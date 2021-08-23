@@ -1,0 +1,28 @@
+{
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    [
+      "babel-plugin-module-resolver",
+      {
+        "root": ["."],
+        "extensions": [".ios.js", ".android.js", ".js", ".ts", ".tsx", ".json"],
+        "alias": {
+          "@core": ["./core"],
+          "@context": ["./core/contexts/CoreProvider"],
+          "@screen": ["./src/screens"],
+          "@action": ["./src/data/actions"],
+          "@actions": ["./src/data/actions/index"],
+          "@reducer": ["./src/data/reducers"],
+          "@reducers": ["./src/data/reducers/index"],
+          "@model": ["./src/data/models"],
+          "@models": ["./src/data/models/index"],
+          "@saga": ["./src/data/sagas"],
+          "@sagas": ["./src/data/sagas/index"],
+          "@type": ["./src/data/types"],
+          "@types": ["./src/data/types/index"],
+          "@navigation": ["./core/functions/navigation/index"]
+        }
+      }
+    ]
+  ]
+}
