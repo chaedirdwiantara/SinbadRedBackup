@@ -5,8 +5,9 @@ import {
   SnbTopNav,
   color,
   SnbText,
-  SnbCardButton,
+  SnbIconHint,
   SnbListButtonType2,
+  SnbCardMultiButton,
 } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
@@ -46,8 +47,37 @@ const UserView: FC = () => {
     return (
       <View>
         <View style={UserStyles.headerBackground} />
-        <View style={{ marginTop: -40, marginHorizontal: 11 }}>
-          <SnbCardButton title={'test'} subTitle1={'test'} />
+        <View style={{ marginTop: -40 }}>
+          <SnbCardMultiButton
+            buttonList={[
+              {
+                icon: (
+                  <Image
+                    source={{
+                      uri: 'https://dutadamaiyogyakarta.id/wp-content/uploads/2016/06/team-1.jpg',
+                    }}
+                    style={UserStyles.image}
+                  />
+                ),
+                title: 'Sinbad Point',
+                subtitle: '1000 Point',
+                onPress: () => console.log('pressed'),
+              },
+              {
+                icon: (
+                  <SnbIconHint
+                    iconName={'warehouse'}
+                    size={24}
+                    badgeColor="yellow"
+                    iconColor={color.red50}
+                  />
+                ),
+                title: 'Voucher Untukmu',
+                subtitle: null,
+                onPress: () => console.log('pressed'),
+              },
+            ]}
+          />
         </View>
       </View>
     );
