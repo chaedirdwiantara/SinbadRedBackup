@@ -161,7 +161,7 @@ const UserView: FC = () => {
   };
   /** this for main view */
   return (
-    <SnbContainer color={'grey'}>
+    <SnbContainer color={'white'}>
       {header()}
       {content()}
     </SnbContainer>
