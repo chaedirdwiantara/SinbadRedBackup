@@ -1,10 +1,11 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import UserView from './user.view';
+import UserSettingView from './user-setting.view';
 /** === IMPORT ALL MODULE'S FUNCTION HERE === */
 /** === IMPORT ALL MODULE'S STYLE HERE === */
 /** === IMPORT ALL MODULE'S TEST HERE === */
 /** === EXPORT ALL === */
-export { UserView };
+export { UserView, UserSettingView };
 /**
  * ================================================================
  * NOTES

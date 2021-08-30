@@ -1,4 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
+import { useState } from 'react';
+/** === IMPORT PACKAGE HERE === */
 import { useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { RootState } from '@reducers';
@@ -12,8 +14,19 @@ const useUserData = () => {
   );
   return data;
 };
+const useBadgeInformation = () => {
+  const [showBadge, setShowBadge] = useState<boolean>(true);
+  return {
+    state: showBadge,
+    action: (data: boolean) => {
+      if (data !== showBadge) {
+        setShowBadge(data);
+      }
+    },
+  };
+};
 /** === EXPORT === */
-export { useUserData };
+export const UserHookFunc = { useUserData, useBadgeInformation };
 /**
  * ================================================================
  * NOTES

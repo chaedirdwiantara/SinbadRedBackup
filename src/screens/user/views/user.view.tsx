@@ -8,11 +8,22 @@ import {
   SnbIconHint,
   SnbListButtonType2,
   SnbCardMultiButton,
+  SnbSvgIcon,
+  SnbCardButtonType2,
 } from 'react-native-sinbad-ui';
+import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
+/** === IMPORT FUNCTION HERE === */
+import { UserHookFunc } from '../functions';
 
 const UserView: FC = () => {
+  /** === HOOK === */
+  const { action, state } = UserHookFunc.useBadgeInformation();
+  /** === FUNCTION FOR HOOK === */
+  const showBadge = (show: boolean) => {
+    action(show);
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -21,7 +32,7 @@ const UserView: FC = () => {
         type="red"
         title="Profil"
         iconName={'settings'}
-        iconAction={() => alert('test')}
+        iconAction={() => NavigationAction.navigate('UserSettingView')}
       />
     );
   };
@@ -47,18 +58,11 @@ const UserView: FC = () => {
     return (
       <View>
         <View style={UserStyles.headerBackground} />
-        <View style={{ marginTop: -40 }}>
+        <View style={{ marginTop: -40, marginHorizontal: -10 }}>
           <SnbCardMultiButton
             buttonList={[
               {
-                icon: (
-                  <Image
-                    source={{
-                      uri: 'https://dutadamaiyogyakarta.id/wp-content/uploads/2016/06/team-1.jpg',
-                    }}
-                    style={UserStyles.image}
-                  />
-                ),
+                icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
                 title: 'Sinbad Point',
                 subtitle: '1000 Point',
                 onPress: () => console.log('pressed'),
@@ -90,30 +94,59 @@ const UserView: FC = () => {
             <SnbText.B4>Data Pemilik</SnbText.B4>
             <SnbText.B3>1/8 Selesai</SnbText.B3>
           </View>
-          <SnbListButtonType2 title={'Data Diri'} />
+          <SnbListButtonType2
+            title={'Data Diri'}
+            onPress={() => console.log('test')}
+          />
         </View>
         <View style={{ marginBottom: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Toko</SnbText.B4>
             <SnbText.B3>4/9 Selesai</SnbText.B3>
           </View>
-          <SnbListButtonType2 title={'Informasi Toko'} />
-          <SnbListButtonType2 title={'Alamat Toko'} />
+          <SnbListButtonType2
+            title={'Informasi Toko'}
+            onPress={() => console.log('test')}
+          />
+          <SnbListButtonType2
+            title={'Alamat Toko'}
+            onPress={() => console.log('test')}
+          />
         </View>
         <View style={{ marginBottom: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Supplier</SnbText.B4>
           </View>
-          <SnbListButtonType2 title={'Informasi Supplier'} />
+          <SnbListButtonType2
+            title={'Informasi Supplier'}
+            onPress={() => console.log('test')}
+          />
         </View>
       </View>
     );
+  };
+  const renderBadgeInformation = () => {
+    if (state) {
+      return (
+        <View>
+          <SnbCardButtonType2
+            text={
+              'Lengkapi profile untuk menjadikan Anda User Verified dan dapatkan fasilitas menarik'
+            }
+            leftItem={<SnbSvgIcon name={'verified_user'} size={24} />}
+            rightIcon={'x'}
+            onPress={() => showBadge(!state)}
+          />
+        </View>
+      );
+    }
   };
   const contentItem = () => {
     return (
       <>
         {renderHeaderInformation()}
         {renderLoyaltiInformation()}
+        {renderBadgeInformation()}
         {renderUserInformation()}
       </>
     );
