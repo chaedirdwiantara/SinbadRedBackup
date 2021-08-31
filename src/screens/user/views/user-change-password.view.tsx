@@ -7,8 +7,33 @@ import {
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
+/** === IMPORT FUNCTION HERE === */
+import { UserHookFunc } from '../functions';
 
 const UserChangePasswordView: FC = () => {
+  /** === HOOK === */
+  const { dataOldPassword, setDataOldPassword } = UserHookFunc.useOldPassword();
+  const { dataNewPassword, setDataNewPassword } = UserHookFunc.useNewPassword();
+  const { dataConfirmNewPassword, setDataConfirmNewPassword } =
+    UserHookFunc.useConfirmNewPassword();
+  /** === FUNCTION FOR HOOK === */
+  const textOldPassword = (oldPassword: string) => {
+    setDataOldPassword(oldPassword);
+  };
+  const textNewPassword = (newPassword: string) => {
+    setDataNewPassword(newPassword);
+  };
+  const textConfirmNewPassword = (confirmNewPassword: string) => {
+    setDataConfirmNewPassword(confirmNewPassword);
+  };
+  /** === FUNCTION === */
+  const confirm = () => {
+    console.log({
+      old: dataOldPassword,
+      new: dataNewPassword,
+      confirm: dataConfirmNewPassword,
+    });
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -28,10 +53,10 @@ const UserChangePasswordView: FC = () => {
             mandatory
             boxIndicator
             labelText="Kata Sandi Sekarang"
-            value={''}
+            value={dataOldPassword}
             type={'password'}
             placeholder="Masukkan kata sandi sekarang"
-            onChangeText={(text) => console.log(text)}
+            onChangeText={(text) => textOldPassword(text)}
             clearText={() => console.log('test')}
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
@@ -45,10 +70,10 @@ const UserChangePasswordView: FC = () => {
             mandatory
             boxIndicator
             labelText="Kata Sandi Baru"
-            value={''}
+            value={dataNewPassword}
             type={'enable'}
             placeholder="Masukkan kata sandi baru"
-            onChangeText={(text) => console.log(text)}
+            onChangeText={(text) => textNewPassword(text)}
             clearText={() => console.log('test')}
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
@@ -61,10 +86,10 @@ const UserChangePasswordView: FC = () => {
           mandatory
           boxIndicator
           labelText="Konfirmasi Kata Sandi Baru"
-          value={''}
+          value={dataConfirmNewPassword}
           type={'enable'}
           placeholder="Masukkan ulang kata sandi baru"
-          onChangeText={(text) => console.log(text)}
+          onChangeText={(text) => textConfirmNewPassword(text)}
           clearText={() => console.log('test')}
           maxLength={40}
           valMsgError="ini contoh kalau error ya"
@@ -80,7 +105,7 @@ const UserChangePasswordView: FC = () => {
       <View>
         <SnbButton.Single
           title={'Ganti Kata Sandi'}
-          onPress={() => console.log('test')}
+          onPress={() => confirm()}
           type={'primary'}
           disabled={false}
           position={'center'}

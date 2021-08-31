@@ -25,8 +25,48 @@ const useBadgeInformation = () => {
     },
   };
 };
+const useOldPassword = () => {
+  const [dataOldPassword, setDataOldPassword] = useState<string>('');
+  return {
+    dataOldPassword: dataOldPassword,
+    setDataOldPassword: (data: string) => {
+      if (data !== dataOldPassword) {
+        setDataOldPassword(data);
+      }
+    },
+  };
+};
+const useNewPassword = () => {
+  const [dataNewPassword, setDataNewPassword] = useState<string>('');
+  return {
+    dataNewPassword: dataNewPassword,
+    setDataNewPassword: (data: string) => {
+      if (data !== dataNewPassword) {
+        setDataNewPassword(data);
+      }
+    },
+  };
+};
+const useConfirmNewPassword = () => {
+  const [dataConfirmNewPassword, setDataConfirmNewPassword] =
+    useState<string>('');
+  return {
+    dataConfirmNewPassword: dataConfirmNewPassword,
+    setDataConfirmNewPassword: (data: string) => {
+      if (data !== dataConfirmNewPassword) {
+        setDataConfirmNewPassword(data);
+      }
+    },
+  };
+};
 /** === EXPORT === */
-export const UserHookFunc = { useUserData, useBadgeInformation };
+export const UserHookFunc = {
+  useUserData,
+  useBadgeInformation,
+  useOldPassword,
+  useNewPassword,
+  useConfirmNewPassword,
+};
 /**
  * ================================================================
  * NOTES
