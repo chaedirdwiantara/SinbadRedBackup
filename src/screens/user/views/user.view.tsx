@@ -96,7 +96,9 @@ const UserView: FC = () => {
           </View>
           <SnbListButtonType2
             title={'Data Diri'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailProfileView')
+            }
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -106,7 +108,9 @@ const UserView: FC = () => {
           </View>
           <SnbListButtonType2
             title={'Informasi Toko'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailInformationView')
+            }
           />
           <SnbListButtonType2
             title={'Alamat Toko'}

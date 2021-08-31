@@ -1,18 +1,22 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
-import UserView from './user.view';
-import UserSettingView from './user-setting.view';
-import UserChangePasswordView from './user-change-password.view';
+import MerchantDetailProfileView from './merchant-detail-profile.view';
+import MerchantDetailInformationView from './merchant-detail-information.view';
+import MerchantDetailAccountView from './merchant-detail-account.view';
 /** === IMPORT ALL MODULE'S FUNCTION HERE === */
 /** === IMPORT ALL MODULE'S STYLE HERE === */
 /** === IMPORT ALL MODULE'S TEST HERE === */
 /** === EXPORT ALL === */
-export { UserView, UserSettingView, UserChangePasswordView };
+export {
+  MerchantDetailProfileView,
+  MerchantDetailInformationView,
+  MerchantDetailAccountView,
+};
 /**
  * ================================================================
  * NOTES
  * ================================================================
  * createdBy: tyo
- * createDate: 30082021
+ * createDate: 31082021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:
