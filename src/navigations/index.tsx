@@ -1,11 +1,13 @@
 import OmsNav from './oms.navigation';
 import ExampleNav from './example.navigation';
 import Example2Nav from './example2.navigation';
+import VoucherNav from './voucher.navigation';
 
 const index = {
   ...OmsNav,
   ...ExampleNav,
   ...Example2Nav,
+  ...VoucherNav,
 };
 
 export default index;
