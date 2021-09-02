@@ -12,10 +12,11 @@ const backToCart = () => {
 };
 /** => go to cart 2 */
 const goToCart2 = () => {
-  NavigationAction.navigate('OmsShoppingCart2View', {
-    id: '1',
-    name: 'test from oms cart 2',
-  });
+  // NavigationAction.navigate('OmsShoppingCart2View', {
+  //   id: '1',
+  //   name: 'test from oms cart 2',
+  // });
+  NavigationAction.navigate('VoucherCartListView');
 };
 /** => go to cart 3 */
 const goToCart3 = () => {
