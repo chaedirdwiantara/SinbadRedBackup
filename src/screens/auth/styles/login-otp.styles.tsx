@@ -14,6 +14,13 @@ const loginOTPStyle = StyleSheet.create({
     margin: 16,
     paddingHorizontal: 14,
   },
+  resend: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 8,
+    paddingVertical: 8,
+  },
 });
 
 export default loginOTPStyle;
