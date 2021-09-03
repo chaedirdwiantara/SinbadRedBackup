@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -33,7 +33,7 @@ const VoucherCartListView: FC = () => {
           <SnbButton.Dynamic
             type={'primary'}
             title="Terapkan"
-            size={'large'}
+            size={'medium'}
             onPress={() => {}}
             disabled={false}
           />
@@ -62,24 +62,56 @@ const VoucherCartListView: FC = () => {
 
   const renderVoucherList = () => {
     return (
-      <View style={VoucherStyle.voucherCard}>
-        <View>
-          <View style={{ marginBottom: 8 }}>
-            <SnbText.B4>Voucher Diskon SGM Rp 100.000</SnbText.B4>
+      <>
+        <View style={VoucherStyle.voucherCard}>
+          <View style={{ width: '70%' }}>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.B4>Voucher Diskon SGM Rp 100.000</SnbText.B4>
+            </View>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.C2 color={color.black80}>
+                SINBAD mengadakan diskon hingga 5% untuk pembelian SGM 200GR...
+              </SnbText.C2>
+            </View>
+            <SnbText.C1 color={color.black80}>
+              Berakhir dalam 1 hari lagi!
+            </SnbText.C1>
           </View>
-          <View style={{ marginBottom: 8 }}>
-            <SnbText.C2 color={color.black80}>
-              SINBAD mengadakan diskon hingga 5% untuk pembelian SGM 200GR...
-            </SnbText.C2>
+          <View
+            style={{
+              width: '30%',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+            }}>
+            <SnbIcon name={'settings'} color={color.green50} size={24} />
+            <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
           </View>
-          <SnbText.C1 color={color.black80}>
-            Berakhir dalam 1 hari lagi!
-          </SnbText.C1>
         </View>
-        <View>
-          
+        <View style={VoucherStyle.voucherCard}>
+          <View style={{ width: '70%' }}>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.B4>Voucher Diskon SGM Rp 100.000</SnbText.B4>
+            </View>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.C2 color={color.black80}>
+                SINBAD mengadakan diskon hingga 5% untuk pembelian SGM 200GR...
+              </SnbText.C2>
+            </View>
+            <SnbText.C1 color={color.black80}>
+              Berakhir dalam 1 hari lagi!
+            </SnbText.C1>
+          </View>
+          <View
+            style={{
+              width: '30%',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+            }}>
+            <SnbIcon name={'settings'} color={color.green50} size={24} />
+            <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
+          </View>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -92,15 +124,54 @@ const VoucherCartListView: FC = () => {
     );
   };
 
+  const renderFooterSection = () => {
+    return (
+      <View
+        style={[
+          {
+            flexDirection: 'row',
+            padding: 16,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            backgroundColor: color.white,
+          },
+          styles.shadowStyle,
+        ]}>
+        <View>
+          <SnbText.B3 color={color.black60}>2 Voucher Terpilih</SnbText.B3>
+          <SnbText.C1 color={color.yellow50}>
+            Potensi Potongan: Rp 200.000
+          </SnbText.C1>
+        </View>
+        <View>
+          <SnbButton.Dynamic
+            type={'primary'}
+            title={'Gunakan Voucher'}
+            onPress={() => {}}
+            disabled={false}
+            size={'small'}
+          />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav.Type4
         type="red"
         title="Pakai Voucher"
         backAction={() => VoucherFunc.goBack()}
+        buttonTitle={'Reset'}
+        buttonAction={() => {}}
       />
       {renderSearchSection()}
-      {renderVoucherSection()}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {renderVoucherSection()}
+        {renderVoucherSection()}
+        {renderVoucherSection()}
+      </ScrollView>
+      {renderFooterSection()}
     </SnbContainer>
   );
 };
