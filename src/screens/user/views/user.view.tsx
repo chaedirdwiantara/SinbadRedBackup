@@ -7,7 +7,7 @@ import {
   SnbText,
   SnbIconHint,
   SnbListButtonType2,
-  SnbCardMultiButton,
+  SnbCardMultiButtonType1,
   SnbSvgIcon,
   SnbCardButtonType2,
 } from 'react-native-sinbad-ui';
@@ -59,7 +59,7 @@ const UserView: FC = () => {
       <View>
         <View style={UserStyles.headerBackground} />
         <View style={{ marginTop: -40, marginHorizontal: -10 }}>
-          <SnbCardMultiButton
+          <SnbCardMultiButtonType1
             buttonList={[
               {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,

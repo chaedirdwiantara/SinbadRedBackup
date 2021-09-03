@@ -3,6 +3,7 @@ import {
   MerchantDetailAccountView,
   MerchantDetailInformationView,
 } from '@screen/merchant/views/detail-merchant';
+import { MerchantEditView } from '@screen/merchant/views/edit-merchant';
 
 const MerchantNav = {
   MerchantDetailProfileView: {
@@ -13,6 +14,9 @@ const MerchantNav = {
   },
   MerchantDetailAccountView: {
     component: MerchantDetailAccountView,
+  },
+  MerchantEditView: {
+    component: MerchantEditView,
   },
 };
 

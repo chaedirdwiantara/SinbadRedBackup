@@ -33,7 +33,10 @@ const MerchantDetailAccountView: FC = () => {
           <SnbListButtonType2
             title={'Kelengkapan Informasi Toko'}
             onPress={() =>
-              NavigationAction.navigate('MerchantDetailAccountView')
+              NavigationAction.navigate('MerchantEditView', {
+                title: 'Kelengkapan Informasi Toko',
+                type: 'merchantCompletenessInformation',
+              })
             }
           />
         </View>
