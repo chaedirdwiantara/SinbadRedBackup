@@ -24,7 +24,7 @@ const VoucherCartListStyles = StyleSheet.create({
   voucherSectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   voucherSectionTitle: {
     flex: 1,
@@ -39,10 +39,12 @@ const VoucherCartListStyles = StyleSheet.create({
   },
   voucherCard: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     padding: 8,
     borderWidth: 1,
     borderColor: color.black10,
     borderRadius: 4,
+    marginBottom: 8,
   },
 });
 
