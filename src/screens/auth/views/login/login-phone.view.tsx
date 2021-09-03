@@ -11,17 +11,6 @@ import {
   SnbTopNav,
 } from 'react-native-sinbad-ui';
 
-const Header: React.FC = () => {
-  const { reset } = useLogin();
-  return (
-    <SnbTopNav.Type3
-      backAction={() => reset('HomeView')}
-      type="white"
-      title=""
-    />
-  );
-};
-
 const Content: React.FC = () => {
   const { func, state, navigate }: any = useLogin();
   return (
@@ -37,7 +26,6 @@ const Content: React.FC = () => {
           keyboardType="phone-pad"
           onChangeText={func.handleOnChangeTextPhone}
           valMsgError={state.phoneError}
-          valMsgSuccess={state.phoneError}
           placeholder="Masukkan nomor handphone anda"
           value={state.phone}
           clearText={() => {
@@ -89,9 +77,15 @@ const Content: React.FC = () => {
 };
 
 const LoginPhoneView: React.FC = () => {
+  const { reset } = useLogin();
+
   return (
     <SnbContainer color="white">
-      <Header />
+      <SnbTopNav.Type3
+        backAction={() => reset('HomeView')}
+        type="white"
+        title=""
+      />
       <Content />
     </SnbContainer>
   );

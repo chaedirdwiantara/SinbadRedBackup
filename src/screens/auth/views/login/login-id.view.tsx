@@ -11,11 +11,6 @@ import {
   SnbTopNav,
 } from 'react-native-sinbad-ui';
 
-const Header: React.FC = () => {
-  const { goBack } = useLogin();
-  return <SnbTopNav.Type3 backAction={goBack} type="white" title="" />;
-};
-
 const Content: React.FC = () => {
   const { func, state, navigate }: any = useLogin();
   return (
@@ -29,7 +24,6 @@ const Content: React.FC = () => {
           labelText="ID Toko"
           maxLength={30}
           valMsgError={state.errorID}
-          valMsgSuccess={state.errorID}
           onChangeText={func.handleOnChangeTextID}
           placeholder="Masukkan ID Toko anda"
           value={state.storeID}
@@ -45,7 +39,6 @@ const Content: React.FC = () => {
           labelText="Kata Sandi"
           maxLength={30}
           valMsgError={state.errorID}
-          valMsgSuccess={state.errorID}
           secureTextEntry={!state.visiblePassword}
           suffixIconName={
             state.visiblePassword ? 'visibility' : 'visibility_off'
@@ -91,9 +84,11 @@ const Content: React.FC = () => {
 };
 
 const LoginIDView: React.FC = () => {
+  const { goBack }: any = useLogin();
+
   return (
     <SnbContainer color="white">
-      <Header />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );
