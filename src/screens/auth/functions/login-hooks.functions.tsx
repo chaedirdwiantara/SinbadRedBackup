@@ -66,14 +66,12 @@ const useLogin: any = () => {
     setTimeout(() => {
       setLoading(false);
       reinitializeState();
-      // setStoreID('');
-      // setPassword('');
-      setType('error');
-      setErrorID('ID Toko atau Password salah');
-      // navigation.reset({
-      //   index: 0,
-      //   routes: [{ name: 'Home' }],
-      // });
+      setStoreID('');
+      setPassword('');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
     }, 1000);
   };
 
