@@ -7,6 +7,25 @@ import { color } from 'react-native-sinbad-ui';
 import MerchantStyles from '../../styles/merchant.style';
 
 const MerchantDetailAccountView: FC = () => {
+  /**
+   * =======================
+   * FUNCTIONAL
+   * =======================
+   */
+  const goTo = (data: any) => {
+    switch (data.type) {
+      case 'merchantAccountName':
+      case 'merchantAccountPhoneNo':
+      case 'merchantAccountImage':
+        NavigationAction.navigate('MerchantEditView', {
+          title: data.title,
+          type: data.type,
+        });
+        break;
+      default:
+        break;
+    }
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -30,12 +49,12 @@ const MerchantDetailAccountView: FC = () => {
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity onPress={() => console.log('press')}>
+            <TouchableOpacity onPress={() => goTo(data)}>
               <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
             </TouchableOpacity>
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity onPress={() => console.log('press')}>
+            <TouchableOpacity onPress={() => goTo(data)}>
               <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
             </TouchableOpacity>
           )}
@@ -56,11 +75,15 @@ const MerchantDetailAccountView: FC = () => {
             key: 'Nama Toko',
             value: '-',
             action: 'tambah',
+            type: 'merchantAccountName',
+            title: 'Tambah Nama Toko',
           })}
           {renderContentSection({
             key: 'Nomor Handphone',
             value: '-',
             action: 'tambah',
+            type: 'merchantAccountPhoneNo',
+            title: 'Tambah No. Handphone Toko',
           })}
           {renderContentSection({
             key: 'Foto Toko',

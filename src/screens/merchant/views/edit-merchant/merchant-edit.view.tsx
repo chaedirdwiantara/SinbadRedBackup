@@ -1,7 +1,9 @@
 import React, { FC } from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { NavigationAction } from '@navigation';
+/** MODULE PAGE */
+import MerchantEditPartialView from './merchant-edit-partial.view';
 
 interface Props {
   route: any;
@@ -32,45 +34,51 @@ const MerchantEditView: FC<Props> = (props) => {
       case 'merchantOwnerPhoneNo':
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
-        return <View />;
-      //   case 'merchantOwnerImageTax':
-      //     return (
-      //       <MerchantEditPartialView
-      //         type={this.props.navigation.state.params.type}
-      //         showButton={false}
-      //         showButtonOpenCamera
-      //         typeCamera={'tax'}
-      //       />
-      //     );
-      //   case 'merchantOwnerImageId':
-      //     return (
-      //       <MerchantEditPartialView
-      //         type={this.props.navigation.state.params.type}
-      //         showButton={false}
-      //         showButtonOpenCamera
-      //         typeCamera={'id'}
-      //       />
-      //     );
-      //   case 'merchantOwnerImageSelfie':
-      //     return (
-      //       <MerchantEditPartialView
-      //         type={this.props.navigation.state.params.type}
-      //         showButton={false}
-      //         showButtonOpenCamera
-      //         typeCamera={'selfie'}
-      //       />
-      //     );
-      //   case 'merchantAccountImage':
-      //     return (
-      //       <MerchantEditPartialView
-      //         type={this.props.navigation.state.params.type}
-      //         showButton={false}
-      //         showButtonOpenCamera
-      //         typeCamera={'merchant'}
-      //       />
-      //     );
-      //   default:
-      //     break;
+        return (
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            // source={props.navigation.state.params.source}
+            showButton
+          />
+        );
+      case 'merchantOwnerImageTax':
+        return (
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            showButton={false}
+            // showButtonOpenCamera
+            // typeCamera={'tax'}
+          />
+        );
+      case 'merchantOwnerImageId':
+        return (
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            showButton={false}
+            // showButtonOpenCamera
+            // typeCamera={'id'}
+          />
+        );
+      case 'merchantOwnerImageSelfie':
+        return (
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            showButton={false}
+            // showButtonOpenCamera
+            // typeCamera={'selfie'}
+          />
+        );
+      case 'merchantAccountImage':
+        return (
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            showButton={false}
+            // showButtonOpenCamera
+            // typeCamera={'merchant'}
+          />
+        );
+      default:
+        break;
     }
   };
   /** => content */

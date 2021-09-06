@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
 const UserStyles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: color.white,
+  },
   headerContainer: {
     alignItems: 'center',
   },
