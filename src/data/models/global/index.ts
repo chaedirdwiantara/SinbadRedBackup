@@ -3,16 +3,7 @@
  * REGISTER ALL INTERFACE HERE
  * ============================================================
  */
-export * from '@core/models/list.model';
-export * from '@core/models/detail.model';
-export * from '@core/models/list-actions.model';
-export * from '@core/models/detail-actions.model';
-export * from '@core/models/error.model';
-export * from './example.model';
-export * from './example2.model';
-export * from './global.model';
-export * from './user.model';
-export * from './global';
+export * from './global-action.model';
 /**
  * ================================================================
  * NOTES
