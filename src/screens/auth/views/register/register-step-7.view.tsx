@@ -65,7 +65,7 @@ const Content: React.FC = () => {
             <SnbButton.Single
               type="primary"
               shadow
-              title="Selanjutnya"
+              title="Selesai"
               onPress={func.handleFinalRegisterProcess}
               disabled={false}
             />
