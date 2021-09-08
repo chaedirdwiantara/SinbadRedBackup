@@ -48,7 +48,7 @@ const Content: React.FC = () => {
             margin: 16,
           }}
         />
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
           <View style={{ height: 72 }}>
             <SnbButton.Dynamic
               size="small"
