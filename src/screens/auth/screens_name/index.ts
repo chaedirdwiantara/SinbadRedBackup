@@ -9,3 +9,4 @@ export const REGISTER_STEP_3_VIEW = 'RegisterStep3View';
 export const REGISTER_STEP_4_VIEW = 'RegisterStep4View';
 export const REGISTER_STEP_5_VIEW = 'RegisterStep5View';
 export const REGISTER_STEP_6_VIEW = 'RegisterStep6View';
+export const REGISTER_STEP_7_VIEW = 'RegisterStep7View';

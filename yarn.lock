@@ -6076,7 +6076,7 @@ react-native-codegen@^0.0.6:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
-react-native-color-matrix-image-filters@5.2.10, react-native-color-matrix-image-filters@^5.2.10:
+react-native-color-matrix-image-filters@5.2.10:
   version "5.2.10"
   resolved "https://registry.yarnpkg.com/react-native-color-matrix-image-filters/-/react-native-color-matrix-image-filters-5.2.10.tgz#881b18d277de6ddcda5741dcf4a7f9eab807ac62"
   integrity sha512-xIzKDopFimbKsT2Ue45iEtNSs1QniM+/hLffrI7hnrgiHiVV1X6NDvZt5iNXlt17SF+OptDaNtatE/xe9sNlng==

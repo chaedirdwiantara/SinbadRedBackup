@@ -1,4 +1,4 @@
-import { renderIF, useRegisterStep3 } from '@screen/auth/functions';
+import { renderIF, useRegisterStep4 } from '@screen/auth/functions';
 import React from 'react';
 import { View, LogBox, Image } from 'react-native';
 import {
@@ -11,7 +11,7 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep3();
+  const { func, state } = useRegisterStep4();
   LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
   ]);
@@ -19,15 +19,14 @@ const Content: React.FC = () => {
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-        imgSrc="https://s3-alpha-sig.figma.com/img/a472/29ec/6a39c819ea1b71b155ef102e6fe133bb?Expires=1631491200&Signature=He7sZQIlhUQ0DT5S567y7n5RRrp~Dc6oiBzC4dt4Y6pVQ9nTeR9sE3zGwpOndPB32dHUYkkdXh4eSvUkSa5zE-wN-6nTtDza3v~9oCnKccJxq285UsTfYT4Gotg7eBG7Ln-MIVcLKDSLL6rXbs1j5PdSCzyyLKp3CRrYavT9gOY7oCOKZvS7FHztGcQD885sYjyhwYd0dZcNM1XbSQpZllj3d0oRRaJqQIMZOVO6NH9E-U81LToTapltMzPQUXuwJr1qN3wnOjHDM2C6unmWCbPL07CXJJOhtp0vExmwUfOvdLc6z3N2fNeSCVx7~UAJ-GI48i~f0B4YoeDgMsb0Dw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-        title="Unggah Foto Selfie KTP"
-        buttonLabel="Ambil Foto Selfie & KTP"
+        rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
+        imgSrc="https://s3-alpha-sig.figma.com/img/b7a0/6a7c/6986f21c9506bac08cb347133c502f7f?Expires=1632096000&Signature=FeF7I~iDW36Pi9e~FOQsVOyaw5HPjTcbsxpRRSwzWqrR9kxRdXvN3QZHumgZcrDSutQOB7mYshVK9PpJVT99LeiuBPA~VqTIJkTmf351R4ZUYjJ-yztjFw9fK3apM~LvkNv9kXO9oxYiYE7LhTaXJHKCVeXo3L7BmCOJGQVB96v9llfm-Qk6oMz2V3mnqlv2YcNAk8MxBOMa8SWY0m8T23C456~awPejQbzOeIOwDO7h0ZfjPsFJw8SRdxMn63Hlyz6t7HptYwG90g6VBBGw91s3Lv61nvKoZAUp-3mxvF2cWs5BX4lVmB7BKPNt~~DRiweLd3g3zpb88wzuEQ0hSA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+        title="Unggah Foto Toko"
+        buttonLabel="Ambil Foto Toko"
         rules={[
-          'Posisikan KTP di bawah dagu Anda',
-          'KTP Tidak silau dan tidak buram',
-          'Pastikan KTP bisa terbaca dengan jelas',
-          'Hindari Tangan Menutupi KTP',
+          'Pastikan foto toko terlihat dengan jelas',
+          'Foto Tidak silau dan tidak buram',
+          'Pastikan foto fokus keseluruhan toko',
         ]}
         action={() => func.gotoCamera()}
       />
@@ -39,7 +38,9 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{ uri: state?.imageSelfieKTP || ' ' }}
+          source={{
+            uri: 'https://s3-alpha-sig.figma.com/img/b7a0/6a7c/6986f21c9506bac08cb347133c502f7f?Expires=1632096000&Signature=FeF7I~iDW36Pi9e~FOQsVOyaw5HPjTcbsxpRRSwzWqrR9kxRdXvN3QZHumgZcrDSutQOB7mYshVK9PpJVT99LeiuBPA~VqTIJkTmf351R4ZUYjJ-yztjFw9fK3apM~LvkNv9kXO9oxYiYE7LhTaXJHKCVeXo3L7BmCOJGQVB96v9llfm-Qk6oMz2V3mnqlv2YcNAk8MxBOMa8SWY0m8T23C456~awPejQbzOeIOwDO7h0ZfjPsFJw8SRdxMn63Hlyz6t7HptYwG90g6VBBGw91s3Lv61nvKoZAUp-3mxvF2cWs5BX4lVmB7BKPNt~~DRiweLd3g3zpb88wzuEQ0hSA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
+          }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -63,7 +64,7 @@ const Content: React.FC = () => {
               type="primary"
               shadow
               title="Selanjutnya"
-              onPress={func.gotoStep4}
+              onPress={func.gotoStep5}
               disabled={false}
             />
           </View>
@@ -77,7 +78,7 @@ const Content: React.FC = () => {
       <View style={{ paddingHorizontal: 16 }}>
         <SnbText.H1>DAFTAR</SnbText.H1>
         <View style={{ marginTop: 16 }}>
-          <SnbText.B4>3/7 Profil Pemilik</SnbText.B4>
+          <SnbText.B4>7/7 Data Toko</SnbText.B4>
           <View style={{ marginVertical: 4 }} />
           <View
             style={{ height: 8, backgroundColor: color.red60, borderRadius: 8 }}
@@ -85,7 +86,7 @@ const Content: React.FC = () => {
         </View>
       </View>
       {renderIF(
-        state.imageSelfieKTP === null,
+        state.imageNPWP === null,
         renderUploadPhotoRules(),
         renderImagePreview(),
       )}
@@ -93,9 +94,9 @@ const Content: React.FC = () => {
   );
 };
 
-const RegisterStep3View: React.FC = (props) => {
+const RegisterStep7View: React.FC = (props) => {
   const {} = props;
-  const { goBack } = useRegisterStep3();
+  const { goBack } = useRegisterStep4();
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
@@ -104,4 +105,4 @@ const RegisterStep3View: React.FC = (props) => {
   );
 };
 
-export default RegisterStep3View;
+export default RegisterStep7View;

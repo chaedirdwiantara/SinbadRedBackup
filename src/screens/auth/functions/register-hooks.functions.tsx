@@ -7,6 +7,8 @@ import {
   REGISTER_STEP_3_VIEW,
   REGISTER_STEP_4_VIEW,
   REGISTER_STEP_5_VIEW,
+  REGISTER_STEP_6_VIEW,
+  REGISTER_STEP_7_VIEW,
 } from '../screens_name';
 
 export const useRegister: any = () => {
@@ -131,7 +133,12 @@ export const useRegisterStep2 = () => {
   const [imageKTP, setImage] = React.useState(null);
 
   const gotoCamera = () => {
-    navigate('CameraView', { setImage });
+    navigate('CameraView', {
+      setImage,
+      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
+      title: 'Ambil Foto KTP',
+      subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
+    });
   };
 
   const gotoStep3 = () => {
@@ -159,7 +166,16 @@ export const useRegisterStep3 = () => {
   const [imageSelfieKTP, setImage] = React.useState(null);
 
   const gotoCamera = () => {
-    navigate('CameraView', { setImage });
+    navigate('CameraView', {
+      setImage,
+      focusPoints: [
+        { focusPointHeight: 0.32, focusPointWidth: 0.9, marginBottom: 24 },
+        { focusPointHeight: 0.18, focusPointWidth: 0.6 },
+      ],
+      title: 'Ambil Foto Selfie dengan KTP',
+      subtitle:
+        'Posisikan Foto Selfie dan KTP Anda tepat berada di dalam bingkai',
+    });
   };
 
   const gotoStep4 = () => {
@@ -187,7 +203,12 @@ export const useRegisterStep4 = () => {
   const [imageNPWP, setImage] = React.useState(null);
 
   const gotoCamera = () => {
-    navigate('CameraView', { setImage });
+    navigate('CameraView', {
+      setImage,
+      title: 'Ambil Foto NPWP',
+      subtitle: 'Posisikan NPWP Anda tepat berada di dalam bingkai',
+      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
+    });
   };
 
   const gotoStep5 = () => {
@@ -205,6 +226,124 @@ export const useRegisterStep4 = () => {
     },
     state: {
       imageNPWP,
+    },
+    ...navigation,
+  };
+};
+
+export const useRegisterStep5 = () => {
+  const navigation = useNavigation();
+  const [type, setType] = React.useState('default');
+  const [storeName, setStoreName] = React.useState('');
+  const [numOfEmployees, setnumOfEmployees] = React.useState('');
+  const [storeSize, setStoreSize] = React.useState('');
+  const [topBrand, setTopBrand] = React.useState('');
+  const [wantedBrand, setWantedBrand] = React.useState('');
+
+  const selectNumOfEmployees = () => {
+    navigate('ListAndSearchView', { setValue: setnumOfEmployees });
+  };
+
+  const gotoStep6 = () => {
+    navigate(REGISTER_STEP_6_VIEW);
+  };
+
+  const handleOnChangeTextStoreName = (text: string) => {
+    setType('default');
+    setStoreName(text);
+  };
+  const handleOnChangeTextStoreSize = (text: string) => {
+    setType('default');
+    setStoreSize(text);
+  };
+  const handleOnChangeTextTopBrand = (text: string) => {
+    setType('default');
+    setTopBrand(text);
+  };
+  const handleOnChangeTextWantedBrand = (text: string) => {
+    setType('default');
+    setWantedBrand(text);
+  };
+
+  return {
+    func: {
+      gotoStep6,
+      selectNumOfEmployees,
+      setStoreName,
+      setnumOfEmployees,
+      setStoreSize,
+      setTopBrand,
+      setWantedBrand,
+      setType,
+      handleOnChangeTextStoreName,
+      handleOnChangeTextStoreSize,
+      handleOnChangeTextTopBrand,
+      handleOnChangeTextWantedBrand,
+    },
+    state: {
+      storeName,
+      numOfEmployees,
+      storeSize,
+      topBrand,
+      wantedBrand,
+      type,
+    },
+    ...navigation,
+  };
+};
+
+export const useRegisterStep6 = () => {
+  const navigation = useNavigation();
+  const [type, setType] = React.useState('default');
+  const [storeAddress, setStoreAddress] = React.useState('');
+  const [storeNoteAddress, setStoreNoteAddress] = React.useState('');
+  const [storeVehicleAccessibility, setStoreVehicleAccessibility] =
+    React.useState('');
+  const [storeRoadCapacity, setStoreRoadCapacity] = React.useState('');
+
+  const gotoStep7 = () => {
+    navigate(REGISTER_STEP_7_VIEW);
+  };
+
+  const goToMaps = () => {
+    navigate('MapsView');
+  };
+
+  const handleOnChangeTextStoreAddress = (text: string) => {
+    setType('default');
+    setStoreAddress(text);
+  };
+  const handleOnChangeTextStoreNoteAddress = (text: string) => {
+    setType('default');
+    setStoreNoteAddress(text);
+  };
+  const selectStoreVehicleAccessibility = () => {
+    navigate('ListAndSearchView', { setValue: setStoreVehicleAccessibility });
+  };
+  const selectStoreRoadCapacity = () => {
+    navigate('ListAndSearchView', { setValue: setStoreRoadCapacity });
+  };
+
+  return {
+    func: {
+      setType,
+      handleOnChangeTextStoreAddress,
+      handleOnChangeTextStoreNoteAddress,
+      selectStoreRoadCapacity,
+      selectStoreVehicleAccessibility,
+      gotoStep7,
+      setStoreAddress,
+      setStoreNoteAddress,
+      setStoreVehicleAccessibility,
+      setStoreRoadCapacity,
+      goToMaps,
+    },
+    state: {
+      storeAddress,
+      storeNoteAddress,
+      storeVehicleAccessibility,
+      storeRoadCapacity,
+      type,
     },
     ...navigation,
   };

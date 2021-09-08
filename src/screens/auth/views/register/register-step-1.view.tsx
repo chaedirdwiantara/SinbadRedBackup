@@ -2,6 +2,7 @@ import { useRegisterStep1 } from '@screen/auth/functions';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
+  color,
   SnbButton,
   SnbContainer,
   SnbText,
@@ -17,6 +18,17 @@ const Content: React.FC = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
+          </View>
+          <View style={{ margin: 16 }}>
+            <SnbText.B4>1/7 Profil Pemilik</SnbText.B4>
+            <View style={{ marginVertical: 4 }} />
+            <View
+              style={{
+                height: 8,
+                backgroundColor: color.red60,
+                borderRadius: 8,
+              }}
+            />
           </View>
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text

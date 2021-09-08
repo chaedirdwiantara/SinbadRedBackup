@@ -9,6 +9,7 @@ import RegisterStep3View from './register/register-step-3.view';
 import RegisterStep4View from './register/register-step-4.view';
 import RegisterStep5View from './register/register-step-5.view';
 import RegisterStep6View from './register/register-step-6.view';
+import RegisterStep7View from './register/register-step-7.view';
 
 export {
   LoginPhoneView,
@@ -22,4 +23,5 @@ export {
   RegisterStep4View,
   RegisterStep5View,
   RegisterStep6View,
+  RegisterStep7View,
 };
