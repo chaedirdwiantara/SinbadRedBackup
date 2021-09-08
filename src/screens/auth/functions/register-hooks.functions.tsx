@@ -348,3 +348,34 @@ export const useRegisterStep6 = () => {
     ...navigation,
   };
 };
+
+export const useRegisterStep7 = () => {
+  const navigation = useNavigation();
+  const [imageStore, setImage] = React.useState(null);
+
+  const gotoCamera = () => {
+    navigate('CameraView', {
+      setImage,
+      title: 'Ambil Foto Depan Toko',
+      subtitle: 'Posisikan depan toko Anda tepat berada di dalam bingkai',
+      focusPoints: [{ focusPointHeight: 0.4, focusPointWidth: 0.9 }],
+    });
+  };
+
+  const handleFinalRegisterProcess = () => {};
+
+  React.useEffect(() => {
+    console.log(imageStore);
+  }, [imageStore]);
+  return {
+    func: {
+      setImage,
+      handleFinalRegisterProcess,
+      gotoCamera,
+    },
+    state: {
+      imageStore,
+    },
+    ...navigation,
+  };
+};

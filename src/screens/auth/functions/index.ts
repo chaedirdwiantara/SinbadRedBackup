@@ -9,6 +9,7 @@ import {
   useRegisterStep4,
   useRegisterStep5,
   useRegisterStep6,
+  useRegisterStep7,
 } from './register-hooks.functions';
 
 export {
@@ -22,4 +23,5 @@ export {
   useRegisterStep4,
   useRegisterStep5,
   useRegisterStep6,
+  useRegisterStep7,
 };
