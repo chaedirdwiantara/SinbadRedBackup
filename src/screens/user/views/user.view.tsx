@@ -114,7 +114,9 @@ const UserView: FC = () => {
           />
           <SnbListButtonType2
             title={'Alamat Toko'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailAddressView')
+            }
           />
         </View>
         <View style={{ marginBottom: 16 }}>

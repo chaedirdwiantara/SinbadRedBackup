@@ -3,6 +3,7 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
+  SnbUploadPhotoRules,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
@@ -35,8 +36,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderCompletenessInformationMerchant();
       //   case 'merchantAddress':
       //     return renderAddressMerchant();
-      //   case 'merchantOwnerImageId':
-      //     return renderOwnerImageId();
+      case 'merchantOwnerImageId':
+        return renderOwnerImageId();
       //   case 'merchantOwnerImageSelfie':
       //     return renderOwnerImageSelfie();
       //   case 'merchantOwnerImageTax':
@@ -128,6 +129,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           value={''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
+        />
+      </View>
+    );
+  };
+  /** === RENDER OWNER IMAGE ID === */
+  const renderOwnerImageId = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <SnbUploadPhotoRules
+          rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
+          imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+          title="Unggah Foto KTP"
+          rules={[
+            'Pastikan KTP sesuai dengan identitas Anda',
+            'KTP Tidak silau dan tidak buram',
+            'Pastikan KTP bisa terbaca dengan jelas',
+            'Hindari Tangan Menutupi KTP',
+          ]}
+          action={() => {}}
         />
       </View>
     );
@@ -255,10 +275,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** this for main view */
   return (
-    <View>
+    <View style={{flex: 1}}>
       <ScrollView style={MerchantStyles.mainContainer}>
         {switchView()}
-        <View style={{ paddingBottom: 50 }} />
       </ScrollView>
       {renderButton()}
       {/* {renderButtonOpenCamera()} */}

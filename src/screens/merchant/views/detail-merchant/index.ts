@@ -3,6 +3,7 @@ import MerchantDetailProfileView from './merchant-detail-profile.view';
 import MerchantDetailInformationView from './merchant-detail-information.view';
 import MerchantDetailAccountView from './merchant-detail-account.view';
 import MerchantSupplierInformationView from './merchant-supplier-information.view';
+import MerchantDetailAddressView from './merchant-detail-address.view';
 /** === IMPORT ALL MODULE'S FUNCTION HERE === */
 /** === IMPORT ALL MODULE'S STYLE HERE === */
 /** === IMPORT ALL MODULE'S TEST HERE === */
@@ -12,6 +13,7 @@ export {
   MerchantDetailInformationView,
   MerchantDetailAccountView,
   MerchantSupplierInformationView,
+  MerchantDetailAddressView,
 };
 /**
  * ================================================================

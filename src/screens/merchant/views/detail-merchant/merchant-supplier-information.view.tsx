@@ -5,11 +5,11 @@ import {
   SnbText,
   SnbBadge,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
-import MerchantStyles from '../../styles/merchant.style';
+// import MerchantStyles from '../../styles/merchant.style';
 
 const MerchantSupplierInformationView: FC = () => {
   /** === VIEW === */
@@ -46,7 +46,7 @@ const MerchantSupplierInformationView: FC = () => {
           <View style={{ marginVertical: 8 }}>
             <SnbText.B3>07 Des 2020 09.58</SnbText.B3>
           </View>
-          {renderBadge('verified', 'test')}
+          {renderBadge('guest', 'test')}
           <View
             style={{
               borderTopWidth: 1,
@@ -61,7 +61,7 @@ const MerchantSupplierInformationView: FC = () => {
   // RENDER BADGE
   const renderBadge = (status: string, message: string) => {
     let title = '';
-    let type = color.black10;
+    let type = 'success';
     switch (status) {
       case 'verified':
         title = 'Terverifikasi';
@@ -69,17 +69,17 @@ const MerchantSupplierInformationView: FC = () => {
         break;
       case 'rejected':
         title = 'Ditolak';
-        type = 'success';
+        type = 'error';
         break;
       case 'pending':
       case 'updating':
       case 'guest':
         title = 'Menunggu Verifikasi';
-        type = 'success';
+        type = 'warning';
     }
     return (
       <View>
-        <SnbBadge.Label type="error" value="Example" />
+        <SnbBadge.Label type={type} value={title} />
       </View>
     );
   };
