@@ -38,10 +38,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       //     return renderAddressMerchant();
       case 'merchantOwnerImageId':
         return renderOwnerImageId();
-      //   case 'merchantOwnerImageSelfie':
-      //     return renderOwnerImageSelfie();
-      //   case 'merchantOwnerImageTax':
-      //     return renderOwnerImageTax();
+      case 'merchantOwnerImageSelfie':
+        return renderOwnerImageSelfie();
+      case 'merchantOwnerImageTax':
+        return renderOwnerImageTax();
       case 'merchantAccountName':
         return renderMerchantAccountName();
       case 'merchantAccountPhoneNo':
@@ -138,14 +138,52 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     return (
       <View style={{ flex: 1 }}>
         <SnbUploadPhotoRules
-          rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-          imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+          rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
+          imgSrc="https://s3-alpha-sig.figma.com/img/4e9b/f869/7b2c7d944da2051c0422f41d9b920d88?Expires=1632096000&Signature=PcMkPhandytpXueLoKbXpj9CUT-4LYOkuxWsfeCUMeMhVNynnb66TmCR6JFZWx-5DLmy0fS0Q6KbGajNdAGbG7DD0Oa76~Z0~1F7K7eItCqYgyCwUL8SGpc~frmLBUqLTqs-NqOea0vPqJifZL-d-nt7IK3XWQ97~IYjB5ujfx87JbeE-k1U-YkQsYjV7zr00rdg4h-gekAhYW0rHN~-4Hm6P8qjFGIaY3p3X4leIanac8HYnx~bpQHIY8HMA-Fz69TxpmamCyKuhau2HwOMcvW2EcYbr4424YrsQUhnNYmsIw7BTckpMk2NYKTXG~3vSzisYypLJQxHItfBZEi0VQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
           title="Unggah Foto KTP"
           rules={[
             'Pastikan KTP sesuai dengan identitas Anda',
             'KTP Tidak silau dan tidak buram',
             'Pastikan KTP bisa terbaca dengan jelas',
             'Hindari Tangan Menutupi KTP',
+          ]}
+          action={() => {}}
+        />
+      </View>
+    );
+  };
+  /** === RENDER OWNER IMAGE Selfie === */
+  const renderOwnerImageSelfie = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <SnbUploadPhotoRules
+          rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
+          imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+          title="Unggah Foto Diri dengan KTP Owner"
+          rules={[
+            'Posisikan KTP di bawah dagu Anda',
+            'KTP Tidak silau dan tidak buram',
+            'Pastikan KTP bisa terbaca dengan jelas',
+            'Hindari Tangan Menutupi KTP',
+          ]}
+          action={() => {}}
+        />
+      </View>
+    );
+  };
+  /** === RENDER OWNER IMAGE TAX === */
+  const renderOwnerImageTax = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <SnbUploadPhotoRules
+          rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
+          imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+          title="Unggah Foto NPWP"
+          rules={[
+            'Pastikan NPWP sesuai dengan identitas Anda',
+            'NPWP Tidak silau dan tidak buram',
+            'Pastikan NPWP bisa terbaca dengan jelas',
+            'Hindari Tangan Menutupi NPWP',
           ]}
           action={() => {}}
         />
