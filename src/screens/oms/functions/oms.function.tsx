@@ -27,4 +27,10 @@ const goToCart4 = () => {
   NavigationAction.navigate('OmsShoppingCart4View');
 };
 
-export const OmsFunc = { goBack, backToCart, goToCart2, goToCart3, goToCart4 };
+export const OmsFunc = {
+  goBack,
+  backToCart,
+  goToCart2,
+  goToCart3,
+  goToCart4,
+};
