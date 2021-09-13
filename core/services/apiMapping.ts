@@ -1,17 +1,31 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import api from './api';
-import { ListSuccessProps } from '../models/list.model';
-import { DetailSuccessProps } from '../models/detail.model';
+import apiGeneral from './apiGeneral';
+import { ListSuccessProps, DetailSuccessProps } from '@models';
 /** === FUNCTION === */
 const apiMapping = <T>(
-  endpoint: string,
-  request: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE',
+  path: string,
+  module: 'account' | 'cart' | 'product',
+  version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE',
+  params?: object,
 ) => {
-  switch (request) {
+  switch (type) {
     case 'LIST':
-      return api<ListSuccessProps<T>>(endpoint, 'GET');
+      return apiGeneral<ListSuccessProps<T>>(
+        path,
+        module,
+        version,
+        'GET',
+        params,
+      );
     case 'DETAIL':
-      return api<DetailSuccessProps<T>>(endpoint, 'GET');
+      return apiGeneral<DetailSuccessProps<T>>(
+        path,
+        module,
+        version,
+        'GET',
+        params,
+      );
     default:
       break;
   }
