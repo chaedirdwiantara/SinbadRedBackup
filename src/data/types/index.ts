@@ -8,6 +8,8 @@ export * from './example2.type';
 export * from './global.type';
 export * from './user.type';
 export * from './register.type';
+export * from './auth.type';
+export * from './product.type';
 /**
  * ================================================================
  * NOTES
