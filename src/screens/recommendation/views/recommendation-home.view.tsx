@@ -2,7 +2,6 @@
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText } from 'react-native-sinbad-ui';
-import Svg from '@svg';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT STYLE HERE === */
 import RecommendationStyle from '../styles/recommendation.style';
@@ -13,7 +12,6 @@ const RecommendationHomeView: FC = () => {
   return (
     <View style={RecommendationStyle.recommendationHomeContainer}>
       <TouchableOpacity>
-        <Svg name="penguin" size={64} color={'red'} />
         <SnbText.B1>Recommendation Here</SnbText.B1>
       </TouchableOpacity>
     </View>

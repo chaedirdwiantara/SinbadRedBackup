@@ -1,0 +1,29 @@
+/** === IMPORT PACKAGE HERE === */
+import { put, call, takeLatest } from 'redux-saga/effects';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { UserApi } from '../apis/user.api';
+import * as ActionCreators from '@actions';
+import * as types from '@types';
+import * as models from '@models';
+/** === FUNCTION === */
+/** => list example */
+function* storeDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.StoreDetail> = yield call(
+      () => {
+        return UserApi.storeDetail(action.payload);
+      },
+    );
+    yield action.contextDispatch(ActionCreators.storeDetailSuccess(response));
+    yield put(ActionCreators.storeDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(ActionCreators.storeDetailFailed(error));
+    yield put(ActionCreators.storeDetailFailed(error));
+  }
+}
+/** === LISTEN FUNCTION === */
+function* UserSaga() {
+  yield takeLatest(types.STORE_DETAIL_PROCESS, storeDetail);
+}
+
+export default UserSaga;
