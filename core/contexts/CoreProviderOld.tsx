@@ -5,9 +5,9 @@ import {
   example2Reducer,
   exampleInitialState,
   example2InitialState,
-} from './core.context';
+} from './core.contextOld';
 
-const CoreProvider: React.FC = ({ children }) => {
+const CoreProvidersOld: React.FC = ({ children }) => {
   // const [state, dispatch] = useReducer(mainReducer, initialState);
   const [stateExample, dispatchExample] = React.useReducer(
     exampleReducer,
@@ -33,4 +33,4 @@ const CoreProvider: React.FC = ({ children }) => {
   );
 };
 
-export { CoreProvider, CoreContext };
+export { CoreProvidersOld, CoreContext };

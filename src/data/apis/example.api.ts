@@ -1,16 +1,20 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMapping from '../../../core/services/apiMapping';
+import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '../models';
 /** === FUNCTION === */
 /** => list example */
 const listExample = (data: models.ListProcessProps) => {
-  const endpoint = `example?limit=${data.limit}&skip=${data.skip}`;
-  return apiMapping<models.Example[]>(endpoint, 'LIST');
+  const mockHost =
+    'https://dc687b55-e036-4881-bd9d-e293f9177435.mock.pstmn.io/';
+  const path = `example?limit=${data.limit}&skip=${data.skip}`;
+  return apiMappingMock<models.ProductList[]>(mockHost, path, 'LIST');
 };
 /** => detail example */
 const detailExample = (data: models.DetailProcessProps) => {
-  const endpoint = `example/${data.id}`;
-  return apiMapping<models.Example>(endpoint, 'DETAIL');
+  const mockHost =
+    'https://dc687b55-e036-4881-bd9d-e293f9177433.mock.pstmn.io/';
+  const path = `example/${data.id}`;
+  return apiMappingMock<models.Example>(mockHost, path, 'DETAIL');
 };
 /** === EXPORT FUNCTIONS === */
 export const ExampleApi = {

@@ -3,12 +3,14 @@ import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { CoreContext } from '@context';
+import { contexts } from '@contexts';
 import { goBack, useExampleDetailAction } from '../functions';
 /** === COMPONENT === */
 const ExampleDetailView: React.FC = () => {
   /** === HOOK === */
-  const { stateExample, dispatchExample } = React.useContext(CoreContext);
+  const { stateExample, dispatchExample } = React.useContext(
+    contexts.ExampleContext,
+  );
   const exampleDetailAction = useExampleDetailAction();
   const exampleState = stateExample.detail;
   /** => effect */
