@@ -7,7 +7,7 @@ import {
   SnbText,
   SnbIconHint,
   SnbListButtonType2,
-  SnbCardMultiButton,
+  SnbCardMultiButtonType1,
   SnbSvgIcon,
   SnbCardButtonType2,
 } from 'react-native-sinbad-ui';
@@ -59,7 +59,7 @@ const UserView: FC = () => {
       <View>
         <View style={UserStyles.headerBackground} />
         <View style={{ marginTop: -40, marginHorizontal: -10 }}>
-          <SnbCardMultiButton
+          <SnbCardMultiButtonType1
             buttonList={[
               {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
@@ -96,7 +96,9 @@ const UserView: FC = () => {
           </View>
           <SnbListButtonType2
             title={'Data Diri'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailProfileView')
+            }
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -106,11 +108,15 @@ const UserView: FC = () => {
           </View>
           <SnbListButtonType2
             title={'Informasi Toko'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailInformationView')
+            }
           />
           <SnbListButtonType2
             title={'Alamat Toko'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantDetailAddressView')
+            }
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -119,7 +125,9 @@ const UserView: FC = () => {
           </View>
           <SnbListButtonType2
             title={'Informasi Supplier'}
-            onPress={() => console.log('test')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantSupplierInformationView')
+            }
           />
         </View>
       </View>
