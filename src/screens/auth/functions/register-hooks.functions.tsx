@@ -2,7 +2,6 @@ import { navigate } from '@core/navigations/RootNavigation';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  REGISTER_OTP_VIEW,
   REGISTER_STEP_2_VIEW,
   REGISTER_STEP_3_VIEW,
   REGISTER_STEP_4_VIEW,
@@ -44,15 +43,7 @@ export const useRegister: any = () => {
     setPhone(text);
   };
 
-  const handleRegisterProcess = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setPhone('');
-      setPhoneError('');
-      navigation.navigate(REGISTER_OTP_VIEW);
-    }, 1000);
-  };
+  const handleRegisterProcess = () => {};
 
   return {
     func: {

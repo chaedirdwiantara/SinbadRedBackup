@@ -11,6 +11,7 @@ import {
   useRegisterStep6,
   useRegisterStep7,
 } from './register-hooks.functions';
+import { useInputPhone } from './auth-hooks.functions';
 
 export {
   useLogin,
@@ -24,4 +25,5 @@ export {
   useRegisterStep5,
   useRegisterStep6,
   useRegisterStep7,
+  useInputPhone,
 };

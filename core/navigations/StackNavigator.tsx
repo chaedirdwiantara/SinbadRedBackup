@@ -45,7 +45,7 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName="RegisterStep2View">
+    <Navigator initialRouteName="Intro">
       {IntroNav()}
       {tabNav()}
       {projectNav()}

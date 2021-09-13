@@ -1,4 +1,4 @@
-import { useLogin } from '@screen/auth/functions';
+import { useInputPhone, useLogin } from '@screen/auth/functions';
 import { LOGIN_ID_VIEW, REGISTER_VIEW } from '@screen/auth/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
@@ -13,6 +13,8 @@ import {
 
 const Content: React.FC = () => {
   const { func, state, navigate }: any = useLogin();
+  const inputPhoneProps = useInputPhone();
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 16 }}>
@@ -20,18 +22,10 @@ const Content: React.FC = () => {
       </View>
       <View style={{ height: 84, padding: 16 }}>
         <SnbTextField.Text
-          type={state.type}
           labelText="Nomor Handphone"
-          maxLength={16}
-          keyboardType="phone-pad"
-          onChangeText={func.handleOnChangeTextPhone}
-          valMsgError={state.phoneError}
           placeholder="Masukkan nomor handphone anda"
-          value={state.phone}
-          clearText={() => {
-            func.setPhone('');
-            func.reinitializeState();
-          }}
+          keyboardType="phone-pad"
+          {...inputPhoneProps}
         />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
