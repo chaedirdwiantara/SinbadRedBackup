@@ -12,12 +12,12 @@
     "baseUrl": ".",
     "paths": {
       "@core/*": ["core/*"],
-      "@context": ["core/contexts/CoreProvider"],
       "@screen/*": ["src/screens/*"],
       "@action/*": ["src/data/actions/*"],
       "@actions": ["src/data/actions/index"],
       "@reducer/*": ["src/data/reducers/*"],
       "@reducers": ["src/data/reducers/index"],
+      "@contexts": ["src/data/contexts/index"],
       "@model/*": ["src/data/models/*"],
       "@models": ["src/data/models/index"],
       "@saga/*": ["src/data/sagas/*"],
