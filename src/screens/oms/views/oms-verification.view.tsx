@@ -9,6 +9,7 @@ import {
   color,
   SnbIcon,
   SnbBadge,
+  SnbButton,
 } from 'react-native-sinbad-ui';
 import { OmsFunc } from '../functions';
 /** === DUMMIES === */
@@ -98,6 +99,7 @@ const dummies = {
 };
 /** === COMPONENT === */
 const OmsVerificationView: FC = () => {
+  const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
   /** === VIEW === */
   /** => header */
@@ -108,19 +110,6 @@ const OmsVerificationView: FC = () => {
         title={'Verifikasi Order'}
         backAction={() => OmsFunc.goBack()}
       />
-    );
-  };
-  /** => content */
-  const renderContent = () => {
-    return (
-      <View style={{ padding: 16 }}>
-        <View>
-          <SnbText.B4>BERIKUT INI ADALAH RINGKASAN ORDER ANDA</SnbText.B4>
-          <SnbDivider style={{ marginVertical: 16 }} />
-        </View>
-        {renderDiscountList()}
-        {renderBonusList()}
-      </View>
     );
   };
   /** => discount list */
@@ -135,7 +124,11 @@ const OmsVerificationView: FC = () => {
             <React.Fragment key={index}>
               {renderDiscountItem(item)}
               <SnbDivider style={{ marginBottom: 12 }} />
-              {renderCutDetail()}
+              {renderDiscountDetail(
+                [...item.listPromo, ...item.listVoucher],
+                item.totalPotongan,
+                index,
+              )}
             </React.Fragment>
           );
         })}
@@ -143,7 +136,13 @@ const OmsVerificationView: FC = () => {
     );
   };
   /** => discount item */
-  const renderDiscountItem = (item) => {
+  const renderDiscountItem = (item: {
+    catalogueImages: string;
+    name: string;
+    qty: number;
+    price: number;
+    totalPrice: number;
+  }) => {
     return (
       <View style={{ flexDirection: 'row', marginBottom: 8 }}>
         <Image
@@ -167,55 +166,80 @@ const OmsVerificationView: FC = () => {
       </View>
     );
   };
-  /** => cut detail */
-  const renderCutDetail = () => {
+  /** => discount detail */
+  const renderDiscountDetail = (
+    discountList: {
+      id: number;
+      name: string;
+      value: number;
+      promoOwner?: string;
+    }[],
+    totalDiscount: number,
+    itemIndex: number,
+  ) => {
+    const isActive = activeSpoiler === itemIndex;
     return (
       <View>
-        <View style={{ marginLeft: 16 }}>
-          <View>
-            <SnbBadge.Label
-              type={'error'}
-              value={'Promo Spesial Supplier'}
-              iconName={'settings'}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: 12,
-              }}>
-              <View style={{ width: '60%' }}>
-                <SnbText.B3>Promo Potongan Harga Rp 500 Lakme</SnbText.B3>
-              </View>
-              <SnbText.B3 color={color.green50}>Rp 139.000.000</SnbText.B3>
-            </View>
+        {isActive ? (
+          <View style={{ marginLeft: 16 }}>
+            {discountList.map((item, index) => {
+              const isLast = index === discountList.length - 1;
+              return (
+                <React.Fragment key={index}>
+                  {item.promoOwner !== 'none' ? (
+                    <SnbBadge.Label
+                      type={'error'}
+                      value={'Promo Spesial Supplier'}
+                      iconName={'settings'}
+                    />
+                  ) : (
+                    <View />
+                  )}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom: 12,
+                    }}>
+                    <View style={{ width: '60%' }}>
+                      <SnbText.B3>{item.name}</SnbText.B3>
+                    </View>
+                    <SnbText.B3 color={color.green50}>{item.value}</SnbText.B3>
+                  </View>
+                  {isLast ? (
+                    <View />
+                  ) : (
+                    <SnbDivider style={{ marginBottom: 12 }} />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </View>
-          <SnbDivider style={{ marginBottom: 12 }} />
-          <View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: 12,
-              }}>
-              <View style={{ width: '60%' }}>
-                <SnbText.B3>Promo Potongan Harga Rp 500 Lakme</SnbText.B3>
-              </View>
-              <SnbText.B3 color={color.green50}>Rp 139.000.000</SnbText.B3>
-            </View>
-          </View>
-        </View>
+        ) : (
+          <View />
+        )}
         <TouchableOpacity
+          onPress={() => {
+            if (isActive) {
+              setActiveSpoiler(null);
+            } else {
+              setActiveSpoiler(itemIndex);
+            }
+          }}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginBottom: 16,
           }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbIcon name={'expand_more'} size={24} color={color.black100} />
+            <SnbIcon
+              name={isActive ? 'expand_less' : 'expand_more'}
+              size={24}
+              color={color.black100}
+            />
             <SnbText.B4>Total Potongan</SnbText.B4>
           </View>
-          <SnbText.B4>Rp 339</SnbText.B4>
+          <SnbText.B4>{totalDiscount}</SnbText.B4>
         </TouchableOpacity>
       </View>
     );
@@ -228,11 +252,10 @@ const OmsVerificationView: FC = () => {
           <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
         </View>
         {dummies.bonusSku.map((item, index) => {
-          const isLast = index === dummies.bonusSku.length - 1;
           return (
             <React.Fragment key={index}>
               {renderBonusItem(item)}
-              {isLast ? <View /> : <SnbDivider style={{ marginBottom: 12 }} />}
+              <SnbDivider style={{ marginBottom: 12 }} />
             </React.Fragment>
           );
         })}
@@ -240,7 +263,12 @@ const OmsVerificationView: FC = () => {
     );
   };
   /** => bonus item */
-  const renderBonusItem = (item) => {
+  const renderBonusItem = (item: {
+    catalogueImages: string;
+    name: string;
+    promoName: string;
+    qty: number;
+  }) => {
     return (
       <View style={{ flexDirection: 'row', marginBottom: 8 }}>
         <Image
@@ -263,11 +291,113 @@ const OmsVerificationView: FC = () => {
       </View>
     );
   };
+  /** => non-discount list */
+  const renderNonDiscountList = () => {
+    return (
+      <View>
+        <View style={{ marginBottom: 24 }}>
+          <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
+        </View>
+        {dummies.notPromoSku.map((item, index) => {
+          return (
+            <React.Fragment key={index}>
+              {renderNonDiscountItem(item)}
+              <SnbDivider style={{ marginBottom: 12 }} />
+            </React.Fragment>
+          );
+        })}
+      </View>
+    );
+  };
+  /** => non-discount item */
+  const renderNonDiscountItem = (item: {
+    catalogueImages: string;
+    name: string;
+    qty: number;
+    price: number;
+    totalPrice: number;
+  }) => {
+    return (
+      <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+        <Image
+          source={{
+            uri: item.catalogueImages,
+          }}
+          style={{ width: 69, height: 69, marginRight: 8 }}
+        />
+        <View style={{ flex: 1 }}>
+          <View style={{ width: '80%' }}>
+            <SnbText.B4>{item.name}</SnbText.B4>
+          </View>
+          <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
+          <SnbText.C2 color={color.red50}>{item.price}</SnbText.C2>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <SnbText.C2>Total</SnbText.C2>
+            <SnbText.C2>{item.totalPrice}</SnbText.C2>
+          </View>
+        </View>
+      </View>
+    );
+  };
+  /** => bottom */
+  const renderBottom = () => {
+    return (
+      <View
+        style={{
+          borderTopColor: color.black10,
+          borderTopWidth: 1,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+        }}>
+        <View>
+          <View
+            style={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+            <SnbText.B4>Total (Sebelum Pajak)</SnbText.B4>
+            <SnbDivider />
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <SnbText.B3>Total Transaksi</SnbText.B3>
+              <SnbText.B3>Rp 100.000</SnbText.B3>
+            </View>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <SnbText.B3>Total Potongan</SnbText.B3>
+              <SnbText.B3>Rp 698</SnbText.B3>
+            </View>
+          </View>
+          <View style={{ height: 75 }}>
+            <SnbButton.Single
+              type={'primary'}
+              title={'Lanjut Ke Pembayaran'}
+              disabled={false}
+              onPress={() => OmsFunc.goToCheckout()}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  };
+  /** => content */
+  const renderContent = () => {
+    return (
+      <View style={{ padding: 16 }}>
+        <View>
+          <SnbText.B4>BERIKUT INI ADALAH RINGKASAN ORDER ANDA</SnbText.B4>
+          <SnbDivider style={{ marginVertical: 16 }} />
+        </View>
+        {renderDiscountList()}
+        {renderBonusList()}
+        {renderNonDiscountList()}
+      </View>
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
       {renderHeader()}
       <ScrollView>{renderContent()}</ScrollView>
+      {renderBottom()}
     </SnbContainer>
   );
 };
