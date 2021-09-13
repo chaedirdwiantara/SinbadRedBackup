@@ -366,12 +366,12 @@ const OmsVerificationView: FC = () => {
               <SnbText.B3>Rp 698</SnbText.B3>
             </View>
           </View>
-          <View style={{ height: 80 }}>
+          <View style={{ height: 75 }}>
             <SnbButton.Single
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
               disabled={false}
-              onPress={() => {}}
+              onPress={() => OmsFunc.goToCheckout()}
             />
           </View>
         </View>
