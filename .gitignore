@@ -63,4 +63,5 @@ buck-out/
 /ios/Pods/
 
 # iOS
-*.plist
+GoogleService-Info.plist
+GoogleService*
