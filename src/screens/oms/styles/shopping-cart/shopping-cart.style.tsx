@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
-const OmsStyles = StyleSheet.create({
+export const ShoppingCartStyles = StyleSheet.create({
   cardContainer: {
     paddingHorizontal: 16,
     borderBottomWidth: 8,
@@ -46,5 +46,3 @@ const OmsStyles = StyleSheet.create({
     borderTopWidth: 1,
   },
 });
-
-export default OmsStyles;

@@ -6,18 +6,25 @@ interface ToCurrencyOptions {
 /** === FUNCTION === */
 const toCurrency = (nominal: number, options: ToCurrencyOptions = {}) => {
   const { withPrefix = true, withFraction = true } = options;
-  const usedOptions: Intl.NumberFormatOptions = { maximumFractionDigits: 0 };
-
-  if (withPrefix) {
-    usedOptions.style = 'currency';
-    usedOptions.currency = 'IDR';
-  }
+  const prefix = 'Rp';
+  let transformed: string;
 
   if (withFraction) {
-    usedOptions.maximumFractionDigits = 2;
+    transformed = nominal.toFixed(2);
+  } else {
+    transformed = nominal.toString();
   }
 
-  return new Intl.NumberFormat('id-ID', usedOptions).format(nominal);
+  const [currency, decimal] = transformed.split('.');
+  const converted = `${currency.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}${
+    withFraction ? ',' + decimal : ''
+  }`;
+
+  if (withPrefix) {
+    return `${prefix} ${converted}`;
+  }
+
+  return converted;
 };
 
 export { toCurrency };

@@ -11,9 +11,9 @@ import {
   color,
   SnbDialog,
 } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../core/functions/global/currency-format';
-import { OmsFunc } from '../functions';
-import OmsStyle from '../styles/oms.style';
+import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { OmsFunc, ShoppingCartFunc } from '../../functions';
+import { ShoppingCartStyles } from '../../styles';
 /** === TYPES === */
 export type DeterminateCheckboxStatus = 'selected' | 'unselect';
 export type CheckboxStatus = DeterminateCheckboxStatus | 'indeterminate';
@@ -133,7 +133,7 @@ const OmsShoppingCartView: FC = () => {
     useState<CheckboxStatus>('unselect');
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const totalProducts = useMemo(
-    () => OmsFunc.getTotalProducts(invoiceGroups),
+    () => ShoppingCartFunc.getTotalProducts(invoiceGroups),
     [],
   );
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
@@ -144,7 +144,7 @@ const OmsShoppingCartView: FC = () => {
     return (
       <SnbTopNav.Type3
         type="red"
-        title={'Keranjang 1'}
+        title={'Keranjang'}
         backAction={() => OmsFunc.goBack()}
       />
     );
@@ -154,7 +154,7 @@ const OmsShoppingCartView: FC = () => {
     <Fragment>
       <View style={{ padding: 16, alignItems: 'center', marginBottom: 24 }}>
         <Image
-          source={require('../../../assets/images/oms_empty_cart.png')}
+          source={require('../../../../assets/images/oms_empty_cart.png')}
           width={180}
           style={{ marginTop: 24, marginBottom: 16 }}
         />
@@ -177,11 +177,11 @@ const OmsShoppingCartView: FC = () => {
   );
   /** => Shipping Address */
   const renderShippingAddress = () => (
-    <View style={OmsStyle.cardContainer}>
-      <View style={OmsStyle.topCardSlot}>
+    <View style={ShoppingCartStyles.cardContainer}>
+      <View style={ShoppingCartStyles.topCardSlot}>
         <SnbText.B4>Alamat Pengiriman</SnbText.B4>
       </View>
-      <View style={OmsStyle.verticalBottomCardSlot}>
+      <View style={ShoppingCartStyles.verticalBottomCardSlot}>
         <View style={{ marginBottom: 6 }}>
           <SnbText.B4>{userName}</SnbText.B4>
         </View>
@@ -204,7 +204,7 @@ const OmsShoppingCartView: FC = () => {
     return (
       <View
         style={{
-          ...OmsStyle.horizontalBottomCardSlot,
+          ...ShoppingCartStyles.horizontalBottomCardSlot,
           paddingBottom: 18,
           borderBottomWidth: productIndex === brand.products.length - 1 ? 0 : 1,
           borderStyle: 'solid',
@@ -216,7 +216,7 @@ const OmsShoppingCartView: FC = () => {
             <SnbCheckbox
               status={product.selected}
               onPress={() =>
-                OmsFunc.handleSelectedProductChange(
+                ShoppingCartFunc.handleSelectedProductChange(
                   invoiceGroupIndex,
                   brandIndex,
                   productIndex,
@@ -249,7 +249,7 @@ const OmsShoppingCartView: FC = () => {
                 disabled={product.qty === 0}
                 buttonColor={color.black60}
                 onPress={() =>
-                  OmsFunc.handleProductQuantityChange(
+                  ShoppingCartFunc.handleProductQuantityChange(
                     invoiceGroupIndex,
                     brandIndex,
                     productIndex,
@@ -258,7 +258,7 @@ const OmsShoppingCartView: FC = () => {
                   )
                 }
               />
-              <View style={OmsStyle.qtyText}>
+              <View style={ShoppingCartStyles.qtyText}>
                 <SnbText.B3>{product.qty}</SnbText.B3>
               </View>
               <SnbButton.Dynamic
@@ -269,7 +269,7 @@ const OmsShoppingCartView: FC = () => {
                 disabled={product.qty === product.stock}
                 buttonColor={color.red50}
                 onPress={() =>
-                  OmsFunc.handleProductQuantityChange(
+                  ShoppingCartFunc.handleProductQuantityChange(
                     invoiceGroupIndex,
                     brandIndex,
                     productIndex,
@@ -288,7 +288,7 @@ const OmsShoppingCartView: FC = () => {
           }}>
           <TouchableOpacity
             onPress={() =>
-              OmsFunc.handleProductDelete(
+              ShoppingCartFunc.handleProductDelete(
                 invoiceGroupIndex,
                 brandIndex,
                 productIndex,
@@ -316,7 +316,7 @@ const OmsShoppingCartView: FC = () => {
     <Fragment key={brand.name}>
       <View
         style={{
-          ...OmsStyle.topCardSlot,
+          ...ShoppingCartStyles.topCardSlot,
           borderStyle: 'solid',
           borderTopWidth: brandIndex === 0 ? 0 : 1,
           borderTopColor: color.black10,
@@ -325,7 +325,7 @@ const OmsShoppingCartView: FC = () => {
           <SnbCheckbox
             status={brand.selected}
             onPress={() =>
-              OmsFunc.handleSelectedBrandChange(
+              ShoppingCartFunc.handleSelectedBrandChange(
                 invoiceGroupIndex,
                 brandIndex,
                 brand.selected === 'indeterminate' ||
@@ -358,8 +358,8 @@ const OmsShoppingCartView: FC = () => {
     invoiceGroup: InvoiceGroup,
     invoiceGroupIndex: number,
   ) => (
-    <View style={OmsStyle.cardContainer} key={invoiceGroup.name}>
-      <View style={OmsStyle.topCardSlot}>
+    <View style={ShoppingCartStyles.cardContainer} key={invoiceGroup.name}>
+      <View style={ShoppingCartStyles.topCardSlot}>
         <SnbText.B4>{invoiceGroup.name}</SnbText.B4>
       </View>
       {invoiceGroup.brands.map((brand, brandIndex) =>
@@ -381,18 +381,18 @@ const OmsShoppingCartView: FC = () => {
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() => OmsFunc.goToCheckout()}
+      ok={() => OmsFunc.goToVerification()}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
     />
   );
   /** => Footer */
   const renderFooter = () => (
-    <View style={OmsStyle.footer}>
+    <View style={ShoppingCartStyles.footer}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <SnbCheckbox
           status={allProductsSelected}
           onPress={() =>
-            OmsFunc.handleAllSelectedProductsChange(
+            ShoppingCartFunc.handleAllSelectedProductsChange(
               allProductsSelected === 'indeterminate' ||
                 allProductsSelected === 'unselect'
                 ? 'selected'
@@ -420,7 +420,7 @@ const OmsShoppingCartView: FC = () => {
               <SnbText.B3>Total:</SnbText.B3>
             </View>
             <SnbText.B2 color={color.red50}>
-              {toCurrency(OmsFunc.getTotalPrice(invoiceGroups))}
+              {toCurrency(ShoppingCartFunc.getTotalPrice(invoiceGroups))}
             </SnbText.B2>
           </View>
           <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
