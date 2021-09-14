@@ -3,7 +3,7 @@ import {
   OmsShoppingCart2View,
   OmsShoppingCart3View,
   OmsShoppingCart4View,
-  OmsVerificationView,
+  OmsVerificationOrderView,
   OmsCheckoutView,
 } from '@screen/oms/views';
 
@@ -20,8 +20,8 @@ const OmsNav = {
   OmsShoppingCart4View: {
     component: OmsShoppingCart4View,
   },
-  OmsVerificationView: {
-    component: OmsVerificationView,
+  OmsVerificationOrderView: {
+    component: OmsVerificationOrderView,
   },
   OmsCheckoutView: {
     component: OmsCheckoutView,

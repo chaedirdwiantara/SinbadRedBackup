@@ -11,94 +11,80 @@ import {
   SnbBadge,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { OmsFunc } from '../functions';
+import { OmsFunc } from '../../functions';
+import styles from '../../styles/verification-order/verification-order.style';
+/** === INTERFACE === */
 /** === DUMMIES === */
 const dummies = {
-  cartId: 2623482,
-  storeId: 5257192,
-  grandTotalTransaction: 27758640,
-  grandTotalRebate: 0,
-  bonusSku: [
+  totalTransaction: 27758640,
+  totalRebate: 0,
+  bonusProduct: [
     {
-      id: '879',
-      name: 'MEGkeju Serbaguna 165 gr (48)',
+      promoId: 879,
       promoName: 'PROMOFGCHEESE',
-      promoOwner: 'none',
-      qty: 35,
-      catalogueImages:
+      productId: 'uuid',
+      productName: 'MEGkeju Serbaguna 165 gr (48)',
+      productQty: 35,
+      productImageUrl:
         'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/31438/image_1626691143340.png',
     },
     {
-      id: '880',
-      name: 'MEGkeju Serbaguna 165 gr (48)',
+      promoId: 879,
       promoName: 'PROMOFGCHEESE',
-      promoOwner: 'none',
-      qty: 35,
-      catalogueImages:
+      productId: 'uuid',
+      productName: 'MEGkeju Serbaguna 165 gr (48)',
+      productQty: 35,
+      productImageUrl:
         'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/31438/image_1626691143340.png',
     },
   ],
-  promoSku: [
+  discountProduct: [
     {
-      id: 1,
-      name: 'SGM EKSPLOR 1+ MADU 1200 GR GA',
-      catalogueImages:
+      productName: 'SGM EKSPLOR 1+ MADU 1200 GR GA',
+      productImageUrl:
         'https://sinbad-website.s3.amazonaws.com/odoo_img/product/115822.png',
       qty: 20,
       price: 25000,
-      totalPrice: 500000,
-      totalPotongan: 21000,
-      listPromo: [
+      totalProductPrice: 500000,
+      totalProductDiscount: 21000,
+      promoList: [
         {
-          id: 11,
-          name: 'Promo 1',
-          value: 5000,
+          promoId: 11,
+          promoName: 'Promo 1',
+          promoValue: 5000,
+          promoOwner: 'supplier',
         },
         {
-          id: 12,
-          name: 'Promo 2',
-          value: 6000,
+          promoId: 12,
+          promoName: 'Promo 2',
+          promoValue: 6000,
+          promoOwner: 'none',
         },
       ],
-      listVoucher: [
+      voucherList: [
         {
-          id: 1,
-          name: 'Voucher Promo 1',
-          value: 5000,
+          voucherId: 1,
+          voucherName: 'Voucher Promo 1',
+          voucherValue: 5000,
+          voucherOwner: 'none',
         },
       ],
     },
   ],
   notPromoSku: [
     {
-      id: 31437,
-      name: 'MEGKEJU SERBAGUNA 2 KG (8)',
-      qty: 280,
-      catalogueImages:
-        'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/31437/image_1626690745603.png',
-      price: 99138,
-      totalPrice: 27758640,
+      productName: 'SGM EKSPLOR 1+ MADU 1200 GR GA',
+      productImageUrl:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/115822.png',
+      qty: 20,
+      price: 25000,
+      totalProductPrice: 500000,
     },
   ],
-  meta: {
-    layer_01: {
-      skuPromo: [
-        {
-          catalogueBonusId: '31438',
-          catalogueBonusQty: 35,
-          promoId: '879',
-          promoName: 'PROMOFGCHEESE',
-          promoOwner: 'none',
-        },
-      ],
-      voucher: [],
-      layerRebate: 0,
-    },
-    totalLayerRebate: 0,
-  },
+  meta: 'TBD',
 };
 /** === COMPONENT === */
-const OmsVerificationView: FC = () => {
+const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
   /** === VIEW === */
@@ -116,17 +102,18 @@ const OmsVerificationView: FC = () => {
   const renderDiscountList = () => {
     return (
       <View>
-        <View style={{ marginBottom: 24 }}>
-          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${dummies.bonusSku.length} SKU)`}</SnbText.B4>
+        <View style={styles.listHeader}>
+          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${dummies.discountProduct.length} SKU)`}</SnbText.B4>
         </View>
-        {dummies.promoSku.map((item, index) => {
+        {dummies.discountProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderDiscountItem(item)}
-              <SnbDivider style={{ marginBottom: 12 }} />
+              <SnbDivider style={styles.listDivider} />
               {renderDiscountDetail(
-                [...item.listPromo, ...item.listVoucher],
-                item.totalPotongan,
+                item.promoList,
+                item.voucherList,
+                item.totalProductDiscount,
                 index,
               )}
             </React.Fragment>
@@ -137,30 +124,29 @@ const OmsVerificationView: FC = () => {
   };
   /** => discount item */
   const renderDiscountItem = (item: {
-    catalogueImages: string;
-    name: string;
+    productImageUrl: string;
+    productName: string;
     qty: number;
     price: number;
-    totalPrice: number;
+    totalProductPrice: number;
   }) => {
     return (
-      <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+      <View style={styles.listItemContainer}>
         <Image
           source={{
-            uri: item.catalogueImages,
+            uri: item.productImageUrl,
           }}
-          style={{ width: 69, height: 69, marginRight: 8 }}
+          style={styles.listItemProductImage}
         />
-        <View style={{ flex: 1 }}>
-          <View style={{ width: '80%' }}>
-            <SnbText.B4>{item.name}</SnbText.B4>
+        <View style={styles.listItemProductDetailContainer}>
+          <View style={styles.listItemProductNameContainer}>
+            <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
           <SnbText.C2 color={color.red50}>{item.price}</SnbText.C2>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={styles.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{item.totalPrice}</SnbText.C2>
+            <SnbText.C2>{item.totalProductPrice}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -168,11 +154,17 @@ const OmsVerificationView: FC = () => {
   };
   /** => discount detail */
   const renderDiscountDetail = (
-    discountList: {
-      id: number;
-      name: string;
-      value: number;
-      promoOwner?: string;
+    promoList: {
+      promoId: number;
+      promoName: string;
+      promoValue: number;
+      promoOwner: string;
+    }[],
+    voucherList: {
+      voucherId: number;
+      voucherName: string;
+      voucherValue: number;
+      voucherOwner: string;
     }[],
     totalDiscount: number,
     itemIndex: number,
@@ -181,36 +173,52 @@ const OmsVerificationView: FC = () => {
     return (
       <View>
         {isActive ? (
-          <View style={{ marginLeft: 16 }}>
-            {discountList.map((item, index) => {
-              const isLast = index === discountList.length - 1;
+          <View style={styles.listItemProductDiscountList}>
+            {promoList.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   {item.promoOwner !== 'none' ? (
                     <SnbBadge.Label
                       type={'error'}
-                      value={'Promo Spesial Supplier'}
+                      value={item.promoOwner}
                       iconName={'settings'}
                     />
                   ) : (
                     <View />
                   )}
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginBottom: 12,
-                    }}>
-                    <View style={{ width: '60%' }}>
-                      <SnbText.B3>{item.name}</SnbText.B3>
+                  <View style={styles.listItemProductDiscountItem}>
+                    <View style={styles.listItemProductDiscountName}>
+                      <SnbText.B3>{item.promoName}</SnbText.B3>
                     </View>
-                    <SnbText.B3 color={color.green50}>{item.value}</SnbText.B3>
+                    <SnbText.B3 color={color.green50}>
+                      {item.promoValue}
+                    </SnbText.B3>
                   </View>
-                  {isLast ? (
-                    <View />
+                  <SnbDivider style={{ marginBottom: 12 }} />
+                </React.Fragment>
+              );
+            })}
+            {voucherList.map((item, index) => {
+              return (
+                <React.Fragment key={index}>
+                  {item.voucherOwner !== 'none' ? (
+                    <SnbBadge.Label
+                      type={'error'}
+                      value={item.voucherOwner}
+                      iconName={'settings'}
+                    />
                   ) : (
-                    <SnbDivider style={{ marginBottom: 12 }} />
+                    <View />
                   )}
+                  <View style={styles.listItemProductDiscountItem}>
+                    <View style={styles.listItemProductDiscountName}>
+                      <SnbText.B3>{item.voucherName}</SnbText.B3>
+                    </View>
+                    <SnbText.B3 color={color.green50}>
+                      {item.voucherValue}
+                    </SnbText.B3>
+                  </View>
+                  <SnbDivider style={styles.listDivider} />
                 </React.Fragment>
               );
             })}
@@ -226,12 +234,8 @@ const OmsVerificationView: FC = () => {
               setActiveSpoiler(itemIndex);
             }
           }}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 16,
-          }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          style={styles.listItemProductDiscountTouchable}>
+          <View style={styles.listItemProductDiscountTotalTextContainer}>
             <SnbIcon
               name={isActive ? 'expand_less' : 'expand_more'}
               size={24}
@@ -248,14 +252,14 @@ const OmsVerificationView: FC = () => {
   const renderBonusList = () => {
     return (
       <View>
-        <View style={{ marginBottom: 24 }}>
+        <View style={styles.listHeader}>
           <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
         </View>
-        {dummies.bonusSku.map((item, index) => {
+        {dummies.bonusProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderBonusItem(item)}
-              <SnbDivider style={{ marginBottom: 12 }} />
+              <SnbDivider style={styles.listDivider} />
             </React.Fragment>
           );
         })}
@@ -264,29 +268,25 @@ const OmsVerificationView: FC = () => {
   };
   /** => bonus item */
   const renderBonusItem = (item: {
-    catalogueImages: string;
-    name: string;
+    productImageUrl: string;
+    productName: string;
     promoName: string;
-    qty: number;
+    productQty: number;
   }) => {
     return (
-      <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+      <View style={styles.listItemContainer}>
         <Image
           source={{
-            uri: item.catalogueImages,
+            uri: item.productImageUrl,
           }}
-          style={{
-            width: 69,
-            height: 69,
-            marginRight: 8,
-          }}
+          style={styles.listItemProductImage}
         />
-        <View style={{ flex: 1 }}>
-          <View style={{ width: '80%' }}>
-            <SnbText.B4>{item.name}</SnbText.B4>
+        <View style={styles.listItemProductDetailContainer}>
+          <View style={styles.listItemProductNameContainer}>
+            <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C3>{item.promoName}</SnbText.C3>
-          <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
+          <SnbText.C2>{`x${item.productQty} Pcs`}</SnbText.C2>
         </View>
       </View>
     );
@@ -295,14 +295,14 @@ const OmsVerificationView: FC = () => {
   const renderNonDiscountList = () => {
     return (
       <View>
-        <View style={{ marginBottom: 24 }}>
+        <View style={styles.listHeader}>
           <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
         </View>
         {dummies.notPromoSku.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderNonDiscountItem(item)}
-              <SnbDivider style={{ marginBottom: 12 }} />
+              <SnbDivider style={styles.listDivider} />
             </React.Fragment>
           );
         })}
@@ -311,30 +311,29 @@ const OmsVerificationView: FC = () => {
   };
   /** => non-discount item */
   const renderNonDiscountItem = (item: {
-    catalogueImages: string;
-    name: string;
+    productImageUrl: string;
+    productName: string;
     qty: number;
     price: number;
-    totalPrice: number;
+    totalProductPrice: number;
   }) => {
     return (
-      <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+      <View style={styles.listItemContainer}>
         <Image
           source={{
-            uri: item.catalogueImages,
+            uri: item.productImageUrl,
           }}
-          style={{ width: 69, height: 69, marginRight: 8 }}
+          style={styles.listItemProductImage}
         />
-        <View style={{ flex: 1 }}>
-          <View style={{ width: '80%' }}>
-            <SnbText.B4>{item.name}</SnbText.B4>
+        <View style={styles.listItemProductDetailContainer}>
+          <View style={styles.listItemProductNameContainer}>
+            <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
           <SnbText.C2 color={color.red50}>{item.price}</SnbText.C2>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={styles.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{item.totalPrice}</SnbText.C2>
+            <SnbText.C2>{item.totalProductPrice}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -343,30 +342,21 @@ const OmsVerificationView: FC = () => {
   /** => bottom */
   const renderBottom = () => {
     return (
-      <View
-        style={{
-          borderTopColor: color.black10,
-          borderTopWidth: 1,
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
-        }}>
+      <View style={styles.bottomContainer}>
         <View>
-          <View
-            style={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 }}>
+          <View style={styles.bottomTextContainer}>
             <SnbText.B4>Total (Sebelum Pajak)</SnbText.B4>
-            <SnbDivider />
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <SnbDivider style={{ marginVertical: 8 }} />
+            <View style={styles.bottomTextRow}>
               <SnbText.B3>Total Transaksi</SnbText.B3>
               <SnbText.B3>Rp 100.000</SnbText.B3>
             </View>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.bottomTextRow}>
               <SnbText.B3>Total Potongan</SnbText.B3>
               <SnbText.B3>Rp 698</SnbText.B3>
             </View>
           </View>
-          <View style={{ height: 75 }}>
+          <View style={styles.bottomButtonContainer}>
             <SnbButton.Single
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
@@ -381,10 +371,10 @@ const OmsVerificationView: FC = () => {
   /** => content */
   const renderContent = () => {
     return (
-      <View style={{ padding: 16 }}>
+      <View style={styles.contentContainer}>
         <View>
           <SnbText.B4>BERIKUT INI ADALAH RINGKASAN ORDER ANDA</SnbText.B4>
-          <SnbDivider style={{ marginVertical: 16 }} />
+          <SnbDivider style={styles.mainDivider} />
         </View>
         {renderDiscountList()}
         {renderBonusList()}
@@ -402,7 +392,7 @@ const OmsVerificationView: FC = () => {
   );
 };
 
-export default OmsVerificationView;
+export default OmsVerificationOrderView;
 /**
  * ================================================================
  * NOTES

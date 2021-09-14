@@ -26,7 +26,7 @@ const OmsShoppingCartView: FC = () => {
     <SnbContainer color="white">
       {header()}
       {content()}
-      <TouchableOpacity onPress={() => OmsFunc.goToCart2()}>
+      <TouchableOpacity onPress={() => OmsFunc.goToVerificationOrder()}>
         <SnbText.B1>Go to cart 2</SnbText.B1>
       </TouchableOpacity>
     </SnbContainer>
