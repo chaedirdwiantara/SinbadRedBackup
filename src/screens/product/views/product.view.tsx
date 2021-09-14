@@ -3,32 +3,54 @@ import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
 import { goBack } from '../functions';
+/** === IMPORT EXTERNAL COMPONENT HERE === */
+import ProductHeaderView from './product-header.view';
+import ProductTabView from './product-tab.view';
+import ProductBottomActionView from './product-bottom-action.view';
 /** === COMPONENT === */
 const ProductView: FC = () => {
   /** === HOOK === */
   /** === VIEW === */
   /** => header */
   const header = () => {
+    return <ProductHeaderView />;
+  };
+  /** => tab */
+  const tab = () => {
+    return <ProductTabView />;
+  };
+  /** => tag */
+  const tag = () => {
+    return <SnbText.B1>This tag section</SnbText.B1>;
+  };
+  /** => item */
+  const item = () => {
     return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Product'}
-        backAction={() => goBack()}
-      />
+      <View>
+        <SnbText.B1>This tab item</SnbText.B1>
+      </View>
     );
+  };
+  /** => bottomAction */
+  const bottomAction = () => {
+    return <ProductBottomActionView />;
   };
   /** => content */
   const content = () => {
-    return <SnbText.B1>This page for list of product</SnbText.B1>;
+    return (
+      <View style={{ flex: 1 }}>
+        {tab()}
+        {tag()}
+        {item()}
+      </View>
+    );
   };
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
-      <View>
-        <SnbText.B1>This product</SnbText.B1>
-      </View>
+      {bottomAction()}
     </SnbContainer>
   );
 };
