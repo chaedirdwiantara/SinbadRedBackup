@@ -1,6 +1,7 @@
+/** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
+import ProductView from './product.view';
 /** === EXPORT ALL === */
-export * from './product-hook.function';
-export * from './product.function';
+export { ProductView };
 /**
  * ================================================================
  * NOTES

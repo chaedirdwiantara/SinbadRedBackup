@@ -5,6 +5,8 @@ import AuthNav from './auth.navigation';
 import SharedNav from './shared.navigation';
 import UserNav from './user.navigation';
 import MerchantNav from './merchant.navigation';
+import CategoryNav from './category.navigation';
+import ProductNav from './product.navigation';
 
 const index = {
   ...OmsNav,
@@ -14,6 +16,8 @@ const index = {
   ...SharedNav,
   ...UserNav,
   ...MerchantNav,
+  ...CategoryNav,
+  ...ProductNav,
 };
 
 export default index;
