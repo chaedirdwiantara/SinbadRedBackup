@@ -36,9 +36,6 @@ const goToCart4 = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
-/** => convert number to currency */
-const toCurrency = (nominal: number) =>
-  `Rp ${nominal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<InvoiceGroup>) => {
   let totalProducts = 0;
@@ -271,7 +268,6 @@ export const OmsFunc = {
   goToCart3,
   goToCart4,
   goToCheckout,
-  toCurrency,
   getTotalProducts,
   getTotalPrice,
   handleProductQuantityChange,

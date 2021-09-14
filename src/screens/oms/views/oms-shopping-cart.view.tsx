@@ -11,6 +11,7 @@ import {
   color,
   SnbDialog,
 } from 'react-native-sinbad-ui';
+import { toCurrency } from '../../../../core/functions/global/currency-format';
 import { OmsFunc } from '../functions';
 import OmsStyle from '../styles/oms.style';
 /** === TYPES === */
@@ -199,7 +200,7 @@ const OmsShoppingCartView: FC = () => {
     brandIndex: number,
     invoiceGroupIndex: number,
   ) => {
-    const productPrice = OmsFunc.toCurrency(product.displayPrice);
+    const productPrice = toCurrency(product.displayPrice);
     return (
       <View
         style={{
@@ -419,7 +420,7 @@ const OmsShoppingCartView: FC = () => {
               <SnbText.B3>Total:</SnbText.B3>
             </View>
             <SnbText.B2 color={color.red50}>
-              {OmsFunc.toCurrency(OmsFunc.getTotalPrice(invoiceGroups))}
+              {toCurrency(OmsFunc.getTotalPrice(invoiceGroups))}
             </SnbText.B2>
           </View>
           <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
@@ -442,13 +443,13 @@ const OmsShoppingCartView: FC = () => {
           <ScrollView>
             {renderShippingAddress()}
             {renderInvoiceGroupList()}
-            {renderConfirmationDialog()}
           </ScrollView>
           {renderFooter()}
         </Fragment>
       ) : (
         renderEmptyCart()
       )}
+      {renderConfirmationDialog()}
     </SnbContainer>
   );
 };
