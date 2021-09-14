@@ -5,7 +5,7 @@ import {
   userDetailInitialState,
 } from './user-detail.reducer';
 /** === TYPE HERE === */
-export type UserInitialProps = models.DetailProps<models.StoreDetail[]>;
+export type UserInitialProps = models.DetailProps<models.StoreDetail>;
 /** === INITIAL HERE === */
 export const userInitialState = {
   detail: userDetailInitialState,

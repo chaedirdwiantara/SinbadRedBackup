@@ -5,7 +5,7 @@ import * as models from '@models';
 /** => store detail */
 const storeDetail = (data: models.DetailProcessProps) => {
   const path = `stores/${data.id}`;
-  return apiMapping<models.StoreDetail[]>(path, 'account', 'v1', 'DETAIL');
+  return apiMapping<models.StoreDetail>(path, 'account', 'v1', 'DETAIL');
 };
 /** === EXPORT FUNCTIONS === */
 export const UserApi = {

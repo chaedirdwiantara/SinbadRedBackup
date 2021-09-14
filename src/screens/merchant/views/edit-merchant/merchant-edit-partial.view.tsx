@@ -8,6 +8,8 @@ import {
 import { ScrollView, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 interface Props {
   type: any;
@@ -15,6 +17,8 @@ interface Props {
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
+  /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
   /**
    * ================================
    * SWITCH VIEW
@@ -227,13 +231,17 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
+    const storeData =
+      stateUser.detail.data?.storeData.storeInformation.storeDetailCompleteness;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={''}
+            value={
+              storeData?.numberOfEmployee ? storeData?.numberOfEmployee : ''
+            }
             onPress={() => console.log('press')}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -245,7 +253,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
-            value={''}
+            value={storeData?.largeArea ? storeData?.largeArea : ''}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -255,7 +263,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Top Brand Selling'}
             placeholder={'Masukan Top Brand Selling'}
             type={'default'}
-            value={''}
+            value={storeData?.topSellingBrand ? storeData?.topSellingBrand : ''}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -265,7 +273,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Wanted Brand'}
             placeholder={'Masukan Wanted Brand'}
             type={'default'}
-            value={''}
+            value={storeData?.mostWantedBrand ? storeData?.mostWantedBrand : ''}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -274,7 +282,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={''}
+            value={
+              storeData?.vehicleAccessibility
+                ? storeData?.vehicleAccessibility
+                : ''
+            }
             onPress={() => console.log('press')}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -285,8 +297,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextField.Text
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukan Jumlah Akses Jalan'}
-            type={'default'}
-            value={''}
+            type={'number'}
+            value={
+              storeData?.vehicleAccessibilityAmount
+                ? storeData?.vehicleAccessibilityAmount
+                : ''
+            }
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
@@ -8,23 +8,33 @@ import {
   SnbIconHint,
   SnbListButtonType2,
   SnbCardMultiButtonType1,
-  SnbSvgIcon,
   SnbCardButtonType2,
+  SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
+import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const UserView: FC = () => {
   /** === HOOK === */
   const { action, state } = UserHookFunc.useBadgeInformation();
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
+  const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  useEffect(() => {
+    storeDetailAction.detail(dispatchUser, '1');
+  }, []);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);
   };
   /** === VIEW === */
+  console.log('storeDetail:', stateUser);
+
   /** => header */
   const header = () => {
     return (
@@ -37,18 +47,18 @@ const UserView: FC = () => {
     );
   };
   const renderHeaderInformation = () => {
+    const data = stateUser.detail.data?.ownerData?.profile;
     return (
       <View style={UserStyles.headerInformationContainer}>
         <View style={UserStyles.imageContainer}>
-          <Image
-            source={{
-              uri: 'https://dutadamaiyogyakarta.id/wp-content/uploads/2016/06/team-1.jpg',
-            }}
-            style={UserStyles.image}
-          />
+          {data?.imageUrl ? (
+            <Image source={{ uri: data.imageUrl }} style={UserStyles.image} />
+          ) : (
+            <Svg name={'avatar'} size={50} color={color.red50} />
+          )}
         </View>
         <View style={UserStyles.userInfo}>
-          <SnbText.B4 color={color.white}>John Doe</SnbText.B4>
+          <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
           <SnbText.C1 color={color.white}>Kelengkapan profil 50%</SnbText.C1>
         </View>
       </View>
@@ -65,7 +75,7 @@ const UserView: FC = () => {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
                 title: 'Sinbad Point',
                 subtitle: '1000 Point',
-                onPress: () => console.log('pressed'),
+                onPress: () => storeDetailAction.detail(dispatchUser, '1'),
               },
               {
                 icon: (
