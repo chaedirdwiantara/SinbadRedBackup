@@ -16,6 +16,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* sinbadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* sinbadTests.m */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9427CD9526F09D5D0014F599 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9427CD9426F09D5D0014F599 /* GoogleService-Info.plist */; };
 		944993492601C833005CC300 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		9449938D2601D31E005CC300 /* Montserrat-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 944993892601D31D005CC300 /* Montserrat-Medium.otf */; };
 		9449938E2601D31E005CC300 /* Montserrat-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 9449938A2601D31D005CC300 /* Montserrat-Bold.otf */; };
@@ -69,6 +70,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = sinbad/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84A19FA5DD3666FA1BA591DB /* libPods-sinbad.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sinbad.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CFA8A6B53A77EC7B9A9C9E5 /* libPods-sinbad-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-sinbad-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9427CD9426F09D5D0014F599 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		944993892601D31D005CC300 /* Montserrat-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Medium.otf"; path = "../../android/app/src/main/assets/fonts/Montserrat-Medium.otf"; sourceTree = "<group>"; };
 		9449938A2601D31D005CC300 /* Montserrat-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Montserrat-Bold.otf"; path = "../../android/app/src/main/assets/fonts/Montserrat-Bold.otf"; sourceTree = "<group>"; };
 		9449938B2601D31D005CC300 /* icomoon.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = icomoon.ttf; path = ../../android/app/src/main/assets/fonts/icomoon.ttf; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9427CD9426F09D5D0014F599 /* GoogleService-Info.plist */,
 				9449933C2601C72A005CC300 /* Sources */,
 				13B07FAE1A68108700A75B9A /* sinbad */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -370,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9449938E2601D31E005CC300 /* Montserrat-Bold.otf in Resources */,
+				9427CD9526F09D5D0014F599 /* GoogleService-Info.plist in Resources */,
 				944993902601D31E005CC300 /* Montserrat-SemiBold.otf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				9449938D2601D31E005CC300 /* Montserrat-Medium.otf in Resources */,
@@ -716,7 +720,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.sinbaddev.ios;
 				PRODUCT_NAME = sinbad;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -739,7 +743,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.sinbaddev.ios;
 				PRODUCT_NAME = sinbad;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
