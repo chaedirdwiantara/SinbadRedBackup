@@ -12,10 +12,11 @@ const backToCart = () => {
 };
 /** => go to cart 2 */
 const goToCart2 = () => {
-  NavigationAction.navigate('OmsShoppingCart2View', {
-    id: '1',
-    name: 'test from oms cart 2',
-  });
+  NavigationAction.navigate('OmsVerificationView');
+  // NavigationAction.navigate('OmsShoppingCart2View', {
+  //   id: '1',
+  //   name: 'test from oms cart 2',
+  // });
 };
 /** => go to cart 3 */
 const goToCart3 = () => {
@@ -25,5 +26,21 @@ const goToCart3 = () => {
 const goToCart4 = () => {
   NavigationAction.navigate('OmsShoppingCart4View');
 };
+/** => go to checkout */
+const goToCheckout = () => {
+  NavigationAction.navigate('OmsCheckoutView');
+};
+/** => go to verification */
+const goToVerification = () => {
+  NavigationAction.navigate('OmsVerificationView');
+};
 
-export const OmsFunc = { goBack, backToCart, goToCart2, goToCart3, goToCart4 };
+export const OmsFunc = {
+  goBack,
+  backToCart,
+  goToCart2,
+  goToCart3,
+  goToCart4,
+  goToCheckout,
+  goToVerification,
+};
