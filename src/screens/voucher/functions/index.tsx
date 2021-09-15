@@ -1,5 +1,5 @@
 /** === EXPORT ALL === */
-export { VoucherFunc } from './voucher.function';
+export * from './voucher.function';
 /**
  * ================================================================
  * NOTES

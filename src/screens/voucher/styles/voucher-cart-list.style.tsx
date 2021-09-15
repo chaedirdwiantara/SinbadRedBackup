@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
-const VoucherCartListStyles = StyleSheet.create({
+export const VoucherCartListStyles = StyleSheet.create({
   parentContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -46,6 +46,12 @@ const VoucherCartListStyles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 8,
   },
+  voucherCardLeftContent: {
+    width: '70%',
+  },
+  voucherCardRightContent: {
+    width: '30%',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
 });
-
-export default VoucherCartListStyles;

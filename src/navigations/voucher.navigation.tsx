@@ -1,14 +1,8 @@
-import {
-  VoucherCartListView,
-  VoucherCartListMoreView,
-} from '@screen/voucher/views';
+import { VoucherCartListView } from '@screen/voucher/views';
 
 const VoucherNav = {
   VoucherCartListView: {
     component: VoucherCartListView,
-  },
-  VoucherCartListMoreView: {
-    component: VoucherCartListMoreView,
   },
 };
 
