@@ -6,6 +6,7 @@ import { goBack } from '../functions';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
+import ProductTagView from './product-tag.view';
 import ProductBottomActionView from './product-bottom-action.view';
 /** === COMPONENT === */
 const ProductView: FC = () => {
@@ -21,13 +22,13 @@ const ProductView: FC = () => {
   };
   /** => tag */
   const tag = () => {
-    return <SnbText.B1>This tag section</SnbText.B1>;
+    return <ProductTagView />;
   };
   /** => item */
   const item = () => {
     return (
       <View>
-        <SnbText.B1>This tab item</SnbText.B1>
+        <SnbText.B1>This item</SnbText.B1>
       </View>
     );
   };

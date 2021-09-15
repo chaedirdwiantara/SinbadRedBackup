@@ -40,6 +40,25 @@ const useTabCategory = () => {
     categories,
   };
 };
+/** => set tag */
+const useTag = () => {
+  const tags = [
+    'Tag 1',
+    'Tag 2',
+    'Tag 3',
+    'Tag 4',
+    'Tag 5',
+    'Tag 6',
+    'Tag 7',
+    'Tag 8',
+  ];
+  return {
+    selectTab: (items: string[]) => {
+      console.log(items);
+    },
+    tags,
+  };
+};
 /** => call list action */
 const useProductListAction = () => {
   const dispatch = useDispatch();
@@ -68,7 +87,7 @@ const useProductListAction = () => {
   };
 };
 /** === EXPORT === */
-export { useProductListAction, useTabCategory };
+export { useProductListAction, useTabCategory, useTag };
 /**
  * ================================================================
  * NOTES
