@@ -5,6 +5,7 @@
  */
 export * from './examples';
 export * from './examples2';
+export * from './register';
 export * from './global';
 export * from './auth';
 export * from './products';

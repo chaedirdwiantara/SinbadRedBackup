@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -17,6 +18,27 @@ const callList = (
     skip,
     limit,
   });
+};
+/** => set tab category */
+const useTabCategory = () => {
+  const categories = [
+    'Tabs 1',
+    'Tabs 2',
+    'Tabs 3',
+    'Tabs 4',
+    'Tabs 5',
+    'Tabs 6',
+    'Tabs 7',
+    'Tabs 8',
+  ];
+  const [activeTabs, setActiveTabs] = useState(0);
+  return {
+    changeTab: (nextTabs: number) => {
+      setActiveTabs(nextTabs);
+    },
+    activeTabs,
+    categories,
+  };
 };
 /** => call list action */
 const useProductListAction = () => {
@@ -46,7 +68,7 @@ const useProductListAction = () => {
   };
 };
 /** === EXPORT === */
-export { useProductListAction };
+export { useProductListAction, useTabCategory };
 /**
  * ================================================================
  * NOTES
