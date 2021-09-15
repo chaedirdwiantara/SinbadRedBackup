@@ -2,14 +2,14 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import StackNavigator from './StackNavigator';
 import { navigationRef } from './RootNavigation';
-import { CoreProvider } from '../contexts/CoreProvider';
+import { CoreProviders } from '../contexts/CoreProviders';
 
 const MainNavigator = () => {
   return (
     <NavigationContainer ref={navigationRef}>
-      <CoreProvider>
+      <CoreProviders>
         <StackNavigator />
-      </CoreProvider>
+      </CoreProviders>
     </NavigationContainer>
   );
 };

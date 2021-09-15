@@ -3,7 +3,7 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { CoreContext } from '@context';
+import { CoreContext } from '@core/contexts/CoreProviderOld';
 import { goToExample2List } from '../functions';
 /** === IMPORT STYLE HERE === */
 import Example2Style from '../styles/example2.style';

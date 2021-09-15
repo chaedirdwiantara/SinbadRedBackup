@@ -3,9 +3,10 @@ import { set, isEmpty } from 'lodash';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@model/index';
 /** === FUNCTION === */
-const api = async <T>(
+const apiMock = async <T>(
+  mockHost: string,
   path: string,
-  method: string,
+  method: 'GET' | 'POST' | 'UPDATE',
   params?: object,
 ): Promise<T> => {
   /** === SET HEADER === */
@@ -51,13 +52,10 @@ const api = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
-  return fetch(
-    'https://dc687b55-e036-4881-bd9d-e293f9177433.mock.pstmn.io/' + path,
-    reqBody,
-  )
+  return fetch(mockHost + path, reqBody)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);
 };
 
-export default api;
+export default apiMock;
