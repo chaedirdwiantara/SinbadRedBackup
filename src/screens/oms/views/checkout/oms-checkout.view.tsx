@@ -10,7 +10,7 @@ import {
   SnbSKUList,
   SnbIcon,
 } from 'react-native-sinbad-ui';
-import { OmsFunc } from '../../functions';
+import { goBack } from '../../functions';
 /** === DUMMIES === */
 const dummies = [
   {
@@ -48,7 +48,7 @@ const OmsCheckoutView: FC = () => {
       <SnbTopNav.Type3
         type="red"
         title={'Checkout'}
-        backAction={() => OmsFunc.goBack()}
+        backAction={() => goBack()}
       />
     );
   };

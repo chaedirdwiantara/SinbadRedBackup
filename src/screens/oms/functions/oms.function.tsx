@@ -26,17 +26,12 @@ const goToCart4 = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
-/** => go to verification */
-const goToVerification = () => {
-  NavigationAction.navigate('OmsVerificationView');
-};
 
-export const OmsFunc = {
+export {
   goBack,
   backToCart,
   goToVerificationOrder,
   goToCart3,
   goToCart4,
   goToCheckout,
-  goToVerification,
 };

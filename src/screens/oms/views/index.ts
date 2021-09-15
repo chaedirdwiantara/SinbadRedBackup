@@ -4,7 +4,7 @@ import OmsShoppingCartView from './shopping-cart/shopping-cart.view';
 import OmsShoppingCart2View from './oms-shopping-cart2.view';
 import OmsShoppingCart3View from './oms-shopping-cart3.view';
 import OmsShoppingCart4View from './oms-shopping-cart4.view';
-import OmsVerificationOrderView from './verification-order/oms-verification-order.view';
+import OmsVerificationOrderView from './verification-order/verification-order.view';
 import OmsCheckoutView from './checkout/oms-checkout.view';
 /** === EXPORT ALL === */
 export {

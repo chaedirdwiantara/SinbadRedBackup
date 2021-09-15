@@ -11,7 +11,7 @@ import {
   SnbBadge,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { OmsFunc } from '../../functions';
+import { goBack } from '../../functions';
 import styles from '../../styles/verification-order/verification-order.style';
 /** === INTERFACE === */
 /** === DUMMIES === */
@@ -94,7 +94,7 @@ const OmsVerificationOrderView: FC = () => {
       <SnbTopNav.Type3
         type="red"
         title={'Verifikasi Order'}
-        backAction={() => OmsFunc.goBack()}
+        backAction={() => goBack()}
       />
     );
   };

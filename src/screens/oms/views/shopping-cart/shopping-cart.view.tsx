@@ -12,7 +12,17 @@ import {
   SnbDialog,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
-import { OmsFunc, ShoppingCartFunc } from '../../functions';
+import {
+  goToVerificationOrder,
+  getTotalProducts,
+  handleSelectedProductChange,
+  goBack,
+  handleProductQuantityChange,
+  handleProductDelete,
+  handleSelectedBrandChange,
+  handleAllSelectedProductsChange,
+  getTotalPrice,
+} from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
 /** === TYPES === */
 export type DeterminateCheckboxStatus = 'selected' | 'unselect';
@@ -132,10 +142,7 @@ const OmsShoppingCartView: FC = () => {
   const [allProductsSelected, setAllProductsSelected] =
     useState<CheckboxStatus>('unselect');
   const [productSelectedCount, setProductSelectedCount] = useState(0);
-  const totalProducts = useMemo(
-    () => ShoppingCartFunc.getTotalProducts(invoiceGroups),
-    [],
-  );
+  const totalProducts = useMemo(() => getTotalProducts(invoiceGroups), []);
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
   /** === VIEW === */
@@ -145,7 +152,7 @@ const OmsShoppingCartView: FC = () => {
       <SnbTopNav.Type3
         type="red"
         title={'Keranjang'}
-        backAction={() => OmsFunc.goBack()}
+        backAction={() => goBack()}
       />
     );
   };
@@ -216,7 +223,7 @@ const OmsShoppingCartView: FC = () => {
             <SnbCheckbox
               status={product.selected}
               onPress={() =>
-                ShoppingCartFunc.handleSelectedProductChange(
+                handleSelectedProductChange(
                   invoiceGroupIndex,
                   brandIndex,
                   productIndex,
@@ -249,7 +256,7 @@ const OmsShoppingCartView: FC = () => {
                 disabled={product.qty === 0}
                 buttonColor={color.black60}
                 onPress={() =>
-                  ShoppingCartFunc.handleProductQuantityChange(
+                  handleProductQuantityChange(
                     invoiceGroupIndex,
                     brandIndex,
                     productIndex,
@@ -269,7 +276,7 @@ const OmsShoppingCartView: FC = () => {
                 disabled={product.qty === product.stock}
                 buttonColor={color.red50}
                 onPress={() =>
-                  ShoppingCartFunc.handleProductQuantityChange(
+                  handleProductQuantityChange(
                     invoiceGroupIndex,
                     brandIndex,
                     productIndex,
@@ -288,7 +295,7 @@ const OmsShoppingCartView: FC = () => {
           }}>
           <TouchableOpacity
             onPress={() =>
-              ShoppingCartFunc.handleProductDelete(
+              handleProductDelete(
                 invoiceGroupIndex,
                 brandIndex,
                 productIndex,
@@ -325,7 +332,7 @@ const OmsShoppingCartView: FC = () => {
           <SnbCheckbox
             status={brand.selected}
             onPress={() =>
-              ShoppingCartFunc.handleSelectedBrandChange(
+              handleSelectedBrandChange(
                 invoiceGroupIndex,
                 brandIndex,
                 brand.selected === 'indeterminate' ||
@@ -381,7 +388,7 @@ const OmsShoppingCartView: FC = () => {
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() => OmsFunc.goToVerification()}
+      ok={() => goToVerificationOrder()}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
     />
   );
@@ -392,7 +399,7 @@ const OmsShoppingCartView: FC = () => {
         <SnbCheckbox
           status={allProductsSelected}
           onPress={() =>
-            ShoppingCartFunc.handleAllSelectedProductsChange(
+            handleAllSelectedProductsChange(
               allProductsSelected === 'indeterminate' ||
                 allProductsSelected === 'unselect'
                 ? 'selected'
@@ -420,7 +427,7 @@ const OmsShoppingCartView: FC = () => {
               <SnbText.B3>Total:</SnbText.B3>
             </View>
             <SnbText.B2 color={color.red50}>
-              {toCurrency(ShoppingCartFunc.getTotalPrice(invoiceGroups))}
+              {toCurrency(getTotalPrice(invoiceGroups))}
             </SnbText.B2>
           </View>
           <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
