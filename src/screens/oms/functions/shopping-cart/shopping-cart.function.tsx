@@ -231,7 +231,7 @@ const handleProductDelete = (
   console.log(`${deletedProduct.name} deleted`);
 };
 
-export const ShoppingCartFunc = {
+export {
   getTotalProducts,
   getTotalPrice,
   handleProductQuantityChange,
