@@ -11,8 +11,9 @@ import {
   SnbBadge,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { goBack } from '../../functions';
+import { goBack, goToCheckout } from '../../functions';
 import styles from '../../styles/verification-order/verification-order.style';
+import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === INTERFACE === */
 /** === DUMMIES === */
 const dummies = {
@@ -143,10 +144,10 @@ const OmsVerificationOrderView: FC = () => {
             <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
-          <SnbText.C2 color={color.red50}>{item.price}</SnbText.C2>
+          <SnbText.C2 color={color.red50}>{toCurrency(item.price)}</SnbText.C2>
           <View style={styles.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{item.totalProductPrice}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.totalProductPrice)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -191,7 +192,7 @@ const OmsVerificationOrderView: FC = () => {
                       <SnbText.B3>{item.promoName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
-                      {item.promoValue}
+                      {toCurrency(item.promoValue)}
                     </SnbText.B3>
                   </View>
                   <SnbDivider style={{ marginBottom: 12 }} />
@@ -215,7 +216,7 @@ const OmsVerificationOrderView: FC = () => {
                       <SnbText.B3>{item.voucherName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
-                      {item.voucherValue}
+                      {toCurrency(item.voucherValue)}
                     </SnbText.B3>
                   </View>
                   <SnbDivider style={styles.listDivider} />
@@ -243,7 +244,7 @@ const OmsVerificationOrderView: FC = () => {
             />
             <SnbText.B4>Total Potongan</SnbText.B4>
           </View>
-          <SnbText.B4>{totalDiscount}</SnbText.B4>
+          <SnbText.B4>{toCurrency(totalDiscount)}</SnbText.B4>
         </TouchableOpacity>
       </View>
     );
@@ -330,10 +331,10 @@ const OmsVerificationOrderView: FC = () => {
             <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
-          <SnbText.C2 color={color.red50}>{item.price}</SnbText.C2>
+          <SnbText.C2 color={color.red50}>{toCurrency(item.price)}</SnbText.C2>
           <View style={styles.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{item.totalProductPrice}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.totalProductPrice)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -349,11 +350,13 @@ const OmsVerificationOrderView: FC = () => {
             <SnbDivider style={{ marginVertical: 8 }} />
             <View style={styles.bottomTextRow}>
               <SnbText.B3>Total Transaksi</SnbText.B3>
-              <SnbText.B3>Rp 100.000</SnbText.B3>
+              <SnbText.B3>{toCurrency(dummies.totalTransaction)}</SnbText.B3>
             </View>
             <View style={styles.bottomTextRow}>
               <SnbText.B3>Total Potongan</SnbText.B3>
-              <SnbText.B3>Rp 698</SnbText.B3>
+              <SnbText.B3 color={color.green50}>
+                {toCurrency(dummies.totalRebate)}
+              </SnbText.B3>
             </View>
           </View>
           <View style={styles.bottomButtonContainer}>
@@ -361,7 +364,7 @@ const OmsVerificationOrderView: FC = () => {
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
               disabled={false}
-              onPress={() => OmsFunc.goToCheckout()}
+              onPress={() => goToCheckout()}
             />
           </View>
         </View>
