@@ -54,4 +54,11 @@ export const VoucherCartListStyles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
+  footerSection: {
+    flexDirection: 'row',
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: color.white,
+  },
 });
