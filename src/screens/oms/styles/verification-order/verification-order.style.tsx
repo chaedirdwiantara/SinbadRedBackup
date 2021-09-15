@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
-const VerificationOrderStyle = StyleSheet.create({
+export const VerificationOrderStyle = StyleSheet.create({
   contentContainer: {
     padding: 16,
   },
@@ -54,8 +54,8 @@ const VerificationOrderStyle = StyleSheet.create({
     alignItems: 'center',
   },
   bottomContainer: {
-    borderTopColor: color.black10,
-    borderTopWidth: 1,
+    borderColor: color.black10,
+    borderWidth: 1,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },

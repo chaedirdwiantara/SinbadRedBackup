@@ -12,7 +12,7 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { goBack, goToCheckout } from '../../functions';
-import styles from '../../styles/verification-order/verification-order.style';
+import { VerificationOrderStyle } from '../../styles';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === INTERFACE === */
 /** === DUMMIES === */
@@ -103,14 +103,14 @@ const OmsVerificationOrderView: FC = () => {
   const renderDiscountList = () => {
     return (
       <View>
-        <View style={styles.listHeader}>
+        <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${dummies.discountProduct.length} SKU)`}</SnbText.B4>
         </View>
         {dummies.discountProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderDiscountItem(item)}
-              <SnbDivider style={styles.listDivider} />
+              <SnbDivider style={VerificationOrderStyle.listDivider} />
               {renderDiscountDetail(
                 item.promoList,
                 item.voucherList,
@@ -132,20 +132,20 @@ const OmsVerificationOrderView: FC = () => {
     totalProductPrice: number;
   }) => {
     return (
-      <View style={styles.listItemContainer}>
+      <View style={VerificationOrderStyle.listItemContainer}>
         <Image
           source={{
             uri: item.productImageUrl,
           }}
-          style={styles.listItemProductImage}
+          style={VerificationOrderStyle.listItemProductImage}
         />
-        <View style={styles.listItemProductDetailContainer}>
-          <View style={styles.listItemProductNameContainer}>
+        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
+          <View style={VerificationOrderStyle.listItemProductNameContainer}>
             <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
           <SnbText.C2 color={color.red50}>{toCurrency(item.price)}</SnbText.C2>
-          <View style={styles.listItemProductPriceContainer}>
+          <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
             <SnbText.C2>{toCurrency(item.totalProductPrice)}</SnbText.C2>
           </View>
@@ -174,7 +174,7 @@ const OmsVerificationOrderView: FC = () => {
     return (
       <View>
         {isActive ? (
-          <View style={styles.listItemProductDiscountList}>
+          <View style={VerificationOrderStyle.listItemProductDiscountList}>
             {promoList.map((item, index) => {
               return (
                 <React.Fragment key={index}>
@@ -187,8 +187,12 @@ const OmsVerificationOrderView: FC = () => {
                   ) : (
                     <View />
                   )}
-                  <View style={styles.listItemProductDiscountItem}>
-                    <View style={styles.listItemProductDiscountName}>
+                  <View
+                    style={VerificationOrderStyle.listItemProductDiscountItem}>
+                    <View
+                      style={
+                        VerificationOrderStyle.listItemProductDiscountName
+                      }>
                       <SnbText.B3>{item.promoName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
@@ -211,15 +215,19 @@ const OmsVerificationOrderView: FC = () => {
                   ) : (
                     <View />
                   )}
-                  <View style={styles.listItemProductDiscountItem}>
-                    <View style={styles.listItemProductDiscountName}>
+                  <View
+                    style={VerificationOrderStyle.listItemProductDiscountItem}>
+                    <View
+                      style={
+                        VerificationOrderStyle.listItemProductDiscountName
+                      }>
                       <SnbText.B3>{item.voucherName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
                       {toCurrency(item.voucherValue)}
                     </SnbText.B3>
                   </View>
-                  <SnbDivider style={styles.listDivider} />
+                  <SnbDivider style={VerificationOrderStyle.listDivider} />
                 </React.Fragment>
               );
             })}
@@ -235,8 +243,11 @@ const OmsVerificationOrderView: FC = () => {
               setActiveSpoiler(itemIndex);
             }
           }}
-          style={styles.listItemProductDiscountTouchable}>
-          <View style={styles.listItemProductDiscountTotalTextContainer}>
+          style={VerificationOrderStyle.listItemProductDiscountTouchable}>
+          <View
+            style={
+              VerificationOrderStyle.listItemProductDiscountTotalTextContainer
+            }>
             <SnbIcon
               name={isActive ? 'expand_less' : 'expand_more'}
               size={24}
@@ -253,14 +264,14 @@ const OmsVerificationOrderView: FC = () => {
   const renderBonusList = () => {
     return (
       <View>
-        <View style={styles.listHeader}>
+        <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
         </View>
         {dummies.bonusProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderBonusItem(item)}
-              <SnbDivider style={styles.listDivider} />
+              <SnbDivider style={VerificationOrderStyle.listDivider} />
             </React.Fragment>
           );
         })}
@@ -275,15 +286,15 @@ const OmsVerificationOrderView: FC = () => {
     productQty: number;
   }) => {
     return (
-      <View style={styles.listItemContainer}>
+      <View style={VerificationOrderStyle.listItemContainer}>
         <Image
           source={{
             uri: item.productImageUrl,
           }}
-          style={styles.listItemProductImage}
+          style={VerificationOrderStyle.listItemProductImage}
         />
-        <View style={styles.listItemProductDetailContainer}>
-          <View style={styles.listItemProductNameContainer}>
+        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
+          <View style={VerificationOrderStyle.listItemProductNameContainer}>
             <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C3>{item.promoName}</SnbText.C3>
@@ -296,14 +307,14 @@ const OmsVerificationOrderView: FC = () => {
   const renderNonDiscountList = () => {
     return (
       <View>
-        <View style={styles.listHeader}>
+        <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
         </View>
         {dummies.notPromoSku.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderNonDiscountItem(item)}
-              <SnbDivider style={styles.listDivider} />
+              <SnbDivider style={VerificationOrderStyle.listDivider} />
             </React.Fragment>
           );
         })}
@@ -319,20 +330,20 @@ const OmsVerificationOrderView: FC = () => {
     totalProductPrice: number;
   }) => {
     return (
-      <View style={styles.listItemContainer}>
+      <View style={VerificationOrderStyle.listItemContainer}>
         <Image
           source={{
             uri: item.productImageUrl,
           }}
-          style={styles.listItemProductImage}
+          style={VerificationOrderStyle.listItemProductImage}
         />
-        <View style={styles.listItemProductDetailContainer}>
-          <View style={styles.listItemProductNameContainer}>
+        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
+          <View style={VerificationOrderStyle.listItemProductNameContainer}>
             <SnbText.B4>{item.productName}</SnbText.B4>
           </View>
           <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
           <SnbText.C2 color={color.red50}>{toCurrency(item.price)}</SnbText.C2>
-          <View style={styles.listItemProductPriceContainer}>
+          <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
             <SnbText.C2>{toCurrency(item.totalProductPrice)}</SnbText.C2>
           </View>
@@ -343,23 +354,23 @@ const OmsVerificationOrderView: FC = () => {
   /** => bottom */
   const renderBottom = () => {
     return (
-      <View style={styles.bottomContainer}>
+      <View style={VerificationOrderStyle.bottomContainer}>
         <View>
-          <View style={styles.bottomTextContainer}>
+          <View style={VerificationOrderStyle.bottomTextContainer}>
             <SnbText.B4>Total (Sebelum Pajak)</SnbText.B4>
             <SnbDivider style={{ marginVertical: 8 }} />
-            <View style={styles.bottomTextRow}>
+            <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Transaksi</SnbText.B3>
               <SnbText.B3>{toCurrency(dummies.totalTransaction)}</SnbText.B3>
             </View>
-            <View style={styles.bottomTextRow}>
+            <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Potongan</SnbText.B3>
               <SnbText.B3 color={color.green50}>
                 {toCurrency(dummies.totalRebate)}
               </SnbText.B3>
             </View>
           </View>
-          <View style={styles.bottomButtonContainer}>
+          <View style={VerificationOrderStyle.bottomButtonContainer}>
             <SnbButton.Single
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
@@ -374,10 +385,10 @@ const OmsVerificationOrderView: FC = () => {
   /** => content */
   const renderContent = () => {
     return (
-      <View style={styles.contentContainer}>
+      <View style={VerificationOrderStyle.contentContainer}>
         <View>
           <SnbText.B4>BERIKUT INI ADALAH RINGKASAN ORDER ANDA</SnbText.B4>
-          <SnbDivider style={styles.mainDivider} />
+          <SnbDivider style={VerificationOrderStyle.mainDivider} />
         </View>
         {renderDiscountList()}
         {renderBonusList()}
@@ -389,7 +400,9 @@ const OmsVerificationOrderView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      <ScrollView>{renderContent()}</ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {renderContent()}
+      </ScrollView>
       {renderBottom()}
     </SnbContainer>
   );
