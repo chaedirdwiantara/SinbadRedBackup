@@ -1,4 +1,9 @@
-import { useRegister } from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import {
+  useCheckPhoneNoAvailability,
+  useInputPhone,
+} from '@screen/auth/functions';
+import { REGISTER_OTP_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
@@ -10,7 +15,25 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state }: any = useRegister();
+  const phone = useInputPhone();
+  const { checkPhone, resetCheckPhone, state } = useCheckPhoneNoAvailability();
+  const { navigate } = useNavigation();
+
+  React.useEffect(() => {
+    if (state.data !== null) {
+      phone.clearText();
+      navigate(REGISTER_OTP_VIEW);
+    }
+    if (state.error !== null) {
+      phone.setMessageError(state.error.message);
+    }
+  }, [state]);
+
+  React.useEffect(() => {
+    return () => {
+      resetCheckPhone();
+    };
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -18,29 +41,16 @@ const Content: React.FC = () => {
         <SnbText.H1>DAFTAR</SnbText.H1>
       </View>
       <View style={{ height: 84, padding: 16 }}>
-        <SnbTextField.Text
-          type={state.type}
-          labelText="Nomor Handphone"
-          maxLength={16}
-          keyboardType="phone-pad"
-          onChangeText={func.handleOnChangeTextPhone}
-          valMsgError={state.phoneError}
-          placeholder="Masukkan nomor handphone anda"
-          value={state.phone}
-          clearText={() => {
-            func.setPhone('');
-            func.reinitializeState();
-          }}
-        />
+        <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.handleRegisterProcess}
+          onPress={() => checkPhone({ mobilePhoneNo: phone.value })}
           type="primary"
           loading={state.loading}
           disabled={
-            state.phone === '' || state.phoneError !== '' || state.loading
+            phone.value === '' || phone.valMsgError !== '' || state.loading
           }
         />
       </View>
@@ -49,7 +59,7 @@ const Content: React.FC = () => {
 };
 
 const RegisterView: React.FC = () => {
-  const { goBack } = useRegister();
+  const { goBack } = useNavigation();
 
   return (
     <SnbContainer color="white">

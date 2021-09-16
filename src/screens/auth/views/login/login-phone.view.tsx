@@ -13,7 +13,7 @@ import {
 
 const Content: React.FC = () => {
   const { func, state, navigate }: any = useLogin();
-  const inputPhoneProps = useInputPhone();
+  const phone = useInputPhone();
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -21,12 +21,7 @@ const Content: React.FC = () => {
         <SnbText.H1>Masuk</SnbText.H1>
       </View>
       <View style={{ height: 84, padding: 16 }}>
-        <SnbTextField.Text
-          labelText="Nomor Handphone"
-          placeholder="Masukkan nomor handphone anda"
-          keyboardType="phone-pad"
-          {...inputPhoneProps}
-        />
+        <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
         <SnbButton.Single
@@ -34,9 +29,7 @@ const Content: React.FC = () => {
           onPress={func.handleLoginPhoneProcess}
           type="primary"
           loading={state.loading}
-          disabled={
-            state.phone === '' || state.phoneError !== '' || state.loading
-          }
+          disabled={phone.value === '' || phone.valMsgError !== ''}
         />
       </View>
       <View style={loginPhoneStyles.choosenText}>

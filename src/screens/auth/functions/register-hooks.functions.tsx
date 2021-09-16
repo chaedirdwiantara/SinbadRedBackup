@@ -1,6 +1,9 @@
 import { navigate } from '@core/navigations/RootNavigation';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import * as Actions from '@actions';
+import * as models from '@models';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   REGISTER_STEP_2_VIEW,
   REGISTER_STEP_3_VIEW,
@@ -10,57 +13,17 @@ import {
   REGISTER_STEP_7_VIEW,
 } from '../screens_name';
 
-export const useRegister: any = () => {
-  const navigation = useNavigation();
-  const [type, setType] = React.useState('default');
-  const [loading, setLoading] = React.useState(false);
-  const [phone, setPhone] = React.useState('');
-  const [phoneError, setPhoneError] = React.useState('');
-
-  React.useEffect(() => {
-    const numberCountIsValid = /^[0-9]{10,14}$/.test(phone);
-    const numberFormatIsValid = /^08[0-9]$/.test(phone) && phone.length > 1;
-
-    if (phone && !numberFormatIsValid && phone[1] !== '8') {
-      setType('error');
-      setPhoneError('No. HP harus diawali dengan 08');
-    } else if (phone && !numberCountIsValid) {
-      setType('error');
-      setPhoneError('No. HP harus 10-14 digit');
-    } else {
-      reinitializeState();
-    }
-  }, [phone]);
-
-  const reinitializeState = () => {
-    setType('default');
-    setPhoneError('');
-  };
-
-  const handleOnChangeTextPhone = (text: string) => {
-    setType('default');
-    text = text.replace(/[^0-9]/g, '');
-    setPhone(text);
-  };
-
-  const handleRegisterProcess = () => {};
-
+export const useCheckPhoneNoAvailability = () => {
+  const dispatch = useDispatch();
+  const { checkPhoneNoAvailability } = useSelector((state: any) => state.auth);
   return {
-    func: {
-      handleOnChangeTextPhone,
-      reinitializeState,
-      handleRegisterProcess,
-      setType,
-      setLoading,
-      setPhone,
+    checkPhone: (data: models.ICheckPhoneNoAvailabilityProcess) => {
+      dispatch(Actions.checkPhoneNoAvailabilityProcess(data));
     },
-    state: {
-      type,
-      loading,
-      phoneError,
-      phone,
+    resetCheckPhone: () => {
+      dispatch(Actions.resetCheckPhoneNoAvailability());
     },
-    ...navigation,
+    state: checkPhoneNoAvailability,
   };
 };
 

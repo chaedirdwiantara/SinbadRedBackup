@@ -1,8 +1,11 @@
 import useLogin from './login-hooks.functions';
-import { renderIF } from './auth-utils.functions';
-import useOTP from './otp-hooks.functions';
 import {
-  useRegister,
+  renderIF,
+  formatter,
+  handleMessageError,
+} from './auth-utils.functions';
+import {
+  useCheckPhoneNoAvailability,
   useRegisterStep1,
   useRegisterStep2,
   useRegisterStep3,
@@ -11,13 +14,17 @@ import {
   useRegisterStep6,
   useRegisterStep7,
 } from './register-hooks.functions';
-import { useInputPhone } from './auth-hooks.functions';
+import {
+  useInputPhone,
+  useInput,
+  useInputFormat,
+} from './global-hooks.functions';
 
 export {
   useLogin,
   renderIF,
-  useOTP,
-  useRegister,
+  formatter,
+  useCheckPhoneNoAvailability,
   useRegisterStep1,
   useRegisterStep2,
   useRegisterStep3,
@@ -26,4 +33,7 @@ export {
   useRegisterStep6,
   useRegisterStep7,
   useInputPhone,
+  useInput,
+  useInputFormat,
+  handleMessageError,
 };

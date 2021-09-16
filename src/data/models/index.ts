@@ -12,7 +12,7 @@ export * from './example.model';
 export * from './example2.model';
 export * from './global.model';
 export * from './user.model';
-export * from './register-data.model';
+export * from './register/register.model';
 export * from './global';
 export * from './auth';
 export * from './product';

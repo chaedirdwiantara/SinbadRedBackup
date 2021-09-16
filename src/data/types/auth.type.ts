@@ -3,6 +3,7 @@
 export const LOGIN_USERNAME_PROCESS = 'LoginUserNameProcess';
 export const LOGIN_USERNAME_SUCCESS = 'LoginUserNameSuccess';
 export const LOGIN_USERNAME_FAILED = 'LoginUserNameFailed';
+export const LOGIN_USERNAME_RESET = 'LoginUserNameReset';
 /** => logout */
 export const LOGOUT_PROCESS = 'LogoutProcess';
 export const LOGOUT_SUCCESS = 'LogoutSuccess';

@@ -18,6 +18,7 @@ const logout = () => {
   const path = 'logout';
   return apiGeneral<models.LogoutSuccesProps>(path, 'auth', 'v1', 'POST');
 };
+
 /** === EXPORT FUNCTIONS === */
 export const AuthApi = {
   loginUserName,

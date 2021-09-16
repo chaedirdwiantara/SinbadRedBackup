@@ -7,14 +7,13 @@ import {
   SnbOTPTimer,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../styles';
-
-const FAKE_OTP = '12345';
 interface Props {
   onVerifyOTP: () => void;
   loading: boolean;
+  otpCode: string;
 }
 
-const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading }) => {
+const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading, otpCode }) => {
   const [otp, setOtp] = React.useState('');
 
   return (
@@ -30,7 +29,7 @@ const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading }) => {
       <View style={{ margin: 4 }}>
         <SnbOTPInput
           autoFocusOnLoad
-          otpSuccess={otp === FAKE_OTP}
+          otpSuccess={otp === otpCode}
           code={otp}
           onCodeChanged={setOtp}
         />
@@ -41,7 +40,7 @@ const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading }) => {
           onPress={onVerifyOTP}
           loading={loading}
           type="primary"
-          disabled={otp !== FAKE_OTP}
+          disabled={otp !== otpCode}
         />
       </View>
       <SnbOTPTimer action={() => {}} />

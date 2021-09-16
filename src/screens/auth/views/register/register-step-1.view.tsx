@@ -1,4 +1,8 @@
-import { useRegisterStep1 } from '@screen/auth/functions';
+import {
+  useInput,
+  useInputFormat,
+  useRegisterStep1,
+} from '@screen/auth/functions';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
@@ -12,6 +16,9 @@ import {
 
 const Content: React.FC = () => {
   const { func, state }: any = useRegisterStep1();
+  const name = useInput();
+  const idNumber = useInputFormat('ktp');
+  const taxNumber = useInputFormat('npwp');
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -32,41 +39,28 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
-              mandatory
-              type={state.type}
+              {...name}
               labelText="Nama Pemilik Toko"
-              maxLength={32}
-              onChangeText={func.handleOnChangeTextName}
               placeholder="Masukkan nama pemilik toko"
-              value={state.name}
-              clearText={() => func.setName('')}
-            />
-          </View>
-          <View style={{ height: 92, padding: 16 }}>
-            <SnbTextField.Text
               mandatory
-              type={state.type}
-              labelText="Nomor KTP"
-              keyboardType="number-pad"
-              maxLength={16}
-              onChangeText={func.handleOnChangeTextIdNumber}
-              valMsgError={''}
-              placeholder="Masukkan nomor KTP anda"
-              value={state.idNumber}
-              clearText={() => func.setIdNumber('')}
             />
           </View>
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
-              type={state.type}
-              labelText="Nomor NPWP Pemilik"
-              maxLength={15}
+              {...idNumber}
+              mandatory
+              maxLength={18}
+              labelText="Nomor KTP"
+              placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
-              onChangeText={func.handleOnChangeTextTaxNumber}
-              valMsgError={''}
+            />
+          </View>
+          <View style={{ height: 92, padding: 16 }}>
+            <SnbTextField.Text
+              {...taxNumber}
+              labelText="Nomor NPWP Pemilik"
               placeholder="Masukkan nomor NPWP anda"
-              value={state.taxNumber}
-              clearText={() => func.setTaxNumber('')}
+              keyboardType="number-pad"
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
