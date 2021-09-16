@@ -12,6 +12,9 @@ import {
   SnbDialog,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { contexts } from '@contexts';
 import {
   goToVerificationOrder,
   getTotalProducts,
@@ -145,6 +148,16 @@ const OmsShoppingCartView: FC = () => {
   const totalProducts = useMemo(() => getTotalProducts(invoiceGroups), []);
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
+  /** => this example */
+  const { verificationOrderCreate } = useVerficationOrderAction();
+  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
+
+  React.useEffect(() => {
+    if (stateOms.verificationOrder.create.data !== null) {
+      goToVerificationOrder();
+      setIsConfirmCheckoutDialogOpen(false);
+    }
+  }, [stateOms.verificationOrder.create.data]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -383,15 +396,24 @@ const OmsShoppingCartView: FC = () => {
     </Fragment>
   );
   /** => Confirmation Dialog */
+  // const renderConfirmationDialog = () => (
+  //   <SnbDialog
+  //     open={isModalOpen}
+  //     title="Konfirmasi"
+  //     content="Konfirmasi order dan lanjut ke Checkout?"
+  //     ok={() => {
+  //       goToVerificationOrder();
+  //       setIsConfirmCheckoutDialogOpen(false);
+  //     }}
+  //     cancel={() => setIsConfirmCheckoutDialogOpen(false)}
+  //   />
+  // );
   const renderConfirmationDialog = () => (
     <SnbDialog
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() => {
-        goToVerificationOrder();
-        setIsConfirmCheckoutDialogOpen(false);
-      }}
+      ok={() => verificationOrderCreate(dispatchOms, {})}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
     />
   );

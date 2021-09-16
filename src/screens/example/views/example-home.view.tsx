@@ -12,8 +12,8 @@ const ExampleHomeView: React.FC = () => {
   /** === HOOK === */
   const { stateProduct } = React.useContext(contexts.ProductContext);
   const { stateExample } = React.useContext(contexts.ExampleContext);
-  console.log('ini example 1', stateExample);
-  console.log('ini product', stateProduct);
+  const { stateOms } = React.useContext(contexts.OmsContext);
+  console.log('ini oms', stateOms);
   /** === VIEW === */
   /** => main */
   return (

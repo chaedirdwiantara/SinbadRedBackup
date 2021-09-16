@@ -6,13 +6,16 @@ import { ErrorProps } from '@model/index';
 const apiMock = async <T>(
   mockHost: string,
   path: string,
-  method: 'GET' | 'POST' | 'UPDATE',
+  module: string,
+  version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
+  method: 'GET' | 'POST' | 'PATCH' | 'PUT',
   params?: object,
 ): Promise<T> => {
   /** === SET HEADER === */
   const headers = {};
   set(headers, 'Accept', 'application/json');
   set(headers, 'Content-Type', 'application/json');
+  set(headers, 'X-Platform', 'sinbad-app');
   /** === SET BODY === */
   const reqBody = {
     method,
@@ -52,7 +55,7 @@ const apiMock = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
-  return fetch(mockHost + path, reqBody)
+  return fetch(`${mockHost}/api/${version}/sinbad-app/${path}`, reqBody)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);
