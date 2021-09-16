@@ -13,8 +13,14 @@ import {
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { contexts } from '@contexts';
+import {
+  CheckboxStatus,
+  CartProduct,
+  CartBrand,
+  CartInvoiceGroup,
+} from '@models';
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import {
   goToVerificationOrder,
   getTotalProducts,
@@ -27,32 +33,10 @@ import {
   getTotalPrice,
 } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
-/** === TYPES === */
-export type DeterminateCheckboxStatus = 'selected' | 'unselect';
-export type CheckboxStatus = DeterminateCheckboxStatus | 'indeterminate';
-export interface Product {
-  name: string;
-  qty: number;
-  displayPrice: number;
-  uom: string;
-  imageUrl: string;
-  selected: DeterminateCheckboxStatus;
-  stock: number;
-}
-export interface Brand {
-  name: string;
-  products: Array<Product>;
-  selected: CheckboxStatus;
-  selectedCount: number;
-}
-export interface InvoiceGroup {
-  name: string;
-  brands: Array<Brand>;
-}
 /** === DUMMIES === */
 const noImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
-const invoiceGroupDummies: Array<InvoiceGroup> = [
+const invoiceGroupDummies: Array<CartInvoiceGroup> = [
   {
     name: 'TRS DNE',
     brands: [
@@ -141,7 +125,7 @@ const address =
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
   const [invoiceGroups, setInvoiceGroups] =
-    useState<Array<InvoiceGroup>>(invoiceGroupDummies);
+    useState<Array<CartInvoiceGroup>>(invoiceGroupDummies);
   const [allProductsSelected, setAllProductsSelected] =
     useState<CheckboxStatus>('unselect');
   const [productSelectedCount, setProductSelectedCount] = useState(0);
@@ -150,14 +134,15 @@ const OmsShoppingCartView: FC = () => {
     useState(false);
   /** => this example */
   const { verificationOrderCreate } = useVerficationOrderAction();
-  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
+  const { stateVerificationOrder, dispatchVerificationOrder } =
+    React.useContext(contexts.VerificationOrderContext);
 
   React.useEffect(() => {
-    if (stateOms.verificationOrder.create.data !== null) {
+    if (stateVerificationOrder.create.data !== null) {
       goToVerificationOrder();
       setIsConfirmCheckoutDialogOpen(false);
     }
-  }, [stateOms.verificationOrder.create.data]);
+  }, [stateVerificationOrder.create.data]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -214,9 +199,9 @@ const OmsShoppingCartView: FC = () => {
   );
   /** => Product */
   const renderProduct = (
-    product: Product,
+    product: CartProduct,
     productIndex: number,
-    brand: Brand,
+    brand: CartBrand,
     brandIndex: number,
     invoiceGroupIndex: number,
   ) => {
@@ -328,7 +313,7 @@ const OmsShoppingCartView: FC = () => {
   };
   /** => Brand */
   const renderBrand = (
-    brand: Brand,
+    brand: CartBrand,
     brandIndex: number,
     invoiceGroupIndex: number,
   ) => (
@@ -374,7 +359,7 @@ const OmsShoppingCartView: FC = () => {
   );
   /** => Invoice Group */
   const renderInvoiceGroup = (
-    invoiceGroup: InvoiceGroup,
+    invoiceGroup: CartInvoiceGroup,
     invoiceGroupIndex: number,
   ) => (
     <View style={ShoppingCartStyles.cardContainer} key={invoiceGroup.name}>
@@ -412,7 +397,7 @@ const OmsShoppingCartView: FC = () => {
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() => verificationOrderCreate(dispatchOms, {})}
+      ok={() => verificationOrderCreate(dispatchVerificationOrder, {})}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
     />
   );
