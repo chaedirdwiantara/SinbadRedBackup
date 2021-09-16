@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { OmsApi } from '../apis/oms.api';
+import { VerificationOrderApi } from '../../../apis/oms/verification-order/verification-order.api';
 import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
@@ -10,7 +10,7 @@ import * as models from '@models';
 function* verficationOrderCreate(action: models.CreateProcessAction) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
-      return OmsApi.verficationOrderCreate(action.payload);
+      return VerificationOrderApi.verficationOrderCreate(action.payload);
     });
     yield action.contextDispatch(
       ActionCreators.verificationOrderCreateSuccess(response),
@@ -27,7 +27,7 @@ function* verficationOrderCreate(action: models.CreateProcessAction) {
 function* verficationOrderDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<{}> = yield call(() => {
-      return OmsApi.verficationOrderDetail(action.payload);
+      return VerificationOrderApi.verficationOrderDetail(action.payload);
     });
     yield action.contextDispatch(
       ActionCreators.verificationOrderDetailSuccess(response),
@@ -42,7 +42,7 @@ function* verficationOrderDetail(action: models.DetailProcessAction) {
   }
 }
 /** === LISTEN FUNCTION === */
-function* OmsSaga() {
+function* VerificationOrderSaga() {
   yield takeLatest(
     types.VERIFICATION_ORDER_CREATE_PROCESS,
     verficationOrderCreate,
@@ -53,4 +53,4 @@ function* OmsSaga() {
   );
 }
 
-export default OmsSaga;
+export default VerificationOrderSaga;

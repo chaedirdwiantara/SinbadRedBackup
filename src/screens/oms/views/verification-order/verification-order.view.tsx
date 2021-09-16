@@ -91,11 +91,12 @@ const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
   const { verificationOrderDetail } = useVerficationOrderAction();
-  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
+  const { stateVerificationOrder, dispatchVerificationOrder } =
+    React.useContext(contexts.VerificationOrderContext);
   React.useEffect(() => {
     verificationOrderDetail(
-      dispatchOms,
-      stateOms.verificationOrder.create.data.id,
+      dispatchVerificationOrder,
+      stateVerificationOrder.create.data?.id ?? '',
     );
   }, []);
   /** === VIEW === */

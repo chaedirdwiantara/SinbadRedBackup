@@ -17,7 +17,7 @@ const verficationOrderDetail = (data: models.DetailProcessProps) => {
   return apiMappingMock(mockHost, path, 'discount', 'v1', 'DETAIL');
 };
 /** === EXPORT FUNCTIONS === */
-export const OmsApi = {
+export const VerificationOrderApi = {
   verficationOrderCreate,
   verficationOrderDetail,
 };
