@@ -1,6 +1,6 @@
 export const apiHost = {
-  api: 'https://ms-api-dev.sinbad.web.id',
-  auth: 'https://ms-auth-dev.sinbad.web.id',
+  api: 'http://ms-api-dev.sinbad.web.id',
+  auth: 'http://ms-auth-dev.sinbad.web.id',
 };
 
 export default apiHost;
