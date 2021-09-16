@@ -8,8 +8,8 @@ const copyToClipboard = (
   setToastMessage: Dispatch<SetStateAction<string>>,
 ) => {
   Clipboard.setString(data.toString());
-  setShowToast(true);
   setToastMessage(message);
+  setShowToast(true);
 
   setTimeout(() => {
     setShowToast(false);
