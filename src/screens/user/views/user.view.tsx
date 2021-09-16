@@ -26,7 +26,7 @@ const UserView: FC = () => {
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
-    storeDetailAction.detail(dispatchUser, '1');
+    storeDetailAction.detail(dispatchUser, '3');
   }, []);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
@@ -59,10 +59,17 @@ const UserView: FC = () => {
         </View>
         <View style={UserStyles.userInfo}>
           <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
-          <SnbText.C1 color={color.white}>Kelengkapan profil 50%</SnbText.C1>
+          <SnbText.C1 color={color.white}>
+            Kelengkapan profil {countPercentageProfileComplete()}%
+          </SnbText.C1>
         </View>
       </View>
     );
+  };
+  const countPercentageProfileComplete = () => {
+    const progressDone = stateUser.detail.data?.progress.done || 0;
+    const progressTotal = stateUser.detail.data?.progress.total || 0;
+    return Math.floor((progressDone / progressTotal) * 100);
   };
   const renderLoyaltiInformation = () => {
     return (
@@ -75,7 +82,7 @@ const UserView: FC = () => {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
                 title: 'Sinbad Point',
                 subtitle: '1000 Point',
-                onPress: () => storeDetailAction.detail(dispatchUser, '1'),
+                onPress: () => storeDetailAction.detail(dispatchUser, '3'),
               },
               {
                 icon: (
@@ -97,12 +104,13 @@ const UserView: FC = () => {
     );
   };
   const renderUserInformation = () => {
+    const data = stateUser.detail.data?.progress;
     return (
       <View>
         <View style={{ marginVertical: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Pemilik</SnbText.B4>
-            <SnbText.B3>1/8 Selesai</SnbText.B3>
+            <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
           </View>
           <SnbListButtonType2
             title={'Data Diri'}
@@ -114,7 +122,7 @@ const UserView: FC = () => {
         <View style={{ marginBottom: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Toko</SnbText.B4>
-            <SnbText.B3>4/9 Selesai</SnbText.B3>
+            <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
           </View>
           <SnbListButtonType2
             title={'Informasi Toko'}

@@ -163,11 +163,12 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.bankAccountNo,
+          action: ownerData?.profile.bankAccountNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerBankAccountNo',
-          // title: dataMerchantVolatile.bank.accountNo ? 'Ubah Rekening Bank' : 'Tambah Rekening Bank'
-          title: 'Tambah Rekening Bank',
+          title: ownerData?.profile.bankAccountNo
+            ? 'Ubah Rekening Bank'
+            : 'Tambah Rekening Bank',
         })}
         {renderContentSection({
           key: 'Nomor Kartu Tanda Penduduk (KTP)',

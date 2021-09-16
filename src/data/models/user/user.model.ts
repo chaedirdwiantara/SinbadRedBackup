@@ -2,6 +2,7 @@
 export interface StoreDetail {
   ownerData: IOwnerData;
   storeData: IStoreData;
+  progress: IProgress;
 }
 
 interface IOwnerData {
@@ -18,6 +19,7 @@ interface IOwnerProfile {
   taxImageUrl?: string;
   idImageUrl?: string;
   selfieImageUrl?: string;
+  bankAccountNo?: string;
 }
 
 interface IStoreData {
@@ -56,4 +58,19 @@ interface IStoreDetailCompleteness {
   mostWantedBrand?: string;
   vehicleAccessibility?: string;
   vehicleAccessibilityAmount?: number;
+}
+interface IProgress {
+  done: number;
+  total: number;
+  ownerProgress: IOwnerProgress;
+  storeProgress: IStoreProgress;
+}
+
+interface IOwnerProgress {
+  done: number;
+  total: number;
+}
+interface IStoreProgress {
+  done: number;
+  total: number;
 }

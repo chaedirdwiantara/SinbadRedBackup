@@ -300,7 +300,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             type={'number'}
             value={
               storeData?.vehicleAccessibilityAmount
-                ? storeData?.vehicleAccessibilityAmount
+                ? `${storeData?.vehicleAccessibilityAmount}`
                 : ''
             }
             onChangeText={(text) => console.log(text)}
