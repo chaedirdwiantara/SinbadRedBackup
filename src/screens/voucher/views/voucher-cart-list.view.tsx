@@ -17,6 +17,8 @@ import {
   handleSelectSinbadVoucher,
   handleSearchVoucher,
   handleSelectSupplierVoucher,
+  useSearchKeyword,
+  useVoucherList,
 } from '../functions';
 import { VoucherCartListStyles } from '../styles';
 /** === INTERFACE === */
@@ -74,7 +76,9 @@ const dummies = {
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
-  const [keyword, setKeyword] = React.useState('');
+  const { keyword, changeKeyword } = useSearchKeyword();
+  const { supplierVoucher, sinbadVoucher, updateVoucherList } =
+    useVoucherList();
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -96,8 +100,8 @@ const VoucherCartListView: FC = () => {
           <SnbTextField.Text
             placeholder={'Cari kode voucher disini...'}
             type={'default'}
-            onChangeText={(value) => setKeyword(value)}
-            clearText={() => setKeyword('')}
+            onChangeText={(value) => changeKeyword(value)}
+            clearText={() => changeKeyword('')}
             value={keyword}
           />
         </View>

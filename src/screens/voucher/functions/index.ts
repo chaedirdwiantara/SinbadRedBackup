@@ -1,5 +1,6 @@
 /** === EXPORT ALL === */
 export * from './voucher.function';
+export * from './voucher-hook.function';
 /**
  * ================================================================
  * NOTES

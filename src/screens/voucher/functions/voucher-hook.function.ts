@@ -2,7 +2,7 @@
 import { useState } from 'react';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === FUNCTION === */
-/** => set tab category */
+/** => set search keyword */
 const useSearchKeyword = () => {
   const [keyword, setKeyword] = useState('');
   return {
@@ -12,8 +12,21 @@ const useSearchKeyword = () => {
     keyword,
   };
 };
+/** => set voucher list local data */
+const useVoucherList = () => {
+  const [supplierVoucher, setSupplierVoucher] = useState([]);
+  const [sinbadVoucher, setSinbadVoucher] = useState([]);
+  return {
+    updateVoucherList: (supplierVoucherList, sinbadVoucherList) => {
+      setSupplierVoucher(supplierVoucherList);
+      setSinbadVoucher(sinbadVoucherList);
+    },
+    supplierVoucher,
+    sinbadVoucher,
+  };
+};
 /** === EXPORT === */
-export { useSearchKeyword };
+export { useSearchKeyword, useVoucherList };
 /**
  * ================================================================
  * NOTES
