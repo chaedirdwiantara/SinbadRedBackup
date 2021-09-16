@@ -10,6 +10,7 @@ export * from './global';
 export * from './auth';
 export * from './products';
 export * from './user';
+export * from './merchant';
 /**
  * ================================================================
  * NOTES

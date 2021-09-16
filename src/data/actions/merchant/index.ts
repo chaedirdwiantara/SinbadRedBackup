@@ -1,22 +1,15 @@
 /**
  * ============================================================
- * ALL VARIABLE THAT WILL USED BY ACTIONS, REDUCERS, AND SAGAS
+ * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './example.type';
-export * from './example2.type';
-export * from './global.type';
-export * from './user.type';
-export * from './register.type';
-export * from './auth.type';
-export * from './product.type';
-export * from './merchant.type';
+export * from './merchant-api.action';
 /**
  * ================================================================
  * NOTES
  * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
+ * createdBy: tyo (team)
+ * createDate: 16092021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

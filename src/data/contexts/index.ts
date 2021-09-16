@@ -6,12 +6,14 @@ import {
   Example2Context,
 } from './examples2/Example2Provider';
 import { UserProvider, UserContext } from './users/UserProvider';
+import { MerchantProvider, MerchantContext } from './merchant/MerchantProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   ProductProvider,
   ExampleProvider,
   Example2Provider,
   UserProvider,
+  MerchantProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -19,4 +21,5 @@ export const contexts = {
   ExampleContext,
   Example2Context,
   UserContext,
+  MerchantContext,
 };

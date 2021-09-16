@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
@@ -8,12 +8,25 @@ import {
 import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
+import { contexts } from '@contexts';
+/** === IMPORT FUNCTION HERE === */
+import { MerchantHookFunc } from '../../function';
 /** === IMPORT STYLE HERE === */
 // import MerchantStyles from '../../styles/merchant.style';
 
 const MerchantSupplierInformationView: FC = () => {
+  /** === HOOK === */
+  const supplierListAction = MerchantHookFunc.useSupplierListAction();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  useEffect(() => {
+    supplierListAction.list(dispatchSupplier);
+  }, []);
   /** === VIEW === */
   /** => header */
+  console.log('stateSupplier:', stateMerchant);
+
   const header = () => {
     return (
       <SnbTopNav.Type3
