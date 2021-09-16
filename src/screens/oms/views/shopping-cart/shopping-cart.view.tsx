@@ -253,8 +253,7 @@ const OmsShoppingCartView: FC = () => {
                 type="primary"
                 iconName="remove"
                 radius={100}
-                disabled={product.qty === 0}
-                buttonColor={color.black60}
+                disabled={product.qty === 1}
                 onPress={() =>
                   handleProductQuantityChange(
                     invoiceGroupIndex,
@@ -302,7 +301,7 @@ const OmsShoppingCartView: FC = () => {
                 invoiceGroups,
               )
             }>
-            <SnbIcon name="delete" color={color.black60} size={32} />
+            <SnbIcon name="delete_outline" color={color.black60} size={32} />
           </TouchableOpacity>
           {product.stock <= 3 && (
             <SnbText.B3

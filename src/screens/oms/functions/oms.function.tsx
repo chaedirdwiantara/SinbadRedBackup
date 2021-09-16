@@ -26,6 +26,14 @@ const goToCart4 = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
+/** => go to checkout success */
+const goToCheckoutSuccess = () => {
+  NavigationAction.navigate('OmsCheckoutSuccessView');
+};
+/** => go to home */
+const goToHome = () => {
+  NavigationAction.navigate('HomeView');
+};
 
 export {
   goBack,
@@ -34,4 +42,6 @@ export {
   goToCart3,
   goToCart4,
   goToCheckout,
+  goToCheckoutSuccess,
+  goToHome,
 };
