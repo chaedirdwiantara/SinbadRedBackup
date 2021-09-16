@@ -19,8 +19,10 @@ import {
   handleSelectSupplierVoucher,
   useSearchKeyword,
   useVoucherList,
+  useVoucherCartListAction,
 } from '../functions';
 import { VoucherCartListStyles } from '../styles';
+import { contexts } from '@contexts';
 /** === INTERFACE === */
 /** === DUMMIES === */
 const dummies = {
@@ -76,9 +78,22 @@ const dummies = {
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
+  const voucherCartListAction = useVoucherCartListAction();
+  const voucherState = stateVoucher.list;
+  console.log(voucherState);
   const { keyword, changeKeyword } = useSearchKeyword();
   const { supplierVoucher, sinbadVoucher, updateVoucherList } =
     useVoucherList();
+  /** => effect */
+  // React.useEffect(() => {
+  //   voucherCartListAction.list(dispatchVoucher);
+  //   return () => {
+  //     voucherCartListAction.reset(dispatchVoucher);
+  //   };
+  // }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -187,43 +202,33 @@ const VoucherCartListView: FC = () => {
   };
   /** => supplier voucher list */
   const renderSupplierVoucherList = () => {
-    return (
-      <View style={VoucherCartListStyles.voucherSection}>
-        {dummies.data.supplierVouchers.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <View style={VoucherCartListStyles.voucherSectionHeader}>
-                <View style={VoucherCartListStyles.voucherSectionTitle}>
-                  <SnbIcon name={'settings'} color={color.green50} size={24} />
-                  <View
-                    style={
-                      VoucherCartListStyles.voucherSectionTitleTextContainer
-                    }>
-                    <SnbText.H4 color={color.black80}>
-                      {item.invoiceGroupName}
-                    </SnbText.H4>
-                    <SnbText.C2 color={color.black60}>
-                      {`${dummies.data.supplierVouchers.length} Voucher Tersedia`}
-                    </SnbText.C2>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  style={VoucherCartListStyles.voucherSectionRightIcon}
-                  onPress={() => goToVoucherCartListMore(item.voucherList)}>
-                  <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
-                  <SnbIcon
-                    name={'chevron_right'}
-                    color={color.red50}
-                    size={24}
-                  />
-                </TouchableOpacity>
+    return dummies.data.supplierVouchers.map((item, index) => {
+      return (
+        <View key={index} style={VoucherCartListStyles.voucherSection}>
+          <View style={VoucherCartListStyles.voucherSectionHeader}>
+            <View style={VoucherCartListStyles.voucherSectionTitle}>
+              <SnbIcon name={'settings'} color={color.green50} size={24} />
+              <View
+                style={VoucherCartListStyles.voucherSectionTitleTextContainer}>
+                <SnbText.H4 color={color.black80}>
+                  {item.invoiceGroupName}
+                </SnbText.H4>
+                <SnbText.C2 color={color.black60}>
+                  {`${dummies.data.supplierVouchers.length} Voucher Tersedia`}
+                </SnbText.C2>
               </View>
-              {renderSupplierVoucherCard(item.voucherList)}
-            </React.Fragment>
-          );
-        })}
-      </View>
-    );
+            </View>
+            <TouchableOpacity
+              style={VoucherCartListStyles.voucherSectionRightIcon}
+              onPress={() => goToVoucherCartListMore(item.voucherList)}>
+              <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
+              <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
+            </TouchableOpacity>
+          </View>
+          {renderSupplierVoucherCard(item.voucherList)}
+        </View>
+      );
+    });
   };
   /** => supplier voucher card */
   const renderSupplierVoucherCard = (
@@ -292,7 +297,7 @@ const VoucherCartListView: FC = () => {
   };
   /** => main */
   return (
-    <SnbContainer color="white">
+    <SnbContainer color="grey">
       {renderHeader()}
       {renderSearchSection()}
       <ScrollView showsVerticalScrollIndicator={false}>

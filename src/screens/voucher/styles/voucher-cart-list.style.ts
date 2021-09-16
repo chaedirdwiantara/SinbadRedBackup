@@ -19,7 +19,11 @@ export const VoucherCartListStyles = StyleSheet.create({
     marginLeft: 8,
   },
   voucherSection: {
-    padding: 16,
+    paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 8,
+    marginBottom: 8,
+    backgroundColor: color.white,
   },
   voucherSectionHeader: {
     flexDirection: 'row',
