@@ -25,10 +25,6 @@ const handleSelectSinbadVoucher = (voucherId: number) => {
 const handleResetVoucher = () => {
   console.log('handle reset voucher');
 };
-/** => handle search voucher */
-const handleSearchVoucher = (keyword: string) => {
-  console.log(`handle search voucher with keyword ${keyword}`);
-};
 
 export {
   goBack,
@@ -37,5 +33,4 @@ export {
   handleResetVoucher,
   handleSelectSupplierVoucher,
   handleSelectSinbadVoucher,
-  handleSearchVoucher,
 };

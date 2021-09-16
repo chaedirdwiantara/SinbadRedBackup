@@ -8,21 +8,21 @@ export interface SinbadVoucherProps {
   voucherName: string;
   shortDescription: string;
   benefitRebate: number;
-  expiredAt: Date;
+  expiredAt: string;
   remainingDay: number;
 }
 export interface SupplierVoucherProps {
   invoiceGroupId: number;
   invoiceGroupName: string;
-  voucherList: VoucherListProps[];
+  voucherList: SupplierVoucherListProps[];
 }
-export interface VoucherListProps {
+export interface SupplierVoucherListProps {
   id: number;
   voucherId: number;
   voucherName: string;
   shortDescription: string;
   remainingDay: number;
-  expiredAt: Date;
+  expiredAt: string;
   invoiceGroupId: number;
   invoiceGroupName: string;
   benefitRebate: number;

@@ -10,7 +10,9 @@ const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
     detail: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.voucherCartListProcess(contextDispatch, { id: '1' }));
+      dispatch(
+        Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
+      );
     },
   };
 };
@@ -26,13 +28,21 @@ const useSearchKeyword = () => {
 };
 /** => set voucher list local data */
 const useVoucherList = () => {
-  const [supplierVoucher, setSupplierVoucher] = useState([]);
-  const [sinbadVoucher, setSinbadVoucher] = useState([]);
+  const [supplierVoucher, setSupplierVoucher] = useState<
+    models.SupplierVoucherProps[]
+  >([]);
+  const [sinbadVoucher, setSinbadVoucher] = useState<
+    models.SinbadVoucherProps[]
+  >([]);
   return {
-    updateVoucherList: (supplierVoucherList, sinbadVoucherList) => {
+    updateVoucherList: (
+      supplierVoucherList: models.SupplierVoucherProps[],
+      sinbadVoucherList: models.SinbadVoucherProps[],
+    ) => {
       setSupplierVoucher(supplierVoucherList);
       setSinbadVoucher(sinbadVoucherList);
     },
+    searchVoucher: (keyword: string) => {},
     supplierVoucher,
     sinbadVoucher,
   };

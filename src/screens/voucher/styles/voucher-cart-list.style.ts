@@ -65,4 +65,9 @@ export const VoucherCartListStyles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: color.white,
   },
+  singleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

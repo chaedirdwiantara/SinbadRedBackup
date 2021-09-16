@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -9,13 +9,13 @@ import {
   color,
   SnbText,
   styles,
+  SnbProgress,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
   goToVoucherCartListMore,
   goToVoucherDetail,
   handleSelectSinbadVoucher,
-  handleSearchVoucher,
   handleSelectSupplierVoucher,
   useSearchKeyword,
   useVoucherList,
@@ -23,74 +23,31 @@ import {
 } from '../functions';
 import { VoucherCartListStyles } from '../styles';
 import { contexts } from '@contexts';
-/** === INTERFACE === */
-/** === DUMMIES === */
-const dummies = {
-  data: {
-    sinbadVouchers: [
-      {
-        voucherId: 12,
-        voucherName: 'Voucher Tiga',
-        shortDescription: 'desc',
-        benefitRebate: 100000,
-        expiredAt: '2021-07-31T16:59:00.000Z',
-        remainingDay: 3,
-      },
-    ],
-    supplierVouchers: [
-      {
-        invoiceGroupId: 3,
-        invoiceGroupName: 'Exclusive Danone',
-        voucherList: [
-          {
-            id: 343,
-            voucherId: 171,
-            voucherName: 'chrisvoucher',
-            shortDescription: 'voucher SGM',
-            remainingDay: 2,
-            expiredAt: '2021-07-31T16:59:00.000Z',
-            invoiceGroupId: 3,
-            invoiceGroupName: 'Exclusive Danone',
-            benefitRebate: 1000,
-          },
-        ],
-      },
-      {
-        invoiceGroupId: 2,
-        invoiceGroupName: 'Exclusive SGM',
-        voucherList: [
-          {
-            id: 342,
-            voucherId: 170,
-            voucherName: 'chrisvoucher',
-            shortDescription: 'voucher SGM',
-            remainingDay: 2,
-            expiredAt: '2021-07-31T16:59:00.000Z',
-            invoiceGroupId: 3,
-            invoiceGroupName: 'Exclusive Danone',
-            benefitRebate: 1000,
-          },
-        ],
-      },
-    ],
-  },
-};
+import * as models from '@models';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
   );
-  const voucherCartListAction = useVoucherCartListAction();
-  const voucherState = stateVoucher.detail;
-  console.log(voucherState);
-  const { keyword, changeKeyword } = useSearchKeyword();
-  const { supplierVoucher, sinbadVoucher, updateVoucherList } =
+  const { supplierVoucher, sinbadVoucher, updateVoucherList, searchVoucher } =
     useVoucherList();
+  const { keyword, changeKeyword } = useSearchKeyword();
+  const voucherCartListAction = useVoucherCartListAction();
+  const voucherCartListState = stateVoucher.detail;
+  console.log(voucherCartListState);
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.detail(dispatchVoucher);
   }, []);
+  React.useEffect(() => {
+    if (voucherCartListState.data !== null) {
+      updateVoucherList(
+        voucherCartListState.data.supplierVouchers,
+        voucherCartListState.data.sinbadVouchers,
+      );
+    }
+  }, [voucherCartListState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -122,7 +79,7 @@ const VoucherCartListView: FC = () => {
             type={'primary'}
             title="Terapkan"
             size={'medium'}
-            onPress={() => handleSearchVoucher(keyword)}
+            onPress={() => searchVoucher(keyword)}
             disabled={false}
           />
         </View>
@@ -131,6 +88,9 @@ const VoucherCartListView: FC = () => {
   };
   /** => sinbad voucher list */
   const renderSinbadVoucherList = () => {
+    if (sinbadVoucher.length === 0) {
+      return null;
+    }
     return (
       <View style={VoucherCartListStyles.voucherSection}>
         <View style={VoucherCartListStyles.voucherSectionHeader}>
@@ -140,33 +100,24 @@ const VoucherCartListView: FC = () => {
               style={VoucherCartListStyles.voucherSectionTitleTextContainer}>
               <SnbText.H4 color={color.black80}>Sinbad Voucher</SnbText.H4>
               <SnbText.C2 color={color.black60}>
-                {`${dummies.data.sinbadVouchers.length} Voucher Tersedia`}
+                {`${sinbadVoucher.length} Voucher Tersedia`}
               </SnbText.C2>
             </View>
           </View>
           <TouchableOpacity
             style={VoucherCartListStyles.voucherSectionRightIcon}
-            onPress={() =>
-              goToVoucherCartListMore(dummies.data.sinbadVouchers)
-            }>
+            onPress={() => goToVoucherCartListMore(sinbadVoucher)}>
             <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
             <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
           </TouchableOpacity>
         </View>
-        {renderSinbadVoucherCard(dummies.data.sinbadVouchers)}
+        {renderSinbadVoucherCard(sinbadVoucher)}
       </View>
     );
   };
   /** => sinbad voucher card */
   const renderSinbadVoucherCard = (
-    voucherList: {
-      voucherId: number;
-      voucherName: string;
-      shortDescription: string;
-      remainingDay: number;
-      expiredAt: string;
-      benefitRebate: number;
-    }[],
+    voucherList: models.SinbadVoucherProps[],
   ) => {
     return voucherList.map((item, index) => {
       return (
@@ -199,7 +150,7 @@ const VoucherCartListView: FC = () => {
   };
   /** => supplier voucher list */
   const renderSupplierVoucherList = () => {
-    return dummies.data.supplierVouchers.map((item, index) => {
+    return supplierVoucher.map((item, index) => {
       return (
         <View key={index} style={VoucherCartListStyles.voucherSection}>
           <View style={VoucherCartListStyles.voucherSectionHeader}>
@@ -211,7 +162,7 @@ const VoucherCartListView: FC = () => {
                   {item.invoiceGroupName}
                 </SnbText.H4>
                 <SnbText.C2 color={color.black60}>
-                  {`${dummies.data.supplierVouchers.length} Voucher Tersedia`}
+                  {`${item.voucherList.length} Voucher Tersedia`}
                 </SnbText.C2>
               </View>
             </View>
@@ -229,17 +180,7 @@ const VoucherCartListView: FC = () => {
   };
   /** => supplier voucher card */
   const renderSupplierVoucherCard = (
-    voucherList: {
-      id: number;
-      voucherId: number;
-      voucherName: string;
-      shortDescription: string;
-      remainingDay: number;
-      expiredAt: string;
-      invoiceGroupId: number;
-      invoiceGroupName: string;
-      benefitRebate: number;
-    }[],
+    voucherList: models.SupplierVoucherListProps[],
   ) => {
     return voucherList.map((item, index) => {
       return (
@@ -292,15 +233,63 @@ const VoucherCartListView: FC = () => {
       </View>
     );
   };
+  /** => empty */
+  const renderEmpty = () => {
+    return (
+      <View style={VoucherCartListStyles.singleContainer}>
+        <Image
+          source={require('../../../assets/images/voucher_empty.png')}
+          style={{
+            height: 190,
+            width: undefined,
+            aspectRatio: 10 / 8,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        />
+        <View style={{ marginTop: 16 }}>
+          <SnbText.H4>Voucher Tidak Tersedia</SnbText.H4>
+        </View>
+        <View>
+          <SnbText.B3>
+            Tidak ada voucher yang tersedia untuk saat ini
+          </SnbText.B3>
+        </View>
+      </View>
+    );
+  };
+  /** => loading */
+  const renderLoading = () => {
+    return (
+      <View style={VoucherCartListStyles.singleContainer}>
+        <SnbProgress size={40} />
+      </View>
+    );
+  };
+  /** => voucher section */
+  const renderVoucherSection = () => {
+    if (
+      voucherCartListState.data?.sinbadVouchers.length === 0 &&
+      voucherCartListState.data?.supplierVouchers.length === 0
+    ) {
+      return renderEmpty();
+    } else {
+      return (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderSinbadVoucherList()}
+          {renderSupplierVoucherList()}
+        </ScrollView>
+      );
+    }
+  };
   /** => main */
   return (
     <SnbContainer color="grey">
       {renderHeader()}
       {renderSearchSection()}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderSinbadVoucherList()}
-        {renderSupplierVoucherList()}
-      </ScrollView>
+      {!voucherCartListState.loading && voucherCartListState.data !== null
+        ? renderVoucherSection()
+        : renderLoading()}
       {renderFooterSection()}
     </SnbContainer>
   );
