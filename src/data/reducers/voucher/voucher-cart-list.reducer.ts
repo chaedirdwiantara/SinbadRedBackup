@@ -3,80 +3,51 @@ import * as types from '../../types';
 import * as models from '../../models';
 import simplifyReducer from '../../../../core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type VoucherCartListInitialProps = models.ListItemProps<
-  models.VoucherCartList[]
->;
+type VoucherCartListInitialProps =
+  models.DetailItemProps<models.VoucherCartList>;
 /** === INITIAL STATE HERE === */
 export const voucherCartListInitialState: VoucherCartListInitialProps = {
-  data: [],
+  data: null,
   error: null,
   loading: false,
-  loadMore: false,
-  refresh: false,
-  total: 0,
-  skip: 0,
 };
 /** === FUNCTION HERE === */
 export const voucherCartListReducer = simplifyReducer(
   voucherCartListInitialState,
   {
-    /** ===> LIST */
-    /** => voucher cart list process */
-    [types.VOUCHER_CART_LIST_PROCESS](
-      state = voucherCartListInitialState,
-      action: models.ListProcessAction,
-    ) {
+    /** ===> DETAIL */
+    /** => detail process */
+    [types.VOUCHER_CART_LIST_PROCESS]() {
       return {
-        ...state,
-        loading: action.payload.loading,
-        error: null,
+        ...voucherCartListInitialState,
+        loading: true,
       };
     },
-    /** => list success */
+    /** => detail success */
     [types.VOUCHER_CART_LIST_SUCCESS](
       state = voucherCartListInitialState,
-      action: models.ListSuccessAction<models.VoucherCartList[]>,
+      action: models.DetailSuccessAction<models.Example>,
     ) {
       return {
         ...state,
-        data: [...state.data, ...action.payload.data],
+        data: action.payload.data,
         loading: false,
-        loadMore: false,
-        refresh: false,
-        total: action.payload.meta.total,
-        skip: action.payload.meta.skip,
       };
     },
-    /** => list failed */
+    /** => detail failed */
     [types.VOUCHER_CART_LIST_FAILED](
       state = voucherCartListInitialState,
-      action: models.ListFailedAction,
+      action: models.DetailFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        loadMore: false,
-        refresh: false,
         error: action.payload,
       };
     },
-    /** => voucher cart list reset */
-    [types.VOUCHER_CART_LIST_RESET]() {
+    /** => detail reset */
+    [types.EXAMPLE_DETAIL_RESET]() {
       return voucherCartListInitialState;
-    },
-    /** => voucher cart list refresh */
-    [types.VOUCHER_CART_LIST_REFRESH]() {
-      return {
-        ...voucherCartListInitialState,
-        refresh: true,
-      };
-    },
-    /** => voucher cart list load more */
-    [types.VOUCHER_CART_LIST_LOADMORE](state = voucherCartListInitialState) {
-      return {
-        ...state,
-        loadMore: true,
-      };
     },
   },
 );

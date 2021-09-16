@@ -17,8 +17,8 @@ function* listExample(action: models.DetailProcessAction) {
       ActionCreators.voucherCartListSuccess(response),
     );
     yield put(ActionCreators.voucherCartListSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+  } catch (error: any) {
+    // yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
     yield put(ActionCreators.voucherCartListFailed(error));
   }
 }

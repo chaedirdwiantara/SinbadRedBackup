@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => voucher cart list process */
 export const voucherCartListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
   contextDispatch({ type: types, payload: data });
   return {
     type: types.VOUCHER_CART_LIST_PROCESS,

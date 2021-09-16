@@ -82,18 +82,15 @@ const VoucherCartListView: FC = () => {
     contexts.VoucherContext,
   );
   const voucherCartListAction = useVoucherCartListAction();
-  const voucherState = stateVoucher.list;
+  const voucherState = stateVoucher.detail;
   console.log(voucherState);
   const { keyword, changeKeyword } = useSearchKeyword();
   const { supplierVoucher, sinbadVoucher, updateVoucherList } =
     useVoucherList();
   /** => effect */
-  // React.useEffect(() => {
-  //   voucherCartListAction.list(dispatchVoucher);
-  //   return () => {
-  //     voucherCartListAction.reset(dispatchVoucher);
-  //   };
-  // }, []);
+  React.useEffect(() => {
+    voucherCartListAction.detail(dispatchVoucher);
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {

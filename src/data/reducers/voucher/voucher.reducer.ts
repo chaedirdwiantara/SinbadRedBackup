@@ -5,12 +5,12 @@ import {
   voucherCartListInitialState,
 } from './voucher-cart-list.reducer';
 /** === TYPE HERE === */
-export type VoucherInitialProps = models.ListProps<models.VoucherCartList[]>;
+export type VoucherInitialProps = models.DetailProps<models.VoucherCartList>;
 /** === INITIAL HERE === */
 export const voucherInitialState = {
-  list: voucherCartListInitialState,
+  detail: voucherCartListInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const voucherReducer = ({ list }: any, action: any) => ({
-  list: voucherCartListReducer(list, action),
+export const voucherReducer = ({ detail }: any, action: any) => ({
+  detail: voucherCartListReducer(detail, action),
 });
