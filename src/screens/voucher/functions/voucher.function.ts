@@ -1,5 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import { NavigationAction } from '@navigation';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import * as models from '@models';
 /** === FUNCTION === */
 /** => go back */
 const goBack = () => {
@@ -13,24 +15,27 @@ const goToVoucherDetail = (voucherId: number) => {
 const goToVoucherCartListMore = (voucherList) => {
   console.log('navigate to voucher cart list more');
 };
-/** => handle select supplier voucher */
-const handleSelectSupplierVoucher = (voucherId: number) => {
-  console.log(`handle select voucher with voucherId ${voucherId}`);
-};
-/** => handle select sinbad voucher */
-const handleSelectSinbadVoucher = (voucherId: number) => {
-  console.log(`handle select voucher with voucherId ${voucherId}`);
-};
-/** => handle reset voucher */
-const handleResetVoucher = () => {
-  console.log('handle reset voucher');
+/** => count potential discount */
+const countPotentialDiscount = (
+  sinbadVoucher: models.SinbadVoucherProps | null,
+  supplierVouchers: models.SupplierVoucherListProps[],
+) => {
+  let totalDiscount = 0;
+  let totalSelectedVoucher = 0;
+  if (sinbadVoucher !== null) {
+    totalDiscount += sinbadVoucher.benefitRebate;
+    totalSelectedVoucher += 1;
+  }
+  supplierVouchers.map((item) => {
+    totalDiscount += item.benefitRebate;
+    totalSelectedVoucher += 1;
+  });
+  return { totalDiscount, totalSelectedVoucher };
 };
 
 export {
   goBack,
   goToVoucherDetail,
   goToVoucherCartListMore,
-  handleResetVoucher,
-  handleSelectSupplierVoucher,
-  handleSelectSinbadVoucher,
+  countPotentialDiscount,
 };
