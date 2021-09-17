@@ -27,6 +27,9 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import SvgIcon from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
+import * as Actions from '@actions';
+import { useDispatch } from 'react-redux';
+import { useDataGlobal } from '@core/redux/Data';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -53,10 +56,15 @@ const VoucherCartListView: FC = () => {
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucher.detail;
-  console.log(selectedSupplierVoucher, selectedSinbadVoucher);
+  const globalData = useDataGlobal();
+  const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.detail(dispatchVoucher);
+    if (globalData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
+    }
   }, []);
   React.useEffect(() => {
     if (voucherCartListState.data !== null) {
@@ -79,6 +87,7 @@ const VoucherCartListView: FC = () => {
           resetSelectedSinbadVoucher();
           resetSelectedSupplierVoucher();
           resetVoucherData();
+          dispatch(Actions.saveSelectedVouchers(null));
         }}
       />
     );
@@ -294,7 +303,14 @@ const VoucherCartListView: FC = () => {
           <SnbButton.Dynamic
             type={'primary'}
             title={'Gunakan Voucher'}
-            onPress={() => {}}
+            onPress={() => {
+              dispatch(
+                Actions.saveSelectedVouchers({
+                  sinbadVoucher: selectedSinbadVoucher,
+                  supplierVouchers: selectedSupplierVoucher,
+                }),
+              );
+            }}
             disabled={false}
             size={'small'}
           />
