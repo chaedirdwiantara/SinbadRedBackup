@@ -70,4 +70,11 @@ export const VoucherCartListStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  emptyImage: {
+    height: 190,
+    width: undefined,
+    aspectRatio: 10 / 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
