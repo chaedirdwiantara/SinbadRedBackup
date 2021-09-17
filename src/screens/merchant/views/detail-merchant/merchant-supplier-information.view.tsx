@@ -1,11 +1,6 @@
 import React, { FC, useEffect } from 'react';
-import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbBadge,
-} from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
+import { View, FlatList } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
@@ -39,61 +34,49 @@ const MerchantSupplierInformationView: FC = () => {
   /** => content */
   const content = () => {
     return (
-      <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-        <View style={{ padding: 16 }}>
-          <SnbText.H4>PT. Cahaya Bumi Makmur Indonesia</SnbText.H4>
-          <View style={{ marginVertical: 8 }}>
-            <SnbText.B3>07 Des 2020 09.58</SnbText.B3>
-          </View>
-          {renderBadge('verified', 'test')}
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderColor: color.black10,
-              marginTop: 16,
-            }}
-          />
-        </View>
-        <View style={{ padding: 16 }}>
-          <SnbText.H4>PT. Cahaya Bumi Makmur Indonesia</SnbText.H4>
-          <View style={{ marginVertical: 8 }}>
-            <SnbText.B3>07 Des 2020 09.58</SnbText.B3>
-          </View>
-          {renderBadge('guest', 'test')}
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderColor: color.black10,
-              marginTop: 16,
-            }}
-          />
-        </View>
-      </ScrollView>
+      <View style={{ flex: 1 }}>
+        <FlatList
+          // contentContainerStyle={{ flex: 1 }}
+          data={stateMerchant.list.data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          // refreshing={refreshGetMerchantSupplier}
+          // refreshControl={
+          //   <RefreshControl onRefresh={this.getMerchantSupplier} />
+          // }
+          // onEndReachedThreshold={0.1}
+          // onEndReached={this.onHandleLoadMore}
+          ItemSeparatorComponent={renderSeparator}
+          showsVerticalScrollIndicator
+          // ListEmptyComponent={this.renderEmpty}
+        />
+      </View>
     );
   };
-  // RENDER BADGE
-  const renderBadge = (status: string, message: string) => {
-    let title = '';
-    let type = 'success';
-    switch (status) {
-      case 'verified':
-        title = 'Terverifikasi';
-        type = 'success';
-        break;
-      case 'rejected':
-        title = 'Ditolak';
-        type = 'error';
-        break;
-      case 'pending':
-      case 'updating':
-      case 'guest':
-        title = 'Menunggu Verifikasi';
-        type = 'warning';
-    }
+
+  const renderItem = ({ item, index }: { item: any; index: any }) => {
+    console.log('item:', item);
+
     return (
-      <View>
-        <SnbBadge.Label type={type} value={title} />
+      <View key={index}>
+        <View style={{ marginHorizontal: 16, marginTop: 16 }}>
+          <SnbText.H4>{item.name}</SnbText.H4>
+          <View style={{ marginTop: 8 }}>
+            <SnbText.B3>{item.createdAt}</SnbText.B3>
+          </View>
+        </View>
       </View>
+    );
+  };
+  const renderSeparator = () => {
+    return (
+      <View
+        style={{
+          borderTopWidth: 1,
+          borderColor: color.black10,
+          marginTop: 16,
+        }}
+      />
     );
   };
   /** this for main view */
