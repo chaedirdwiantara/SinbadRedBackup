@@ -8,25 +8,25 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const checkPhoneNoAvailability = simplifyReducer(INITIAL_STATE, {
-  [types.CHECK_PHONE_AVAILABILITY_PROCESS]() {
+export const checkEmailAvailability = simplifyReducer(INITIAL_STATE, {
+  [types.CHECK_EMAIL_AVAILABILITY_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.CHECK_PHONE_AVAILABILITY_SUCCESS](
+  [types.CHECK_EMAIL_AVAILABILITY_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.ICheckPhoneNoAvailabilitySuccess>,
+    action: models.IRegisterAction<models.ICheckEmailAvailabilitySuccess>,
   ) {
     return {
       ...state,
       loading: false,
-      data: action.payload.data,
+      data: action.payload,
     };
   },
 
-  [types.CHECK_PHONE_AVAILABILITY_FAILED](
+  [types.CHECK_EMAIL_AVAILABILITY_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.ICheckPhoneNoAvailabilityFailed>,
+    action: models.IRegisterAction<models.ICheckEmailAvailabilityFailed>,
   ) {
     return {
       ...state,
@@ -35,7 +35,7 @@ export const checkPhoneNoAvailability = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.CHECK_PHONE_AVAILABILITY_RESET]() {
+  [types.CHECK_EMAIL_AVAILABILITY_RESET]() {
     return INITIAL_STATE;
   },
 });

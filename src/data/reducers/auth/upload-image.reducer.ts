@@ -8,20 +8,20 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const loginUsername = simplifyReducer(INITIAL_STATE, {
-  [types.LOGIN_USERNAME_PROCESS]() {
+export const uploadedImage = simplifyReducer(INITIAL_STATE, {
+  [types.UPLOAD_IMAGE_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.LOGIN_USERNAME_SUCCESS](state = INITIAL_STATE, action: any) {
+  [types.UPLOAD_IMAGE_SUCCESS](state = INITIAL_STATE, action: any) {
     return {
       ...state,
       loading: false,
-      data: action.payload.data,
+      data: action.payload,
     };
   },
 
-  [types.LOGIN_USERNAME_FAILED](state = INITIAL_STATE, action: any) {
+  [types.UPLOAD_IMAGE_FAILED](state = INITIAL_STATE, action: any) {
     return {
       ...state,
       loading: false,
@@ -29,7 +29,7 @@ export const loginUsername = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.LOGIN_USERNAME_RESET]() {
+  [types.UPLOAD_IMAGE_RESET]() {
     return INITIAL_STATE;
   },
 });

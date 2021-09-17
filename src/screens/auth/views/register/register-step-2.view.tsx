@@ -1,6 +1,11 @@
-import { renderIF, useRegisterStep2 } from '@screen/auth/functions';
+import {
+  renderIF,
+  useCamera,
+  useRegister,
+  useRegisterStep2,
+} from '@screen/auth/functions';
 import React from 'react';
-import { View, LogBox, Image } from 'react-native';
+import { View, LogBox, Image, ToastAndroid } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -9,9 +14,22 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import * as models from '@models';
+import { useUploadImage } from '@screen/auth/functions/global-hooks.functions';
 
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep2();
+  const { openCamera, state: cameraData, resetCamera } = useCamera();
+  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const { state: registerData, saveRegisterUserData } = useRegister();
+  const registerState: models.IRegisterMerchantProcess = registerData;
+
+  React.useEffect(() => {
+    if (registerData.user?.imageUrl) {
+      ToastAndroid.showWithGravity('Image Uploaded', 3000, ToastAndroid.BOTTOM);
+      resetCamera();
+    }
+  }, [registerData.user?.idImageUrl]);
+
   LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
   ]);
@@ -29,17 +47,19 @@ const Content: React.FC = () => {
           'Pastikan KTP bisa terbaca dengan jelas',
           'Hindari Tangan Menutupi KTP',
         ]}
-        action={() => func.gotoCamera()}
+        action={() => openCamera('ktp')}
       />
     );
   };
 
   const renderImagePreview = () => {
+    const isImageUploaded =
+      registerState.user?.idImageUrl !== '' && cameraData.data === null;
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{ uri: state?.imageKTP || ' ' }}
+          source={{ uri: cameraData.data?.uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -53,18 +73,30 @@ const Content: React.FC = () => {
             <SnbButton.Dynamic
               size="small"
               type="tertiary"
-              title="Ulangi"
-              onPress={() => func.gotoCamera()}
+              title="Ubah Foto"
+              onPress={() => openCamera('ktp')}
               disabled={false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type="primary"
+              type={isImageUploaded ? 'primary' : 'secondary'}
               shadow
-              title="Selanjutnya"
-              onPress={func.gotoStep3}
-              disabled={false}
+              loading={uploadData?.loading}
+              title={isImageUploaded ? 'Selanjutnya' : 'Upload'}
+              onPress={() => {
+                if (isImageUploaded) {
+                  saveRegisterUserData({ idImageUrl: '' });
+                } else {
+                  resetUploadImage();
+                  uploadImage({
+                    image: cameraData.base64,
+                    type: 'idCard',
+                    oldLink: registerData.user?.imageUrl,
+                  });
+                }
+              }}
+              disabled={uploadData?.loading}
             />
           </View>
         </View>
@@ -85,9 +117,9 @@ const Content: React.FC = () => {
         </View>
       </View>
       {renderIF(
-        state.imageKTP === null,
-        renderUploadPhotoRules(),
+        cameraData.data !== null && cameraData.data?.type === 'ktp',
         renderImagePreview(),
+        renderUploadPhotoRules(),
       )}
     </View>
   );

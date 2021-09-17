@@ -3,10 +3,11 @@ import {
   renderIF,
   formatter,
   handleMessageError,
+  maskPhone,
 } from './auth-utils.functions';
 import {
   useCheckPhoneNoAvailability,
-  useRegisterStep1,
+  useRegister,
   useRegisterStep2,
   useRegisterStep3,
   useRegisterStep4,
@@ -18,14 +19,16 @@ import {
   useInputPhone,
   useInput,
   useInputFormat,
+  useCamera,
 } from './global-hooks.functions';
 
 export {
   useLogin,
   renderIF,
   formatter,
+  useCamera,
   useCheckPhoneNoAvailability,
-  useRegisterStep1,
+  useRegister,
   useRegisterStep2,
   useRegisterStep3,
   useRegisterStep4,
@@ -36,4 +39,5 @@ export {
   useInput,
   useInputFormat,
   handleMessageError,
+  maskPhone,
 };

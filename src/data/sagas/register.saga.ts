@@ -18,6 +18,20 @@ function* checkPhoneNoAvailability(
   }
 }
 
+/** check email */
+function* checkEmailAvailability(
+  action: models.IRegisterAction<models.ICheckEmailAvailabilityProcess>,
+) {
+  try {
+    const response: models.ICheckEmailAvailabilitySuccess = yield call(() =>
+      registerApi.checkEmailAvailability(action.payload),
+    );
+    yield put(ActionCreators.checkEmailAvailabilitySuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.checkEmailAvailabilityFailed(error));
+  }
+}
+
 /** register merchant */
 function* registerMerchant(
   action: models.IRegisterAction<models.IRegisterMerchantProcess>,
@@ -37,6 +51,10 @@ function* RegisterSaga() {
   yield takeLatest(
     types.CHECK_PHONE_AVAILABILITY_PROCESS,
     checkPhoneNoAvailability,
+  );
+  yield takeLatest(
+    types.CHECK_EMAIL_AVAILABILITY_PROCESS,
+    checkEmailAvailability,
   );
 }
 

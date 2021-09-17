@@ -8,6 +8,13 @@ const checkPhoneNoAvailability = (
   return apiAuth(path, 'v1', 'GET');
 };
 
+const checkEmailAvailability = (
+  data: models.ICheckEmailAvailabilityProcess,
+) => {
+  const path = `check-owner-email?email=${data.email}`;
+  return apiAuth(path, 'v1', 'GET');
+};
+
 const registerMerchant = (data: models.IRegisterMerchantProcess) => {
   const path = 'registration';
   return apiAuth(path, 'v1', 'POST', data);
@@ -16,4 +23,5 @@ const registerMerchant = (data: models.IRegisterMerchantProcess) => {
 export const registerApi = {
   checkPhoneNoAvailability,
   registerMerchant,
+  checkEmailAvailability,
 };

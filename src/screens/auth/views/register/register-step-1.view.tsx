@@ -1,8 +1,7 @@
-import {
-  useInput,
-  useInputFormat,
-  useRegisterStep1,
-} from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import { useInput, useInputFormat, useRegister } from '@screen/auth/functions';
+import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
+import { REGISTER_STEP_2_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
@@ -13,12 +12,24 @@ import {
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import * as models from '@models';
 
 const Content: React.FC = () => {
-  const { func, state }: any = useRegisterStep1();
+  const { checkEmail } = useCheckEmailAvailability();
+  const { saveRegisterUserData, state } = useRegister();
+  const { navigate } = useNavigation();
   const name = useInput();
   const idNumber = useInputFormat('ktp');
   const taxNumber = useInputFormat('npwp');
+  const email = useInputFormat('email');
+
+  React.useEffect(() => {
+    const user: models.User = state.user;
+    if (user.name || user.idNo || user.email || user.taxNo) {
+      navigate(REGISTER_STEP_2_VIEW);
+    }
+  }, [state.user]);
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -49,7 +60,7 @@ const Content: React.FC = () => {
             <SnbTextField.Text
               {...idNumber}
               mandatory
-              maxLength={18}
+              maxLength={16}
               labelText="Nomor KTP"
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
@@ -59,21 +70,18 @@ const Content: React.FC = () => {
             <SnbTextField.Text
               {...taxNumber}
               labelText="Nomor NPWP Pemilik"
+              maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...email}
+              maxLength={32}
               labelText="Alamat Email Pemilik"
-              maxLength={16}
-              keyboardType="email-address"
-              onChangeText={func.handleOnChangeTextEmail}
-              valMsgError={''}
               placeholder="Masukkan alamat email anda"
-              value={state.email}
-              clearText={() => func.setEmail('')}
+              keyboardType="email-address"
             />
           </View>
         </ScrollView>
@@ -85,11 +93,22 @@ const Content: React.FC = () => {
         }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.goToStep2}
+          onPress={() => {
+            if (email.value !== '') {
+              checkEmail({ email: email.value });
+            } else {
+              saveRegisterUserData({
+                name: name.value,
+                email: email.value,
+                idNo: idNumber.value,
+                taxNo: taxNumber.value,
+              });
+            }
+          }}
           type="primary"
           shadow
-          loading={state.loading}
-          disabled={false}
+          loading={false}
+          disabled={name.value === '' || idNumber.value === ''}
         />
       </View>
     </View>
@@ -97,7 +116,7 @@ const Content: React.FC = () => {
 };
 
 const RegisterStep1View: React.FC = () => {
-  const { goBack } = useRegisterStep1();
+  const { goBack } = useNavigation();
 
   return (
     <SnbContainer color="white">

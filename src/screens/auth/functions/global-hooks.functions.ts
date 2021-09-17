@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { formatter } from './auth-utils.functions';
+import * as Actions from '@actions';
+import * as models from '@models';
+import { useNavigation } from '@react-navigation/core';
 
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
@@ -84,9 +88,89 @@ export const useInput = (initialState: string = '') => {
   };
 };
 
-export const useInputFormat = (format: 'npwp' | 'ktp') => {
+export const useCamera = () => {
+  const dispatch = useDispatch();
+  const { navigate } = useNavigation();
+  const { capturedImage } = useSelector((state: any) => state.auth);
+  const openCamera = (
+    type: 'ktp' | 'npwp' | 'selfie' | 'store' | 'custom',
+    params: models.ICamera = {
+      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
+      title: 'Ambil Foto KTP',
+      subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
+    },
+  ) => {
+    switch (type) {
+      case 'npwp': {
+        params.focusPoints = [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }];
+        params.title = 'Ambil Foto NPWP';
+        params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai';
+        break;
+      }
+      case 'selfie': {
+        params.focusPoints = [
+          { focusPointHeight: 0.32, focusPointWidth: 0.9, marginBottom: 24 },
+          { focusPointHeight: 0.18, focusPointWidth: 0.6 },
+        ];
+        params.title = 'Ambil Foto Selfie dengan KTP';
+        params.subtitle =
+          'Posisikan Foto Selfie dan KTP Anda tepat berada di dalam bingkai';
+        break;
+      }
+      case 'store': {
+        params.title = 'Ambil Foto Depan Toko';
+        params.subtitle =
+          'Posisikan depan toko Anda tepat berada di dalam bingkai';
+        params.focusPoints = [{ focusPointHeight: 0.4, focusPointWidth: 0.9 }];
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+    params.type = type;
+    navigate('CameraView', params);
+  };
+
+  const saveCapturedImage = (data: any) => {
+    dispatch(Actions.saveCapturedImage(data));
+  };
+
+  const resetCamera = () => {
+    dispatch(Actions.saveCapturedImage(null));
+  };
+
+  return {
+    openCamera,
+    saveCapturedImage,
+    state: capturedImage,
+    resetCamera,
+  };
+};
+
+export const useUploadImage = () => {
+  const dispatch = useDispatch();
+  const { uploadedImage } = useSelector((state: any) => state.auth);
+
+  const uploadImage = (data: models.IUploadImage) => {
+    dispatch(Actions.uploadImageProcess(data));
+  };
+
+  const resetUploadImage = () => {
+    dispatch(Actions.resetUploadImage());
+  };
+
+  return {
+    uploadImage,
+    resetUploadImage,
+    state: uploadedImage,
+  };
+};
+
+export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
   const [value, setValue] = useState('');
   const [valMsgError, setValMsgError] = useState('');
+  const [type, setType] = useState('default');
 
   React.useEffect(() => {
     console.log(valMsgError);
@@ -98,7 +182,6 @@ export const useInputFormat = (format: 'npwp' | 'ktp') => {
       case 'ktp': {
         text = text.substr(0, 16);
         formatted = formatter(text, [6, 12], '-');
-        setValue(formatted);
         break;
       }
       case 'npwp': {
@@ -106,13 +189,27 @@ export const useInputFormat = (format: 'npwp' | 'ktp') => {
         formatted = formatter(text, [2, 5, 8, 9, 12, 15], '.');
         break;
       }
+      default:
+        break;
     }
+    console.log(formatted);
+    setValue(text);
   };
-  const clearText = () => setValue('');
+
+  // const setMessageError = (message: string) => {
+  //   setType('error');
+  //   setValMsgError(message);
+  // };
+
+  const clearText = () => {
+    setValue('');
+    setValMsgError('');
+    setType('default');
+  };
 
   return {
     value,
-    type: 'default',
+    type,
     onChangeText,
     clearText,
     valMsgError,

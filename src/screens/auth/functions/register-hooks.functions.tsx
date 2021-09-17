@@ -5,7 +5,6 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  REGISTER_STEP_2_VIEW,
   REGISTER_STEP_3_VIEW,
   REGISTER_STEP_4_VIEW,
   REGISTER_STEP_5_VIEW,
@@ -27,58 +26,41 @@ export const useCheckPhoneNoAvailability = () => {
   };
 };
 
-export const useRegisterStep1: any = () => {
-  const navigation = useNavigation();
-  const [type, setType] = React.useState('default');
-  const [name, setName] = React.useState('');
-  const [idNumber, setIdNumber] = React.useState('');
-  const [taxNumber, setTaxNumber] = React.useState('');
-  const [email, setEmail] = React.useState('');
-
-  const handleOnChangeTextName = (text: string) => {
-    setType('default');
-    setName(text);
-  };
-
-  const handleOnChangeTextIdNumber = (text: string) => {
-    setType('default');
-    setIdNumber(text);
-  };
-
-  const handleOnChangeTextTaxNumber = (text: string) => {
-    setType('default');
-    setTaxNumber(text);
-  };
-
-  const handleOnChangeTextEmail = (text: string) => {
-    setType('default');
-    setEmail(text);
-  };
-
-  const goToStep2 = () => {
-    navigation.navigate(REGISTER_STEP_2_VIEW);
-  };
+export const useCheckEmailAvailability = () => {
+  const dispatch = useDispatch();
+  const { checkEmailAvailability } = useSelector((state: any) => state.auth);
   return {
-    func: {
-      handleOnChangeTextName,
-      handleOnChangeTextIdNumber,
-      handleOnChangeTextTaxNumber,
-      handleOnChangeTextEmail,
-      goToStep2,
-      setType,
-      setName,
-      setIdNumber,
-      setTaxNumber,
-      setEmail,
+    checkEmail: (data: models.ICheckEmailAvailabilityProcess) => {
+      dispatch(Actions.checkEmailAvailabilityProcess(data));
     },
-    state: {
-      type,
-      name,
-      idNumber,
-      taxNumber,
-      email,
+    resetCheckEmail: () => {
+      dispatch(Actions.resetCheckEmailAvailability());
     },
-    ...navigation,
+    state: checkEmailAvailability,
+  };
+};
+
+export const useRegister = () => {
+  const dispatch = useDispatch();
+  const { registerData } = useSelector((state: any) => state.auth);
+
+  const saveRegisterStoreData = (data: models.IRegisterMerchantProcess) => {
+    dispatch(Actions.saveRegisterStoreData(data));
+  };
+
+  const saveRegisterUserData = (data: models.User) => {
+    dispatch(Actions.saveRegisterUserData(data));
+  };
+
+  const resetRegisterData = () => {
+    dispatch(Actions.resetRegisterData());
+  };
+
+  return {
+    saveRegisterStoreData,
+    saveRegisterUserData,
+    resetRegisterData,
+    state: registerData,
   };
 };
 
@@ -86,27 +68,14 @@ export const useRegisterStep2 = () => {
   const navigation = useNavigation();
   const [imageKTP, setImage] = React.useState(null);
 
-  const gotoCamera = () => {
-    navigate('CameraView', {
-      setImage,
-      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
-      title: 'Ambil Foto KTP',
-      subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
-    });
-  };
-
   const gotoStep3 = () => {
     navigate(REGISTER_STEP_3_VIEW);
   };
 
-  React.useEffect(() => {
-    console.log(imageKTP);
-  }, [imageKTP]);
   return {
     func: {
       setImage,
       gotoStep3,
-      gotoCamera,
     },
     state: {
       imageKTP,

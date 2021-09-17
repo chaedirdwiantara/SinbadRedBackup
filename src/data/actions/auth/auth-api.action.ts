@@ -8,9 +8,6 @@ export const loginUserNameProcess = (
   return { type: types.LOGIN_USERNAME_PROCESS, payload: data };
 };
 
-export const resetLoginUsername = () => {
-  return { type: types.LOGIN_USERNAME_RESET };
-};
 /** => login with username success */
 export const loginUserNameSuccess = (
   data: models.LoginSuccessProps,

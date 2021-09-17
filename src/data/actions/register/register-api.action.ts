@@ -29,9 +29,31 @@ export const checkPhoneNoAvailabilityFailed = (
   };
 };
 
-export const resetCheckPhoneNoAvailability = () => {
+// CHECK EMAIL AVAILABILITY
+export const checkEmailAvailabilityProcess = (
+  data: models.ICheckEmailAvailabilityProcess,
+): models.IRegisterAction<models.ICheckEmailAvailabilityProcess> => {
   return {
-    type: types.CHECK_PHONE_AVAILABILITY_RESET,
+    type: types.CHECK_EMAIL_AVAILABILITY_PROCESS,
+    payload: data,
+  };
+};
+
+export const checkEmailAvailabilitySuccess = (
+  data: models.ICheckEmailAvailabilitySuccess,
+): models.IRegisterAction<any> => {
+  return {
+    type: types.CHECK_EMAIL_AVAILABILITY_SUCCESS,
+    payload: data,
+  };
+};
+
+export const checkEmailAvailabilityFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.ICheckEmailAvailabilityFailed | unknown> => {
+  return {
+    type: types.CHECK_EMAIL_AVAILABILITY_FAILED,
+    payload: data,
   };
 };
 

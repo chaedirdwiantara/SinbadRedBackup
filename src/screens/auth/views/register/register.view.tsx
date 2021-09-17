@@ -21,8 +21,8 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (state.data !== null) {
+      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
       phone.clearText();
-      navigate(REGISTER_OTP_VIEW);
     }
     if (state.error !== null) {
       phone.setMessageError(state.error.message);

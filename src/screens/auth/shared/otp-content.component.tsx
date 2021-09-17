@@ -11,9 +11,15 @@ interface Props {
   onVerifyOTP: () => void;
   loading: boolean;
   otpCode: string;
+  phoneNo: string;
 }
 
-const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading, otpCode }) => {
+const OTPContent: React.FC<Props> = ({
+  onVerifyOTP,
+  loading,
+  otpCode,
+  phoneNo,
+}) => {
   const [otp, setOtp] = React.useState('');
 
   return (
@@ -23,7 +29,7 @@ const OTPContent: React.FC<Props> = ({ onVerifyOTP, loading, otpCode }) => {
         <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
         <View style={{ marginVertical: 4 }} />
         <SnbText.B1 align="center">
-          Kode verifikasi telah dikirimkan melalui sms ke ****-****-*123
+          Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
         </SnbText.B1>
       </View>
       <View style={{ margin: 4 }}>

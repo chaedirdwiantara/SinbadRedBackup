@@ -34,3 +34,22 @@ export const handleMessageError = (code: number) => {
     }
   }
 };
+
+export const maskPhone = (phoneNo: string) => {
+  let temp = [];
+  for (let i = 0; i < phoneNo.length; i += 4) {
+    temp.push(phoneNo.substr(i, 4));
+  }
+  const result = temp
+    .reverse()
+    .map((el, index) => {
+      if (index !== 0) {
+        return el.replace(/[0-9]/g, '*');
+      }
+      return el;
+    })
+    .reverse()
+    .join('-');
+
+  return result;
+};
