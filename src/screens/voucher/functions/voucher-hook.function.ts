@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
+import { SupplierVoucherListProps } from '@models';
 /** === FUNCTION === */
 /** => voucher cart list action */
 const useVoucherCartListAction = () => {
@@ -49,7 +50,7 @@ const useSelectedSinbadVoucher = () => {
   const [selectedSinbadVoucher, setSelectedSinbadVoucher] =
     useState<models.SinbadVoucherProps | null>(null);
   return {
-    setSelectedSinbadVoucher: (voucher: models.SinbadVoucherProps) => {
+    setSelectedSinbadVoucher: (voucher: models.SinbadVoucherProps | null) => {
       setSelectedSinbadVoucher(voucher);
     },
     resetSelectedSinbadVoucher: () => {
@@ -58,7 +59,32 @@ const useSelectedSinbadVoucher = () => {
     selectedSinbadVoucher,
   };
 };
-/** => set voucher list local data */
+/** => set voucher list local data (this is for list more view) */
+const useVoucherListMore = () => {
+  const [voucherListData, setVoucherListData] = useState<
+    models.SinbadVoucherProps[] | models.SupplierVoucherListProps[]
+  >([]);
+  return {
+    setVoucherListData: (
+      voucher: models.SinbadVoucherProps[] | SupplierVoucherListProps[],
+    ) => {
+      setVoucherListData(voucher);
+    },
+    searchVoucherListData: (
+      initialData:
+        | models.SupplierVoucherListProps[]
+        | models.SinbadVoucherProps[],
+      keyword: string,
+    ) => {
+      const filteredVoucher = initialData.filter((item) => {
+        return item.voucherName.toLowerCase().includes(keyword.toLowerCase());
+      });
+      setVoucherListData(filteredVoucher);
+    },
+    voucherListData,
+  };
+};
+/** => set voucher list local data (this is for list view) */
 const useVoucherList = () => {
   const [supplierVoucher, setSupplierVoucher] = useState<
     models.SupplierVoucherProps[]
@@ -69,8 +95,8 @@ const useVoucherList = () => {
   const { stateVoucher } = useContext(contexts.VoucherContext);
   return {
     updateVoucherList: (
-      supplierVoucherList: models.SupplierVoucherProps[] | [],
-      sinbadVoucherList: models.SinbadVoucherProps[] | [],
+      supplierVoucherList: models.SupplierVoucherProps[],
+      sinbadVoucherList: models.SinbadVoucherProps[],
     ) => {
       setSupplierVoucher(supplierVoucherList);
       setSinbadVoucher(sinbadVoucherList);
@@ -118,6 +144,7 @@ const useVoucherList = () => {
 export {
   useSearchKeyword,
   useVoucherList,
+  useVoucherListMore,
   useVoucherCartListAction,
   useSelectedSinbadVoucher,
   useSelectedSupplierVoucher,

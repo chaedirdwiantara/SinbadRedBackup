@@ -12,8 +12,26 @@ const goToVoucherDetail = (voucherId: number) => {
   console.log(`navigate to voucher detail with voucherId ${voucherId}`);
 };
 /** => go to voucher cart list more */
-const goToVoucherCartListMore = (voucherList) => {
-  console.log('navigate to voucher cart list more');
+const goToVoucherCartListMore = ({
+  voucherList,
+  voucherGroupName,
+  voucherGroupType,
+  selectedSinbadVoucher,
+  selectedSupplierVoucher,
+}: {
+  voucherList: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[];
+  voucherGroupName: string;
+  voucherGroupType: 'sinbad_voucher' | 'supplier_voucher';
+  selectedSinbadVoucher: models.SinbadVoucherProps | null;
+  selectedSupplierVoucher: models.SupplierVoucherListProps[];
+}) => {
+  NavigationAction.navigate('VoucherCartListMoreView', {
+    voucherList,
+    voucherGroupName,
+    voucherGroupType,
+    selectedSinbadVoucher,
+    selectedSupplierVoucher,
+  });
 };
 /** => count potential discount */
 const countPotentialDiscount = (
