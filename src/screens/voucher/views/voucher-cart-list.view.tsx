@@ -67,6 +67,15 @@ const VoucherCartListView: FC = () => {
     }
   }, []);
   React.useEffect(() => {
+    if (globalData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
+    } else if (globalData.dataVouchers === null) {
+      setSelectedSinbadVoucher(null);
+      setSelectedSupplierVoucher([]);
+    }
+  }, [globalData.dataVouchers]);
+  React.useEffect(() => {
     if (voucherCartListState.data !== null) {
       updateVoucherList(
         voucherCartListState.data.supplierVouchers,
@@ -86,7 +95,6 @@ const VoucherCartListView: FC = () => {
         buttonAction={() => {
           resetSelectedSinbadVoucher();
           resetSelectedSupplierVoucher();
-          resetVoucherData();
           dispatch(Actions.saveSelectedVouchers(null));
         }}
       />
@@ -139,12 +147,24 @@ const VoucherCartListView: FC = () => {
               </SnbText.C2>
             </View>
           </View>
-          <TouchableOpacity
-            style={VoucherCartListStyles.voucherSectionRightIcon}
-            onPress={() => goToVoucherCartListMore(sinbadVoucher)}>
-            <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
-            <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
-          </TouchableOpacity>
+          {sinbadVoucher.length > 3 ? (
+            <TouchableOpacity
+              style={VoucherCartListStyles.voucherSectionRightIcon}
+              onPress={() =>
+                goToVoucherCartListMore({
+                  voucherList: sinbadVoucher,
+                  voucherGroupName: 'Sinbad Voucher',
+                  voucherGroupType: 'sinbad_voucher',
+                  selectedSupplierVoucher: selectedSupplierVoucher,
+                  selectedSinbadVoucher: selectedSinbadVoucher,
+                })
+              }>
+              <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
+              <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
         </View>
         {renderSinbadVoucherCard(sinbadVoucher)}
       </View>
@@ -155,36 +175,39 @@ const VoucherCartListView: FC = () => {
     voucherList: models.SinbadVoucherProps[],
   ) => {
     return voucherList.map((item, index) => {
-      const isIdActive = selectedSinbadVoucher?.voucherId === item.voucherId;
-      return (
-        <TouchableOpacity
-          key={index}
-          style={VoucherCartListStyles.voucherCard}
-          onPress={() => setSelectedSinbadVoucher(item)}>
-          <View style={VoucherCartListStyles.voucherCardLeftContent}>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.B4>{item.voucherName}</SnbText.B4>
+      if (index < 3) {
+        const isIdActive = selectedSinbadVoucher?.voucherId === item.voucherId;
+        return (
+          <TouchableOpacity
+            key={index}
+            style={VoucherCartListStyles.voucherCard}
+            onPress={() => setSelectedSinbadVoucher(item)}>
+            <View style={VoucherCartListStyles.voucherCardLeftContent}>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.B4>{item.voucherName}</SnbText.B4>
+              </View>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.C2 color={color.black80}>
+                  {item.shortDescription}
+                </SnbText.C2>
+              </View>
+              <SnbText.C1 color={color.black80}>
+                {`Berakhir dalam ${item.remainingDay} hari lagi!`}
+              </SnbText.C1>
             </View>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.C2 color={color.black80}>
-                {item.shortDescription}
-              </SnbText.C2>
+            <View style={VoucherCartListStyles.voucherCardRightContent}>
+              <SvgIcon
+                name={isIdActive ? 'selected_voucher' : 'unselect_voucher'}
+                size={24}
+              />
+              <TouchableOpacity
+                onPress={() => goToVoucherDetail(item.voucherId)}>
+                <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
+              </TouchableOpacity>
             </View>
-            <SnbText.C1 color={color.black80}>
-              {`Berakhir dalam ${item.remainingDay} hari lagi!`}
-            </SnbText.C1>
-          </View>
-          <View style={VoucherCartListStyles.voucherCardRightContent}>
-            <SvgIcon
-              name={isIdActive ? 'selected_voucher' : 'unselect_voucher'}
-              size={24}
-            />
-            <TouchableOpacity onPress={() => goToVoucherDetail(item.voucherId)}>
-              <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      );
+          </TouchableOpacity>
+        );
+      }
     });
   };
   /** => supplier voucher list */
@@ -205,12 +228,24 @@ const VoucherCartListView: FC = () => {
                 </SnbText.C2>
               </View>
             </View>
-            <TouchableOpacity
-              style={VoucherCartListStyles.voucherSectionRightIcon}
-              onPress={() => goToVoucherCartListMore(item.voucherList)}>
-              <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
-              <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
-            </TouchableOpacity>
+            {item.voucherList.length > 3 ? (
+              <TouchableOpacity
+                style={VoucherCartListStyles.voucherSectionRightIcon}
+                onPress={() =>
+                  goToVoucherCartListMore({
+                    voucherList: item.voucherList,
+                    voucherGroupName: item.invoiceGroupName,
+                    voucherGroupType: 'supplier_voucher',
+                    selectedSupplierVoucher: selectedSupplierVoucher,
+                    selectedSinbadVoucher: selectedSinbadVoucher,
+                  })
+                }>
+                <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
+                <SnbIcon name={'chevron_right'} color={color.red50} size={24} />
+              </TouchableOpacity>
+            ) : (
+              <View />
+            )}
           </View>
           {renderSupplierVoucherCard(item.voucherList)}
         </View>
@@ -222,55 +257,59 @@ const VoucherCartListView: FC = () => {
     voucherList: models.SupplierVoucherListProps[],
   ) => {
     return voucherList.map((item, index) => {
-      const isIdActive = selectedSupplierVoucher.some(
-        (element) => element.id === item.id,
-      );
-      const isInvoiceGroupIdActive = selectedSupplierVoucher.some(
-        (element) => element.invoiceGroupId === item.invoiceGroupId,
-      );
-      return (
-        <TouchableOpacity
-          key={index}
-          style={VoucherCartListStyles.voucherCard}
-          onPress={() => {
-            if (isInvoiceGroupIdActive) {
-              if (!isIdActive) {
-                const tempArray = selectedSupplierVoucher.filter((element) => {
-                  return item.invoiceGroupId !== element.invoiceGroupId;
-                });
+      if (index < 3) {
+        const isIdActive = selectedSupplierVoucher.some(
+          (element) => element.id === item.id,
+        );
+        const isInvoiceGroupIdActive = selectedSupplierVoucher.some(
+          (element) => element.invoiceGroupId === item.invoiceGroupId,
+        );
+        return (
+          <TouchableOpacity
+            key={index}
+            style={VoucherCartListStyles.voucherCard}
+            onPress={() => {
+              if (isInvoiceGroupIdActive) {
+                if (!isIdActive) {
+                  const tempArray = selectedSupplierVoucher.filter(
+                    (element) => {
+                      return item.invoiceGroupId !== element.invoiceGroupId;
+                    },
+                  );
+                  tempArray.push(item);
+                  setSelectedSupplierVoucher(tempArray);
+                }
+              } else {
+                const tempArray = [...selectedSupplierVoucher];
                 tempArray.push(item);
                 setSelectedSupplierVoucher(tempArray);
               }
-            } else {
-              const tempArray = [...selectedSupplierVoucher];
-              tempArray.push(item);
-              setSelectedSupplierVoucher(tempArray);
-            }
-          }}>
-          <View style={VoucherCartListStyles.voucherCardLeftContent}>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.B4>{item.voucherName}</SnbText.B4>
+            }}>
+            <View style={VoucherCartListStyles.voucherCardLeftContent}>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.B4>{item.voucherName}</SnbText.B4>
+              </View>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.C2 color={color.black80}>
+                  {item.shortDescription}
+                </SnbText.C2>
+              </View>
+              <SnbText.C1 color={color.black80}>
+                {`Berakhir dalam ${item.remainingDay} hari lagi!`}
+              </SnbText.C1>
             </View>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.C2 color={color.black80}>
-                {item.shortDescription}
-              </SnbText.C2>
+            <View style={VoucherCartListStyles.voucherCardRightContent}>
+              <SvgIcon
+                name={isIdActive ? 'selected_voucher' : 'unselect_voucher'}
+                size={24}
+              />
+              <TouchableOpacity onPress={() => goToVoucherDetail(item.id)}>
+                <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
+              </TouchableOpacity>
             </View>
-            <SnbText.C1 color={color.black80}>
-              {`Berakhir dalam ${item.remainingDay} hari lagi!`}
-            </SnbText.C1>
-          </View>
-          <View style={VoucherCartListStyles.voucherCardRightContent}>
-            <SvgIcon
-              name={isIdActive ? 'selected_voucher' : 'unselect_voucher'}
-              size={24}
-            />
-            <TouchableOpacity onPress={() => goToVoucherDetail(item.id)}>
-              <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      );
+          </TouchableOpacity>
+        );
+      }
     });
   };
   /** => footer section */
@@ -310,6 +349,7 @@ const VoucherCartListView: FC = () => {
                   supplierVouchers: selectedSupplierVoucher,
                 }),
               );
+              goBack();
             }}
             disabled={false}
             size={'small'}
@@ -319,7 +359,7 @@ const VoucherCartListView: FC = () => {
     );
   };
   /** => empty */
-  const renderEmpty = () => {
+  const renderEmpty = (messageTitle: string, messageBody: string) => {
     return (
       <View style={VoucherCartListStyles.singleContainer}>
         <Image
@@ -327,12 +367,10 @@ const VoucherCartListView: FC = () => {
           style={VoucherCartListStyles.emptyImage}
         />
         <View style={{ marginTop: 16 }}>
-          <SnbText.H4>Voucher Tidak Tersedia</SnbText.H4>
+          <SnbText.H4>{messageTitle}</SnbText.H4>
         </View>
         <View>
-          <SnbText.B3>
-            Tidak ada voucher yang tersedia untuk saat ini
-          </SnbText.B3>
+          <SnbText.B3>{messageBody}</SnbText.B3>
         </View>
       </View>
     );
@@ -351,7 +389,15 @@ const VoucherCartListView: FC = () => {
       voucherCartListState.data?.sinbadVouchers.length === 0 &&
       voucherCartListState.data?.supplierVouchers.length === 0
     ) {
-      return renderEmpty();
+      return renderEmpty(
+        'Voucher Tidak Tersedia',
+        'Tidak ada voucher yang tersedia untuk saat ini',
+      );
+    } else if (sinbadVoucher.length === 0 && supplierVoucher.length === 0) {
+      return renderEmpty(
+        'Voucher Tidak Ditemukan',
+        'Voucher yang anda cari tidak ditemukan',
+      );
     } else {
       return (
         <ScrollView showsVerticalScrollIndicator={false}>
