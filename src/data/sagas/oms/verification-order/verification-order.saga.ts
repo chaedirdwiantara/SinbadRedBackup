@@ -26,9 +26,10 @@ function* verficationOrderCreate(action: models.CreateProcessAction) {
 /** => verification order detail */
 function* verficationOrderDetail(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<{}> = yield call(() => {
-      return VerificationOrderApi.verficationOrderDetail(action.payload);
-    });
+    const response: models.DetailSuccessProps<models.VerificationOrderDetailProps> =
+      yield call(() => {
+        return VerificationOrderApi.verficationOrderDetail(action.payload);
+      });
     yield action.contextDispatch(
       ActionCreators.verificationOrderDetailSuccess(response),
     );

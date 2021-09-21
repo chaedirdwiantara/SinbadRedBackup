@@ -46,8 +46,8 @@ export const verificationOrderDetailProcess = (
 };
 /** => process */
 export const verificationOrderDetailSuccess = (
-  data: models.DetailSuccessProps<{}>,
-): models.DetailSuccessAction<{}> => {
+  data: models.DetailSuccessProps<models.VerificationOrderDetailProps>,
+): models.DetailSuccessAction<models.VerificationOrderDetailProps> => {
   return { type: types.VERIFICATION_ORDER_DETAIL_SUCCESS, payload: data };
 };
 /** => failed */

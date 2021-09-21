@@ -14,91 +14,22 @@ import {
 import { goBack, goToCheckout } from '../../functions';
 import { VerificationOrderStyle } from '../../styles';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { contexts } from '@contexts';
-/** === INTERFACE === */
-/** === DUMMIES === */
-const dummies = {
-  totalTransaction: 27758640,
-  totalRebate: 0,
-  bonusProduct: [
-    {
-      promoId: 879,
-      promoName: 'PROMOFGCHEESE',
-      productId: 'uuid',
-      productName: 'MEGkeju Serbaguna 165 gr (48)',
-      productQty: 35,
-      productImageUrl:
-        'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/31438/image_1626691143340.png',
-    },
-    {
-      promoId: 879,
-      promoName: 'PROMOFGCHEESE',
-      productId: 'uuid',
-      productName: 'MEGkeju Serbaguna 165 gr (48)',
-      productQty: 35,
-      productImageUrl:
-        'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/31438/image_1626691143340.png',
-    },
-  ],
-  discountProduct: [
-    {
-      productName: 'SGM EKSPLOR 1+ MADU 1200 GR GA',
-      productImageUrl:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/115822.png',
-      qty: 20,
-      price: 25000,
-      totalProductPrice: 500000,
-      totalProductDiscount: 21000,
-      promoList: [
-        {
-          promoId: 11,
-          promoName: 'Promo 1',
-          promoValue: 5000,
-          promoOwner: 'supplier',
-        },
-        {
-          promoId: 12,
-          promoName: 'Promo 2',
-          promoValue: 6000,
-          promoOwner: 'none',
-        },
-      ],
-      voucherList: [
-        {
-          voucherId: 1,
-          voucherName: 'Voucher Promo 1',
-          voucherValue: 5000,
-          voucherOwner: 'none',
-        },
-      ],
-    },
-  ],
-  notPromoSku: [
-    {
-      productName: 'SGM EKSPLOR 1+ MADU 1200 GR GA',
-      productImageUrl:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/115822.png',
-      qty: 20,
-      price: 25000,
-      totalProductPrice: 500000,
-    },
-  ],
-  meta: 'TBD',
-};
+import {
+  VerificationOrderBonusProduct,
+  VerificationOrderDiscountProduct,
+  VerificationOrderNotPromoSkuList,
+  VerificationOrderPromoList,
+  VerificationOrderVoucherList,
+} from '@models';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
-  const { verificationOrderDetail } = useVerficationOrderAction();
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
-  React.useEffect(() => {
-    verificationOrderDetail(
-      dispatchVerificationOrder,
-      stateVerificationOrder.create.data?.id ?? '',
-    );
-  }, []);
+  const { stateVerificationOrder } = React.useContext(
+    contexts.VerificationOrderContext,
+  );
+  const verificationOrderDetail = stateVerificationOrder.detail.data;
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -115,9 +46,9 @@ const OmsVerificationOrderView: FC = () => {
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${dummies.discountProduct.length} SKU)`}</SnbText.B4>
+          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${verificationOrderDetail?.discountProduct.length} SKU)`}</SnbText.B4>
         </View>
-        {dummies.discountProduct.map((item, index) => {
+        {verificationOrderDetail?.discountProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderDiscountItem(item)}
@@ -135,13 +66,7 @@ const OmsVerificationOrderView: FC = () => {
     );
   };
   /** => discount item */
-  const renderDiscountItem = (item: {
-    productImageUrl: string;
-    productName: string;
-    qty: number;
-    price: number;
-    totalProductPrice: number;
-  }) => {
+  const renderDiscountItem = (item: VerificationOrderDiscountProduct) => {
     return (
       <View style={VerificationOrderStyle.listItemContainer}>
         <Image
@@ -166,18 +91,8 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => discount detail */
   const renderDiscountDetail = (
-    promoList: {
-      promoId: number;
-      promoName: string;
-      promoValue: number;
-      promoOwner: string;
-    }[],
-    voucherList: {
-      voucherId: number;
-      voucherName: string;
-      voucherValue: number;
-      voucherOwner: string;
-    }[],
+    promoList: VerificationOrderPromoList[],
+    voucherList: VerificationOrderVoucherList[],
     totalDiscount: number,
     itemIndex: number,
   ) => {
@@ -278,7 +193,7 @@ const OmsVerificationOrderView: FC = () => {
         <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
         </View>
-        {dummies.bonusProduct.map((item, index) => {
+        {verificationOrderDetail?.bonusProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderBonusItem(item)}
@@ -290,12 +205,7 @@ const OmsVerificationOrderView: FC = () => {
     );
   };
   /** => bonus item */
-  const renderBonusItem = (item: {
-    productImageUrl: string;
-    productName: string;
-    promoName: string;
-    productQty: number;
-  }) => {
+  const renderBonusItem = (item: VerificationOrderBonusProduct) => {
     return (
       <View style={VerificationOrderStyle.listItemContainer}>
         <Image
@@ -321,7 +231,7 @@ const OmsVerificationOrderView: FC = () => {
         <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
         </View>
-        {dummies.notPromoSku.map((item, index) => {
+        {verificationOrderDetail?.notPromoSku.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderNonDiscountItem(item)}
@@ -333,13 +243,7 @@ const OmsVerificationOrderView: FC = () => {
     );
   };
   /** => non-discount item */
-  const renderNonDiscountItem = (item: {
-    productImageUrl: string;
-    productName: string;
-    qty: number;
-    price: number;
-    totalProductPrice: number;
-  }) => {
+  const renderNonDiscountItem = (item: VerificationOrderNotPromoSkuList) => {
     return (
       <View style={VerificationOrderStyle.listItemContainer}>
         <Image
@@ -372,12 +276,14 @@ const OmsVerificationOrderView: FC = () => {
             <SnbDivider style={{ marginVertical: 8 }} />
             <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Transaksi</SnbText.B3>
-              <SnbText.B3>{toCurrency(dummies.totalTransaction)}</SnbText.B3>
+              <SnbText.B3>
+                {toCurrency(verificationOrderDetail?.totalTransaction)}
+              </SnbText.B3>
             </View>
             <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Potongan</SnbText.B3>
               <SnbText.B3 color={color.green50}>
-                {toCurrency(dummies.totalRebate)}
+                {toCurrency(verificationOrderDetail?.totalRebate)}
               </SnbText.B3>
             </View>
           </View>
