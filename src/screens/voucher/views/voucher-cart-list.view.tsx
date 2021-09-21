@@ -409,7 +409,11 @@ const VoucherCartListView: FC = () => {
         'Voucher Tidak Tersedia',
         'Tidak ada voucher yang tersedia untuk saat ini',
       );
-    } else if (sinbadVoucher.length === 0 && supplierVoucher.length === 0) {
+    } else if (
+      sinbadVoucher.length === 0 &&
+      supplierVoucher.length === 0 &&
+      keyword !== ''
+    ) {
       return renderEmpty(
         'Voucher Tidak Ditemukan',
         'Voucher yang anda cari tidak ditemukan',
