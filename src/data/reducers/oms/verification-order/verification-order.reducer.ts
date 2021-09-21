@@ -10,7 +10,7 @@ import {
 } from './verification-order-detail.reducer';
 /** === TYPE HERE === */
 export type VerificationOrderInitialProps = models.CreateProps &
-  models.DetailProps<{}>;
+  models.DetailProps<models.VerificationOrderDetailProps>;
 /** === INITIAL HERE === */
 export const verificationOrderInitialState = {
   create: verificationOrderCreateInitialState,

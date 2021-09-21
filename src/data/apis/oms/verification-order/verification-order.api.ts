@@ -14,7 +14,13 @@ const verficationOrderDetail = (data: models.DetailProcessProps) => {
   const mockHost =
     'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io/';
   const path = `potensial-discount/${data.id}`;
-  return apiMappingMock(mockHost, path, 'discount', 'v1', 'DETAIL');
+  return apiMappingMock<models.VerificationOrderDetailProps>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'DETAIL',
+  );
 };
 /** === EXPORT FUNCTIONS === */
 export const VerificationOrderApi = {
