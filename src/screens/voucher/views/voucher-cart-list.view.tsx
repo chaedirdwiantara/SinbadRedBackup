@@ -27,6 +27,7 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import SvgIcon from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { camelize } from '@core/functions/global/camelize';
 import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
 import { useDataGlobal } from '@core/redux/Data';
@@ -119,6 +120,7 @@ const VoucherCartListView: FC = () => {
         </View>
         <View style={VoucherCartListStyles.searchSectionButton}>
           <SnbButton.Dynamic
+            testID={'voucherCartListView.searchButton'}
             type={'primary'}
             title="Terapkan"
             size={'medium'}
@@ -149,6 +151,7 @@ const VoucherCartListView: FC = () => {
           </View>
           {sinbadVoucher.length > 3 ? (
             <TouchableOpacity
+              testID={'voucherCartListView.sinbadVoucherSeeMore'}
               style={VoucherCartListStyles.voucherSectionRightIcon}
               onPress={() =>
                 goToVoucherCartListMore({
@@ -179,6 +182,7 @@ const VoucherCartListView: FC = () => {
         const isIdActive = selectedSinbadVoucher?.voucherId === item.voucherId;
         return (
           <TouchableOpacity
+            testID={`voucherCartListView.sinbadVoucherCardTouchable${index}`}
             key={index}
             style={VoucherCartListStyles.voucherCard}
             onPress={() => setSelectedSinbadVoucher(item)}>
@@ -201,6 +205,7 @@ const VoucherCartListView: FC = () => {
                 size={24}
               />
               <TouchableOpacity
+                testID={`voucherCartListView.sinbadVoucherDetailTouchable${index}`}
                 onPress={() => goToVoucherDetail(item.voucherId)}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
@@ -230,6 +235,9 @@ const VoucherCartListView: FC = () => {
             </View>
             {item.voucherList.length > 3 ? (
               <TouchableOpacity
+                testID={`voucherCartListView.${camelize(
+                  item.invoiceGroupName,
+                )}SeeMore`}
                 style={VoucherCartListStyles.voucherSectionRightIcon}
                 onPress={() =>
                   goToVoucherCartListMore({
@@ -266,6 +274,9 @@ const VoucherCartListView: FC = () => {
         );
         return (
           <TouchableOpacity
+            testID={`voucherCartListView.${camelize(
+              item.invoiceGroupName,
+            )}CardTouchable${index}`}
             key={index}
             style={VoucherCartListStyles.voucherCard}
             onPress={() => {
@@ -303,7 +314,11 @@ const VoucherCartListView: FC = () => {
                 name={isIdActive ? 'selected_voucher' : 'unselect_voucher'}
                 size={24}
               />
-              <TouchableOpacity onPress={() => goToVoucherDetail(item.id)}>
+              <TouchableOpacity
+                testID={`voucherCartListView.${camelize(
+                  item.invoiceGroupName,
+                )}DetailTouchable${index}`}
+                onPress={() => goToVoucherDetail(item.id)}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -340,6 +355,7 @@ const VoucherCartListView: FC = () => {
         </View>
         <View>
           <SnbButton.Dynamic
+            testID={'voucherCartListView.useVoucherButton'}
             type={'primary'}
             title={'Gunakan Voucher'}
             onPress={() => {
