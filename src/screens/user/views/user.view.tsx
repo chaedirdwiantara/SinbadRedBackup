@@ -82,7 +82,7 @@ const UserView: FC = () => {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
                 title: 'Sinbad Point',
                 subtitle: '1000 Point',
-                onPress: () => storeDetailAction.detail(dispatchUser, '3'),
+                onPress: () => console.log('press'),
               },
               {
                 icon: (
@@ -180,8 +180,18 @@ const UserView: FC = () => {
   /** => content */
   const content = () => {
     return (
-      <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-        {contentItem()}
+      <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={stateUser.detail.data ? {} : { flex: 1 }}>
+        {stateUser.detail.data ? (
+          contentItem()
+        ) : (
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <SnbText.B1>Not Login</SnbText.B1>
+          </View>
+        )}
       </ScrollView>
     );
   };
@@ -189,7 +199,14 @@ const UserView: FC = () => {
   return (
     <SnbContainer color={'white'}>
       {header()}
-      {content()}
+      {!stateUser.detail.loading ? (
+        content()
+      ) : (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <SnbText.B1>Loading ...</SnbText.B1>
+        </View>
+      )}
     </SnbContainer>
   );
 };

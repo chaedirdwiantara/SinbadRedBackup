@@ -4,6 +4,7 @@ import {
   SnbTextFieldSelect,
   SnbButton,
   SnbUploadPhotoRules,
+  SnbText,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
@@ -38,8 +39,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerPhoneNo();
       case 'merchantCompletenessInformation':
         return renderCompletenessInformationMerchant();
-      //   case 'merchantAddress':
-      //     return renderAddressMerchant();
+      case 'merchantAddress':
+        return renderAddressMerchant();
       case 'merchantOwnerImageId':
         return renderOwnerImageId();
       case 'merchantOwnerImageSelfie':
@@ -310,6 +311,37 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
+  /** === RENDER MERCHANT ADDRESS (ALAMAT TOKO) === */
+  const renderAddressMerchant = () => {
+    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
+    return (
+      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+        <View style={{ marginBottom: 16 }}>
+          <SnbText.B1>map</SnbText.B1>
+        </View>
+        <View style={{ marginBottom: 16 }}>
+          <SnbTextField.Area
+            labelText={'Alamat'}
+            placeholder={'-'}
+            type={'default'}
+            value={dataAddress?.address ? dataAddress?.address : '-'}
+            onChangeText={(text) => console.log(text)}
+            clearText={() => console.log('clear')}
+          />
+        </View>
+        <View style={{ marginBottom: 16 }}>
+          <SnbTextField.Area
+            labelText={'Catatan Alamat'}
+            placeholder={'-'}
+            type={'default'}
+            value={dataAddress?.noteAddress ? dataAddress?.noteAddress : '-'}
+            onChangeText={(text) => console.log(text)}
+            clearText={() => console.log('clear')}
+          />
+        </View>
+      </View>
+    );
+  };
   /** === RENDER BUTTON === */
   const renderButton = () => {
     const labelVerify =
@@ -334,9 +366,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
         {switchView()}
-        {renderButton()}
       </ScrollView>
-
+      {renderButton()}
       {/* {renderButtonOpenCamera()} */}
       {/* {this.state.showModalError && this.renderModalError()} */}
     </View>

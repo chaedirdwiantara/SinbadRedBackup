@@ -35,6 +35,7 @@ const useExample2ListAction = () => {
       contextDispatch: (action: any) => any,
       list: models.ListItemProps<models.Example2[]>,
     ) => {
+      console.log('list:', list);
       if (list.data.length < list.total) {
         contextDispatch(Actions.example2ListLoadMore());
         dispatch(callList(contextDispatch, false, list.skip + limit, limit));

@@ -7,16 +7,27 @@ import {
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const MerchantDetailAddressView: FC = () => {
+  /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
   /** === VIEW === */
   /** => header */
   const header = () => {
     return (
-      <SnbTopNav.Type3
+      <SnbTopNav.Type4
         type="red"
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
+        buttonTitle="Ubah"
+        buttonAction={() =>
+          NavigationAction.navigate('MerchantEditView', {
+            title: 'Alamat Toko',
+            type: 'merchantAddress',
+          })
+        }
       />
     );
   };
@@ -30,6 +41,7 @@ const MerchantDetailAddressView: FC = () => {
   };
   /** input */
   const renderInput = () => {
+    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
     return (
       <View style={{ marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
@@ -37,7 +49,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Provinsi'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.province ? dataAddress?.province : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -47,7 +59,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kota'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.city ? dataAddress?.city : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -57,7 +69,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kecamatan'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.district ? dataAddress?.district : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -67,7 +79,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kelurahan'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.urban ? dataAddress?.urban : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -77,7 +89,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kodepos'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.zipCode ? dataAddress?.zipCode : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -87,7 +99,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Alamat'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.address ? dataAddress?.address : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -97,7 +109,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Catatan Alamat'}
             placeholder={'-'}
             type={'default'}
-            value={''}
+            value={dataAddress?.noteAddress ? dataAddress?.noteAddress : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />

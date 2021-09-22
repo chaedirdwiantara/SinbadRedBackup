@@ -35,6 +35,7 @@ const useSupplierListAction = () => {
       contextDispatch: (action: any) => any,
       list: models.ListItemProps<models.SupplierList[]>,
     ) => {
+      
       if (list.data.length < list.total) {
         contextDispatch(Actions.supplierListLoadMore());
         dispatch(callList(contextDispatch, false, list.skip + limit, limit));
