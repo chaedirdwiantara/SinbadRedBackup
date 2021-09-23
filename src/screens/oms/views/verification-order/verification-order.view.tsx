@@ -10,6 +10,7 @@ import {
   SnbIcon,
   SnbBadge,
   SnbButton,
+  SnbProgress,
 } from 'react-native-sinbad-ui';
 import { goBack, goToCheckout } from '../../functions';
 import { VerificationOrderStyle } from '../../styles';
@@ -22,14 +23,23 @@ import {
   VerificationOrderPromoList,
   VerificationOrderVoucherList,
 } from '@models';
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
-  const { stateVerificationOrder } = React.useContext(
-    contexts.VerificationOrderContext,
-  );
-  const verificationOrderDetail = stateVerificationOrder.detail.data;
+  const { stateVerificationOrder, dispatchVerificationOrder } =
+    React.useContext(contexts.VerificationOrderContext);
+  const verificationOrderDetailData = stateVerificationOrder.detail.data;
+  const { verificationOrderDetail } = useVerficationOrderAction();
+  React.useEffect(() => {
+    if (stateVerificationOrder.create.data !== null) {
+      verificationOrderDetail(
+        dispatchVerificationOrder,
+        stateVerificationOrder.create.data.id,
+      );
+    }
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -46,9 +56,9 @@ const OmsVerificationOrderView: FC = () => {
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${verificationOrderDetail?.discountProduct.length} SKU)`}</SnbText.B4>
+          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${verificationOrderDetailData?.discountProduct.length} SKU)`}</SnbText.B4>
         </View>
-        {verificationOrderDetail?.discountProduct.map((item, index) => {
+        {verificationOrderDetailData?.discountProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderDiscountItem(item)}
@@ -193,7 +203,7 @@ const OmsVerificationOrderView: FC = () => {
         <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
         </View>
-        {verificationOrderDetail?.bonusProduct.map((item, index) => {
+        {verificationOrderDetailData?.bonusProduct.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderBonusItem(item)}
@@ -231,7 +241,7 @@ const OmsVerificationOrderView: FC = () => {
         <View style={VerificationOrderStyle.listHeader}>
           <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
         </View>
-        {verificationOrderDetail?.notPromoSku.map((item, index) => {
+        {verificationOrderDetailData?.notPromoSku.map((item, index) => {
           return (
             <React.Fragment key={index}>
               {renderNonDiscountItem(item)}
@@ -268,6 +278,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => bottom */
   const renderBottom = () => {
+    if (verificationOrderDetailData === null) {
+      return null;
+    }
     return (
       <View style={VerificationOrderStyle.bottomContainer}>
         <View>
@@ -277,13 +290,13 @@ const OmsVerificationOrderView: FC = () => {
             <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Transaksi</SnbText.B3>
               <SnbText.B3>
-                {toCurrency(verificationOrderDetail?.totalTransaction)}
+                {toCurrency(verificationOrderDetailData.totalTransaction)}
               </SnbText.B3>
             </View>
             <View style={VerificationOrderStyle.bottomTextRow}>
               <SnbText.B3>Total Potongan</SnbText.B3>
               <SnbText.B3 color={color.green50}>
-                {toCurrency(verificationOrderDetail?.totalRebate)}
+                {toCurrency(verificationOrderDetailData.totalRebate)}
               </SnbText.B3>
             </View>
           </View>
@@ -313,14 +326,28 @@ const OmsVerificationOrderView: FC = () => {
       </View>
     );
   };
+  /** => loading */
+  const renderLoading = () => {
+    return (
+      <View style={VerificationOrderStyle.singleContainer}>
+        <SnbProgress size={40} />
+      </View>
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderContent()}
-      </ScrollView>
-      {renderBottom()}
+      {stateVerificationOrder.detail.loading ? (
+        renderLoading()
+      ) : (
+        <>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {renderContent()}
+          </ScrollView>
+          {renderBottom()}
+        </>
+      )}
     </SnbContainer>
   );
 };
