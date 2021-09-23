@@ -133,24 +133,15 @@ const OmsShoppingCartView: FC = () => {
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
   /** => this example */
-  const { verificationOrderCreate, verificationOrderDetail } =
-    useVerficationOrderAction();
+  const { verificationOrderCreate } = useVerficationOrderAction();
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
   React.useEffect(() => {
     if (stateVerificationOrder.create.data !== null) {
-      verificationOrderDetail(
-        dispatchVerificationOrder,
-        stateVerificationOrder.create.data.id,
-      );
-    }
-  }, [stateVerificationOrder.create.data]);
-  React.useEffect(() => {
-    if (stateVerificationOrder.detail.data !== null) {
       setIsConfirmCheckoutDialogOpen(false);
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.detail.data]);
+  }, [stateVerificationOrder.create.data]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
