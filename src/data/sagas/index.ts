@@ -5,6 +5,7 @@ import ProductSaga from './product.saga';
 import AuthSaga from './auth.saga';
 import UserSaga from './user.saga';
 import MerchantSaga from './merchant.saga';
+import OmsSaga from './oms.saga';
 
 function* rootSaga() {
   yield all([fork(ExampleSaga)]);
@@ -13,6 +14,7 @@ function* rootSaga() {
   yield all([fork(AuthSaga)]);
   yield all([fork(UserSaga)]);
   yield all([fork(MerchantSaga)]);
+  yield all([fork(OmsSaga)]);
 }
 
 export default rootSaga;

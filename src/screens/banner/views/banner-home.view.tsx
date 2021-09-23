@@ -5,7 +5,12 @@ import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
 import BannerStyle from '../styles/banner.style';
 /** === IMPORT FUNCTION HERE === */
+import { contexts } from '@contexts';
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
+import {
+  useVerficationOrderAction,
+  useTest,
+} from '@screen/oms/functions/verification-order/verification-order-hook.function';
 /** === INTERFACE === */
 interface Props {
   testID?: string;
@@ -14,6 +19,10 @@ interface Props {
 const BannerHomeView: FC<Props> = () => {
   /** === HOOK === */
   const { loginUserName, logout } = useAuthAction();
+  const { verificationOrderDetail, verificationOrderCreate } =
+    useVerficationOrderAction();
+  // const { create } = useTest();
+  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
   /** => main */
   return (
     <View style={BannerStyle.bannerHomeContainer} testID={'bannerHome'}>
@@ -26,6 +35,31 @@ const BannerHomeView: FC<Props> = () => {
       <TouchableOpacity onPress={() => logout()}>
         <SnbText.B1>Logout</SnbText.B1>
       </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => verificationOrderCreate(dispatchOms, {})}>
+        <SnbText.B1>create verification order</SnbText.B1>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          verificationOrderDetail(
+            dispatchOms,
+            'y238372891282178912ujfkjnqwlokemlkdfoqwioeoi1',
+          )
+        }>
+        <SnbText.B1>detail verification order</SnbText.B1>
+      </TouchableOpacity>
+      <SnbText.B1>||</SnbText.B1>
+      <SnbText.B1>||</SnbText.B1>
+      <SnbText.B1>||</SnbText.B1>
+      <SnbText.B1>||</SnbText.B1>
+      <SnbText.B1>
+        Create{' '}
+        {stateOms.verificationOrder.create.loading ? 'loading' : 'not loading'}
+      </SnbText.B1>
+      <SnbText.B1>
+        Detail{' '}
+        {stateOms.verificationOrder.detail.loading ? 'loading' : 'not loading'}
+      </SnbText.B1>
     </View>
   );
 };

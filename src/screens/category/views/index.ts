@@ -1,7 +1,8 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import CategoryHomeView from './category-home.view';
+import CategoryView from './category.view';
 /** === EXPORT ALL === */
-export { CategoryHomeView };
+export { CategoryHomeView, CategoryView };
 /**
  * ================================================================
  * NOTES

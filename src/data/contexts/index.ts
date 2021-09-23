@@ -1,5 +1,6 @@
 /** === IMPORT ALL PROVIDER and ALL CONTEXT HERE === */
 import { ProductProvider, ProductContext } from './products/ProductProvider';
+import { OmsProvider, OmsContext } from './oms/OmsProvider';
 import { ExampleProvider, ExampleContext } from './examples/ExampleProvider';
 import {
   Example2Provider,
@@ -14,10 +15,12 @@ export const providers = [
   Example2Provider,
   UserProvider,
   MerchantProvider,
+  OmsProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
   ProductContext,
+  OmsContext,
   ExampleContext,
   Example2Context,
   UserContext,

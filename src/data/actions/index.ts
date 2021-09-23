@@ -11,6 +11,7 @@ export * from './auth';
 export * from './products';
 export * from './user';
 export * from './merchant';
+export * from './oms';
 /**
  * ================================================================
  * NOTES

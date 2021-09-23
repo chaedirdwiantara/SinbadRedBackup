@@ -8,7 +8,7 @@ const apiGeneral = async <T>(
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  method: 'GET' | 'POST' | 'UPDATE',
+  method: 'GET' | 'POST' | 'PATCH' | 'PUT',
   params?: object,
 ): Promise<T> => {
   /** === SET HEADER === */
