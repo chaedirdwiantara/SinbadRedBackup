@@ -19,6 +19,7 @@ export * from './register-data.model';
 export * from './global';
 export * from './auth';
 export * from './product';
+export * from './voucher';
 /**
  * ================================================================
  * NOTES

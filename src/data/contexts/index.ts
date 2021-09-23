@@ -6,9 +6,13 @@ import {
   Example2Provider,
   Example2Context,
 } from './examples2/Example2Provider';
+import { VoucherProvider, VoucherContext } from './voucher/VoucherProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   ProductProvider,
+  ExampleProvider,
+  Example2Provider,
+  VoucherProvider,
   OmsProvider,
   ExampleProvider,
   Example2Provider,
@@ -19,4 +23,5 @@ export const contexts = {
   OmsContext,
   ExampleContext,
   Example2Context,
+  VoucherContext,
 };
