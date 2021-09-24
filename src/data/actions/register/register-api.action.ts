@@ -84,3 +84,30 @@ export const merchantRegisterFailed = (
     payload: data,
   };
 };
+
+export const verifyOTPRegisterProcess = (
+  data: models.IVerifyOTPRegister,
+): models.IRegisterAction<models.IVerifyOTPRegister> => {
+  return {
+    type: types.VERIFY_OTP_REGISTER_PROCESS,
+    payload: data,
+  };
+};
+
+export const verifyOTPRegisterSuccess = (
+  data: models.IVerifyOTPRegisterSuccess,
+): models.IRegisterAction<models.IVerifyOTPRegisterSuccess> => {
+  return {
+    type: types.VERIFY_OTP_REGISTER_SUCCESS,
+    payload: data,
+  };
+};
+
+export const verifyOTPRegisterFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<any> => {
+  return {
+    type: types.VERIFY_OTP_REGISTER_FAILED,
+    payload: data,
+  };
+};

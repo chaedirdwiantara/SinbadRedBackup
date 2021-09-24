@@ -6,10 +6,12 @@
 import { combineReducers } from 'redux';
 import { permanent } from './permanent';
 import { auth } from './auth';
+import { global } from './global';
 
 export const rootReducer = combineReducers({
   permanent,
   auth,
+  global,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

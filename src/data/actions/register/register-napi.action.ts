@@ -38,3 +38,9 @@ export const resetCheckEmailAvailability = () => {
     type: types.CHECK_EMAIL_AVAILABILITY_RESET,
   };
 };
+
+export const resetVerifyOTP = () => {
+  return {
+    type: types.VERIFY_OTP_REGISTER_RESET,
+  };
+};

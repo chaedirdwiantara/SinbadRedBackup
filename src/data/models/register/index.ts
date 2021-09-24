@@ -66,6 +66,21 @@ export interface IRegisterMerchantSuccess {
   };
 }
 
+export interface IVerifyOTPRegister {
+  mobilePhone: string;
+  otp: string;
+}
+export interface IVerifyOTPRegisterSuccess {
+  data: {
+    sessionActiveUntil: string;
+    sessionExpiredUntil: string;
+    sellerIds: string[];
+    user: {
+      id: number;
+    };
+  };
+}
+
 // FAILED MODEL
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}

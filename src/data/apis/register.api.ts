@@ -20,8 +20,14 @@ const registerMerchant = (data: models.IRegisterMerchantProcess) => {
   return apiAuth(path, 'v1', 'POST', data);
 };
 
+const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
+  const path = 'otp/verification/self-registration';
+  return apiAuth(path, 'v1', 'POST', data);
+};
+
 export const registerApi = {
   checkPhoneNoAvailability,
   registerMerchant,
   checkEmailAvailability,
+  verifyOTPRegister,
 };

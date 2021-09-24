@@ -1,25 +1,29 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import {
+  SnbContainer,
+  SnbText,
+  SnbTopNav,
+  color,
+} from 'react-native-sinbad-ui';
 
 const ListAndSearchView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [search, setSearch] = React.useState('');
-
-  console.log(search);
+  const { getSelection, listSelection, selectedItem, onSelectedItem } =
+    useTextFieldSelect();
 
   React.useEffect(() => {
-    setTimeout(() => {
-      params?.setValue('This is from list and search');
-      goBack();
-    }, 2000);
+    getSelection(params?.type);
   }, []);
 
-  const handleOnChangeTextSearch = (text: string) => setSearch(text);
-  const clearSearch = () => setSearch('');
-  const handleOnEnter = () => {};
+  React.useEffect(() => {
+    if (selectedItem !== null) {
+      goBack();
+    }
+  }, [selectedItem]);
 
   return (
     <SnbContainer color="white">
@@ -27,10 +31,25 @@ const ListAndSearchView = () => {
         <SnbTopNav.Type7
           type="red"
           placeholder="Pilih jumlah karyawan"
-          enter={handleOnEnter}
+          enter={() => {}}
           backAction={goBack}
-          clearText={clearSearch}
-          onChangeText={handleOnChangeTextSearch}
+          clearText={() => {}}
+          onChangeText={() => {}}
+        />
+        <FlatList
+          data={listSelection.data}
+          keyExtractor={(el, index) => index.toString()}
+          renderItem={({ item, index }) => {
+            const backgroundColor =
+              index % 2 === 0 ? color.black5 : color.white;
+            return (
+              <TouchableOpacity
+                style={{ padding: 16, backgroundColor }}
+                onPress={() => onSelectedItem({ item, type: params?.type })}>
+                <SnbText.B3>{item?.amount || item?.name}</SnbText.B3>
+              </TouchableOpacity>
+            );
+          }}
         />
       </SafeAreaView>
     </SnbContainer>

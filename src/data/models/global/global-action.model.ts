@@ -5,7 +5,19 @@ export interface IsFCMAction {
 }
 
 export interface IUploadImage {
-  image: string;
-  type: 'idCard' | 'selfie' | 'userTax' | 'storePhoto';
-  oldLink: string;
+  base64: string;
+  currentFilePath: string | null | undefined;
+}
+
+export interface IUploadImageSuccess {
+  data: {
+    url: string;
+  };
+}
+
+export interface INumOfEmployee {
+  amount: string;
+}
+export interface IGetSelectionSuccess<T> {
+  data: T[];
 }

@@ -12,3 +12,16 @@ export const saveCapturedImage = (data: any) => ({
 export const resetUploadImage = () => ({
   type: types.UPLOAD_IMAGE_RESET,
 });
+
+export const resetGetSelection = () => {
+  return {
+    type: types.GET_SELECTION_RESET,
+  };
+};
+
+export const onSelectedItem = (data: any) => {
+  return {
+    type: types.SELECTED_ITEM,
+    payload: data,
+  };
+};

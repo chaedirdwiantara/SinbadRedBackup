@@ -19,3 +19,9 @@ export const RESET_REGISTER_DATA = 'ResetRegisterData';
 export const REGISTER_MERCHANT_PROCESS = 'RegisterMerchantProcess';
 export const REGISTER_MERCHANT_SUCCESS = 'RegisterMerchantSuccess';
 export const REGISTER_MERCHANT_FAILED = 'RegisterMerchantFailed';
+
+// VERIFY OTP REGISTER
+export const VERIFY_OTP_REGISTER_PROCESS = 'VerifyOTPRegisterProcess';
+export const VERIFY_OTP_REGISTER_SUCCESS = 'VerifyOTPRegisterSuccess';
+export const VERIFY_OTP_REGISTER_FAILED = 'VerifyOTPRegisterFailed';
+export const VERIFY_OTP_REGISTER_RESET = 'VerifyOTPRegisterReset';

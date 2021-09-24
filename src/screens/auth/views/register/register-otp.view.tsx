@@ -2,23 +2,31 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   maskPhone,
   useCheckPhoneNoAvailability,
+  useOTP,
   useRegister,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_1_VIEW } from '@screen/auth/screens_name';
 import { OTPContent } from '@screen/auth/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import * as models from '@models';
 
 const RegisterOTPView: React.FC = () => {
-  const { state } = useCheckPhoneNoAvailability();
+  const { checkPhone } = useCheckPhoneNoAvailability();
   const { saveRegisterUserData, state: registerData } = useRegister();
+  const { verifyOTPRegister, verifyOTP } = useOTP();
   const { goBack, replace }: any = useNavigation();
   const { params }: any = useRoute();
+  const [hide, setHide] = React.useState(true);
 
   React.useEffect(() => {
-    const user: models.User = registerData.user;
-    if (user.mobilePhone) {
+    if (verifyOTP.data !== null) {
+      setHide(false);
+      saveRegisterUserData({ mobilePhone: params?.phoneNo });
+    }
+  }, [verifyOTP.data]);
+
+  React.useEffect(() => {
+    if (registerData.user?.mobilePhone !== '') {
       replace(REGISTER_STEP_1_VIEW);
     }
   }, [registerData.user]);
@@ -32,11 +40,15 @@ const RegisterOTPView: React.FC = () => {
       />
       <OTPContent
         onVerifyOTP={() =>
-          saveRegisterUserData({ mobilePhone: params?.phoneNo })
+          verifyOTPRegister({ mobilePhone: params?.phoneNo, otp: '12345' })
         }
-        otpCode={state.data.otp}
-        loading={state.loading}
+        otpSuccess={verifyOTP.data !== null}
+        hideIcon={hide}
+        loading={verifyOTP.loading}
         phoneNo={maskPhone(params?.phoneNo)}
+        resend={() => {
+          checkPhone({ mobilePhoneNo: params?.phoneNo });
+        }}
       />
     </SnbContainer>
   );

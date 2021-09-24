@@ -1,12 +1,11 @@
-import { useRegisterStep6 } from '@screen/auth/functions';
-import React from 'react';
+import { useNavigation } from '@react-navigation/core';
 import {
-  LogBox,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+  useInput,
+  useRegister,
+  useTextFieldSelect,
+} from '@screen/auth/functions';
+import React from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
   color,
   SnbButton,
@@ -18,11 +17,12 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep6();
+  const { saveRegisterStoreData } = useRegister();
+  const address = useInput();
+  const noteAddress = useInput();
+  const vehicleAccessibilityAmount = useInput();
+  const { gotoSelection, selectedItem } = useTextFieldSelect();
 
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -44,55 +44,48 @@ const Content: React.FC = () => {
           <View style={{ paddingHorizontal: 16 }}>
             <SnbText.H4>Koordinat Lokasi</SnbText.H4>
             <View style={{ paddingVertical: 4 }} />
-            <TouchableOpacity onPress={func.goToMaps} style={styles.pinPoint}>
+            <TouchableOpacity onPress={() => {}} style={styles.pinPoint}>
               <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
             </TouchableOpacity>
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
+              {...address}
               mandatory
-              type={state.type}
               labelText="Detail Alamat"
-              maxLength={32}
-              onChangeText={func.handleOnChangeTextStoreAddress}
               placeholder="Masukkan detail alamat"
-              value={state.storeAddress}
-              clearText={() => func.setStoreAddress('')}
             />
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
+              {...noteAddress}
               mandatory
-              type={state.type}
               labelText="Catatan Alamat"
-              maxLength={32}
-              onChangeText={func.handleOnChangeTextStoreNoteAddress}
               placeholder="Masukkan catatan alamat"
-              value={state.storeNoteAddress}
-              clearText={() => func.setStoreNoteAddress('')}
             />
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextFieldSelect
               labelText="Aksesibilitas Kendaraan"
-              value={state.storeVehicleAccessibility}
+              value={
+                selectedItem?.type === 'listVehicleAccess'
+                  ? selectedItem?.item.name
+                  : ''
+              }
               placeholder="Pilih aksesibitas kendaraan"
               type="default"
-              onPress={func.selectStoreVehicleAccessibility}
+              onPress={() => gotoSelection('listVehicleAccess')}
               rightType="icon"
               rightIcon="chevron_right"
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+            <SnbTextField.Text
+              {...vehicleAccessibilityAmount}
+              mandatory
               labelText="Kapasitas Jalan"
-              value={state.storeRoadCapacity}
-              placeholder="Pilih kapasitas jalan"
-              type="default"
-              onPress={func.selectStoreRoadCapacity}
-              rightType="icon"
-              rightIcon="chevron_right"
-              helpText="Jumlah kendaraan yang bisa melewati jalan menuju Toko"
+              placeholder="Masukkan kapasitas jalan"
+              keyboardType="phone-pad"
             />
           </View>
         </ScrollView>
@@ -104,23 +97,33 @@ const Content: React.FC = () => {
         }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.gotoStep7}
+          onPress={() => {
+            saveRegisterStoreData({
+              address: address.value,
+              noteAddress: noteAddress.value,
+              vehicleAccessibilityId: selectedItem.data?.id,
+              latitude: 0,
+              longitude: 0,
+              vehicleAccessibilityAmount: Number(
+                vehicleAccessibilityAmount.value,
+              ),
+            });
+          }}
           type="primary"
           shadow
           loading={false}
-          disabled={false}
+          disabled={address.value === '' || noteAddress.value === ''}
         />
       </View>
     </View>
   );
 };
 
-const RegisterStep6View: React.FC = (props) => {
-  const {} = props;
-  const { goBack } = useRegisterStep6();
+const RegisterStep6View: React.FC = () => {
+  const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );

@@ -10,16 +10,14 @@ import { loginOTPStyle } from '../styles';
 interface Props {
   onVerifyOTP: () => void;
   loading: boolean;
-  otpCode: string;
+  otpSuccess: boolean;
+  hideIcon: boolean;
   phoneNo: string;
+  resend: () => void;
 }
 
-const OTPContent: React.FC<Props> = ({
-  onVerifyOTP,
-  loading,
-  otpCode,
-  phoneNo,
-}) => {
+const OTPContent: React.FC<Props> = (props) => {
+  const { onVerifyOTP, loading, phoneNo, resend } = props;
   const [otp, setOtp] = React.useState('');
 
   return (
@@ -34,8 +32,8 @@ const OTPContent: React.FC<Props> = ({
       </View>
       <View style={{ margin: 4 }}>
         <SnbOTPInput
+          {...props}
           autoFocusOnLoad
-          otpSuccess={otp === otpCode}
           code={otp}
           onCodeChanged={setOtp}
         />
@@ -46,10 +44,10 @@ const OTPContent: React.FC<Props> = ({
           onPress={onVerifyOTP}
           loading={loading}
           type="primary"
-          disabled={otp !== otpCode}
+          disabled={otp.length < 5}
         />
       </View>
-      <SnbOTPTimer action={() => {}} />
+      <SnbOTPTimer action={resend} />
     </ScrollView>
   );
 };

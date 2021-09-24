@@ -91,7 +91,7 @@ export const useInput = (initialState: string = '') => {
 export const useCamera = () => {
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
-  const { capturedImage } = useSelector((state: any) => state.auth);
+  const { capturedImage } = useSelector((state: any) => state.global);
   const openCamera = (
     type: 'ktp' | 'npwp' | 'selfie' | 'store' | 'custom',
     params: models.ICamera = {
@@ -143,14 +143,14 @@ export const useCamera = () => {
   return {
     openCamera,
     saveCapturedImage,
-    state: capturedImage,
+    capturedImage,
     resetCamera,
   };
 };
 
 export const useUploadImage = () => {
   const dispatch = useDispatch();
-  const { uploadedImage } = useSelector((state: any) => state.auth);
+  const { uploadedImage } = useSelector((state: any) => state.global);
 
   const uploadImage = (data: models.IUploadImage) => {
     dispatch(Actions.uploadImageProcess(data));
@@ -167,14 +167,61 @@ export const useUploadImage = () => {
   };
 };
 
+export const useTextFieldSelect = () => {
+  type Tlist =
+    | 'listNumOfEmployee'
+    | 'listProvince'
+    | 'listCity'
+    | 'listDistrict'
+    | 'listUrban'
+    | 'listVehicleAccessAmount'
+    | 'listVehicleAccess';
+
+  const dispatch = useDispatch();
+  const { navigate } = useNavigation();
+  const { listSelection, selectedItem } = useSelector(
+    (state: any) => state.global,
+  );
+
+  const gotoSelection = (type: Tlist) => {
+    resetSelectedItem();
+    resetGetSelection();
+    navigate('ListAndSearchView', { type });
+  };
+
+  const getSelection = (type: Tlist) => {
+    dispatch(Actions.getSelectionProcess(type));
+  };
+
+  const resetGetSelection = () => {
+    dispatch(Actions.resetGetSelection());
+  };
+
+  const onSelectedItem = (data: any) => {
+    dispatch(Actions.onSelectedItem(data));
+  };
+
+  const resetSelectedItem = () => {
+    dispatch(Actions.onSelectedItem(null));
+  };
+
+  return {
+    resetGetSelection,
+    gotoSelection,
+    getSelection,
+    listSelection,
+    selectedItem,
+    onSelectedItem,
+    resetSelectedItem,
+  };
+};
+
 export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
   const [value, setValue] = useState('');
   const [valMsgError, setValMsgError] = useState('');
   const [type, setType] = useState('default');
 
-  React.useEffect(() => {
-    console.log(valMsgError);
-  }, [valMsgError]);
+  React.useEffect(() => {}, [valMsgError]);
 
   const onChangeText = (text: string) => {
     let formatted = '';
@@ -186,13 +233,13 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
       }
       case 'npwp': {
         text = text.substr(0, 15);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         formatted = formatter(text, [2, 5, 8, 9, 12, 15], '.');
         break;
       }
       default:
         break;
     }
-    console.log(formatted);
     setValue(text);
   };
 

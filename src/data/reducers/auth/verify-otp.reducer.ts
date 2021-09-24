@@ -1,6 +1,6 @@
 import simplifyReducer from '@core/redux/simplifyReducer';
 import * as types from '@types';
-// import * as models from '@models';
+import * as models from '@models';
 
 const INITIAL_STATE = {
   data: null,
@@ -8,12 +8,15 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const uploadedImage = simplifyReducer(INITIAL_STATE, {
-  [types.UPLOAD_IMAGE_PROCESS]() {
+export const verifyOTP = simplifyReducer(INITIAL_STATE, {
+  [types.VERIFY_OTP_REGISTER_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.UPLOAD_IMAGE_SUCCESS](state = INITIAL_STATE, action: any) {
+  [types.VERIFY_OTP_REGISTER_SUCCESS](
+    state = INITIAL_STATE,
+    action: models.IRegisterAction<models.IVerifyOTPRegisterSuccess>,
+  ) {
     return {
       ...state,
       loading: false,
@@ -21,7 +24,10 @@ export const uploadedImage = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.UPLOAD_IMAGE_FAILED](state = INITIAL_STATE, action: any) {
+  [types.VERIFY_OTP_REGISTER_FAILED](
+    state = INITIAL_STATE,
+    action: models.IRegisterAction<any>,
+  ) {
     return {
       ...state,
       loading: false,
@@ -29,7 +35,7 @@ export const uploadedImage = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.UPLOAD_IMAGE_RESET]() {
+  [types.VERIFY_OTP_REGISTER_RESET]() {
     return INITIAL_STATE;
   },
 });

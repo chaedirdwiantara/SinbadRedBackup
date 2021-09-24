@@ -2,6 +2,8 @@ import { useNavigation } from '@react-navigation/core';
 import {
   useCheckPhoneNoAvailability,
   useInputPhone,
+  useOTP,
+  useRegister,
 } from '@screen/auth/functions';
 import { REGISTER_OTP_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
@@ -17,12 +19,16 @@ import {
 const Content: React.FC = () => {
   const phone = useInputPhone();
   const { checkPhone, resetCheckPhone, state } = useCheckPhoneNoAvailability();
+  const { resetVerifyOTP } = useOTP();
+  const { resetRegisterData } = useRegister();
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
     if (state.data !== null) {
-      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
+      resetVerifyOTP();
+      resetRegisterData();
       phone.clearText();
+      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
     }
     if (state.error !== null) {
       phone.setMessageError(state.error.message);
@@ -63,7 +69,7 @@ const RegisterView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );

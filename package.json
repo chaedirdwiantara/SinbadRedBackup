@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "1.12.1",
+    "@react-native-community/image-editor": "2.3.0",
     "@react-native-community/masked-view": "0.1.11",
     "@react-native-firebase/app": "12.7.4",
     "@react-native-firebase/database": "12.7.4",
@@ -26,6 +27,7 @@
     "react-native-camera": "3.44.1",
     "react-native-color-matrix-image-filters": "5.2.10",
     "react-native-device-info": "8.1.2",
+    "react-native-fs": "2.18.0",
     "react-native-gesture-handler": "1.10.3",
     "react-native-reanimated": "2.1.0",
     "react-native-safe-area-context": "3.2.0",

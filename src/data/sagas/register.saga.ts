@@ -37,17 +37,31 @@ function* registerMerchant(
   action: models.IRegisterAction<models.IRegisterMerchantProcess>,
 ) {
   try {
-    const response: models.IRegisterMerchantSuccess = yield call(() => {
-      registerApi.registerMerchant(action.payload);
-    });
+    const response: models.IRegisterMerchantSuccess = yield call(() =>
+      registerApi.registerMerchant(action.payload),
+    );
     yield put(ActionCreators.merchantRegisterSuccess(response));
   } catch (error) {
     yield put(ActionCreators.merchantRegisterFailed(error));
   }
 }
 
+function* verifyOTPRegister(
+  action: models.IRegisterAction<models.IVerifyOTPRegister>,
+) {
+  try {
+    const response: models.IVerifyOTPRegisterSuccess = yield call(() =>
+      registerApi.verifyOTPRegister(action.payload),
+    );
+    yield put(ActionCreators.verifyOTPRegisterSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.verifyOTPRegisterFailed(error));
+  }
+}
+
 function* RegisterSaga() {
   yield takeLatest(types.REGISTER_MERCHANT_PROCESS, registerMerchant);
+  yield takeLatest(types.VERIFY_OTP_REGISTER_PROCESS, verifyOTPRegister);
   yield takeLatest(
     types.CHECK_PHONE_AVAILABILITY_PROCESS,
     checkPhoneNoAvailability,

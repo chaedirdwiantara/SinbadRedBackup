@@ -1,6 +1,12 @@
-import { useRegisterStep5 } from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import {
+  useInput,
+  useRegister,
+  useTextFieldSelect,
+} from '@screen/auth/functions';
+import { REGISTER_STEP_6_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
-import { LogBox, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   color,
   SnbButton,
@@ -12,11 +18,20 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep5();
+  const storeName = useInput();
+  const storeSize = useInput();
+  const topBrand = useInput();
+  const wantedBrand = useInput();
+  const { state: registerData, saveRegisterStoreData } = useRegister();
+  const { navigate } = useNavigation();
+  const { gotoSelection, selectedItem } = useTextFieldSelect();
 
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+  React.useEffect(() => {
+    if (registerData.name !== '') {
+      navigate(REGISTER_STEP_6_VIEW);
+    }
+  }, [registerData]);
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -37,64 +52,49 @@ const Content: React.FC = () => {
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
+              {...storeName}
               mandatory
-              type={state.type}
               labelText="Nama Toko"
-              maxLength={32}
-              onChangeText={func.handleOnChangeTextStoreName}
               placeholder="Masukkan nama toko"
-              value={state.storeName}
-              clearText={() => func.setStoreName('')}
             />
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextFieldSelect
               labelText="Jumlah Karyawan"
               placeholder="Masukkan jumlah karyawan"
-              value={state.numOfEmployees}
+              value={
+                selectedItem?.type === 'listNumOfEmployee'
+                  ? selectedItem?.item.amount
+                  : ''
+              }
               type="default"
-              onPress={func.selectNumOfEmployees}
+              onPress={() => {
+                gotoSelection('listNumOfEmployee');
+              }}
               rightType="icon"
               rightIcon="chevron_right"
             />
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...storeSize}
               labelText="Ukuran Toko"
-              keyboardType="number-pad"
-              maxLength={16}
-              onChangeText={func.handleOnChangeTextStoreSize}
-              valMsgError={''}
               placeholder="Masukkan ukuran toko Anda"
-              value={state.storeSize}
-              clearText={() => func.setStoreSize('')}
+              keyboardType="number-pad"
             />
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...topBrand}
               labelText="Merk Paling Laku"
-              maxLength={15}
-              keyboardType="number-pad"
-              onChangeText={func.handleOnChangeTextTopBrand}
-              valMsgError={''}
               placeholder="Masukkan merk paling laku"
-              value={state.topBrand}
-              clearText={() => func.setTopBrand('')}
             />
           </View>
           <View style={{ padding: 16, marginBottom: 24 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...wantedBrand}
               labelText="Merk Paling Diinginkan"
-              maxLength={16}
-              keyboardType="email-address"
-              onChangeText={func.handleOnChangeTextWantedBrand}
-              valMsgError={''}
               placeholder="Masukkan merk paling diingikan"
-              value={state.wantedBrand}
-              clearText={() => func.setWantedBrand('')}
             />
           </View>
         </ScrollView>
@@ -106,23 +106,30 @@ const Content: React.FC = () => {
         }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.gotoStep6}
+          onPress={() => {
+            saveRegisterStoreData({
+              name: storeName.value,
+              topSellingBrand: topBrand.value,
+              mostWantedBrand: wantedBrand.value,
+              largeArea: storeSize.value,
+              numberOfEmployee: selectedItem?.item.amount || '',
+            });
+          }}
           type="primary"
           shadow
           loading={false}
-          disabled={false}
+          disabled={storeName.value === ''}
         />
       </View>
     </View>
   );
 };
 
-const RegisterStep5View: React.FC = (props) => {
-  const {} = props;
-  const { goBack } = useRegisterStep5();
+const RegisterStep5View: React.FC = () => {
+  const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );

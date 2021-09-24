@@ -34,7 +34,7 @@ const INITIAL_STATE: models.IRegisterMerchantProcess = {
 };
 
 export const registerData = simplifyReducer(INITIAL_STATE, {
-  [types.SAVE_REGISTER_USER_DATA](
+  [types.SAVE_REGISTER_STORE_DATA](
     state = INITIAL_STATE,
     action: models.IRegisterAction<models.IRegisterMerchantProcess>,
   ) {

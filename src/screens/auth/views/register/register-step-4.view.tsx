@@ -1,6 +1,9 @@
-import { renderIF, useRegisterStep4 } from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import { useUploadImage } from '@screen/auth/functions/global-hooks.functions';
+import { REGISTER_STEP_5_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
-import { View, LogBox, Image } from 'react-native';
+import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -10,11 +13,39 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 
+const { height } = Dimensions.get('screen');
+
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep4();
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+  const { openCamera, state: cameraData, resetCamera } = useCamera();
+  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const { state: registerData, saveRegisterUserData } = useRegister();
+  const { navigate } = useNavigation();
+
+  React.useEffect(() => {
+    if (uploadData.data !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Berhasil Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+      saveRegisterUserData({ imageUrl: uploadData.data?.url });
+    }
+
+    if (uploadData.error !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Gagal Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+      resetCamera();
+      resetUploadImage();
+      navigate(REGISTER_STEP_5_VIEW);
+    }
+  }, [uploadData]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -29,17 +60,24 @@ const Content: React.FC = () => {
           'Pastikan NPWP bisa terbaca dengan jelas',
           'Hindari Tangan Menutupi NPWP',
         ]}
-        action={() => func.gotoCamera()}
+        action={() => openCamera('npwp')}
       />
     );
   };
 
   const renderImagePreview = () => {
+    const isImageUploaded =
+      registerData.user?.taxImageUrl !== '' && cameraData.data === null;
+
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{ uri: state?.imageNPWP || ' ' }}
+          source={{
+            uri:
+              registerData.user?.taxImageUrl ||
+              `data:image/jpg;base64,${cameraData.data?.croppedImage}`,
+          }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -54,23 +92,39 @@ const Content: React.FC = () => {
               size="small"
               type="tertiary"
               title="Ulangi"
-              onPress={() => func.gotoCamera()}
+              onPress={() => openCamera('npwp')}
               disabled={false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type="primary"
+              type={isImageUploaded ? 'primary' : 'secondary'}
               shadow
-              title="Selanjutnya"
-              onPress={func.gotoStep5}
-              disabled={false}
+              loading={uploadData?.loading}
+              title={isImageUploaded ? 'Selanjutnya' : 'Upload'}
+              onPress={() => {
+                if (isImageUploaded) {
+                  saveRegisterUserData({ taxImageUrl: '' });
+                } else {
+                  resetUploadImage();
+                  const payload = {
+                    base64: `data:image/png;base64,${cameraData?.data.croppedImage}`,
+                    currentFilePath: registerData?.user?.taxImageUrl || null,
+                  };
+                  uploadImage(payload);
+                }
+              }}
+              disabled={uploadData?.loading}
             />
           </View>
         </View>
       </View>
     );
   };
+
+  const isImageAvailable =
+    registerData?.user?.taxImageUrl !== '' ||
+    (cameraData.data !== null && cameraData.data?.type === 'npwp');
 
   return (
     <View style={{ flex: 1 }}>
@@ -85,9 +139,9 @@ const Content: React.FC = () => {
         </View>
       </View>
       {renderIF(
-        state.imageNPWP === null,
-        renderUploadPhotoRules(),
+        isImageAvailable,
         renderImagePreview(),
+        renderUploadPhotoRules(),
       )}
     </View>
   );
@@ -95,10 +149,10 @@ const Content: React.FC = () => {
 
 const RegisterStep4View: React.FC = (props) => {
   const {} = props;
-  const { goBack } = useRegisterStep4();
+  const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );

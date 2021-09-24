@@ -1,10 +1,13 @@
-import { useOTP } from '@screen/auth/functions';
+import { useNavigation, useRoute } from '@react-navigation/core';
+import { maskPhone, useCheckPhoneNoAvailability } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const LoginOTPView: React.FC = () => {
-  const { state, func, reset, goBack } = useOTP();
+  const { goBack } = useNavigation();
+  const { state } = useCheckPhoneNoAvailability();
+  const { params }: any = useRoute();
 
   return (
     <SnbContainer color="white">
@@ -14,14 +17,10 @@ const LoginOTPView: React.FC = () => {
         title="Kode Verifikasi"
       />
       <OTPContent
-        onVerifyOTP={() => {
-          func.setLoading(true);
-          setTimeout(() => {
-            func.setLoading(false);
-            reset({ index: 0, routes: [{ name: 'Home' }] });
-          }, 2500);
-        }}
+        onVerifyOTP={() => {}}
         loading={state.loading}
+        otpCode={state.data.otp}
+        phoneNo={maskPhone(params?.phoneNo)}
       />
     </SnbContainer>
   );

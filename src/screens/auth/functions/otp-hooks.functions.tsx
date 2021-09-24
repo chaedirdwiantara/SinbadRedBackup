@@ -1,18 +1,24 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import * as Actions from '@actions';
+import * as models from '@models';
 
-const useOTP: any = () => {
-  const [loading, setLoading] = React.useState(false);
-  const navigation = useNavigation();
+import { useDispatch, useSelector } from 'react-redux';
+
+const useOTP = () => {
+  const dispatch = useDispatch();
+  const { verifyOTP } = useSelector((state: any) => state.auth);
+
+  const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
+    dispatch(Actions.verifyOTPRegisterProcess(data));
+  };
+
+  const resetVerifyOTP = () => {
+    dispatch(Actions.resetVerifyOTP());
+  };
 
   return {
-    func: {
-      setLoading,
-    },
-    state: {
-      loading,
-    },
-    ...navigation,
+    verifyOTPRegister,
+    verifyOTP,
+    resetVerifyOTP,
   };
 };
 

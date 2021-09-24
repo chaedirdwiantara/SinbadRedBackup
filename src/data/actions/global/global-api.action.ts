@@ -10,7 +10,9 @@ export const uploadImageProcess = (
   };
 };
 
-export const uploadImageSuccess = (data: any): models.IRegisterAction<any> => {
+export const uploadImageSuccess = (
+  data: models.IUploadImageSuccess,
+): models.IRegisterAction<models.IUploadImageSuccess> => {
   return {
     type: types.UPLOAD_IMAGE_SUCCESS,
     payload: data,
@@ -22,6 +24,27 @@ export const uploadImageFailed = (
 ): models.IRegisterAction<any | unknown> => {
   return {
     type: types.UPLOAD_IMAGE_FAILED,
+    payload: data,
+  };
+};
+
+export const getSelectionProcess = (data: string) => {
+  return {
+    type: types.GET_SELECTION_PROCESS,
+    payload: data,
+  };
+};
+
+export const getSelectionSuccess = (data: any) => {
+  return {
+    type: types.GET_SELECTION_SUCCESS,
+    payload: data,
+  };
+};
+
+export const getSelectionFailed = (data: any) => {
+  return {
+    type: types.GET_SELECTION_FAILED,
     payload: data,
   };
 };

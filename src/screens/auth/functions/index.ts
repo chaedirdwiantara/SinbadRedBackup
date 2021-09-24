@@ -8,36 +8,28 @@ import {
 import {
   useCheckPhoneNoAvailability,
   useRegister,
-  useRegisterStep2,
-  useRegisterStep3,
-  useRegisterStep4,
-  useRegisterStep5,
-  useRegisterStep6,
-  useRegisterStep7,
 } from './register-hooks.functions';
 import {
   useInputPhone,
   useInput,
   useInputFormat,
   useCamera,
+  useTextFieldSelect,
 } from './global-hooks.functions';
+import useOTP from './otp-hooks.functions';
 
 export {
   useLogin,
   renderIF,
   formatter,
   useCamera,
+  useTextFieldSelect,
   useCheckPhoneNoAvailability,
   useRegister,
-  useRegisterStep2,
-  useRegisterStep3,
-  useRegisterStep4,
-  useRegisterStep5,
-  useRegisterStep6,
-  useRegisterStep7,
   useInputPhone,
   useInput,
   useInputFormat,
   handleMessageError,
   maskPhone,
+  useOTP,
 };
