@@ -26,7 +26,7 @@ export const voucherCartListReducer = simplifyReducer(
     /** => detail success */
     [types.VOUCHER_CART_LIST_SUCCESS](
       state = voucherCartListInitialState,
-      action: models.DetailSuccessAction<models.Example>,
+      action: models.DetailSuccessAction<models.VoucherCartListProps>,
     ) {
       return {
         ...state,

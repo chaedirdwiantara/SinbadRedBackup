@@ -1,8 +1,3 @@
-import * as models from '@models';
-/** === VOUCHER CART LIST === */
-export interface VoucherCartList<T> {
-  list: models.DetailItemProps<T>;
-}
 export interface VoucherCartListProps {
   sinbadVouchers: SinbadVoucherProps[];
   supplierVouchers: SupplierVoucherProps[];
@@ -30,16 +25,4 @@ export interface SupplierVoucherListProps {
   invoiceGroupId: number;
   invoiceGroupName: string;
   benefitRebate: number;
-}
-/** === VOUCHER DETAIL === */
-export interface VoucherDetailProps {
-  id: number;
-  imageUrl: string;
-  expiredAt: string;
-  voucherDescription: string;
-  termsAndCondition: string[];
-  instructions: string[];
-  voucherName: string;
-  voucherHeaeder: string;
-  voucherCode: string;
 }

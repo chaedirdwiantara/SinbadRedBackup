@@ -21,8 +21,8 @@ import {
   useSelectedSupplierVoucher,
   useSelectedSinbadVoucher,
   countPotentialDiscount,
-} from '../functions';
-import { VoucherCartListStyles } from '../styles';
+} from '../../functions';
+import { VoucherCartListStyles } from '../../styles';
 import { contexts } from '@contexts';
 import * as models from '@models';
 import SvgIcon from '@svg';
@@ -34,8 +34,8 @@ import { useDataGlobal } from '@core/redux/Data';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
-  const { stateVoucher, dispatchVoucher } = React.useContext(
-    contexts.VoucherContext,
+  const { stateVoucherCart, dispatchVoucherCart } = React.useContext(
+    contexts.VoucherCartContext,
   );
   const {
     selectedSupplierVoucher,
@@ -56,12 +56,12 @@ const VoucherCartListView: FC = () => {
   } = useVoucherList();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
-  const voucherCartListState = stateVoucher.list;
+  const voucherCartListState = stateVoucherCart.detail;
   const globalData = useDataGlobal();
   const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
-    voucherCartListAction.list(dispatchVoucher);
+    voucherCartListAction.list(dispatchVoucherCart);
     if (globalData.dataVouchers !== null) {
       setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
       setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
@@ -379,7 +379,7 @@ const VoucherCartListView: FC = () => {
     return (
       <View style={VoucherCartListStyles.singleContainer}>
         <Image
-          source={require('../../../assets/images/voucher_empty.png')}
+          source={require('../../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
         <View style={{ marginTop: 16 }}>

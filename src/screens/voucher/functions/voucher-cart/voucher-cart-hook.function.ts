@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
-import { SupplierVoucherListProps } from '@models';
 /** === FUNCTION === */
 /** => voucher cart list action */
 const useVoucherCartListAction = () => {
@@ -66,7 +65,7 @@ const useVoucherListMore = () => {
   >([]);
   return {
     setVoucherListData: (
-      voucher: models.SinbadVoucherProps[] | SupplierVoucherListProps[],
+      voucher: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[],
     ) => {
       setVoucherListData(voucher);
     },
@@ -92,7 +91,7 @@ const useVoucherList = () => {
   const [sinbadVoucher, setSinbadVoucher] = React.useState<
     models.SinbadVoucherProps[]
   >([]);
-  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+  const { stateVoucherCart } = React.useContext(contexts.VoucherCartContext);
   return {
     updateVoucherList: (
       supplierVoucherList: models.SupplierVoucherProps[],
@@ -102,9 +101,9 @@ const useVoucherList = () => {
       setSinbadVoucher(sinbadVoucherList);
     },
     searchVoucher: (keyword: string) => {
-      if (stateVoucher.detail.data !== null) {
+      if (stateVoucherCart.detail.data !== null) {
         const filteredSupplierVoucher: Array<models.SupplierVoucherProps> = [];
-        stateVoucher.detail.data.supplierVouchers.map((item) => {
+        stateVoucherCart.detail.data.supplierVouchers.map((item) => {
           const filteredSubSupplierVoucher = item.voucherList.filter(
             (element) => {
               return element.voucherName
@@ -121,7 +120,7 @@ const useVoucherList = () => {
           }
         });
         const filteredSinbadVoucher =
-          stateVoucher.detail.data.sinbadVouchers.filter((item) => {
+          stateVoucherCart.detail.data.sinbadVouchers.filter((item) => {
             return item.voucherName
               .toLowerCase()
               .includes(keyword.toLowerCase());
@@ -131,35 +130,13 @@ const useVoucherList = () => {
       }
     },
     resetVoucherData: () => {
-      if (stateVoucher.detail.data !== null) {
-        setSupplierVoucher(stateVoucher.detail.data.supplierVouchers);
-        setSinbadVoucher(stateVoucher.detail.data.sinbadVouchers);
+      if (stateVoucherCart.detail.data !== null) {
+        setSupplierVoucher(stateVoucherCart.detail.data.supplierVouchers);
+        setSinbadVoucher(stateVoucherCart.detail.data.sinbadVouchers);
       }
     },
     supplierVoucher,
     sinbadVoucher,
-  };
-};
-/** => set voucher tnc & instruction modal */
-const useVoucherListItemModal = () => {
-  const [isTncModalOpen, setTncModalOpen] = React.useState(false);
-  const [isInstructionModalOpen, setInstructionModalOpen] =
-    React.useState(false);
-  return {
-    handleOpenTncModal: () => {
-      setTncModalOpen(true);
-    },
-    handleCloseTnCModal: () => {
-      setTncModalOpen(false);
-    },
-    handleOpenInstructionModal: () => {
-      setInstructionModalOpen(true);
-    },
-    handleCloseInstructionModal: () => {
-      setInstructionModalOpen(false);
-    },
-    isTncModalOpen,
-    isInstructionModalOpen,
   };
 };
 /** === EXPORT === */
@@ -170,7 +147,6 @@ export {
   useVoucherCartListAction,
   useSelectedSinbadVoucher,
   useSelectedSupplierVoucher,
-  useVoucherListItemModal,
 };
 /**
  * ================================================================

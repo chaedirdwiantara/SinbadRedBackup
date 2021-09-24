@@ -1,17 +1,17 @@
 /** === IMPORT PACKAGE HERE === */
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { VoucherApi } from '../apis/voucher.api';
-import * as ActionCreators from '../actions';
-import * as types from '../types';
-import * as models from '../models';
+import { VoucherCartApi } from '../../../apis/voucher/voucher-cart.api';
+import * as ActionCreators from '@actions';
+import * as types from '@types';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => voucher cart list */
 function* voucherCartList(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.VoucherCartListProps> =
       yield call(() => {
-        return VoucherApi.voucherCartList();
+        return VoucherCartApi.voucherCartList();
       });
     yield action.contextDispatch(
       ActionCreators.voucherCartListSuccess(response),

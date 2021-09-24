@@ -10,8 +10,8 @@ import {
   SnbText,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
-import { goBack, useVoucherListItemModal } from '../functions';
-import { VoucherCartListStyles, VoucherDetailStyles } from '../styles';
+import { goBack, useVoucherListItemModal } from '../../functions';
+import { VoucherCartListStyles, VoucherDetailStyles } from '../../styles';
 import moment from 'moment';
 import { ScrollView } from 'react-native-gesture-handler';
 /** === DUMMIES === */
@@ -266,7 +266,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
   /** => main */
   return (
     <SnbContainer color="white">
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
         {renderBanner()}
         {renderVoucherCardInformation()}
