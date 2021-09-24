@@ -8,7 +8,8 @@ const goBack = () => {
 };
 /** => go to voucher detail */
 const goToVoucherDetail = (voucherId: number) => {
-  NavigationAction.navigate('VoucherDetailView', { voucherId });
+  // NavigationAction.navigate('VoucherDetailView', { voucherId: voucherId.toString() });
+  NavigationAction.navigate('VoucherDetailView', { voucherId: 1 });
 };
 
 export { goBack, goToVoucherDetail };

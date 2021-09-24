@@ -1,6 +1,21 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
+import { useDispatch } from 'react-redux';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import * as Actions from '@actions';
 /** === FUNCTION === */
+/** => voucher cart list action */
+const useVoucherDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.voucherDetailReset());
+    },
+  };
+};
 /** => set voucher tnc & instruction modal */
 const useVoucherListItemModal = () => {
   const [isTncModalOpen, setTncModalOpen] = React.useState(false);
@@ -24,7 +39,7 @@ const useVoucherListItemModal = () => {
   };
 };
 /** === EXPORT === */
-export { useVoucherListItemModal };
+export { useVoucherListItemModal, useVoucherDetailAction };
 /**
  * ================================================================
  * NOTES

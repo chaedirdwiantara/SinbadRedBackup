@@ -15,6 +15,9 @@ const useVoucherCartListAction = () => {
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
     },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.voucherCartListReset());
+    },
   };
 };
 /** => set search keyword */
