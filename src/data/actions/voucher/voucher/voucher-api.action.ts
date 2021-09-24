@@ -25,3 +25,7 @@ export const voucherDetailFailed = (
 ): models.DetailFailedAction => {
   return { type: types.VOUCHER_DETAIL_FAILED, payload: data };
 };
+/** => voucher detail reset */
+export const voucherDetailReset = () => {
+  return { type: types.VOUCHER_DETAIL_RESET };
+};

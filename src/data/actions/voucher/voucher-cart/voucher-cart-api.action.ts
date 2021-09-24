@@ -25,3 +25,7 @@ export const voucherCartListFailed = (
 ): models.DetailFailedAction => {
   return { type: types.VOUCHER_CART_LIST_FAILED, payload: data };
 };
+/** => voucher cart list reset */
+export const voucherCartListReset = () => {
+  return { type: types.VOUCHER_CART_LIST_RESET };
+};
