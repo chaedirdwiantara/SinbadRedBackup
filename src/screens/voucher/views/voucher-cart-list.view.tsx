@@ -56,12 +56,12 @@ const VoucherCartListView: FC = () => {
   } = useVoucherList();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
-  const voucherCartListState = stateVoucher.detail;
+  const voucherCartListState = stateVoucher.list;
   const globalData = useDataGlobal();
   const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
-    voucherCartListAction.detail(dispatchVoucher);
+    voucherCartListAction.list(dispatchVoucher);
     if (globalData.dataVouchers !== null) {
       setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
       setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);

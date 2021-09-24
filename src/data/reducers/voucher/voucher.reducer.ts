@@ -3,14 +3,15 @@ import * as models from '../../models';
 import {
   voucherCartListReducer,
   voucherCartListInitialState,
-} from './voucher-cart-list.reducer';
+} from './voucher-cart/voucher-cart-list.reducer';
 /** === TYPE HERE === */
-export type VoucherInitialProps = models.DetailProps<models.VoucherCartList>;
+export type VoucherInitialProps =
+  models.VoucherCartList<models.VoucherCartListProps>;
 /** === INITIAL HERE === */
 export const voucherInitialState = {
-  detail: voucherCartListInitialState,
+  list: voucherCartListInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const voucherReducer = ({ detail }: any, action: any) => ({
-  detail: voucherCartListReducer(detail, action),
+export const voucherReducer = ({ list }: any, action: any) => ({
+  voucherCartList: voucherCartListReducer(list, action),
 });

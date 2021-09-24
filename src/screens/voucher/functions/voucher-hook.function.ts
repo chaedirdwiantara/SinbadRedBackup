@@ -11,7 +11,7 @@ import { SupplierVoucherListProps } from '@models';
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any) => {
+    list: (contextDispatch: (action: any) => any) => {
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );

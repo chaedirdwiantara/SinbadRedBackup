@@ -6,10 +6,10 @@ import * as ActionCreators from '../actions';
 import * as types from '../types';
 import * as models from '../models';
 /** === FUNCTION === */
-/** => list example */
-function* listExample(action: models.DetailProcessAction) {
+/** => voucher cart list */
+function* voucherCartList(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.VoucherCartList> =
+    const response: models.DetailSuccessProps<models.VoucherCartListProps> =
       yield call(() => {
         return VoucherApi.voucherCartList();
       });
@@ -23,8 +23,8 @@ function* listExample(action: models.DetailProcessAction) {
   }
 }
 /** === LISTEN FUNCTION === */
-function* ExampleSaga() {
-  yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, listExample);
+function* VoucherSaga() {
+  yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
 }
 
-export default ExampleSaga;
+export default VoucherSaga;

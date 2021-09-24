@@ -15,8 +15,8 @@ export const voucherCartListProcess = (
 };
 /** => voucher cart list success */
 export const voucherCartListSuccess = (
-  data: models.DetailSuccessProps<models.VoucherCartList>,
-): models.DetailSuccessAction<models.VoucherCartList> => {
+  data: models.DetailSuccessProps<models.VoucherCartListProps>,
+): models.DetailSuccessAction<models.VoucherCartListProps> => {
   return { type: types.VOUCHER_CART_LIST_SUCCESS, payload: data };
 };
 /** => voucher cart list failed */
