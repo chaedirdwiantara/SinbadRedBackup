@@ -10,10 +10,15 @@ import {
   SnbText,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
-import { goBack, useVoucherListItemModal } from '../../functions';
+import {
+  goBack,
+  useVoucherListItemModal,
+  useVoucherDetailAction,
+} from '../../functions';
 import { VoucherCartListStyles, VoucherDetailStyles } from '../../styles';
 import moment from 'moment';
 import { ScrollView } from 'react-native-gesture-handler';
+import { contexts } from '@contexts';
 /** === DUMMIES === */
 const dummies = {
   id: 1,
@@ -75,6 +80,10 @@ const SnbTextSeeMore = (props) => {
 /** === COMPONENT === */
 const VoucherDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
+  const voucherDetailState = stateVoucher.detail;
   const {
     handleOpenInstructionModal,
     handleCloseInstructionModal,
@@ -83,8 +92,14 @@ const VoucherDetailView: FC = ({ route }: any) => {
     isTncModalOpen,
     isInstructionModalOpen,
   } = useVoucherListItemModal();
+  const voucherDetailAction = useVoucherDetailAction();
   /** => effect */
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    voucherDetailAction.detail(dispatchVoucher, route.params.voucherId);
+    return () => {
+      voucherDetailAction.reset(dispatchVoucher);
+    };
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -103,7 +118,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
     return (
       <Image
         source={{
-          uri: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/open-mic-night-facebook-event-banner-design-template-5a951f3dcd85d692ef014b7594d11498_screen.jpg?ts=1566599540',
+          uri: voucherDetailState.data?.imageUrl,
         }}
         style={{
           height: 149,
@@ -114,16 +129,21 @@ const VoucherDetailView: FC = ({ route }: any) => {
   };
   /** => voucher card information */
   const renderVoucherCardInformation = () => {
+    if (voucherDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={{ marginTop: -40 }}>
-        <SnbCardInfoType2.Header title={dummies.voucherName}>
+        <SnbCardInfoType2.Header title={voucherDetailState.data?.voucherName}>
           <SnbCardInfoType2.Row
             label={'Berlaku Sampai'}
-            text={moment(new Date(dummies.expiredAt)).format('DD MMMM YYYY')}
+            text={moment(new Date(voucherDetailState.data?.expiredAt)).format(
+              'DD MMMM YYYY',
+            )}
           />
           <SnbCardInfoType2.Row
             label={'Kode Voucher'}
-            text={dummies.voucherCode}
+            text={voucherDetailState.data.voucherCode}
           />
         </SnbCardInfoType2.Header>
       </View>
@@ -138,7 +158,11 @@ const VoucherDetailView: FC = ({ route }: any) => {
           toggleColor={color.red50}
           toggleShowMore={'Lihat Semua'}
           toggleShowLess={'Lihat Lebih Sedikit'}
-          content={<SnbText.B1>{dummies.voucherDescription}</SnbText.B1>}
+          content={
+            <SnbText.B1>
+              {voucherDetailState.data?.voucherDescription}
+            </SnbText.B1>
+          }
         />
         <SnbDivider style={{ marginTop: 20 }} />
       </View>
@@ -146,14 +170,17 @@ const VoucherDetailView: FC = ({ route }: any) => {
   };
   /** => voucher tnc */
   const renderVoucherTnC = () => {
+    if (voucherDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={VoucherDetailStyles.sectionContainer}>
         <View style={{ marginBottom: 8 }}>
           <SnbText.B2>Syarat dan Ketentuan</SnbText.B2>
         </View>
-        {renderListItem(dummies.termsAndCondition, false)}
+        {renderListItem(voucherDetailState.data?.termsAndCondition, false)}
         <View style={{ marginTop: 8 }}>
-          {dummies.termsAndCondition.length > 3 ? (
+          {voucherDetailState.data.termsAndCondition.length > 3 ? (
             <TouchableOpacity onPress={() => handleOpenTncModal()}>
               <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
             </TouchableOpacity>
@@ -162,7 +189,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
           )}
         </View>
         {renderListItemModal(
-          dummies.termsAndCondition,
+          voucherDetailState.data?.termsAndCondition,
           'Syarat dan Ketentuan',
           isTncModalOpen,
           handleCloseTnCModal,
@@ -172,14 +199,17 @@ const VoucherDetailView: FC = ({ route }: any) => {
   };
   /** => voucher instruction */
   const renderVoucherInstruction = () => {
+    if (voucherDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={VoucherDetailStyles.sectionContainer}>
         <View style={{ marginBottom: 8 }}>
           <SnbText.B2>Cara Pakai</SnbText.B2>
         </View>
-        {renderListItem(dummies.instructions, false)}
+        {renderListItem(voucherDetailState.data?.instructions, false)}
         <View style={{ marginTop: 8 }}>
-          {dummies.termsAndCondition.length > 3 ? (
+          {voucherDetailState.data?.instructions.length > 3 ? (
             <TouchableOpacity onPress={() => handleOpenInstructionModal()}>
               <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
             </TouchableOpacity>
@@ -188,7 +218,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
           )}
         </View>
         {renderListItemModal(
-          dummies.instructions,
+          voucherDetailState.data?.instructions,
           'Cara Pakai',
           isInstructionModalOpen,
           handleCloseInstructionModal,
@@ -266,14 +296,18 @@ const VoucherDetailView: FC = ({ route }: any) => {
   /** => main */
   return (
     <SnbContainer color="white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderHeader()}
-        {renderBanner()}
-        {renderVoucherCardInformation()}
-        {renderVoucherDescription()}
-        {renderVoucherTnC()}
-        {renderVoucherInstruction()}
-      </ScrollView>
+      {!voucherDetailState.loading && voucherDetailState.data !== null ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderHeader()}
+          {renderBanner()}
+          {renderVoucherCardInformation()}
+          {renderVoucherDescription()}
+          {renderVoucherTnC()}
+          {renderVoucherInstruction()}
+        </ScrollView>
+      ) : (
+        renderLoading()
+      )}
     </SnbContainer>
   );
 };
