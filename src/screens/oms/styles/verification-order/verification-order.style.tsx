@@ -77,5 +77,3 @@ export const VerificationOrderStyle = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default VerificationOrderStyle;

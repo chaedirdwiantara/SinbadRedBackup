@@ -11,6 +11,7 @@ export * from './register.type';
 export * from './auth.type';
 export * from './product.type';
 export * from './oms/verification-order/verification-order.type';
+export * from './voucher.type';
 /**
  * ================================================================
  * NOTES
