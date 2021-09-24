@@ -14,9 +14,9 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { toLocalDateTime } from '@core/functions/global/date-format';
 import { goBack } from '@screen/oms/functions';
 import { HistoryDetailStyle } from '@screen/oms/styles';
-import { toLocalDateTime } from './date-format';
 import {
   HistoryDetailCard,
   HistoryDetailCardDivider,
