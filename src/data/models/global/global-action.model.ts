@@ -1,3 +1,4 @@
+import * as models from '@models';
 /** === FCM FLAG === */
 export interface IsFCMAction {
   type: string;
@@ -20,4 +21,9 @@ export interface INumOfEmployee {
 }
 export interface IGetSelectionSuccess<T> {
   data: T[];
+}
+/** === SELECTED VOUCHER DATA === */
+export interface selectedVoucherDataAction {
+  type: string;
+  payload: models.selectedVoucherDataProps;
 }

@@ -10,8 +10,13 @@ const loginUserName = (data: models.LoginUserNameProps) => {
 };
 /** => request OTP */
 const requestOTP = (data: models.OtpRequestProps) => {
-  const path = `otp/request-otp?mobilePhone=${data.mobilePhone}&type=login`;
+  const path = 'otp/request-otp';
   return apiAuth<models.OtpGetSuccessProps>(path, 'v1', 'POST', data);
+};
+/** => verification OTP */
+const verificationOTP = (data: models.LoginPhoneNumberProps) => {
+  const path = 'otp/verification';
+  return apiAuth<models.LoginSuccessProps>(path, 'v1', 'POST', data);
 };
 /** => logout */
 const logout = () => {
@@ -23,5 +28,6 @@ const logout = () => {
 export const AuthApi = {
   loginUserName,
   requestOTP,
+  verificationOTP,
   logout,
 };

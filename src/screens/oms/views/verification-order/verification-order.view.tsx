@@ -14,6 +14,8 @@ import {
 import { goBack, goToCheckout } from '../../functions';
 import { VerificationOrderStyle } from '../../styles';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { contexts } from '@contexts';
 /** === INTERFACE === */
 /** === DUMMIES === */
 const dummies = {
@@ -88,6 +90,14 @@ const dummies = {
 const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
+  const { verificationOrderDetail } = useVerficationOrderAction();
+  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
+  React.useEffect(() => {
+    verificationOrderDetail(
+      dispatchOms,
+      stateOms.verificationOrder.create.data.id,
+    );
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {

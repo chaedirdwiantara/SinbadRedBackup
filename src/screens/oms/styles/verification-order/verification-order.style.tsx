@@ -72,5 +72,3 @@ export const VerificationOrderStyle = StyleSheet.create({
     height: 75,
   },
 });
-
-export default VerificationOrderStyle;

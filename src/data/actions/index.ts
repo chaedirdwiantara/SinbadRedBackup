@@ -9,6 +9,8 @@ export * from './register';
 export * from './global';
 export * from './auth';
 export * from './products';
+export * from './voucher';
+export * from './oms';
 /**
  * ================================================================
  * NOTES
