@@ -22,7 +22,8 @@ const BannerHomeView: FC<Props> = () => {
   const { verificationOrderDetail, verificationOrderCreate } =
     useVerficationOrderAction();
   // const { create } = useTest();
-  const { stateOms, dispatchOms } = React.useContext(contexts.OmsContext);
+  const { stateVerificationOrder, dispatchVerificationOrder } =
+    React.useContext(contexts.VerificationOrderContext);
   /** => main */
   return (
     <View style={BannerStyle.bannerHomeContainer} testID={'bannerHome'}>
@@ -36,13 +37,13 @@ const BannerHomeView: FC<Props> = () => {
         <SnbText.B1>Logout</SnbText.B1>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => verificationOrderCreate(dispatchOms, {})}>
+        onPress={() => verificationOrderCreate(dispatchVerificationOrder, {})}>
         <SnbText.B1>create verification order</SnbText.B1>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() =>
           verificationOrderDetail(
-            dispatchOms,
+            dispatchVerificationOrder,
             'y238372891282178912ujfkjnqwlokemlkdfoqwioeoi1',
           )
         }>
@@ -54,11 +55,11 @@ const BannerHomeView: FC<Props> = () => {
       <SnbText.B1>||</SnbText.B1>
       <SnbText.B1>
         Create{' '}
-        {stateOms.verificationOrder.create.loading ? 'loading' : 'not loading'}
+        {stateVerificationOrder.create.loading ? 'loading' : 'not loading'}
       </SnbText.B1>
       <SnbText.B1>
         Detail{' '}
-        {stateOms.verificationOrder.detail.loading ? 'loading' : 'not loading'}
+        {stateVerificationOrder.detail.loading ? 'loading' : 'not loading'}
       </SnbText.B1>
     </View>
   );

@@ -12,8 +12,10 @@ const ExampleHomeView: React.FC = () => {
   /** === HOOK === */
   const { stateProduct } = React.useContext(contexts.ProductContext);
   const { stateExample } = React.useContext(contexts.ExampleContext);
-  const { stateOms } = React.useContext(contexts.OmsContext);
-  console.log('ini oms', stateOms);
+  const { stateVerificationOrder } = React.useContext(
+    contexts.VerificationOrderContext,
+  );
+  console.log('ini oms verification order', stateVerificationOrder);
   /** === VIEW === */
   /** => main */
   return (

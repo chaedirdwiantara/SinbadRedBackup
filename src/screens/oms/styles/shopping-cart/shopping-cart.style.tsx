@@ -5,7 +5,7 @@ export const ShoppingCartStyles = StyleSheet.create({
   cardContainer: {
     paddingHorizontal: 16,
     borderBottomWidth: 8,
-    borderBottomColor: 'rgba(37, 40, 43, 0.102)',
+    borderBottomColor: 'rgba(37, 40, 43, 0.05)',
     borderStyle: 'solid',
   },
   topCardSlot: {

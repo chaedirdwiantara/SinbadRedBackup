@@ -19,6 +19,8 @@ export * from './register-data.model';
 export * from './global';
 export * from './auth';
 export * from './product';
+export * from './oms/shopping-cart/shopping-cart.model';
+export * from './oms/verification/verification.model';
 export * from './voucher';
 /**
  * ================================================================

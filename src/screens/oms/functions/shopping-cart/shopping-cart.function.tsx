@@ -3,11 +3,11 @@ import { Dispatch, SetStateAction } from 'react';
 import {
   DeterminateCheckboxStatus,
   CheckboxStatus,
-  InvoiceGroup,
-} from '../../views/shopping-cart/shopping-cart.view';
+  CartInvoiceGroup,
+} from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
-const getTotalProducts = (invoiceGroups: Array<InvoiceGroup>) => {
+const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
   let totalProducts = 0;
 
   invoiceGroups.forEach((invoiceGroup) => {
@@ -19,7 +19,7 @@ const getTotalProducts = (invoiceGroups: Array<InvoiceGroup>) => {
   return totalProducts;
 };
 /** => get total price from selected products */
-const getTotalPrice = (invoiceGroups: Array<InvoiceGroup>) => {
+const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
   let totalPrice = 0;
 
   invoiceGroups.forEach((invoiceGroup) => {
@@ -43,8 +43,8 @@ const handleProductQuantityChange = (
   productIndex: number,
   action: 'increase' | 'decrease',
   invoiceGroupsState: [
-    Array<InvoiceGroup>,
-    Dispatch<SetStateAction<Array<InvoiceGroup>>>,
+    Array<CartInvoiceGroup>,
+    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
@@ -72,8 +72,8 @@ const handleSelectedProductChange = (
   productIndex: number,
   selected: DeterminateCheckboxStatus,
   invoiceGroupsState: [
-    Array<InvoiceGroup>,
-    Dispatch<SetStateAction<Array<InvoiceGroup>>>,
+    Array<CartInvoiceGroup>,
+    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
@@ -133,8 +133,8 @@ const handleSelectedBrandChange = (
   brandIndex: number,
   selected: DeterminateCheckboxStatus,
   invoiceGroupsState: [
-    Array<InvoiceGroup>,
-    Dispatch<SetStateAction<Array<InvoiceGroup>>>,
+    Array<CartInvoiceGroup>,
+    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
@@ -194,8 +194,8 @@ const handleSelectedBrandChange = (
 const handleAllSelectedProductsChange = (
   selected: DeterminateCheckboxStatus,
   invoiceGroupsState: [
-    Array<InvoiceGroup>,
-    Dispatch<SetStateAction<Array<InvoiceGroup>>>,
+    Array<CartInvoiceGroup>,
+    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   setProductSelectedCount: Dispatch<SetStateAction<number>>,
   setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
@@ -224,7 +224,7 @@ const handleProductDelete = (
   invoiceGroupIndex: number,
   brandIndex: number,
   productIndex: number,
-  invoiceGroups: Array<InvoiceGroup>,
+  invoiceGroups: Array<CartInvoiceGroup>,
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
