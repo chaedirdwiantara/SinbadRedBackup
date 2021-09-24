@@ -26,9 +26,12 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { camelize } from '@core/functions/global/camelize';
 import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
+import { contexts } from '@contexts';
 /** === COMPONENT === */
 const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const { stateVoucherCart } = React.useContext(contexts.VoucherCartContext);
+  const voucherCartListState = stateVoucherCart.detail;
   const {
     selectedSupplierVoucher,
     setSelectedSupplierVoucher,
@@ -246,8 +249,9 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** => footer section */
   const renderFooterSection = () => {
     if (
-      selectedSinbadVoucher === null &&
-      selectedSupplierVoucher.length === 0
+      (selectedSinbadVoucher === null &&
+        selectedSupplierVoucher.length === 0) ||
+      voucherCartListState.data === null
     ) {
       return null;
     }

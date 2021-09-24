@@ -66,6 +66,9 @@ const VoucherCartListView: FC = () => {
       setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
       setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
     }
+    return () => {
+      voucherCartListAction.reset(dispatchVoucherCart);
+    };
   }, []);
   React.useEffect(() => {
     if (globalData.dataVouchers !== null) {
@@ -330,8 +333,9 @@ const VoucherCartListView: FC = () => {
   /** => footer section */
   const renderFooterSection = () => {
     if (
-      selectedSinbadVoucher === null &&
-      selectedSupplierVoucher.length === 0
+      (selectedSinbadVoucher === null &&
+        selectedSupplierVoucher.length === 0) ||
+      voucherCartListState.data === null
     ) {
       return null;
     }
