@@ -34,6 +34,10 @@ const goToCheckoutSuccess = () => {
 const goToHome = () => {
   NavigationAction.navigate('HomeView');
 };
+/** => go to history detail */
+const goToHistoryDetail = (section: 'order' | 'payment') => {
+  NavigationAction.navigate('OmsHistoryDetailView', { section });
+};
 
 export {
   goBack,
@@ -44,4 +48,5 @@ export {
   goToCheckout,
   goToCheckoutSuccess,
   goToHome,
+  goToHistoryDetail,
 };
