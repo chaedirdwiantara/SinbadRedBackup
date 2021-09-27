@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Image, View, Text, TouchableOpacity } from 'react-native';
+import { Image, View, TouchableOpacity } from 'react-native';
 import {
   color,
   SnbBottomSheet,
@@ -19,64 +19,7 @@ import { VoucherCartListStyles, VoucherDetailStyles } from '../../styles';
 import moment from 'moment';
 import { ScrollView } from 'react-native-gesture-handler';
 import { contexts } from '@contexts';
-/** === DUMMIES === */
-const dummies = {
-  id: 1,
-  imageUrl: 'string',
-  expiredAt: '2021-07-31T16:59:00.000Z',
-  voucherDescription:
-    'SINBAD mengadakan diskon hingga 5% untuk pembelian ovaltine classic 20GR. Jangan sampai ketinggalan promo dari SINBAD! SINBAD mengadakan diskon hingga 5% untuk pembelian ovaltine classic 20GR. Jangan sampai ketinggalan promo dari SINBAD!',
-  termsAndCondition: [
-    'Ketuhanan yang maha esa',
-    'Kemanusiaan yang adil dan beradab',
-    'Persatuan indonesia',
-    'Kerakyatan yang dipimpin oleh hikmat kebijaksaan dalam permusyawaratan perwakilan',
-    'keadilan sosial bagi seluruh rakyat indonesia',
-  ],
-  instructions: [
-    'Aku sayang ibu',
-    'Aku sayang ayah',
-    'Sayang adek-kakak',
-    'Saya semuanya',
-  ],
-  voucherName: 'Voucher Cashback 10% Hanya di Sinbad',
-  voucherHeader: 'Voucher Discount',
-  voucherCode: 'VCH20',
-};
-const SnbTextSeeMore = (props) => {
-  const [isShowAll, setShowAll] = React.useState(false);
-  const [isShowToggle, setShowToggle] = React.useState(false);
-
-  const handleToggleShow = () => {
-    setShowAll(!isShowAll);
-  };
-
-  return (
-    <View style={props.containerStyle}>
-      <Text
-        numberOfLines={isShowAll ? undefined : props.maxLine}
-        ellipsizeMode={'tail'}
-        onTextLayout={({ nativeEvent: { lines } }) => {
-          if (lines.length > props.maxLine) {
-            setShowToggle(true);
-          }
-        }}>
-        {props.content}
-      </Text>
-      {isShowToggle ? (
-        <TouchableOpacity
-          onPress={() => handleToggleShow()}
-          style={{ marginTop: 8 }}>
-          <SnbText.B1 color={props.toggleColor}>
-            {isShowAll ? props.toggleShowLess : props.toggleShowMore}
-          </SnbText.B1>
-        </TouchableOpacity>
-      ) : (
-        <View />
-      )}
-    </View>
-  );
-};
+import SnbTextSeeMore from '../../components/SnbTextSeeMore';
 /** === COMPONENT === */
 const VoucherDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
