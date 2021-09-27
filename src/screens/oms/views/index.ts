@@ -7,6 +7,7 @@ import OmsShoppingCart4View from './oms-shopping-cart4.view';
 import OmsVerificationOrderView from './verification-order/verification-order.view';
 import OmsCheckoutView from './checkout/oms-checkout.view';
 import OmsCheckoutSuccessView from './checkout-success/checkout-success.view';
+import OmsHistoryDetailView from './history/history-detail.view';
 /** === EXPORT ALL === */
 export {
   OmsHistoryView,
@@ -17,6 +18,7 @@ export {
   OmsVerificationOrderView,
   OmsCheckoutView,
   OmsCheckoutSuccessView,
+  OmsHistoryDetailView,
 };
 /**
  * ================================================================
