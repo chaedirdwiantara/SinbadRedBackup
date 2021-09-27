@@ -15,8 +15,8 @@ export const voucherCartListProcess = (
 };
 /** => voucher cart list success */
 export const voucherCartListSuccess = (
-  data: models.DetailSuccessProps<models.VoucherCartList>,
-): models.DetailSuccessAction<models.VoucherCartList> => {
+  data: models.DetailSuccessProps<models.VoucherCartListProps>,
+): models.DetailSuccessAction<models.VoucherCartListProps> => {
   return { type: types.VOUCHER_CART_LIST_SUCCESS, payload: data };
 };
 /** => voucher cart list failed */
@@ -24,4 +24,8 @@ export const voucherCartListFailed = (
   data: models.ErrorProps,
 ): models.DetailFailedAction => {
   return { type: types.VOUCHER_CART_LIST_FAILED, payload: data };
+};
+/** => voucher cart list reset */
+export const voucherCartListReset = () => {
+  return { type: types.VOUCHER_CART_LIST_RESET };
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  VoucherInitialProps,
   voucherInitialState,
   voucherReducer,
-} from '@reducer/voucher/voucher.reducer';
+  VoucherInitialProps,
+} from '@reducer/voucher/voucher/voucher.reducer';
 
 const VoucherContext = React.createContext<{
   // state: InitialStateType;

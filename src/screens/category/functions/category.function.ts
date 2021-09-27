@@ -11,7 +11,7 @@ const goToProduct = () => {
 };
 /** => go to category list */
 const goToCategory = () => {
-  NavigationAction.navigate('CategoryView');
+  NavigationAction.navigate('VoucherCartListView');
 };
 
 export { goBack, goToProduct, goToCategory };

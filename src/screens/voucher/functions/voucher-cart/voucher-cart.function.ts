@@ -3,14 +3,6 @@ import { NavigationAction } from '@navigation';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as models from '@models';
 /** === FUNCTION === */
-/** => go back */
-const goBack = () => {
-  NavigationAction.back();
-};
-/** => go to voucher detail */
-const goToVoucherDetail = (voucherId: number) => {
-  console.log(`navigate to voucher detail with voucherId ${voucherId}`);
-};
 /** => go to voucher cart list more */
 const goToVoucherCartListMore = ({
   voucherList,
@@ -51,9 +43,4 @@ const countPotentialDiscount = (
   return { totalDiscount, totalSelectedVoucher };
 };
 
-export {
-  goBack,
-  goToVoucherDetail,
-  goToVoucherCartListMore,
-  countPotentialDiscount,
-};
+export { goToVoucherCartListMore, countPotentialDiscount };

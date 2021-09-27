@@ -1,5 +1,4 @@
-/** === VOUCHER CART LIST === */
-export interface VoucherCartList {
+export interface VoucherCartListProps {
   sinbadVouchers: SinbadVoucherProps[];
   supplierVouchers: SupplierVoucherProps[];
 }

@@ -1,10 +1,10 @@
 /** === IMPORT HERE === */
-import * as types from '../../types';
-import * as models from '../../models';
-import simplifyReducer from '../../../../core/redux/simplifyReducer';
+import * as types from '../../../types';
+import * as models from '../../../models';
+import simplifyReducer from '../../../../../core/redux/simplifyReducer';
 /** === TYPE HERE === */
 type VoucherCartListInitialProps =
-  models.DetailItemProps<models.VoucherCartList>;
+  models.DetailItemProps<models.VoucherCartListProps>;
 /** === INITIAL STATE HERE === */
 export const voucherCartListInitialState: VoucherCartListInitialProps = {
   data: null,
@@ -26,7 +26,7 @@ export const voucherCartListReducer = simplifyReducer(
     /** => detail success */
     [types.VOUCHER_CART_LIST_SUCCESS](
       state = voucherCartListInitialState,
-      action: models.DetailSuccessAction<models.Example>,
+      action: models.DetailSuccessAction<models.VoucherCartListProps>,
     ) {
       return {
         ...state,
@@ -46,7 +46,7 @@ export const voucherCartListReducer = simplifyReducer(
       };
     },
     /** => detail reset */
-    [types.EXAMPLE_DETAIL_RESET]() {
+    [types.VOUCHER_CART_LIST_RESET]() {
       return voucherCartListInitialState;
     },
   },
