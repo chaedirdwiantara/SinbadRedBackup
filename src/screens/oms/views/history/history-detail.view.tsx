@@ -10,6 +10,7 @@ import {
   styles,
   SnbIcon,
   SnbButton,
+  SnbDialog,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ProductCard } from '@core/components/ProductCard';
@@ -133,6 +134,11 @@ const OmsHistoryDetailView: FC = () => {
   const title = params.section === 'order' ? 'Pesanan' : 'Tagihan';
   const [seeMoreProducts, setSeeMoreProducts] = useState(true);
   const [seeMoreCanceledProducts, setSeeMoreCanceledProducts] = useState(true);
+  const [isConfirmOrderDialogOpen, setIsConfirmOrderDialogOpen] =
+    useState(false);
+  const [confirmDialogType, setConfirmDialogType] = useState<
+    'accept' | 'refuse'
+  >('accept');
   const products = seeMoreProducts
     ? historyDetailDummy.products.slice(0, 2)
     : historyDetailDummy.products;
@@ -178,38 +184,37 @@ const OmsHistoryDetailView: FC = () => {
     key: string,
     value: string | null,
     type: 'normal' | 'bold' | 'green' = 'normal',
-  ) => (
-    <View key={`${key}-${value}`} style={HistoryDetailStyle.cardItem}>
-      {type !== 'bold' ? (
-        <>
-          <View style={{ marginRight: 16 }}>
-            <SnbText.B3
-              color={type === 'normal' ? color.black60 : color.green50}>
-              {key}
-            </SnbText.B3>
-          </View>
-          <View style={{ maxWidth: '60%' }}>
-            <SnbText.B3
-              color={type === 'normal' ? color.black60 : color.green50}
-              align="right">
-              {value}
-            </SnbText.B3>
-          </View>
-        </>
-      ) : (
-        <>
-          <View style={{ marginRight: 16 }}>
-            <SnbText.B4 color={color.black100}>{key}</SnbText.B4>
-          </View>
-          <View style={{ maxWidth: '60%' }}>
-            <SnbText.B4 color={color.black100} align="right">
-              {value}
-            </SnbText.B4>
-          </View>
-        </>
-      )}
-    </View>
-  );
+  ) => {
+    const notBoldColor = type === 'normal' ? color.black60 : color.green50;
+
+    return (
+      <View key={`${key}-${value}`} style={HistoryDetailStyle.cardItem}>
+        {type !== 'bold' ? (
+          <>
+            <View style={{ marginRight: 16 }}>
+              <SnbText.B3 color={notBoldColor}>{key}</SnbText.B3>
+            </View>
+            <View style={{ maxWidth: '60%' }}>
+              <SnbText.B3 color={notBoldColor} align="right">
+                {value}
+              </SnbText.B3>
+            </View>
+          </>
+        ) : (
+          <>
+            <View style={{ marginRight: 16 }}>
+              <SnbText.B4 color={color.black100}>{key}</SnbText.B4>
+            </View>
+            <View style={{ maxWidth: '60%' }}>
+              <SnbText.B4 color={color.black100} align="right">
+                {value}
+              </SnbText.B4>
+            </View>
+          </>
+        )}
+      </View>
+    );
+  };
   /** => Invoice Info */
   const renderInvoiceInfo = () => (
     <HistoryDetailCard
@@ -479,19 +484,39 @@ const OmsHistoryDetailView: FC = () => {
               title="Tolak"
               type="secondary"
               size="medium"
-              onPress={() => console.log('Refuse order pressed')}
+              onPress={() => {
+                setConfirmDialogType('refuse');
+                setIsConfirmOrderDialogOpen(true);
+              }}
             />
             <View style={{ marginLeft: 12 }}>
               <SnbButton.Dynamic
                 title="Terima"
                 type="primary"
                 size="medium"
-                onPress={() => console.log('Accept order pressed')}
+                onPress={() => {
+                  setConfirmDialogType('accept');
+                  setIsConfirmOrderDialogOpen(true);
+                }}
               />
             </View>
           </View>
         )}
     </View>
+  );
+  /** => Order Confirmation Dialog */
+  const renderOrderConfirmationDialog = () => (
+    <SnbDialog
+      open={isConfirmOrderDialogOpen}
+      title={confirmDialogType === 'accept' ? 'Terima' : 'Tolak'}
+      content={
+        confirmDialogType === 'accept'
+          ? 'Apakah Anda ingin menerima perubahan jumlah barang?'
+          : 'Apakah Anda ingin membatalkan order?'
+      }
+      ok={() => console.log('Confirm yes pressed')}
+      cancel={() => setIsConfirmOrderDialogOpen(false)}
+    />
   );
   /** => main */
   return (
@@ -499,6 +524,7 @@ const OmsHistoryDetailView: FC = () => {
       {renderHeader()}
       {renderContent()}
       {renderFooter()}
+      {renderOrderConfirmationDialog()}
     </SnbContainer>
   );
 };
