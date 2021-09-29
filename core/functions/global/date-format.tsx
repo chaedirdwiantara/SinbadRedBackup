@@ -16,9 +16,19 @@ const toLocalDateTime = (ISOStringDate: string) => {
   const localDateTime = moment(dateInstance)
     .format('lll')
     .replace('pukul ', '');
-  const localDateTimeWithTimeZone = `${localDateTime} ${localTimeZone}`;
 
-  return localDateTimeWithTimeZone;
+  return `${localDateTime} ${localTimeZone}`;
 };
 
-export { toLocalDateTime };
+const toDateWithTime = (ISOStringDate: string) => {
+  const dateInstance = new Date(ISOStringDate);
+  const seconds = dateInstance.getSeconds();
+  const dateWithTime = moment(dateInstance)
+    .format('LLL')
+    .replace('pukul ', '')
+    .replace('.', ':');
+
+  return `${dateWithTime}:${seconds}`;
+};
+
+export { toLocalDateTime, toDateWithTime };
