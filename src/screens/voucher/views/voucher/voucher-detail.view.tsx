@@ -47,9 +47,10 @@ const VoucherDetailView: FC = ({ route }: any) => {
   /** => header */
   const renderHeader = () => {
     return (
-      <View>
+      <View
+        style={{ width: '100%', position: 'absolute', zIndex: 1000, top: 0 }}>
         <SnbTopNav.Type3
-          type={'transparent2'}
+          type={'transparent1'}
           backAction={() => goBack()}
           title={''}
         />
@@ -64,7 +65,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
           uri: voucherDetailState.data?.imageUrl,
         }}
         style={{
-          height: 149,
+          height: 180,
           width: '100%',
         }}
       />
