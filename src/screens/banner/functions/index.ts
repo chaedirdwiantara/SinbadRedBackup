@@ -1,6 +1,5 @@
-/** === IMPORT ALL MODULE'S FUNCTION HERE === */
-export * from './category.function';
-export * from './category-hook.function';
+/** === EXPORT ALL === */
+export * from './banner.function';
 /**
  * ================================================================
  * NOTES

@@ -1,17 +1,9 @@
 /**
  * ============================================================
- * ALL VARIABLE THAT WILL USED BY ACTIONS, REDUCERS, AND SAGAS
+ * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './example.type';
-export * from './example2.type';
-export * from './global.type';
-export * from './user.type';
-export * from './register.type';
-export * from './auth.type';
-export * from './product.type';
-export * from './oms.type';
-export * from './category.type';
+export * from './category-api.action';
 /**
  * ================================================================
  * NOTES

@@ -1,7 +1,9 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import BannerHomeView from './banner-home.view';
+import BannerView from './banner.view';
+import BannerDetailView from './banner-detail.view';
 /** === EXPORT ALL === */
-export { BannerHomeView };
+export { BannerHomeView, BannerView, BannerDetailView };
 /**
  * ================================================================
  * NOTES

@@ -2,7 +2,7 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
-import { NavigationAction } from '@navigation';
+import { goBack } from '../functions';
 /** === IMPORT STYLE HERE === */
 /** === INTERFACE === */
 /** === COMPONENT === */
@@ -13,13 +13,13 @@ const ProductHeaderView: FC = () => {
     <View>
       <SnbTopNav.Type6
         title={'Product'}
-        backAction={() => console.log('alalal')}
+        backAction={() => goBack()}
         type={'red'}
         icon1Name="search"
         icon1Action={() => console.log('this example for icon 1 action')}
         icon2Value={100}
         icon2Name="cart"
-        icon2Action={() => NavigationAction.navigate('OmsShoppingCartView')}
+        icon2Action={() => console.log('go to shooping cart')}
       />
     </View>
   );
