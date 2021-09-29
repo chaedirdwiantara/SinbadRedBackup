@@ -30,7 +30,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { camelize } from '@core/functions/global/camelize';
 import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
-import { useDataGlobal } from '@core/redux/Data';
+import { useDataVoucher } from '@core/redux/Data';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -57,28 +57,28 @@ const VoucherCartListView: FC = () => {
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucherCart.detail;
-  const globalData = useDataGlobal();
+  const voucherData = useDataVoucher();
   const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.list(dispatchVoucherCart);
-    if (globalData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
+    if (voucherData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
     }
     return () => {
       voucherCartListAction.reset(dispatchVoucherCart);
     };
   }, []);
   React.useEffect(() => {
-    if (globalData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
-    } else if (globalData.dataVouchers === null) {
+    if (voucherData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
+    } else if (voucherData.dataVouchers === null) {
       setSelectedSinbadVoucher(null);
       setSelectedSupplierVoucher([]);
     }
-  }, [globalData.dataVouchers]);
+  }, [voucherData.dataVouchers]);
   React.useEffect(() => {
     if (voucherCartListState.data !== null) {
       updateVoucherList(

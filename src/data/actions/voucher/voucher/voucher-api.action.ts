@@ -29,3 +29,9 @@ export const voucherDetailFailed = (
 export const voucherDetailReset = () => {
   return { type: types.VOUCHER_DETAIL_RESET };
 };
+/** => FOR SAVE SELECTED VOUCHERS DATA */
+export const saveSelectedVouchers = (
+  data: models.selectedVoucherDataProps | null,
+) => {
+  return { type: types.SAVE_SELECTED_VOUCHERS, payload: data };
+};
