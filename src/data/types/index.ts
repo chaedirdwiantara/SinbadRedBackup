@@ -13,6 +13,7 @@ export * from './product.type';
 export * from './oms/verification-order/verification-order.type';
 export * from './voucher/voucher/voucher.type';
 export * from './voucher/voucher-cart/voucher-cart.type';
+export * from './promo.type';
 /**
  * ================================================================
  * NOTES
