@@ -25,6 +25,12 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
     return () => reset();
   }, []);
 
+  useEffect(() => {
+    if (timer <= 0) {
+      reset();
+    }
+  }, [timer]);
+
   return (
     <View
       style={{

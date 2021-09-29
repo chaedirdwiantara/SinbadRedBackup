@@ -75,7 +75,7 @@ const payments: Array<HistoryItem> = [
     id: 'SNB18120000708',
     status: { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 16, 46).toISOString(),
+    expiredPaymentTime: new Date(2021, 8, 30, 14, 16).toISOString(),
     totalPrice: 300000,
     totalQty: 10,
     products: [
@@ -100,7 +100,6 @@ const payments: Array<HistoryItem> = [
     id: 'SNB18120000707',
     status: { key: 'overdue', value: 'Overdue' },
     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 19, 46).toISOString(),
     totalPrice: 450000,
     totalQty: 3,
     products: [
@@ -140,7 +139,6 @@ const orders: Array<HistoryItem> = [
     id: 'SNB18120000720',
     status: { key: 'canceled', value: 'Batal' },
     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 12, 22).toISOString(),
     totalPrice: 450000,
     totalQty: 3,
     products: [
@@ -154,7 +152,6 @@ const orders: Array<HistoryItem> = [
     status: { key: 'on_delivery', value: 'Dikirim' },
     partial: true,
     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 10, 9).toISOString(),
     totalPrice: 450000,
     totalQty: 3,
     products: [
