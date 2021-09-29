@@ -1,16 +1,9 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbBottomActions,
-} from 'react-native-sinbad-ui';
-import { goBack } from '../functions';
+import React from 'react';
+import { SnbBottomActions } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 /** === COMPONENT === */
-const ProductBottomActionView: FC = () => {
+const BottomActionView: React.FC = () => {
   /** === HOOK === */
   //   const [selected, setSelected] = useState(0);
   //   const changeTab = (item: number) => {
@@ -34,7 +27,7 @@ const ProductBottomActionView: FC = () => {
   );
 };
 
-export default ProductBottomActionView;
+export default BottomActionView;
 /**
  * ================================================================
  * NOTES

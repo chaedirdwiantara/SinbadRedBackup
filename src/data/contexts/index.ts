@@ -4,6 +4,7 @@ import {
   VerificationOrderProvider,
   VerificationOrderContext,
 } from './oms/verification-order/VerificationOrderProvider';
+import { CategoryProvider, CategoryContext } from './category/CategoryProvider';
 import { ExampleProvider, ExampleContext } from './examples/ExampleProvider';
 import {
   Example2Provider,
@@ -25,6 +26,7 @@ export const providers = [
   ExampleProvider,
   Example2Provider,
   VoucherCartProvider,
+  CategoryProvider,
   ExampleProvider,
   Example2Provider,
   VoucherProvider,
@@ -34,6 +36,7 @@ export const providers = [
 export const contexts = {
   ProductContext,
   VerificationOrderContext,
+  CategoryContext,
   ExampleContext,
   Example2Context,
   VoucherCartContext,
