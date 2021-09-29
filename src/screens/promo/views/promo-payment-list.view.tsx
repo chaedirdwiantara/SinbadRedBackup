@@ -19,13 +19,31 @@ import { useDataGlobal } from '@core/redux/Data';
 const dummies = {
   data: [
     {
-      paymentPromoId: 1,
-      paymentPromoName: 'Promo Virtual Account BCA',
-      paymentPromoDescription: 'Promo potongan sebesar Rp50.000',
-      imageUrl:
-        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
+      id: 1,
+      name: 'Promo Virtual Account BCA',
       startDate: '2021-07-01T16:59:00.000Z',
-      expiredAt: '2021-07-31T16:59:00.000Z',
+      endDate: '2021-07-31T16:59:00.000Z',
+      discountRebate: 10000,
+      image:
+        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
+    },
+    {
+      id: 2,
+      name: 'Promo Virtual Account BCA 2',
+      startDate: '2021-07-01T16:59:00.000Z',
+      endDate: '2021-07-31T16:59:00.000Z',
+      discountRebate: 20000,
+      image:
+        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
+    },
+    {
+      id: 3,
+      name: 'Promo Virtual Account BCA 3',
+      startDate: '2021-07-01T16:59:00.000Z',
+      endDate: '2021-07-31T16:59:00.000Z',
+      discountRebate: 30000,
+      image:
+        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
     },
   ],
 };
@@ -59,6 +77,7 @@ const PromoPaymentList: FC = () => {
             width: 60,
             height: 40,
             borderRadius: 20,
+            resizeMode: 'contain',
           }}
         />
       </View>
@@ -78,12 +97,12 @@ const PromoPaymentList: FC = () => {
                 flexWrap: 'wrap',
               }}>
               <SnbCardButtonType1
-                title={item.paymentPromoName}
-                subTitle1={item.paymentPromoDescription}
+                title={item.name}
+                subTitle1={`Promo potongan sebesar ${item.discountRebate}`}
                 subTitle2={`Berlaku ${moment(new Date(item.startDate)).format(
                   'DD MMM',
-                )} - ${moment(new Date(item.expiredAt)).format('DD MMM YYYY')}`}
-                left={() => renderImagePaymentPromo(item.imageUrl)}
+                )} - ${moment(new Date(item.endDate)).format('DD MMM YYYY')}`}
+                left={() => renderImagePaymentPromo(item.image)}
                 type={'goTo'}
                 onPress={() => goBack()}
               />
