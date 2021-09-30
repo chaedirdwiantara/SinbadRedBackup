@@ -7,6 +7,40 @@ import * as models from '@models';
 import { contexts } from '@contexts';
 /** === FUNCTION === */
 /** => voucher cart list action */
+const useVoucherDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.voucherDetailReset());
+    },
+  };
+};
+/** => set voucher tnc & instruction modal */
+const useVoucherListItemModal = () => {
+  const [isTncModalOpen, setTncModalOpen] = React.useState(false);
+  const [isInstructionModalOpen, setInstructionModalOpen] =
+    React.useState(false);
+  return {
+    handleOpenTncModal: () => {
+      setTncModalOpen(true);
+    },
+    handleCloseTnCModal: () => {
+      setTncModalOpen(false);
+    },
+    handleOpenInstructionModal: () => {
+      setInstructionModalOpen(true);
+    },
+    handleCloseInstructionModal: () => {
+      setInstructionModalOpen(false);
+    },
+    isTncModalOpen,
+    isInstructionModalOpen,
+  };
+};
+/** => voucher cart list action */
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
@@ -144,12 +178,14 @@ const useVoucherList = () => {
 };
 /** === EXPORT === */
 export {
-  useSearchKeyword,
-  useVoucherList,
-  useVoucherListMore,
+  useVoucherListItemModal,
+  useVoucherDetailAction,
   useVoucherCartListAction,
+  useSearchKeyword,
   useSelectedSinbadVoucher,
   useSelectedSupplierVoucher,
+  useVoucherListMore,
+  useVoucherList,
 };
 /**
  * ================================================================

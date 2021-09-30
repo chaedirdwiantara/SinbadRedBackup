@@ -1,2 +1,2 @@
-export * from './voucher-cart/voucher-cart-list.style';
-export * from './voucher/voucher-detail.style';
+export * from './voucher-detail.style';
+export * from './voucher-cart-list.style';
