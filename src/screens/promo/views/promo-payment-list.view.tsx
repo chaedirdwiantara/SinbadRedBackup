@@ -7,50 +7,23 @@ import {
   SnbCardButtonType1,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack } from '../functions';
+import { goBack, usePromoPaymentListAction } from '../functions';
 import { PromoPaymentListStyles } from '../styles';
 import { contexts } from '@contexts';
-import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import * as Actions from '@actions';
-import { useDispatch } from 'react-redux';
-import { useDataGlobal } from '@core/redux/Data';
-/** === DUMMIES === */
-const dummies = {
-  data: [
-    {
-      id: 1,
-      name: 'Promo Virtual Account BCA',
-      startDate: '2021-07-01T16:59:00.000Z',
-      endDate: '2021-07-31T16:59:00.000Z',
-      discountRebate: 10000,
-      image:
-        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
-    },
-    {
-      id: 2,
-      name: 'Promo Virtual Account BCA 2',
-      startDate: '2021-07-01T16:59:00.000Z',
-      endDate: '2021-07-31T16:59:00.000Z',
-      discountRebate: 20000,
-      image:
-        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
-    },
-    {
-      id: 3,
-      name: 'Promo Virtual Account BCA 3',
-      startDate: '2021-07-01T16:59:00.000Z',
-      endDate: '2021-07-31T16:59:00.000Z',
-      discountRebate: 30000,
-      image:
-        'https://artolouis.com/wp-content/uploads/2019/05/Bank_Central_Asia.png',
-    },
-  ],
-};
 /** === COMPONENT === */
 const PromoPaymentList: FC = () => {
   /** === HOOK === */
+  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const promoPaymentListAction = usePromoPaymentListAction();
+  const promoPaymentListState = statePromo.promoPayment.list;
   /** => effect */
+  React.useEffect(() => {
+    promoPaymentListAction.list(dispatchPromo);
+    return () => {
+      promoPaymentListAction.reset(dispatchPromo);
+    };
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -65,20 +38,10 @@ const PromoPaymentList: FC = () => {
   /** => image payment promo */
   const renderImagePaymentPromo = (imageUrl: string) => {
     return (
-      <View
-        style={{
-          alignContent: 'flex-start',
-          marginRight: 16,
-          alignSelf: 'center',
-        }}>
+      <View style={PromoPaymentListStyles.imageContainer}>
         <Image
           source={{ uri: imageUrl }}
-          style={{
-            width: 60,
-            height: 40,
-            borderRadius: 20,
-            resizeMode: 'contain',
-          }}
+          style={PromoPaymentListStyles.image}
         />
       </View>
     );
@@ -86,19 +49,15 @@ const PromoPaymentList: FC = () => {
   /** => promo list */
   const renderPromoList = () => {
     return (
-      <View style={{ marginHorizontal: 16, marginTop: 16 }}>
-        {dummies.data.map((item, index) => {
+      <View style={{ margin: 16 }}>
+        {promoPaymentListState.data.map((item, index) => {
           return (
-            <View
-              key={index}
-              style={{
-                paddingVertical: 8,
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}>
+            <View key={index} style={PromoPaymentListStyles.card}>
               <SnbCardButtonType1
                 title={item.name}
-                subTitle1={`Promo potongan sebesar ${item.discountRebate}`}
+                subTitle1={`Promo potongan sebesar ${toCurrency(
+                  item.discountRebate,
+                )}`}
                 subTitle2={`Berlaku ${moment(new Date(item.startDate)).format(
                   'DD MMM',
                 )} - ${moment(new Date(item.endDate)).format('DD MMM YYYY')}`}
@@ -115,7 +74,7 @@ const PromoPaymentList: FC = () => {
   /** => loading */
   const renderLoading = () => {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={PromoPaymentListStyles.singleContainer}>
         <SnbProgress size={40} />
       </View>
     );
@@ -124,7 +83,12 @@ const PromoPaymentList: FC = () => {
   return (
     <SnbContainer color="grey">
       {renderHeader()}
-      <ScrollView>{renderPromoList()}</ScrollView>
+      {!promoPaymentListState.loading &&
+      promoPaymentListState.data.length !== 0 ? (
+        <ScrollView>{renderPromoList()}</ScrollView>
+      ) : (
+        renderLoading()
+      )}
     </SnbContainer>
   );
 };

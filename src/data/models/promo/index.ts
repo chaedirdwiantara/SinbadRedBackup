@@ -1,24 +1,15 @@
 /**
  * ============================================================
- * REGISTER ALL ACTIONS HERE
+ * REGISTER ALL INTERFACE HERE
  * ============================================================
  */
-export * from './examples';
-export * from './examples2';
-export * from './register';
-export * from './global';
-export * from './auth';
-export * from './products';
-export * from './voucher';
-export * from './oms';
-export * from './category';
-export * from './promo';
+export * from './promo.model';
 /**
  * ================================================================
  * NOTES
  * ================================================================
  * createdBy: hasapu (team)
- * createDate: 01022021
+ * createDate: 30092021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

@@ -1,9 +1,11 @@
 /** === IMPORT HERE === */
-import * as types from '../../types';
-import * as models from '../../models';
-import simplifyReducer from '../../../../core/redux/simplifyReducer';
+import * as types from '@types';
+import * as models from '@models';
+import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PromoPaymentListInitialProps = models.ListItemProps<models.Example[]>;
+type PromoPaymentListInitialProps = models.ListItemProps<
+  models.PromoPaymentListSuccessProps[]
+>;
 /** === INITIAL STATE HERE === */
 export const promoPaymentListInitialState: PromoPaymentListInitialProps = {
   data: [],

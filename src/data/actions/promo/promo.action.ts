@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => promo payment list process */
 export const promoPaymentListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
+  data: models.ListProcessProps,
+): models.ListProcessAction => {
   contextDispatch({ type: types, payload: data });
   return {
     type: types.PROMO_PAYMENT_LIST_PROCESS,
@@ -15,8 +15,8 @@ export const promoPaymentListProcess = (
 };
 /** => promo payment list success */
 export const promoPaymentListSuccess = (
-  data: models.DetailSuccessProps<models.VoucherDetailProps>,
-): models.DetailSuccessAction<models.VoucherDetailProps> => {
+  data: models.DetailSuccessProps<models.PromoPaymentListSuccessProps>,
+): models.DetailSuccessAction<models.PromoPaymentListSuccessProps> => {
   return { type: types.PROMO_PAYMENT_LIST_SUCCESS, payload: data };
 };
 /** => promo payment list failed */

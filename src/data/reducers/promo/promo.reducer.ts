@@ -1,18 +1,18 @@
 /** === IMPORT HERE === */
-import * as models from '../../models';
 import {
-  promoPaymentListReducer,
-  promoPaymentListInitialState,
-} from './promo-payment-list.reducer';
+  promoPaymentInitialState,
+  promoPaymentReducer,
+  PromoPaymentInitialProps,
+} from './promo-payment/promo-payment.reducer';
 /** === TYPE HERE === */
 export type PromoInitialProps = {
-  promoPaymentList: models.ListItemProps<models.Example[]>;
+  promoPayment: PromoPaymentInitialProps;
 };
 /** === INITIAL HERE === */
 export const promoInitialState = {
-  promoPaymentList: promoPaymentListInitialState,
+  promoPayment: promoPaymentInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const promoReducer = ({ list }: any, action: any) => ({
-  promoPaymentList: promoPaymentListReducer(list, action),
+export const promoReducer = ({ promoPayment }: any, action: any) => ({
+  promoPayment: promoPaymentReducer(promoPayment, action),
 });
