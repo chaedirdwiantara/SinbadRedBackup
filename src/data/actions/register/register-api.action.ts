@@ -95,8 +95,8 @@ export const verifyOTPRegisterProcess = (
 };
 
 export const verifyOTPRegisterSuccess = (
-  data: models.IVerifyOTPRegisterSuccess,
-): models.IRegisterAction<models.IVerifyOTPRegisterSuccess> => {
+  data: models.IVerifyOTPSuccess,
+): models.IRegisterAction<models.IVerifyOTPSuccess> => {
   return {
     type: types.VERIFY_OTP_REGISTER_SUCCESS,
     payload: data,

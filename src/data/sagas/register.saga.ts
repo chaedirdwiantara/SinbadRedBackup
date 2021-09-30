@@ -50,7 +50,7 @@ function* verifyOTPRegister(
   action: models.IRegisterAction<models.IVerifyOTPRegister>,
 ) {
   try {
-    const response: models.IVerifyOTPRegisterSuccess = yield call(() =>
+    const response: models.IVerifyOTPSuccess = yield call(() =>
       registerApi.verifyOTPRegister(action.payload),
     );
     yield put(ActionCreators.verifyOTPRegisterSuccess(response));

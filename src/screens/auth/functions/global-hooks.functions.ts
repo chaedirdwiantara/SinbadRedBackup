@@ -4,6 +4,7 @@ import { formatter } from './auth-utils.functions';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
+import { IListSelection } from '@models';
 
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
@@ -168,29 +169,22 @@ export const useUploadImage = () => {
 };
 
 export const useTextFieldSelect = () => {
-  type Tlist =
-    | 'listNumOfEmployee'
-    | 'listProvince'
-    | 'listCity'
-    | 'listDistrict'
-    | 'listUrban'
-    | 'listVehicleAccessAmount'
-    | 'listVehicleAccess';
-
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
   const { listSelection, selectedItem } = useSelector(
     (state: any) => state.global,
   );
 
-  const gotoSelection = (type: Tlist) => {
+  const gotoSelection = (data: IListSelection) => {
     resetSelectedItem();
     resetGetSelection();
-    navigate('ListAndSearchView', { type });
+    navigate('ListAndSearchView', data);
   };
 
-  const getSelection = (type: Tlist) => {
-    dispatch(Actions.getSelectionProcess(type));
+  const getSelection = (data: IListSelection) => {
+    console.log(data);
+
+    dispatch(Actions.getSelectionProcess(data));
   };
 
   const resetGetSelection = () => {

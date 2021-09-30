@@ -17,19 +17,19 @@ const Content: React.FC = () => {
   const { navigate, reset } = useNavigation();
   const storeID = useInput('08966666670');
   const password = useInput('sinbad');
-  const { loginUserName, state, resetLoginUsername } = useAuthAction();
+  const { loginUserName, loginIDState, resetLoginUsername } = useAuthAction();
 
   React.useEffect(() => {
-    if (state.data) {
+    if (loginIDState.data) {
       storeID.clearText();
       password.clearText();
       resetLoginUsername();
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
-    if (state.error) {
-      password.setMessageError(state.error.message);
+    if (loginIDState.error) {
+      password.setMessageError(loginIDState.error.message);
     }
-  }, [state]);
+  }, [loginIDState]);
 
   React.useEffect(() => {
     return () => resetLoginUsername();
@@ -52,9 +52,9 @@ const Content: React.FC = () => {
           {...password}
           labelText="Kata Sandi"
           placeholder="Masukkan kata sandi Anda"
-          // secureTextEntry={!state.visiblePassword}
+          // secureTextEntry={!loginIDState.visiblePassword}
           // suffixIconName={
-          //   state.visiblePassword ? 'visibility' : 'visibility_off'
+          //   loginIDState.visiblePassword ? 'visibility' : 'visibility_off'
           // }
           // suffixAction={func.toggleVisibilityPassword}
         />
@@ -70,12 +70,12 @@ const Content: React.FC = () => {
             loginUserName(data);
           }}
           type="primary"
-          loading={state.loading}
+          loading={loginIDState.loading}
           disabled={
             storeID.value === '' ||
             password.value === '' ||
-            state.loading ||
-            state.errorID
+            loginIDState.loading ||
+            loginIDState.errorID
           }
         />
       </View>

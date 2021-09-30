@@ -70,7 +70,7 @@ export interface IVerifyOTPRegister {
   mobilePhone: string;
   otp: string;
 }
-export interface IVerifyOTPRegisterSuccess {
+export interface IVerifyOTPSuccess {
   data: {
     sessionActiveUntil: string;
     sessionExpiredUntil: string;

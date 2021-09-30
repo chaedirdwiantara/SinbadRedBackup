@@ -12,28 +12,43 @@ const uploadImage = (data: models.IUploadImage) => {
     data,
   );
 };
-const getSelection = (data: string) => {
+const getSelection = (data: models.IListSelection) => {
   let path = '';
-  switch (data) {
+  let meta = `skip=${data.meta?.skip || 0}&limit=${
+    data.meta?.limit || 10
+  }&keyword=${data.meta?.keyword || ''}`;
+  switch (data.type) {
     case 'listNumOfEmployee': {
       path = 'number-of-employees';
-      return apiGeneral<models.IGetSelectionSuccess<models.INumOfEmployee>>(
-        path,
-        'account',
-        'v1',
-        'GET',
-      );
+      break;
     }
     case 'listVehicleAccess': {
       path = 'vehicle-accessibilities/all';
-      return apiGeneral<models.IGetSelectionSuccess<any>>(
-        path,
-        'account',
-        'v1',
-        'GET',
-      );
+      break;
+    }
+    case 'listProvince': {
+      path = 'provinces/all';
+      break;
+    }
+    case 'listCity': {
+      path = `locations/city?${data.params}&${meta}`;
+      break;
+    }
+    case 'listDistrict': {
+      path = `locations/district?${data.params}&${meta}`;
+      break;
+    }
+    case 'listUrban': {
+      path = `locations/urban?${data.params}&${meta}`;
+      break;
     }
   }
+  return apiGeneral<models.IGetSelectionSuccess<any>>(
+    path,
+    'account',
+    'v1',
+    'GET',
+  );
 };
 
 /** === EXPORT FUNCTIONS === */

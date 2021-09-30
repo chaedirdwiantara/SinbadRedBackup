@@ -27,3 +27,20 @@ export interface selectedVoucherDataAction {
   type: string;
   payload: models.selectedVoucherDataProps;
 }
+
+export interface IListSelection {
+  type:
+    | 'listNumOfEmployee'
+    | 'listProvince'
+    | 'listCity'
+    | 'listDistrict'
+    | 'listUrban'
+    | 'listVehicleAccessAmount'
+    | 'listVehicleAccess';
+  params?: string;
+  meta?: {
+    skip?: number;
+    limit?: number;
+    keyword?: string;
+  };
+}

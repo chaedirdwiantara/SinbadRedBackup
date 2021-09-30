@@ -8,6 +8,7 @@ export const LOGIN_USERNAME_RESET = 'LoginUserNameReset';
 export const REQUEST_OTP_PROCESS = 'RequestOTPProcess';
 export const REQUEST_OTP_SUCCESS = 'RequestOTPSuccess';
 export const REQUEST_OTP_FAILED = 'RequestOTPFailed';
+export const REQUEST_OTP_RESET = 'RequestOTPReset';
 /** => verification OTP */
 export const VERIFICATION_OTP_PROCESS = 'VerificationOTPProcess';
 export const VERIFICATION_OTP_SUCCESS = 'VerificationOTPSuccess';

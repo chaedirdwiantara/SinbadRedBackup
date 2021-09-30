@@ -22,6 +22,7 @@ const Content: React.FC = () => {
   const noteAddress = useInput();
   const vehicleAccessibilityAmount = useInput();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const { navigate } = useNavigation();
 
   return (
     <View style={{ flex: 1 }}>
@@ -44,7 +45,9 @@ const Content: React.FC = () => {
           <View style={{ paddingHorizontal: 16 }}>
             <SnbText.H4>Koordinat Lokasi</SnbText.H4>
             <View style={{ paddingVertical: 4 }} />
-            <TouchableOpacity onPress={() => {}} style={styles.pinPoint}>
+            <TouchableOpacity
+              onPress={() => navigate('MapsView')}
+              style={styles.pinPoint}>
               <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
             </TouchableOpacity>
           </View>
@@ -74,7 +77,7 @@ const Content: React.FC = () => {
               }
               placeholder="Pilih aksesibitas kendaraan"
               type="default"
-              onPress={() => gotoSelection('listVehicleAccess')}
+              onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
               rightType="icon"
               rightIcon="chevron_right"
             />

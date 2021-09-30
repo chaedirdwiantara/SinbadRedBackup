@@ -1,4 +1,3 @@
-import useLogin from './login-hooks.functions';
 import {
   renderIF,
   formatter,
@@ -17,9 +16,9 @@ import {
   useTextFieldSelect,
 } from './global-hooks.functions';
 import useOTP from './otp-hooks.functions';
+import { useAuthAction } from './auth-hook.function';
 
 export {
-  useLogin,
   renderIF,
   formatter,
   useCamera,
@@ -32,4 +31,5 @@ export {
   handleMessageError,
   maskPhone,
   useOTP,
+  useAuthAction,
 };

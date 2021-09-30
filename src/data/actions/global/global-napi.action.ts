@@ -20,6 +20,12 @@ export const resetGetSelection = () => {
   };
 };
 
+export const resetRequestOTP = () => {
+  return {
+    type: types.REQUEST_OTP_RESET,
+  };
+};
+
 export const onSelectedItem = (data: any) => {
   return {
     type: types.SELECTED_ITEM,

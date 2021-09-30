@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -16,7 +16,9 @@ const ListAndSearchView = () => {
     useTextFieldSelect();
 
   React.useEffect(() => {
-    getSelection(params?.type);
+    setTimeout(() => {
+      getSelection(params);
+    }, 2000);
   }, []);
 
   React.useEffect(() => {
@@ -39,6 +41,15 @@ const ListAndSearchView = () => {
         <FlatList
           data={listSelection.data}
           keyExtractor={(el, index) => index.toString()}
+          ListEmptyComponent={() => {
+            const { data, error } = listSelection;
+            if (data?.length === 0 || error) {
+              return (
+                <SnbText.B3 color={color.red70}>Tidak Ada Data</SnbText.B3>
+              );
+            }
+            return <SnbText.B3>Loading</SnbText.B3>;
+          }}
           renderItem={({ item, index }) => {
             const backgroundColor =
               index % 2 === 0 ? color.black5 : color.white;
@@ -46,7 +57,13 @@ const ListAndSearchView = () => {
               <TouchableOpacity
                 style={{ padding: 16, backgroundColor }}
                 onPress={() => onSelectedItem({ item, type: params?.type })}>
-                <SnbText.B3>{item?.amount || item?.name}</SnbText.B3>
+                <SnbText.B3>
+                  {item?.amount ||
+                    item?.name ||
+                    item?.city ||
+                    item?.district ||
+                    item?.urban}
+                </SnbText.B3>
               </TouchableOpacity>
             );
           }}

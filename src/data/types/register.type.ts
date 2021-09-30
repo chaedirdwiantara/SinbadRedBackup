@@ -24,4 +24,4 @@ export const REGISTER_MERCHANT_FAILED = 'RegisterMerchantFailed';
 export const VERIFY_OTP_REGISTER_PROCESS = 'VerifyOTPRegisterProcess';
 export const VERIFY_OTP_REGISTER_SUCCESS = 'VerifyOTPRegisterSuccess';
 export const VERIFY_OTP_REGISTER_FAILED = 'VerifyOTPRegisterFailed';
-export const VERIFY_OTP_REGISTER_RESET = 'VerifyOTPRegisterReset';
+export const VERIFY_OTP_RESET = 'VerifyOTPReset';

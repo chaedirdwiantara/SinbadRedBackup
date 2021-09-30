@@ -7,7 +7,9 @@ import * as models from '@models';
 /** => call auth action */
 const useAuthAction = () => {
   const dispatch = useDispatch();
-  const { loginUsername } = useSelector((state: any) => state.auth);
+  const { loginUsername, requestOTP, verifyOTP } = useSelector(
+    (state: any) => state.auth,
+  );
   return {
     loginUserName: (data: models.LoginUserNameProps) => {
       dispatch(Actions.loginUserNameProcess(data));
@@ -24,7 +26,12 @@ const useAuthAction = () => {
     logout: () => {
       dispatch(Actions.logoutProcess());
     },
-    state: loginUsername,
+    resetRequestOTP: () => {
+      dispatch(Actions.resetRequestOTP());
+    },
+    loginIDState: loginUsername,
+    requestOTPState: requestOTP,
+    verifyOTPState: verifyOTP,
   };
 };
 /** === EXPORT === */

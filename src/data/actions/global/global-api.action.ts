@@ -28,7 +28,7 @@ export const uploadImageFailed = (
   };
 };
 
-export const getSelectionProcess = (data: string) => {
+export const getSelectionProcess = (data: any) => {
   return {
     type: types.GET_SELECTION_PROCESS,
     payload: data,

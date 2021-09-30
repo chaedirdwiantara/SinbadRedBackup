@@ -16,7 +16,7 @@ import {
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
-  const { openCamera, state: cameraData, resetCamera } = useCamera();
+  const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
   const { state: registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
@@ -67,7 +67,7 @@ const Content: React.FC = () => {
 
   const renderImagePreview = () => {
     const isImageUploaded =
-      registerData.user?.taxImageUrl !== '' && cameraData.data === null;
+      registerData.user?.taxImageUrl !== '' && capturedImage.data === null;
 
     return (
       <View style={{ flex: 1 }}>
@@ -76,7 +76,7 @@ const Content: React.FC = () => {
           source={{
             uri:
               registerData.user?.taxImageUrl ||
-              `data:image/jpg;base64,${cameraData.data?.croppedImage}`,
+              `data:image/jpg;base64,${capturedImage.data?.croppedImage}`,
           }}
           borderRadius={4}
           style={{
@@ -108,7 +108,7 @@ const Content: React.FC = () => {
                 } else {
                   resetUploadImage();
                   const payload = {
-                    base64: `data:image/png;base64,${cameraData?.data.croppedImage}`,
+                    base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
                     currentFilePath: registerData?.user?.taxImageUrl || null,
                   };
                   uploadImage(payload);
@@ -124,7 +124,7 @@ const Content: React.FC = () => {
 
   const isImageAvailable =
     registerData?.user?.taxImageUrl !== '' ||
-    (cameraData.data !== null && cameraData.data?.type === 'npwp');
+    (capturedImage.data !== null && capturedImage.data?.type === 'npwp');
 
   return (
     <View style={{ flex: 1 }}>

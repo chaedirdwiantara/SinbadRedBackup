@@ -17,7 +17,7 @@ import { REGISTER_STEP_4_VIEW } from '@screen/auth/screens_name';
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
-  const { openCamera, state: cameraData, resetCamera } = useCamera();
+  const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
   const { state: registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
@@ -69,7 +69,7 @@ const Content: React.FC = () => {
 
   const renderImagePreview = () => {
     const isImageUploaded =
-      registerState.user?.selfieImageUrl !== '' && cameraData.data === null;
+      registerState.user?.selfieImageUrl !== '' && capturedImage.data === null;
     return (
       <View style={{ flex: 1 }}>
         <Image
@@ -77,7 +77,7 @@ const Content: React.FC = () => {
           source={{
             uri:
               registerData.user?.selfieImageUrl ||
-              `data:image/jpg;base64,${cameraData.data?.croppedImage}`,
+              `data:image/jpg;base64,${capturedImage.data?.croppedImage}`,
           }}
           borderRadius={4}
           style={{
@@ -108,7 +108,7 @@ const Content: React.FC = () => {
                 } else {
                   resetUploadImage();
                   const payload = {
-                    base64: `data:image/png;base64,${cameraData?.data.croppedImage}`,
+                    base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
                     currentFilePath:
                       registerState?.user?.selfieImageUrl || null,
                   };
@@ -126,7 +126,7 @@ const Content: React.FC = () => {
 
   const isImageAvailable =
     registerData?.user?.selfieImageUrl !== '' ||
-    (cameraData.data !== null && cameraData.data?.type === 'selfie');
+    (capturedImage.data !== null && capturedImage.data?.type === 'selfie');
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16 }}>

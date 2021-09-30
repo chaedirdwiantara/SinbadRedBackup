@@ -23,6 +23,9 @@ const RegisterOTPView: React.FC = () => {
       setHide(false);
       saveRegisterUserData({ mobilePhone: params?.phoneNo });
     }
+    if (verifyOTP.errpr !== null) {
+      setHide(false);
+    }
   }, [verifyOTP.data]);
 
   React.useEffect(() => {
@@ -39,13 +42,14 @@ const RegisterOTPView: React.FC = () => {
         title="Kode Verifikasi"
       />
       <OTPContent
-        onVerifyOTP={() =>
-          verifyOTPRegister({ mobilePhone: params?.phoneNo, otp: '12345' })
+        onVerifyOTP={(otp) =>
+          verifyOTPRegister({ mobilePhone: params?.phoneNo, otp })
         }
         otpSuccess={verifyOTP.data !== null}
         hideIcon={hide}
         loading={verifyOTP.loading}
         phoneNo={maskPhone(params?.phoneNo)}
+        errorMessage={verifyOTP.error?.message || ''}
         resend={() => {
           checkPhone({ mobilePhoneNo: params?.phoneNo });
         }}

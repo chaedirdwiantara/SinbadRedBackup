@@ -69,7 +69,7 @@ const Content: React.FC = () => {
               }
               type="default"
               onPress={() => {
-                gotoSelection('listNumOfEmployee');
+                gotoSelection({ type: 'listNumOfEmployee' });
               }}
               rightType="icon"
               rightIcon="chevron_right"

@@ -1,13 +1,29 @@
 import { useNavigation, useRoute } from '@react-navigation/core';
-import { maskPhone, useCheckPhoneNoAvailability } from '@screen/auth/functions';
+import { maskPhone, useAuthAction, useOTP } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const LoginOTPView: React.FC = () => {
-  const { goBack } = useNavigation();
-  const { state } = useCheckPhoneNoAvailability();
+  const { goBack, reset } = useNavigation();
+  const { requestOTP, verifyOTPState, verificationOTP } = useAuthAction();
+  const { resetVerifyOTP } = useOTP();
   const { params }: any = useRoute();
+  const [hide, setHide] = React.useState(true);
+  const [otpSuccess, setOtpSuccess] = React.useState(false);
+
+  React.useEffect(() => {
+    if (verifyOTPState.data !== null) {
+      setHide(false);
+      setOtpSuccess(true);
+      resetVerifyOTP();
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+    }
+    if (verifyOTPState.error !== null) {
+      setOtpSuccess(false);
+      setHide(false);
+    }
+  }, [verifyOTPState]);
 
   return (
     <SnbContainer color="white">
@@ -17,10 +33,18 @@ const LoginOTPView: React.FC = () => {
         title="Kode Verifikasi"
       />
       <OTPContent
-        onVerifyOTP={() => {}}
-        loading={state.loading}
-        otpCode={state.data.otp}
+        onVerifyOTP={(otp) => {
+          resetVerifyOTP();
+          verificationOTP({ mobilePhone: params?.phoneNo, otp });
+        }}
+        otpSuccess={otpSuccess}
+        hideIcon={hide}
+        loading={verifyOTPState.loading}
         phoneNo={maskPhone(params?.phoneNo)}
+        resend={() => {
+          requestOTP({ mobilePhone: params?.phoneNo });
+        }}
+        errorMessage={verifyOTPState.error?.message || ''}
       />
     </SnbContainer>
   );
