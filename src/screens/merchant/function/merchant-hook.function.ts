@@ -3,6 +3,9 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { navigate } from '@core/navigations/RootNavigation';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 /** === FUNCTION === */
 /** => collect data */
 /** => call fetch */
@@ -35,7 +38,6 @@ const useSupplierListAction = () => {
       contextDispatch: (action: any) => any,
       list: models.ListItemProps<models.SupplierList[]>,
     ) => {
-      
       if (list.data.length < list.total) {
         contextDispatch(Actions.supplierListLoadMore());
         dispatch(callList(contextDispatch, false, list.skip + limit, limit));
@@ -46,8 +48,37 @@ const useSupplierListAction = () => {
     },
   };
 };
+
+const useRegisterStep4 = () => {
+  console.log('disini');
+  const navigation = useNavigation();
+  const [imageNPWP, setImage] = React.useState(null);
+
+  const gotoCamera = () => {
+    navigate('CameraView', {
+      setImage,
+      title: 'Ambil Foto NPWP',
+      subtitle: 'Posisikan NPWP Anda tepat berada di dalam bingkai',
+      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
+    });
+  };
+
+  React.useEffect(() => {
+    console.log(imageNPWP);
+  }, [imageNPWP]);
+  return {
+    func: {
+      setImage,
+      gotoCamera,
+    },
+    state: {
+      imageNPWP,
+    },
+    ...navigation,
+  };
+};
 /** === EXPORT === */
-export const MerchantHookFunc = { useSupplierListAction };
+export const MerchantHookFunc = { useSupplierListAction, useRegisterStep4 };
 /**
  * ================================================================
  * NOTES

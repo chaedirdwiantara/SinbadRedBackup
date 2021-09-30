@@ -7,7 +7,15 @@ const storeDetail = () => {
   const path = 'stores';
   return apiMapping<models.StoreDetail>(path, 'account', 'v1', 'DETAIL');
 };
+/** => verfication order create */
+const changePassword = (data: object) => {
+  console.log('dataass:', data);
+
+  const path = 'change-password';
+  return apiMapping(path, 'auth', 'v1', 'PATCH', data);
+};
 /** === EXPORT FUNCTIONS === */
 export const UserApi = {
   storeDetail,
+  changePassword,
 };

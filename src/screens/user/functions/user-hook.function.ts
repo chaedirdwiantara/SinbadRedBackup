@@ -73,6 +73,18 @@ const useStoreDetailAction = () => {
     },
   };
 };
+/** => change password */
+const useChangePassword = () => {
+  const dispatch = useDispatch();
+  return {
+    changePassword: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.changePasswordProcess(contextDispatch, data));
+    },
+  };
+};
 /** === EXPORT === */
 export const UserHookFunc = {
   useUserData,
@@ -81,6 +93,7 @@ export const UserHookFunc = {
   useNewPassword,
   useConfirmNewPassword,
   useStoreDetailAction,
+  useChangePassword,
 };
 /**
  * ================================================================

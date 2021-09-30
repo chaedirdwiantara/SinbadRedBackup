@@ -11,6 +11,7 @@ import { ScrollView, View } from 'react-native';
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { MerchantHookFunc } from '../../function';
 
 interface Props {
   type: any;
@@ -190,7 +191,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             'Pastikan NPWP bisa terbaca dengan jelas',
             'Hindari Tangan Menutupi NPWP',
           ]}
-          action={() => {}}
+          action={() => MerchantHookFunc.useRegisterStep4}
         />
       </View>
     );

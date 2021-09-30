@@ -21,9 +21,25 @@ function* storeDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.storeDetailFailed(error));
   }
 }
+/** => change password  */
+function* changePassword(action: models.UpdateProcessAction) {
+  try {
+    const response: models.UpdateSuccessProps = yield call(() => {
+      return UserApi.changePassword(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.changePasswordSuccess(response),
+    );
+    yield put(ActionCreators.changePasswordSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(ActionCreators.changePasswordFailed(error));
+    yield put(ActionCreators.changePasswordFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* UserSaga() {
   yield takeLatest(types.STORE_DETAIL_PROCESS, storeDetail);
+  yield takeLatest(types.CHANGE_PASSWORD_PROCESS, changePassword);
 }
 
 export default UserSaga;

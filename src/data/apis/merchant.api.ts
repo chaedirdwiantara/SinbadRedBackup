@@ -4,8 +4,7 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => supplier list */
 const supplierList = (data: models.ListProcessProps) => {
-  const path = `suppliers?buyerId=3&limit=10&skip=${data.skip}`;
-  console.log('sini:', data);
+  const path = `suppliers?limit=${data.limit}&skip=${data.skip}`;
   return apiMapping<models.SupplierList[]>(path, 'account', 'v1', 'LIST');
 };
 /** === EXPORT FUNCTIONS === */

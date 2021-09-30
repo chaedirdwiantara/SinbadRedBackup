@@ -11,6 +11,7 @@ export * from '@core/models/error.model';
 export * from '@core/models/create.model';
 export * from '@core/models/create-action.model';
 export * from '@core/models/update.model';
+export * from '@core/models/update-action.model';
 export * from './example.model';
 export * from './example2.model';
 export * from './global.model';
