@@ -18,8 +18,8 @@ import {
   useSelectedSinbadVoucher,
   countPotentialDiscount,
   useVoucherListMore,
-} from '../../functions';
-import { VoucherCartListStyles } from '../../styles';
+} from '../functions';
+import { VoucherCartListStyles } from '../styles';
 import * as models from '@models';
 import SvgIcon from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -58,7 +58,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
     return (
       <View style={VoucherCartListStyles.singleContainer}>
         <Image
-          source={require('../../../../assets/images/voucher_empty.png')}
+          source={require('../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
         <View style={{ marginTop: 16 }}>

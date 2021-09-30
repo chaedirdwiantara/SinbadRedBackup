@@ -21,8 +21,8 @@ import {
   useSelectedSupplierVoucher,
   useSelectedSinbadVoucher,
   countPotentialDiscount,
-} from '../../functions';
-import { VoucherCartListStyles } from '../../styles';
+} from '../functions';
+import { VoucherCartListStyles } from '../styles';
 import { contexts } from '@contexts';
 import * as models from '@models';
 import SvgIcon from '@svg';
@@ -383,7 +383,7 @@ const VoucherCartListView: FC = () => {
     return (
       <View style={VoucherCartListStyles.singleContainer}>
         <Image
-          source={require('../../../../assets/images/voucher_empty.png')}
+          source={require('../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
         <View style={{ marginTop: 16 }}>

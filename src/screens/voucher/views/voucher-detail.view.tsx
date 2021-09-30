@@ -14,12 +14,12 @@ import {
   goBack,
   useVoucherListItemModal,
   useVoucherDetailAction,
-} from '../../functions';
-import { VoucherCartListStyles, VoucherDetailStyles } from '../../styles';
+} from '../functions';
+import { VoucherCartListStyles, VoucherDetailStyles } from '../styles';
 import moment from 'moment';
 import { ScrollView } from 'react-native-gesture-handler';
 import { contexts } from '@contexts';
-import SnbTextSeeMore from '../../components/SnbTextSeeMore';
+import SnbTextSeeMore from '../components/SnbTextSeeMore';
 /** === COMPONENT === */
 const VoucherDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
