@@ -35,7 +35,7 @@ export const promoPaymentListReducer = simplifyReducer(
     /** => list success */
     [types.PROMO_PAYMENT_LIST_SUCCESS](
       state = promoPaymentListInitialState,
-      action: models.ListSuccessAction<models.Example[]>,
+      action: models.ListSuccessAction<models.PromoPaymentListSuccessProps[]>,
     ) {
       return {
         ...state,
