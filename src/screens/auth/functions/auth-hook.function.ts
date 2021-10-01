@@ -11,6 +11,12 @@ const useAuthAction = () => {
     loginUserName: (data: models.LoginUserNameProps) => {
       dispatch(Actions.loginUserNameProcess(data));
     },
+    requestOTP: (data: models.OtpRequestProps) => {
+      dispatch(Actions.requestOTPProcess(data));
+    },
+    verificationOTP: (data: models.LoginPhoneNumberProps) => {
+      dispatch(Actions.verificationOTPProcess(data));
+    },
     logout: () => {
       dispatch(Actions.logoutProcess());
     },

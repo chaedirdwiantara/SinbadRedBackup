@@ -3,6 +3,9 @@ import {
   LoginUserNameProps,
   LoginSuccessProps,
   LogoutSuccesProps,
+  OtpRequestProps,
+  OtpGetSuccessProps,
+  LoginPhoneNumberProps,
 } from './auth.model';
 import { ErrorProps } from '@models';
 /** === LOGIN WITH USERNAME === */
@@ -18,6 +21,38 @@ export interface LoginUserNameSuccessAction {
 }
 /** => failed */
 export interface LoginUserNameFailedAction {
+  type: string;
+  payload: ErrorProps;
+}
+/** === REQUEST OTP === */
+/** => process */
+export interface RequestOTPProcessAction {
+  type: string;
+  payload: OtpRequestProps;
+}
+/** => success */
+export interface RequestOTPSuccessAction {
+  type: string;
+  payload: OtpGetSuccessProps;
+}
+/** => failed */
+export interface RequestOTPFailedAction {
+  type: string;
+  payload: ErrorProps;
+}
+/** === VERIFICATION OTP === */
+/** => process */
+export interface VerificationOTPProcessAction {
+  type: string;
+  payload: LoginPhoneNumberProps;
+}
+/** => success */
+export interface VerificationOTPSuccessAction {
+  type: string;
+  payload: LoginSuccessProps;
+}
+/** => failed */
+export interface VerificationOTPFailedAction {
   type: string;
   payload: ErrorProps;
 }
