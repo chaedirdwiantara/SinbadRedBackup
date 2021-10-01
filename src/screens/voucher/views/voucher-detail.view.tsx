@@ -26,7 +26,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
   );
-  const voucherDetailState = stateVoucher.detail;
+  const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const {
     handleOpenInstructionModal,
     handleCloseInstructionModal,
@@ -173,7 +173,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
   /** => list item  */
   const renderListItem = (listItem: string[], isFull: boolean) => {
     return (
-      <View>
+      <View style={{ marginRight: 20 }}>
         {listItem.map((item, index) => {
           if (isFull) {
             return (
