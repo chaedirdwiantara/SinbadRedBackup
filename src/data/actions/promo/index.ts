@@ -3,7 +3,7 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './promo.action';
+export * from './promo-api.action';
 /**
  * ================================================================
  * NOTES
