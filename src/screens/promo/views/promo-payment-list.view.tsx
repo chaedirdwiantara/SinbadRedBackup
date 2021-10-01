@@ -7,7 +7,11 @@ import {
   SnbCardButtonType1,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack, usePromoPaymentListAction } from '../functions';
+import {
+  goBack,
+  usePromoPaymentListAction,
+  goToPromoPaymentDetail,
+} from '../functions';
 import { PromoPaymentListStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -63,7 +67,7 @@ const PromoPaymentList: FC = () => {
                 )} - ${moment(new Date(item.endDate)).format('DD MMM YYYY')}`}
                 left={() => renderImagePaymentPromo(item.image)}
                 type={'goTo'}
-                onPress={() => goBack()}
+                onPress={() => goToPromoPaymentDetail(1)}
               />
             </View>
           );

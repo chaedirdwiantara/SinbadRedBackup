@@ -1,8 +1,14 @@
-import { PromoPaymentListView } from '@screen/promo/views';
+import {
+  PromoPaymentListView,
+  PromoPaymentDetailView,
+} from '@screen/promo/views';
 
 const PromoNav = {
   PromoPaymentListView: {
     component: PromoPaymentListView,
+  },
+  PromoPaymentDetailView: {
+    component: PromoPaymentDetailView,
   },
 };
 
