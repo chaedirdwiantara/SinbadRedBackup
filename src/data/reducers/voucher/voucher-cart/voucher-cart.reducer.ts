@@ -12,6 +12,6 @@ export const voucherCartInitialState = {
   detail: voucherCartListInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const voucherCartReducer = ({ list }: any, action: any) => ({
-  detail: voucherCartListReducer(list, action),
+export const voucherCartReducer = ({ detail }: any, action: any) => ({
+  detail: voucherCartListReducer(detail, action),
 });
