@@ -5,3 +5,8 @@ export const PROMO_PAYMENT_LIST_FAILED = 'PromoPaymentListFailed';
 export const PROMO_PAYMENT_LIST_REFRESH = 'PromoPaymentListRefresh';
 export const PROMO_PAYMENT_LIST_RESET = 'PromoPaymentListReset';
 export const PROMO_PAYMENT_LIST_LOADMORE = 'PromoPaymentListLoadMore';
+// PROMO PAYMENT DETAIL
+export const PROMO_PAYMENT_DETAIL_PROCESS = 'PromoPaymentDetailProcess';
+export const PROMO_PAYMENT_DETAIL_SUCCESS = 'PromoPaymentDetailSuccess';
+export const PROMO_PAYMENT_DETAIL_FAILED = 'PromoPaymentDetailFailed';
+export const PROMO_PAYMENT_DETAIL_RESET = 'PromoPaymentDetailReset';

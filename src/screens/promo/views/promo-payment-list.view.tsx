@@ -9,7 +9,7 @@ import {
 import moment from 'moment';
 import {
   goBack,
-  usePromoPaymentListAction,
+  usePromoPaymentAction,
   goToPromoPaymentDetail,
 } from '../functions';
 import { PromoPaymentListStyles } from '../styles';
@@ -19,13 +19,13 @@ import { toCurrency } from '@core/functions/global/currency-format';
 const PromoPaymentList: FC = () => {
   /** === HOOK === */
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
-  const promoPaymentListAction = usePromoPaymentListAction();
+  const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentListState = statePromo.promoPayment.list;
   /** => effect */
   React.useEffect(() => {
-    promoPaymentListAction.list(dispatchPromo);
+    promoPaymentAction.list(dispatchPromo);
     return () => {
-      promoPaymentListAction.reset(dispatchPromo);
+      promoPaymentAction.resetList(dispatchPromo);
     };
   }, []);
   /** === VIEW === */

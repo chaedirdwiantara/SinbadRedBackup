@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -10,7 +10,7 @@ import {
   SnbDivider,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack } from '../functions';
+import { goBack, usePromoPaymentAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -36,10 +36,18 @@ const dummies = {
   },
 };
 /** === COMPONENT === */
-const PromoPaymentDetail: FC = () => {
+const PromoPaymentDetail: FC = ({ route }: any) => {
   /** === HOOK === */
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const promoPaymentAction = usePromoPaymentAction();
+  const promoPaymentDetailState = statePromo.promoPayment.detail;
   /** => effect */
+  React.useEffect(() => {
+    promoPaymentAction.detail(dispatchPromo, route.params.promoPaymentId);
+    return () => {
+      promoPaymentAction.resetDetail(dispatchPromo);
+    };
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -51,20 +59,23 @@ const PromoPaymentDetail: FC = () => {
   };
   /** => promo card information */
   const renderPromoCardInformation = () => {
+    if (promoPaymentDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={{ marginTop: -90 }}>
-        <SnbCardInfoType2.Header title={dummies.data.name}>
+        <SnbCardInfoType2.Header title={promoPaymentDetailState.data.name}>
           <SnbCardInfoType2.Row
             label={'Berlaku Dari'}
-            text={`${moment(new Date(dummies.data.startDate)).format(
-              'DD MMM YYYY',
-            )} - ${moment(new Date(dummies.data.endDate)).format(
-              'DD MMM YYYY',
-            )}`}
+            text={`${moment(
+              new Date(promoPaymentDetailState.data.startDate),
+            ).format('DD MMM YYYY')} - ${moment(
+              new Date(promoPaymentDetailState.data.endDate),
+            ).format('DD MMM YYYY')}`}
           />
           <SnbCardInfoType2.Row
             label={'Promo Potongan'}
-            text={toCurrency(dummies.data.discountRebate)}
+            text={toCurrency(promoPaymentDetailState.data.discountRebate)}
           />
         </SnbCardInfoType2.Header>
       </View>
@@ -79,7 +90,7 @@ const PromoPaymentDetail: FC = () => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {dummies.data.promoTnC.map((item, index) => {
+          {promoPaymentDetailState.data?.promoTnC.map((item, index) => {
             return (
               <View
                 key={index}
@@ -109,10 +120,17 @@ const PromoPaymentDetail: FC = () => {
   /** => main */
   return (
     <SnbContainer color="grey">
-      {renderHeader()}
-      {renderRedBackground()}
-      {renderPromoCardInformation()}
-      {renderPromoTnC()}
+      {!promoPaymentDetailState.loading &&
+      promoPaymentDetailState.data !== null ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderHeader()}
+          {renderRedBackground()}
+          {renderPromoCardInformation()}
+          {renderPromoTnC()}
+        </ScrollView>
+      ) : (
+        renderLoading()
+      )}
     </SnbContainer>
   );
 };

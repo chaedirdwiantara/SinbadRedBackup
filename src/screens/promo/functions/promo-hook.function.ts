@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 /** === FUNCTION === */
-/** => voucher cart list action */
-const usePromoPaymentListAction = () => {
+/** => voucher cart action */
+const usePromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
     list: (contextDispatch: (action: any) => any) => {
@@ -17,13 +17,19 @@ const usePromoPaymentListAction = () => {
         }),
       );
     },
-    reset: (contextDispatch: (action: any) => any) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.promoPaymentDetailProcess(contextDispatch, { id }));
+    },
+    resetList: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.promoPaymentListReset());
+    },
+    resetDetail: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.promoPaymentDetailReset());
     },
   };
 };
 /** === EXPORT === */
-export { usePromoPaymentListAction };
+export { usePromoPaymentAction };
 /**
  * ================================================================
  * NOTES

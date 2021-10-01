@@ -37,3 +37,32 @@ export const promoPaymentListReset = () => {
 export const promoPaymentListLoadMore = () => {
   return { type: types.PROMO_PAYMENT_LIST_LOADMORE };
 };
+/** === DETAIL === */
+/** => promo payment detail process */
+export const promoPaymentDetailProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({ type: types.PROMO_PAYMENT_DETAIL_PROCESS, payload: data });
+  return {
+    type: types.PROMO_PAYMENT_DETAIL_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => promo payment detail process */
+export const promoPaymentDetailSuccess = (
+  data: models.DetailSuccessProps<models.PromoPaymentDetailSuccessProps>,
+): models.DetailSuccessAction<models.PromoPaymentDetailSuccessProps> => {
+  return { type: types.PROMO_PAYMENT_DETAIL_SUCCESS, payload: data };
+};
+/** => promo payment detail failed */
+export const promoPaymentDetailFailed = (
+  data: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.PROMO_PAYMENT_DETAIL_FAILED, payload: data };
+};
+/** => promo payment detail reset */
+export const promoPaymentDetailReset = () => {
+  return { type: types.PROMO_PAYMENT_DETAIL_RESET };
+};
