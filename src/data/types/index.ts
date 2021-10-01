@@ -11,10 +11,9 @@ export * from './register.type';
 export * from './auth.type';
 export * from './product.type';
 export * from './oms/verification-order/verification-order.type';
-export * from './voucher/voucher/voucher.type';
-export * from './voucher/voucher-cart/voucher-cart.type';
 export * from './promo.type';
 export * from './category.type';
+export * from './voucher.type';
 /**
  * ================================================================
  * NOTES

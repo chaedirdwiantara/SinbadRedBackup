@@ -10,14 +10,7 @@ import {
   Example2Provider,
   Example2Context,
 } from './examples2/Example2Provider';
-import {
-  VoucherCartProvider,
-  VoucherCartContext,
-} from './voucher/voucher-cart/VoucherCartProvider';
-import {
-  VoucherProvider,
-  VoucherContext,
-} from './voucher/voucher/VoucherProvider';
+import { VoucherProvider, VoucherContext } from './voucher/VoucherProvider';
 import { PromoProvider, PromoContext } from './promo/PromoProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
@@ -25,7 +18,6 @@ export const providers = [
   VerificationOrderProvider,
   ExampleProvider,
   Example2Provider,
-  VoucherCartProvider,
   CategoryProvider,
   ExampleProvider,
   Example2Provider,
@@ -39,7 +31,6 @@ export const contexts = {
   CategoryContext,
   ExampleContext,
   Example2Context,
-  VoucherCartContext,
   VoucherContext,
   PromoContext,
 };

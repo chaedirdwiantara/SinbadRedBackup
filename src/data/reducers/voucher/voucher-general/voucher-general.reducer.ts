@@ -3,14 +3,15 @@ import * as models from '@models';
 import {
   voucherDetailReducer,
   voucherDetailInitialState,
-} from './voucher-detail.reducer';
+} from './voucher-general-detail.reducer';
 /** === TYPE HERE === */
-export type VoucherInitialProps = models.DetailProps<models.VoucherDetailProps>;
+export type VoucherGeneralInitialProps =
+  models.DetailProps<models.VoucherDetailProps>;
 /** === INITIAL HERE === */
-export const voucherInitialState = {
+export const voucherGeneralInitialState = {
   detail: voucherDetailInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const voucherReducer = ({ detail }: any, action: any) => ({
+export const voucherGeneralReducer = ({ detail }: any, action: any) => ({
   detail: voucherDetailReducer(detail, action),
 });

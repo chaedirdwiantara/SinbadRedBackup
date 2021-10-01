@@ -5,7 +5,7 @@
  */
 import { combineReducers } from 'redux';
 import { permanent } from './permanent';
-import { voucher } from './voucher/voucher/voucher-data.reducer';
+import { voucher } from './voucher/voucher-local-data.reducer';
 
 export const rootReducer = combineReducers({
   permanent,

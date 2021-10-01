@@ -34,8 +34,8 @@ import { useDataVoucher } from '@core/redux/Data';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
-  const { stateVoucherCart, dispatchVoucherCart } = React.useContext(
-    contexts.VoucherCartContext,
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
   );
   const {
     selectedSupplierVoucher,
@@ -56,18 +56,18 @@ const VoucherCartListView: FC = () => {
   } = useVoucherList();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
-  const voucherCartListState = stateVoucherCart.detail;
+  const voucherCartListState = stateVoucher.voucherCart.detail;
   const voucherData = useDataVoucher();
   const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
-    voucherCartListAction.list(dispatchVoucherCart);
+    voucherCartListAction.list(dispatchVoucher);
     if (voucherData.dataVouchers !== null) {
       setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
       setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
     }
     return () => {
-      voucherCartListAction.reset(dispatchVoucherCart);
+      voucherCartListAction.reset(dispatchVoucher);
     };
   }, []);
   React.useEffect(() => {
@@ -431,6 +431,7 @@ const VoucherCartListView: FC = () => {
       );
     }
   };
+  console.log(stateVoucher);
   /** => main */
   return (
     <SnbContainer color="grey">

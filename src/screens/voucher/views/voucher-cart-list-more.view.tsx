@@ -30,8 +30,8 @@ import { contexts } from '@contexts';
 /** === COMPONENT === */
 const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** === HOOK === */
-  const { stateVoucherCart } = React.useContext(contexts.VoucherCartContext);
-  const voucherCartListState = stateVoucherCart.detail;
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+  const voucherCartListState = stateVoucher.voucherCart.detail;
   const {
     selectedSupplierVoucher,
     setSelectedSupplierVoucher,

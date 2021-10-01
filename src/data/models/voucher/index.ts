@@ -3,8 +3,7 @@
  * REGISTER ALL INTERFACE HERE
  * ============================================================
  */
-export * from './voucher-cart/voucher-cart.model';
-export * from './voucher/voucher.model';
+export * from './voucher.model';
 /**
  * ================================================================
  * NOTES

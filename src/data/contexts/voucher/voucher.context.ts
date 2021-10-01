@@ -3,7 +3,7 @@ import {
   voucherInitialState,
   voucherReducer,
   VoucherInitialProps,
-} from '@reducer/voucher/voucher/voucher.reducer';
+} from '@reducer/voucher/voucher.reducer';
 
 const VoucherContext = React.createContext<{
   // state: InitialStateType;

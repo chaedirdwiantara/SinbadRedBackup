@@ -29,7 +29,36 @@ export const voucherDetailFailed = (
 export const voucherDetailReset = () => {
   return { type: types.VOUCHER_DETAIL_RESET };
 };
-/** => FOR SAVE SELECTED VOUCHERS DATA */
+/** === LIST === */
+/** => voucher cart list process */
+export const voucherCartListProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({ type: types, payload: data });
+  return {
+    type: types.VOUCHER_CART_LIST_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => voucher cart list success */
+export const voucherCartListSuccess = (
+  data: models.DetailSuccessProps<models.VoucherCartListProps>,
+): models.DetailSuccessAction<models.VoucherCartListProps> => {
+  return { type: types.VOUCHER_CART_LIST_SUCCESS, payload: data };
+};
+/** => voucher cart list failed */
+export const voucherCartListFailed = (
+  data: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.VOUCHER_CART_LIST_FAILED, payload: data };
+};
+/** => voucher cart list reset */
+export const voucherCartListReset = () => {
+  return { type: types.VOUCHER_CART_LIST_RESET };
+};
+/** === SAVE SELECTED VOUCHER (LOCAL DATA) === */
 export const saveSelectedVouchers = (
   data: models.selectedVoucherDataProps | null,
 ) => {

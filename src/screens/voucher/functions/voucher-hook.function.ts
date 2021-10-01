@@ -45,11 +45,13 @@ const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
     list: (contextDispatch: (action: any) => any) => {
+      console.log('called 1');
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
+      console.log('called 1 - r');
       contextDispatch(Actions.voucherCartListReset());
     },
   };
@@ -128,7 +130,7 @@ const useVoucherList = () => {
   const [sinbadVoucher, setSinbadVoucher] = React.useState<
     models.SinbadVoucherProps[]
   >([]);
-  const { stateVoucherCart } = React.useContext(contexts.VoucherCartContext);
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
   return {
     updateVoucherList: (
       supplierVoucherList: models.SupplierVoucherProps[],
@@ -138,9 +140,9 @@ const useVoucherList = () => {
       setSinbadVoucher(sinbadVoucherList);
     },
     searchVoucher: (keyword: string) => {
-      if (stateVoucherCart.detail.data !== null) {
+      if (stateVoucher.voucherCart.detail.data !== null) {
         const filteredSupplierVoucher: Array<models.SupplierVoucherProps> = [];
-        stateVoucherCart.detail.data.supplierVouchers.map((item) => {
+        stateVoucher.voucherCart.detail.data.supplierVouchers.map((item) => {
           const filteredSubSupplierVoucher = item.voucherList.filter(
             (element) => {
               return element.voucherName
@@ -157,7 +159,7 @@ const useVoucherList = () => {
           }
         });
         const filteredSinbadVoucher =
-          stateVoucherCart.detail.data.sinbadVouchers.filter((item) => {
+          stateVoucher.voucherCart.detail.data.sinbadVouchers.filter((item) => {
             return item.voucherName
               .toLowerCase()
               .includes(keyword.toLowerCase());
@@ -167,9 +169,11 @@ const useVoucherList = () => {
       }
     },
     resetVoucherData: () => {
-      if (stateVoucherCart.detail.data !== null) {
-        setSupplierVoucher(stateVoucherCart.detail.data.supplierVouchers);
-        setSinbadVoucher(stateVoucherCart.detail.data.sinbadVouchers);
+      if (stateVoucher.voucherCart.detail.data !== null) {
+        setSupplierVoucher(
+          stateVoucher.voucherCart.detail.data.supplierVouchers,
+        );
+        setSinbadVoucher(stateVoucher.voucherCart.detail.data.sinbadVouchers);
       }
     },
     supplierVoucher,
