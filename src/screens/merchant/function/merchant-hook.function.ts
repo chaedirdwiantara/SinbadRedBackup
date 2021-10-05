@@ -77,8 +77,25 @@ const useRegisterStep4 = () => {
     ...navigation,
   };
 };
+
+/** => edit merchant */
+const useEditMerchant = () => {
+  const dispatch = useDispatch();
+  return {
+    editMerchant: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.merchantEditProcess(contextDispatch, data));
+    },
+  };
+};
 /** === EXPORT === */
-export const MerchantHookFunc = { useSupplierListAction, useRegisterStep4 };
+export const MerchantHookFunc = {
+  useSupplierListAction,
+  useRegisterStep4,
+  useEditMerchant,
+};
 /**
  * ================================================================
  * NOTES

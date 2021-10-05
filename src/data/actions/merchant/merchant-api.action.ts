@@ -33,3 +33,31 @@ export const supplierListReset = () => {
 export const supplierListLoadMore = () => {
   return { type: types.SUPPLIER_LIST_LOADMORE };
 };
+/** === MERCHANT EDIT === */
+/** => process */
+export const merchantEditProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.UpdateProcessProps<{}>,
+): models.UpdateProcessAction => {
+  contextDispatch({
+    type: types.MERCHANT_EDIT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.MERCHANT_EDIT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const merchantEditSuccess = (
+  data: models.UpdateSuccessProps,
+): models.UpdateSuccessAction => {
+  return { type: types.MERCHANT_EDIT_SUCCESS, payload: data };
+};
+/** => failed */
+export const merchantEditFailed = (
+  data: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return { type: types.MERCHANT_EDIT_FAILED, payload: data };
+};

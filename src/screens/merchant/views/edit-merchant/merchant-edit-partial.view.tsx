@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
@@ -21,6 +21,63 @@ interface Props {
 const MerchantEditPartialView: FC<Props> = (props) => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  const ownerData = stateUser.detail.data?.ownerData.profile;
+  const [ownerName, setOwnerName] = useState(
+    ownerData?.name ? ownerData?.name : '',
+  );
+  const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  /** FUNCTION */
+  const confirm = () => {
+    // const ownerData = stateUser.detail.data?.ownerData.profile;
+    console.log('disiinii:', ownerData);
+
+    const { type } = props;
+    let data = {};
+    switch (type) {
+      case 'merchantOwnerEmail':
+      case 'merchantOwnerPhoneNo':
+      case 'merchantOwnerIdNo':
+      case 'merchantOwnerTaxNo':
+      case 'merchantOwnerName': {
+        data = {
+          name: ownerName,
+        };
+        break;
+      }
+      case 'merchantAccountName':
+      case 'merchantAccountPhoneNo': {
+        break;
+      }
+      case 'merchantCompletenessInformation': {
+        break;
+      }
+      case 'merchantAddress': {
+        break;
+      }
+      case 'merchantOwnerImageId': {
+        break;
+      }
+      case 'merchantOwnerImageTax': {
+        break;
+      }
+      case 'merchantOwnerImageSelfie': {
+        break;
+      }
+      case 'merchantAccountImage': {
+        break;
+      }
+      default:
+        break;
+    }
+    console.log('hasil:', data);
+    editMerchantAction.editMerchant(dispatchSupplier, {
+      data,
+    });
+    // this.props.merchantEditProcess(data);
+  };
   /**
    * ================================
    * SWITCH VIEW
@@ -72,8 +129,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukan Nama Lengkap Pemilik'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
+          value={ownerName}
+          onChangeText={(text) => setOwnerName(text)}
           clearText={() => console.log('clear')}
         />
       </View>
@@ -81,13 +138,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
           type={'default'}
-          value={''}
+          value={ownerData?.email ? ownerData?.email : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -96,13 +154,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukan nomor handphone Anda'}
           type={'default'}
-          value={''}
+          value={ownerData?.mobilePhone ? ownerData?.mobilePhone : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -111,13 +170,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO KTP === */
   const renderOwnerIdNo = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
           type={'default'}
-          value={''}
+          value={ownerData?.idNo ? ownerData?.idNo : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -126,13 +186,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO NPWP === */
   const renderOwnerTaxNo = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukan No.NPWP maks.15 Digit'}
           type={'default'}
-          value={''}
+          value={ownerData?.taxNo ? ownerData?.taxNo : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -354,7 +415,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbButton.Single
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
-          onPress={() => console.log('press')}
+          onPress={() => confirm()}
           disabled={false}
         />
       </View>

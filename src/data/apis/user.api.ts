@@ -9,8 +9,6 @@ const storeDetail = () => {
 };
 /** => verfication order create */
 const changePassword = (data: object) => {
-  console.log('dataass:', data);
-
   const path = 'change-password';
   return apiMapping(path, 'auth', 'v1', 'PATCH', data);
 };
