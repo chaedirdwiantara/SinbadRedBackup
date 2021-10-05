@@ -18,22 +18,23 @@ import {
 
 const Content: React.FC = () => {
   const phone = useInputPhone();
-  const { checkPhone, resetCheckPhone, state } = useCheckPhoneNoAvailability();
+  const { checkPhone, resetCheckPhone, checkPhoneNoAvailability } =
+    useCheckPhoneNoAvailability();
   const { resetVerifyOTP } = useOTP();
   const { resetRegisterData } = useRegister();
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
-    if (state.data !== null) {
+    if (checkPhoneNoAvailability.data !== null) {
       resetVerifyOTP();
       resetRegisterData();
       phone.clearText();
       navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
     }
-    if (state.error !== null) {
-      phone.setMessageError(state.error.message);
+    if (checkPhoneNoAvailability.error !== null) {
+      phone.setMessageError(checkPhoneNoAvailability.error.message);
     }
-  }, [state]);
+  }, [checkPhoneNoAvailability]);
 
   React.useEffect(() => {
     return () => {
@@ -54,9 +55,11 @@ const Content: React.FC = () => {
           title="Selanjutnya"
           onPress={() => checkPhone({ mobilePhoneNo: phone.value })}
           type="primary"
-          loading={state.loading}
+          loading={checkPhoneNoAvailability.loading}
           disabled={
-            phone.value === '' || phone.valMsgError !== '' || state.loading
+            phone.value === '' ||
+            phone.valMsgError !== '' ||
+            checkPhoneNoAvailability.loading
           }
         />
       </View>

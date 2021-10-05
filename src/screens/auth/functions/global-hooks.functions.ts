@@ -86,6 +86,7 @@ export const useInput = (initialState: string = '') => {
     clearText,
     maxLength: 32,
     setMessageError,
+    setValue,
   };
 };
 
@@ -182,8 +183,6 @@ export const useTextFieldSelect = () => {
   };
 
   const getSelection = (data: IListSelection) => {
-    console.log(data);
-
     dispatch(Actions.getSelectionProcess(data));
   };
 
@@ -207,6 +206,24 @@ export const useTextFieldSelect = () => {
     selectedItem,
     onSelectedItem,
     resetSelectedItem,
+  };
+};
+
+export const useLocations = () => {
+  const dispatch = useDispatch();
+  const { locations } = useSelector((state: any) => state.global);
+
+  const getLocation = (data: models.IUrbanID) => {
+    dispatch(Actions.getLocationProcess(data));
+  };
+  const resetLocation = () => {
+    dispatch(Actions.resetLocation());
+  };
+
+  return {
+    getLocation,
+    locations,
+    resetLocation,
   };
 };
 

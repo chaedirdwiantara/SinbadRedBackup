@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useInput, useInputFormat, useRegister } from '@screen/auth/functions';
+import { useInput, useRegister } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
@@ -12,23 +12,29 @@ import {
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
-import * as models from '@models';
 
 const Content: React.FC = () => {
-  const { checkEmail } = useCheckEmailAvailability();
-  const { saveRegisterUserData, state } = useRegister();
+  const { checkEmail, checkEmailAvailability, resetCheckEmail } =
+    useCheckEmailAvailability();
+  const { saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
-  const name = useInput();
-  const idNumber = useInputFormat('ktp');
-  const taxNumber = useInputFormat('npwp');
-  const email = useInputFormat('email');
+  const name = useInput('Test');
+  const idNumber = useInput('3375020801940003');
+  const taxNumber = useInput('123456789123456');
+  const email = useInput('mazhuda@gmail.com');
 
   React.useEffect(() => {
-    const user: models.User = state.user;
-    if (user.name || user.idNo || user.email || user.taxNo) {
+    if (checkEmailAvailability.data !== null) {
+      saveRegisterUserData({
+        name: name.value,
+        email: email.value,
+        idNo: idNumber.value,
+        taxNo: taxNumber.value,
+      });
+      resetCheckEmail();
       navigate(REGISTER_STEP_2_VIEW);
     }
-  }, [state.user]);
+  }, [checkEmailAvailability]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -103,11 +109,12 @@ const Content: React.FC = () => {
                 idNo: idNumber.value,
                 taxNo: taxNumber.value,
               });
+              navigate(REGISTER_STEP_2_VIEW);
             }
           }}
           type="primary"
           shadow
-          loading={false}
+          loading={checkEmailAvailability.loading}
           disabled={name.value === '' || idNumber.value === ''}
         />
       </View>

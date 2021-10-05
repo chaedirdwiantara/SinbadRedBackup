@@ -3,6 +3,7 @@ import {
   formatter,
   handleMessageError,
   maskPhone,
+  extractAddress,
 } from './auth-utils.functions';
 import {
   useCheckPhoneNoAvailability,
@@ -14,6 +15,7 @@ import {
   useInputFormat,
   useCamera,
   useTextFieldSelect,
+  useUploadImage,
 } from './global-hooks.functions';
 import useOTP from './otp-hooks.functions';
 import { useAuthAction } from './auth-hook.function';
@@ -32,4 +34,6 @@ export {
   maskPhone,
   useOTP,
   useAuthAction,
+  useUploadImage,
+  extractAddress,
 };

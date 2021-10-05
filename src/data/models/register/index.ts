@@ -35,19 +35,19 @@ export interface IRegisterMerchantProcess {
   urbanId?: number;
   topSellingBrand?: string;
   mostWantedBrand?: string;
-  vehicleAccessibilityId?: number;
+  vehicleAccessibilityId?: number | null;
   name?: string;
   address?: string;
   noteAddress?: string;
   taxNo?: string;
-  longitude?: number;
-  latitude?: number;
+  longitude?: number | null;
+  latitude?: number | null;
   largeArea?: string;
   phoneNo?: string;
   imageUrl?: string;
   taxImageUrl?: string;
   numberOfEmployee?: string;
-  vehicleAccessibilityAmount?: number;
+  vehicleAccessibilityAmount?: number | null;
   user?: User;
 }
 

@@ -1,11 +1,14 @@
 import { useNavigation } from '@react-navigation/core';
 import {
+  renderIF,
   useInput,
   useRegister,
   useTextFieldSelect,
 } from '@screen/auth/functions';
+import { REGISTER_STEP_7_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import {
   color,
   SnbButton,
@@ -17,12 +20,27 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { saveRegisterStoreData } = useRegister();
+  const { saveRegisterStoreData, registerData } = useRegister();
   const address = useInput();
-  const noteAddress = useInput();
+  const noteAddress = useInput('Catatan Alamat');
   const vehicleAccessibilityAmount = useInput();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
   const { navigate } = useNavigation();
+  let mapRef = React.useRef<MapView>(null);
+
+  React.useEffect(() => {
+    if (registerData.longitude !== null) {
+      mapRef.current?.animateToRegion({
+        latitude: registerData?.latitude || 0,
+        longitude: registerData?.longitude || 0,
+        longitudeDelta: 0.02,
+        latitudeDelta: 0.02,
+      });
+    }
+    if (registerData.address !== '') {
+      address.setValue(registerData.address || '');
+    }
+  }, [registerData]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -43,18 +61,54 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ paddingHorizontal: 16 }}>
-            <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+            <View
+              style={{
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+              {renderIF(
+                registerData.longitude !== null,
+                <TouchableOpacity onPress={() => navigate('MapsView')}>
+                  <SnbText.B4>Ubah</SnbText.B4>
+                </TouchableOpacity>,
+              )}
+            </View>
             <View style={{ paddingVertical: 4 }} />
-            <TouchableOpacity
-              onPress={() => navigate('MapsView')}
-              style={styles.pinPoint}>
-              <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
-            </TouchableOpacity>
+            {renderIF(
+              registerData.longitude !== null,
+              <MapView
+                ref={mapRef}
+                initialRegion={{
+                  latitude: registerData?.latitude || 0,
+                  longitude: registerData?.longitude || 0,
+                  latitudeDelta: 0.02,
+                  longitudeDelta: 0.02,
+                }}
+                zoomEnabled={false}
+                pitchEnabled={false}
+                scrollEnabled={false}
+                style={styles.pinPoint}>
+                <Marker
+                  coordinate={{
+                    latitude: registerData?.latitude || 0,
+                    longitude: registerData?.longitude || 0,
+                  }}
+                />
+              </MapView>,
+              <TouchableOpacity
+                onPress={() => navigate('MapsView')}
+                style={styles.pinPoint}>
+                <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
+              </TouchableOpacity>,
+            )}
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...address}
               mandatory
+              maxLength={250}
               labelText="Detail Alamat"
               placeholder="Masukkan detail alamat"
             />
@@ -104,13 +158,12 @@ const Content: React.FC = () => {
             saveRegisterStoreData({
               address: address.value,
               noteAddress: noteAddress.value,
-              vehicleAccessibilityId: selectedItem.data?.id,
-              latitude: 0,
-              longitude: 0,
+              vehicleAccessibilityId: selectedItem.item?.id,
               vehicleAccessibilityAmount: Number(
                 vehicleAccessibilityAmount.value,
               ),
             });
+            navigate(REGISTER_STEP_7_VIEW);
           }}
           type="primary"
           shadow
@@ -142,6 +195,7 @@ const styles = StyleSheet.create({
     borderColor: color.black40,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
 });
 

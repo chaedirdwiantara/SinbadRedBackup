@@ -36,7 +36,16 @@ export interface IListSelection {
     | 'listDistrict'
     | 'listUrban'
     | 'listVehicleAccessAmount'
+    | 'listUrbanID'
     | 'listVehicleAccess';
+  params?: string;
+  meta?: {
+    skip?: number;
+    limit?: number;
+    keyword?: string;
+  };
+}
+export interface IUrbanID {
   params?: string;
   meta?: {
     skip?: number;

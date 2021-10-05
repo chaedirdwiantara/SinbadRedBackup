@@ -48,3 +48,26 @@ export const getSelectionFailed = (data: any) => {
     payload: data,
   };
 };
+
+export const getLocationProcess = (
+  data: models.IUrbanID,
+): models.IRegisterAction<any> => {
+  return {
+    type: types.GET_LOCATION_PROCESS,
+    payload: data,
+  };
+};
+
+export const getLocationSuccess = (data: any): models.IRegisterAction<any> => {
+  return {
+    type: types.GET_LOCATION_SUCCESS,
+    payload: data,
+  };
+};
+
+export const getLocationFailed = (data: any): models.IRegisterAction<any> => {
+  return {
+    type: types.GET_LOCATION_FAILED,
+    payload: data,
+  };
+};

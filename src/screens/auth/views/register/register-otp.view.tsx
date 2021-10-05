@@ -12,7 +12,7 @@ import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
   const { checkPhone } = useCheckPhoneNoAvailability();
-  const { saveRegisterUserData, state: registerData } = useRegister();
+  const { saveRegisterUserData } = useRegister();
   const { verifyOTPRegister, verifyOTP } = useOTP();
   const { goBack, replace }: any = useNavigation();
   const { params }: any = useRoute();
@@ -22,17 +22,12 @@ const RegisterOTPView: React.FC = () => {
     if (verifyOTP.data !== null) {
       setHide(false);
       saveRegisterUserData({ mobilePhone: params?.phoneNo });
+      replace(REGISTER_STEP_1_VIEW);
     }
-    if (verifyOTP.errpr !== null) {
+    if (verifyOTP.error !== null) {
       setHide(false);
     }
   }, [verifyOTP.data]);
-
-  React.useEffect(() => {
-    if (registerData.user?.mobilePhone !== '') {
-      replace(REGISTER_STEP_1_VIEW);
-    }
-  }, [registerData.user]);
 
   return (
     <SnbContainer color="white">

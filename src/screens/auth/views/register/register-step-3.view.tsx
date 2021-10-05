@@ -1,5 +1,9 @@
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
-import { useUploadImage } from '@screen/auth/functions/global-hooks.functions';
+import {
+  renderIF,
+  useCamera,
+  useRegister,
+  useUploadImage,
+} from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -10,7 +14,6 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
 import { REGISTER_STEP_4_VIEW } from '@screen/auth/screens_name';
 
@@ -19,13 +22,11 @@ const { height } = Dimensions.get('screen');
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
-  const { state: registerData, saveRegisterUserData } = useRegister();
+  const { registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
 
-  const registerState: models.IRegisterMerchantProcess = registerData;
-
   React.useEffect(() => {
-    if (uploadData.data !== null) {
+    if (uploadData.data !== null && capturedImage.data?.type === 'selfie') {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -33,7 +34,9 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ imageUrl: uploadData.data?.url });
+      saveRegisterUserData({ selfieImageUrl: uploadData.data?.url });
+      resetUploadImage();
+      resetCamera();
     }
 
     if (uploadData.error !== null) {
@@ -44,8 +47,6 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      resetCamera();
-      navigate(REGISTER_STEP_4_VIEW);
     }
   }, [uploadData]);
 
@@ -68,17 +69,31 @@ const Content: React.FC = () => {
   };
 
   const renderImagePreview = () => {
-    const isImageUploaded =
-      registerState.user?.selfieImageUrl !== '' && capturedImage.data === null;
+    const isImageCaptured = capturedImage?.data?.type === 'selfie';
+    let uri: string | undefined = '';
+    let action = () => {
+      resetCamera();
+      resetUploadImage();
+      navigate(REGISTER_STEP_4_VIEW);
+    };
+
+    if (isImageCaptured) {
+      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      action = () => {
+        const payload = {
+          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
+          currentFilePath: registerData?.user?.selfieImageUrl || null,
+        };
+        uploadImage(payload);
+      };
+    } else {
+      uri = registerData.user?.selfieImageUrl;
+    }
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{
-            uri:
-              registerData.user?.selfieImageUrl ||
-              `data:image/jpg;base64,${capturedImage.data?.croppedImage}`,
-          }}
+          source={{ uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -93,28 +108,18 @@ const Content: React.FC = () => {
               size="small"
               type="tertiary"
               title="Ulangi"
-              onPress={() => openCamera('selfie')}
+              onPress={() => {
+                openCamera('selfie');
+              }}
               disabled={false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type="primary"
+              type={isImageCaptured ? 'secondary' : 'primary'}
+              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               shadow
-              title={isImageUploaded ? 'Selanjutnya' : 'Upload'}
-              onPress={() => {
-                if (isImageUploaded) {
-                  saveRegisterUserData({ idImageUrl: '' });
-                } else {
-                  resetUploadImage();
-                  const payload = {
-                    base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-                    currentFilePath:
-                      registerState?.user?.selfieImageUrl || null,
-                  };
-                  uploadImage(payload);
-                }
-              }}
+              onPress={action}
               disabled={uploadData?.loading}
               loading={uploadData?.loading}
             />
@@ -126,7 +131,7 @@ const Content: React.FC = () => {
 
   const isImageAvailable =
     registerData?.user?.selfieImageUrl !== '' ||
-    (capturedImage.data !== null && capturedImage.data?.type === 'selfie');
+    capturedImage.data?.type === 'selfie';
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16 }}>

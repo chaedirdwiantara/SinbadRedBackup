@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { useTextFieldSelect } from '@screen/auth/functions';
+import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import React from 'react';
 import { View } from 'react-native';
 import {
@@ -10,24 +11,39 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content = () => {
-  const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
   const [province, setProvince] = React.useState<any>(null);
   const [city, setCity] = React.useState<any>(null);
   const [district, setDistrict] = React.useState<any>(null);
   const [urban, setUrban] = React.useState<any>(null);
+  const { getLocation, locations } = useLocations();
+  const { goBack } = useNavigation();
+
+  React.useEffect(() => {
+    if (locations.data?.length > 0) {
+      goBack();
+    }
+  }, [locations]);
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
       case 'listProvince': {
         setProvince(selectedItem.item);
+        setCity(null);
+        setDistrict(null);
+        setUrban(null);
         break;
       }
       case 'listCity': {
         setCity(selectedItem.item);
+        setDistrict(null);
+        setUrban(null);
         break;
       }
       case 'listDistrict': {
         setDistrict(selectedItem.item);
+        setUrban(null);
         break;
       }
       case 'listUrban': {
@@ -37,7 +53,9 @@ const Content = () => {
       default:
         break;
     }
+    return resetSelectedItem;
   }, [selectedItem]);
+
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <View style={{ padding: 16 }}>
@@ -59,13 +77,15 @@ const Content = () => {
           value={city?.city || ''}
           type="default"
           onPress={() => {
-            gotoSelection({
-              type: 'listCity',
-              params: `provinceId=${province.id}`,
-              meta: {
-                limit: 100,
-              },
-            });
+            if (province?.id) {
+              gotoSelection({
+                type: 'listCity',
+                params: `provinceId=${province.id}`,
+                meta: {
+                  limit: 100,
+                },
+              });
+            }
           }}
           rightType="icon"
           rightIcon="arrow_drop_down"
@@ -77,13 +97,15 @@ const Content = () => {
           value={district?.district || ''}
           type="default"
           onPress={() => {
-            gotoSelection({
-              type: 'listDistrict',
-              params: `city=${city.city}`,
-              meta: {
-                limit: 100,
-              },
-            });
+            if (city?.city) {
+              gotoSelection({
+                type: 'listDistrict',
+                params: `city=${city.city}`,
+                meta: {
+                  limit: 100,
+                },
+              });
+            }
           }}
           rightType="icon"
           rightIcon="arrow_drop_down"
@@ -95,13 +117,15 @@ const Content = () => {
           value={urban?.urban || ''}
           type="default"
           onPress={() => {
-            gotoSelection({
-              type: 'listUrban',
-              params: `district=${district.district}`,
-              meta: {
-                limit: 100,
-              },
-            });
+            if (district?.district) {
+              gotoSelection({
+                type: 'listUrban',
+                params: `district=${district.district}`,
+                meta: {
+                  limit: 100,
+                },
+              });
+            }
           }}
           rightType="icon"
           rightIcon="arrow_drop_down"
@@ -110,15 +134,9 @@ const Content = () => {
         <SnbTextFieldSelect
           labelText="Kode Pos"
           placeholder="Lihat Kode Pos"
-          value={
-            selectedItem?.type === 'listNumOfEmployee'
-              ? selectedItem?.item.amount
-              : ''
-          }
+          value={urban?.zipCode || ''}
           type="default"
-          onPress={() => {
-            gotoSelection({ type: 'listNumOfEmployee' });
-          }}
+          onPress={() => {}}
           rightType="icon"
           rightIcon="arrow_drop_down"
         />
@@ -126,7 +144,16 @@ const Content = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="Simpan Lokasi Manual"
-          onPress={() => {}}
+          loading={locations.loading}
+          onPress={() => {
+            getLocation({
+              params: `province=${province.name}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
+              meta: {
+                limit: 10,
+                skip: 0,
+              },
+            });
+          }}
           disabled={!province || !city || !district || !urban}
           type="primary"
         />

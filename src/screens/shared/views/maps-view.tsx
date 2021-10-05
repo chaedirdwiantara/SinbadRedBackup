@@ -1,7 +1,8 @@
 import { navigate } from '@core/navigations/RootNavigation';
 import apiMaps from '@core/services/apiMaps';
 import { useNavigation } from '@react-navigation/core';
-import { useTextFieldSelect } from '@screen/auth/functions';
+import { extractAddress, useRegister } from '@screen/auth/functions';
+import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
 import { View } from 'react-native';
@@ -9,16 +10,34 @@ import MapView, { LatLng } from 'react-native-maps';
 import {
   SnbBottomSheet,
   SnbButton,
+  SnbText,
   SnbContainer,
   SnbMaps,
+  SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 
 const MapsView = () => {
   const [desc, setDesc] = React.useState('');
   const [loadingDesc, setLoadingDesc] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+  const [loading] = React.useState(false);
   const { goBack } = useNavigation();
-  const { resetSelectedItem } = useTextFieldSelect();
+  const [address, setAddress] = React.useState<any>();
+  const { getLocation, locations, resetLocation } = useLocations();
+  const [showModal, setShowModal] = React.useState(false);
+  const { saveRegisterStoreData, registerData } = useRegister();
+
+  React.useEffect(() => {
+    if (locations.data?.length > 0) {
+      saveRegisterStoreData({
+        address: desc === 'Alamat tidak ditemukan' ? '' : desc,
+        urbanId: locations?.data[0]?.id,
+      });
+      goBack();
+    } else if (locations.data?.length === 0) {
+      setShowModal(true);
+    }
+    return resetLocation;
+  }, [locations]);
 
   const getAddress = async (coords?: LatLng) => {
     setLoadingDesc(true);
@@ -27,28 +46,30 @@ const MapsView = () => {
         `&latlng=${coords?.latitude},${coords?.longitude}`,
         'GET',
       );
-      if (results) {
-        if (results.length > 0) {
-          setDesc(results[0].formatted_address);
-        } else {
-          setDesc('Alamat tidak ditemukan');
-        }
-        setLoadingDesc(false);
-      }
-      if (error_message) {
+      if (results?.length > 0) {
+        setDesc(results[0].formatted_address);
+        setAddress(extractAddress(results[0].address_components));
+      } else if (error_message) {
         setDesc(error_message);
-        setLoadingDesc(false);
+      } else {
+        setDesc('Alamat tidak ditemukan');
       }
+      setLoadingDesc(false);
     } catch (error) {
       setLoadingDesc(false);
       setDesc('Alamat tidak ditemukan');
-      console.log(error);
     }
   };
 
   return (
     <SnbContainer color="white">
       <SnbMaps.Type1
+        initialRegion={{
+          latitude: registerData?.latitude || -6.25511,
+          longitude: registerData?.longitude || 106.808,
+          latitudeDelta: 0.02,
+          longitudeDelta: 0.02,
+        }}
         onDragEnd={(
           coords: LatLng,
           mapRef: React.MutableRefObject<MapView | null>,
@@ -58,11 +79,25 @@ const MapsView = () => {
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           });
+          saveRegisterStoreData({
+            latitude: coords?.latitude,
+            longitude: coords?.longitude,
+          });
           getAddress(coords);
         }}
+        disableMainButton={locations.loading || loadingDesc}
         mainButtonAction={() => {
-          resetSelectedItem();
-          navigate(INPUT_MANUAL_LOCATION_VIEW);
+          if (address) {
+            getLocation({
+              params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
+              meta: {
+                limit: 10,
+                skip: 0,
+              },
+            });
+          } else {
+            setShowModal(true);
+          }
         }}
         contentTitle="Detail Alamat"
         loading={loading}
@@ -70,23 +105,52 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onSuccessGetPosition={(position) => {
-          getAddress(position.coords);
+          if (registerData.longitude === null) {
+            saveRegisterStoreData({
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            });
+            getAddress(position.coords);
+          } else {
+            getAddress({
+              latitude: registerData.latitude || 0,
+              longitude: registerData.longitude || 0,
+            });
+          }
         }}
       />
       <SnbBottomSheet
+        actionIcon="close"
+        action
+        closeAction={() => {
+          setShowModal(false);
+        }}
         content={
           <View>
+            <View style={{ alignItems: 'center', margin: 16 }}>
+              <SnbSvgIcon name="error_circle" size={160} />
+            </View>
+            <SnbText.B2 align="center">Area tidak ditemukan</SnbText.B2>
+            <View style={{ marginVertical: 8 }} />
+            <SnbText.B3 align="center">
+              Perbesar peta dengan dua jari pada layar Anda atau masukkan lokasi
+              manual
+            </SnbText.B3>
+            <View style={{ marginVertical: 8 }} />
             <View style={{ height: 72 }}>
               <SnbButton.Single
-                title="Input Lokasi Manual"
-                onPress={() => navigate(INPUT_MANUAL_LOCATION_VIEW)}
+                title="Masukkan Lokasi Manual"
+                onPress={() => {
+                  setShowModal(false);
+                  navigate(INPUT_MANUAL_LOCATION_VIEW);
+                }}
                 disabled={false}
                 type="primary"
               />
             </View>
           </View>
         }
-        open={true}
+        open={showModal}
       />
     </SnbContainer>
   );

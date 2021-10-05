@@ -65,7 +65,7 @@ const apiMaps = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
-  return fetch(`${apiHost.maps}/${path}`, reqBody)
+  return fetch(`${apiHost.maps}${path}`, reqBody)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);

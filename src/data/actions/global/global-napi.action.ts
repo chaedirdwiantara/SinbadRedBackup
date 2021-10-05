@@ -38,3 +38,9 @@ export const saveSelectedVouchers = (
 ) => {
   return { type: types.SAVE_SELECTED_VOUCHERS, payload: data };
 };
+
+export const resetLocation = () => {
+  return {
+    type: types.GET_LOCATION_RESET,
+  };
+};

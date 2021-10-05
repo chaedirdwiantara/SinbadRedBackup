@@ -53,3 +53,28 @@ export const maskPhone = (phoneNo: string) => {
 
   return result;
 };
+
+export const extractAddress = (data: any) => {
+  const dataAddress = {
+    province: '',
+    city: '',
+    district: '',
+    urban: '',
+  };
+
+  data.map((item: any) => {
+    if (item.types.indexOf('administrative_area_level_4') > -1) {
+      dataAddress.urban = item.long_name;
+    }
+    if (item.types.indexOf('administrative_area_level_3') > -1) {
+      dataAddress.district = item.long_name;
+    }
+    if (item.types.indexOf('administrative_area_level_2') > -1) {
+      dataAddress.city = item.long_name;
+    }
+    if (item.types.indexOf('administrative_area_level_1') > -1) {
+      dataAddress.province = item.long_name;
+    }
+  });
+  return dataAddress;
+};

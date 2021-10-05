@@ -1,6 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
-import { useUploadImage } from '@screen/auth/functions/global-hooks.functions';
+import {
+  renderIF,
+  useCamera,
+  useRegister,
+  useUploadImage,
+} from '@screen/auth/functions';
 import { REGISTER_STEP_5_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
@@ -18,11 +22,11 @@ const { height } = Dimensions.get('screen');
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
-  const { state: registerData, saveRegisterUserData } = useRegister();
+  const { registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
-    if (uploadData.data !== null) {
+    if (uploadData.data !== null && capturedImage.data?.type === 'npwp') {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -30,7 +34,9 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ imageUrl: uploadData.data?.url });
+      saveRegisterUserData({ taxImageUrl: uploadData.data?.url });
+      resetUploadImage();
+      resetCamera();
     }
 
     if (uploadData.error !== null) {
@@ -41,9 +47,6 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      resetCamera();
-      resetUploadImage();
-      navigate(REGISTER_STEP_5_VIEW);
     }
   }, [uploadData]);
 
@@ -66,18 +69,32 @@ const Content: React.FC = () => {
   };
 
   const renderImagePreview = () => {
-    const isImageUploaded =
-      registerData.user?.taxImageUrl !== '' && capturedImage.data === null;
+    const isImageCaptured = capturedImage?.data?.type === 'npwp';
+    let uri: string | undefined = '';
+    let action = () => {
+      resetCamera();
+      resetUploadImage();
+      navigate(REGISTER_STEP_5_VIEW);
+    };
+
+    if (isImageCaptured) {
+      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      action = () => {
+        const payload = {
+          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
+          currentFilePath: registerData?.user?.taxImageUrl || null,
+        };
+        uploadImage(payload);
+      };
+    } else {
+      uri = registerData.user?.taxImageUrl;
+    }
 
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{
-            uri:
-              registerData.user?.taxImageUrl ||
-              `data:image/jpg;base64,${capturedImage.data?.croppedImage}`,
-          }}
+          source={{ uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -98,22 +115,11 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type={isImageUploaded ? 'primary' : 'secondary'}
+              type={isImageCaptured ? 'secondary' : 'primary'}
               shadow
               loading={uploadData?.loading}
-              title={isImageUploaded ? 'Selanjutnya' : 'Upload'}
-              onPress={() => {
-                if (isImageUploaded) {
-                  saveRegisterUserData({ taxImageUrl: '' });
-                } else {
-                  resetUploadImage();
-                  const payload = {
-                    base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-                    currentFilePath: registerData?.user?.taxImageUrl || null,
-                  };
-                  uploadImage(payload);
-                }
-              }}
+              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
+              onPress={action}
               disabled={uploadData?.loading}
             />
           </View>
@@ -124,7 +130,7 @@ const Content: React.FC = () => {
 
   const isImageAvailable =
     registerData?.user?.taxImageUrl !== '' ||
-    (capturedImage.data !== null && capturedImage.data?.type === 'npwp');
+    capturedImage.data?.type === 'npwp';
 
   return (
     <View style={{ flex: 1 }}>

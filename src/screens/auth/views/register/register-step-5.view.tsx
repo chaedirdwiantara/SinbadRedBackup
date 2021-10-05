@@ -18,19 +18,13 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const storeName = useInput();
-  const storeSize = useInput();
-  const topBrand = useInput();
-  const wantedBrand = useInput();
-  const { state: registerData, saveRegisterStoreData } = useRegister();
+  const storeName = useInput('Test Toko');
+  const storeSize = useInput('24');
+  const topBrand = useInput('Rinso');
+  const wantedBrand = useInput('Rinso Matic');
+  const { saveRegisterStoreData } = useRegister();
   const { navigate } = useNavigation();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
-
-  React.useEffect(() => {
-    if (registerData.name !== '') {
-      navigate(REGISTER_STEP_6_VIEW);
-    }
-  }, [registerData]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -114,6 +108,7 @@ const Content: React.FC = () => {
               largeArea: storeSize.value,
               numberOfEmployee: selectedItem?.item.amount || '',
             });
+            navigate(REGISTER_STEP_6_VIEW);
           }}
           type="primary"
           shadow

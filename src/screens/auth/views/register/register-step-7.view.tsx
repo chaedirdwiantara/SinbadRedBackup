@@ -1,6 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
-import { useUploadImage } from '@screen/auth/functions/global-hooks.functions';
+import {
+  renderIF,
+  useCamera,
+  useRegister,
+  useUploadImage,
+} from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -17,11 +21,10 @@ const { height } = Dimensions.get('screen');
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
-  const { state: registerData, saveRegisterUserData } = useRegister();
-  // const { navigate } = useNavigation();
+  const { registerData, saveRegisterStoreData, register } = useRegister();
 
   React.useEffect(() => {
-    if (uploadData.data !== null) {
+    if (uploadData.data !== null && capturedImage.data?.type === 'store') {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -29,7 +32,9 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ imageUrl: uploadData.data?.url });
+      saveRegisterStoreData({ imageUrl: uploadData.data?.url });
+      resetUploadImage();
+      resetCamera();
     }
 
     if (uploadData.error !== null) {
@@ -63,17 +68,32 @@ const Content: React.FC = () => {
   };
 
   const renderImagePreview = () => {
-    const isImageUploaded =
-      registerData.imageUrl !== '' && capturedImage.data === null;
+    const isImageCaptured = capturedImage?.data?.type === 'store';
+    let uri: string | undefined = '';
+    let action = () => {
+      resetCamera();
+      resetUploadImage();
+      register();
+    };
+
+    if (isImageCaptured) {
+      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      action = () => {
+        const payload = {
+          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
+          currentFilePath: registerData.imageUrl || null,
+        };
+        uploadImage(payload);
+      };
+    } else {
+      uri = registerData.imageUrl;
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{
-            uri:
-              registerData.imageUrl ||
-              `data:image/jpg;base64,${capturedImage.data?.croppedImage}`,
-          }}
+          source={{ uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -94,22 +114,11 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type={isImageUploaded ? 'primary' : 'secondary'}
+              type={isImageCaptured ? 'secondary' : 'primary'}
+              title={isImageCaptured ? 'Upload' : 'Selesai'}
               shadow
               loading={uploadData?.loading}
-              title={isImageUploaded ? 'Selanjutnya' : 'Upload'}
-              onPress={() => {
-                if (isImageUploaded) {
-                  saveRegisterUserData({ idImageUrl: '' });
-                } else {
-                  resetUploadImage();
-                  const payload = {
-                    base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-                    currentFilePath: registerData.imageUrl || null,
-                  };
-                  uploadImage(payload);
-                }
-              }}
+              onPress={action}
               disabled={uploadData?.loading}
             />
           </View>
@@ -119,8 +128,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.imageUrl !== '' ||
-    (capturedImage.data !== null && capturedImage.data?.type === 'store');
+    registerData?.imageUrl !== '' || capturedImage.data?.type === 'store';
 
   return (
     <View style={{ flex: 1 }}>

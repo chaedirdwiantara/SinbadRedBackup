@@ -1,7 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
   SnbText,

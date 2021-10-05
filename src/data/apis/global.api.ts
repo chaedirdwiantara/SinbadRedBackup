@@ -42,7 +42,23 @@ const getSelection = (data: models.IListSelection) => {
       path = `locations/urban?${data.params}&${meta}`;
       break;
     }
+    case 'listUrbanID': {
+      meta = `skip=${data.meta?.skip}&limit=${data.meta?.limit}`;
+      path = `locations/search?${data.params}&${meta}`;
+      break;
+    }
   }
+  return apiGeneral<models.IGetSelectionSuccess<any>>(
+    path,
+    'account',
+    'v1',
+    'GET',
+  );
+};
+
+const getLocation = (data: models.IUrbanID) => {
+  let meta = `skip=${data.meta?.skip || 0}&limit=${data.meta?.limit || 10}`;
+  let path = `locations/search?${data.params}&${meta}`;
   return apiGeneral<models.IGetSelectionSuccess<any>>(
     path,
     'account',
@@ -55,4 +71,5 @@ const getSelection = (data: models.IListSelection) => {
 export const GlobalApi = {
   uploadImage,
   getSelection,
+  getLocation,
 };

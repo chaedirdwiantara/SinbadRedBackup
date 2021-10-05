@@ -12,7 +12,7 @@ export const useCheckPhoneNoAvailability = () => {
     resetCheckPhone: () => {
       dispatch(Actions.resetCheckPhoneNoAvailability());
     },
-    state: checkPhoneNoAvailability,
+    checkPhoneNoAvailability,
   };
 };
 
@@ -26,7 +26,7 @@ export const useCheckEmailAvailability = () => {
     resetCheckEmail: () => {
       dispatch(Actions.resetCheckEmailAvailability());
     },
-    state: checkEmailAvailability,
+    checkEmailAvailability,
   };
 };
 
@@ -46,10 +46,15 @@ export const useRegister = () => {
     dispatch(Actions.resetRegisterData());
   };
 
+  const register = () => {
+    dispatch(Actions.merchantRegisterProcess(registerData));
+  };
+
   return {
     saveRegisterStoreData,
     saveRegisterUserData,
     resetRegisterData,
-    state: registerData,
+    registerData,
+    register,
   };
 };
