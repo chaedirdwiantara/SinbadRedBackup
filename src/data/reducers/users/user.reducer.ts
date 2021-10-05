@@ -1,5 +1,5 @@
 /** === IMPORT HERE === */
-import * as models from '@models';
+// import * as models from '@models';
 import {
   userDetailReducer,
   userDetailInitialState,
@@ -9,14 +9,14 @@ import {
   changePasswordInitialState,
 } from './user-change-password.reducer';
 /** === TYPE HERE === */
-export type UserInitialProps = models.DetailProps<models.StoreDetail>;
+// export type UserInitialProps = models.DetailProps<models.StoreDetail>;
 /** === INITIAL HERE === */
 export const userInitialState = {
   detail: userDetailInitialState,
   changePassword: changePasswordInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const userReducer = ({ detail, update }: any, action: any) => ({
+export const userReducer = ({ detail, changePassword }: any, action: any) => ({
   detail: userDetailReducer(detail, action),
-  changePassword: changePasswordReducer(update, action),
+  changePassword: changePasswordReducer(changePassword, action),
 });

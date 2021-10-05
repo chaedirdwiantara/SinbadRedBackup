@@ -22,9 +22,9 @@ const UserChangePasswordView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
     if (stateUser.changePassword.data) {
-      alert('success');
+      console.log('success');
     } else {
-      alert('failed');
+      console.log('failed');
     }
   }, [stateUser]);
 
