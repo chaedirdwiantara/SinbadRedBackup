@@ -1,9 +1,9 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC, useEffect } from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, TouchableOpacity } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { ScrollView } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import HomeHeaderView from './home-header.view';
 import { BannerHomeView } from '../../banner/views';
@@ -16,6 +16,7 @@ import { Example2HomeView } from '../../example2/views';
 import { HomeHookFunc } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import messaging from '@react-native-firebase/messaging';
+import { NavigationAction } from '@core/functions/navigation';
 /** === COMPONENT === */
 const HomeView: FC = () => {
   /** === HOOK === */
@@ -35,6 +36,31 @@ const HomeView: FC = () => {
     return unsubscribe;
   }, []);
   /** === VIEW === */
+  /** => voyager home view */
+  const VoyagerHomeView = () => {
+    return (
+      <View
+        style={{
+          height: 300,
+          backgroundColor: 'brown',
+          alignItems: 'center',
+          justifyContent: 'space-around',
+        }}>
+        <TouchableOpacity
+          onPress={() => NavigationAction.navigate('PromoDetailView')}>
+          <SnbText.B1>Navigate to Promo (layout only)</SnbText.B1>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => NavigationAction.navigate('PromoPaymentListView')}>
+          <SnbText.B1>Navigate to Promo Payment (mock)</SnbText.B1>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => NavigationAction.navigate('VoucherCartListView')}>
+          <SnbText.B1>Navigate to Voucher Cart (mock)</SnbText.B1>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={state} />;
@@ -43,6 +69,7 @@ const HomeView: FC = () => {
     return (
       <>
         <BannerHomeView />
+        <VoyagerHomeView />
         <CategoryHomeView />
         <RecommendationHomeView />
         <BrandHomeView />

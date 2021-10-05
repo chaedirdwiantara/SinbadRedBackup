@@ -1,7 +1,7 @@
 import {
   PromoPaymentListView,
   PromoPaymentDetailView,
-  PromoDetail,
+  PromoDetailView,
 } from '@screen/promo/views';
 
 const PromoNav = {
@@ -11,8 +11,8 @@ const PromoNav = {
   PromoPaymentDetailView: {
     component: PromoPaymentDetailView,
   },
-  PromoDetail: {
-    component: PromoDetail,
+  PromoDetailView: {
+    component: PromoDetailView,
   },
 };
 
