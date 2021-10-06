@@ -14,10 +14,20 @@ import { goBack, usePromoPaymentAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
+import SnbTextSeeMore from '../../voucher/components/SnbTextSeeMore';
 /** === DUMMIES === */
 const dummies = {
   data: {
-    promoTnC: [
+    id: 1,
+    name: 'PROMOMRS 092021',
+    shortDescription:
+      'Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS',
+    header: 'SupplierVoucherTRS',
+    imageUrl:
+      'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/staging/voucher/image_1633342649926.png',
+    startDate: '2021-09-16T03:25:00.000Z',
+    endDate: '2021-11-30T16:59:00.000Z',
+    termsAndCondition: [
       'Berlaku hanya untuk user tertentu',
       'Promo hanya didapat oleh store yang memiliki order Rp. 100.000',
       'Promo berlaku untuk faktur MARS',
@@ -76,6 +86,20 @@ const PromoDetail: FC = ({ route }: any) => {
       </View>
     );
   };
+  /** => voucher description */
+  const renderPromoDescription = () => {
+    return (
+      <View style={PromoPaymentDetailStyles.sectionContainer}>
+        <SnbTextSeeMore
+          maxLine={3}
+          toggleColor={color.red50}
+          toggleShowMore={'Lihat Semua'}
+          toggleShowLess={'Lihat Lebih Sedikit'}
+          content={<SnbText.B1>{dummies.data.shortDescription}</SnbText.B1>}
+        />
+      </View>
+    );
+  };
   /** => promo TnC */
   const renderPromoTnC = () => {
     return (
@@ -85,7 +109,7 @@ const PromoDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {dummies.data.promoTnC.map((item, index) => {
+          {dummies.data.termsAndCondition.map((item, index) => {
             return (
               <View
                 key={index}
@@ -119,6 +143,7 @@ const PromoDetail: FC = ({ route }: any) => {
         {renderHeader()}
         {renderBanner()}
         {renderPromoCardInformation()}
+        {renderPromoDescription()}
         {renderPromoTnC()}
       </ScrollView>
     </SnbContainer>
