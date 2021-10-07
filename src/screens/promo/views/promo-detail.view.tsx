@@ -3,7 +3,6 @@ import { View, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbProgress,
   color,
   SnbCardInfoType2,
   SnbText,
@@ -13,7 +12,8 @@ import moment from 'moment';
 import { goBack, usePromoGeneralAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
-import SnbTextSeeMore from '../../voucher/components/SnbTextSeeMore';
+import SnbTextSeeMore from '@core/components/TextSeeMore';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const PromoDetail: FC = ({ route }: any) => {
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
@@ -99,6 +99,9 @@ const PromoDetail: FC = ({ route }: any) => {
   };
   /** => promo TnC */
   const renderPromoTnC = () => {
+    if (promoGeneralDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={PromoPaymentDetailStyles.sectionContainer}>
         <View>
@@ -106,32 +109,22 @@ const PromoDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {promoGeneralDetailState.data?.termsAndCondition.map(
-            (item, index) => {
-              return (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: 'row',
-                    marginBottom: 4,
-                  }}>
-                  <View style={{ marginRight: 8, width: 20 }}>
-                    <SnbText.B1>{index + 1}.</SnbText.B1>
-                  </View>
-                  <SnbText.B1>{item}</SnbText.B1>
+          {promoGeneralDetailState.data.termsAndCondition.map((item, index) => {
+            return (
+              <View
+                key={index}
+                style={{
+                  flexDirection: 'row',
+                  marginBottom: 4,
+                }}>
+                <View style={{ marginRight: 8, width: 20 }}>
+                  <SnbText.B1>{index + 1}.</SnbText.B1>
                 </View>
-              );
-            },
-          )}
+                <SnbText.B1>{item}</SnbText.B1>
+              </View>
+            );
+          })}
         </View>
-      </View>
-    );
-  };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={PromoPaymentDetailStyles.singleContainer}>
-        <SnbProgress size={40} />
       </View>
     );
   };
@@ -148,7 +141,7 @@ const PromoDetail: FC = ({ route }: any) => {
           {renderPromoTnC()}
         </ScrollView>
       ) : (
-        renderLoading()
+        <LoadingPage />
       )}
     </SnbContainer>
   );

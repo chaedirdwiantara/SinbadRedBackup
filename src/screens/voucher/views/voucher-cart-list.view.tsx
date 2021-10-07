@@ -9,7 +9,6 @@ import {
   color,
   SnbText,
   styles,
-  SnbProgress,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
@@ -31,6 +30,7 @@ import { camelize } from '@core/functions/global/camelize';
 import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
 import { useDataVoucher } from '@core/redux/Data';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -395,14 +395,6 @@ const VoucherCartListView: FC = () => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => voucher section */
   const renderVoucherSection = () => {
     if (
@@ -437,9 +429,11 @@ const VoucherCartListView: FC = () => {
     <SnbContainer color="grey">
       {renderHeader()}
       {renderSearchSection()}
-      {!voucherCartListState.loading && voucherCartListState.data !== null
-        ? renderVoucherSection()
-        : renderLoading()}
+      {!voucherCartListState.loading && voucherCartListState.data !== null ? (
+        renderVoucherSection()
+      ) : (
+        <LoadingPage />
+      )}
       {renderFooterSection()}
     </SnbContainer>
   );

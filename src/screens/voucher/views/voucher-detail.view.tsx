@@ -6,7 +6,6 @@ import {
   SnbCardInfoType2,
   SnbContainer,
   SnbDivider,
-  SnbProgress,
   SnbText,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
@@ -15,11 +14,12 @@ import {
   useVoucherListItemModal,
   useVoucherDetailAction,
 } from '../functions';
-import { VoucherCartListStyles, VoucherDetailStyles } from '../styles';
+import { VoucherDetailStyles } from '../styles';
 import moment from 'moment';
 import { ScrollView } from 'react-native-gesture-handler';
 import { contexts } from '@contexts';
-import SnbTextSeeMore from '../components/SnbTextSeeMore';
+import SnbTextSeeMore from '@core/components/TextSeeMore';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const VoucherDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
@@ -229,14 +229,6 @@ const VoucherDetailView: FC = ({ route }: any) => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -250,7 +242,7 @@ const VoucherDetailView: FC = ({ route }: any) => {
           {renderVoucherInstruction()}
         </ScrollView>
       ) : (
-        renderLoading()
+        <LoadingPage />
       )}
     </SnbContainer>
   );

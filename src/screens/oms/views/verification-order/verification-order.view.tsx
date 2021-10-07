@@ -10,7 +10,6 @@ import {
   SnbIcon,
   SnbBadge,
   SnbButton,
-  SnbProgress,
 } from 'react-native-sinbad-ui';
 import { goBack, goToCheckout } from '../../functions';
 import { VerificationOrderStyle } from '../../styles';
@@ -24,6 +23,7 @@ import {
   VerificationOrderVoucherList,
 } from '@models';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
@@ -326,20 +326,12 @@ const OmsVerificationOrderView: FC = () => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={VerificationOrderStyle.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => main */
   return (
     <SnbContainer color="white">
       {renderHeader()}
       {stateVerificationOrder.detail.loading ? (
-        renderLoading()
+        <LoadingPage />
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>

@@ -3,7 +3,6 @@ import { View, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbProgress,
   color,
   SnbCardInfoType2,
   SnbText,
@@ -14,6 +13,7 @@ import { goBack, usePromoPaymentAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const PromoPaymentDetail: FC = ({ route }: any) => {
   /** === HOOK === */
@@ -88,14 +88,6 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={PromoPaymentDetailStyles.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -108,7 +100,7 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
           {renderPromoTnC()}
         </ScrollView>
       ) : (
-        renderLoading()
+        <LoadingPage />
       )}
     </SnbContainer>
   );

@@ -3,7 +3,6 @@ import { View, Image, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbProgress,
   SnbCardButtonType1,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
@@ -15,6 +14,7 @@ import {
 import { PromoPaymentListStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const PromoPaymentList: FC = () => {
   /** === HOOK === */
@@ -75,14 +75,6 @@ const PromoPaymentList: FC = () => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={PromoPaymentListStyles.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -91,7 +83,7 @@ const PromoPaymentList: FC = () => {
       promoPaymentListState.data.length !== 0 ? (
         <ScrollView>{renderPromoList()}</ScrollView>
       ) : (
-        renderLoading()
+        <LoadingPage />
       )}
     </SnbContainer>
   );
