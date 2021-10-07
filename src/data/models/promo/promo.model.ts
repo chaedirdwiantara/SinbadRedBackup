@@ -16,3 +16,14 @@ export interface PromoPaymentDetailSuccessProps {
   discountRebate: number;
   promoTnC: string[];
 }
+/** === PROMO GENERRAL DETAIL === */
+export interface PromoGeneralDetailSuccessProps {
+  id: number;
+  name: string;
+  shortDescription: string;
+  header: string;
+  imageUrl: string;
+  startDate: string;
+  endDate: string;
+  termsAndCondition: string[];
+}

@@ -10,3 +10,8 @@ export const PROMO_PAYMENT_DETAIL_PROCESS = 'PromoPaymentDetailProcess';
 export const PROMO_PAYMENT_DETAIL_SUCCESS = 'PromoPaymentDetailSuccess';
 export const PROMO_PAYMENT_DETAIL_FAILED = 'PromoPaymentDetailFailed';
 export const PROMO_PAYMENT_DETAIL_RESET = 'PromoPaymentDetailReset';
+// PROMO GENERAL DETAIL
+export const PROMO_GENERAL_DETAIL_PROCESS = 'PromoGeneralDetailProcess';
+export const PROMO_GENERAL_DETAIL_SUCCESS = 'PromoGeneralDetailSuccess';
+export const PROMO_GENERAL_DETAIL_FAILED = 'PromoGeneralDetailFailed';
+export const PROMO_GENERAL_DETAIL_RESET = 'PromoGeneralDetailReset';
