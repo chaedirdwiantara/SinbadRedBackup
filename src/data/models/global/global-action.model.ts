@@ -21,11 +21,6 @@ export interface INumOfEmployee {
 export interface IGetSelectionSuccess<T> {
   data: T[];
 }
-/** === SELECTED VOUCHER DATA === */
-export interface selectedVoucherDataAction {
-  type: string;
-  payload: models.selectedVoucherDataProps;
-}
 
 export interface IListSelection {
   type:
