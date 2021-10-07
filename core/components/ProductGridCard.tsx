@@ -13,8 +13,6 @@ interface ProductGridCardProps {
   name: string;
   imageUrl: string;
   price: number;
-  stock: number;
-  uom: string;
   isBundle?: boolean;
   isPromo?: boolean;
   isExclusive?: boolean;
@@ -59,14 +57,11 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => {
   const renderProductInfo = () => (
     <>
       <SnbText.C1 color={color.black100}>{props.name}</SnbText.C1>
-      <View style={{ marginVertical: 8 }}>
+      <View style={{ marginTop: 8 }}>
         <SnbText.C1 color={color.red50}>
           {toCurrency(props.price, { withFraction: false })}
         </SnbText.C1>
       </View>
-      <SnbText.C1 color={color.black100}>
-        {`Tersisa ${props.stock} ${props.uom}`}
-      </SnbText.C1>
     </>
   );
   /** => Main */

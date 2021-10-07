@@ -12,8 +12,6 @@ interface RecommendedProduct {
   name: string;
   imageUrl: string;
   displayPrice: number;
-  stock: number;
-  uom: string;
   isBundle: boolean;
   isPromo: boolean;
   isExclusive: boolean;
@@ -26,8 +24,6 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
     displayPrice: 77891,
-    stock: 10,
-    uom: 'Pcs',
     isBundle: false,
     isPromo: true,
     isExclusive: true,
@@ -38,8 +34,6 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
     displayPrice: 150000,
-    stock: 5,
-    uom: 'Pcs',
     isBundle: false,
     isPromo: false,
     isExclusive: false,
@@ -50,8 +44,6 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
     displayPrice: 98782,
-    stock: 4,
-    uom: 'Pcs',
     isBundle: true,
     isPromo: true,
     isExclusive: true,
@@ -62,8 +54,6 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
     displayPrice: 72000,
-    stock: 1,
-    uom: 'Pcs',
     isBundle: false,
     isPromo: true,
     isExclusive: false,
@@ -74,8 +64,6 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
     displayPrice: 77891,
-    stock: 200,
-    uom: 'Pcs',
     isBundle: false,
     isPromo: false,
     isExclusive: true,
@@ -98,8 +86,6 @@ const RecommendationHomeView: FC = () => {
         name={item.name}
         imageUrl={item.imageUrl}
         price={item.displayPrice}
-        stock={item.stock}
-        uom={item.uom}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}
@@ -118,7 +104,7 @@ const RecommendationHomeView: FC = () => {
       showsHorizontalScrollIndicator={false}
       data={recommendedProducts}
       renderItem={renderProductCard}
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => item.id}
       ItemSeparatorComponent={renderProductListSeparator}
     />
   );
