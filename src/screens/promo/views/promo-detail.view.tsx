@@ -10,7 +10,7 @@ import {
   SnbDivider,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack, usePromoPaymentAction } from '../functions';
+import { goBack, usePromoGeneralAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -42,8 +42,18 @@ const dummies = {
 };
 /** === COMPONENT === */
 const PromoDetail: FC = ({ route }: any) => {
+  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const promoGeneralAction = usePromoGeneralAction();
+  const promoGeneralDetailState = statePromo.promoGeneral.detail;
+  console.log(promoGeneralDetailState);
   /** === HOOK === */
   /** => effect */
+  React.useEffect(() => {
+    promoGeneralAction.detail(dispatchPromo, '1');
+    return () => {
+      promoGeneralAction.reset(dispatchPromo);
+    };
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -77,17 +87,27 @@ const PromoDetail: FC = ({ route }: any) => {
   };
   /** => promo card information */
   const renderPromoCardInformation = () => {
+    if (promoGeneralDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={{ marginTop: -90 }}>
-        <SnbCardInfoType2.Header
-          title={'Diskon hingga 5% untuk pembelian Ovaltine'}>
-          <SnbCardInfoType2.Row label={'Berlaku Sampai'} text={'31 Jan 2020'} />
+        <SnbCardInfoType2.Header title={promoGeneralDetailState.data.name}>
+          <SnbCardInfoType2.Row
+            label={'Berlaku Sampai'}
+            text={moment(
+              new Date(promoGeneralDetailState.data.startDate),
+            ).format('DD MMM YYYY')}
+          />
         </SnbCardInfoType2.Header>
       </View>
     );
   };
   /** => voucher description */
   const renderPromoDescription = () => {
+    if (promoGeneralDetailState.data === null) {
+      return null;
+    }
     return (
       <View style={PromoPaymentDetailStyles.sectionContainer}>
         <SnbTextSeeMore
@@ -95,7 +115,11 @@ const PromoDetail: FC = ({ route }: any) => {
           toggleColor={color.red50}
           toggleShowMore={'Lihat Semua'}
           toggleShowLess={'Lihat Lebih Sedikit'}
-          content={<SnbText.B1>{dummies.data.shortDescription}</SnbText.B1>}
+          content={
+            <SnbText.B1>
+              {promoGeneralDetailState.data.shortDescription}
+            </SnbText.B1>
+          }
         />
       </View>
     );
@@ -109,21 +133,23 @@ const PromoDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {dummies.data.termsAndCondition.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 4,
-                }}>
-                <View style={{ marginRight: 8, width: 20 }}>
-                  <SnbText.B1>{index + 1}.</SnbText.B1>
+          {promoGeneralDetailState.data?.termsAndCondition.map(
+            (item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 4,
+                  }}>
+                  <View style={{ marginRight: 8, width: 20 }}>
+                    <SnbText.B1>{index + 1}.</SnbText.B1>
+                  </View>
+                  <SnbText.B1>{item}</SnbText.B1>
                 </View>
-                <SnbText.B1>{item}</SnbText.B1>
-              </View>
-            );
-          })}
+              );
+            },
+          )}
         </View>
       </View>
     );
@@ -139,13 +165,18 @@ const PromoDetail: FC = ({ route }: any) => {
   /** => main */
   return (
     <SnbContainer color="grey">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {renderHeader()}
-        {renderBanner()}
-        {renderPromoCardInformation()}
-        {renderPromoDescription()}
-        {renderPromoTnC()}
-      </ScrollView>
+      {!promoGeneralDetailState.loading &&
+      promoGeneralDetailState.data !== null ? (
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {renderHeader()}
+          {renderBanner()}
+          {renderPromoCardInformation()}
+          {renderPromoDescription()}
+          {renderPromoTnC()}
+        </ScrollView>
+      ) : (
+        renderLoading()
+      )}
     </SnbContainer>
   );
 };
