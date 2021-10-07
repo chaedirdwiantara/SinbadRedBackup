@@ -1,4 +1,3 @@
-import * as models from '@models';
 /** === FCM FLAG === */
 export interface IsFCMAction {
   type: string;

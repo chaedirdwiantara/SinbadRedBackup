@@ -1,6 +1,7 @@
 import {
   VoucherCartListView,
   VoucherCartListMoreView,
+  VoucherDetailView,
 } from '@screen/voucher/views';
 
 const VoucherNav = {
@@ -9,6 +10,9 @@ const VoucherNav = {
   },
   VoucherCartListMoreView: {
     component: VoucherCartListMoreView,
+  },
+  VoucherDetailView: {
+    component: VoucherDetailView,
   },
 };
 

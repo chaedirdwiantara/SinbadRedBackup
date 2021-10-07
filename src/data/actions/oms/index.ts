@@ -3,7 +3,6 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './oms-api.action';
 export * from './verification-order/verification-order-api.action';
 /**
  * ================================================================

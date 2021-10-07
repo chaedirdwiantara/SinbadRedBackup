@@ -9,7 +9,8 @@ const goBack = () => {
 };
 /** => go to voucher detail */
 const goToVoucherDetail = (voucherId: number) => {
-  console.log(`navigate to voucher detail with voucherId ${voucherId}`);
+  // NavigationAction.navigate('VoucherDetailView', { voucherId: voucherId.toString() });
+  NavigationAction.navigate('VoucherDetailView', { voucherId: 1 });
 };
 /** => go to voucher cart list more */
 const goToVoucherCartListMore = ({
