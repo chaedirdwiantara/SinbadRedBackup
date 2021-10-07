@@ -90,11 +90,24 @@ const useEditMerchant = () => {
     },
   };
 };
+/** => edit profile */
+const useEditProfile = () => {
+  const dispatch = useDispatch();
+  return {
+    editProfile: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.profileEditProcess(contextDispatch, data));
+    },
+  };
+};
 /** === EXPORT === */
 export const MerchantHookFunc = {
   useSupplierListAction,
   useRegisterStep4,
   useEditMerchant,
+  useEditProfile,
 };
 /**
  * ================================================================

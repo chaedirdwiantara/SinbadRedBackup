@@ -61,3 +61,31 @@ export const merchantEditFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.MERCHANT_EDIT_FAILED, payload: data };
 };
+/** === PROFILE ACCOUNT EDIT === */
+/** => process */
+export const profileEditProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.UpdateProcessProps<{}>,
+): models.UpdateProcessAction => {
+  contextDispatch({
+    type: types.PROFILE_EDIT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.PROFILE_EDIT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const profileEditSuccess = (
+  data: models.UpdateSuccessProps,
+): models.UpdateSuccessAction => {
+  return { type: types.PROFILE_EDIT_SUCCESS, payload: data };
+};
+/** => failed */
+export const profileEditFailed = (
+  data: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return { type: types.PROFILE_EDIT_FAILED, payload: data };
+};

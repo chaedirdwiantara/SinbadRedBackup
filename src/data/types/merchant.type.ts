@@ -10,6 +10,10 @@ export const SUPPLIER_LIST_LOADMORE = 'SupplierListLoadMore';
 export const MERCHANT_EDIT_PROCESS = 'MerchantEditProcess';
 export const MERCHANT_EDIT_SUCCESS = 'MerchantEditSuccess';
 export const MERCHANT_EDIT_FAILED = 'MerchantEditFailed';
+/** => edit profile account */
+export const PROFILE_EDIT_PROCESS = 'ProfileEditProcess';
+export const PROFILE_EDIT_SUCCESS = 'ProfileEditSuccess';
+export const PROFILE_EDIT_FAILED = 'ProfileEditFailed';
 /**
  * ================================================================
  * NOTES

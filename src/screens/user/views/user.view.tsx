@@ -28,13 +28,12 @@ const UserView: FC = () => {
   useEffect(() => {
     storeDetailAction.detail(dispatchUser, '3');
   }, []);
+  console.log('stateUSer:', stateUser);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);
   };
   /** === VIEW === */
-  console.log('storeDetail:', stateUser);
-
   /** => header */
   const header = () => {
     return (
@@ -197,7 +196,7 @@ const UserView: FC = () => {
   };
   /** this for main view */
   return (
-    <SnbContainer color={'white'}>
+    <SnbContainer color={'grey'}>
       {header()}
       {!stateUser.detail.loading ? (
         content()

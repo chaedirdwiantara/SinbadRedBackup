@@ -34,10 +34,24 @@ function* editMerchant(action: models.UpdateProcessAction) {
     yield put(ActionCreators.merchantEditFailed(error));
   }
 }
+/** => profile edit  */
+function* editProfile(action: models.UpdateProcessAction) {
+  try {
+    const response: models.UpdateSuccessProps = yield call(() => {
+      return MerchantApi.editProfile(action.payload);
+    });
+    yield action.contextDispatch(ActionCreators.profileEditSuccess(response));
+    yield put(ActionCreators.profileEditSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(ActionCreators.profileEditFailed(error));
+    yield put(ActionCreators.profileEditFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* MerchantSaga() {
   yield takeLatest(types.SUPPLIER_LIST_PROCESS, supplierList);
   yield takeLatest(types.MERCHANT_EDIT_PROCESS, editMerchant);
+  yield takeLatest(types.PROFILE_EDIT_PROCESS, editProfile);
 }
 
 export default MerchantSaga;

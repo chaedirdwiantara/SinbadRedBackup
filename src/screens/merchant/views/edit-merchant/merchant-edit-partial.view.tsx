@@ -1,10 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
   SnbUploadPhotoRules,
   SnbText,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
@@ -25,29 +26,73 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const [ownerName, setOwnerName] = useState(
     ownerData?.name ? ownerData?.name : '',
   );
+  const [noKtp, setNoktp] = useState(ownerData?.idNo ? ownerData?.idNo : '');
+  const storeData = stateUser.detail.data?.storeData.storeInformation;
+  const [merchantName, setMerchantName] = useState(
+    storeData.storeAccount?.name ? storeData.storeAccount?.name : '',
+  );
+
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
+
+  useEffect(() => {
+    if (stateMerchant.profileEdit.data) {
+      toast();
+    }
+  }, [stateMerchant]);
+  console.log('stateMerchant:', stateMerchant);
+
+  const toast = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <SnbToast
+          message={'success'}
+          open={true}
+          close={() => {
+            console.log('test');
+          }}
+        />
+      </View>
+    );
+  };
   /** FUNCTION */
   const confirm = () => {
-    // const ownerData = stateUser.detail.data?.ownerData.profile;
-    console.log('disiinii:', ownerData);
-
     const { type } = props;
     let data = {};
     switch (type) {
       case 'merchantOwnerEmail':
       case 'merchantOwnerPhoneNo':
-      case 'merchantOwnerIdNo':
+      case 'merchantOwnerIdNo': {
+        data = {
+          idNo: noKtp,
+        };
+        editProfileAction.editProfile(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
       case 'merchantOwnerTaxNo':
       case 'merchantOwnerName': {
         data = {
           name: ownerName,
         };
+        editProfileAction.editProfile(dispatchSupplier, {
+          data,
+        });
         break;
       }
-      case 'merchantAccountName':
+      case 'merchantAccountName': {
+        data = {
+          name: merchantName,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
       case 'merchantAccountPhoneNo': {
         break;
       }
@@ -72,11 +117,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       default:
         break;
     }
-    console.log('hasil:', data);
-    editMerchantAction.editMerchant(dispatchSupplier, {
-      data,
-    });
-    // this.props.merchantEditProcess(data);
   };
   /**
    * ================================
@@ -170,16 +210,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO KTP === */
   const renderOwnerIdNo = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
           type={'default'}
-          value={ownerData?.idNo ? ownerData?.idNo : ''}
-          onChangeText={(text) => console.log(text)}
+          value={noKtp}
+          onChangeText={(text) => setNoktp(text)}
           clearText={() => console.log('clear')}
+          keyboardType={'numeric'}
         />
       </View>
     );
@@ -270,8 +310,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Toko'}
           placeholder={'Masukan Nama Toko'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
+          value={merchantName}
+          onChangeText={(text) => setMerchantName(text)}
           clearText={() => console.log('clear')}
         />
       </View>

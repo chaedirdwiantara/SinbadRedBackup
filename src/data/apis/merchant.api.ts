@@ -12,8 +12,14 @@ const editMerchant = (data: object) => {
   const path = 'stores/profile';
   return apiMapping(path, 'account', 'v1', 'PATCH', data);
 };
+/** => profile edit */
+const editProfile = (data: object) => {
+  const path = 'completed-data/profile-account-type';
+  return apiMapping(path, 'account', 'v1', 'PATCH', data);
+};
 /** === EXPORT FUNCTIONS === */
 export const MerchantApi = {
   supplierList,
   editMerchant,
+  editProfile,
 };
