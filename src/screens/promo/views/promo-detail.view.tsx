@@ -15,31 +15,6 @@ import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
 import SnbTextSeeMore from '../../voucher/components/SnbTextSeeMore';
-/** === DUMMIES === */
-const dummies = {
-  data: {
-    id: 1,
-    name: 'PROMOMRS 092021',
-    shortDescription:
-      'Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS Ini adalah voucher dari supplier TRS',
-    header: 'SupplierVoucherTRS',
-    imageUrl:
-      'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/staging/voucher/image_1633342649926.png',
-    startDate: '2021-09-16T03:25:00.000Z',
-    endDate: '2021-11-30T16:59:00.000Z',
-    termsAndCondition: [
-      'Berlaku hanya untuk user tertentu',
-      'Promo hanya didapat oleh store yang memiliki order Rp. 100.000',
-      'Promo berlaku untuk faktur MARS',
-      'Tidak berlaku kelipatan (1 toko mendapatkan 1 promo)',
-      'Promo dipotong setelah pajak',
-      'Promo hanya berlaku untuk pembayaran Bayar Sekarang dan Bayar Nanti dengan metode pembayaran Virtual Account',
-      'Promo hanya berlaku menggunakan Aplikasi Sinbad Red',
-      'Untuk mendapatkan promo pastikan sudah menginstall aplikasi Sinbad terbaru',
-      'Dengan menggunakan promo ini, pengguna dianggap mengerti dan menyetujui semua Syarat & Kententuan yang berlaku',
-    ],
-  },
-};
 /** === COMPONENT === */
 const PromoDetail: FC = ({ route }: any) => {
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
