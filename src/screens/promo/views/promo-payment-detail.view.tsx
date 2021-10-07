@@ -14,27 +14,6 @@ import { goBack, usePromoPaymentAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
-/** === DUMMIES === */
-const dummies = {
-  data: {
-    id: '1',
-    name: 'PROMOMRS 092021',
-    startDate: '2021-09-16T03:25:00.000Z',
-    endDate: '2021-09-30T16:59:00.000Z',
-    discountRebate: 50000,
-    promoTnC: [
-      'Berlaku hanya untuk user tertentu',
-      'Promo hanya didapat oleh store yang memiliki order Rp. 100.000',
-      'Promo berlaku untuk faktur MARS',
-      'Tidak berlaku kelipatan (1 toko mendapatkan 1 promo)',
-      'Promo dipotong setelah pajak',
-      'Promo hanya berlaku untuk pembayaran Bayar Sekarang dan Bayar Nanti dengan metode pembayaran Virtual Account',
-      'Promo hanya berlaku menggunakan Aplikasi Sinbad Red',
-      'Untuk mendapatkan promo pastikan sudah menginstall aplikasi Sinbad terbaru',
-      'Dengan menggunakan promo ini, pengguna dianggap mengerti dan menyetujui semua Syarat & Kententuan yang berlaku',
-    ],
-  },
-};
 /** === COMPONENT === */
 const PromoPaymentDetail: FC = ({ route }: any) => {
   /** === HOOK === */
