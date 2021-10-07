@@ -13,14 +13,12 @@ import moment from 'moment';
 import { goBack, usePromoGeneralAction } from '../functions';
 import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
-import { toCurrency } from '@core/functions/global/currency-format';
 import SnbTextSeeMore from '../../voucher/components/SnbTextSeeMore';
 /** === COMPONENT === */
 const PromoDetail: FC = ({ route }: any) => {
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoGeneralAction = usePromoGeneralAction();
   const promoGeneralDetailState = statePromo.promoGeneral.detail;
-  console.log(promoGeneralDetailState);
   /** === HOOK === */
   /** => effect */
   React.useEffect(() => {
@@ -51,7 +49,7 @@ const PromoDetail: FC = ({ route }: any) => {
     return (
       <Image
         source={{
-          uri: 'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/open-mic-night-facebook-event-banner-design-template-5a951f3dcd85d692ef014b7594d11498_screen.jpg?ts=1566599540',
+          uri: promoGeneralDetailState.data?.imageUrl,
         }}
         style={{
           height: 180,
