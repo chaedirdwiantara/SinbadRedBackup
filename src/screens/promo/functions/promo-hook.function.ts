@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 /** === FUNCTION === */
-/** => voucher cart action */
+/** => promo payment action */
 const usePromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -28,8 +28,20 @@ const usePromoPaymentAction = () => {
     },
   };
 };
+/** => promo general action */
+const usePromoGeneralAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.promoGeneralDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.promoGeneralDetailReset());
+    },
+  };
+};
 /** === EXPORT === */
-export { usePromoPaymentAction };
+export { usePromoPaymentAction, usePromoGeneralAction };
 /**
  * ================================================================
  * NOTES
