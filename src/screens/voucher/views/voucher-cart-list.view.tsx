@@ -9,7 +9,6 @@ import {
   color,
   SnbText,
   styles,
-  SnbProgress,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
@@ -30,7 +29,8 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { camelize } from '@core/functions/global/camelize';
 import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
-import { useDataGlobal } from '@core/redux/Data';
+import { useDataVoucher } from '@core/redux/Data';
+import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -56,26 +56,29 @@ const VoucherCartListView: FC = () => {
   } = useVoucherList();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
-  const voucherCartListState = stateVoucher.detail;
-  const globalData = useDataGlobal();
+  const voucherCartListState = stateVoucher.voucherCart.detail;
+  const voucherData = useDataVoucher();
   const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
-    voucherCartListAction.detail(dispatchVoucher);
-    if (globalData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
+    voucherCartListAction.list(dispatchVoucher);
+    if (voucherData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
     }
+    return () => {
+      voucherCartListAction.reset(dispatchVoucher);
+    };
   }, []);
   React.useEffect(() => {
-    if (globalData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(globalData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(globalData.dataVouchers.supplierVouchers);
-    } else if (globalData.dataVouchers === null) {
+    if (voucherData.dataVouchers !== null) {
+      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
+      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
+    } else if (voucherData.dataVouchers === null) {
       setSelectedSinbadVoucher(null);
       setSelectedSupplierVoucher([]);
     }
-  }, [globalData.dataVouchers]);
+  }, [voucherData.dataVouchers]);
   React.useEffect(() => {
     if (voucherCartListState.data !== null) {
       updateVoucherList(
@@ -330,8 +333,9 @@ const VoucherCartListView: FC = () => {
   /** => footer section */
   const renderFooterSection = () => {
     if (
-      selectedSinbadVoucher === null &&
-      selectedSupplierVoucher.length === 0
+      (selectedSinbadVoucher === null &&
+        selectedSupplierVoucher.length === 0) ||
+      voucherCartListState.data === null
     ) {
       return null;
     }
@@ -391,14 +395,6 @@ const VoucherCartListView: FC = () => {
       </View>
     );
   };
-  /** => loading */
-  const renderLoading = () => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
-        <SnbProgress size={40} />
-      </View>
-    );
-  };
   /** => voucher section */
   const renderVoucherSection = () => {
     if (
@@ -427,14 +423,17 @@ const VoucherCartListView: FC = () => {
       );
     }
   };
+  console.log(stateVoucher);
   /** => main */
   return (
     <SnbContainer color="grey">
       {renderHeader()}
       {renderSearchSection()}
-      {!voucherCartListState.loading && voucherCartListState.data !== null
-        ? renderVoucherSection()
-        : renderLoading()}
+      {!voucherCartListState.loading && voucherCartListState.data !== null ? (
+        renderVoucherSection()
+      ) : (
+        <LoadingPage />
+      )}
       {renderFooterSection()}
     </SnbContainer>
   );

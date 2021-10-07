@@ -1,26 +1,64 @@
 /** === IMPORT PACKAGE HERE === */
-import { useState, useContext } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
-import { SupplierVoucherListProps } from '@models';
 /** === FUNCTION === */
+/** => voucher cart list action */
+const useVoucherDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.voucherDetailReset());
+    },
+  };
+};
+/** => set voucher tnc & instruction modal */
+const useVoucherListItemModal = () => {
+  const [isTncModalOpen, setTncModalOpen] = React.useState(false);
+  const [isInstructionModalOpen, setInstructionModalOpen] =
+    React.useState(false);
+  return {
+    handleOpenTncModal: () => {
+      setTncModalOpen(true);
+    },
+    handleCloseTnCModal: () => {
+      setTncModalOpen(false);
+    },
+    handleOpenInstructionModal: () => {
+      setInstructionModalOpen(true);
+    },
+    handleCloseInstructionModal: () => {
+      setInstructionModalOpen(false);
+    },
+    isTncModalOpen,
+    isInstructionModalOpen,
+  };
+};
 /** => voucher cart list action */
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any) => {
+    list: (contextDispatch: (action: any) => any) => {
+      console.log('called 1');
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      console.log('called 1 - r');
+      contextDispatch(Actions.voucherCartListReset());
     },
   };
 };
 /** => set search keyword */
 const useSearchKeyword = () => {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = React.useState('');
   return {
     changeKeyword: (newValue: string) => {
       setKeyword(newValue);
@@ -30,7 +68,7 @@ const useSearchKeyword = () => {
 };
 /** => set selected supplier voucher */
 const useSelectedSupplierVoucher = () => {
-  const [selectedSupplierVoucher, setSelectedSupplierVoucher] = useState<
+  const [selectedSupplierVoucher, setSelectedSupplierVoucher] = React.useState<
     models.SupplierVoucherListProps[]
   >([]);
   return {
@@ -48,7 +86,7 @@ const useSelectedSupplierVoucher = () => {
 /** => set selected sinbad voucher */
 const useSelectedSinbadVoucher = () => {
   const [selectedSinbadVoucher, setSelectedSinbadVoucher] =
-    useState<models.SinbadVoucherProps | null>(null);
+    React.useState<models.SinbadVoucherProps | null>(null);
   return {
     setSelectedSinbadVoucher: (voucher: models.SinbadVoucherProps | null) => {
       setSelectedSinbadVoucher(voucher);
@@ -61,12 +99,12 @@ const useSelectedSinbadVoucher = () => {
 };
 /** => set voucher list local data (this is for list more view) */
 const useVoucherListMore = () => {
-  const [voucherListData, setVoucherListData] = useState<
+  const [voucherListData, setVoucherListData] = React.useState<
     models.SinbadVoucherProps[] | models.SupplierVoucherListProps[]
   >([]);
   return {
     setVoucherListData: (
-      voucher: models.SinbadVoucherProps[] | SupplierVoucherListProps[],
+      voucher: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[],
     ) => {
       setVoucherListData(voucher);
     },
@@ -86,13 +124,13 @@ const useVoucherListMore = () => {
 };
 /** => set voucher list local data (this is for list view) */
 const useVoucherList = () => {
-  const [supplierVoucher, setSupplierVoucher] = useState<
+  const [supplierVoucher, setSupplierVoucher] = React.useState<
     models.SupplierVoucherProps[]
   >([]);
-  const [sinbadVoucher, setSinbadVoucher] = useState<
+  const [sinbadVoucher, setSinbadVoucher] = React.useState<
     models.SinbadVoucherProps[]
   >([]);
-  const { stateVoucher } = useContext(contexts.VoucherContext);
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
   return {
     updateVoucherList: (
       supplierVoucherList: models.SupplierVoucherProps[],
@@ -102,9 +140,9 @@ const useVoucherList = () => {
       setSinbadVoucher(sinbadVoucherList);
     },
     searchVoucher: (keyword: string) => {
-      if (stateVoucher.detail.data !== null) {
+      if (stateVoucher.voucherCart.detail.data !== null) {
         const filteredSupplierVoucher: Array<models.SupplierVoucherProps> = [];
-        stateVoucher.detail.data.supplierVouchers.map((item) => {
+        stateVoucher.voucherCart.detail.data.supplierVouchers.map((item) => {
           const filteredSubSupplierVoucher = item.voucherList.filter(
             (element) => {
               return element.voucherName
@@ -121,7 +159,7 @@ const useVoucherList = () => {
           }
         });
         const filteredSinbadVoucher =
-          stateVoucher.detail.data.sinbadVouchers.filter((item) => {
+          stateVoucher.voucherCart.detail.data.sinbadVouchers.filter((item) => {
             return item.voucherName
               .toLowerCase()
               .includes(keyword.toLowerCase());
@@ -131,9 +169,11 @@ const useVoucherList = () => {
       }
     },
     resetVoucherData: () => {
-      if (stateVoucher.detail.data !== null) {
-        setSupplierVoucher(stateVoucher.detail.data.supplierVouchers);
-        setSinbadVoucher(stateVoucher.detail.data.sinbadVouchers);
+      if (stateVoucher.voucherCart.detail.data !== null) {
+        setSupplierVoucher(
+          stateVoucher.voucherCart.detail.data.supplierVouchers,
+        );
+        setSinbadVoucher(stateVoucher.voucherCart.detail.data.sinbadVouchers);
       }
     },
     supplierVoucher,
@@ -142,12 +182,14 @@ const useVoucherList = () => {
 };
 /** === EXPORT === */
 export {
-  useSearchKeyword,
-  useVoucherList,
-  useVoucherListMore,
+  useVoucherListItemModal,
+  useVoucherDetailAction,
   useVoucherCartListAction,
+  useSearchKeyword,
   useSelectedSinbadVoucher,
   useSelectedSupplierVoucher,
+  useVoucherListMore,
+  useVoucherList,
 };
 /**
  * ================================================================

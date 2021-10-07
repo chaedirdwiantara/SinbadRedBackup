@@ -8,6 +8,7 @@ import {
 } from '@models';
 /** === FUNCTION === */
 const apiMapping = <T>(
+  access: 'public' | 'auth',
   path: string,
   module: 'account' | 'cart' | 'product' | 'discount',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
@@ -17,6 +18,7 @@ const apiMapping = <T>(
   switch (type) {
     case 'LIST':
       return apiGeneral<ListSuccessProps<T>>(
+        access,
         path,
         module,
         version,
@@ -25,6 +27,7 @@ const apiMapping = <T>(
       );
     case 'DETAIL':
       return apiGeneral<DetailSuccessProps<T>>(
+        access,
         path,
         module,
         version,
@@ -33,6 +36,7 @@ const apiMapping = <T>(
       );
     case 'CREATE':
       return apiGeneral<CreateSuccessProps>(
+        access,
         path,
         module,
         version,
@@ -41,6 +45,7 @@ const apiMapping = <T>(
       );
     case 'PUT':
       return apiGeneral<UpdateSuccessProps>(
+        access,
         path,
         module,
         version,
@@ -49,6 +54,7 @@ const apiMapping = <T>(
       );
     case 'PATCH':
       return apiGeneral<UpdateSuccessProps>(
+        access,
         path,
         module,
         version,

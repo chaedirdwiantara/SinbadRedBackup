@@ -71,4 +71,9 @@ export const VerificationOrderStyle = StyleSheet.create({
   bottomButtonContainer: {
     height: 75,
   },
+  singleContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

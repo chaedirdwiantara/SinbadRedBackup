@@ -5,7 +5,6 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
 const initialState: models.GlobalProps = {
   dataCart: null,
-  dataVouchers: null,
   isFCM: false,
 };
 /** === FUNCTION HERE === */
@@ -21,18 +20,6 @@ export const global = simplifyReducer(initialState, {
     return {
       ...state,
       isFCM: action.payload,
-    };
-  },
-  /** => FOR SAVING SELECTED VOUCHERS DATA */
-  [types.SAVE_SELECTED_VOUCHERS](
-    state = initialState,
-    action: {
-      payload: models.selectedVoucherDataProps;
-    },
-  ) {
-    return {
-      ...state,
-      dataVouchers: action.payload,
     };
   },
 });

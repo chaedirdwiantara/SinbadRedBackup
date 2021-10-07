@@ -1,16 +1,29 @@
 /** === IMPORT HERE === */
-import * as models from '../../models';
 import {
-  voucherCartListReducer,
-  voucherCartListInitialState,
-} from './voucher-cart-list.reducer';
+  voucherCartInitialState,
+  voucherCartReducer,
+  VoucherCartInitialProps,
+} from './voucher-cart/voucher-cart.reducer';
+import {
+  voucherGeneralInitialState,
+  voucherGeneralReducer,
+  VoucherGeneralInitialProps,
+} from './voucher-general/voucher-general.reducer';
 /** === TYPE HERE === */
-export type VoucherInitialProps = models.DetailProps<models.VoucherCartList>;
+export type VoucherInitialProps = {
+  voucherCart: VoucherCartInitialProps;
+  voucherGeneral: VoucherGeneralInitialProps;
+};
 /** === INITIAL HERE === */
 export const voucherInitialState = {
-  detail: voucherCartListInitialState,
+  voucherCart: voucherCartInitialState,
+  voucherGeneral: voucherGeneralInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const voucherReducer = ({ detail }: any, action: any) => ({
-  detail: voucherCartListReducer(detail, action),
+export const voucherReducer = (
+  { voucherCart, voucherGeneral }: any,
+  action: any,
+) => ({
+  voucherCart: voucherCartReducer(voucherCart, action),
+  voucherGeneral: voucherGeneralReducer(voucherGeneral, action),
 });

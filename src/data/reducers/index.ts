@@ -7,11 +7,13 @@ import { combineReducers } from 'redux';
 import { permanent } from './permanent';
 import { auth } from './auth';
 import { global } from './global';
+import { voucher } from './voucher/voucher-local-data.reducer';
 
 export const rootReducer = combineReducers({
   permanent,
   auth,
   global,
+  voucher,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
