@@ -3,8 +3,7 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './voucher/voucher-api.action';
-export * from './voucher-cart/voucher-cart-api.action';
+export * from './voucher-api.action';
 /**
  * ================================================================
  * NOTES

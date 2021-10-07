@@ -11,6 +11,8 @@ export * from './auth';
 export * from './products';
 export * from './voucher';
 export * from './oms';
+export * from './category';
+export * from './promo';
 /**
  * ================================================================
  * NOTES

@@ -5,12 +5,7 @@ import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
 import BannerStyle from '../styles/banner.style';
 /** === IMPORT FUNCTION HERE === */
-import { contexts } from '@contexts';
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
-import {
-  useVerficationOrderAction,
-  useTest,
-} from '@screen/oms/functions/verification-order/verification-order-hook.function';
 /** === INTERFACE === */
 interface Props {
   testID?: string;
@@ -18,12 +13,8 @@ interface Props {
 /** === COMPONENT === */
 const BannerHomeView: FC<Props> = () => {
   /** === HOOK === */
-  const { loginUserName, logout } = useAuthAction();
-  const { verificationOrderDetail, verificationOrderCreate } =
-    useVerficationOrderAction();
-  // const { create } = useTest();
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
+  const { loginUserName, requestOTP, verificationOTP, logout } =
+    useAuthAction();
   /** => main */
   return (
     <View style={BannerStyle.bannerHomeContainer} testID={'bannerHome'}>
@@ -31,36 +22,21 @@ const BannerHomeView: FC<Props> = () => {
         onPress={() =>
           loginUserName({ username: '08966666670', password: 'sinbad' })
         }>
-        <SnbText.B1>Login</SnbText.B1>
+        <SnbText.B1>Login UserName</SnbText.B1>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => requestOTP({ mobilePhone: '08966666670' })}>
+        <SnbText.B1>Request OTP</SnbText.B1>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          verificationOTP({ mobilePhone: '08966666670', otp: '12345' })
+        }>
+        <SnbText.B1>Verify OTP</SnbText.B1>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => logout()}>
         <SnbText.B1>Logout</SnbText.B1>
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => verificationOrderCreate(dispatchVerificationOrder, {})}>
-        <SnbText.B1>create verification order</SnbText.B1>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          verificationOrderDetail(
-            dispatchVerificationOrder,
-            'y238372891282178912ujfkjnqwlokemlkdfoqwioeoi1',
-          )
-        }>
-        <SnbText.B1>detail verification order</SnbText.B1>
-      </TouchableOpacity>
-      <SnbText.B1>||</SnbText.B1>
-      <SnbText.B1>||</SnbText.B1>
-      <SnbText.B1>||</SnbText.B1>
-      <SnbText.B1>||</SnbText.B1>
-      <SnbText.B1>
-        Create{' '}
-        {stateVerificationOrder.create.loading ? 'loading' : 'not loading'}
-      </SnbText.B1>
-      <SnbText.B1>
-        Detail{' '}
-        {stateVerificationOrder.detail.loading ? 'loading' : 'not loading'}
-      </SnbText.B1>
     </View>
   );
 };

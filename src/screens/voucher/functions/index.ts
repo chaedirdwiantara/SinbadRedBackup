@@ -1,8 +1,6 @@
 /** === EXPORT ALL === */
-export * from './voucher/voucher.function';
-export * from './voucher/voucher-hook.function';
-export * from './voucher-cart/voucher-cart.function';
-export * from './voucher-cart/voucher-cart-hook.function';
+export * from './voucher.function';
+export * from './voucher-hook.function';
 /**
  * ================================================================
  * NOTES
