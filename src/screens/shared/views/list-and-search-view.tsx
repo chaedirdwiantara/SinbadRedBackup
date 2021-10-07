@@ -1,12 +1,13 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import {
   SnbContainer,
   SnbText,
   SnbTopNav,
   color,
+  SnbProgress,
 } from 'react-native-sinbad-ui';
 
 const ListAndSearchView = () => {
@@ -48,7 +49,16 @@ const ListAndSearchView = () => {
                 <SnbText.B3 color={color.red70}>Tidak Ada Data</SnbText.B3>
               );
             }
-            return <SnbText.B3>Loading</SnbText.B3>;
+            return (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flex: 1,
+                }}>
+                <SnbProgress />
+              </View>
+            );
           }}
           renderItem={({ item, index }) => {
             const backgroundColor =

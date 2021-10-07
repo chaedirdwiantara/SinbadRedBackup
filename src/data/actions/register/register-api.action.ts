@@ -68,8 +68,8 @@ export const merchantRegisterProcess = (
 };
 
 export const merchantRegisterSuccess = (
-  data: models.IRegisterMerchantSuccess,
-): models.IRegisterAction<models.IRegisterMerchantSuccess> => {
+  data: models.IRegisterMerchantDetail,
+): models.IRegisterAction<models.IRegisterMerchantDetail> => {
   return {
     type: types.REGISTER_MERCHANT_SUCCESS,
     payload: data,

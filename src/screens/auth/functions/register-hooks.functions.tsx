@@ -34,6 +34,7 @@ export const useRegister = () => {
   const dispatch = useDispatch();
   const state = useSelector((state: any) => state.auth);
   const registerData: models.IRegisterMerchantProcess = state.registerData;
+  const registerState = state.register;
   const saveRegisterStoreData = (data: models.IRegisterMerchantProcess) => {
     dispatch(Actions.saveRegisterStoreData(data));
   };
@@ -50,11 +51,17 @@ export const useRegister = () => {
     dispatch(Actions.merchantRegisterProcess(registerData));
   };
 
+  const resetRegister = () => {
+    dispatch(Actions.resetRegister());
+  };
+
   return {
     saveRegisterStoreData,
     saveRegisterUserData,
     resetRegisterData,
     registerData,
     register,
+    registerState,
+    resetRegister,
   };
 };

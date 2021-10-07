@@ -27,6 +27,12 @@ export const resetRegisterData = () => {
   };
 };
 
+export const resetRegister = () => {
+  return {
+    type: types.REGISTER_MERCHANT_RESET,
+  };
+};
+
 export const resetCheckPhoneNoAvailability = () => {
   return {
     type: types.CHECK_PHONE_AVAILABILITY_RESET,

@@ -37,10 +37,15 @@ function* registerMerchant(
   action: models.IRegisterAction<models.IRegisterMerchantProcess>,
 ) {
   try {
-    const response: models.IRegisterMerchantSuccess = yield call(() =>
+    const registerReponse: models.IRegisterMerchantSuccess = yield call(() =>
       registerApi.registerMerchant(action.payload),
     );
-    yield put(ActionCreators.merchantRegisterSuccess(response));
+    if (registerReponse) {
+      const response: models.IRegisterMerchantDetail = yield call(() =>
+        registerApi.registermerchantDetail(registerReponse),
+      );
+      yield put(ActionCreators.merchantRegisterSuccess(response));
+    }
   } catch (error) {
     yield put(ActionCreators.merchantRegisterFailed(error));
   }

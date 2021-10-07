@@ -158,7 +158,7 @@ const Content: React.FC = () => {
             saveRegisterStoreData({
               address: address.value,
               noteAddress: noteAddress.value,
-              vehicleAccessibilityId: selectedItem.item?.id,
+              vehicleAccessibilityId: selectedItem?.item?.id || null,
               vehicleAccessibilityAmount: Number(
                 vehicleAccessibilityAmount.value,
               ),

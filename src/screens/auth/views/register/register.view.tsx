@@ -2,8 +2,6 @@ import { useNavigation } from '@react-navigation/core';
 import {
   useCheckPhoneNoAvailability,
   useInputPhone,
-  useOTP,
-  useRegister,
 } from '@screen/auth/functions';
 import { REGISTER_OTP_VIEW } from '@screen/auth/screens_name';
 import React from 'react';
@@ -20,14 +18,10 @@ const Content: React.FC = () => {
   const phone = useInputPhone();
   const { checkPhone, resetCheckPhone, checkPhoneNoAvailability } =
     useCheckPhoneNoAvailability();
-  const { resetVerifyOTP } = useOTP();
-  const { resetRegisterData } = useRegister();
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
     if (checkPhoneNoAvailability.data !== null) {
-      resetVerifyOTP();
-      resetRegisterData();
       phone.clearText();
       navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
     }

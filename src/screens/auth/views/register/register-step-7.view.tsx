@@ -21,7 +21,14 @@ const { height } = Dimensions.get('screen');
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
-  const { registerData, saveRegisterStoreData, register } = useRegister();
+  const {
+    registerData,
+    saveRegisterStoreData,
+    register,
+    registerState,
+    resetRegister,
+  } = useRegister();
+  const { reset } = useNavigation();
 
   React.useEffect(() => {
     if (uploadData.data !== null && capturedImage.data?.type === 'store') {
@@ -50,6 +57,17 @@ const Content: React.FC = () => {
     }
   }, [uploadData]);
 
+  React.useEffect(() => {
+    if (registerState.data?.data?.isCreated) {
+      reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    } else {
+      console.log('GAGAL BROW');
+    }
+  }, [registerState]);
+
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
@@ -73,6 +91,7 @@ const Content: React.FC = () => {
     let action = () => {
       resetCamera();
       resetUploadImage();
+      resetRegister();
       register();
     };
 
@@ -117,9 +136,9 @@ const Content: React.FC = () => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selesai'}
               shadow
-              loading={uploadData?.loading}
+              loading={uploadData?.loading || registerState?.loading}
               onPress={action}
-              disabled={uploadData?.loading}
+              disabled={uploadData?.loading || registerState?.loading}
             />
           </View>
         </View>

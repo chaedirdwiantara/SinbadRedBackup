@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { maskPhone, useAuthAction, useOTP } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/shared';
 import React from 'react';
@@ -6,24 +6,22 @@ import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const LoginOTPView: React.FC = () => {
   const { goBack, reset } = useNavigation();
-  const { requestOTP, verifyOTPState, verificationOTP } = useAuthAction();
-  const { resetVerifyOTP } = useOTP();
-  const { params }: any = useRoute();
+  const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
+  const { resetVerifyOTP, mobilePhone } = useOTP();
   const [hide, setHide] = React.useState(true);
   const [otpSuccess, setOtpSuccess] = React.useState(false);
 
   React.useEffect(() => {
-    if (verifyOTPState.data !== null) {
+    if (verifyOTP.data !== null) {
       setHide(false);
       setOtpSuccess(true);
-      resetVerifyOTP();
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
-    if (verifyOTPState.error !== null) {
+    if (verifyOTP.error !== null) {
       setOtpSuccess(false);
       setHide(false);
     }
-  }, [verifyOTPState]);
+  }, [verifyOTP]);
 
   return (
     <SnbContainer color="white">
@@ -35,16 +33,16 @@ const LoginOTPView: React.FC = () => {
       <OTPContent
         onVerifyOTP={(otp) => {
           resetVerifyOTP();
-          verificationOTP({ mobilePhone: params?.phoneNo, otp });
+          verificationOTP({ mobilePhone, otp });
         }}
         otpSuccess={otpSuccess}
         hideIcon={hide}
-        loading={verifyOTPState.loading}
-        phoneNo={maskPhone(params?.phoneNo)}
+        loading={verifyOTP.loading}
+        phoneNo={maskPhone(mobilePhone)}
         resend={() => {
-          requestOTP({ mobilePhone: params?.phoneNo });
+          requestOTP({ mobilePhone });
         }}
-        errorMessage={verifyOTPState.error?.message || ''}
+        errorMessage={verifyOTP.error?.message || ''}
       />
     </SnbContainer>
   );

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useAuthAction, useInputPhone, useOTP } from '@screen/auth/functions';
+import { useAuthAction, useInputPhone } from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
@@ -19,13 +19,10 @@ import {
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
   const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
-  const { resetVerifyOTP } = useOTP();
   const phone = useInputPhone();
 
   React.useEffect(() => {
     if (requestOTPState.data !== null) {
-      resetRequestOTP();
-      resetVerifyOTP();
       phone.clearText();
       navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
     }

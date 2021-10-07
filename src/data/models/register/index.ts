@@ -2,10 +2,8 @@ export interface User {
   name?: string;
   mobilePhone?: string;
   email?: string;
-  username?: string;
   idNo?: string;
   taxNo?: string;
-  imageUrl?: string;
   taxImageUrl?: string;
   idImageUrl?: string;
   selfieImageUrl?: string;
@@ -18,7 +16,7 @@ export interface IRegisterAction<T> {
 
 // PARAM MODEL
 export interface ICheckPhoneNoAvailabilityProcess {
-  mobilePhoneNo: string;
+  mobilePhoneNo: string | undefined;
 }
 export interface ICheckEmailAvailabilityProcess {
   email: string | undefined;
@@ -32,23 +30,35 @@ export interface IStep1Data {
 }
 
 export interface IRegisterMerchantProcess {
-  urbanId?: number;
+  urbanId?: number | null;
   topSellingBrand?: string;
   mostWantedBrand?: string;
   vehicleAccessibilityId?: number | null;
   name?: string;
   address?: string;
   noteAddress?: string;
-  taxNo?: string;
   longitude?: number | null;
   latitude?: number | null;
   largeArea?: string;
-  phoneNo?: string;
   imageUrl?: string;
-  taxImageUrl?: string;
   numberOfEmployee?: string;
   vehicleAccessibilityAmount?: number | null;
   user?: User;
+}
+
+export interface IRegisterMerchantSuccess {
+  data: {
+    requestId: string;
+    message: string;
+  };
+}
+
+export interface IRegisterMerchantDetail {
+  data: {
+    status: string;
+    isCreated: boolean;
+    errors: any[];
+  };
 }
 
 // SUCCESS MODEL
@@ -60,14 +70,9 @@ export interface ICheckPhoneNoAvailabilitySuccess {
     otp: string;
   };
 }
-export interface IRegisterMerchantSuccess {
-  data: {
-    message: string;
-  };
-}
 
 export interface IVerifyOTPRegister {
-  mobilePhone: string;
+  mobilePhone: string | undefined;
   otp: string;
 }
 export interface IVerifyOTPSuccess {

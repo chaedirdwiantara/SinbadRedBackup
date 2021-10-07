@@ -35,7 +35,10 @@ export const handleMessageError = (code: number) => {
   }
 };
 
-export const maskPhone = (phoneNo: string) => {
+export const maskPhone = (phoneNo: string | undefined) => {
+  if (!phoneNo) {
+    return '';
+  }
   let temp = [];
   for (let i = 0; i < phoneNo.length; i += 4) {
     temp.push(phoneNo.substr(i, 4));

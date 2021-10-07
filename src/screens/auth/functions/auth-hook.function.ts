@@ -31,7 +31,7 @@ const useAuthAction = () => {
     },
     loginIDState: loginUsername,
     requestOTPState: requestOTP,
-    verifyOTPState: verifyOTP,
+    verifyOTP,
   };
 };
 /** === EXPORT === */
