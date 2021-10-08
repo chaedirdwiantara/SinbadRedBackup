@@ -4,7 +4,7 @@ import { color } from 'react-native-sinbad-ui';
 export const ProductGridCardStyle = StyleSheet.create({
   innnerContainer: {
     flex: 1,
-    paddingHorizontal: 4,
+    paddingHorizontal: 2,
     paddingBottom: 10,
     paddingTop: 1,
   },
@@ -50,5 +50,17 @@ export const ProductGridCardStyle = StyleSheet.create({
     paddingBottom: 6,
     borderRadius: 15,
     backgroundColor: color.red50,
+  },
+  shadowForBox5: {
+    borderWidth: 0,
+    backgroundColor: color.white,
+    shadowColor: color.black100,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
