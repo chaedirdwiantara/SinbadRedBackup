@@ -95,7 +95,7 @@ const RecommendationHomeView: FC = () => {
   );
   /** === Product List Separator === */
   const renderProductListSeparator = () => {
-    return <View style={{ width: 10 }} />;
+    return <View style={{ width: 12 }} />;
   };
   /** => Product List */
   const renderProductList = () => (

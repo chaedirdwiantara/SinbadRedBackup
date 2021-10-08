@@ -1,7 +1,7 @@
 /** === EXTERNAL === */
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbIcon, color, styles } from 'react-native-sinbad-ui';
+import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === INTERNAL === */
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -73,7 +73,10 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => {
       }}>
       <View style={ProductGridCardStyle.innnerContainer}>
         <TouchableOpacity
-          style={[styles.shadowForBox10, { borderRadius: 6, flex: 1 }]}
+          style={[
+            ProductGridCardStyle.shadowForBox5,
+            { borderRadius: 6, flex: 1 },
+          ]}
           onPress={() => {
             if (props.onCardPress) {
               props.onCardPress();
