@@ -20,9 +20,8 @@ export const TagListType1: FC<TagListType1Props> = ({ data, shadow }) => {
           <View
             key={i}
             style={shadow ? TagListStyle.boxChip1 : TagListStyle.boxChip2}>
-            <TouchableOpacity
-              onPress={() => console.log(`search tag ${data[i]}`)}>
-              <SnbText.B3>{data[i]}</SnbText.B3>
+            <TouchableOpacity onPress={() => console.log(`search tag ${item}`)}>
+              <SnbText.B3>{item}</SnbText.B3>
             </TouchableOpacity>
             <View style={{ marginLeft: 10 }}>
               <TouchableOpacity onPress={() => console.log('remove tag')}>
