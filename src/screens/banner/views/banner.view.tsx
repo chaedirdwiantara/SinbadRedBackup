@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { TouchableOpacity, View, Image, ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav, SnbText, color } from 'react-native-sinbad-ui';
 import { goBack, goToBannerDetail } from '../functions';
 import { BannerStyles } from '../styles'
 /** === COMPONENT === */
@@ -69,12 +69,14 @@ const CardBanner = () => {
         Khusus untuk kamu, iya kamu !
         Dapatkan Promo Voucher SGM
       </SnbText.B2>
-      <SnbText.B3>
-        SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !
-      </SnbText.B3>
+      <View style={{marginTop:8}}>
+        <SnbText.B3 color={color.black80}>
+          SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !
+        </SnbText.B3>
+      </View>
     </View>
     {/* Foter */}
-    <View style={{paddingHorizontal: 16, paddingBottom: 16, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end'}}>
+    <View style={BannerStyles.footerCardBanner}>
       <TouchableOpacity 
         style={BannerStyles.buttonDetail} 
         onPress={() => goToBannerDetail()}

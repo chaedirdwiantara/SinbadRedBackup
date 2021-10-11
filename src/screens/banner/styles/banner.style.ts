@@ -30,6 +30,16 @@ export const BannerStyles = StyleSheet.create({
     resizeMode: 'cover',
   },
 
+  footerCardBanner: {
+    paddingHorizontal: 16, 
+    paddingBottom: 16, 
+    backgroundColor: 'white', 
+    flexDirection: 'row', 
+    justifyContent: 'flex-end',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8
+  },
+
   buttonDetail: {
     backgroundColor: color.red50,
     borderRadius: 8,
