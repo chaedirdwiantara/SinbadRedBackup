@@ -36,9 +36,6 @@ const BannerListView: React.FC = () => {
     <SnbContainer color="white">
       {header()}
       <ScrollView>{content()}</ScrollView>
-      <TouchableOpacity onPress={() => goToBannerDetail()}>
-        <SnbText.B1>Go To Banner Detail</SnbText.B1>
-      </TouchableOpacity>
     </SnbContainer>
   );
 };
@@ -67,6 +64,25 @@ const CardBanner = () => {
       />
     </View>
     {/* Info */}
+    <View style={{padding: 16, backgroundColor: 'white'}}>
+      <SnbText.B2>
+        Khusus untuk kamu, iya kamu !
+        Dapatkan Promo Voucher SGM
+      </SnbText.B2>
+      <SnbText.B3>
+        SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !
+      </SnbText.B3>
+    </View>
     {/* Foter */}
+    <View style={{paddingHorizontal: 16, paddingBottom: 16, backgroundColor: 'white', flexDirection: 'row', justifyContent: 'flex-end'}}>
+      <TouchableOpacity 
+        style={BannerStyles.buttonDetail} 
+        onPress={() => goToBannerDetail()}
+      >
+        <SnbText.B2 color={'white'}>
+          Detail
+        </SnbText.B2>
+      </TouchableOpacity>
+    </View>
   </View>
 }

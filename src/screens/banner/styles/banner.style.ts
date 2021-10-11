@@ -9,11 +9,18 @@ export const BannerStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   bannerCardContainer: {
-    height: 300,
     flexGrow: 1,
-    backgroundColor: 'salmon',
     marginBottom: 20,
-    borderRadius: 8
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   imageCard: {
     flexGrow: 1,
@@ -22,4 +29,11 @@ export const BannerStyles = StyleSheet.create({
     borderTopRightRadius: 8,
     resizeMode: 'cover',
   },
+
+  buttonDetail: {
+    backgroundColor: color.red50,
+    borderRadius: 8,
+    paddingHorizontal: 22,
+    paddingVertical: 8
+  }
 });
