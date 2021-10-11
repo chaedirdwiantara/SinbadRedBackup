@@ -3,7 +3,7 @@ import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { CoreContext } from '@context';
+import { contexts } from '@contexts';
 import {
   goBack,
   goToExampleDetail,
@@ -11,13 +11,15 @@ import {
   useExampleDetailAction,
 } from '../functions';
 import { useUserData } from '@screen/user/functions';
+import { State } from 'react-native-gesture-handler';
 /** === COMPONENT === */
 const ExampleListView: React.FC = () => {
   /** === HOOK === */
   const exampleListAction = useExampleListAction();
   const exampleDetailAction = useExampleDetailAction();
-  const { user } = useUserData();
-  const { stateExample, dispatchExample } = React.useContext(CoreContext);
+  const { stateExample, dispatchExample } = React.useContext(
+    contexts.ExampleContext,
+  );
   const exampleState = stateExample.list;
   /** => effect */
   React.useEffect(() => {

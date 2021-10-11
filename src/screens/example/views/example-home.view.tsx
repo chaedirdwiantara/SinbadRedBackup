@@ -3,16 +3,19 @@ import React from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { CoreContext } from '@context';
+import { contexts } from '../../../data/contexts';
 import { goToExampleList } from '../functions';
 /** === IMPORT STYLE HERE === */
 import ExampleStyle from '../styles/example.style';
 /** === COMPONENT === */
 const ExampleHomeView: React.FC = () => {
   /** === HOOK === */
-  const { stateExample, stateExample2 } = React.useContext(CoreContext);
-  console.log('ini example 1', stateExample);
-  console.log('ini example 2', stateExample2);
+  const { stateProduct } = React.useContext(contexts.ProductContext);
+  const { stateExample } = React.useContext(contexts.ExampleContext);
+  const { stateVerificationOrder } = React.useContext(
+    contexts.VerificationOrderContext,
+  );
+  console.log('ini oms verification order', stateVerificationOrder);
   /** === VIEW === */
   /** => main */
   return (

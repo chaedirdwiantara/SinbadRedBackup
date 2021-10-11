@@ -11,12 +11,12 @@ import sagas from '@sagas';
 const config = {
   key: 'root',
   storage: AsyncStorage,
+  whitelist: ['permanent'],
 };
 /** === SET LOGGER === */
 const logger = createLogger({
   duration: true,
   timestamp: true,
-  whitelist: ['permanent'],
   // diff: true,
   logErrors: true,
 });

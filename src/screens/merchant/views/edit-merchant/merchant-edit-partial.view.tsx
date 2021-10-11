@@ -61,7 +61,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NAME === */
   const renderOwnerName = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukan Nama Lengkap Pemilik'}
@@ -76,7 +76,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
@@ -91,7 +91,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukan nomor handphone Anda'}
@@ -106,7 +106,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO KTP === */
   const renderOwnerIdNo = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
@@ -121,7 +121,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO NPWP === */
   const renderOwnerTaxNo = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukan No.NPWP maks.15 Digit'}
@@ -160,7 +160,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER MERCHANT ACCOUNT NAME === */
   const renderMerchantAccountName = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Toko'}
           placeholder={'Masukan Nama Toko'}
@@ -175,7 +175,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER MERCHANT ACCOUNT PHONE NUMBER === */
   const renderMerchantAccountPhoneNo = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukan Nomor Handphone Toko'}
@@ -190,7 +190,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
     return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
@@ -263,23 +263,26 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       props.type === 'merchantOwnerPhoneNo';
 
     return props.showButton ? (
-      <SnbButton.Single
-        title={labelVerify ? 'Verifikasi' : 'Simpan'}
-        type={'primary'}
-        onPress={() => console.log('press')}
-        disabled={false}
-      />
+      <View style={{ height: 75 }}>
+        <SnbButton.Single
+          title={labelVerify ? 'Verifikasi' : 'Simpan'}
+          type={'primary'}
+          onPress={() => console.log('press')}
+          disabled={false}
+        />
+      </View>
     ) : (
       <View />
     );
   };
   /** this for main view */
   return (
-    <View style={{flex: 1}}>
-      <ScrollView style={MerchantStyles.mainContainer}>
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
         {switchView()}
+        {renderButton()}
       </ScrollView>
-      {renderButton()}
+
       {/* {renderButtonOpenCamera()} */}
       {/* {this.state.showModalError && this.renderModalError()} */}
     </View>

@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -21,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.sinbad"
+        applicationId "com.sinbad.nextgen"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -58,11 +59,17 @@ android {
 }
 
 dependencies {
+    // INTERNAL REACT NATIVE
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:0.64.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    // MULTIDEX
+    implementation "androidx.multidex:multidex:2.0.1"
     // REACT NATIVE LIBRARY
-    implementation project(':react-native-camera')
+    implementation project(":react-native-camera")
+    implementation project(":@react-native-firebase_messaging")
+    implementation project(":@react-native-firebase_firestore")
+    implementation project(":@react-native-firebase_database")
     // CHECK FOR HERMES
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

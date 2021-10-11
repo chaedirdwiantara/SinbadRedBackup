@@ -11,6 +11,13 @@ project(':react-native-device-info').projectDir = new File(rootProject.projectDi
 // THIS PACKAGE FOR CAMERA
 include ':react-native-camera'
 project(':react-native-camera').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-camera/android')
+// THIS PACKAGE FOR FIREBASE
+include ':@react-native-firebase_messaging'
+project(':@react-native-firebase_messaging').projectDir = new File(rootProject.projectDir, './../node_modules/@react-native-firebase/messaging/android')
+include ':@react-native-firebase_firestore'
+project(':@react-native-firebase_firestore').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-firebase/firestore/android')
+include ':@react-native-firebase_database'
+project(':@react-native-firebase_database').projectDir = new File(rootProject.projectDir, './../node_modules/@react-native-firebase/database/android')
 // REACT NATIVE
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':app'

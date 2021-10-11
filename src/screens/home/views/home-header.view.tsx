@@ -23,7 +23,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
         clearText={() => console.log('clear text')}
         enter={() => console.log('enter')}
         icon1Value={100}
-        icon1Name="notifications"
+        icon1Name="notifications_none"
         icon1Action={() => console.log('this example for icon 1 action')}
         icon2Value={100}
         icon2Name="cart"

@@ -1,17 +1,66 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import api from './api';
-import { ListSuccessProps } from '../models/list.model';
-import { DetailSuccessProps } from '../models/detail.model';
+import apiGeneral from './apiGeneral';
+import {
+  ListSuccessProps,
+  DetailSuccessProps,
+  CreateSuccessProps,
+  UpdateSuccessProps,
+} from '@models';
 /** === FUNCTION === */
 const apiMapping = <T>(
-  endpoint: string,
-  request: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE',
+  access: 'public' | 'auth',
+  path: string,
+  module: 'account' | 'cart' | 'product' | 'discount',
+  version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH',
+  params?: object,
 ) => {
-  switch (request) {
+  switch (type) {
     case 'LIST':
-      return api<ListSuccessProps<T>>(endpoint, 'GET');
+      return apiGeneral<ListSuccessProps<T>>(
+        access,
+        path,
+        module,
+        version,
+        'GET',
+        params,
+      );
     case 'DETAIL':
-      return api<DetailSuccessProps<T>>(endpoint, 'GET');
+      return apiGeneral<DetailSuccessProps<T>>(
+        access,
+        path,
+        module,
+        version,
+        'GET',
+        params,
+      );
+    case 'CREATE':
+      return apiGeneral<CreateSuccessProps>(
+        access,
+        path,
+        module,
+        version,
+        'POST',
+        params,
+      );
+    case 'PUT':
+      return apiGeneral<UpdateSuccessProps>(
+        access,
+        path,
+        module,
+        version,
+        'PUT',
+        params,
+      );
+    case 'PATCH':
+      return apiGeneral<UpdateSuccessProps>(
+        access,
+        path,
+        module,
+        version,
+        'PATCH',
+        params,
+      );
     default:
       break;
   }

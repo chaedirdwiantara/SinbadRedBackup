@@ -86,7 +86,10 @@ const MerchantEditView: FC<Props> = (props) => {
     console.log('nih:', props.route.params);
 
     return (
-      <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ flex: 1 }}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
         {switchView()}
       </ScrollView>
     );

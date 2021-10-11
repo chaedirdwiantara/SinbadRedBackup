@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ExampleApi } from '../apis/example.api';
 import * as ActionCreators from '../actions';
@@ -38,8 +38,8 @@ function* detailExample(action: models.DetailProcessAction) {
 }
 /** === LISTEN FUNCTION === */
 function* ExampleSaga() {
-  yield takeEvery(types.EXAMPLE_LIST_PROCESS, listExample);
-  yield takeEvery(types.EXAMPLE_DETAIL_PROCESS, detailExample);
+  yield takeLatest(types.EXAMPLE_LIST_PROCESS, listExample);
+  yield takeLatest(types.EXAMPLE_DETAIL_PROCESS, detailExample);
 }
 
 export default ExampleSaga;
