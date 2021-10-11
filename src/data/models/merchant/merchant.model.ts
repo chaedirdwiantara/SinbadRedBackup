@@ -4,3 +4,6 @@ export interface SupplierList {
   name: string;
   createdAt: string;
 }
+export interface NumberOfEmployeeList {
+  amount: string;
+}

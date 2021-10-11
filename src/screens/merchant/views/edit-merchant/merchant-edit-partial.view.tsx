@@ -13,6 +13,7 @@ import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { MerchantHookFunc } from '../../function';
+import { NavigationAction } from '@navigation';
 
 interface Props {
   type: any;
@@ -29,7 +30,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const [noKtp, setNoktp] = useState(ownerData?.idNo ? ownerData?.idNo : '');
   const storeData = stateUser.detail.data?.storeData.storeInformation;
   const [merchantName, setMerchantName] = useState(
-    storeData.storeAccount?.name ? storeData.storeAccount?.name : '',
+    storeData?.storeAccount?.name ? storeData.storeAccount?.name : '',
   );
 
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
@@ -37,27 +38,26 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
+  const [isOpenToast, setIsOpenToast] = useState(false);
+  const [toasMessage, setToastMessage] = useState('');
 
   useEffect(() => {
     if (stateMerchant.profileEdit.data) {
-      toast();
+      setToastMessage('Success');
+      setIsOpenToast(true);
+      setTimeout(() => {
+        setIsOpenToast(false);
+      }, 2000);
+    } else {
+      setToastMessage('Failed');
+      setIsOpenToast(true);
+      setTimeout(() => {
+        setIsOpenToast(false);
+      }, 2000);
     }
   }, [stateMerchant]);
   console.log('stateMerchant:', stateMerchant);
 
-  const toast = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <SnbToast
-          message={'success'}
-          open={true}
-          close={() => {
-            console.log('test');
-          }}
-        />
-      </View>
-    );
-  };
   /** FUNCTION */
   const confirm = () => {
     const { type } = props;
@@ -345,7 +345,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             value={
               storeData?.numberOfEmployee ? storeData?.numberOfEmployee : ''
             }
-            onPress={() => console.log('press')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantEditDataListView', {
+                type: 'employee',
+              })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
@@ -390,7 +394,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
                 ? storeData?.vehicleAccessibility
                 : ''
             }
-            onPress={() => console.log('press')}
+            onPress={() =>
+              NavigationAction.navigate('MerchantEditDataListView', {
+                type: 'vehicle',
+              })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}
@@ -463,6 +471,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
+  /** === RENDER TOAST === */
+  const renderToast = () => {
+    return (
+      <SnbToast
+        open={isOpenToast}
+        message={toasMessage}
+        close={() => setIsOpenToast(false)}
+      />
+    );
+  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -470,6 +488,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         {switchView()}
       </ScrollView>
       {renderButton()}
+      {renderToast()}
       {/* {renderButtonOpenCamera()} */}
       {/* {this.state.showModalError && this.renderModalError()} */}
     </View>

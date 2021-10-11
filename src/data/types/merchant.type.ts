@@ -14,6 +14,11 @@ export const MERCHANT_EDIT_FAILED = 'MerchantEditFailed';
 export const PROFILE_EDIT_PROCESS = 'ProfileEditProcess';
 export const PROFILE_EDIT_SUCCESS = 'ProfileEditSuccess';
 export const PROFILE_EDIT_FAILED = 'ProfileEditFailed';
+/** => get number of employee */
+export const NUMBER_OF_EMPLOYEE_LIST_PROCESS = 'NumberOfEmployeeListProcess';
+export const NUMBER_OF_EMPLOYEE_LIST_SUCCESS = 'NumberOfEmployeeListSuccess';
+export const NUMBER_OF_EMPLOYEE_LIST_FAILED = 'NumberOfEmployeeListFailed';
+export const NUMBER_OF_EMPLOYEE_LIST_RESET = 'NumberOfEmployeeListReset';
 /**
  * ================================================================
  * NOTES

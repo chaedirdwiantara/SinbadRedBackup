@@ -102,12 +102,29 @@ const useEditProfile = () => {
     },
   };
 };
+/** => number Of Employee List */
+/** => call list action */
+const useNumberOfEmployeeListAction = () => {
+  const dispatch = useDispatch();
+  return {
+    numberOfEmployeeList: (
+      contextDispatch: (action: any) => any,
+      data: models.ListProcessProps,
+    ) => {
+      dispatch(Actions.numberOfEmployeeListProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.supplierListReset());
+    },
+  };
+};
 /** === EXPORT === */
 export const MerchantHookFunc = {
   useSupplierListAction,
   useRegisterStep4,
   useEditMerchant,
   useEditProfile,
+  useNumberOfEmployeeListAction,
 };
 /**
  * ================================================================

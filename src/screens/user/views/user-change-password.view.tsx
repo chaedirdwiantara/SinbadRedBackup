@@ -21,12 +21,12 @@ const UserChangePasswordView: FC = () => {
   const changePasswordAction = UserHookFunc.useChangePassword();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
-    if (stateUser.changePassword.data) {
+    if (stateUser.update.data) {
       console.log('success');
     } else {
       console.log('failed');
     }
-  }, [stateUser]);
+  }, [stateUser.update.data]);
 
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {

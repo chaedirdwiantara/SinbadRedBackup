@@ -47,11 +47,30 @@ function* editProfile(action: models.UpdateProcessAction) {
     yield put(ActionCreators.profileEditFailed(error));
   }
 }
+/** => list number of employee  */
+function* numberOfEmployeeList(action: models.ListProcessAction) {
+  try {
+    const response: models.ListSuccessProps<models.NumberOfEmployeeList[]> =
+      yield call(() => {
+        return MerchantApi.numberOfEmployeeList(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.numberOfEmployeeListSuccess(response),
+    );
+    yield put(ActionCreators.numberOfEmployeeListSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.numberOfEmployeeListFailed(error),
+    );
+    yield put(ActionCreators.numberOfEmployeeListFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* MerchantSaga() {
   yield takeLatest(types.SUPPLIER_LIST_PROCESS, supplierList);
   yield takeLatest(types.MERCHANT_EDIT_PROCESS, editMerchant);
   yield takeLatest(types.PROFILE_EDIT_PROCESS, editProfile);
+  yield takeLatest(types.NUMBER_OF_EMPLOYEE_LIST_PROCESS, numberOfEmployeeList);
 }
 
 export default MerchantSaga;

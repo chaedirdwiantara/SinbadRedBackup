@@ -17,9 +17,20 @@ const editProfile = (data: object) => {
   const path = 'completed-data/profile-account-type';
   return apiMapping(path, 'account', 'v1', 'PATCH', data);
 };
+/** => number of employee list */
+const numberOfEmployeeList = () => {
+  const path = 'number-of-employees';
+  return apiMapping<models.NumberOfEmployeeList[]>(
+    path,
+    'account',
+    'v1',
+    'LIST',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const MerchantApi = {
   supplierList,
   editMerchant,
   editProfile,
+  numberOfEmployeeList,
 };
