@@ -1,5 +1,10 @@
-import { useInputPhone, useLogin } from '@screen/auth/functions';
-import { LOGIN_ID_VIEW, REGISTER_VIEW } from '@screen/auth/screens_name';
+import { useNavigation } from '@react-navigation/core';
+import { useAuthAction, useInputPhone } from '@screen/auth/functions';
+import {
+  LOGIN_ID_VIEW,
+  LOGIN_OTP_VIEW,
+  REGISTER_VIEW,
+} from '@screen/auth/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
@@ -12,8 +17,19 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state, navigate }: any = useLogin();
-  const inputPhoneProps = useInputPhone();
+  const { navigate } = useNavigation();
+  const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
+  const phone = useInputPhone();
+
+  React.useEffect(() => {
+    if (requestOTPState.data !== null) {
+      phone.clearText();
+      navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
+    }
+    if (requestOTPState.error !== null) {
+      phone.setMessageError(requestOTPState.error.message);
+    }
+  }, [requestOTPState]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -21,21 +37,21 @@ const Content: React.FC = () => {
         <SnbText.H1>Masuk</SnbText.H1>
       </View>
       <View style={{ height: 84, padding: 16 }}>
-        <SnbTextField.Text
-          labelText="Nomor Handphone"
-          placeholder="Masukkan nomor handphone anda"
-          keyboardType="phone-pad"
-          {...inputPhoneProps}
-        />
+        <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.handleLoginPhoneProcess}
+          onPress={() => {
+            resetRequestOTP();
+            requestOTP({ mobilePhone: phone.value });
+          }}
           type="primary"
-          loading={state.loading}
+          loading={requestOTPState.loading}
           disabled={
-            state.phone === '' || state.phoneError !== '' || state.loading
+            phone.value === '' ||
+            phone.valMsgError !== '' ||
+            requestOTPState.loading
           }
         />
       </View>
@@ -71,12 +87,12 @@ const Content: React.FC = () => {
 };
 
 const LoginPhoneView: React.FC = () => {
-  const { reset } = useLogin();
+  const { reset } = useNavigation();
 
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
-        backAction={() => reset('HomeView')}
+        backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         type="white"
         title=""
       />

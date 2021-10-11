@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -7,13 +7,31 @@ import * as models from '@models';
 /** => call auth action */
 const useAuthAction = () => {
   const dispatch = useDispatch();
+  const { loginUsername, requestOTP, verifyOTP } = useSelector(
+    (state: any) => state.auth,
+  );
   return {
     loginUserName: (data: models.LoginUserNameProps) => {
       dispatch(Actions.loginUserNameProcess(data));
     },
+    resetLoginUsername: () => {
+      dispatch(Actions.resetLoginUsername());
+    },
+    requestOTP: (data: models.OtpRequestProps) => {
+      dispatch(Actions.requestOTPProcess(data));
+    },
+    verificationOTP: (data: models.LoginPhoneNumberProps) => {
+      dispatch(Actions.verificationOTPProcess(data));
+    },
     logout: () => {
       dispatch(Actions.logoutProcess());
     },
+    resetRequestOTP: () => {
+      dispatch(Actions.resetRequestOTP());
+    },
+    loginIDState: loginUsername,
+    requestOTPState: requestOTP,
+    verifyOTP,
   };
 };
 /** === EXPORT === */

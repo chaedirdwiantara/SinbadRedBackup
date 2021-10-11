@@ -17,6 +17,28 @@ function* loginUserName(action: models.LoginUserNameProcessAction) {
     yield put(ActionCreators.loginUserNameFailed(error));
   }
 }
+/** => request OTP */
+function* requestOTP(action: models.RequestOTPProcessAction) {
+  try {
+    const response: models.OtpGetSuccessProps = yield call(() => {
+      return AuthApi.requestOTP(action.payload);
+    });
+    yield put(ActionCreators.requestOTPSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.requestOTPFailed(error));
+  }
+}
+/** => verification OTP */
+function* verificationOTP(action: models.VerificationOTPProcessAction) {
+  try {
+    const response: models.LoginSuccessProps = yield call(() => {
+      return AuthApi.verificationOTP(action.payload);
+    });
+    yield put(ActionCreators.verificationOTPSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.verificationOTPFailed(error));
+  }
+}
 /** => logout */
 function* logout() {
   try {
@@ -28,9 +50,12 @@ function* logout() {
     yield put(ActionCreators.logoutFailed(error));
   }
 }
+
 /** === LISTEN FUNCTION === */
 function* AuthSaga() {
   yield takeLatest(types.LOGIN_USERNAME_PROCESS, loginUserName);
+  yield takeLatest(types.REQUEST_OTP_PROCESS, requestOTP);
+  yield takeLatest(types.VERIFICATION_OTP_PROCESS, verificationOTP);
   yield takeLatest(types.LOGOUT_PROCESS, logout);
 }
 
