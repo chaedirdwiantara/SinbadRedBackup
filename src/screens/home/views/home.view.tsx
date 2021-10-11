@@ -47,6 +47,10 @@ const HomeView: FC = () => {
           justifyContent: 'space-around',
         }}>
         <TouchableOpacity
+          onPress={() => NavigationAction.navigate('BannerListView')}>
+        <SnbText.B1>Navigate to Banner List (layout only)</SnbText.B1>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => NavigationAction.navigate('PromoDetailView')}>
           <SnbText.B1>Navigate to Promo (layout only)</SnbText.B1>
         </TouchableOpacity>

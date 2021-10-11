@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
 import { goBack, goToBannerDetail } from '../functions';
 /** === COMPONENT === */
-const BannerView: React.FC = () => {
+const BannerListView: React.FC = () => {
   /** === HOOK === */
   /** === VIEW === */
   /** => header */
@@ -33,7 +33,7 @@ const BannerView: React.FC = () => {
   );
 };
 
-export default BannerView;
+export default BannerListView;
 /**
  * ================================================================
  * NOTES
