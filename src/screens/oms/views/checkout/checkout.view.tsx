@@ -19,6 +19,7 @@ import { goBack } from '../../functions';
 import {
   usePaymentDetailAccorrdion,
   usePaymentTypeModal,
+  usePaymentChannelModal,
 } from '../../functions/checkout';
 /** === DUMMIES === */
 const dummySKU = [
@@ -112,12 +113,138 @@ const dummyPaymentTypes = {
     ],
   },
 };
-const dummyPaymentChannel = {};
+const dummyPaymentChannel = {
+  data: {
+    paymentTypeId: 1,
+    paymentChannels: [
+      {
+        id: 1,
+        name: 'Tunai',
+        type: [
+          {
+            id: 1,
+            name: 'Tunai',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/intersection.png',
+            totalFee: 0,
+            totalPayment: 0,
+            status: 'disabled',
+            message: 'Tidak tersedia untuk transaksi ini',
+            paymentPromo: null,
+          },
+        ],
+      },
+      {
+        id: 2,
+        name: 'Virtual Account',
+        type: [
+          {
+            id: 2,
+            name: 'Bank BCA Virtual Account',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bca.png',
+            totalFee: 4400,
+            totalPayment: 104400,
+            status: 'enabled',
+            message: 'Minimum Pesanan Rp. 10.000',
+            paymentPromo: {
+              orderParcelId: 6665,
+              paymentChannelId: 2,
+              promoPaymentId: 0,
+              promoPaymentAvailable: false,
+              promoPaymentDescription: '',
+              promoPaymentAmount: 0,
+            },
+          },
+          {
+            id: 3,
+            name: 'Bank BNI Virtual Account',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bni.png',
+            totalFee: 4400,
+            totalPayment: 0,
+            status: 'disabled',
+            message: 'Minimum Pesanan Rp. 10.000',
+            paymentPromo: {
+              orderParcelId: 6665,
+              paymentChannelId: 3,
+              promoPaymentId: 0,
+              promoPaymentAvailable: false,
+              promoPaymentDescription: '',
+              promoPaymentAmount: 0,
+            },
+          },
+          {
+            id: 4,
+            name: 'Bank BRI Virtual Account',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bri.png',
+            totalFee: 3850,
+            totalPayment: 0,
+            status: 'disabled',
+            message: 'Minimum Pesanan Rp. 10.000',
+            paymentPromo: {
+              orderParcelId: 6665,
+              paymentChannelId: 4,
+              promoPaymentId: 0,
+              promoPaymentAvailable: false,
+              promoPaymentDescription: '',
+              promoPaymentAmount: 0,
+            },
+          },
+          {
+            id: 5,
+            name: 'Bank Mandiri Virtual Account',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/mandiri.png',
+            totalFee: 4400,
+            totalPayment: 0,
+            status: 'disabled',
+            message: 'Minimum Pesanan Rp. 10.000',
+            paymentPromo: {
+              orderParcelId: 6665,
+              paymentChannelId: 5,
+              promoPaymentId: 0,
+              promoPaymentAvailable: false,
+              promoPaymentDescription: '',
+              promoPaymentAmount: 0,
+            },
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: 'Outlet',
+        type: [
+          {
+            id: 6,
+            name: 'Alfamart',
+            image:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/alfamart.png',
+            totalFee: 5000,
+            totalPayment: 0,
+            status: 'disabled',
+            message: 'Minimum Pesanan Rp. 25.000',
+            paymentPromo: {
+              orderParcelId: 6665,
+              paymentChannelId: 6,
+              promoPaymentId: 0,
+              promoPaymentAvailable: false,
+              promoPaymentDescription: '',
+              promoPaymentAmount: 0,
+            },
+          },
+        ],
+      },
+    ],
+  },
+};
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const paymentAccordion = usePaymentDetailAccorrdion();
   const paymentTypesModal = usePaymentTypeModal();
+  const paymentChannelsModal = usePaymentChannelModal();
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -355,6 +482,11 @@ const OmsCheckoutView: FC = () => {
                 type={'one'}
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
+                onPress={() => {
+                  console.log('abcd');
+                  paymentTypesModal.setOpen(false);
+                  paymentChannelsModal.setOpen(true);
+                }}
               />
             );
           })}
@@ -372,9 +504,101 @@ const OmsCheckoutView: FC = () => {
       />
     );
   };
+  /** => payment channels modal */
+  const renderPaymentChannelsModal = () => {
+    const contentChannelTypes = (paymentTypes) => {
+      return (
+        <>
+          {paymentTypes.map((item, index) => {
+            const description =
+              item.status === 'enabled'
+                ? `Total Biaya ${toCurrency(item.totalPayment)}`
+                : item.message;
+            return (
+              <SnbListButtonType1
+                title={item.name}
+                description={description}
+                image={item.image}
+                type={'two'}
+                disabled={item.status === 'disabled' ? true : false}
+              />
+            );
+          })}
+        </>
+      );
+    };
+    const contentChannelGroups = (paymentGroups) => {
+      return (
+        <View>
+          {paymentGroups.map((item, index) => {
+            return (
+              <>
+                <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
+                  <SnbText.H4>{item.name}</SnbText.H4>
+                </View>
+                {contentChannelTypes(item.type)}
+              </>
+            );
+          })}
+        </View>
+      );
+    };
+    const content = () => {
+      return (
+        <ScrollView style={{ backgroundColor: color.black10 }}>
+          <View
+            style={{
+              backgroundColor: color.white,
+              paddingHorizontal: 16,
+              marginBottom: 8,
+            }}>
+            <SnbText.H4>Tipe Pembayaran</SnbText.H4>
+            <View
+              style={{
+                flexDirection: 'row',
+                paddingVertical: 12,
+              }}>
+              <Image
+                source={{
+                  uri: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
+                }}
+                style={{ width: 24, height: 24, marginRight: 16 }}
+              />
+              <SnbText.B1>Bayar Sekarang</SnbText.B1>
+            </View>
+          </View>
+          <View
+            style={{
+              backgroundColor: color.white,
+            }}>
+            <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+              <SnbText.H4>Pilih Metode Pembayaran</SnbText.H4>
+            </View>
+            {contentChannelGroups(dummyPaymentChannel.data.paymentChannels)}
+          </View>
+        </ScrollView>
+      );
+    };
+    return (
+      <SnbBottomSheet
+        open={paymentChannelsModal.isOpen}
+        content={content()}
+        title={'Metode Pembayaran'}
+        closeAction={() => paymentChannelsModal.setOpen(false)}
+        action={true}
+        actionIcon={'close'}
+        fullsize={true}
+      />
+    );
+  };
   /** => modals */
   const renderModals = () => {
-    return <>{renderPaymentTypesModal()}</>;
+    return (
+      <>
+        {renderPaymentTypesModal()}
+        {renderPaymentChannelsModal()}
+      </>
+    );
   };
   /** => main */
   return (

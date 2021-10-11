@@ -28,8 +28,22 @@ const usePaymentTypeModal = () => {
     isOpen,
   };
 };
+/** => payment types modal */
+const usePaymentChannelModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** === EXPORT === */
-export { usePaymentDetailAccorrdion, usePaymentTypeModal };
+export {
+  usePaymentDetailAccorrdion,
+  usePaymentTypeModal,
+  usePaymentChannelModal,
+};
 /**
  * ================================================================
  * NOTES
