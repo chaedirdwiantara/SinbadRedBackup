@@ -6,7 +6,7 @@ export interface LoginUserNameProps {
 /** === LOGIN WITH PHONENUMBER === */
 export interface LoginPhoneNumberProps {
   mobilePhone: string;
-  code: string;
+  otp: string;
 }
 /** === REQUEST OTP === */
 export interface OtpRequestProps {

@@ -1,10 +1,12 @@
+import { useNavigation } from '@react-navigation/core';
 import {
   renderIF,
-  useRegisterStep4,
-  useRegisterStep7,
+  useCamera,
+  useRegister,
+  useUploadImage,
 } from '@screen/auth/functions';
 import React from 'react';
-import { View, LogBox, Image } from 'react-native';
+import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -14,11 +16,57 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 
+const { height } = Dimensions.get('screen');
+
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep7();
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const {
+    registerData,
+    saveRegisterStoreData,
+    register,
+    registerState,
+    resetRegister,
+  } = useRegister();
+  const { reset } = useNavigation();
+
+  React.useEffect(() => {
+    if (uploadData.data !== null && capturedImage.data?.type === 'store') {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Berhasil Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+      saveRegisterStoreData({ imageUrl: uploadData.data?.url });
+      resetUploadImage();
+      resetCamera();
+    }
+
+    if (uploadData.error !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Gagal Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+      resetCamera();
+      resetUploadImage();
+    }
+  }, [uploadData]);
+
+  React.useEffect(() => {
+    if (registerState.data?.data?.isCreated) {
+      reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
+    } else {
+      console.log('GAGAL BROW');
+    }
+  }, [registerState]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -32,17 +80,39 @@ const Content: React.FC = () => {
           'Foto Tidak silau dan tidak buram',
           'Pastikan foto fokus keseluruhan toko',
         ]}
-        action={() => func.gotoCamera()}
+        action={() => openCamera('store')}
       />
     );
   };
 
   const renderImagePreview = () => {
+    const isImageCaptured = capturedImage?.data?.type === 'store';
+    let uri: string | undefined = '';
+    let action = () => {
+      resetCamera();
+      resetUploadImage();
+      resetRegister();
+      register();
+    };
+
+    if (isImageCaptured) {
+      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      action = () => {
+        const payload = {
+          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
+          currentFilePath: registerData.imageUrl || null,
+        };
+        uploadImage(payload);
+      };
+    } else {
+      uri = registerData.imageUrl;
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{ uri: state?.imageStore || ' ' }}
+          source={{ uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -57,23 +127,27 @@ const Content: React.FC = () => {
               size="small"
               type="tertiary"
               title="Ulangi"
-              onPress={() => func.gotoCamera()}
+              onPress={() => openCamera('store')}
               disabled={false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type="primary"
+              type={isImageCaptured ? 'secondary' : 'primary'}
+              title={isImageCaptured ? 'Upload' : 'Selesai'}
               shadow
-              title="Selesai"
-              onPress={func.handleFinalRegisterProcess}
-              disabled={false}
+              loading={uploadData?.loading || registerState?.loading}
+              onPress={action}
+              disabled={uploadData?.loading || registerState?.loading}
             />
           </View>
         </View>
       </View>
     );
   };
+
+  const isImageAvailable =
+    registerData?.imageUrl !== '' || capturedImage.data?.type === 'store';
 
   return (
     <View style={{ flex: 1 }}>
@@ -88,20 +162,19 @@ const Content: React.FC = () => {
         </View>
       </View>
       {renderIF(
-        state.imageStore === null,
-        renderUploadPhotoRules(),
+        isImageAvailable,
         renderImagePreview(),
+        renderUploadPhotoRules(),
       )}
     </View>
   );
 };
 
-const RegisterStep7View: React.FC = (props) => {
-  const {} = props;
-  const { goBack } = useRegisterStep4();
+const RegisterStep7View: React.FC = () => {
+  const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );
