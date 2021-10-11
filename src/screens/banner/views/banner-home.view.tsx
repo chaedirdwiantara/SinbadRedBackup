@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
-import BannerStyle from '../styles/banner.style';
+import {BannerStyles} from '../styles';
 /** === IMPORT FUNCTION HERE === */
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 /** === INTERFACE === */
@@ -17,7 +17,7 @@ const BannerHomeView: FC<Props> = () => {
     useAuthAction();
   /** => main */
   return (
-    <View style={BannerStyle.bannerHomeContainer} testID={'bannerHome'}>
+    <View style={BannerStyles.bannerHomeContainer} testID={'bannerHome'}>
       <TouchableOpacity
         onPress={() =>
           loginUserName({ username: '08966666670', password: 'sinbad' })
