@@ -1,36 +1,44 @@
 /** === IMPORT PACKAGE === */
 import { set, isEmpty } from 'lodash';
 import apiHost from './apiHost';
+import RNFetchBlob from 'rn-fetch-blob';
+const { fs, wrap } = RNFetchBlob;
+const axios = require('axios');
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
-const apiAuth = async <T>(
-  path: string,
-  version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  method: 'POST' | 'GET',
-  params?: object,
-): Promise<T> => {
+const apiUpload = async <T>(imageUri: string): Promise<T> => {
+  var formData = new FormData();
+  const img = imageUri.replace('file://', '');
+  // fs.readFile(imageUri, 'base64').then((data) => {
+  //   console.log(data);
+  // });
+  // formData.append('file', {
+  //   uri: wrap(img),
+  //   type: 'image/jpeg',
+  //   name: 'testddd.jpg',
+  // });
+
+  // console.log(fs.dirs.CacheDir);
+
+  formData.append('file', wrap(imageUri));
   /** === SET HEADER === */
   const headers = {};
   set(headers, 'Accept', 'application/json');
-  set(headers, 'Content-Type', 'application/json');
-  set(headers, 'X-Platform', 'sinbad-app');
+  set(headers, 'Content-Type', 'multipart/form-data');
+  // set(headers, 'X-Platform', 'sinbad-app');
   /** === SET BODY === */
   const reqBody = {
-    method,
+    method: 'POST',
     headers,
   };
   Object.assign(reqBody, {
-    credentials: 'same-origin',
+    // credentials: 'same-origin',
+    body: formData,
   });
-  /** === IF THERE IS PARAMETER === */
-  if (!isEmpty(params)) {
-    Object.assign(reqBody, {
-      body: JSON.stringify(params),
-    });
-  }
   /** === HANDLE ERROR RESPONSE === */
   const handleErrors = (response: any) => {
+    console.log(response);
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
         throwError(response);
@@ -43,10 +51,12 @@ const apiAuth = async <T>(
   };
   /** === HANDLE SUCCESS RESPONS === */
   const handleSuccess = (response: any) => {
+    console.log(response);
     return response.json().then((data: T) => data);
   };
   /** === HANDLE MAIN ERROR RESPONSE === */
   const handleMainErrors = (error: ErrorProps) => {
+    console.log(error);
     throwFinalError(error);
   };
   /** === THROW ERROR === */
@@ -69,11 +79,12 @@ const apiAuth = async <T>(
       code: error.code,
     };
   };
+  console.log(reqBody);
   /** === MAIN FUNCTION === */
-  return fetch(`${apiHost.auth}/api/${version}/sinbad-app/${path}`, reqBody)
+  return fetch('https://file.io/', reqBody)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);
 };
 
-export default apiAuth;
+export default apiUpload;

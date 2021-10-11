@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useDataGlobal } from '@core/redux/Data';
 import {
-  saveFCMGlobal,
+  saveFCMNotLogin,
   deleteFcmByDeviceId,
 } from '@core/functions/firebase/fcm-firestore';
 import * as Actions from '@actions';
@@ -14,10 +14,10 @@ const useGetTokenNotLogin = async () => {
   const data = useDataGlobal();
   const dispatch = useDispatch();
   if (!data.isFCM) {
-    deleteFcmByDeviceId('global').then(async (d) => {
+    deleteFcmByDeviceId().then(async (d) => {
       if (d || d === undefined) {
         try {
-          saveFCMGlobal(await messaging().getToken());
+          saveFCMNotLogin(await messaging().getToken());
           dispatch(Actions.isFCM(true));
         } catch (err) {
           console.error('get token failed', err);

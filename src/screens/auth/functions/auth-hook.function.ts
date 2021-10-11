@@ -1,5 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import { useDispatch } from 'react-redux';
+import apiUpload from '@core/services/apiUpload';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -18,7 +19,8 @@ const useAuthAction = () => {
       dispatch(Actions.verificationOTPProcess(data));
     },
     logout: () => {
-      dispatch(Actions.logoutProcess());
+      apiUpload();
+      // dispatch(Actions.logoutProcess());
     },
   };
 };
