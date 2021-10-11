@@ -16,12 +16,18 @@ export * from './example.model';
 export * from './example2.model';
 export * from './global.model';
 export * from './user.model';
-export * from './register-data.model';
+export * from './register';
 export * from './global';
 export * from './auth';
 export * from './product';
 export * from './user';
 export * from './merchant';
+export * from './shared';
+export * from './oms/shopping-cart/shopping-cart.model';
+export * from './oms/verification/verification.model';
+export * from './voucher';
+export * from './category';
+export * from './promo';
 /**
  * ================================================================
  * NOTES

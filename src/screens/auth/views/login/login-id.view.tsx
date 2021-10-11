@@ -1,4 +1,6 @@
-import { useLogin } from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import { useInput } from '@screen/auth/functions';
+import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 import { REGISTER_VIEW } from '@screen/auth/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
@@ -12,7 +14,27 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state, navigate }: any = useLogin();
+  const { navigate, reset } = useNavigation();
+  const storeID = useInput('08966666670');
+  const password = useInput('sinbad');
+  const { loginUserName, loginIDState, resetLoginUsername } = useAuthAction();
+
+  React.useEffect(() => {
+    if (loginIDState.data) {
+      storeID.clearText();
+      password.clearText();
+      resetLoginUsername();
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+    }
+    if (loginIDState.error) {
+      password.setMessageError(loginIDState.error.message);
+    }
+  }, [loginIDState]);
+
+  React.useEffect(() => {
+    return () => resetLoginUsername();
+  }, []);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 16 }}>
@@ -20,50 +42,40 @@ const Content: React.FC = () => {
       </View>
       <View style={{ height: 84, padding: 16 }}>
         <SnbTextField.Text
-          type={state.type}
+          {...storeID}
           labelText="ID Toko"
-          maxLength={30}
-          valMsgError={state.errorID}
-          onChangeText={func.handleOnChangeTextID}
-          placeholder="Masukkan ID Toko anda"
-          value={state.storeID}
-          clearText={() => {
-            func.setStoreID('');
-            func.reinitializeState();
-          }}
+          placeholder="Masukkan ID toko Anda"
         />
       </View>
       <View style={{ height: 84, padding: 16, marginTop: 16 }}>
         <SnbTextField.Text
-          type={state.type}
+          {...password}
           labelText="Kata Sandi"
-          maxLength={30}
-          valMsgError={state.errorID}
-          secureTextEntry={!state.visiblePassword}
-          suffixIconName={
-            state.visiblePassword ? 'visibility' : 'visibility_off'
-          }
-          suffixAction={func.toggleVisibilityPassword}
-          onChangeText={func.handleOnChangeTextPassword}
-          placeholder="Masukkan Kata Sandi anda"
-          value={state.password}
-          clearText={() => {
-            func.setPassword('');
-            func.reinitializeState();
-          }}
+          placeholder="Masukkan kata sandi Anda"
+          // secureTextEntry={!loginIDState.visiblePassword}
+          // suffixIconName={
+          //   loginIDState.visiblePassword ? 'visibility' : 'visibility_off'
+          // }
+          // suffixAction={func.toggleVisibilityPassword}
         />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
         <SnbButton.Single
           title="Masuk"
-          onPress={func.handleLoginIDProcess}
+          onPress={() => {
+            const data = {
+              username: storeID.value,
+              password: password.value,
+            };
+            loginUserName(data);
+          }}
           type="primary"
-          loading={state.loading}
+          loading={loginIDState.loading}
           disabled={
-            state.storeID === '' ||
-            state.password === '' ||
-            state.loading ||
-            state.errorID
+            storeID.value === '' ||
+            password.value === '' ||
+            loginIDState.loading ||
+            loginIDState.errorID
           }
         />
       </View>
@@ -84,7 +96,7 @@ const Content: React.FC = () => {
 };
 
 const LoginIDView: React.FC = () => {
-  const { goBack }: any = useLogin();
+  const { goBack }: any = useNavigation();
 
   return (
     <SnbContainer color="white">

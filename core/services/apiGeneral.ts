@@ -5,6 +5,7 @@ import apiHost from './apiHost';
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
 const apiGeneral = async <T>(
+  access: 'public' | 'auth' | string,
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
@@ -69,8 +70,11 @@ const apiGeneral = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
+  console.log('header:', reqBody);
   return fetch(
-    `${apiHost.api}/${module}/api/${version}/sinbad-app/${path}`,
+    `${apiHost.api}/${module}/api/${version}/sinbad-app/${
+      access === 'public' ? '/public/' : ''
+    }${path}`,
     reqBody,
   )
     .then(handleErrors)

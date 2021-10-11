@@ -26,6 +26,18 @@ const goToCart4 = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
+/** => go to checkout success */
+const goToCheckoutSuccess = () => {
+  NavigationAction.navigate('OmsCheckoutSuccessView');
+};
+/** => go to home */
+const goToHome = () => {
+  NavigationAction.navigate('HomeView');
+};
+/** => go to history detail */
+const goToHistoryDetail = (section: 'order' | 'payment') => {
+  NavigationAction.navigate('OmsHistoryDetailView', { section });
+};
 
 export {
   goBack,
@@ -34,4 +46,7 @@ export {
   goToCart3,
   goToCart4,
   goToCheckout,
+  goToCheckoutSuccess,
+  goToHome,
+  goToHistoryDetail,
 };

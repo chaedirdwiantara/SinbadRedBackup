@@ -6,20 +6,20 @@ import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '../../../data/actions';
 import { RootState } from '../../../data/reducers';
-import { OmsFunc } from '../functions';
+import { goToHistoryDetail } from '../functions';
 /** === COMPONENT === */
 const OmsHistoryView: FC = () => {
   /** === HOOK === */
-  const data = useSelector((state: RootState) => state.oms);
-  const dispatch = useDispatch();
+  // const data = useSelector((state: RootState) => state.oms);
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(data.newOrder);
-  });
+  // useEffect(() => {
+  //   console.log(data.newOrder);
+  // });
   /** === FUNCTION === */
-  const changeStateFunc = () => {
-    dispatch(Actions.omsNewOrderNotif({ newOrder: !data.newOrder }));
-  };
+  // const changeStateFunc = () => {
+  //   dispatch(Actions.omsNewOrderNotif({ newOrder: !data.newOrder }));
+  // };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -28,7 +28,7 @@ const OmsHistoryView: FC = () => {
   /** => test to change state */
   const changeState = () => {
     return (
-      <TouchableOpacity onPress={() => changeStateFunc()}>
+      <TouchableOpacity onPress={() => goToHistoryDetail('order')}>
         <SnbText.B1>Change state</SnbText.B1>
       </TouchableOpacity>
     );

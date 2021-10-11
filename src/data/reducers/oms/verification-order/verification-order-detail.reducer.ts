@@ -26,7 +26,7 @@ export const verificationOrderDetailReducer = simplifyReducer(
     /** => success */
     [types.VERIFICATION_ORDER_DETAIL_SUCCESS](
       state = verificationOrderDetailInitialState,
-      action: models.DetailSuccessAction<{}>,
+      action: models.DetailSuccessAction<models.VerificationOrderDetailProps>,
     ) {
       return {
         ...state,

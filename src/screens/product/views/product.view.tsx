@@ -2,16 +2,23 @@
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { goBack } from '../functions';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
-import ProductTagView from './product-tag.view';
-import ProductItemView from './product-item.view';
-import ProductBottomActionView from './product-bottom-action.view';
+import ProductListView from '@core/components/product/list';
+import { contexts } from '@contexts';
+import { goBack, useTabCategory, useProductListAction } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
   /** === HOOK === */
+  const { list } = useProductListAction();
+  const { stateProduct, dispatchProduct } = React.useContext(
+    contexts.ProductContext,
+  );
+  /** === EFFECT === */
+  React.useEffect(() => {
+    list(dispatchProduct);
+  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -21,25 +28,16 @@ const ProductView: FC = () => {
   const tab = () => {
     return <ProductTabView />;
   };
-  /** => tag */
-  const tag = () => {
-    return <ProductTagView />;
-  };
-  /** => item */
-  const item = () => {
-    return <ProductItemView />;
-  };
-  /** => bottomAction */
-  const bottomAction = () => {
-    return <ProductBottomActionView />;
+  /** => product list */
+  const productList = () => {
+    return <ProductListView data={stateProduct.list} />;
   };
   /** => content */
   const content = () => {
     return (
       <View style={{ flex: 1 }}>
         {tab()}
-        {tag()}
-        {item()}
+        {productList()}
       </View>
     );
   };
@@ -48,7 +46,6 @@ const ProductView: FC = () => {
     <SnbContainer color="white">
       {header()}
       {content()}
-      {bottomAction()}
     </SnbContainer>
   );
 };
