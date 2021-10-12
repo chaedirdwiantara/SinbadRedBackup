@@ -15,6 +15,7 @@ export * from './oms/verification-order/verification-order.type';
 export * from './promo.type';
 export * from './category.type';
 export * from './voucher.type';
+export * from './user.type';
 /**
  * ================================================================
  * NOTES

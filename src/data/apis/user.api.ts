@@ -5,12 +5,18 @@ import * as models from '@models';
 /** => store detail */
 const storeDetail = () => {
   const path = 'stores';
-  return apiMapping<models.StoreDetail>(path, 'account', 'v1', 'DETAIL');
+  return apiMapping<models.StoreDetail>(
+    'auth',
+    path,
+    'account',
+    'v1',
+    'DETAIL',
+  );
 };
 /** => verfication order create */
 const changePassword = (data: object) => {
   const path = 'change-password';
-  return apiMapping(path, 'auth', 'v1', 'PATCH', data);
+  return apiMapping('auth', path, 'auth', 'v1', 'PATCH', data);
 };
 /** === EXPORT FUNCTIONS === */
 export const UserApi = {

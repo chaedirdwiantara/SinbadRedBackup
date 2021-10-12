@@ -10,17 +10,19 @@ import {
   Example2Provider,
   Example2Context,
 } from './examples2/Example2Provider';
+import { UserProvider, UserContext } from './users/UserProvider';
+import { MerchantProvider, MerchantContext } from './merchant/MerchantProvider';
 import { VoucherProvider, VoucherContext } from './voucher/VoucherProvider';
 import { PromoProvider, PromoContext } from './promo/PromoProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   ProductProvider,
+  ExampleProvider,
+  Example2Provider,
+  UserProvider,
+  MerchantProvider,
   VerificationOrderProvider,
-  ExampleProvider,
-  Example2Provider,
   CategoryProvider,
-  ExampleProvider,
-  Example2Provider,
   VoucherProvider,
   PromoProvider,
 ];
@@ -31,6 +33,8 @@ export const contexts = {
   CategoryContext,
   ExampleContext,
   Example2Context,
+  UserContext,
+  MerchantContext,
   VoucherContext,
   PromoContext,
 };
