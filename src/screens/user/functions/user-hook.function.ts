@@ -68,8 +68,11 @@ const useConfirmNewPassword = () => {
 const useStoreDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.storeDetailProcess(contextDispatch, { id }));
+    detail: (
+      contextDispatch: (action: any) => any,
+      data: models.DetailProcessProps,
+    ) => {
+      dispatch(Actions.storeDetailProcess(contextDispatch, data));
     },
   };
 };

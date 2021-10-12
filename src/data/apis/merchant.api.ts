@@ -1,5 +1,4 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiGeneral from '@core/services/apiGeneral';
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTION === */
@@ -17,7 +16,7 @@ const supplierList = (data: models.ListProcessProps) => {
 /** => merchant edit */
 const editMerchant = (data: object) => {
   const path = 'stores/profile';
-  return apiGeneral('auth', path, 'account', 'v1', 'PATCH', data);
+  return apiMapping('auth', path, 'account', 'v1', 'PATCH', data);
 };
 /** => profile edit */
 const editProfile = (data: object) => {

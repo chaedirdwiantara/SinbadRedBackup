@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
@@ -25,9 +26,13 @@ const UserView: FC = () => {
   const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  useEffect(() => {
-    storeDetailAction.detail(dispatchUser, '3');
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const storeDetail = storeDetailAction.detail(dispatchUser);
+      return storeDetail;
+    }, []),
+  );
+
   console.log('stateUSer:', stateUser);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
