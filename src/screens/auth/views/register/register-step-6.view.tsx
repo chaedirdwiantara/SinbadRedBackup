@@ -5,7 +5,7 @@ import {
   useRegister,
   useTextFieldSelect,
 } from '@screen/auth/functions';
-import { REGISTER_STEP_7_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_7_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';

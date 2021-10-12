@@ -5,7 +5,7 @@ import * as models from '@models';
 const uploadImage = (data: models.IUploadImage) => {
   const path = 'upload/store-images';
   return apiGeneral<models.IUploadImageSuccess>(
-    'public',
+    'auth',
     path,
     'common',
     'v1',
@@ -62,7 +62,7 @@ const getLocation = (data: models.IUrbanID) => {
   let meta = `skip=${data.meta?.skip || 0}&limit=${data.meta?.limit || 10}`;
   let path = `locations/search?${data.params}&${meta}`;
   return apiGeneral<models.IGetSelectionSuccess<any>>(
-    'account',
+    'auth',
     path,
     'account',
     'v1',

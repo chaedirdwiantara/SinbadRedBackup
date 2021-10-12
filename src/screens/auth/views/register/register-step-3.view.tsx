@@ -15,7 +15,7 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import { REGISTER_STEP_4_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_4_VIEW } from '@screen/auth/functions/screens_name';
 
 const { height } = Dimensions.get('screen');
 

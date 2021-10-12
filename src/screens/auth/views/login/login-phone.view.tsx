@@ -4,7 +4,7 @@ import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
   REGISTER_VIEW,
-} from '@screen/auth/screens_name';
+} from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
 import { View, ScrollView } from 'react-native';

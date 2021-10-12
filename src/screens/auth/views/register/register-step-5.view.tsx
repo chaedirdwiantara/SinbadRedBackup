@@ -4,7 +4,7 @@ import {
   useRegister,
   useTextFieldSelect,
 } from '@screen/auth/functions';
-import { REGISTER_STEP_6_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_6_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import {
