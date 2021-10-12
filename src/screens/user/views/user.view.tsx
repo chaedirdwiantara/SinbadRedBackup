@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Image } from 'react-native';
 import {
@@ -32,8 +32,6 @@ const UserView: FC = () => {
       return storeDetail;
     }, []),
   );
-
-  console.log('stateUSer:', stateUser);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);

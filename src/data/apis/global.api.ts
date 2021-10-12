@@ -49,6 +49,7 @@ const getSelection = (data: models.IListSelection) => {
     }
   }
   return apiGeneral<models.IGetSelectionSuccess<any>>(
+    'auth',
     path,
     'account',
     'v1',

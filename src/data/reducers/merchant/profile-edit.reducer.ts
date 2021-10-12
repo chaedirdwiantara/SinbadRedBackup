@@ -42,4 +42,8 @@ export const profileEditReducer = simplifyReducer(profileEditInitialState, {
       error: action.payload,
     };
   },
+  /** => list reset */
+  [types.PROFILE_EDIT_RESET]() {
+    return profileEditInitialState;
+  },
 });

@@ -71,12 +71,12 @@ const UserChangePasswordView: FC = () => {
             type={'default'}
             placeholder="Masukkan kata sandi sekarang"
             onChangeText={(text) => textOldPassword(text)}
-            clearText={() => console.log('test')}
+            clearText={() => setDataOldPassword('')}
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName="visibility"
-            suffixAction={() => console.log('this for suffix action')}
+            // suffixAction={() => console.log('this for suffix action')}
             secureTextEntry={true}
           />
         </View>
@@ -89,12 +89,13 @@ const UserChangePasswordView: FC = () => {
             type={'default'}
             placeholder="Masukkan kata sandi baru"
             onChangeText={(text) => textNewPassword(text)}
-            clearText={() => console.log('test')}
+            clearText={() => setDataNewPassword('')}
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName="visibility"
-            suffixAction={() => console.log('this for suffix action')}
+            // suffixAction={() => console.log('this for suffix action')}
+            secureTextEntry={true}
           />
         </View>
         <SnbTextField.Text
@@ -105,12 +106,13 @@ const UserChangePasswordView: FC = () => {
           type={'default'}
           placeholder="Masukkan ulang kata sandi baru"
           onChangeText={(text) => textConfirmNewPassword(text)}
-          clearText={() => console.log('test')}
+          clearText={() => setDataConfirmNewPassword('')}
           maxLength={40}
           valMsgError="ini contoh kalau error ya"
           keyboardType="default"
           suffixIconName="visibility"
-          suffixAction={() => console.log('this for suffix action')}
+          // suffixAction={() => console.log('this for suffix action')}
+          secureTextEntry={true}
         />
       </View>
     );

@@ -56,8 +56,12 @@ interface IStoreDetailCompleteness {
   largeArea?: string;
   topSellingBrand?: string;
   mostWantedBrand?: string;
-  vehicleAccessibility?: string;
+  vehicleAccessibility?: IVehicleAccessibility;
   vehicleAccessibilityAmount?: number;
+}
+interface IVehicleAccessibility {
+  id: number;
+  name: string;
 }
 interface IProgress {
   done: number;

@@ -61,6 +61,10 @@ export const merchantEditFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.MERCHANT_EDIT_FAILED, payload: data };
 };
+/** => merchant edit reset */
+export const merchantEditReset = () => {
+  return { type: types.MERCHANT_EDIT_RESET };
+};
 /** === PROFILE ACCOUNT EDIT === */
 /** => process */
 export const profileEditProcess = (
@@ -88,6 +92,10 @@ export const profileEditFailed = (
   data: models.ErrorProps,
 ): models.UpdateFailedAction => {
   return { type: types.PROFILE_EDIT_FAILED, payload: data };
+};
+/** => profile edit reset */
+export const profileEditReset = () => {
+  return { type: types.PROFILE_EDIT_RESET };
 };
 /** === GET NUMBER OF EMPLOYEE LIST === */
 /** => list number of employee process */
