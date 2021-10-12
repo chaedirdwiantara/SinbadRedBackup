@@ -35,7 +35,8 @@ export const BannerStyles = StyleSheet.create({
     paddingBottom: 16, 
     backgroundColor: 'white', 
     flexDirection: 'row', 
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8
   },

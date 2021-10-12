@@ -77,6 +77,11 @@ const CardBanner = () => {
     </View>
     {/* Foter */}
     <View style={BannerStyles.footerCardBanner}>
+      <View>
+        <SnbText.C1 color={color.black60}>
+          Berlaku sampai 31 Jan 2020
+        </SnbText.C1>
+      </View>
       <TouchableOpacity 
         style={BannerStyles.buttonDetail} 
         onPress={() => goToBannerDetail()}
