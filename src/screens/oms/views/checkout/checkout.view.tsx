@@ -3,6 +3,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
 import React, { FC } from 'react';
 import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import HTMLView from 'react-native-htmlview';
 import {
   SnbContainer,
   SnbTopNav,
@@ -20,6 +21,8 @@ import {
   usePaymentDetailAccorrdion,
   usePaymentTypeModal,
   usePaymentChannelModal,
+  useParcelDetailModal,
+  useTermsAndConditionsModal,
 } from '../../functions/checkout';
 /** === DUMMIES === */
 const dummySKU = [
@@ -239,12 +242,38 @@ const dummyPaymentChannel = {
     ],
   },
 };
+const dummyTermsAndConditions = {
+  data: {
+    storeId: 101,
+    paymentTypes: [
+      {
+        paymentTypeId: 1,
+        name: 'Bayar Sekarang',
+        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+      },
+      {
+        paymentTypeId: 1,
+        name: 'Bayar Sekarang',
+        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+      },
+    ],
+    paymentChannels: [
+      {
+        paymentChannelId: 2,
+        name: 'Bank BCA Virtual Account',
+        term: '<ul><li class=p1>Pembeli diharapkan untuk melakukan transfer ke nomor rekening yang disediakan.</li></ul>',
+      },
+    ],
+  },
+};
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const paymentAccordion = usePaymentDetailAccorrdion();
   const paymentTypesModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
+  const parcelDetailModal = useParcelDetailModal();
+  const termsAndConditionModal = useTermsAndConditionsModal();
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -423,7 +452,8 @@ const OmsCheckoutView: FC = () => {
       <View style={CheckoutStyle.invoiceGroupListContainer}>
         <View style={CheckoutStyle.headerSection}>
           <SnbText.H4>Danone</SnbText.H4>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => termsAndConditionModal.setOpen(true)}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity>
         </View>
@@ -465,6 +495,117 @@ const OmsCheckoutView: FC = () => {
         </ScrollView>
         {renderBottom()}
       </>
+    );
+  };
+  /** => terms and conditions modal */
+  const renderTermsAndConditionModal = () => {
+    const paymentTypesTermsConditions = () => {
+      return dummyTermsAndConditions.data.paymentTypes.map((item, index) => {
+        return (
+          <View key={index} style={{ marginBottom: 12 }}>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.H4>{item.name}</SnbText.H4>
+            </View>
+            <HTMLView value={item.term} />
+          </View>
+        );
+      });
+    };
+    const paymentChannelTermsConditions = () => {
+      return dummyTermsAndConditions.data.paymentChannels.map((item, index) => {
+        return (
+          <View key={index} style={{ marginBottom: 12 }}>
+            <View style={{ marginBottom: 8 }}>
+              <SnbText.H4>{item.name}</SnbText.H4>
+            </View>
+            <HTMLView value={item.term} />
+          </View>
+        );
+      });
+    };
+    const button = () => {
+      return (
+        <View>
+          <SnbButton.Single
+            title={'Buat Pesanan'}
+            disabled={false}
+            type={'primary'}
+            onPress={() => {}}
+          />
+        </View>
+      );
+    };
+    const content = () => {
+      return (
+        <ScrollView style={{ paddingHorizontal: 16 }}>
+          <View style={{ marginBottom: 16, alignItems: 'center' }}>
+            <SnbText.C1>
+              Dengan ini saya menyetujui Syarat & Ketentuan yang berlaku:
+            </SnbText.C1>
+          </View>
+          {paymentTypesTermsConditions()}
+          <SnbDivider style={{ marginBottom: 12 }} />
+          {paymentChannelTermsConditions()}
+          {button()}
+        </ScrollView>
+      );
+    };
+    return (
+      <SnbBottomSheet
+        open={termsAndConditionModal.isOpen}
+        content={content()}
+        title={'Syarat & Ketentuan'}
+        closeAction={() => termsAndConditionModal.setOpen(false)}
+        action={true}
+        actionIcon={'close'}
+      />
+    );
+  };
+  /** => parcel detail modal */
+  const renderParcelDetailModal = () => {
+    const content = () => {
+      return (
+        <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingBottom: 16 }}>
+            <SnbText.H4>Produk</SnbText.H4>
+            <SnbDivider style={{ marginVertical: 8 }} />
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginBottom: 8,
+              }}>
+              <View style={{ width: '50%' }}>
+                <SnbText.B1>SGM ANANDA 11000 GR GA</SnbText.B1>
+              </View>
+              <SnbText.B1>{toCurrency(330000)}</SnbText.B1>
+            </View>
+            <View
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ width: '50%' }}>
+                <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
+              </View>
+              <SnbText.B2 color={color.black80}>
+                {toCurrency(330000)}
+              </SnbText.B2>
+            </View>
+          </View>
+          <View style={{ paddingVertical: 16 }}>
+            <SnbText.H4>Potongan Harga</SnbText.H4>
+            <SnbDivider style={{ marginVertical: 8 }} />
+          </View>
+        </View>
+      );
+    };
+    return (
+      <SnbBottomSheet
+        open={parcelDetailModal.isOpen}
+        content={content()}
+        title={'Detail Pesanan'}
+        closeAction={() => parcelDetailModal.setOpen(false)}
+        action={true}
+        actionIcon={'close'}
+      />
     );
   };
   /** => payment types modal */
@@ -597,6 +738,8 @@ const OmsCheckoutView: FC = () => {
       <>
         {renderPaymentTypesModal()}
         {renderPaymentChannelsModal()}
+        {renderParcelDetailModal()}
+        {renderTermsAndConditionModal()}
       </>
     );
   };

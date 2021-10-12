@@ -18,6 +18,26 @@ const usePaymentDetailAccorrdion = () => {
     active,
   };
 };
+/** => terms and conditions modal */
+const useTermsAndConditionsModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
+/** => parcel detail modal */
+const useParcelDetailModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** => payment types modal */
 const usePaymentTypeModal = () => {
   const [isOpen, setOpen] = React.useState(false);
@@ -41,6 +61,8 @@ const usePaymentChannelModal = () => {
 /** === EXPORT === */
 export {
   usePaymentDetailAccorrdion,
+  useTermsAndConditionsModal,
+  useParcelDetailModal,
   usePaymentTypeModal,
   usePaymentChannelModal,
 };
