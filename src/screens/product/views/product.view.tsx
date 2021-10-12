@@ -1,51 +1,38 @@
-/** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+/** === IMPORT PACKAGES ===  */
+import React, { FC, useContext, useEffect } from 'react';
+import { View } from 'react-native';
+import { SnbContainer } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENTS === */
 import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
 import ProductListView from '@core/components/product/list';
+/** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
-import { goBack, useTabCategory, useProductListAction } from '../functions';
+import { useProductListAction } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
-  /** === HOOK === */
+  /** === HOOKS === */
   const { list } = useProductListAction();
-  const { stateProduct, dispatchProduct } = React.useContext(
-    contexts.ProductContext,
-  );
-  /** === EFFECT === */
-  React.useEffect(() => {
+  const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
+
+  useEffect(() => {
     list(dispatchProduct);
   }, []);
   /** === VIEW === */
-  /** => header */
-  const header = () => {
-    return <ProductHeaderView />;
-  };
-  /** => tab */
-  const tab = () => {
-    return <ProductTabView />;
-  };
-  /** => product list */
-  const productList = () => {
-    return <ProductListView data={stateProduct.list} />;
-  };
-  /** => content */
-  const content = () => {
+  /** => Content */
+  const renderContent = () => {
     return (
       <View style={{ flex: 1 }}>
-        {tab()}
-        {productList()}
+        <ProductTabView />
+        <ProductListView data={stateProduct.list} />
       </View>
     );
   };
-  /** => main */
+  /** => Main */
   return (
     <SnbContainer color="white">
-      {header()}
-      {content()}
+      <ProductHeaderView />
+      {renderContent()}
     </SnbContainer>
   );
 };
@@ -57,8 +44,8 @@ export default ProductView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 12-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
