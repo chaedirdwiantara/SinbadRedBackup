@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import {
+  color,
   SnbContainer,
-  SnbText,
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
@@ -9,10 +9,13 @@ import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import MapView, { Marker } from 'react-native-maps';
 
 const MerchantDetailAddressView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  let mapRef = React.useRef<MapView>(null);
+
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -35,7 +38,39 @@ const MerchantDetailAddressView: FC = () => {
   const renderMap = () => {
     return (
       <View style={{ marginTop: 16, marginHorizontal: 16 }}>
-        <SnbText.B1>map</SnbText.B1>
+        <MapView
+          ref={mapRef}
+          initialRegion={{
+            latitude:
+              stateUser.detail.data?.storeData.storeAddress.latitude || 0,
+            longitude:
+              stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          }}
+          zoomEnabled={false}
+          pitchEnabled={false}
+          scrollEnabled={false}
+          style={{
+            height: 160,
+            borderWidth: 1,
+            borderStyle: 'dashed',
+            borderRadius: 16,
+            backgroundColor: color.black5,
+            borderColor: color.black40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+          <Marker
+            coordinate={{
+              latitude:
+                stateUser.detail.data?.storeData.storeAddress.latitude || 0,
+              longitude:
+                stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            }}
+          />
+        </MapView>
       </View>
     );
   };

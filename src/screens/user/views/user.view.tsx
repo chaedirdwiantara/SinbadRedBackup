@@ -20,6 +20,8 @@ import UserStyles from '../styles/user.style';
 import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import LoadingPage from '@core/components/LoadingPage';
+import { LoginPhoneView } from '@screen/auth/views';
 
 const UserView: FC = () => {
   /** === HOOK === */
@@ -41,14 +43,17 @@ const UserView: FC = () => {
   /** === VIEW === */
   /** => header */
   const header = () => {
-    return (
-      <SnbTopNav.Type2
-        type="red"
-        title="Profil"
-        iconName={'settings'}
-        iconAction={() => NavigationAction.navigate('UserSettingView')}
-      />
-    );
+    if (stateUser.detail.data) {
+      return (
+        <SnbTopNav.Type2
+          type="red"
+          title="Profil"
+          iconName={'settings'}
+          iconAction={() => NavigationAction.navigate('UserSettingView')}
+        />
+      );
+    }
+    return <SnbTopNav.Type1 type="white" title="" />;
   };
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
@@ -183,34 +188,31 @@ const UserView: FC = () => {
   };
   /** => content */
   const content = () => {
-    return (
-      <ScrollView
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={stateUser.detail.data ? {} : { flex: 1 }}>
-        {stateUser.detail.data ? (
-          contentItem()
-        ) : (
-          <View
-            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <SnbText.B1>Not Login</SnbText.B1>
-          </View>
-        )}
-      </ScrollView>
-    );
+    if (stateUser.detail.loading) {
+      return <LoadingPage />;
+    }
+
+    if (stateUser.detail.data) {
+      return (
+        <ScrollView
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}>
+          {contentItem()}
+        </ScrollView>
+      );
+    }
+
+    if (!stateUser.detail.data) {
+      return <LoginPhoneView asComponent />;
+    }
+
+    return null;
   };
   /** this for main view */
   return (
     <SnbContainer color={'grey'}>
       {header()}
-      {!stateUser.detail.loading ? (
-        content()
-      ) : (
-        <View
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <SnbText.B1>Loading ...</SnbText.B1>
-        </View>
-      )}
+      {content()}
     </SnbContainer>
   );
 };

@@ -5,7 +5,7 @@ import apiHost from './apiHost';
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
 const apiGeneral = async <T>(
-  access: 'public' | 'auth',
+  access: 'public' | 'auth' | 'account',
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
