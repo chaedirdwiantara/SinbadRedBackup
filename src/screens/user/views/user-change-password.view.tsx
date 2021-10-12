@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
@@ -9,6 +9,8 @@ import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const UserChangePasswordView: FC = () => {
   /** === HOOK === */
@@ -16,6 +18,16 @@ const UserChangePasswordView: FC = () => {
   const { dataNewPassword, setDataNewPassword } = UserHookFunc.useNewPassword();
   const { dataConfirmNewPassword, setDataConfirmNewPassword } =
     UserHookFunc.useConfirmNewPassword();
+  const changePasswordAction = UserHookFunc.useChangePassword();
+  const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  useEffect(() => {
+    if (stateUser.update.data) {
+      console.log('success');
+    } else {
+      console.log('failed');
+    }
+  }, [stateUser.update.data]);
+
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
     setDataOldPassword(oldPassword);
@@ -28,10 +40,12 @@ const UserChangePasswordView: FC = () => {
   };
   /** === FUNCTION === */
   const confirm = () => {
-    console.log({
-      old: dataOldPassword,
-      new: dataNewPassword,
-      confirm: dataConfirmNewPassword,
+    changePasswordAction.changePassword(dispatchUser, {
+      data: {
+        oldPassword: dataOldPassword,
+        newPassword: dataNewPassword,
+        confirmNewPassword: dataConfirmNewPassword,
+      },
     });
   };
   /** === VIEW === */
@@ -54,7 +68,7 @@ const UserChangePasswordView: FC = () => {
             boxIndicator
             labelText="Kata Sandi Sekarang"
             value={dataOldPassword}
-            type={'password'}
+            type={'default'}
             placeholder="Masukkan kata sandi sekarang"
             onChangeText={(text) => textOldPassword(text)}
             clearText={() => console.log('test')}
@@ -63,6 +77,7 @@ const UserChangePasswordView: FC = () => {
             keyboardType="default"
             suffixIconName="visibility"
             suffixAction={() => console.log('this for suffix action')}
+            secureTextEntry={true}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -71,7 +86,7 @@ const UserChangePasswordView: FC = () => {
             boxIndicator
             labelText="Kata Sandi Baru"
             value={dataNewPassword}
-            type={'enable'}
+            type={'default'}
             placeholder="Masukkan kata sandi baru"
             onChangeText={(text) => textNewPassword(text)}
             clearText={() => console.log('test')}
@@ -87,7 +102,7 @@ const UserChangePasswordView: FC = () => {
           boxIndicator
           labelText="Konfirmasi Kata Sandi Baru"
           value={dataConfirmNewPassword}
-          type={'enable'}
+          type={'default'}
           placeholder="Masukkan ulang kata sandi baru"
           onChangeText={(text) => textConfirmNewPassword(text)}
           clearText={() => console.log('test')}

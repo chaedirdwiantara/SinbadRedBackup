@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
@@ -8,18 +9,31 @@ import {
   SnbIconHint,
   SnbListButtonType2,
   SnbCardMultiButtonType1,
-  SnbSvgIcon,
   SnbCardButtonType2,
+  SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
+import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const UserView: FC = () => {
   /** === HOOK === */
   const { action, state } = UserHookFunc.useBadgeInformation();
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
+  const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  useFocusEffect(
+    React.useCallback(() => {
+      const storeDetail = storeDetailAction.detail(dispatchUser);
+      return storeDetail;
+    }, []),
+  );
+
+  console.log('stateUSer:', stateUser);
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);
@@ -37,22 +51,29 @@ const UserView: FC = () => {
     );
   };
   const renderHeaderInformation = () => {
+    const data = stateUser.detail.data?.ownerData?.profile;
     return (
       <View style={UserStyles.headerInformationContainer}>
         <View style={UserStyles.imageContainer}>
-          <Image
-            source={{
-              uri: 'https://dutadamaiyogyakarta.id/wp-content/uploads/2016/06/team-1.jpg',
-            }}
-            style={UserStyles.image}
-          />
+          {data?.imageUrl ? (
+            <Image source={{ uri: data.imageUrl }} style={UserStyles.image} />
+          ) : (
+            <Svg name={'avatar'} size={50} color={color.red50} />
+          )}
         </View>
         <View style={UserStyles.userInfo}>
-          <SnbText.B4 color={color.white}>John Doe</SnbText.B4>
-          <SnbText.C1 color={color.white}>Kelengkapan profil 50%</SnbText.C1>
+          <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+          <SnbText.C1 color={color.white}>
+            Kelengkapan profil {countPercentageProfileComplete()}%
+          </SnbText.C1>
         </View>
       </View>
     );
+  };
+  const countPercentageProfileComplete = () => {
+    const progressDone = stateUser.detail.data?.progress.done || 0;
+    const progressTotal = stateUser.detail.data?.progress.total || 0;
+    return Math.floor((progressDone / progressTotal) * 100);
   };
   const renderLoyaltiInformation = () => {
     return (
@@ -65,7 +86,7 @@ const UserView: FC = () => {
                 icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
                 title: 'Sinbad Point',
                 subtitle: '1000 Point',
-                onPress: () => console.log('pressed'),
+                onPress: () => console.log('press'),
               },
               {
                 icon: (
@@ -87,12 +108,13 @@ const UserView: FC = () => {
     );
   };
   const renderUserInformation = () => {
+    const data = stateUser.detail.data?.progress;
     return (
       <View>
         <View style={{ marginVertical: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Pemilik</SnbText.B4>
-            <SnbText.B3>1/8 Selesai</SnbText.B3>
+            <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
           </View>
           <SnbListButtonType2
             title={'Data Diri'}
@@ -104,7 +126,7 @@ const UserView: FC = () => {
         <View style={{ marginBottom: 16 }}>
           <View style={UserStyles.bodyTitleContainer}>
             <SnbText.B4>Data Toko</SnbText.B4>
-            <SnbText.B3>4/9 Selesai</SnbText.B3>
+            <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
           </View>
           <SnbListButtonType2
             title={'Informasi Toko'}
@@ -162,16 +184,33 @@ const UserView: FC = () => {
   /** => content */
   const content = () => {
     return (
-      <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-        {contentItem()}
+      <ScrollView
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={stateUser.detail.data ? {} : { flex: 1 }}>
+        {stateUser.detail.data ? (
+          contentItem()
+        ) : (
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <SnbText.B1>Not Login</SnbText.B1>
+          </View>
+        )}
       </ScrollView>
     );
   };
   /** this for main view */
   return (
-    <SnbContainer color={'white'}>
+    <SnbContainer color={'grey'}>
       {header()}
-      {content()}
+      {!stateUser.detail.loading ? (
+        content()
+      ) : (
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <SnbText.B1>Loading ...</SnbText.B1>
+        </View>
+      )}
     </SnbContainer>
   );
 };

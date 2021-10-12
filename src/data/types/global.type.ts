@@ -14,8 +14,6 @@ export const GET_SELECTION_SUCCESS = 'GetSelectionSuccess';
 export const GET_SELECTION_FAILED = 'GetSelectionFailed';
 export const GET_SELECTION_RESET = 'GetSelectionReset';
 export const SELECTED_ITEM = 'SelectedItem';
-// THIS FOR SAVING SELECTED VOUCHERS DATA
-export const SAVE_SELECTED_VOUCHERS = 'SaveSelectedVouchers';
 
 export const GET_LOCATION_PROCESS = 'GetLocationProcess';
 export const GET_LOCATION_SUCCESS = 'GetLocationSuccess';
