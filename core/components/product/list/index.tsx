@@ -1,39 +1,136 @@
-/** === IMPORT PACKAGE HERE ===  */
+/** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
-import TagView from './tag.view';
-import ItemView from './item.view';
+import { View } from 'react-native';
+import { SnbContainer } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENTS === */
+import GridLayoutView from './grid-layout.view';
+import ListLayoutView from './list-layout.view';
 import BottomActionView from './bottom-action.view';
-/** === IMPORT MODEL HERE === */
+/** === IMPORT FUNCTIONS === */
+import { useBottomAction } from '@core/functions/product';
+/** === IMPORT MODEL === */
 import * as models from '@models';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+/** === TYPE === */
 interface ProductComponentProps {
   data: models.ListItemProps<models.ProductList[]>;
 }
+/** === DUMMIES === */
+const dummyTags: Array<string> = [
+  'Fresh',
+  'Cream',
+  'Honey',
+  'Anak',
+  'Almond',
+  'Perfect',
+  'Liquid',
+  'Remover',
+];
+const dummyProducts = {
+  data: [
+    {
+      id: '1',
+      name: 'LAKME CC CREAM ALMOND',
+      image:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
+      currentPrice: 77891,
+      isBundle: false,
+      isPromo: true,
+      isExclusive: true,
+      segmentationPrice: 77891,
+      retailBuyingPrice: 77891,
+    },
+    {
+      id: '2',
+      name: 'LAKME BLUR PERFECT CREAMER',
+      image:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
+      currentPrice: 150000,
+      isBundle: false,
+      isPromo: false,
+      isExclusive: false,
+      segmentationPrice: 150000,
+      retailBuyingPrice: 150000,
+    },
+    {
+      id: '3',
+      name: 'LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR',
+      image:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
+      currentPrice: 98782,
+      isBundle: true,
+      isPromo: true,
+      isExclusive: true,
+      segmentationPrice: 98782,
+      retailBuyingPrice: 98782,
+    },
+    {
+      id: '4',
+      name: 'LAKME BIPHASED MAKEUP REMOVER',
+      image:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
+      currentPrice: 72000,
+      isBundle: false,
+      isPromo: true,
+      isExclusive: false,
+      segmentationPrice: 72000,
+      retailBuyingPrice: 72000,
+    },
+    {
+      id: '5',
+      name: 'LAKME CC CREAM HONEY',
+      image:
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
+      currentPrice: 77891,
+      isBundle: false,
+      isPromo: false,
+      isExclusive: true,
+      segmentationPrice: 77891,
+      retailBuyingPrice: 77891,
+    },
+  ],
+  loading: false,
+  loadMore: false,
+  refresh: false,
+  error: null,
+  total: 5,
+  skip: 0,
+};
 /** === COMPONENT === */
-const ProductListView: React.FC<ProductComponentProps> = (props) => {
+const ProductListView: FC<ProductComponentProps> = ({ data }) => {
   /** === HOOK === */
-  console.log(props.data);
+  const { layoutDisplay, handleActionClick } = useBottomAction();
   /** === VIEW === */
-  /** => item */
-  const item = () => {
-    return <ItemView data={props.data} />;
+  /** => List */
+  const renderList = () =>
+    layoutDisplay === 'grid' ? (
+      <GridLayoutView
+        data={data}
+        tags={dummyTags}
+        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+      />
+    ) : (
+      <ListLayoutView
+        data={dummyProducts}
+        tags={dummyTags}
+        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+      />
+    );
+  /** => Content */
+  const renderContent = () => {
+    return <View style={{ flex: 1 }}>{renderList()}</View>;
   };
-  /** => bottomAction */
-  const bottomAction = () => {
-    return <BottomActionView />;
-  };
-  /** => content */
-  const content = () => {
-    return <View style={{ flex: 1 }}>{item()}</View>;
-  };
-  /** => main */
+  /** => Main */
   return (
     <SnbContainer color="white">
-      {content()}
-      {bottomAction()}
+      {renderContent()}
+      <BottomActionView
+        sort={true}
+        filter={true}
+        layout={true}
+        category={true}
+        layoutDisplay={layoutDisplay}
+        onActionPress={handleActionClick}
+      />
     </SnbContainer>
   );
 };
@@ -45,8 +142,8 @@ export default ProductListView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 12-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
