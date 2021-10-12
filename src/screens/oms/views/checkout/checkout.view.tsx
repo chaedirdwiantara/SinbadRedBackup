@@ -453,7 +453,7 @@ const OmsCheckoutView: FC = () => {
         <View style={CheckoutStyle.headerSection}>
           <SnbText.H4>Danone</SnbText.H4>
           <TouchableOpacity
-            onPress={() => termsAndConditionModal.setOpen(true)}>
+            onPress={() => parcelDetailModal.setModalOpen(true)}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity>
         </View>
@@ -563,46 +563,136 @@ const OmsCheckoutView: FC = () => {
   };
   /** => parcel detail modal */
   const renderParcelDetailModal = () => {
+    const productDetail = () => {
+      return (
+        <View style={{ paddingBottom: 16 }}>
+          <SnbText.H4>Produk</SnbText.H4>
+          <SnbDivider style={{ marginVertical: 8 }} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 8,
+            }}>
+            <View style={{ width: '50%' }}>
+              <SnbText.B1>SGM ANANDA 11000 GR GA</SnbText.B1>
+            </View>
+            <SnbText.B1>{toCurrency(330000)}</SnbText.B1>
+          </View>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ width: '50%' }}>
+              <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
+            </View>
+            <SnbText.B2 color={color.black80}>{toCurrency(330000)}</SnbText.B2>
+          </View>
+        </View>
+      );
+    };
+    const discountDetail = () => {
+      return (
+        <View style={{ paddingBottom: 16 }}>
+          <SnbText.H4>Potongan Harga</SnbText.H4>
+          <SnbDivider style={{ marginVertical: 8 }} />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 8,
+            }}>
+            <View style={{ width: '50%' }}>
+              <SnbText.B1 color={color.green50}>
+                Voucher 'Berkah Ramadhan'
+              </SnbText.B1>
+            </View>
+            <SnbText.B1 color={color.green50}>{toCurrency(626)}</SnbText.B1>
+          </View>
+          <View
+            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={{ width: '50%' }}>
+              <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
+            </View>
+            <SnbText.B2 color={color.black80}>{toCurrency(626)}</SnbText.B2>
+          </View>
+        </View>
+      );
+    };
+    const total = () => {
+      return (
+        <View>
+          {parcelDetailModal.isDetailOpen ? (
+            <View style={{ marginLeft: 32 }}>
+              {dummyPaymentDetail.map((item, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginTop: 8,
+                    }}>
+                    <SnbText.B3
+                      color={
+                        item.type === 'normal' ? color.black100 : color.green50
+                      }>
+                      {item.name}
+                    </SnbText.B3>
+                    <SnbText.B3
+                      color={
+                        item.type === 'normal' ? color.black100 : color.green50
+                      }>
+                      {toCurrency(item.value)}
+                    </SnbText.B3>
+                  </View>
+                );
+              })}
+            </View>
+          ) : (
+            <View />
+          )}
+          <TouchableOpacity
+            onPress={() => {
+              parcelDetailModal.toggleDetail();
+            }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingVertical: 12,
+            }}>
+            <View style={{ flexDirection: 'row' }}>
+              <SnbIcon
+                name={
+                  parcelDetailModal.isDetailOpen ? 'expand_less' : 'expand_more'
+                }
+                size={24}
+                color={color.black100}
+              />
+              <View style={{ marginLeft: 8 }}>
+                <SnbText.H4>Total</SnbText.H4>
+              </View>
+            </View>
+            <SnbText.H4>Rp367.367,00</SnbText.H4>
+          </TouchableOpacity>
+        </View>
+      );
+    };
     const content = () => {
       return (
         <View style={{ paddingHorizontal: 16 }}>
-          <View style={{ paddingBottom: 16 }}>
-            <SnbText.H4>Produk</SnbText.H4>
-            <SnbDivider style={{ marginVertical: 8 }} />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginBottom: 8,
-              }}>
-              <View style={{ width: '50%' }}>
-                <SnbText.B1>SGM ANANDA 11000 GR GA</SnbText.B1>
-              </View>
-              <SnbText.B1>{toCurrency(330000)}</SnbText.B1>
-            </View>
-            <View
-              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View style={{ width: '50%' }}>
-                <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
-              </View>
-              <SnbText.B2 color={color.black80}>
-                {toCurrency(330000)}
-              </SnbText.B2>
-            </View>
-          </View>
           <View style={{ paddingVertical: 16 }}>
-            <SnbText.H4>Potongan Harga</SnbText.H4>
-            <SnbDivider style={{ marginVertical: 8 }} />
+            {productDetail()}
+            {discountDetail()}
+            {total()}
           </View>
         </View>
       );
     };
     return (
       <SnbBottomSheet
-        open={parcelDetailModal.isOpen}
+        open={parcelDetailModal.isModalOpen}
         content={content()}
         title={'Detail Pesanan'}
-        closeAction={() => parcelDetailModal.setOpen(false)}
+        closeAction={() => parcelDetailModal.setModalOpen(false)}
         action={true}
         actionIcon={'close'}
       />

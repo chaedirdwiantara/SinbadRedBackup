@@ -30,12 +30,21 @@ const useTermsAndConditionsModal = () => {
 };
 /** => parcel detail modal */
 const useParcelDetailModal = () => {
-  const [isOpen, setOpen] = React.useState(false);
+  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [isDetailOpen, setDetailOpen] = React.useState(false);
   return {
-    setOpen: (value: boolean) => {
-      setOpen(value);
+    setModalOpen: (value: boolean) => {
+      setModalOpen(value);
     },
-    isOpen,
+    toggleDetail: () => {
+      if (isDetailOpen) {
+        setDetailOpen(false);
+      } else {
+        setDetailOpen(true);
+      }
+    },
+    isModalOpen,
+    isDetailOpen,
   };
 };
 /** => payment types modal */
