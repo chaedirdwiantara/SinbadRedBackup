@@ -8,6 +8,15 @@ export const BannerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  search: {
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    borderColor: color.black10,
+    borderWidth: 1,
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginVertical: 8
+  },
   bannerCardContainer: {
     flexGrow: 1,
     marginBottom: 20,

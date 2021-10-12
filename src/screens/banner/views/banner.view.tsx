@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { TouchableOpacity, View, Image, ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav, SnbText, color } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav, SnbText, color, SnbIcon, SnbTextField } from 'react-native-sinbad-ui';
 import { goBack, goToBannerDetail } from '../functions';
 import { BannerStyles } from '../styles'
 /** === COMPONENT === */
@@ -19,6 +19,28 @@ const BannerListView: React.FC = () => {
     );
   };
 
+
+  /** => search */
+  const search = () => {
+    return (
+      <View style={BannerStyles.search}>
+        <SnbTextField.Text
+            noBorder
+            value={''}
+            type={'default'}
+            placeholder="Cari di Sinbad"
+            onChangeText={() => {}}
+            clearText={() => {}}
+            autoCapitalize="none"
+            keyboardType="default"
+            returnKeyType="search"
+            enter={() => {}}
+            prefixIconName="search"
+          />
+      </View>
+    );
+  }
+
   /** => content */
   const content = () => {
     return (
@@ -35,6 +57,7 @@ const BannerListView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
+      {search()}
       <ScrollView>{content()}</ScrollView>
     </SnbContainer>
   );
@@ -78,6 +101,7 @@ const CardBanner = () => {
     {/* Foter */}
     <View style={BannerStyles.footerCardBanner}>
       <View>
+        {/* <SnbIcon name={"calendar"} color={color.black60} size={12} /> */}
         <SnbText.C1 color={color.black60}>
           Berlaku sampai 31 Jan 2020
         </SnbText.C1>
