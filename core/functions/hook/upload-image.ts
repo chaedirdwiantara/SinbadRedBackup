@@ -2,28 +2,26 @@
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
-import * as models from '@models';
 /** === FUNCTION === */
-/** => call auth action */
-const useAuthAction = () => {
+/** => call action */
+const useUploadImageAction = () => {
   const dispatch = useDispatch();
   return {
-    loginUserName: (data: models.LoginUserNameProps) => {
-      dispatch(Actions.loginUserNameProcess(data));
+    save: (contextDispatch: (action: any) => any, imageUri: string) => {
+      dispatch(Actions.uploadImageReset(contextDispatch));
+      dispatch(
+        Actions.uploadImageSave(contextDispatch, {
+          imageUri,
+        }),
+      );
     },
-    requestOTP: (data: models.OtpRequestProps) => {
-      dispatch(Actions.requestOTPProcess(data));
-    },
-    verificationOTP: (data: models.LoginPhoneNumberProps) => {
-      dispatch(Actions.verificationOTPProcess(data));
-    },
-    logout: () => {
-      dispatch(Actions.logoutProcess());
+    upload: (contextDispatch: (action: any) => any, imageUri: string) => {
+      dispatch(Actions.uploadImageProcess(contextDispatch, { imageUri }));
     },
   };
 };
 /** === EXPORT === */
-export { useAuthAction };
+export { useUploadImageAction };
 /**
  * ================================================================
  * NOTES

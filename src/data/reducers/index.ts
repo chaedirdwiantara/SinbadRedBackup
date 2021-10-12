@@ -4,7 +4,7 @@
  * ============================================================
  */
 import { combineReducers } from 'redux';
-import { permanent } from './permanent';
+import { permanent } from './global/permanent.reducer';
 
 export const rootReducer = combineReducers({
   permanent,
