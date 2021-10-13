@@ -3,9 +3,10 @@ import {
   maskPhone,
   useCheckPhoneNoAvailability,
   useOTP,
+  useRegister,
 } from '@screen/auth/functions';
-import { REGISTER_STEP_1_VIEW } from '@screen/auth/screens_name';
-import { OTPContent } from '@screen/auth/shared';
+import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
+import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
@@ -14,10 +15,12 @@ const RegisterOTPView: React.FC = () => {
   const { verifyOTPRegister, verifyOTP, mobilePhone } = useOTP();
   const { goBack, replace }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
+  const { saveRegisterUserData } = useRegister();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
+      saveRegisterUserData({ mobilePhone });
       replace(REGISTER_STEP_1_VIEW);
     }
     if (verifyOTP.error !== null) {

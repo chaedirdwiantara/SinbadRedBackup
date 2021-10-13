@@ -17,9 +17,7 @@ const ListAndSearchView = () => {
     useTextFieldSelect();
 
   React.useEffect(() => {
-    setTimeout(() => {
-      getSelection(params);
-    }, 2000);
+    getSelection(params);
   }, []);
 
   React.useEffect(() => {

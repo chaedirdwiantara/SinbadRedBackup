@@ -3,7 +3,7 @@ import apiMaps from '@core/services/apiMaps';
 import { useNavigation } from '@react-navigation/core';
 import { extractAddress, useRegister } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
-import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/screens_name';
+import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View } from 'react-native';
 import MapView, { LatLng } from 'react-native-maps';

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { useInput } from '@screen/auth/functions';
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
-import { REGISTER_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
