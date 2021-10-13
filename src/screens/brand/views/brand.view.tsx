@@ -19,9 +19,6 @@ const BannerView: React.FC = () => {
   /** => effect */
   React.useEffect(() => {
     brandAction.list(dispatchBrand);
-    return () => {
-      brandAction.reset(dispatchBrand);
-    };
   }, []);
 
   const onHandleLoadMore = () => {
