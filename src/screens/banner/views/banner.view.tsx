@@ -100,11 +100,13 @@ const CardBanner = () => {
     </View>
     {/* Foter */}
     <View style={BannerStyles.footerCardBanner}>
-      <View>
-        {/* <SnbIcon name={"calendar"} color={color.black60} size={12} /> */}
-        <SnbText.C1 color={color.black60}>
-          Berlaku sampai 31 Jan 2020
-        </SnbText.C1>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <SnbIcon name={"calender"} color={color.black60} size={16} />
+        <View style={{marginLeft: 7}}>
+          <SnbText.C1 color={color.black60}>
+            Berlaku sampai 31 Jan 2020
+          </SnbText.C1>
+        </View>
       </View>
       <TouchableOpacity 
         style={BannerStyles.buttonDetail} 
