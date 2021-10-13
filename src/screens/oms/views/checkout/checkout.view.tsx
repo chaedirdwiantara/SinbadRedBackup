@@ -16,7 +16,7 @@ import {
   SnbBottomSheet,
   SnbListButtonType1,
 } from 'react-native-sinbad-ui';
-import { goBack } from '../../functions';
+import { goBack, goToPaymentPromoList } from '../../functions';
 import {
   usePaymentDetailAccorrdion,
   usePaymentTypeModal,
@@ -336,6 +336,7 @@ const OmsCheckoutView: FC = () => {
   const renderPaymentPromoBadge = () => {
     return (
       <TouchableOpacity
+        onPress={() => goToPaymentPromoList()}
         style={{
           flexDirection: 'row',
           padding: 12,
