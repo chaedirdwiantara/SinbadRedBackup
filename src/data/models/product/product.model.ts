@@ -6,6 +6,9 @@ export interface ProductList {
   isExclusive: boolean;
   isPromo: boolean;
   image: string;
+  thumbnail?: string;
+  originalPrice?: number;
+  currentPrice?: number;
   segmentationPrice: number;
   retailBuyingPrice: number;
 }
