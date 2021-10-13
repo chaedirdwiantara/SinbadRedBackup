@@ -11,3 +11,46 @@ export interface uploadImageAction {
   payload: UploadImageSaveProps;
   contextDispatch: (action: any) => any;
 }
+export interface IUploadImage {
+  base64: string;
+  currentFilePath: string | null | undefined;
+}
+
+export interface IUploadImageSuccess {
+  data: {
+    url: string;
+  };
+}
+
+export interface INumOfEmployee {
+  amount: string;
+}
+export interface IGetSelectionSuccess<T> {
+  data: T[];
+}
+
+export interface IListSelection {
+  type:
+    | 'listNumOfEmployee'
+    | 'listProvince'
+    | 'listCity'
+    | 'listDistrict'
+    | 'listUrban'
+    | 'listVehicleAccessAmount'
+    | 'listUrbanID'
+    | 'listVehicleAccess';
+  params?: string;
+  meta?: {
+    skip?: number;
+    limit?: number;
+    keyword?: string;
+  };
+}
+export interface IUrbanID {
+  params?: string;
+  meta?: {
+    skip?: number;
+    limit?: number;
+    keyword?: string;
+  };
+}

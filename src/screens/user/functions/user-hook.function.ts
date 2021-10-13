@@ -2,9 +2,12 @@
 import { useState } from 'react';
 /** === IMPORT PACKAGE HERE === */
 import { useSelector } from 'react-redux';
+/** === IMPORT PACKAGE HERE === */
+import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { RootState } from '@reducers';
 import * as models from '@models';
+import * as Actions from '@actions';
 /** === FUNCTION === */
 /** => collect data */
 /** brand */
@@ -59,6 +62,32 @@ const useConfirmNewPassword = () => {
     },
   };
 };
+
+/** => collect data */
+/** => call detail action */
+const useStoreDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (
+      contextDispatch: (action: any) => any,
+      data: models.DetailProcessProps,
+    ) => {
+      dispatch(Actions.storeDetailProcess(contextDispatch, data));
+    },
+  };
+};
+/** => change password */
+const useChangePassword = () => {
+  const dispatch = useDispatch();
+  return {
+    changePassword: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.changePasswordProcess(contextDispatch, data));
+    },
+  };
+};
 /** === EXPORT === */
 export const UserHookFunc = {
   useUserData,
@@ -66,6 +95,8 @@ export const UserHookFunc = {
   useOldPassword,
   useNewPassword,
   useConfirmNewPassword,
+  useStoreDetailAction,
+  useChangePassword,
 };
 /**
  * ================================================================

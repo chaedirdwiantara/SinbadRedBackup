@@ -5,6 +5,7 @@
  */
 export * from './permanent-napi.action';
 export * from './upload-image.action';
+export * from './global-api.action';
 /**
  * ================================================================
  * NOTES

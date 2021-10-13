@@ -6,8 +6,11 @@ import { RootState } from '@reducers';
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
+const useDataVoucher = () => {
+  return useSelector((state: RootState) => state.voucher);
+};
 /** === EXPORT === */
-export { useDataGlobal };
+export { useDataGlobal, useDataVoucher };
 /**
  * ================================================================
  * NOTES

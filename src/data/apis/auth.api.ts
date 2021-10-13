@@ -29,6 +29,7 @@ const logout = () => {
     'POST',
   );
 };
+
 /** === EXPORT FUNCTIONS === */
 export const AuthApi = {
   loginUserName,
