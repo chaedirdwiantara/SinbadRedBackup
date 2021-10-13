@@ -21,7 +21,7 @@ const callList = (
 /** => brand action */
 const useBrandAction = () => {
   const dispatch = useDispatch();
-  const limit = 30;
+  const limit = 10;
   return {
     list: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.brandListReset());
@@ -35,7 +35,6 @@ const useBrandAction = () => {
       contextDispatch: (action: any) => any,
       list: models.ListItemProps<models.BrandListSuccessProps[]>,
     ) => {
-      console.log('list', list);
       if (list.data.length < list.total) {
         contextDispatch(Actions.brandListLoadMore());
         dispatch(callList(contextDispatch, false, list.skip + limit, limit));
