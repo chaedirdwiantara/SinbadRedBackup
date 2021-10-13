@@ -45,7 +45,7 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName="Intro">
+    <Navigator initialRouteName={'Intro'}>
       {IntroNav()}
       {tabNav()}
       {projectNav()}

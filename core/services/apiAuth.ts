@@ -20,10 +20,12 @@ const apiAuth = async <T>(
     method,
     headers,
   };
+  Object.assign(reqBody, {
+    credentials: 'same-origin',
+  });
   /** === IF THERE IS PARAMETER === */
   if (!isEmpty(params)) {
     Object.assign(reqBody, {
-      credentials: 'same-origin',
       body: JSON.stringify(params),
     });
   }

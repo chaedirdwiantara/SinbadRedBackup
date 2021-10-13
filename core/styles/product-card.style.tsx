@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { styles, color } from 'react-native-sinbad-ui';
 
-export const ProductCardStyle = StyleSheet.create({
+const Type1 = StyleSheet.create({
   container: {
     borderRadius: 6,
     marginBottom: 8,
@@ -27,3 +27,7 @@ export const ProductCardStyle = StyleSheet.create({
     paddingVertical: 8,
   },
 });
+
+export const ProductCardStyle = {
+  Type1,
+};

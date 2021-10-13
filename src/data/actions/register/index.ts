@@ -3,7 +3,8 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './register.action';
+export * from './register-api.action';
+export * from './register-napi.action';
 /**
  * ================================================================
  * NOTES

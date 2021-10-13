@@ -4,14 +4,19 @@ import {
   SnbTopNav,
   SnbText,
   SnbIcon,
+  color,
 } from 'react-native-sinbad-ui';
 import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { NavigationAction } from '@navigation';
-import { color } from 'react-native-sinbad-ui';
+import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const MerchantDetailProfileView: FC = () => {
+  /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
   /** FUNCTION */
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
@@ -56,15 +61,20 @@ const MerchantDetailProfileView: FC = () => {
   };
   /** === RENDER HEADER CONTENT IMAGE (Owner Image) === */
   const renderOwnerImage = () => {
+    const ownerData = stateUser.detail.data?.ownerData;
     return (
       <View>
         {/* {this.props.merchant.dataMerchantVolatile.ownerImageUrl !== null ? ( */}
-        <Image
-          source={{
-            uri: 'https://dutadamaiyogyakarta.id/wp-content/uploads/2016/06/team-1.jpg',
-          }}
-          style={[MerchantStyles.imageProfile, {}]}
-        />
+        {ownerData?.profile.imageUrl ? (
+          <Image
+            source={{
+              uri: ownerData?.profile.imageUrl,
+            }}
+            style={MerchantStyles.imageProfile}
+          />
+        ) : (
+          <Svg name={'avatar'} size={50} color={color.red50} />
+        )}
         {/* ) : (
           <Image
             source={require('../../../assets/images/profile/avatar.png')}
@@ -102,7 +112,9 @@ const MerchantDetailProfileView: FC = () => {
           <View style={{ marginBottom: 6 }}>
             <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
           </View>
-          <SnbText.B3 color={color.black100}>{data.value}</SnbText.B3>
+          <SnbText.B3 color={data.success ? color.green50 : color.black100}>
+            {data.value}
+          </SnbText.B3>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
@@ -121,74 +133,78 @@ const MerchantDetailProfileView: FC = () => {
   };
   /** => content */
   const renderContent = () => {
+    const ownerData = stateUser.detail.data?.ownerData;
     return (
       <View>
         {renderContentSection({
           key: 'Nama Lengkap Pemilik',
-          value: 'Tyo',
-          action: 'ubah',
+          value: ownerData?.profile.name,
+          action: ownerData?.profile.name ? 'ubah' : 'tambah',
           type: 'merchantOwnerName',
-          // title: dataMerchantVolatile.idNo ? 'Ubah Nama Pemilik' : 'Tambah Nama Pemilik'
-          title: 'Tambah Nama Pemilik',
+          title: ownerData?.profile.name
+            ? 'Ubah Nama Pemilik'
+            : 'Tambah Nama Pemilik',
         })}
         {renderContentSection({
           key: 'Email',
-          value: 'Tyo@sinbad.co.id',
-          action: 'ubah',
+          value: ownerData?.profile.email,
+          action: ownerData?.profile.email ? 'ubah' : 'tambah',
           type: 'merchantOwnerEmail',
-          // title: dataMerchantVolatile.email ? 'Ubah E-mail' : 'Tambah E-mail'
-          title: 'Tambah E-mail',
+          title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
         })}
         {renderContentSection({
           key: 'Nomor Handphone',
-          value: '082288360129',
-          action: 'ubah',
+          value: ownerData?.profile.mobilePhone,
+          action: ownerData?.profile.mobilePhone ? 'ubah' : 'tambah',
           type: 'merchantOwnerPhoneNo',
-          // title: dataMerchantVolatile.phone ? 'Ubah Nomor Handphone' : 'Tambah Nomor Handphone'
-          title: 'Tambah Nomor Handphone',
+          title: ownerData?.profile.mobilePhone
+            ? 'Ubah Nomor Handphone'
+            : 'Tambah Nomor Handphone',
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.bankAccountNo,
+          action: ownerData?.profile.bankAccountNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerBankAccountNo',
-          // title: dataMerchantVolatile.bank.accountNo ? 'Ubah Rekening Bank' : 'Tambah Rekening Bank'
-          title: 'Tambah Rekening Bank',
+          title: ownerData?.profile.bankAccountNo
+            ? 'Ubah Rekening Bank'
+            : 'Tambah Rekening Bank',
         })}
         {renderContentSection({
           key: 'Nomor Kartu Tanda Penduduk (KTP)',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.idNo,
+          action: ownerData?.profile.idNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerIdNo',
-          // title: dataMerchantVolatile.idNo ? 'Ubah KTP' : 'Tambah KTP'
-          title: 'Tambah KTP',
+          title: ownerData?.profile.idNo ? 'Ubah KTP' : 'Tambah KTP',
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.taxNo,
+          action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
-          // title: dataMerchantVolatile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP'
-          title: 'Tambah NPWP',
+          title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
         })}
         {renderContentSection({
           key: 'Foto Nomor Pokok Wajib Pajak (NPWP)',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.taxImageUrl ? 'Sudah diupload' : '-',
+          action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.taxImageUrl ? true : false,
           type: 'merchantOwnerImageTax',
           title: 'Foto NPWP',
         })}
         {renderContentSection({
           key: 'Foto KTP',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.idImageUrl ? 'Sudah diupload' : '-',
+          action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.idImageUrl ? true : false,
           type: 'merchantOwnerImageId',
           title: 'Foto KTP',
         })}
         {renderContentSection({
           key: 'Foto Selfie + KTP',
-          value: '-',
-          action: 'tambah',
+          value: ownerData?.profile.selfieImageUrl ? 'Sudah diupload' : '-',
+          action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.selfieImageUrl ? true : false,
           type: 'merchantOwnerImageSelfie',
           title: 'Foto Selfie + KTP',
         })}

@@ -22,6 +22,9 @@ const apiGeneral = async <T>(
     method,
     headers,
   };
+  Object.assign(reqBody, {
+    credentials: 'same-origin',
+  });
   /** === IF THERE IS PARAMETER === */
   if (!isEmpty(params)) {
     Object.assign(reqBody, {
@@ -51,6 +54,7 @@ const apiGeneral = async <T>(
   };
   /** === THROW ERROR === */
   const throwError = (response: any) => {
+    console.log(response);
     throw {
       status: response.status,
       message: response.statusText,
@@ -71,7 +75,7 @@ const apiGeneral = async <T>(
   };
   /** === MAIN FUNCTION === */
   return fetch(
-    `${apiHost.api}/${module}/api/${version}/sinbad-app/${
+    `${apiHost.base}/${module}/api/${version}/sinbad-app/${
       access === 'public' ? '/public/' : ''
     }${path}`,
     reqBody,

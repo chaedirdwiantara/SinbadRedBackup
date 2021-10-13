@@ -3,7 +3,9 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './global-napi.action';
+export * from './permanent-napi.action';
+export * from './upload-image.action';
+export * from './global-api.action';
 /**
  * ================================================================
  * NOTES

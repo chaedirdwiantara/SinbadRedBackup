@@ -26,8 +26,8 @@ const Type1: FC<ProductCardType1Props> = ({
   total,
   originalTotal,
 }) => (
-  <View style={ProductCardStyle.container}>
-    <View style={ProductCardStyle.body}>
+  <View style={ProductCardStyle.Type1.container}>
+    <View style={ProductCardStyle.Type1.body}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Image
           source={{ uri: imageSource }}
@@ -51,8 +51,8 @@ const Type1: FC<ProductCardType1Props> = ({
         <SnbText.C2>{`${qty} ${uom}`}</SnbText.C2>
       </View>
     </View>
-    <View style={ProductCardStyle.divider} />
-    <View style={ProductCardStyle.footer}>
+    <View style={ProductCardStyle.Type1.divider} />
+    <View style={ProductCardStyle.Type1.footer}>
       <SnbText.C1>Total Harga</SnbText.C1>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         {originalQty && (
