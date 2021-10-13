@@ -48,34 +48,22 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { dispatchUser } = React.useContext(contexts.UserContext);
   // COMPLETNESS DATA
   const [numberOfEmployee, setNumberOfEmployee] = useState(
-    storeData?.storeDetailCompleteness?.numberOfEmployee
-      ? storeData?.storeDetailCompleteness?.numberOfEmployee
-      : '',
+    storeData?.storeDetailCompleteness?.numberOfEmployee || '',
   );
   const [vehicleAccessibility, setVehicleAccessibility] = useState(
-    storeData?.storeDetailCompleteness.vehicleAccessibility
-      ? storeData?.storeDetailCompleteness.vehicleAccessibility
-      : '',
+    storeData?.storeDetailCompleteness.vehicleAccessibility || '',
   );
   const [largeArea, setLargeArea] = useState(
-    storeData?.storeDetailCompleteness?.largeArea
-      ? storeData.storeDetailCompleteness?.largeArea
-      : '',
+    storeData?.storeDetailCompleteness?.largeArea || '',
   );
   const [topBrand, setTopBrand] = useState(
-    storeData?.storeDetailCompleteness?.topSellingBrand
-      ? storeData.storeDetailCompleteness?.topSellingBrand
-      : '',
+    storeData?.storeDetailCompleteness?.topSellingBrand || '',
   );
   const [wantedBrand, setWantedBrand] = useState(
-    storeData?.storeDetailCompleteness?.mostWantedBrand
-      ? storeData.storeDetailCompleteness?.mostWantedBrand
-      : '',
+    storeData?.storeDetailCompleteness?.mostWantedBrand || '',
   );
   const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] = useState(
-    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount
-      ? storeData.storeDetailCompleteness?.vehicleAccessibilityAmount
-      : '',
+    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || '',
   );
 
   useEffect(() => {
