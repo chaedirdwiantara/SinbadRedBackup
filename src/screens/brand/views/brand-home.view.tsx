@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
+import { NavigationAction } from '@navigation';
 /** === INTERNAL === */
 import { BrandCard } from '@core/components/BrandCard';
 /** === STYLE === */
@@ -78,7 +79,7 @@ const BrandHomeView: FC = () => {
         <SnbText.B4>Brand Kami</SnbText.B4>
         <TouchableOpacity
           style={{ justifyContent: 'center', alignItems: 'center' }}
-          onPress={() => console.log('See all brand pressed')}>
+          onPress={() => NavigationAction.navigate('BrandView')}>
           <SnbText.C2 color={color.red50}>Lihat Semua</SnbText.C2>
         </TouchableOpacity>
       </View>

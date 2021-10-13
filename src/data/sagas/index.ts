@@ -7,6 +7,7 @@ import VerificationOrderSaga from './oms/verification-order/verification-order.s
 import CategorySaga from './category/category.saga';
 import PromoSaga from './promo.saga';
 import VoucherSaga from './voucher.saga';
+import BrandSaga from './brand.saga';
 
 function* rootSaga() {
   yield all([fork(ExampleSaga)]);
@@ -17,6 +18,7 @@ function* rootSaga() {
   yield all([fork(VoucherSaga)]);
   yield all([fork(CategorySaga)]);
   yield all([fork(PromoSaga)]);
+  yield all([fork(BrandSaga)]);
 }
 
 export default rootSaga;
