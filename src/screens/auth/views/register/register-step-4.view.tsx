@@ -5,7 +5,7 @@ import {
   useRegister,
   useUploadImage,
 } from '@screen/auth/functions';
-import { REGISTER_STEP_5_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_5_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {

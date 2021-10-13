@@ -7,7 +7,7 @@ import {
   SnbOTPTimer,
   color,
 } from 'react-native-sinbad-ui';
-import { loginOTPStyle } from '../styles';
+import { loginOTPStyle } from '../../styles';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;

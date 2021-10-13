@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { useInput, useRegister } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
-import { REGISTER_STEP_2_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {

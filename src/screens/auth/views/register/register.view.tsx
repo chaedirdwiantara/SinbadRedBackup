@@ -3,7 +3,7 @@ import {
   useCheckPhoneNoAvailability,
   useInputPhone,
 } from '@screen/auth/functions';
-import { REGISTER_OTP_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {

@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { useAuthAction, useInputPhone } from '@screen/auth/functions';
+import { renderIF, useAuthAction, useInputPhone } from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
   REGISTER_VIEW,
-} from '@screen/auth/screens_name';
+} from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
@@ -29,6 +29,7 @@ const Content: React.FC = () => {
     if (requestOTPState.error !== null) {
       phone.setMessageError(requestOTPState.error.message);
     }
+    return resetRequestOTP;
   }, [requestOTPState]);
 
   return (
@@ -86,16 +87,21 @@ const Content: React.FC = () => {
   );
 };
 
-const LoginPhoneView: React.FC = () => {
+const LoginPhoneView: React.FC<{ asComponent: boolean }> = ({
+  asComponent,
+}: any) => {
   const { reset } = useNavigation();
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
-        backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-        type="white"
-        title=""
-      />
+      {renderIF(
+        !asComponent,
+        <SnbTopNav.Type3
+          backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+          type="white"
+          title=""
+        />,
+      )}
       <Content />
     </SnbContainer>
   );

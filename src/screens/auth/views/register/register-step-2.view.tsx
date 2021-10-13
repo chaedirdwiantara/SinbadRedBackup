@@ -14,7 +14,7 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { REGISTER_STEP_3_VIEW } from '@screen/auth/screens_name';
+import { REGISTER_STEP_3_VIEW } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
 
 const { height } = Dimensions.get('screen');
