@@ -14,6 +14,8 @@ import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { MerchantHookFunc } from '../../function';
+import { UserHookFunc } from '../../../user/functions';
+import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
 import { renderIF, useCamera, useUploadImage } from '@screen/auth/functions';
 import MapView, { Marker } from 'react-native-maps';
@@ -44,6 +46,29 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   );
   const [isOpenToast, setIsOpenToast] = useState(false);
   const [toasMessage, setToastMessage] = useState('');
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
+  const { dispatchUser } = React.useContext(contexts.UserContext);
+  // COMPLETNESS DATA
+  const [numberOfEmployee, setNumberOfEmployee] = useState(
+    storeData?.storeDetailCompleteness?.numberOfEmployee || '',
+  );
+  const [vehicleAccessibility, setVehicleAccessibility] = useState(
+    storeData?.storeDetailCompleteness.vehicleAccessibility || '',
+  );
+  const [largeArea, setLargeArea] = useState(
+    storeData?.storeDetailCompleteness?.largeArea || '',
+  );
+  const [topBrand, setTopBrand] = useState(
+    storeData?.storeDetailCompleteness?.topSellingBrand || '',
+  );
+  const [wantedBrand, setWantedBrand] = useState(
+    storeData?.storeDetailCompleteness?.mostWantedBrand || '',
+  );
+  const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] = useState(
+    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || '',
+  );
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { resetUploadImage, state: uploadData } = useUploadImage();
   let mapRef = React.useRef<MapView>(null);
@@ -55,21 +80,40 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   }, []);
 
   useEffect(() => {
-    if (stateMerchant.profileEdit.data) {
-      setToastMessage('Success');
+    if (stateMerchant.profileEdit.data || stateMerchant.merchantEdit.data) {
+      NavigationAction.back();
+      editMerchantAction.reset(dispatchSupplier);
+      editProfileAction.reset(dispatchSupplier);
+      storeDetailAction.detail(dispatchUser);
+    } else if (
+      stateMerchant.profileEdit.error ||
+      stateMerchant.merchantEdit.error
+    ) {
+      setToastMessage('failed');
       setIsOpenToast(true);
       setTimeout(() => {
         setIsOpenToast(false);
-      }, 2000);
-    } else {
-      setToastMessage('Failed');
-      setIsOpenToast(true);
-      setTimeout(() => {
-        setIsOpenToast(false);
+        editMerchantAction.reset(dispatchSupplier);
+        editProfileAction.reset(dispatchSupplier);
       }, 2000);
     }
   }, [stateMerchant]);
-  console.log('stateMerchant:', stateMerchant);
+
+  React.useEffect(() => {
+    switch (selectedItem?.type) {
+      case 'listNumOfEmployee': {
+        setNumberOfEmployee(selectedItem.item.amount);
+        break;
+      }
+      case 'listVehicleAccess': {
+        setVehicleAccessibility(selectedItem.item);
+        break;
+      }
+      default:
+        break;
+    }
+    return resetSelectedItem;
+  }, [selectedItem]);
 
   /** FUNCTION */
   const confirm = () => {
@@ -110,6 +154,17 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
       }
       case 'merchantCompletenessInformation': {
+        data = {
+          numberOfEmployee: numberOfEmployee,
+          largeArea: largeArea,
+          topSellingBrand: topBrand,
+          mostWantedBrand: wantedBrand,
+          vehicleAccessibilityId: vehicleAccessibility.id,
+          vehicleAccessibilityAmount: vehicleAccessibilityAmount,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
         break;
       }
       case 'merchantAddress': {
@@ -184,7 +239,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'default'}
           value={ownerName}
           onChangeText={(text) => setOwnerName(text)}
-          clearText={() => console.log('clear')}
+          clearText={() => setOwnerName('')}
         />
       </View>
     );
@@ -231,7 +286,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'default'}
           value={noKtp}
           onChangeText={(text) => setNoktp(text)}
-          clearText={() => console.log('clear')}
+          clearText={() => setNoktp('')}
           keyboardType={'numeric'}
         />
       </View>
@@ -380,7 +435,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'default'}
           value={merchantName}
           onChangeText={(text) => setMerchantName(text)}
-          clearText={() => console.log('clear')}
+          clearText={() => setMerchantName('')}
         />
       </View>
     );
@@ -402,22 +457,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
-    const storeData =
-      stateUser.detail.data?.storeData.storeInformation.storeDetailCompleteness;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={
-              storeData?.numberOfEmployee ? storeData?.numberOfEmployee : ''
-            }
-            onPress={() =>
-              NavigationAction.navigate('MerchantEditDataListView', {
-                type: 'employee',
-              })
-            }
+            value={numberOfEmployee}
+            onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
@@ -428,8 +475,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
-            value={storeData?.largeArea ? storeData?.largeArea : ''}
-            onChangeText={(text) => console.log(text)}
+            value={largeArea}
+            onChangeText={(text) => setLargeArea(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -438,8 +485,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Top Brand Selling'}
             placeholder={'Masukan Top Brand Selling'}
             type={'default'}
-            value={storeData?.topSellingBrand ? storeData?.topSellingBrand : ''}
-            onChangeText={(text) => console.log(text)}
+            value={topBrand}
+            onChangeText={(text) => setTopBrand(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -448,8 +495,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Wanted Brand'}
             placeholder={'Masukan Wanted Brand'}
             type={'default'}
-            value={storeData?.mostWantedBrand ? storeData?.mostWantedBrand : ''}
-            onChangeText={(text) => console.log(text)}
+            value={wantedBrand}
+            onChangeText={(text) => setWantedBrand(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -457,16 +504,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={
-              storeData?.vehicleAccessibility
-                ? storeData?.vehicleAccessibility
-                : ''
-            }
-            onPress={() =>
-              NavigationAction.navigate('MerchantEditDataListView', {
-                type: 'vehicle',
-              })
-            }
+            value={vehicleAccessibility.name}
+            onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}
@@ -476,14 +515,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextField.Text
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukan Jumlah Akses Jalan'}
-            type={'number'}
-            value={
-              storeData?.vehicleAccessibilityAmount
-                ? `${storeData?.vehicleAccessibilityAmount}`
-                : ''
-            }
-            onChangeText={(text) => console.log(text)}
+            type={'default'}
+            value={`${vehicleAccessibilityAmount}`}
+            onChangeText={(text) => setVehicleAccessibilityAmount(text)}
             clearText={() => console.log('clear')}
+            keyboardType={'number-pad'}
           />
         </View>
       </View>

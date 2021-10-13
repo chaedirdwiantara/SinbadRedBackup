@@ -61,6 +61,10 @@ export const merchantEditFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.MERCHANT_EDIT_FAILED, payload: data };
 };
+/** => merchant edit reset */
+export const merchantEditReset = () => {
+  return { type: types.MERCHANT_EDIT_RESET };
+};
 /** === PROFILE ACCOUNT EDIT === */
 /** => process */
 export const profileEditProcess = (
@@ -89,28 +93,7 @@ export const profileEditFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.PROFILE_EDIT_FAILED, payload: data };
 };
-/** === GET NUMBER OF EMPLOYEE LIST === */
-/** => list number of employee process */
-export const numberOfEmployeeListProcess = (
-  contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
-  contextDispatch({ type: types, payload: data });
-  return {
-    type: types.NUMBER_OF_EMPLOYEE_LIST_PROCESS,
-    payload: data,
-    contextDispatch,
-  };
-};
-/** => list number of employee success */
-export const numberOfEmployeeListSuccess = (
-  data: models.ListSuccessProps<models.SupplierList[]>,
-): models.ListSuccessAction<models.SupplierList[]> => {
-  return { type: types.NUMBER_OF_EMPLOYEE_LIST_SUCCESS, payload: data };
-};
-/** => list number of employee failed */
-export const numberOfEmployeeListFailed = (
-  data: models.ErrorProps,
-): models.ListFailedAction => {
-  return { type: types.NUMBER_OF_EMPLOYEE_LIST_FAILED, payload: data };
+/** => profile edit reset */
+export const profileEditReset = () => {
+  return { type: types.PROFILE_EDIT_RESET };
 };

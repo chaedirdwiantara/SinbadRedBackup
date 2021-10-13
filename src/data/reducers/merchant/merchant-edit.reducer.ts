@@ -42,4 +42,8 @@ export const merchantEditReducer = simplifyReducer(merchantEditInitialState, {
       error: action.payload,
     };
   },
+  /** => list reset */
+  [types.MERCHANT_EDIT_RESET]() {
+    return merchantEditInitialState;
+  },
 });

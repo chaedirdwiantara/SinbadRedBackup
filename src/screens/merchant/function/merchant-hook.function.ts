@@ -88,6 +88,9 @@ const useEditMerchant = () => {
     ) => {
       dispatch(Actions.merchantEditProcess(contextDispatch, data));
     },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.merchantEditReset());
+    },
   };
 };
 /** => edit profile */
@@ -99,6 +102,9 @@ const useEditProfile = () => {
       data: models.UpdateProcessProps<{}>,
     ) => {
       dispatch(Actions.profileEditProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.profileEditReset());
     },
   };
 };
