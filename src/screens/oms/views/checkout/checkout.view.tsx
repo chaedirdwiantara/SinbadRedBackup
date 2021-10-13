@@ -16,7 +16,11 @@ import {
   SnbBottomSheet,
   SnbListButtonType1,
 } from 'react-native-sinbad-ui';
-import { goBack, goToPaymentPromoList } from '../../functions';
+import {
+  goBack,
+  goToPaymentPromoList,
+  goToCheckoutSuccess,
+} from '../../functions';
 import {
   usePaymentDetailAccorrdion,
   usePaymentTypeModal,
@@ -288,7 +292,7 @@ const OmsCheckoutView: FC = () => {
   /** => address */
   const renderAddress = () => {
     return (
-      <View style={{ padding: 16, backgroundColor: color.white }}>
+      <View style={CheckoutStyle.addessSection}>
         <SnbText.B2>Alamat Pengiriman</SnbText.B2>
         <SnbDivider style={{ marginVertical: 8 }} />
         <SnbText.B2>Alamat 1 (Default)</SnbText.B2>
@@ -337,14 +341,7 @@ const OmsCheckoutView: FC = () => {
     return (
       <TouchableOpacity
         onPress={() => goToPaymentPromoList()}
-        style={{
-          flexDirection: 'row',
-          padding: 12,
-          backgroundColor: color.yellow10,
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          borderRadius: 4,
-        }}>
+        style={CheckoutStyle.paymentPromoBadgeContainer}>
         <SnbIcon name={'info'} color={color.yellow50} size={24} />
         <View style={{ flexDirection: 'row' }}>
           <SnbText.B1 color={color.yellow50}>Pakai </SnbText.B1>
@@ -366,16 +363,12 @@ const OmsCheckoutView: FC = () => {
           onPress={() => {
             paymentTypesModal.setOpen(true);
           }}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            paddingVertical: 12,
-          }}>
+          style={CheckoutStyle.selectPaymentButton}>
           <Image
             source={{
               uri: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
             }}
-            style={{ width: 20, height: 20, marginRight: 10 }}
+            style={CheckoutStyle.smallIcon}
           />
           <View style={{ flex: 1 }}>
             <SnbText.B1 color={color.black80}>
@@ -399,13 +392,7 @@ const OmsCheckoutView: FC = () => {
           <View style={{ marginLeft: 32 }}>
             {dummyPaymentDetail.map((item, index) => {
               return (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 8,
-                  }}>
+                <View key={index} style={CheckoutStyle.detailItemContainer}>
                   <SnbText.B3
                     color={
                       item.type === 'normal' ? color.black100 : color.green50
@@ -427,11 +414,7 @@ const OmsCheckoutView: FC = () => {
         )}
         <TouchableOpacity
           onPress={() => paymentAccordion.changeActive(1)}
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingVertical: 12,
-          }}>
+          style={CheckoutStyle.detailExpandButton}>
           <View style={{ flexDirection: 'row' }}>
             <SnbIcon
               name={isActive ? 'expand_less' : 'expand_more'}
@@ -479,7 +462,7 @@ const OmsCheckoutView: FC = () => {
       <View style={{ height: 75 }}>
         <SnbButton.Content
           type={'primary'}
-          onPress={() => console.log('buat pesanan...')}
+          onPress={() => termsAndConditionModal.setOpen(true)}
           content={content()}
           title={'Buat Pesanan'}
         />
@@ -531,7 +514,10 @@ const OmsCheckoutView: FC = () => {
             title={'Buat Pesanan'}
             disabled={false}
             type={'primary'}
-            onPress={() => {}}
+            onPress={() => {
+              termsAndConditionModal.setOpen(false);
+              goToCheckoutSuccess();
+            }}
           />
         </View>
       );
@@ -569,19 +555,13 @@ const OmsCheckoutView: FC = () => {
         <View style={{ paddingBottom: 16 }}>
           <SnbText.H4>Produk</SnbText.H4>
           <SnbDivider style={{ marginVertical: 8 }} />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 8,
-            }}>
+          <View style={CheckoutStyle.modalDetailItemContainer}>
             <View style={{ width: '50%' }}>
               <SnbText.B1>SGM ANANDA 11000 GR GA</SnbText.B1>
             </View>
             <SnbText.B1>{toCurrency(330000)}</SnbText.B1>
           </View>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={CheckoutStyle.modalDetailTotalContainer}>
             <View style={{ width: '50%' }}>
               <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
             </View>
@@ -595,12 +575,7 @@ const OmsCheckoutView: FC = () => {
         <View style={{ paddingBottom: 16 }}>
           <SnbText.H4>Potongan Harga</SnbText.H4>
           <SnbDivider style={{ marginVertical: 8 }} />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 8,
-            }}>
+          <View style={CheckoutStyle.modalDetailItemContainer}>
             <View style={{ width: '50%' }}>
               <SnbText.B1 color={color.green50}>
                 Voucher 'Berkah Ramadhan'
@@ -608,8 +583,7 @@ const OmsCheckoutView: FC = () => {
             </View>
             <SnbText.B1 color={color.green50}>{toCurrency(626)}</SnbText.B1>
           </View>
-          <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={CheckoutStyle.modalDetailTotalContainer}>
             <View style={{ width: '50%' }}>
               <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
             </View>
@@ -625,13 +599,7 @@ const OmsCheckoutView: FC = () => {
             <View style={{ marginLeft: 32 }}>
               {dummyPaymentDetail.map((item, index) => {
                 return (
-                  <View
-                    key={index}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      marginTop: 8,
-                    }}>
+                  <View key={index} style={CheckoutStyle.detailItemContainer}>
                     <SnbText.B3
                       color={
                         item.type === 'normal' ? color.black100 : color.green50
@@ -655,11 +623,7 @@ const OmsCheckoutView: FC = () => {
             onPress={() => {
               parcelDetailModal.toggleDetail();
             }}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingVertical: 12,
-            }}>
+            style={CheckoutStyle.detailExpandButton}>
             <View style={{ flexDirection: 'row' }}>
               <SnbIcon
                 name={
@@ -715,7 +679,6 @@ const OmsCheckoutView: FC = () => {
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
                 onPress={() => {
-                  console.log('abcd');
                   paymentTypesModal.setOpen(false);
                   paymentChannelsModal.setOpen(true);
                 }}
@@ -748,6 +711,7 @@ const OmsCheckoutView: FC = () => {
                 : item.message;
             return (
               <SnbListButtonType1
+                key={index}
                 title={item.name}
                 description={description}
                 image={item.image}
@@ -764,12 +728,12 @@ const OmsCheckoutView: FC = () => {
         <View>
           {paymentGroups.map((item, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
                 <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
                   <SnbText.H4>{item.name}</SnbText.H4>
                 </View>
                 {contentChannelTypes(item.type)}
-              </>
+              </React.Fragment>
             );
           })}
         </View>
@@ -777,7 +741,7 @@ const OmsCheckoutView: FC = () => {
     };
     const content = () => {
       return (
-        <ScrollView style={{ backgroundColor: color.black10 }}>
+        <ScrollView>
           <View
             style={{
               backgroundColor: color.white,
@@ -788,13 +752,13 @@ const OmsCheckoutView: FC = () => {
             <View
               style={{
                 flexDirection: 'row',
-                paddingVertical: 12,
+                paddingTop: 12,
               }}>
               <Image
                 source={{
                   uri: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
                 }}
-                style={{ width: 24, height: 24, marginRight: 16 }}
+                style={CheckoutStyle.mediumIcon}
               />
               <SnbText.B1>Bayar Sekarang</SnbText.B1>
             </View>
