@@ -16,7 +16,7 @@ function* categoryHome(action: models.ListProcessAction) {
     );
     yield action.contextDispatch(ActionCreators.categoryHomeSuccess(response));
     yield put(ActionCreators.categoryHomeSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.categoryHomeFailed(error));
     yield put(ActionCreators.categoryHomeFailed(error));
   }
@@ -30,7 +30,7 @@ function* categoryLevel(action: models.ListProcessAction) {
       });
     yield action.contextDispatch(ActionCreators.categoryLevelSuccess(response));
     yield put(ActionCreators.categoryLevelSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.categoryLevelFailed(error));
     yield put(ActionCreators.categoryLevelFailed(error));
   }

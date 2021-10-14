@@ -1,13 +1,25 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
   SnbUploadPhotoRules,
+  SnbText,
+  SnbToast,
+  color,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
+import { MerchantHookFunc } from '../../function';
+import { UserHookFunc } from '../../../user/functions';
+import { useTextFieldSelect } from '@screen/auth/functions';
+import { NavigationAction } from '@navigation';
+import { renderIF, useCamera, useUploadImage } from '@screen/auth/functions';
+import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/core';
 
 interface Props {
   type: any;
@@ -15,6 +27,165 @@ interface Props {
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
+  /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
+  const ownerData = stateUser.detail.data?.ownerData.profile;
+  const [ownerName, setOwnerName] = useState(
+    ownerData?.name ? ownerData?.name : '',
+  );
+  const [noKtp, setNoktp] = useState(ownerData?.idNo ? ownerData?.idNo : '');
+  const storeData = stateUser.detail.data?.storeData.storeInformation;
+  const [merchantName, setMerchantName] = useState(
+    storeData?.storeAccount?.name ? storeData.storeAccount?.name : '',
+  );
+
+  const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  const [isOpenToast, setIsOpenToast] = useState(false);
+  const [toasMessage, setToastMessage] = useState('');
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
+  const { dispatchUser } = React.useContext(contexts.UserContext);
+  // COMPLETNESS DATA
+  const [numberOfEmployee, setNumberOfEmployee] = useState(
+    storeData?.storeDetailCompleteness?.numberOfEmployee || '',
+  );
+  const [vehicleAccessibility, setVehicleAccessibility] = useState(
+    storeData?.storeDetailCompleteness.vehicleAccessibility || '',
+  );
+  const [largeArea, setLargeArea] = useState(
+    storeData?.storeDetailCompleteness?.largeArea || '',
+  );
+  const [topBrand, setTopBrand] = useState(
+    storeData?.storeDetailCompleteness?.topSellingBrand || '',
+  );
+  const [wantedBrand, setWantedBrand] = useState(
+    storeData?.storeDetailCompleteness?.mostWantedBrand || '',
+  );
+  const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] = useState(
+    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || '',
+  );
+  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { resetUploadImage, state: uploadData } = useUploadImage();
+  let mapRef = React.useRef<MapView>(null);
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    resetCamera();
+    resetUploadImage();
+  }, []);
+
+  useEffect(() => {
+    if (stateMerchant.profileEdit.data || stateMerchant.merchantEdit.data) {
+      NavigationAction.back();
+      editMerchantAction.reset(dispatchSupplier);
+      editProfileAction.reset(dispatchSupplier);
+      storeDetailAction.detail(dispatchUser);
+    } else if (
+      stateMerchant.profileEdit.error ||
+      stateMerchant.merchantEdit.error
+    ) {
+      setToastMessage('failed');
+      setIsOpenToast(true);
+      setTimeout(() => {
+        setIsOpenToast(false);
+        editMerchantAction.reset(dispatchSupplier);
+        editProfileAction.reset(dispatchSupplier);
+      }, 2000);
+    }
+  }, [stateMerchant]);
+
+  React.useEffect(() => {
+    switch (selectedItem?.type) {
+      case 'listNumOfEmployee': {
+        setNumberOfEmployee(selectedItem.item.amount);
+        break;
+      }
+      case 'listVehicleAccess': {
+        setVehicleAccessibility(selectedItem.item);
+        break;
+      }
+      default:
+        break;
+    }
+    return resetSelectedItem;
+  }, [selectedItem]);
+
+  /** FUNCTION */
+  const confirm = () => {
+    const { type } = props;
+    let data = {};
+    switch (type) {
+      case 'merchantOwnerEmail':
+      case 'merchantOwnerPhoneNo':
+      case 'merchantOwnerIdNo': {
+        data = {
+          idNo: noKtp,
+        };
+        editProfileAction.editProfile(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
+      case 'merchantOwnerTaxNo':
+      case 'merchantOwnerName': {
+        data = {
+          name: ownerName,
+        };
+        editProfileAction.editProfile(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
+      case 'merchantAccountName': {
+        data = {
+          name: merchantName,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
+      case 'merchantAccountPhoneNo': {
+        break;
+      }
+      case 'merchantCompletenessInformation': {
+        data = {
+          numberOfEmployee: numberOfEmployee,
+          largeArea: largeArea,
+          topSellingBrand: topBrand,
+          mostWantedBrand: wantedBrand,
+          vehicleAccessibilityId: vehicleAccessibility.id,
+          vehicleAccessibilityAmount: vehicleAccessibilityAmount,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
+      case 'merchantAddress': {
+        break;
+      }
+      case 'merchantOwnerImageId': {
+        break;
+      }
+      case 'merchantOwnerImageTax': {
+        break;
+      }
+      case 'merchantOwnerImageSelfie': {
+        break;
+      }
+      case 'merchantAccountImage': {
+        break;
+      }
+      default:
+        break;
+    }
+  };
   /**
    * ================================
    * SWITCH VIEW
@@ -34,14 +205,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerPhoneNo();
       case 'merchantCompletenessInformation':
         return renderCompletenessInformationMerchant();
-      //   case 'merchantAddress':
-      //     return renderAddressMerchant();
+      case 'merchantAddress':
+        return renderAddressMerchant();
       case 'merchantOwnerImageId':
         return renderOwnerImageId();
-      //   case 'merchantOwnerImageSelfie':
-      //     return renderOwnerImageSelfie();
-      //   case 'merchantOwnerImageTax':
-      //     return renderOwnerImageTax();
+      case 'merchantOwnerImageSelfie':
+        return renderOwnerImageSelfie();
+      case 'merchantOwnerImageTax':
+        return renderOwnerImageTax();
       case 'merchantAccountName':
         return renderMerchantAccountName();
       case 'merchantAccountPhoneNo':
@@ -66,22 +237,23 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukan Nama Lengkap Pemilik'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={ownerName}
+          onChangeText={(text) => setOwnerName(text)}
+          clearText={() => setOwnerName('')}
         />
       </View>
     );
   };
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
           type={'default'}
-          value={''}
+          value={ownerData?.email ? ownerData?.email : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -90,13 +262,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukan nomor handphone Anda'}
           type={'default'}
-          value={''}
+          value={ownerData?.mobilePhone ? ownerData?.mobilePhone : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -111,22 +284,24 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={noKtp}
+          onChangeText={(text) => setNoktp(text)}
+          clearText={() => setNoktp('')}
+          keyboardType={'numeric'}
         />
       </View>
     );
   };
   /** === RENDER OWNER NO NPWP === */
   const renderOwnerTaxNo = () => {
+    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukan No.NPWP maks.15 Digit'}
           type={'default'}
-          value={''}
+          value={ownerData?.taxNo ? ownerData?.taxNo : ''}
           onChangeText={(text) => console.log(text)}
           clearText={() => console.log('clear')}
         />
@@ -137,18 +312,111 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const renderOwnerImageId = () => {
     return (
       <View style={{ flex: 1 }}>
-        <SnbUploadPhotoRules
-          rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-          imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-          title="Unggah Foto KTP"
-          rules={[
-            'Pastikan KTP sesuai dengan identitas Anda',
-            'KTP Tidak silau dan tidak buram',
-            'Pastikan KTP bisa terbaca dengan jelas',
-            'Hindari Tangan Menutupi KTP',
-          ]}
-          action={() => {}}
+        {renderIF(
+          capturedImage.data !== null,
+          renderImagePreview(),
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
+            imgSrc="https://s3-alpha-sig.figma.com/img/4e9b/f869/7b2c7d944da2051c0422f41d9b920d88?Expires=1632096000&Signature=PcMkPhandytpXueLoKbXpj9CUT-4LYOkuxWsfeCUMeMhVNynnb66TmCR6JFZWx-5DLmy0fS0Q6KbGajNdAGbG7DD0Oa76~Z0~1F7K7eItCqYgyCwUL8SGpc~frmLBUqLTqs-NqOea0vPqJifZL-d-nt7IK3XWQ97~IYjB5ujfx87JbeE-k1U-YkQsYjV7zr00rdg4h-gekAhYW0rHN~-4Hm6P8qjFGIaY3p3X4leIanac8HYnx~bpQHIY8HMA-Fz69TxpmamCyKuhau2HwOMcvW2EcYbr4424YrsQUhnNYmsIw7BTckpMk2NYKTXG~3vSzisYypLJQxHItfBZEi0VQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+            title="Unggah Foto KTP"
+            rules={[
+              'Pastikan KTP sesuai dengan identitas Anda',
+              'KTP Tidak silau dan tidak buram',
+              'Pastikan KTP bisa terbaca dengan jelas',
+              'Hindari Tangan Menutupi KTP',
+            ]}
+            action={() => openCamera('ktp')}
+          />,
+        )}
+      </View>
+    );
+  };
+  /** === RENDER OWNER IMAGE Selfie === */
+  const renderOwnerImageSelfie = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        {renderIF(
+          capturedImage.data !== null,
+          renderImagePreview(),
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
+            imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+            title="Unggah Foto Diri dengan KTP Owner"
+            rules={[
+              'Posisikan KTP di bawah dagu Anda',
+              'KTP Tidak silau dan tidak buram',
+              'Pastikan KTP bisa terbaca dengan jelas',
+              'Hindari Tangan Menutupi KTP',
+            ]}
+            action={() => openCamera('selfie')}
+          />,
+        )}
+      </View>
+    );
+  };
+
+  /** === RENDER OWNER IMAGE TAX === */
+  const renderOwnerImageTax = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        {renderIF(
+          capturedImage.data !== null,
+          renderImagePreview(),
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
+            imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+            title="Unggah Foto NPWP"
+            rules={[
+              'Pastikan NPWP sesuai dengan identitas Anda',
+              'NPWP Tidak silau dan tidak buram',
+              'Pastikan NPWP bisa terbaca dengan jelas',
+              'Hindari Tangan Menutupi NPWP',
+            ]}
+            action={() => openCamera('npwp')}
+          />,
+        )}
+      </View>
+    );
+  };
+
+  const renderImagePreview = () => {
+    const isImageCaptured = capturedImage.data;
+    return (
+      <View style={{ flex: 1 }}>
+        <Image
+          resizeMode="contain"
+          source={{
+            uri: `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`,
+          }}
+          borderRadius={4}
+          style={{
+            height: undefined,
+            width: undefined,
+            flex: 1,
+            margin: 16,
+          }}
         />
+        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
+          <View style={{ height: 72 }}>
+            <SnbButton.Dynamic
+              size="small"
+              type="tertiary"
+              title="Ubah Foto"
+              onPress={() => openCamera('ktp')}
+              disabled={false}
+            />
+          </View>
+          <View style={{ height: 72 }}>
+            <SnbButton.Single
+              type={isImageCaptured ? 'secondary' : 'primary'}
+              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
+              shadow
+              loading={uploadData?.loading}
+              onPress={() => {}}
+              disabled={uploadData?.loading}
+            />
+          </View>
+        </View>
       </View>
     );
   };
@@ -165,9 +433,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Toko'}
           placeholder={'Masukan Nama Toko'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={merchantName}
+          onChangeText={(text) => setMerchantName(text)}
+          clearText={() => setMerchantName('')}
         />
       </View>
     );
@@ -195,8 +463,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={''}
-            onPress={() => console.log('press')}
+            value={numberOfEmployee}
+            onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
@@ -207,8 +475,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
-            value={''}
-            onChangeText={(text) => console.log(text)}
+            value={largeArea}
+            onChangeText={(text) => setLargeArea(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -217,8 +485,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Top Brand Selling'}
             placeholder={'Masukan Top Brand Selling'}
             type={'default'}
-            value={''}
-            onChangeText={(text) => console.log(text)}
+            value={topBrand}
+            onChangeText={(text) => setTopBrand(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -227,8 +495,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Wanted Brand'}
             placeholder={'Masukan Wanted Brand'}
             type={'default'}
-            value={''}
-            onChangeText={(text) => console.log(text)}
+            value={wantedBrand}
+            onChangeText={(text) => setWantedBrand(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -236,8 +504,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={''}
-            onPress={() => console.log('press')}
+            value={vehicleAccessibility.name}
+            onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}
@@ -248,7 +516,82 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukan Jumlah Akses Jalan'}
             type={'default'}
-            value={''}
+            value={`${vehicleAccessibilityAmount}`}
+            onChangeText={(text) => setVehicleAccessibilityAmount(text)}
+            clearText={() => console.log('clear')}
+            keyboardType={'number-pad'}
+          />
+        </View>
+      </View>
+    );
+  };
+  /** === RENDER MERCHANT ADDRESS (ALAMAT TOKO) === */
+  const renderAddressMerchant = () => {
+    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
+    return (
+      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+        <View
+          style={{
+            justifyContent: 'space-between',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}>
+          <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+          <TouchableOpacity onPress={() => navigate('MapsView')}>
+            <SnbText.B4>Ubah</SnbText.B4>
+          </TouchableOpacity>
+        </View>
+        <View style={{ paddingVertical: 4 }} />
+        <MapView
+          ref={mapRef}
+          initialRegion={{
+            latitude:
+              stateUser.detail.data?.storeData.storeAddress.latitude || 0,
+            longitude:
+              stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          }}
+          zoomEnabled={false}
+          pitchEnabled={false}
+          scrollEnabled={false}
+          style={{
+            height: 160,
+            borderWidth: 1,
+            borderStyle: 'dashed',
+            borderRadius: 16,
+            backgroundColor: color.black5,
+            borderColor: color.black40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}>
+          <Marker
+            coordinate={{
+              latitude:
+                stateUser.detail.data?.storeData.storeAddress.latitude || 0,
+              longitude:
+                stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            }}
+          />
+        </MapView>
+        <View style={{ marginVertical: 8 }} />
+        <View style={{ marginBottom: 16 }}>
+          <SnbTextField.Area
+            labelText={'Alamat'}
+            placeholder={'-'}
+            type={'default'}
+            value={dataAddress?.address ? dataAddress?.address : '-'}
+            onChangeText={(text) => console.log(text)}
+            clearText={() => console.log('clear')}
+          />
+        </View>
+        <View style={{ marginBottom: 16 }}>
+          <SnbTextField.Area
+            labelText={'Catatan Alamat'}
+            placeholder={'-'}
+            type={'default'}
+            value={dataAddress?.noteAddress ? dataAddress?.noteAddress : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -267,7 +610,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbButton.Single
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
-          onPress={() => console.log('press')}
+          onPress={() => confirm()}
           disabled={false}
         />
       </View>
@@ -275,14 +618,24 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
+  /** === RENDER TOAST === */
+  const renderToast = () => {
+    return (
+      <SnbToast
+        open={isOpenToast}
+        message={toasMessage}
+        close={() => setIsOpenToast(false)}
+      />
+    );
+  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
         {switchView()}
-        {renderButton()}
       </ScrollView>
-
+      {renderButton()}
+      {renderToast()}
       {/* {renderButtonOpenCamera()} */}
       {/* {this.state.showModalError && this.renderModalError()} */}
     </View>

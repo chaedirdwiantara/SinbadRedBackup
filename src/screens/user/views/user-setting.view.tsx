@@ -7,8 +7,12 @@ import {
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
+/** === IMPORT FUNCTION HERE === */
+import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 
 const UserSettingView: FC = () => {
+  /** === HOOK === */
+  const { logout } = useAuthAction();
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -34,7 +38,7 @@ const UserSettingView: FC = () => {
           type="secondary"
           title="Log Out"
           disabled={false}
-          onPress={() => null}
+          onPress={() => logout()}
           shadow={true}
         />
       </ScrollView>
