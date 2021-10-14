@@ -398,6 +398,7 @@ const OmsShoppingCartView: FC = () => {
       content="Konfirmasi order dan lanjut ke Checkout?"
       ok={() => verificationOrderCreate(dispatchVerificationOrder, {})}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
+      loading={stateVerificationOrder.create.loading}
     />
   );
   /** => Footer */
