@@ -5,8 +5,12 @@ import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 
 const MerchantDetailAccountView: FC = () => {
+  /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
   /**
    * =======================
    * FUNCTIONAL
@@ -45,7 +49,9 @@ const MerchantDetailAccountView: FC = () => {
           <View style={{ marginBottom: 6 }}>
             <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
           </View>
-          <SnbText.B3 color={color.black100}>{data.value}</SnbText.B3>
+          <SnbText.B3 color={data.fontColor ? data.fontColor : color.black100}>
+            {data.value}
+          </SnbText.B3>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
@@ -64,31 +70,46 @@ const MerchantDetailAccountView: FC = () => {
   };
   /** => content */
   const content = () => {
+    const storeData = stateUser.detail.data?.storeData.storeInformation;
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View>
           {renderContentSection({
             key: 'Sinbad ID',
-            value: 'SNB0001',
+            value: storeData?.storeAccount.code,
           })}
           {renderContentSection({
             key: 'Nama Toko',
-            value: '-',
-            action: 'tambah',
+            value: storeData?.storeAccount.name,
+            action: storeData?.storeAccount.name ? 'ubah' : 'tambah',
             type: 'merchantAccountName',
-            title: 'Tambah Nama Toko',
+            title: storeData?.storeAccount.name
+              ? 'Ubah Nama Toko'
+              : 'Tambah Nama Toko',
           })}
           {renderContentSection({
             key: 'Nomor Handphone',
-            value: '-',
-            action: 'tambah',
+            fontColor: storeData?.storeAccount.phoneNo
+              ? color.black100
+              : color.red50,
+            value: storeData?.storeAccount.phoneNo
+              ? storeData?.storeAccount.phoneNo
+              : 'Gagal Verifikasi',
+            action: storeData?.storeAccount.phoneNo ? 'ubah' : 'tambah',
             type: 'merchantAccountPhoneNo',
-            title: 'Tambah No. Handphone Toko',
+            title: storeData?.storeAccount.phoneNo
+              ? 'Ubah No. Handphone Toko'
+              : 'Tambah No. Handphone Toko',
           })}
           {renderContentSection({
             key: 'Foto Toko',
-            value: '-',
-            action: 'tambah',
+            fontColor: storeData?.storeAccount.imageUrl
+              ? color.green50
+              : color.red50,
+            value: storeData?.storeAccount.imageUrl
+              ? 'Berhasil Di Upload'
+              : 'Gagal Verifikasi',
+            action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
           })}
         </View>
       </ScrollView>

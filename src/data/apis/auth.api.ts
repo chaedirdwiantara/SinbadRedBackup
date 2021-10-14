@@ -21,8 +21,15 @@ const verificationOTP = (data: models.LoginPhoneNumberProps) => {
 /** => logout */
 const logout = () => {
   const path = 'logout';
-  return apiGeneral<models.LogoutSuccesProps>(path, 'auth', 'v1', 'POST');
+  return apiGeneral<models.LogoutSuccesProps>(
+    'auth',
+    path,
+    'auth',
+    'v1',
+    'POST',
+  );
 };
+
 /** === EXPORT FUNCTIONS === */
 export const AuthApi = {
   loginUserName,

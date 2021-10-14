@@ -11,6 +11,7 @@ import {
   RegisterStep6View,
   RegisterStep7View,
   RegisterView,
+  InputManualLocationView,
 } from '@screen/auth/views';
 
 const AuthNav = {
@@ -49,6 +50,9 @@ const AuthNav = {
   },
   RegisterStep7View: {
     component: RegisterStep7View,
+  },
+  InputManualLocationView: {
+    component: InputManualLocationView,
   },
 };
 

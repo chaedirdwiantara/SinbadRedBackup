@@ -13,6 +13,8 @@ import * as models from '@models';
 /** === TYPE === */
 interface ProductComponentProps {
   data: models.ListItemProps<models.ProductList[]>;
+  onCardPress: (item: models.ProductList) => void;
+  onOrderPress: (item: models.ProductList) => void;
 }
 /** === DUMMIES === */
 const dummyTags: Array<string> = [
@@ -96,7 +98,11 @@ const dummyProducts = {
   skip: 0,
 };
 /** === COMPONENT === */
-const ProductListView: FC<ProductComponentProps> = ({ data }) => {
+const ProductListView: FC<ProductComponentProps> = ({
+  data,
+  onCardPress,
+  onOrderPress,
+}) => {
   /** === HOOK === */
   const { layoutDisplay, handleActionClick } = useBottomAction();
   /** === VIEW === */
@@ -107,12 +113,16 @@ const ProductListView: FC<ProductComponentProps> = ({ data }) => {
         data={data}
         tags={dummyTags}
         onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+        onCardPress={onCardPress}
+        onOrderPress={onOrderPress}
       />
     ) : (
       <ListLayoutView
         data={dummyProducts}
         tags={dummyTags}
         onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+        onCardPress={onCardPress}
+        onOrderPress={onOrderPress}
       />
     );
   /** => Content */
@@ -143,7 +153,7 @@ export default ProductListView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

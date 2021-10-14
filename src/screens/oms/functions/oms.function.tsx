@@ -38,6 +38,10 @@ const goToHome = () => {
 const goToHistoryDetail = (section: 'order' | 'payment') => {
   NavigationAction.navigate('OmsHistoryDetailView', { section });
 };
+/** => go to voucher detail */
+const goToPaymentPromoList = () => {
+  NavigationAction.navigate('PromoPaymentListView');
+};
 
 export {
   goBack,
@@ -49,4 +53,5 @@ export {
   goToCheckoutSuccess,
   goToHome,
   goToHistoryDetail,
+  goToPaymentPromoList,
 };

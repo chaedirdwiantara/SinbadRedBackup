@@ -1,5 +1,7 @@
 import * as types from '@types';
 import * as models from '@models';
+/** EXTERNAL FUNCTION */
+import { setUserFCM } from '@core/functions/firebase/fcm-firestore';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
@@ -11,6 +13,7 @@ export const loginUserNameProcess = (
 export const loginUserNameSuccess = (
   data: models.LoginSuccessProps,
 ): models.LoginUserNameSuccessAction => {
+  setUserFCM(data.data.user.id);
   return { type: types.LOGIN_USERNAME_SUCCESS, payload: data };
 };
 /** => failed */
@@ -66,6 +69,7 @@ export const logoutProcess = (): models.LogoutProcessAction => {
 export const logoutSuccess = (
   data: models.LogoutSuccesProps,
 ): models.LogoutSuccessAction => {
+  setUserFCM(null);
   return { type: types.LOGOUT_SUCCESS, payload: data };
 };
 /** => failed */

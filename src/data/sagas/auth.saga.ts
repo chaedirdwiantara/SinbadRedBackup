@@ -50,6 +50,7 @@ function* logout() {
     yield put(ActionCreators.logoutFailed(error));
   }
 }
+
 /** === LISTEN FUNCTION === */
 function* AuthSaga() {
   yield takeLatest(types.LOGIN_USERNAME_PROCESS, loginUserName);
