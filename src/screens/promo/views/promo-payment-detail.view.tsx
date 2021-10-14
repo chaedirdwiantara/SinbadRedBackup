@@ -69,7 +69,7 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {promoPaymentDetailState.data?.termsAndCondition.map(
+          {promoPaymentDetailState.data?.termAndConditions.map(
             (item, index) => {
               return (
                 <View
