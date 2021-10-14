@@ -6371,9 +6371,6 @@ react-native-device-info@8.1.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.1.2.tgz#142f2f05e27689858d5aa73dae36f0c37c965031"
   integrity sha512-5jaQBL42H3g8+KXkFlIy2lMyKyPPETI8eUYgEg7JylW7rltkMPngn/wDnupgP4NhDYI+fBdMRGdRjEeetFr0IQ==
 
-<<<<<<< HEAD
-react-native-geolocation-service@^5.3.0-beta.3:
-=======
 "react-native-fs@git://github.com/itinance/react-native-fs.git#master":
   version "2.18.0"
   resolved "git://github.com/itinance/react-native-fs.git#36d8ec5f1d865062f6f458af1514efb0aca59db1"
@@ -6382,7 +6379,6 @@ react-native-geolocation-service@^5.3.0-beta.3:
     utf8 "^3.0.0"
 
 react-native-geolocation-service@5.3.0-beta.3:
->>>>>>> 1d0fabf6c7781738c513d0e502e16bb3874fa1c1
   version "5.3.0-beta.3"
   resolved "https://registry.yarnpkg.com/react-native-geolocation-service/-/react-native-geolocation-service-5.3.0-beta.3.tgz#6afd291e886ecb5fdf8c096ea0a694ccb0975330"
   integrity sha512-TRIrkD1CV6yAOUNAqFsHiYuTyzBXJ8bttk84r4dCSKLJbYzKkvGyKoqtIIydAVlHRyZhU6u6U4Uz1bkdXPlT3g==
@@ -6411,11 +6407,7 @@ react-native-iphone-x-helper@^1.3.0:
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
   integrity sha512-HOf0jzRnq2/aFUcdCJ9w9JGzN3gdEg0zFE4FyYlp4jtidqU03D5X7ZegGKfT1EWteR0gPBGp9ye5T5FvSWi9Yg==
 
-<<<<<<< HEAD
-react-native-maps@^0.29.3:
-=======
 react-native-maps@0.29.3:
->>>>>>> 1d0fabf6c7781738c513d0e502e16bb3874fa1c1
   version "0.29.3"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.29.3.tgz#ab873fa5e7301c29f07886df5f3cbef667d46cca"
   integrity sha512-742ipC71NdGHXmrCHPY9SEGDuKoSx2l0RMC1W9WXe/jd6+Eg5OllRBcR6Y+ORnzvuYZrd0Hj6q6bK3QR5ZL8sA==
