@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -15,6 +15,11 @@ const ProductView: FC = () => {
   const { list } = useProductListAction();
   const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
 
+  /** === STATE */
+  const [openModalSort, setOpenModalSort] = useState(false)
+  const [openModalFilter, setOpenModalFilter] = useState(false)
+
+
   useEffect(() => {
     list(dispatchProduct);
   }, []);
@@ -28,6 +33,23 @@ const ProductView: FC = () => {
       </View>
     );
   };
+
+    /**
+   * =====================
+   * MODAL
+   * =====================
+   */
+  /** === RENDER MODAL SORT === */
+  const renderModalSort = () => {
+    return <View/>
+  }
+
+  /** === RENDER MODAL FILTER === */
+  const renderModalFilter = () => {
+    return <View/>
+  }
+
+
   /** => Main */
   return (
     <SnbContainer color="white">
