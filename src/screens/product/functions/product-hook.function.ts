@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Keyboard } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -86,16 +87,79 @@ const useProductListAction = () => {
     },
   };
 };
+/** => Add to Cart Modal */
+/** => Modal Visibility */
+const useModalVisibility = () => {
+  const [orderModalVisible, setOrderModalVisible] = useState(false);
+
+  const toggleModalVisible = () => {
+    setOrderModalVisible((prevVisible) => !prevVisible);
+  };
+
+  return { orderModalVisible, setOrderModalVisible, toggleModalVisible };
+};
+/** => Order Quantity */
+const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
+  const [orderQty, setOrderQty] = useState(minQty);
+
+  const increaseOrderQty = () => {
+    setOrderQty((prevQty) => prevQty + 1);
+  };
+
+  const decreaseOrderQty = () => {
+    setOrderQty((prevQty) => {
+      if (prevQty - 1 >= minQty) {
+        return prevQty - 1;
+      }
+
+      return prevQty;
+    });
+  };
+
+  return { orderQty, increaseOrderQty, decreaseOrderQty };
+};
+/** => Keyboard Listener */
+const useKeyboardListener = () => {
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+
+  const showKeyboard = () => setKeyboardVisible(true);
+  const hideKeyboard = () => setKeyboardVisible(false);
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      showKeyboard,
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      hideKeyboard,
+    );
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
+  }, []);
+
+  return { keyboardVisible };
+};
 /** === EXPORT === */
-export { useProductListAction, useTabCategory, useTag };
+export {
+  useProductListAction,
+  useTabCategory,
+  useTag,
+  useModalVisibility,
+  useOrderQuantity,
+  useKeyboardListener,
+};
 /**
  * ================================================================
  * NOTES
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

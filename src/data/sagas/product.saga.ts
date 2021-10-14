@@ -6,7 +6,7 @@ import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
-/** => list example */
+/** => list */
 function* productList(action: models.ListProcessAction) {
   try {
     const response: models.ListSuccessProps<models.ProductList[]> = yield call(

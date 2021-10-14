@@ -4,7 +4,6 @@ import { color } from 'react-native-sinbad-ui';
 const BrandHomeStyle = StyleSheet.create({
   container: {
     backgroundColor: color.white,
-    paddingHorizontal: 16,
     paddingBottom: 16,
     paddingTop: 12,
   },
@@ -12,6 +11,7 @@ const BrandHomeStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 16,
     marginBottom: 12,
   },
 });

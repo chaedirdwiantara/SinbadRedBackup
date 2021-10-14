@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE === */
 import { set, isEmpty } from 'lodash';
 import apiHost from './apiHost';
+import { NavigationAction } from '@navigation';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
@@ -22,6 +23,9 @@ const apiGeneral = async <T>(
     method,
     headers,
   };
+  Object.assign(reqBody, {
+    credentials: 'same-origin',
+  });
   /** === IF THERE IS PARAMETER === */
   if (!isEmpty(params)) {
     Object.assign(reqBody, {
@@ -37,6 +41,7 @@ const apiGeneral = async <T>(
   const handleErrors = (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
+        NavigationAction.navigate('LoginPhoneView');
         throwError(response);
       }
       return response.json().then((error: ErrorProps) => {
@@ -71,7 +76,7 @@ const apiGeneral = async <T>(
   };
   /** === MAIN FUNCTION === */
   return fetch(
-    `${apiHost.api}/${module}/api/${version}/sinbad-app/${
+    `${apiHost.base}/${module}/api/${version}/sinbad-app/${
       access === 'public' ? '/public/' : ''
     }${path}`,
     reqBody,

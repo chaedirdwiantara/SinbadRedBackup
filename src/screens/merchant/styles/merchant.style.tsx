@@ -41,22 +41,22 @@ const UserStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  badge: (backgroundColor) => ({
-    padding: 8,
-    backgroundColor,
-    borderRadius: 4,
-    alignSelf: 'flex-start',
-  }),
-  message: (color) => ({
-    ...Fonts.type23,
-    fontSize: 10,
-    color,
-    marginTop: 4,
-  }),
-  title: (color) => ({
-    ...Fonts.type48,
-    fontSize: 12,
-    color,
-  }),
+  // badge: (backgroundColor) => ({
+  //   padding: 8,
+  //   backgroundColor,
+  //   borderRadius: 4,
+  //   alignSelf: 'flex-start',
+  // }),
+  // message: (color) => ({
+  //   ...Fonts.type23,
+  //   fontSize: 10,
+  //   color,
+  //   marginTop: 4,
+  // }),
+  // title: (color) => ({
+  //   ...Fonts.type48,
+  //   fontSize: 12,
+  //   color,
+  // }),
 });
 export default UserStyles;

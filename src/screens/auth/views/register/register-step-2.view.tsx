@@ -1,6 +1,11 @@
-import { renderIF, useRegisterStep2 } from '@screen/auth/functions';
+import {
+  renderIF,
+  useCamera,
+  useRegister,
+  useUploadImage,
+} from '@screen/auth/functions';
 import React from 'react';
-import { View, LogBox, Image } from 'react-native';
+import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -9,12 +14,41 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import { REGISTER_STEP_3_VIEW } from '@screen/auth/functions/screens_name';
+import { useNavigation } from '@react-navigation/core';
+
+const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
-  const { func, state } = useRegisterStep2();
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const { registerData, saveRegisterUserData } = useRegister();
+  const { navigate } = useNavigation();
+
+  React.useEffect(() => {
+    if (uploadData.data !== null && capturedImage.data?.type === 'ktp') {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Berhasil Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+      saveRegisterUserData({ idImageUrl: uploadData.data?.url });
+      resetUploadImage();
+      resetCamera();
+    }
+
+    if (uploadData.error !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Foto Gagal Diupload',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        height * 0.25,
+      );
+    }
+  }, [uploadData, capturedImage.data?.type]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -29,17 +63,38 @@ const Content: React.FC = () => {
           'Pastikan KTP bisa terbaca dengan jelas',
           'Hindari Tangan Menutupi KTP',
         ]}
-        action={() => func.gotoCamera()}
+        action={() => openCamera('ktp')}
       />
     );
   };
 
   const renderImagePreview = () => {
+    const isImageCaptured = capturedImage?.data?.type === 'ktp';
+    let action = () => {
+      resetCamera();
+      resetUploadImage();
+      navigate(REGISTER_STEP_3_VIEW);
+    };
+
+    let uri: string | undefined = '';
+    if (isImageCaptured) {
+      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      action = () => {
+        const payload = {
+          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
+          currentFilePath: registerData?.user?.idImageUrl || null,
+        };
+        uploadImage(payload);
+      };
+    } else {
+      uri = registerData.user?.idImageUrl;
+    }
+
     return (
       <View style={{ flex: 1 }}>
         <Image
           resizeMode="contain"
-          source={{ uri: state?.imageKTP || ' ' }}
+          source={{ uri }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -53,24 +108,28 @@ const Content: React.FC = () => {
             <SnbButton.Dynamic
               size="small"
               type="tertiary"
-              title="Ulangi"
-              onPress={() => func.gotoCamera()}
+              title="Ubah Foto"
+              onPress={() => openCamera('ktp')}
               disabled={false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type="primary"
+              type={isImageCaptured ? 'secondary' : 'primary'}
+              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               shadow
-              title="Selanjutnya"
-              onPress={func.gotoStep3}
-              disabled={false}
+              loading={uploadData?.loading}
+              onPress={action}
+              disabled={uploadData?.loading}
             />
           </View>
         </View>
       </View>
     );
   };
+
+  const isImageAvailable =
+    registerData?.user?.idImageUrl !== '' || capturedImage.data?.type === 'ktp';
 
   return (
     <View style={{ flex: 1 }}>
@@ -85,20 +144,19 @@ const Content: React.FC = () => {
         </View>
       </View>
       {renderIF(
-        state.imageKTP === null,
-        renderUploadPhotoRules(),
+        isImageAvailable,
         renderImagePreview(),
+        renderUploadPhotoRules(),
       )}
     </View>
   );
 };
 
-const RegisterStep2View: React.FC = (props) => {
-  const {} = props;
-  const { goBack } = useRegisterStep2();
+const RegisterStep2View: React.FC = () => {
+  const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );

@@ -55,8 +55,8 @@ export const buildBottomAction = ({
 
   if (layout) {
     actions.push({
-      iconName: layoutDisplay === 'grid' ? 'view_list' : 'view_module',
-      title: layoutDisplay === 'grid' ? 'List' : 'Grid',
+      iconName: layoutDisplay === 'grid' ? 'view_module' : 'view_list',
+      title: layoutDisplay === 'grid' ? 'Grid' : 'List',
     });
     actionNames.push('layout');
   }

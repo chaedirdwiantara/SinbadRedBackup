@@ -1,29 +1,39 @@
-import useLogin from './login-hooks.functions';
-import { renderIF } from './auth-utils.functions';
-import useOTP from './otp-hooks.functions';
 import {
+  renderIF,
+  formatter,
+  handleMessageError,
+  maskPhone,
+  extractAddress,
+} from './auth-utils.functions';
+import {
+  useCheckPhoneNoAvailability,
   useRegister,
-  useRegisterStep1,
-  useRegisterStep2,
-  useRegisterStep3,
-  useRegisterStep4,
-  useRegisterStep5,
-  useRegisterStep6,
-  useRegisterStep7,
 } from './register-hooks.functions';
-import { useInputPhone } from './auth-hooks.functions';
+import {
+  useInputPhone,
+  useInput,
+  useInputFormat,
+  useCamera,
+  useTextFieldSelect,
+  useUploadImage,
+} from './global-hooks.functions';
+import useOTP from './otp-hooks.functions';
+import { useAuthAction } from './auth-hook.function';
 
 export {
-  useLogin,
   renderIF,
-  useOTP,
+  formatter,
+  useCamera,
+  useTextFieldSelect,
+  useCheckPhoneNoAvailability,
   useRegister,
-  useRegisterStep1,
-  useRegisterStep2,
-  useRegisterStep3,
-  useRegisterStep4,
-  useRegisterStep5,
-  useRegisterStep6,
-  useRegisterStep7,
   useInputPhone,
+  useInput,
+  useInputFormat,
+  handleMessageError,
+  maskPhone,
+  useOTP,
+  useAuthAction,
+  useUploadImage,
+  extractAddress,
 };

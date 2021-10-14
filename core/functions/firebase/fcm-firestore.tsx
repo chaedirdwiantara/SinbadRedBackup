@@ -5,11 +5,11 @@ import { uniqueId } from '../global/device-data';
 /** === FUNCTION === */
 /** => */
 /** => get FCM by device id */
-const getFcmByDeviceId = async (table: 'global' | 'users') => {
+const getFcmByDeviceId = async () => {
   return firestore()
     .collection('sinbadRed')
     .doc('notifications')
-    .collection(table)
+    .collection('fcm')
     .where('deviceId', '==', uniqueId)
     .get()
     .then((querySnapshot) => {
@@ -22,35 +22,53 @@ const getFcmByDeviceId = async (table: 'global' | 'users') => {
     });
 };
 /** => delete FCM by device id  */
-const deleteFcmByDeviceId = async (table: 'global' | 'users') => {
-  return getFcmByDeviceId(table).then((data) => {
+const deleteFcmByDeviceId = async () => {
+  return getFcmByDeviceId().then((data) => {
     if (data !== null) {
       return firestore()
         .collection('sinbadRed')
         .doc('notifications')
-        .collection(table)
+        .collection('fcm')
         .doc(data.id)
         .delete()
         .then(() => true);
     }
   });
 };
-/** => save FCM global data */
-const saveFCMGlobal = async (fcm: string) => {
+/** => set user id to FCM */
+const setUserFCM = async (userId: number | null) => {
+  return getFcmByDeviceId().then((data) => {
+    if (data !== null) {
+      return firestore()
+        .collection('sinbadRed')
+        .doc('notifications')
+        .collection('fcm')
+        .doc(data.id)
+        .update({
+          userId,
+        })
+        .then(() => true);
+    }
+  });
+};
+/** => save FCM not login */
+const saveFCMNotLogin = async (fcm: string) => {
   firestore()
     .collection('sinbadRed')
     .doc('notifications')
-    .collection('global')
-    .add({
+    .collection('fcm')
+    .doc(uniqueId)
+    .set({
       deviceId: uniqueId,
       fcm,
+      userId: null,
     })
     .then(() => {
       console.log('User added!');
     });
 };
 /** === EXPORT === */
-export { getFcmByDeviceId, deleteFcmByDeviceId, saveFCMGlobal };
+export { getFcmByDeviceId, deleteFcmByDeviceId, saveFCMNotLogin, setUserFCM };
 /**
  * ================================================================
  * NOTES
