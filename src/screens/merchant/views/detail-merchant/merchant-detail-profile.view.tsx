@@ -21,8 +21,6 @@ const MerchantDetailProfileView: FC = () => {
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
     const { type, title } = data;
-    console.log('ini:', data);
-
     switch (type) {
       case 'merchantOwnerImage':
         // NavigationService.navigate('TakeProfilePicture');
@@ -38,11 +36,7 @@ const MerchantDetailProfileView: FC = () => {
         NavigationAction.navigate('MerchantEditView', { title, type });
         break;
       case 'merchantOwnerBankAccountNo':
-        // if (dataMerchantVolatile.isMobilePhoneNoVerified) {
-        //   NavigationService.navigate('MerchantAccountBankForm', { title });
-        // } else {
-        //   this.setState({ showModalPrevention: true });
-        // }
+        NavigationAction.navigate('MerchantBankAccountView', { title, type });
         break;
       default:
         break;
