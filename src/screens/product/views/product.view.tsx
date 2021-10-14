@@ -5,17 +5,19 @@ import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
+import { AddToCartModal } from './AddToCartModal';
 import ProductListView from '@core/components/product/list';
 import { ModalBottom } from '@core/components/BottomModal';
 import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
-import { useProductListAction } from '../functions';
+import { useProductListAction, useModalVisibility } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
   /** === HOOKS === */
   const { list } = useProductListAction();
   const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
+  const { orderModalVisible, setOrderModalVisible } = useModalVisibility();
 
   /** === STATE */
   const [openModalSort, setOpenModalSort] = useState(false);
@@ -76,12 +78,24 @@ const ProductView: FC = () => {
   }
 
   /** === VIEW === */
+  /** => Add to Cart Modal */
+  const renderAddToCartModal = () => (
+    <AddToCartModal
+      open={orderModalVisible}
+      closeAction={() => setOrderModalVisible(false)}
+      onAddToCartPress={() => console.log('Add to cart pressed')}
+    />
+  );
   /** => Content */
   const renderContent = () => {
     return (
       <View style={{ flex: 1 }}>
         <ProductTabView />
-        <ProductListView data={stateProduct.list} />
+        <ProductListView
+          data={stateProduct.list}
+          onCardPress={(item) => console.log(`${item.name} pressed`)}
+          onOrderPress={() => setOrderModalVisible(true)}
+        />
       </View>
     );
   };
@@ -144,6 +158,7 @@ const ProductView: FC = () => {
       {/* filter */}
       {renderModalSort()}
       {renderModalFilter()}
+      {renderAddToCartModal()}
     </SnbContainer>
   );
 };
@@ -156,7 +171,7 @@ export default ProductView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

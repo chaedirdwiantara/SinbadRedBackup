@@ -1,4 +1,7 @@
-import { useRegisterStep1 } from '@screen/auth/functions';
+import { useNavigation } from '@react-navigation/core';
+import { useInput, useRegister } from '@screen/auth/functions';
+import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
+import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
@@ -11,7 +14,28 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { func, state }: any = useRegisterStep1();
+  const { checkEmail, checkEmailAvailability, resetCheckEmail } =
+    useCheckEmailAvailability();
+  const { saveRegisterUserData } = useRegister();
+  const { navigate } = useNavigation();
+  const name = useInput('Test');
+  const idNumber = useInput('3375020801940003');
+  const taxNumber = useInput('123456789123456');
+  const email = useInput('mazhuda@gmail.com');
+
+  React.useEffect(() => {
+    if (checkEmailAvailability.data !== null) {
+      saveRegisterUserData({
+        name: name.value,
+        email: email.value,
+        idNo: idNumber.value,
+        taxNo: taxNumber.value,
+      });
+      resetCheckEmail();
+      navigate(REGISTER_STEP_2_VIEW);
+    }
+  }, [checkEmailAvailability]);
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -32,54 +56,38 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
-              mandatory
-              type={state.type}
+              {...name}
               labelText="Nama Pemilik Toko"
-              maxLength={32}
-              onChangeText={func.handleOnChangeTextName}
               placeholder="Masukkan nama pemilik toko"
-              value={state.name}
-              clearText={() => func.setName('')}
-            />
-          </View>
-          <View style={{ height: 92, padding: 16 }}>
-            <SnbTextField.Text
               mandatory
-              type={state.type}
-              labelText="Nomor KTP"
-              keyboardType="number-pad"
-              maxLength={16}
-              onChangeText={func.handleOnChangeTextIdNumber}
-              valMsgError={''}
-              placeholder="Masukkan nomor KTP anda"
-              value={state.idNumber}
-              clearText={() => func.setIdNumber('')}
             />
           </View>
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...idNumber}
+              mandatory
+              maxLength={16}
+              labelText="Nomor KTP"
+              placeholder="Masukkan nomor KTP anda"
+              keyboardType="number-pad"
+            />
+          </View>
+          <View style={{ height: 92, padding: 16 }}>
+            <SnbTextField.Text
+              {...taxNumber}
               labelText="Nomor NPWP Pemilik"
               maxLength={15}
-              keyboardType="number-pad"
-              onChangeText={func.handleOnChangeTextTaxNumber}
-              valMsgError={''}
               placeholder="Masukkan nomor NPWP anda"
-              value={state.taxNumber}
-              clearText={() => func.setTaxNumber('')}
+              keyboardType="number-pad"
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
             <SnbTextField.Text
-              type={state.type}
+              {...email}
+              maxLength={32}
               labelText="Alamat Email Pemilik"
-              maxLength={16}
-              keyboardType="email-address"
-              onChangeText={func.handleOnChangeTextEmail}
-              valMsgError={''}
               placeholder="Masukkan alamat email anda"
-              value={state.email}
-              clearText={() => func.setEmail('')}
+              keyboardType="email-address"
             />
           </View>
         </ScrollView>
@@ -91,11 +99,23 @@ const Content: React.FC = () => {
         }}>
         <SnbButton.Single
           title="Selanjutnya"
-          onPress={func.goToStep2}
+          onPress={() => {
+            if (email.value !== '') {
+              checkEmail({ email: email.value });
+            } else {
+              saveRegisterUserData({
+                name: name.value,
+                email: email.value,
+                idNo: idNumber.value,
+                taxNo: taxNumber.value,
+              });
+              navigate(REGISTER_STEP_2_VIEW);
+            }
+          }}
           type="primary"
           shadow
-          loading={state.loading}
-          disabled={false}
+          loading={checkEmailAvailability.loading}
+          disabled={name.value === '' || idNumber.value === ''}
         />
       </View>
     </View>
@@ -103,11 +123,11 @@ const Content: React.FC = () => {
 };
 
 const RegisterStep1View: React.FC = () => {
-  const { goBack } = useRegisterStep1();
+  const { goBack } = useNavigation();
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => goBack()} type="white" title="" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );
