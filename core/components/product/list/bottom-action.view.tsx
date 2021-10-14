@@ -1,30 +1,47 @@
-/** === IMPORT PACKAGE HERE ===  */
+/** === IMPORT PACKAGES ===  */
 import React from 'react';
 import { SnbBottomActions } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+/** === IMPORT FUNCTIONS === */
+import {
+  getBottomActionHandler,
+  buildBottomAction,
+} from '@core/functions/product';
+/** === TYPES === */
+export type BottomActionType = 'sort' | 'filter' | 'layout' | 'category';
+export type LayoutDisplay = 'grid' | 'list';
+export type BottomActionPressHandler = ({
+  type,
+  value,
+}: {
+  type: BottomActionType;
+  value?: LayoutDisplay;
+}) => void;
+
+interface BottomActionProps {
+  sort?: boolean;
+  filter?: boolean;
+  layout?: boolean;
+  category?: boolean;
+  sortActive?: boolean;
+  filterActive?: boolean;
+  layoutDisplay?: LayoutDisplay;
+  onActionPress: BottomActionPressHandler;
+}
 /** === COMPONENT === */
-const BottomActionView: React.FC = () => {
-  /** === HOOK === */
-  //   const [selected, setSelected] = useState(0);
-  //   const changeTab = (item: number) => {
-  //     setSelected(item);
-  //   };
-  const goTo = (item: number) => {
-    console.log(item);
-  };
+const BottomActionView: React.FC<BottomActionProps> = ({
+  onActionPress,
+  ...booleanProps
+}) => {
+  /** === DERIVED VALUES === */
+  const { actions, actionNames } = buildBottomAction(booleanProps);
+  const handleActionPress = getBottomActionHandler({
+    onActionPress,
+    actionNames,
+    layoutDisplay: booleanProps.layoutDisplay ?? 'grid',
+  });
   /** === VIEW === */
-  /** => main */
-  return (
-    <SnbBottomActions
-      item={[
-        { iconName: 'sort', title: 'Urutkan', dotShow: true },
-        { iconName: 'filter_list', title: 'Filter' },
-        { iconName: 'view_list', title: 'List' },
-        { iconName: 'category', title: 'Kategory' },
-      ]}
-      onPress={goTo}
-    />
-  );
+  /** => Main */
+  return <SnbBottomActions item={actions} onPress={handleActionPress} />;
 };
 
 export default BottomActionView;
@@ -34,8 +51,8 @@ export default BottomActionView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 12-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

@@ -1,34 +1,74 @@
-/** === IMPORT PACKAGE HERE ===  */
+/** === IMPORT PACKAGES ===  */
 import React from 'react';
-import { TouchableOpacity, View, FlatList, ScrollView } from 'react-native';
-import { SnbText } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+import { View, ScrollView } from 'react-native';
+/** === IMPORT COMPONENTS === */
 import TagView from './tag.view';
+import { ProductGridCard } from '@core/components/ProductGridCard';
+/** === IMPORT FUNCTIONS === */
+import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
+/** === IMPORT MODEL === */
+import * as models from '@models';
+/** === TYPE === */
 interface ListProps {
   data: models.ListItemProps<models.ProductList[]>;
+  tags: Array<string>;
+  onTagPress: (tags: Array<string>) => void;
 }
-/** === IMPORT MODEL HERE === */
-import * as models from '@models';
 /** === COMPONENT === */
-const GridLayoutView: React.FC = () => {
+const GridLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
   /** === VIEW === */
-  /** => tag */
-  const tag = () => {
-    return <TagView />;
-  };
-  const renderItem = () => {
+  /** => Tag List */
+  const renderTagList = () => <TagView tags={tags} onTagPress={onTagPress} />;
+  /** => Grid Card */
+  const renderGridCard = (item: models.ProductList, index: number) => {
     return (
-      <View style={{ borderWidth: 1, height: 100 }}>
-        <SnbText.B1>test</SnbText.B1>
+      <View
+        key={index}
+        style={{ marginRight: index % 2 === 0 ? 8 : 0, marginBottom: 4 }}>
+        <ProductGridCard
+          flexOne={true}
+          name={item.name}
+          imageUrl={item.image ?? item.thumbnail}
+          price={item.currentPrice ?? 0}
+          isBundle={item.isBundle}
+          isPromo={item.isPromo}
+          isExclusive={item.isExclusive}
+          onCardPress={() => console.log(`${item.name} pressed`)}
+          withOrderButton={true}
+          onOrderPress={() => console.log(`${item.name} order pressed`)}
+        />
       </View>
     );
   };
-  /** => main */
+  /** => Grid List */
+  const renderGridList = () => (
+    <View style={{ flexDirection: 'row' }}>
+      <View style={{ flex: 1 }}>
+        {data.data.map(
+          (item, itemIndex) =>
+            itemIndex % 2 === 0 && renderGridCard(item, itemIndex),
+        )}
+      </View>
+      <View style={{ flex: 1 }}>
+        {data.data.map(
+          (item, itemIndex) =>
+            itemIndex % 2 === 1 && renderGridCard(item, itemIndex),
+        )}
+      </View>
+    </View>
+  );
+  /** => Main */
   return (
-    <View style={{ borderWidth: 1, flex: 1 }}>
-      <ScrollView>
-        {tag()}
-        {renderItem()}
+    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+      <ScrollView
+        onScroll={({ nativeEvent }) => {
+          if (scrollHasReachedEnd(nativeEvent)) {
+            console.log('Scroll has reached end');
+          }
+        }}
+        scrollEventThrottle={10}>
+        {renderTagList()}
+        {renderGridList()}
       </ScrollView>
     </View>
   );
@@ -41,8 +81,8 @@ export default GridLayoutView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 12-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

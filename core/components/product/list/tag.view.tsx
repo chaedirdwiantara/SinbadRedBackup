@@ -1,55 +1,32 @@
-/** === IMPORT PACKAGE HERE ===  */
+/** === IMPORT PACKAGES ===  */
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbBottomActions,
-  SnbTabs,
-  SnbChipsSlider,
-} from 'react-native-sinbad-ui';
-// import { goBack, useTag } from '../functions';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+import { View } from 'react-native';
+import { SnbText, SnbChipsSlider } from 'react-native-sinbad-ui';
+/** === TYPE === */
+interface TagListProps {
+  tags: Array<string>;
+  onTagPress: (keywords: Array<string>) => void;
+}
 /** === COMPONENT === */
-const TagView: React.FC = () => {
-  /** === HOOK === */
-  //   const { tags, selectTab } = useTag();
+const TagView: React.FC<TagListProps> = ({ tags, onTagPress }) => {
   /** === VIEW === */
-  /** => tag slider */
-  const tagSlider = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <SnbChipsSlider
-          chipsList={[
-            'test',
-            'test2',
-            'test3',
-            'test',
-            'test2',
-            'test3',
-            'test',
-            'test2',
-            'test3',
-          ]}
-          parentFunction={(item) => console.log(item)}
-        />
-      </View>
-    );
-  };
-  /** => total product */
-  const totalProduct = () => {
-    return (
-      <View style={{ justifyContent: 'center', paddingHorizontal: 16 }}>
-        <SnbText.B1>1200 Produk</SnbText.B1>
-      </View>
-    );
-  };
-  /** => main */
+  /** => Tag Slider */
+  const renderTagSlider = () => (
+    <View style={{ flex: 1, paddingLeft: 8 }}>
+      <SnbChipsSlider chipsList={tags} parentFunction={onTagPress} />
+    </View>
+  );
+  /** => Total Product */
+  const renderTotalProduct = () => (
+    <View style={{ justifyContent: 'center', marginRight: 8 }}>
+      <SnbText.B4>1200 Produk</SnbText.B4>
+    </View>
+  );
+  /** => Main */
   return (
-    <View style={{ paddingVertical: 8, flexDirection: 'row' }}>
-      {totalProduct()}
-      {tagSlider()}
+    <View style={{ flexDirection: 'row', paddingVertical: 14 }}>
+      {renderTotalProduct()}
+      {renderTagSlider()}
     </View>
   );
 };
@@ -61,8 +38,8 @@ export default TagView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: aliisetia
+ * updatedDate: 12-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
