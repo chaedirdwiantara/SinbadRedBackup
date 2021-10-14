@@ -5,26 +5,40 @@ import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
+import { AddToCartModal } from './AddToCartModal';
 import ProductListView from '@core/components/product/list';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
-import { useProductListAction } from '../functions';
+import { useProductListAction, useModalVisibility } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
   /** === HOOKS === */
   const { list } = useProductListAction();
   const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
+  const { orderModalVisible, setOrderModalVisible } = useModalVisibility();
 
   useEffect(() => {
     list(dispatchProduct);
   }, []);
   /** === VIEW === */
+  /** => Add to Cart Modal */
+  const renderAddToCartModal = () => (
+    <AddToCartModal
+      open={orderModalVisible}
+      closeAction={() => setOrderModalVisible(false)}
+      onAddToCartPress={() => console.log('Add to cart pressed')}
+    />
+  );
   /** => Content */
   const renderContent = () => {
     return (
       <View style={{ flex: 1 }}>
         <ProductTabView />
-        <ProductListView data={stateProduct.list} />
+        <ProductListView
+          data={stateProduct.list}
+          onCardPress={(item) => console.log(`${item.name} pressed`)}
+          onOrderPress={() => setOrderModalVisible(true)}
+        />
       </View>
     );
   };
@@ -33,6 +47,7 @@ const ProductView: FC = () => {
     <SnbContainer color="white">
       <ProductHeaderView />
       {renderContent()}
+      {renderAddToCartModal()}
     </SnbContainer>
   );
 };
@@ -45,7 +60,7 @@ export default ProductView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
