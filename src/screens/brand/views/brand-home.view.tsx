@@ -30,7 +30,12 @@ const BrandHomeView: FC = () => {
     item: models.BrandListSuccessProps;
     index: number;
   }) => (
-    <View key={index}>
+    <View
+      key={index}
+      style={{
+        marginLeft: index === 0 ? 16 : 0,
+        marginRight: index === brandListState.data.length - 1 ? 16 : 0,
+      }}>
       <BrandCard
         id={item.id}
         imageUrl={item.image}
