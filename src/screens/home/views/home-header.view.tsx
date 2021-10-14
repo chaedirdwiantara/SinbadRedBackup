@@ -16,7 +16,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
   return (
     <View style={HomeStyles.topNavContainer}>
       <SnbTopNav.Type8
-        goToSearch={() => console.log('search')}
+        goToSearch={() => NavigationAction.navigate('SearchView')}
         type={props.headerChange ? 'red' : 'transparent1'}
         placeholder="Cari di Sinbad"
         onChangeText={(text) => console.log(text)}
