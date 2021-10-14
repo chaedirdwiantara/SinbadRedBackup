@@ -241,3 +241,16 @@ const styles = StyleSheet.create({
 });
 
 export const ModalBottom = { Type1, Type2 }
+
+/**
+* ============================
+* NOTES
+* ============================
+* createdBy: Maulana Ghozi
+* createdDate: 13 October 2021
+* updatedBy: 
+* updatedDate: 
+* updatedFunction:
+* 
+* 
+*/

@@ -17,10 +17,17 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import { TextInputMask } from 'react-native-masked-text';
 
 /** === TYPE === */
+interface SortData {
+  name: string;
+  sortBy: string;
+  sort: string;
+}
+
 interface ActionSortMenuType1Props {
-  sortData: any;
-  sortDataIndex: number;
+  sortData: SortData[];
+  sortDataIndex: number | null;
   parentFunction: (any: any) => void;
+  onRef?: any;
 }
 
 interface ActionFilterMenuType1Props {
@@ -458,7 +465,7 @@ export const Action = { SortMenuType1, FilterMenuType1 }
  * NOTES
  * ============================
  * createdBy: Maulana Ghozi
- * createdDate:
+ * createdDate: 14 October 2021
  * updatedBy: 
  * updatedDate: 
  * updatedFunction:
