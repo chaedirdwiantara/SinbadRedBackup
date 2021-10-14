@@ -8,9 +8,6 @@ import OmsHistoryView from './history/history.view';
 /** === EXPORT ALL === */
 export {
   OmsShoppingCartView,
-  OmsShoppingCart2View,
-  OmsShoppingCart3View,
-  OmsShoppingCart4View,
   OmsVerificationOrderView,
   OmsCheckoutView,
   OmsCheckoutSuccessView,
