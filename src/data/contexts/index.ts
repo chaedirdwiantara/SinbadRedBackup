@@ -21,12 +21,9 @@ export const providers = [
   CategoryProvider,
   VoucherProvider,
   PromoProvider,
-<<<<<<< HEAD
   BrandProvider,
-=======
   UserProvider,
   MerchantProvider,
->>>>>>> 1d0fabf6c7781738c513d0e502e16bb3874fa1c1
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {

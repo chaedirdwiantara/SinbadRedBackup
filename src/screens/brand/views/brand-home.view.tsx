@@ -23,7 +23,6 @@ const BrandHomeView: FC = () => {
   }, []);
   /** === VIEW === */
   /** === Brand Card === */
-<<<<<<< HEAD
   const renderBrandCard = ({
     item,
     index,
@@ -32,15 +31,6 @@ const BrandHomeView: FC = () => {
     index: number;
   }) => (
     <View key={index}>
-=======
-  const renderBrandCard = ({ item, index }: { item: Brand; index: number }) => (
-    <View
-      key={index}
-      style={{
-        marginLeft: index === 0 ? 16 : 0,
-        marginRight: index === brandList.length - 1 ? 16 : 0,
-      }}>
->>>>>>> 1d0fabf6c7781738c513d0e502e16bb3874fa1c1
       <BrandCard
         id={item.id}
         imageUrl={item.image}
