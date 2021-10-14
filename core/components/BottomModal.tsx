@@ -24,6 +24,14 @@ interface ModalBottomType1Props {
   onBackdropPress?: () => void;
 }
 
+interface ModalBottomType2Props {
+  title: string;
+  typeClose: string;
+  close?: () => void;
+  isOpen: boolean;
+  content: React.ReactNode;
+}
+
 /** === COMPONENT === */
 const Type1: FC<ModalBottomType1Props> = (props) => {
 
@@ -91,7 +99,7 @@ const Type1: FC<ModalBottomType1Props> = (props) => {
         onBackButtonPress={onBackButtonPress}
         onBackdropPress={onBackdropPress}
       >
-        <View style={styles.contentContainer}>
+        <View style={styles.contentContainerType1}>
           {renderContentTitle()}
           {renderContentBody()}
         </View>
@@ -101,6 +109,83 @@ const Type1: FC<ModalBottomType1Props> = (props) => {
 
   /** === MAIN === */
   return <View>{renderContent}</View>
+}
+
+const Type2: FC<ModalBottomType2Props> = (props) => {
+
+  /** PROPS */
+  const {
+    title,
+    typeClose,
+    close,
+    isOpen,
+    content,
+  } = props
+
+  /** === RENDER TITLE === */
+  const renderContentTitle = () => {
+    return (
+      <View>
+        <View style={{ alignItems: 'center' }}>
+          <View style={{ marginTop: 14 }} />
+        </View>
+        <View style={styles.boxContentTitle}>
+          <TouchableOpacity
+            accessible={true}
+            accessibilityLabel={'btnModalType2Close'}
+            style={styles.boxClose}
+            onPress={close}
+          >
+            {typeClose === 'cancel' ? (
+              <SnbIcon
+                name="close"
+                color={color.black5}
+                size={24}
+              />
+            ) : (
+              <SnbIcon
+                name="keyboard-arrow-left"
+                color={color.black5}
+                size={32}
+              />
+            )}
+          </TouchableOpacity>
+          <View>
+            <SnbText.C1>{title}</SnbText.C1>
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+/** === RENDER BODY === */
+const renderContentBody = () => {
+  return <View style={styles.boxContentBody}>{content}</View>;
+}
+
+/** === RENDER STATUS BAR === */
+const renderContent = () => {
+  return (
+    <Modal
+      isVisible={isOpen}
+      useNativeDriver={true}
+      hasBackdrop={true}
+      coverScreen={true}
+      backdropColor={color.black100}
+      backdropOpacity={0.4}
+      deviceHeight={height}
+      style={styles.mainContainer}
+    >
+      <View style={styles.contentContainerType1}>
+        {renderContentTitle()}
+        {renderContentBody()}
+      </View>
+    </Modal>
+  );
+}
+
+/** === MAIN === */
+return <View>{renderContent}</View>
 }
 
 const styles = StyleSheet.create({
@@ -116,10 +201,21 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0
   },
-  contentContainer: {
+  contentContainerType1: {
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     maxHeight: 0.8 * height,
+    backgroundColor: color.white,
+    flexDirection: 'column',
+    position: 'absolute',
+    width: '100%',
+    bottom: 0,
+    zIndex: 1000
+  },
+  contentContainerType2: {
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    maxHeight: 0.9 * height,
     backgroundColor: color.white,
     flexDirection: 'column',
     position: 'absolute',
@@ -144,4 +240,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export const ModalBottom = { Type1 }
+export const ModalBottom = { Type1, Type2 }
