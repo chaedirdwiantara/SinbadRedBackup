@@ -51,7 +51,7 @@ const UserView: FC = () => {
         />
       );
     }
-    return <SnbTopNav.Type1 type="white" title="" />;
+    return <SnbTopNav.Type1 type="red" title="Profil" />;
   };
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
@@ -199,12 +199,6 @@ const UserView: FC = () => {
         </ScrollView>
       );
     }
-
-    if (!stateUser.detail.data) {
-      return <LoginPhoneView asComponent />;
-    }
-
-    return null;
   };
   /** this for main view */
   return (
