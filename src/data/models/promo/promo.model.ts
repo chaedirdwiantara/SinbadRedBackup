@@ -14,7 +14,7 @@ export interface PromoPaymentDetailSuccessProps {
   startDate: string;
   endDate: string;
   discountRebate: number;
-  promoTnC: string[];
+  termsAndCondition: string[];
 }
 /** === PROMO GENERRAL DETAIL === */
 export interface PromoGeneralDetailSuccessProps {

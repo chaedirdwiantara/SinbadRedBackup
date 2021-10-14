@@ -69,21 +69,23 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {promoPaymentDetailState.data?.promoTnC.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 4,
-                }}>
-                <View style={{ marginRight: 8, width: 20 }}>
-                  <SnbText.B1>{index + 1}.</SnbText.B1>
+          {promoPaymentDetailState.data?.termsAndCondition.map(
+            (item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 4,
+                  }}>
+                  <View style={{ marginRight: 8, width: 20 }}>
+                    <SnbText.B1>{index + 1}.</SnbText.B1>
+                  </View>
+                  <SnbText.B1>{item}</SnbText.B1>
                 </View>
-                <SnbText.B1>{item}</SnbText.B1>
-              </View>
-            );
-          })}
+              );
+            },
+          )}
         </View>
       </View>
     );
