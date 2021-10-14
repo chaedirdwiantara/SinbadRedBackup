@@ -80,7 +80,13 @@ const RecommendationHomeView: FC = () => {
     item: RecommendedProduct;
     index: number;
   }) => (
-    <View key={index} style={{ width: 160 }}>
+    <View
+      key={index}
+      style={{
+        width: 160,
+        marginLeft: index === 0 ? 16 : 0,
+        marginRight: index === recommendedProducts.length - 1 ? 16 : 0,
+      }}>
       <ProductGridCard
         flexOne={true}
         name={item.name}

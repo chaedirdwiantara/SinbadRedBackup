@@ -45,7 +45,12 @@ const BrandHomeView: FC = () => {
   /** === VIEW === */
   /** === Brand Card === */
   const renderBrandCard = ({ item, index }: { item: Brand; index: number }) => (
-    <View key={index}>
+    <View
+      key={index}
+      style={{
+        marginLeft: index === 0 ? 16 : 0,
+        marginRight: index === brandList.length - 1 ? 16 : 0,
+      }}>
       <BrandCard
         id={item.id}
         name={item.name}
@@ -97,7 +102,7 @@ export default BrandHomeView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 08-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
