@@ -21,38 +21,6 @@ const HomeView: React.FC = () => {
     height > 100 ? action(true) : action(false);
   };
   /** === VIEW === */
-<<<<<<< HEAD
-  /** => voyager home view */
-  const VoyagerHomeView = () => {
-    return (
-      <View
-        style={{
-          height: 300,
-          backgroundColor: 'brown',
-          alignItems: 'center',
-          justifyContent: 'space-around',
-        }}>
-        <TouchableOpacity
-          onPress={() => NavigationAction.navigate('BannerListView')}>
-        <SnbText.B1>Navigate to Banner List (layout only)</SnbText.B1>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => NavigationAction.navigate('PromoDetailView')}>
-          <SnbText.B1>Navigate to Promo (layout only)</SnbText.B1>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => NavigationAction.navigate('PromoPaymentListView')}>
-          <SnbText.B1>Navigate to Promo Payment (mock)</SnbText.B1>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => NavigationAction.navigate('VoucherCartListView')}>
-          <SnbText.B1>Navigate to Voucher Cart (mock)</SnbText.B1>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-=======
->>>>>>> 1d0fabf6c7781738c513d0e502e16bb3874fa1c1
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={state} />;
