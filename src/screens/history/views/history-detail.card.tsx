@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { SnbText, color, styles } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { HistoryDetailStyle } from '../../styles';
+import { HistoryDetailStyle } from '../styles';
 /** === TYPES === */
 interface HistoryDetailCardProps {
   title: string;

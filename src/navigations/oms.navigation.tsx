@@ -3,7 +3,6 @@ import {
   OmsVerificationOrderView,
   OmsCheckoutView,
   OmsCheckoutSuccessView,
-  OmsHistoryDetailView,
 } from '@screen/oms/views';
 
 const OmsNav = {
@@ -18,9 +17,6 @@ const OmsNav = {
   },
   OmsCheckoutSuccessView: {
     component: OmsCheckoutSuccessView,
-  },
-  OmsHistoryDetailView: {
-    component: OmsHistoryDetailView,
   },
 };
 

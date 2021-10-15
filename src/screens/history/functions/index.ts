@@ -1,14 +1,11 @@
 /** === EXPORT ALL === */
-export * from './oms.function';
-export * from './oms-hook.function';
-export * from './shopping-cart/shopping-cart.function';
-export * from './checkout-success/checkout-success.function';
+export * from './history.function';
 /**
  * ================================================================
  * NOTES
  * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
+ * createdBy: ryan (team)
+ * createDate: 31082021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

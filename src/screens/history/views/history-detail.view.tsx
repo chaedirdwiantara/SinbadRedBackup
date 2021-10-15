@@ -16,8 +16,8 @@ import {
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { goBack } from '@screen/oms/functions';
-import { HistoryDetailStyle } from '@screen/oms/styles';
+import { goBack } from '@screen/history/functions';
+import { HistoryDetailStyle } from '@screen/history/styles';
 import {
   HistoryDetailCard,
   HistoryDetailCardDivider,

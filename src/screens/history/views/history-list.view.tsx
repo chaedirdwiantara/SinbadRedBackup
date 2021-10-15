@@ -12,8 +12,8 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack } from '@screen/oms/functions';
-import { HistoryStyle } from '@screen/oms/styles';
+import { goBack } from '@screen/history/functions';
+import { HistoryStyle } from '@screen/history/styles';
 import { HistoryCard, HistoryStatusColor } from './HistoryCard';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
@@ -162,7 +162,7 @@ const orders: Array<HistoryItem> = [
   },
 ];
 /** === COMPONENT === */
-const OmsHistoryView: FC = () => {
+const HistoryListView: FC = () => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
@@ -358,4 +358,4 @@ const OmsHistoryView: FC = () => {
   );
 };
 
-export default OmsHistoryView;
+export default HistoryListView;

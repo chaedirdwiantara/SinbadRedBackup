@@ -7,6 +7,7 @@ import CategoryNav from './category.navigation';
 import ProductNav from './product.navigation';
 import PromoNav from './promo.navigation';
 import BannerNav from './banner.navigation';
+import HistoryNav from './history.navigation';
 
 const index = {
   ...OmsNav,
@@ -18,6 +19,7 @@ const index = {
   ...ProductNav,
   ...PromoNav,
   ...BannerNav,
+  ...HistoryNav,
 };
 
 export default index;

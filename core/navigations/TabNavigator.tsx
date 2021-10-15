@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { enableScreens } from 'react-native-screens';
 import { View } from 'react-native';
 import { HomeView } from '@screen/home/views';
-import { OmsHistoryView } from '@screen/oms/views';
+import { HistoryListView } from '@screen/history/views';
 import { HelpView } from '@screen/help/views';
 import { UserView } from '@screen/user/views';
 import FastOrderView from '../components/FastOrderView';
@@ -57,8 +57,8 @@ const TabNavigator = () => {
         }}
       />
       <Screen
-        name="OmsHistoryView"
-        component={OmsHistoryView}
+        name="HistoryListView"
+        component={HistoryListView}
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
