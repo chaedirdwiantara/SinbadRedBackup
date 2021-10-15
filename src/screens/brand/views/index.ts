@@ -1,8 +1,7 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import BrandHomeView from './brand-home.view';
-import BrandView from './brand.view';
 /** === EXPORT ALL === */
-export { BrandHomeView, BrandView };
+export { BrandHomeView };
 /**
  * ================================================================
  * NOTES

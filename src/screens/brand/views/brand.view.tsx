@@ -1,96 +1,34 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React from 'react';
-import { View, FlatList, Dimensions } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import { BrandCard } from '@core/components/BrandCard';
-import { goBack, useBrandAction } from '../functions';
-import { contexts } from '@contexts';
-import LoadingPage from '@core/components/LoadingPage';
-import * as models from '@models';
-
-const { width } = Dimensions.get('window');
-
+import { TouchableOpacity } from 'react-native';
+import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
+import { goBack, goToBannerDetail } from '../functions';
 /** === COMPONENT === */
 const BannerView: React.FC = () => {
   /** === HOOK === */
-  const { stateBrand, dispatchBrand } = React.useContext(contexts.BrandContext);
-  const brandAction = useBrandAction();
-  const brandListState = stateBrand.list;
-  /** => effect */
-  React.useEffect(() => {
-    brandAction.list(dispatchBrand);
-  }, []);
-
-  const onHandleLoadMore = () => {
-    if (stateBrand.list.data) {
-      if (stateBrand.list.data.length < stateBrand.list.total) {
-        brandAction.loadMore(dispatchBrand, stateBrand.list);
-      }
-    }
-  };
   /** === VIEW === */
   /** => header */
   const header = () => {
     return (
       <SnbTopNav.Type3
         type="red"
-        title={'Brand Kami'}
+        title={'Brand List'}
         backAction={() => goBack()}
-      />
-    );
-  };
-  const renderBrandCard = ({
-    item,
-    index,
-  }: {
-    item: models.BrandListSuccessProps;
-    index: number;
-  }) => (
-    <View key={index} style={{ paddingHorizontal: 5, paddingVertical: 5 }}>
-      <BrandCard
-        id={item.id}
-        imageUrl={item.image}
-        height={0.25 * width}
-        width={0.21 * width}
-        onCardPress={() => console.log(`${item.image} pressed`)}
-      />
-    </View>
-  );
-  /** => Brand List */
-  const renderBrandList = () => {
-    return (
-      <FlatList
-        contentContainerStyle={{
-          paddingVertical: 20,
-          paddingHorizontal: 0.01 * width,
-        }}
-        showsHorizontalScrollIndicator
-        data={brandListState.data}
-        renderItem={renderBrandCard}
-        keyExtractor={(item) => item.id}
-        numColumns={4}
-        onEndReachedThreshold={0.1}
-        onEndReached={onHandleLoadMore}
       />
     );
   };
   /** => content */
   const content = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {!brandListState.loading && brandListState.data.length !== 0 ? (
-          <View>{renderBrandList()}</View>
-        ) : (
-          <LoadingPage />
-        )}
-      </View>
-    );
+    return <SnbText.B1>This page for list of brand</SnbText.B1>;
   };
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
+      <TouchableOpacity onPress={() => goToBannerDetail()}>
+        <SnbText.B1>Go To Banner Detail</SnbText.B1>
+      </TouchableOpacity>
     </SnbContainer>
   );
 };
