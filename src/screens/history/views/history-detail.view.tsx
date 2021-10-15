@@ -18,10 +18,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { goBack } from '@screen/history/functions';
 import { HistoryDetailStyle } from '@screen/history/styles';
-import {
-  HistoryDetailCard,
-  HistoryDetailCardDivider,
-} from './history-detail.card';
+import { HistoryDetailCardDivider, HistoryDetailCard } from '../components';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment' };
@@ -128,7 +125,7 @@ const historyDetailDummy = {
   },
 };
 /** === COMPONENT === */
-const OmsHistoryDetailView: FC = () => {
+const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
   const { params } = useRoute<HistoryDetailRouteProp>();
   const title = params.section === 'order' ? 'Pesanan' : 'Tagihan';
@@ -529,4 +526,4 @@ const OmsHistoryDetailView: FC = () => {
   );
 };
 
-export default OmsHistoryDetailView;
+export default HistoryDetailView;

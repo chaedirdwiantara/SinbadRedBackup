@@ -18,7 +18,7 @@ import {
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
 import { HistoryStyle } from '@screen/history/styles';
-import { CountDownTimer } from './CountDownTimer';
+import { CountDownTimer } from '../components';
 import { NavigationAction } from '@core/functions/navigation';
 /** === TYPES === */
 export interface HistoryStatusColor {
@@ -86,7 +86,7 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   return (
     <TouchableOpacity
       onPress={() =>
-        NavigationAction.navigate('HistoryDetailView', { section: 'order' })
+        NavigationAction.navigate('HistoryDetailView', { section: 'payment' })
       }
       style={[
         {

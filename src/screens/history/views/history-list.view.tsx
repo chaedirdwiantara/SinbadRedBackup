@@ -214,6 +214,7 @@ const HistoryListView: FC = () => {
   );
   /** => Status List */
   const renderStatusList = () => {
+    // ini nanti diganti
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
@@ -227,7 +228,8 @@ const HistoryListView: FC = () => {
           style={{
             paddingVertical: 8,
             paddingHorizontal: 16,
-          }}>
+          }}
+          showsHorizontalScrollIndicator={false}>
           <View style={{ marginRight: 16 }}>
             <SnbButton.Dynamic
               title="Semua"
