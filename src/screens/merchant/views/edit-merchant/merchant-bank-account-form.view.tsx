@@ -36,7 +36,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
   };
   console.log('merchant:', stateUser);
-  
+
   /** content */
   const renderContent = () => {
     return (
