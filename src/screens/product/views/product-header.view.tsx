@@ -1,14 +1,13 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
-import { goBack } from '../functions';
-/** === IMPORT STYLE HERE === */
-/** === INTERFACE === */
+/** === IMPORT FUNCTIONS === */
+import { goBack, goToShoppingCart } from '../functions';
 /** === COMPONENT === */
 const ProductHeaderView: FC = () => {
   /** === VIEW === */
-  /** => main */
+  /** => Main */
   return (
     <View>
       <SnbTopNav.Type6
@@ -19,14 +18,13 @@ const ProductHeaderView: FC = () => {
         icon1Action={() => console.log('this example for icon 1 action')}
         icon2Value={100}
         icon2Name="cart"
-        icon2Action={() => console.log('go to shooping cart')}
+        icon2Action={goToShoppingCart}
       />
     </View>
   );
 };
 
 export default ProductHeaderView;
-
 /**
  * ================================================================
  * NOTES
