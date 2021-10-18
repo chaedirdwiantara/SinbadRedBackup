@@ -24,7 +24,6 @@ interface BottomActionItem {
 interface GetBottomActionHandlerParams {
   onActionPress: BottomActionPressHandler;
   actionNames: Array<BottomActionType>;
-  layoutDisplay: LayoutDisplay;
 }
 /** === FUNCTIONS ===  */
 export const buildBottomAction = ({
@@ -72,18 +71,9 @@ export const buildBottomAction = ({
 export const getBottomActionHandler = ({
   onActionPress,
   actionNames,
-  layoutDisplay,
 }: GetBottomActionHandlerParams) => {
   return (index: number) => {
     const type = actionNames[index];
-
-    if (type === 'layout') {
-      onActionPress({
-        type: 'layout',
-        value: layoutDisplay === 'grid' ? 'list' : 'grid',
-      });
-    } else {
-      onActionPress({ type });
-    }
+    onActionPress({ type });
   };
 };

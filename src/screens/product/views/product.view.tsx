@@ -11,6 +11,7 @@ import { ModalBottom } from '@core/components/BottomModal';
 import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
+import { NavigationAction } from '@core/functions/navigation';
 import { useProductListAction, useModalVisibility } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
@@ -28,19 +29,19 @@ const ProductView: FC = () => {
     {
       name: 'Harga Tinggi ke Rendah',
       sortBy: 'retail_buying_price',
-      sort: 'desc'
+      sort: 'desc',
     },
     {
       name: 'Harga Rendah ke Tinggi',
       sortBy: 'retail_buying_price',
-      sort: 'asc'
-    }
+      sort: 'asc',
+    },
   ]);
   const [sortDataIndex, setSortDataIndex] = useState(null);
 
   /** filter price */
-  const [priceGteMasking, setPriceGteMasking] = useState<string | number>("");
-  const [priceLteMasking, setPriceLteMasking] = useState<string | number>("");
+  const [priceGteMasking, setPriceGteMasking] = useState<string | number>('');
+  const [priceLteMasking, setPriceLteMasking] = useState<string | number>('');
   const [priceGte, setPriceGte] = useState<number>(0);
   const [priceLte, setPriceLte] = useState<number>(0);
 
@@ -75,7 +76,7 @@ const ProductView: FC = () => {
       default:
         break;
     }
-  }
+  };
 
   /** === VIEW === */
   /** => Add to Cart Modal */
@@ -93,14 +94,14 @@ const ProductView: FC = () => {
         <ProductTabView />
         <ProductListView
           data={stateProduct.list}
-          onCardPress={(item) => console.log(`${item.name} pressed`)}
+          onCardPress={() => NavigationAction.navigate('ProductDetailView')}
           onOrderPress={() => setOrderModalVisible(true)}
         />
       </View>
     );
   };
 
-    /**
+  /**
    * =====================
    * MODAL
    * =====================
@@ -124,7 +125,7 @@ const ProductView: FC = () => {
     ) : (
       <View />
     );
-  }
+  };
 
   /** === RENDER MODAL FILTER === */
   const renderModalFilter = () => {
@@ -147,8 +148,7 @@ const ProductView: FC = () => {
     ) : (
       <View />
     );
-  }
-
+  };
 
   /** => Main */
   return (
