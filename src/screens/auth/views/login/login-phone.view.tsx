@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { renderIF, useAuthAction, useInputPhone } from '@screen/auth/functions';
+import { useAuthAction, useInputPhone } from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
@@ -87,21 +87,16 @@ const Content: React.FC = () => {
   );
 };
 
-const LoginPhoneView: React.FC<{ asComponent: boolean }> = ({
-  asComponent,
-}: any) => {
+const LoginPhoneView = () => {
   const { reset } = useNavigation();
 
   return (
     <SnbContainer color="white">
-      {renderIF(
-        !asComponent,
-        <SnbTopNav.Type3
-          backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-          type="white"
-          title=""
-        />,
-      )}
+      <SnbTopNav.Type3
+        backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+        type="white"
+        title=""
+      />
       <Content />
     </SnbContainer>
   );

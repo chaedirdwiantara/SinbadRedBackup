@@ -17,7 +17,7 @@ import { MerchantHookFunc } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
-import { renderIF, useCamera, useUploadImage } from '@screen/auth/functions';
+import { renderIF, useCamera } from '@screen/auth/functions';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/core';
 
@@ -70,13 +70,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || '',
   );
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { resetUploadImage, state: uploadData } = useUploadImage();
   let mapRef = React.useRef<MapView>(null);
   const { navigate } = useNavigation();
 
   useEffect(() => {
     resetCamera();
-    resetUploadImage();
   }, []);
 
   useEffect(() => {
@@ -159,7 +157,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           largeArea: largeArea,
           topSellingBrand: topBrand,
           mostWantedBrand: wantedBrand,
-          vehicleAccessibilityId: vehicleAccessibility.id,
+          vehicleAccessibilityId: vehicleAccessibility?.id,
           vehicleAccessibilityAmount: vehicleAccessibilityAmount,
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
@@ -386,7 +384,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <Image
           resizeMode="contain"
           source={{
-            uri: `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`,
+            uri: capturedImage?.data?.url,
           }}
           borderRadius={4}
           style={{
@@ -411,9 +409,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               shadow
-              loading={uploadData?.loading}
+              loading={false}
               onPress={() => {}}
-              disabled={uploadData?.loading}
+              disabled={false}
             />
           </View>
         </View>

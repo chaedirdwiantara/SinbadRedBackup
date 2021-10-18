@@ -48,6 +48,9 @@ export const useRegister = () => {
   };
 
   const register = () => {
+    if (registerData.user?.email === '') {
+      delete registerData.user?.email;
+    }
     dispatch(Actions.merchantRegisterProcess(registerData));
   };
 

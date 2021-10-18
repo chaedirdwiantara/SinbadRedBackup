@@ -150,25 +150,6 @@ export const useCamera = () => {
   };
 };
 
-export const useUploadImage = () => {
-  const dispatch = useDispatch();
-  const { uploadedImage } = useSelector((state: any) => state.global);
-
-  const uploadImage = (data: models.IUploadImage) => {
-    dispatch(Actions.uploadImageProcess(data));
-  };
-
-  const resetUploadImage = () => {
-    dispatch(Actions.resetUploadImage());
-  };
-
-  return {
-    uploadImage,
-    resetUploadImage,
-    state: uploadedImage,
-  };
-};
-
 export const useTextFieldSelect = () => {
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
