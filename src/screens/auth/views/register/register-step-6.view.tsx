@@ -21,12 +21,22 @@ import {
 
 const Content: React.FC = () => {
   const { saveRegisterStoreData, registerData } = useRegister();
-  const address = useInput();
-  const noteAddress = useInput('Catatan Alamat');
-  const vehicleAccessibilityAmount = useInput();
+  const address = useInput(registerData.address);
+  const noteAddress = useInput(registerData.noteAddress);
+  const vehicleAccessibilityAmount = useInput(
+    registerData.vehicleAccessibilityAmount?.toString() || '',
+  );
   const { gotoSelection, selectedItem } = useTextFieldSelect();
   const { navigate } = useNavigation();
+  const [vehicleAccessibility, setVehicleAccessibility] =
+    React.useState<any>(null);
   let mapRef = React.useRef<MapView>(null);
+
+  React.useEffect(() => {
+    if (selectedItem?.type === 'listVehicleAccess') {
+      setVehicleAccessibility(selectedItem.item);
+    }
+  }, [selectedItem]);
 
   React.useEffect(() => {
     if (registerData.longitude !== null) {
@@ -125,9 +135,8 @@ const Content: React.FC = () => {
             <SnbTextFieldSelect
               labelText="Aksesibilitas Kendaraan"
               value={
-                selectedItem?.type === 'listVehicleAccess'
-                  ? selectedItem?.item.name
-                  : ''
+                vehicleAccessibility?.name ||
+                registerData.vehicleAccessibilityId
               }
               placeholder="Pilih aksesibitas kendaraan"
               type="default"
@@ -158,7 +167,8 @@ const Content: React.FC = () => {
             saveRegisterStoreData({
               address: address.value,
               noteAddress: noteAddress.value,
-              vehicleAccessibilityId: selectedItem?.item?.id || null,
+              vehicleAccessibilityId:
+                vehicleAccessibility?.id || registerData.vehicleAccessibilityId,
               vehicleAccessibilityAmount: Number(
                 vehicleAccessibilityAmount.value,
               ),
@@ -168,7 +178,11 @@ const Content: React.FC = () => {
           type="primary"
           shadow
           loading={false}
-          disabled={address.value === '' || noteAddress.value === ''}
+          disabled={
+            address.value === '' ||
+            noteAddress.value === '' ||
+            vehicleAccessibilityAmount.value === ''
+          }
         />
       </View>
     </View>

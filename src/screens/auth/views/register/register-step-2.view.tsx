@@ -1,9 +1,4 @@
-import {
-  renderIF,
-  useCamera,
-  useRegister,
-  useUploadImage,
-} from '@screen/auth/functions';
+import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -16,17 +11,32 @@ import {
 } from 'react-native-sinbad-ui';
 import { REGISTER_STEP_3_VIEW } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
+import { useUploadImageAction } from '@core/functions/hook/upload-image';
+import { contexts } from '@contexts';
 
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const { upload, save } = useUploadImageAction();
   const { registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
+  const { stateGlobal, dispatchGlobal } = React.useContext(
+    contexts.GlobalContext,
+  );
 
   React.useEffect(() => {
-    if (uploadData.data !== null && capturedImage.data?.type === 'ktp') {
+    return () => {
+      save(dispatchGlobal, '');
+      resetCamera();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (
+      stateGlobal.uploadImage.data !== null &&
+      capturedImage.data?.type === 'ktp'
+    ) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -34,12 +44,11 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ idImageUrl: uploadData.data?.url });
-      resetUploadImage();
+      saveRegisterUserData({ idImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
-    if (uploadData.error !== null) {
+    if (stateGlobal.uploadImage.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Gagal Diupload',
         ToastAndroid.LONG,
@@ -48,7 +57,7 @@ const Content: React.FC = () => {
         height * 0.25,
       );
     }
-  }, [uploadData, capturedImage.data?.type]);
+  }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -71,20 +80,14 @@ const Content: React.FC = () => {
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage?.data?.type === 'ktp';
     let action = () => {
-      resetCamera();
-      resetUploadImage();
       navigate(REGISTER_STEP_3_VIEW);
     };
 
     let uri: string | undefined = '';
     if (isImageCaptured) {
-      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      uri = capturedImage?.data?.url;
       action = () => {
-        const payload = {
-          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-          currentFilePath: registerData?.user?.idImageUrl || null,
-        };
-        uploadImage(payload);
+        upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
       uri = registerData.user?.idImageUrl;
@@ -118,9 +121,9 @@ const Content: React.FC = () => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               shadow
-              loading={uploadData?.loading}
+              loading={stateGlobal.uploadImage.loading}
               onPress={action}
-              disabled={uploadData?.loading}
+              disabled={stateGlobal.uploadImage.loading}
             />
           </View>
         </View>

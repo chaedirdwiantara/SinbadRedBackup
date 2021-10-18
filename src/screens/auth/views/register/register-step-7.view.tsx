@@ -1,10 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import {
-  renderIF,
-  useCamera,
-  useRegister,
-  useUploadImage,
-} from '@screen/auth/functions';
+import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -14,13 +9,19 @@ import {
   color,
   SnbUploadPhotoRules,
   SnbButton,
+  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
+import { contexts } from '@contexts';
+import { useUploadImageAction } from '@core/functions/hook/upload-image';
 
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
+  const { stateGlobal, dispatchGlobal } = React.useContext(
+    contexts.GlobalContext,
+  );
+  const { upload, save } = useUploadImageAction();
   const {
     registerData,
     saveRegisterStoreData,
@@ -29,9 +30,22 @@ const Content: React.FC = () => {
     resetRegister,
   } = useRegister();
   const { reset } = useNavigation();
+  const [showModalFailed, setShowModalFailed] = React.useState(false);
 
   React.useEffect(() => {
-    if (uploadData.data !== null && capturedImage.data?.type === 'store') {
+    resetRegister();
+    return () => {
+      save(dispatchGlobal, '');
+      resetCamera();
+      resetRegister();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (
+      stateGlobal.uploadImage.data !== null &&
+      capturedImage.data?.type === 'store'
+    ) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -39,12 +53,11 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterStoreData({ imageUrl: uploadData.data?.url });
-      resetUploadImage();
+      saveRegisterStoreData({ imageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
-    if (uploadData.error !== null) {
+    if (stateGlobal.uploadImage.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Gagal Diupload',
         ToastAndroid.LONG,
@@ -52,19 +65,18 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      resetCamera();
-      resetUploadImage();
     }
-  }, [uploadData]);
+  }, [stateGlobal.uploadImage, capturedImage.data]);
 
   React.useEffect(() => {
-    if (registerState.data?.data?.isCreated) {
+    if (registerState.data?.data?.isCreated === true) {
       reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
-    } else {
-      console.log('GAGAL BROW');
+    }
+    if (registerState.data?.data?.isCreated === false) {
+      setShowModalFailed(true);
     }
   }, [registerState]);
 
@@ -89,20 +101,14 @@ const Content: React.FC = () => {
     const isImageCaptured = capturedImage?.data?.type === 'store';
     let uri: string | undefined = '';
     let action = () => {
-      resetCamera();
-      resetUploadImage();
       resetRegister();
       register();
     };
 
     if (isImageCaptured) {
-      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      uri = capturedImage?.data?.url;
       action = () => {
-        const payload = {
-          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-          currentFilePath: registerData.imageUrl || null,
-        };
-        uploadImage(payload);
+        upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
       uri = registerData.imageUrl;
@@ -136,9 +142,13 @@ const Content: React.FC = () => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selesai'}
               shadow
-              loading={uploadData?.loading || registerState?.loading}
               onPress={action}
-              disabled={uploadData?.loading || registerState?.loading}
+              disabled={
+                stateGlobal.uploadImage.loading || registerState?.loading
+              }
+              loading={
+                stateGlobal.uploadImage.loading || registerState?.loading
+              }
             />
           </View>
         </View>
@@ -166,6 +176,36 @@ const Content: React.FC = () => {
         renderImagePreview(),
         renderUploadPhotoRules(),
       )}
+      <SnbBottomSheet
+        open={showModalFailed}
+        actionIcon="close"
+        title="Gagal Membuat Toko"
+        content={
+          <View>
+            <Image
+              source={{ uri: ' ' }}
+              style={{
+                height: 160,
+                width: 160,
+                alignSelf: 'center',
+                backgroundColor: color.black10,
+                marginVertical: 16,
+              }}
+            />
+            <View style={{ marginVertical: 16 }}>
+              <SnbText.B3 align="center">
+                Toko gagal dibuat karena ada kesalahan pada server
+              </SnbText.B3>
+            </View>
+            <SnbButton.Single
+              title="Tutup"
+              type="primary"
+              disabled={false}
+              onPress={() => setShowModalFailed(false)}
+            />
+          </View>
+        }
+      />
     </View>
   );
 };

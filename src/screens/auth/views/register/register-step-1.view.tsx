@@ -18,10 +18,10 @@ const Content: React.FC = () => {
     useCheckEmailAvailability();
   const { saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
-  const name = useInput('Test');
-  const idNumber = useInput('3375020801940003');
-  const taxNumber = useInput('123456789123456');
-  const email = useInput('mazhuda@gmail.com');
+  const name = useInput();
+  const idNumber = useInput();
+  const taxNumber = useInput();
+  const email = useInput();
 
   React.useEffect(() => {
     if (checkEmailAvailability.data !== null) {

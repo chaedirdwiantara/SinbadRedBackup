@@ -72,6 +72,8 @@ const useStoreDetailAction = () => {
       contextDispatch: (action: any) => any,
       data: models.DetailProcessProps,
     ) => {
+      console.log(data);
+
       dispatch(Actions.storeDetailProcess(contextDispatch, data));
     },
   };

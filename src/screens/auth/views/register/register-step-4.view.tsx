@@ -1,10 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import {
-  renderIF,
-  useCamera,
-  useRegister,
-  useUploadImage,
-} from '@screen/auth/functions';
+import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
 import { REGISTER_STEP_5_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
@@ -16,17 +11,32 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import { contexts } from '@contexts';
+import { useUploadImageAction } from '@core/functions/hook/upload-image';
 
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
   const { registerData, saveRegisterUserData } = useRegister();
   const { navigate } = useNavigation();
+  const { stateGlobal, dispatchGlobal } = React.useContext(
+    contexts.GlobalContext,
+  );
+  const { upload, save } = useUploadImageAction();
 
   React.useEffect(() => {
-    if (uploadData.data !== null && capturedImage.data?.type === 'npwp') {
+    return () => {
+      save(dispatchGlobal, '');
+      resetCamera();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (
+      stateGlobal.uploadImage.data !== null &&
+      capturedImage.data?.type === 'npwp'
+    ) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -34,12 +44,11 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ taxImageUrl: uploadData.data?.url });
-      resetUploadImage();
+      saveRegisterUserData({ taxImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
-    if (uploadData.error !== null) {
+    if (stateGlobal.uploadImage.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Gagal Diupload',
         ToastAndroid.LONG,
@@ -48,7 +57,7 @@ const Content: React.FC = () => {
         height * 0.25,
       );
     }
-  }, [uploadData]);
+  }, [stateGlobal.uploadImage, capturedImage.data]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -70,21 +79,15 @@ const Content: React.FC = () => {
 
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage?.data?.type === 'npwp';
-    let uri: string | undefined = '';
     let action = () => {
-      resetCamera();
-      resetUploadImage();
       navigate(REGISTER_STEP_5_VIEW);
     };
 
+    let uri: string | undefined = '';
     if (isImageCaptured) {
-      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      uri = capturedImage?.data?.url;
       action = () => {
-        const payload = {
-          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-          currentFilePath: registerData?.user?.taxImageUrl || null,
-        };
-        uploadImage(payload);
+        upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
       uri = registerData.user?.taxImageUrl;
@@ -117,10 +120,10 @@ const Content: React.FC = () => {
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
               shadow
-              loading={uploadData?.loading}
+              disabled={stateGlobal.uploadImage.loading}
+              loading={stateGlobal.uploadImage.loading}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               onPress={action}
-              disabled={uploadData?.loading}
             />
           </View>
         </View>
