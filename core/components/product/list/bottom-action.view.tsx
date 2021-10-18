@@ -5,16 +5,24 @@ import { SnbBottomActions } from 'react-native-sinbad-ui';
 import {
   getBottomActionHandler,
   buildBottomAction,
+  SortQuery,
 } from '@core/functions/product';
 /** === TYPES === */
 export type BottomActionType = 'sort' | 'filter' | 'layout' | 'category';
 export type LayoutDisplay = 'grid' | 'list';
+export type BottomActionPressHandlerType =
+  | 'sort'
+  | 'applySort'
+  | 'filter'
+  | 'applyFilter'
+  | 'layout'
+  | 'category';
 export type BottomActionPressHandler = ({
   type,
   value,
 }: {
-  type: BottomActionType;
-  value?: LayoutDisplay;
+  type: BottomActionPressHandlerType;
+  value?: SortQuery; // add FilterQuery type/interface in product-hook.function
 }) => void;
 
 interface BottomActionProps {
@@ -30,14 +38,13 @@ interface BottomActionProps {
 /** === COMPONENT === */
 const BottomActionView: React.FC<BottomActionProps> = ({
   onActionPress,
-  ...booleanProps
+  ...props
 }) => {
   /** === DERIVED VALUES === */
-  const { actions, actionNames } = buildBottomAction(booleanProps);
+  const { actions, actionNames } = buildBottomAction(props);
   const handleActionPress = getBottomActionHandler({
     onActionPress,
     actionNames,
-    layoutDisplay: booleanProps.layoutDisplay ?? 'grid',
   });
   /** === VIEW === */
   /** => Main */

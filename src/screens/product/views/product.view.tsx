@@ -29,19 +29,19 @@ const ProductView: FC = () => {
     {
       name: 'Harga Tinggi ke Rendah',
       sortBy: 'retail_buying_price',
-      sort: 'desc'
+      sort: 'desc',
     },
     {
       name: 'Harga Rendah ke Tinggi',
       sortBy: 'retail_buying_price',
-      sort: 'asc'
-    }
+      sort: 'asc',
+    },
   ]);
   const [sortDataIndex, setSortDataIndex] = useState(null);
 
   /** filter price */
-  const [priceGteMasking, setPriceGteMasking] = useState<string | number>("");
-  const [priceLteMasking, setPriceLteMasking] = useState<string | number>("");
+  const [priceGteMasking, setPriceGteMasking] = useState<string | number>('');
+  const [priceLteMasking, setPriceLteMasking] = useState<string | number>('');
   const [priceGte, setPriceGte] = useState<number>(0);
   const [priceLte, setPriceLte] = useState<number>(0);
 
@@ -76,7 +76,7 @@ const ProductView: FC = () => {
       default:
         break;
     }
-  }
+  };
 
   /** === VIEW === */
   /** => Add to Cart Modal */
@@ -101,7 +101,7 @@ const ProductView: FC = () => {
     );
   };
 
-    /**
+  /**
    * =====================
    * MODAL
    * =====================
@@ -125,7 +125,7 @@ const ProductView: FC = () => {
     ) : (
       <View />
     );
-  }
+  };
 
   /** === RENDER MODAL FILTER === */
   const renderModalFilter = () => {
@@ -148,8 +148,7 @@ const ProductView: FC = () => {
     ) : (
       <View />
     );
-  }
-
+  };
 
   /** => Main */
   return (
