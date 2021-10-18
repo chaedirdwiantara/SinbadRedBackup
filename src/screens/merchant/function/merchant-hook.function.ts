@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 /** === IMPORT PACKAGE HERE === */
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -5,7 +6,6 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { navigate } from '@core/navigations/RootNavigation';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
 /** === FUNCTION === */
 /** => collect data */
 /** => call fetch */
@@ -50,7 +50,6 @@ const useSupplierListAction = () => {
 };
 
 const useRegisterStep4 = () => {
-  console.log('disini');
   const navigation = useNavigation();
   const [imageNPWP, setImage] = React.useState(null);
 
@@ -122,6 +121,39 @@ const useNumberOfEmployeeListAction = () => {
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.supplierListReset());
     },
+  };
+};
+/** => useInput */
+export const useInput = (initialState: string = '') => {
+  const [value, setValue] = useState(initialState);
+  const [valMsgError, setValMsgError] = useState('');
+  const [type, setType] = useState('default');
+
+  const onChangeText = (text: string) => {
+    setType('default');
+    setValue(text);
+  };
+
+  const clearText = () => {
+    setValue('');
+    setValMsgError('');
+    setType('default');
+  };
+
+  const setMessageError = (message: string) => {
+    setType('error');
+    setValMsgError(message);
+  };
+
+  return {
+    value,
+    type,
+    onChangeText,
+    valMsgError,
+    clearText,
+    maxLength: 32,
+    setMessageError,
+    setValue,
   };
 };
 /** === EXPORT === */

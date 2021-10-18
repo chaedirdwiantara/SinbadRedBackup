@@ -157,10 +157,12 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: ownerData?.profile.bankAccountNo,
-          action: ownerData?.profile.bankAccountNo ? 'ubah' : 'tambah',
+          value: ownerData?.profile.bankAccount.bankAccountNo,
+          action: ownerData?.profile.bankAccount.bankAccountNo
+            ? 'ubah'
+            : 'tambah',
           type: 'merchantOwnerBankAccountNo',
-          title: ownerData?.profile.bankAccountNo
+          title: ownerData?.profile.bankAccount.bankAccountNo
             ? 'Ubah Rekening Bank'
             : 'Tambah Rekening Bank',
         })}

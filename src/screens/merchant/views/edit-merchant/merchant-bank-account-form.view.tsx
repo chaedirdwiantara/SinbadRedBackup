@@ -39,13 +39,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
 
   /** content */
   const renderContent = () => {
+    const bankData = stateUser.detail.data?.ownerData.profile.bankAccount;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Nama Bank'}
             type={'default'}
-            value={'test'}
+            value={bankData?.bankAccountName || ''}
             onPress={() => console.log('press')}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -58,7 +59,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Nomor Rekening'}
             placeholder={'Masukan Nomor Rekening'}
             type={'default'}
-            value={'largeArea'}
+            value={bankData?.bankAccountNo || ''}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
             mandatory
@@ -80,7 +81,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Nama Cabang'}
             placeholder={'Masukan Nama Cabang'}
             type={'default'}
-            value={'largeArea'}
+            value={bankData?.bankBranchName || ''}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
             helpText={'Cabang tempat pembukaan rekening'}
