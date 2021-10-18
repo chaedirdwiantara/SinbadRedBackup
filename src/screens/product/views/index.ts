@@ -1,7 +1,8 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import ProductView from './product.view';
+import ProductDetailView from './detail/product-detail.view';
 /** === EXPORT ALL === */
-export { ProductView };
+export { ProductView, ProductDetailView };
 /**
  * ================================================================
  * NOTES

@@ -11,6 +11,7 @@ import { ModalBottom } from '@core/components/BottomModal';
 import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
+import { NavigationAction } from '@core/functions/navigation';
 import { useProductListAction, useModalVisibility } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
@@ -93,7 +94,7 @@ const ProductView: FC = () => {
         <ProductTabView />
         <ProductListView
           data={stateProduct.list}
-          onCardPress={(item) => console.log(`${item.name} pressed`)}
+          onCardPress={() => NavigationAction.navigate('ProductDetailView')}
           onOrderPress={() => setOrderModalVisible(true)}
         />
       </View>
