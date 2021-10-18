@@ -4,7 +4,7 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbText,
-  SnbButton,
+  SnbListButtonType2,
   color,
 } from 'react-native-sinbad-ui';
 import DeviceInfo from 'react-native-device-info';
@@ -51,27 +51,12 @@ const HelpView: FC = () => {
   const renderContentMenu = () => {
     return menu.map((item, index) => {
       return (
-        <>
-          <View key={index} style={{ paddingHorizontal: 16 }}>
-            <SnbButton.Dynamic
-              title={item.name}
-              type="tertiary"
-              size="small"
-              position="left"
-              disabled={false}
-              contentColor={color.black100}
-              loading={false}
-              onPress={() => console.log(`pressed ${item.name}`)}
-            />
-          </View>
-          <View
-            style={{
-              borderTopWidth: 1,
-              borderColor: color.black10,
-              marginLeft: 16,
-            }}
+        <View key={index} style={{ paddingHorizontal: 16 }}>
+          <SnbListButtonType2
+            title={item.name}
+            onPress={() => console.log(`pressed ${item.name}`)}
           />
-        </>
+        </View>
       );
     });
   };
