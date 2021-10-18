@@ -179,7 +179,7 @@ const ProductDetailView: FC = () => {
             source={
               productDetailDummy.supplier.imageLogoUrl
                 ? { uri: productDetailDummy.supplier.imageLogoUrl }
-                : require('../../../assets/images/store.png')
+                : require('../../../../assets/images/store.png')
             }
             style={ProductDetailStyle.supplierLogo}
           />
