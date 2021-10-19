@@ -225,6 +225,7 @@ const OmsHistoryView: FC = () => {
       <View>
         <ScrollView
           horizontal={true}
+          showsHorizontalScrollIndicator={false}
           style={{
             paddingVertical: 8,
             paddingHorizontal: 16,
