@@ -39,44 +39,9 @@ const ProductView: FC = () => {
   ]);
   const [sortDataIndex, setSortDataIndex] = useState(null);
 
-  /** filter price */
-  const [priceGteMasking, setPriceGteMasking] = useState<string | number>('');
-  const [priceLteMasking, setPriceLteMasking] = useState<string | number>('');
-  const [priceGte, setPriceGte] = useState<number>(0);
-  const [priceLte, setPriceLte] = useState<number>(0);
-
   useEffect(() => {
     list(dispatchProduct);
   }, []);
-
-  /**
-   * =======================
-   * FUNCTIONAL
-   * =======================
-   */
-  /** CALLED FROM CHILD */
-  const parentFunction = (data: any) => {
-    switch (data.type) {
-      /** => for open modal short */
-      case 'sort':
-        setOpenModalSort(true);
-        break;
-      /** => after selected sort */
-      case 'sortSelected':
-        setOpenModalSort(false);
-        break;
-      /** => for open modal filter */
-      case 'filter':
-        setOpenModalFilter(true);
-        break;
-      /** => filter selected */
-      case 'filterSelected':
-        setOpenModalFilter(false);
-        break;
-      default:
-        break;
-    }
-  };
 
   /** === VIEW === */
   /** => Add to Cart Modal */
@@ -127,29 +92,6 @@ const ProductView: FC = () => {
     );
   };
 
-  /** === RENDER MODAL FILTER === */
-  const renderModalFilter = () => {
-    return openModalFilter ? (
-      <ModalBottom.Type2
-        isOpen={openModalFilter}
-        title={'Filter'}
-        typeClose={'cancel'}
-        content={
-          <Action.FilterMenuType1
-            priceGteMasking={priceGteMasking}
-            priceLteMasking={priceLteMasking}
-            priceGte={priceGte}
-            priceLte={priceLte}
-            parentFunction={() => {}}
-          />
-        }
-        close={() => setOpenModalFilter(false)}
-      />
-    ) : (
-      <View />
-    );
-  };
-
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -157,7 +99,6 @@ const ProductView: FC = () => {
       {renderContent()}
       {/* filter */}
       {renderModalSort()}
-      {renderModalFilter()}
       {renderAddToCartModal()}
     </SnbContainer>
   );

@@ -9,7 +9,7 @@ import {
   Dimensions,
   Keyboard
 } from 'react-native';
-import { SnbIcon, color, SnbText } from 'react-native-sinbad-ui';
+import { SnbIcon, color, SnbText, SnbButton } from 'react-native-sinbad-ui';
 import { toCurrency } from '../functions/global/currency-format'
 
 /** === IMPORT THIRD PARTY PACKAGE */
@@ -45,7 +45,7 @@ let keyboardDidHideListener: any;
 const { height, width } = Dimensions.get('window');
 
 const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any[]>(props.sortData);
   const [sortData, setSortData] = useState(null);
   const [sortDataIndex, setSortDataIndex] = useState<number | null>(null)
 
@@ -117,9 +117,14 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
   const renderButton = () => {
     
     return (
-      <TouchableOpacity onPress={toParentFunction} disabled={sortDataIndex === props.sortDataIndex}>
-        <SnbText.C1>Terapkan</SnbText.C1>
-      </TouchableOpacity>
+      <View style={{ marginTop: 32, height: 72 }}> 
+        <SnbButton.Single
+          type="primary"
+          title="Simpan"
+          onPress={toParentFunction}
+          disabled={sortDataIndex === props.sortDataIndex}
+        />
+      </View>
     );
   }
 
@@ -235,12 +240,14 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
     return (
       <View>
         <View>
-          <SnbText.C1>Harga</SnbText.C1>
+          <SnbText.B2>Harga</SnbText.B2>
         </View>
         <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
           <View style={{ flexDirection: 'row', flex: 1 }}>
             <View style={{ justifyContent: 'center', marginRight: 10 }}>
-            <SnbText.C1>Harga</SnbText.C1>
+              <SnbText.C1>Rp</SnbText.C1>
+            </View>
+            <View style={{ justifyContent: 'center', marginRight: 10 }}>
             </View>
             <View style={{ flex: 1 }}>
               <TextInputMask
@@ -388,9 +395,14 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
   /** === RENDER BUTTON === */
   const renderButton = () => {
     return (
-      <TouchableOpacity onPress={toParentFunction}>
-        <SnbText.C1>Terapkan</SnbText.C1>
-      </TouchableOpacity>
+      <View style={{ marginTop: 32, height: 72 }}> 
+        <SnbButton.Single
+          type="primary"
+          title="Simpan"
+          onPress={toParentFunction}
+          disabled={false}
+        />
+      </View>
     );
   }
 

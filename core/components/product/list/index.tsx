@@ -1,11 +1,12 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
 import BottomActionView from './bottom-action.view';
+import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
 import { useBottomAction } from '@core/functions/product';
 /** === IMPORT MODEL === */
@@ -103,6 +104,28 @@ const ProductListView: FC<ProductComponentProps> = ({
   onCardPress,
   onOrderPress,
 }) => {
+  /** => STATE */
+  /** filter price */
+  const [priceGteMasking, setPriceGteMasking] = useState<string | number>('');
+  const [priceLteMasking, setPriceLteMasking] = useState<string | number>('');
+  const [priceGte, setPriceGte] = useState<number>(0);
+  const [priceLte, setPriceLte] = useState<number>(0);
+
+  /** sort */
+  const [sortData, setSortData] = useState([
+    {
+      name: 'Harga Tinggi ke Rendah',
+      sortBy: 'retail_buying_price',
+      sort: 'desc',
+    },
+    {
+      name: 'Harga Rendah ke Tinggi',
+      sortBy: 'retail_buying_price',
+      sort: 'asc',
+    },
+  ]);
+  const [sortDataIndex, setSortDataIndex] = useState(null);
+
   /** === HOOK === */
   const { 
     layoutDisplay, 
@@ -143,8 +166,14 @@ const ProductListView: FC<ProductComponentProps> = ({
       <SnbBottomSheet
         open={sortModalVisible}
         title={"Urutkan"}
+        action
+        actionIcon="close"
         content={
-          <View/>
+          <Action.SortMenuType1
+            sortDataIndex={sortDataIndex}
+            sortData={sortData}
+            parentFunction={() => {}}
+          />
         }
         closeAction={() => handleActionClick({type: "sort"})}
       />
@@ -159,8 +188,16 @@ const ProductListView: FC<ProductComponentProps> = ({
       <SnbBottomSheet
         open={filterModalVisible}
         title={"Filter"}
+        action
+        actionIcon="close"
         content={
-          <View/>
+          <Action.FilterMenuType1
+            priceGteMasking={priceGteMasking}
+            priceLteMasking={priceLteMasking}
+            priceGte={priceGte}
+            priceLte={priceLte}
+            parentFunction={() => {}}
+          />
         }
         closeAction={() => handleActionClick({type: "filter"})}
       />
