@@ -30,12 +30,12 @@ const HelpView: FC = () => {
     },
   ]);
   /** === HOOK === */
-  const CallCsModal = useCallCsModal();
+  const callCsModal = useCallCsModal();
 
   const goTo = (page: string) => {
     switch (page) {
       case 'call_cs':
-        CallCsModal.setOpen(true);
+        callCsModal.setOpen(true);
         break;
       case 'faq':
         NavigationAction.navigate('HelpFaqView');
@@ -49,7 +49,7 @@ const HelpView: FC = () => {
   };
 
   const closeModal = (data: boolean) => {
-    CallCsModal.setOpen(data);
+    callCsModal.setOpen(data);
   };
   /** === VIEW === */
   /** === HEADER === */
@@ -117,8 +117,8 @@ const HelpView: FC = () => {
   const renderCallCsModal = () => {
     return (
       <ModalCallCs
-        open={CallCsModal.isOpen}
-        close={() => CallCsModal.setOpen(false)}
+        open={callCsModal.isOpen}
+        close={() => callCsModal.setOpen(false)}
         closeModal={(ref: boolean) => closeModal(ref)}
       />
     );
