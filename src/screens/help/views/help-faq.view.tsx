@@ -168,7 +168,7 @@ const HelpFaqView: FC = () => {
     } else {
       bgColor = '#6fcf97';
     }
-    console.log(888, item);
+
     return (
       <View
         style={{
