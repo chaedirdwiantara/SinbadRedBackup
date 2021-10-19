@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { View, TouchableOpacity } from 'react-native';
+import { color, SnbContainer, SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
@@ -104,7 +104,8 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** === HOOK === */
-  const { layoutDisplay, handleActionClick } = useBottomAction();
+  const { layoutDisplay, handleActionClick, sortActive, filterActive } =
+    useBottomAction();
   /** === VIEW === */
   /** => List */
   const renderList = () =>
@@ -133,11 +134,27 @@ const ProductListView: FC<ProductComponentProps> = ({
   return (
     <SnbContainer color="white">
       {renderContent()}
+      <TouchableOpacity
+        style={{
+          padding: 16,
+          backgroundColor: color.yellow40,
+          alignItems: 'center',
+        }}
+        onPress={() =>
+          handleActionClick({
+            type: 'applySort',
+            value: { sortBy: 'price', sort: 'asc' },
+          })
+        }>
+        <SnbText.B4>Apply Sort</SnbText.B4>
+      </TouchableOpacity>
       <BottomActionView
         sort={true}
         filter={true}
         layout={true}
         category={true}
+        sortActive={sortActive}
+        filterActive={filterActive}
         layoutDisplay={layoutDisplay}
         onActionPress={handleActionClick}
       />
