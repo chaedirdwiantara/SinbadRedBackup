@@ -4,12 +4,11 @@ import {
   View, 
   TouchableOpacity,
   StyleSheet,
-  Text,
   ScrollView,
   Dimensions,
   Keyboard
 } from 'react-native';
-import { SnbIcon, color, SnbText, SnbButton } from 'react-native-sinbad-ui';
+import { SnbIcon, color, SnbText, SnbButton, SnbRadioButton } from 'react-native-sinbad-ui';
 import { toCurrency } from '../functions/global/currency-format'
 
 /** === IMPORT THIRD PARTY PACKAGE */
@@ -89,20 +88,16 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
         >
           <View style={styles.boxContentItemSortType1}>
             <View style={{ flex: 1 }}>
-              <SnbText.C1>{item.name}</SnbText.C1>
+              <SnbText.B3>{item.name}</SnbText.B3>
             </View>
             <View style={styles.boxIconRight}>
               {sortDataIndex === index ? (
-                <SnbIcon
-                  name="radio-button-checked"
-                  color={color.red50}
-                  size={24}
+                <SnbRadioButton
+                  status={"selected"}
                 />
               ) : (
-                <SnbIcon
-                  name="radio-button-unchecked"
-                  color={color.black40}
-                  size={24}
+                <SnbRadioButton
+                  status={"unselect"}
                 />
               )}
             </View>
