@@ -30,7 +30,6 @@ const MerchantEditView: FC<Props> = (props) => {
       case 'merchantOwnerName':
       case 'merchantOwnerEmail':
       case 'merchantOwnerTaxNo':
-      case 'merchantAddress':
       case 'merchantOwnerPhoneNo':
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':

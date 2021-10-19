@@ -14,6 +14,7 @@ import MapView, { Marker } from 'react-native-maps';
 const MerchantDetailAddressView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  const storeData = stateUser.detail.data?.storeData;
   let mapRef = React.useRef<MapView>(null);
 
   /** === VIEW === */
@@ -26,10 +27,7 @@ const MerchantDetailAddressView: FC = () => {
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
         buttonAction={() =>
-          NavigationAction.navigate('MerchantEditView', {
-            title: 'Alamat Toko',
-            type: 'merchantAddress',
-          })
+          NavigationAction.navigate('MerchantEditAddressView')
         }
       />
     );
@@ -41,10 +39,8 @@ const MerchantDetailAddressView: FC = () => {
         <MapView
           ref={mapRef}
           initialRegion={{
-            latitude:
-              stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-            longitude:
-              stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            latitude: storeData?.storeAddress.latitude || 0,
+            longitude: storeData?.storeAddress.longitude || 0,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           }}
@@ -64,10 +60,8 @@ const MerchantDetailAddressView: FC = () => {
           }}>
           <Marker
             coordinate={{
-              latitude:
-                stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-              longitude:
-                stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+              latitude: storeData?.storeAddress.latitude || 0,
+              longitude: storeData?.storeAddress.longitude || 0,
             }}
           />
         </MapView>
@@ -76,7 +70,7 @@ const MerchantDetailAddressView: FC = () => {
   };
   /** input */
   const renderInput = () => {
-    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
+    const dataAddress = storeData?.storeAddress;
     return (
       <View style={{ marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
