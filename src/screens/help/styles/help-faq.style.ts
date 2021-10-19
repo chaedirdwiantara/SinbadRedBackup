@@ -10,6 +10,18 @@ const HelpFaqStyles = StyleSheet.create({
     top: 0,
     zIndex: 0,
   },
+  shadowForBox: {
+    borderWidth: 0,
+    backgroundColor: color.white,
+    shadowColor: color.black100,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2,
+  },
   boxContentItem: {
     borderWidth: 1,
     borderRadius: 15,

@@ -12,7 +12,6 @@ import {
   SnbText,
   SnbTextField,
   color,
-  styles,
   SnbCarousel,
 } from 'react-native-sinbad-ui';
 import { goBack } from '../functions';
@@ -177,7 +176,7 @@ const HelpFaqView: FC = () => {
           marginBottom: 2,
         }}
         key={index}>
-        <View style={[HelpFaqStyle.boxContentItem, styles.shadowForBox10]}>
+        <View style={[HelpFaqStyle.boxContentItem, HelpFaqStyle.shadowForBox]}>
           <View
             style={[HelpFaqStyle.headerContent, { backgroundColor: bgColor }]}>
             <SnbText.B1>{item.title}</SnbText.B1>
