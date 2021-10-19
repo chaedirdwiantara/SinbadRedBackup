@@ -40,6 +40,9 @@ const HelpView: FC = () => {
       case 'faq':
         NavigationAction.navigate('HelpFaqView');
         break;
+      case 'clear_cache':
+        console.log('PRESSED CLEAR CACHE');
+        break;
       default:
         break;
     }
@@ -116,7 +119,7 @@ const HelpView: FC = () => {
       <ModalCallCs
         open={CallCsModal.isOpen}
         close={() => CallCsModal.setOpen(false)}
-        closeModal={(data: boolean) => closeModal(data)}
+        closeModal={(ref: boolean) => closeModal(ref)}
       />
     );
   };
