@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { color, SnbContainer, SnbText } from 'react-native-sinbad-ui';
+import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
@@ -104,8 +104,14 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** === HOOK === */
-  const { layoutDisplay, handleActionClick, sortActive, filterActive } =
-    useBottomAction();
+  const { 
+    layoutDisplay, 
+    handleActionClick, 
+    sortActive, 
+    filterActive, 
+    filterModalVisible, 
+    sortModalVisible 
+  } = useBottomAction();
   /** === VIEW === */
   /** => List */
   const renderList = () =>
@@ -130,6 +136,49 @@ const ProductListView: FC<ProductComponentProps> = ({
   const renderContent = () => {
     return <View style={{ flex: 1 }}>{renderList()}</View>;
   };
+
+  /** === RENDER MODAL SORT === */
+  const renderModalSort = () => {
+    return sortModalVisible ? (
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title={"Urutkan"}
+        content={
+          <View/>
+        }
+        closeAction={() => handleActionClick({type: "sort"})}
+      />
+    ) : (
+      <View />
+    );
+  };
+
+  /** === RENDER MODAL FILTER === */
+  const renderModalFilter = () => {
+    return filterModalVisible ? (
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title={"Filter"}
+        content={
+          <View/>
+        }
+        closeAction={() => handleActionClick({type: "filter"})}
+      />
+    ) : (
+      <View />
+    );
+  };
+
+//   <SnbBottomSheet
+//   open={termsAndConditionModal.isOpen}
+//   content={content()}
+//   title={'Syarat & Ketentuan'}
+//   closeAction={() => termsAndConditionModal.setOpen(false)}
+//   action={true}
+//   actionIcon={'close'}
+// />
+
+
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -158,6 +207,8 @@ const ProductListView: FC<ProductComponentProps> = ({
         layoutDisplay={layoutDisplay}
         onActionPress={handleActionClick}
       />
+      {renderModalSort()}
+      {renderModalFilter()}
     </SnbContainer>
   );
 };
