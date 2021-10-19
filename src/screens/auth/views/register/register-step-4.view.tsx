@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import { REGISTER_STEP_5_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
@@ -18,7 +18,7 @@ const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { registerData, saveRegisterUserData } = useRegister();
+  const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -44,7 +44,7 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ taxImageUrl: stateGlobal.uploadImage.data.url });
+      saveUserData({ taxImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
@@ -90,7 +90,7 @@ const Content: React.FC = () => {
         upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.user?.taxImageUrl;
+      uri = merchantData.user?.taxImageUrl;
     }
 
     return (
@@ -132,7 +132,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.user?.taxImageUrl !== '' ||
+    merchantData?.user?.taxImageUrl !== '' ||
     capturedImage.data?.type === 'npwp';
 
   return (

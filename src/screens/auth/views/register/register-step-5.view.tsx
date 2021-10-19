@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import {
   useInput,
-  useRegister,
+  useMerchant,
   useTextFieldSelect,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_6_VIEW } from '@screen/auth/functions/screens_name';
@@ -22,7 +22,7 @@ const Content: React.FC = () => {
   const storeSize = useInput();
   const topBrand = useInput();
   const wantedBrand = useInput();
-  const { saveRegisterStoreData, registerData } = useRegister();
+  const { saveStoreData, merchantData } = useMerchant();
   const { navigate } = useNavigation();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
   const [numOfEmployee, setNumOfEmployee] = React.useState<any>(null);
@@ -63,7 +63,7 @@ const Content: React.FC = () => {
             <SnbTextFieldSelect
               labelText="Jumlah Karyawan"
               placeholder="Masukkan jumlah karyawan"
-              value={numOfEmployee?.amount || registerData.numberOfEmployee}
+              value={numOfEmployee?.amount || merchantData.numberOfEmployee}
               type="default"
               onPress={() => {
                 gotoSelection({ type: 'listNumOfEmployee' });
@@ -104,13 +104,13 @@ const Content: React.FC = () => {
         <SnbButton.Single
           title="Selanjutnya"
           onPress={() => {
-            saveRegisterStoreData({
+            saveStoreData({
               name: storeName.value,
               topSellingBrand: topBrand.value,
               mostWantedBrand: wantedBrand.value,
               largeArea: storeSize.value,
               numberOfEmployee:
-                numOfEmployee?.amount || registerData.numberOfEmployee,
+                numOfEmployee?.amount || merchantData.numberOfEmployee,
             });
             navigate(REGISTER_STEP_6_VIEW);
           }}

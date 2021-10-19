@@ -34,7 +34,7 @@ function* checkEmailAvailability(
 
 /** register merchant */
 function* registerMerchant(
-  action: models.IRegisterAction<models.IRegisterMerchantProcess>,
+  action: models.IRegisterAction<models.IMerchantData>,
 ) {
   try {
     const registerReponse: models.IRegisterMerchantSuccess = yield call(() =>

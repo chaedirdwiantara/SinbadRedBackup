@@ -1,5 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import {
+  renderIF,
+  useCamera,
+  useMerchant,
+  useRegister,
+} from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -22,13 +27,8 @@ const Content: React.FC = () => {
     contexts.GlobalContext,
   );
   const { upload, save } = useUploadImageAction();
-  const {
-    registerData,
-    saveRegisterStoreData,
-    register,
-    registerState,
-    resetRegister,
-  } = useRegister();
+  const { merchantData, saveStoreData } = useMerchant();
+  const { register, registerState, resetRegister } = useRegister();
   const { reset } = useNavigation();
   const [showModalFailed, setShowModalFailed] = React.useState(false);
 
@@ -53,7 +53,7 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterStoreData({ imageUrl: stateGlobal.uploadImage.data.url });
+      saveStoreData({ imageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
@@ -111,7 +111,7 @@ const Content: React.FC = () => {
         upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.imageUrl;
+      uri = merchantData.imageUrl;
     }
 
     return (
@@ -157,7 +157,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.imageUrl !== '' || capturedImage.data?.type === 'store';
+    merchantData?.imageUrl !== '' || capturedImage.data?.type === 'store';
 
   return (
     <View style={{ flex: 1 }}>

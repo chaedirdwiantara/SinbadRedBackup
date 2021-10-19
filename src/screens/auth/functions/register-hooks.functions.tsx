@@ -31,41 +31,25 @@ export const useCheckEmailAvailability = () => {
 };
 
 export const useRegister = () => {
-  const dispatch = useDispatch();
   const state = useSelector((state: any) => state.auth);
-  const registerData: models.IRegisterMerchantProcess = state.registerData;
   const registerState = state.register;
-  const saveRegisterStoreData = (data: models.IRegisterMerchantProcess) => {
-    dispatch(Actions.saveRegisterStoreData(data));
-  };
-
-  const saveRegisterUserData = (data: models.User) => {
-    dispatch(Actions.saveRegisterUserData(data));
-  };
-
-  const resetRegisterData = () => {
-    dispatch(Actions.resetRegisterData());
-  };
+  const dispatch = useDispatch();
+  const merchantData: models.IMerchantData = state.merchantData;
 
   const register = () => {
-    if (registerData.user?.email === '') {
-      delete registerData.user?.email;
+    if (merchantData.user?.email === '') {
+      delete merchantData.user?.email;
     }
-    if (registerData.user?.taxNo === '') {
-      delete registerData.user?.taxNo;
+    if (merchantData.user?.taxNo === '') {
+      delete merchantData.user?.taxNo;
     }
-    dispatch(Actions.merchantRegisterProcess(registerData));
+    dispatch(Actions.merchantRegisterProcess(merchantData));
   };
 
   const resetRegister = () => {
     dispatch(Actions.resetRegister());
   };
-
   return {
-    saveRegisterStoreData,
-    saveRegisterUserData,
-    resetRegisterData,
-    registerData,
     register,
     registerState,
     resetRegister,

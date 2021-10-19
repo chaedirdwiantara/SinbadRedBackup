@@ -254,3 +254,27 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
     valMsgError,
   };
 };
+
+export const useMerchant = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state: any) => state.auth);
+  const merchantData: models.IMerchantData = state.merchantData;
+  const saveStoreData = (data: models.IMerchantData) => {
+    dispatch(Actions.saveStoreData(data));
+  };
+
+  const saveUserData = (data: models.User) => {
+    dispatch(Actions.saveUserData(data));
+  };
+
+  const resetMerchantData = () => {
+    dispatch(Actions.resetMerchantData());
+  };
+
+  return {
+    saveStoreData,
+    saveUserData,
+    resetMerchantData,
+    merchantData,
+  };
+};

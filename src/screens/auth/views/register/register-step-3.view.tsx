@@ -1,4 +1,4 @@
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -18,7 +18,7 @@ const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { registerData, saveRegisterUserData } = useRegister();
+  const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -44,7 +44,7 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({
+      saveUserData({
         selfieImageUrl: stateGlobal.uploadImage.data.url,
       });
       resetCamera();
@@ -93,7 +93,7 @@ const Content: React.FC = () => {
         upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.user?.selfieImageUrl;
+      uri = merchantData.user?.selfieImageUrl;
     }
     return (
       <View style={{ flex: 1 }}>
@@ -136,7 +136,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.user?.selfieImageUrl !== '' ||
+    merchantData?.user?.selfieImageUrl !== '' ||
     capturedImage.data?.type === 'selfie';
   return (
     <View style={{ flex: 1 }}>
