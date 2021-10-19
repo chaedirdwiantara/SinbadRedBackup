@@ -8,6 +8,8 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import DeviceInfo from 'react-native-device-info';
+import ModalCallCs from '../components/ModalCallCs';
+import { useCallCsModal } from '../functions';
 /** === IMPORT STYLE HERE === */
 import HelpStyle from '../styles/help.style';
 
@@ -27,6 +29,23 @@ const HelpView: FC = () => {
     },
   ]);
   /** === HOOK === */
+  const CallCsModal = useCallCsModal();
+
+  const goTo = (page: string) => {
+    switch (page) {
+      case 'call_cs':
+        CallCsModal.setOpen(true);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const closeModal = (data: boolean) => {
+    console.log('CLOSEEE MODAL');
+    CallCsModal.setOpen(data);
+  };
   /** === VIEW === */
   /** === HEADER === */
   const header = () => {
@@ -54,7 +73,7 @@ const HelpView: FC = () => {
         <View key={index} style={{ paddingHorizontal: 16 }}>
           <SnbListButtonType2
             title={item.name}
-            onPress={() => console.log(`pressed ${item.name}`)}
+            onPress={() => goTo(item.goTo)}
           />
         </View>
       );
@@ -89,11 +108,27 @@ const HelpView: FC = () => {
       </ScrollView>
     );
   };
+  /** === RENDER MODAL CALL CS === */
+  const renderCallCsModal = () => {
+    return (
+      <ModalCallCs
+        open={CallCsModal.isOpen}
+        close={() => CallCsModal.setOpen(false)}
+        closeModal={(data: boolean) => closeModal(data)}
+      />
+    );
+  };
+
+  /** === MODALS */
+  const renderModals = () => {
+    return renderCallCsModal();
+  };
   /** === MAIN === */
   return (
     <SnbContainer color="white">
       {header()}
       {renderContent()}
+      {renderModals()}
     </SnbContainer>
   );
 };

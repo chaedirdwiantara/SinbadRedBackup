@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { styles } from 'react-native-sinbad-ui';
 
 const HelpStyles = StyleSheet.create({
   headerContainer: {
