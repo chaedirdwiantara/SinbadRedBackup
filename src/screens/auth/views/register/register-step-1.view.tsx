@@ -34,6 +34,10 @@ const Content: React.FC = () => {
       resetCheckEmail();
       navigate(REGISTER_STEP_2_VIEW);
     }
+
+    if (checkEmailAvailability.error !== null) {
+      email.setMessageError(checkEmailAvailability.error.message);
+    }
   }, [checkEmailAvailability]);
 
   return (

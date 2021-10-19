@@ -181,7 +181,8 @@ const Content: React.FC = () => {
           disabled={
             address.value === '' ||
             noteAddress.value === '' ||
-            vehicleAccessibilityAmount.value === ''
+            vehicleAccessibilityAmount.value === '' ||
+            merchantData.urbanId === null
           }
         />
       </View>
