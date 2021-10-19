@@ -1,5 +1,11 @@
 import React, { FC, useState } from 'react';
-import { View, Image, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  Image,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -9,15 +15,22 @@ import {
   styles,
   SnbCarousel,
 } from 'react-native-sinbad-ui';
-import { useCallCsModal, goBack } from '../functions';
+import { goBack } from '../functions';
 /** === IMPORT STYLE HERE === */
 import HelpFaqStyle from '../styles/help-faq.style';
 
 const { width } = Dimensions.get('window');
 
 const HelpFaqView: FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [carouselItems] = [
+  const [, setActiveIndex] = useState(0);
+  const [tag] = useState([
+    'Voucher',
+    'Pembayaran',
+    'Order',
+    'Pengajuan Retur',
+    'Akun',
+  ]);
+  const [carouselItems] = useState([
     {
       title: 'Pertanyaan Umum',
       content: [
@@ -111,7 +124,7 @@ const HelpFaqView: FC = () => {
         },
       ],
     },
-  ];
+  ]);
   /** === HOOK === */
   /** === VIEW === */
   /** === HEADER === */
@@ -148,13 +161,14 @@ const HelpFaqView: FC = () => {
     );
   };
   /** === RENDER MENU CONTENT ITEM === */
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item, index }: any) => {
     let bgColor = '#f5a623';
     if (index % 2 === 0) {
       bgColor = '#f5a623';
     } else {
       bgColor = '#6fcf97';
     }
+    console.log(888, item);
     return (
       <View
         style={{
@@ -205,6 +219,29 @@ const HelpFaqView: FC = () => {
       </View>
     );
   };
+  /** === RENDER TAG CONTENT === */
+  const renderContentTag = () => {
+    return (
+      <View
+        style={{
+          padding: 20,
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}>
+        {tag.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              style={HelpFaqStyle.tag}
+              onPress={() => console.log('PRESSED TAG')}>
+              <SnbText.B3>{item}</SnbText.B3>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  };
   /** === RENDER CONTENT === */
   const renderContent = () => {
     return (
@@ -212,7 +249,7 @@ const HelpFaqView: FC = () => {
         {renderBackgroundImage()}
         {renderContentHeader()}
         {renderContentItem()}
-        {/* {renderContentTag()} */}
+        {renderContentTag()}
       </ScrollView>
     );
   };

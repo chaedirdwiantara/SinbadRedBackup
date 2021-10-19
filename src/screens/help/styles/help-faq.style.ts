@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
+import { color } from 'react-native-sinbad-ui';
 
 const HelpFaqStyles = StyleSheet.create({
   imageBackground: {
     width: '100%',
-    height: 217,
+    height: 224,
     position: 'absolute',
     resizeMode: 'cover',
     top: 0,
@@ -23,6 +24,14 @@ const HelpFaqStyles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 20,
     paddingRight: '60%',
+  },
+  tag: {
+    paddingHorizontal: 12,
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 40,
+    paddingVertical: 11,
+    backgroundColor: color.black10,
   },
 });
 
