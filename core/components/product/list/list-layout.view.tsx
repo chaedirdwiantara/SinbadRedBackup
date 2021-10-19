@@ -11,9 +11,17 @@ interface ListProps {
   data: models.ListItemProps<models.ProductList[]>;
   tags: Array<string>;
   onTagPress: (tags: Array<string>) => void;
+  onCardPress: (item: models.ProductList) => void;
+  onOrderPress: (item: models.ProductList) => void;
 }
 /** === COMPONENT === */
-const ListLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
+const ListLayoutView: React.FC<ListProps> = ({
+  data,
+  tags,
+  onTagPress,
+  onCardPress,
+  onOrderPress,
+}) => {
   /** === VIEW === */
   /** => Tag List */
   const renderTagList = () => <TagView tags={tags} onTagPress={onTagPress} />;
@@ -26,7 +34,7 @@ const ListLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
     index: number;
   }) => {
     return (
-      <View key={index} style={{ minHeight: 100 }}>
+      <View key={index} style={{ minHeight: 100, marginHorizontal: 16 }}>
         <ProductListCard
           name={item.name}
           imageUrl={item.image ?? item.thumbnail}
@@ -34,16 +42,16 @@ const ListLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           isExclusive={item.isExclusive}
-          onCardPress={() => console.log(`${item.name} pressed`)}
+          onCardPress={() => onCardPress(item)}
           withOrderButton={true}
-          onOrderPress={() => console.log(`${item.name} order pressed`)}
+          onOrderPress={() => onOrderPress(item)}
         />
       </View>
     );
   };
   /** => Main */
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+    <View style={{ flex: 1 }}>
       <FlatList
         contentContainerStyle={{ paddingBottom: 24 }}
         ListHeaderComponent={renderTagList}
@@ -66,7 +74,7 @@ export default ListLayoutView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

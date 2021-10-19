@@ -13,9 +13,17 @@ interface ListProps {
   data: models.ListItemProps<models.ProductList[]>;
   tags: Array<string>;
   onTagPress: (tags: Array<string>) => void;
+  onCardPress: (item: models.ProductList) => void;
+  onOrderPress: (item: models.ProductList) => void;
 }
 /** === COMPONENT === */
-const GridLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
+const GridLayoutView: React.FC<ListProps> = ({
+  data,
+  tags,
+  onTagPress,
+  onCardPress,
+  onOrderPress,
+}) => {
   /** === VIEW === */
   /** => Tag List */
   const renderTagList = () => <TagView tags={tags} onTagPress={onTagPress} />;
@@ -24,7 +32,11 @@ const GridLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
     return (
       <View
         key={index}
-        style={{ marginRight: index % 2 === 0 ? 8 : 0, marginBottom: 4 }}>
+        style={{
+          marginRight: index % 2 === 0 ? 8 : 16,
+          marginLeft: index % 2 === 0 ? 16 : 0,
+          marginBottom: 4,
+        }}>
         <ProductGridCard
           flexOne={true}
           name={item.name}
@@ -33,9 +45,9 @@ const GridLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           isExclusive={item.isExclusive}
-          onCardPress={() => console.log(`${item.name} pressed`)}
+          onCardPress={() => onCardPress(item)}
           withOrderButton={true}
-          onOrderPress={() => console.log(`${item.name} order pressed`)}
+          onOrderPress={() => onOrderPress(item)}
         />
       </View>
     );
@@ -59,7 +71,7 @@ const GridLayoutView: React.FC<ListProps> = ({ data, tags, onTagPress }) => {
   );
   /** => Main */
   return (
-    <View style={{ flex: 1, paddingHorizontal: 16 }}>
+    <View style={{ flex: 1 }}>
       <ScrollView
         onScroll={({ nativeEvent }) => {
           if (scrollHasReachedEnd(nativeEvent)) {
@@ -82,7 +94,7 @@ export default GridLayoutView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

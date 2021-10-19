@@ -24,7 +24,12 @@ const TagView: React.FC<TagListProps> = ({ tags, onTagPress }) => {
   );
   /** => Main */
   return (
-    <View style={{ flexDirection: 'row', paddingVertical: 14 }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        paddingVertical: 14,
+        paddingHorizontal: 16,
+      }}>
       {renderTotalProduct()}
       {renderTagSlider()}
     </View>
@@ -39,7 +44,7 @@ export default TagView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 12-10-21
+ * updatedDate: 14-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

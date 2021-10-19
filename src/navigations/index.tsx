@@ -8,6 +8,8 @@ import ProductNav from './product.navigation';
 import PromoNav from './promo.navigation';
 import BannerNav from './banner.navigation';
 import HistoryNav from './history.navigation';
+import BrandNav from './brand.navigations';
+import SearchNav from './search.navigation';
 
 const index = {
   ...OmsNav,
@@ -20,6 +22,8 @@ const index = {
   ...PromoNav,
   ...BannerNav,
   ...HistoryNav,
+  ...BrandNav,
+  ...SearchNav,
 };
 
 export default index;
