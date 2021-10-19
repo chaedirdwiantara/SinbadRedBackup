@@ -13,6 +13,7 @@ interface ProductGridCardProps {
   name: string;
   imageUrl: string;
   price: number;
+  currentPrice?: number;
   isBundle?: boolean;
   isPromo?: boolean;
   isExclusive?: boolean;
@@ -54,16 +55,28 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => {
     </View>
   );
   /** => Product Info */
-  const renderProductInfo = () => (
-    <>
-      <SnbText.C1 color={color.black100}>{props.name}</SnbText.C1>
-      <View style={{ marginTop: 8 }}>
-        <SnbText.C1 color={color.red50}>
-          {toCurrency(props.price, { withFraction: false })}
-        </SnbText.C1>
-      </View>
-    </>
-  );
+  const renderProductInfo = () => {
+    const hasCurrentPrice = Boolean(props.currentPrice);
+    const currentPrice = hasCurrentPrice ? props.currentPrice! : props.price;
+
+    return (
+      <>
+        <SnbText.C1 color={color.black100}>{props.name}</SnbText.C1>
+        {hasCurrentPrice && (
+          <View style={{ marginTop: 8 }}>
+            <SnbText.C3 color={color.black40}>
+              {toCurrency(props.price, { withFraction: false })}
+            </SnbText.C3>
+          </View>
+        )}
+        <View style={{ marginTop: 8 }}>
+          <SnbText.C1 color={color.red50}>
+            {toCurrency(currentPrice, { withFraction: false })}
+          </SnbText.C1>
+        </View>
+      </>
+    );
+  };
   /** => Main */
   return (
     <View
