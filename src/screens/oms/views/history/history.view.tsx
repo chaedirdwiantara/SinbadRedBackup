@@ -8,13 +8,14 @@ import {
   SnbTabs,
   SnbTextField,
   SnbIcon,
-  SnbButton,
   color,
+  SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '@screen/oms/functions';
 import { HistoryStyle } from '@screen/oms/styles';
 import { HistoryCard, HistoryStatusColor } from './HistoryCard';
+import { goToHistoryDetail } from '@screen/oms/functions';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -229,19 +230,17 @@ const OmsHistoryView: FC = () => {
             paddingHorizontal: 16,
           }}>
           <View style={{ marginRight: 16 }}>
-            <SnbButton.Dynamic
-              title="Semua"
-              type={activeStatus === '' ? 'primary' : 'secondary'}
-              size="small"
+            <SnbChips.Choice
+              text="Semua"
+              status={activeStatus === '' ? 'active' : 'inactive'}
               onPress={() => setActiveStatus('')}
             />
           </View>
           {statusList.map((status) => (
             <View key={status.key} style={{ marginRight: 16 }}>
-              <SnbButton.Dynamic
-                title={status.value}
-                type={status.key === activeStatus ? 'primary' : 'secondary'}
-                size="small"
+              <SnbChips.Choice
+                text={status.value}
+                status={status.key === activeStatus ? 'active' : 'inactive'}
                 onPress={() => setActiveStatus(status.key as any)}
               />
             </View>
@@ -277,6 +276,7 @@ const OmsHistoryView: FC = () => {
             style={
               paymentIndex === payments.length - 1 ? { marginBottom: 24 } : {}
             }
+            onCardPress={() => goToHistoryDetail('payment')}
           />
         );
       })}
@@ -327,6 +327,7 @@ const OmsHistoryView: FC = () => {
             additionalInfo={
               order.partial ? 'Terjadi Pengiriman Sebagian' : undefined
             }
+            onCardPress={() => goToHistoryDetail('order')}
           />
         );
       })}

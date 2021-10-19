@@ -412,23 +412,6 @@ const OmsHistoryDetailView: FC = () => {
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
   );
-  /** => Automatic Order Confirmation Count Down */
-  const renderAutomaticOrderConfirmationCountDown = () => (
-    <View style={HistoryDetailStyle.orderConfirmationCountDown}>
-      <View style={{ flexDirection: 'row' }}>
-        <SnbIcon
-          name="info"
-          color={color.yellow50}
-          size={16}
-          style={{ marginRight: 8 }}
-        />
-        <SnbText.B3 color={color.yellow50}>
-          {`Konfirmasi otomatis dalam ${10}`}
-        </SnbText.B3>
-      </View>
-      <SnbIcon name="chevron_right" color={color.yellow50} size={20} />
-    </View>
-  );
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
     <ScrollView>
@@ -445,8 +428,6 @@ const OmsHistoryDetailView: FC = () => {
   const renderOrderDetailContent = () => (
     <ScrollView>
       {renderStatus()}
-      {historyDetailDummy.status.title.includes('Menunggu') &&
-        renderAutomaticOrderConfirmationCountDown()}
       {renderInvoiceInfo()}
       {renderOrderNotes()}
       {renderProductList()}

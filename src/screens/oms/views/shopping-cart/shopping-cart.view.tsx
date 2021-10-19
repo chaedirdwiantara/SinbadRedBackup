@@ -10,6 +10,7 @@ import {
   SnbIcon,
   color,
   SnbDialog,
+  SnbNumberCounter,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -245,33 +246,9 @@ const OmsShoppingCartView: FC = () => {
               <SnbText.B4 color={color.red50}>{productPrice}</SnbText.B4>
             </View>
             <View style={{ flexDirection: 'row' }}>
-              <SnbButton.Dynamic
-                size="small"
-                type="primary"
-                iconName="remove"
-                radius={100}
-                disabled={product.qty === 1}
-                onPress={() =>
-                  handleProductQuantityChange(
-                    invoiceGroupIndex,
-                    brandIndex,
-                    productIndex,
-                    'decrease',
-                    [invoiceGroups, setInvoiceGroups],
-                  )
-                }
-              />
-              <View style={ShoppingCartStyles.qtyText}>
-                <SnbText.B3>{product.qty}</SnbText.B3>
-              </View>
-              <SnbButton.Dynamic
-                size="small"
-                type="primary"
-                iconName="add"
-                radius={100}
-                disabled={product.qty === product.stock}
-                buttonColor={color.red50}
-                onPress={() =>
+              <SnbNumberCounter
+                value={product.qty}
+                onIncrease={() =>
                   handleProductQuantityChange(
                     invoiceGroupIndex,
                     brandIndex,
@@ -280,6 +257,17 @@ const OmsShoppingCartView: FC = () => {
                     [invoiceGroups, setInvoiceGroups],
                   )
                 }
+                onDecrease={() =>
+                  handleProductQuantityChange(
+                    invoiceGroupIndex,
+                    brandIndex,
+                    productIndex,
+                    'decrease',
+                    [invoiceGroups, setInvoiceGroups],
+                  )
+                }
+                minusDisabled={product.qty === 1}
+                plusDisabled={product.qty === product.stock}
               />
             </View>
           </View>
