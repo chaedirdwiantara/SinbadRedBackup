@@ -14,7 +14,7 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '@screen/history/functions';
 import { HistoryStyle } from '@screen/history/styles';
-import { HistoryCard, HistoryStatusColor } from './HistoryCard';
+import { HistoryCard, HistoryStatusColor } from '../components';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
