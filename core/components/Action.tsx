@@ -8,7 +8,7 @@ import {
   Dimensions,
   Keyboard
 } from 'react-native';
-import { SnbIcon, color, SnbText, SnbButton, SnbRadioButton } from 'react-native-sinbad-ui';
+import { color, SnbText, SnbButton, SnbRadioButton } from 'react-native-sinbad-ui';
 import { toCurrency } from '../functions/global/currency-format'
 
 /** === IMPORT THIRD PARTY PACKAGE */
@@ -224,7 +224,7 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
     return (
       <View style={{ alignItems: 'flex-end' }}>
         <TouchableOpacity onPress={() => clearState()}>
-          <SnbText.C1>Reset</SnbText.C1>
+          <SnbText.C1 color={color.red50}>Reset</SnbText.C1>
         </TouchableOpacity>
       </View>
     );
@@ -449,19 +449,19 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     lineHeight: 15,
-    color: color.black40
+    color: color.black100
   },
   shadowForBox: {
     borderWidth: 0,
     backgroundColor: color.white,
-    shadowColor: color.black5,
+    shadowColor: color.black100,
     shadowOffset: {
       width: 0,
       height: 1
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 2
+    shadowOpacity: 0.18,
+    shadowRadius: 1.22,
+    elevation: 1
   },
 });
 
