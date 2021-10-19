@@ -10,6 +10,7 @@ import {
 import DeviceInfo from 'react-native-device-info';
 import ModalCallCs from '../components/ModalCallCs';
 import { useCallCsModal } from '../functions';
+import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
 import HelpStyle from '../styles/help.style';
 
@@ -36,14 +37,15 @@ const HelpView: FC = () => {
       case 'call_cs':
         CallCsModal.setOpen(true);
         break;
-
+      case 'faq':
+        NavigationAction.navigate('HelpFaqView');
+        break;
       default:
         break;
     }
   };
 
   const closeModal = (data: boolean) => {
-    console.log('CLOSEEE MODAL');
     CallCsModal.setOpen(data);
   };
   /** === VIEW === */
