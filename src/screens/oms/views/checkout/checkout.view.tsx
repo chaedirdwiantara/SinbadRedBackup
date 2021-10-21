@@ -3,7 +3,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
 import React, { FC } from 'react';
 import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import Html from '@core/components/Html';
 import {
   SnbContainer,
   SnbTopNav,
@@ -253,19 +253,19 @@ const dummyTermsAndConditions = {
       {
         paymentTypeId: 1,
         name: 'Bayar Sekarang',
-        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+        term: '<p>- Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</p><p>- Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</p><p>- Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</p>',
       },
       {
         paymentTypeId: 1,
         name: 'Bayar Sekarang',
-        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+        term: '<p>- Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</p><p>- Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</p><p>- Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</p>',
       },
     ],
     paymentChannels: [
       {
         paymentChannelId: 2,
         name: 'Bank BCA Virtual Account',
-        term: '<ul><li class=p1>Pembeli diharapkan untuk melakukan transfer ke nomor rekening yang disediakan.</li></ul>',
+        term: '<p>- Pembeli diharapkan untuk melakukan transfer ke nomor rekening yang disediakan.</p>',
       },
     ],
   },
@@ -490,7 +490,7 @@ const OmsCheckoutView: FC = () => {
             <View style={{ marginBottom: 8 }}>
               <SnbText.H4>{item.name}</SnbText.H4>
             </View>
-            <HTMLView value={item.term} />
+            <Html value={item.term} fontSize={12} />
           </View>
         );
       });
@@ -502,7 +502,7 @@ const OmsCheckoutView: FC = () => {
             <View style={{ marginBottom: 8 }}>
               <SnbText.H4>{item.name}</SnbText.H4>
             </View>
-            <HTMLView value={item.term} />
+            <Html value={item.term} fontSize={12} />
           </View>
         );
       });
