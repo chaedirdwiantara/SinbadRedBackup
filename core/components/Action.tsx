@@ -25,7 +25,7 @@ interface SortData {
 interface ActionSortMenuType1Props {
   sortData: SortData[];
   sortDataIndex: number | null;
-  parentFunction: (any: any) => void;
+  onChange: (any: any) => void;
   onRef?: any;
 }
 
@@ -34,7 +34,7 @@ interface ActionFilterMenuType1Props {
   priceLteMasking: string | number;
   priceGte: number;
   priceLte: number;
-  parentFunction: (any: any) => void;
+  onChange: (any: any) => void;
 }
 
 /** KEYBOAD LISTENER */
@@ -44,8 +44,7 @@ let keyboardDidHideListener: any;
 const { height, width } = Dimensions.get('window');
 
 const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
-  const [data, setData] = useState<any[]>(props.sortData);
-  const [sortData, setSortData] = useState(null);
+  const [sortData, setSortData] = useState<SortData | null>(null);
   const [sortDataIndex, setSortDataIndex] = useState<number | null>(null)
 
   /**
@@ -55,16 +54,15 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
    */
   /** === SEND DATA TO PARENT === */
   const toParentFunction = () => {
-    props.parentFunction({
-      type: 'sortSelected',
-      data: {
-        sortDataIndex: sortDataIndex,
+    props.onChange({
+      type: 'applySort',
+      value: {
         data: sortDataIndex !== null ? sortData : null
       }
     });
   }
   /** === CHECK SELECTED SORT ITEM === */
-  const checkSort = (item: any, index: number) => {
+  const checkSort = (item: SortData, index: number) => {
     if (index === sortDataIndex) {
       setSortDataIndex(null)
     } else {
@@ -80,31 +78,32 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
    */
   /** === RENDER CONTENT === */
   const renderContent = () => {
-    return data.map((item, index) => {
-      return (
-        <TouchableOpacity
-          key={index}
-          onPress={() => checkSort(item, index)}
-        >
-          <View style={styles.boxContentItemSortType1}>
-            <View style={{ flex: 1 }}>
-              <SnbText.B3>{item.name}</SnbText.B3>
+    return Array.isArray(props.sortData) && 
+      props.sortData.map((item, index) => {
+        return (
+          <TouchableOpacity
+            key={index}
+            onPress={() => checkSort(item, index)}
+          >
+            <View style={styles.boxContentItemSortType1}>
+              <View style={{ flex: 1 }}>
+                <SnbText.B3>{item.name}</SnbText.B3>
+              </View>
+              <View style={styles.boxIconRight}>
+                {sortDataIndex === index ? (
+                  <SnbRadioButton
+                    status={"selected"}
+                  />
+                ) : (
+                  <SnbRadioButton
+                    status={"unselect"}
+                  />
+                )}
+              </View>
             </View>
-            <View style={styles.boxIconRight}>
-              {sortDataIndex === index ? (
-                <SnbRadioButton
-                  status={"selected"}
-                />
-              ) : (
-                <SnbRadioButton
-                  status={"unselect"}
-                />
-              )}
-            </View>
-          </View>
-          <View style={[styles.lines, { marginLeft: 16 }]} />
-        </TouchableOpacity>
-      );
+            <View style={[styles.lines, { marginLeft: 16 }]} />
+          </TouchableOpacity>
+        );
     });
   }
 
@@ -153,7 +152,7 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
   /** === SEND DATA TO PARENT === */
   const toParentFunction = () => {
     Keyboard.dismiss();
-    props.parentFunction({
+    props.onChange({
       type: 'filterSelected',
       data: {
         priceGte: priceGte,

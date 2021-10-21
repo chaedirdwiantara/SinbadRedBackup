@@ -12,6 +12,19 @@ export interface SortQuery {
   sortBy: string;
   sort: 'asc' | 'desc';
 }
+
+export interface FilterQuery {
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export interface FilterParams {
+  priceGteMasking: string | number;
+  priceLteMasking: string | number;
+  priceGte: number;
+  priceLte: number;
+}
+
 /** === HOOKS ===  */
 export const useBottomAction = () => {
   const [sortModalVisible, setSortModalVisible] = useState(false);
@@ -22,6 +35,13 @@ export const useBottomAction = () => {
   });
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [filterActive, setFilterActive] = useState(false);
+  const [filterQuery, setFilterQuery] = useState<FilterQuery | null>(null);
+  const [filterParams, setFilterParams] = useState<FilterParams>({
+    priceGteMasking: "",
+    priceLteMasking: "",
+    priceGte: 0,
+    priceLte: 0
+  });
   const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
 
   const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
@@ -39,8 +59,18 @@ export const useBottomAction = () => {
         break;
       case 'applyFilter':
         // setFilterQuery
+        setFilterQuery(value as FilterQuery);
         setFilterModalVisible(false);
+        if(!filterQuery) {
+          setFilterActive(false);
+        } else {
+          setFilterActive(true);
+        }
+        break;
+      case 'resetFilter':
         setFilterActive(false);
+        setFilterQuery(null);
+        setFilterModalVisible(false);
         break;
       case 'layout':
         setLayoutDisplay((prev) => (prev === 'grid' ? 'list' : 'grid'));
@@ -58,6 +88,7 @@ export const useBottomAction = () => {
     sortActive,
     sortQuery,
     filterModalVisible,
+    filterParams,
     filterActive,
     layoutDisplay,
     handleActionClick,

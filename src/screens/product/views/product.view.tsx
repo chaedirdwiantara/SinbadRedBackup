@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -7,8 +7,6 @@ import ProductHeaderView from './product-header.view';
 import ProductTabView from './product-tab.view';
 import { AddToCartModal } from './AddToCartModal';
 import ProductListView from '@core/components/product/list';
-import { ModalBottom } from '@core/components/BottomModal';
-import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
@@ -19,25 +17,6 @@ const ProductView: FC = () => {
   const { list } = useProductListAction();
   const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
   const { orderModalVisible, setOrderModalVisible } = useModalVisibility();
-
-  /** === STATE */
-  const [openModalSort, setOpenModalSort] = useState(false);
-  const [openModalFilter, setOpenModalFilter] = useState(false);
-
-  /** sort */
-  const [sortData, setSortData] = useState([
-    {
-      name: 'Harga Tinggi ke Rendah',
-      sortBy: 'retail_buying_price',
-      sort: 'desc',
-    },
-    {
-      name: 'Harga Rendah ke Tinggi',
-      sortBy: 'retail_buying_price',
-      sort: 'asc',
-    },
-  ]);
-  const [sortDataIndex, setSortDataIndex] = useState(null);
 
   useEffect(() => {
     list(dispatchProduct);
@@ -66,39 +45,11 @@ const ProductView: FC = () => {
     );
   };
 
-  /**
-   * =====================
-   * MODAL
-   * =====================
-   */
-  /** === RENDER MODAL SORT === */
-  const renderModalSort = () => {
-    return openModalSort ? (
-      <ModalBottom.Type1
-        isOpen={openModalSort}
-        title={'Urutkan'}
-        typeClose={'cancel'}
-        content={
-          <Action.SortMenuType1
-            sortDataIndex={sortDataIndex}
-            sortData={sortData}
-            parentFunction={() => {}}
-          />
-        }
-        close={() => setOpenModalSort(false)}
-      />
-    ) : (
-      <View />
-    );
-  };
-
   /** => Main */
   return (
     <SnbContainer color="white">
       <ProductHeaderView />
       {renderContent()}
-      {/* filter */}
-      {renderModalSort()}
       {renderAddToCartModal()}
     </SnbContainer>
   );

@@ -105,12 +105,6 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** => STATE */
-  /** filter price */
-  const [priceGteMasking, setPriceGteMasking] = useState<string | number>('');
-  const [priceLteMasking, setPriceLteMasking] = useState<string | number>('');
-  const [priceGte, setPriceGte] = useState<number>(0);
-  const [priceLte, setPriceLte] = useState<number>(0);
-
   /** sort */
   const [sortData, setSortData] = useState([
     {
@@ -133,7 +127,8 @@ const ProductListView: FC<ProductComponentProps> = ({
     sortActive, 
     filterActive, 
     filterModalVisible, 
-    sortModalVisible 
+    sortModalVisible,
+    filterParams 
   } = useBottomAction();
   /** === VIEW === */
   /** => List */
@@ -162,59 +157,41 @@ const ProductListView: FC<ProductComponentProps> = ({
 
   /** === RENDER MODAL SORT === */
   const renderModalSort = () => {
-    return sortModalVisible ? (
-      <SnbBottomSheet
-        open={sortModalVisible}
-        title={"Urutkan"}
-        action
-        actionIcon="close"
-        content={
-          <Action.SortMenuType1
-            sortDataIndex={sortDataIndex}
-            sortData={sortData}
-            parentFunction={() => {}}
-          />
-        }
-        closeAction={() => handleActionClick({type: "sort"})}
-      />
-    ) : (
-      <View />
-    );
+    return <SnbBottomSheet
+      open={sortModalVisible}
+      title={"Urutkan"}
+      action
+      actionIcon="close"
+      content={
+        <Action.SortMenuType1
+          sortDataIndex={sortDataIndex}
+          sortData={sortData}
+          onChange={() => {}}
+        />
+      }
+      closeAction={() => handleActionClick({type: "sort"})}
+    />
   };
 
   /** === RENDER MODAL FILTER === */
   const renderModalFilter = () => {
-    return filterModalVisible ? (
-      <SnbBottomSheet
-        open={filterModalVisible}
-        title={"Filter"}
-        action
-        actionIcon="close"
-        content={
-          <Action.FilterMenuType1
-            priceGteMasking={priceGteMasking}
-            priceLteMasking={priceLteMasking}
-            priceGte={priceGte}
-            priceLte={priceLte}
-            parentFunction={() => {}}
-          />
-        }
-        closeAction={() => handleActionClick({type: "filter"})}
-      />
-    ) : (
-      <View />
-    );
+    return <SnbBottomSheet
+      open={filterModalVisible}
+      title={"Filter"}
+      action
+      actionIcon="close"
+      content={
+        <Action.FilterMenuType1
+          priceGteMasking={filterParams.priceGteMasking}
+          priceLteMasking={filterParams.priceLteMasking}
+          priceGte={filterParams.priceGte}
+          priceLte={filterParams.priceLte}
+          onChange={() => {}}
+        />
+      }
+      closeAction={() => handleActionClick({type: "filter"})}
+    />
   };
-
-//   <SnbBottomSheet
-//   open={termsAndConditionModal.isOpen}
-//   content={content()}
-//   title={'Syarat & Ketentuan'}
-//   closeAction={() => termsAndConditionModal.setOpen(false)}
-//   action={true}
-//   actionIcon={'close'}
-// />
-
 
   /** => Main */
   return (
