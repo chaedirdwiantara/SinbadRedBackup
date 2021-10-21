@@ -28,6 +28,15 @@ import {
   verificationMobilePhoneReducer,
   verificationMobilePhoneInitialState,
 } from './verification-mobile-phone.reducer';
+import {
+  changeBankAccountReducer,
+  changeBankAccountInitialState,
+} from './change-bank-account.reducer';
+import {
+  verificationBankAccountReducer,
+  verificationBankAccountInitialState,
+} from './verification-bank-account.reducer';
+
 /** === TYPE HERE === */
 // export type MerchantInitialProps = models.ListProps<models.SupplierList[]>;
 // export type ProfileEditInitialProps = models.UpdateProps;
@@ -40,6 +49,8 @@ export const supplierInitialState = {
   verificationEmail: verificationEmailInitialState,
   changeMobilePhone: changeMobilePhoneInitialState,
   verificationMobilePhone: verificationMobilePhoneInitialState,
+  changeBankAccount: changeBankAccountInitialState,
+  verificationBankAccount: verificationBankAccountInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const merchantReducer = (
@@ -51,6 +62,8 @@ export const merchantReducer = (
     verificationEmail,
     changeMobilePhone,
     verificationMobilePhone,
+    changeBankAccount,
+    verificationBankAccount,
   }: any,
   action: any,
 ) => ({
@@ -62,6 +75,11 @@ export const merchantReducer = (
   changeMobilePhone: changeMobilePhoneReducer(changeMobilePhone, action),
   verificationMobilePhone: verificationMobilePhoneReducer(
     verificationMobilePhone,
+    action,
+  ),
+  changeBankAccount: changeBankAccountReducer(changeBankAccount, action),
+  verificationBankAccount: verificationBankAccountReducer(
+    verificationBankAccount,
     action,
   ),
 });

@@ -699,7 +699,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
           onPress={() => confirm()}
-          disabled={checkButton()}
+          disabled={checkButton() || false}
         />
       </View>
     ) : (

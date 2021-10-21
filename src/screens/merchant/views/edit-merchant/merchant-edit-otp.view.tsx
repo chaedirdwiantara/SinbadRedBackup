@@ -29,6 +29,7 @@ const OTPContent: React.FC<Props> = (props) => {
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
+  const changeBankAccountAction = MerchantHookFunc.useChangeBankAccount();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
@@ -54,13 +55,24 @@ const OTPContent: React.FC<Props> = (props) => {
       changeMobilePhoneAction.verificationMobilePhone(dispatchSupplier, {
         data,
       });
+    } else if (type === 'bankAccount') {
+      // eslint-disable-next-line no-shadow
+      const data = {
+        code: otp,
+      };
+      changeBankAccountAction.verificationBankAccount(dispatchSupplier, {
+        data,
+      });
     }
   };
 
+  console.log('disini:', stateMerchant);
+  
   useEffect(() => {
     if (
       stateMerchant.verificationEmail.data ||
-      stateMerchant.verificationMobilePhone.data
+      stateMerchant.verificationMobilePhone.data ||
+      stateMerchant.verificationBankAccount.data
     ) {
       setOpenModalSuccess(true);
     }
@@ -79,6 +91,9 @@ const OTPContent: React.FC<Props> = (props) => {
     } else if (type === 'mobilePhone') {
       changeMobilePhoneAction.resetChangeMobilePhone(dispatchSupplier);
       changeMobilePhoneAction.resetVerificationMobilePhone(dispatchSupplier);
+    } else if (type === 'bankAccount') {
+      changeBankAccountAction.resetChangeBankAccount(dispatchSupplier);
+      changeBankAccountAction.resetVerificationBankAccount(dispatchSupplier);
     }
     setOpenModalSuccess(false);
     NavigationAction.backToPage('MerchantDetailProfileView');

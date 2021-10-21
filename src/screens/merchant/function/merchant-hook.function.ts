@@ -155,8 +155,32 @@ const useChangeMobilePhone = () => {
     },
   };
 };
+/** => change bank account */
+const useChangeBankAccount = () => {
+  const dispatch = useDispatch();
+  return {
+    changeBankAccount: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.changeBankAccountProcess(contextDispatch, data));
+    },
+    resetChangeBankAccount: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.changeBankAccountReset());
+    },
+    verificationBankAccount: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.verificationBankAccountProcess(contextDispatch, data));
+    },
+    resetVerificationBankAccount: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.verificationBankAccountReset());
+    },
+  };
+};
 /** => useInput */
-export const useInput = (initialState: string = '') => {
+export const useInput = (initialState: any = '') => {
   const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
   const [type, setType] = useState('default');
@@ -196,6 +220,7 @@ export const MerchantHookFunc = {
   useEditProfile,
   useChangeEmail,
   useChangeMobilePhone,
+  useChangeBankAccount,
 };
 /**
  * ================================================================

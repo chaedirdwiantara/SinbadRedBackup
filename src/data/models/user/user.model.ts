@@ -20,10 +20,11 @@ interface IOwnerProfile {
   bankAccount: IBankAccount;
 }
 interface IBankAccount {
+  bankId: number;
+  bankName: string;
   bankAccountName: string;
   bankAccountNo: string;
   bankBranchName: string;
-  bankId: number;
 }
 interface IStoreData {
   storeInformation: IStoreInformation;

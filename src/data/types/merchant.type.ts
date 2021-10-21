@@ -38,6 +38,18 @@ export const VERIFICATION_MOBILE_PHONE_SUCCESS =
   'VerificationMobilePhoneSuccess';
 export const VERIFICATION_MOBILE_PHONE_FAILED = 'VerificationMobilePhoneFailed';
 export const VERIFICATION_MOBILE_PHONE_RESET = 'VerificationMobilePhoneReset';
+/** => change bank account */
+export const CHANGE_BANK_ACCOUNT_PROCESS = 'ChangeBankAccountProcess';
+export const CHANGE_BANK_ACCOUNT_SUCCESS = 'ChangeBankAccountSuccess';
+export const CHANGE_BANK_ACCOUNT_FAILED = 'ChangeBankAccountFailed';
+export const CHANGE_BANK_ACCOUNT_RESET = 'ChangeBankAccountReset';
+/** => verification email */
+export const VERIFICATION_BANK_ACCOUNT_PROCESS =
+  'VerificationBankAccountProcess';
+export const VERIFICATION_BANK_ACCOUNT_SUCCESS =
+  'VerificationBankAccountSuccess';
+export const VERIFICATION_BANK_ACCOUNT_FAILED = 'VerificationBankAccountFailed';
+export const VERIFICATION_BANK_ACCOUNT_RESET = 'VerificationBankAccountReset';
 /**
  * ================================================================
  * NOTES

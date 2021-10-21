@@ -225,3 +225,67 @@ export const verificationMobilePhoneFailed = (
 export const verificationMobilePhoneReset = () => {
   return { type: types.VERIFICATION_MOBILE_PHONE_RESET };
 };
+/** === CHANGE BANK ACCOUNT === */
+/** => process */
+export const changeBankAccountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_BANK_ACCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_BANK_ACCOUNT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeBankAccountSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_BANK_ACCOUNT_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeBankAccountFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_BANK_ACCOUNT_FAILED, payload: data };
+};
+/** => reset */
+export const changeBankAccountReset = () => {
+  return { type: types.CHANGE_BANK_ACCOUNT_RESET };
+};
+/** === VERIFICATION BANK ACCOUNT === */
+/** => process */
+export const verificationBankAccountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_BANK_ACCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_BANK_ACCOUNT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationBankAccountSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationBankAccountFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_FAILED, payload: data };
+};
+/** => reset */
+export const verificationBankAccountReset = () => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_RESET };
+};

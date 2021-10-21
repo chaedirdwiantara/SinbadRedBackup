@@ -107,6 +107,38 @@ function* verificationMobilePhone(action: models.CreateProcessAction) {
     yield put(ActionCreators.verificationMobilePhoneFailed(error));
   }
 }
+/** => change bank account  */
+function* changeBankAccount(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return MerchantApi.changeBankAccount(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.changeBankAccountSuccess(response),
+    );
+    yield put(ActionCreators.changeBankAccountSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.changeBankAccountFailed(error));
+    yield put(ActionCreators.changeBankAccountFailed(error));
+  }
+}
+/** => verification bank account  */
+function* verificationBankAccount(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return MerchantApi.verificationBankAccount(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.verificationBankAccountSuccess(response),
+    );
+    yield put(ActionCreators.verificationBankAccountSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.verificationBankAccountFailed(error),
+    );
+    yield put(ActionCreators.verificationBankAccountFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* MerchantSaga() {
   yield takeLatest(types.SUPPLIER_LIST_PROCESS, supplierList);
@@ -118,6 +150,11 @@ function* MerchantSaga() {
   yield takeLatest(
     types.VERIFICATION_MOBILE_PHONE_PROCESS,
     verificationMobilePhone,
+  );
+  yield takeLatest(types.CHANGE_BANK_ACCOUNT_PROCESS, changeBankAccount);
+  yield takeLatest(
+    types.VERIFICATION_BANK_ACCOUNT_PROCESS,
+    verificationBankAccount,
   );
 }
 

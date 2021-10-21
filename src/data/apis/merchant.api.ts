@@ -43,6 +43,16 @@ const verificationMobilePhone = (data: object) => {
   const path = 'verification/mobile-phone';
   return apiMapping('auth', path, 'common', 'v1', 'CREATE', data);
 };
+/** => change bank account */
+const changeBankAccount = (data: object) => {
+  const path = 'request-change/bank-account';
+  return apiMapping('auth', path, 'account', 'v1', 'CREATE', data);
+};
+/** => verification mobile phone */
+const verificationBankAccount = (data: object) => {
+  const path = 'verification/bank-account';
+  return apiMapping('auth', path, 'common', 'v1', 'CREATE', data);
+};
 /** === EXPORT FUNCTIONS === */
 export const MerchantApi = {
   supplierList,
@@ -52,4 +62,6 @@ export const MerchantApi = {
   verificationEmail,
   changeMobilePhone,
   verificationMobilePhone,
+  changeBankAccount,
+  verificationBankAccount,
 };
