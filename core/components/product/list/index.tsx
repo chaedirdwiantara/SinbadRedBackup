@@ -1,13 +1,14 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { color, SnbContainer, SnbText } from 'react-native-sinbad-ui';
+import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
 import BottomActionView from './bottom-action.view';
+import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
-import { useBottomAction } from '@core/functions/product';
+import { useBottomAction, useDataSort } from '@core/functions/product';
 /** === IMPORT MODEL === */
 import * as models from '@models';
 /** === TYPE === */
@@ -104,8 +105,18 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** === HOOK === */
-  const { layoutDisplay, handleActionClick, sortActive, filterActive } =
-    useBottomAction();
+  const { 
+    layoutDisplay, 
+    handleActionClick, 
+    sortActive, 
+    filterActive, 
+    filterModalVisible, 
+    sortModalVisible,
+    filterParams,
+    sortDataIndex
+  } = useBottomAction();
+
+  const { sortData } = useDataSort()
   /** === VIEW === */
   /** => List */
   const renderList = () =>
@@ -130,6 +141,45 @@ const ProductListView: FC<ProductComponentProps> = ({
   const renderContent = () => {
     return <View style={{ flex: 1 }}>{renderList()}</View>;
   };
+
+  /** === RENDER MODAL SORT === */
+  const renderModalSort = () => {
+    return <SnbBottomSheet
+      open={sortModalVisible}
+      title={"Urutkan"}
+      action
+      actionIcon="close"
+      content={
+        <Action.SortMenuType1
+          sortDataIndex={sortDataIndex}
+          sortData={sortData}
+          onChange={() => {}}
+        />
+      }
+      closeAction={() => handleActionClick({type: "sort"})}
+    />
+  };
+
+  /** === RENDER MODAL FILTER === */
+  const renderModalFilter = () => {
+    return <SnbBottomSheet
+      open={filterModalVisible}
+      title={"Filter"}
+      action
+      actionIcon="close"
+      content={
+        <Action.FilterMenuType1
+          priceGteMasking={filterParams.priceGteMasking}
+          priceLteMasking={filterParams.priceLteMasking}
+          priceGte={filterParams.priceGte}
+          priceLte={filterParams.priceLte}
+          onChange={() => {}}
+        />
+      }
+      closeAction={() => handleActionClick({type: "filter"})}
+    />
+  };
+
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -158,6 +208,8 @@ const ProductListView: FC<ProductComponentProps> = ({
         layoutDisplay={layoutDisplay}
         onActionPress={handleActionClick}
       />
+      {renderModalSort()}
+      {renderModalFilter()}
     </SnbContainer>
   );
 };

@@ -14,6 +14,7 @@ export type BottomActionPressHandlerType =
   | 'sort'
   | 'applySort'
   | 'filter'
+  | 'resetFilter'
   | 'applyFilter'
   | 'layout'
   | 'category';

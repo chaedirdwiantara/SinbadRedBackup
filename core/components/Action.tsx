@@ -4,12 +4,11 @@ import {
   View, 
   TouchableOpacity,
   StyleSheet,
-  Text,
   ScrollView,
   Dimensions,
   Keyboard
 } from 'react-native';
-import { SnbIcon, color, SnbText } from 'react-native-sinbad-ui';
+import { color, SnbText, SnbButton, SnbRadioButton } from 'react-native-sinbad-ui';
 import { toCurrency } from '../functions/global/currency-format'
 
 /** === IMPORT THIRD PARTY PACKAGE */
@@ -26,7 +25,7 @@ interface SortData {
 interface ActionSortMenuType1Props {
   sortData: SortData[];
   sortDataIndex: number | null;
-  parentFunction: (any: any) => void;
+  onChange: (any: any) => void;
   onRef?: any;
 }
 
@@ -35,7 +34,7 @@ interface ActionFilterMenuType1Props {
   priceLteMasking: string | number;
   priceGte: number;
   priceLte: number;
-  parentFunction: (any: any) => void;
+  onChange: (any: any) => void;
 }
 
 /** KEYBOAD LISTENER */
@@ -45,8 +44,7 @@ let keyboardDidHideListener: any;
 const { height, width } = Dimensions.get('window');
 
 const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
-  const [data, setData] = useState<any[]>([]);
-  const [sortData, setSortData] = useState(null);
+  const [sortData, setSortData] = useState<SortData | null>(null);
   const [sortDataIndex, setSortDataIndex] = useState<number | null>(null)
 
   /**
@@ -56,16 +54,15 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
    */
   /** === SEND DATA TO PARENT === */
   const toParentFunction = () => {
-    props.parentFunction({
-      type: 'sortSelected',
-      data: {
-        sortDataIndex: sortDataIndex,
+    props.onChange({
+      type: 'applySort',
+      value: {
         data: sortDataIndex !== null ? sortData : null
       }
     });
   }
   /** === CHECK SELECTED SORT ITEM === */
-  const checkSort = (item: any, index: number) => {
+  const checkSort = (item: SortData, index: number) => {
     if (index === sortDataIndex) {
       setSortDataIndex(null)
     } else {
@@ -81,35 +78,32 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
    */
   /** === RENDER CONTENT === */
   const renderContent = () => {
-    return data.map((item, index) => {
-      return (
-        <TouchableOpacity
-          key={index}
-          onPress={() => checkSort(item, index)}
-        >
-          <View style={styles.boxContentItemSortType1}>
-            <View style={{ flex: 1 }}>
-              <SnbText.C1>{item.name}</SnbText.C1>
+    return Array.isArray(props.sortData) && 
+      props.sortData.map((item, index) => {
+        return (
+          <TouchableOpacity
+            key={index}
+            onPress={() => checkSort(item, index)}
+          >
+            <View style={styles.boxContentItemSortType1}>
+              <View style={{ flex: 1 }}>
+                <SnbText.B3>{item.name}</SnbText.B3>
+              </View>
+              <View style={styles.boxIconRight}>
+                {sortDataIndex === index ? (
+                  <SnbRadioButton
+                    status={"selected"}
+                  />
+                ) : (
+                  <SnbRadioButton
+                    status={"unselect"}
+                  />
+                )}
+              </View>
             </View>
-            <View style={styles.boxIconRight}>
-              {sortDataIndex === index ? (
-                <SnbIcon
-                  name="radio-button-checked"
-                  color={color.red50}
-                  size={24}
-                />
-              ) : (
-                <SnbIcon
-                  name="radio-button-unchecked"
-                  color={color.black40}
-                  size={24}
-                />
-              )}
-            </View>
-          </View>
-          <View style={[styles.lines, { marginLeft: 16 }]} />
-        </TouchableOpacity>
-      );
+            <View style={[styles.lines, { marginLeft: 16 }]} />
+          </TouchableOpacity>
+        );
     });
   }
 
@@ -117,9 +111,14 @@ const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
   const renderButton = () => {
     
     return (
-      <TouchableOpacity onPress={toParentFunction} disabled={sortDataIndex === props.sortDataIndex}>
-        <SnbText.C1>Terapkan</SnbText.C1>
-      </TouchableOpacity>
+      <View style={{ marginTop: 32, height: 72 }}> 
+        <SnbButton.Single
+          type="primary"
+          title="Simpan"
+          onPress={toParentFunction}
+          disabled={sortDataIndex === props.sortDataIndex}
+        />
+      </View>
     );
   }
 
@@ -153,7 +152,7 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
   /** === SEND DATA TO PARENT === */
   const toParentFunction = () => {
     Keyboard.dismiss();
-    props.parentFunction({
+    props.onChange({
       type: 'filterSelected',
       data: {
         priceGte: priceGte,
@@ -224,7 +223,7 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
     return (
       <View style={{ alignItems: 'flex-end' }}>
         <TouchableOpacity onPress={() => clearState()}>
-          <SnbText.C1>Reset</SnbText.C1>
+          <SnbText.C1 color={color.red50}>Reset</SnbText.C1>
         </TouchableOpacity>
       </View>
     );
@@ -235,12 +234,14 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
     return (
       <View>
         <View>
-          <SnbText.C1>Harga</SnbText.C1>
+          <SnbText.B2>Harga</SnbText.B2>
         </View>
         <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
           <View style={{ flexDirection: 'row', flex: 1 }}>
             <View style={{ justifyContent: 'center', marginRight: 10 }}>
-            <SnbText.C1>Harga</SnbText.C1>
+              <SnbText.C1>Rp</SnbText.C1>
+            </View>
+            <View style={{ justifyContent: 'center', marginRight: 10 }}>
             </View>
             <View style={{ flex: 1 }}>
               <TextInputMask
@@ -388,9 +389,14 @@ const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
   /** === RENDER BUTTON === */
   const renderButton = () => {
     return (
-      <TouchableOpacity onPress={toParentFunction}>
-        <SnbText.C1>Terapkan</SnbText.C1>
-      </TouchableOpacity>
+      <View style={{ marginTop: 32, height: 72 }}> 
+        <SnbButton.Single
+          type="primary"
+          title="Simpan"
+          onPress={toParentFunction}
+          disabled={false}
+        />
+      </View>
     );
   }
 
@@ -442,19 +448,19 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     lineHeight: 15,
-    color: color.black40
+    color: color.black100
   },
   shadowForBox: {
     borderWidth: 0,
     backgroundColor: color.white,
-    shadowColor: color.black5,
+    shadowColor: color.black100,
     shadowOffset: {
       width: 0,
       height: 1
     },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 2
+    shadowOpacity: 0.18,
+    shadowRadius: 1.22,
+    elevation: 1
   },
 });
 
