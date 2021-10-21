@@ -1,8 +1,15 @@
-/** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
-import HelpView from './help.view';
-import HelpFaqView from './help-faq.view';
-/** === EXPORT ALL === */
-export { HelpView, HelpFaqView };
+/** === IMPORT PACKAGE HERE === */
+import React from 'react';
+/** === FUNCTION === */
+const usePrevious = (value: any) => {
+  const ref = React.useRef(0);
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+};
+/** === EXPORT === */
+export { usePrevious };
 /**
  * ================================================================
  * NOTES

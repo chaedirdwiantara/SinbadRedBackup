@@ -13,6 +13,7 @@ export * from './voucher';
 export * from './oms';
 export * from './category';
 export * from './promo';
+export * from './brand';
 /**
  * ================================================================
  * NOTES
