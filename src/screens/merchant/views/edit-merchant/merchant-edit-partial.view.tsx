@@ -32,6 +32,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const ownerData = stateUser.detail.data?.ownerData.profile;
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
+  const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
@@ -47,9 +48,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   let mapRef = React.useRef<MapView>(null);
   const { navigate } = useNavigation();
   // USER DATA
-  const ownerName = useInput(ownerData?.name ? ownerData?.name : '');
-  const noKtp = useInput(ownerData?.idNo ? ownerData?.idNo : '');
-  const noNPWP = useInput(ownerData?.taxNo ? ownerData?.taxNo : '');
+  const ownerName = useInput(ownerData?.name || '');
+  const ownerEmail = useInput(ownerData?.email || '');
+  const noKtp = useInput(ownerData?.idNo || '');
+  const noNPWP = useInput(ownerData?.taxNo || '');
+  const mobilePhone = useInput(ownerData?.mobilePhone || '');
   // COMPLETNESS DATA
   const merchantName = useInput(
     storeData?.storeAccount?.name ? storeData.storeAccount?.name : '',
@@ -58,7 +61,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     storeData?.storeDetailCompleteness?.numberOfEmployee || '',
   );
   const vehicleAccessibility = useInput(
-    storeData?.storeDetailCompleteness.vehicleAccessibility || '',
+    storeData?.storeDetailCompleteness?.vehicleAccessibility || '',
   );
   const largeArea = useInput(
     storeData?.storeDetailCompleteness?.largeArea || '',
@@ -83,7 +86,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
-      storeDetailAction.detail(dispatchUser);
+      storeDetailAction.detail(dispatchUser, { id: '3' });
     } else if (
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
@@ -95,6 +98,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         editMerchantAction.reset(dispatchSupplier);
         editProfileAction.reset(dispatchSupplier);
       }, 2000);
+    }
+  }, [stateMerchant]);
+
+  useEffect(() => {
+    if (stateMerchant.changeEmail.data) {
+      NavigationAction.navigate('MerchantOtpView', {
+        type: 'email',
+        data: ownerEmail.value,
+      });
     }
   }, [stateMerchant]);
 
@@ -119,8 +131,19 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     const { type } = props;
     let data = {};
     switch (type) {
-      case 'merchantOwnerEmail':
-      case 'merchantOwnerPhoneNo':
+      case 'merchantOwnerEmail': {
+        data = {
+          email: ownerEmail.value,
+        };
+        changeEmailAction.changeEmail(dispatchSupplier, { data });
+        break;
+      }
+      case 'merchantOwnerPhoneNo': {
+        data = {
+          mobilePhone: ownerData?.mobilePhone,
+        };
+        break;
+      }
       case 'merchantOwnerIdNo': {
         data = {
           idNo: noKtp.value,
@@ -193,6 +216,58 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
     }
   };
+
+  //checkbutton
+  /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
+  const checkButton = () => {
+    switch (props.type) {
+      case 'merchantOwnerName':
+        return ownerName.value === ownerData?.name;
+      case 'merchantOwnerEmail':
+        return (
+          ownerEmail.value === ownerData?.email
+          // || this.state.emailIsNotValid
+        );
+      case 'merchantOwnerIdNo':
+        return noKtp.value === ownerData?.idNo;
+      case 'merchantOwnerTaxNo':
+        return noNPWP.value === ownerData?.taxNo;
+      case 'merchantOwnerPhoneNo':
+        return mobilePhone.value === ownerData?.mobilePhone;
+      case 'merchantOwnerImageId':
+      case 'merchantOwnerImageSelfie':
+      case 'merchantOwnerImageTax':
+      case 'merchantImage':
+      case 'merchantAccountName':
+        return merchantName.value === storeData?.storeAccount.name;
+      case 'merchantAccountPhoneNo':
+      case 'merchantCompletenessInformation':
+        return (
+          largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
+          topBrand.value ===
+            storeData?.storeDetailCompleteness.topSellingBrand &&
+          wantedBrand.value ===
+            storeData?.storeDetailCompleteness.mostWantedBrand &&
+          vehicleAccessibilityAmount.value ===
+            `${storeData?.storeDetailCompleteness.vehicleAccessibilityAmount}` &&
+          vehicleAccessibility.value.id ===
+            storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
+          numberOfEmployee.value ===
+            storeData?.storeDetailCompleteness.numberOfEmployee
+        );
+      case 'merchantAddress':
+      // return (
+      //   this.props.global.longitude ===
+      //     this.props.merchant.dataGetMerchantDetail.longitude &&
+      //   this.props.global.latitude ===
+      //     this.props.merchant.dataGetMerchantDetail.latitude &&
+      //   this.state.address === data.address &&
+      //   this.state.noteAddress === data.noteAddress
+      // );
+      default:
+        break;
+    }
+  };
   /**
    * ================================
    * SWITCH VIEW
@@ -253,32 +328,32 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
           type={'default'}
-          value={ownerData?.email ? ownerData?.email : ''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={ownerEmail.value}
+          onChangeText={(text) => ownerEmail.setValue(text)}
+          clearText={() => ownerEmail.setValue('')}
         />
       </View>
     );
   };
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukan nomor handphone Anda'}
           type={'default'}
-          value={ownerData?.mobilePhone ? ownerData?.mobilePhone : ''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={mobilePhone.value}
+          onChangeText={(text) => mobilePhone.setValue(text)}
+          clearText={() => mobilePhone.setValue('')}
+          maxLength={14}
+          keyboardType={'numeric'}
         />
       </View>
     );
@@ -483,7 +558,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
-            clearText={() => console.log('clear')}
+            clearText={() => largeArea.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -493,7 +568,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             type={'default'}
             value={topBrand.value}
             onChangeText={(text) => topBrand.setValue(text)}
-            clearText={() => console.log('clear')}
+            clearText={() => topBrand.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -503,7 +578,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             type={'default'}
             value={wantedBrand.value}
             onChangeText={(text) => wantedBrand.setValue(text)}
-            clearText={() => console.log('clear')}
+            clearText={() => wantedBrand.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -524,7 +599,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             type={'default'}
             value={`${vehicleAccessibilityAmount.value}`}
             onChangeText={(text) => vehicleAccessibilityAmount.setValue(text)}
-            clearText={() => console.log('clear')}
+            clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
           />
         </View>
@@ -617,7 +692,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
           onPress={() => confirm()}
-          disabled={false}
+          disabled={checkButton()}
         />
       </View>
     ) : (

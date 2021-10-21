@@ -16,6 +16,16 @@ export const PROFILE_EDIT_PROCESS = 'ProfileEditProcess';
 export const PROFILE_EDIT_SUCCESS = 'ProfileEditSuccess';
 export const PROFILE_EDIT_FAILED = 'ProfileEditFailed';
 export const PROFILE_EDIT_RESET = 'ProfileEditReset';
+/** => change email */
+export const CHANGE_EMAIL_PROCESS = 'ChangeEmailProcess';
+export const CHANGE_EMAIL_SUCCESS = 'ChangeEmailSuccess';
+export const CHANGE_EMAIL_FAILED = 'ChangeEmailFailed';
+export const CHANGE_EMAIL_RESET = 'ChangeEmailReset';
+/** => verification email */
+export const VERIFICATION_EMAIL_PROCESS = 'VerificationEmailProcess';
+export const VERIFICATION_EMAIL_SUCCESS = 'VerificationEmailSuccess';
+export const VERIFICATION_EMAIL_FAILED = 'VerificationEmailFailed';
+export const VERIFICATION_EMAIL_RESET = 'VerificationEmailReset';
 /**
  * ================================================================
  * NOTES

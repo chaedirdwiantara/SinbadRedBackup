@@ -23,9 +23,21 @@ const editProfile = (data: object) => {
   const path = 'completed-data/profile-account-type';
   return apiMapping('auth', path, 'account', 'v1', 'PATCH', data);
 };
+/** => change email */
+const changeEmail = (data: object) => {
+  const path = 'request-change/email';
+  return apiMapping('auth', path, 'account', 'v1', 'CREATE', data);
+};
+/** => verification email */
+const verificationEmail = (data: object) => {
+  const path = 'verification/email';
+  return apiMapping('auth', path, 'common', 'v1', 'CREATE', data);
+};
 /** === EXPORT FUNCTIONS === */
 export const MerchantApi = {
   supplierList,
   editMerchant,
   editProfile,
+  changeEmail,
+  verificationEmail,
 };

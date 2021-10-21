@@ -107,19 +107,27 @@ const useEditProfile = () => {
     },
   };
 };
-/** => number Of Employee List */
-/** => call list action */
-const useNumberOfEmployeeListAction = () => {
+/** => change email */
+const useChangeEmail = () => {
   const dispatch = useDispatch();
   return {
-    numberOfEmployeeList: (
+    changeEmail: (
       contextDispatch: (action: any) => any,
-      data: models.ListProcessProps,
+      data: models.CreateProcessProps<{}>,
     ) => {
-      dispatch(Actions.numberOfEmployeeListProcess(contextDispatch, data));
+      dispatch(Actions.changeEmailProcess(contextDispatch, data));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.supplierListReset());
+      contextDispatch(Actions.changeEmailReset());
+    },
+    verificationEmail: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.verificationEmailProcess(contextDispatch, data));
+    },
+    resetVerificationEmail: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.verificationEmailReset());
     },
   };
 };
@@ -162,7 +170,7 @@ export const MerchantHookFunc = {
   useRegisterStep4,
   useEditMerchant,
   useEditProfile,
-  useNumberOfEmployeeListAction,
+  useChangeEmail,
 };
 /**
  * ================================================================

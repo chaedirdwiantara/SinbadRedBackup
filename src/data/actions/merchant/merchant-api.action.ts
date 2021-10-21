@@ -97,3 +97,67 @@ export const profileEditFailed = (
 export const profileEditReset = () => {
   return { type: types.PROFILE_EDIT_RESET };
 };
+/** === CHANGE EMAIL === */
+/** => process */
+export const changeEmailProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_EMAIL_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_EMAIL_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeEmailSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_EMAIL_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeEmailFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_EMAIL_FAILED, payload: data };
+};
+/** => reset */
+export const changeEmailReset = () => {
+  return { type: types.CHANGE_EMAIL_RESET };
+};
+/** === VERIFICATION EMAIL === */
+/** => process */
+export const verificationEmailProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_EMAIL_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_EMAIL_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationEmailSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_EMAIL_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationEmailFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_EMAIL_FAILED, payload: data };
+};
+/** => reset */
+export const verificationEmailReset = () => {
+  return { type: types.VERIFICATION_EMAIL_RESET };
+};

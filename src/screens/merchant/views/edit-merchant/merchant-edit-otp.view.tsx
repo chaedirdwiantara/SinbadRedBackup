@@ -1,51 +1,163 @@
-import { useNavigation } from '@react-navigation/core';
-import { maskPhone, useAuthAction, useOTP } from '@screen/auth/functions';
-import { OTPContent } from '@screen/auth/views/shared';
-import React from 'react';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import React, { useEffect, useState } from 'react';
+import { Image, View } from 'react-native';
+import {
+  SnbButton,
+  SnbOTPInput,
+  SnbText,
+  SnbOTPTimer,
+  color,
+  SnbContainer,
+  SnbTopNav,
+  SnbBottomSheet,
+} from 'react-native-sinbad-ui';
+import OtpStyle from '../../styles/otp.style';
+import { MerchantHookFunc } from '../../function';
+import { UserHookFunc } from '../../../user/functions';
+import { contexts } from '@contexts';
+import { NavigationAction } from '@navigation';
+interface Props {
+  loading: boolean;
+  otpSuccess: boolean;
+  hideIcon: boolean;
+  resend: () => void;
+  route: any;
+}
 
-const MerchantEditOTPView: React.FC = () => {
-  const { goBack, reset } = useNavigation();
-  const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
-  const { resetVerifyOTP, mobilePhone } = useOTP();
-  const [hide, setHide] = React.useState(true);
-  const [otpSuccess, setOtpSuccess] = React.useState(false);
-
-  React.useEffect(() => {
-    if (verifyOTP.data !== null) {
-      setHide(false);
-      setOtpSuccess(true);
-      reset({ index: 0, routes: [{ name: 'Home' }] });
+const OTPContent: React.FC<Props> = (props) => {
+  /** === HOOK === */
+  const { loading, resend, data, type } = props.route.params;
+  const [otp, setOtp] = useState('');
+  const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const [openModalSuccess, setOpenModalSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  //FUNCTION
+  const verifyOtp = () => {
+    if (type === 'email') {
+      // eslint-disable-next-line no-shadow
+      const data = {
+        email: props.route.params.data,
+        code: otp,
+      };
+      changeEmailAction.verificationEmail(dispatchSupplier, { data });
     }
-    if (verifyOTP.error !== null) {
-      setOtpSuccess(false);
-      setHide(false);
-    }
-  }, [verifyOTP]);
+  };
 
-  return (
-    <SnbContainer color="white">
+  useEffect(() => {
+    if (stateMerchant.verificationEmail.data) {
+      setOpenModalSuccess(true);
+    }
+  }, [stateMerchant]);
+
+  useEffect(() => {
+    if (stateMerchant.verificationEmail.error) {
+      setErrorMessage(stateMerchant.verificationEmail.error.message);
+    }
+  }, [stateMerchant]);
+
+  const confirm = () => {
+    setOpenModalSuccess(false);
+    changeEmailAction.resetVerificationEmail(dispatchSupplier);
+    changeEmailAction.reset(dispatchSupplier);
+    NavigationAction.backToPage('MerchantDetailProfileView');
+    storeDetailAction.detail(dispatchUser, { id: '3' });
+  };
+
+  /** === VIEW === */
+  const header = () => {
+    return (
       <SnbTopNav.Type3
-        backAction={goBack}
         type="white"
-        title="Kode Verifikasi"
+        title={'Kode Verifikasi'}
+        backAction={() => NavigationAction.back()}
       />
-      <OTPContent
-        onVerifyOTP={(otp) => {
-          resetVerifyOTP();
-          verificationOTP({ mobilePhone, otp });
-        }}
-        otpSuccess={otpSuccess}
-        hideIcon={hide}
-        loading={verifyOTP.loading}
-        phoneNo={maskPhone(mobilePhone)}
-        resend={() => {
-          requestOTP({ mobilePhone });
-        }}
-        errorMessage={verifyOTP.error?.message || ''}
-      />
+    );
+  };
+
+  const content = () => {
+    return (
+      <View style={{ justifyContent: 'space-between', flex: 1 }}>
+        <View>
+          <Image source={{ uri: ' ' }} style={OtpStyle.image} />
+          <View style={OtpStyle.titleContainer}>
+            <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
+            <View style={{ marginVertical: 4 }} />
+            <SnbText.B1 align="center">
+              Kode verifikasi telah dikirimkan melalui{' '}
+              {props.route.params.type === 'email' ? 'email' : 'sms'} ke {data}
+            </SnbText.B1>
+          </View>
+          <View style={{ margin: 4 }}>
+            <SnbOTPInput
+              {...props}
+              autoFocusOnLoad
+              code={otp}
+              onCodeChanged={setOtp}
+              otpSuccess={true}
+            />
+          </View>
+          <SnbText.B1 color={color.red70} align="center">
+            {errorMessage}
+          </SnbText.B1>
+        </View>
+        <View>
+          <View style={{ height: 72 }}>
+            <SnbButton.Single
+              title="Verifikasi"
+              onPress={() => verifyOtp()}
+              loading={loading}
+              type="primary"
+              disabled={otp.length < 5}
+            />
+          </View>
+          <SnbOTPTimer action={resend} timer={90} />
+        </View>
+      </View>
+    );
+  };
+
+  const modalSuccess = () => {
+    return openModalSuccess ? (
+      <View style={{ backgroundColor: 'red' }}>
+        <SnbBottomSheet
+          open={openModalSuccess}
+          content={
+            <View>
+              <View style={{ alignContent: 'center', alignItems: 'center' }}>
+                <Image source={{ uri: ' ' }} style={OtpStyle.image} />
+                <View style={{ marginVertical: 16 }}>
+                  <SnbText.H3>Email Berhasil Terverifikasi</SnbText.H3>
+                </View>
+              </View>
+              <View>
+                <SnbButton.Single
+                  type={'primary'}
+                  disabled={false}
+                  onPress={() => confirm()}
+                  title={'Oke, Saya Mengerti'}
+                />
+              </View>
+            </View>
+          }
+        />
+      </View>
+    ) : (
+      <View />
+    );
+  };
+
+  //main
+  return (
+    <SnbContainer color={'white'}>
+      {header()}
+      {content()}
+      {modalSuccess()}
     </SnbContainer>
   );
 };
 
-export default MerchantEditOTPView;
+export default OTPContent;

@@ -48,6 +48,10 @@ const getSelection = (data: models.IListSelection) => {
       path = `locations/search?${data.params}&${meta}`;
       break;
     }
+    case 'listBank': {
+      path = 'banks/all';
+      break;
+    }
   }
   return apiGeneral<models.IGetSelectionSuccess<any>>(
     'auth',

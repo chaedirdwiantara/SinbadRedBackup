@@ -13,6 +13,7 @@ import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
+import { useTextFieldSelect } from '@screen/auth/functions';
 
 interface Props {
   route: any;
@@ -21,6 +22,8 @@ interface Props {
 const MerchantEditPartialView: FC<Props> = (props) => {
   //HOOK
   const { stateUser } = React.useContext(contexts.UserContext);
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
   /** function */
   const confirm = () => {
     console.log('press');
@@ -47,7 +50,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Pilih Nama Bank'}
             type={'default'}
             value={bankData?.bankAccountName || ''}
-            onPress={() => console.log('press')}
+            onPress={() => gotoSelection({ type: 'listBank' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Nama Bank'}
