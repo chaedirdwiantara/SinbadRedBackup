@@ -1,8 +1,8 @@
-import { BannerView, BannerDetailView } from '@screen/banner/views';
+import { BannerListView, BannerDetailView } from '@screen/banner/views';
 
 const BannerNav = {
-  BannerView: {
-    component: BannerView,
+  BannerListView: {
+    component: BannerListView,
   },
   BannerDetailView: {
     component: BannerDetailView,

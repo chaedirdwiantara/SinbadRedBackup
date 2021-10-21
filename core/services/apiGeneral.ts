@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE === */
 import { set, isEmpty } from 'lodash';
 import apiHost from './apiHost';
+import { NavigationAction } from '@navigation';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
@@ -40,6 +41,7 @@ const apiGeneral = async <T>(
   const handleErrors = (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
+        NavigationAction.navigate('LoginPhoneView');
         throwError(response);
       }
       return response.json().then((error: ErrorProps) => {
@@ -54,7 +56,6 @@ const apiGeneral = async <T>(
   };
   /** === THROW ERROR === */
   const throwError = (response: any) => {
-    console.log(response);
     throw {
       status: response.status,
       message: response.statusText,

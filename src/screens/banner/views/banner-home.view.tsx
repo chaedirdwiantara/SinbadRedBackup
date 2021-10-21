@@ -1,42 +1,44 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { SnbText } from 'react-native-sinbad-ui';
+import React from 'react';
+import { View } from 'react-native';
 /** === IMPORT STYLE HERE === */
-import BannerStyle from '../styles/banner.style';
 /** === IMPORT FUNCTION HERE === */
-import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
+/** === IMPORT EXTERNAL COMPONENT HERE === */
+import BannerSlider from '@core/components/BannerSlider';
 /** === INTERFACE === */
 interface Props {
   testID?: string;
 }
 /** === COMPONENT === */
-const BannerHomeView: FC<Props> = () => {
-  /** === HOOK === */
-  const { loginUserName, requestOTP, verificationOTP, logout } =
-    useAuthAction();
+const BannerHomeView: React.FC<Props> = () => {
   /** => main */
   return (
-    <View style={BannerStyle.bannerHomeContainer} testID={'bannerHome'}>
-      <TouchableOpacity
-        onPress={() =>
-          loginUserName({ username: 'dianprasetyo', password: 'sinbad' })
-        }>
-        <SnbText.B1>Login UserName</SnbText.B1>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => requestOTP({ mobilePhone: '08966666670' })}>
-        <SnbText.B1>Request OTP</SnbText.B1>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() =>
-          verificationOTP({ mobilePhone: '08966666670', otp: '12345' })
-        }>
-        <SnbText.B1>Verify OTP</SnbText.B1>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => logout()}>
-        <SnbText.B1>Logout</SnbText.B1>
-      </TouchableOpacity>
+    <View testID={'bannerHome'}>
+      <BannerSlider
+        goToDetail={(data) => console.log(data)}
+        data={[
+          {
+            imageUrl:
+              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/dummy_images/ovaltine_banner.png',
+            id: '1',
+            promo: null,
+          },
+          {
+            imageUrl:
+              'https://sinbad-website.s3.amazonaws.com/odoo_img/promo/Promo+banner+dua+belibis+buy+2+get+1+-+new.png',
+            id: '2',
+            promo: null,
+          },
+          {
+            imageUrl:
+              'https://sinbad-website.s3.amazonaws.com/odoo_img/promo/banner+promo+wipol-1.png',
+            id: '3',
+            promo: null,
+          },
+        ]}
+        loading={false}
+        seeAll={() => console.log('go to all list')}
+      />
     </View>
   );
 };
