@@ -131,6 +131,30 @@ const useChangeEmail = () => {
     },
   };
 };
+/** => change mobile phone */
+const useChangeMobilePhone = () => {
+  const dispatch = useDispatch();
+  return {
+    changeMobilePhone: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.changeMobilePhoneProcess(contextDispatch, data));
+    },
+    resetChangeMobilePhone: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.changeMobilePhoneReset());
+    },
+    verificationMobilePhone: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.verificationMobilePhoneProcess(contextDispatch, data));
+    },
+    resetVerificationMobilePhone: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.verificationMobilePhoneReset());
+    },
+  };
+};
 /** => useInput */
 export const useInput = (initialState: string = '') => {
   const [value, setValue] = useState(initialState);
@@ -171,6 +195,7 @@ export const MerchantHookFunc = {
   useEditMerchant,
   useEditProfile,
   useChangeEmail,
+  useChangeMobilePhone,
 };
 /**
  * ================================================================

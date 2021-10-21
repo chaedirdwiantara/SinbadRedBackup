@@ -26,6 +26,18 @@ export const VERIFICATION_EMAIL_PROCESS = 'VerificationEmailProcess';
 export const VERIFICATION_EMAIL_SUCCESS = 'VerificationEmailSuccess';
 export const VERIFICATION_EMAIL_FAILED = 'VerificationEmailFailed';
 export const VERIFICATION_EMAIL_RESET = 'VerificationEmailReset';
+/** => change mobile phone */
+export const CHANGE_MOBILE_PHONE_PROCESS = 'ChangeMobilePhoneProcess';
+export const CHANGE_MOBILE_PHONE_SUCCESS = 'ChangeMobilePhoneSuccess';
+export const CHANGE_MOBILE_PHONE_FAILED = 'ChangeMobilePhoneFailed';
+export const CHANGE_MOBILE_PHONE_RESET = 'ChangeMobilePhoneReset';
+/** => verification email */
+export const VERIFICATION_MOBILE_PHONE_PROCESS =
+  'VerificationMobilePhoneProcess';
+export const VERIFICATION_MOBILE_PHONE_SUCCESS =
+  'VerificationMobilePhoneSuccess';
+export const VERIFICATION_MOBILE_PHONE_FAILED = 'VerificationMobilePhoneFailed';
+export const VERIFICATION_MOBILE_PHONE_RESET = 'VerificationMobilePhoneReset';
 /**
  * ================================================================
  * NOTES

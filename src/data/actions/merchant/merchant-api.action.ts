@@ -161,3 +161,67 @@ export const verificationEmailFailed = (
 export const verificationEmailReset = () => {
   return { type: types.VERIFICATION_EMAIL_RESET };
 };
+/** === CHANGE MOBILE PHONE === */
+/** => process */
+export const changeMobilePhoneProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_MOBILE_PHONE_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_MOBILE_PHONE_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeMobilePhoneSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_MOBILE_PHONE_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeMobilePhoneFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_MOBILE_PHONE_FAILED, payload: data };
+};
+/** => reset */
+export const changeMobilePhoneReset = () => {
+  return { type: types.CHANGE_MOBILE_PHONE_RESET };
+};
+/** === VERIFICATION MOBILE PHONE === */
+/** => process */
+export const verificationMobilePhoneProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_MOBILE_PHONE_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_MOBILE_PHONE_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationMobilePhoneSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationMobilePhoneFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_FAILED, payload: data };
+};
+/** => reset */
+export const verificationMobilePhoneReset = () => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_RESET };
+};

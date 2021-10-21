@@ -28,6 +28,7 @@ const OTPContent: React.FC<Props> = (props) => {
   const { loading, resend, data, type } = props.route.params;
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
@@ -44,11 +45,23 @@ const OTPContent: React.FC<Props> = (props) => {
         code: otp,
       };
       changeEmailAction.verificationEmail(dispatchSupplier, { data });
+    } else if (type === 'mobilePhone') {
+      // eslint-disable-next-line no-shadow
+      const data = {
+        mobilePhone: props.route.params.data,
+        code: otp,
+      };
+      changeMobilePhoneAction.verificationMobilePhone(dispatchSupplier, {
+        data,
+      });
     }
   };
 
   useEffect(() => {
-    if (stateMerchant.verificationEmail.data) {
+    if (
+      stateMerchant.verificationEmail.data ||
+      stateMerchant.verificationMobilePhone.data
+    ) {
       setOpenModalSuccess(true);
     }
   }, [stateMerchant]);
@@ -60,9 +73,14 @@ const OTPContent: React.FC<Props> = (props) => {
   }, [stateMerchant]);
 
   const confirm = () => {
+    if (type === 'email') {
+      changeEmailAction.resetVerificationEmail(dispatchSupplier);
+      changeEmailAction.reset(dispatchSupplier);
+    } else if (type === 'mobilePhone') {
+      changeMobilePhoneAction.resetChangeMobilePhone(dispatchSupplier);
+      changeMobilePhoneAction.resetVerificationMobilePhone(dispatchSupplier);
+    }
     setOpenModalSuccess(false);
-    changeEmailAction.resetVerificationEmail(dispatchSupplier);
-    changeEmailAction.reset(dispatchSupplier);
     NavigationAction.backToPage('MerchantDetailProfileView');
     storeDetailAction.detail(dispatchUser, { id: '3' });
   };

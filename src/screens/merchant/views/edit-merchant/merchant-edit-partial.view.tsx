@@ -33,6 +33,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
@@ -107,6 +108,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         type: 'email',
         data: ownerEmail.value,
       });
+    } else if (stateMerchant.changeMobilePhone.data) {
+      NavigationAction.navigate('MerchantOtpView', {
+        type: 'mobilePhone',
+        data: mobilePhone.value,
+      });
     }
   }, [stateMerchant]);
 
@@ -140,8 +146,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantOwnerPhoneNo': {
         data = {
-          mobilePhone: ownerData?.mobilePhone,
+          mobilePhone: mobilePhone.value,
         };
+        changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
         break;
       }
       case 'merchantOwnerIdNo': {
