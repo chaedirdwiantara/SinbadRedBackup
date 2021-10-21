@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import {
   View,
   Image,
@@ -19,8 +19,13 @@ import { goBack } from '../functions';
 import HelpFaqStyle from '../styles/help-faq.style';
 
 const { width } = Dimensions.get('window');
+interface Iref {
+  _snapToItem: any;
+}
 
 const HelpFaqView: FC = () => {
+  /** === HOOK === */
+  const carouselRef = useRef<Iref>(null);
   const [, setActiveIndex] = useState(0);
   const [tag] = useState([
     'Voucher',
@@ -124,7 +129,31 @@ const HelpFaqView: FC = () => {
       ],
     },
   ]);
-  /** === HOOK === */
+  /** === FUNCTIONAL === */
+  const submitSearch = (text: string) => {
+    let keyFound = 0;
+    let i = 0;
+    let found = false;
+    while (found === false && i < carouselItems.length) {
+      let j = 0;
+
+      while (found === false && j < carouselItems[i].content.length) {
+        if (
+          carouselItems[i].content[j].answer
+            .toLowerCase()
+            .indexOf(text.toLowerCase()) > -1
+        ) {
+          keyFound = i;
+          found = true;
+        }
+        j++;
+      }
+      i++;
+    }
+    if (carouselRef.current) {
+      carouselRef.current._snapToItem(keyFound);
+    }
+  };
   /** === VIEW === */
   /** === HEADER === */
   const header = () => {
@@ -143,7 +172,7 @@ const HelpFaqView: FC = () => {
             type={'default'}
             value={''}
             prefixIconName="search"
-            onChangeText={(text) => console.log(text)}
+            onChangeText={(text) => submitSearch(text)}
             clearText={() => console.log('clear')}
           />
         </View>
@@ -207,7 +236,7 @@ const HelpFaqView: FC = () => {
     return (
       <View style={{ flex: 1 }}>
         <SnbCarousel
-          carouselRef={null}
+          carouselRef={carouselRef}
           data={carouselItems}
           sliderWidth={width}
           itemWidth={0.82 * width}
@@ -233,7 +262,11 @@ const HelpFaqView: FC = () => {
             <TouchableOpacity
               key={index}
               style={HelpFaqStyle.tag}
-              onPress={() => console.log('PRESSED TAG')}>
+              onPress={() => {
+                if (carouselRef.current) {
+                  carouselRef.current._snapToItem(index + 1);
+                }
+              }}>
               <SnbText.B3>{item}</SnbText.B3>
             </TouchableOpacity>
           );
