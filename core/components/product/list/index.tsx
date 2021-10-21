@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -8,7 +8,7 @@ import ListLayoutView from './list-layout.view';
 import BottomActionView from './bottom-action.view';
 import { Action } from '@core/components/Action';
 /** === IMPORT FUNCTIONS === */
-import { useBottomAction } from '@core/functions/product';
+import { useBottomAction, useDataSort } from '@core/functions/product';
 /** === IMPORT MODEL === */
 import * as models from '@models';
 /** === TYPE === */
@@ -104,22 +104,6 @@ const ProductListView: FC<ProductComponentProps> = ({
   onCardPress,
   onOrderPress,
 }) => {
-  /** => STATE */
-  /** sort */
-  const [sortData, setSortData] = useState([
-    {
-      name: 'Harga Tinggi ke Rendah',
-      sortBy: 'retail_buying_price',
-      sort: 'desc',
-    },
-    {
-      name: 'Harga Rendah ke Tinggi',
-      sortBy: 'retail_buying_price',
-      sort: 'asc',
-    },
-  ]);
-  const [sortDataIndex, setSortDataIndex] = useState(null);
-
   /** === HOOK === */
   const { 
     layoutDisplay, 
@@ -128,8 +112,11 @@ const ProductListView: FC<ProductComponentProps> = ({
     filterActive, 
     filterModalVisible, 
     sortModalVisible,
-    filterParams 
+    filterParams,
+    sortDataIndex
   } = useBottomAction();
+
+  const { sortData } = useDataSort()
   /** === VIEW === */
   /** => List */
   const renderList = () =>

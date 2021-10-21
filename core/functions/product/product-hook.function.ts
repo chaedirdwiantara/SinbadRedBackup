@@ -29,6 +29,7 @@ export interface FilterParams {
 export const useBottomAction = () => {
   const [sortModalVisible, setSortModalVisible] = useState(false);
   const [sortActive, setSortActive] = useState(false);
+  const [sortDataIndex, setSortDataIndex] = useState(null);
   const [sortQuery, setSortQuery] = useState<SortQuery>({
     sortBy: '',
     sort: 'asc',
@@ -87,6 +88,7 @@ export const useBottomAction = () => {
     sortModalVisible,
     sortActive,
     sortQuery,
+    sortDataIndex,
     filterModalVisible,
     filterParams,
     filterActive,
@@ -94,3 +96,22 @@ export const useBottomAction = () => {
     handleActionClick,
   };
 };
+
+export const useDataSort = () => {
+  const sortData = [
+    {
+      name: 'Harga Tinggi ke Rendah',
+      sortBy: 'retail_buying_price',
+      sort: 'desc',
+    },
+    {
+      name: 'Harga Rendah ke Tinggi',
+      sortBy: 'retail_buying_price',
+      sort: 'asc',
+    },
+  ];
+
+  return {
+    sortData
+  }
+}
