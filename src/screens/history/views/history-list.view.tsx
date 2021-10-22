@@ -251,45 +251,6 @@ const payments = {
     },
   ],
 };
-// const payments: Array<HistoryItem> = [
-//   {
-//     id: 'SNB18120000708',
-//     status: { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-//     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-//     expiredPaymentTime: new Date(2021, 8, 30, 14, 16).toISOString(),
-//     totalPrice: 300000,
-//     totalQty: 10,
-//     products: [
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-//     ],
-//   },
-//   {
-//     id: 'SNB18120000709',
-//     status: { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-//     createdAt: new Date(2021, 8, 27, 12, 46).toISOString(),
-//     totalPrice: 200000,
-//     originalTotalPrice: 400000,
-//     totalQty: 3,
-//     originalTotalQty: 6,
-//     products: [
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-//     ],
-//   },
-//   {
-//     id: 'SNB18120000707',
-//     status: { key: 'overdue', value: 'Overdue' },
-//     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-//     totalPrice: 450000,
-//     totalQty: 3,
-//     products: [
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-//     ],
-//   },
-// ];
 const orders: Array<HistoryItem> = [
   {
     id: 'SNB18120000722',
