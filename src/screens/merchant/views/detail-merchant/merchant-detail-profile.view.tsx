@@ -23,7 +23,7 @@ const MerchantDetailProfileView: FC = () => {
     const { type, title } = data;
     switch (type) {
       case 'merchantOwnerImage':
-        // NavigationService.navigate('TakeProfilePicture');
+        NavigationAction.navigate('TakeProfilePictureView');
         break;
       case 'merchantOwnerName':
       case 'merchantOwnerEmail':
@@ -77,7 +77,7 @@ const MerchantDetailProfileView: FC = () => {
         )} */}
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          onPress={() => console.log('test')}>
+          onPress={() => goTo({ type: 'merchantOwnerImage' })}>
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
       </View>
