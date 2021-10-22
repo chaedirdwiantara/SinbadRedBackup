@@ -84,6 +84,11 @@ export const HistoryCard: FC<HistoryCardProps> = ({
     (new Date(expiredPaymentTime!).getTime() - new Date().getTime()) / 1000,
   );
 
+  const arrProductImages: Array<object> = [];
+  productImages.map((item) => {
+    arrProductImages.push({ imgUrl: item });
+  });
+
   return (
     <TouchableOpacity
       onPress={() =>
@@ -129,10 +134,13 @@ export const HistoryCard: FC<HistoryCardProps> = ({
       </View>
       <View style={HistoryStyle.cardBody}>
         <SnbSKUList
-          data={productImages}
+          data={arrProductImages}
           renderItem={({ item }: any) => {
             return (
-              <Image source={{ uri: item }} style={{ height: 60, width: 60 }} />
+              <Image
+                source={{ uri: item.imgUrl }}
+                style={{ height: 60, width: 60 }}
+              />
             );
           }}
           expandable
