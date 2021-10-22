@@ -43,11 +43,6 @@ export const HistoryStyle = StyleSheet.create({
     marginBottom: 8,
     padding: 8,
     marginHorizontal: 16,
-    backgroundColor: color.black5,
-    borderRadius: 6,
-    borderColor: color.black10,
-    borderStyle: 'solid',
-    borderWidth: 1,
   },
   cardFooterRow: {
     flexDirection: 'row',

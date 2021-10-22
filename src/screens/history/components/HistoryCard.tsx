@@ -11,6 +11,7 @@ import {
   color,
   SnbButton,
   SnbIcon,
+  SnbSKUList,
   SnbText,
   styles,
 } from 'react-native-sinbad-ui';
@@ -127,18 +128,15 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         </View>
       </View>
       <View style={HistoryStyle.cardBody}>
-        {productImages.slice(0, 3).map((image, imageIndex) => (
-          <Image
-            key={imageIndex}
-            source={{ uri: image }}
-            style={{ marginRight: 8, width: 60, height: 60 }}
-          />
-        ))}
-        {productImages.length > 3 && (
-          <SnbText.C1 color={color.black80}>{`(+${
-            productImages.length - 3
-          } Produk Lain)`}</SnbText.C1>
-        )}
+        <SnbSKUList
+          data={productImages}
+          renderItem={({ item }: any) => {
+            return (
+              <Image source={{ uri: item }} style={{ height: 60, width: 60 }} />
+            );
+          }}
+          expandable
+        />
       </View>
       {originalTotalPrice && originalTotalQty ? (
         <View
