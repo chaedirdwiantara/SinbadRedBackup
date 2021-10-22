@@ -140,7 +140,7 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           } Produk Lain)`}</SnbText.C1>
         )}
       </View>
-      {originalTotalPrice && originalTotalQty && (
+      {originalTotalPrice && originalTotalQty ? (
         <View
           style={{
             ...HistoryStyle.cardFooterRow,
@@ -151,8 +151,11 @@ export const HistoryCard: FC<HistoryCardProps> = ({
             {toCurrency(originalTotalPrice)}
           </SnbText.C2>
           {/* Should be styled with strikethrough */}
-          <SnbText.C2 color={color.black40}>{`QTY: ${totalQty}`}</SnbText.C2>
+          <SnbText.C2
+            color={color.black40}>{`QTY: ${originalTotalQty}`}</SnbText.C2>
         </View>
+      ) : (
+        <View />
       )}
       <View style={HistoryStyle.cardFooterRow}>
         <SnbText.C2 color={color.black100}>{toCurrency(totalPrice)}</SnbText.C2>

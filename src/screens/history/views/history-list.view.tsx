@@ -70,45 +70,226 @@ const orderStatusColor: Record<OrderStatusKey, keyof HistoryStatusColor> = {
   supplier_pending: 'yellow',
   canceled: 'red',
 };
-const payments: Array<HistoryItem> = [
-  {
-    id: 'SNB18120000708',
-    status: { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 14, 16).toISOString(),
-    totalPrice: 300000,
-    totalQty: 10,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
+const payments = {
+  meta: {
+    total: 100,
+    skip: 0,
+    limit: 10,
   },
-  {
-    id: 'SNB18120000709',
-    status: { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-    createdAt: new Date(2021, 8, 27, 12, 46).toISOString(),
-    totalPrice: 200000,
-    originalTotalPrice: 400000,
-    totalQty: 3,
-    originalTotalQty: 6,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-    ],
-  },
-  {
-    id: 'SNB18120000707',
-    status: { key: 'overdue', value: 'Overdue' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    totalPrice: 450000,
-    totalQty: 3,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
-  },
-];
+  data: [
+    {
+      id: 1,
+      orderCode: 'S010001000105508',
+      createdAt: '2021-08-18T02:36:12.812Z',
+      parcelFinalPrice: 0,
+      parcelFinalPriceBuyer: null,
+      parcelQty: 10,
+      deliveredParcelFinalPrice: 10,
+      deliveredParcelFinalPriceBuyer: null,
+      deliveredParcelQty: 0,
+      deliveredParcelModified: false,
+      statusPayment: 'paid',
+      status: 'delivered',
+      billing: {
+        id: 2,
+        totalPayment: 10000,
+        deliveredTotalPayment: 10000,
+        billingStatus: 'paid',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        expiredPaymentTime: '2021-07-30T15:14:02Z',
+        paymentChannelTypeId: 1,
+      },
+      orderBrands: [
+        {
+          id: '6665',
+          orderBrandCatalogues: [
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '5',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842640.png',
+                  },
+                ],
+                id: '4',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 4 G.NATURAL',
+              },
+              catalogueId: '4',
+              id: '7653',
+              qty: 35,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '3',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842634.png',
+                  },
+                ],
+                id: '2',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 2 L.SAND',
+              },
+              catalogueId: '2',
+              id: '7651',
+              qty: 50,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '1',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842629.png',
+                  },
+                  {
+                    id: '141',
+                    imageUrl:
+                      'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/dev/catalogue-images/1/image_1633923191651.png',
+                  },
+                  {
+                    id: '142',
+                    imageUrl:
+                      'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/dev/catalogue-images/1/image_1633923208746.png',
+                  },
+                  {
+                    id: '143',
+                    imageUrl:
+                      'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/dev/catalogue-images/1/image_1633923551926.png',
+                  },
+                ],
+                id: '1',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 1 N.FAIR',
+              },
+              catalogueId: '1',
+              id: '7650',
+              qty: 1,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '8',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842825.png',
+                  },
+                ],
+                id: '7',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION REFFILL 1 N.FAIR',
+              },
+              catalogueId: '7',
+              id: '7656',
+              qty: 53,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '7',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842646.png',
+                  },
+                ],
+                id: '6',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 6 S.TAN',
+              },
+              catalogueId: '6',
+              id: '7655',
+              qty: 35,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '6',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842644.png',
+                  },
+                ],
+                id: '5',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 5 H.BRONZE',
+              },
+              catalogueId: '5',
+              id: '7654',
+              qty: 53,
+            },
+            {
+              catalogue: {
+                catalogueImages: [
+                  {
+                    id: '4',
+                    imageUrl:
+                      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67842638.png',
+                  },
+                ],
+                id: '3',
+                name: 'LAKME 9TO5 CUSHION FOUNDATION 3 M.HONEY',
+              },
+              catalogueId: '3',
+              id: '7652',
+              qty: 53,
+            },
+          ],
+        },
+      ],
+      products: [
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
+      ],
+      // products: [
+      //   {
+      //     imgUrl:
+      //       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
+      //   },
+      //   {
+      //     imgUrl:
+      //       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
+      //   },
+      // ],
+    },
+  ],
+};
+// const payments: Array<HistoryItem> = [
+//   {
+//     id: 'SNB18120000708',
+//     status: { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
+//     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
+//     expiredPaymentTime: new Date(2021, 8, 30, 14, 16).toISOString(),
+//     totalPrice: 300000,
+//     totalQty: 10,
+//     products: [
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
+//     ],
+//   },
+//   {
+//     id: 'SNB18120000709',
+//     status: { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
+//     createdAt: new Date(2021, 8, 27, 12, 46).toISOString(),
+//     totalPrice: 200000,
+//     originalTotalPrice: 400000,
+//     totalQty: 3,
+//     originalTotalQty: 6,
+//     products: [
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
+//     ],
+//   },
+//   {
+//     id: 'SNB18120000707',
+//     status: { key: 'overdue', value: 'Overdue' },
+//     createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
+//     totalPrice: 450000,
+//     totalQty: 3,
+//     products: [
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
+//       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
+//     ],
+//   },
+// ];
 const orders: Array<HistoryItem> = [
   {
     id: 'SNB18120000722',
@@ -256,28 +437,30 @@ const HistoryListView: FC = () => {
   /** => Payment List */
   const renderPaymentList = () => (
     <>
-      {payments.map((payment, paymentIndex) => {
+      {payments.data.map((payment, paymentIndex) => {
         const statusColor =
-          paymentStatusColor[payment.status.key as PaymentStatusKey];
+          paymentStatusColor[payment.statusPayment as PaymentStatusKey];
 
         return (
           <HistoryCard
             key={payment.id}
-            id={payment.id}
+            id={payment.orderCode}
             createdAt={payment.createdAt}
-            status={payment.status.value}
+            status={payment.statusPayment}
             statusColor={statusColor}
             statusIconName={
-              payment.status.key === 'overdue' ? 'error' : undefined
+              payment.statusPayment === 'overdue' ? 'error' : undefined
             }
-            expiredPaymentTime={payment.expiredPaymentTime}
+            expiredPaymentTime={payment.billing.expiredPaymentTime}
             productImages={payment.products}
-            totalPrice={payment.totalPrice}
-            originalTotalPrice={payment.originalTotalPrice}
-            totalQty={payment.totalQty}
-            originalTotalQty={payment.originalTotalQty}
+            totalPrice={payment.billing.deliveredTotalPayment}
+            originalTotalPrice={payment.billing.totalPayment}
+            totalQty={payment.parcelQty}
+            originalTotalQty={payment.deliveredParcelQty}
             style={
-              paymentIndex === payments.length - 1 ? { marginBottom: 24 } : {}
+              paymentIndex === payments.data.length - 1
+                ? { marginBottom: 24 }
+                : {}
             }
           />
         );
