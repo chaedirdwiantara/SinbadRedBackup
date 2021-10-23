@@ -1,6 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React from 'react';
-import { View, ScrollView, Image, FlatList } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native';
 import moment from 'moment';
 import {
   SnbContainer,
@@ -9,6 +15,7 @@ import {
   SnbCardInfoType2,
   color,
   SnbDivider,
+  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
@@ -88,6 +95,8 @@ const termsAndCondition = [
 
 /** === COMPONENT === */
 const BannerDetailView: React.FC = () => {
+  /** === STATE === */
+  const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
   /** === HOOK === */
   /** === VIEW === */
   /** => header */
@@ -183,6 +192,9 @@ const BannerDetailView: React.FC = () => {
             );
           })}
         </View>
+        <TouchableOpacity onPress={() => setModalTnCVisible(true)}>
+          <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -244,6 +256,38 @@ const BannerDetailView: React.FC = () => {
     );
   };
 
+  /** => modal full TnC */
+  const renderModalFullTnC = () => {
+    return (
+      <SnbBottomSheet
+        open={modalTnCVisible}
+        title={'Syarat dan Ketentuan'}
+        action={true}
+        actionIcon={'close'}
+        closeAction={() => setModalTnCVisible(false)}
+        content={
+          <View style={{ marginRight: 20, paddingHorizontal: 16 }}>
+            {termsAndCondition.map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 4,
+                  }}>
+                  <View style={{ marginRight: 8, width: 20 }}>
+                    <SnbText.B1>{index + 1}.</SnbText.B1>
+                  </View>
+                  <SnbText.B1>{item}</SnbText.B1>
+                </View>
+              );
+            })}
+          </View>
+        }
+      />
+    );
+  };
+
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -254,6 +298,7 @@ const BannerDetailView: React.FC = () => {
         {renderPromoDescription()}
         {renderPromoTnC()}
         {renderRecommendationProduct()}
+        {renderModalFullTnC()}
       </ScrollView>
     </SnbContainer>
   );
