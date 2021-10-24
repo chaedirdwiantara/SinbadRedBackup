@@ -1,6 +1,8 @@
 import { contexts } from '@contexts';
 import { useNavigation } from '@react-navigation/core';
 import { useInput, useMerchant } from '@screen/auth/functions';
+import { MerchantHookFunc } from '@screen/merchant/function';
+import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -18,15 +20,30 @@ const MerchantEditAddressView = () => {
   const { stateUser } = React.useContext(contexts.UserContext);
   const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   const { navigate, goBack } = useNavigation();
-  const { merchantData } = useMerchant();
+  const { merchantData, resetMerchantData } = useMerchant();
   const address = useInput(merchantData.address || storeAddress?.address);
   const noteAddress = useInput(
     merchantData.noteAddress || storeAddress?.noteAddress,
   );
   let mapRef = React.useRef<MapView>(null);
+  const { editMerchant, reset } = MerchantHookFunc.useEditMerchant();
+  const { detail } = UserHookFunc.useStoreDetailAction();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  const { dispatchUser } = React.useContext(contexts.UserContext);
 
   React.useEffect(() => {
-    if (merchantData.longitude !== null) {
+    if (stateMerchant.merchantEdit.data) {
+      reset(dispatchSupplier);
+      resetMerchantData();
+      detail(dispatchUser);
+      goBack();
+    }
+  }, [stateMerchant]);
+
+  React.useEffect(() => {
+    if (merchantData.longitude !== null && merchantData.latitude !== null) {
       mapRef.current?.animateToRegion({
         latitude: merchantData?.latitude || 0,
         longitude: merchantData?.longitude || 0,
@@ -38,6 +55,33 @@ const MerchantEditAddressView = () => {
       address.setValue(merchantData.address || '');
     }
   }, [merchantData]);
+
+  const handleDisableButton = () => {
+    return !(
+      address.value === '' ||
+      address.value !== storeAddress?.address ||
+      noteAddress.value === '' ||
+      noteAddress.value !== storeAddress?.noteAddress
+    );
+  };
+
+  const handleUpdate = () => {
+    const data: any = {};
+    if (merchantData.latitude !== null && merchantData.longitude !== null) {
+      data.latitude = merchantData.latitude;
+      data.longitude = merchantData.longitude;
+    }
+    if (merchantData.urbanId !== null) {
+      data.urbanId = merchantData.urbanId;
+    }
+    if (address.value !== storeAddress?.address) {
+      data.address = address.value;
+    }
+    if (noteAddress.value !== storeAddress?.noteAddress) {
+      data.noteAddress = noteAddress.value;
+    }
+    editMerchant(dispatchSupplier, { data });
+  };
 
   return (
     <SnbContainer color={'white'}>
@@ -97,17 +141,18 @@ const MerchantEditAddressView = () => {
               <SnbTextField.Area
                 {...address}
                 labelText="Alamat"
-                mandatory
                 placeholder="Masukkan Alamat Toko"
-                type={'default'}
+                mandatory
+                maxLength={200}
               />
             </View>
             <View style={{ marginBottom: 16 }}>
               <SnbTextField.Area
                 {...noteAddress}
                 labelText="Catatan Alamat"
-                mandatory
                 placeholder="Masukkan Catatan Alamat"
+                mandatory
+                maxLength={200}
               />
             </View>
           </View>
@@ -115,9 +160,9 @@ const MerchantEditAddressView = () => {
       </View>
       <View style={{ height: 72 }}>
         <SnbButton.Single
-          disabled={true}
+          disabled={handleDisableButton()}
           title="Simpan"
-          onPress={() => {}}
+          onPress={handleUpdate}
           type="primary"
         />
       </View>

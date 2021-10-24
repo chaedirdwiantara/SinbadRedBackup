@@ -14,7 +14,6 @@ export const uploadImageProcess = (
   contextDispatch: (action: any) => any,
   data: models.UploadImageSaveProps,
 ): models.uploadImageAction => {
-  console.log(data);
   contextDispatch({ type: types.UPLOAD_IMAGE_PROCESS, payload: data });
   return { type: types.UPLOAD_IMAGE_PROCESS, payload: data, contextDispatch };
 };

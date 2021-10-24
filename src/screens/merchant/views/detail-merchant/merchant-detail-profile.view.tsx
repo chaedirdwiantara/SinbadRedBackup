@@ -13,10 +13,12 @@ import Svg from '@svg';
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { useNavigation } from '@react-navigation/core';
 
 const MerchantDetailProfileView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  const { navigate } = useNavigation();
   /** FUNCTION */
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
@@ -30,14 +32,17 @@ const MerchantDetailProfileView: FC = () => {
       case 'merchantOwnerPhoneNo':
       case 'merchantOwnerIdNo':
       case 'merchantOwnerTaxNo':
-      case 'merchantOwnerImageTax':
-      case 'merchantOwnerImageId':
-      case 'merchantOwnerImageSelfie':
         NavigationAction.navigate('MerchantEditView', { title, type });
         break;
       case 'merchantOwnerBankAccountNo':
         NavigationAction.navigate('MerchantBankAccountView', { title, type });
         break;
+      case 'ktp':
+      case 'npwp':
+      case 'selfie': {
+        navigate('MerchantEditPhotoView', { title, type });
+        break;
+      }
       default:
         break;
     }
@@ -58,7 +63,6 @@ const MerchantDetailProfileView: FC = () => {
     const ownerData = stateUser.detail.data?.ownerData;
     return (
       <View>
-        {/* {this.props.merchant.dataMerchantVolatile.ownerImageUrl !== null ? ( */}
         {ownerData?.profile.imageUrl ? (
           <Image
             source={{
@@ -69,12 +73,6 @@ const MerchantDetailProfileView: FC = () => {
         ) : (
           <Svg name={'avatar'} size={50} color={color.red50} />
         )}
-        {/* ) : (
-          <Image
-            source={require('../../../assets/images/profile/avatar.png')}
-            style={[GlobalStyle.image100, {borderRadius: 100}]}
-          />
-        )} */}
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
           onPress={() => console.log('test')}>
@@ -183,7 +181,7 @@ const MerchantDetailProfileView: FC = () => {
           value: ownerData?.profile.taxImageUrl ? 'Sudah diupload' : '-',
           action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.taxImageUrl ? true : false,
-          type: 'merchantOwnerImageTax',
+          type: 'npwp',
           title: 'Foto NPWP',
         })}
         {renderContentSection({
@@ -191,7 +189,7 @@ const MerchantDetailProfileView: FC = () => {
           value: ownerData?.profile.idImageUrl ? 'Sudah diupload' : '-',
           action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.idImageUrl ? true : false,
-          type: 'merchantOwnerImageId',
+          type: 'ktp',
           title: 'Foto KTP',
         })}
         {renderContentSection({
@@ -199,7 +197,7 @@ const MerchantDetailProfileView: FC = () => {
           value: ownerData?.profile.selfieImageUrl ? 'Sudah diupload' : '-',
           action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.selfieImageUrl ? true : false,
-          type: 'merchantOwnerImageSelfie',
+          type: 'selfie',
           title: 'Foto Selfie + KTP',
         })}
       </View>

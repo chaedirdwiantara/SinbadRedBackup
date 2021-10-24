@@ -27,7 +27,14 @@ const MapsView = () => {
   const { saveStoreData, merchantData } = useMerchant();
 
   React.useEffect(() => {
+    resetLocation();
+    return resetLocation;
+  }, []);
+
+  React.useEffect(() => {
     if (locations.data?.length > 0) {
+      console.log('Triggered BACK in MAPS');
+
       saveStoreData({
         address: desc === 'Alamat tidak ditemukan' ? '' : desc,
         urbanId: locations?.data[0]?.id,
@@ -36,7 +43,6 @@ const MapsView = () => {
     } else if (locations.data?.length === 0) {
       setShowModal(true);
     }
-    return resetLocation;
   }, [locations]);
 
   const getAddress = async (coords?: LatLng) => {
