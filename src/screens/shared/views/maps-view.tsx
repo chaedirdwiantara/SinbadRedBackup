@@ -33,8 +33,6 @@ const MapsView = () => {
 
   React.useEffect(() => {
     if (locations.data?.length > 0) {
-      console.log('Triggered BACK in MAPS');
-
       saveStoreData({
         address: desc === 'Alamat tidak ditemukan' ? '' : desc,
         urbanId: locations?.data[0]?.id,
