@@ -122,13 +122,13 @@ const BannerListView: React.FC = () => {
   /** => content */
   const content = () => {
     return (
-      <View style={{ margin: 16 }}>
+      <View style={{ margin: 16, paddingBottom: 150 }}>
         <FlatList
           data={bannerList}
           renderItem={renderListBanner}
           keyExtractor={(item) => item.id.toString()}
           onEndReachedThreshold={0.1}
-          onEndReached={() => console.log('List scroll has reached end')}
+          onEndReached={() => {}}
           showsVerticalScrollIndicator={true}
         />
       </View>
