@@ -13,7 +13,20 @@ const productList = (data: models.ListProcessProps) => {
     'LIST',
   );
 };
+
+/** => product detail */
+const productDetail = (data: models.DetailProcessProps) => {
+  const path = `products/${data.id}`;
+  return apiMapping<models.ProductList[]>(
+    'public',
+    path,
+    'product',
+    'v1',
+    'DETAIL',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const ProductApi = {
   productList,
+  productDetail,
 };

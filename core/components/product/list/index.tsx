@@ -1,7 +1,12 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
+import {
+  color,
+  SnbContainer,
+  SnbText,
+  SnbBottomSheet,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
@@ -105,18 +110,18 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** === HOOK === */
-  const { 
-    layoutDisplay, 
-    handleActionClick, 
-    sortActive, 
-    filterActive, 
-    filterModalVisible, 
+  const {
+    layoutDisplay,
+    handleActionClick,
+    sortActive,
+    filterActive,
+    filterModalVisible,
     sortModalVisible,
     filterParams,
-    sortDataIndex
+    sortDataIndex,
   } = useBottomAction();
 
-  const { sortData } = useDataSort()
+  const { sortData } = useDataSort();
   /** === VIEW === */
   /** => List */
   const renderList = () =>
@@ -144,40 +149,44 @@ const ProductListView: FC<ProductComponentProps> = ({
 
   /** === RENDER MODAL SORT === */
   const renderModalSort = () => {
-    return <SnbBottomSheet
-      open={sortModalVisible}
-      title={"Urutkan"}
-      action
-      actionIcon="close"
-      content={
-        <Action.SortMenuType1
-          sortDataIndex={sortDataIndex}
-          sortData={sortData}
-          onChange={() => {}}
-        />
-      }
-      closeAction={() => handleActionClick({type: "sort"})}
-    />
+    return (
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title={'Urutkan'}
+        action
+        actionIcon="close"
+        content={
+          <Action.SortMenuType1
+            sortDataIndex={sortDataIndex}
+            sortData={sortData}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'sort' })}
+      />
+    );
   };
 
   /** === RENDER MODAL FILTER === */
   const renderModalFilter = () => {
-    return <SnbBottomSheet
-      open={filterModalVisible}
-      title={"Filter"}
-      action
-      actionIcon="close"
-      content={
-        <Action.FilterMenuType1
-          priceGteMasking={filterParams.priceGteMasking}
-          priceLteMasking={filterParams.priceLteMasking}
-          priceGte={filterParams.priceGte}
-          priceLte={filterParams.priceLte}
-          onChange={() => {}}
-        />
-      }
-      closeAction={() => handleActionClick({type: "filter"})}
-    />
+    return (
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title={'Filter'}
+        action
+        actionIcon="close"
+        content={
+          <Action.FilterMenuType1
+            priceGteMasking={filterParams.priceGteMasking}
+            priceLteMasking={filterParams.priceLteMasking}
+            priceGte={filterParams.priceGte}
+            priceLte={filterParams.priceLte}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'filter' })}
+      />
+    );
   };
 
   /** => Main */

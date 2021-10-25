@@ -38,10 +38,10 @@ export const useBottomAction = () => {
   const [filterActive, setFilterActive] = useState(false);
   const [filterQuery, setFilterQuery] = useState<FilterQuery | null>(null);
   const [filterParams, setFilterParams] = useState<FilterParams>({
-    priceGteMasking: "",
-    priceLteMasking: "",
+    priceGteMasking: '',
+    priceLteMasking: '',
     priceGte: 0,
-    priceLte: 0
+    priceLte: 0,
   });
   const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
 
@@ -62,7 +62,7 @@ export const useBottomAction = () => {
         // setFilterQuery
         setFilterQuery(value as FilterQuery);
         setFilterModalVisible(false);
-        if(!filterQuery) {
+        if (!filterQuery) {
           setFilterActive(false);
         } else {
           setFilterActive(true);
@@ -112,6 +112,6 @@ export const useDataSort = () => {
   ];
 
   return {
-    sortData
-  }
-}
+    sortData,
+  };
+};
