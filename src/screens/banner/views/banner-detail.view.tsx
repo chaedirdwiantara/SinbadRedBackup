@@ -176,25 +176,28 @@ const BannerDetailView: React.FC = () => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {termsAndCondition.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 4,
-                }}>
-                <View style={{ marginRight: 8, width: 20 }}>
-                  <SnbText.B1>{index + 1}.</SnbText.B1>
+          {Array.isArray(termsAndCondition) &&
+            termsAndCondition.slice(0, 3).map((item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 4,
+                  }}>
+                  <View style={{ marginRight: 8, width: 20 }}>
+                    <SnbText.B1>{index + 1}.</SnbText.B1>
+                  </View>
+                  <SnbText.B1>{item}</SnbText.B1>
                 </View>
-                <SnbText.B1>{item}</SnbText.B1>
-              </View>
-            );
-          })}
+              );
+            })}
         </View>
-        <TouchableOpacity onPress={() => setModalTnCVisible(true)}>
-          <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
-        </TouchableOpacity>
+        {Array.isArray(termsAndCondition) && termsAndCondition.length > 3 && (
+          <TouchableOpacity onPress={() => setModalTnCVisible(true)}>
+            <SnbText.B1 color={color.red50}>Baca Selengkapnya</SnbText.B1>
+          </TouchableOpacity>
+        )}
       </View>
     );
   };
