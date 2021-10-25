@@ -13,6 +13,37 @@ import {
   SnbUploadPhotoRules,
 } from 'react-native-sinbad-ui';
 
+function setRules(type: string) {
+  switch (type) {
+    case 'npwp': {
+      return [
+        'Pastikan NPWP sesuai dengan identitas Anda',
+        'NPWP Tidak silau dan tidak buram',
+        'Pastikan NPWP bisa terbaca dengan jelas',
+        'Hindari Tangan Menutupi NPWP',
+      ];
+    }
+    case 'ktp': {
+      return [
+        'Pastikan KTP sesuai dengan identitas Anda',
+        'KTP Tidak silau dan tidak buram',
+        'Pastikan KTP bisa terbaca dengan jelas',
+        'Hindari Tangan Menutupi KTP',
+      ];
+    }
+    case 'selfie': {
+      return [
+        'Posisikan KTP di bawah dagu Anda',
+        'KTP Tidak silau dan tidak buram',
+        'Pastikan KTP bisa terbaca dengan jelas',
+        'Hindari Tangan Menutupi KTP',
+      ];
+    }
+    default:
+      return [];
+  }
+}
+
 const MerchantEditPhotoView = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { goBack } = useNavigation();
@@ -21,15 +52,29 @@ const MerchantEditPhotoView = () => {
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
-  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const { dispatchUser, stateUser } = React.useContext(contexts.UserContext);
   const { detail } = UserHookFunc.useStoreDetailAction();
   const { upload, save } = useUploadImageAction();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
-  const [imageUrl, setImageUrl] = React.useState('');
+  const [imageUrl, setImageUrl] = React.useState<string | undefined>('');
 
   React.useEffect(() => {
+    switch (params.type) {
+      case 'npwp': {
+        setImageUrl(stateUser.detail.data?.ownerData.profile.taxImageUrl);
+        break;
+      }
+      case 'ktp': {
+        setImageUrl(stateUser.detail.data?.ownerData.profile.idImageUrl);
+        break;
+      }
+      case 'selfie': {
+        setImageUrl(stateUser.detail.data?.ownerData.profile.selfieImageUrl);
+        break;
+      }
+    }
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
@@ -38,14 +83,7 @@ const MerchantEditPhotoView = () => {
 
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data !== null) {
-      setImageUrl(stateGlobal.uploadImage.data.url + '.jpeg');
-      ToastAndroid.showWithGravityAndOffset(
-        `Berhasil Update Foto ${params.type.toUpperCase()}`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
+      setImageUrl(stateGlobal.uploadImage.data.url);
       resetCamera();
     }
 
@@ -62,6 +100,13 @@ const MerchantEditPhotoView = () => {
 
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        `Berhasil Update Foto ${params.type.toUpperCase()}`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
       goBack();
       reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
@@ -79,6 +124,7 @@ const MerchantEditPhotoView = () => {
   }, [stateMerchant.profileEdit]);
 
   const handleUpdatePhoto = () => {
+    save(dispatchGlobal, '');
     const data = {};
     switch (params.type) {
       case 'npwp': {
@@ -129,7 +175,7 @@ const MerchantEditPhotoView = () => {
               size="small"
               type="tertiary"
               title="Ubah Foto"
-              onPress={() => openCamera(params?.type || 'ktp')}
+              onPress={() => openCamera(params?.type)}
               disabled={false}
             />
           </View>
@@ -162,15 +208,10 @@ const MerchantEditPhotoView = () => {
           isImageAvailable,
           renderImagePreview(),
           <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
+            rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}
             imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto NPWP"
-            rules={[
-              'Pastikan NPWP sesuai dengan identitas Anda',
-              'NPWP Tidak silau dan tidak buram',
-              'Pastikan NPWP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi NPWP',
-            ]}
+            title={`Unggah Foto ${params.type.toUpperCase()}`}
+            rules={setRules(params.type)}
             action={() => openCamera(params?.type)}
           />,
         )}
