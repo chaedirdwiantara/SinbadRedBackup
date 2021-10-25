@@ -1,7 +1,13 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { color, SnbContainer, SnbText, SnbBottomSheet } from 'react-native-sinbad-ui';
+import { View, TouchableOpacity, Image } from 'react-native';
+import {
+  color,
+  SnbContainer,
+  SnbText,
+  SnbBottomSheet,
+  SnbButton,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import GridLayoutView from './grid-layout.view';
 import ListLayoutView from './list-layout.view';
@@ -105,18 +111,19 @@ const ProductListView: FC<ProductComponentProps> = ({
   onOrderPress,
 }) => {
   /** === HOOK === */
-  const { 
-    layoutDisplay, 
-    handleActionClick, 
-    sortActive, 
-    filterActive, 
-    filterModalVisible, 
+  const {
+    layoutDisplay,
+    handleActionClick,
+    sortActive,
+    filterActive,
+    filterModalVisible,
     sortModalVisible,
     filterParams,
-    sortDataIndex
+    sortDataIndex,
+    registerSupplierModalVisible,
   } = useBottomAction();
 
-  const { sortData } = useDataSort()
+  const { sortData } = useDataSort();
   /** === VIEW === */
   /** => List */
   const renderList = () =>
@@ -144,40 +151,89 @@ const ProductListView: FC<ProductComponentProps> = ({
 
   /** === RENDER MODAL SORT === */
   const renderModalSort = () => {
-    return <SnbBottomSheet
-      open={sortModalVisible}
-      title={"Urutkan"}
-      action
-      actionIcon="close"
-      content={
-        <Action.SortMenuType1
-          sortDataIndex={sortDataIndex}
-          sortData={sortData}
-          onChange={() => {}}
-        />
-      }
-      closeAction={() => handleActionClick({type: "sort"})}
-    />
+    return (
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title={'Urutkan'}
+        action
+        actionIcon="close"
+        content={
+          <Action.SortMenuType1
+            sortDataIndex={sortDataIndex}
+            sortData={sortData}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'sort' })}
+      />
+    );
   };
 
   /** === RENDER MODAL FILTER === */
   const renderModalFilter = () => {
-    return <SnbBottomSheet
-      open={filterModalVisible}
-      title={"Filter"}
-      action
-      actionIcon="close"
-      content={
-        <Action.FilterMenuType1
-          priceGteMasking={filterParams.priceGteMasking}
-          priceLteMasking={filterParams.priceLteMasking}
-          priceGte={filterParams.priceGte}
-          priceLte={filterParams.priceLte}
-          onChange={() => {}}
-        />
-      }
-      closeAction={() => handleActionClick({type: "filter"})}
-    />
+    return (
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title={'Filter'}
+        action
+        actionIcon="close"
+        content={
+          <Action.FilterMenuType1
+            priceGteMasking={filterParams.priceGteMasking}
+            priceLteMasking={filterParams.priceLteMasking}
+            priceGte={filterParams.priceGte}
+            priceLte={filterParams.priceLte}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'filter' })}
+      />
+    );
+  };
+
+  /** === RENDER MODAL REGISTER SUPPLIER === */
+  const renderModalRegisterSupplier = () => {
+    return (
+      <SnbBottomSheet
+        open={registerSupplierModalVisible}
+        title={' '}
+        action={true}
+        actionIcon="close"
+        content={
+          <View
+            style={{
+              backgroundColor: color.white,
+            }}>
+            <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
+              <Image
+                source={require('../../../../src/assets/images/no_gps.png')}
+                style={{ width: 200, marginBottom: 16 }}
+              />
+              <SnbText.B2 color={color.black100}>
+                Supplier butuh datamu nih
+              </SnbText.B2>
+              <View style={{ marginTop: 8 }}>
+                <SnbText.C1 color={color.black100} align={'center'}>
+                  Kirim data Anda ke supplier untuk dapat berbelanja produk
+                  supplier terkait sekarang yuk !
+                </SnbText.C1>
+              </View>
+            </View>
+            <View style={{ marginTop: 32, height: 72 }}>
+              <SnbButton.Single
+                type="primary"
+                title="Kirim data ke Supplier"
+                onPress={() => console.log('Kirim data ke Supplier')}
+                disabled={false}
+              />
+            </View>
+          </View>
+        }
+        closeAction={() =>
+          handleActionClick({ type: 'registerSupplierVisible' })
+        }
+      />
+    );
   };
 
   /** => Main */
@@ -210,6 +266,7 @@ const ProductListView: FC<ProductComponentProps> = ({
       />
       {renderModalSort()}
       {renderModalFilter()}
+      {renderModalRegisterSupplier()}
     </SnbContainer>
   );
 };
