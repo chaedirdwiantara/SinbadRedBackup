@@ -1,7 +1,18 @@
 /** === IMPORT PACKAGES ===  */
+<<<<<<< HEAD
 import React, { FC, useState, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
+=======
+import React, { FC } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import {
+  color,
+  SnbContainer,
+  SnbText,
+  SnbBottomSheet,
+} from 'react-native-sinbad-ui';
+>>>>>>> f07cab5 (product detail type)
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
@@ -53,6 +64,7 @@ const ProductList: FC<ProductListProps> = ({
   activeKeyword = '',
   activeCategory,
 }) => {
+<<<<<<< HEAD
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
   const [keywordSearched, setKeywordSearched] = useState(false);
@@ -113,6 +125,86 @@ const ProductList: FC<ProductListProps> = ({
       tags,
     };
     onFetch(queryOptions);
+=======
+  /** === HOOK === */
+  const {
+    layoutDisplay,
+    handleActionClick,
+    sortActive,
+    filterActive,
+    filterModalVisible,
+    sortModalVisible,
+    filterParams,
+    sortDataIndex,
+  } = useBottomAction();
+
+  const { sortData } = useDataSort();
+  /** === VIEW === */
+  /** => List */
+  const renderList = () =>
+    layoutDisplay === 'grid' ? (
+      <GridLayoutView
+        data={data}
+        tags={dummyTags}
+        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+        onCardPress={onCardPress}
+        onOrderPress={onOrderPress}
+      />
+    ) : (
+      <ListLayoutView
+        data={dummyProducts}
+        tags={dummyTags}
+        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+        onCardPress={onCardPress}
+        onOrderPress={onOrderPress}
+      />
+    );
+  /** => Content */
+  const renderContent = () => {
+    return <View style={{ flex: 1 }}>{renderList()}</View>;
+  };
+
+  /** === RENDER MODAL SORT === */
+  const renderModalSort = () => {
+    return (
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title={'Urutkan'}
+        action
+        actionIcon="close"
+        content={
+          <Action.SortMenuType1
+            sortDataIndex={sortDataIndex}
+            sortData={sortData}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'sort' })}
+      />
+    );
+  };
+
+  /** === RENDER MODAL FILTER === */
+  const renderModalFilter = () => {
+    return (
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title={'Filter'}
+        action
+        actionIcon="close"
+        content={
+          <Action.FilterMenuType1
+            priceGteMasking={filterParams.priceGteMasking}
+            priceLteMasking={filterParams.priceLteMasking}
+            priceGte={filterParams.priceGte}
+            priceLte={filterParams.priceLte}
+            onChange={() => {}}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'filter' })}
+      />
+    );
+>>>>>>> f07cab5 (product detail type)
   };
   /** === VIEW === */
   return (

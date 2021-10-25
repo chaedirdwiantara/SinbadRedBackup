@@ -36,9 +36,8 @@ const getList = (payload: models.ProductListProcessProps) => {
   );
 };
 
-/** => product detail */
-const getDetail = (data: models.DetailProcessProps) => {
-  const path = `products/${data.id}`;
+const getDetail = (payload: models.DetailProcessProps) => {
+  const path = `products/${payload.id}`;
   return apiMapping<models.ProductList[]>(
     'public',
     path,
@@ -47,7 +46,7 @@ const getDetail = (data: models.DetailProcessProps) => {
     'DETAIL',
   );
 };
-/** === EXPORT FUNCTIONS === */
+
 export const ProductApi = {
   getList,
   getDetail,
