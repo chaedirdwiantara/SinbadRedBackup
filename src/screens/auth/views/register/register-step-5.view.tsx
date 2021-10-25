@@ -18,11 +18,11 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const storeName = useInput();
-  const storeSize = useInput();
-  const topBrand = useInput();
-  const wantedBrand = useInput();
   const { saveStoreData, merchantData } = useMerchant();
+  const storeName = useInput(merchantData.name);
+  const storeSize = useInput(merchantData.largeArea);
+  const topBrand = useInput(merchantData.topSellingBrand);
+  const wantedBrand = useInput(merchantData.mostWantedBrand);
   const { navigate } = useNavigation();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
   const [numOfEmployee, setNumOfEmployee] = React.useState<any>(null);

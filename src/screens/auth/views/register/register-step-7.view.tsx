@@ -66,7 +66,7 @@ const Content: React.FC = () => {
         height * 0.25,
       );
     }
-  }, [stateGlobal.uploadImage, capturedImage.data]);
+  }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
     if (registerState.data?.data?.isCreated === true) {

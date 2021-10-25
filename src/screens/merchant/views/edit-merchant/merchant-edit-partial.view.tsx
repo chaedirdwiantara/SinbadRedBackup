@@ -159,15 +159,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         });
         break;
       }
-      case 'merchantOwnerImageId': {
-        break;
-      }
-      case 'merchantOwnerImageTax': {
-        break;
-      }
-      case 'merchantOwnerImageSelfie': {
-        break;
-      }
       case 'merchantAccountImage': {
         break;
       }
