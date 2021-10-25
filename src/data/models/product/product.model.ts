@@ -83,3 +83,33 @@ export interface ProductDetailSuccessProps {
   tags: string[];
   images: ImagesList[];
 }
+
+/** === IMAGE === */
+export interface ImagesList {
+  url: string;
+}
+
+/** === PRODUCT DETAIL === */
+export interface ProductDetailSuccessProps {
+  id: string;
+  supplierCode: string;
+  supplierId: string;
+  name: string;
+  detail: string;
+  description: string;
+  productWeight: number;
+  productDimension: number;
+  packagedWeight: number;
+  packagedDimension: number;
+  minQty: number;
+  minQtyType: string;
+  packagedQty: number;
+  multipleQty: number;
+  multipleQtyType: string;
+  brand: string;
+  subBrand: string;
+  category?: string[] | string | null;
+  unit: string;
+  tags: string[];
+  images: ImagesList[];
+}
