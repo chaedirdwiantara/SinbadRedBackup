@@ -44,6 +44,22 @@ function setRules(type: string) {
   }
 }
 
+function setImage(type: string) {
+  switch (type) {
+    case 'npwp': {
+      return require('../../../../assets/images/npwp_image.png');
+    }
+    case 'ktp': {
+      return require('../../../../assets/images/ktp_image.png');
+    }
+    case 'selfie': {
+      return require('../../../../assets/images/selfie_image.png');
+    }
+    default:
+      return ' ';
+  }
+}
+
 const MerchantEditPhotoView = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { goBack } = useNavigation();
@@ -209,7 +225,7 @@ const MerchantEditPhotoView = () => {
           renderImagePreview(),
           <SnbUploadPhotoRules
             rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}
-            imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+            imgSrc={setImage(params.type)}
             title={`Unggah Foto ${params.type.toUpperCase()}`}
             rules={setRules(params.type)}
             action={() => openCamera(params?.type)}
