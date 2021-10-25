@@ -7,9 +7,9 @@ const goBack = () => {
 };
 /** => go to banner list */
 const goToBanner = () => {
-  NavigationAction.navigate('BannerView');
+  NavigationAction.navigate('BannerListView');
 };
-/** => go to banner list */
+/** => go to banner Detail */
 const goToBannerDetail = () => {
   NavigationAction.navigate('BannerDetailView');
 };
