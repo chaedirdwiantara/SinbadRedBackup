@@ -17,7 +17,8 @@ export type BottomActionPressHandlerType =
   | 'resetFilter'
   | 'applyFilter'
   | 'layout'
-  | 'category';
+  | 'category'
+  | 'registerSupplierVisible';
 export type BottomActionPressHandler = ({
   type,
   value,

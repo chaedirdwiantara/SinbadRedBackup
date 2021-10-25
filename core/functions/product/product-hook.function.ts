@@ -38,12 +38,14 @@ export const useBottomAction = () => {
   const [filterActive, setFilterActive] = useState(false);
   const [filterQuery, setFilterQuery] = useState<FilterQuery | null>(null);
   const [filterParams, setFilterParams] = useState<FilterParams>({
-    priceGteMasking: "",
-    priceLteMasking: "",
+    priceGteMasking: '',
+    priceLteMasking: '',
     priceGte: 0,
-    priceLte: 0
+    priceLte: 0,
   });
   const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
+  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
+    useState<boolean>(true);
 
   const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
     switch (type) {
@@ -62,7 +64,7 @@ export const useBottomAction = () => {
         // setFilterQuery
         setFilterQuery(value as FilterQuery);
         setFilterModalVisible(false);
-        if(!filterQuery) {
+        if (!filterQuery) {
           setFilterActive(false);
         } else {
           setFilterActive(true);
@@ -79,6 +81,9 @@ export const useBottomAction = () => {
       case 'category':
         goToCategory();
         break;
+      case 'registerSupplierVisible':
+        setRegisterSupplierModalVisible((prev) => !prev);
+        break;
       default:
         throw new Error(`Unknown bottom action type: ${type}`);
     }
@@ -93,6 +98,7 @@ export const useBottomAction = () => {
     filterParams,
     filterActive,
     layoutDisplay,
+    registerSupplierModalVisible,
     handleActionClick,
   };
 };
@@ -112,6 +118,6 @@ export const useDataSort = () => {
   ];
 
   return {
-    sortData
-  }
-}
+    sortData,
+  };
+};
