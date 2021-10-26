@@ -45,13 +45,11 @@ const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
     list: (contextDispatch: (action: any) => any) => {
-      console.log('called 1');
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
-      console.log('called 1 - r');
       contextDispatch(Actions.voucherCartListReset());
     },
   };
