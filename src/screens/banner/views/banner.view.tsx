@@ -46,6 +46,11 @@ const bannerList = [
 /** === COMPONENT === */
 const BannerListView: React.FC = () => {
   /** === HOOK === */
+  /** === FUNCTION === */
+  /** => handle fatch more */
+  const handleFatchMore = () => {
+    //function to handle lazy load
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -128,7 +133,7 @@ const BannerListView: React.FC = () => {
           renderItem={renderListBanner}
           keyExtractor={(item) => item.id.toString()}
           onEndReachedThreshold={0.1}
-          onEndReached={() => {}}
+          onEndReached={() => handleFatchMore()}
           showsVerticalScrollIndicator={true}
         />
       </View>
