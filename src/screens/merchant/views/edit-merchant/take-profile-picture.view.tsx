@@ -23,10 +23,8 @@ const TakeProfilePictureView: FC = () => {
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
-  const { stateMerchant, dispatchSupplier } = React.useContext(
-    contexts.MerchantContext,
-  );
-  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
+  const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
@@ -41,21 +39,22 @@ const TakeProfilePictureView: FC = () => {
   useEffect(() => {
     if (stateGlobal.uploadImage.data) {
       const data = {
-        user: { imageUrl: stateGlobal.uploadImage.data.url },
+        imageUrl: stateGlobal.uploadImage.data.url,
       };
-      editMerchantAction.editMerchant(dispatchSupplier, {
+      editProfileAction.editProfile(dispatchUser, {
         data,
       });
     }
   }, [stateGlobal.uploadImage.data]);
   useEffect(() => {
-    if (stateMerchant.merchantEdit.data) {
+    if (stateUser.profileEdit.data) {
       editMerchantAction.reset(dispatchSupplier);
       storeDetailAction.detail(dispatchUser, { id: '3' });
+      editProfileAction.reset(dispatchUser);
       NavigationAction.back();
       save(dispatchGlobal, '');
     }
-  }, [stateMerchant.merchantEdit.data]);
+  }, [stateUser]);
   //FUNCTION
   const takePicture = async () => {
     if (camera) {
