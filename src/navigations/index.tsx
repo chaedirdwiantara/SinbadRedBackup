@@ -10,6 +10,7 @@ import BannerNav from './banner.navigation';
 import HistoryNav from './history.navigation';
 import BrandNav from './brand.navigations';
 import SearchNav from './search.navigation';
+import VoucherNav from './voucher.navigation';
 
 const index = {
   ...OmsNav,
@@ -24,6 +25,7 @@ const index = {
   ...HistoryNav,
   ...BrandNav,
   ...SearchNav,
+  ...VoucherNav,
 };
 
 export default index;
