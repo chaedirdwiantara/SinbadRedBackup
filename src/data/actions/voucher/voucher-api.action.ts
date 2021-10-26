@@ -4,7 +4,7 @@ import * as models from '@models';
 /** => voucher detail process */
 export const voucherDetailProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
+  data: models.VoucherDetailProcessProps,
 ): models.DetailProcessAction => {
   contextDispatch({ type: types, payload: data });
   return {

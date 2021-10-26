@@ -1,13 +1,12 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMappingMock from '@core/services/apiMappingMock';
+import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
-const voucherDetail = (data: models.DetailProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = `voucher-cart-list/${data.id}`;
-  return apiMappingMock<models.VoucherDetailProps>(
-    mockHost,
+const voucherDetail = (data: models.VoucherDetailProcessProps) => {
+  const path = `voucher-cart-list/detail/${data.id}?type=${data.type}`;
+  return apiMapping<models.VoucherDetailProps>(
+    'auth',
     path,
     'discount',
     'v1',
@@ -16,10 +15,9 @@ const voucherDetail = (data: models.DetailProcessProps) => {
 };
 /** => voucher cart list */
 const voucherCartList = () => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = 'voucher-cart-list';
-  return apiMappingMock<models.VoucherCartListProps>(
-    mockHost,
+  return apiMapping<models.VoucherCartListProps>(
+    'auth',
     path,
     'discount',
     'v1',

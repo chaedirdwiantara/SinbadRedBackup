@@ -209,7 +209,7 @@ const VoucherCartListView: FC = () => {
               />
               <TouchableOpacity
                 testID={`voucherCartListView.sinbadVoucherDetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.voucherId)}>
+                onPress={() => goToVoucherDetail(item.voucherId, 'supplier')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -321,7 +321,7 @@ const VoucherCartListView: FC = () => {
                 testID={`voucherCartListView.${camelize(
                   item.invoiceGroupName,
                 )}DetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.id)}>
+                onPress={() => goToVoucherDetail(item.id, 'supplier')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -423,7 +423,6 @@ const VoucherCartListView: FC = () => {
       );
     }
   };
-  console.log(stateVoucher);
   /** => main */
   return (
     <SnbContainer color="grey">

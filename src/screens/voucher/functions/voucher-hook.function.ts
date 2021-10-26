@@ -10,8 +10,12 @@ import { contexts } from '@contexts';
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    detail: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      type: string,
+    ) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id, type }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.voucherDetailReset());
