@@ -64,7 +64,6 @@ const useProductListActions = () => {
     },
   };
 };
-
 /** === Fetch Product Tag List Related === */
 const useTagListActions = () => {
   const dispatch = useDispatch();
@@ -96,7 +95,18 @@ const useTagListActions = () => {
     },
   };
 };
-
+/** => product detail action */
+const useProductDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.productDetailReset());
+    },
+  };
+};
 /** === Add to Cart Modal Related === */
 const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
@@ -132,5 +142,18 @@ export {
   useProductListActions,
   useOrderModalVisibility,
   useOrderQuantity,
+  useProductDetailAction,
   useTagListActions,
 };
+/**
+ * ================================================================
+ * NOTES
+ * ================================================================
+ * createdBy: hasapu (team)
+ * createDate: 01022021
+ * updatedBy: aliisetia
+ * updatedDate: 27-10-21
+ * updatedFunction/Component:
+ * -> NaN (no desc)
+ * -> NaN (no desc)
+ */
