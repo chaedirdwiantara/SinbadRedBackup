@@ -8,6 +8,8 @@ import {
 import {
   MerchantEditView,
   MerchantBankAccountView,
+  MerchantEditAddressView,
+  MerchantEditPhotoView,
 } from '@screen/merchant/views/edit-merchant';
 
 const MerchantNav = {
@@ -29,8 +31,14 @@ const MerchantNav = {
   MerchantDetailAddressView: {
     component: MerchantDetailAddressView,
   },
+  MerchantEditAddressView: {
+    component: MerchantEditAddressView,
+  },
   MerchantBankAccountView: {
     component: MerchantBankAccountView,
+  },
+  MerchantEditPhotoView: {
+    component: MerchantEditPhotoView,
   },
 };
 

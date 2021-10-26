@@ -29,7 +29,7 @@ function* editMerchant(action: models.UpdateProcessAction) {
     });
     yield action.contextDispatch(ActionCreators.merchantEditSuccess(response));
     yield put(ActionCreators.merchantEditSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.merchantEditFailed(error));
     yield put(ActionCreators.merchantEditFailed(error));
   }
@@ -42,7 +42,7 @@ function* editProfile(action: models.UpdateProcessAction) {
     });
     yield action.contextDispatch(ActionCreators.profileEditSuccess(response));
     yield put(ActionCreators.profileEditSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.profileEditFailed(error));
     yield put(ActionCreators.profileEditFailed(error));
   }

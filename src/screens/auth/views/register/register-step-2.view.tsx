@@ -1,4 +1,4 @@
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -19,7 +19,7 @@ const { height } = Dimensions.get('screen');
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
-  const { registerData, saveRegisterUserData } = useRegister();
+  const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -44,7 +44,7 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ idImageUrl: stateGlobal.uploadImage.data.url });
+      saveUserData({ idImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
@@ -63,7 +63,7 @@ const Content: React.FC = () => {
     return (
       <SnbUploadPhotoRules
         rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
-        imgSrc="https://s3-alpha-sig.figma.com/img/4e9b/f869/7b2c7d944da2051c0422f41d9b920d88?Expires=1631491200&Signature=J4sqf6bKuDT1xGesaA2s6W~h7ResGV9fSs6BnX60OWPNU5UMKhkZFnpHxcWH~RXRIVrBam5n5v6jVA8piyLprV5ab3l2-E3ar2ueK2X9K~wNQowIocdAheGhv5EanU6PiWyvQFls-LA7HkQeKOoJ17SHG~C2Xu9C~7RVT6JjlCVZg3bO8luil9pQI5BbatUEcSy8KkLLhrlpj9416wagJGFjpPhP-mrd6ssG2lFZ1dFYE2YfTY8Z35-Fjlyf7pBgWYOGFe4E2MqKpCifyFKR6qITS99qOxrDl~aDmsi0y8Bo0ycobady9GYe5D2X7J9L63uGrG9rWszKvzmozmg3rw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+        imgSrc={require('../../../../assets/images/ktp_image.png')}
         title="Unggah Foto KTP"
         buttonLabel="Ambil Foto KTP"
         rules={[
@@ -90,7 +90,7 @@ const Content: React.FC = () => {
         upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.user?.idImageUrl;
+      uri = merchantData.user?.idImageUrl;
     }
 
     return (
@@ -132,7 +132,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.user?.idImageUrl !== '' || capturedImage.data?.type === 'ktp';
+    merchantData?.user?.idImageUrl !== '' || capturedImage.data?.type === 'ktp';
 
   return (
     <View style={{ flex: 1 }}>

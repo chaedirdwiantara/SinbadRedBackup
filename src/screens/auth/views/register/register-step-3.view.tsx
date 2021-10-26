@@ -1,4 +1,4 @@
-import { renderIF, useCamera, useRegister } from '@screen/auth/functions';
+import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
 import {
@@ -18,7 +18,7 @@ const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { registerData, saveRegisterUserData } = useRegister();
+  const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -44,7 +44,7 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({
+      saveUserData({
         selfieImageUrl: stateGlobal.uploadImage.data.url,
       });
       resetCamera();
@@ -59,13 +59,13 @@ const Content: React.FC = () => {
         height * 0.25,
       );
     }
-  }, [stateGlobal.uploadImage, capturedImage.data]);
+  }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
         rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-        imgSrc="https://s3-alpha-sig.figma.com/img/a472/29ec/6a39c819ea1b71b155ef102e6fe133bb?Expires=1631491200&Signature=He7sZQIlhUQ0DT5S567y7n5RRrp~Dc6oiBzC4dt4Y6pVQ9nTeR9sE3zGwpOndPB32dHUYkkdXh4eSvUkSa5zE-wN-6nTtDza3v~9oCnKccJxq285UsTfYT4Gotg7eBG7Ln-MIVcLKDSLL6rXbs1j5PdSCzyyLKp3CRrYavT9gOY7oCOKZvS7FHztGcQD885sYjyhwYd0dZcNM1XbSQpZllj3d0oRRaJqQIMZOVO6NH9E-U81LToTapltMzPQUXuwJr1qN3wnOjHDM2C6unmWCbPL07CXJJOhtp0vExmwUfOvdLc6z3N2fNeSCVx7~UAJ-GI48i~f0B4YoeDgMsb0Dw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+        imgSrc={require('../../../../assets/images/selfie_image.png')}
         title="Unggah Foto Selfie KTP"
         buttonLabel="Ambil Foto Selfie & KTP"
         rules={[
@@ -93,7 +93,7 @@ const Content: React.FC = () => {
         upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.user?.selfieImageUrl;
+      uri = merchantData.user?.selfieImageUrl;
     }
     return (
       <View style={{ flex: 1 }}>
@@ -136,7 +136,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.user?.selfieImageUrl !== '' ||
+    merchantData?.user?.selfieImageUrl !== '' ||
     capturedImage.data?.type === 'selfie';
   return (
     <View style={{ flex: 1 }}>

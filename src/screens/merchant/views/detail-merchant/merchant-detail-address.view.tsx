@@ -10,11 +10,25 @@ import { NavigationAction } from '@navigation';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import MapView, { Marker } from 'react-native-maps';
+import { useMerchant } from '@screen/auth/functions';
 
 const MerchantDetailAddressView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   let mapRef = React.useRef<MapView>(null);
+  const { resetMerchantData } = useMerchant();
+
+  React.useEffect(() => {
+    if (storeAddress.longitude !== null && storeAddress.latitude !== null) {
+      mapRef.current?.animateToRegion({
+        latitude: storeAddress?.latitude || 0,
+        longitude: storeAddress?.longitude || 0,
+        longitudeDelta: 0.02,
+        latitudeDelta: 0.02,
+      });
+    }
+  }, [storeAddress]);
 
   /** === VIEW === */
   /** => header */
@@ -25,12 +39,10 @@ const MerchantDetailAddressView: FC = () => {
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
-        buttonAction={() =>
-          NavigationAction.navigate('MerchantEditView', {
-            title: 'Alamat Toko',
-            type: 'merchantAddress',
-          })
-        }
+        buttonAction={() => {
+          resetMerchantData();
+          NavigationAction.navigate('MerchantEditAddressView');
+        }}
       />
     );
   };
@@ -41,10 +53,8 @@ const MerchantDetailAddressView: FC = () => {
         <MapView
           ref={mapRef}
           initialRegion={{
-            latitude:
-              stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-            longitude:
-              stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+            latitude: storeAddress.latitude || 0,
+            longitude: storeAddress.longitude || 0,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           }}
@@ -64,10 +74,8 @@ const MerchantDetailAddressView: FC = () => {
           }}>
           <Marker
             coordinate={{
-              latitude:
-                stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-              longitude:
-                stateUser.detail.data?.storeData.storeAddress.longitude || 0,
+              latitude: storeAddress.latitude || 0,
+              longitude: storeAddress.longitude || 0,
             }}
           />
         </MapView>
@@ -76,7 +84,6 @@ const MerchantDetailAddressView: FC = () => {
   };
   /** input */
   const renderInput = () => {
-    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
     return (
       <View style={{ marginTop: 16, marginHorizontal: 16 }}>
         <View style={{ marginBottom: 16 }}>
@@ -84,7 +91,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Provinsi'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.province ? dataAddress?.province : '-'}
+            value={storeAddress?.province || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -94,7 +101,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kota'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.city ? dataAddress?.city : '-'}
+            value={storeAddress?.city || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -104,7 +111,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kecamatan'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.district ? dataAddress?.district : '-'}
+            value={storeAddress?.district || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -114,7 +121,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kelurahan'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.urban ? dataAddress?.urban : '-'}
+            value={storeAddress?.urban || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -124,7 +131,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Kodepos'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.zipCode ? dataAddress?.zipCode : '-'}
+            value={storeAddress?.zipCode || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -134,7 +141,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Alamat'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.address ? dataAddress?.address : '-'}
+            value={storeAddress?.address ? storeAddress?.address : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />
@@ -144,7 +151,7 @@ const MerchantDetailAddressView: FC = () => {
             labelText={'Catatan Alamat'}
             placeholder={'-'}
             type={'default'}
-            value={dataAddress?.noteAddress ? dataAddress?.noteAddress : '-'}
+            value={storeAddress?.noteAddress || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
           />

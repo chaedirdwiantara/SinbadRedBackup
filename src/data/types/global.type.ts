@@ -31,3 +31,8 @@ export const GET_LOCATION_PROCESS = 'GetLocationProcess';
 export const GET_LOCATION_SUCCESS = 'GetLocationSuccess';
 export const GET_LOCATION_FAILED = 'GetLocationFailed';
 export const GET_LOCATION_RESET = 'GetLocationReset';
+
+// COLLECT REGISTER DATA
+export const SAVE_STORE_DATA = 'SaveStoreData';
+export const SAVE_USER_DATA = 'SaveUserData';
+export const RESET_MERCHANT_DATA = 'ResetMerchantData';

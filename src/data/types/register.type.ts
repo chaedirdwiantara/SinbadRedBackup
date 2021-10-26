@@ -10,11 +10,6 @@ export const CHECK_EMAIL_AVAILABILITY_SUCCESS = 'CheckEmailAvailableSuccess';
 export const CHECK_EMAIL_AVAILABILITY_FAILED = 'CheckEmailAvailableFailed';
 export const CHECK_EMAIL_AVAILABILITY_RESET = 'CheckEmailAvailableReset';
 
-// COLLECT REGISTER DATA
-export const SAVE_REGISTER_STORE_DATA = 'SaveRegisterStoreData';
-export const SAVE_REGISTER_USER_DATA = 'SaveRegisterUserData';
-export const RESET_REGISTER_DATA = 'ResetRegisterData';
-
 // REGISTER MERCHANT
 export const REGISTER_MERCHANT_PROCESS = 'RegisterMerchantProcess';
 export const REGISTER_MERCHANT_SUCCESS = 'RegisterMerchantSuccess';

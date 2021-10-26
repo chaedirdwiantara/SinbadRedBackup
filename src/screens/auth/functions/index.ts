@@ -10,6 +10,7 @@ import {
   useRegister,
 } from './register-hooks.functions';
 import {
+  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
@@ -25,7 +26,7 @@ export {
   useCamera,
   useTextFieldSelect,
   useCheckPhoneNoAvailability,
-  useRegister,
+  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
@@ -34,4 +35,5 @@ export {
   useOTP,
   useAuthAction,
   extractAddress,
+  useRegister,
 };
