@@ -107,6 +107,7 @@ const useProductDetailAction = () => {
     },
   };
 };
+
 /** === Add to Cart Modal Related === */
 const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
