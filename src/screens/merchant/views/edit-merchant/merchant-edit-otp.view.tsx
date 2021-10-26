@@ -66,8 +66,6 @@ const OTPContent: React.FC<Props> = (props) => {
     }
   };
 
-  console.log('disini:', stateMerchant);
-  
   useEffect(() => {
     if (
       stateMerchant.verificationEmail.data ||

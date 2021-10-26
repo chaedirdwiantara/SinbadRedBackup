@@ -21,7 +21,6 @@ import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
-import { LoginPhoneView } from '@screen/auth/views';
 
 const UserView: FC = () => {
   /** === HOOK === */
@@ -30,7 +29,7 @@ const UserView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useFocusEffect(
     React.useCallback(() => {
-      const storeDetail = storeDetailAction.detail(dispatchUser);
+      const storeDetail = storeDetailAction.detail(dispatchUser, { id: '' });
       return storeDetail;
     }, []),
   );

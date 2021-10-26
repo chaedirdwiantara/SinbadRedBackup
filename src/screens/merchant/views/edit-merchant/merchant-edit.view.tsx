@@ -34,47 +34,7 @@ const MerchantEditView: FC<Props> = (props) => {
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
         return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            // source={props.navigation.state.params.source}
-            showButton
-          />
-        );
-      case 'merchantOwnerImageTax':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'tax'}
-          />
-        );
-      case 'merchantOwnerImageId':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'id'}
-          />
-        );
-      case 'merchantOwnerImageSelfie':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'selfie'}
-          />
-        );
-      case 'merchantAccountImage':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'merchant'}
-          />
+          <MerchantEditPartialView type={props.route.params.type} showButton />
         );
       default:
         break;
@@ -82,8 +42,6 @@ const MerchantEditView: FC<Props> = (props) => {
   };
   /** => content */
   const content = () => {
-    console.log('nih:', props.route.params);
-
     return (
       <ScrollView
         contentContainerStyle={{ flex: 1 }}

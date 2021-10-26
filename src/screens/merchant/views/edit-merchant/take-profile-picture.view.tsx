@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  ToastAndroid,
 } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -47,14 +48,27 @@ const TakeProfilePictureView: FC = () => {
     }
   }, [stateGlobal.uploadImage.data]);
   useEffect(() => {
-    if (stateUser.profileEdit.data) {
+    if (stateUser.profileEdit.data !== null) {
       editMerchantAction.reset(dispatchSupplier);
       storeDetailAction.detail(dispatchUser, { id: '3' });
       editProfileAction.reset(dispatchUser);
       NavigationAction.back();
       save(dispatchGlobal, '');
     }
-  }, [stateUser]);
+  }, [stateUser.profileEdit]);
+
+  useEffect(() => {
+    if (stateGlobal.uploadImage.error !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        `${stateGlobal.uploadImage.error.message}`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
+      NavigationAction.back();
+    }
+  });
   //FUNCTION
   const takePicture = async () => {
     if (camera) {
@@ -68,7 +82,6 @@ const TakeProfilePictureView: FC = () => {
       camera
         .takePictureAsync(options)
         .then((data: { uri: any }) => {
-          console.log(data);
           save(dispatchGlobal, data.uri);
         })
         .catch(() => {});
@@ -80,13 +93,10 @@ const TakeProfilePictureView: FC = () => {
         ref={(ref) => {
           camera = ref;
         }}
-        aspect={1}
         style={styles.preview}
         type={RNCamera.Constants.Type.front}
         captureAudio={false}
-        defaultTouchToFocus
         flashMode={RNCamera.Constants.FlashMode.on}
-        clearWindowBackground={false}
         androidCameraPermissionOptions={{
           title: 'Permission to use camera',
           message: 'We need your permission to use your camera',

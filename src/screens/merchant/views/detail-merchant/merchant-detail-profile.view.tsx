@@ -71,7 +71,7 @@ const MerchantDetailProfileView: FC = () => {
             style={MerchantStyles.imageProfile}
           />
         ) : (
-          <Svg name={'avatar'} size={50} color={color.red50} />
+          <Svg name={'avatar'} size={100} color={color.red50} />
         )}
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}

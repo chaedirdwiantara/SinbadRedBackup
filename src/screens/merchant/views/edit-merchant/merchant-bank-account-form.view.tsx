@@ -75,7 +75,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       />
     );
   };
-  console.log('bank:', stateUser);
 
   /** content */
   const renderContent = () => {

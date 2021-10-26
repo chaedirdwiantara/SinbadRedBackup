@@ -20,10 +20,15 @@ const MerchantDetailAccountView: FC = () => {
     switch (data.type) {
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
-      case 'merchantAccountImage':
         NavigationAction.navigate('MerchantEditView', {
           title: data.title,
           type: data.type,
+        });
+        break;
+      case 'merchantAccountImage':
+        NavigationAction.navigate('MerchantEditPhotoView', {
+          title: data.title,
+          type: 'store',
         });
         break;
       default:
@@ -110,6 +115,8 @@ const MerchantDetailAccountView: FC = () => {
               ? 'Berhasil Di Upload'
               : 'Gagal Verifikasi',
             action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
+            type: 'merchantAccountImage',
+            title: 'Foto Toko',
           })}
         </View>
       </ScrollView>

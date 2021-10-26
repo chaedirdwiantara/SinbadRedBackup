@@ -39,6 +39,13 @@ function setRules(type: string) {
         'Hindari Tangan Menutupi KTP',
       ];
     }
+    case 'store': {
+      return [
+        'Siapkan Kamera',
+        'Hindari Tangan Menutupi Kamera',
+        'Pastikan Foto Toko terlihat dengan jelas',
+      ];
+    }
     default:
       return [];
   }
@@ -65,6 +72,7 @@ const MerchantEditPhotoView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
   const { editProfile, reset } = MerchantHookFunc.useEditProfile();
+  const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
@@ -88,6 +96,13 @@ const MerchantEditPhotoView = () => {
       }
       case 'selfie': {
         setImageUrl(stateUser.detail.data?.ownerData.profile.selfieImageUrl);
+        break;
+      }
+      case 'store': {
+        setImageUrl(
+          stateUser.detail.data?.storeData.storeInformation.storeAccount
+            .imageUrl,
+        );
         break;
       }
     }
@@ -139,24 +154,58 @@ const MerchantEditPhotoView = () => {
     }
   }, [stateMerchant.profileEdit]);
 
+  React.useEffect(() => {
+    if (stateMerchant.merchantEdit.data !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        `Berhasil Update Foto ${params.type.toUpperCase()}`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
+      goBack();
+      reset(dispatchSupplier);
+      detail(dispatchUser, { id: '' });
+    }
+
+    if (stateMerchant.merchantEdit.error !== null) {
+      ToastAndroid.showWithGravityAndOffset(
+        `Update Foto ${params.type.toUpperCase()} Gagal`,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
+    }
+  }, [stateMerchant.merchantEdit]);
+
   const handleUpdatePhoto = () => {
     save(dispatchGlobal, '');
     const data = {};
     switch (params.type) {
       case 'npwp': {
         Object.assign(data, { taxImageUrl: imageUrl });
+        editProfile(dispatchSupplier, { data });
         break;
       }
       case 'ktp': {
         Object.assign(data, { idImageUrl: imageUrl });
+        editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
         Object.assign(data, { selfieImageUrl: imageUrl });
+        editProfile(dispatchSupplier, { data });
+        break;
+      }
+      case 'store': {
+        Object.assign(data, { image: imageUrl });
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
         break;
       }
     }
-    editProfile(dispatchSupplier, { data });
   };
 
   const renderImagePreview = () => {

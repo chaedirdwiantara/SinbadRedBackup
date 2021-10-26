@@ -1,12 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
-  SnbUploadPhotoRules,
-  SnbToast,
 } from 'react-native-sinbad-ui';
-import { Image, ScrollView, View } from 'react-native';
+import { ScrollView, View, ToastAndroid } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -15,7 +13,6 @@ import { MerchantHookFunc, useInput } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
-import { renderIF, useCamera } from '@screen/auth/functions';
 
 interface Props {
   type: any;
@@ -35,23 +32,19 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   );
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { dispatchUser } = React.useContext(contexts.UserContext);
-  const [isOpenToast, setIsOpenToast] = useState(false);
-  const [toasMessage, setToastMessage] = useState('');
   const { gotoSelection, selectedItem, resetSelectedItem } =
     useTextFieldSelect();
   const storeData = stateUser.detail.data?.storeData.storeInformation;
-  const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { resetUploadImage, state: uploadData } = useUploadImage();
   // USER DATA
   const ownerName = useInput(ownerData?.name || '');
   const ownerEmail = useInput(ownerData?.email || '');
   const noKtp = useInput(ownerData?.idNo || '');
   const noNPWP = useInput(ownerData?.taxNo || '');
   const mobilePhone = useInput(ownerData?.mobilePhone || '');
+  //MERCHANT DATA
+  const merchantName = useInput(storeData?.storeAccount?.name || '');
+  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
   // COMPLETNESS DATA
-  const merchantName = useInput(
-    storeData?.storeAccount?.name ? storeData.storeAccount?.name : '',
-  );
   const numberOfEmployee = useInput(
     storeData?.storeDetailCompleteness?.numberOfEmployee || '',
   );
@@ -70,14 +63,19 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
-  // FUNCTIONAL
-  useEffect(() => {
-    resetCamera();
-    resetUploadImage();
-  }, []);
 
   useEffect(() => {
-    if (stateMerchant.profileEdit.data || stateMerchant.merchantEdit.data) {
+    if (
+      stateMerchant.profileEdit.data !== null ||
+      stateMerchant.merchantEdit.data !== null
+    ) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Success',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
@@ -86,13 +84,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      setToastMessage('failed');
-      setIsOpenToast(true);
-      setTimeout(() => {
-        setIsOpenToast(false);
-        editMerchantAction.reset(dispatchSupplier);
-        editProfileAction.reset(dispatchSupplier);
-      }, 2000);
+      ToastAndroid.showWithGravityAndOffset(
+        'Failed',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
     }
   }, [stateMerchant]);
 
@@ -108,7 +106,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         data: mobilePhone.value,
       });
     }
-  }, [stateMerchant]);
+  }, [stateMerchant.changeEmail]);
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
@@ -182,6 +180,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
       }
       case 'merchantAccountPhoneNo': {
+        data = {
+          phoneNo: merchantPhoneNo.value,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
         break;
       }
       case 'merchantCompletenessInformation': {
@@ -196,9 +200,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
         });
-        break;
-      }
-      case 'merchantAccountImage': {
         break;
       }
       default:
@@ -223,10 +224,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return noNPWP.value === ownerData?.taxNo;
       case 'merchantOwnerPhoneNo':
         return mobilePhone.value === ownerData?.mobilePhone;
-      case 'merchantOwnerImageId':
-      case 'merchantOwnerImageSelfie':
-      case 'merchantOwnerImageTax':
-      case 'merchantImage':
       case 'merchantAccountName':
         return merchantName.value === storeData?.storeAccount.name;
       case 'merchantAccountPhoneNo':
@@ -245,14 +242,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             storeData?.storeDetailCompleteness.numberOfEmployee
         );
       case 'merchantAddress':
-      // return (
-      //   this.props.global.longitude ===
-      //     this.props.merchant.dataGetMerchantDetail.longitude &&
-      //   this.props.global.latitude ===
-      //     this.props.merchant.dataGetMerchantDetail.latitude &&
-      //   this.state.address === data.address &&
-      //   this.state.noteAddress === data.noteAddress
-      // );
       default:
         break;
     }
@@ -276,18 +265,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerPhoneNo();
       case 'merchantCompletenessInformation':
         return renderCompletenessInformationMerchant();
-      case 'merchantOwnerImageId':
-        return renderOwnerImageId();
-      case 'merchantOwnerImageSelfie':
-        return renderOwnerImageSelfie();
-      case 'merchantOwnerImageTax':
-        return renderOwnerImageTax();
       case 'merchantAccountName':
         return renderMerchantAccountName();
       case 'merchantAccountPhoneNo':
         return renderMerchantAccountPhoneNo();
-      //   case 'merchantAccountImage':
-      //     return renderMerchantAccountImage();
       default:
         break;
     }
@@ -376,118 +357,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
-  /** === RENDER OWNER IMAGE ID === */
-  const renderOwnerImageId = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/4e9b/f869/7b2c7d944da2051c0422f41d9b920d88?Expires=1632096000&Signature=PcMkPhandytpXueLoKbXpj9CUT-4LYOkuxWsfeCUMeMhVNynnb66TmCR6JFZWx-5DLmy0fS0Q6KbGajNdAGbG7DD0Oa76~Z0~1F7K7eItCqYgyCwUL8SGpc~frmLBUqLTqs-NqOea0vPqJifZL-d-nt7IK3XWQ97~IYjB5ujfx87JbeE-k1U-YkQsYjV7zr00rdg4h-gekAhYW0rHN~-4Hm6P8qjFGIaY3p3X4leIanac8HYnx~bpQHIY8HMA-Fz69TxpmamCyKuhau2HwOMcvW2EcYbr4424YrsQUhnNYmsIw7BTckpMk2NYKTXG~3vSzisYypLJQxHItfBZEi0VQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto KTP"
-            rules={[
-              'Pastikan KTP sesuai dengan identitas Anda',
-              'KTP Tidak silau dan tidak buram',
-              'Pastikan KTP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi KTP',
-            ]}
-            action={() => openCamera('ktp')}
-          />,
-        )}
-      </View>
-    );
-  };
-  /** === RENDER OWNER IMAGE Selfie === */
-  const renderOwnerImageSelfie = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto Diri dengan KTP Owner"
-            rules={[
-              'Posisikan KTP di bawah dagu Anda',
-              'KTP Tidak silau dan tidak buram',
-              'Pastikan KTP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi KTP',
-            ]}
-            action={() => openCamera('selfie')}
-          />,
-        )}
-      </View>
-    );
-  };
-
-  /** === RENDER OWNER IMAGE TAX === */
-  const renderOwnerImageTax = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto NPWP"
-            rules={[
-              'Pastikan NPWP sesuai dengan identitas Anda',
-              'NPWP Tidak silau dan tidak buram',
-              'Pastikan NPWP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi NPWP',
-            ]}
-            action={() => openCamera('npwp')}
-          />,
-        )}
-      </View>
-    );
-  };
-
-  const renderImagePreview = () => {
-    const isImageCaptured = capturedImage.data;
-    return (
-      <View style={{ flex: 1 }}>
-        <Image
-          resizeMode="contain"
-          source={{
-            uri: capturedImage?.data?.url,
-          }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 1,
-            margin: 16,
-          }}
-        />
-        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
-          <View style={{ height: 72 }}>
-            <SnbButton.Dynamic
-              size="small"
-              type="tertiary"
-              title="Ubah Foto"
-              onPress={() => openCamera('ktp')}
-              disabled={false}
-            />
-          </View>
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
-              type={isImageCaptured ? 'secondary' : 'primary'}
-              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
-              shadow
-              loading={false}
-              onPress={() => {}}
-              disabled={false}
-            />
-          </View>
-        </View>
-      </View>
-    );
-  };
   /**
    * =====================================
    * RENDER ACCOUNT MERCHANT (AKUN TOKO)
@@ -516,9 +385,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukan Nomor Handphone Toko'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={merchantPhoneNo.value}
+          onChangeText={(text) => merchantPhoneNo.setValue(text)}
+          clearText={() => merchantPhoneNo.setValue('')}
         />
       </View>
     );
@@ -612,16 +481,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
-  /** === RENDER TOAST === */
-  const renderToast = () => {
-    return (
-      <SnbToast
-        open={isOpenToast}
-        message={toasMessage}
-        close={() => setIsOpenToast(false)}
-      />
-    );
-  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -629,9 +488,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         {switchView()}
       </ScrollView>
       {renderButton()}
-      {renderToast()}
-      {/* {renderButtonOpenCamera()} */}
-      {/* {this.state.showModalError && this.renderModalError()} */}
     </View>
   );
 };
