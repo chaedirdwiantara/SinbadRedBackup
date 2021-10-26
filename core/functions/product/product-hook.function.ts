@@ -1,5 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import { useState } from 'react';
+import { Alert } from 'react-native';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
 /** === IMPORT TYPES ===  */
@@ -43,12 +44,15 @@ export const useBottomAction = () => {
     priceGte: 0,
     priceLte: 0,
   });
-  const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
   const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
-    useState<boolean>(true);
+    useState(true);
+  const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
 
   const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
     switch (type) {
+      case 'registerSupplierVisible':
+        setRegisterSupplierModalVisible((prev) => !prev);
+        break;
       case 'sort':
         setSortModalVisible((prev) => !prev);
         break;
@@ -81,8 +85,23 @@ export const useBottomAction = () => {
       case 'category':
         goToCategory();
         break;
-      case 'registerSupplierVisible':
-        setRegisterSupplierModalVisible((prev) => !prev);
+      case 'sendDataSupplier':
+        //hit api send-store-supplier
+        Alert.alert(
+          'Send Data to Suplier',
+          'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => setRegisterSupplierModalVisible(false),
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => setRegisterSupplierModalVisible(false),
+            },
+          ],
+        );
         break;
       default:
         throw new Error(`Unknown bottom action type: ${type}`);

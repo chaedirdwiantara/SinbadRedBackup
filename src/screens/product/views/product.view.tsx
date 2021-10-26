@@ -10,6 +10,7 @@ import ProductListView from '@core/components/product/list';
 /** === IMPORT FUNCTIONS === */
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
+import { useBottomAction } from '@core/functions/product';
 import { useProductListAction, useModalVisibility } from '../functions';
 /** === COMPONENT === */
 const ProductView: FC = () => {
@@ -17,6 +18,7 @@ const ProductView: FC = () => {
   const { list } = useProductListAction();
   const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
   const { orderModalVisible, setOrderModalVisible } = useModalVisibility();
+  const { handleActionClick } = useBottomAction();
 
   useEffect(() => {
     list(dispatchProduct);
@@ -39,7 +41,9 @@ const ProductView: FC = () => {
         <ProductListView
           data={stateProduct.list}
           onCardPress={() => NavigationAction.navigate('ProductDetailView')}
-          onOrderPress={() => setOrderModalVisible(true)}
+          onOrderPress={() =>
+            handleActionClick({ type: 'registerSupplierVisible' })
+          }
         />
       </View>
     );

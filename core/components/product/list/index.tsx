@@ -223,7 +223,7 @@ const ProductListView: FC<ProductComponentProps> = ({
               <SnbButton.Single
                 type="primary"
                 title="Kirim data ke Supplier"
-                onPress={() => console.log('Kirim data ke Supplier')}
+                onPress={() => handleActionClick({ type: 'sendDataSupplier' })}
                 disabled={false}
               />
             </View>

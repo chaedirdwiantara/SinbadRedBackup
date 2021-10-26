@@ -18,7 +18,8 @@ export type BottomActionPressHandlerType =
   | 'applyFilter'
   | 'layout'
   | 'category'
-  | 'registerSupplierVisible';
+  | 'registerSupplierVisible'
+  | 'sendDataSupplier';
 export type BottomActionPressHandler = ({
   type,
   value,
