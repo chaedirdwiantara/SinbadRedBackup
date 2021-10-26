@@ -4,11 +4,9 @@ import {
   SnbTextFieldSelect,
   SnbButton,
   SnbUploadPhotoRules,
-  SnbText,
   SnbToast,
-  color,
 } from 'react-native-sinbad-ui';
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -17,9 +15,7 @@ import { MerchantHookFunc, useInput } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
-import { renderIF, useCamera, useUploadImage } from '@screen/auth/functions';
-import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/core';
+import { renderIF, useCamera } from '@screen/auth/functions';
 
 interface Props {
   type: any;
@@ -46,8 +42,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const storeData = stateUser.detail.data?.storeData.storeInformation;
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { resetUploadImage, state: uploadData } = useUploadImage();
-  let mapRef = React.useRef<MapView>(null);
-  const { navigate } = useNavigation();
   // USER DATA
   const ownerName = useInput(ownerData?.name || '');
   const ownerEmail = useInput(ownerData?.email || '');
@@ -204,18 +198,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         });
         break;
       }
-      case 'merchantAddress': {
-        break;
-      }
-      case 'merchantOwnerImageId': {
-        break;
-      }
-      case 'merchantOwnerImageTax': {
-        break;
-      }
-      case 'merchantOwnerImageSelfie': {
-        break;
-      }
       case 'merchantAccountImage': {
         break;
       }
@@ -294,8 +276,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerPhoneNo();
       case 'merchantCompletenessInformation':
         return renderCompletenessInformationMerchant();
-      case 'merchantAddress':
-        return renderAddressMerchant();
       case 'merchantOwnerImageId':
         return renderOwnerImageId();
       case 'merchantOwnerImageSelfie':
@@ -474,7 +454,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <Image
           resizeMode="contain"
           source={{
-            uri: `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`,
+            uri: capturedImage?.data?.url,
           }}
           borderRadius={4}
           style={{
@@ -499,9 +479,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               shadow
-              loading={uploadData?.loading}
+              loading={false}
               onPress={() => {}}
-              disabled={uploadData?.loading}
+              disabled={false}
             />
           </View>
         </View>
@@ -608,80 +588,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             onChangeText={(text) => vehicleAccessibilityAmount.setValue(text)}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
-          />
-        </View>
-      </View>
-    );
-  };
-  /** === RENDER MERCHANT ADDRESS (ALAMAT TOKO) === */
-  const renderAddressMerchant = () => {
-    const dataAddress = stateUser.detail.data?.storeData.storeAddress;
-    return (
-      <View style={{ marginTop: 16, marginHorizontal: 16 }}>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}>
-          <SnbText.H4>Koordinat Lokasi</SnbText.H4>
-          <TouchableOpacity onPress={() => navigate('MapsView')}>
-            <SnbText.B4>Ubah</SnbText.B4>
-          </TouchableOpacity>
-        </View>
-        <View style={{ paddingVertical: 4 }} />
-        <MapView
-          ref={mapRef}
-          initialRegion={{
-            latitude:
-              stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-            longitude:
-              stateUser.detail.data?.storeData.storeAddress.longitude || 0,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
-          }}
-          zoomEnabled={false}
-          pitchEnabled={false}
-          scrollEnabled={false}
-          style={{
-            height: 160,
-            borderWidth: 1,
-            borderStyle: 'dashed',
-            borderRadius: 16,
-            backgroundColor: color.black5,
-            borderColor: color.black40,
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}>
-          <Marker
-            coordinate={{
-              latitude:
-                stateUser.detail.data?.storeData.storeAddress.latitude || 0,
-              longitude:
-                stateUser.detail.data?.storeData.storeAddress.longitude || 0,
-            }}
-          />
-        </MapView>
-        <View style={{ marginVertical: 8 }} />
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Area
-            labelText={'Alamat'}
-            placeholder={'-'}
-            type={'default'}
-            value={dataAddress?.address ? dataAddress?.address : '-'}
-            onChangeText={(text) => console.log(text)}
-            clearText={() => console.log('clear')}
-          />
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Area
-            labelText={'Catatan Alamat'}
-            placeholder={'-'}
-            type={'default'}
-            value={dataAddress?.noteAddress ? dataAddress?.noteAddress : '-'}
-            onChangeText={(text) => console.log(text)}
-            clearText={() => console.log('clear')}
           />
         </View>
       </View>

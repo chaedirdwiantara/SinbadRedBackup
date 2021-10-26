@@ -15,8 +15,8 @@ import {
 
 const Content: React.FC = () => {
   const { navigate, reset } = useNavigation();
-  const storeID = useInput('08966666670');
-  const password = useInput('sinbad');
+  const storeID = useInput();
+  const password = useInput();
   const { loginUserName, loginIDState, resetLoginUsername } = useAuthAction();
 
   React.useEffect(() => {

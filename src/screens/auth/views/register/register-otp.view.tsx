@@ -3,7 +3,7 @@ import {
   maskPhone,
   useCheckPhoneNoAvailability,
   useOTP,
-  useRegister,
+  useMerchant,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
 import { OTPContent } from '@screen/auth/views/shared';
@@ -15,12 +15,13 @@ const RegisterOTPView: React.FC = () => {
   const { verifyOTPRegister, verifyOTP, mobilePhone } = useOTP();
   const { goBack, replace }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
-  const { saveRegisterUserData } = useRegister();
+  const { saveUserData, resetMerchantData } = useMerchant();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      saveRegisterUserData({ mobilePhone });
+      resetMerchantData();
+      saveUserData({ mobilePhone });
       replace(REGISTER_STEP_1_VIEW);
     }
     if (verifyOTP.error !== null) {

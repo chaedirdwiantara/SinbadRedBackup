@@ -1,11 +1,12 @@
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import {
   SnbButton,
   SnbOTPInput,
   SnbText,
   SnbOTPTimer,
   color,
+  SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 interface Props {
@@ -24,8 +25,10 @@ const OTPContent: React.FC<Props> = (props) => {
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
-      <View>
-        <Image source={{ uri: ' ' }} style={loginOTPStyle.image} />
+      <View style={{ marginVertical: 24 }}>
+        <View style={{ alignSelf: 'center' }}>
+          <SnbSvgIcon name="otp" size={100} />
+        </View>
         <View style={loginOTPStyle.titleContainer}>
           <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
           <View style={{ marginVertical: 4 }} />

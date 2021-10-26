@@ -10,6 +10,8 @@ import {
   MerchantBankAccountView,
   MerchantOtpView,
   TakeProfilePictureView,
+  MerchantEditAddressView,
+  MerchantEditPhotoView,
 } from '@screen/merchant/views/edit-merchant';
 
 const MerchantNav = {
@@ -31,6 +33,9 @@ const MerchantNav = {
   MerchantDetailAddressView: {
     component: MerchantDetailAddressView,
   },
+  MerchantEditAddressView: {
+    component: MerchantEditAddressView,
+  },
   MerchantBankAccountView: {
     component: MerchantBankAccountView,
   },
@@ -39,6 +44,9 @@ const MerchantNav = {
   },
   TakeProfilePictureView: {
     component: TakeProfilePictureView,
+  },
+  MerchantEditPhotoView: {
+    component: MerchantEditPhotoView,
   },
 };
 

@@ -10,12 +10,12 @@ import {
   useRegister,
 } from './register-hooks.functions';
 import {
+  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
   useCamera,
   useTextFieldSelect,
-  useUploadImage,
 } from './global-hooks.functions';
 import useOTP from './otp-hooks.functions';
 import { useAuthAction } from './auth-hook.function';
@@ -26,7 +26,7 @@ export {
   useCamera,
   useTextFieldSelect,
   useCheckPhoneNoAvailability,
-  useRegister,
+  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
@@ -34,6 +34,6 @@ export {
   maskPhone,
   useOTP,
   useAuthAction,
-  useUploadImage,
   extractAddress,
+  useRegister,
 };

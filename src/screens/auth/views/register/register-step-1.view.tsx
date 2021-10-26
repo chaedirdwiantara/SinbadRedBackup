@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useInput, useRegister } from '@screen/auth/functions';
+import { useInput, useMerchant } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
@@ -16,16 +16,16 @@ import {
 const Content: React.FC = () => {
   const { checkEmail, checkEmailAvailability, resetCheckEmail } =
     useCheckEmailAvailability();
-  const { saveRegisterUserData } = useRegister();
+  const { saveUserData } = useMerchant();
   const { navigate } = useNavigation();
-  const name = useInput('Test');
-  const idNumber = useInput('3375020801940003');
-  const taxNumber = useInput('123456789123456');
-  const email = useInput('mazhuda@gmail.com');
+  const name = useInput();
+  const idNumber = useInput();
+  const taxNumber = useInput();
+  const email = useInput();
 
   React.useEffect(() => {
     if (checkEmailAvailability.data !== null) {
-      saveRegisterUserData({
+      saveUserData({
         name: name.value,
         email: email.value,
         idNo: idNumber.value,
@@ -33,6 +33,10 @@ const Content: React.FC = () => {
       });
       resetCheckEmail();
       navigate(REGISTER_STEP_2_VIEW);
+    }
+
+    if (checkEmailAvailability.error !== null) {
+      email.setMessageError(checkEmailAvailability.error.message);
     }
   }, [checkEmailAvailability]);
 
@@ -103,7 +107,7 @@ const Content: React.FC = () => {
             if (email.value !== '') {
               checkEmail({ email: email.value });
             } else {
-              saveRegisterUserData({
+              saveUserData({
                 name: name.value,
                 email: email.value,
                 idNo: idNumber.value,

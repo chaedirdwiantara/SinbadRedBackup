@@ -48,13 +48,10 @@ const ListAndSearchView = () => {
               );
             }
             return (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flex: 1,
-                }}>
+              <View style={{ marginVertical: 48 }}>
                 <SnbProgress />
+                <View style={{ marginVertical: 8 }} />
+                <SnbText.B3 align="center">Memuat Data...</SnbText.B3>
               </View>
             );
           }}
