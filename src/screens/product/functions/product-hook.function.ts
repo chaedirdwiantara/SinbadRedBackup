@@ -87,6 +87,18 @@ const useProductListAction = () => {
     },
   };
 };
+/** => product detail action */
+const useProductDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.productDetailReset());
+    },
+  };
+};
 /** => Add to Cart Modal */
 /** => Modal Visibility */
 const useModalVisibility = () => {
@@ -146,6 +158,7 @@ const useKeyboardListener = () => {
 /** === EXPORT === */
 export {
   useProductListAction,
+  useProductDetailAction,
   useTabCategory,
   useTag,
   useModalVisibility,
