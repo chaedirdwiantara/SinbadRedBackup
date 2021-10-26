@@ -5,7 +5,7 @@ import {
   SnbTextField,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, ToastAndroid } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
@@ -22,9 +22,22 @@ const UserChangePasswordView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
     if (stateUser.update.data) {
-      console.log('success');
+      ToastAndroid.showWithGravityAndOffset(
+        'Success',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
+      NavigationAction.back();
     } else {
-      console.log('failed');
+      ToastAndroid.showWithGravityAndOffset(
+        'Failed',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
     }
   }, [stateUser.update.data]);
 
@@ -76,7 +89,6 @@ const UserChangePasswordView: FC = () => {
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName="visibility"
-            // suffixAction={() => console.log('this for suffix action')}
             secureTextEntry={true}
           />
         </View>
@@ -94,7 +106,6 @@ const UserChangePasswordView: FC = () => {
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName="visibility"
-            // suffixAction={() => console.log('this for suffix action')}
             secureTextEntry={true}
           />
         </View>
@@ -111,7 +122,6 @@ const UserChangePasswordView: FC = () => {
           valMsgError="ini contoh kalau error ya"
           keyboardType="default"
           suffixIconName="visibility"
-          // suffixAction={() => console.log('this for suffix action')}
           secureTextEntry={true}
         />
       </View>

@@ -4,11 +4,9 @@ export interface StoreDetail {
   storeData: IStoreData;
   progress: IProgress;
 }
-
 interface IOwnerData {
   profile: IOwnerProfile;
 }
-
 interface IOwnerProfile {
   imageUrl?: string;
   name: string;
@@ -19,19 +17,23 @@ interface IOwnerProfile {
   taxImageUrl?: string;
   idImageUrl?: string;
   selfieImageUrl?: string;
-  bankAccountNo?: string;
+  bankAccount: IBankAccount;
 }
-
+interface IBankAccount {
+  bankId: number;
+  bankName: string;
+  bankAccountName: string;
+  bankAccountNo: string;
+  bankBranchName: string;
+}
 interface IStoreData {
   storeInformation: IStoreInformation;
   storeAddress: IStoreAddress;
 }
-
 interface IStoreInformation {
   storeAccount: IStoreAccount;
   storeDetailCompleteness: IStoreDetailCompleteness;
 }
-
 interface IStoreAddress {
   latitude: number;
   longitude: number;
@@ -43,25 +45,23 @@ interface IStoreAddress {
   address: string;
   noteAddress?: string;
 }
-
 interface IStoreAccount {
   code: string;
   name: string;
   phoneNo?: string;
   imageUrl?: string;
 }
-
 interface IStoreDetailCompleteness {
   numberOfEmployee?: string;
   largeArea?: string;
   topSellingBrand?: string;
   mostWantedBrand?: string;
-  vehicleAccessibility?: IVehicleAccessibility;
-  vehicleAccessibilityAmount?: number;
+  vehicleAccessibility: any;
+  vehicleAccessibilityAmount?: any;
 }
 interface IVehicleAccessibility {
-  id: number;
-  name: string;
+  id: any;
+  name: any;
 }
 interface IProgress {
   done: number;
@@ -69,7 +69,6 @@ interface IProgress {
   ownerProgress: IOwnerProgress;
   storeProgress: IStoreProgress;
 }
-
 interface IOwnerProgress {
   done: number;
   total: number;

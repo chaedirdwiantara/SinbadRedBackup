@@ -25,7 +25,7 @@ const MerchantDetailProfileView: FC = () => {
     const { type, title } = data;
     switch (type) {
       case 'merchantOwnerImage':
-        // NavigationService.navigate('TakeProfilePicture');
+        NavigationAction.navigate('TakeProfilePictureView');
         break;
       case 'merchantOwnerName':
       case 'merchantOwnerEmail':
@@ -71,11 +71,11 @@ const MerchantDetailProfileView: FC = () => {
             style={MerchantStyles.imageProfile}
           />
         ) : (
-          <Svg name={'avatar'} size={50} color={color.red50} />
+          <Svg name={'avatar'} size={100} color={color.red50} />
         )}
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          onPress={() => console.log('test')}>
+          onPress={() => goTo({ type: 'merchantOwnerImage' })}>
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
       </View>
@@ -155,10 +155,12 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: ownerData?.profile.bankAccountNo,
-          action: ownerData?.profile.bankAccountNo ? 'ubah' : 'tambah',
+          value: ownerData?.profile.bankAccount.bankAccountNo,
+          action: ownerData?.profile.bankAccount.bankAccountNo
+            ? 'ubah'
+            : 'tambah',
           type: 'merchantOwnerBankAccountNo',
-          title: ownerData?.profile.bankAccountNo
+          title: ownerData?.profile.bankAccount.bankAccountNo
             ? 'Ubah Rekening Bank'
             : 'Tambah Rekening Bank',
         })}

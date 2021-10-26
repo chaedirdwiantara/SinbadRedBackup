@@ -1,25 +1,18 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
-  SnbUploadPhotoRules,
-  SnbText,
-  SnbToast,
-  color,
 } from 'react-native-sinbad-ui';
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, View, ToastAndroid } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
-import { MerchantHookFunc } from '../../function';
+import { MerchantHookFunc, useInput } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
-import { renderIF, useCamera } from '@screen/auth/functions';
-import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/core';
 
 interface Props {
   type: any;
@@ -30,75 +23,99 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
   const ownerData = stateUser.detail.data?.ownerData.profile;
-  const [ownerName, setOwnerName] = useState(
-    ownerData?.name ? ownerData?.name : '',
-  );
-  const [noKtp, setNoktp] = useState(ownerData?.idNo ? ownerData?.idNo : '');
-  const storeData = stateUser.detail.data?.storeData.storeInformation;
-  const [merchantName, setMerchantName] = useState(
-    storeData?.storeAccount?.name ? storeData.storeAccount?.name : '',
-  );
-
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
+  const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
-  const [isOpenToast, setIsOpenToast] = useState(false);
-  const [toasMessage, setToastMessage] = useState('');
-  const { gotoSelection, selectedItem, resetSelectedItem } =
-    useTextFieldSelect();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { dispatchUser } = React.useContext(contexts.UserContext);
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
+  const storeData = stateUser.detail.data?.storeData.storeInformation;
+  // USER DATA
+  const ownerName = useInput(ownerData?.name || '');
+  const ownerEmail = useInput(ownerData?.email || '');
+  const noKtp = useInput(ownerData?.idNo || '');
+  const noNPWP = useInput(ownerData?.taxNo || '');
+  const mobilePhone = useInput(ownerData?.mobilePhone || '');
+  //MERCHANT DATA
+  const merchantName = useInput(storeData?.storeAccount?.name || '');
+  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
   // COMPLETNESS DATA
-  const [numberOfEmployee, setNumberOfEmployee] = useState(
+  const numberOfEmployee = useInput(
     storeData?.storeDetailCompleteness?.numberOfEmployee || '',
   );
-  const [vehicleAccessibility, setVehicleAccessibility] = useState(
-    storeData?.storeDetailCompleteness.vehicleAccessibility || '',
+  const vehicleAccessibility = useInput(
+    storeData?.storeDetailCompleteness?.vehicleAccessibility || '',
   );
-  const [largeArea, setLargeArea] = useState(
+  const largeArea = useInput(
     storeData?.storeDetailCompleteness?.largeArea || '',
   );
-  const [topBrand, setTopBrand] = useState(
+  const topBrand = useInput(
     storeData?.storeDetailCompleteness?.topSellingBrand || '',
   );
-  const [wantedBrand, setWantedBrand] = useState(
+  const wantedBrand = useInput(
     storeData?.storeDetailCompleteness?.mostWantedBrand || '',
   );
-  const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] = useState(
-    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || '',
+  const vehicleAccessibilityAmount = useInput(
+    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
-  const { openCamera, capturedImage } = useCamera();
 
   useEffect(() => {
-    if (stateMerchant.profileEdit.data || stateMerchant.merchantEdit.data) {
+    if (
+      stateMerchant.profileEdit.data !== null ||
+      stateMerchant.merchantEdit.data !== null
+    ) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Success',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
-      storeDetailAction.detail(dispatchUser);
+      storeDetailAction.detail(dispatchUser, { id: '3' });
     } else if (
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      setToastMessage('failed');
-      setIsOpenToast(true);
-      setTimeout(() => {
-        setIsOpenToast(false);
-        editMerchantAction.reset(dispatchSupplier);
-        editProfileAction.reset(dispatchSupplier);
-      }, 2000);
+      ToastAndroid.showWithGravityAndOffset(
+        'Failed',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        0,
+        240,
+      );
     }
   }, [stateMerchant]);
+
+  useEffect(() => {
+    if (stateMerchant.changeEmail.data) {
+      NavigationAction.navigate('MerchantOtpView', {
+        type: 'email',
+        data: ownerEmail.value,
+      });
+    } else if (stateMerchant.changeMobilePhone.data) {
+      NavigationAction.navigate('MerchantOtpView', {
+        type: 'mobilePhone',
+        data: mobilePhone.value,
+      });
+    }
+  }, [stateMerchant.changeEmail]);
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
       case 'listNumOfEmployee': {
-        setNumberOfEmployee(selectedItem.item.amount);
+        numberOfEmployee.setValue(selectedItem.item.amount);
         break;
       }
       case 'listVehicleAccess': {
-        setVehicleAccessibility(selectedItem.item);
+        vehicleAccessibility.setValue(selectedItem.item);
         break;
       }
       default:
@@ -112,21 +129,41 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     const { type } = props;
     let data = {};
     switch (type) {
-      case 'merchantOwnerEmail':
-      case 'merchantOwnerPhoneNo':
+      case 'merchantOwnerEmail': {
+        data = {
+          email: ownerEmail.value,
+        };
+        changeEmailAction.changeEmail(dispatchSupplier, { data });
+        break;
+      }
+      case 'merchantOwnerPhoneNo': {
+        data = {
+          mobilePhone: mobilePhone.value,
+        };
+        changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
+        break;
+      }
       case 'merchantOwnerIdNo': {
         data = {
-          idNo: noKtp,
+          idNo: noKtp.value,
         };
         editProfileAction.editProfile(dispatchSupplier, {
           data,
         });
         break;
       }
-      case 'merchantOwnerTaxNo':
+      case 'merchantOwnerTaxNo': {
+        data = {
+          taxNo: noNPWP.value,
+        };
+        editProfileAction.editProfile(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
       case 'merchantOwnerName': {
         data = {
-          name: ownerName,
+          name: ownerName.value,
         };
         editProfileAction.editProfile(dispatchSupplier, {
           data,
@@ -135,7 +172,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantAccountName': {
         data = {
-          name: merchantName,
+          name: merchantName.value,
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
@@ -143,25 +180,68 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
       }
       case 'merchantAccountPhoneNo': {
-        break;
-      }
-      case 'merchantCompletenessInformation': {
         data = {
-          numberOfEmployee: numberOfEmployee,
-          largeArea: largeArea,
-          topSellingBrand: topBrand,
-          mostWantedBrand: wantedBrand,
-          vehicleAccessibilityId: vehicleAccessibility?.id,
-          vehicleAccessibilityAmount: vehicleAccessibilityAmount,
+          phoneNo: merchantPhoneNo.value,
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
         });
         break;
       }
-      case 'merchantAccountImage': {
+      case 'merchantCompletenessInformation': {
+        data = {
+          numberOfEmployee: numberOfEmployee.value,
+          largeArea: largeArea.value,
+          topSellingBrand: topBrand.value,
+          mostWantedBrand: wantedBrand.value,
+          vehicleAccessibilityId: vehicleAccessibility.value.id,
+          vehicleAccessibilityAmount: vehicleAccessibilityAmount.value,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
         break;
       }
+      default:
+        break;
+    }
+  };
+
+  //checkbutton
+  /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
+  const checkButton = () => {
+    switch (props.type) {
+      case 'merchantOwnerName':
+        return ownerName.value === ownerData?.name;
+      case 'merchantOwnerEmail':
+        return (
+          ownerEmail.value === ownerData?.email
+          // || this.state.emailIsNotValid
+        );
+      case 'merchantOwnerIdNo':
+        return noKtp.value === ownerData?.idNo;
+      case 'merchantOwnerTaxNo':
+        return noNPWP.value === ownerData?.taxNo;
+      case 'merchantOwnerPhoneNo':
+        return mobilePhone.value === ownerData?.mobilePhone;
+      case 'merchantAccountName':
+        return merchantName.value === storeData?.storeAccount.name;
+      case 'merchantAccountPhoneNo':
+      case 'merchantCompletenessInformation':
+        return (
+          largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
+          topBrand.value ===
+            storeData?.storeDetailCompleteness.topSellingBrand &&
+          wantedBrand.value ===
+            storeData?.storeDetailCompleteness.mostWantedBrand &&
+          vehicleAccessibilityAmount.value ===
+            `${storeData?.storeDetailCompleteness.vehicleAccessibilityAmount}` &&
+          vehicleAccessibility.value.id ===
+            storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
+          numberOfEmployee.value ===
+            storeData?.storeDetailCompleteness.numberOfEmployee
+        );
+      case 'merchantAddress':
       default:
         break;
     }
@@ -185,18 +265,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerPhoneNo();
       case 'merchantCompletenessInformation':
         return renderCompletenessInformationMerchant();
-      case 'merchantOwnerImageId':
-        return renderOwnerImageId();
-      case 'merchantOwnerImageSelfie':
-        return renderOwnerImageSelfie();
-      case 'merchantOwnerImageTax':
-        return renderOwnerImageTax();
       case 'merchantAccountName':
         return renderMerchantAccountName();
       case 'merchantAccountPhoneNo':
         return renderMerchantAccountPhoneNo();
-      //   case 'merchantAccountImage':
-      //     return renderMerchantAccountImage();
       default:
         break;
     }
@@ -215,41 +287,41 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukan Nama Lengkap Pemilik'}
           type={'default'}
-          value={ownerName}
-          onChangeText={(text) => setOwnerName(text)}
-          clearText={() => setOwnerName('')}
+          value={ownerName.value}
+          onChangeText={(text) => ownerName.setValue(text)}
+          clearText={() => ownerName.setValue('')}
         />
       </View>
     );
   };
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
           type={'default'}
-          value={ownerData?.email ? ownerData?.email : ''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={ownerEmail.value}
+          onChangeText={(text) => ownerEmail.setValue(text)}
+          clearText={() => ownerEmail.setValue('')}
         />
       </View>
     );
   };
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukan nomor handphone Anda'}
           type={'default'}
-          value={ownerData?.mobilePhone ? ownerData?.mobilePhone : ''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={mobilePhone.value}
+          onChangeText={(text) => mobilePhone.setValue(text)}
+          clearText={() => mobilePhone.setValue('')}
+          maxLength={14}
+          keyboardType={'numeric'}
         />
       </View>
     );
@@ -262,9 +334,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
           type={'default'}
-          value={noKtp}
-          onChangeText={(text) => setNoktp(text)}
-          clearText={() => setNoktp('')}
+          value={noKtp.value}
+          onChangeText={(text) => noKtp.setValue(text)}
+          clearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
         />
       </View>
@@ -272,129 +344,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** === RENDER OWNER NO NPWP === */
   const renderOwnerTaxNo = () => {
-    const ownerData = stateUser.detail.data?.ownerData.profile;
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukan No.NPWP maks.15 Digit'}
           type={'default'}
-          value={ownerData?.taxNo ? ownerData?.taxNo : ''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={noNPWP.value}
+          onChangeText={(text) => noNPWP.setValue(text)}
+          clearText={() => noNPWP.setValue('')}
         />
-      </View>
-    );
-  };
-  /** === RENDER OWNER IMAGE ID === */
-  const renderOwnerImageId = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/4e9b/f869/7b2c7d944da2051c0422f41d9b920d88?Expires=1632096000&Signature=PcMkPhandytpXueLoKbXpj9CUT-4LYOkuxWsfeCUMeMhVNynnb66TmCR6JFZWx-5DLmy0fS0Q6KbGajNdAGbG7DD0Oa76~Z0~1F7K7eItCqYgyCwUL8SGpc~frmLBUqLTqs-NqOea0vPqJifZL-d-nt7IK3XWQ97~IYjB5ujfx87JbeE-k1U-YkQsYjV7zr00rdg4h-gekAhYW0rHN~-4Hm6P8qjFGIaY3p3X4leIanac8HYnx~bpQHIY8HMA-Fz69TxpmamCyKuhau2HwOMcvW2EcYbr4424YrsQUhnNYmsIw7BTckpMk2NYKTXG~3vSzisYypLJQxHItfBZEi0VQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto KTP"
-            rules={[
-              'Pastikan KTP sesuai dengan identitas Anda',
-              'KTP Tidak silau dan tidak buram',
-              'Pastikan KTP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi KTP',
-            ]}
-            action={() => openCamera('ktp')}
-          />,
-        )}
-      </View>
-    );
-  };
-  /** === RENDER OWNER IMAGE Selfie === */
-  const renderOwnerImageSelfie = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto Selfie dengan KTP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/c574/249b/f08ded42c46f8427961fd40b348661e1?Expires=1631491200&Signature=KeYeygi5MdQe~mRDLUAh8eA44ZDz50Ky9cGKdf3uDZr7MqCPw7aFNCska4DaY-GnI29-ENc177K-m5YK3FDUnbgb6UKzQDuULdIqlZucpBhGIPqRBFTvr0b-5lC7dZmv97j6UJ3~ketFJf7H8GdPxPFdDwegMoYPOSqPscb1E46iU1h8iM8Uu~1Rq5~2t8qp~EX6mwrLabvJWTc0rywhHhpzpV~Vi6qGn3Rx0U9JAvBbA7rUjG4HWGa5t0kcLIRZ~shAQDMPKp2FGsg2z-Na7xPqur5h6VLSGTpD6V909BpYx2FxfFyFiw76Ug2s82tgm4iY0bnsf6cg-dHMS2sgxg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto Diri dengan KTP Owner"
-            rules={[
-              'Posisikan KTP di bawah dagu Anda',
-              'KTP Tidak silau dan tidak buram',
-              'Pastikan KTP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi KTP',
-            ]}
-            action={() => openCamera('selfie')}
-          />,
-        )}
-      </View>
-    );
-  };
-
-  /** === RENDER OWNER IMAGE TAX === */
-  const renderOwnerImageTax = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {renderIF(
-          capturedImage.data !== null,
-          renderImagePreview(),
-          <SnbUploadPhotoRules
-            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-            imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1632096000&Signature=Wl0ScvJmSsWpSqCsSvjBsKVjEUc53NoEawaVNBGALvYfoCwe5P2hyo45Ba2NSThzZbPaDrpRV7Gl7MVSwhkSqoh8cbMoJcAQp0ic2UwKW6cP0oYcNfFiE77QeU7zJo5kbhr1J3RRYVMnZ0nvYUqgBjrVtt6utz7AjkGNDqVyWAReTUOsEM4BHNUAioWtFAbdZAjsqRVp2H6SkuEKjVum90HnG0xHeOVdp5HGo3CB96s~y7aqrhlxb3Z-NISSbYmxYdDeH0RmDNo8sao-xzB5HWcYR1Uiy-60bQSOQXjFjsu9V~D72rT3ERNYvDu2Ez8VneDD3oGZuT7abW1RcT1wXg__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-            title="Unggah Foto NPWP"
-            rules={[
-              'Pastikan NPWP sesuai dengan identitas Anda',
-              'NPWP Tidak silau dan tidak buram',
-              'Pastikan NPWP bisa terbaca dengan jelas',
-              'Hindari Tangan Menutupi NPWP',
-            ]}
-            action={() => openCamera('npwp')}
-          />,
-        )}
-      </View>
-    );
-  };
-
-  const renderImagePreview = () => {
-    const isImageCaptured = capturedImage.data;
-    return (
-      <View style={{ flex: 1 }}>
-        <Image
-          resizeMode="contain"
-          source={{
-            uri: capturedImage?.data?.url,
-          }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 1,
-            margin: 16,
-          }}
-        />
-        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
-          <View style={{ height: 72 }}>
-            <SnbButton.Dynamic
-              size="small"
-              type="tertiary"
-              title="Ubah Foto"
-              onPress={() => openCamera('ktp')}
-              disabled={false}
-            />
-          </View>
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
-              type={isImageCaptured ? 'secondary' : 'primary'}
-              title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
-              shadow
-              loading={false}
-              onPress={() => {}}
-              disabled={false}
-            />
-          </View>
-        </View>
       </View>
     );
   };
@@ -411,9 +370,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Toko'}
           placeholder={'Masukan Nama Toko'}
           type={'default'}
-          value={merchantName}
-          onChangeText={(text) => setMerchantName(text)}
-          clearText={() => setMerchantName('')}
+          value={merchantName.value}
+          onChangeText={(text) => merchantName.setValue(text)}
+          clearText={() => merchantName.setValue('')}
         />
       </View>
     );
@@ -426,9 +385,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukan Nomor Handphone Toko'}
           type={'default'}
-          value={''}
-          onChangeText={(text) => console.log(text)}
-          clearText={() => console.log('clear')}
+          value={merchantPhoneNo.value}
+          onChangeText={(text) => merchantPhoneNo.setValue(text)}
+          clearText={() => merchantPhoneNo.setValue('')}
         />
       </View>
     );
@@ -441,7 +400,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={numberOfEmployee}
+            value={numberOfEmployee.value}
             onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -453,9 +412,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
-            value={largeArea}
-            onChangeText={(text) => setLargeArea(text)}
-            clearText={() => console.log('clear')}
+            value={largeArea.value}
+            onChangeText={(text) => largeArea.setValue(text)}
+            clearText={() => largeArea.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -463,9 +422,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Top Brand Selling'}
             placeholder={'Masukan Top Brand Selling'}
             type={'default'}
-            value={topBrand}
-            onChangeText={(text) => setTopBrand(text)}
-            clearText={() => console.log('clear')}
+            value={topBrand.value}
+            onChangeText={(text) => topBrand.setValue(text)}
+            clearText={() => topBrand.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -473,16 +432,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Wanted Brand'}
             placeholder={'Masukan Wanted Brand'}
             type={'default'}
-            value={wantedBrand}
-            onChangeText={(text) => setWantedBrand(text)}
-            clearText={() => console.log('clear')}
+            value={wantedBrand.value}
+            onChangeText={(text) => wantedBrand.setValue(text)}
+            clearText={() => wantedBrand.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={vehicleAccessibility.name}
+            value={vehicleAccessibility.value.name}
             onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -494,9 +453,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukan Jumlah Akses Jalan'}
             type={'default'}
-            value={`${vehicleAccessibilityAmount}`}
-            onChangeText={(text) => setVehicleAccessibilityAmount(text)}
-            clearText={() => console.log('clear')}
+            value={`${vehicleAccessibilityAmount.value}`}
+            onChangeText={(text) => vehicleAccessibilityAmount.setValue(text)}
+            clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
           />
         </View>
@@ -515,21 +474,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
           onPress={() => confirm()}
-          disabled={false}
+          disabled={checkButton() || false}
         />
       </View>
     ) : (
       <View />
-    );
-  };
-  /** === RENDER TOAST === */
-  const renderToast = () => {
-    return (
-      <SnbToast
-        open={isOpenToast}
-        message={toasMessage}
-        close={() => setIsOpenToast(false)}
-      />
     );
   };
   /** this for main view */
@@ -539,9 +488,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         {switchView()}
       </ScrollView>
       {renderButton()}
-      {renderToast()}
-      {/* {renderButtonOpenCamera()} */}
-      {/* {this.state.showModalError && this.renderModalError()} */}
     </View>
   );
 };

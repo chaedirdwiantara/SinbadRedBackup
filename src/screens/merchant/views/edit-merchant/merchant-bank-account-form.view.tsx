@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbText,
   SnbTopNav,
@@ -13,6 +13,8 @@ import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
+import { useTextFieldSelect } from '@screen/auth/functions';
+import { useInput, MerchantHookFunc } from '../../function';
 
 interface Props {
   route: any;
@@ -21,9 +23,47 @@ interface Props {
 const MerchantEditPartialView: FC<Props> = (props) => {
   //HOOK
   const { stateUser } = React.useContext(contexts.UserContext);
+  const bankData = stateUser.detail.data?.ownerData.profile.bankAccount;
+  const changeBankAccountAction = MerchantHookFunc.useChangeBankAccount();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const bankId = useInput(bankData?.bankId || null);
+  const bankName = useInput(bankData?.bankName || '');
+  const bankAccountNo = useInput(bankData?.bankAccountNo || '');
+  const bankAccountName = useInput(bankData?.bankAccountName || '');
+  const bankBranchName = useInput(bankData?.bankBranchName || '');
+  useEffect(() => {
+    if (selectedItem?.item) {
+      bankId.setValue(selectedItem.item.id);
+      bankName.setValue(selectedItem.item.name);
+    }
+  }, [selectedItem]);
+  useEffect(() => {
+    if (stateMerchant.changeBankAccount.data) {
+      NavigationAction.navigate('MerchantOtpView', {
+        type: 'bankAccount',
+        data: stateUser.detail.data?.ownerData.profile.mobilePhone,
+      });
+    }
+  }, [stateMerchant]);
   /** function */
+  const checkButton = () => {
+    if (bankId.value && bankAccountNo.value && bankAccountName.value) {
+      return false;
+    } else {
+      return true;
+    }
+  };
   const confirm = () => {
-    console.log('press');
+    const data = {
+      bankId: bankId.value,
+      accountName: bankAccountName.value,
+      accountNo: bankAccountNo.value,
+      branch: bankBranchName.value,
+    };
+    changeBankAccountAction.changeBankAccount(dispatchSupplier, { data });
   };
   /** header */
   const renderHeader = () => {
@@ -35,7 +75,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       />
     );
   };
-  console.log('merchant:', stateUser);
 
   /** content */
   const renderContent = () => {
@@ -45,8 +84,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Nama Bank'}
             type={'default'}
-            value={'test'}
-            onPress={() => console.log('press')}
+            value={bankName.value}
+            onPress={() => gotoSelection({ type: 'listBank' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Nama Bank'}
@@ -58,11 +97,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Nomor Rekening'}
             placeholder={'Masukan Nomor Rekening'}
             type={'default'}
-            value={'largeArea'}
-            onChangeText={(text) => console.log(text)}
-            clearText={() => console.log('clear')}
+            value={bankAccountNo.value}
+            onChangeText={(text) => bankAccountNo.setValue(text)}
+            clearText={() => bankAccountNo.setValue('')}
             mandatory
             helpText={'Pastikan nomor rekening benar'}
+            maxLength={30}
+            keyboardType={'numeric'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -70,9 +111,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Nama Lengkap Pemilik Rekening'}
             placeholder={'Masukan Nama Lengkap Pemilik Rekening'}
             type={'default'}
-            value={'largeArea'}
-            onChangeText={(text) => console.log(text)}
-            clearText={() => console.log('clear')}
+            value={bankAccountName.value}
+            onChangeText={(text) => bankAccountName.setValue(text)}
+            clearText={() => bankAccountName.setValue('')}
+            maxLength={50}
+            mandatory
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -80,10 +123,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Nama Cabang'}
             placeholder={'Masukan Nama Cabang'}
             type={'default'}
-            value={'largeArea'}
-            onChangeText={(text) => console.log(text)}
-            clearText={() => console.log('clear')}
+            value={bankBranchName.value}
+            onChangeText={(text) => bankBranchName.setValue(text)}
+            clearText={() => bankBranchName.setValue('')}
             helpText={'Cabang tempat pembukaan rekening'}
+            maxLength={50}
           />
         </View>
       </View>
@@ -114,7 +158,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             title={'Verifikasi'}
             type={'primary'}
             onPress={() => confirm()}
-            disabled={false}
+            disabled={checkButton()}
           />
         </View>
       </View>

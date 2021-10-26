@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -21,19 +21,34 @@ import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
-import { LoginPhoneView } from '@screen/auth/views';
+import { useNavigation } from '@react-navigation/core';
 
 const UserView: FC = () => {
   /** === HOOK === */
   const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  const { reset } = useNavigation();
   useFocusEffect(
     React.useCallback(() => {
-      const storeDetail = storeDetailAction.detail(dispatchUser);
+      const storeDetail = storeDetailAction.detail(dispatchUser, { id: '' });
       return storeDetail;
     }, []),
   );
+  useEffect(() => {
+    const backAction = () => {
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);
