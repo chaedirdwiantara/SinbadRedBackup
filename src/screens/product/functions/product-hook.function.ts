@@ -64,7 +64,18 @@ const useProductListActions = () => {
     },
   };
 };
-
+/** => product detail action */
+const useProductDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.productDetailReset());
+    },
+  };
+};
 /** === Add to Cart Modal Related === */
 const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
@@ -96,7 +107,12 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   return { orderQty, increaseOrderQty, decreaseOrderQty };
 };
 
-export { useProductListActions, useOrderModalVisibility, useOrderQuantity };
+export {
+  useProductListActions,
+  useOrderModalVisibility,
+  useOrderQuantity,
+  useProductDetailAction,
+};
 /**
  * ================================================================
  * NOTES
