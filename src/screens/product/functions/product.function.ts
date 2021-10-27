@@ -1,13 +1,16 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import { NavigationAction } from '@navigation';
-/** === FUNCTION === */
-/** => Go Back */
+/** === FUNCTIONS === */
 const goBack = () => {
   NavigationAction.back();
 };
-/** => Go to Shopping Cart */
+
 const goToShoppingCart = () => {
   NavigationAction.navigate('OmsShoppingCartView');
 };
 
-export { goBack, goToShoppingCart };
+const goToProductDetail = () => {
+  NavigationAction.navigate('ProductDetailView');
+};
+
+export { goBack, goToShoppingCart, goToProductDetail };

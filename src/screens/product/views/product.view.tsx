@@ -1,27 +1,54 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
+import { RouteProp, useRoute } from '@react-navigation/core';
 /** === IMPORT COMPONENTS === */
-import ProductHeaderView from './product-header.view';
-import ProductTabView from './product-tab.view';
+import ProductList from '@core/components/product/list';
 import { AddToCartModal } from './AddToCartModal';
-import ProductListView from '@core/components/product/list';
 /** === IMPORT FUNCTIONS === */
-import { contexts } from '@contexts';
-import { NavigationAction } from '@core/functions/navigation';
-import { useProductListAction, useModalVisibility } from '../functions';
+import { useProductContext } from 'src/data/contexts/products/useProductContext';
+import { useProductListActions, useOrderModalVisibility } from '../functions';
+/** === IMPORT TYPE === */
+import * as models from '@models';
+/** === TYPES === */
+type CategoryProductRouteParams = {
+  CategoryProduct: {
+    category:
+      | models.CategoryLevel
+      | models.CategoryLevel2
+      | models.CategoryLevel3;
+    categoryFirstLevelIndex?: number;
+    categorySecondLevelIndex?: number;
+    categoryThirdLevelIndex?: number;
+  };
+};
+
+type CategoryProductRouteProps = RouteProp<
+  CategoryProductRouteParams,
+  'CategoryProduct'
+>;
 /** === COMPONENT === */
 const ProductView: FC = () => {
   /** === HOOKS === */
-  const { list } = useProductListAction();
-  const { stateProduct, dispatchProduct } = useContext(contexts.ProductContext);
-  const { orderModalVisible, setOrderModalVisible } = useModalVisibility();
+  const {
+    params: {
+      category,
+      categoryFirstLevelIndex,
+      categorySecondLevelIndex,
+      categoryThirdLevelIndex,
+    },
+  } = useRoute<CategoryProductRouteProps>();
+  const { fetch, refresh, loadMore } = useProductListActions();
+  const {
+    stateProduct: { list: productListState },
+    dispatchProduct,
+  } = useProductContext();
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
 
   useEffect(() => {
-    list(dispatchProduct);
+    fetch(dispatchProduct, { categoryId: category.id });
   }, []);
-
   /** === VIEW === */
   /** => Add to Cart Modal */
   const renderAddToCartModal = () => (
@@ -32,23 +59,43 @@ const ProductView: FC = () => {
     />
   );
   /** => Content */
-  const renderContent = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <ProductTabView />
-        <ProductListView
-          data={stateProduct.list}
-          onCardPress={() => NavigationAction.navigate('ProductDetailView')}
-          onOrderPress={() => setOrderModalVisible(true)}
-        />
-      </View>
-    );
-  };
-
+  const renderContent = () => (
+    <View style={{ flex: 1 }}>
+      <ProductList
+        products={productListState.data}
+        onOrderPress={() => setOrderModalVisible(true)}
+        activeCategory={category}
+        categoryTabs={categoryFirstLevelIndex !== undefined}
+        categoryTabsConfig={
+          categoryFirstLevelIndex !== undefined
+            ? {
+                level: categoryThirdLevelIndex === undefined ? '2' : '3',
+                firstLevelIndex: categoryFirstLevelIndex,
+                secondLevelIndex: categorySecondLevelIndex,
+                thirdLevelIndex: categoryThirdLevelIndex,
+              }
+            : undefined
+        }
+        isRefreshing={productListState.refresh}
+        onRefresh={(queryOptions) =>
+          refresh(dispatchProduct, { categoryId: category.id, ...queryOptions })
+        }
+        onLoadMore={(queryOptions) =>
+          loadMore(
+            dispatchProduct,
+            {
+              skip: productListState.skip,
+              canLoadMore: productListState.canLoadMore,
+            },
+            { categoryId: category.id, ...queryOptions },
+          )
+        }
+      />
+    </View>
+  );
   /** => Main */
   return (
     <SnbContainer color="white">
-      <ProductHeaderView />
       {renderContent()}
       {renderAddToCartModal()}
     </SnbContainer>
@@ -63,7 +110,7 @@ export default ProductView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 14-10-21
+ * updatedDate: 27-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

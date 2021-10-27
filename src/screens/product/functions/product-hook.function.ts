@@ -1,95 +1,72 @@
-/** === IMPORT PACKAGE HERE === */
-import { useEffect, useState } from 'react';
+/** === IMPORT PACKAGES === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Keyboard } from 'react-native';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
-/** === FUNCTION === */
-/** => collect data */
-/** => call fetch */
-const callList = (
+/** === FUNCTIONS === */
+/** === Fetch Product List Related === */
+const callProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
   skip: number,
   limit: number,
+  queryOptions?: models.ProductListQueryOptions,
 ) => {
   return Actions.productListProcess(contextDispatch, {
     loading,
     skip,
     limit,
+    ...queryOptions,
   });
 };
-/** => set tab category */
-const useTabCategory = () => {
-  const categories = [
-    'Tabs 1',
-    'Tabs 2',
-    'Tabs 3',
-    'Tabs 4',
-    'Tabs 5',
-    'Tabs 6',
-    'Tabs 7',
-    'Tabs 8',
-  ];
-  const [activeTabs, setActiveTabs] = useState(0);
-  return {
-    changeTab: (nextTabs: number) => {
-      setActiveTabs(nextTabs);
-    },
-    activeTabs,
-    categories,
-  };
-};
-/** => set tag */
-const useTag = () => {
-  const tags = [
-    'Tag 1',
-    'Tag 2',
-    'Tag 3',
-    'Tag 4',
-    'Tag 5',
-    'Tag 6',
-    'Tag 7',
-    'Tag 8',
-  ];
-  return {
-    selectTab: (items: string[]) => {
-      console.log(items);
-    },
-    tags,
-  };
-};
-/** => call list action */
-const useProductListAction = () => {
+
+const useProductListActions = () => {
   const dispatch = useDispatch();
   const limit = 10;
+
   return {
-    list: (contextDispatch: (action: any) => any) => {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.ProductListQueryOptions,
+    ) => {
       contextDispatch(Actions.productListReset());
-      dispatch(callList(contextDispatch, true, 0, limit));
+      dispatch(
+        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+      );
     },
-    refresh: (contextDispatch: (action: any) => any) => {
+    refresh: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.ProductListQueryOptions,
+    ) => {
       contextDispatch(Actions.productListRefresh());
-      dispatch(callList(contextDispatch, true, 0, limit));
+      dispatch(
+        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+      );
     },
     loadMore: (
       contextDispatch: (action: any) => any,
-      list: models.ListItemProps<models.ProductList[]>,
+      paginationQueries: { skip: number; canLoadMore: boolean },
+      queryOptions?: models.ProductListQueryOptions,
     ) => {
-      if (list.data.length < list.total) {
+      if (paginationQueries.canLoadMore) {
         contextDispatch(Actions.productListLoadMore());
-        dispatch(callList(contextDispatch, false, list.skip + limit, limit));
+        dispatch(
+          callProcessAction(
+            contextDispatch,
+            false,
+            paginationQueries.skip + limit,
+            limit,
+            queryOptions,
+          ),
+        );
       }
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productListReset());
     },
   };
 };
-/** => Add to Cart Modal */
-/** => Modal Visibility */
-const useModalVisibility = () => {
+
+/** === Add to Cart Modal Related === */
+const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
 
   const toggleModalVisible = () => {
@@ -98,7 +75,7 @@ const useModalVisibility = () => {
 
   return { orderModalVisible, setOrderModalVisible, toggleModalVisible };
 };
-/** => Order Quantity */
+
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
@@ -118,40 +95,8 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
 
   return { orderQty, increaseOrderQty, decreaseOrderQty };
 };
-/** => Keyboard Listener */
-const useKeyboardListener = () => {
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
-  const showKeyboard = () => setKeyboardVisible(true);
-  const hideKeyboard = () => setKeyboardVisible(false);
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      showKeyboard,
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      hideKeyboard,
-    );
-
-    return () => {
-      keyboardDidShowListener.remove();
-      keyboardDidHideListener.remove();
-    };
-  }, []);
-
-  return { keyboardVisible };
-};
-/** === EXPORT === */
-export {
-  useProductListAction,
-  useTabCategory,
-  useTag,
-  useModalVisibility,
-  useOrderQuantity,
-  useKeyboardListener,
-};
+export { useProductListActions, useOrderModalVisibility, useOrderQuantity };
 /**
  * ================================================================
  * NOTES
@@ -159,7 +104,7 @@ export {
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 14-10-21
+ * updatedDate: 27-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
