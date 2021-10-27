@@ -1,19 +1,40 @@
-/** === IMPORT EXTERNAL FUNCTION === */
+/** === IMPORT INTERNAL === */
+import { serializeQs } from '@core/functions/global/query-string';
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
-/** === FUNCTION === */
-/** => product list */
-const productList = (data: models.ListProcessProps) => {
-  const path = `products?limit=${data.limit}&skip=${data.skip}`;
+/** === FUNCTIONS === */
+const serializeTagsQs = (tags?: Array<string>) => {
+  if (tags !== undefined) {
+    const formattedArray = tags.map(
+      (tag) => `tags[]=${encodeURIComponent(tag)}`,
+    );
+    return formattedArray.join('&');
+  }
+};
+
+const getList = (data: models.ProductListProcessProps) => {
+  const qs = serializeQs({
+    skip: data.skip,
+    limit: data.limit,
+    sort: data.sort,
+    sortBy: data.sortBy,
+    keyword: data.keyword,
+    brandId: data.brandId,
+    categoryId: data.categoryId,
+    minPrice: data.minPrice,
+    maxPrice: data.maxPrice,
+  });
+  const tagQs = data.tags !== undefined ? `&${serializeTagsQs(data.tags)}` : '';
+
   return apiMapping<models.ProductList[]>(
     'public',
-    path,
+    `products?${qs}${tagQs}`,
     'product',
     'v1',
     'LIST',
   );
 };
-/** === EXPORT FUNCTIONS === */
+
 export const ProductApi = {
-  productList,
+  getList,
 };
