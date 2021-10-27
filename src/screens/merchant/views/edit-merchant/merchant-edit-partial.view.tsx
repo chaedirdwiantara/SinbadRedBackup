@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
@@ -41,6 +41,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const noKtp = useInput(ownerData?.idNo || '');
   const noNPWP = useInput(ownerData?.taxNo || '');
   const mobilePhone = useInput(ownerData?.mobilePhone || '');
+  const [emailIsNotValid, setEmailIsNotValid] = useState(false);
+  const [errorIdNumber, setErrorIdNumber] = useState(false);
   //MERCHANT DATA
   const merchantName = useInput(storeData?.storeAccount?.name || '');
   const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
@@ -70,7 +72,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.merchantEdit.data !== null
     ) {
       ToastAndroid.showWithGravityAndOffset(
-        'Success',
+        'Berhasil Update Data',
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -95,7 +97,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   }, [stateMerchant]);
 
   useEffect(() => {
-    if (stateMerchant.changeEmail.data) {
+    if (stateMerchant.changeEmail.data !== null) {
       NavigationAction.navigate('MerchantOtpView', {
         type: 'email',
         data: ownerEmail.value,
@@ -106,7 +108,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         data: mobilePhone.value,
       });
     }
-  }, [stateMerchant.changeEmail]);
+  }, [stateMerchant]);
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
@@ -206,7 +208,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
     }
   };
-
+  /** VALIDATE EMAIL */
+  const validateEmail = (email: string) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(email)) {
+      setEmailIsNotValid(false);
+    } else {
+      setEmailIsNotValid(true);
+    }
+    ownerEmail.setValue(email);
+  };
+  /** === CHECK ID NUMBER FORMAT === */
+  const checkIdNoFormat = (idNumber: any) => {
+    noKtp.setValue(idNumber);
+    if (idNumber === '' || idNumber.length === 16) {
+      setErrorIdNumber(false);
+    } else {
+      setErrorIdNumber(true);
+    }
+  };
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
@@ -214,12 +234,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantOwnerName':
         return ownerName.value === ownerData?.name;
       case 'merchantOwnerEmail':
-        return (
-          ownerEmail.value === ownerData?.email
-          // || this.state.emailIsNotValid
-        );
+        return ownerEmail.value === ownerData?.email || emailIsNotValid;
       case 'merchantOwnerIdNo':
-        return noKtp.value === ownerData?.idNo;
+        return errorIdNumber || noKtp.value === ownerData?.idNo;
       case 'merchantOwnerTaxNo':
         return noNPWP.value === ownerData?.taxNo;
       case 'merchantOwnerPhoneNo':
@@ -303,7 +320,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           placeholder={'Masukan E-mail'}
           type={'default'}
           value={ownerEmail.value}
-          onChangeText={(text) => ownerEmail.setValue(text)}
+          onChangeText={(text) => validateEmail(text)}
           clearText={() => ownerEmail.setValue('')}
         />
       </View>
@@ -335,9 +352,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           placeholder={'Masukan No.KTP maks. 16 Digit'}
           type={'default'}
           value={noKtp.value}
-          onChangeText={(text) => noKtp.setValue(text)}
+          onChangeText={(text) => {
+            const cleanNumber = text.replace(/[^0-9]/g, '');
+            checkIdNoFormat(cleanNumber);
+          }}
           clearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
+          maxLength={16}
         />
       </View>
     );

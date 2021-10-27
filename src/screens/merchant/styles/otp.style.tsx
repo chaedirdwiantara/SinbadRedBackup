@@ -1,12 +1,15 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
 
 const OtpStyle = StyleSheet.create({
   image: {
+    height: 190,
+    width: undefined,
+    aspectRatio: 1 / 1,
+  },
+  imageOtp: {
     height: 100,
-    width: 100,
-    backgroundColor: color.black10,
-    marginTop: 24,
+    width: undefined,
+    aspectRatio: 1 / 1,
     alignSelf: 'center',
   },
   titleContainer: {

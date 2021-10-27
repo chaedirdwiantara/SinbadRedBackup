@@ -40,12 +40,10 @@ const UserView: FC = () => {
       reset({ index: 0, routes: [{ name: 'Home' }] });
       return true;
     };
-
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       backAction,
     );
-
     return () => backHandler.remove();
   }, []);
 

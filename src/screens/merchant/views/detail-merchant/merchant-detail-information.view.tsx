@@ -1,13 +1,25 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
   SnbListButtonType2,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 
 const MerchantDetailAccountView: FC = () => {
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {

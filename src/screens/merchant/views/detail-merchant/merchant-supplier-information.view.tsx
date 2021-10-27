@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { View, FlatList, RefreshControl } from 'react-native';
+import { View, FlatList, RefreshControl, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
@@ -17,6 +17,18 @@ const MerchantSupplierInformationView: FC = () => {
   );
   useEffect(() => {
     supplierListAction.list(dispatchSupplier);
+  }, []);
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   }, []);
   /** LOAD MORE LIST VIEW */
   const onHandleLoadMore = () => {

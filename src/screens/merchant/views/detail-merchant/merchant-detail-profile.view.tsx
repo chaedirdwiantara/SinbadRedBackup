@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
@@ -6,7 +6,13 @@ import {
   SnbIcon,
   color,
 } from 'react-native-sinbad-ui';
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+  BackHandler,
+} from 'react-native';
 import { NavigationAction } from '@navigation';
 import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
@@ -19,6 +25,18 @@ const MerchantDetailProfileView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
   const { navigate } = useNavigation();
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /** FUNCTION */
   /** === GO TO PAGE === */
   const goTo = (data: any) => {

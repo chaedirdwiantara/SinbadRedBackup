@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import { ScrollView } from 'react-native';
+import { ScrollView, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** MODULE PAGE */
 import MerchantEditPartialView from './merchant-edit-partial.view';
@@ -10,6 +10,18 @@ interface Props {
 }
 
 const MerchantEditView: FC<Props> = (props) => {
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {
