@@ -14,6 +14,10 @@ const backToCart = () => {
 const goToVerificationOrder = () => {
   NavigationAction.navigate('OmsVerificationOrderView');
 };
+/** => go to verification order */
+const goToVoucherCartList = () => {
+  NavigationAction.navigate('VoucherCartListView');
+};
 /** => go to cart 3 */
 const goToCart3 = () => {
   NavigationAction.navigate('OmsShoppingCart3View');
@@ -54,4 +58,5 @@ export {
   goToHome,
   goToHistoryDetail,
   goToPaymentPromoList,
+  goToVoucherCartList,
 };
