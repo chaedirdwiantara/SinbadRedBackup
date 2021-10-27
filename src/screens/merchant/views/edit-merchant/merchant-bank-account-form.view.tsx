@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   SnbText,
   SnbTopNav,
@@ -6,8 +6,9 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
   color,
+  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TouchableOpacity, BackHandler } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -21,6 +22,12 @@ interface Props {
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
+  //DATA
+  const TNC_CONTENT = [
+    'Setiap pengguna hanya dapat memiliki 1(satu) rekening Bank yang terdaftar pada akun Sinbad. Pengguna memahami dan menyetujui bahwa Pengguna bertanggung jawab penuh atas penggunaan rekening Bank yang didaftarkan tersebut.',
+    'Pendaftaran rekening Bank dapat digunakan untuk melakukan refund.',
+    'Sinbad berhak untuk melakukan pembatasan Rekening Bank, pembekuan dan/atau penghapusan akun Bank yang didaftarkan sesuai dengan kebijakan yang ditentukan oleh Sinbad. Dalam hal ini, jika ditemukan adanya dugaan pelanggaran syarat dan ketentuan, kecurangan, manipulasi atau kejahatan yang dilakukan oleh Pengguna pada Situs/Aplikasi.',
+  ];
   //HOOK
   const { stateUser } = React.useContext(contexts.UserContext);
   const bankData = stateUser.detail.data?.ownerData.profile.bankAccount;
@@ -34,6 +41,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
   const bankBranchName = useInput(bankData?.bankBranchName || '');
+  const [openModalTNC, setOpenModalTNC] = useState(false);
   useEffect(() => {
     if (selectedItem?.item) {
       bankId.setValue(selectedItem.item.id);
@@ -48,6 +56,18 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       });
     }
   }, [stateMerchant]);
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /** function */
   const checkButton = () => {
     if (bankId.value && bankAccountNo.value && bankAccountName.value) {
@@ -137,22 +157,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const renderButton = () => {
     return (
       <View>
-        <View
-          style={{
-            alignItems: 'center',
-            flexDirection: 'row',
-            paddingHorizontal: 16,
-            backgroundColor: color.white,
-          }}>
-          <SnbText.B3 color={color.black40}>
-            Dengan verifikasi, anda menyetujui{' '}
-          </SnbText.B3>
-          <TouchableOpacity
-            style={{ paddingVertical: 8 }}
-            onPress={() => console.log('press')}>
-            <SnbText.B3 color={color.red50}>Syarat dan Ketentuan</SnbText.B3>
-          </TouchableOpacity>
-        </View>
         <View style={{ height: 75 }}>
           <SnbButton.Single
             title={'Verifikasi'}
@@ -164,6 +168,69 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
+  const renderTNC = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          flexDirection: 'row',
+          paddingHorizontal: 16,
+          backgroundColor: color.white,
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}>
+        <SnbText.C1 color={color.black40}>
+          Dengan verifikasi, anda menyetujui{' '}
+        </SnbText.C1>
+        <TouchableOpacity
+          style={{ paddingVertical: 8 }}
+          onPress={() => setOpenModalTNC(!openModalTNC)}>
+          <SnbText.C1 color={color.red50}>Syarat dan Ketentuan</SnbText.C1>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  //** terms and condition */
+  const renderContentTnC = () => {
+    return (
+      <View style={{ padding: 16 }}>
+        <View style={{ marginBottom: 8 }}>
+          <SnbText.B3>
+            Syarat dan Ketentuan Rekening Bank di Sinbad :
+          </SnbText.B3>
+        </View>
+        {TNC_CONTENT.map((el, index) => {
+          return (
+            <View key={index} style={{ flexDirection: 'row', marginBottom: 8 }}>
+              <View style={{ marginHorizontal: 8 }}>
+                <SnbText.B3>{index + 1}.</SnbText.B3>
+              </View>
+              <View style={{ flex: 1 }}>
+                <SnbText.B3>{el}</SnbText.B3>
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
+  //** modal TNC */
+  const modalTNC = () => {
+    return openModalTNC ? (
+      <View style={{ backgroundColor: 'red' }}>
+        <SnbBottomSheet
+          open={openModalTNC}
+          content={renderContentTnC()}
+          title={'Syarat dan Ketentuan'}
+          actionIcon={'close'}
+          action={true}
+          closeAction={() => setOpenModalTNC(false)}
+        />
+      </View>
+    ) : (
+      <View />
+    );
+  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -171,7 +238,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
         {renderContent()}
       </ScrollView>
+      {renderTNC()}
       {renderButton()}
+      {modalTNC()}
     </View>
   );
 };

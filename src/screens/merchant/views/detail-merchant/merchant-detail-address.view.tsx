@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   color,
   SnbContainer,
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -29,6 +29,18 @@ const MerchantDetailAddressView: FC = () => {
       });
     }
   }, [storeAddress]);
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   /** === VIEW === */
   /** => header */
