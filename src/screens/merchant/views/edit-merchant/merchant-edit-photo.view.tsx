@@ -100,6 +100,7 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data !== null) {
       setImageUrl(stateGlobal.uploadImage.data.url);
+      handleUpdatePhoto();
       resetCamera();
     }
 
@@ -197,12 +198,12 @@ const MerchantEditPhotoView = () => {
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
-              type={isImageCaptured ? 'secondary' : 'primary'}
-              title={isImageCaptured ? 'Upload' : 'Simpan'}
+              type={'primary'}
+              title={'Simpan'}
               shadow
               onPress={action}
               loading={stateGlobal.uploadImage.loading}
-              disabled={stateGlobal.uploadImage.loading}
+              disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
             />
           </View>
         </View>
@@ -221,7 +222,7 @@ const MerchantEditPhotoView = () => {
       />
       <View style={{ flex: 1 }}>
         {renderIF(
-          isImageAvailable,
+          !isImageAvailable,
           renderImagePreview(),
           <SnbUploadPhotoRules
             rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}
