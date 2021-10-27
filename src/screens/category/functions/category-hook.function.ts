@@ -35,13 +35,24 @@ const useSetLevel2 = () => {
   const [selectedLevel2Id, setSelectedLevel2Id] = React.useState<string | null>(
     null,
   );
+  const [selectedSecondLevelIndex, setSelectedSecondLevelIndex] =
+    React.useState<number | null>(null);
+
   return {
-    selectedLevel2Id: selectedLevel2Id,
+    selectedLevel2Id,
+    selectedSecondLevelIndex,
     setSelectLevel2Id: (id: string) => {
       if (selectedLevel2Id === id) {
         setSelectedLevel2Id(null);
       } else {
         setSelectedLevel2Id(id);
+      }
+    },
+    setSecondLevelIndex: (index: number) => {
+      if (index === selectedSecondLevelIndex) {
+        setSelectedSecondLevelIndex(null);
+      } else {
+        setSelectedSecondLevelIndex(index);
       }
     },
   };

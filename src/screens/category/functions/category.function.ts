@@ -8,8 +8,21 @@ const goBack = () => {
   NavigationAction.back();
 };
 /** => go to product list */
-const goToProduct = () => {
-  NavigationAction.navigate('ProductView');
+const goToProduct = (
+  category:
+    | models.CategoryLevel
+    | models.CategoryLevel2
+    | models.CategoryLevel3,
+  firstLevelIndex?: number,
+  secondLevelIndex?: number,
+  thirdLevelIndex?: number,
+) => {
+  NavigationAction.navigate('ProductView', {
+    category,
+    categoryFirstLevelIndex: firstLevelIndex,
+    categorySecondLevelIndex: secondLevelIndex,
+    categoryThirdLevelIndex: thirdLevelIndex,
+  });
 };
 /** => go to category list */
 const goToCategory = (id?: string) => {
