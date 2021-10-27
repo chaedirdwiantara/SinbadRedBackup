@@ -24,8 +24,20 @@ const voucherCartList = () => {
     'DETAIL',
   );
 };
+/** => count all voucher */
+const countAllVoucher = () => {
+  const path = 'voucher-cart-list/count';
+  return apiMapping<models.CountAllVoucherProps>(
+    'auth',
+    path,
+    'discount',
+    'v1',
+    'DETAIL',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
+  countAllVoucher,
 };
