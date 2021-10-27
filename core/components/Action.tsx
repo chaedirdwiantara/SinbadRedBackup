@@ -1,479 +1,300 @@
-/** === IMPORT PACKAGE === */
-import React, { FC, useState, useEffect} from 'react';
-import { 
-  View, 
+/** === IMPORT PACKAGES === */
+import React, { FC } from 'react';
+import {
+  View,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   Dimensions,
-  Keyboard
+  Keyboard,
 } from 'react-native';
-import { color, SnbText, SnbButton, SnbRadioButton } from 'react-native-sinbad-ui';
-import { toCurrency } from '../functions/global/currency-format'
-
-/** === IMPORT THIRD PARTY PACKAGE */
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import {
+  color,
+  SnbText,
+  SnbButton,
+  SnbRadioButton,
+} from 'react-native-sinbad-ui';
 import { TextInputMask } from 'react-native-masked-text';
-
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+/** === IMPORT FUNCTIONS */
+import { useKeyboardListener } from '@core/functions/hook/keyboard-listener';
+import { useSortIndex, usePriceRangeFilter } from '@core/functions/product';
+import { toCurrency } from '../functions/global/currency-format';
+/** === IMPORT TYPE */
+import { BottomActionPressHandlerType } from '@core/components/product/list/BottomAction';
+/** === IMPORT STYLE */
+import { ModalActionStyle } from '@core/styles';
 /** === TYPE === */
-interface SortData {
+interface SortOption {
   name: string;
   sortBy: string;
   sort: string;
 }
 
 interface ActionSortMenuType1Props {
-  sortData: SortData[];
-  sortDataIndex: number | null;
-  onChange: (any: any) => void;
-  onRef?: any;
+  options: SortOption[];
+  appliedOptionIndex: number | null;
+  onButtonPress: ({
+    type,
+    value,
+  }: {
+    type: BottomActionPressHandlerType;
+    value: number | null;
+  }) => void;
 }
 
 interface ActionFilterMenuType1Props {
-  priceGteMasking: string | number;
-  priceLteMasking: string | number;
-  priceGte: number;
-  priceLte: number;
-  onChange: (any: any) => void;
+  onButtonPress: ({
+    type,
+    value,
+  }: {
+    type: BottomActionPressHandlerType;
+    value: { minPrice: number; maxPrice: number };
+  }) => void;
 }
-
-/** KEYBOAD LISTENER */
-let keyboardDidShowListener: any;
-let keyboardDidHideListener: any;
-
+interface RenderPriceInputParams {
+  value: number;
+  handleTextChange: (formatted: string, extracted?: string) => void;
+  handleWhenEditEnd: () => void;
+}
+/** === CONSTANT === */
 const { height, width } = Dimensions.get('window');
-
-const SortMenuType1: FC<ActionSortMenuType1Props> = (props) => {
-  const [sortData, setSortData] = useState<SortData | null>(null);
-  const [sortDataIndex, setSortDataIndex] = useState<number | null>(null)
-
-  /**
-   * =======================
-   * FUNCTIONAL
-   * =======================
-   */
-  /** === SEND DATA TO PARENT === */
-  const toParentFunction = () => {
-    props.onChange({
-      type: 'applySort',
-      value: {
-        data: sortDataIndex !== null ? sortData : null
-      }
-    });
-  }
-  /** === CHECK SELECTED SORT ITEM === */
-  const checkSort = (item: SortData, index: number) => {
-    if (index === sortDataIndex) {
-      setSortDataIndex(null)
-    } else {
-      setSortDataIndex(index);
-      setSortData(item);
-    }
-  }
-
-  /**
-   * ==========================
-   * RENDER VIEW
-   * ==========================
-   */
-  /** === RENDER CONTENT === */
+/** === COMPONENTS === */
+const SortMenuType1: FC<ActionSortMenuType1Props> = ({
+  options,
+  appliedOptionIndex,
+  onButtonPress,
+}) => {
+  /** === HOOK === */
+  const { activeIndex, setActiveSortIndex } = useSortIndex(appliedOptionIndex);
+  /** === VIEW === */
+  /** => Content */
   const renderContent = () => {
-    return Array.isArray(props.sortData) && 
-      props.sortData.map((item, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => checkSort(item, index)}
-          >
-            <View style={styles.boxContentItemSortType1}>
-              <View style={{ flex: 1 }}>
-                <SnbText.B3>{item.name}</SnbText.B3>
-              </View>
-              <View style={styles.boxIconRight}>
-                {sortDataIndex === index ? (
-                  <SnbRadioButton
-                    status={"selected"}
-                  />
-                ) : (
-                  <SnbRadioButton
-                    status={"unselect"}
-                  />
-                )}
-              </View>
-            </View>
-            <View style={[styles.lines, { marginLeft: 16 }]} />
-          </TouchableOpacity>
-        );
-    });
-  }
-
-  /** === RENDER BUTTON === */
-  const renderButton = () => {
-    
     return (
-      <View style={{ marginTop: 32, height: 72 }}> 
-        <SnbButton.Single
-          type="primary"
-          title="Simpan"
-          onPress={toParentFunction}
-          disabled={sortDataIndex === props.sortDataIndex}
-        />
-      </View>
-    );
-  }
-
-  return (
-    <View style={styles.mainContainer}>
-      {renderContent()}
-      {renderButton()}
-    </View>
-  )
-}
-
-const FilterMenuType1: FC<ActionFilterMenuType1Props> = (props) => {
-  /** === STATE === */
-  const [priceGteMasking, setPriceGteMasking] = useState<string | number>(props.priceGteMasking);
-  const [priceLteMasking, setPriceLteMasking] = useState<string | number>(props.priceLteMasking);
-  const [priceGte, setPriceGte] = useState<number>(props.priceGte);
-  const [priceLte, setPriceLte] = useState<number>(props.priceLte);
-  const [showKeyboard, setShowKeyboard] = useState<boolean>(false);
-
-  /**
-   * ======================
-   * FUNCTIONAL
-   * ======================
-   */
-  /** USE EFFECT */
-  useEffect(() => {
-    keyboardListener()
-    return keyboardRemove()
-  },[])
-
-  /** === SEND DATA TO PARENT === */
-  const toParentFunction = () => {
-    Keyboard.dismiss();
-    props.onChange({
-      type: 'filterSelected',
-      data: {
-        priceGte: priceGte,
-        priceLte: priceLte,
-        priceGteMasking: priceGteMasking,
-        priceLteMasking: priceLteMasking
-      }
-    });
-  }
-
-  /** === CLEAR STATE === */
-  const clearState = () => {
-    setPriceGteMasking("");
-    setPriceLteMasking("");
-    setPriceGte(0);
-    setPriceLte(0);
-  }
-
-  /**
-   * ========================
-   * FOR KEYBOARD
-   * ========================
-   */
-
-  /** KEYBOARD LISTENER */
-  const keyboardListener = () => {
-    keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      keyboardDidShow
-    );
-    keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      keyboardDidHide
-    );
-  }
-  /** KEYBOARD SHOW */
-  const keyboardDidShow = () => {
-    setShowKeyboard(true);
-  };
-  /** KEYBOARD HIDE */
-  const keyboardDidHide = () => {
-    setShowKeyboard(false);
-  };
-  /** KEYBOARD REMOVE */
-  const keyboardRemove = () => {
-    keyboardDidShowListener.remove();
-    keyboardDidHideListener.remove();
-  }
-  /** === MULTISLIDER === */
-  const multiSliderValuesChange = (values: number[]) => {
-    setPriceGte(values[0]);
-    setPriceLte(values[1]);
-  };
-
-  const multiFinish = (values: number[]) => {
-    setPriceGte(values[0]);
-    setPriceLte(values[1]);
-  };
-
-
-  /**
-   * ==========================
-   * RENDER VIEW
-   * ==========================
-   */
-  /** === RENDER RESET === */
-  const renderReset = () => {
-    return (
-      <View style={{ alignItems: 'flex-end' }}>
-        <TouchableOpacity onPress={() => clearState()}>
-          <SnbText.C1 color={color.red50}>Reset</SnbText.C1>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  /** === RENDER FILTER PRICE === */
-  const renderFilterPrice = () => {
-    return (
-      <View>
-        <View>
-          <SnbText.B2>Harga</SnbText.B2>
-        </View>
-        <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <View style={{ justifyContent: 'center', marginRight: 10 }}>
-              <SnbText.C1>Rp</SnbText.C1>
-            </View>
-            <View style={{ justifyContent: 'center', marginRight: 10 }}>
-            </View>
+      Array.isArray(options) &&
+      options.map((option, optionIndex) => (
+        <TouchableOpacity
+          key={option.name}
+          onPress={() => setActiveSortIndex(optionIndex)}>
+          <View style={ModalActionStyle.boxContentItemSortType1}>
             <View style={{ flex: 1 }}>
-              <TextInputMask
-                type={'money'}
-                value={priceGte.toString()}
-                options={{
-                  precision: 0,
-                  separator: ',',
-                  delimiter: '.',
-                  unit: '',
-                  suffixUnit: ''
-                }}
-                placeholder=""
-                keyboardType="number-pad"
-                autoFocus={false}
-                includeRawValueInChangeText
-                onChangeText={(formatted: any, extracted: any) => {
-                  setPriceGteMasking(formatted === '' ? 0 : formatted);
-                  setPriceGte(isNaN(extracted) ? 0 : extracted)
-                }}
-                onEndEditing={() => {
-                  setPriceLteMasking(
-                    priceLte < priceGte
-                    ? priceGte + 1
-                    : priceLteMasking
-                  );
-                  setPriceLte(
-                    priceLte < priceGte
-                    ? priceGte + 1
-                    : priceLte
-                  )
-                }}
-                style={[
-                  styles.text,
-                  styles.boxInput,
-                  styles.shadowForBox
-                ]}
-              />
+              <SnbText.B3>{option.name}</SnbText.B3>
+            </View>
+            <View style={ModalActionStyle.boxIconRight}>
+              {optionIndex === activeIndex ? (
+                <SnbRadioButton
+                  status="selected"
+                  onPress={() => setActiveSortIndex(null)}
+                />
+              ) : (
+                <SnbRadioButton
+                  status="unselect"
+                  onPress={() => setActiveSortIndex(optionIndex)}
+                />
+              )}
             </View>
           </View>
-          <View style={{ paddingHorizontal: 10, justifyContent: 'center' }}>
-            <SnbText.C1>-</SnbText.C1>
+          <View style={[ModalActionStyle.lines, { marginLeft: 16 }]} />
+        </TouchableOpacity>
+      ))
+    );
+  };
+  /** => Apply Button */
+  const renderApplyButton = () => (
+    <View style={{ marginTop: 32, height: 72 }}>
+      <SnbButton.Single
+        type="primary"
+        title="Simpan"
+        onPress={() =>
+          onButtonPress({
+            type: 'applySort',
+            value: activeIndex,
+          })
+        }
+        disabled={activeIndex === appliedOptionIndex}
+      />
+    </View>
+  );
+  /** => Main */
+  return (
+    <View style={ModalActionStyle.mainContainer}>
+      {renderContent()}
+      {renderApplyButton()}
+    </View>
+  );
+};
+
+const FilterMenuType1: FC<ActionFilterMenuType1Props> = ({ onButtonPress }) => {
+  /** === HOOKS === */
+  const { keyboardVisible } = useKeyboardListener();
+  const {
+    minPrice,
+    maxPrice,
+    setMinPrice,
+    setMaxPrice,
+    resetValues,
+    handleSliderChange,
+    handleSliderFinishChange,
+  } = usePriceRangeFilter();
+  /** === VIEW === */
+  /** => Reset Button */
+  const renderResetButton = () => (
+    <View style={{ alignItems: 'flex-end' }}>
+      <TouchableOpacity onPress={resetValues}>
+        <SnbText.C1 color={color.red50}>Reset</SnbText.C1>
+      </TouchableOpacity>
+    </View>
+  );
+  /** => Price Input */
+  const renderPriceInput = ({
+    value,
+    handleTextChange,
+    handleWhenEditEnd,
+  }: RenderPriceInputParams) => (
+    <TextInputMask
+      type="money"
+      value={value.toString()}
+      options={{
+        precision: 0,
+        separator: ',',
+        delimiter: '.',
+        unit: '',
+        suffixUnit: '',
+      }}
+      placeholder=""
+      keyboardType="number-pad"
+      autoFocus={false}
+      includeRawValueInChangeText={true}
+      onChangeText={handleTextChange}
+      onEndEditing={handleWhenEditEnd}
+      style={[
+        ModalActionStyle.text,
+        ModalActionStyle.boxInput,
+        ModalActionStyle.shadowForBox,
+      ]}
+    />
+  );
+  /** => Filter Price */
+  const renderFilterPrice = () => (
+    <View>
+      <View>
+        <SnbText.B2>Harga</SnbText.B2>
+      </View>
+      <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+        <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ justifyContent: 'center', marginRight: 10 }}>
+            <SnbText.C1>Rp</SnbText.C1>
           </View>
-          <View style={{ flexDirection: 'row', flex: 1 }}>
-            <View style={{ justifyContent: 'center', marginRight: 10 }}>
-              <SnbText.C1>Rp</SnbText.C1>
-            </View>
-            <View style={{ flex: 1, marginRight: 2 }}>
-              <TextInputMask
-                type={'money'}
-                value={priceLte.toString()}
-                options={{
-                  precision: 0,
-                  separator: ',',
-                  delimiter: '.',
-                  unit: '',
-                  suffixUnit: ''
-                }}
-                placeholder=""
-                keyboardType="number-pad"
-                autoFocus={false}
-                includeRawValueInChangeText
-                onChangeText={(formatted: any, extracted: any) => {
-                  setPriceLteMasking(formatted === '' ? 0 : formatted);
-                  setPriceLte(isNaN(extracted) ? 0 : extracted);
-                }}
-                onEndEditing={() => {
-                  setPriceGteMasking(
-                    priceGte > priceLte
-                    ? 0
-                    : priceGteMasking,
-                  );
-                  setPriceGte(
-                    priceGte > priceLte
-                    ? 0
-                    : priceGte
-                  )
-                }}
-                style={[
-                  styles.text,
-                  styles.boxInput,
-                  styles.shadowForBox
-                ]}
-              />
-            </View>
+          <View style={{ justifyContent: 'center', marginRight: 10 }} />
+          <View style={{ flex: 1 }}>
+            {renderPriceInput({
+              value: minPrice,
+              handleTextChange: (_, extracted: any) => {
+                setMinPrice(isNaN(extracted) ? 0 : extracted);
+              },
+              handleWhenEditEnd: () => {
+                setMaxPrice(maxPrice < minPrice ? minPrice + 1 : maxPrice);
+              },
+            })}
+          </View>
+        </View>
+        <View style={{ paddingHorizontal: 10, justifyContent: 'center' }}>
+          <SnbText.C1>-</SnbText.C1>
+        </View>
+        <View style={{ flexDirection: 'row', flex: 1 }}>
+          <View style={{ justifyContent: 'center', marginRight: 10 }}>
+            <SnbText.C1>Rp</SnbText.C1>
+          </View>
+          <View style={{ flex: 1, marginRight: 2 }}>
+            {renderPriceInput({
+              value: maxPrice,
+              handleTextChange: (_, extracted: any) => {
+                setMaxPrice(isNaN(extracted) ? 0 : extracted);
+              },
+              handleWhenEditEnd: () => () => {
+                setMinPrice(minPrice > maxPrice ? 0 : minPrice);
+              },
+            })}
           </View>
         </View>
       </View>
-    );
-  }
-
-  /** === RENDER FILTER SLIDER === */
-  const renderFilterSliderPrice = () => {
-    const widthTemp = 0.85 * width;
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <MultiSlider
-          trackStyle={{
-            width: '100%'
-          }}
-          selectedStyle={{
-            backgroundColor: color.red50
-          }}
-          unselectedStyle={{
-            backgroundColor: color.black10
-          }}
-          markerStyle={{
-            backgroundColor: color.red50
-          }}
-          min={0}
-          max={5000000}
-          values={[priceGte, priceLte]}
-          sliderLength={widthTemp}
-          onValuesChangeFinish={multiFinish}
-          onValuesChange={multiSliderValuesChange}
-          enabledOne
-          enabledTwo
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-            marginTop: -10
-          }}
-        >
-          <SnbText.C1>{toCurrency(priceGte)}</SnbText.C1>
-          <SnbText.C1>{toCurrency(priceLte)}</SnbText.C1>
-        </View>
+    </View>
+  );
+  /** => Filter Slider */
+  const renderFilterSliderPrice = () => (
+    <View style={{ alignItems: 'center' }}>
+      <MultiSlider
+        trackStyle={{ width: '100%' }}
+        selectedStyle={{ backgroundColor: color.red50 }}
+        unselectedStyle={{ backgroundColor: color.black10 }}
+        markerStyle={{ backgroundColor: color.red50 }}
+        min={0}
+        max={5000000}
+        values={[minPrice, maxPrice]}
+        sliderLength={0.85 * width}
+        onValuesChangeFinish={handleSliderFinishChange}
+        onValuesChange={handleSliderChange}
+        enabledOne={true}
+        enabledTwo={true}
+      />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: '100%',
+          marginTop: -10,
+        }}>
+        <SnbText.C1>{toCurrency(minPrice)}</SnbText.C1>
+        <SnbText.C1>{toCurrency(maxPrice)}</SnbText.C1>
       </View>
-    );
-  }
-
-  /** === RENDER CONTENT === */
-  const renderContent = () => {
-    return (
-      <ScrollView style={styles.boxContentItemFilterType1}>
-        {renderReset()}
-        {renderFilterPrice()}
-        {renderFilterSliderPrice()}
-      </ScrollView>
-    );
-  }
-
-  /** === RENDER BUTTON === */
-  const renderButton = () => {
-    return (
-      <View style={{ marginTop: 32, height: 72 }}> 
-        <SnbButton.Single
-          type="primary"
-          title="Simpan"
-          onPress={toParentFunction}
-          disabled={false}
-        />
-      </View>
-    );
-  }
-
+    </View>
+  );
+  /** => Content */
+  const renderContent = () => (
+    <ScrollView style={ModalActionStyle.boxContentItemFilterType1}>
+      {renderResetButton()}
+      {renderFilterPrice()}
+      {renderFilterSliderPrice()}
+    </ScrollView>
+  );
+  /** => Apply Button */
+  const renderApplyButton = () => (
+    <View style={{ marginTop: 32, height: 72 }}>
+      <SnbButton.Single
+        type="primary"
+        title="Simpan"
+        onPress={() => {
+          Keyboard.dismiss();
+          onButtonPress({
+            type: 'applyFilter',
+            value: { minPrice, maxPrice },
+          });
+        }}
+        disabled={false}
+      />
+    </View>
+  );
+  /** => Main */
   return (
     <View
       style={[
-        styles.mainContainer,
-        { maxHeight: showKeyboard ? 0.4 * height : 0.8 * height }
-      ]}
-    >
-      {/* <StatusBarRedOP50 /> */}
+        ModalActionStyle.mainContainer,
+        { maxHeight: keyboardVisible ? 0.4 * height : 0.8 * height },
+      ]}>
       {renderContent()}
-      {renderButton()}
+      {renderApplyButton()}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  lines: {
-    borderTopWidth: 1,
-    borderColor: color.black10
-  },
-  mainContainer: {
-    flex: 1,
-    backgroundColor: color.white
-  },
-  boxContentItemSortType1: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
-  },
-  boxContentItemFilterType1: {
-    paddingHorizontal: 20,
-    paddingBottom: 16
-  },
-  boxIconRight: {
-    position: 'absolute',
-    right: 20
-  },
-  boxInput: {
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    height: 37,
-    paddingBottom: 8,
-    width: '100%'
-  },
-  text: {
-    fontSize: 12,
-    lineHeight: 15,
-    color: color.black100
-  },
-  shadowForBox: {
-    borderWidth: 0,
-    backgroundColor: color.white,
-    shadowColor: color.black100,
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 1.22,
-    elevation: 1
-  },
-});
-
-export const Action = { SortMenuType1, FilterMenuType1 }
-
+export const Action = { SortMenuType1, FilterMenuType1 };
 /**
  * ============================
  * NOTES
  * ============================
  * createdBy: Maulana Ghozi
  * createdDate: 14 October 2021
- * updatedBy: 
- * updatedDate: 
+ * updatedBy:
+ * updatedDate:
  * updatedFunction:
  *
  */

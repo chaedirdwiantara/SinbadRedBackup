@@ -1,32 +1,30 @@
 /** === IMPORT PACKAGES ===  */
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { FC } from 'react';
+import { View, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
-import TagView from './tag.view';
 import { ProductGridCard } from '@core/components/ProductGridCard';
-/** === IMPORT FUNCTIONS === */
+import ProductTagList from './ProductTagList';
+/** === IMPORT FUNCTION === */
 import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
-/** === IMPORT MODEL === */
+import { goToProductDetail } from '@core/functions/product';
+/** === IMPORT TYPES === */
 import * as models from '@models';
-/** === TYPE === */
-interface ListProps {
-  data: models.ListItemProps<models.ProductList[]>;
-  tags: Array<string>;
-  onTagPress: (tags: Array<string>) => void;
-  onCardPress: (item: models.ProductList) => void;
-  onOrderPress: (item: models.ProductList) => void;
-}
+import { ProductLayoutProps } from './product-list-core.type';
 /** === COMPONENT === */
-const GridLayoutView: React.FC<ListProps> = ({
-  data,
+const GridLayout: FC<ProductLayoutProps> = ({
+  products,
   tags,
   onTagPress,
-  onCardPress,
   onOrderPress,
+  isRefreshing,
+  onRefresh,
+  onLoadMore,
 }) => {
   /** === VIEW === */
   /** => Tag List */
-  const renderTagList = () => <TagView tags={tags} onTagPress={onTagPress} />;
+  const renderTagList = () => (
+    <ProductTagList tags={tags} onTagPress={onTagPress} />
+  );
   /** => Grid Card */
   const renderGridCard = (item: models.ProductList, index: number) => {
     return (
@@ -40,12 +38,16 @@ const GridLayoutView: React.FC<ListProps> = ({
         <ProductGridCard
           flexOne={true}
           name={item.name}
-          imageUrl={item.image ?? item.thumbnail}
+          imageUrl={item.thumbnail ?? item.image}
           price={item.currentPrice ?? 0}
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           isExclusive={item.isExclusive}
-          onCardPress={() => onCardPress(item)}
+          onCardPress={() => {
+            // Fetch product detail
+            console.log({ productId: item.id });
+            goToProductDetail();
+          }}
           withOrderButton={true}
           onOrderPress={() => onOrderPress(item)}
         />
@@ -56,15 +58,15 @@ const GridLayoutView: React.FC<ListProps> = ({
   const renderGridList = () => (
     <View style={{ flexDirection: 'row' }}>
       <View style={{ flex: 1 }}>
-        {data.data.map(
-          (item, itemIndex) =>
-            itemIndex % 2 === 0 && renderGridCard(item, itemIndex),
+        {products.map(
+          (product, productIndex) =>
+            productIndex % 2 === 0 && renderGridCard(product, productIndex),
         )}
       </View>
       <View style={{ flex: 1 }}>
-        {data.data.map(
-          (item, itemIndex) =>
-            itemIndex % 2 === 1 && renderGridCard(item, itemIndex),
+        {products.map(
+          (product, productIndex) =>
+            productIndex % 2 === 1 && renderGridCard(product, productIndex),
         )}
       </View>
     </View>
@@ -73,9 +75,12 @@ const GridLayoutView: React.FC<ListProps> = ({
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
         onScroll={({ nativeEvent }) => {
           if (scrollHasReachedEnd(nativeEvent)) {
-            console.log('Scroll has reached end');
+            onLoadMore();
           }
         }}
         scrollEventThrottle={10}>
@@ -86,16 +91,4 @@ const GridLayoutView: React.FC<ListProps> = ({
   );
 };
 
-export default GridLayoutView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 14-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default GridLayout;

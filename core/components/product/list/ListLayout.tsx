@@ -1,30 +1,29 @@
 /** === IMPORT PACKAGES ===  */
-import React from 'react';
+import React, { FC } from 'react';
 import { View, FlatList } from 'react-native';
 /** === IMPORT COMPONENTS === */
-import TagView from './tag.view';
 import { ProductListCard } from '@core/components/ProductListCard';
-/** === IMPORT MODEL === */
+import ProductTagList from './ProductTagList';
+/** === IMPORT FUNCTION === */
+import { goToProductDetail } from '@core/functions/product';
+/** === IMPORT TYPES === */
 import * as models from '@models';
-/** === TYPE === */
-interface ListProps {
-  data: models.ListItemProps<models.ProductList[]>;
-  tags: Array<string>;
-  onTagPress: (tags: Array<string>) => void;
-  onCardPress: (item: models.ProductList) => void;
-  onOrderPress: (item: models.ProductList) => void;
-}
+import { ProductLayoutProps } from './product-list-core.type';
 /** === COMPONENT === */
-const ListLayoutView: React.FC<ListProps> = ({
-  data,
+const ListLayout: FC<ProductLayoutProps> = ({
+  products,
   tags,
   onTagPress,
-  onCardPress,
   onOrderPress,
+  isRefreshing,
+  onRefresh,
+  onLoadMore,
 }) => {
   /** === VIEW === */
   /** => Tag List */
-  const renderTagList = () => <TagView tags={tags} onTagPress={onTagPress} />;
+  const renderTagList = () => (
+    <ProductTagList tags={tags} onTagPress={onTagPress} />
+  );
   /** => List Card */
   const renderListCard = ({
     item,
@@ -37,12 +36,16 @@ const ListLayoutView: React.FC<ListProps> = ({
       <View key={index} style={{ minHeight: 100, marginHorizontal: 16 }}>
         <ProductListCard
           name={item.name}
-          imageUrl={item.image ?? item.thumbnail}
+          imageUrl={item.thumbnail ?? item.image}
           price={item.currentPrice ?? 0}
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           isExclusive={item.isExclusive}
-          onCardPress={() => onCardPress(item)}
+          onCardPress={() => {
+            // Fetch product detail
+            console.log({ productId: item.id });
+            goToProductDetail();
+          }}
           withOrderButton={true}
           onOrderPress={() => onOrderPress(item)}
         />
@@ -55,27 +58,17 @@ const ListLayoutView: React.FC<ListProps> = ({
       <FlatList
         contentContainerStyle={{ paddingBottom: 24 }}
         ListHeaderComponent={renderTagList}
-        data={data.data}
+        data={products}
         renderItem={renderListCard}
         keyExtractor={(item) => item.id}
         onEndReachedThreshold={0.1}
-        onEndReached={() => console.log('List scroll has reached end')}
+        onEndReached={onLoadMore}
         showsVerticalScrollIndicator={true}
+        refreshing={isRefreshing}
+        onRefresh={onRefresh}
       />
     </View>
   );
 };
 
-export default ListLayoutView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 14-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default ListLayout;
