@@ -113,7 +113,10 @@ const OTPContent: React.FC<Props> = (props) => {
     return (
       <View style={{ justifyContent: 'space-between', flex: 1 }}>
         <View>
-          <Image source={{ uri: ' ' }} style={OtpStyle.image} />
+          <Image
+            source={require('../../../../assets/images/sinbad_image/otp.png')}
+            style={OtpStyle.imageOtp}
+          />
           <View style={OtpStyle.titleContainer}>
             <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
             <View style={{ marginVertical: 4 }} />
@@ -152,6 +155,14 @@ const OTPContent: React.FC<Props> = (props) => {
   };
 
   const modalSuccess = () => {
+    const label =
+      type === 'email'
+        ? 'Email'
+        : type === 'bankAccount'
+        ? 'Nomor Rekening'
+        : type === 'mobilePhone'
+        ? 'Nomor Handphone'
+        : '';
     return openModalSuccess ? (
       <View style={{ backgroundColor: 'red' }}>
         <SnbBottomSheet
@@ -159,9 +170,12 @@ const OTPContent: React.FC<Props> = (props) => {
           content={
             <View>
               <View style={{ alignContent: 'center', alignItems: 'center' }}>
-                <Image source={{ uri: ' ' }} style={OtpStyle.image} />
+                <Image
+                  source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
+                  style={OtpStyle.image}
+                />
                 <View style={{ marginVertical: 16 }}>
-                  <SnbText.H3>Email Berhasil Terverifikasi</SnbText.H3>
+                  <SnbText.B2>{label} Berhasil Terverifikasi</SnbText.B2>
                 </View>
               </View>
               <View>
