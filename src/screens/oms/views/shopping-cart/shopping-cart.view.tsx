@@ -35,6 +35,7 @@ import {
   getTotalPrice,
   goToVoucherCartList,
 } from '../../functions';
+import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
 import { useDataVoucher } from '@core/redux/Data';
 /** === DUMMIES === */
@@ -435,16 +436,21 @@ const OmsShoppingCartView: FC = () => {
                   <>
                     <SnbText.C1
                       color={color.green50}>{`Potensi potongan ${toCurrency(
-                      20000000,
+                      countPotentialDiscount(
+                        voucherData.dataVouchers.sinbadVoucher,
+                        voucherData.dataVouchers.supplierVouchers,
+                      ).totalDiscount,
                       {
                         withPrefix: false,
                         withFraction: false,
                       },
                     )}`}</SnbText.C1>
-                    <SnbText.C2
-                      color={
-                        color.green50
-                      }>{`${2} Voucher terpilih`}</SnbText.C2>
+                    <SnbText.C2 color={color.green50}>{`${
+                      countPotentialDiscount(
+                        voucherData.dataVouchers.sinbadVoucher,
+                        voucherData.dataVouchers.supplierVouchers,
+                      ).totalSelectedVoucher
+                    } Voucher terpilih`}</SnbText.C2>
                   </>
                 ) : (
                   <SnbText.B3
