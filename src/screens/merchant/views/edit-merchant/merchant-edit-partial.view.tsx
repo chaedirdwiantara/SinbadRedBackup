@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
-  SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, ToastAndroid } from 'react-native';
 /** === IMPORT STYLE HERE === */
@@ -36,7 +35,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { gotoSelection, selectedItem, resetSelectedItem } =
     useTextFieldSelect();
   const storeData = stateUser.detail.data?.storeData.storeInformation;
-  const [showToast, setShowToast] = useState(false);
   // USER DATA
   const ownerName = useInput(ownerData?.name || '');
   const ownerEmail = useInput(ownerData?.email || '');
@@ -483,17 +481,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
-  /** => Toast */
-  const renderToast = () =>
-    showToast && (
-      <SnbToast
-        message={toastMessage}
-        buttonText="TUTUP"
-        buttonAction={() => setShowToast(false)}
-        open={showToast}
-        close={() => setShowToast(false)}
-      />
-    );
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -501,7 +488,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         {switchView()}
       </ScrollView>
       {renderButton()}
-      {renderToast()}
     </View>
   );
 };
