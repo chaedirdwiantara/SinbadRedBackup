@@ -16,7 +16,7 @@ function* voucherDetail(action: models.VoucherDetailProcessAction) {
     yield action.contextDispatch(ActionCreators.voucherDetailSuccess(response));
     yield put(ActionCreators.voucherDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.voucherDetailFailed(error));
+    yield action.contextDispatch(ActionCreators.voucherDetailFailed(error));
     yield put(ActionCreators.voucherDetailFailed(error));
   }
 }
@@ -32,7 +32,7 @@ function* voucherCartList(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.voucherCartListSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
     yield put(ActionCreators.voucherCartListFailed(error));
   }
 }
@@ -48,7 +48,7 @@ function* countAllVoucher(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.countAllVoucherSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
     yield put(ActionCreators.countAllVoucherFailed(error));
   }
 }
