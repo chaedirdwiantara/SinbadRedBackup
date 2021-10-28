@@ -3,7 +3,9 @@ import React from 'react';
 import { View, FlatList, TouchableWithoutFeedback, Image } from 'react-native';
 import { SnbContainer, SnbText, SnbTopNav } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack } from '../functions';
+import { goBack, useNotificationAction } from '../functions';
+import { contexts } from '@contexts';
+import * as models from '@models';
 import NotificationEmptyView from './notification-empty.view';
 import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
@@ -67,30 +69,6 @@ const SINBAD_REJECT_MESSAGE =
   'Sinbad gagal melakukan verifikasi toko Anda. Yuk, periksa kembali halaman profile dan lengkapi data Anda.';
 
 const dataMock = [
-  {
-    id: '45717',
-    userId: '3',
-    type: 'order',
-    description: 'Status order anda sekarang adalah packing',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-09-16T16:53:09.336Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '45714',
-    userId: '3',
-    type: 'payment',
-    description: 'Pembayaran untuk Pesanan S020003000105612 gagal.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-09-16T12:47:55.543Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
   {
     id: '44499',
     userId: '3',
@@ -213,7 +191,15 @@ interface IDataMock {
 /** === COMPONENT === */
 const NotificationView: React.FC = () => {
   /** === HOOK === */
-  // SET APPROVAL STATUS TITLE
+  const { stateNotification, dispatchNotification } = React.useContext(contexts.NotificationContext);
+  const notificationAction = useNotificationAction();
+  const notificationListState = stateNotification.list;
+  /** => effect */
+  React.useEffect(() => {
+    notificationAction.list(dispatchNotification);
+  }, []);
+  console.log(999, notificationListState);
+  /** => set approval status title */
   const setApprovalStatusTitle = (status: string) => {
     switch (status) {
       case 'verified':
@@ -248,7 +234,13 @@ const NotificationView: React.FC = () => {
     );
   };
   /** => render item */
-  const renderItem = ({ item, index }: { item: IDataMock; index: number }) => {
+  const renderItem = ({
+    item,
+    index,
+  }: {
+    item: models.NotificationListSuccessProps;
+    index: number;
+  }) => {
     let title = dataIcon[item.type]?.title;
     let message = item.description;
     switch (item?.type) {
@@ -301,7 +293,7 @@ const NotificationView: React.FC = () => {
       <View style={{ flex: 1 }}>
         <FlatList
           contentContainerStyle={NotificationStyle.boxFlatlist}
-          data={dataMock}
+          data={notificationListState.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           // refreshing={this.props.notification.refreshGetNotification}

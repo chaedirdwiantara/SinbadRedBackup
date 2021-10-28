@@ -16,6 +16,7 @@ export * from './category.type';
 export * from './voucher.type';
 export * from './brand.type';
 export * from './user.type';
+export * from './notification.type';
 /**
  * ================================================================
  * NOTES
