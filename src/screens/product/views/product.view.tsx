@@ -50,54 +50,48 @@ const ProductView: FC = () => {
     fetch(dispatchProduct, { categoryId: category.id });
   }, []);
   /** === VIEW === */
-  /** => Add to Cart Modal */
-  const renderAddToCartModal = () => (
-    <AddToCartModal
-      open={orderModalVisible}
-      closeAction={() => setOrderModalVisible(false)}
-      onAddToCartPress={() => console.log('Add to cart pressed')}
-    />
-  );
-  /** => Content */
-  const renderContent = () => (
-    <View style={{ flex: 1 }}>
-      <ProductList
-        products={productListState.data}
-        onOrderPress={() => setOrderModalVisible(true)}
-        activeCategory={category}
-        categoryTabs={categoryFirstLevelIndex !== undefined}
-        categoryTabsConfig={
-          categoryFirstLevelIndex !== undefined
-            ? {
-                level: categoryThirdLevelIndex === undefined ? '2' : '3',
-                firstLevelIndex: categoryFirstLevelIndex,
-                secondLevelIndex: categorySecondLevelIndex,
-                thirdLevelIndex: categoryThirdLevelIndex,
-              }
-            : undefined
-        }
-        isRefreshing={productListState.refresh}
-        onRefresh={(queryOptions) =>
-          refresh(dispatchProduct, { categoryId: category.id, ...queryOptions })
-        }
-        onLoadMore={(queryOptions) =>
-          loadMore(
-            dispatchProduct,
-            {
-              skip: productListState.skip,
-              canLoadMore: productListState.canLoadMore,
-            },
-            { categoryId: category.id, ...queryOptions },
-          )
-        }
-      />
-    </View>
-  );
-  /** => Main */
   return (
     <SnbContainer color="white">
-      {renderContent()}
-      {renderAddToCartModal()}
+      <View style={{ flex: 1 }}>
+        <ProductList
+          products={productListState.data}
+          onOrderPress={() => setOrderModalVisible(true)}
+          activeCategory={category}
+          categoryTabs={categoryFirstLevelIndex !== undefined}
+          categoryTabsConfig={
+            categoryFirstLevelIndex !== undefined
+              ? {
+                  level: categoryThirdLevelIndex === undefined ? '2' : '3',
+                  firstLevelIndex: categoryFirstLevelIndex,
+                  secondLevelIndex: categorySecondLevelIndex,
+                  thirdLevelIndex: categoryThirdLevelIndex,
+                }
+              : undefined
+          }
+          isRefreshing={productListState.refresh}
+          onRefresh={(queryOptions) =>
+            refresh(dispatchProduct, {
+              categoryId: category.id,
+              ...queryOptions,
+            })
+          }
+          onLoadMore={(queryOptions) =>
+            loadMore(
+              dispatchProduct,
+              {
+                skip: productListState.skip,
+                canLoadMore: productListState.canLoadMore,
+              },
+              { categoryId: category.id, ...queryOptions },
+            )
+          }
+        />
+      </View>
+      <AddToCartModal
+        open={orderModalVisible}
+        closeAction={() => setOrderModalVisible(false)}
+        onAddToCartPress={() => console.log('Add to cart pressed')}
+      />
     </SnbContainer>
   );
 };
@@ -110,7 +104,7 @@ export default ProductView;
  * createdBy: hasapu (team)
  * createDate: 01022021
  * updatedBy: aliisetia
- * updatedDate: 27-10-21
+ * updatedDate: 28-10-21
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

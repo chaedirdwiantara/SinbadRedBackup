@@ -24,43 +24,35 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   title,
   setSearchKeyword,
   onSearch,
-}) => {
-  /** === VIEW === */
-  /** => Default Header */
-  const renderDefaultHeader = () => (
-    <SnbTopNav.Type6
-      title={title as string}
-      backAction={goBack}
-      type="red"
-      icon1Name="search"
-      icon1Action={goToSearch}
-      icon2Value={100}
-      icon2Name="cart"
-      icon2Action={goToShoppingCart}
-    />
-  );
-  /** => Search Header */
-  const renderSearchHeader = () => (
-    <SnbTopNav.Type8
-      type="red"
-      placeholder="Cari di Sinbad"
-      clearText={() => setSearchKeyword!('')}
-      enter={onSearch}
-      goToSearch={goToSearch}
-      onChangeText={(keyword) => setSearchKeyword!(keyword)}
-      icon1Name="home"
-      icon1Action={goToHome}
-      icon2Value={100}
-      icon2Name="cart"
-      icon2Action={goToShoppingCart}
-    />
-  );
-  /** => Main */
-  return (
-    <View>
-      {type === 'default' ? renderDefaultHeader() : renderSearchHeader()}
-    </View>
-  );
-};
+}) => (
+  <View>
+    {type === 'default' ? (
+      <SnbTopNav.Type6
+        title={title as string}
+        backAction={goBack}
+        type="red"
+        icon1Name="search"
+        icon1Action={goToSearch}
+        icon2Value={100}
+        icon2Name="cart"
+        icon2Action={goToShoppingCart}
+      />
+    ) : (
+      <SnbTopNav.Type8
+        type="red"
+        placeholder="Cari di Sinbad"
+        clearText={() => setSearchKeyword!('')}
+        enter={onSearch}
+        goToSearch={goToSearch}
+        onChangeText={(keyword) => setSearchKeyword!(keyword)}
+        icon1Name="home"
+        icon1Action={goToHome}
+        icon2Value={100}
+        icon2Name="cart"
+        icon2Action={goToShoppingCart}
+      />
+    )}
+  </View>
+);
 
 export default NavigationHeader;

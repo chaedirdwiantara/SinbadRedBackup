@@ -8,25 +8,17 @@ interface ProductTagListProps {
   onTagPress: (keywords: Array<string>) => void;
 }
 /** === COMPONENT === */
-const ProductTagList: FC<ProductTagListProps> = ({ tags, onTagPress }) => {
-  /** === VIEW === */
-  /** => Tag Slider */
-  const renderTagSlider = () => (
+const ProductTagList: FC<ProductTagListProps> = ({ tags, onTagPress }) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+    }}>
     <View style={{ flex: 1 }}>
       <SnbChipsSlider chipsList={tags} parentFunction={onTagPress} />
     </View>
-  );
-  /** => Main */
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        paddingVertical: 14,
-        paddingHorizontal: 16,
-      }}>
-      {renderTagSlider()}
-    </View>
-  );
-};
+  </View>
+);
 
 export default ProductTagList;

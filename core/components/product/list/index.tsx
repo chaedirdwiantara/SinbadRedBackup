@@ -3,10 +3,10 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
-import { Action } from '@core/components/Action';
+import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
 import CategoryTabList from './CategoryTabList';
-import GridLayout from './GridLayout';
+import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 /** === IMPORT FUNCTIONS === */
@@ -88,25 +88,24 @@ const ProductList: FC<ProductListProps> = ({
     maxPrice: filterQuery?.maxPrice,
   };
   /** === VIEW === */
-  /** => Navigation Header */
-  const renderNavigationHeader = () => (
-    <NavigationHeader
-      title={selectedCategory ? selectedCategory.name : headerTitle}
-      type={headerType}
-      setSearchKeyword={setSearchKeyword}
-      onSearch={() => {
-        const queryOptions = { ...derivedQueryOptions, keyword: searchKeyword };
+  return (
+    <SnbContainer color="white">
+      <NavigationHeader
+        title={selectedCategory ? selectedCategory.name : headerTitle}
+        type={headerType}
+        setSearchKeyword={setSearchKeyword}
+        onSearch={() => {
+          const queryOptions = {
+            ...derivedQueryOptions,
+            keyword: searchKeyword,
+          };
 
-        if (onHeaderSearch) {
-          onHeaderSearch(queryOptions);
-        }
-      }}
-    />
-  );
-  /** => Category Tabs */
-  const renderCategoryTabList = () => {
-    return (
-      categoryTabs && (
+          if (onHeaderSearch) {
+            onHeaderSearch(queryOptions);
+          }
+        }}
+      />
+      {categoryTabs && (
         <CategoryTabList
           level={categoryTabsConfig?.level!}
           selectedFirstLevelIndex={categoryTabsConfig?.firstLevelIndex!}
@@ -121,84 +120,64 @@ const ProductList: FC<ProductListProps> = ({
             onRefresh(queryOptions);
           }}
         />
-      )
-    );
-  };
-  /** => List */
-  const renderList = () =>
-    layoutDisplay === 'grid' ? (
-      <GridLayout
-        products={products}
-        tags={dummyTags}
-        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-        onOrderPress={onOrderPress}
-        isRefreshing={isRefreshing}
-        onRefresh={() => onRefresh(derivedQueryOptions)}
-        onLoadMore={() => onLoadMore(derivedQueryOptions)}
+      )}
+      <View style={{ flex: 1 }}>
+        {layoutDisplay === 'grid' ? (
+          <GridLayout
+            products={products}
+            tags={dummyTags}
+            onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+            onOrderPress={onOrderPress}
+            isRefreshing={isRefreshing}
+            onRefresh={() => onRefresh(derivedQueryOptions)}
+            onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          />
+        ) : (
+          <ListLayout
+            products={products}
+            tags={dummyTags}
+            onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
+            onOrderPress={onOrderPress}
+            isRefreshing={isRefreshing}
+            onRefresh={() => onRefresh(derivedQueryOptions)}
+            onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          />
+        )}
+      </View>
+      <BottomAction
+        sort={true}
+        filter={true}
+        layout={true}
+        category={true}
+        sortActive={sortActive}
+        filterActive={filterActive}
+        layoutDisplay={layoutDisplay}
+        onActionPress={handleActionClick}
       />
-    ) : (
-      <ListLayout
-        products={products}
-        tags={dummyTags}
-        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-        onOrderPress={onOrderPress}
-        isRefreshing={isRefreshing}
-        onRefresh={() => onRefresh(derivedQueryOptions)}
-        onLoadMore={() => onLoadMore(derivedQueryOptions)}
+      {/* Sort Modal */}
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title="Urutkan"
+        action={true}
+        actionIcon="close"
+        content={
+          <Action.Sort
+            appliedOptionIndex={sortIndex}
+            options={priceSortOptions}
+            onButtonPress={handleActionClick}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'sort' })}
       />
-    );
-  /** => Content */
-  const renderContent = () => <View style={{ flex: 1 }}>{renderList()}</View>;
-  /** => Bottom Action */
-  const renderBottomAction = () => (
-    <BottomAction
-      sort={true}
-      filter={true}
-      layout={true}
-      category={true}
-      sortActive={sortActive}
-      filterActive={filterActive}
-      layoutDisplay={layoutDisplay}
-      onActionPress={handleActionClick}
-    />
-  );
-  /** => Filter Modal */
-  const renderSortModal = () => (
-    <SnbBottomSheet
-      open={sortModalVisible}
-      title="Urutkan"
-      action={true}
-      actionIcon="close"
-      content={
-        <Action.SortMenuType1
-          appliedOptionIndex={sortIndex}
-          options={priceSortOptions}
-          onButtonPress={handleActionClick}
-        />
-      }
-      closeAction={() => handleActionClick({ type: 'sort' })}
-    />
-  );
-  /** => Filter Modal */
-  const renderFilterModal = () => (
-    <SnbBottomSheet
-      open={filterModalVisible}
-      title="Filter"
-      action={true}
-      actionIcon="close"
-      content={<Action.FilterMenuType1 onButtonPress={handleActionClick} />}
-      closeAction={() => handleActionClick({ type: 'filter' })}
-    />
-  );
-  /** => Main */
-  return (
-    <SnbContainer color="white">
-      {renderNavigationHeader()}
-      {renderCategoryTabList()}
-      {renderContent()}
-      {renderBottomAction()}
-      {renderSortModal()}
-      {renderFilterModal()}
+      {/* Filter Modal */}
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title="Filter"
+        action={true}
+        actionIcon="close"
+        content={<Action.Filter onButtonPress={handleActionClick} />}
+        closeAction={() => handleActionClick({ type: 'filter' })}
+      />
     </SnbContainer>
   );
 };

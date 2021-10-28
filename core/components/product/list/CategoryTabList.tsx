@@ -54,7 +54,6 @@ const CategoryTabList: FC<CategoryTabListProps> = ({
     ...categoryLevelList.map((category) => category.name),
   ];
   /** === VIEW === */
-  /** => Main */
   return (
     <View>
       <SnbTabs.Scrollable

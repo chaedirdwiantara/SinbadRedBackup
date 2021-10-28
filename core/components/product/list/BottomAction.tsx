@@ -55,7 +55,6 @@ const BottomAction: React.FC<BottomActionProps> = ({
     actionNames,
   });
   /** === VIEW === */
-  /** => Main */
   return <SnbBottomActions item={actions} onPress={handleActionPress} />;
 };
 

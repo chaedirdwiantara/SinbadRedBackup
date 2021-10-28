@@ -20,10 +20,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
   onLoadMore,
 }) => {
   /** === VIEW === */
-  /** => Tag List */
-  const renderTagList = () => (
-    <ProductTagList tags={tags} onTagPress={onTagPress} />
-  );
   /** => List Card */
   const renderListCard = ({
     item,
@@ -43,7 +39,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
           isExclusive={item.isExclusive}
           onCardPress={() => {
             // Fetch product detail
-            console.log({ productId: item.id });
             goToProductDetail();
           }}
           withOrderButton={true}
@@ -57,7 +52,9 @@ const ListLayout: FC<ProductLayoutProps> = ({
     <View style={{ flex: 1 }}>
       <FlatList
         contentContainerStyle={{ paddingBottom: 24 }}
-        ListHeaderComponent={renderTagList}
+        ListHeaderComponent={
+          <ProductTagList tags={tags} onTagPress={onTagPress} />
+        }
         data={products}
         renderItem={renderListCard}
         keyExtractor={(item) => item.id}
