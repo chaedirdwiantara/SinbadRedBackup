@@ -68,137 +68,34 @@ const dataIcon = {
 const SINBAD_REJECT_MESSAGE =
   'Sinbad gagal melakukan verifikasi toko Anda. Yuk, periksa kembali halaman profile dan lengkapi data Anda.';
 
-const dataMock = [
-  {
-    id: '44499',
-    userId: '3',
-    type: 'payment',
-    description: 'Pembayaran untuk Pesanan S020003186305452 gagal.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-08-04T10:52:38.753Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44497',
-    userId: '3',
-    type: 'payment',
-    description:
-      'Virtual Account untuk Pesanan S020003186305452 sudah tidak aktif. Pesanan Anda otomatis dibatalkan. Silahkan lakukan pemesanan kembali.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-08-04T10:52:38.444Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44409',
-    userId: '3',
-    type: 'payment',
-    description:
-      'Pesanan S020003186305452 sukses. Klik disini untuk melakukan pembayaran dengan mengikuti petunjuk yang telah disediakan atau Pesanan Anda akan otomatis dibatalkan.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-08-03T10:52:37.209Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44241',
-    userId: '3',
-    type: 'payment',
-    description: 'Pesanan S010001191305405 sukses.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-07-30T04:00:11.261Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44158',
-    userId: '3',
-    type: 'payment',
-    description: 'Pesanan S010001191305394 sukses.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-07-29T08:34:43.493Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44156',
-    userId: '3',
-    type: 'payment',
-    description: 'Pesanan S010001191305393 sukses.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-07-29T08:33:45.931Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44154',
-    userId: '3',
-    type: 'payment',
-    description: 'Pesanan S010001191305392 sukses.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-07-29T08:30:47.685Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-  {
-    id: '44056',
-    userId: '3',
-    type: 'payment',
-    description: 'Pesanan S020003191105375 sukses.',
-    imageUrl: null,
-    isRead: true,
-    data: null,
-    createdAt: '2021-07-22T12:15:28.300Z',
-    updatedAt: '2021-10-22T07:20:27.949Z',
-    deletedAt: null,
-  },
-];
-
-interface IDataObj {
-  supplierName: string;
-  approvalStatus: string;
-  reasons: string;
-}
-
-interface IDataMock {
-  id: string;
-  userId: string;
-  type: string;
-  description: string;
-  imageUrl: string;
-  isRead: boolean;
-  data: IDataObj;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
-}
-
 /** === COMPONENT === */
 const NotificationView: React.FC = () => {
   /** === HOOK === */
-  const { stateNotification, dispatchNotification } = React.useContext(contexts.NotificationContext);
+  const { stateNotification, dispatchNotification } = React.useContext(
+    contexts.NotificationContext,
+  );
   const notificationAction = useNotificationAction();
   const notificationListState = stateNotification.list;
   /** => effect */
   React.useEffect(() => {
     notificationAction.list(dispatchNotification);
   }, []);
-  console.log(999, notificationListState);
+
+  const onHandleLoadMore = () => {
+    if (stateNotification.list.data) {
+      if (stateNotification.list.data.length < stateNotification.list.total) {
+        notificationAction.loadMore(
+          dispatchNotification,
+          stateNotification.list,
+        );
+      }
+    }
+  };
+
+  const onHandleRefresh = () => {
+    notificationAction.reset(dispatchNotification);
+    notificationAction.list(dispatchNotification);
+  };
   /** => set approval status title */
   const setApprovalStatusTitle = (status: string) => {
     switch (status) {
@@ -288,21 +185,34 @@ const NotificationView: React.FC = () => {
     return <View style={[NotificationStyle.lines, { marginLeft: 16 }]} />;
   };
   /** => render content */
-  const renderContent = () => {
+  const renderNotificationList = () => {
     return (
-      <View style={{ flex: 1 }}>
+      <View>
         <FlatList
           contentContainerStyle={NotificationStyle.boxFlatlist}
           data={notificationListState.data}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
-          // refreshing={this.props.notification.refreshGetNotification}
-          // onRefresh={this.onHandleRefresh}
+          refreshing={notificationListState.refresh}
+          onRefresh={onHandleRefresh}
           onEndReachedThreshold={0.1}
-          // onEndReached={this.onHandleLoadMore.bind(this)}
+          onEndReached={onHandleLoadMore}
           ItemSeparatorComponent={renderSeparator}
           showsVerticalScrollIndicator
         />
+      </View>
+    );
+  };
+  /** => render content */
+  const content = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        {!notificationListState.loading &&
+        notificationListState.data.length !== 0 ? (
+          <View>{renderNotificationList()}</View>
+        ) : (
+          renderEmpty()
+        )}
       </View>
     );
   };
@@ -310,9 +220,7 @@ const NotificationView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
-      {renderContent()}
-      {/* {renderEmpty()} */}
-      {/* {<LoadingPage />} */}
+      {notificationListState.loading ? <LoadingPage /> : content()}
     </SnbContainer>
   );
 };
