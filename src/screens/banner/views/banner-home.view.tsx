@@ -20,7 +20,7 @@ const BannerHomeView: FC<Props> = () => {
     <View style={BannerStyles.bannerHomeContainer} testID={'bannerHome'}>
       <TouchableOpacity
         onPress={() =>
-          loginUserName({ username: 'dianprasetyo', password: 'sinbad' })
+          loginUserName({ username: '34389791', password: 'sinbad' })
         }>
         <SnbText.B1>Login UserName</SnbText.B1>
       </TouchableOpacity>

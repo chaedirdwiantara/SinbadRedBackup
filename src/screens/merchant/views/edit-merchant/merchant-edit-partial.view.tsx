@@ -43,6 +43,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const mobilePhone = useInput(ownerData?.mobilePhone || '');
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorIdNumber, setErrorIdNumber] = useState(false);
+  const [errorTaxNumber, setErrorTaxNumber] = useState(false);
   //MERCHANT DATA
   const merchantName = useInput(storeData?.storeAccount?.name || '');
   const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
@@ -227,6 +228,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       setErrorIdNumber(true);
     }
   };
+  /** === CHECK TAX NUMBER FORMAT === */
+  const checkTaxNoFormat = (taxNumber: any) => {
+    noNPWP.setValue(taxNumber);
+    if (taxNumber === '' || taxNumber.length === 15) {
+      setErrorTaxNumber(false);
+    } else {
+      setErrorTaxNumber(true);
+    }
+  };
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
@@ -318,10 +328,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbTextField.Text
           labelText={'E-mail'}
           placeholder={'Masukan E-mail'}
-          type={'default'}
+          type={emailIsNotValid ? 'error' : 'default'}
           value={ownerEmail.value}
           onChangeText={(text) => validateEmail(text)}
           clearText={() => ownerEmail.setValue('')}
+          valMsgError={'Pastikan email yang Anda masukkan benar'}
         />
       </View>
     );
@@ -350,7 +361,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukan No.KTP maks. 16 Digit'}
-          type={'default'}
+          type={errorIdNumber ? 'error' : 'default'}
           value={noKtp.value}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
@@ -359,6 +370,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           clearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
           maxLength={16}
+          valMsgError={'Pastikan No.KTP 16 Digit'}
         />
       </View>
     );
@@ -370,10 +382,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukan No.NPWP maks.15 Digit'}
-          type={'default'}
+          type={errorTaxNumber ? 'error' : 'default'}
           value={noNPWP.value}
-          onChangeText={(text) => noNPWP.setValue(text)}
+          onChangeText={(text) => {
+            const cleanNumber = text.replace(/[^0-9]/g, '');
+            checkTaxNoFormat(cleanNumber);
+          }}
           clearText={() => noNPWP.setValue('')}
+          valMsgError={'Pastikan No.NPWP 15 Digit'}
+          maxLength={15}
+          keyboardType={'number-pad'}
         />
       </View>
     );
