@@ -4,9 +4,9 @@ import * as models from '@models';
 /** => promo payment list process */
 export const promoPaymentListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  data: models.PromoPaymentListProcessProps,
+): models.PromoPaymentListProcessAction => {
+  contextDispatch({ type: types.PROMO_PAYMENT_LIST_PROCESS, payload: data });
   return {
     type: types.PROMO_PAYMENT_LIST_PROCESS,
     payload: data,
