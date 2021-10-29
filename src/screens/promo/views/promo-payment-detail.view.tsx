@@ -29,6 +29,11 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
       promoPaymentAction.resetDetail(dispatchPromo);
     };
   }, []);
+  React.useEffect(() => {
+    if (promoPaymentDetailState.error !== null) {
+      setErrorModalOpen(true);
+    }
+  }, [promoPaymentDetailState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
