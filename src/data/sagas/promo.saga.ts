@@ -34,7 +34,9 @@ function* promoPaymentDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoPaymentDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoPaymentDetailFailed(error),
+    );
     yield put(ActionCreators.promoPaymentDetailFailed(error));
   }
 }
@@ -50,7 +52,9 @@ function* promoGeneralDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoGeneralDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoGeneralDetailFailed(error),
+    );
     yield put(ActionCreators.promoGeneralDetailFailed(error));
   }
 }
