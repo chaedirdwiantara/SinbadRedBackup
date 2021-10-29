@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE ===  */
 import { useState } from 'react';
-/** === IMPORT FUNCTION ===  */
+import { Alert } from 'react-native';
+/** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
@@ -44,6 +45,8 @@ export const useBottomAction = (
   const [filterActive, setFilterActive] = useState(false);
   const [filterQuery, setFilterQuery] = useState<PriceRange | null>(null);
   const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
+  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
+    useState(true);
 
   const getQueryOptions = ({
     sort = true,
@@ -73,6 +76,9 @@ export const useBottomAction = (
 
   const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
     switch (type) {
+      case 'registerSupplierVisible':
+        setRegisterSupplierModalVisible((prev) => !prev);
+        break;
       case 'sort':
         setSortModalVisible((prev) => !prev);
         break;
@@ -127,6 +133,24 @@ export const useBottomAction = (
       case 'category':
         goToCategory();
         break;
+      case 'sendDataSupplier':
+        //hit api send-store-supplier
+        Alert.alert(
+          'Send Data to Suplier',
+          'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
+          [
+            {
+              text: 'Cancel',
+              onPress: () => setRegisterSupplierModalVisible(false),
+              style: 'cancel',
+            },
+            {
+              text: 'OK',
+              onPress: () => setRegisterSupplierModalVisible(false),
+            },
+          ],
+        );
+        break;
       default:
         throw new Error(`Unknown bottom action type: ${type}`);
     }
@@ -141,6 +165,7 @@ export const useBottomAction = (
     filterActive,
     filterQuery,
     layoutDisplay,
+    registerSupplierModalVisible,
     handleActionClick,
   };
 };

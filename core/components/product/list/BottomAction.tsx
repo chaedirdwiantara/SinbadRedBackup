@@ -16,6 +16,8 @@ export type BottomActionPressHandlerType =
   | 'resetFilter'
   | 'applyFilter'
   | 'layout'
+  | 'registerSupplierVisible'
+  | 'sendDataSupplier'
   | 'category';
 
 export type SortIndex = number | null;

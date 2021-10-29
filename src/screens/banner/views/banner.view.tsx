@@ -133,7 +133,7 @@ const BannerListView: React.FC = () => {
           renderItem={renderListBanner}
           keyExtractor={(item) => item.id.toString()}
           onEndReachedThreshold={0.1}
-          onEndReached={() => handleFatchMore()}
+          onEndReached={handleFatchMore}
           showsVerticalScrollIndicator={true}
         />
       </View>

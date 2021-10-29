@@ -1,7 +1,13 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useState } from 'react';
-import { View } from 'react-native';
-import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
+import { View, Image } from 'react-native';
+import {
+  SnbContainer,
+  SnbBottomSheet,
+  SnbButton,
+  SnbText,
+  color,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
@@ -74,6 +80,7 @@ const ProductList: FC<ProductListProps> = ({
     filterQuery,
     layoutDisplay,
     handleActionClick,
+    registerSupplierModalVisible,
   } = useBottomAction(onRefresh, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
@@ -177,6 +184,46 @@ const ProductList: FC<ProductListProps> = ({
         actionIcon="close"
         content={<Action.Filter onButtonPress={handleActionClick} />}
         closeAction={() => handleActionClick({ type: 'filter' })}
+      />
+      {/** === RENDER MODAL REGISTER SUPPLIER === */}
+      <SnbBottomSheet
+        open={registerSupplierModalVisible}
+        title={' '}
+        action={true}
+        actionIcon="close"
+        content={
+          <View
+            style={{
+              backgroundColor: color.white,
+            }}>
+            <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
+              <Image
+                source={require('../../../../src/assets/images/no_gps.png')}
+                style={{ width: 200, marginBottom: 16 }}
+              />
+              <SnbText.B2 color={color.black100}>
+                Supplier butuh datamu nih
+              </SnbText.B2>
+              <View style={{ marginTop: 8 }}>
+                <SnbText.C1 color={color.black100} align={'center'}>
+                  Kirim data Anda ke supplier untuk dapat berbelanja produk
+                  supplier terkait sekarang yuk !
+                </SnbText.C1>
+              </View>
+            </View>
+            <View style={{ marginTop: 32, height: 72 }}>
+              <SnbButton.Single
+                type="primary"
+                title="Kirim data ke Supplier"
+                onPress={() => handleActionClick({ type: 'sendDataSupplier' })}
+                disabled={false}
+              />
+            </View>
+          </View>
+        }
+        closeAction={() =>
+          handleActionClick({ type: 'registerSupplierVisible' })
+        }
       />
     </SnbContainer>
   );
