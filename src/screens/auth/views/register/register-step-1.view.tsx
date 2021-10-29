@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useInput, useMerchant } from '@screen/auth/functions';
+import { setErrorMessage, useInput, useMerchant } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
@@ -36,7 +36,7 @@ const Content: React.FC = () => {
     }
 
     if (checkEmailAvailability.error !== null) {
-      email.setMessageError(checkEmailAvailability.error.message);
+      email.setMessageError(setErrorMessage(checkEmailAvailability.error.code));
     }
   }, [checkEmailAvailability]);
 
