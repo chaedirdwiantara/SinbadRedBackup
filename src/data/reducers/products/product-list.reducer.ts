@@ -1,77 +1,78 @@
-/** === IMPORT HERE === */
-import * as types from '@types';
-import * as models from '@models';
+/** === IMPORT INTERNAL === */
 import simplifyReducer from '@core/redux/simplifyReducer';
-/** === TYPE HERE === */
-type ProductListInitialProps = models.ListItemProps<models.ProductList[]>;
-/** === INITIAL STATE HERE === */
+import * as models from '@models';
+import * as types from '@types';
+/** === TYPE === */
+export type ProductListInitialProps = models.ProductListItemProps;
+/** === INITIAL STATE === */
 export const productListInitialState: ProductListInitialProps = {
   data: [],
-  error: null,
   loading: false,
   loadMore: false,
   refresh: false,
+  error: null,
   total: 0,
   skip: 0,
+  canLoadMore: false,
 };
-/** === FUNCTION HERE === */
+/** === REDUCER === */
 export const productListReducer = simplifyReducer(productListInitialState, {
-  /** ===> LIST */
-  /** => list process */
+  /** => Process */
   [types.PRODUCT_LIST_PROCESS](
     state = productListInitialState,
-    action: models.ListProcessAction,
+    { payload }: models.ListProcessAction,
   ) {
     return {
       ...state,
-      loading: action.payload.loading,
+      loading: payload.loading,
       error: null,
     };
   },
-  /** => list success */
+  /** => Succeeded */
   [types.PRODUCT_LIST_SUCCESS](
     state = productListInitialState,
-    action: models.ListSuccessAction<models.ProductList[]>,
+    { payload }: models.ProductListSuccessAction,
   ) {
     return {
       ...state,
-      data: [...state.data, ...action.payload.data],
+      data: [...state.data, ...payload.data],
       loading: false,
       loadMore: false,
       refresh: false,
-      total: action.payload.meta.total,
-      skip: action.payload.meta.skip,
+      total: payload.meta.total,
+      skip: payload.meta.skip,
+      canLoadMore: payload.meta.canLoadMore,
     };
   },
-  /** => list failed */
+  /** => Failed */
   [types.PRODUCT_LIST_FAILED](
     state = productListInitialState,
-    action: models.ListFailedAction,
+    { payload }: models.ListFailedAction,
   ) {
     return {
       ...state,
       loading: false,
       loadMore: false,
       refresh: false,
-      error: action.payload,
+      error: payload,
     };
   },
-  /** => list reset */
-  [types.PRODUCT_LIST_RESET]() {
-    return productListInitialState;
-  },
-  /** => list refresh */
+  /** => Refresh */
   [types.PRODUCT_LIST_REFRESH]() {
     return {
       ...productListInitialState,
       refresh: true,
     };
   },
-  /** => list load more */
+  /** => Load More */
   [types.PRODUCT_LIST_LOADMORE](state = productListInitialState) {
     return {
       ...state,
       loadMore: true,
     };
+  },
+  /** => Reset */
+  [types.PRODUCT_LIST_RESET]() {
+    return productListInitialState;
   },
 });
