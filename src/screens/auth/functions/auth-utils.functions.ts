@@ -81,3 +81,23 @@ export const extractAddress = (data: any) => {
   });
   return dataAddress;
 };
+
+export const setErrorMessage = (code: number) => {
+  switch (code) {
+    case 10002: {
+      return 'Email yang Anda masukkan telah terdaftar';
+    }
+    case 10003: {
+      return 'Format email yang Anda masukkan salah';
+    }
+    case 10004: {
+      return 'No. HP harus berupa angka';
+    }
+    case 10005: {
+      return 'No. Hp yang anda masukan sudah terdaftar';
+    }
+    default: {
+      return 'Terjadi kesalahan';
+    }
+  }
+};

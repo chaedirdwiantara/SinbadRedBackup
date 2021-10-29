@@ -4,6 +4,7 @@ import {
   handleMessageError,
   maskPhone,
   extractAddress,
+  setErrorMessage,
 } from './auth-utils.functions';
 import {
   useCheckPhoneNoAvailability,
@@ -36,4 +37,5 @@ export {
   useAuthAction,
   extractAddress,
   useRegister,
+  setErrorMessage,
 };
