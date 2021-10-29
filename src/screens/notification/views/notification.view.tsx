@@ -80,7 +80,7 @@ const NotificationView: React.FC = () => {
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [approvalStatus, setApprovalStatus] = useState('');
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const { stateNotification, dispatchNotification } = React.useContext(
     contexts.NotificationContext,
   );
@@ -103,8 +103,7 @@ const NotificationView: React.FC = () => {
   };
 
   const onHandleRefresh = () => {
-    notificationAction.reset(dispatchNotification);
-    notificationAction.list(dispatchNotification);
+    notificationAction.refresh(dispatchNotification);
   };
   /** => set approval status title */
   const setApprovalStatusTitle = (status: string) => {
@@ -302,7 +301,7 @@ const NotificationView: React.FC = () => {
     return (
       <View style={{ flex: 1 }}>
         {!notificationListState.loading &&
-        notificationListState.data.length !== 0 ? (
+        notificationListState.data.length > 0 ? (
           <View>{renderNotificationList()}</View>
         ) : (
           renderEmpty()
@@ -314,7 +313,12 @@ const NotificationView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
-      {notificationListState.loading ? <LoadingPage /> : content()}
+      {!notificationListState.loading &&
+      notificationListState.data.length !== 0 ? (
+        content()
+      ) : (
+        <LoadingPage />
+      )}
       {renderModal()}
     </SnbContainer>
   );
