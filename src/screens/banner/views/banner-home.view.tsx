@@ -3,6 +3,8 @@ import React from 'react';
 import { View } from 'react-native';
 /** === IMPORT STYLE HERE === */
 /** === IMPORT FUNCTION HERE === */
+import { goToBannerDetail, goToBanner } from '../functions';
+
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BannerSlider from '@core/components/BannerSlider';
 /** === INTERFACE === */
@@ -15,7 +17,7 @@ const BannerHomeView: React.FC<Props> = () => {
   return (
     <View testID={'bannerHome'}>
       <BannerSlider
-        goToDetail={(data) => console.log(data)}
+        goToDetail={() => goToBannerDetail()}
         data={[
           {
             imageUrl:
@@ -37,7 +39,7 @@ const BannerHomeView: React.FC<Props> = () => {
           },
         ]}
         loading={false}
-        seeAll={() => console.log('go to all list')}
+        seeAll={() => goToBanner()}
       />
     </View>
   );

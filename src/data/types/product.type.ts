@@ -1,5 +1,4 @@
-/** === THIS FOR EXTERNAL USED === */
-/** => list */
+/** => List */
 export const PRODUCT_LIST_PROCESS = 'ProductListProcess';
 export const PRODUCT_LIST_SUCCESS = 'ProductListSuccess';
 export const PRODUCT_LIST_FAILED = 'ProductListFailed';

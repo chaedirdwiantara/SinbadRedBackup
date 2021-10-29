@@ -1,27 +1,31 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import { put, call, takeLatest } from 'redux-saga/effects';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT INTERNAL === */
 import { ProductApi } from '../apis/product.api';
 import * as ActionCreators from '@actions';
-import * as types from '@types';
 import * as models from '@models';
-/** === FUNCTION === */
-/** => list */
+import * as types from '@types';
+/** === FUNCTIONS === */
+/** => List */
 function* productList(action: models.ListProcessAction) {
   try {
     const response: models.ListSuccessProps<models.ProductList[]> = yield call(
       () => {
-        return ProductApi.productList(action.payload);
+        return ProductApi.getList(
+          action.payload as models.ProductListProcessProps,
+        );
       },
     );
     yield action.contextDispatch(ActionCreators.productListSuccess(response));
     yield put(ActionCreators.productListSuccess(response));
   } catch (error) {
-    yield action.contextDispatch(ActionCreators.productListFailed(error));
-    yield put(ActionCreators.productListFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.productListFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.productListFailed(error as models.ErrorProps));
   }
 }
-/** === LISTEN FUNCTION === */
+/** === LISTENER === */
 function* ProductSaga() {
   yield takeLatest(types.PRODUCT_LIST_PROCESS, productList);
 }
