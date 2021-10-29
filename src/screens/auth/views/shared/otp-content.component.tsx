@@ -6,9 +6,9 @@ import {
   SnbText,
   SnbOTPTimer,
   color,
-  SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
+import Svg from '@svg';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
@@ -27,7 +27,7 @@ const OTPContent: React.FC<Props> = (props) => {
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <View style={{ marginVertical: 24 }}>
         <View style={{ alignSelf: 'center' }}>
-          <SnbSvgIcon name="otp" size={100} />
+          <Svg name="otp_icon" size={100} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
           <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
