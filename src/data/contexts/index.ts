@@ -11,6 +11,10 @@ import { MerchantProvider, MerchantContext } from './merchant/MerchantProvider';
 import { VoucherProvider, VoucherContext } from './voucher/VoucherProvider';
 import { PromoProvider, PromoContext } from './promo/PromoProvider';
 import { BrandProvider, BrandContext } from './brand/BrandProvider';
+import {
+  NotificationProvider,
+  NotificationContext,
+} from './notification/NotificationProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -24,6 +28,7 @@ export const providers = [
   BrandProvider,
   UserProvider,
   MerchantProvider,
+  NotificationProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -36,4 +41,5 @@ export const contexts = {
   VoucherContext,
   PromoContext,
   BrandContext,
+  NotificationContext,
 };

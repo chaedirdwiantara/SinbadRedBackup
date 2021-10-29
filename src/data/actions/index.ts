@@ -14,6 +14,7 @@ export * from './oms';
 export * from './category';
 export * from './promo';
 export * from './brand';
+export * from './notification';
 /**
  * ================================================================
  * NOTES
