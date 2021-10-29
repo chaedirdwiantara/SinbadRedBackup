@@ -24,17 +24,6 @@ export const formatter = (string = '', gaps: number[], spacer: string) => {
   return temp.join(spacer);
 };
 
-export const handleMessageError = (code: number) => {
-  switch (code) {
-    case 10401: {
-      return 'Unauthorized';
-    }
-    default: {
-      return 'Terjadi kesalahan pada jaringan';
-    }
-  }
-};
-
 export const maskPhone = (phoneNo: string | undefined) => {
   if (!phoneNo) {
     return '';
@@ -95,6 +84,21 @@ export const setErrorMessage = (code: number) => {
     }
     case 10005: {
       return 'No. Hp yang anda masukan sudah terdaftar';
+    }
+    case 10006: {
+      return 'No. Hp yang tidak boleh kosong';
+    }
+    case 10007: {
+      return 'No. Hp yang anda masukan tidak terdaftar';
+    }
+    case 10008: {
+      return 'Kode OTP yang Anda masukkan salah atau kadaluarsa';
+    }
+    case 10009: {
+      return 'Data user tidak valid';
+    }
+    case 10010: {
+      return 'ID Toko/Password yang Anda masukkan salah';
     }
     default: {
       return 'Terjadi kesalahan';
