@@ -54,12 +54,10 @@ export interface ProductListSuccessAction {
   payload: ProductListSuccessProps;
 }
 
-/** === IMAGE === */
 export interface ImagesList {
   url: string;
 }
 
-/** === PRODUCT DETAIL === */
 export interface ProductDetailSuccessProps {
   id: string;
   supplierCode: string;
