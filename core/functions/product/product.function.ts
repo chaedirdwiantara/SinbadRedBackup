@@ -1,10 +1,12 @@
+/** === IMPORT FUNCTION ===  */
+import { NavigationAction } from '@navigation';
 /** === IMPORT TYPES ===  */
 import {
   LayoutDisplay,
   BottomActionPressHandler,
-  BottomActionType,
-} from '@core/components/product/list/bottom-action.view';
+} from '@core/components/product/list/BottomAction';
 /** === TYPES ===  */
+type BottomActionType = 'sort' | 'filter' | 'layout' | 'category';
 interface BuildBottomActionParams {
   sort?: boolean;
   filter?: boolean;
@@ -21,11 +23,12 @@ interface BottomActionItem {
   dotShow?: boolean;
 }
 
-interface GetBottomActionHandlerParams {
+interface BuildBottomActionHandlerParams {
   onActionPress: BottomActionPressHandler;
   actionNames: Array<BottomActionType>;
 }
 /** === FUNCTIONS ===  */
+/** === Bottom Action Related ===  */
 export const buildBottomAction = ({
   sort = false,
   filter = false,
@@ -68,12 +71,33 @@ export const buildBottomAction = ({
   return { actions, actionNames };
 };
 
-export const getBottomActionHandler = ({
+export const buildBottomActionHandler = ({
   onActionPress,
   actionNames,
-}: GetBottomActionHandlerParams) => {
+}: BuildBottomActionHandlerParams) => {
   return (index: number) => {
     const type = actionNames[index];
     onActionPress({ type });
   };
+};
+
+/** === Navigation Related ===  */
+export const goBack = () => {
+  NavigationAction.back();
+};
+
+export const goToHome = () => {
+  NavigationAction.navigate('HomeView');
+};
+
+export const goToSearch = () => {
+  NavigationAction.navigate('SearchView');
+};
+
+export const goToShoppingCart = () => {
+  NavigationAction.navigate('OmsShoppingCartView');
+};
+
+export const goToProductDetail = () => {
+  NavigationAction.navigate('ProductDetailView');
 };

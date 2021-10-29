@@ -1,16 +1,21 @@
-/** === IMPORT HERE === */
+/** === IMPORT INTERNAL === */
 import * as models from '@models';
 import {
-  productListReducer,
   productListInitialState,
+  ProductListInitialProps,
+  productListReducer,
 } from './product-list.reducer';
-/** === TYPE HERE === */
-export type ProductInitialProps = models.ListProps<models.ProductList[]>;
-/** === INITIAL HERE === */
+/** === TYPES === */
+export type ProductInitialProps = models.ProductListProps;
+
+interface ProductState {
+  list: ProductListInitialProps;
+}
+/** === INITIAL STATE === */
 export const productInitialState = {
   list: productListInitialState,
 };
-/** === EXPORT ALL HERE === */
-export const productReducer = ({ list }: any, action: any) => ({
+/** === REDUCER === */
+export const productReducer = ({ list }: ProductState, action: any) => ({
   list: productListReducer(list, action),
 });

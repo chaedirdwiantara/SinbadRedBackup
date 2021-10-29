@@ -37,7 +37,12 @@ const CategoryView: React.FC = () => {
   /** === STATE === */
   const [selectedCategoryIndex, setSelectedCategoryIndex] =
     React.useState<number>(0);
-  const { selectedLevel2Id, setSelectLevel2Id } = useSetLevel2();
+  const {
+    selectedLevel2Id,
+    setSelectLevel2Id,
+    selectedSecondLevelIndex,
+    setSecondLevelIndex,
+  } = useSetLevel2();
   /** === EFFECT === */
   /** => get category level */
   React.useEffect(() => {
@@ -79,7 +84,14 @@ const CategoryView: React.FC = () => {
     return item ? (
       <TouchableOpacity
         key={index}
-        onPress={() => goToProduct()}
+        onPress={() =>
+          goToProduct(
+            item,
+            selectedCategoryIndex,
+            selectedSecondLevelIndex as number,
+            index,
+          )
+        }
         style={CategoryStyle.level3layoutItem}>
         {globalIcon(item.icon, 64)}
         <View style={{ marginTop: 4 }}>
@@ -108,9 +120,14 @@ const CategoryView: React.FC = () => {
               ? CategoryStyle.level2LayoutActive
               : CategoryStyle.level2LayoutInactive
           }
-          onPress={() =>
-            item.hasChild ? setSelectLevel2Id(item.id) : goToProduct()
-          }>
+          onPress={() => {
+            if (item.hasChild) {
+              setSelectLevel2Id(item.id);
+              setSecondLevelIndex(index);
+            } else {
+              goToProduct(item, selectedCategoryIndex, index);
+            }
+          }}>
           {globalIcon(item.icon, 32)}
           <View style={{ marginLeft: 8 }}>
             <SnbText.B3>{item.name}</SnbText.B3>
@@ -150,7 +167,7 @@ const CategoryView: React.FC = () => {
             index === selectedCategoryIndex ? color.white : color.black10,
         }}
         onPress={() =>
-          item.hasChild ? setSelectedCategoryIndex(index) : goToProduct()
+          item.hasChild ? setSelectedCategoryIndex(index) : goToProduct(item)
         }>
         <View style={{ alignItems: 'center', width: 80 }}>
           {globalIcon(item.icon, 32)}

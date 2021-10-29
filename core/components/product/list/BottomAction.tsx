@@ -3,13 +3,12 @@ import React from 'react';
 import { SnbBottomActions } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import {
-  getBottomActionHandler,
   buildBottomAction,
-  SortQuery,
+  buildBottomActionHandler,
 } from '@core/functions/product';
 /** === TYPES === */
-export type BottomActionType = 'sort' | 'filter' | 'layout' | 'category';
 export type LayoutDisplay = 'grid' | 'list';
+
 export type BottomActionPressHandlerType =
   | 'sort'
   | 'applySort'
@@ -18,12 +17,20 @@ export type BottomActionPressHandlerType =
   | 'applyFilter'
   | 'layout'
   | 'category';
+
+export type SortIndex = number | null;
+
+export interface PriceRange {
+  minPrice: number;
+  maxPrice: number;
+}
+
 export type BottomActionPressHandler = ({
   type,
   value,
 }: {
   type: BottomActionPressHandlerType;
-  value?: SortQuery; // add FilterQuery type/interface in product-hook.function
+  value?: SortIndex | PriceRange;
 }) => void;
 
 interface BottomActionProps {
@@ -37,31 +44,18 @@ interface BottomActionProps {
   onActionPress: BottomActionPressHandler;
 }
 /** === COMPONENT === */
-const BottomActionView: React.FC<BottomActionProps> = ({
+const BottomAction: React.FC<BottomActionProps> = ({
   onActionPress,
   ...props
 }) => {
   /** === DERIVED VALUES === */
   const { actions, actionNames } = buildBottomAction(props);
-  const handleActionPress = getBottomActionHandler({
+  const handleActionPress = buildBottomActionHandler({
     onActionPress,
     actionNames,
   });
   /** === VIEW === */
-  /** => Main */
   return <SnbBottomActions item={actions} onPress={handleActionPress} />;
 };
 
-export default BottomActionView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 12-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default BottomAction;

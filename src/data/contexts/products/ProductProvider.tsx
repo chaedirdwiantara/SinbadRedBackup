@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { FC, useReducer, useMemo } from 'react';
+
 import {
   ProductContext,
   productReducer,
   productInitialState,
 } from './product.context';
 
-const ProductProvider: React.FC = ({ children }) => {
-  const [stateProduct, dispatchProduct] = React.useReducer(
+const ProductProvider: FC = ({ children }) => {
+  const [stateProduct, dispatchProduct] = useReducer(
     productReducer,
     productInitialState,
   );
-  const valueProvider = React.useMemo(
+  const contextValue = useMemo(
     () => ({
       stateProduct,
       dispatchProduct,
     }),
     [stateProduct, dispatchProduct],
   );
+
   return (
-    <ProductContext.Provider value={valueProvider}>
+    <ProductContext.Provider value={contextValue}>
       {children}
     </ProductContext.Provider>
   );
