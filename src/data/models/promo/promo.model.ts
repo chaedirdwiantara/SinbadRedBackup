@@ -1,4 +1,21 @@
 /** === PROMO PAYMENT LIST === */
+/** => process props */
+export interface PromoPaymentListProcessProps {
+  loading: boolean;
+  skip: number;
+  limit: number;
+  sort?: 'asc' | 'desc';
+  sortBy?: string;
+  search?: string;
+  invoiceGroupId: string;
+}
+/** => process action */
+export interface PromoPaymentListProcessAction {
+  type: string;
+  payload: PromoPaymentListProcessProps;
+  contextDispatch: (action: any) => any;
+}
+/** => success props */
 export interface PromoPaymentListSuccessProps {
   id: number;
   name: string;
@@ -16,7 +33,7 @@ export interface PromoPaymentDetailSuccessProps {
   discountRebate: number;
   termAndConditions: string[];
 }
-/** === PROMO GENERRAL DETAIL === */
+/** === PROMO GENERAL DETAIL === */
 export interface PromoGeneralDetailSuccessProps {
   id: number;
   name: string;

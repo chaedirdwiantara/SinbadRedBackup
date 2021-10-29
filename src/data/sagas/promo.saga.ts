@@ -7,7 +7,7 @@ import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment list */
-function* promoPaymentList(action: models.ListProcessAction) {
+function* promoPaymentList(action: models.PromoPaymentListProcessAction) {
   try {
     const response: models.ListSuccessProps<models.PromoPaymentListSuccessProps> =
       yield call(() => {
