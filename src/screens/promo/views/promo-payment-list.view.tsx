@@ -4,6 +4,7 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbCardButtonType1,
+  SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import {
@@ -23,7 +24,7 @@ const PromoPaymentList: FC = () => {
   const promoPaymentListState = statePromo.promoPayment.list;
   /** => effect */
   React.useEffect(() => {
-    promoPaymentAction.list(dispatchPromo);
+    promoPaymentAction.list(dispatchPromo, '1');
     return () => {
       promoPaymentAction.resetList(dispatchPromo);
     };
@@ -75,16 +76,43 @@ const PromoPaymentList: FC = () => {
       </View>
     );
   };
+  /** => empty */
+  const renderEmpty = (messageTitle: string, messageBody: string) => {
+    const image = () => {
+      return (
+        <Image
+          source={require('../../../assets/images/voucher_empty.png')}
+          style={PromoPaymentListStyles.emptyImage}
+        />
+      );
+    };
+    return (
+      <View style={PromoPaymentListStyles.singleContainer}>
+        <SnbEmptyData
+          title={messageTitle}
+          subtitle={messageBody}
+          image={image()}
+        />
+      </View>
+    );
+  };
+  /** => promo section */
+  const renderPromoSection = () => {
+    if (promoPaymentListState.data.length === 0) {
+      return renderEmpty(
+        'Promo Pembayaran Tidak Tersedia',
+        'Tidak ada promo pembayaran yang tersedia saat ini',
+      );
+    } else {
+      return <ScrollView>{renderPromoList()}</ScrollView>;
+    }
+  };
+  console.log('ini loading', promoPaymentListState.loading);
   /** => main */
   return (
     <SnbContainer color="grey">
       {renderHeader()}
-      {!promoPaymentListState.loading &&
-      promoPaymentListState.data.length !== 0 ? (
-        <ScrollView>{renderPromoList()}</ScrollView>
-      ) : (
-        <LoadingPage />
-      )}
+      {!promoPaymentListState.loading ? renderPromoSection() : <LoadingPage />}
     </SnbContainer>
   );
 };
