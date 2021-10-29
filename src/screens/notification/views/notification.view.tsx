@@ -1,7 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
+import React, { useState } from 'react';
 import { View, FlatList, TouchableWithoutFeedback, Image } from 'react-native';
-import { SnbContainer, SnbText, SnbTopNav } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbText,
+  SnbTopNav,
+  SnbBottomSheet,
+  SnbButton,
+} from 'react-native-sinbad-ui';
 import moment from 'moment';
 import { goBack, useNotificationAction } from '../functions';
 import { contexts } from '@contexts';
@@ -71,6 +77,10 @@ const SINBAD_REJECT_MESSAGE =
 /** === COMPONENT === */
 const NotificationView: React.FC = () => {
   /** === HOOK === */
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [approvalStatus, setApprovalStatus] = useState('');
+  const [showModal, setShowModal] = useState(true);
   const { stateNotification, dispatchNotification } = React.useContext(
     contexts.NotificationContext,
   );
@@ -155,7 +165,15 @@ const NotificationView: React.FC = () => {
     }
 
     return (
-      <TouchableWithoutFeedback>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (item.type === 'registration' || item.type === 'verification') {
+            setModalTitle(title);
+            setModalMessage(message);
+            setApprovalStatus(item?.data?.approvalStatus);
+            setShowModal(true);
+          }
+        }}>
         <View style={NotificationStyle.boxNotification} key={index}>
           <View>
             <Image
@@ -178,6 +196,82 @@ const NotificationView: React.FC = () => {
           </View>
         </View>
       </TouchableWithoutFeedback>
+    );
+  };
+  /** => render modal */
+  const renderModal = () => {
+    return (
+      <SnbBottomSheet
+        open={showModal}
+        closeAction={() => setShowModal(false)}
+        content={renderModalContent()}
+        title={modalTitle}
+        action={true}
+        actionIcon={'close'}
+      />
+    );
+  };
+  /** => render message with supplier name */
+  const renderMessageWithSupplierName = () => {
+    return (
+      <View>
+        <SnbText.B3>Akun anda telah ditambahkan oleh supplier</SnbText.B3>
+        <View style={{ marginVertical: 2 }} />
+        <SnbText.B3>
+          <SnbText.H4>
+            {notificationListState.data?.supplierName || 'Unknown Supplier'}.
+          </SnbText.H4>{' '}
+          Yuk nikmati pilihan produk terbarumu
+        </SnbText.B3>
+      </View>
+    );
+  };
+  /** => render message */
+  const renderMessage = () => (
+    <SnbText.B3 align="center">{modalMessage}</SnbText.B3>
+  );
+  /** => render modal */
+  const renderModalContent = () => {
+    let image = require('../../../assets/images/sinbad_image/smile_sinbad.png');
+    let title = 'Lihat Informasi Supplier';
+    if (approvalStatus === 'rejected') {
+      image = require('../../../assets/images/sinbad_image/cry_sinbad.png');
+    }
+    if (approvalStatus === undefined) {
+      image = require('../../../assets/images/sinbad_image/failed_error.png');
+      title = 'Lihat Profil';
+    }
+
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={image}
+            style={{ width: 240, height: 160 }}
+            resizeMode="contain"
+          />
+          <SnbText.H4>{modalTitle}</SnbText.H4>
+          {notificationListState.data?.suppierName && approvalStatus === ''
+            ? renderMessageWithSupplierName()
+            : renderMessage()}
+        </View>
+        <View style={{ marginVertical: 16 }} />
+        <View style={{ width: '100%' }}>
+          <SnbButton.Single
+            type="primary"
+            title={title}
+            disabled={false}
+            onPress={() => {
+              setShowModal(false);
+              if (approvalStatus) {
+                console.log('go to MerchantSupplierInformationView');
+              } else {
+                console.log('go to ProfileView');
+              }
+            }}
+          />
+        </View>
+      </View>
     );
   };
   /** => render separator */
@@ -221,6 +315,7 @@ const NotificationView: React.FC = () => {
     <SnbContainer color="white">
       {header()}
       {notificationListState.loading ? <LoadingPage /> : content()}
+      {renderModal()}
     </SnbContainer>
   );
 };
