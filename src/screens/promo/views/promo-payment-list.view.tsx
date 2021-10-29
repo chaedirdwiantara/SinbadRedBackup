@@ -16,19 +16,26 @@ import { PromoPaymentListStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
 const PromoPaymentList: FC = () => {
   /** === HOOK === */
+  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentListState = statePromo.promoPayment.list;
   /** => effect */
   React.useEffect(() => {
-    promoPaymentAction.list(dispatchPromo, '1');
+    promoPaymentAction.list(dispatchPromo, '2');
     return () => {
       promoPaymentAction.resetList(dispatchPromo);
     };
   }, []);
+  React.useEffect(() => {
+    if (promoPaymentListState.error !== null) {
+      setErrorModalOpen(true);
+    }
+  }, [promoPaymentListState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -107,12 +114,29 @@ const PromoPaymentList: FC = () => {
       return <ScrollView>{renderPromoList()}</ScrollView>;
     }
   };
-  console.log('ini loading', promoPaymentListState.loading);
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={isErrorModalOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          setErrorModalOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="grey">
       {renderHeader()}
       {!promoPaymentListState.loading ? renderPromoSection() : <LoadingPage />}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

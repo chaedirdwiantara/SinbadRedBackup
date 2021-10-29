@@ -18,7 +18,7 @@ function* promoPaymentList(action: models.PromoPaymentListProcessAction) {
     );
     yield put(ActionCreators.promoPaymentListSuccess(response));
   } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield action.contextDispatch(ActionCreators.promoPaymentListFailed(error));
     yield put(ActionCreators.promoPaymentListFailed(error));
   }
 }

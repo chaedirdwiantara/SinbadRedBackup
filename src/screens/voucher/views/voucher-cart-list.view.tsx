@@ -447,6 +447,7 @@ const VoucherCartListView: FC = () => {
         buttonTitle={'Ok'}
         buttonOnPress={() => {
           setErrorModalOpen(false);
+          goBack();
         }}
       />
     );
