@@ -418,9 +418,8 @@ const OmsShoppingCartView: FC = () => {
   const renderVoucherTag = () => {
     const { countVoucher } = stateVoucher;
     if (
-      (countVoucher.detail.data?.total !== 0 &&
-        countVoucher.detail.loading !== true) ||
-      true
+      countVoucher.detail.data?.total !== 0 &&
+      countVoucher.detail.loading !== true
     ) {
       return (
         <View>
