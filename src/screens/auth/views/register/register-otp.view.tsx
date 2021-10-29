@@ -4,6 +4,7 @@ import {
   useCheckPhoneNoAvailability,
   useOTP,
   useMerchant,
+  setErrorMessage,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
 import { OTPContent } from '@screen/auth/views/shared';
@@ -47,7 +48,7 @@ const RegisterOTPView: React.FC = () => {
         hideIcon={hide}
         loading={verifyOTP.loading}
         phoneNo={maskPhone(mobilePhone)}
-        errorMessage={verifyOTP.error?.message || ''}
+        errorMessage={setErrorMessage(verifyOTP.error?.code)}
         resend={() => {
           checkPhone({ mobilePhoneNo: mobilePhone });
         }}

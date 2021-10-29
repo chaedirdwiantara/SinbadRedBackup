@@ -1,5 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { maskPhone, useAuthAction, useOTP } from '@screen/auth/functions';
+import {
+  maskPhone,
+  setErrorMessage,
+  useAuthAction,
+  useOTP,
+} from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
@@ -42,7 +47,7 @@ const LoginOTPView: React.FC = () => {
         resend={() => {
           requestOTP({ mobilePhone });
         }}
-        errorMessage={verifyOTP.error?.message || ''}
+        errorMessage={setErrorMessage(verifyOTP.error?.code)}
       />
     </SnbContainer>
   );
