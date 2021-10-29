@@ -1,18 +1,26 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { Image, View, StyleProp, ViewStyle } from 'react-native';
+import {
+  Image,
+  View,
+  StyleProp,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
 import {
   color,
   SnbButton,
   SnbIcon,
+  SnbSKUList,
   SnbText,
   styles,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
-import { HistoryStyle } from '@screen/oms/styles';
-import { CountDownTimer } from './CountDownTimer';
+import { HistoryStyle } from '@screen/history/styles';
+import { CountDownTimer } from '../components';
+import { NavigationAction } from '@core/functions/navigation';
 /** === TYPES === */
 export interface HistoryStatusColor {
   white: string;
@@ -76,8 +84,16 @@ export const HistoryCard: FC<HistoryCardProps> = ({
     (new Date(expiredPaymentTime!).getTime() - new Date().getTime()) / 1000,
   );
 
+  const arrProductImages: Array<object> = [];
+  productImages.map((item) => {
+    arrProductImages.push({ imgUrl: item });
+  });
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={() =>
+        NavigationAction.navigate('HistoryDetailView', { section: 'payment' })
+      }
       style={[
         {
           ...HistoryStyle.cardContainer,
@@ -117,20 +133,20 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         </View>
       </View>
       <View style={HistoryStyle.cardBody}>
-        {productImages.slice(0, 3).map((image, imageIndex) => (
-          <Image
-            key={imageIndex}
-            source={{ uri: image }}
-            style={{ marginRight: 8, width: 60, height: 60 }}
-          />
-        ))}
-        {productImages.length > 3 && (
-          <SnbText.C1 color={color.black80}>{`(+${
-            productImages.length - 3
-          } Produk Lain)`}</SnbText.C1>
-        )}
+        <SnbSKUList
+          data={arrProductImages}
+          renderItem={({ item }: any) => {
+            return (
+              <Image
+                source={{ uri: item.imgUrl }}
+                style={{ height: 60, width: 60 }}
+              />
+            );
+          }}
+          expandable
+        />
       </View>
-      {originalTotalPrice && originalTotalQty && (
+      {originalTotalPrice && originalTotalQty ? (
         <View
           style={{
             ...HistoryStyle.cardFooterRow,
@@ -141,8 +157,11 @@ export const HistoryCard: FC<HistoryCardProps> = ({
             {toCurrency(originalTotalPrice)}
           </SnbText.C2>
           {/* Should be styled with strikethrough */}
-          <SnbText.C2 color={color.black40}>{`QTY: ${totalQty}`}</SnbText.C2>
+          <SnbText.C2
+            color={color.black40}>{`QTY: ${originalTotalQty}`}</SnbText.C2>
         </View>
+      ) : (
+        <View />
       )}
       <View style={HistoryStyle.cardFooterRow}>
         <SnbText.C2 color={color.black100}>{toCurrency(totalPrice)}</SnbText.C2>
@@ -169,6 +188,6 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           <SnbText.C2 color={color.yellow50}>{additionalInfo}</SnbText.C2>
         </View>
       )}
-    </View>
+    </TouchableOpacity>
   );
 };

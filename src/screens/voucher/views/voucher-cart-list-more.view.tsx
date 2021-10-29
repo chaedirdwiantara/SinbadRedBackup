@@ -175,7 +175,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
             />
             <TouchableOpacity
               testID={`voucherCartListMoreView.sinbadVoucherDetailTouchable${index}`}
-              onPress={() => goToVoucherDetail(item.voucherId)}>
+              onPress={() => goToVoucherDetail(item.voucherId, 'supplier')}>
               <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
             </TouchableOpacity>
           </View>
@@ -238,7 +238,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
               testID={`voucherCartListMoreView.${camelize(
                 item.invoiceGroupName,
               )}DetailTouchable${index}`}
-              onPress={() => goToVoucherDetail(item.id)}>
+              onPress={() => goToVoucherDetail(item.id, 'supplier')}>
               <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
             </TouchableOpacity>
           </View>

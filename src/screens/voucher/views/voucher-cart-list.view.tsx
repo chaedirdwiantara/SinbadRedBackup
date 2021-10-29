@@ -31,6 +31,7 @@ import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
 import { useDataVoucher } from '@core/redux/Data';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -54,6 +55,7 @@ const VoucherCartListView: FC = () => {
     searchVoucher,
     resetVoucherData,
   } = useVoucherList();
+  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucher.voucherCart.detail;
@@ -80,11 +82,18 @@ const VoucherCartListView: FC = () => {
     }
   }, [voucherData.dataVouchers]);
   React.useEffect(() => {
+    console.log('test', voucherCartListState);
+    // if fetching success
     if (voucherCartListState.data !== null) {
       updateVoucherList(
         voucherCartListState.data.supplierVouchers,
         voucherCartListState.data.sinbadVouchers,
       );
+    }
+    // if fetching error
+    if (voucherCartListState.error !== null) {
+      console.log('error');
+      setErrorModalOpen(true);
     }
   }, [voucherCartListState]);
   /** === VIEW === */
@@ -209,7 +218,7 @@ const VoucherCartListView: FC = () => {
               />
               <TouchableOpacity
                 testID={`voucherCartListView.sinbadVoucherDetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.voucherId)}>
+                onPress={() => goToVoucherDetail(item.voucherId, 'supplier')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -321,7 +330,7 @@ const VoucherCartListView: FC = () => {
                 testID={`voucherCartListView.${camelize(
                   item.invoiceGroupName,
                 )}DetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.id)}>
+                onPress={() => goToVoucherDetail(item.id, 'supplier')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -423,7 +432,21 @@ const VoucherCartListView: FC = () => {
       );
     }
   };
-  console.log(stateVoucher);
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={isErrorModalOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          setErrorModalOpen(false);
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -435,6 +458,8 @@ const VoucherCartListView: FC = () => {
         <LoadingPage />
       )}
       {renderFooterSection()}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

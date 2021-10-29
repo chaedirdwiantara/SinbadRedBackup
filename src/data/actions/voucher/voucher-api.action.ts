@@ -4,7 +4,7 @@ import * as models from '@models';
 /** => voucher detail process */
 export const voucherDetailProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
+  data: models.VoucherDetailProcessProps,
 ): models.DetailProcessAction => {
   contextDispatch({ type: types, payload: data });
   return {
@@ -57,6 +57,35 @@ export const voucherCartListFailed = (
 /** => voucher cart list reset */
 export const voucherCartListReset = () => {
   return { type: types.VOUCHER_CART_LIST_RESET };
+};
+/** === COUNT ALL VOUCHER === */
+/** => count all voucher process */
+export const countAllVoucherProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({ type: types, payload: data });
+  return {
+    type: types.COUNT_ALL_VOUCHER_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => count all voucher success */
+export const countAllVoucherSuccess = (
+  data: models.DetailSuccessProps<models.CountAllVoucherProps>,
+): models.DetailSuccessAction<models.CountAllVoucherProps> => {
+  return { type: types.COUNT_ALL_VOUCHER_SUCCESS, payload: data };
+};
+/** => count all voucher failed */
+export const countAllVoucherFailed = (
+  data: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.COUNT_ALL_VOUCHER_FAILED, payload: data };
+};
+/** => count all voucher reset */
+export const countAllVoucherReset = () => {
+  return { type: types.COUNT_ALL_VOUCHER_RESET };
 };
 /** === SAVE SELECTED VOUCHER (LOCAL DATA) === */
 export const saveSelectedVouchers = (

@@ -1,8 +1,8 @@
+/** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
+import HistoryListView from './history-list.view';
+import HistoryDetailView from './history-detail.view';
 /** === EXPORT ALL === */
-export * from './oms.function';
-export * from './oms-hook.function';
-export * from './shopping-cart/shopping-cart.function';
-export * from './checkout-success/checkout-success.function';
+export { HistoryListView, HistoryDetailView };
 /**
  * ================================================================
  * NOTES

@@ -9,21 +9,29 @@ import {
   voucherGeneralReducer,
   VoucherGeneralInitialProps,
 } from './voucher-general/voucher-general.reducer';
+import {
+  countVoucherInitialState,
+  countVoucherReducer,
+  CountVoucherInitialProps,
+} from './count-all-voucher/count-all-voucher.reducer';
 /** === TYPE HERE === */
 export type VoucherInitialProps = {
   voucherCart: VoucherCartInitialProps;
   voucherGeneral: VoucherGeneralInitialProps;
+  countVoucher: CountVoucherInitialProps;
 };
 /** === INITIAL HERE === */
 export const voucherInitialState = {
   voucherCart: voucherCartInitialState,
   voucherGeneral: voucherGeneralInitialState,
+  countVoucher: countVoucherInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const voucherReducer = (
-  { voucherCart, voucherGeneral }: any,
+  { voucherCart, voucherGeneral, countVoucher }: any,
   action: any,
 ) => ({
   voucherCart: voucherCartReducer(voucherCart, action),
   voucherGeneral: voucherGeneralReducer(voucherGeneral, action),
+  countVoucher: countVoucherReducer(countVoucher, action),
 });

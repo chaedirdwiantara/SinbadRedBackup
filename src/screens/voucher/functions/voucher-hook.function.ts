@@ -6,12 +6,30 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 /** === FUNCTION === */
-/** => voucher cart list action */
+/** => count all voucher action */
+const useCountAllVoucherAction = () => {
+  const dispatch = useDispatch();
+  return {
+    count: (contextDispatch: (action: any) => any) => {
+      dispatch(
+        Actions.countAllVoucherProcess(contextDispatch, { id: 'unused' }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.countAllVoucherReset());
+    },
+  };
+};
+/** => voucher cart detail action */
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    detail: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      type: string,
+    ) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id, type }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.voucherDetailReset());
@@ -45,13 +63,11 @@ const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
     list: (contextDispatch: (action: any) => any) => {
-      console.log('called 1');
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
-      console.log('called 1 - r');
       contextDispatch(Actions.voucherCartListReset());
     },
   };
@@ -190,6 +206,7 @@ export {
   useSelectedSupplierVoucher,
   useVoucherListMore,
   useVoucherList,
+  useCountAllVoucherAction,
 };
 /**
  * ================================================================

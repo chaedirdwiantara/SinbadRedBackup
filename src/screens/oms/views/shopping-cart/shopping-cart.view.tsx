@@ -10,6 +10,7 @@ import {
   SnbIcon,
   color,
   SnbDialog,
+  SnbDivider,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -21,6 +22,7 @@ import {
   CartInvoiceGroup,
 } from '@models';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 import {
   goToVerificationOrder,
   getTotalProducts,
@@ -31,8 +33,11 @@ import {
   handleSelectedBrandChange,
   handleAllSelectedProductsChange,
   getTotalPrice,
+  goToVoucherCartList,
 } from '../../functions';
+import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
+import { useDataVoucher } from '@core/redux/Data';
 /** === DUMMIES === */
 const noImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -136,6 +141,14 @@ const OmsShoppingCartView: FC = () => {
   const { verificationOrderCreate } = useVerficationOrderAction();
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
+  const { count } = useCountAllVoucherAction();
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
+  const voucherData = useDataVoucher();
+  React.useEffect(() => {
+    count(dispatchVoucher);
+  }, []);
   React.useEffect(() => {
     if (stateVerificationOrder.create.data !== null) {
       setIsConfirmCheckoutDialogOpen(false);
@@ -401,52 +414,110 @@ const OmsShoppingCartView: FC = () => {
       loading={stateVerificationOrder.create.loading}
     />
   );
+  /** => voucher tag */
+  const renderVoucherTag = () => {
+    const { countVoucher } = stateVoucher;
+    if (
+      countVoucher.detail.data?.total !== 0 &&
+      countVoucher.detail.loading !== true
+    ) {
+      return (
+        <View>
+          <TouchableOpacity
+            onPress={() => goToVoucherCartList()}
+            style={ShoppingCartStyles.voucherTagContainer}>
+            <View style={ShoppingCartStyles.voucherTagLeftContainer}>
+              <View style={ShoppingCartStyles.voucherTagIconContainer}>
+                <SnbIcon name={'local_offer'} size={16} color={color.white} />
+              </View>
+              <View style={{ justifyContent: 'center' }}>
+                {voucherData.dataVouchers !== null ? (
+                  <>
+                    <SnbText.C1
+                      color={color.green50}>{`Potensi potongan ${toCurrency(
+                      countPotentialDiscount(
+                        voucherData.dataVouchers.sinbadVoucher,
+                        voucherData.dataVouchers.supplierVouchers,
+                      ).totalDiscount,
+                      {
+                        withPrefix: false,
+                        withFraction: false,
+                      },
+                    )}`}</SnbText.C1>
+                    <SnbText.C2 color={color.green50}>{`${
+                      countPotentialDiscount(
+                        voucherData.dataVouchers.sinbadVoucher,
+                        voucherData.dataVouchers.supplierVouchers,
+                      ).totalSelectedVoucher
+                    } Voucher terpilih`}</SnbText.C2>
+                  </>
+                ) : (
+                  <SnbText.B3
+                    color={
+                      color.green50
+                    }>{`Anda memiliki ${stateVoucher.countVoucher.detail.data?.total} voucher`}</SnbText.B3>
+                )}
+              </View>
+            </View>
+            <View style={ShoppingCartStyles.voucherTagRightContainer}>
+              <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
+              <SnbIcon name={'chevron_right'} size={24} color={color.red50} />
+            </View>
+          </TouchableOpacity>
+          <SnbDivider />
+        </View>
+      );
+    }
+  };
   /** => Footer */
   const renderFooter = () => (
-    <View style={ShoppingCartStyles.footer}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <SnbCheckbox
-          status={allProductsSelected}
-          onPress={() =>
-            handleAllSelectedProductsChange(
-              allProductsSelected === 'indeterminate' ||
-                allProductsSelected === 'unselect'
-                ? 'selected'
-                : 'unselect',
-              [invoiceGroups, setInvoiceGroups],
-              setProductSelectedCount,
-              setAllProductsSelected,
-              totalProducts,
-            )
-          }
-        />
-        <View style={{ marginLeft: 10 }}>
-          <SnbText.B3>Pilih Semua</SnbText.B3>
-        </View>
-      </View>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ marginRight: 10, alignItems: 'flex-end' }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginBottom: 4,
-            }}>
-            <View style={{ marginRight: 6 }}>
-              <SnbText.B3>Total:</SnbText.B3>
-            </View>
-            <SnbText.B2 color={color.red50}>
-              {toCurrency(getTotalPrice(invoiceGroups))}
-            </SnbText.B2>
+    <View style={ShoppingCartStyles.footerContainer}>
+      {renderVoucherTag()}
+      <View style={ShoppingCartStyles.footerBody}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <SnbCheckbox
+            status={allProductsSelected}
+            onPress={() =>
+              handleAllSelectedProductsChange(
+                allProductsSelected === 'indeterminate' ||
+                  allProductsSelected === 'unselect'
+                  ? 'selected'
+                  : 'unselect',
+                [invoiceGroups, setInvoiceGroups],
+                setProductSelectedCount,
+                setAllProductsSelected,
+                totalProducts,
+              )
+            }
+          />
+          <View style={{ marginLeft: 10 }}>
+            <SnbText.B3>Pilih Semua</SnbText.B3>
           </View>
-          <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
         </View>
-        <SnbButton.Dynamic
-          type="primary"
-          title="Checkout"
-          size="small"
-          onPress={() => setIsConfirmCheckoutDialogOpen(true)}
-        />
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ marginRight: 10, alignItems: 'flex-end' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 4,
+              }}>
+              <View style={{ marginRight: 6 }}>
+                <SnbText.B3>Total:</SnbText.B3>
+              </View>
+              <SnbText.B2 color={color.red50}>
+                {toCurrency(getTotalPrice(invoiceGroups))}
+              </SnbText.B2>
+            </View>
+            <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
+          </View>
+          <SnbButton.Dynamic
+            type="primary"
+            title="Checkout"
+            size="small"
+            onPress={() => setIsConfirmCheckoutDialogOpen(true)}
+          />
+        </View>
       </View>
     </View>
   );
