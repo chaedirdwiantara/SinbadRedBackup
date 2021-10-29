@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES === */
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT INTERNAL === */
-import { ProductApi } from '../apis/product.api';
+import { ProductApi } from 'src/data/apis/product/product.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';

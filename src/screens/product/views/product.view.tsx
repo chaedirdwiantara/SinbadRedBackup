@@ -7,7 +7,7 @@ import { RouteProp, useRoute } from '@react-navigation/core';
 import ProductList from '@core/components/product/list';
 import { AddToCartModal } from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
-import { useProductContext } from 'src/data/contexts/products/useProductContext';
+import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions, useOrderModalVisibility } from '../functions';
 /** === IMPORT TYPE === */
 import * as models from '@models';

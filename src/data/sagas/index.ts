@@ -1,5 +1,5 @@
 import { all, fork } from 'redux-saga/effects';
-import ProductSaga from './product.saga';
+import ProductSaga from './product/product.saga';
 import AuthSaga from './auth.saga';
 import UserSaga from './user.saga';
 import MerchantSaga from './merchant.saga';

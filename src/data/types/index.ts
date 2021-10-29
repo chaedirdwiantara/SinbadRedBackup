@@ -6,7 +6,7 @@
 export * from './global.type';
 export * from './register.type';
 export * from './auth.type';
-export * from './product.type';
+export * from './product';
 export * from './merchant.type';
 export * from './user.type';
 // export * from './oms.type';

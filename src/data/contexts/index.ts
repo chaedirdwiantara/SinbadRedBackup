@@ -1,6 +1,6 @@
 /** === IMPORT ALL PROVIDER and ALL CONTEXT HERE === */
 import { GlobalProvider, GlobalContext } from './global/GlobalProvider';
-import { ProductProvider, ProductContext } from './products/ProductProvider';
+import { ProductProvider, ProductContext } from './product/ProductProvider';
 import {
   VerificationOrderProvider,
   VerificationOrderContext,
