@@ -5,22 +5,22 @@ import * as types from '@types';
 /** => Process */
 export const tagListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.TagListProcessProps,
+  payload: models.TagListProcessProps,
 ): models.TagListProcessAction => {
-  contextDispatch({ type: types.TAG_LIST_PROCESS, payload: data });
-  return { type: types.TAG_LIST_PROCESS, payload: data, contextDispatch };
+  contextDispatch({ type: types.TAG_LIST_PROCESS, payload });
+  return { type: types.TAG_LIST_PROCESS, payload, contextDispatch };
 };
 /** => Succeeded */
 export const tagListSuccess = (
-  data: models.TagListSuccessProps,
+  payload: models.TagListSuccessProps,
 ): models.TagListSuccessAction => {
-  return { type: types.TAG_LIST_SUCCESS, payload: data };
+  return { type: types.TAG_LIST_SUCCESS, payload };
 };
 /** => Failed */
 export const tagListFailed = (
-  data: models.ErrorProps,
+  payload: models.ErrorProps,
 ): models.ListFailedAction => {
-  return { type: types.TAG_LIST_FAILED, payload: data };
+  return { type: types.TAG_LIST_FAILED, payload };
 };
 /** => Refresh */
 export const tagListRefresh = () => {

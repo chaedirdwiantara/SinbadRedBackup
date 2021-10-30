@@ -15,7 +15,6 @@ interface BuildBottomActionParams {
   sortActive?: boolean;
   filterActive?: boolean;
   layoutDisplay?: LayoutDisplay;
-  registerSupplierVisible?: boolean;
 }
 
 interface BottomActionItem {

@@ -5,22 +5,22 @@ import * as types from '@types';
 /** => Process */
 export const productListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ProductListProcessProps,
+  payload: models.ProductListProcessProps,
 ): models.ListProcessAction => {
-  contextDispatch({ type: types.PRODUCT_LIST_PROCESS, payload: data });
-  return { type: types.PRODUCT_LIST_PROCESS, payload: data, contextDispatch };
+  contextDispatch({ type: types.PRODUCT_LIST_PROCESS, payload });
+  return { type: types.PRODUCT_LIST_PROCESS, payload, contextDispatch };
 };
 /** => Succeeded */
 export const productListSuccess = (
-  data: models.ListSuccessProps<models.ProductList[]>,
+  payload: models.ListSuccessProps<models.ProductList[]>,
 ): models.ListSuccessAction<models.ProductList[]> => {
-  return { type: types.PRODUCT_LIST_SUCCESS, payload: data };
+  return { type: types.PRODUCT_LIST_SUCCESS, payload };
 };
 /** => Failed */
 export const productListFailed = (
-  data: models.ErrorProps,
+  payload: models.ErrorProps,
 ): models.ListFailedAction => {
-  return { type: types.PRODUCT_LIST_FAILED, payload: data };
+  return { type: types.PRODUCT_LIST_FAILED, payload };
 };
 /** => Refresh */
 export const productListRefresh = () => {

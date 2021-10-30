@@ -13,12 +13,11 @@ export type BottomActionPressHandlerType =
   | 'sort'
   | 'applySort'
   | 'filter'
-  | 'resetFilter'
   | 'applyFilter'
   | 'layout'
-  | 'registerSupplierVisible'
-  | 'sendDataSupplier'
-  | 'category';
+  | 'category'
+  | 'toggleRegisterSupplier'
+  | 'sendSupplierData';
 
 export type SortIndex = number | null;
 

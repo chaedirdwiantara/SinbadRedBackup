@@ -76,9 +76,6 @@ export const useBottomAction = (
 
   const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
     switch (type) {
-      case 'registerSupplierVisible':
-        setRegisterSupplierModalVisible((prev) => !prev);
-        break;
       case 'sort':
         setSortModalVisible((prev) => !prev);
         break;
@@ -122,19 +119,17 @@ export const useBottomAction = (
           ...filterQueryOption,
         });
         break;
-      case 'resetFilter':
-        setFilterQuery(null);
-        setFilterModalVisible(false);
-        setFilterActive(false);
-        break;
       case 'layout':
         setLayoutDisplay((prev) => (prev === 'grid' ? 'list' : 'grid'));
         break;
       case 'category':
         goToCategory();
         break;
-      case 'sendDataSupplier':
-        //hit api send-store-supplier
+      case 'toggleRegisterSupplier':
+        setRegisterSupplierModalVisible((prev) => !prev);
+        break;
+      case 'sendSupplierData':
+        // Hit api send-store-supplier
         Alert.alert(
           'Send Data to Suplier',
           'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',

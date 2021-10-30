@@ -69,6 +69,12 @@ const ProductView: FC = () => {
               : undefined
           }
           isRefreshing={productListState.refresh}
+          onFetch={(queryOptions) =>
+            fetch(dispatchProduct, {
+              categoryId: category.id,
+              ...queryOptions,
+            })
+          }
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
               categoryId: category.id,

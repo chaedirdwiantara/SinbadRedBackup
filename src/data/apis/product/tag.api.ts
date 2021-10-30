@@ -3,11 +3,11 @@ import { serializeQs } from '@core/functions/global/query-string';
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTION === */
-const getList = (data: models.TagListProcessProps) => {
+const getList = (payload: models.TagListProcessProps) => {
   const qs = serializeQs({
-    keyword: data.keyword,
-    brandId: data.brandId,
-    categoryId: data.categoryId,
+    keyword: payload.keyword,
+    brandId: payload.brandId,
+    categoryId: payload.categoryId,
   });
 
   return apiMapping<Array<models.TagList>>(
