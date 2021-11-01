@@ -36,6 +36,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
             (product, productIndex) =>
               productIndex % 2 === 0 && (
                 <GridLayoutCard
+                  key={product.id}
                   product={product}
                   index={productIndex}
                   onOrderPress={onOrderPress}
@@ -48,6 +49,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
             (product, productIndex) =>
               productIndex % 2 === 1 && (
                 <GridLayoutCard
+                  key={product.id}
                   product={product}
                   index={productIndex}
                   onOrderPress={onOrderPress}

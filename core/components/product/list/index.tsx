@@ -1,13 +1,7 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState } from 'react';
-import { View, Image } from 'react-native';
-import {
-  SnbContainer,
-  SnbBottomSheet,
-  SnbButton,
-  SnbText,
-  color,
-} from 'react-native-sinbad-ui';
+import React, { FC, useState, useEffect, useMemo } from 'react';
+import { View } from 'react-native';
+import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
@@ -15,8 +9,15 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
+import RegisterSupplierModal from './RegisterSupplierModal';
 /** === IMPORT FUNCTIONS === */
-import { useBottomAction, priceSortOptions } from '@core/functions/product';
+import {
+  useBottomAction,
+  priceSortOptions,
+  useRegisterSupplierModal,
+} from '@core/functions/product';
+import { useTagListActions } from '@screen/product/functions';
+import { useProductContext, useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -27,46 +28,34 @@ import {
 /** === TYPE === */
 interface ProductListProps {
   products: Array<models.ProductList>;
-  onOrderPress: (item: models.ProductList) => void;
   headerType?: ProductHeaderType;
   headerTitle?: string;
-  onHeaderSearch?: (queryOptions: models.ProductListQueryOptions) => void;
   categoryTabs?: boolean;
   categoryTabsConfig?: CategoryTabsConfig;
   isRefreshing: boolean;
   onRefresh: (queryOptions: models.ProductListQueryOptions) => void;
+  onFetch: (queryOptions: models.ProductListQueryOptions) => void;
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
   activeCategory?: CategoryType;
 }
-/** === DUMMY === */
-const dummyTags: Array<string> = [
-  'Fresh',
-  'Cream',
-  'Honey',
-  'Anak',
-  'Almond',
-  'Perfect',
-  'Liquid',
-  'Remover',
-];
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
   products,
-  onOrderPress,
   categoryTabs = false,
   categoryTabsConfig,
   headerType = 'default',
   headerTitle,
-  onHeaderSearch,
   isRefreshing,
   onRefresh,
+  onFetch,
   onLoadMore,
   activeKeyword = '',
   activeCategory,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
+  const [keywordSearched, setKeywordSearched] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
@@ -80,12 +69,35 @@ const ProductList: FC<ProductListProps> = ({
     filterQuery,
     layoutDisplay,
     handleActionClick,
-    registerSupplierModalVisible,
-  } = useBottomAction(onRefresh, {
+  } = useBottomAction(onFetch, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
   });
-  /** === DERIVED VALUE === */
+  const registerSupplierModal = useRegisterSupplierModal();
+  const tagActions = useTagListActions();
+  const {
+    stateProduct: {
+      list: { loading: productLoading },
+    },
+  } = useProductContext();
+  const {
+    stateTag: {
+      list: { data: tagList },
+    },
+    dispatchTag,
+  } = useTagContext();
+  const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
+
+  useEffect(() => {
+    if (!productLoading) {
+      setKeywordSearched(false);
+    }
+  }, [productLoading]);
+
+  useEffect(() => {
+    tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
+  }, [selectedCategory, keywordSearched]);
+  /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
@@ -93,6 +105,14 @@ const ProductList: FC<ProductListProps> = ({
     sortBy: sortQuery?.sortBy,
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
+  };
+
+  const handleTagPress = (tags: Array<string>) => {
+    const queryOptions = {
+      ...derivedQueryOptions,
+      tags,
+    };
+    onFetch(queryOptions);
   };
   /** === VIEW === */
   return (
@@ -106,10 +126,8 @@ const ProductList: FC<ProductListProps> = ({
             ...derivedQueryOptions,
             keyword: searchKeyword,
           };
-
-          if (onHeaderSearch) {
-            onHeaderSearch(queryOptions);
-          }
+          setKeywordSearched(true);
+          onFetch(queryOptions);
         }}
       />
       {categoryTabs && (
@@ -124,7 +142,7 @@ const ProductList: FC<ProductListProps> = ({
               categoryId: category.id,
             };
             setSelectedCategory(category);
-            onRefresh(queryOptions);
+            onFetch(queryOptions);
           }}
         />
       )}
@@ -132,9 +150,9 @@ const ProductList: FC<ProductListProps> = ({
         {layoutDisplay === 'grid' ? (
           <GridLayout
             products={products}
-            tags={dummyTags}
-            onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-            onOrderPress={onOrderPress}
+            tags={tagNames}
+            onTagPress={handleTagPress}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -142,9 +160,9 @@ const ProductList: FC<ProductListProps> = ({
         ) : (
           <ListLayout
             products={products}
-            tags={dummyTags}
-            onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-            onOrderPress={onOrderPress}
+            tags={tagNames}
+            onTagPress={handleTagPress}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -185,45 +203,11 @@ const ProductList: FC<ProductListProps> = ({
         content={<Action.Filter onButtonPress={handleActionClick} />}
         closeAction={() => handleActionClick({ type: 'filter' })}
       />
-      {/** === RENDER MODAL REGISTER SUPPLIER === */}
-      <SnbBottomSheet
-        open={registerSupplierModalVisible}
-        title={' '}
-        action={true}
-        actionIcon="close"
-        content={
-          <View
-            style={{
-              backgroundColor: color.white,
-            }}>
-            <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
-              <Image
-                source={require('../../../../src/assets/images/no_gps.png')}
-                style={{ width: 200, marginBottom: 16 }}
-              />
-              <SnbText.B2 color={color.black100}>
-                Supplier butuh datamu nih
-              </SnbText.B2>
-              <View style={{ marginTop: 8 }}>
-                <SnbText.C1 color={color.black100} align={'center'}>
-                  Kirim data Anda ke supplier untuk dapat berbelanja produk
-                  supplier terkait sekarang yuk !
-                </SnbText.C1>
-              </View>
-            </View>
-            <View style={{ marginTop: 32, height: 72 }}>
-              <SnbButton.Single
-                type="primary"
-                title="Kirim data ke Supplier"
-                onPress={() => handleActionClick({ type: 'sendDataSupplier' })}
-                disabled={false}
-              />
-            </View>
-          </View>
-        }
-        closeAction={() =>
-          handleActionClick({ type: 'registerSupplierVisible' })
-        }
+      {/* Register Supplier Modal */}
+      <RegisterSupplierModal
+        visible={registerSupplierModal.visible}
+        onSubmit={registerSupplierModal.sendSupplierData}
+        onClose={() => registerSupplierModal.setVisible(false)}
       />
     </SnbContainer>
   );

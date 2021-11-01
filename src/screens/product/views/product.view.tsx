@@ -7,7 +7,7 @@ import { RouteProp, useRoute } from '@react-navigation/core';
 import ProductList from '@core/components/product/list';
 import { AddToCartModal } from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
-import { useProductContext } from 'src/data/contexts/products/useProductContext';
+import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions, useOrderModalVisibility } from '../functions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
@@ -55,7 +55,6 @@ const ProductView: FC = () => {
       <View style={{ flex: 1 }}>
         <ProductList
           products={productListState.data}
-          onOrderPress={() => setOrderModalVisible(true)}
           activeCategory={category}
           categoryTabs={categoryFirstLevelIndex !== undefined}
           categoryTabsConfig={
@@ -69,6 +68,12 @@ const ProductView: FC = () => {
               : undefined
           }
           isRefreshing={productListState.refresh}
+          onFetch={(queryOptions) =>
+            fetch(dispatchProduct, {
+              categoryId: category.id,
+              ...queryOptions,
+            })
+          }
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
               categoryId: category.id,

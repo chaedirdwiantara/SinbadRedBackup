@@ -4,7 +4,7 @@ import {
   ProductInitialProps,
   productInitialState,
   productReducer,
-} from '@reducer/products/product.reducer';
+} from '@reducer/product/product.reducer';
 
 const ProductContext = createContext<{
   stateProduct: ProductInitialProps;

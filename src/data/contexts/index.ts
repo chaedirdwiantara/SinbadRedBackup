@@ -1,6 +1,7 @@
 /** === IMPORT ALL PROVIDER and ALL CONTEXT HERE === */
 import { GlobalProvider, GlobalContext } from './global/GlobalProvider';
-import { ProductProvider, ProductContext } from './products/ProductProvider';
+import { ProductProvider, ProductContext } from './product/ProductProvider';
+import { TagProvider, TagContext } from './product/tag/TagProvider';
 import {
   VerificationOrderProvider,
   VerificationOrderContext,
@@ -29,6 +30,7 @@ export const providers = [
   UserProvider,
   MerchantProvider,
   NotificationProvider,
+  TagProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -42,4 +44,5 @@ export const contexts = {
   PromoContext,
   BrandContext,
   NotificationContext,
+  TagContext,
 };

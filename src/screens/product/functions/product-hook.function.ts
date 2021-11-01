@@ -65,6 +65,38 @@ const useProductListActions = () => {
   };
 };
 
+/** === Fetch Product Tag List Related === */
+const useTagListActions = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.TagListQueryOptions,
+    ) => {
+      contextDispatch(Actions.tagListReset());
+      dispatch(
+        Actions.tagListProcess(contextDispatch, {
+          loading: true,
+          ...queryOptions,
+        }),
+      );
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.TagListQueryOptions,
+    ) => {
+      contextDispatch(Actions.tagListRefresh());
+      dispatch(
+        Actions.tagListProcess(contextDispatch, {
+          loading: true,
+          ...queryOptions,
+        }),
+      );
+    },
+  };
+};
+
 /** === Add to Cart Modal Related === */
 const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
@@ -96,16 +128,9 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   return { orderQty, increaseOrderQty, decreaseOrderQty };
 };
 
-export { useProductListActions, useOrderModalVisibility, useOrderQuantity };
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 27-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export {
+  useProductListActions,
+  useOrderModalVisibility,
+  useOrderQuantity,
+  useTagListActions,
+};

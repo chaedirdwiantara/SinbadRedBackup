@@ -12,19 +12,20 @@ const serializeTagsQs = (tags?: Array<string>) => {
   }
 };
 
-const getList = (data: models.ProductListProcessProps) => {
+const getList = (payload: models.ProductListProcessProps) => {
   const qs = serializeQs({
-    skip: data.skip,
-    limit: data.limit,
-    sort: data.sort,
-    sortBy: data.sortBy,
-    keyword: data.keyword,
-    brandId: data.brandId,
-    categoryId: data.categoryId,
-    minPrice: data.minPrice,
-    maxPrice: data.maxPrice,
+    skip: payload.skip,
+    limit: payload.limit,
+    sort: payload.sort,
+    sortBy: payload.sortBy,
+    keyword: payload.keyword,
+    brandId: payload.brandId,
+    categoryId: payload.categoryId,
+    minPrice: payload.minPrice,
+    maxPrice: payload.maxPrice,
   });
-  const tagQs = data.tags !== undefined ? `&${serializeTagsQs(data.tags)}` : '';
+  const tagQs =
+    payload.tags !== undefined ? `&${serializeTagsQs(payload.tags)}` : '';
 
   return apiMapping<models.ProductList[]>(
     'public',
