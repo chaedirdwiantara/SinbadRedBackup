@@ -94,7 +94,13 @@ export const setErrorMessage = (code: number) => {
       return 'No. HP harus berupa angka';
     }
     case 10005: {
-      return 'No. Hp yang anda masukan sudah terdaftar';
+      return 'No. Hp yang Anda masukan sudah terdaftar';
+    }
+    case 10007: {
+      return 'No. Hp yang Anda masukkan tidak terdaftar';
+    }
+    case 10008: {
+      return 'Kode OTP salah/kadaluarsa';
     }
     default: {
       return 'Terjadi kesalahan';
