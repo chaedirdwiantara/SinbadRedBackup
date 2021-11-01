@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type ProductDetailInitialProps =
+export type ProductDetailInitialProps =
   models.DetailItemProps<models.ProductDetailSuccessProps>;
 /** === INITIAL STATE HERE === */
 export const productDetailInitialState: ProductDetailInitialProps = {
