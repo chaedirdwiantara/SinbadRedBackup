@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects';
+import { takeLatest, put, call, delay } from 'redux-saga/effects';
 import { registerApi } from '../apis/register.api';
 import * as types from '@types';
 import * as ActionCreators from '@actions';
@@ -41,6 +41,7 @@ function* registerMerchant(
       registerApi.registerMerchant(action.payload),
     );
     if (registerReponse) {
+      yield delay(2000);
       const response: models.IRegisterMerchantDetail = yield call(() =>
         registerApi.registermerchantDetail(registerReponse),
       );
