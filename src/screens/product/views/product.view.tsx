@@ -55,7 +55,6 @@ const ProductView: FC = () => {
       <View style={{ flex: 1 }}>
         <ProductList
           products={productListState.data}
-          onOrderPress={() => setOrderModalVisible(true)}
           activeCategory={category}
           categoryTabs={categoryFirstLevelIndex !== undefined}
           categoryTabsConfig={

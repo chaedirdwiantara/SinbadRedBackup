@@ -11,7 +11,11 @@ import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 import RegisterSupplierModal from './RegisterSupplierModal';
 /** === IMPORT FUNCTIONS === */
-import { useBottomAction, priceSortOptions } from '@core/functions/product';
+import {
+  useBottomAction,
+  priceSortOptions,
+  useRegisterSupplierModal,
+} from '@core/functions/product';
 import { useTagListActions } from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES === */
@@ -24,7 +28,6 @@ import {
 /** === TYPE === */
 interface ProductListProps {
   products: Array<models.ProductList>;
-  onOrderPress: (item: models.ProductList) => void;
   headerType?: ProductHeaderType;
   headerTitle?: string;
   categoryTabs?: boolean;
@@ -39,7 +42,6 @@ interface ProductListProps {
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
   products,
-  onOrderPress,
   categoryTabs = false,
   categoryTabsConfig,
   headerType = 'default',
@@ -67,11 +69,11 @@ const ProductList: FC<ProductListProps> = ({
     filterQuery,
     layoutDisplay,
     handleActionClick,
-    registerSupplierModalVisible,
   } = useBottomAction(onFetch, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
   });
+  const registerSupplierModal = useRegisterSupplierModal();
   const tagActions = useTagListActions();
   const {
     stateProduct: {
@@ -95,7 +97,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
   }, [selectedCategory, keywordSearched]);
-  /** === DERIVED VALUE === */
+  /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
@@ -103,6 +105,14 @@ const ProductList: FC<ProductListProps> = ({
     sortBy: sortQuery?.sortBy,
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
+  };
+
+  const handleTagPress = (tags: Array<string>) => {
+    const queryOptions = {
+      ...derivedQueryOptions,
+      tags,
+    };
+    onFetch(queryOptions);
   };
   /** === VIEW === */
   return (
@@ -141,14 +151,8 @@ const ProductList: FC<ProductListProps> = ({
           <GridLayout
             products={products}
             tags={tagNames}
-            onTagPress={(tags) => {
-              const queryOptions = {
-                ...derivedQueryOptions,
-                tags,
-              };
-              onFetch(queryOptions);
-            }}
-            onOrderPress={onOrderPress}
+            onTagPress={handleTagPress}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -157,14 +161,8 @@ const ProductList: FC<ProductListProps> = ({
           <ListLayout
             products={products}
             tags={tagNames}
-            onTagPress={(tags) => {
-              const queryOptions = {
-                ...derivedQueryOptions,
-                tags,
-              };
-              onFetch(queryOptions);
-            }}
-            onOrderPress={onOrderPress}
+            onTagPress={handleTagPress}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -207,9 +205,9 @@ const ProductList: FC<ProductListProps> = ({
       />
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
-        visible={registerSupplierModalVisible}
-        onSubmit={() => handleActionClick({ type: 'sendSupplierData' })}
-        onClose={() => handleActionClick({ type: 'toggleRegisterSupplier' })}
+        visible={registerSupplierModal.visible}
+        onSubmit={registerSupplierModal.sendSupplierData}
+        onClose={() => registerSupplierModal.setVisible(false)}
       />
     </SnbContainer>
   );

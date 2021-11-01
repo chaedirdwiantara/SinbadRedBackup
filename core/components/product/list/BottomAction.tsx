@@ -15,9 +15,7 @@ export type BottomActionPressHandlerType =
   | 'filter'
   | 'applyFilter'
   | 'layout'
-  | 'category'
-  | 'toggleRegisterSupplier'
-  | 'sendSupplierData';
+  | 'category';
 
 export type SortIndex = number | null;
 
