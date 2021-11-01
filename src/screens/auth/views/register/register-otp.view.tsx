@@ -48,7 +48,9 @@ const RegisterOTPView: React.FC = () => {
         hideIcon={hide}
         loading={verifyOTP.loading}
         phoneNo={maskPhone(mobilePhone)}
-        errorMessage={setErrorMessage(verifyOTP.error?.code)}
+        errorMessage={
+          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
+        }
         resend={() => {
           checkPhone({ mobilePhoneNo: mobilePhone });
         }}

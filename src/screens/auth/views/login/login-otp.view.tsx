@@ -47,7 +47,9 @@ const LoginOTPView: React.FC = () => {
         resend={() => {
           requestOTP({ mobilePhone });
         }}
-        errorMessage={setErrorMessage(verifyOTP.error?.code)}
+        errorMessage={
+          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
+        }
       />
     </SnbContainer>
   );

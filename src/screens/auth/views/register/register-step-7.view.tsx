@@ -69,7 +69,7 @@ const Content: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
-    if (registerState.data?.data?.isCreated === true) {
+    if (registerState.data?.data?.isCreated) {
       reset({
         index: 0,
         routes: [{ name: 'Home' }],
