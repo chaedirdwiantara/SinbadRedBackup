@@ -13,7 +13,7 @@ function* loginUserName(action: models.LoginUserNameProcessAction) {
       return AuthApi.loginUserName(action.payload);
     });
     yield put(ActionCreators.loginUserNameSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield put(ActionCreators.loginUserNameFailed(error));
   }
 }
@@ -24,7 +24,7 @@ function* requestOTP(action: models.RequestOTPProcessAction) {
       return AuthApi.requestOTP(action.payload);
     });
     yield put(ActionCreators.requestOTPSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield put(ActionCreators.requestOTPFailed(error));
   }
 }
@@ -35,7 +35,7 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
       return AuthApi.verificationOTP(action.payload);
     });
     yield put(ActionCreators.verificationOTPSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield put(ActionCreators.verificationOTPFailed(error));
   }
 }
@@ -46,7 +46,7 @@ function* logout() {
       return AuthApi.logout();
     });
     yield put(ActionCreators.logoutSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield put(ActionCreators.logoutFailed(error));
   }
 }

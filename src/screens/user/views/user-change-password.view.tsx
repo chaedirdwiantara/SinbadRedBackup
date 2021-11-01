@@ -25,7 +25,7 @@ const UserChangePasswordView: FC = () => {
     if (stateUser.update.data !== null) {
       setOpenConfirm(false);
       ToastAndroid.showWithGravityAndOffset(
-        'Kata Sandi berhasil di perbaharui',
+        'Kata Sandi berhasil diperbaharui',
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -208,7 +208,7 @@ const UserChangePasswordView: FC = () => {
         <SnbDialog
           open={openConfirm}
           title={'Ganti Kata Sandi'}
-          content={'Apakah anda yakin ingin mengganti kata sandi Anda ?'}
+          content={'Apakah Anda yakin ingin mengganti kata sandi Anda ?'}
           okText={'Ya'}
           ok={() => confirm()}
           cancel={() => setOpenConfirm(false)}

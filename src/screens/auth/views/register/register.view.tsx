@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import {
+  setErrorMessage,
   useCheckPhoneNoAvailability,
   useInputPhone,
 } from '@screen/auth/functions';
@@ -26,7 +27,9 @@ const Content: React.FC = () => {
       navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
     }
     if (checkPhoneNoAvailability.error !== null) {
-      phone.setMessageError(checkPhoneNoAvailability.error.message);
+      phone.setMessageError(
+        setErrorMessage(checkPhoneNoAvailability.error.code),
+      );
     }
   }, [checkPhoneNoAvailability]);
 

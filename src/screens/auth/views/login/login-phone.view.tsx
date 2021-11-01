@@ -1,5 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
-import { useAuthAction, useInputPhone } from '@screen/auth/functions';
+import {
+  setErrorMessage,
+  useAuthAction,
+  useInputPhone,
+} from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
@@ -22,14 +26,17 @@ const Content: React.FC = () => {
   const phone = useInputPhone();
 
   React.useEffect(() => {
+    return resetRequestOTP;
+  }, []);
+
+  React.useEffect(() => {
     if (requestOTPState.data !== null) {
       phone.clearText();
       navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
     }
     if (requestOTPState.error !== null) {
-      phone.setMessageError(requestOTPState.error.message);
+      phone.setMessageError(setErrorMessage(requestOTPState.error.code));
     }
-    return resetRequestOTP;
   }, [requestOTPState]);
 
   return (
@@ -66,7 +73,10 @@ const Content: React.FC = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="ID Toko"
-          onPress={() => navigate(LOGIN_ID_VIEW)}
+          onPress={() => {
+            phone.clearText();
+            navigate(LOGIN_ID_VIEW);
+          }}
           type="secondary"
           disabled={false}
         />
@@ -78,7 +88,10 @@ const Content: React.FC = () => {
         <SnbButton.Dynamic
           title="Daftar"
           size="small"
-          onPress={() => navigate(REGISTER_VIEW)}
+          onPress={() => {
+            phone.clearText();
+            navigate(REGISTER_VIEW);
+          }}
           type="tertiary"
           disabled={false}
         />
