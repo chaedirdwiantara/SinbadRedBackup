@@ -74,7 +74,7 @@ const MerchantEditPhotoView = () => {
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
-  const [imageUrl, setImageUrl] = React.useState<string | undefined>('');
+  const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
 
   React.useEffect(() => {
     switch (params.type) {
@@ -211,7 +211,7 @@ const MerchantEditPhotoView = () => {
     );
   };
 
-  const isImageAvailable = imageUrl !== '' || capturedImage.data !== null;
+  const isImageAvailable = imageUrl !== ' ' || capturedImage.data !== null;
 
   return (
     <SnbContainer color={'white'}>
@@ -222,7 +222,7 @@ const MerchantEditPhotoView = () => {
       />
       <View style={{ flex: 1 }}>
         {renderIF(
-          !isImageAvailable,
+          isImageAvailable,
           renderImagePreview(),
           <SnbUploadPhotoRules
             rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}
