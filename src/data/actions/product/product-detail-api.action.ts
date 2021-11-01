@@ -1,6 +1,6 @@
-/** === IMPORT INTERNAL === */
-import * as models from '@models';
 import * as types from '@types';
+import * as models from '@models';
+
 /** product detail process */
 export const productDetailProcess = (
   contextDispatch: (action: any) => any,
