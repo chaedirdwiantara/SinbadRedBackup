@@ -72,7 +72,7 @@ const UserView: FC = () => {
       <View style={UserStyles.headerInformationContainer}>
         <View style={UserStyles.imageContainer}>
           {data?.imageUrl ? (
-            <Image source={{ uri: data.imageUrl }} style={UserStyles.image} />
+            <Image source={{ uri: data?.imageUrl }} style={UserStyles.image} />
           ) : (
             <Svg name={'avatar'} size={50} color={color.red50} />
           )}

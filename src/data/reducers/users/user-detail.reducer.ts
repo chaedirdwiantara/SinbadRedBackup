@@ -8,7 +8,7 @@ type UserDetailInitialProps = models.DetailItemProps<models.StoreDetail>;
 export const userDetailInitialState: UserDetailInitialProps = {
   data: null,
   error: null,
-  loading: false,
+  loading: true,
 };
 /** === FUNCTION HERE === */
 export const userDetailReducer = simplifyReducer(userDetailInitialState, {
@@ -23,7 +23,7 @@ export const userDetailReducer = simplifyReducer(userDetailInitialState, {
   /** => detail success */
   [types.STORE_DETAIL_SUCCESS](
     state = userDetailInitialState,
-    action: models.DetailSuccessAction<models.Example2>,
+    action: models.DetailSuccessAction<models.StoreDetail>,
   ) {
     return {
       ...state,
