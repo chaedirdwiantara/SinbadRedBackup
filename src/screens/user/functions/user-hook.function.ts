@@ -83,6 +83,9 @@ const useChangePassword = () => {
     ) => {
       dispatch(Actions.changePasswordProcess(contextDispatch, data));
     },
+    resetChangePassword: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.changePasswordReset());
+    },
   };
 };
 /** === EXPORT === */

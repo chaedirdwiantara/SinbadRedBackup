@@ -44,5 +44,9 @@ export const changePasswordReducer = simplifyReducer(
         error: action.payload,
       };
     },
+    /** => reset */
+    [types.CHANGE_PASSWORD_RESET]() {
+      return changePasswordInitialState;
+    },
   },
 );

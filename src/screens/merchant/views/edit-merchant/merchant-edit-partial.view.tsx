@@ -198,7 +198,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           topSellingBrand: topBrand.value,
           mostWantedBrand: wantedBrand.value,
           vehicleAccessibilityId: vehicleAccessibility.value.id,
-          vehicleAccessibilityAmount: vehicleAccessibilityAmount.value,
+          vehicleAccessibilityAmount: Number(vehicleAccessibilityAmount.value),
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
@@ -317,6 +317,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           value={ownerName.value}
           onChangeText={(text) => ownerName.setValue(text)}
           clearText={() => ownerName.setValue('')}
+          maxLength={64}
         />
       </View>
     );
@@ -448,12 +449,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Ukuran Toko'}
+            labelText={'Ukuran Toko (m²)'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
             clearText={() => largeArea.setValue('')}
+            keyboardType={'number-pad'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -492,8 +494,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukan Jumlah Akses Jalan'}
             type={'default'}
-            value={`${vehicleAccessibilityAmount.value}`}
-            onChangeText={(text) => vehicleAccessibilityAmount.setValue(text)}
+            value={
+              vehicleAccessibilityAmount.value
+                ? `${vehicleAccessibilityAmount.value}`
+                : vehicleAccessibilityAmount.value
+            }
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              vehicleAccessibilityAmount.setValue(cleanNumber);
+            }}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
           />
