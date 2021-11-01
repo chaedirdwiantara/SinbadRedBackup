@@ -8,7 +8,7 @@ type UserDetailInitialProps = models.DetailItemProps<models.StoreDetail>;
 export const userDetailInitialState: UserDetailInitialProps = {
   data: null,
   error: null,
-  loading: true,
+  loading: false,
 };
 /** === FUNCTION HERE === */
 export const userDetailReducer = simplifyReducer(userDetailInitialState, {
