@@ -43,17 +43,7 @@ export const useBottomAction = (
   const [sortQuery, setSortQuery] = useState<SortQuery | null>(null);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [filterActive, setFilterActive] = useState(false);
-<<<<<<< HEAD
   const [filterQuery, setFilterQuery] = useState<PriceRange | null>(null);
-=======
-  const [filterQuery, setFilterQuery] = useState<FilterQuery | null>(null);
-  const [filterParams, setFilterParams] = useState<FilterParams>({
-    priceGteMasking: '',
-    priceLteMasking: '',
-    priceGte: 0,
-    priceLte: 0,
-  });
->>>>>>> f07cab5 (product detail type)
   const [layoutDisplay, setLayoutDisplay] = useState<LayoutDisplay>('grid');
 
   const getQueryOptions = ({
@@ -108,23 +98,8 @@ export const useBottomAction = (
         setFilterModalVisible((prev) => !prev);
         break;
       case 'applyFilter':
-<<<<<<< HEAD
         const filterValue = value as PriceRange;
         setFilterQuery(filterValue);
-=======
-        // setFilterQuery
-        setFilterQuery(value as FilterQuery);
-        setFilterModalVisible(false);
-        if (!filterQuery) {
-          setFilterActive(false);
-        } else {
-          setFilterActive(true);
-        }
-        break;
-      case 'resetFilter':
-        setFilterActive(false);
-        setFilterQuery(null);
->>>>>>> f07cab5 (product detail type)
         setFilterModalVisible(false);
         setFilterActive(
           filterValue.minPrice === 0 && filterValue.maxPrice === 0
@@ -200,7 +175,6 @@ export const usePriceRangeFilter = () => {
   };
 
   return {
-<<<<<<< HEAD
     minPrice,
     maxPrice,
     setMinPrice,
@@ -238,8 +212,5 @@ export const useRegisterSupplierModal = () => {
     visible: registerSupplierModalVisible,
     setVisible: setRegisterSupplierModalVisible,
     sendSupplierData,
-=======
-    sortData,
->>>>>>> f07cab5 (product detail type)
   };
 };
