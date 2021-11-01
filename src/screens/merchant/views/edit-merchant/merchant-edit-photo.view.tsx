@@ -79,15 +79,28 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     switch (params.type) {
       case 'npwp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.taxImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.taxImageUrl || ' ',
+        );
         break;
       }
       case 'ktp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.idImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
+        );
         break;
       }
       case 'selfie': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.selfieImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.selfieImageUrl || ' ',
+        );
+        break;
+      }
+      case 'store': {
+        setImageUrl(
+          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+            ?.imageUrl || ' ',
+        );
         break;
       }
     }
