@@ -204,7 +204,7 @@ const NotificationView: React.FC = () => {
         open={showModal}
         closeAction={() => setShowModal(false)}
         content={renderModalContent()}
-        title={modalTitle}
+        title={' '}
         action={true}
         actionIcon={'close'}
       />
@@ -250,9 +250,11 @@ const NotificationView: React.FC = () => {
             resizeMode="contain"
           />
           <SnbText.H4>{modalTitle}</SnbText.H4>
-          {notificationListState.data?.suppierName && approvalStatus === ''
-            ? renderMessageWithSupplierName()
-            : renderMessage()}
+          <View style={{ paddingHorizontal: 16 }}>
+            {notificationListState.data?.supplierName && approvalStatus === ''
+              ? renderMessageWithSupplierName()
+              : renderMessage()}
+          </View>
         </View>
         <View style={{ marginVertical: 16 }} />
         <View style={{ width: '100%' }}>
