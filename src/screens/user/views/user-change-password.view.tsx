@@ -1,9 +1,10 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
   SnbTextField,
   SnbButton,
+  SnbDialog,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, ToastAndroid } from 'react-native';
 import { NavigationAction } from '@navigation';
@@ -21,7 +22,8 @@ const UserChangePasswordView: FC = () => {
   const changePasswordAction = UserHookFunc.useChangePassword();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
-    if (stateUser.update.data) {
+    if (stateUser.update.data !== null) {
+      setOPenConfirm(false);
       ToastAndroid.showWithGravityAndOffset(
         'Success',
         ToastAndroid.LONG,
@@ -30,7 +32,9 @@ const UserChangePasswordView: FC = () => {
         240,
       );
       NavigationAction.back();
-    } else {
+      changePasswordAction.resetChangePassword(dispatchUser);
+    } else if (stateUser.update.error !== null) {
+      setOPenConfirm(false);
       ToastAndroid.showWithGravityAndOffset(
         'Failed',
         ToastAndroid.LONG,
@@ -38,9 +42,14 @@ const UserChangePasswordView: FC = () => {
         0,
         240,
       );
+      changePasswordAction.resetChangePassword(dispatchUser);
     }
-  }, [stateUser.update.data]);
+  }, [stateUser.update]);
 
+  const [secureOldPassword, setSecureOldPassword] = useState(true);
+  const [secureNewPassword, setSecureNewPassword] = useState(true);
+  const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
+  const [openConfirm, setOPenConfirm] = useState(false);
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
     setDataOldPassword(oldPassword);
@@ -88,8 +97,9 @@ const UserChangePasswordView: FC = () => {
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
-            suffixIconName="visibility"
-            secureTextEntry={true}
+            suffixIconName={secureOldPassword ? 'visibility' : 'visibility_off'}
+            secureTextEntry={secureOldPassword}
+            suffixAction={() => setSecureOldPassword(!secureOldPassword)}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -105,8 +115,9 @@ const UserChangePasswordView: FC = () => {
             maxLength={40}
             valMsgError="ini contoh kalau error ya"
             keyboardType="default"
-            suffixIconName="visibility"
-            secureTextEntry={true}
+            suffixIconName={secureNewPassword ? 'visibility' : 'visibility_off'}
+            secureTextEntry={secureNewPassword}
+            suffixAction={() => setSecureNewPassword(!secureNewPassword)}
           />
         </View>
         <SnbTextField.Text
@@ -121,21 +132,45 @@ const UserChangePasswordView: FC = () => {
           maxLength={40}
           valMsgError="ini contoh kalau error ya"
           keyboardType="default"
-          suffixIconName="visibility"
-          secureTextEntry={true}
+          suffixIconName={
+            secureConfirmPassword ? 'visibility' : 'visibility_off'
+          }
+          secureTextEntry={secureConfirmPassword}
+          suffixAction={() => setSecureConfirmPassword(!secureConfirmPassword)}
         />
       </View>
     );
   };
+
   const renderButton = () => {
     return (
       <View>
         <SnbButton.Single
           title={'Ganti Kata Sandi'}
-          onPress={() => confirm()}
+          onPress={() => setOPenConfirm(true)}
           type={'primary'}
-          disabled={false}
+          disabled={
+            !dataOldPassword ||
+            !dataNewPassword ||
+            !dataConfirmNewPassword ||
+            stateUser.update.loading
+          }
           position={'center'}
+          loading={stateUser.update.loading}
+        />
+      </View>
+    );
+  };
+  const renderConfirm = () => {
+    return (
+      <View>
+        <SnbDialog
+          open={openConfirm}
+          title={'Ganti Kata Sandi'}
+          content={'Apakah anda yakin ingin mengganti kata sandi Anda ?'}
+          okText={'Ya'}
+          ok={() => confirm()}
+          cancel={() => setOPenConfirm(false)}
         />
       </View>
     );
@@ -156,6 +191,7 @@ const UserChangePasswordView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
+      {renderConfirm()}
     </SnbContainer>
   );
 };

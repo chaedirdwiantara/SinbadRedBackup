@@ -317,6 +317,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           value={ownerName.value}
           onChangeText={(text) => ownerName.setValue(text)}
           clearText={() => ownerName.setValue('')}
+          maxLength={64}
         />
       </View>
     );
