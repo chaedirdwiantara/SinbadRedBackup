@@ -6,7 +6,7 @@ import {
   SnbButton,
   SnbDialog,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, ToastAndroid } from 'react-native';
+import { ScrollView, View, ToastAndroid, Image } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
@@ -23,9 +23,9 @@ const UserChangePasswordView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useEffect(() => {
     if (stateUser.update.data !== null) {
-      setOPenConfirm(false);
+      setOpenConfirm(false);
       ToastAndroid.showWithGravityAndOffset(
-        'Success',
+        'Kata Sandi berhasil di perbaharui',
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -34,22 +34,49 @@ const UserChangePasswordView: FC = () => {
       NavigationAction.back();
       changePasswordAction.resetChangePassword(dispatchUser);
     } else if (stateUser.update.error !== null) {
-      setOPenConfirm(false);
-      ToastAndroid.showWithGravityAndOffset(
-        'Failed',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
-      changePasswordAction.resetChangePassword(dispatchUser);
+      if (stateUser.update.error.code === 10000) {
+        setOpenConfirm(false);
+        ToastAndroid.showWithGravityAndOffset(
+          'Terjadi Kesalahan',
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+          0,
+          240,
+        );
+        changePasswordAction.resetChangePassword(dispatchUser);
+      } else if (stateUser.update.error.code === 10011) {
+        setOpenConfirm(false);
+        setErrorChangePassword(true);
+        setErrorMessage(
+          'Kata sandi baru tidak boleh sama dengan kata sandi sekarang',
+        );
+      } else if (stateUser.update.error.code === 10012) {
+        setOpenConfirm(false);
+        setErrorChangePassword(true);
+        setErrorMessage('Kata sandi sekarang salah');
+      } else if (stateUser.update.error.code === 10013) {
+        setOpenConfirm(false);
+        setErrorChangePassword(true);
+        setErrorMessage('kata sandi baru tidak sesuai format');
+      }
     }
   }, [stateUser.update]);
+
+  useEffect(() => {
+    if (dataNewPassword === dataConfirmNewPassword) {
+      setVerifyPassword(true);
+    } else {
+      setVerifyPassword(false);
+    }
+  }, [dataNewPassword, dataConfirmNewPassword]);
 
   const [secureOldPassword, setSecureOldPassword] = useState(true);
   const [secureNewPassword, setSecureNewPassword] = useState(true);
   const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
-  const [openConfirm, setOPenConfirm] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [errorChangePassword, setErrorChangePassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [verifyPassword, setVerifyPassword] = useState(false);
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
     setDataOldPassword(oldPassword);
@@ -81,6 +108,21 @@ const UserChangePasswordView: FC = () => {
       />
     );
   };
+  const renderTitle = () => {
+    return (
+      <View style={{ alignItems: 'center', paddingVertical: 10 }}>
+        <Image
+          source={require('../../../assets/images/sinbad_image/change_password.png')}
+          style={{
+            height: 145,
+            width: undefined,
+            aspectRatio: 1 / 1,
+            resizeMode: 'contain',
+          }}
+        />
+      </View>
+    );
+  };
   const renderForm = () => {
     return (
       <View style={{ margin: 16, flex: 1 }}>
@@ -95,7 +137,6 @@ const UserChangePasswordView: FC = () => {
             onChangeText={(text) => textOldPassword(text)}
             clearText={() => setDataOldPassword('')}
             maxLength={40}
-            valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName={secureOldPassword ? 'visibility' : 'visibility_off'}
             secureTextEntry={secureOldPassword}
@@ -113,7 +154,6 @@ const UserChangePasswordView: FC = () => {
             onChangeText={(text) => textNewPassword(text)}
             clearText={() => setDataNewPassword('')}
             maxLength={40}
-            valMsgError="ini contoh kalau error ya"
             keyboardType="default"
             suffixIconName={secureNewPassword ? 'visibility' : 'visibility_off'}
             secureTextEntry={secureNewPassword}
@@ -125,12 +165,12 @@ const UserChangePasswordView: FC = () => {
           boxIndicator
           labelText="Konfirmasi Kata Sandi Baru"
           value={dataConfirmNewPassword}
-          type={'default'}
+          type={errorChangePassword ? 'error' : 'default'}
           placeholder="Masukkan ulang kata sandi baru"
           onChangeText={(text) => textConfirmNewPassword(text)}
           clearText={() => setDataConfirmNewPassword('')}
           maxLength={40}
-          valMsgError="ini contoh kalau error ya"
+          valMsgError={errorMessage}
           keyboardType="default"
           suffixIconName={
             secureConfirmPassword ? 'visibility' : 'visibility_off'
@@ -147,13 +187,14 @@ const UserChangePasswordView: FC = () => {
       <View>
         <SnbButton.Single
           title={'Ganti Kata Sandi'}
-          onPress={() => setOPenConfirm(true)}
+          onPress={() => setOpenConfirm(true)}
           type={'primary'}
           disabled={
             !dataOldPassword ||
             !dataNewPassword ||
             !dataConfirmNewPassword ||
-            stateUser.update.loading
+            stateUser.update.loading ||
+            !verifyPassword
           }
           position={'center'}
           loading={stateUser.update.loading}
@@ -170,7 +211,7 @@ const UserChangePasswordView: FC = () => {
           content={'Apakah anda yakin ingin mengganti kata sandi Anda ?'}
           okText={'Ya'}
           ok={() => confirm()}
-          cancel={() => setOPenConfirm(false)}
+          cancel={() => setOpenConfirm(false)}
         />
       </View>
     );
@@ -180,6 +221,7 @@ const UserChangePasswordView: FC = () => {
     return (
       <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1 }}>
+          {renderTitle()}
           {renderForm()}
           {renderButton()}
         </View>
