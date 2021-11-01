@@ -118,7 +118,7 @@ const MerchantDetailProfileView: FC = () => {
   const renderContentSection = (data: any) => {
     return (
       <View style={MerchantStyles.boxContent}>
-        <View>
+        <View style={{ width: '85%' }}>
           <View style={{ marginBottom: 6 }}>
             <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
           </View>
