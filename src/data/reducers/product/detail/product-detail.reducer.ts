@@ -1,27 +1,26 @@
-/** === IMPORT HERE === */
-import * as types from '@types';
-import * as models from '@models';
+/** === IMPORT INTERNAL === */
 import simplifyReducer from '@core/redux/simplifyReducer';
-/** === TYPE HERE === */
+import * as models from '@models';
+import * as types from '@types';
+/** === TYPE === */
 export type ProductDetailInitialProps =
   models.DetailItemProps<models.ProductDetailSuccessProps>;
-/** === INITIAL STATE HERE === */
+/** === INITIAL STATE === */
 export const productDetailInitialState: ProductDetailInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
-/** === FUNCTION HERE === */
+/** === REDUCER === */
 export const productDetailReducer = simplifyReducer(productDetailInitialState, {
-  /** === DETAIL === */
-  /** => detail process */
+  /** => Process */
   [types.PRODUCT_DETAIL_PROCESS]() {
     return {
       ...productDetailInitialState,
       loading: true,
     };
   },
-  /** => detail success */
+  /** => Succeeded */
   [types.PRODUCT_DETAIL_SUCCESS](
     state = productDetailInitialState,
     action: models.DetailSuccessAction<models.ProductDetailSuccessProps>,
@@ -32,7 +31,7 @@ export const productDetailReducer = simplifyReducer(productDetailInitialState, {
       loading: false,
     };
   },
-  /** => detail failed */
+  /** => Failed */
   [types.PRODUCT_DETAIL_FAILED](
     state = productDetailInitialState,
     action: models.DetailFailedAction,
@@ -42,5 +41,9 @@ export const productDetailReducer = simplifyReducer(productDetailInitialState, {
       loading: false,
       error: action.payload,
     };
+  },
+  /** => Reset */
+  [types.PRODUCT_DETAIL_RESET]() {
+    return productDetailInitialState;
   },
 });

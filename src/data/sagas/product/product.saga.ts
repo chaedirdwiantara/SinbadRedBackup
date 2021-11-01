@@ -34,9 +34,11 @@ function* productDetail(action: models.DetailProcessAction) {
       });
     yield action.contextDispatch(ActionCreators.productDetailSuccess(response));
     yield put(ActionCreators.productDetailSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.productDetailFailed(error));
-    yield put(ActionCreators.productDetailFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.productDetailFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.productDetailFailed(error as models.ErrorProps));
   }
 }
 /** === LISTENER === */
