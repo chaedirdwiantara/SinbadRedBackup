@@ -25,9 +25,24 @@ function* productList(action: models.ListProcessAction) {
     yield put(ActionCreators.productListFailed(error as models.ErrorProps));
   }
 }
+/** => Detail */
+function* productDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.ProductDetailSuccessProps> =
+      yield call(() => {
+        return ProductApi.getDetail(action.payload);
+      });
+    yield action.contextDispatch(ActionCreators.productDetailSuccess(response));
+    yield put(ActionCreators.productDetailSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.productDetailFailed(error));
+    yield put(ActionCreators.productDetailFailed(error));
+  }
+}
 /** === LISTENER === */
 function* ProductSaga() {
   yield takeLatest(types.PRODUCT_LIST_PROCESS, productList);
+  yield takeLatest(types.PRODUCT_DETAIL_PROCESS, productDetail);
 }
 
 export default ProductSaga;
