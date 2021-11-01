@@ -13,7 +13,6 @@ import {
   SnbSvgIcon,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
-import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
 /** === IMPORT FUNCTION HERE === */
@@ -68,14 +67,13 @@ const UserView: FC = () => {
   };
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
+    const source = data?.imageUrl
+      ? { uri: data?.imageUrl }
+      : require('../../../assets/images/sinbad_image/avatar.png');
     return (
       <View style={UserStyles.headerInformationContainer}>
         <View style={UserStyles.imageContainer}>
-          {data?.imageUrl ? (
-            <Image source={{ uri: data?.imageUrl }} style={UserStyles.image} />
-          ) : (
-            <Svg name={'avatar'} size={50} color={color.red50} />
-          )}
+          <Image source={source} style={UserStyles.image} />
         </View>
         <View style={UserStyles.userInfo}>
           <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
