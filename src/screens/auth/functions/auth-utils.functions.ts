@@ -94,7 +94,7 @@ export const setErrorMessage = (code: number) => {
       return 'No. HP harus berupa angka';
     }
     case 10005: {
-      return 'No. Hp yang Anda masukan sudah terdaftar';
+      return 'No. Hp yang Anda masukkan sudah terdaftar';
     }
     case 10006: {
       return 'No. Hp yang tidak boleh kosong';
