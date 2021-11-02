@@ -207,7 +207,9 @@ export const useRegisterSupplierModal = () => {
         },
         {
           text: 'OK',
-          onPress: () => setRegisterSupplierModalVisible(false),
+          onPress: () => {
+            setRegisterSupplierModalVisible(false);
+          },
         },
       ],
     );
