@@ -14,7 +14,6 @@ import {
   BackHandler,
 } from 'react-native';
 import { NavigationAction } from '@navigation';
-import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -79,18 +78,12 @@ const MerchantDetailProfileView: FC = () => {
   /** === RENDER HEADER CONTENT IMAGE (Owner Image) === */
   const renderOwnerImage = () => {
     const ownerData = stateUser.detail.data?.ownerData;
+    const source = ownerData?.profile.imageUrl
+      ? { uri: ownerData?.profile.imageUrl }
+      : require('../../../../assets/images/sinbad_image/avatar.png');
     return (
       <View>
-        {ownerData?.profile.imageUrl ? (
-          <Image
-            source={{
-              uri: ownerData?.profile.imageUrl,
-            }}
-            style={MerchantStyles.imageProfile}
-          />
-        ) : (
-          <Svg name={'avatar'} size={100} color={color.red50} />
-        )}
+        <Image source={source} style={MerchantStyles.imageProfile} />
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
           onPress={() => goTo({ type: 'merchantOwnerImage' })}>
