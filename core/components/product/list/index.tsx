@@ -16,7 +16,10 @@ import {
   priceSortOptions,
   useRegisterSupplierModal,
 } from '@core/functions/product';
-import { useTagListActions } from '@screen/product/functions';
+import {
+  useTagListActions,
+  useProductDetailAction,
+} from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
@@ -80,11 +83,11 @@ const ProductList: FC<ProductListProps> = ({
   });
   const registerSupplierModal = useRegisterSupplierModal();
   const tagActions = useTagListActions();
-
   const {
     stateProduct: {
       list: { loading: productLoading },
     },
+    dispatchProduct,
   } = useProductContext();
   const {
     stateTag: {
@@ -107,6 +110,11 @@ const ProductList: FC<ProductListProps> = ({
       brandId: activeBrandId,
     });
   }, [selectedCategory, keywordSearched]);
+
+  const handleOrderPress = (product: models.ProductList) => {
+    registerSupplierModal.setVisible(true);
+    productDetailActions.fatch(dispatchProduct, product.id);
+  };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -159,7 +167,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -170,7 +178,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -191,7 +199,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={sortModalVisible}
         title="Urutkan"
-        action={true}
         actionIcon="close"
         content={
           <Action.Sort
@@ -206,7 +213,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={filterModalVisible}
         title="Filter"
-        action={true}
         actionIcon="close"
         content={
           <Action.Filter

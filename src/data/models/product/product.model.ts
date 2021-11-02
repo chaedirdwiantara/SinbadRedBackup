@@ -33,8 +33,12 @@ export interface ProductListItemProps
   canLoadMore: boolean;
 }
 
+export interface ProductDetailItemProps
+  extends models.DetailItemProps<ProductDetailSuccessProps> {}
+
 export interface ProductListProps {
   list: ProductListItemProps;
+  detail: ProductDetailItemProps;
 }
 
 interface ProductListPagination {
@@ -58,6 +62,11 @@ export interface ProductImage {
   url: string;
 }
 
+export interface PromoList {
+  shortDescription: string;
+}
+
+/** === PRODUCT DETAIL === */
 export interface ProductDetailSuccessProps {
   id: string;
   supplierCode: string;
@@ -80,4 +89,7 @@ export interface ProductDetailSuccessProps {
   unit: string;
   tags: string[];
   images: ProductImage[];
+  promoList: PromoList[];
+  price: number;
+  isExclusive: boolean;
 }

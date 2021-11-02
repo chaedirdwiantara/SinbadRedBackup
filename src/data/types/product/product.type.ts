@@ -9,5 +9,6 @@ export const PRODUCT_LIST_LOADMORE = 'ProductListLoadMore';
 /** => Detail */
 export const PRODUCT_DETAIL_PROCESS = 'ProductDetailProcess';
 export const PRODUCT_DETAIL_SUCCESS = 'ProductDetailSuccess';
+export const PRODUCT_DETAIL_REFRESH = 'ProductDetailRefresh';
 export const PRODUCT_DETAIL_FAILED = 'ProductDetailFailed';
 export const PRODUCT_DETAIL_RESET = 'ProductDetailReset';
