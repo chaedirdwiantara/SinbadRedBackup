@@ -152,6 +152,7 @@ const ProductList: FC<ProductListProps> = ({
             products={products}
             tags={tagNames}
             onTagPress={handleTagPress}
+            tagListComponentKey={selectedCategory?.id}
             onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
@@ -162,6 +163,7 @@ const ProductList: FC<ProductListProps> = ({
             products={products}
             tags={tagNames}
             onTagPress={handleTagPress}
+            tagListComponentKey={selectedCategory?.id}
             onOrderPress={() => registerSupplierModal.setVisible(true)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}

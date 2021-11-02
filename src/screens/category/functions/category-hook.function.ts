@@ -1,14 +1,15 @@
-/** === IMPORT PACKAGE HERE === */
-import React from 'react';
+/** === IMPORT PACKAGES === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
-/** === FUNCTION === */
-/** => call action */
+/** === FUNCTIONS === */
+/** === Fetch Category Related === */
 const useCategoryAction = () => {
   const dispatch = useDispatch();
+
   return {
-    home: (contextDispatch: (action: any) => any) => {
+    fetchHome: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.categoryHomeReset());
       dispatch(
         Actions.categoryHomeProcess(contextDispatch, {
@@ -18,7 +19,7 @@ const useCategoryAction = () => {
         }),
       );
     },
-    level: (contextDispatch: (action: any) => any) => {
+    fetchList: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.categoryLevelReset());
       dispatch(
         Actions.categoryLevelProcess(contextDispatch, {
@@ -30,44 +31,38 @@ const useCategoryAction = () => {
     },
   };
 };
-/** => set level 2 id */
-const useSetLevel2 = () => {
-  const [selectedLevel2Id, setSelectedLevel2Id] = React.useState<string | null>(
+
+/** === Category State Related === */
+const useSelected2ndLevelCategory = () => {
+  const [selected2ndLevelId, setSelected2ndLevelId] = useState<string | null>(
     null,
   );
-  const [selectedSecondLevelIndex, setSelectedSecondLevelIndex] =
-    React.useState<number | null>(null);
+  const [selected2ndLevelIndex, setSelected2ndLevelIndex] = useState<
+    number | null
+  >(null);
+
+  const handle2ndLevelIdChange = (id: string) => {
+    if (selected2ndLevelId === id) {
+      setSelected2ndLevelId(null);
+    } else {
+      setSelected2ndLevelId(id);
+    }
+  };
+
+  const handle2ndLevelIndexChange = (index: number) => {
+    if (index === selected2ndLevelIndex) {
+      setSelected2ndLevelIndex(null);
+    } else {
+      setSelected2ndLevelIndex(index);
+    }
+  };
 
   return {
-    selectedLevel2Id,
-    selectedSecondLevelIndex,
-    setSelectLevel2Id: (id: string) => {
-      if (selectedLevel2Id === id) {
-        setSelectedLevel2Id(null);
-      } else {
-        setSelectedLevel2Id(id);
-      }
-    },
-    setSecondLevelIndex: (index: number) => {
-      if (index === selectedSecondLevelIndex) {
-        setSelectedSecondLevelIndex(null);
-      } else {
-        setSelectedSecondLevelIndex(index);
-      }
-    },
+    selected2ndLevelId,
+    selected2ndLevelIndex,
+    handle2ndLevelIdChange,
+    handle2ndLevelIndexChange,
   };
 };
-/** === EXPORT === */
-export { useCategoryAction, useSetLevel2 };
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+
+export { useCategoryAction, useSelected2ndLevelCategory };

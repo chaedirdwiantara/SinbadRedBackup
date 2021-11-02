@@ -13,6 +13,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
   products,
   tags,
   onTagPress,
+  tagListComponentKey,
   onOrderPress,
   isRefreshing,
   onRefresh,
@@ -29,7 +30,11 @@ const GridLayout: FC<ProductLayoutProps> = ({
         }
       }}
       scrollEventThrottle={10}>
-      <ProductTagList tags={tags} onTagPress={onTagPress} />
+      <ProductTagList
+        key={tagListComponentKey}
+        tags={tags}
+        onTagPress={onTagPress}
+      />
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
           {products.map(
