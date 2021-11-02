@@ -37,10 +37,23 @@ const promoGeneralDetail = (data: models.DetailProcessProps) => {
     'DETAIL',
   );
 };
+/** => potential promo product */
+const potentialPromoProduct = (data: models.DetailProcessProps) => {
+  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
+  const path = `potential-promo-product/${data.id}`;
+  return apiMappingMock<models.PotentialPromoProductProps>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'LIST',
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PromoApi = {
   promoPaymentList,
   promoPaymentDetail,
   promoGeneralDetail,
+  potentialPromoProduct,
 };

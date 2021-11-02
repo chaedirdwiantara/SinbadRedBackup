@@ -28,3 +28,7 @@ export interface PromoGeneralDetailSuccessProps {
   endDate: string;
   termsAndCondition: string[];
 }
+export interface PotentialPromoProductProps {
+  promoSupplierId: string;
+  shortDescription: string;
+}
