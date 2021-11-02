@@ -6,7 +6,6 @@ import { BrandCardStyle } from '../styles';
 /** === TYPE === */
 interface BrandCardProps {
   id: string;
-  name: string;
   imageUrl: string;
   height?: number;
   width?: number;
