@@ -11,33 +11,22 @@ import { useProductListActions } from '@screen/product/functions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 /** === TYPES === */
-type CategoryProductRouteParams = {
-  CategoryProduct: {
-    category:
-      | models.CategoryLevel
-      | models.CategoryLevel2
-      | models.CategoryLevel3;
-    categoryFirstLevelIndex?: number;
-    categorySecondLevelIndex?: number;
-    categoryThirdLevelIndex?: number;
+type BrandProductRouteParams = {
+  BrandProduct: {
+    brand: models.BrandListSuccessProps;
   };
 };
 
-type CategoryProductRouteProps = RouteProp<
-  CategoryProductRouteParams,
-  'CategoryProduct'
+type BrandProductRouteProps = RouteProp<
+  BrandProductRouteParams,
+  'BrandProduct'
 >;
 /** === COMPONENT === */
-const CategoryProductView: FC = () => {
+const BrandProductView: FC = () => {
   /** === HOOKS === */
   const {
-    params: {
-      category,
-      categoryFirstLevelIndex,
-      categorySecondLevelIndex,
-      categoryThirdLevelIndex,
-    },
-  } = useRoute<CategoryProductRouteProps>();
+    params: { brand },
+  } = useRoute<BrandProductRouteProps>();
   const { fetch, refresh, loadMore } = useProductListActions();
   const {
     stateProduct: { list: productListState },
@@ -46,7 +35,7 @@ const CategoryProductView: FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetch(dispatchProduct, { categoryId: category.id });
+      fetch(dispatchProduct, { brandId: brand.id });
     }, []),
   );
   /** === VIEW === */
@@ -55,28 +44,17 @@ const CategoryProductView: FC = () => {
       <View style={{ flex: 1 }}>
         <ProductList
           products={productListState.data}
-          activeCategory={category}
-          categoryTabs={categoryFirstLevelIndex !== undefined} // Only for 2nd and 3rd level categories
-          categoryTabsConfig={
-            categoryFirstLevelIndex !== undefined
-              ? {
-                  level: categoryThirdLevelIndex === undefined ? '2' : '3',
-                  firstLevelIndex: categoryFirstLevelIndex,
-                  secondLevelIndex: categorySecondLevelIndex,
-                  thirdLevelIndex: categoryThirdLevelIndex,
-                }
-              : undefined
-          }
+          headerTitle={brand.name}
           isRefreshing={productListState.refresh}
           onFetch={(queryOptions) =>
             fetch(dispatchProduct, {
-              categoryId: category.id,
+              brandId: brand.id,
               ...queryOptions,
             })
           }
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
-              categoryId: category.id,
+              brandId: brand.id,
               ...queryOptions,
             })
           }
@@ -87,7 +65,7 @@ const CategoryProductView: FC = () => {
                 skip: productListState.skip,
                 canLoadMore: productListState.canLoadMore,
               },
-              { categoryId: category.id, ...queryOptions },
+              { brandId: brand.id, ...queryOptions },
             )
           }
         />
@@ -96,4 +74,4 @@ const CategoryProductView: FC = () => {
   );
 };
 
-export default CategoryProductView;
+export default BrandProductView;
