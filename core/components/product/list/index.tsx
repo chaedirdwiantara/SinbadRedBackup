@@ -86,6 +86,7 @@ const ProductList: FC<ProductListProps> = ({
   const registerSupplierModal = useRegisterSupplierModal();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
+  const productDetailActions = useProductDetailAction();
   const {
     stateProduct: {
       list: { loading: productLoading },

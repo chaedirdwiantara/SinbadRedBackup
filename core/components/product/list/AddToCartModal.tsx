@@ -186,7 +186,6 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
     <SnbBottomSheet
       open={open}
       title="Masukan Jumlah"
-      action
       actionIcon="close"
       closeAction={closeAction}
       content={renderContent()}
