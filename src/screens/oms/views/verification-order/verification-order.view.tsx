@@ -118,7 +118,7 @@ const OmsVerificationOrderView: FC = () => {
                     <SnbBadge.Label
                       type={'error'}
                       value={item.promoOwner}
-                      iconName={'settings'}
+                      iconName={'local_offer'}
                     />
                   ) : (
                     <View />
@@ -146,7 +146,7 @@ const OmsVerificationOrderView: FC = () => {
                     <SnbBadge.Label
                       type={'error'}
                       value={item.voucherOwner}
-                      iconName={'settings'}
+                      iconName={'local_offer'}
                     />
                   ) : (
                     <View />
