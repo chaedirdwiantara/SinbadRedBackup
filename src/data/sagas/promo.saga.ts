@@ -58,11 +58,33 @@ function* promoGeneralDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.promoGeneralDetailFailed(error));
   }
 }
+/** => potential promo product */
+function* potentialPromoProduct(action: models.DetailProcessAction) {
+  try {
+    const response: models.ListSuccessProps<models.PotentialPromoProductProps> =
+      yield call(() => {
+        return PromoApi.potentialPromoProduct(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.potentialPromoProductSuccess(response),
+    );
+    yield put(ActionCreators.potentialPromoProductSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.potentialPromoProductFailed(error),
+    );
+    yield put(ActionCreators.potentialPromoProductFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* PromoSaga() {
   yield takeLatest(types.PROMO_PAYMENT_LIST_PROCESS, promoPaymentList);
   yield takeLatest(types.PROMO_PAYMENT_DETAIL_PROCESS, promoPaymentDetail);
   yield takeLatest(types.PROMO_GENERAL_DETAIL_PROCESS, promoGeneralDetail);
+  yield takeLatest(
+    types.POTENTIAL_PROMO_PRODUCT_PROCESS,
+    potentialPromoProduct,
+  );
 }
 
 export default PromoSaga;
