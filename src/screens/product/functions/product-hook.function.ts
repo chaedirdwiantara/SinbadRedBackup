@@ -112,21 +112,6 @@ const useTagListActions = () => {
   };
 };
 
-/** === Add to Cart Modal Related === */
-const useOrderModalVisibility = () => {
-  const [orderModalVisible, setOrderModalVisible] = useState(false);
-
-  const toggleModalVisible = () => {
-    setOrderModalVisible((prevVisible) => !prevVisible);
-  };
-
-  return {
-    orderModalVisible,
-    setOrderModalVisible,
-    toggleModalVisible,
-  };
-};
-
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
@@ -149,7 +134,6 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
 
 export {
   useProductListActions,
-  useOrderModalVisibility,
   useOrderQuantity,
   useProductDetailAction,
   useTagListActions,
