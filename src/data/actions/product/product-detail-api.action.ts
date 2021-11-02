@@ -1,7 +1,8 @@
-import * as types from '@types';
+/** === IMPORT INTERNAL === */
 import * as models from '@models';
-
-/** product detail process */
+import * as types from '@types';
+/** === ACTIONS === */
+/** => Process */
 export const productDetailProcess = (
   contextDispatch: (action: any) => any,
   payload: models.DetailProcessProps,
@@ -13,19 +14,19 @@ export const productDetailProcess = (
     contextDispatch,
   };
 };
-/** product detail success */
+/** => Succeeded */
 export const productDetailSuccess = (
   payload: models.DetailSuccessProps<models.ProductDetailSuccessProps>,
 ): models.DetailSuccessAction<models.ProductDetailSuccessProps> => {
   return { type: types.PRODUCT_DETAIL_SUCCESS, payload };
 };
-/** product detail failed */
+/** => Failed */
 export const productDetailFailed = (
   payload: models.ErrorProps,
 ): models.DetailFailedAction => {
   return { type: types.PRODUCT_LIST_FAILED, payload };
 };
-/** product detail reset */
+/** => Reset */
 export const productDetailReset = () => {
   return { type: types.PRODUCT_DETAIL_RESET };
 };

@@ -14,6 +14,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
   products,
   tags,
   onTagPress,
+  tagListComponentKey,
   onOrderPress,
   isRefreshing,
   onRefresh,
@@ -53,7 +54,11 @@ const ListLayout: FC<ProductLayoutProps> = ({
       <FlatList
         contentContainerStyle={{ paddingBottom: 24 }}
         ListHeaderComponent={
-          <ProductTagList tags={tags} onTagPress={onTagPress} />
+          <ProductTagList
+            key={tagListComponentKey}
+            tags={tags}
+            onTagPress={onTagPress}
+          />
         }
         data={products}
         renderItem={renderListCard}

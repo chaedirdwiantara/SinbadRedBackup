@@ -187,7 +187,7 @@ export const usePriceRangeFilter = () => {
 
 export const useRegisterSupplierModal = () => {
   const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
-    useState(true);
+    useState(false);
 
   const sendSupplierData = () => {
     // Hit api send-store-supplier

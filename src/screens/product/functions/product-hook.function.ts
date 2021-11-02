@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 /** === FUNCTIONS === */
-/** === Fetch Product List Related === */
+/** === Fetch Product Related === */
 const callProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
@@ -64,6 +64,19 @@ const useProductListActions = () => {
     },
   };
 };
+
+const useProductDetailAction = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.productDetailReset());
+    },
+  };
+};
+
 /** === Fetch Product Tag List Related === */
 const useTagListActions = () => {
   const dispatch = useDispatch();
@@ -95,18 +108,7 @@ const useTagListActions = () => {
     },
   };
 };
-/** => product detail action */
-const useProductDetailAction = () => {
-  const dispatch = useDispatch();
-  return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productDetailReset());
-    },
-  };
-};
+
 /** === Add to Cart Modal Related === */
 const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
@@ -145,15 +147,3 @@ export {
   useProductDetailAction,
   useTagListActions,
 };
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 27-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
