@@ -65,6 +65,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   const renderPromoList = () => {
     return (
       productDetailState?.data !== null &&
+      Array.isArray(productDetailState.data.promoList) &&
       productDetailState?.data?.promoList.length > 0 && (
         <View style={{ paddingHorizontal: 16 }}>
           <SnbText.C1 color={color.black60}>Promo</SnbText.C1>
