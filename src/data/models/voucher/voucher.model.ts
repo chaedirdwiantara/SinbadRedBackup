@@ -48,15 +48,6 @@ export interface SupplierVoucherListProps {
   invoiceGroupName: string;
   benefitRebate: number;
 }
-export interface VoucherDetailProcessProps {
-  id: string;
-  type: string;
-}
-export interface VoucherDetailProcessAction {
-  type: string;
-  payload: VoucherDetailProcessProps;
-  contextDispatch: (action: any) => any;
-}
 export interface CountAllVoucherProps {
   total: number;
 }

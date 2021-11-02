@@ -9,6 +9,7 @@ import {
   color,
   SnbText,
   styles,
+  SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
@@ -55,18 +56,21 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** === VIEW === */
   /** => empty */
   const renderEmpty = (messageTitle: string, messageBody: string) => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
+    const image = () => {
+      return (
         <Image
           source={require('../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
-        <View style={{ marginTop: 16 }}>
-          <SnbText.H4>{messageTitle}</SnbText.H4>
-        </View>
-        <View>
-          <SnbText.B3>{messageBody}</SnbText.B3>
-        </View>
+      );
+    };
+    return (
+      <View style={VoucherCartListStyles.singleContainer}>
+        <SnbEmptyData
+          title={messageTitle}
+          subtitle={messageBody}
+          image={image()}
+        />
       </View>
     );
   };

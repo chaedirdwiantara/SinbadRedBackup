@@ -8,11 +8,11 @@ import {
   SnbTabs,
   SnbTextField,
   SnbIcon,
-  SnbButton,
   color,
+  SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack } from '@screen/history/functions';
+import { goBack, goToHistoryDetail } from '@screen/history/functions';
 import { HistoryStyle } from '@screen/history/styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 /** === TYPES === */
@@ -223,25 +223,23 @@ const HistoryListView: FC = () => {
       <View>
         <ScrollView
           horizontal={true}
+          showsHorizontalScrollIndicator={false}
           style={{
             paddingVertical: 8,
             paddingHorizontal: 16,
-          }}
-          showsHorizontalScrollIndicator={false}>
+          }}>
           <View style={{ marginRight: 16 }}>
-            <SnbButton.Dynamic
-              title="Semua"
-              type={activeStatus === '' ? 'primary' : 'secondary'}
-              size="small"
+            <SnbChips.Choice
+              text="Semua"
+              status={activeStatus === '' ? 'active' : 'inactive'}
               onPress={() => setActiveStatus('')}
             />
           </View>
           {statusList.map((status) => (
             <View key={status.key} style={{ marginRight: 16 }}>
-              <SnbButton.Dynamic
-                title={status.value}
-                type={status.key === activeStatus ? 'primary' : 'secondary'}
-                size="small"
+              <SnbChips.Choice
+                text={status.value}
+                status={status.key === activeStatus ? 'active' : 'inactive'}
                 onPress={() => setActiveStatus(status.key as any)}
               />
             </View>
@@ -279,6 +277,7 @@ const HistoryListView: FC = () => {
                 ? { marginBottom: 24 }
                 : {}
             }
+            onCardPress={() => goToHistoryDetail('payment')}
           />
         );
       })}
@@ -329,6 +328,7 @@ const HistoryListView: FC = () => {
             additionalInfo={
               order.partial ? 'Terjadi Pengiriman Sebagian' : undefined
             }
+            onCardPress={() => goToHistoryDetail('order')}
           />
         );
       })}

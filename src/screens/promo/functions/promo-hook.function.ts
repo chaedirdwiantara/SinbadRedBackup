@@ -8,12 +8,13 @@ import * as Actions from '@actions';
 const usePromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any) => {
+    list: (contextDispatch: (action: any) => any, invoiceGroupId: string) => {
       dispatch(
         Actions.promoPaymentListProcess(contextDispatch, {
           loading: true,
           limit: 0,
           skip: 0,
+          invoiceGroupId,
         }),
       );
     },

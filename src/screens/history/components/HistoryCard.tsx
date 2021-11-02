@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import {
-  Image,
-  View,
-  StyleProp,
-  ViewStyle,
-  TouchableOpacity,
-} from 'react-native';
+import { Image, View, StyleProp, ViewStyle, Pressable } from 'react-native';
 import {
   color,
   SnbButton,
@@ -20,7 +14,6 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
 import { HistoryStyle } from '@screen/history/styles';
 import { CountDownTimer } from '../components';
-import { NavigationAction } from '@core/functions/navigation';
 /** === TYPES === */
 export interface HistoryStatusColor {
   white: string;
@@ -45,6 +38,7 @@ interface HistoryCardProps {
   onActionButtonPress?: () => void;
   additionalInfo?: string;
   style?: StyleProp<ViewStyle>;
+  onCardPress?: () => void;
 }
 /** === CONSTANTS === */
 const historyStatusBgColor: HistoryStatusColor = {
@@ -77,6 +71,7 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   onActionButtonPress,
   additionalInfo,
   style,
+  onCardPress,
 }) => {
   const statusBgColor = historyStatusBgColor[statusColor];
   const statusTextColor = historyStatusTextColor[statusColor];
@@ -90,10 +85,8 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   });
 
   return (
-    <TouchableOpacity
-      onPress={() =>
-        NavigationAction.navigate('HistoryDetailView', { section: 'payment' })
-      }
+    <Pressable
+      onPress={onCardPress}
       style={[
         {
           ...HistoryStyle.cardContainer,
@@ -188,6 +181,6 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           <SnbText.C2 color={color.yellow50}>{additionalInfo}</SnbText.C2>
         </View>
       )}
-    </TouchableOpacity>
+    </Pressable>
   );
 };

@@ -6,7 +6,7 @@ export const voucherDetailProcess = (
   contextDispatch: (action: any) => any,
   data: models.VoucherDetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.VOUCHER_DETAIL_PROCESS, payload: data });
   return {
     type: types.VOUCHER_DETAIL_PROCESS,
     payload: data,
@@ -35,7 +35,7 @@ export const voucherCartListProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.VOUCHER_CART_LIST_PROCESS, payload: data });
   return {
     type: types.VOUCHER_CART_LIST_PROCESS,
     payload: data,
@@ -64,7 +64,7 @@ export const countAllVoucherProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.COUNT_ALL_VOUCHER_PROCESS, payload: data });
   return {
     type: types.COUNT_ALL_VOUCHER_PROCESS,
     payload: data,

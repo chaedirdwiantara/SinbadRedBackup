@@ -7,7 +7,7 @@ import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment list */
-function* promoPaymentList(action: models.ListProcessAction) {
+function* promoPaymentList(action: models.PromoPaymentListProcessAction) {
   try {
     const response: models.ListSuccessProps<models.PromoPaymentListSuccessProps> =
       yield call(() => {
@@ -18,7 +18,7 @@ function* promoPaymentList(action: models.ListProcessAction) {
     );
     yield put(ActionCreators.promoPaymentListSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield action.contextDispatch(ActionCreators.promoPaymentListFailed(error));
     yield put(ActionCreators.promoPaymentListFailed(error));
   }
 }
@@ -34,7 +34,9 @@ function* promoPaymentDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoPaymentDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoPaymentDetailFailed(error),
+    );
     yield put(ActionCreators.promoPaymentDetailFailed(error));
   }
 }
@@ -50,8 +52,28 @@ function* promoGeneralDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoGeneralDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoGeneralDetailFailed(error),
+    );
     yield put(ActionCreators.promoGeneralDetailFailed(error));
+  }
+}
+/** => potential promo product */
+function* potentialPromoProduct(action: models.DetailProcessAction) {
+  try {
+    const response: models.ListSuccessProps<models.PotentialPromoProductProps> =
+      yield call(() => {
+        return PromoApi.potentialPromoProduct(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.potentialPromoProductSuccess(response),
+    );
+    yield put(ActionCreators.potentialPromoProductSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.potentialPromoProductFailed(error),
+    );
+    yield put(ActionCreators.potentialPromoProductFailed(error));
   }
 }
 /** === LISTEN FUNCTION === */
@@ -59,6 +81,10 @@ function* PromoSaga() {
   yield takeLatest(types.PROMO_PAYMENT_LIST_PROCESS, promoPaymentList);
   yield takeLatest(types.PROMO_PAYMENT_DETAIL_PROCESS, promoPaymentDetail);
   yield takeLatest(types.PROMO_GENERAL_DETAIL_PROCESS, promoGeneralDetail);
+  yield takeLatest(
+    types.POTENTIAL_PROMO_PRODUCT_PROCESS,
+    potentialPromoProduct,
+  );
 }
 
 export default PromoSaga;
