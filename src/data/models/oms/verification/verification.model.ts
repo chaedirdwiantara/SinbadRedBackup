@@ -1,48 +1,54 @@
 export interface VerificationOrderDetailProps {
   id: string;
-  totalTransaction: number;
-  totalRebate: number;
-  bonusProduct: VerificationOrderBonusProduct[];
-  discountProduct: VerificationOrderDiscountProduct[];
-  notPromoSku: VerificationOrderNotPromoSkuList[];
-  meta: string;
-  createdAt: string;
-  expiredAt: string;
+  bonusProducts: VerificationOrderDetailBonusProduct[];
+  promoProducts: VerificationOrderDetailPromoProduct[];
+  nonPromoProducts: VerificationOrderDetailNonPromoList[];
+  grandTotal: VerificationOrderDetailGrandTotal;
 }
-export interface VerificationOrderBonusProduct {
-  promoId: number;
-  promoName: string;
-  productId: string;
-  productName: string;
-  productQty: number;
-  productImageUrl: string;
+export interface VerificationOrderDetailBonusProduct {
+  promoSupplierId: number;
+  promoSupplierName: string;
+  bonusProductId: string;
+  bonusProductName: string;
+  bonusQty: number;
+  bonusProductImageUrl: string;
 }
-export interface VerificationOrderDiscountProduct {
+export interface VerificationOrderDetailPromoProduct {
+  productId: number;
   productName: string;
   productImageUrl: string;
   qty: number;
-  price: number;
-  totalProductPrice: number;
-  totalProductDiscount: number;
-  promoList: VerificationOrderPromoList[];
-  voucherList: VerificationOrderVoucherList[];
+  displayPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  promoPrice: number;
+  voucherPrice: number;
+  priceAfterDiscount: number;
+  promos: VerificationOrderDetailPromoList[];
+  vouchers: VerificationOrderDetailVoucherList[];
 }
-export interface VerificationOrderPromoList {
-  promoId: number;
-  promoName: string;
-  promoValue: number;
+export interface VerificationOrderDetailPromoList {
+  promoSupplierId: number;
+  promoSupplierName: string;
+  promoAmount: number;
   promoOwner: string;
 }
-export interface VerificationOrderVoucherList {
-  voucherId: number;
-  voucherName: string;
-  voucherValue: number;
+export interface VerificationOrderDetailVoucherList {
+  voucherSupplierId: number;
+  voucherSupplierName: string;
+  voucherAmount: number;
   voucherOwner: string;
 }
-export interface VerificationOrderNotPromoSkuList {
+export interface VerificationOrderDetailNonPromoList {
+  productId: number;
   productName: string;
   productImageUrl: string;
   qty: number;
-  price: number;
-  totalProductPrice: number;
+  displayPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+}
+export interface VerificationOrderDetailGrandTotal {
+  grandTotalPrice: number;
+  grandTotalDiscount: number;
 }

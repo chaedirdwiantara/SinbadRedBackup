@@ -14,9 +14,11 @@ import { PromoPaymentDetailStyles } from '../styles';
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
 const PromoPaymentDetail: FC = ({ route }: any) => {
   /** === HOOK === */
+  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentDetailState = statePromo.promoPayment.detail;
@@ -27,6 +29,11 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
       promoPaymentAction.resetDetail(dispatchPromo);
     };
   }, []);
+  React.useEffect(() => {
+    if (promoPaymentDetailState.error !== null) {
+      setErrorModalOpen(true);
+    }
+  }, [promoPaymentDetailState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -69,23 +76,41 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
         </View>
         <SnbDivider style={{ marginVertical: 8 }} />
         <View style={{ marginRight: 20 }}>
-          {promoPaymentDetailState.data?.promoTnC.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  flexDirection: 'row',
-                  marginBottom: 4,
-                }}>
-                <View style={{ marginRight: 8, width: 20 }}>
-                  <SnbText.B1>{index + 1}.</SnbText.B1>
+          {promoPaymentDetailState.data?.termAndConditions.map(
+            (item, index) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    flexDirection: 'row',
+                    marginBottom: 4,
+                  }}>
+                  <View style={{ marginRight: 8, width: 20 }}>
+                    <SnbText.B1>{index + 1}.</SnbText.B1>
+                  </View>
+                  <SnbText.B1>{item}</SnbText.B1>
                 </View>
-                <SnbText.B1>{item}</SnbText.B1>
-              </View>
-            );
-          })}
+              );
+            },
+          )}
         </View>
       </View>
+    );
+  };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={isErrorModalOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          setErrorModalOpen(false);
+          goBack();
+        }}
+      />
     );
   };
   /** => main */
@@ -102,6 +127,8 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

@@ -1,4 +1,13 @@
+import { NavigationAction } from '@navigation';
 import { useState, useRef } from 'react';
+
+export const goBack = () => {
+  NavigationAction.back();
+};
+
+export const goToHistoryDetail = (section: string) => {
+  NavigationAction.navigate('HistoryDetailView', { section });
+};
 
 export const formatTime = (timer: number) => {
   const seconds = `0${timer % 60}`.slice(-2);

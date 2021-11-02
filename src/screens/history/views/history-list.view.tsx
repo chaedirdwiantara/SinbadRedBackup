@@ -12,10 +12,9 @@ import {
   SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack } from '@screen/oms/functions';
-import { HistoryStyle } from '@screen/oms/styles';
-import { HistoryCard, HistoryStatusColor } from './HistoryCard';
-import { goToHistoryDetail } from '@screen/oms/functions';
+import { goBack, goToHistoryDetail } from '@screen/history/functions';
+import { HistoryStyle } from '@screen/history/styles';
+import { HistoryCard, HistoryStatusColor } from '../components';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -71,45 +70,43 @@ const orderStatusColor: Record<OrderStatusKey, keyof HistoryStatusColor> = {
   supplier_pending: 'yellow',
   canceled: 'red',
 };
-const payments: Array<HistoryItem> = [
-  {
-    id: 'SNB18120000708',
-    status: { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 8, 30, 14, 16).toISOString(),
-    totalPrice: 300000,
-    totalQty: 10,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
+const payments = {
+  meta: {
+    total: 100,
+    skip: 0,
+    limit: 10,
   },
-  {
-    id: 'SNB18120000709',
-    status: { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-    createdAt: new Date(2021, 8, 27, 12, 46).toISOString(),
-    totalPrice: 200000,
-    originalTotalPrice: 400000,
-    totalQty: 3,
-    originalTotalQty: 6,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-    ],
-  },
-  {
-    id: 'SNB18120000707',
-    status: { key: 'overdue', value: 'Overdue' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    totalPrice: 450000,
-    totalQty: 3,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
-  },
-];
+  data: [
+    {
+      id: 1,
+      orderCode: 'S010001000105508',
+      createdAt: '2021-08-18T02:36:12.812Z',
+      parcelFinalPrice: 0,
+      parcelFinalPriceBuyer: null,
+      parcelQty: 10,
+      deliveredParcelFinalPrice: 10,
+      deliveredParcelFinalPriceBuyer: null,
+      deliveredParcelQty: 0,
+      deliveredParcelModified: false,
+      statusPayment: 'paid',
+      status: 'delivered',
+      billing: {
+        id: 2,
+        totalPayment: 10000,
+        deliveredTotalPayment: 10000,
+        billingStatus: 'paid',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        expiredPaymentTime: '2021-07-30T15:14:02Z',
+        paymentChannelTypeId: 1,
+      },
+      products: [
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
+        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
+      ],
+    },
+  ],
+};
 const orders: Array<HistoryItem> = [
   {
     id: 'SNB18120000722',
@@ -163,7 +160,7 @@ const orders: Array<HistoryItem> = [
   },
 ];
 /** === COMPONENT === */
-const OmsHistoryView: FC = () => {
+const HistoryListView: FC = () => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
@@ -215,6 +212,7 @@ const OmsHistoryView: FC = () => {
   );
   /** => Status List */
   const renderStatusList = () => {
+    // ini nanti diganti
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
@@ -254,28 +252,30 @@ const OmsHistoryView: FC = () => {
   /** => Payment List */
   const renderPaymentList = () => (
     <>
-      {payments.map((payment, paymentIndex) => {
+      {payments.data.map((payment, paymentIndex) => {
         const statusColor =
-          paymentStatusColor[payment.status.key as PaymentStatusKey];
+          paymentStatusColor[payment.statusPayment as PaymentStatusKey];
 
         return (
           <HistoryCard
             key={payment.id}
-            id={payment.id}
+            id={payment.orderCode}
             createdAt={payment.createdAt}
-            status={payment.status.value}
+            status={payment.statusPayment}
             statusColor={statusColor}
             statusIconName={
-              payment.status.key === 'overdue' ? 'error' : undefined
+              payment.statusPayment === 'overdue' ? 'error' : undefined
             }
-            expiredPaymentTime={payment.expiredPaymentTime}
+            expiredPaymentTime={payment.billing.expiredPaymentTime}
             productImages={payment.products}
-            totalPrice={payment.totalPrice}
-            originalTotalPrice={payment.originalTotalPrice}
-            totalQty={payment.totalQty}
-            originalTotalQty={payment.originalTotalQty}
+            totalPrice={payment.billing.deliveredTotalPayment}
+            originalTotalPrice={payment.billing.totalPayment}
+            totalQty={payment.parcelQty}
+            originalTotalQty={payment.deliveredParcelQty}
             style={
-              paymentIndex === payments.length - 1 ? { marginBottom: 24 } : {}
+              paymentIndex === payments.data.length - 1
+                ? { marginBottom: 24 }
+                : {}
             }
             onCardPress={() => goToHistoryDetail('payment')}
           />
@@ -360,4 +360,4 @@ const OmsHistoryView: FC = () => {
   );
 };
 
-export default OmsHistoryView;
+export default HistoryListView;

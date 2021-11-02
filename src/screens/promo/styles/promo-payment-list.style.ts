@@ -22,4 +22,11 @@ export const PromoPaymentListStyles = StyleSheet.create({
     marginRight: 16,
     alignSelf: 'center',
   },
+  emptyImage: {
+    height: 190,
+    width: undefined,
+    aspectRatio: 10 / 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
