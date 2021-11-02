@@ -29,6 +29,8 @@ import {
   useTermsAndConditionsModal,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
+import Database from '@react-native-firebase/database';
+import { uniqueId } from '@core/functions/global/device-data';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -280,10 +282,19 @@ const OmsCheckoutView: FC = () => {
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
   const [loadingPage, setLoadingPage] = useState(true);
+  const [userS2S, setUserS2S] = useState({
+    confirmOrderLoading: false,
+    initiateCheckoutLoading: false,
+  });
 
   /** === FUNCTION === */
+  const userInfo = Database().ref(`/s2sCommunication/sinbadApp/${uniqueId}`);
+
   /** Set Loading Page */
   useEffect(() => {
+    userInfo.on('value', (data) => {
+      setUserS2S(data.val());
+    });
     setTimeout(() => setLoadingPage(false), 1000);
   }, []);
 
@@ -802,7 +813,7 @@ const OmsCheckoutView: FC = () => {
    * @returns { Component } - Return Body
    */
   const renderBody = () => {
-    return loadingPage ? (
+    return userS2S.initiateCheckoutLoading || loadingPage ? (
       <LoadingPage />
     ) : (
       <>
