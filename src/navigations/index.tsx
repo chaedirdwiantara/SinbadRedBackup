@@ -9,6 +9,8 @@ import PromoNav from './promo.navigation';
 import BannerNav from './banner.navigation';
 import BrandNav from './brand.navigations';
 import SearchNav from './search.navigation';
+import HelpNav from './help.navigation';
+import NotificationNav from './notification.navigations';
 
 const index = {
   ...OmsNav,
@@ -22,6 +24,8 @@ const index = {
   ...BannerNav,
   ...BrandNav,
   ...SearchNav,
+  ...HelpNav,
+  ...NotificationNav,
 };
 
 export default index;

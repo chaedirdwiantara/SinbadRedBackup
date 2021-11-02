@@ -1,7 +1,8 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import HelpView from './help.view';
+import HelpFaqView from './help-faq.view';
 /** === EXPORT ALL === */
-export { HelpView };
+export { HelpView, HelpFaqView };
 /**
  * ================================================================
  * NOTES
