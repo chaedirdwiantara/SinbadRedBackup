@@ -10,6 +10,7 @@ export const productDetailInitialState: ProductDetailInitialProps = {
   data: null,
   error: null,
   loading: false,
+  refresh: false,
 };
 /** === REDUCER === */
 export const productDetailReducer = simplifyReducer(productDetailInitialState, {
@@ -40,6 +41,13 @@ export const productDetailReducer = simplifyReducer(productDetailInitialState, {
       ...state,
       loading: false,
       error: action.payload,
+    };
+  },
+  /** => Refresh */
+  [types.PRODUCT_DETAIL_REFRESH]() {
+    return {
+      ...productDetailInitialState,
+      refresh: true,
     };
   },
   /** => Reset */

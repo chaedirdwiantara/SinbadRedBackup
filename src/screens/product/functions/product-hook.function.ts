@@ -71,6 +71,9 @@ const useProductDetailAction = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.productDetailReset());
     },
@@ -117,7 +120,11 @@ const useOrderModalVisibility = () => {
     setOrderModalVisible((prevVisible) => !prevVisible);
   };
 
-  return { orderModalVisible, setOrderModalVisible, toggleModalVisible };
+  return {
+    orderModalVisible,
+    setOrderModalVisible,
+    toggleModalVisible,
+  };
 };
 
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {

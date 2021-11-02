@@ -18,6 +18,7 @@ import {
   SnbNumberCounter,
 } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
+import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { useOrderQuantity } from '@screen/product/functions';
 /** === IMPORT STYLE ===  */
@@ -28,28 +29,6 @@ interface AddToCartModalProps {
   closeAction: () => void;
   onAddToCartPress: () => void;
 }
-/** === DUMMY ===  */
-const productDetailDummy = {
-  id: '1',
-  name: 'LAKME CC CREAM ALMOND',
-  imageUrl:
-    'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-  price: 77891,
-  packagedQty: 5,
-  minQty: 1,
-  uom: 'Pcs',
-  isExclusive: false,
-  promoList: [
-    {
-      shortDescription:
-        'Setiap pembelian produk Mamy poko & Charm sebesar 2jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 1%.\nSetiap pembelian di atas 5jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 2%',
-    },
-    {
-      shortDescription:
-        'Setiap pembelian produk Mamy poko & Charm sebesar 10jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 3%.',
-    },
-  ],
-};
 /** === CONSTANT ===  */
 const { height } = Dimensions.get('window');
 /** === COMPONENT ===  */
@@ -59,8 +38,11 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
   onAddToCartPress,
 }) => {
   /** === HOOKS ===  */
+  const {
+    stateProduct: { detail: productDetailState },
+  } = useProductContext();
   const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetailDummy.minQty,
+    minQty: productDetailState.data.minQty,
   });
   const [tooltipVisible, toggleTooltipVisible] = useReducer(
     (prevVisible) => !prevVisible,
@@ -75,14 +57,14 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
         value={orderQty}
         onIncrease={increaseOrderQty}
         onDecrease={decreaseOrderQty}
-        minusDisabled={orderQty === productDetailDummy.minQty}
+        minusDisabled={orderQty === productDetailState.data.minQty}
       />
     </View>
   );
   /** => Promo List */
   const renderPromoList = () => {
     return (
-      productDetailDummy.promoList.length > 0 && (
+      productDetailState.data.promoList.length > 0 && (
         <View style={{ paddingHorizontal: 16 }}>
           <SnbText.C1 color={color.black60}>Promo</SnbText.C1>
           <View style={{ marginTop: 8, marginBottom: 16 }}>
@@ -90,11 +72,12 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
           </View>
           <View style={{ height: height * 0.15 }}>
             <ScrollView>
-              {productDetailDummy.promoList.map((promo, promoIndex) => (
-                <View key={promoIndex} style={{ marginBottom: 8 }}>
-                  <SnbText.C1>{promo.shortDescription}</SnbText.C1>
-                </View>
-              ))}
+              {productDetailState.data.promoList.length > 0 &&
+                productDetailState.data.promoList.map((promo, promoIndex) => (
+                  <View key={promoIndex} style={{ marginBottom: 8 }}>
+                    <SnbText.C1>{promo.shortDescription}</SnbText.C1>
+                  </View>
+                ))}
             </ScrollView>
           </View>
         </View>
@@ -104,7 +87,7 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
   /** => Exclusive Tag */
   const renderExclusiveTag = () => {
     return (
-      productDetailDummy.isExclusive && (
+      productDetailState.data.isExclusive && (
         <View style={AddToCartModalStyle.exclusiveTagContainer}>
           <SnbIcon
             name="stars"
@@ -121,16 +104,18 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
   const renderProductData = () => (
     <View style={AddToCartModalStyle.mainContentContainer}>
       <Image
-        source={{ uri: productDetailDummy.imageUrl }}
+        source={{ uri: productDetailState.data.images[0].url }}
         style={AddToCartModalStyle.image}
       />
       <View style={{ marginLeft: 16 }}>
         {renderExclusiveTag()}
-        <SnbText.C1>{productDetailDummy.name}</SnbText.C1>
+        <SnbText.C1>{productDetailState.data.name}</SnbText.C1>
         <View style={AddToCartModalStyle.priceContainer}>
           <View style={{ marginRight: 8 }}>
             <SnbText.B3 color={color.red50}>
-              {toCurrency(productDetailDummy.price, { withFraction: false })}
+              {toCurrency(productDetailState.data.price, {
+                withFraction: false,
+              })}
             </SnbText.B3>
           </View>
           <TouchableOpacity onPress={toggleTooltipVisible}>
@@ -151,12 +136,12 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row' }}>
           <SnbText.C1>
             per-Dus{' '}
-            {`${productDetailDummy.packagedQty} ${productDetailDummy.uom}`}
+            {`${productDetailState.data.packagedQty} ${productDetailState.data.minQtyType}`}
           </SnbText.C1>
           <View style={AddToCartModalStyle.lineSeparator} />
           <SnbText.C1>
             min.pembelian{' '}
-            {`${productDetailDummy.minQty} ${productDetailDummy.uom}`}
+            {`${productDetailState.data.minQty} ${productDetailState.data.minQtyType}`}
           </SnbText.C1>
         </View>
       </View>
@@ -169,7 +154,7 @@ export const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           <SnbText.B3>Total: </SnbText.B3>
           <SnbText.B4 color={color.red50}>
-            {toCurrency(productDetailDummy.price * orderQty, {
+            {toCurrency(productDetailState.data.price * orderQty, {
               withFraction: false,
             })}
           </SnbText.B4>
