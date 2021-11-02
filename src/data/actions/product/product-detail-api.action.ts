@@ -30,6 +30,10 @@ export const productDetailFailed = (
 export const productDetailRefresh = () => {
   return { type: types.PRODUCT_DETAIL_REFRESH };
 };
+/** => Refresh */
+export const productDetailRefresh = () => {
+  return { type: types.PRODUCT_DETAIL_REFRESH };
+};
 /** => Reset */
 export const productDetailReset = () => {
   return { type: types.PRODUCT_DETAIL_RESET };
