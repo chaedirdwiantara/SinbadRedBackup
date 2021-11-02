@@ -61,19 +61,31 @@ const Content: React.FC = () => {
 
   const renderUploadPhotoRules = () => {
     return (
-      <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-        imgSrc={require('../../../../assets/images/npwp_image.png')}
-        title="Unggah Foto NPWP"
-        buttonLabel="Ambil Foto NPWP"
-        rules={[
-          'Pastikan NPWP sesuai dengan identitas Anda',
-          'NPWP Tidak silau dan tidak buram',
-          'Pastikan NPWP bisa terbaca dengan jelas',
-          'Hindari Tangan Menutupi NPWP',
-        ]}
-        action={() => openCamera('npwp')}
-      />
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
+            imgSrc={require('../../../../assets/images/npwp_image.png')}
+            title="Unggah Foto NPWP"
+            buttonLabel="Ambil Foto NPWP"
+            rules={[
+              'Pastikan NPWP sesuai dengan identitas Anda',
+              'NPWP Tidak silau dan tidak buram',
+              'Pastikan NPWP bisa terbaca dengan jelas',
+              'Hindari Tangan Menutupi NPWP',
+            ]}
+            action={() => openCamera('npwp')}
+          />
+        </View>
+        <View style={{ height: 72 }}>
+          <SnbButton.Single
+            type="secondary"
+            title="Lewati"
+            onPress={() => navigate(REGISTER_STEP_5_VIEW)}
+            disabled={false}
+          />
+        </View>
+      </View>
     );
   };
 
