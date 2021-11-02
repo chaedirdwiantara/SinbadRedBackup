@@ -10,11 +10,13 @@ import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 import RegisterSupplierModal from './RegisterSupplierModal';
+import AddToCartModal from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
   priceSortOptions,
   useRegisterSupplierModal,
+  useOrderModalVisibility,
 } from '@core/functions/product';
 import {
   useTagListActions,
@@ -82,6 +84,7 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   });
   const registerSupplierModal = useRegisterSupplierModal();
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
   const {
     stateProduct: {
@@ -225,9 +228,19 @@ const ProductList: FC<ProductListProps> = ({
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
         visible={registerSupplierModal.visible}
-        onSubmit={registerSupplierModal.sendSupplierData}
+        onSubmit={() =>
+          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+        }
         onClose={() => registerSupplierModal.setVisible(false)}
       />
+      {/* Add to Cart Modal */}
+      {orderModalVisible && (
+        <AddToCartModal
+          open={orderModalVisible}
+          closeAction={() => setOrderModalVisible(false)}
+          onAddToCartPress={() => console.log('Add to cart pressed')}
+        />
+      )}
     </SnbContainer>
   );
 };
