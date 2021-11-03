@@ -34,14 +34,18 @@ export const useRegister = () => {
   const state = useSelector((state: any) => state.auth);
   const registerState = state.register;
   const dispatch = useDispatch();
-  const merchantData: models.IMerchantData = state.merchantData;
+  const merchantData: models.IMerchantData | any = state.merchantData;
 
   const register = () => {
-    if (merchantData.user?.email === '') {
-      delete merchantData.user?.email;
+    for (const key in merchantData) {
+      if (merchantData[key] === null || merchantData[key] === '') {
+        delete merchantData[key];
+      }
     }
-    if (merchantData.user?.taxNo === '') {
-      delete merchantData.user?.taxNo;
+    for (const key in merchantData.user) {
+      if (merchantData.user[key] === null || merchantData.user[key] === '') {
+        delete merchantData.user[key];
+      }
     }
     dispatch(Actions.merchantRegisterProcess(merchantData));
   };

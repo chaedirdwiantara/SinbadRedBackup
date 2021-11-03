@@ -94,7 +94,22 @@ export const setErrorMessage = (code: number) => {
       return 'No. HP harus berupa angka';
     }
     case 10005: {
-      return 'No. Hp yang anda masukan sudah terdaftar';
+      return 'No. Hp yang Anda masukkan sudah terdaftar';
+    }
+    case 10006: {
+      return 'No. Hp tidak boleh kosong';
+    }
+    case 10007: {
+      return 'No. Hp yang Anda masukkan tidak terdaftar';
+    }
+    case 10008: {
+      return 'Kode OTP salah/kadaluarsa';
+    }
+    case 10009: {
+      return 'Data user tidak valid';
+    }
+    case 10010: {
+      return 'ID Toko/Password yang Anda masukkan salah';
     }
     default: {
       return 'Terjadi kesalahan';

@@ -49,3 +49,7 @@ export const changePasswordFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.CHANGE_PASSWORD_FAILED, payload: data };
 };
+/** => reset */
+export const changePasswordReset = () => {
+  return { type: types.CHANGE_PASSWORD_RESET };
+};

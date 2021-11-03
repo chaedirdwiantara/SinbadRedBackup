@@ -82,20 +82,33 @@ const MerchantEditPhotoView = () => {
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
-  const [imageUrl, setImageUrl] = React.useState<string | undefined>('');
+  const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
 
   React.useEffect(() => {
     switch (params.type) {
       case 'npwp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.taxImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.taxImageUrl || ' ',
+        );
         break;
       }
       case 'ktp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.idImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
+        );
         break;
       }
       case 'selfie': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.selfieImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.selfieImageUrl || ' ',
+        );
+        break;
+      }
+      case 'store': {
+        setImageUrl(
+          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+            ?.imageUrl || ' ',
+        );
         break;
       }
       case 'store': {
@@ -260,7 +273,7 @@ const MerchantEditPhotoView = () => {
     );
   };
 
-  const isImageAvailable = imageUrl !== '' || capturedImage.data !== null;
+  const isImageAvailable = imageUrl !== ' ' || capturedImage.data !== null;
 
   return (
     <SnbContainer color={'white'}>
@@ -271,7 +284,7 @@ const MerchantEditPhotoView = () => {
       />
       <View style={{ flex: 1 }}>
         {renderIF(
-          !isImageAvailable,
+          isImageAvailable,
           renderImagePreview(),
           <SnbUploadPhotoRules
             rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}

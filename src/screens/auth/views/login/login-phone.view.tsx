@@ -1,5 +1,9 @@
 import { useNavigation } from '@react-navigation/core';
-import { useAuthAction, useInputPhone } from '@screen/auth/functions';
+import {
+  setErrorMessage,
+  useAuthAction,
+  useInputPhone,
+} from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
@@ -31,11 +35,7 @@ const Content: React.FC = () => {
       navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
     }
     if (requestOTPState.error !== null) {
-      if (requestOTPState.error.status === 400) {
-        phone.setMessageError('No. Hp yang anda masukan tidak terdaftar');
-      } else {
-        phone.setMessageError('Terjadi Kesalahan');
-      }
+      phone.setMessageError(setErrorMessage(requestOTPState.error.code));
     }
   }, [requestOTPState]);
 

@@ -69,7 +69,7 @@ const Content: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
-    if (registerState.data?.data?.isCreated === true) {
+    if (registerState.data?.data?.isCreated) {
       reset({
         index: 0,
         routes: [{ name: 'Home' }],
@@ -82,18 +82,34 @@ const Content: React.FC = () => {
 
   const renderUploadPhotoRules = () => {
     return (
-      <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
-        imgSrc={require('../../../../assets/images/store_image.png')}
-        title="Unggah Foto Toko"
-        buttonLabel="Ambil Foto Toko"
-        rules={[
-          'Pastikan foto toko terlihat dengan jelas',
-          'Foto Tidak silau dan tidak buram',
-          'Pastikan foto fokus keseluruhan toko',
-        ]}
-        action={() => openCamera('store')}
-      />
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
+            imgSrc={require('../../../../assets/images/store_image.png')}
+            title="Unggah Foto Toko"
+            buttonLabel="Ambil Foto Toko"
+            rules={[
+              'Pastikan foto toko terlihat dengan jelas',
+              'Foto Tidak silau dan tidak buram',
+              'Pastikan foto fokus keseluruhan toko',
+            ]}
+            action={() => openCamera('store')}
+          />
+        </View>
+        <View style={{ height: 72 }}>
+          <SnbButton.Single
+            type="secondary"
+            title="Selesai"
+            onPress={() => {
+              resetRegister();
+              register();
+            }}
+            disabled={registerState?.loading}
+            loading={registerState?.loading}
+          />
+        </View>
+      </View>
     );
   };
 
