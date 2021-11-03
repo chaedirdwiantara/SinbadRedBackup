@@ -11,14 +11,11 @@ function* storeDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.StoreDetail> = yield call(
       () => {
-        console.log('sini');
         return UserApi.storeDetail();
       },
     );
-    console.log('disini');
     yield action.contextDispatch(ActionCreators.storeDetailSuccess(response));
     yield put(ActionCreators.storeDetailSuccess(response));
-    console.log('error');
   } catch (error: any) {
     yield action.contextDispatch(ActionCreators.storeDetailFailed(error));
     yield put(ActionCreators.storeDetailFailed(error));
