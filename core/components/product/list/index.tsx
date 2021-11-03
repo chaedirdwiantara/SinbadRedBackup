@@ -1,160 +1,218 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
-import GridLayoutView from './grid-layout.view';
-import ListLayoutView from './list-layout.view';
-import BottomActionView from './bottom-action.view';
+import Action from '@core/components/modal-actions';
+import NavigationHeader from './NavigationHeader';
+import CategoryTabList from './CategoryTabList';
+import GridLayout from './grid-layout/GridLayout';
+import ListLayout from './ListLayout';
+import BottomAction from './BottomAction';
+import RegisterSupplierModal from './RegisterSupplierModal';
 /** === IMPORT FUNCTIONS === */
-import { useBottomAction } from '@core/functions/product';
-/** === IMPORT MODEL === */
+import {
+  useBottomAction,
+  priceSortOptions,
+  useRegisterSupplierModal,
+} from '@core/functions/product';
+import { useTagListActions } from '@screen/product/functions';
+import { useProductContext, useTagContext } from 'src/data/contexts/product';
+/** === IMPORT TYPES === */
 import * as models from '@models';
+import {
+  ProductHeaderType,
+  CategoryTabsConfig,
+  CategoryType,
+} from './product-list-core.type';
 /** === TYPE === */
-interface ProductComponentProps {
-  data: models.ListItemProps<models.ProductList[]>;
-  onCardPress: (item: models.ProductList) => void;
-  onOrderPress: (item: models.ProductList) => void;
+interface ProductListProps {
+  products: Array<models.ProductList>;
+  headerType?: ProductHeaderType;
+  headerTitle?: string;
+  categoryTabs?: boolean;
+  categoryTabsConfig?: CategoryTabsConfig;
+  isRefreshing: boolean;
+  onRefresh: (queryOptions: models.ProductListQueryOptions) => void;
+  onFetch: (queryOptions: models.ProductListQueryOptions) => void;
+  onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
+  activeKeyword?: string;
+  activeCategory?: CategoryType;
 }
-/** === DUMMIES === */
-const dummyTags: Array<string> = [
-  'Fresh',
-  'Cream',
-  'Honey',
-  'Anak',
-  'Almond',
-  'Perfect',
-  'Liquid',
-  'Remover',
-];
-const dummyProducts = {
-  data: [
-    {
-      id: '1',
-      name: 'LAKME CC CREAM ALMOND',
-      image:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      currentPrice: 77891,
-      isBundle: false,
-      isPromo: true,
-      isExclusive: true,
-      segmentationPrice: 77891,
-      retailBuyingPrice: 77891,
-    },
-    {
-      id: '2',
-      name: 'LAKME BLUR PERFECT CREAMER',
-      image:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      currentPrice: 150000,
-      isBundle: false,
-      isPromo: false,
-      isExclusive: false,
-      segmentationPrice: 150000,
-      retailBuyingPrice: 150000,
-    },
-    {
-      id: '3',
-      name: 'LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR',
-      image:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      currentPrice: 98782,
-      isBundle: true,
-      isPromo: true,
-      isExclusive: true,
-      segmentationPrice: 98782,
-      retailBuyingPrice: 98782,
-    },
-    {
-      id: '4',
-      name: 'LAKME BIPHASED MAKEUP REMOVER',
-      image:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-      currentPrice: 72000,
-      isBundle: false,
-      isPromo: true,
-      isExclusive: false,
-      segmentationPrice: 72000,
-      retailBuyingPrice: 72000,
-    },
-    {
-      id: '5',
-      name: 'LAKME CC CREAM HONEY',
-      image:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
-      currentPrice: 77891,
-      isBundle: false,
-      isPromo: false,
-      isExclusive: true,
-      segmentationPrice: 77891,
-      retailBuyingPrice: 77891,
-    },
-  ],
-  loading: false,
-  loadMore: false,
-  refresh: false,
-  error: null,
-  total: 5,
-  skip: 0,
-};
 /** === COMPONENT === */
-const ProductListView: FC<ProductComponentProps> = ({
-  data,
-  onCardPress,
-  onOrderPress,
+const ProductList: FC<ProductListProps> = ({
+  products,
+  categoryTabs = false,
+  categoryTabsConfig,
+  headerType = 'default',
+  headerTitle,
+  isRefreshing,
+  onRefresh,
+  onFetch,
+  onLoadMore,
+  activeKeyword = '',
+  activeCategory,
 }) => {
-  /** === HOOK === */
-  const { layoutDisplay, handleActionClick } = useBottomAction();
-  /** === VIEW === */
-  /** => List */
-  const renderList = () =>
-    layoutDisplay === 'grid' ? (
-      <GridLayoutView
-        data={data}
-        tags={dummyTags}
-        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-        onCardPress={onCardPress}
-        onOrderPress={onOrderPress}
-      />
-    ) : (
-      <ListLayoutView
-        data={dummyProducts}
-        tags={dummyTags}
-        onTagPress={(tags) => console.log(`Active tags: ${tags}`)}
-        onCardPress={onCardPress}
-        onOrderPress={onOrderPress}
-      />
-    );
-  /** => Content */
-  const renderContent = () => {
-    return <View style={{ flex: 1 }}>{renderList()}</View>;
+  /** === HOOKS === */
+  const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
+  const [keywordSearched, setKeywordSearched] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryType | undefined
+  >(activeCategory);
+  const {
+    sortModalVisible,
+    sortActive,
+    sortIndex,
+    sortQuery,
+    filterModalVisible,
+    filterActive,
+    filterQuery,
+    layoutDisplay,
+    handleActionClick,
+  } = useBottomAction(onFetch, {
+    keyword: searchKeyword,
+    categoryId: selectedCategory?.id,
+  });
+  const registerSupplierModal = useRegisterSupplierModal();
+  const tagActions = useTagListActions();
+  const {
+    stateProduct: {
+      list: { loading: productLoading },
+    },
+  } = useProductContext();
+  const {
+    stateTag: {
+      list: { data: tagList },
+    },
+    dispatchTag,
+  } = useTagContext();
+  const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
+
+  useEffect(() => {
+    if (!productLoading) {
+      setKeywordSearched(false);
+    }
+  }, [productLoading]);
+
+  useEffect(() => {
+    tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
+  }, [selectedCategory, keywordSearched]);
+  /** === DERIVED === */
+  const derivedQueryOptions: models.ProductListQueryOptions = {
+    keyword: searchKeyword,
+    categoryId: selectedCategory?.id,
+    sort: sortQuery?.sort,
+    sortBy: sortQuery?.sortBy,
+    minPrice: filterQuery?.minPrice,
+    maxPrice: filterQuery?.maxPrice,
   };
-  /** => Main */
+
+  const handleTagPress = (tags: Array<string>) => {
+    const queryOptions = {
+      ...derivedQueryOptions,
+      tags,
+    };
+    onFetch(queryOptions);
+  };
+  /** === VIEW === */
   return (
     <SnbContainer color="white">
-      {renderContent()}
-      <BottomActionView
+      <NavigationHeader
+        title={selectedCategory ? selectedCategory.name : headerTitle}
+        type={headerType}
+        setSearchKeyword={setSearchKeyword}
+        onSearch={() => {
+          const queryOptions = {
+            ...derivedQueryOptions,
+            keyword: searchKeyword,
+          };
+          setKeywordSearched(true);
+          onFetch(queryOptions);
+        }}
+      />
+      {categoryTabs && (
+        <CategoryTabList
+          level={categoryTabsConfig?.level!}
+          selectedFirstLevelIndex={categoryTabsConfig?.firstLevelIndex!}
+          selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
+          selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
+          onTabChange={(category) => {
+            const queryOptions = {
+              ...derivedQueryOptions,
+              categoryId: category.id,
+            };
+            setSelectedCategory(category);
+            onFetch(queryOptions);
+          }}
+        />
+      )}
+      <View style={{ flex: 1 }}>
+        {layoutDisplay === 'grid' ? (
+          <GridLayout
+            products={products}
+            tags={tagNames}
+            onTagPress={handleTagPress}
+            tagListComponentKey={selectedCategory?.id}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            isRefreshing={isRefreshing}
+            onRefresh={() => onRefresh(derivedQueryOptions)}
+            onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          />
+        ) : (
+          <ListLayout
+            products={products}
+            tags={tagNames}
+            onTagPress={handleTagPress}
+            tagListComponentKey={selectedCategory?.id}
+            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            isRefreshing={isRefreshing}
+            onRefresh={() => onRefresh(derivedQueryOptions)}
+            onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          />
+        )}
+      </View>
+      <BottomAction
         sort={true}
         filter={true}
         layout={true}
         category={true}
+        sortActive={sortActive}
+        filterActive={filterActive}
         layoutDisplay={layoutDisplay}
         onActionPress={handleActionClick}
+      />
+      {/* Sort Modal */}
+      <SnbBottomSheet
+        open={sortModalVisible}
+        title="Urutkan"
+        action={true}
+        actionIcon="close"
+        content={
+          <Action.Sort
+            appliedOptionIndex={sortIndex}
+            options={priceSortOptions}
+            onButtonPress={handleActionClick}
+          />
+        }
+        closeAction={() => handleActionClick({ type: 'sort' })}
+      />
+      {/* Filter Modal */}
+      <SnbBottomSheet
+        open={filterModalVisible}
+        title="Filter"
+        action={true}
+        actionIcon="close"
+        content={<Action.Filter onButtonPress={handleActionClick} />}
+        closeAction={() => handleActionClick({ type: 'filter' })}
+      />
+      {/* Register Supplier Modal */}
+      <RegisterSupplierModal
+        visible={registerSupplierModal.visible}
+        onSubmit={registerSupplierModal.sendSupplierData}
+        onClose={() => registerSupplierModal.setVisible(false)}
       />
     </SnbContainer>
   );
 };
 
-export default ProductListView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: aliisetia
- * updatedDate: 14-10-21
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default ProductList;
