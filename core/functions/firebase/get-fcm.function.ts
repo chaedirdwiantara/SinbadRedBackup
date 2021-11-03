@@ -6,7 +6,7 @@ import { useDataGlobal } from '@core/redux/Data';
 import {
   saveFCMNotLogin,
   deleteFcmByDeviceId,
-} from '@core/functions/firebase/fcm-firestore';
+} from '@core/functions/firebase/fcm-firestore.function';
 import * as Actions from '@actions';
 /** === FUNCTION === */
 /** => get FCM token from firebase */
