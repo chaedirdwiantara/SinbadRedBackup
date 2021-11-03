@@ -57,7 +57,15 @@ const UserChangePasswordView: FC = () => {
       } else if (stateUser.update.error.code === 10013) {
         setOpenConfirm(false);
         setErrorChangePassword(true);
-        setErrorMessage('kata sandi baru tidak sesuai format');
+        setErrorMessage('Kata sandi baru tidak sesuai format');
+      } else if (stateUser.update.error.code === 10031) {
+        setOpenConfirm(false);
+        setErrorChangePassword(true);
+        setErrorMessage('Kata sandi baru tidak sesuai format');
+      } else if (stateUser.update.error.code === 10033) {
+        setOpenConfirm(false);
+        setErrorChangePassword(true);
+        setErrorMessage('Konfirmasi kata sandi baru tidak sesuai format');
       }
     }
   }, [stateUser.update]);
