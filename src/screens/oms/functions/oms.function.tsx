@@ -42,6 +42,10 @@ const goToHistoryDetail = (section: 'order' | 'payment') => {
 const goToPaymentPromoList = () => {
   NavigationAction.navigate('PromoPaymentListView');
 };
+/** => go to category product */
+const goToCategory = (id?: string) => {
+  NavigationAction.navigate('CategoryView', { id });
+};
 
 export {
   goBack,
@@ -54,4 +58,5 @@ export {
   goToHome,
   goToHistoryDetail,
   goToPaymentPromoList,
+  goToCategory,
 };
