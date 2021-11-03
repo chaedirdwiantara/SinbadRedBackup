@@ -11,12 +11,15 @@ function* storeDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.StoreDetail> = yield call(
       () => {
-        return UserApi.storeDetail(action.payload);
+        console.log('sini');
+        return UserApi.storeDetail();
       },
     );
+    console.log('disini');
     yield action.contextDispatch(ActionCreators.storeDetailSuccess(response));
     yield put(ActionCreators.storeDetailSuccess(response));
-  } catch (error) {
+    console.log('error');
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.storeDetailFailed(error));
     yield put(ActionCreators.storeDetailFailed(error));
   }
@@ -31,7 +34,7 @@ function* changePassword(action: models.UpdateProcessAction) {
       ActionCreators.changePasswordSuccess(response),
     );
     yield put(ActionCreators.changePasswordSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(ActionCreators.changePasswordFailed(error));
     yield put(ActionCreators.changePasswordFailed(error));
   }

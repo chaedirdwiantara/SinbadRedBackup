@@ -73,7 +73,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.merchantEdit.data !== null
     ) {
       ToastAndroid.showWithGravityAndOffset(
-        'Berhasil Update Data',
+        'Data Berhasil Diperbaharui',
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -449,13 +449,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Ukuran Toko (m²)'}
+            labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
+            rightText={'m²'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>

@@ -65,8 +65,12 @@ const UserChangePasswordView: FC = () => {
   useEffect(() => {
     if (dataNewPassword === dataConfirmNewPassword) {
       setVerifyPassword(true);
+      setErrorChangePassword(false);
+      setErrorMessage('');
     } else {
       setVerifyPassword(false);
+      setErrorChangePassword(true);
+      setErrorMessage('kata sandi baru tidak sesuai format');
     }
   }, [dataNewPassword, dataConfirmNewPassword]);
 

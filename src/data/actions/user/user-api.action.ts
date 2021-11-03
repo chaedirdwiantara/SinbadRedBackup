@@ -6,7 +6,7 @@ export const storeDetailProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.STORE_DETAIL_PROCESS, payload: data });
   return { type: types.STORE_DETAIL_PROCESS, payload: data, contextDispatch };
 };
 /** => store detail success */

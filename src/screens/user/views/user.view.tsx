@@ -30,8 +30,7 @@ const UserView: FC = () => {
   const { reset } = useNavigation();
   useFocusEffect(
     React.useCallback(() => {
-      const storeDetail = storeDetailAction.detail(dispatchUser, { id: '' });
-      return storeDetail;
+      storeDetailAction.detail(dispatchUser, { id: '' });
     }, []),
   );
   useEffect(() => {
@@ -196,6 +195,7 @@ const UserView: FC = () => {
     );
   };
   /** => content */
+  console.log('loading:', stateUser.detail.loading);
   const content = () => {
     if (stateUser.detail.loading) {
       return <LoadingPage />;
