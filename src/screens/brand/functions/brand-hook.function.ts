@@ -1,12 +1,11 @@
-/** === IMPORT PACKAGE HERE === */
-// import React from 'react';
+/** === IMPORT PACKAGES === */
 import { useDispatch } from 'react-redux';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
-/** === FUNCTION === */
-/** === call fetch === */
-const callList = (
+/** === FUNCTIONS === */
+/** === Fetch Brand Related === */
+const callProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
   skip: number,
@@ -18,18 +17,19 @@ const callList = (
     limit,
   });
 };
-/** => brand action */
-const useBrandAction = () => {
+
+const useBrandListAction = () => {
   const dispatch = useDispatch();
   const limit = 10;
+
   return {
-    list: (contextDispatch: (action: any) => any) => {
+    fetch: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.brandListReset());
-      dispatch(callList(contextDispatch, true, 0, limit));
+      dispatch(callProcessAction(contextDispatch, true, 0, limit));
     },
     refresh: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.brandListRefresh());
-      dispatch(callList(contextDispatch, true, 0, limit));
+      dispatch(callProcessAction(contextDispatch, true, 0, limit));
     },
     loadMore: (
       contextDispatch: (action: any) => any,
@@ -37,7 +37,9 @@ const useBrandAction = () => {
     ) => {
       if (list.data.length < list.total) {
         contextDispatch(Actions.brandListLoadMore());
-        dispatch(callList(contextDispatch, false, list.skip + limit, limit));
+        dispatch(
+          callProcessAction(contextDispatch, false, list.skip + limit, limit),
+        );
       }
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -45,5 +47,5 @@ const useBrandAction = () => {
     },
   };
 };
-/** === EXPORT === */
-export { useBrandAction };
+
+export { useBrandListAction };
