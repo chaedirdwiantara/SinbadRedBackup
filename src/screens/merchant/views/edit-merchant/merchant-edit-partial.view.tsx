@@ -245,8 +245,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
-    console.log('data:', stateUser.detail.data?.ownerData.info);
-
     switch (props.type) {
       case 'merchantOwnerName':
         return ownerName.value === ownerData?.name;
@@ -259,7 +257,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantOwnerIdNo':
         return errorIdNumber || noKtp.value === ownerData?.idNo;
       case 'merchantOwnerTaxNo':
-        return noNPWP.value === ownerData?.taxNo;
+        return errorTaxNumber || noNPWP.value === ownerData?.taxNo;
       case 'merchantOwnerPhoneNo':
         return (
           stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
