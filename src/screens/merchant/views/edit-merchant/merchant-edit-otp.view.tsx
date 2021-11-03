@@ -98,13 +98,28 @@ const OTPContent: React.FC<Props> = (props) => {
     storeDetailAction.detail(dispatchUser, { id: '3' });
   };
 
+  const backFunc = () => {
+    console.log(type);
+    if (type === 'email') {
+      changeEmailAction.resetVerificationEmail(dispatchSupplier);
+      changeEmailAction.reset(dispatchSupplier);
+    } else if (type === 'mobilePhone') {
+      changeMobilePhoneAction.resetChangeMobilePhone(dispatchSupplier);
+      changeMobilePhoneAction.resetVerificationMobilePhone(dispatchSupplier);
+    } else if (type === 'bankAccount') {
+      changeBankAccountAction.resetChangeBankAccount(dispatchSupplier);
+      changeBankAccountAction.resetVerificationBankAccount(dispatchSupplier);
+    }
+    NavigationAction.back();
+  };
+
   /** === VIEW === */
   const header = () => {
     return (
       <SnbTopNav.Type3
         type="white"
         title={'Kode Verifikasi'}
-        backAction={() => NavigationAction.back()}
+        backAction={() => backFunc()}
       />
     );
   };

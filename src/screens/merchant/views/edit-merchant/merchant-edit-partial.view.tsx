@@ -4,7 +4,12 @@ import {
   SnbTextFieldSelect,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, ToastAndroid } from 'react-native';
+import {
+  ScrollView,
+  View,
+  ToastAndroid,
+  KeyboardAvoidingView,
+} from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -240,17 +245,26 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
+    console.log('data:', stateUser.detail.data?.ownerData.info);
+
     switch (props.type) {
       case 'merchantOwnerName':
         return ownerName.value === ownerData?.name;
       case 'merchantOwnerEmail':
-        return ownerEmail.value === ownerData?.email || emailIsNotValid;
+        return (
+          (stateUser.detail.data?.ownerData.info.isEmailVerified &&
+            ownerEmail.value === ownerData?.email) ||
+          emailIsNotValid
+        );
       case 'merchantOwnerIdNo':
         return errorIdNumber || noKtp.value === ownerData?.idNo;
       case 'merchantOwnerTaxNo':
         return noNPWP.value === ownerData?.taxNo;
       case 'merchantOwnerPhoneNo':
-        return mobilePhone.value === ownerData?.mobilePhone;
+        return (
+          stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
+          mobilePhone.value === ownerData?.mobilePhone
+        );
       case 'merchantAccountName':
         return merchantName.value === storeData?.storeAccount.name;
       case 'merchantAccountPhoneNo':
@@ -533,10 +547,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
-        {switchView()}
-      </ScrollView>
-      {renderButton()}
+      <KeyboardAvoidingView behavior={'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
+          {switchView()}
+        </ScrollView>
+        {renderButton()}
+      </KeyboardAvoidingView>
     </View>
   );
 };
