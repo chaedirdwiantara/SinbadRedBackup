@@ -1,7 +1,7 @@
 import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
-import { setUserFCM } from '@core/functions/firebase/fcm-firestore';
+import { setUserFCM } from '@core/functions/firebase/fcm-firestore.function';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (

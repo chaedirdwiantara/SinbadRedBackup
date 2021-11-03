@@ -1,8 +1,11 @@
-import { ProductView } from '@screen/product/views';
+import { ProductView, ProductDetailView } from '@screen/product/views';
 
 const ProductNav = {
   ProductView: {
     component: ProductView,
+  },
+  ProductDetailView: {
+    component: ProductDetailView,
   },
 };
 
