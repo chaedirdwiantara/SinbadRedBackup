@@ -53,6 +53,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => discount list */
   const renderDiscountList = () => {
+    if (verificationOrderDetailData?.promoProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
@@ -200,6 +203,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => bonus list */
   const renderBonusList = () => {
+    if (verificationOrderDetailData?.bonusProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
@@ -238,6 +244,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => non-discount list */
   const renderNonDiscountList = () => {
+    if (verificationOrderDetailData?.nonPromoProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
