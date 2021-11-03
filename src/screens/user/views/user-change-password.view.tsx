@@ -63,14 +63,17 @@ const UserChangePasswordView: FC = () => {
   }, [stateUser.update]);
 
   useEffect(() => {
-    if (dataNewPassword === dataConfirmNewPassword) {
+    if (
+      dataNewPassword === dataConfirmNewPassword ||
+      dataConfirmNewPassword === ''
+    ) {
       setVerifyPassword(true);
       setErrorChangePassword(false);
       setErrorMessage('');
     } else {
       setVerifyPassword(false);
       setErrorChangePassword(true);
-      setErrorMessage('kata sandi baru tidak sesuai format');
+      setErrorMessage('Konfirmasi kata sandi baru tidak sesuai');
     }
   }, [dataNewPassword, dataConfirmNewPassword]);
 

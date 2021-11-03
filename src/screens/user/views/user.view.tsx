@@ -11,6 +11,7 @@ import {
   SnbCardMultiButtonType1,
   SnbCardButtonType2,
   SnbSvgIcon,
+  SnbTextSeeMoreType1,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -75,7 +76,11 @@ const UserView: FC = () => {
           <Image source={source} style={UserStyles.image} />
         </View>
         <View style={UserStyles.userInfo}>
-          <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+          <View style={{ marginLeft: -18 }}>
+            <SnbTextSeeMoreType1 line={1}>
+              <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+            </SnbTextSeeMoreType1>
+          </View>
           <SnbText.C1 color={color.white}>
             Kelengkapan profil {countPercentageProfileComplete()}%
           </SnbText.C1>
