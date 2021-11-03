@@ -99,7 +99,6 @@ const OTPContent: React.FC<Props> = (props) => {
   };
 
   const backFunc = () => {
-    console.log(type);
     if (type === 'email') {
       changeEmailAction.resetVerificationEmail(dispatchSupplier);
       changeEmailAction.reset(dispatchSupplier);
