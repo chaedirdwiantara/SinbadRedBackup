@@ -155,9 +155,14 @@ export const useSortIndex = (initialIndex: number | null) => {
   return { activeIndex, setActiveSortIndex };
 };
 
-export const usePriceRangeFilter = () => {
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
+export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
+  const filterIsApplied = appliedFilterQuery !== null;
+  const [minPrice, setMinPrice] = useState(
+    filterIsApplied ? appliedFilterQuery.minPrice : 0,
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    filterIsApplied ? appliedFilterQuery.maxPrice : 0,
+  );
 
   const resetValues = () => {
     setMinPrice(0);
