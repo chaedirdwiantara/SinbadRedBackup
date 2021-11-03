@@ -8,25 +8,23 @@ import ProductList from '@core/components/product/list';
 /** === IMPORT FUNCTIONS === */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
-/** === IMPORT TYPE === */
-import * as models from '@models';
 /** === TYPES === */
-type BrandProductRouteParams = {
-  BrandProduct: {
-    brand: models.BrandListSuccessProps;
+type SearchProductRouteParams = {
+  SearchProduct: {
+    keyword: string;
   };
 };
 
-type BrandProductRouteProps = RouteProp<
-  BrandProductRouteParams,
-  'BrandProduct'
+type SearchProductRouteProps = RouteProp<
+  SearchProductRouteParams,
+  'SearchProduct'
 >;
 /** === COMPONENT === */
-const BrandProductView: FC = () => {
+const SearchProductView: FC = () => {
   /** === HOOKS === */
   const {
-    params: { brand },
-  } = useRoute<BrandProductRouteProps>();
+    params: { keyword },
+  } = useRoute<SearchProductRouteProps>();
   const { fetch, refresh, loadMore } = useProductListActions();
   const {
     stateProduct: { list: productListState },
@@ -35,7 +33,7 @@ const BrandProductView: FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetch(dispatchProduct, { brandId: brand.id });
+      fetch(dispatchProduct, { keyword });
     }, []),
   );
   /** === VIEW === */
@@ -44,18 +42,18 @@ const BrandProductView: FC = () => {
       <View style={{ flex: 1 }}>
         <ProductList
           products={productListState.data}
-          headerTitle={brand.name}
-          activeBrandId={brand.id}
+          headerType="search"
+          activeKeyword={keyword}
           isRefreshing={productListState.refresh}
           onFetch={(queryOptions) =>
             fetch(dispatchProduct, {
-              brandId: brand.id,
+              keyword,
               ...queryOptions,
             })
           }
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
-              brandId: brand.id,
+              keyword,
               ...queryOptions,
             })
           }
@@ -66,7 +64,7 @@ const BrandProductView: FC = () => {
                 skip: productListState.skip,
                 canLoadMore: productListState.canLoadMore,
               },
-              { brandId: brand.id, ...queryOptions },
+              { keyword, ...queryOptions },
             )
           }
         />
@@ -75,4 +73,4 @@ const BrandProductView: FC = () => {
   );
 };
 
-export default BrandProductView;
+export default SearchProductView;

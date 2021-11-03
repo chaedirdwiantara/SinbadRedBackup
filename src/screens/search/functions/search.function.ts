@@ -1,9 +1,12 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT FUNCTION === */
 import { NavigationAction } from '@navigation';
-/** === FUNCTION === */
-/** => go back */
+/** === FUNCTIONS === */
 const goBack = () => {
   NavigationAction.back();
 };
 
-export { goBack };
+const goToProduct = (keyword: string) => {
+  NavigationAction.navigate('SearchProductView', { keyword });
+};
+
+export { goBack, goToProduct };
