@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSelector } from 'react-redux';
 import { enableScreens } from 'react-native-screens';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { HomeView } from '@screen/home/views';
 import { OmsHistoryView } from '@screen/oms/views';
 import { HelpView } from '@screen/help/views';
@@ -30,7 +30,7 @@ const TabNavigator = () => {
         allowFontScaling: true,
         activeTintColor: colors.red50,
         inactiveTintColor: colors.black40,
-        style: { height: 54 },
+        style: { height: Platform.OS === 'ios' ? '10%' : 54 },
       }}>
       <Screen
         name="HomeView"
