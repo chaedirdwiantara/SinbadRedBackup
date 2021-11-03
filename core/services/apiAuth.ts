@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE === */
 import { set, isEmpty } from 'lodash';
 import apiHost from './apiHost';
+import { uniqueId } from '@core/functions/global/device-data';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
@@ -14,7 +15,8 @@ const apiAuth = async <T>(
   const headers = {};
   set(headers, 'Accept', 'application/json');
   set(headers, 'Content-Type', 'application/json');
-  set(headers, 'X-Platform', 'sinbad-app');
+  set(headers, 'x-platform', 'sinbad-app');
+  set(headers, 'x-device-id', uniqueId);
   /** === SET BODY === */
   const reqBody = {
     method,
