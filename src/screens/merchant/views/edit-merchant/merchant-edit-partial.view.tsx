@@ -4,7 +4,12 @@ import {
   SnbTextFieldSelect,
   SnbButton,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, ToastAndroid } from 'react-native';
+import {
+  ScrollView,
+  View,
+  ToastAndroid,
+  KeyboardAvoidingView,
+} from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -73,7 +78,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.merchantEdit.data !== null
     ) {
       ToastAndroid.showWithGravityAndOffset(
-        'Berhasil Update Data',
+        'Data Berhasil Diperbaharui',
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -244,13 +249,20 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantOwnerName':
         return ownerName.value === ownerData?.name;
       case 'merchantOwnerEmail':
-        return ownerEmail.value === ownerData?.email || emailIsNotValid;
+        return (
+          (stateUser.detail.data?.ownerData.info.isEmailVerified &&
+            ownerEmail.value === ownerData?.email) ||
+          emailIsNotValid
+        );
       case 'merchantOwnerIdNo':
         return errorIdNumber || noKtp.value === ownerData?.idNo;
       case 'merchantOwnerTaxNo':
-        return noNPWP.value === ownerData?.taxNo;
+        return errorTaxNumber || noNPWP.value === ownerData?.taxNo;
       case 'merchantOwnerPhoneNo':
-        return mobilePhone.value === ownerData?.mobilePhone;
+        return (
+          stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
+          mobilePhone.value === ownerData?.mobilePhone
+        );
       case 'merchantAccountName':
         return merchantName.value === storeData?.storeAccount.name;
       case 'merchantAccountPhoneNo':
@@ -361,7 +373,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
-          placeholder={'Masukan No.KTP maks. 16 Digit'}
+          placeholder={'Masukan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
           value={noKtp.value}
           onChangeText={(text) => {
@@ -371,7 +383,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           clearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
           maxLength={16}
-          valMsgError={'Pastikan No.KTP 16 Digit'}
+          valMsgError={'Pastikan Nomor KTP 16 Digit'}
         />
       </View>
     );
@@ -382,7 +394,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
-          placeholder={'Masukan No.NPWP maks.15 Digit'}
+          placeholder={'Masukan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
           value={noNPWP.value}
           onChangeText={(text) => {
@@ -390,7 +402,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             checkTaxNoFormat(cleanNumber);
           }}
           clearText={() => noNPWP.setValue('')}
-          valMsgError={'Pastikan No.NPWP 15 Digit'}
+          valMsgError={'Pastikan Nomor NPWP 15 Digit'}
           maxLength={15}
           keyboardType={'number-pad'}
         />
@@ -449,13 +461,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Ukuran Toko (m²)'}
+            labelText={'Ukuran Toko'}
             placeholder={'Masukan Ukuran Toko'}
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
+            rightText={'m²'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -532,10 +545,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
-        {switchView()}
-      </ScrollView>
-      {renderButton()}
+      <KeyboardAvoidingView behavior={'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
+          {switchView()}
+        </ScrollView>
+        {renderButton()}
+      </KeyboardAvoidingView>
     </View>
   );
 };

@@ -21,6 +21,39 @@ const UserChangePasswordView: FC = () => {
     UserHookFunc.useConfirmNewPassword();
   const changePasswordAction = UserHookFunc.useChangePassword();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  const [secureOldPassword, setSecureOldPassword] = useState(true);
+  const [secureNewPassword, setSecureNewPassword] = useState(true);
+  const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [verifyPassword, setVerifyPassword] = useState(false);
+  const [errorOldPassword, setErrorOldPassword] = useState(false);
+  const [errorNewPassword, setErrorNewPassword] = useState(false);
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState(false);
+  const [errorOldPasswordMessage, setErrorOldPasswordMessage] = useState('');
+  const [errorNewPasswordMessage, setErrorNewPasswordMessage] = useState('');
+  const [errorConfirmPasswordMessage, setErrorConfirmPasswordMessage] =
+    useState('');
+  /** === FUNCTION FOR HOOK === */
+  const textOldPassword = (oldPassword: string) => {
+    setDataOldPassword(oldPassword);
+  };
+  const textNewPassword = (newPassword: string) => {
+    setDataNewPassword(newPassword);
+  };
+  const textConfirmNewPassword = (confirmNewPassword: string) => {
+    setDataConfirmNewPassword(confirmNewPassword);
+  };
+  /** === FUNCTION === */
+  const confirm = () => {
+    changePasswordAction.changePassword(dispatchUser, {
+      data: {
+        oldPassword: dataOldPassword,
+        newPassword: dataNewPassword,
+        confirmNewPassword: dataConfirmNewPassword,
+      },
+    });
+  };
+  //HANDLE ERROR
   useEffect(() => {
     if (stateUser.update.data !== null) {
       setOpenConfirm(false);
@@ -46,57 +79,49 @@ const UserChangePasswordView: FC = () => {
         changePasswordAction.resetChangePassword(dispatchUser);
       } else if (stateUser.update.error.code === 10011) {
         setOpenConfirm(false);
-        setErrorChangePassword(true);
-        setErrorMessage(
+        setErrorNewPassword(true);
+        setErrorNewPasswordMessage(
           'Kata sandi baru tidak boleh sama dengan kata sandi sekarang',
         );
-      } else if (stateUser.update.error.code === 10012) {
+      } else if (
+        stateUser.update.error.code === 10012 ||
+        stateUser.update.error.code === 10029
+      ) {
         setOpenConfirm(false);
-        setErrorChangePassword(true);
-        setErrorMessage('Kata sandi sekarang salah');
+        setErrorOldPassword(true);
+        setErrorOldPasswordMessage('Kata sandi sekarang salah');
       } else if (stateUser.update.error.code === 10013) {
         setOpenConfirm(false);
-        setErrorChangePassword(true);
-        setErrorMessage('kata sandi baru tidak sesuai format');
+        setErrorNewPassword(true);
+        setErrorNewPasswordMessage('Kata sandi baru tidak sesuai format');
+      } else if (stateUser.update.error.code === 10031) {
+        setOpenConfirm(false);
+        setErrorNewPassword(true);
+        setErrorNewPasswordMessage('Kata sandi baru tidak sesuai format');
+      } else if (stateUser.update.error.code === 10033) {
+        setOpenConfirm(false);
+        setErrorConfirmPassword(true);
+        setErrorConfirmPasswordMessage(
+          'Konfirmasi kata sandi baru tidak sesuai format',
+        );
       }
     }
   }, [stateUser.update]);
 
   useEffect(() => {
-    if (dataNewPassword === dataConfirmNewPassword) {
+    if (
+      dataNewPassword === dataConfirmNewPassword ||
+      dataConfirmNewPassword === ''
+    ) {
       setVerifyPassword(true);
+      setErrorConfirmPassword(false);
+      setErrorConfirmPasswordMessage('');
     } else {
       setVerifyPassword(false);
+      setErrorConfirmPassword(true);
+      setErrorConfirmPasswordMessage('Konfirmasi kata sandi baru tidak sesuai');
     }
   }, [dataNewPassword, dataConfirmNewPassword]);
-
-  const [secureOldPassword, setSecureOldPassword] = useState(true);
-  const [secureNewPassword, setSecureNewPassword] = useState(true);
-  const [secureConfirmPassword, setSecureConfirmPassword] = useState(true);
-  const [openConfirm, setOpenConfirm] = useState(false);
-  const [errorChangePassword, setErrorChangePassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [verifyPassword, setVerifyPassword] = useState(false);
-  /** === FUNCTION FOR HOOK === */
-  const textOldPassword = (oldPassword: string) => {
-    setDataOldPassword(oldPassword);
-  };
-  const textNewPassword = (newPassword: string) => {
-    setDataNewPassword(newPassword);
-  };
-  const textConfirmNewPassword = (confirmNewPassword: string) => {
-    setDataConfirmNewPassword(confirmNewPassword);
-  };
-  /** === FUNCTION === */
-  const confirm = () => {
-    changePasswordAction.changePassword(dispatchUser, {
-      data: {
-        oldPassword: dataOldPassword,
-        newPassword: dataNewPassword,
-        confirmNewPassword: dataConfirmNewPassword,
-      },
-    });
-  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -132,15 +157,19 @@ const UserChangePasswordView: FC = () => {
             boxIndicator
             labelText="Kata Sandi Sekarang"
             value={dataOldPassword}
-            type={'default'}
+            type={errorOldPassword ? 'error' : 'default'}
             placeholder="Masukkan kata sandi sekarang"
-            onChangeText={(text) => textOldPassword(text)}
+            onChangeText={(text) => {
+              textOldPassword(text);
+              setErrorOldPassword(false);
+            }}
             clearText={() => setDataOldPassword('')}
             maxLength={40}
             keyboardType="default"
             suffixIconName={secureOldPassword ? 'visibility' : 'visibility_off'}
             secureTextEntry={secureOldPassword}
             suffixAction={() => setSecureOldPassword(!secureOldPassword)}
+            valMsgError={errorOldPasswordMessage}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -149,15 +178,19 @@ const UserChangePasswordView: FC = () => {
             boxIndicator
             labelText="Kata Sandi Baru"
             value={dataNewPassword}
-            type={'default'}
+            type={errorNewPassword ? 'error' : 'default'}
             placeholder="Masukkan kata sandi baru"
-            onChangeText={(text) => textNewPassword(text)}
+            onChangeText={(text) => {
+              textNewPassword(text);
+              setErrorNewPassword(false);
+            }}
             clearText={() => setDataNewPassword('')}
             maxLength={40}
             keyboardType="default"
             suffixIconName={secureNewPassword ? 'visibility' : 'visibility_off'}
             secureTextEntry={secureNewPassword}
             suffixAction={() => setSecureNewPassword(!secureNewPassword)}
+            valMsgError={errorNewPasswordMessage}
           />
         </View>
         <SnbTextField.Text
@@ -165,12 +198,15 @@ const UserChangePasswordView: FC = () => {
           boxIndicator
           labelText="Konfirmasi Kata Sandi Baru"
           value={dataConfirmNewPassword}
-          type={errorChangePassword ? 'error' : 'default'}
+          type={errorConfirmPassword ? 'error' : 'default'}
           placeholder="Masukkan ulang kata sandi baru"
-          onChangeText={(text) => textConfirmNewPassword(text)}
+          onChangeText={(text) => {
+            textConfirmNewPassword(text);
+            setErrorConfirmPassword(false);
+          }}
           clearText={() => setDataConfirmNewPassword('')}
           maxLength={40}
-          valMsgError={errorMessage}
+          valMsgError={errorConfirmPasswordMessage}
           keyboardType="default"
           suffixIconName={
             secureConfirmPassword ? 'visibility' : 'visibility_off'

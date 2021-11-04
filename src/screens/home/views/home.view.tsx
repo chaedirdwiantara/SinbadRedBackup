@@ -11,11 +11,13 @@ import { CategoryHomeView } from '../../category/views';
 /** === IMPORT FUNCTION HERE === */
 import { HomeHookFunc } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
+import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 /** === COMPONENT === */
 const HomeView: React.FC = () => {
   /** === HOOK === */
   const { action, state } = HomeHookFunc.useHeaderChange();
   useGetTokenNotLogin();
+  setFlagByDeviceId();
   /** === FUNCTION FOR HOOK === */
   const changeHeader = (height: number) => {
     height > 100 ? action(true) : action(false);

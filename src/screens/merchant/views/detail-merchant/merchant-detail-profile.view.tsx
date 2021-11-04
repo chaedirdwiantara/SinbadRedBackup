@@ -107,13 +107,36 @@ const MerchantDetailProfileView: FC = () => {
       </View>
     );
   };
+  /** === label === */
+  const renderLabel = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: color.green50,
+          alignSelf: 'center',
+          marginHorizontal: 8,
+          flexDirection: 'row',
+          paddingHorizontal: 5,
+          paddingVertical: 2,
+          borderRadius: 10,
+        }}>
+        <View style={{ alignSelf: 'center' }}>
+          <SnbIcon name={'check'} size={10} color={color.white} />
+        </View>
+        <View style={{ marginLeft: 5 }}>
+          <SnbText.C1 color={color.white}>Terverifikasi</SnbText.C1>
+        </View>
+      </View>
+    );
+  };
   /** === RENDER CONTENT SECTION === */
   const renderContentSection = (data: any) => {
     return (
       <View style={MerchantStyles.boxContent}>
         <View style={{ width: '85%' }}>
-          <View style={{ marginBottom: 6 }}>
+          <View style={{ marginBottom: 6, flexDirection: 'row' }}>
             <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
+            {data.label ? renderLabel() : null}
           </View>
           <SnbText.B3 color={data.success ? color.green50 : color.black100}>
             {data.value}
@@ -154,6 +177,7 @@ const MerchantDetailProfileView: FC = () => {
           action: ownerData?.profile.email ? 'ubah' : 'tambah',
           type: 'merchantOwnerEmail',
           title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
+          label: ownerData?.info.isEmailVerified,
         })}
         {renderContentSection({
           key: 'Nomor Handphone',
@@ -163,6 +187,7 @@ const MerchantDetailProfileView: FC = () => {
           title: ownerData?.profile.mobilePhone
             ? 'Ubah Nomor Handphone'
             : 'Tambah Nomor Handphone',
+          label: ownerData?.info.isMobilePhoneVerified,
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
@@ -174,6 +199,7 @@ const MerchantDetailProfileView: FC = () => {
           title: ownerData?.profile.bankAccount.bankAccountNo
             ? 'Ubah Rekening Bank'
             : 'Tambah Rekening Bank',
+          label: ownerData?.info.isBankAccountVerified,
         })}
         {renderContentSection({
           key: 'Nomor Kartu Tanda Penduduk (KTP)',
