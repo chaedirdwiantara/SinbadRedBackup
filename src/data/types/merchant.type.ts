@@ -1,11 +1,4 @@
 /** === THIS FOR EXTERNAL USED === */
-/** => list */
-export const SUPPLIER_LIST_PROCESS = 'SupplierListProcess';
-export const SUPPLIER_LIST_SUCCESS = 'SupplierListSuccess';
-export const SUPPLIER_LIST_FAILED = 'SupplierListFailed';
-export const SUPPLIER_LIST_REFRESH = 'SupplierListRefresh';
-export const SUPPLIER_LIST_RESET = 'SupplierListReset';
-export const SUPPLIER_LIST_LOADMORE = 'SupplierListLoadMore';
 /** => edit merchant */
 export const MERCHANT_EDIT_PROCESS = 'MerchantEditProcess';
 export const MERCHANT_EDIT_SUCCESS = 'MerchantEditSuccess';
