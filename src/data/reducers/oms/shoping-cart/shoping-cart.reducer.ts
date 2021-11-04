@@ -11,7 +11,7 @@ export type ShopingCartInitialProps = models.ShopingCartProps;
 interface ShopingCartState {
   cart: CartViewInitialProps;
 }
-/** INITIAL STATE */
+/** === INITIAL STATE === */
 export const shopingCartInitialState = {
   cart: cartViewInitialState,
 };

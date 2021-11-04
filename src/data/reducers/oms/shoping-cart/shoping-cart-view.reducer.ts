@@ -10,6 +10,7 @@ export const cartViewInitialState: CartViewInitialProps = {
   data: null,
   error: null,
   loading: false,
+  refresh: false,
 };
 /** === REDUCER === */
 export const cartViewReducer = simplifyReducer(cartViewInitialState, {
