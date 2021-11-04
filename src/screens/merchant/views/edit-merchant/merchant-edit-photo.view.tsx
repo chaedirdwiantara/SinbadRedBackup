@@ -71,7 +71,7 @@ const MerchantEditPhotoView = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const { editProfile, reset } = MerchantHookFunc.useEditProfile();
+  const { editProfile } = MerchantHookFunc.useEditProfile();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
