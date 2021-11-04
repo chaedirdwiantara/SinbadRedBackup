@@ -109,6 +109,8 @@ const MerchantEditPhotoView = () => {
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
+      reset(dispatchSupplier);
+      editMerchantAction.reset(dispatchSupplier);
     };
   }, []);
 
@@ -121,7 +123,7 @@ const MerchantEditPhotoView = () => {
 
     if (stateGlobal.uploadImage.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
-        `Upload Foto ${params.type.toUpperCase()} Gagal`,
+        `Upload Foto ${setType()} Gagal`,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -133,7 +135,7 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
       ToastAndroid.showWithGravityAndOffset(
-        `Berhasil Update Foto ${params.type.toUpperCase()}`,
+        `Berhasil Update Foto ${setType()}`,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -141,12 +143,13 @@ const MerchantEditPhotoView = () => {
       );
       goBack();
       reset(dispatchSupplier);
+      editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
 
     if (stateMerchant.profileEdit.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
-        `Update Foto ${params.type.toUpperCase()} Gagal`,
+        `Update Foto ${setType()} Gagal`,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -158,7 +161,7 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     if (stateMerchant.merchantEdit.data !== null) {
       ToastAndroid.showWithGravityAndOffset(
-        `Berhasil Update Foto ${params.type.toUpperCase()}`,
+        `Berhasil Update Foto ${setType()}`,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -166,12 +169,13 @@ const MerchantEditPhotoView = () => {
       );
       goBack();
       reset(dispatchSupplier);
+      editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
-        `Update Foto ${params.type.toUpperCase()} Gagal`,
+        `Update Foto ${setType()} Gagal`,
         ToastAndroid.LONG,
         ToastAndroid.TOP,
         0,
@@ -205,6 +209,21 @@ const MerchantEditPhotoView = () => {
           data,
         });
         break;
+      }
+    }
+  };
+
+  const setType = () => {
+    switch (params?.type) {
+      case 'npwp':
+      case 'ktp': {
+        return params.type.toUpperCase();
+      }
+      case 'selfie': {
+        return 'Selfie';
+      }
+      case 'store': {
+        return 'Toko';
       }
     }
   };
@@ -264,19 +283,14 @@ const MerchantEditPhotoView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3
-        type="red"
-        title={`Ubah ${params?.title}`}
-        backAction={goBack}
-      />
+      <SnbTopNav.Type3 type="red" title={params?.title} backAction={goBack} />
       <View style={{ flex: 1 }}>
         {renderIF(
           isImageAvailable,
           renderImagePreview(),
           <SnbUploadPhotoRules
-            rulesTitle={`Pastikan Foto ${params.type.toUpperCase()} Anda Sesuai Ketentuan`}
+            rulesTitle={`Pastikan Foto ${setType()} Anda Sesuai Ketentuan`}
             imgSrc={setImage(params.type)}
-            title={`Unggah Foto ${params.type.toUpperCase()}`}
             rules={setRules(params.type)}
             action={() => openCamera(params?.type)}
           />,
