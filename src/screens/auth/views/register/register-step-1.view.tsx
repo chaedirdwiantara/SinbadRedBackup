@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { setErrorMessage, useInput, useMerchant } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import {
   color,
@@ -22,6 +22,9 @@ const Content: React.FC = () => {
   const idNumber = useInput();
   const taxNumber = useInput();
   const email = useInput();
+  const [errorIdNumber, setErrorIdNumber] = useState(false);
+  const [errorTaxNumber, setErrorTaxNumber] = useState(false);
+  const [emailIsNotValid, setEmailIsNotValid] = useState(false);
 
   React.useEffect(() => {
     if (checkEmailAvailability.data !== null) {
@@ -39,6 +42,30 @@ const Content: React.FC = () => {
       email.setMessageError(setErrorMessage(checkEmailAvailability.error.code));
     }
   }, [checkEmailAvailability]);
+
+  React.useEffect(() => {
+    if (idNumber.value.length === 16 || idNumber.value === '') {
+      setErrorIdNumber(false);
+    } else {
+      setErrorIdNumber(true);
+    }
+    if (taxNumber.value.length === 15 || taxNumber.value === '') {
+      setErrorTaxNumber(false);
+    } else {
+      setErrorTaxNumber(true);
+    }
+  }, [idNumber.value, taxNumber.value]);
+
+  /** VALIDATE EMAIL */
+  const validateEmail = (data: string) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(data) || !data) {
+      setEmailIsNotValid(false);
+    } else {
+      setEmailIsNotValid(true);
+    }
+    email.setValue(data);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -64,9 +91,15 @@ const Content: React.FC = () => {
               labelText="Nama Pemilik Toko"
               placeholder="Masukkan nama pemilik toko"
               mandatory
+              maxLength={64}
             />
           </View>
-          <View style={{ height: 92, padding: 16 }}>
+          <View
+            style={{
+              height: 92,
+              padding: 16,
+              marginBottom: errorIdNumber ? 8 : 0,
+            }}>
             <SnbTextField.Text
               {...idNumber}
               mandatory
@@ -74,24 +107,35 @@ const Content: React.FC = () => {
               labelText="Nomor KTP"
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
+              type={errorIdNumber ? 'error' : 'default'}
+              valMsgError={'Pastikan Nomor KTP 16 Digit'}
             />
           </View>
-          <View style={{ height: 92, padding: 16 }}>
+          <View
+            style={{
+              height: 92,
+              padding: 16,
+              marginBottom: errorTaxNumber ? 8 : 0,
+            }}>
             <SnbTextField.Text
               {...taxNumber}
               labelText="Nomor NPWP Pemilik"
               maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
+              valMsgError={'Pastikan Nomor NPWP 15 Digit'}
+              type={errorTaxNumber ? 'error' : 'default'}
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
             <SnbTextField.Text
               {...email}
-              maxLength={32}
               labelText="Alamat Email Pemilik"
               placeholder="Masukkan alamat email anda"
               keyboardType="email-address"
+              onChangeText={(text) => validateEmail(text)}
+              type={emailIsNotValid ? 'error' : 'default'}
+              valMsgError={'Pastikan email yang Anda masukkan benar'}
             />
           </View>
         </ScrollView>
@@ -119,7 +163,13 @@ const Content: React.FC = () => {
           type="primary"
           shadow
           loading={checkEmailAvailability.loading}
-          disabled={name.value === '' || idNumber.value === ''}
+          disabled={
+            name.value === '' ||
+            idNumber.value === '' ||
+            errorIdNumber ||
+            errorTaxNumber ||
+            emailIsNotValid
+          }
         />
       </View>
     </View>
