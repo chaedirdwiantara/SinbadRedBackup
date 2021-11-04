@@ -373,7 +373,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
-          placeholder={'Masukan No.KTP maks. 16 Digit'}
+          placeholder={'Masukan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
           value={noKtp.value}
           onChangeText={(text) => {
@@ -383,7 +383,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           clearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
           maxLength={16}
-          valMsgError={'Pastikan No.KTP 16 Digit'}
+          valMsgError={'Pastikan Nomor KTP 16 Digit'}
         />
       </View>
     );
@@ -394,7 +394,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
-          placeholder={'Masukan No.NPWP maks.15 Digit'}
+          placeholder={'Masukan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
           value={noNPWP.value}
           onChangeText={(text) => {
@@ -402,7 +402,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             checkTaxNoFormat(cleanNumber);
           }}
           clearText={() => noNPWP.setValue('')}
-          valMsgError={'Pastikan No.NPWP 15 Digit'}
+          valMsgError={'Pastikan Nomor NPWP 15 Digit'}
           maxLength={15}
           keyboardType={'number-pad'}
         />
