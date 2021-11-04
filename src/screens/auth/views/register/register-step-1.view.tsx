@@ -22,8 +22,6 @@ const Content: React.FC = () => {
   const idNumber = useInput();
   const taxNumber = useInput();
   const email = useInput();
-  const [errorIdNumber, setErrorIdNumber] = useState(false);
-  const [errorTaxNumber, setErrorTaxNumber] = useState(false);
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
 
   React.useEffect(() => {
@@ -45,16 +43,14 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (idNumber.value.length === 16 || idNumber.value === '') {
-      setErrorIdNumber(false);
+      idNumber.setMessageError('');
     } else {
-      setErrorIdNumber(true);
       idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
     }
     if (taxNumber.value.length === 15 || taxNumber.value === '') {
-      setErrorTaxNumber(false);
+      taxNumber.setMessageError('');
     } else {
-      setErrorTaxNumber(true);
-      idNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
+      taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
     }
   }, [idNumber.value, taxNumber.value]);
 
@@ -100,7 +96,7 @@ const Content: React.FC = () => {
             style={{
               height: 92,
               padding: 16,
-              marginBottom: errorIdNumber ? 8 : 0,
+              marginBottom: idNumber.valMsgError ? 8 : 0,
             }}>
             <SnbTextField.Text
               {...idNumber}
@@ -109,14 +105,13 @@ const Content: React.FC = () => {
               labelText="Nomor KTP"
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
-              type={errorIdNumber ? 'error' : 'default'}
             />
           </View>
           <View
             style={{
               height: 92,
               padding: 16,
-              marginBottom: errorTaxNumber ? 8 : 0,
+              marginBottom: taxNumber.valMsgError ? 8 : 0,
             }}>
             <SnbTextField.Text
               {...taxNumber}
@@ -124,7 +119,6 @@ const Content: React.FC = () => {
               maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
-              type={errorTaxNumber ? 'error' : 'default'}
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
@@ -166,8 +160,8 @@ const Content: React.FC = () => {
           disabled={
             name.value === '' ||
             idNumber.value === '' ||
-            errorIdNumber ||
-            errorTaxNumber ||
+            idNumber.valMsgError !== '' ||
+            taxNumber.valMsgError !== '' ||
             emailIsNotValid
           }
         />
