@@ -48,11 +48,13 @@ const Content: React.FC = () => {
       setErrorIdNumber(false);
     } else {
       setErrorIdNumber(true);
+      idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
     }
     if (taxNumber.value.length === 15 || taxNumber.value === '') {
       setErrorTaxNumber(false);
     } else {
       setErrorTaxNumber(true);
+      idNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
     }
   }, [idNumber.value, taxNumber.value]);
 
@@ -108,7 +110,6 @@ const Content: React.FC = () => {
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
               type={errorIdNumber ? 'error' : 'default'}
-              valMsgError={'Pastikan Nomor KTP 16 Digit'}
             />
           </View>
           <View
@@ -123,7 +124,6 @@ const Content: React.FC = () => {
               maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
-              valMsgError={'Pastikan Nomor NPWP 15 Digit'}
               type={errorTaxNumber ? 'error' : 'default'}
             />
           </View>
