@@ -12,8 +12,8 @@ import {
   SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack, goToHistoryDetail } from '@screen/history/functions';
-import { HistoryStyle } from '@screen/history/styles';
+import { goBack, goToHistoryDetail } from '../functions';
+import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];

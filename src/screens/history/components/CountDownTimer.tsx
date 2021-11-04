@@ -2,8 +2,8 @@ import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
 
-import { formatTime, useTimer } from '@screen/history/functions';
-import { HistoryStyle } from '@screen/history/styles';
+import { formatTime, useTimer } from '../functions';
+import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
   timeInSeconds: number;
