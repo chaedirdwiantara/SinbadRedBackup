@@ -6,6 +6,7 @@ import UserSaga from './user.saga';
 import MerchantSaga from './merchant.saga';
 import RegisterSaga from './register.saga';
 import VerificationOrderSaga from './oms/verification-order/verification-order.saga';
+import CartSaga from './oms/shoping-cart/shoping-cart.saga';
 import CategorySaga from './category/category.saga';
 import GlobalSaga from './global/global.saga';
 import PromoSaga from './promo.saga';
@@ -28,6 +29,7 @@ function* rootSaga() {
   yield all([fork(BrandSaga)]);
   yield all([fork(NotificationSaga)]);
   yield all([fork(ProductTagSaga)]);
+  yield all([fork(CartSaga)]);
 }
 
 export default rootSaga;
