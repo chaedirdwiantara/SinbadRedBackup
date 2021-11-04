@@ -53,6 +53,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => discount list */
   const renderDiscountList = () => {
+    if (verificationOrderDetailData?.promoProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
@@ -131,7 +134,7 @@ const OmsVerificationOrderView: FC = () => {
                       style={
                         VerificationOrderStyle.listItemProductDiscountName
                       }>
-                      <SnbText.B3>{item.promoSupplierName}</SnbText.B3>
+                      <SnbText.B3>{item.promoSellerName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
                       {toCurrency(item.promoAmount)}
@@ -159,7 +162,7 @@ const OmsVerificationOrderView: FC = () => {
                       style={
                         VerificationOrderStyle.listItemProductDiscountName
                       }>
-                      <SnbText.B3>{item.voucherSupplierName}</SnbText.B3>
+                      <SnbText.B3>{item.voucherSellerName}</SnbText.B3>
                     </View>
                     <SnbText.B3 color={color.green50}>
                       {toCurrency(item.voucherAmount)}
@@ -200,6 +203,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => bonus list */
   const renderBonusList = () => {
+    if (verificationOrderDetailData?.bonusProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>
@@ -230,7 +236,7 @@ const OmsVerificationOrderView: FC = () => {
           <View style={VerificationOrderStyle.listItemProductNameContainer}>
             <SnbText.B4>{item.bonusProductName}</SnbText.B4>
           </View>
-          <SnbText.C3>{item.promoSupplierName}</SnbText.C3>
+          <SnbText.C3>{item.promoSellerName}</SnbText.C3>
           <SnbText.C2>{`x${item.bonusQty} Pcs`}</SnbText.C2>
         </View>
       </View>
@@ -238,6 +244,9 @@ const OmsVerificationOrderView: FC = () => {
   };
   /** => non-discount list */
   const renderNonDiscountList = () => {
+    if (verificationOrderDetailData?.nonPromoProducts.length === 0) {
+      return null;
+    }
     return (
       <View>
         <View style={VerificationOrderStyle.listHeader}>

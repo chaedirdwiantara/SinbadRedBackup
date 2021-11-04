@@ -17,26 +17,26 @@ const goToVoucherCartListMore = ({
   voucherGroupName,
   voucherGroupType,
   selectedSinbadVoucher,
-  selectedSupplierVoucher,
+  selectedSellerVoucher,
 }: {
-  voucherList: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[];
+  voucherList: models.SinbadVoucherProps[] | models.SellerVoucherListProps[];
   voucherGroupName: string;
-  voucherGroupType: 'sinbad_voucher' | 'supplier_voucher';
+  voucherGroupType: 'sinbad_voucher' | 'seller_voucher';
   selectedSinbadVoucher: models.SinbadVoucherProps | null;
-  selectedSupplierVoucher: models.SupplierVoucherListProps[];
+  selectedSellerVoucher: models.SellerVoucherListProps[];
 }) => {
   NavigationAction.navigate('VoucherCartListMoreView', {
     voucherList,
     voucherGroupName,
     voucherGroupType,
     selectedSinbadVoucher,
-    selectedSupplierVoucher,
+    selectedSellerVoucher,
   });
 };
 /** => count potential discount */
 const countPotentialDiscount = (
   sinbadVoucher: models.SinbadVoucherProps | null,
-  supplierVouchers: models.SupplierVoucherListProps[],
+  sellerVouchers: models.SellerVoucherListProps[],
 ) => {
   let totalDiscount = 0;
   let totalSelectedVoucher = 0;
@@ -44,7 +44,7 @@ const countPotentialDiscount = (
     totalDiscount += sinbadVoucher.benefitRebate;
     totalSelectedVoucher += 1;
   }
-  supplierVouchers.map((item) => {
+  sellerVouchers.map((item) => {
     totalDiscount += item.benefitRebate;
     totalSelectedVoucher += 1;
   });

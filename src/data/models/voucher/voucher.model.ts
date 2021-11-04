@@ -17,12 +17,12 @@ export interface VoucherDataProps {
 /** === SELECTED VOUCHER DATA === */
 export interface selectedVoucherDataProps {
   sinbadVoucher: models.SinbadVoucherProps | null;
-  supplierVouchers: models.SupplierVoucherListProps[];
+  sellerVouchers: models.SellerVoucherListProps[];
 }
 /** === VOUCHER CART LIST === */
 export interface VoucherCartListProps {
   sinbadVouchers: SinbadVoucherProps[];
-  supplierVouchers: SupplierVoucherProps[];
+  sellerVouchers: SellerVoucherProps[];
 }
 export interface SinbadVoucherProps {
   voucherId: number;
@@ -32,12 +32,12 @@ export interface SinbadVoucherProps {
   expiredAt: string;
   remainingDay: number;
 }
-export interface SupplierVoucherProps {
+export interface SellerVoucherProps {
   invoiceGroupId: number;
   invoiceGroupName: string;
-  voucherList: SupplierVoucherListProps[];
+  voucherList: SellerVoucherListProps[];
 }
-export interface SupplierVoucherListProps {
+export interface SellerVoucherListProps {
   id: number;
   voucherId: number;
   voucherName: string;

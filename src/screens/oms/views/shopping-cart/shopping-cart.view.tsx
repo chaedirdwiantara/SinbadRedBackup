@@ -398,7 +398,67 @@ const OmsShoppingCartView: FC = () => {
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
       ok={() =>
-        verificationOrderCreate(dispatchVerificationOrder, { data: {} })
+        verificationOrderCreate(dispatchVerificationOrder, {
+          data: {
+            _id: 1,
+            data: [
+              {
+                invoiceGroupId: '1',
+                portfolioId: null,
+                brands: [
+                  {
+                    brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
+                    products: [
+                      {
+                        productId: '9536f526-2447-11ec-9621-0242ac130002',
+                        qty: 2,
+                        displayPrice: 201000,
+                        priceBeforeTax: 201000,
+                        priceAfterTax: 221100,
+                        warehouseId: 1,
+                      },
+                      {
+                        productId: '997fd26a-2447-11ec-9621-0242ac130002',
+                        qty: 1,
+                        displayPrice: 216000,
+                        priceBeforeTax: 216000,
+                        priceAfterTax: 237600,
+                        warehouseId: 1,
+                      },
+                      {
+                        productId: '19d816be-24db-11ec-9621-0242ac130002',
+                        qty: 2,
+                        displayPrice: 240000,
+                        priceBeforeTax: 240000,
+                        priceAfterTax: 264000,
+                        warehouseId: 1,
+                      },
+                      {
+                        productId: '32039060-24db-11ec-9621-0242ac130002',
+                        qty: 2,
+                        displayPrice: 204000,
+                        priceBeforeTax: 204000,
+                        priceAfterTax: 224400,
+                        warehouseId: 1,
+                      },
+                    ],
+                  },
+                ],
+                supplierId: 1,
+                channelId: 1,
+                groupId: 1,
+                typeId: 1,
+                clusterId: 1,
+              },
+            ],
+            isActiveStore: false,
+            voucherIds: [],
+            storeId: 1,
+            salesId: 1,
+            platform: 'sinbad_app',
+            userId: 1,
+          },
+        })
       }
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
       loading={stateVerificationOrder.create.loading}
@@ -427,7 +487,7 @@ const OmsShoppingCartView: FC = () => {
                       color={color.green50}>{`Potensi potongan ${toCurrency(
                       countPotentialDiscount(
                         voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.supplierVouchers,
+                        voucherData.dataVouchers.sellerVouchers,
                       ).totalDiscount,
                       {
                         withPrefix: false,
@@ -437,7 +497,7 @@ const OmsShoppingCartView: FC = () => {
                     <SnbText.C2 color={color.green50}>{`${
                       countPotentialDiscount(
                         voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.supplierVouchers,
+                        voucherData.dataVouchers.sellerVouchers,
                       ).totalSelectedVoucher
                     } Voucher terpilih`}</SnbText.C2>
                   </>
