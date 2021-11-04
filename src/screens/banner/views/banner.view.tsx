@@ -1,6 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
-import { TouchableOpacity, View, Image, FlatList } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -9,48 +15,35 @@ import {
   SnbIcon,
   SnbTextField,
 } from 'react-native-sinbad-ui';
-import { goBack, goToBannerDetail } from '../functions';
+import moment from 'moment';
+import { goBack, goToBannerDetail, useBannerAction } from '../functions';
+import { contexts } from '@contexts';
+import * as models from '@models';
+import LoadingPage from '@core/components/LoadingPage';
 import { BannerStyles } from '../styles';
 
-/** === MOCK === */
-const bannerList = [
-  {
-    id: 1,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-  {
-    id: 2,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-  {
-    id: 3,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-];
+const { width } = Dimensions.get('window');
 
 /** === COMPONENT === */
 const BannerListView: React.FC = () => {
   /** === HOOK === */
+  const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const bannerAction = useBannerAction();
+  const bannerlistState = stateBanner.list;
+  /** => effect */
+  useEffect(() => {
+    bannerAction.list(dispatchBanner);
+  }, []);
+  console.log(999, bannerlistState);
   /** === FUNCTION === */
-  /** => handle fatch more */
-  const handleFatchMore = () => {
-    //function to handle lazy load
-  };
+  /** => handle load more */
+  // const onHandleLoadMore = () => {
+  //   if (stateBanner.list.data) {
+  //     if (stateBanner.list.data.length < stateBanner.list.total) {
+  //       bannerAction.loadMore(dispatchBanner, stateBanner.list);
+  //     }
+  //   }
+  // };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -84,8 +77,13 @@ const BannerListView: React.FC = () => {
     );
   };
 
-  /** => list banner */
-  const renderListBanner = ({ item }: { item: any; index: number }) => {
+  /** => banner card */
+  const renderBannerCard = ({
+    item,
+  }: {
+    item: models.BannerListSuccessProps;
+    index: number;
+  }) => {
     return (
       <View style={BannerStyles.bannerCardContainer}>
         {/* Image */}
@@ -99,7 +97,7 @@ const BannerListView: React.FC = () => {
         </View>
         {/* Info */}
         <View style={{ padding: 16, backgroundColor: 'white' }}>
-          <SnbText.B2>{item.title}</SnbText.B2>
+          <SnbText.B2>{item.header}</SnbText.B2>
           <View style={{ marginTop: 8 }}>
             <SnbText.B3 color={color.black80}>{item.description}</SnbText.B3>
           </View>
@@ -110,7 +108,7 @@ const BannerListView: React.FC = () => {
             <SnbIcon name={'calender'} color={color.black60} size={16} />
             <View style={{ marginLeft: 7 }}>
               <SnbText.C1 color={color.black60}>
-                Berlaku sampai {item.expiredAt}
+                Berlaku sampai {moment(item.activeTo).format('DD MMM YYYY')}
               </SnbText.C1>
             </View>
           </View>
@@ -124,22 +122,36 @@ const BannerListView: React.FC = () => {
     );
   };
 
-  /** => content */
-  const content = () => {
+  /** => Banner List */
+  const renderBannerList = () => {
     return (
-      <View style={{ margin: 16, paddingBottom: 150 }}>
-        <FlatList
-          data={bannerList}
-          renderItem={renderListBanner}
-          keyExtractor={(item) => item.id.toString()}
-          onEndReachedThreshold={0.1}
-          onEndReached={handleFatchMore}
-          showsVerticalScrollIndicator={true}
-        />
-      </View>
+      <FlatList
+        data={bannerlistState.data}
+        renderItem={renderBannerCard}
+        keyExtractor={(item) => item.id.toString()}
+        onEndReachedThreshold={0.1}
+        // onEndReached={onHandleLoadMore}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{
+          paddingVertical: 20,
+          paddingHorizontal: 0.04 * width,
+        }}
+      />
     );
   };
 
+  /** => content */
+  const content = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        {!bannerlistState.loading && bannerlistState.data.length !== 0 ? (
+          <View>{renderBannerList()}</View>
+        ) : (
+          <LoadingPage />
+        )}
+      </View>
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
