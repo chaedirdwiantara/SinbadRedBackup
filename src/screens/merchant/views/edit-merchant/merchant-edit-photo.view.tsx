@@ -153,7 +153,7 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
+      editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
 
@@ -178,7 +178,7 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
+      editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
 

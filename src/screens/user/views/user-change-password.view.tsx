@@ -83,7 +83,10 @@ const UserChangePasswordView: FC = () => {
         setErrorNewPasswordMessage(
           'Kata sandi baru tidak boleh sama dengan kata sandi sekarang',
         );
-      } else if (stateUser.update.error.code === 10012) {
+      } else if (
+        stateUser.update.error.code === 10012 ||
+        stateUser.update.error.code === 10029
+      ) {
         setOpenConfirm(false);
         setErrorOldPassword(true);
         setErrorOldPasswordMessage('Kata sandi sekarang salah');
