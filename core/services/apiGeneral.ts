@@ -42,8 +42,8 @@ const apiGeneral = async <T>(
   /** === HANDLE ERROR RESPONSE === */
   const handleErrors = (response: any) => {
     if (!response.ok) {
+      NavigationAction.navigate('LoginPhoneView');
       if (response.headers.map['content-type'] === 'text/html') {
-        NavigationAction.navigate('LoginPhoneView');
         throwError(response);
       }
       return response.json().then((error: ErrorProps) => {
