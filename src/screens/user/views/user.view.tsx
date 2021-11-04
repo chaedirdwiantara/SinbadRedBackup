@@ -11,6 +11,7 @@ import {
   SnbCardMultiButtonType1,
   SnbCardButtonType2,
   SnbSvgIcon,
+  SnbTextSeeMoreType1,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -30,8 +31,7 @@ const UserView: FC = () => {
   const { reset } = useNavigation();
   useFocusEffect(
     React.useCallback(() => {
-      const storeDetail = storeDetailAction.detail(dispatchUser, { id: '' });
-      return storeDetail;
+      storeDetailAction.detail(dispatchUser, { id: '' });
     }, []),
   );
   useEffect(() => {
@@ -76,7 +76,11 @@ const UserView: FC = () => {
           <Image source={source} style={UserStyles.image} />
         </View>
         <View style={UserStyles.userInfo}>
-          <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+          <View style={{ marginLeft: -18 }}>
+            <SnbTextSeeMoreType1 line={1}>
+              <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+            </SnbTextSeeMoreType1>
+          </View>
           <SnbText.C1 color={color.white}>
             Kelengkapan profil {countPercentageProfileComplete()}%
           </SnbText.C1>
@@ -197,26 +201,27 @@ const UserView: FC = () => {
   };
   /** => content */
   const content = () => {
-    if (stateUser.detail.loading) {
+    if (stateUser.detail.loading || !stateUser.detail.data) {
       return <LoadingPage />;
     }
-
     if (stateUser.detail.data) {
       return (
-        <ScrollView
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}>
-          {contentItem()}
-        </ScrollView>
+        <View>
+          {header()}
+          <ScrollView
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}>
+            {contentItem()}
+          </ScrollView>
+        </View>
       );
     }
   };
   /** this for main view */
   return (
-    <SnbContainer color={'grey'}>
-      {header()}
-      {content()}
-    </SnbContainer>
+    <View style={{ flex: 1 }}>
+      <SnbContainer color={'grey'}>{content()}</SnbContainer>
+    </View>
   );
 };
 
