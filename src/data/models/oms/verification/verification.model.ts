@@ -6,8 +6,8 @@ export interface VerificationOrderDetailProps {
   grandTotal: VerificationOrderDetailGrandTotal;
 }
 export interface VerificationOrderDetailBonusProduct {
-  promoSupplierId: number;
-  promoSupplierName: string;
+  promoSellerId: number;
+  promoSellerName: string;
   bonusProductId: string;
   bonusProductName: string;
   bonusQty: number;
@@ -28,14 +28,14 @@ export interface VerificationOrderDetailPromoProduct {
   vouchers: VerificationOrderDetailVoucherList[];
 }
 export interface VerificationOrderDetailPromoList {
-  promoSupplierId: number;
-  promoSupplierName: string;
+  promoSellerId: number;
+  promoSellerName: string;
   promoAmount: number;
   promoOwner: string;
 }
 export interface VerificationOrderDetailVoucherList {
-  voucherSupplierId: number;
-  voucherSupplierName: string;
+  voucherSellerId: number;
+  voucherSellerName: string;
   voucherAmount: number;
   voucherOwner: string;
 }

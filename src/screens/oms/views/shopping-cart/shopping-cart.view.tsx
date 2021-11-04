@@ -487,7 +487,7 @@ const OmsShoppingCartView: FC = () => {
                       color={color.green50}>{`Potensi potongan ${toCurrency(
                       countPotentialDiscount(
                         voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.supplierVouchers,
+                        voucherData.dataVouchers.sellerVouchers,
                       ).totalDiscount,
                       {
                         withPrefix: false,
@@ -497,7 +497,7 @@ const OmsShoppingCartView: FC = () => {
                     <SnbText.C2 color={color.green50}>{`${
                       countPotentialDiscount(
                         voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.supplierVouchers,
+                        voucherData.dataVouchers.sellerVouchers,
                       ).totalSelectedVoucher
                     } Voucher terpilih`}</SnbText.C2>
                   </>
