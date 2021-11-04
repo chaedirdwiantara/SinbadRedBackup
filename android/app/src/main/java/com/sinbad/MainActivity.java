@@ -1,4 +1,4 @@
-package com.sinbad.nextgen;
+package com.app.sinbaddev;
 
 import com.facebook.react.ReactActivity;
 

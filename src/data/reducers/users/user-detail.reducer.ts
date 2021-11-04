@@ -23,7 +23,7 @@ export const userDetailReducer = simplifyReducer(userDetailInitialState, {
   /** => detail success */
   [types.STORE_DETAIL_SUCCESS](
     state = userDetailInitialState,
-    action: models.DetailSuccessAction<models.Example2>,
+    action: models.DetailSuccessAction<models.StoreDetail>,
   ) {
     return {
       ...state,

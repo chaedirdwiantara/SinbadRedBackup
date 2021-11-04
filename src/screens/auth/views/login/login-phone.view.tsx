@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/core';
 import {
   setErrorMessage,
   useAuthAction,
@@ -10,8 +9,8 @@ import {
   REGISTER_VIEW,
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, ScrollView, BackHandler } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
@@ -19,11 +18,13 @@ import {
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import { useNavigation } from '@react-navigation/core';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
   const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
   const phone = useInputPhone();
+  const { reset } = useNavigation();
 
   React.useEffect(() => {
     return resetRequestOTP;
@@ -38,6 +39,18 @@ const Content: React.FC = () => {
       phone.setMessageError(setErrorMessage(requestOTPState.error.code));
     }
   }, [requestOTPState]);
+
+  useEffect(() => {
+    const backAction = () => {
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>

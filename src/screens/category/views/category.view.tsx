@@ -1,5 +1,5 @@
-/** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
+/** === IMPORT PACKAGES ===  */
+import React, { useState, useEffect } from 'react';
 import { FlatList, View, TouchableOpacity, Image } from 'react-native';
 import {
   SnbContainer,
@@ -9,58 +9,57 @@ import {
   color,
   SnbIcon,
 } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENT === */
+import Menu from '@core/components/Menu';
+/** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@navigation';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import {
   goBack,
   goToProduct,
+  getCategory1stLevelIndex,
   useCategoryAction,
-  useSetLevel2,
-  categoryIndexById,
+  useSelected2ndLevelCategory,
 } from '../functions';
-import { contexts } from '@contexts';
-/** === IMPORT MODEL HERE === */
+/** === IMPORT TYPE === */
 import * as models from '@models';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
-import Menu from '@core/components/Menu';
-/** === IMPORT STYLE HERE === */
+/** === IMPORT STYLE === */
 import CategoryStyle from '../styles/category.style';
 /** === COMPONENT === */
 const CategoryView: React.FC = () => {
-  /** === HOOK === */
-  const { params } = NavigationAction.useGetNavParams();
-  const { level } = useCategoryAction();
-  const { stateCategory, dispatchCategory } = React.useContext(
-    contexts.CategoryContext,
-  );
-  const categoryLevelData = stateCategory.level.list;
-  /** === STATE === */
-  const [selectedCategoryIndex, setSelectedCategoryIndex] =
-    React.useState<number>(0);
-  const { selectedLevel2Id, setSelectLevel2Id } = useSetLevel2();
-  /** === EFFECT === */
-  /** => get category level */
-  React.useEffect(() => {
-    level(dispatchCategory);
+  /** === HOOKS === */
+  const {
+    params: { id: categoryId },
+  } = NavigationAction.useGetNavParams();
+  const { fetchList } = useCategoryAction();
+  const {
+    stateCategory: {
+      level: { list: categoryLevelState },
+    },
+    dispatchCategory,
+  } = useCategoryContext();
+  const [selected1stLevelIndex, setSelected1stLevelIndex] = useState(0);
+  const {
+    selected2ndLevelId,
+    selected2ndLevelIndex,
+    handle2ndLevelIdChange,
+    handle2ndLevelIndexChange,
+  } = useSelected2ndLevelCategory();
+
+  useEffect(() => {
+    fetchList(dispatchCategory);
   }, []);
-  /** => choose default selected after get data */
-  React.useEffect(() => {
-    setSelectedCategoryIndex(
-      categoryIndexById(params.id, categoryLevelData.data),
-    );
-  }, [categoryLevelData.data.length > 0]);
+
+  // Set default selected category 1st level index after data is fetched
+  useEffect(() => {
+    if (categoryLevelState.data.length > 0) {
+      setSelected1stLevelIndex(
+        getCategory1stLevelIndex(categoryLevelState.data, categoryId),
+      );
+    }
+  }, [categoryLevelState.data.length]);
   /** === VIEW === */
-  /** => header */
-  const header = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Semua Kategori'}
-        backAction={() => goBack()}
-      />
-    );
-  };
-  /** => global image */
+  /** => Global Icon */
   const globalIcon = (image: string, size: number) => {
     return image ? (
       <Image source={{ uri: image }} style={{ width: size, height: size }} />
@@ -68,101 +67,108 @@ const CategoryView: React.FC = () => {
       <SnbSvgIcon name="sinbad" size={size} />
     );
   };
-  /** => third level item */
-  const thirdLevelItem = ({
+  /** => First Level Item */
+  const renderFirstLevelItem = ({
     item,
     index,
   }: {
-    item: models.CategoryLevel3;
+    item: models.CategoryLevel;
     index: number;
-  }) => {
-    return item ? (
-      <TouchableOpacity
-        key={index}
-        onPress={() => goToProduct()}
-        style={CategoryStyle.level3layoutItem}>
-        {globalIcon(item.icon, 64)}
-        <View style={{ marginTop: 4 }}>
-          <SnbText.C1 align={'center'}>{item.name}</SnbText.C1>
+  }) => (
+    <TouchableOpacity
+      activeOpacity={1}
+      key={index}
+      style={{
+        padding: 16,
+        borderWidth: 0,
+        backgroundColor:
+          index === selected1stLevelIndex ? color.white : color.black10,
+      }}
+      onPress={() =>
+        item.hasChild ? setSelected1stLevelIndex(index) : goToProduct(item)
+      }>
+      <View style={{ alignItems: 'center', width: 80 }}>
+        {globalIcon(item.icon, 32)}
+        <View style={{ marginTop: 8 }}>
+          <SnbText.C2 align={'center'}>{item.name}</SnbText.C2>
         </View>
-      </TouchableOpacity>
-    ) : (
-      <View />
-    );
-  };
-  /** => second level item */
-  const secondLevelItem = ({
+      </View>
+    </TouchableOpacity>
+  );
+  /** => Second Level Item */
+  const renderSecondLevelItem = ({
     item,
     index,
   }: {
     item: models.CategoryLevel2;
     index: number;
   }) => {
+    const iconName =
+      item.id === selected2ndLevelId ? 'expand_more' : 'expand_less';
+
     return (
       <View style={{ paddingBottom: 8 }}>
         <TouchableOpacity
           activeOpacity={1}
           key={index}
           style={
-            item.id === selectedLevel2Id
+            item.id === selected2ndLevelId
               ? CategoryStyle.level2LayoutActive
               : CategoryStyle.level2LayoutInactive
           }
-          onPress={() =>
-            item.hasChild ? setSelectLevel2Id(item.id) : goToProduct()
-          }>
+          onPress={() => {
+            if (item.hasChild) {
+              handle2ndLevelIdChange(item.id);
+              handle2ndLevelIndexChange(index);
+            } else {
+              goToProduct(item, selected1stLevelIndex, index);
+            }
+          }}>
           {globalIcon(item.icon, 32)}
           <View style={{ marginLeft: 8 }}>
             <SnbText.B3>{item.name}</SnbText.B3>
           </View>
-          {item.hasChild ? (
+          {item.hasChild && (
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              {item.id === selectedLevel2Id ? (
-                <SnbIcon name={'expand_more'} size={24} color={color.black40} />
-              ) : (
-                <SnbIcon name={'expand_less'} size={24} color={color.black40} />
-              )}
+              <SnbIcon name={iconName} size={24} color={color.black40} />
             </View>
-          ) : (
-            <View />
           )}
         </TouchableOpacity>
-        {thirdLevel(item)}
+        {renderthirdLevelList(item)}
       </View>
     );
   };
-  /** => first level item */
-  const firstLevelItem = ({
+  /** => Third Level Item */
+  const renderThirdLevelItem = ({
     item,
     index,
   }: {
-    item: models.CategoryLevel;
+    item: models.CategoryLevel3;
     index: number;
   }) => {
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        key={index}
-        style={{
-          padding: 16,
-          borderWidth: 0,
-          backgroundColor:
-            index === selectedCategoryIndex ? color.white : color.black10,
-        }}
-        onPress={() =>
-          item.hasChild ? setSelectedCategoryIndex(index) : goToProduct()
-        }>
-        <View style={{ alignItems: 'center', width: 80 }}>
-          {globalIcon(item.icon, 32)}
-          <View style={{ marginTop: 8 }}>
-            <SnbText.C2 align={'center'}>{item.name}</SnbText.C2>
+      item && (
+        <TouchableOpacity
+          key={index}
+          onPress={() =>
+            goToProduct(
+              item,
+              selected1stLevelIndex,
+              selected2ndLevelIndex as number,
+              index,
+            )
+          }
+          style={CategoryStyle.level3layoutItem}>
+          {globalIcon(item.icon, 64)}
+          <View style={{ marginTop: 4 }}>
+            <SnbText.C1 align={'center'}>{item.name}</SnbText.C1>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )
     );
   };
-  /** => third level */
-  const thirdLevel = (item: models.CategoryLevel2) => {
+  /** => Third Level List */
+  const renderthirdLevelList = (item: models.CategoryLevel2) => {
     const additionalData = [
       {
         id: item.id,
@@ -172,94 +178,66 @@ const CategoryView: React.FC = () => {
         child: [],
       },
     ];
-    return item.hasChild && selectedLevel2Id === item.id ? (
-      <View style={CategoryStyle.level3layout}>
-        <Menu
-          data={[...additionalData, ...item.child]}
-          column={3}
-          renderItem={thirdLevelItem}
-        />
-      </View>
-    ) : (
-      <View />
-    );
-  };
-  /** => second level */
-  const secondLevel = () => {
-    const data = categoryLevelData.data[selectedCategoryIndex].child;
-    return data.length > 0 ? (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          contentContainerStyle={{ paddingBottom: 100, padding: 16 }}
-          data={data}
-          renderItem={secondLevelItem}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
-    ) : (
-      <View />
-    );
-  };
-  /** => first level */
-  const firstLevel = () => {
+
     return (
-      <View>
-        <FlatList
-          contentContainerStyle={{
-            paddingBottom: 100,
-            backgroundColor: color.black10,
-          }}
-          data={categoryLevelData.data}
-          renderItem={firstLevelItem}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      item.hasChild &&
+      selected2ndLevelId === item.id && (
+        <View style={CategoryStyle.level3layout}>
+          <Menu
+            data={[...additionalData, ...item.child]}
+            column={3}
+            renderItem={renderThirdLevelItem}
+          />
+        </View>
+      )
     );
   };
-  /** => content */
-  const content = () => {
-    return (
-      <View style={{ flexDirection: 'row', flex: 1 }}>
-        {firstLevel()}
-        {secondLevel()}
-      </View>
-    );
-  };
-  /** => loading */
-  const loading = () => {
-    return (
-      <View>
-        <SnbText.B1>loading</SnbText.B1>
-      </View>
-    );
-  };
-  /** => process */
-  const process = () => {
-    return categoryLevelData.loading || categoryLevelData.data.length === 0
-      ? loading()
-      : content();
-  };
-  /** => main */
+  /** => Main */
   return (
     <SnbContainer color="white">
-      {header()}
-      {process()}
+      <SnbTopNav.Type3
+        type="red"
+        title={'Semua Kategori'}
+        backAction={goBack}
+      />
+      {categoryLevelState.loading || categoryLevelState.data.length === 0 ? (
+        <View>
+          <SnbText.B1>loading</SnbText.B1>
+        </View>
+      ) : (
+        <View style={{ flexDirection: 'row', flex: 1 }}>
+          {/* First Level List */}
+          <View>
+            <FlatList
+              contentContainerStyle={{
+                paddingBottom: 100,
+                backgroundColor: color.black10,
+              }}
+              data={categoryLevelState.data}
+              renderItem={renderFirstLevelItem}
+              keyExtractor={(_, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
+          {
+            // Second Level List
+            categoryLevelState.data[selected1stLevelIndex]?.child.length >
+              0 && (
+              <View style={{ flex: 1 }}>
+                <FlatList
+                  contentContainerStyle={{ paddingBottom: 100, padding: 16 }}
+                  data={categoryLevelState.data[selected1stLevelIndex].child}
+                  renderItem={renderSecondLevelItem}
+                  keyExtractor={(_, index) => index.toString()}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
+            )
+          }
+        </View>
+      )}
     </SnbContainer>
   );
 };
 
 export default CategoryView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */

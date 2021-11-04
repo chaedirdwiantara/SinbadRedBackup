@@ -9,10 +9,12 @@ import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
+import { useNavigation } from '@react-navigation/core';
 
 const UserSettingView: FC = () => {
   /** === HOOK === */
   const { logout } = useAuthAction();
+  const { reset } = useNavigation();
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -38,7 +40,10 @@ const UserSettingView: FC = () => {
           type="secondary"
           title="Log Out"
           disabled={false}
-          onPress={() => logout()}
+          onPress={() => {
+            logout();
+            reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
+          }}
           shadow={true}
         />
       </ScrollView>

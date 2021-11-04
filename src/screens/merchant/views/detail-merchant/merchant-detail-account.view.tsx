@@ -106,12 +106,9 @@ const MerchantDetailAccountView: FC = () => {
           })}
           {renderContentSection({
             key: 'Nomor Handphone',
-            fontColor: storeData?.storeAccount.phoneNo
-              ? color.black100
-              : color.red50,
             value: storeData?.storeAccount.phoneNo
               ? storeData?.storeAccount.phoneNo
-              : 'Gagal Verifikasi',
+              : '-',
             action: storeData?.storeAccount.phoneNo ? 'ubah' : 'tambah',
             type: 'merchantAccountPhoneNo',
             title: storeData?.storeAccount.phoneNo
@@ -122,10 +119,10 @@ const MerchantDetailAccountView: FC = () => {
             key: 'Foto Toko',
             fontColor: storeData?.storeAccount.imageUrl
               ? color.green50
-              : color.red50,
+              : color.black100,
             value: storeData?.storeAccount.imageUrl
               ? 'Berhasil Di Upload'
-              : 'Gagal Verifikasi',
+              : '-',
             action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
             type: 'merchantAccountImage',
             title: 'Foto Toko',

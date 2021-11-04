@@ -1,9 +1,16 @@
 import React, { FC, useEffect } from 'react';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { View, FlatList, RefreshControl, BackHandler } from 'react-native';
+import {
+  View,
+  FlatList,
+  RefreshControl,
+  BackHandler,
+  Image,
+} from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
+import moment from 'moment';
 /** === IMPORT FUNCTION HERE === */
 import { MerchantHookFunc } from '../../function';
 /** === IMPORT STYLE HERE === */
@@ -87,7 +94,21 @@ const MerchantSupplierInformationView: FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <SnbText.B1>Empty</SnbText.B1>
+        <Image
+          style={{ height: 180, width: undefined, aspectRatio: 1 / 1 }}
+          source={require('../../../../assets/images/sinbad_image/cry_sinbad.png')}
+        />
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 16,
+          }}>
+          <SnbText.B2>Tidak Ada Informasi Supplier</SnbText.B2>
+          <SnbText.B3>
+            Toko Anda Tidak Terdaftar di Supplier Manapun!
+          </SnbText.B3>
+        </View>
       </View>
     );
   };
@@ -98,7 +119,9 @@ const MerchantSupplierInformationView: FC = () => {
         <View style={{ marginHorizontal: 16, marginTop: 16 }}>
           <SnbText.H4>{item.name}</SnbText.H4>
           <View style={{ marginTop: 8 }}>
-            <SnbText.B3>{item.createdAt}</SnbText.B3>
+            <SnbText.B3>
+              {moment(new Date(item.createdAt)).format('DD MMM YYYY mm:ss')}
+            </SnbText.B3>
           </View>
         </View>
         <View

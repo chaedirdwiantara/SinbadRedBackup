@@ -71,7 +71,7 @@ const MerchantEditPhotoView = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const { editProfile, reset } = MerchantHookFunc.useEditProfile();
+  const { editProfile } = MerchantHookFunc.useEditProfile();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
@@ -87,15 +87,28 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     switch (params.type) {
       case 'npwp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.taxImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.taxImageUrl || ' ',
+        );
         break;
       }
       case 'ktp': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.idImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
+        );
         break;
       }
       case 'selfie': {
-        setImageUrl(stateUser.detail.data?.ownerData.profile.selfieImageUrl);
+        setImageUrl(
+          stateUser.detail.data?.ownerData?.profile?.selfieImageUrl || ' ',
+        );
+        break;
+      }
+      case 'store': {
+        setImageUrl(
+          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+            ?.imageUrl || ' ',
+        );
         break;
       }
       case 'store': {

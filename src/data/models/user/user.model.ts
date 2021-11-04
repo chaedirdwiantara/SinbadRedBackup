@@ -6,6 +6,7 @@ export interface StoreDetail {
 }
 interface IOwnerData {
   profile: IOwnerProfile;
+  info: IInfo;
 }
 interface IOwnerProfile {
   imageUrl?: string;
@@ -18,6 +19,11 @@ interface IOwnerProfile {
   idImageUrl?: string;
   selfieImageUrl?: string;
   bankAccount: IBankAccount;
+}
+interface IInfo {
+  isMobilePhoneVerified: boolean;
+  isEmailVerified: boolean;
+  isBankAccountVerified: boolean;
 }
 interface IBankAccount {
   bankId: number;

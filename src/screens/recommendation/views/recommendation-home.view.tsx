@@ -12,6 +12,7 @@ interface RecommendedProduct {
   name: string;
   imageUrl: string;
   displayPrice: number;
+  currentPrice?: number;
   isBundle: boolean;
   isPromo: boolean;
   isExclusive: boolean;
@@ -24,6 +25,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
     displayPrice: 77891,
+    currentPrice: 68000,
     isBundle: false,
     isPromo: true,
     isExclusive: true,
@@ -92,6 +94,7 @@ const RecommendationHomeView: FC = () => {
         name={item.name}
         imageUrl={item.imageUrl}
         price={item.displayPrice}
+        currentPrice={item.currentPrice}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

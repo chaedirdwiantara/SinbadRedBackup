@@ -74,8 +74,13 @@ export const useInput = (initialState: string = '') => {
   };
 
   const setMessageError = (message: string) => {
-    setType('error');
-    setValMsgError(message);
+    if (message !== '') {
+      setType('error');
+      setValMsgError(message);
+    } else {
+      setType('default');
+      setValMsgError('');
+    }
   };
 
   return {
