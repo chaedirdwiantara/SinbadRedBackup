@@ -95,6 +95,9 @@ const Content: React.FC = () => {
 
     return (
       <View style={{ flex: 1 }}>
+        <View style={{ margin: 16, marginBottom: 0 }}>
+          <SnbText.B3>Unggah Foto KTP</SnbText.B3>
+        </View>
         <Image
           resizeMode="contain"
           source={{ uri }}
