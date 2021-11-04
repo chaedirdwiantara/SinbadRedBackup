@@ -11,11 +11,13 @@ const callList = (
   loading: boolean,
   skip: number,
   limit: number,
+  search?: string,
 ) => {
   return Actions.bannerListProcess(contextDispatch, {
     loading,
     skip,
     limit,
+    search,
   });
 };
 /** => banner action */
@@ -23,9 +25,9 @@ const useBannerAction = () => {
   const dispatch = useDispatch();
   const limit = 4;
   return {
-    list: (contextDispatch: (action: any) => any) => {
+    list: (contextDispatch: (action: any) => any, search?: string) => {
       contextDispatch(Actions.bannerListReset());
-      dispatch(callList(contextDispatch, true, 0, limit));
+      dispatch(callList(contextDispatch, true, 0, limit, search));
     },
     refresh: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.bannerListRefresh());

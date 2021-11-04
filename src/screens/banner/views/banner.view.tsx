@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   TouchableOpacity,
   View,
@@ -16,6 +16,7 @@ import {
   SnbTextField,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
+import RenderHtml from 'react-native-render-html';
 import { goBack, goToBannerDetail, useBannerAction } from '../functions';
 import { contexts } from '@contexts';
 import * as models from '@models';
@@ -27,6 +28,7 @@ const { width } = Dimensions.get('window');
 /** === COMPONENT === */
 const BannerListView: React.FC = () => {
   /** === HOOK === */
+  const [searchText, setSearchText] = useState('');
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
   const bannerAction = useBannerAction();
   const bannerlistState = stateBanner.list;
@@ -34,7 +36,6 @@ const BannerListView: React.FC = () => {
   useEffect(() => {
     bannerAction.list(dispatchBanner);
   }, []);
-  console.log(999, bannerlistState);
   /** === FUNCTION === */
   /** => handle load more */
   const onHandleLoadMore = () => {
@@ -43,6 +44,10 @@ const BannerListView: React.FC = () => {
         bannerAction.loadMore(dispatchBanner, stateBanner.list);
       }
     }
+  };
+  /** => handle search */
+  const onHandleSearch = () => {
+    bannerAction.list(dispatchBanner, searchText);
   };
   /** === VIEW === */
   /** => header */
@@ -62,16 +67,17 @@ const BannerListView: React.FC = () => {
       <View style={BannerStyles.search}>
         <SnbTextField.Text
           noBorder
-          value={''}
+          value={searchText}
           type={'default'}
           placeholder="Cari di Sinbad"
-          onChangeText={() => {}}
-          clearText={() => {}}
+          onChangeText={(text) => setSearchText(text)}
+          clearText={() => setSearchText('')}
           autoCapitalize="none"
           keyboardType="default"
           returnKeyType="search"
-          enter={() => {}}
+          enter={() => onHandleSearch}
           prefixIconName="search"
+          suffixIconName={searchText !== '' ? 'cancel' : 'bca'}
         />
       </View>
     );
@@ -84,6 +90,9 @@ const BannerListView: React.FC = () => {
     item: models.BannerListSuccessProps;
     index: number;
   }) => {
+    const sourceHtml = {
+      html: item.description,
+    };
     return (
       <View style={BannerStyles.bannerCardContainer}>
         {/* Image */}
@@ -100,7 +109,7 @@ const BannerListView: React.FC = () => {
         <View style={{ padding: 16, backgroundColor: 'white' }}>
           <SnbText.B2>{item.header}</SnbText.B2>
           <View style={{ marginTop: 8 }}>
-            <SnbText.B3 color={color.black80}>{item.description}</SnbText.B3>
+            <RenderHtml contentWidth={width} source={sourceHtml} />
           </View>
         </View>
         {/* Foter */}
