@@ -3,33 +3,15 @@ import React, { FC } from 'react';
 import { TouchableWithoutFeedback, View } from 'react-native';
 import { SnbText, color, styles } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { HistoryDetailStyle } from '../../styles';
+import { HistoryDetailStyle } from '../styles';
+import { HistoryDetailCardDivider } from './HistoryDetailCardDivider';
 /** === TYPES === */
 interface HistoryDetailCardProps {
   title: string;
   actionTitle?: string;
   onActionClick?: () => void;
 }
-
-interface HistoryDetailCardDividerProps {
-  horizontalSpaces?: number;
-  topSpaces?: number;
-}
 /** === COMPONENTS === */
-export const HistoryDetailCardDivider: FC<HistoryDetailCardDividerProps> = ({
-  horizontalSpaces = 0,
-  topSpaces = 8,
-}) => (
-  <View
-    style={{
-      borderTopWidth: 1,
-      borderColor: color.black10,
-      marginTop: topSpaces,
-      marginHorizontal: horizontalSpaces,
-    }}
-  />
-);
-
 export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
   title,
   children,
