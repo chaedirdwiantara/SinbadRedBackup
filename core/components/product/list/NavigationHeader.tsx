@@ -9,26 +9,30 @@ import {
   goToSearch,
   goToShoppingCart,
 } from '@core/functions/product';
-/** === IMPORT tYPE === */
+/** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
 /** === TYPE === */
 interface NavigationHeaderProps {
   type?: ProductHeaderType;
   title?: string;
-  setSearchKeyword?: Dispatch<SetStateAction<string>>;
+  keyword: string;
+  setSearchKeyword: Dispatch<SetStateAction<string>>;
   onSearch: () => void;
+  onSearchClear: () => void;
 }
 /** === COMPONENT === */
 const NavigationHeader: FC<NavigationHeaderProps> = ({
   type = 'default',
-  title,
+  title = 'Product',
+  keyword,
   setSearchKeyword,
   onSearch,
+  onSearchClear,
 }) => (
   <View>
     {type === 'default' ? (
       <SnbTopNav.Type6
-        title={title as string}
+        title={title}
         backAction={goBack}
         type="red"
         icon1Name="search"
@@ -38,13 +42,14 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
         icon2Action={goToShoppingCart}
       />
     ) : (
-      <SnbTopNav.Type8
+      <SnbTopNav.Type10
         type="red"
+        backAction={goBack}
         placeholder="Cari di Sinbad"
-        clearText={() => setSearchKeyword!('')}
+        value={keyword}
+        clearText={onSearchClear}
         enter={onSearch}
-        goToSearch={goToSearch}
-        onChangeText={(keyword) => setSearchKeyword!(keyword)}
+        onChangeText={(text) => setSearchKeyword(text)}
         icon1Name="home"
         icon1Action={goToHome}
         icon2Value={100}

@@ -1,40 +1,51 @@
-/** === IMPORT PACKAGE HERE ===  */
+/** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
-import SearchHeaderView from './search-header.view';
-import SearchRecentView from './search-recent.view';
+import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENT === */
+import RecentSearch from './RecentSearch';
+/** === IMPORT FUNCTION === */
+import {
+  goBack,
+  goToProduct,
+  useInputText,
+  useRecentSearch,
+} from '../functions';
 /** === COMPONENT === */
 const SearchView: FC = () => {
-  /** === HOOK === */
-
-  /** === EFFECT === */
-
+  /** === HOOKS === */
+  const { inputText, handleTextChange, clearText } = useInputText();
+  const { searchedKeywords, addKeyword, deleteKeyword, deleteAllKeywords } =
+    useRecentSearch();
   /** === VIEW === */
-  /** => header */
-  const header = () => {
-    return <SearchHeaderView />;
-  };
-
-  /** => recent */
-  const recent = () => {
-    return (
-      <SearchRecentView
-        data={['susu', 'sgm', 'beras', 'minyak', 'Gula', 'sayur']}
-      />
-    );
-  };
-
-  /** => content */
-  const content = () => {
-    return <View style={{ flex: 1 }}>{recent()}</View>;
-  };
-  /** => main */
   return (
     <SnbContainer color="white">
-      {header()}
-      {content()}
+      <View>
+        <SnbTopNav.Type7
+          type="red"
+          placeholder="Cari disini"
+          value={inputText}
+          backAction={goBack}
+          onChangeText={handleTextChange}
+          clearText={clearText}
+          enter={() => {
+            clearText();
+            addKeyword(inputText);
+            goToProduct(inputText);
+          }}
+        />
+      </View>
+      <View style={{ flex: 1 }}>
+        <RecentSearch
+          keywords={searchedKeywords}
+          onKeywordDelete={deleteKeyword}
+          onAllDelete={deleteAllKeywords}
+          onKeywordPress={(keyword) => {
+            clearText();
+            goToProduct(keyword);
+          }}
+        />
+      </View>
     </SnbContainer>
   );
 };
