@@ -31,8 +31,11 @@ import {
   handleSelectedBrandChange,
   handleAllSelectedProductsChange,
   getTotalPrice,
+  goToCategory,
 } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
+/** === IMPORT EXTERNAL COMPONENT === */
+import { RecommendationHomeView } from '@screen/recommendation/views';
 /** === DUMMIES === */
 const noImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
@@ -163,10 +166,10 @@ const OmsShoppingCartView: FC = () => {
           style={{ marginTop: 24, marginBottom: 16 }}
         />
         <View style={{ marginBottom: 4 }}>
-          <SnbText.H4>Voucher tidak tersedia</SnbText.H4>
+          <SnbText.H4>Keranjang Kosong</SnbText.H4>
         </View>
-        <SnbText.B3>
-          Untuk saat ini Sinbad Voucher belum dapat digunakan
+        <SnbText.B3 align={'center'}>
+          Yuk, Isi keranjang kamu dengan produk - produk di Sinbad
         </SnbText.B3>
       </View>
       <View style={{ height: 80, borderStyle: 'dashed' }}>
@@ -174,9 +177,10 @@ const OmsShoppingCartView: FC = () => {
           type="primary"
           title="Tambah Produk"
           disabled={false}
-          onPress={() => console.log('Add Product pressed')}
+          onPress={goToCategory}
         />
       </View>
+      <RecommendationHomeView />
     </Fragment>
   );
   /** => Shipping Address */
@@ -453,7 +457,7 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {invoiceGroups.length > 0 ? (
+      {invoiceGroups.length > 10 ? (
         <Fragment>
           <ScrollView>
             {renderShippingAddress()}
