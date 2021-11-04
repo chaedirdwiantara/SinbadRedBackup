@@ -21,7 +21,7 @@ const callList = (
 /** => banner action */
 const useBannerAction = () => {
   const dispatch = useDispatch();
-  const limit = 3;
+  const limit = 4;
   return {
     list: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.bannerListReset());

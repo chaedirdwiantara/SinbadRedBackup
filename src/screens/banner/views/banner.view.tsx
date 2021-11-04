@@ -37,13 +37,13 @@ const BannerListView: React.FC = () => {
   console.log(999, bannerlistState);
   /** === FUNCTION === */
   /** => handle load more */
-  // const onHandleLoadMore = () => {
-  //   if (stateBanner.list.data) {
-  //     if (stateBanner.list.data.length < stateBanner.list.total) {
-  //       bannerAction.loadMore(dispatchBanner, stateBanner.list);
-  //     }
-  //   }
-  // };
+  const onHandleLoadMore = () => {
+    if (stateBanner.list.data) {
+      if (stateBanner.list.data.length < stateBanner.list.total) {
+        bannerAction.loadMore(dispatchBanner, stateBanner.list);
+      }
+    }
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -89,6 +89,7 @@ const BannerListView: React.FC = () => {
         {/* Image */}
         <View>
           <Image
+            defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
             style={BannerStyles.imageCard}
             source={{
               uri: item.imageUrl,
@@ -112,11 +113,15 @@ const BannerListView: React.FC = () => {
               </SnbText.C1>
             </View>
           </View>
-          <TouchableOpacity
-            style={BannerStyles.buttonDetail}
-            onPress={() => goToBannerDetail()}>
-            <SnbText.B2 color={'white'}>Detail</SnbText.B2>
-          </TouchableOpacity>
+          {item.bannerType === 'general' ? (
+            <TouchableOpacity
+              style={BannerStyles.buttonDetail}
+              onPress={() => goToBannerDetail()}>
+              <SnbText.B2 color={'white'}>Detail</SnbText.B2>
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
         </View>
       </View>
     );
@@ -130,7 +135,7 @@ const BannerListView: React.FC = () => {
         renderItem={renderBannerCard}
         keyExtractor={(item) => item.id.toString()}
         onEndReachedThreshold={0.1}
-        // onEndReached={onHandleLoadMore}
+        onEndReached={onHandleLoadMore}
         showsVerticalScrollIndicator={true}
         contentContainerStyle={{
           paddingVertical: 20,
