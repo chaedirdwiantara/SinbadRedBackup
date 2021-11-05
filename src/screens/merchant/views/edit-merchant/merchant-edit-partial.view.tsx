@@ -324,7 +324,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Lengkap Pemilik'}
-          placeholder={'Masukan Nama Lengkap Pemilik'}
+          placeholder={'Masukkan Nama Lengkap Pemilik'}
           type={'default'}
           value={ownerName.value}
           onChangeText={(text) => ownerName.setValue(text)}
@@ -340,7 +340,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
-          placeholder={'Masukan E-mail'}
+          placeholder={'Masukkan E-mail'}
           type={emailIsNotValid ? 'error' : 'default'}
           value={ownerEmail.value}
           onChangeText={(text) => validateEmail(text)}
@@ -356,7 +356,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
-          placeholder={'Masukan nomor handphone Anda'}
+          placeholder={'Masukkan nomor handphone Anda'}
           type={'default'}
           value={mobilePhone.value}
           onChangeText={(text) => mobilePhone.setValue(text)}
@@ -373,7 +373,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
-          placeholder={'Masukan Nomor KTP maks. 16 Digit'}
+          placeholder={'Masukkan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
           value={noKtp.value}
           onChangeText={(text) => {
@@ -394,7 +394,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
-          placeholder={'Masukan Nomor NPWP maks.15 Digit'}
+          placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
           value={noNPWP.value}
           onChangeText={(text) => {
@@ -420,7 +420,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Toko'}
-          placeholder={'Masukan Nama Toko'}
+          placeholder={'Masukkan Nama Toko'}
           type={'default'}
           value={merchantName.value}
           onChangeText={(text) => merchantName.setValue(text)}
@@ -435,7 +435,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone Toko'}
-          placeholder={'Masukan Nomor Handphone Toko'}
+          placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
           value={merchantPhoneNo.value}
           onChangeText={(text) => merchantPhoneNo.setValue(text)}
@@ -462,7 +462,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Ukuran Toko'}
-            placeholder={'Masukan Ukuran Toko'}
+            placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
@@ -474,7 +474,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Top Brand Selling'}
-            placeholder={'Masukan Top Brand Selling'}
+            placeholder={'Masukkan Top Brand Selling'}
             type={'default'}
             value={topBrand.value}
             onChangeText={(text) => topBrand.setValue(text)}
@@ -484,7 +484,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Wanted Brand'}
-            placeholder={'Masukan Wanted Brand'}
+            placeholder={'Masukkan Wanted Brand'}
             type={'default'}
             value={wantedBrand.value}
             onChangeText={(text) => wantedBrand.setValue(text)}
@@ -505,7 +505,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View>
           <SnbTextField.Text
             labelText={'Jumlah Akses Jalan'}
-            placeholder={'Masukan Jumlah Akses Jalan'}
+            placeholder={'Masukkan Jumlah Akses Jalan'}
             type={'default'}
             value={
               vehicleAccessibilityAmount.value

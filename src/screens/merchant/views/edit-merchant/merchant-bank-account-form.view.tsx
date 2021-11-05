@@ -127,7 +127,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nomor Rekening'}
-            placeholder={'Masukan Nomor Rekening'}
+            placeholder={'Masukkan Nomor Rekening'}
             type={'default'}
             value={bankAccountNo.value}
             onChangeText={(text) => bankAccountNo.setValue(text)}
@@ -141,7 +141,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nama Lengkap Pemilik Rekening'}
-            placeholder={'Masukan Nama Lengkap Pemilik Rekening'}
+            placeholder={'Masukkan Nama Lengkap'}
             type={'default'}
             value={bankAccountName.value}
             onChangeText={(text) => bankAccountName.setValue(text)}
@@ -153,7 +153,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nama Cabang'}
-            placeholder={'Masukan Nama Cabang'}
+            placeholder={'Masukkan Nama Cabang'}
             type={'default'}
             value={bankBranchName.value}
             onChangeText={(text) => bankBranchName.setValue(text)}

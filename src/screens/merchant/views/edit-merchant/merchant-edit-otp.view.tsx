@@ -141,14 +141,14 @@ const OTPContent: React.FC<Props> = (props) => {
 
   const content = () => {
     return (
-      <View style={{ justifyContent: 'space-between', flex: 1 }}>
+      <View style={{ justifyContent: 'space-between' }}>
         <View>
           <Image
             source={require('../../../../assets/images/sinbad_image/otp.png')}
             style={OtpStyle.imageOtp}
           />
           <View style={OtpStyle.titleContainer}>
-            <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
+            <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
             <View style={{ marginVertical: 4 }} />
             <SnbText.B1 align="center">
               Kode verifikasi telah dikirimkan melalui{' '}
@@ -169,7 +169,7 @@ const OTPContent: React.FC<Props> = (props) => {
           </SnbText.B1>
         </View>
         <View>
-          <View style={{ height: 72 }}>
+          <View style={{ height: 72, marginTop: -28, marginBottom: -20 }}>
             <SnbButton.Single
               title="Verifikasi"
               onPress={() => verifyOtp()}
