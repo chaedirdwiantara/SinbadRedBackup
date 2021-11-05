@@ -28,7 +28,7 @@ const RegisterOTPView: React.FC = () => {
     if (verifyOTP.error !== null) {
       setHide(false);
     }
-  }, [verifyOTP.data]);
+  }, [verifyOTP]);
 
   return (
     <SnbContainer color="white">
@@ -38,22 +38,23 @@ const RegisterOTPView: React.FC = () => {
         title="Kode Verifikasi"
       />
       <OTPContent
-        onVerifyOTP={(otp) =>
+        onVerifyOTP={(otp) => {
+          setHide(true);
           verifyOTPRegister({
             mobilePhone,
             otp,
-          })
+          });
+        }}
+        resend={() => {
+          checkPhone({ mobilePhoneNo: mobilePhone });
+        }}
+        errorMessage={
+          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
         }
         otpSuccess={verifyOTP.data !== null}
         hideIcon={hide}
         loading={verifyOTP.loading}
         phoneNo={maskPhone(mobilePhone)}
-        errorMessage={
-          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
-        }
-        resend={() => {
-          checkPhone({ mobilePhoneNo: mobilePhone });
-        }}
       />
     </SnbContainer>
   );

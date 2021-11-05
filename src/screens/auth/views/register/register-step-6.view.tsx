@@ -77,7 +77,11 @@ const Content: React.FC = () => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+              <View style={{ flexDirection: 'row' }}>
+                <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+                <View style={{ marginHorizontal: 2 }} />
+                <SnbText.H4 color={color.red60}>*</SnbText.H4>
+              </View>
               {renderIF(
                 merchantData.longitude !== null,
                 <TouchableOpacity onPress={() => navigate('MapsView')}>

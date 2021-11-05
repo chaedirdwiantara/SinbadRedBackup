@@ -15,6 +15,7 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
   SnbBottomSheet,
+  SnbCheckbox,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -31,6 +32,11 @@ const Content: React.FC = () => {
   const { register, registerState, resetRegister } = useRegister();
   const { reset } = useNavigation();
   const [showModalFailed, setShowModalFailed] = React.useState(false);
+  const [showModalPrivacyPolicy, setShowModalPrivacyPolicy] =
+    React.useState(false);
+  const [checked, setChecked] = React.useState<'unselect' | 'selected'>(
+    'unselect',
+  );
 
   React.useEffect(() => {
     resetRegister();
@@ -78,6 +84,9 @@ const Content: React.FC = () => {
     if (registerState.data?.data?.isCreated === false) {
       setShowModalFailed(true);
     }
+    if (registerState.error !== null) {
+      setShowModalFailed(true);
+    }
   }, [registerState]);
 
   const renderUploadPhotoRules = () => {
@@ -102,8 +111,8 @@ const Content: React.FC = () => {
             type="secondary"
             title="Selesai"
             onPress={() => {
-              resetRegister();
-              register();
+              setChecked('unselect');
+              setShowModalPrivacyPolicy(true);
             }}
             disabled={registerState?.loading}
             loading={registerState?.loading}
@@ -117,8 +126,8 @@ const Content: React.FC = () => {
     const isImageCaptured = capturedImage?.data?.type === 'store';
     let uri: string | undefined = '';
     let action = () => {
-      resetRegister();
-      register();
+      setChecked('unselect');
+      setShowModalPrivacyPolicy(true);
     };
 
     if (isImageCaptured) {
@@ -132,6 +141,9 @@ const Content: React.FC = () => {
 
     return (
       <View style={{ flex: 1 }}>
+        <View style={{ margin: 16, marginBottom: 0 }}>
+          <SnbText.B3>Unggah Foto Toko</SnbText.B3>
+        </View>
         <Image
           resizeMode="contain"
           source={{ uri }}
@@ -148,7 +160,7 @@ const Content: React.FC = () => {
             <SnbButton.Dynamic
               size="small"
               type="tertiary"
-              title="Ulangi"
+              title="Ubah Foto"
               onPress={() => openCamera('store')}
               disabled={false}
             />
@@ -172,6 +184,95 @@ const Content: React.FC = () => {
     );
   };
 
+  const renderSheetContent = () => {
+    if (showModalFailed) {
+      return (
+        <View>
+          <Image
+            source={require('../../../../assets/images/sinbad_cry.png')}
+            style={{
+              height: 160,
+              width: 160,
+              alignSelf: 'center',
+              marginVertical: 16,
+            }}
+          />
+          <View style={{ marginVertical: 16 }}>
+            <SnbText.B3 align="center">
+              Toko gagal dibuat karena ada kesalahan pada server
+            </SnbText.B3>
+          </View>
+          <SnbButton.Single
+            title="Tutup"
+            type="primary"
+            disabled={false}
+            onPress={() => setShowModalFailed(false)}
+          />
+        </View>
+      );
+    }
+
+    if (showModalPrivacyPolicy) {
+      return (
+        <View>
+          <View style={{ padding: 16 }}>
+            <SnbText.B1 align="justify">
+              Kebijakan Privasi ini adalah bentuk komitmen dari Sinbad untuk
+              menghargai dan melindungi setiap data atau informasi pribadi
+              Pengguna aplikasi Sinbad (selanjutnya disebut sebagai "aplikasi").
+              {'\n'}
+              {'\n'}
+              Kebijakan Privasi ini menetapkan dasar atas perolehan,
+              pengumpulan, pengolahan, penganalisisan, penampilan, pembukaan,
+              dan/atau segala bentuk pengelolaan yang terkait dengan data atau
+              informasi yang Pengguna berikan kepada Sinbad atau yang Sinbad
+              kumpulkan dari Pengguna, termasuk data pribadi Pengguna, baik pada
+              saat pengguna mengakses aplikasi dan mempergunakan layanan-layanan
+              pada aplikasi (selanjutnya disebut sebagai "data").
+              {'\n'}
+              {'\n'}
+              Dengan mengakses dan/atau mempergunakan layanan Sinbad, Pengguna
+              menyatakan bahwa setiap data Pengguna merupakan data yang benar
+              dan sah, serta Pengguna memberikan persetujuan kepada Sinbad untuk
+              memperoleh, mengumpulkan, menyimpan, mengelola dan mempergunakan
+              data tersebut sebagaimana tercantum dalam Kebijakan Privasi
+              Sinbad.
+            </SnbText.B1>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 16,
+              }}>
+              <SnbCheckbox
+                status={checked}
+                onPress={() =>
+                  setChecked(checked === 'selected' ? 'unselect' : 'selected')
+                }
+              />
+              <View style={{ marginHorizontal: 4 }} />
+              <SnbText.B3 color={color.black60}>
+                Saya menyetujui Syarat & Ketentuan yang berlaku
+              </SnbText.B3>
+            </View>
+          </View>
+          <SnbButton.Single
+            title="Setuju"
+            type="primary"
+            disabled={checked === 'unselect'}
+            onPress={() => {
+              setShowModalPrivacyPolicy(false);
+              resetRegister();
+              register();
+            }}
+          />
+        </View>
+      );
+    }
+
+    return null;
+  };
+
   const isImageAvailable =
     merchantData?.imageUrl !== '' || capturedImage.data?.type === 'store';
 
@@ -193,33 +294,14 @@ const Content: React.FC = () => {
         renderUploadPhotoRules(),
       )}
       <SnbBottomSheet
-        open={showModalFailed}
+        open={showModalFailed || showModalPrivacyPolicy}
         actionIcon="close"
-        title="Gagal Membuat Toko"
-        content={
-          <View>
-            <Image
-              source={require('../../../../assets/images/sinbad_cry.png')}
-              style={{
-                height: 160,
-                width: 160,
-                alignSelf: 'center',
-                marginVertical: 16,
-              }}
-            />
-            <View style={{ marginVertical: 16 }}>
-              <SnbText.B3 align="center">
-                Toko gagal dibuat karena ada kesalahan pada server
-              </SnbText.B3>
-            </View>
-            <SnbButton.Single
-              title="Tutup"
-              type="primary"
-              disabled={false}
-              onPress={() => setShowModalFailed(false)}
-            />
-          </View>
-        }
+        closeAction={() => {
+          setShowModalFailed(false);
+          setShowModalPrivacyPolicy(false);
+        }}
+        title={showModalFailed ? 'Gagal Membuat Toko' : 'Kebijakan Privasi'}
+        content={renderSheetContent()}
       />
     </View>
   );

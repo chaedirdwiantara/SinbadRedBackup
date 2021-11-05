@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import { setErrorMessage, useInput, useMerchant } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
   color,
@@ -22,7 +22,6 @@ const Content: React.FC = () => {
   const idNumber = useInput();
   const taxNumber = useInput();
   const email = useInput();
-  const [emailIsNotValid, setEmailIsNotValid] = useState(false);
 
   React.useEffect(() => {
     if (checkEmailAvailability.data !== null) {
@@ -58,9 +57,9 @@ const Content: React.FC = () => {
   const validateEmail = (data: string) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(data) || !data) {
-      setEmailIsNotValid(false);
+      email.setMessageError('');
     } else {
-      setEmailIsNotValid(true);
+      email.setMessageError('Pastikan email yang Anda masukkan benar');
     }
     email.setValue(data);
   };
@@ -128,8 +127,6 @@ const Content: React.FC = () => {
               placeholder="Masukkan alamat email anda"
               keyboardType="email-address"
               onChangeText={(text) => validateEmail(text)}
-              type={emailIsNotValid ? 'error' : 'default'}
-              valMsgError={'Pastikan email yang Anda masukkan benar'}
             />
           </View>
         </ScrollView>
@@ -162,7 +159,7 @@ const Content: React.FC = () => {
             idNumber.value === '' ||
             idNumber.valMsgError !== '' ||
             taxNumber.valMsgError !== '' ||
-            emailIsNotValid
+            email.valMsgError !== ''
           }
         />
       </View>
