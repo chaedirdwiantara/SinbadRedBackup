@@ -20,7 +20,7 @@ const MerchantDetailAddressView: FC = () => {
   const { resetMerchantData } = useMerchant();
 
   React.useEffect(() => {
-    if (storeAddress.longitude !== null && storeAddress.latitude !== null) {
+    if (storeAddress?.longitude !== null && storeAddress?.latitude !== null) {
       mapRef.current?.animateToRegion({
         latitude: storeAddress?.latitude || 0,
         longitude: storeAddress?.longitude || 0,
@@ -65,8 +65,8 @@ const MerchantDetailAddressView: FC = () => {
         <MapView
           ref={mapRef}
           initialRegion={{
-            latitude: storeAddress.latitude || 0,
-            longitude: storeAddress.longitude || 0,
+            latitude: storeAddress?.latitude || 0,
+            longitude: storeAddress?.longitude || 0,
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           }}
@@ -86,8 +86,8 @@ const MerchantDetailAddressView: FC = () => {
           }}>
           <Marker
             coordinate={{
-              latitude: storeAddress.latitude || 0,
-              longitude: storeAddress.longitude || 0,
+              latitude: storeAddress?.latitude || 0,
+              longitude: storeAddress?.longitude || 0,
             }}
           />
         </MapView>
@@ -102,7 +102,7 @@ const MerchantDetailAddressView: FC = () => {
           <SnbTextField.Text
             labelText={'Provinsi'}
             placeholder={'-'}
-            type={'default'}
+            type={'read'}
             value={storeAddress?.province || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
@@ -112,60 +112,60 @@ const MerchantDetailAddressView: FC = () => {
           <SnbTextField.Text
             labelText={'Kota'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.city || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Kecamatan'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.district || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Kelurahan'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.urban || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Kodepos'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.zipCode || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Area
             labelText={'Alamat'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.address ? storeAddress?.address : '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Area
             labelText={'Catatan Alamat'}
             placeholder={'-'}
-            type={'default'}
             value={storeAddress?.noteAddress || '-'}
             onChangeText={(text) => console.log(text)}
             clearText={() => console.log('clear')}
+            type={'read'}
           />
         </View>
       </View>

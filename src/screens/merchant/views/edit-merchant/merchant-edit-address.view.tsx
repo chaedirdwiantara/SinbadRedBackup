@@ -42,15 +42,15 @@ const MerchantEditAddressView = () => {
         0,
         240,
       );
+      goBack();
       reset(dispatchSupplier);
       resetMerchantData();
       detail(dispatchUser, { id: '' });
-      goBack();
     }
   }, [stateMerchant]);
 
   React.useEffect(() => {
-    if (merchantData.longitude !== null && merchantData.latitude !== null) {
+    if (merchantData?.longitude !== null && merchantData?.latitude !== null) {
       mapRef.current?.animateToRegion({
         latitude: merchantData?.latitude || 0,
         longitude: merchantData?.longitude || 0,
@@ -64,12 +64,24 @@ const MerchantEditAddressView = () => {
   }, [merchantData]);
 
   const handleDisableButton = () => {
-    return !(
-      address.value === '' ||
-      address.value !== storeAddress?.address ||
-      noteAddress.value === '' ||
-      noteAddress.value !== storeAddress?.noteAddress
-    );
+    if (address.value === '') {
+      if (
+        noteAddress.value === '' ||
+        noteAddress.value === storeAddress?.noteAddress
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (address.value === storeAddress?.address) {
+      if (noteAddress.value === storeAddress?.noteAddress) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   };
 
   const handleUpdate = () => {
@@ -88,8 +100,10 @@ const MerchantEditAddressView = () => {
       data.noteAddress = noteAddress.value;
     }
     editMerchant(dispatchSupplier, { data });
+    console.log('data:', data);
   };
 
+  console.log('map:', storeAddress);
   return (
     <SnbContainer color={'white'}>
       <SnbTopNav.Type3
@@ -158,7 +172,6 @@ const MerchantEditAddressView = () => {
                 {...noteAddress}
                 labelText="Catatan Alamat"
                 placeholder="Masukkan Catatan Alamat"
-                mandatory
                 maxLength={200}
               />
             </View>
