@@ -78,6 +78,7 @@ const Content: React.FC = () => {
               labelText="Ukuran Toko"
               placeholder="Masukkan ukuran toko Anda"
               keyboardType="number-pad"
+              rightText="m²"
             />
           </View>
           <View style={{ padding: 16 }}>

@@ -35,19 +35,23 @@ export const useRegister = () => {
   const registerState = state.register;
   const dispatch = useDispatch();
   const merchantData: models.IMerchantData | any = state.merchantData;
+  const registerParams = { ...merchantData };
 
   const register = () => {
-    for (const key in merchantData) {
-      if (merchantData[key] === null || merchantData[key] === '') {
-        delete merchantData[key];
+    for (const key in registerParams) {
+      if (registerParams[key] === null || registerParams[key] === '') {
+        delete registerParams[key];
       }
     }
-    for (const key in merchantData.user) {
-      if (merchantData.user[key] === null || merchantData.user[key] === '') {
-        delete merchantData.user[key];
+    for (const key in registerParams.user) {
+      if (
+        registerParams.user[key] === null ||
+        registerParams.user[key] === ''
+      ) {
+        delete registerParams.user[key];
       }
     }
-    dispatch(Actions.merchantRegisterProcess(merchantData));
+    dispatch(Actions.merchantRegisterProcess(registerParams));
   };
 
   const resetRegister = () => {

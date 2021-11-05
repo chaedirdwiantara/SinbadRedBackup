@@ -97,6 +97,9 @@ const Content: React.FC = () => {
     }
     return (
       <View style={{ flex: 1 }}>
+        <View style={{ margin: 16, marginBottom: 0 }}>
+          <SnbText.B3>Unggah Foto Selfie & KTP</SnbText.B3>
+        </View>
         <Image
           resizeMode="contain"
           source={{ uri }}
@@ -113,7 +116,7 @@ const Content: React.FC = () => {
             <SnbButton.Dynamic
               size="small"
               type="tertiary"
-              title="Ulangi"
+              title="Ubah Foto"
               onPress={() => {
                 openCamera('selfie');
               }}
