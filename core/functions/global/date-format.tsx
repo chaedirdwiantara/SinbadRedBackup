@@ -7,7 +7,7 @@ const TimeZone = {
   9: 'WIT',
 };
 
-moment.locale('id', idLocale);
+moment.updateLocale('id', idLocale);
 
 const toLocalDateTime = (ISOStringDate: string) => {
   const dateInstance = new Date(ISOStringDate);

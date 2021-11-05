@@ -24,7 +24,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
         enter={() => console.log('enter')}
         icon1Value={100}
         icon1Name="notifications_none"
-        icon1Action={() => console.log('this example for icon 1 action')}
+        icon1Action={() => NavigationAction.navigate('NotificationView')}
         icon2Value={100}
         icon2Name="cart"
         icon2Action={() => NavigationAction.navigate('OmsShoppingCartView')}

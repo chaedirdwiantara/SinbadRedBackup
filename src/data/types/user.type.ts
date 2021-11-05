@@ -7,6 +7,7 @@ export const STORE_DETAIL_FAILED = 'StoreDetailFailed';
 export const CHANGE_PASSWORD_PROCESS = 'ChangePasswordProcess';
 export const CHANGE_PASSWORD_SUCCESS = 'ChangePasswordSuccess';
 export const CHANGE_PASSWORD_FAILED = 'ChangePasswordFailed';
+export const CHANGE_PASSWORD_RESET = 'ChangePasswordReset';
 /**
  * ================================================================
  * NOTES

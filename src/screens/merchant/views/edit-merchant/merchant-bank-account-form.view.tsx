@@ -8,7 +8,13 @@ import {
   color,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity, BackHandler } from 'react-native';
+import {
+  ScrollView,
+  View,
+  TouchableOpacity,
+  BackHandler,
+  KeyboardAvoidingView,
+} from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -223,7 +229,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           content={renderContentTnC()}
           title={'Syarat dan Ketentuan'}
           actionIcon={'close'}
-          action={true}
           closeAction={() => setOpenModalTNC(false)}
         />
       </View>
@@ -235,9 +240,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   return (
     <View style={{ flex: 1 }}>
       {renderHeader()}
-      <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
-        {renderContent()}
-      </ScrollView>
+      <KeyboardAvoidingView behavior={'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
+          {renderContent()}
+        </ScrollView>
+      </KeyboardAvoidingView>
       {renderTNC()}
       {renderButton()}
       {modalTNC()}

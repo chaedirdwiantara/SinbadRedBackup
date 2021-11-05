@@ -6,7 +6,7 @@ import {
 } from '@screen/auth/functions';
 import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, BackHandler } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
@@ -20,6 +20,7 @@ const Content: React.FC = () => {
   const { checkPhone, resetCheckPhone, checkPhoneNoAvailability } =
     useCheckPhoneNoAvailability();
   const { navigate } = useNavigation();
+  const { goBack } = useNavigation();
 
   React.useEffect(() => {
     if (checkPhoneNoAvailability.data !== null) {
@@ -37,6 +38,18 @@ const Content: React.FC = () => {
     return () => {
       resetCheckPhone();
     };
+  }, []);
+
+  React.useEffect(() => {
+    const backAction = () => {
+      goBack();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   }, []);
 
   return (
