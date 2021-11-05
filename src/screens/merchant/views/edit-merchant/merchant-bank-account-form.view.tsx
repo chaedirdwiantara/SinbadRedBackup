@@ -59,6 +59,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.navigate('MerchantOtpView', {
         type: 'bankAccount',
         data: stateUser.detail.data?.ownerData.profile.mobilePhone,
+        bankData: {
+          bankId: bankId.value,
+          accountName: bankAccountName.value,
+          accountNo: bankAccountNo.value,
+          branch: bankBranchName.value,
+        },
       });
     }
   }, [stateMerchant]);

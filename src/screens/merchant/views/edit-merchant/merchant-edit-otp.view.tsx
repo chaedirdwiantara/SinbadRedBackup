@@ -19,13 +19,12 @@ interface Props {
   loading: boolean;
   otpSuccess: boolean;
   hideIcon: boolean;
-  resend: () => void;
   route: any;
 }
 
 const OTPContent: React.FC<Props> = (props) => {
   /** === HOOK === */
-  const { loading, resend, data, type } = props.route.params;
+  const { loading, data, type } = props.route.params;
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
@@ -110,6 +109,23 @@ const OTPContent: React.FC<Props> = (props) => {
       changeBankAccountAction.resetVerificationBankAccount(dispatchSupplier);
     }
     NavigationAction.back();
+  };
+
+  const resend = () => {
+    if (type === 'email') {
+      const data = {
+        email: props.route.params.data,
+      };
+      changeEmailAction.changeEmail(dispatchSupplier, { data });
+    } else if (type === 'mobilePhone') {
+      const data = {
+        mobilePhone: props.route.params.data,
+      };
+      changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
+    } else if (type === 'bankAccount') {
+      const data = props.route.params.bankData;
+      changeBankAccountAction.changeBankAccount(dispatchSupplier, { data });
+    }
   };
 
   /** === VIEW === */
