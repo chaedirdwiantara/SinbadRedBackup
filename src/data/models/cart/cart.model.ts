@@ -1,9 +1,6 @@
 import * as models from '@models';
-export type DeterminateCheckboxStatus = 'selected' | 'unselect';
-
-export type CheckboxStatus = DeterminateCheckboxStatus | 'indeterminate';
-
-export interface CartProduct {
+/** === CART LIST === */
+export interface ProductCart {
   productId: string;
   productName: string;
   urlImages: string;
@@ -17,11 +14,11 @@ export interface CartProduct {
   uom: string;
 }
 
-export interface CartBrand {
+export interface BrandCart {
   brandId: string;
   brandName: string;
   selected: boolean;
-  products: CartProduct[];
+  products: ProductCart[];
 }
 
 export interface ParcelCart {
@@ -29,7 +26,7 @@ export interface ParcelCart {
   invoiceGroupId: string;
   invoiceGroupName: string;
   portfolioId: string;
-  brands: CartBrand[];
+  brands: BrandCart[];
   supplierId: number;
   channelId: number;
   groupId: number;
@@ -47,11 +44,4 @@ export interface CartSuccessProps {
   isActiveStore: boolean;
   platform: string;
   userId: number;
-}
-
-export interface ShopingCartItemProps
-  extends models.DetailItemProps<CartSuccessProps> {}
-
-export interface ShopingCartProps {
-  cart: ShopingCartItemProps;
 }

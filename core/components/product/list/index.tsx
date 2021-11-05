@@ -38,6 +38,7 @@ interface ProductListProps {
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
   activeCategory?: CategoryType;
+  activeBrandId?: string;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -52,6 +53,7 @@ const ProductList: FC<ProductListProps> = ({
   onLoadMore,
   activeKeyword = '',
   activeCategory,
+  activeBrandId,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -59,6 +61,8 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+
   const {
     sortModalVisible,
     sortActive,
@@ -72,9 +76,11 @@ const ProductList: FC<ProductListProps> = ({
   } = useBottomAction(onFetch, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
+    tags: selectedTags,
   });
   const registerSupplierModal = useRegisterSupplierModal();
   const tagActions = useTagListActions();
+
   const {
     stateProduct: {
       list: { loading: productLoading },
@@ -95,7 +101,11 @@ const ProductList: FC<ProductListProps> = ({
   }, [productLoading]);
 
   useEffect(() => {
-    tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
+    tagActions.fetch(dispatchTag, {
+      categoryId: selectedCategory?.id,
+      keyword: searchKeyword,
+      brandId: activeBrandId,
+    });
   }, [selectedCategory, keywordSearched]);
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -105,14 +115,12 @@ const ProductList: FC<ProductListProps> = ({
     sortBy: sortQuery?.sortBy,
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
+    tags: selectedTags,
   };
 
   const handleTagPress = (tags: Array<string>) => {
-    const queryOptions = {
-      ...derivedQueryOptions,
-      tags,
-    };
-    onFetch(queryOptions);
+    setSelectedTags(tags);
+    onFetch({ ...derivedQueryOptions, tags });
   };
   /** === VIEW === */
   return (
@@ -121,13 +129,15 @@ const ProductList: FC<ProductListProps> = ({
         title={selectedCategory ? selectedCategory.name : headerTitle}
         type={headerType}
         setSearchKeyword={setSearchKeyword}
+        keyword={searchKeyword}
         onSearch={() => {
-          const queryOptions = {
-            ...derivedQueryOptions,
-            keyword: searchKeyword,
-          };
           setKeywordSearched(true);
-          onFetch(queryOptions);
+          onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
+        }}
+        onSearchClear={() => {
+          setSearchKeyword('');
+          setKeywordSearched(true);
+          onFetch({ ...derivedQueryOptions, keyword: '' });
         }}
       />
       {categoryTabs && (
@@ -137,12 +147,8 @@ const ProductList: FC<ProductListProps> = ({
           selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
           selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
           onTabChange={(category) => {
-            const queryOptions = {
-              ...derivedQueryOptions,
-              categoryId: category.id,
-            };
             setSelectedCategory(category);
-            onFetch(queryOptions);
+            onFetch({ ...derivedQueryOptions, categoryId: category.id });
           }}
         />
       )}
@@ -202,7 +208,12 @@ const ProductList: FC<ProductListProps> = ({
         title="Filter"
         action={true}
         actionIcon="close"
-        content={<Action.Filter onButtonPress={handleActionClick} />}
+        content={
+          <Action.Filter
+            appliedFilterQuery={filterQuery}
+            onButtonPress={handleActionClick}
+          />
+        }
         closeAction={() => handleActionClick({ type: 'filter' })}
       />
       {/* Register Supplier Modal */}

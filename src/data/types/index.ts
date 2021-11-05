@@ -9,14 +9,13 @@ export * from './auth.type';
 export * from './product';
 export * from './merchant.type';
 export * from './user.type';
-// export * from './oms.type';
-export * from './oms/verification-order/verification-order.type';
 export * from './promo.type';
 export * from './category.type';
 export * from './voucher.type';
 export * from './brand.type';
 export * from './user.type';
 export * from './notification.type';
+export * from './oms';
 /**
  * ================================================================
  * NOTES
