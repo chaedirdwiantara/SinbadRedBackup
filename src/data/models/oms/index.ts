@@ -1,2 +1,3 @@
 export * from './shopping-cart/shopping-cart.model';
 export * from './verification/verification.model';
+export * from './shopping-cart/add-to-cart.model';

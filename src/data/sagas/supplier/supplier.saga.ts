@@ -6,7 +6,7 @@ import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
-/** Segmentation */
+/** => Segmentation */
 function* supplierSegmentation(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.SupplierSegmentationSuccessProps> =
@@ -26,6 +26,7 @@ function* supplierSegmentation(action: models.DetailProcessAction) {
     );
   }
 }
+/** => Send data to supplier */
 function* sendDataToSupplier(action: models.CreateProcessAction) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
