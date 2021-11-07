@@ -14,7 +14,7 @@ function* loginUserName(action: models.LoginUserNameProcessAction) {
     });
     yield put(ActionCreators.loginUserNameSuccess(response));
   } catch (error) {
-    yield put(ActionCreators.loginUserNameFailed(error));
+    yield put(ActionCreators.loginUserNameFailed(error as models.ErrorProps));
   }
 }
 /** => request OTP */
@@ -25,7 +25,7 @@ function* requestOTP(action: models.RequestOTPProcessAction) {
     });
     yield put(ActionCreators.requestOTPSuccess(response));
   } catch (error) {
-    yield put(ActionCreators.requestOTPFailed(error));
+    yield put(ActionCreators.requestOTPFailed(error as models.ErrorProps));
   }
 }
 /** => verification OTP */
@@ -36,7 +36,7 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
     });
     yield put(ActionCreators.verificationOTPSuccess(response));
   } catch (error) {
-    yield put(ActionCreators.verificationOTPFailed(error));
+    yield put(ActionCreators.verificationOTPFailed(error as models.ErrorProps));
   }
 }
 /** => logout */
@@ -47,7 +47,18 @@ function* logout() {
     });
     yield put(ActionCreators.logoutSuccess(response));
   } catch (error) {
-    yield put(ActionCreators.logoutFailed(error));
+    yield put(ActionCreators.logoutFailed(error as models.ErrorProps));
+  }
+}
+/** => Auth me */
+function* authMe() {
+  try {
+    const response: models.AuthMeSuccessProps = yield call(() => {
+      return AuthApi.getAuthMe;
+    });
+    yield put(ActionCreators.authMeSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.authMeFailed(error as models.ErrorProps));
   }
 }
 
@@ -57,6 +68,7 @@ function* AuthSaga() {
   yield takeLatest(types.REQUEST_OTP_PROCESS, requestOTP);
   yield takeLatest(types.VERIFICATION_OTP_PROCESS, verificationOTP);
   yield takeLatest(types.LOGOUT_PROCESS, logout);
+  yield takeLatest(types.AUTH_ME_PROCESS, authMe);
 }
 
 export default AuthSaga;

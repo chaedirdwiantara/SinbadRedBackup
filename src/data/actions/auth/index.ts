@@ -5,6 +5,7 @@
  */
 export * from './auth-api.action';
 export * from './auth-napi.action';
+export * from './auth-me-api.action';
 /**
  * ================================================================
  * NOTES
