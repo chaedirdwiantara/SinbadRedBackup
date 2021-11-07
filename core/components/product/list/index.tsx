@@ -117,7 +117,7 @@ const ProductList: FC<ProductListProps> = ({
 
   const handleOrderPress = (product: models.ProductList) => {
     registerSupplierModal.setVisible(true);
-    productDetailActions.fatch(dispatchProduct, product.id);
+    productDetailActions.detail(dispatchProduct, product.id);
   };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
