@@ -6,7 +6,7 @@ import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
-/** Cart View */
+/** => Cart view */
 function* cartView(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.CartSuccessProps> =
@@ -22,10 +22,25 @@ function* cartView(action: models.DetailProcessAction) {
     yield put(ActionCreators.cartViewFailed(error as models.ErrorProps));
   }
 }
-
+/** => Add to cart */
+function* addToCart(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return CartApi.addToCart(action.payload);
+    });
+    yield action.contextDispatch(ActionCreators.addToCartSuccess(response));
+    yield put(ActionCreators.addToCartSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.addToCartFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.addToCartFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_VIEW_PROCESS, cartView);
+  yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
 }
 
 export default CartSaga;
