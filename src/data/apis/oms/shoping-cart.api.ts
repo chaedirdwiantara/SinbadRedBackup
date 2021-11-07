@@ -13,6 +13,14 @@ const getCartView = (payload: models.DetailProcessProps) => {
   );
 };
 
+const addToCart = (
+  payload: models.CreateProcessProps<models.AddToCartProps>,
+) => {
+  const path = '';
+  return apiMapping('auth', path, 'cart', 'v1', 'CREATE', payload.data);
+};
+
 export const CartApi = {
   getCartView,
+  addToCart,
 };
