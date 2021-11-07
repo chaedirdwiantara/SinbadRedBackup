@@ -26,9 +26,28 @@ function* supplierSegmentation(action: models.DetailProcessAction) {
     );
   }
 }
+function* sendDataToSupplier(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return SupplierApi.createSupplierStore(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.sendDataToSupplierSuccess(response),
+    );
+    yield put(ActionCreators.sendDataToSupplierSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.sendDataToSupplierFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.sendDataToSupplierFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER ===*/
 function* SupplierSaga() {
   yield takeLatest(types.SUPPLIER_SEGMENTATION_PROCESS, supplierSegmentation);
+  yield takeLatest(types.SEND_DATA_SUPPLIER_PROCESS, sendDataToSupplier);
 }
 
 export default SupplierSaga;

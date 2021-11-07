@@ -5,20 +5,29 @@ import {
   SupplierSegmentationInitialProps,
   supplierSegmentationReducer,
 } from './supplier-segmentation.reducer';
+import {
+  sendDataToSupplierInitialState,
+  SendDataToSupplierInitialProps,
+  sendDataToSupplierReducer,
+} from './send-data-to-supplier.reducer';
 /** === TYPES === */
-export type SupplierInitialProps = models.SupplierSegmentationProps;
+export type SupplierInitialProps = models.SupplierSegmentationProps &
+  models.CreateProps;
 
 interface SupplierState {
   segmentation: SupplierSegmentationInitialProps;
+  create: SendDataToSupplierInitialProps;
 }
 /** === INITIAL STATE */
 export const supplierInitialState = {
   segmentation: supplierSegmentationInitialState,
+  create: sendDataToSupplierInitialState,
 };
 /** === REDUCER === */
 export const supplierReducer = (
-  { segmentation }: SupplierState,
+  { segmentation, create }: SupplierState,
   action: any,
 ) => ({
   segmentation: supplierSegmentationReducer(segmentation, action),
+  create: sendDataToSupplierReducer(create, action),
 });
