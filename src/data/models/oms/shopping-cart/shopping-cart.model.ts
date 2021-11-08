@@ -1,7 +1,4 @@
 import * as models from '@models';
-export type DeterminateCheckboxStatus = 'selected' | 'unselect';
-
-export type CheckboxStatus = DeterminateCheckboxStatus | 'indeterminate';
 
 export interface CartProduct {
   productId: string;
