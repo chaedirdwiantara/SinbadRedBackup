@@ -22,24 +22,20 @@ import {
   VerificationOrderDetailPromoList,
   VerificationOrderDetailVoucherList,
 } from '@models';
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import LoadingPage from '@core/components/LoadingPage';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
-  const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
   /** === HOOK === */
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
+  const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
+
+  /**
+   * VERIFICATION-ORDER SECTION
+   */
+  const { stateVerificationOrder } = React.useContext(
+    contexts.VerificationOrderContext,
+  );
   const verificationOrderDetailData = stateVerificationOrder.detail.data;
-  const { verificationOrderDetail } = useVerficationOrderAction();
-  React.useEffect(() => {
-    if (stateVerificationOrder.create.data !== null) {
-      verificationOrderDetail(
-        dispatchVerificationOrder,
-        stateVerificationOrder.create.data.id,
-      );
-    }
-  }, []);
+
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
