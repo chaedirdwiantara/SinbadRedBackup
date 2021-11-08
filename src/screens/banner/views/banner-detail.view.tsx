@@ -23,6 +23,7 @@ import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
 import { contexts } from '@contexts';
+import LoadingPage from '@core/components/LoadingPage';
 import { BannerDetailStyles } from '../styles';
 
 const { width } = Dimensions.get('window');
@@ -315,9 +316,8 @@ const BannerDetailView: React.FC = ({ route }: any) => {
     );
   };
 
-  /** => main */
-  return (
-    <SnbContainer color="grey">
+  const content = () => {
+    return (
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
         {renderBanner()}
@@ -337,6 +337,13 @@ const BannerDetailView: React.FC = ({ route }: any) => {
         )}
         {renderModalFullTnC()}
       </ScrollView>
+    );
+  };
+
+  /** => main */
+  return (
+    <SnbContainer color="grey">
+      {!bannerDetailState.loading ? <View>{content()}</View> : <LoadingPage />}
     </SnbContainer>
   );
 };
