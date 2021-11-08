@@ -22,7 +22,6 @@ const RegisterSupplierModal: FC<RegisterSupplierModalProps> = ({
   <SnbBottomSheet
     open={visible}
     title={' '}
-    action={true}
     actionIcon="close"
     content={
       <View

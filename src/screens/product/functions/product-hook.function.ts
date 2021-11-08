@@ -67,11 +67,13 @@ const useProductListActions = () => {
 
 const useProductDetailAction = () => {
   const dispatch = useDispatch();
+
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
     refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.productDetailRefresh());
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {

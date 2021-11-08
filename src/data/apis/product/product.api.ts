@@ -27,7 +27,7 @@ const getList = (payload: models.ProductListProcessProps) => {
   const tagQs =
     payload.tags !== undefined ? `&${serializeTagsQs(payload.tags)}` : '';
 
-  return apiMapping<models.ProductList[]>(
+  return apiMapping<Array<models.ProductList>>(
     'public',
     `products?${qs}${tagQs}`,
     'product',
@@ -37,10 +37,9 @@ const getList = (payload: models.ProductListProcessProps) => {
 };
 
 const getDetail = (payload: models.DetailProcessProps) => {
-  const path = `products/${payload.id}`;
-  return apiMapping<models.ProductDetailSuccessProps>(
+  return apiMapping<models.ProductDetail>(
     'public',
-    path,
+    `products/${payload.id}`,
     'product',
     'v1',
     'DETAIL',

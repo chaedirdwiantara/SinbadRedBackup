@@ -98,6 +98,6 @@ export const goToShoppingCart = () => {
   NavigationAction.navigate('OmsShoppingCartView');
 };
 
-export const goToProductDetail = () => {
-  NavigationAction.navigate('ProductDetailView');
+export const goToProductDetail = (id: string) => {
+  NavigationAction.navigate('ProductDetailView', { id });
 };

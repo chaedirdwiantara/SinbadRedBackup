@@ -16,8 +16,8 @@ export const productDetailProcess = (
 };
 /** => Succeeded */
 export const productDetailSuccess = (
-  payload: models.DetailSuccessProps<models.ProductDetailSuccessProps>,
-): models.DetailSuccessAction<models.ProductDetailSuccessProps> => {
+  payload: models.DetailSuccessProps<models.ProductDetail>,
+): models.DetailSuccessAction<models.ProductDetail> => {
   return { type: types.PRODUCT_DETAIL_SUCCESS, payload };
 };
 /** => Failed */
