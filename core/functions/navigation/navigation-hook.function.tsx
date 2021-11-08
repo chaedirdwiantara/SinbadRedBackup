@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { useRoute, RouteProp } from '@react-navigation/native';
+import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === TYPE === */
 /** => for params route */
@@ -32,7 +32,7 @@ const useGetNavParams = () => {
   return useRoute<RouteProp<ParamList, 'Data'>>();
 };
 /** === EXPORT === */
-export { useGetNavParams, useCustomBackHardware };
+export { useGetNavParams, useCustomBackHardware, useFocusEffect };
 /**
  * ================================================================
  * NOTES

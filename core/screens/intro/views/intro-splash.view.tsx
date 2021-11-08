@@ -1,18 +1,16 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbSvgIcon } from 'react-native-sinbad-ui';
-import { NavigationAction } from '@navigation';
+/** === IMPORT EXTERNAL FUNCTION === */
+import { usePageAfterIntro } from '../functions';
 /** === IMPORT STYLE HERE === */
 import IntroStyle from '../styles/intro.style';
 /** === COMPONENT === */
-const SplashView: FC = () => {
+const IntroSplashView: React.FC = () => {
   /** === HOOK === */
-  useEffect(() => {
-    setTimeout(() => {
-      NavigationAction.resetToHome();
-    }, 1000);
-  }, []);
+  usePageAfterIntro();
+  /** === EFFECT === */
   /** === VIEW === */
   /** => main */
   return (
@@ -24,7 +22,7 @@ const SplashView: FC = () => {
   );
 };
 
-export default SplashView;
+export default IntroSplashView;
 /**
  * ================================================================
  * NOTES

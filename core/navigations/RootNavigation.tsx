@@ -47,3 +47,12 @@ export const resetToHome = () => {
     }),
   );
 };
+/** => reset to intro sinbad */
+export const resetToIntroSinbad = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'IntroSinbad' }],
+    }),
+  );
+};

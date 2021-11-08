@@ -1,11 +1,10 @@
 /**
  * ============================================================
- * REGISTER ALL ACTIONS HERE
+ * REGISTER ALL INTERFACE HERE
  * ============================================================
  */
-export * from './permanent';
-export * from './global';
-export * from './auth';
+export * from './auth.model';
+export * from './auth-action.model';
 /**
  * ================================================================
  * NOTES

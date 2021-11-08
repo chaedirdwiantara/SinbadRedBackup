@@ -1,11 +1,14 @@
 /**
  * ============================================================
- * REGISTER ALL ACTIONS HERE
+ * REGISTER ALL REDUCERS HERE
  * ============================================================
  */
-export * from './permanent';
-export * from './global';
-export * from './auth';
+import { combineReducers } from 'redux';
+import { flagRTDB } from './flag-rtdb/flag-rtdb.reducer';
+
+export const globalCore = combineReducers({
+  flagRTDB,
+});
 /**
  * ================================================================
  * NOTES
