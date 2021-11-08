@@ -84,4 +84,5 @@ export interface ProductDetail {
   isPromo: boolean;
   isAvailable?: boolean;
   isBundle?: boolean;
+  promoList: Array<models.PotentialPromoProductProps>;
 }
