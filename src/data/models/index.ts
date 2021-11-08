@@ -8,6 +8,7 @@ export * from '@core/models/detail.model';
 export * from '@core/models/list-actions.model';
 export * from '@core/models/detail-actions.model';
 export * from '@core/models/error.model';
+export * from '@core/data/models';
 export * from '@core/models/create.model';
 export * from '@core/models/create-action.model';
 export * from '@core/models/update.model';

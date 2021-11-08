@@ -3,9 +3,7 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './permanent';
-export * from './global';
-export * from './auth';
+export * from './auth-api.action';
 /**
  * ================================================================
  * NOTES

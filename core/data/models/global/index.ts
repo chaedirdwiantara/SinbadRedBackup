@@ -1,9 +1,9 @@
 /**
  * ============================================================
- * ALL VARIABLE THAT WILL USED BY ACTIONS, REDUCERS, AND SAGAS
+ * REGISTER ALL INTERFACE HERE
  * ============================================================
  */
-export * from './flag-rtdb.type';
+export * from './flag-rtdb';
 /**
  * ================================================================
  * NOTES

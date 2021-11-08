@@ -10,6 +10,7 @@ import { RecommendationHomeView } from '../../recommendation/views';
 import { CategoryHomeView } from '../../category/views';
 /** === IMPORT FUNCTION HERE === */
 import { HomeHookFunc } from '../functions';
+import { useAuthCoreAction } from '@core/functions/auth';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 /** === COMPONENT === */
@@ -18,11 +19,15 @@ const HomeView: React.FC = () => {
   const { action, state } = HomeHookFunc.useHeaderChange();
   useGetTokenNotLogin();
   setFlagByDeviceId();
+  const { me } = useAuthCoreAction();
   /** === FUNCTION FOR HOOK === */
   const changeHeader = (height: number) => {
     height > 100 ? action(true) : action(false);
   };
   /** === VIEW === */
+  React.useEffect(() => {
+    me();
+  }, []);
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={state} />;

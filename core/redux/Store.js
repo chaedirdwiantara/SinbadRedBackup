@@ -11,7 +11,7 @@ import sagas from '@sagas';
 const config = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['permanent'],
+  whitelist: ['permanentCore'],
 };
 /** === SET LOGGER === */
 const logger = createLogger({

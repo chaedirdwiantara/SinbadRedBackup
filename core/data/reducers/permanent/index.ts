@@ -1,7 +1,9 @@
-/** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
-import SplashView from './splash.view';
-/** === EXPORT ALL === */
-export { SplashView };
+/**
+ * ============================================================
+ * EXPORT ALL REDUCER HERE
+ * ============================================================
+ */
+export * from './permanent.reducer';
 /**
  * ================================================================
  * NOTES

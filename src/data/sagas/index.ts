@@ -1,4 +1,5 @@
 import { all, fork } from 'redux-saga/effects';
+import AuthCoreSaga from '@core/data/sagas/auth/auth.saga';
 import ProductSaga from './product/product.saga';
 import ProductTagSaga from './product/tag.saga';
 import AuthSaga from './auth.saga';
@@ -15,6 +16,7 @@ import BrandSaga from './brand.saga';
 import NotificationSaga from './notification.saga';
 
 function* rootSaga() {
+  yield all([fork(AuthCoreSaga)]);
   yield all([fork(ProductSaga)]);
   yield all([fork(AuthSaga)]);
   yield all([fork(UserSaga)]);

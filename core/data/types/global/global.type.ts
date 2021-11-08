@@ -1,4 +1,4 @@
-/** === THIS FOR EXTERNAL USED === */
+/** === THIS FOR INTERNAL USED === */
 /** => change flag rtdb */
 export const CHANGE_FLAG_RTDB = 'ChangeFlagRTDB';
 /**
