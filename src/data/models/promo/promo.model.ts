@@ -1,4 +1,5 @@
 /** === PROMO PAYMENT LIST === */
+/** => success props */
 export interface PromoPaymentListSuccessProps {
   id: number;
   name: string;
@@ -14,9 +15,9 @@ export interface PromoPaymentDetailSuccessProps {
   startDate: string;
   endDate: string;
   discountRebate: number;
-  promoTnC: string[];
+  termAndConditions: string[];
 }
-/** === PROMO GENERRAL DETAIL === */
+/** === PROMO GENERAL DETAIL === */
 export interface PromoGeneralDetailSuccessProps {
   id: number;
   name: string;
@@ -26,4 +27,8 @@ export interface PromoGeneralDetailSuccessProps {
   startDate: string;
   endDate: string;
   termsAndCondition: string[];
+}
+export interface PotentialPromoProductProps {
+  promoSupplierId: string;
+  shortDescription: string;
 }

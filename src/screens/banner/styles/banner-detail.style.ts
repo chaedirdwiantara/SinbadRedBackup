@@ -10,4 +10,11 @@ export const BannerDetailStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  headerProductList: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    marginBottom: 12,
+  },
 });

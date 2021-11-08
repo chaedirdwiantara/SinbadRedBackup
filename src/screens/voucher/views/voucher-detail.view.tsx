@@ -38,7 +38,11 @@ const VoucherDetailView: FC = ({ route }: any) => {
   const voucherDetailAction = useVoucherDetailAction();
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(dispatchVoucher, route.params.voucherId);
+    voucherDetailAction.detail(
+      dispatchVoucher,
+      route.params.voucherId,
+      route.params.type,
+    );
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };

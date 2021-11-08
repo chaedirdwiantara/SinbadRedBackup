@@ -1,8 +1,8 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { TouchableOpacity, View, Image } from 'react-native';
 import { SnbText } from 'react-native-sinbad-ui';
-/** === STYLE === */
+/** === IMPORT STYLE === */
 import CategoryHomeStyle from '../styles/category-home.style';
 /** === TYPE === */
 interface CategoryHomeItemProps {

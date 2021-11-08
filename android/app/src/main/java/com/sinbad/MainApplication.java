@@ -1,4 +1,4 @@
-package com.sinbad.nextgen;
+package com.app.sinbaddev;
 
 import android.app.Application;
 import android.content.Context;

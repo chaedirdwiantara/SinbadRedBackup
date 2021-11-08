@@ -7,7 +7,7 @@ import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment list */
-function* promoPaymentList(action: models.ListProcessAction) {
+function* promoPaymentList(action: models.PromoPaymentListProcessAction) {
   try {
     const response: models.ListSuccessProps<models.PromoPaymentListSuccessProps> =
       yield call(() => {
@@ -18,7 +18,7 @@ function* promoPaymentList(action: models.ListProcessAction) {
     );
     yield put(ActionCreators.promoPaymentListSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield action.contextDispatch(ActionCreators.promoPaymentListFailed(error));
     yield put(ActionCreators.promoPaymentListFailed(error));
   }
 }
@@ -34,7 +34,9 @@ function* promoPaymentDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoPaymentDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoPaymentDetailFailed(error),
+    );
     yield put(ActionCreators.promoPaymentDetailFailed(error));
   }
 }
@@ -50,7 +52,9 @@ function* promoGeneralDetail(action: models.DetailProcessAction) {
     );
     yield put(ActionCreators.promoGeneralDetailSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.promoPaymentDetailFailed(error));
+    yield action.contextDispatch(
+      ActionCreators.promoGeneralDetailFailed(error),
+    );
     yield put(ActionCreators.promoGeneralDetailFailed(error));
   }
 }

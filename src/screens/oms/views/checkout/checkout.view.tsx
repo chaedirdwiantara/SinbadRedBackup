@@ -1,9 +1,9 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
-import HTMLView from 'react-native-htmlview';
+import Html from '@core/components/Html';
 import {
   SnbContainer,
   SnbTopNav,
@@ -28,6 +28,7 @@ import {
   useParcelDetailModal,
   useTermsAndConditionsModal,
 } from '../../functions/checkout';
+import LoadingPage from '@core/components/LoadingPage';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -253,19 +254,19 @@ const dummyTermsAndConditions = {
       {
         paymentTypeId: 1,
         name: 'Bayar Sekarang',
-        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+        term: '<p>- Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</p><p>- Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</p><p>- Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</p>',
       },
       {
         paymentTypeId: 1,
         name: 'Bayar Sekarang',
-        term: '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
+        term: '<p>- Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</p><p>- Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</p><p>- Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</p>',
       },
     ],
     paymentChannels: [
       {
         paymentChannelId: 2,
         name: 'Bank BCA Virtual Account',
-        term: '<ul><li class=p1>Pembeli diharapkan untuk melakukan transfer ke nomor rekening yang disediakan.</li></ul>',
+        term: '<p>- Pembeli diharapkan untuk melakukan transfer ke nomor rekening yang disediakan.</p>',
       },
     ],
   },
@@ -278,6 +279,13 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelsModal = usePaymentChannelModal();
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
+  const [loadingPage, setLoadingPage] = useState(true);
+
+  /** Set Loading Page */
+  useEffect(() => {
+    setTimeout(() => setLoadingPage(false), 1000);
+  }, []);
+
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -490,7 +498,7 @@ const OmsCheckoutView: FC = () => {
             <View style={{ marginBottom: 8 }}>
               <SnbText.H4>{item.name}</SnbText.H4>
             </View>
-            <HTMLView value={item.term} />
+            <Html value={item.term} fontSize={12} />
           </View>
         );
       });
@@ -502,7 +510,7 @@ const OmsCheckoutView: FC = () => {
             <View style={{ marginBottom: 8 }}>
               <SnbText.H4>{item.name}</SnbText.H4>
             </View>
-            <HTMLView value={item.term} />
+            <Html value={item.term} fontSize={12} />
           </View>
         );
       });
@@ -787,6 +795,22 @@ const OmsCheckoutView: FC = () => {
       />
     );
   };
+
+  /**
+   * Render Body
+   * @returns { Component } - Return Body
+   */
+  const renderBody = () => {
+    return loadingPage ? (
+      <LoadingPage />
+    ) : (
+      <>
+        {renderContent()}
+        {renderModals()}
+      </>
+    );
+  };
+
   /** => modals */
   const renderModals = () => {
     return (
@@ -802,8 +826,7 @@ const OmsCheckoutView: FC = () => {
   return (
     <SnbContainer color="grey">
       {renderHeader()}
-      {renderContent()}
-      {renderModals()}
+      {renderBody()}
     </SnbContainer>
   );
 };
