@@ -152,7 +152,6 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...vehicleAccessibilityAmount}
-              mandatory
               labelText="Kapasitas Jalan"
               placeholder="Masukkan kapasitas jalan"
               keyboardType="phone-pad"

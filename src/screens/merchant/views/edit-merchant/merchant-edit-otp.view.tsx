@@ -19,13 +19,12 @@ interface Props {
   loading: boolean;
   otpSuccess: boolean;
   hideIcon: boolean;
-  resend: () => void;
   route: any;
 }
 
 const OTPContent: React.FC<Props> = (props) => {
   /** === HOOK === */
-  const { loading, resend, data, type } = props.route.params;
+  const { loading, data, type } = props.route.params;
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
@@ -112,6 +111,23 @@ const OTPContent: React.FC<Props> = (props) => {
     NavigationAction.back();
   };
 
+  const resend = () => {
+    if (type === 'email') {
+      const data = {
+        email: props.route.params.data,
+      };
+      changeEmailAction.changeEmail(dispatchSupplier, { data });
+    } else if (type === 'mobilePhone') {
+      const data = {
+        mobilePhone: props.route.params.data,
+      };
+      changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
+    } else if (type === 'bankAccount') {
+      const data = props.route.params.bankData;
+      changeBankAccountAction.changeBankAccount(dispatchSupplier, { data });
+    }
+  };
+
   /** === VIEW === */
   const header = () => {
     return (
@@ -125,14 +141,14 @@ const OTPContent: React.FC<Props> = (props) => {
 
   const content = () => {
     return (
-      <View style={{ justifyContent: 'space-between', flex: 1 }}>
+      <View style={{ justifyContent: 'space-between' }}>
         <View>
           <Image
             source={require('../../../../assets/images/sinbad_image/otp.png')}
             style={OtpStyle.imageOtp}
           />
           <View style={OtpStyle.titleContainer}>
-            <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
+            <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
             <View style={{ marginVertical: 4 }} />
             <SnbText.B1 align="center">
               Kode verifikasi telah dikirimkan melalui{' '}
@@ -153,7 +169,7 @@ const OTPContent: React.FC<Props> = (props) => {
           </SnbText.B1>
         </View>
         <View>
-          <View style={{ height: 72 }}>
+          <View style={{ height: 72, marginTop: -28, marginBottom: -20 }}>
             <SnbButton.Single
               title="Verifikasi"
               onPress={() => verifyOtp()}
