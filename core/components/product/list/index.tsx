@@ -9,8 +9,8 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
-import RegisterSupplierModal from './RegisterSupplierModal';
 import AddToCartModal from './AddToCartModal';
+import { RegisterSupplierModal } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
