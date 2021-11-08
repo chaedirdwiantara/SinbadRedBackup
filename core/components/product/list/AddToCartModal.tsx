@@ -115,7 +115,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={AddToCartModalStyle.priceContainer}>
           <View style={{ marginRight: 8 }}>
             <SnbText.B3 color={color.red50}>
-              {toCurrency(productDetailState?.data?.price ?? 0, {
+              {toCurrency(productDetailState?.data?.currentPrice ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>
@@ -156,9 +156,12 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           <SnbText.B3>Total: </SnbText.B3>
           <SnbText.B4 color={color.red50}>
-            {toCurrency(productDetailState?.data?.price ?? 0 * orderQty, {
-              withFraction: false,
-            })}
+            {toCurrency(
+              productDetailState?.data?.currentPrice ?? 0 * orderQty,
+              {
+                withFraction: false,
+              },
+            )}
           </SnbText.B4>
         </View>
         <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>

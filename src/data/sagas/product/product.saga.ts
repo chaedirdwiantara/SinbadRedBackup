@@ -9,13 +9,12 @@ import * as types from '@types';
 /** => List */
 function* productList(action: models.ListProcessAction) {
   try {
-    const response: models.ListSuccessProps<models.ProductList[]> = yield call(
-      () => {
+    const response: models.ListSuccessProps<Array<models.ProductList>> =
+      yield call(() => {
         return ProductApi.getList(
           action.payload as models.ProductListProcessProps,
         );
-      },
-    );
+      });
     yield action.contextDispatch(ActionCreators.productListSuccess(response));
     yield put(ActionCreators.productListSuccess(response));
   } catch (error) {
@@ -28,7 +27,7 @@ function* productList(action: models.ListProcessAction) {
 /** => Detail */
 function* productDetail(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.ProductDetailSuccessProps> =
+    const response: models.DetailSuccessProps<models.ProductDetail> =
       yield call(() => {
         return ProductApi.getDetail(action.payload);
       });

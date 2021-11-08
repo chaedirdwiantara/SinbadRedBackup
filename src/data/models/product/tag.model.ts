@@ -35,7 +35,3 @@ export interface TagListItemProps {
   data: Array<TagList>;
   error: models.ErrorProps | null;
 }
-
-export interface TagListProps {
-  list: TagListItemProps;
-}
