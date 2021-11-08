@@ -16,6 +16,7 @@ export * from './brand.type';
 export * from './user.type';
 export * from './notification.type';
 export * from './oms';
+export * from './supplier';
 /**
  * ================================================================
  * NOTES

@@ -24,7 +24,11 @@ export const productDetailSuccess = (
 export const productDetailFailed = (
   payload: models.ErrorProps,
 ): models.DetailFailedAction => {
-  return { type: types.PRODUCT_LIST_FAILED, payload };
+  return { type: types.PRODUCT_DETAIL_FAILED, payload };
+};
+/** => Refresh */
+export const productDetailRefresh = () => {
+  return { type: types.PRODUCT_DETAIL_REFRESH };
 };
 /** => Reset */
 export const productDetailReset = () => {

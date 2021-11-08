@@ -10,13 +10,18 @@ import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 import RegisterSupplierModal from './RegisterSupplierModal';
+import AddToCartModal from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
   priceSortOptions,
   useRegisterSupplierModal,
+  useOrderModalVisibility,
 } from '@core/functions/product';
-import { useTagListActions } from '@screen/product/functions';
+import {
+  useTagListActions,
+  useProductDetailAction,
+} from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
@@ -79,12 +84,14 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   });
   const registerSupplierModal = useRegisterSupplierModal();
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
-
+  const productDetailActions = useProductDetailAction();
   const {
     stateProduct: {
       list: { loading: productLoading },
     },
+    dispatchProduct,
   } = useProductContext();
   const {
     stateTag: {
@@ -107,6 +114,11 @@ const ProductList: FC<ProductListProps> = ({
       brandId: activeBrandId,
     });
   }, [selectedCategory, keywordSearched]);
+
+  const handleOrderPress = (product: models.ProductList) => {
+    registerSupplierModal.setVisible(true);
+    productDetailActions.detail(dispatchProduct, product.id);
+  };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -159,7 +171,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -170,7 +182,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -191,7 +203,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={sortModalVisible}
         title="Urutkan"
-        action={true}
         actionIcon="close"
         content={
           <Action.Sort
@@ -206,7 +217,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={filterModalVisible}
         title="Filter"
-        action={true}
         actionIcon="close"
         content={
           <Action.Filter
@@ -219,9 +229,19 @@ const ProductList: FC<ProductListProps> = ({
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
         visible={registerSupplierModal.visible}
-        onSubmit={registerSupplierModal.sendSupplierData}
+        onSubmit={() =>
+          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+        }
         onClose={() => registerSupplierModal.setVisible(false)}
       />
+      {/* Add to Cart Modal */}
+      {orderModalVisible && (
+        <AddToCartModal
+          open={orderModalVisible}
+          closeAction={() => setOrderModalVisible(false)}
+          onAddToCartPress={() => console.log('Add to cart pressed')}
+        />
+      )}
     </SnbContainer>
   );
 };
