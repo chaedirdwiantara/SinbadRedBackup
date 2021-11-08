@@ -7,7 +7,7 @@ const useSupplierSegmentationAction = () => {
   const dispatch = useDispatch();
 
   return {
-    fatch: (contextDispatch: (action: any) => any, id: string) => {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.supplierSegmentationProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {

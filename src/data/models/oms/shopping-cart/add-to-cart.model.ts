@@ -1,5 +1,3 @@
-import * as models from '@models';
-
 export interface AddToCartProps {
   cartId?: string;
   deviceId: string;
@@ -19,7 +17,3 @@ export interface AddToCartProps {
   typeId: number;
   clusterId: number;
 }
-
-export interface AddToCartDataProps extends models.CreateItemSuccessProps {}
-
-export interface AddToCartSuccessProps extends models.CreateSuccessProps {}
