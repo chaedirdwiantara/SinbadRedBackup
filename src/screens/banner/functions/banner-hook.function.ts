@@ -25,6 +25,7 @@ const useBannerAction = () => {
   const dispatch = useDispatch();
   const limit = 4;
   return {
+    /** => list */
     list: (contextDispatch: (action: any) => any, search?: string) => {
       contextDispatch(Actions.bannerListReset());
       dispatch(callList(contextDispatch, true, 0, limit, search));
@@ -44,6 +45,13 @@ const useBannerAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.bannerListReset());
+    },
+    /** => detail */
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.bannerDetailProcess(contextDispatch, { id }));
+    },
+    resetDetail: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.bannerDetailReset());
     },
   };
 };

@@ -21,7 +21,6 @@ function* bannerSlider(action: models.ListProcessAction) {
 }
 /** ==> banner list */
 function* bannerList(action: models.ListProcessAction) {
-  console.log('run saga');
   try {
     const response: models.ListSuccessProps<models.BannerListSuccessProps> =
       yield call(() => {
@@ -34,10 +33,24 @@ function* bannerList(action: models.ListProcessAction) {
     yield put(ActionCreators.bannerListFailed(error));
   }
 }
+/** ==> banner detail */
+function* bannerDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.ListSuccessProps<models.BannerDetailSuccessProps> =
+      yield call(() => {
+        return BannerApi.bannerDetail(action.payload);
+      });
+    yield action.contextDispatch(ActionCreators.bannerDetailSuccess(response));
+    yield put(ActionCreators.bannerDetailSuccess(response));
+  } catch (error: any) {
+    yield put(ActionCreators.bannerDetailFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* BannerSaga() {
   yield takeLatest(types.BANNER_SLIDER_PROCESS, bannerSlider);
   yield takeLatest(types.BANNER_LIST_PROCESS, bannerList);
+  yield takeLatest(types.BANNER_DETAIL_PROCESS, bannerDetail);
 }
 
 export default BannerSaga;

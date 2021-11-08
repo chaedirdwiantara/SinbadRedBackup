@@ -27,15 +27,17 @@ const { width } = Dimensions.get('window');
 
 /** === COMPONENT === */
 const BannerListView: React.FC = () => {
-  /** === HOOK === */
+  /** === STATE === */
   const [searchText, setSearchText] = useState('');
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
   const bannerAction = useBannerAction();
   const bannerlistState = stateBanner.list;
+  /** === HOOK === */
   /** => effect */
   useEffect(() => {
-    bannerAction.list(dispatchBanner);
+    bannerAction.list(dispatchBanner, searchText);
   }, []);
+  console.log('bannerlistState', bannerlistState);
   /** === FUNCTION === */
   /** => handle load more */
   const onHandleLoadMore = () => {
@@ -75,9 +77,9 @@ const BannerListView: React.FC = () => {
           autoCapitalize="none"
           keyboardType="default"
           returnKeyType="search"
-          enter={() => onHandleSearch}
+          enter={() => onHandleSearch()}
           prefixIconName="search"
-          suffixIconName={searchText !== '' ? 'cancel' : 'bca'}
+          suffixIconName={searchText !== '' ? 'cancel' : ''}
         />
       </View>
     );
@@ -125,7 +127,7 @@ const BannerListView: React.FC = () => {
           {item.bannerType === 'general' ? (
             <TouchableOpacity
               style={BannerStyles.buttonDetail}
-              onPress={() => goToBannerDetail()}>
+              onPress={() => goToBannerDetail(item.id)}>
               <SnbText.B2 color={'white'}>Detail</SnbText.B2>
             </TouchableOpacity>
           ) : (
@@ -158,10 +160,10 @@ const BannerListView: React.FC = () => {
   const content = () => {
     return (
       <View style={{ flex: 1 }}>
-        {!bannerlistState.loading && bannerlistState.data.length !== 0 ? (
+        {!bannerlistState.loading && bannerlistState.data.length > 0 ? (
           <View>{renderBannerList()}</View>
         ) : (
-          <LoadingPage />
+          <View />
         )}
       </View>
     );
@@ -171,7 +173,7 @@ const BannerListView: React.FC = () => {
     <SnbContainer color="white">
       {header()}
       {search()}
-      {content()}
+      {bannerlistState.loading ? <LoadingPage /> : content()}
     </SnbContainer>
   );
 };

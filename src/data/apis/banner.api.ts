@@ -25,8 +25,20 @@ const bannerList = (data: models.ListProcessProps) => {
     'LIST',
   );
 };
+/** => banner detail */
+const bannerDetail = (data: models.DetailProcessProps) => {
+  const path = `banners/${data.id}`;
+  return apiMapping<models.BannerDetailSuccessProps>(
+    'public',
+    path,
+    'banner',
+    'v1',
+    'DETAIL',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const BannerApi = {
   bannerSlider,
   bannerList,
+  bannerDetail,
 };
