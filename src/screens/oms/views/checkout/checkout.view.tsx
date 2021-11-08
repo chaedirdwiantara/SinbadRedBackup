@@ -30,7 +30,7 @@ import {
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import Database from '@react-native-firebase/database';
-import { uniqueId } from '@core/functions/global/device-data';
+import { uniqueId, deviceId } from '@core/functions/global/device-data';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -288,11 +288,13 @@ const OmsCheckoutView: FC = () => {
   });
 
   /** === FUNCTION === */
-  const userInfo = Database().ref(`/s2sCommunication/sinbadApp/${uniqueId}`);
+  const userInfo = Database().ref(`/sinbadApp/${uniqueId}/flag`);
 
   /** Set Loading Page */
   useEffect(() => {
+    console.log('uniqueId:', uniqueId);
     userInfo.on('value', (data) => {
+      console.log(data.val());
       setUserS2S(data.val());
     });
     setTimeout(() => setLoadingPage(false), 1000);
