@@ -31,19 +31,21 @@ const BannerListView: React.FC = () => {
   const [searchText, setSearchText] = useState('');
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
   const bannerAction = useBannerAction();
-  const bannerlistState = stateBanner.list;
+  const bannerlistState = stateBanner.bannerGeneral.list;
   /** === HOOK === */
   /** => effect */
   useEffect(() => {
     bannerAction.list(dispatchBanner, searchText);
   }, []);
-  console.log('bannerlistState', bannerlistState);
   /** === FUNCTION === */
   /** => handle load more */
   const onHandleLoadMore = () => {
-    if (stateBanner.list.data) {
-      if (stateBanner.list.data.length < stateBanner.list.total) {
-        bannerAction.loadMore(dispatchBanner, stateBanner.list);
+    if (stateBanner.bannerGeneral.list.data) {
+      if (
+        stateBanner.bannerGeneral.list.data.length <
+        stateBanner.bannerGeneral.list.total
+      ) {
+        bannerAction.loadMore(dispatchBanner, stateBanner.bannerGeneral.list);
       }
     }
   };
@@ -79,7 +81,8 @@ const BannerListView: React.FC = () => {
           returnKeyType="search"
           enter={() => onHandleSearch()}
           prefixIconName="search"
-          suffixIconName={searchText !== '' ? 'cancel' : ''}
+          suffixIconName={searchText !== '' ? 'cancel' : undefined}
+          // suffixIconName="cancel"
         />
       </View>
     );

@@ -7,9 +7,9 @@ import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => banner slider */
-function* bannerSlider(action: models.ListProcessAction) {
+function* bannerSlider(action: models.SliderProcessAction) {
   try {
-    const response: models.ListSuccessProps<models.BannerSliderSuccessProps> =
+    const response: models.SliderSuccessProps<models.BannerSliderSuccessProps> =
       yield call(() => {
         return BannerApi.bannerSlider();
       });
@@ -28,7 +28,6 @@ function* bannerList(action: models.ListProcessAction) {
       });
     yield action.contextDispatch(ActionCreators.bannerListSuccess(response));
     yield put(ActionCreators.bannerListSuccess(response));
-    console.log(response, 'resp');
   } catch (error: any) {
     yield put(ActionCreators.bannerListFailed(error));
   }

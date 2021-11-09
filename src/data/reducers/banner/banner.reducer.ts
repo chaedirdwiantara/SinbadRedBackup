@@ -1,35 +1,29 @@
 /** === IMPORT HERE === */
-import * as models from '@models';
+import {
+  bannerGeneralInitialState,
+  bannerGeneralReducer,
+  BannerGeneralInitialProps,
+} from './banner-general/banner-general.reducer';
 import {
   bannerSliderInitialState,
   bannerSliderReducer,
-} from './banner-slider.reducer';
-import {
-  bannerListInitialState,
-  bannerListReducer,
-} from './banner-list.reducer';
-import {
-  bannerDetailInitialState,
-  bannerDetailReducer,
-} from './banner-detail.reducer';
+  BannerSliderInitialProps,
+} from './banner-slider/banner-slider.reducer';
 /** === TYPE HERE === */
-export type BannerInitialProps = models.ListProps<
-  models.BannerSliderSuccessProps[]
-> &
-  models.ListProps<models.BannerListSuccessProps[]> &
-  models.DetailProps<models.BannerDetailSuccessProps>;
+export type BannerInitialProps = {
+  bannerGeneral: BannerGeneralInitialProps;
+  bannerSlider: BannerSliderInitialProps;
+};
 /** === INITIAL HERE === */
 export const bannerInitialState = {
-  listSlider: bannerSliderInitialState,
-  list: bannerListInitialState,
-  detail: bannerDetailInitialState,
+  bannerGeneral: bannerGeneralInitialState,
+  bannerSlider: bannerSliderInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const bannerReducer = (
-  { listSlider, list, detail }: any,
+  { bannerGeneral, bannerSlider }: any,
   action: any,
 ) => ({
-  listSlider: bannerSliderReducer(listSlider, action),
-  list: bannerListReducer(list, action),
-  detail: bannerDetailReducer(detail, action),
+  bannerGeneral: bannerGeneralReducer(bannerGeneral, action),
+  bannerSlider: bannerSliderReducer(bannerSlider, action),
 });

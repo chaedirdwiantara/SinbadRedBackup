@@ -53,6 +53,10 @@ const useBannerAction = () => {
     resetDetail: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.bannerDetailReset());
     },
+    /** => slider */
+    slider: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.bannerSliderProcess(contextDispatch));
+    },
   };
 };
 /** === EXPORT === */

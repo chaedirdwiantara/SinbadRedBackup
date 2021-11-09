@@ -105,7 +105,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
   const bannerAction = useBannerAction();
-  const bannerDetailState = stateBanner.detail;
+  const bannerDetailState = stateBanner.bannerGeneral.detail;
   /** === HOOK === */
   React.useEffect(() => {
     bannerAction.detail(dispatchBanner, route.params.bannerId);

@@ -4,25 +4,23 @@ import * as models from '@models';
 /** => banner slider process */
 export const bannerSliderProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
-  contextDispatch({ type: types, payload: data });
+): models.SliderProcessAction => {
+  contextDispatch({ type: types });
   return {
     type: types.BANNER_SLIDER_PROCESS,
-    payload: data,
     contextDispatch,
   };
 };
 /** => banner slider success */
 export const bannerSliderSuccess = (
-  data: models.DetailSuccessProps<models.BannerSliderSuccessProps>,
-): models.DetailSuccessAction<models.BannerSliderSuccessProps> => {
+  data: models.SliderSuccessProps<models.BannerSliderSuccessProps>,
+): models.SliderSuccessAction<models.BannerSliderSuccessProps> => {
   return { type: types.BANNER_SLIDER_SUCCESS, payload: data };
 };
 /** => banner slider failed */
 export const bannerSliderFailed = (
   data: models.ErrorProps,
-): models.DetailFailedAction => {
+): models.ListFailedAction => {
   return { type: types.BANNER_SLIDER_FAILED, payload: data };
 };
 /** === BANNER LIST === */
@@ -40,14 +38,14 @@ export const bannerListProcess = (
 };
 /** => banner list success */
 export const bannerListSuccess = (
-  data: models.DetailSuccessProps<models.BannerListSuccessProps>,
-): models.DetailSuccessAction<models.BannerListSuccessProps> => {
+  data: models.ListSuccessProps<models.BannerListSuccessProps>,
+): models.ListSuccessAction<models.BannerListSuccessProps> => {
   return { type: types.BANNER_LIST_SUCCESS, payload: data };
 };
 /** => bannerlist failed */
 export const bannerListFailed = (
   data: models.ErrorProps,
-): models.DetailFailedAction => {
+): models.ListFailedAction => {
   return { type: types.BANNER_LIST_FAILED, payload: data };
 };
 /** => bannerlist refresh */
