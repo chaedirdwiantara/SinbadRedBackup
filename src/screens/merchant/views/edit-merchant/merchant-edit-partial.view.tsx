@@ -474,8 +474,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Top Brand Selling'}
-            placeholder={'Masukkan Top Brand Selling'}
+            labelText={'Merk Paling Laku'}
+            placeholder={'Masukkan Merk Paling Laku'}
             type={'default'}
             value={topBrand.value}
             onChangeText={(text) => topBrand.setValue(text)}
@@ -484,8 +484,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Wanted Brand'}
-            placeholder={'Masukkan Wanted Brand'}
+            labelText={'Merk Paling Diinginkan'}
+            placeholder={'Masukkan Merk Paling Diinginkan'}
             type={'default'}
             value={wantedBrand.value}
             onChangeText={(text) => wantedBrand.setValue(text)}
