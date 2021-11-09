@@ -53,7 +53,7 @@ function* logout() {
 /** => Auth me */
 function* authMe() {
   try {
-    const response: models.AuthMeSuccessProps = yield call(() => {
+    const response: models.AuthMeSuccess = yield call(() => {
       return AuthApi.getAuthMe;
     });
     yield put(ActionCreators.authMeSuccess(response));

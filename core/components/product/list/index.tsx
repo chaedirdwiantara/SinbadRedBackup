@@ -23,6 +23,9 @@ import {
   useProductDetailAction,
 } from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
+import { useSupplierSegmentationAction } from '@core/functions/supplier/supplier-hook.function';
+import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+import { useAuthCoreAction } from '@core/functions/auth';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -87,6 +90,8 @@ const ProductList: FC<ProductListProps> = ({
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailAction();
+  const supplierSegmentationAction = useSupplierSegmentationAction();
+  const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
       list: { loading: productLoading },
@@ -99,6 +104,7 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchTag,
   } = useTagContext();
+  const { dispatchSupplier } = useSupplierContext();
   const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
 
   useEffect(() => {
@@ -116,8 +122,10 @@ const ProductList: FC<ProductListProps> = ({
   }, [selectedCategory, keywordSearched]);
 
   const handleOrderPress = (product: models.ProductList) => {
-    registerSupplierModal.setVisible(true);
+    authCoreAction.me();
+    supplierSegmentationAction.fetch(dispatchSupplier, product.supplierId);
     productDetailActions.fetch(dispatchProduct, product.id);
+    registerSupplierModal.setVisible(true);
   };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {

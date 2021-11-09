@@ -16,12 +16,7 @@ import {
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
-import {
-  CheckboxStatus,
-  CartProduct,
-  CartBrand,
-  CartInvoiceGroup,
-} from '@models';
+import { CartProduct, CartBrand, CartInvoiceGroup } from '@models';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 import {
@@ -46,20 +41,33 @@ const noImage =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
 const invoiceGroupDummies: Array<CartInvoiceGroup> = [
   {
-    name: 'TRS DNE',
+    invoiceGroupId: '1',
+    invoiceGroupName: 'TRS DNE',
+    cartParcelId: '1',
+    portfolioId: '1',
+    supplierId: 1,
+    channelId: 1,
+    groupId: 1,
+    typeId: 1,
+    clusterId: 1,
     brands: [
       {
-        name: 'SGM',
-        selected: 'unselect',
+        brandId: '1',
+        brandName: 'SGM',
+        selected: false,
         selectedCount: 0,
         products: [
           {
-            name: 'SGM ANANDA 1 1000GR GA',
-            qty: 1,
+            productId: '1',
+            productName: 'SGM ANANDA 1 1000GR GA',
+            urlImages: noImage,
             stock: 5,
+            selected: false,
+            qty: 1,
             displayPrice: 76097,
-            selected: 'unselect',
-            imageUrl: noImage,
+            priceBeforeTax: 76097,
+            priceAfterTax: 76097,
+            warehouseId: 2,
             uom: 'Pcs',
           },
         ],
@@ -67,57 +75,83 @@ const invoiceGroupDummies: Array<CartInvoiceGroup> = [
     ],
   },
   {
-    name: 'Lakme',
+    invoiceGroupId: '2',
+    invoiceGroupName: 'Lakme',
+    cartParcelId: '1',
+    portfolioId: '1',
+    supplierId: 1,
+    channelId: 1,
+    groupId: 1,
+    typeId: 1,
+    clusterId: 1,
     brands: [
       {
-        name: 'Lakme',
-        selected: 'unselect',
+        brandId: '2',
+        brandName: 'Lakme',
+        selected: false,
         selectedCount: 0,
         products: [
           {
-            name: 'LAKME CC CREAM ALMOND',
-            qty: 1,
-            stock: 2,
-            displayPrice: 77891,
-            selected: 'unselect',
-            imageUrl:
+            productId: '2',
+            productName: 'LAKME CC CREAM ALMOND',
+            urlImages:
               'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
+            stock: 2,
+            selected: false,
+            qty: 1,
+            displayPrice: 77891,
+            priceBeforeTax: 77891,
+            priceAfterTax: 77891,
+            warehouseId: 2,
             uom: 'Pcs',
           },
           {
-            name: 'LAKME BLUR PERFECT CREAMER',
-            qty: 1,
-            stock: 10,
-            displayPrice: 150000,
-            selected: 'unselect',
-            imageUrl:
+            productId: '3',
+            productName: 'LAKME BLUR PERFECT CREAMER',
+            urlImages:
               'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
+            stock: 10,
+            selected: false,
+            qty: 1,
+            displayPrice: 150000,
+            priceBeforeTax: 150000,
+            priceAfterTax: 150000,
+            warehouseId: 2,
             uom: 'Pcs',
           },
         ],
       },
       {
-        name: 'Lakme 2',
-        selected: 'unselect',
+        brandId: '3',
+        brandName: 'Lakme 2',
+        selected: false,
         selectedCount: 0,
         products: [
           {
-            name: ' LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR ',
+            productId: '4',
+            productName: ' LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR ',
             qty: 1,
             stock: 4,
             displayPrice: 98782,
-            selected: 'unselect',
-            imageUrl:
+            priceBeforeTax: 98782,
+            priceAfterTax: 98782,
+            warehouseId: 2,
+            selected: false,
+            urlImages:
               'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
             uom: 'Pcs',
           },
           {
-            name: 'LAKME BIPHASED MAKEUP REMOVER ',
+            productId: '5',
+            productName: 'LAKME BIPHASED MAKEUP REMOVER ',
             qty: 1,
             stock: 12,
             displayPrice: 72000,
-            selected: 'unselect',
-            imageUrl:
+            priceBeforeTax: 72000,
+            priceAfterTax: 72000,
+            warehouseId: 2,
+            selected: false,
+            urlImages:
               'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
             uom: 'Pcs',
           },
@@ -135,7 +169,7 @@ const OmsShoppingCartView: FC = () => {
   const [invoiceGroups, setInvoiceGroups] =
     useState<Array<CartInvoiceGroup>>(invoiceGroupDummies);
   const [allProductsSelected, setAllProductsSelected] =
-    useState<CheckboxStatus>('unselect');
+    useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const totalProducts = useMemo(() => getTotalProducts(invoiceGroups), []);
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
@@ -231,17 +265,17 @@ const OmsShoppingCartView: FC = () => {
           borderStyle: 'solid',
           borderBottomColor: color.black10,
         }}
-        key={product.name}>
+        key={product.productName}>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ marginRight: 20, marginLeft: 4 }}>
             <SnbCheckbox
-              status={product.selected}
+              status={product.selected ? 'selected' : 'unselect'}
               onPress={() =>
                 handleSelectedProductChange(
                   invoiceGroupIndex,
                   brandIndex,
                   productIndex,
-                  product.selected === 'selected' ? 'unselect' : 'selected',
+                  product.selected ? false : true,
                   [invoiceGroups, setInvoiceGroups],
                   [productSelectedCount, setProductSelectedCount],
                   setAllProductsSelected,
@@ -251,12 +285,12 @@ const OmsShoppingCartView: FC = () => {
             />
           </View>
           <Image
-            source={{ uri: product.imageUrl }}
+            source={{ uri: product.urlImages }}
             style={{ marginRight: 8, width: 77, height: 77 }}
           />
           <View>
             <View style={{ marginBottom: 12, maxWidth: 160 }}>
-              <SnbText.B4>{product.name}</SnbText.B4>
+              <SnbText.B4>{product.productName}</SnbText.B4>
             </View>
             <View style={{ marginBottom: 12 }}>
               <SnbText.B4 color={color.red50}>{productPrice}</SnbText.B4>
@@ -320,7 +354,7 @@ const OmsShoppingCartView: FC = () => {
     brandIndex: number,
     invoiceGroupIndex: number,
   ) => (
-    <Fragment key={brand.name}>
+    <Fragment key={brand.brandName}>
       <View
         style={{
           ...ShoppingCartStyles.topCardSlot,
@@ -330,15 +364,12 @@ const OmsShoppingCartView: FC = () => {
         }}>
         <View style={{ marginRight: 20, marginLeft: 4 }}>
           <SnbCheckbox
-            status={brand.selected}
+            status={brand.selected ? 'selected' : 'unselect'}
             onPress={() =>
               handleSelectedBrandChange(
                 invoiceGroupIndex,
                 brandIndex,
-                brand.selected === 'indeterminate' ||
-                  brand.selected === 'unselect'
-                  ? 'selected'
-                  : 'unselect',
+                brand.selected === false ? true : false,
                 [invoiceGroups, setInvoiceGroups],
                 [productSelectedCount, setProductSelectedCount],
                 setAllProductsSelected,
@@ -347,7 +378,7 @@ const OmsShoppingCartView: FC = () => {
             }
           />
         </View>
-        <SnbText.B4>{brand.name}</SnbText.B4>
+        <SnbText.B4>{brand.brandName}</SnbText.B4>
       </View>
       {brand.products.map((product, productIndex) =>
         renderProduct(
@@ -365,9 +396,11 @@ const OmsShoppingCartView: FC = () => {
     invoiceGroup: CartInvoiceGroup,
     invoiceGroupIndex: number,
   ) => (
-    <View style={ShoppingCartStyles.cardContainer} key={invoiceGroup.name}>
+    <View
+      style={ShoppingCartStyles.cardContainer}
+      key={invoiceGroup.invoiceGroupName}>
       <View style={ShoppingCartStyles.topCardSlot}>
-        <SnbText.B4>{invoiceGroup.name}</SnbText.B4>
+        <SnbText.B4>{invoiceGroup.invoiceGroupName}</SnbText.B4>
       </View>
       {invoiceGroup.brands.map((brand, brandIndex) =>
         renderBrand(brand, brandIndex, invoiceGroupIndex),
@@ -529,13 +562,10 @@ const OmsShoppingCartView: FC = () => {
       <View style={ShoppingCartStyles.footerBody}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <SnbCheckbox
-            status={allProductsSelected}
+            status={allProductsSelected ? 'selected' : 'unselect'}
             onPress={() =>
               handleAllSelectedProductsChange(
-                allProductsSelected === 'indeterminate' ||
-                  allProductsSelected === 'unselect'
-                  ? 'selected'
-                  : 'unselect',
+                allProductsSelected === false ? true : false,
                 [invoiceGroups, setInvoiceGroups],
                 setProductSelectedCount,
                 setAllProductsSelected,
@@ -578,7 +608,7 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {invoiceGroups.length > 10 ? (
+      {invoiceGroups.length > 0 ? (
         <Fragment>
           <ScrollView>
             {renderShippingAddress()}

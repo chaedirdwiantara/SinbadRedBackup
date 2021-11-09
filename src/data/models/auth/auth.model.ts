@@ -56,6 +56,6 @@ export interface AuthMeDataProps {
   sellerIds: SellerId[];
 }
 
-export interface AuthMeSuccessProps {
+export interface AuthMeSuccess {
   data: AuthMeDataProps;
 }

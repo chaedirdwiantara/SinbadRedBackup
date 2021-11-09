@@ -9,7 +9,7 @@ import * as types from '@types';
 /** => Segmentation */
 function* supplierSegmentation(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.SupplierSegmentationSuccessProps> =
+    const response: models.DetailSuccessProps<models.SupplierSegmentation> =
       yield call(() => {
         return SupplierApi.getSegmentation(action.payload);
       });

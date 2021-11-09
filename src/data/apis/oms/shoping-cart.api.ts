@@ -14,14 +14,14 @@ const getCartView = (payload: models.DetailProcessProps) => {
 };
 
 const addToCart = (
-  payload: models.CreateProcessProps<models.AddToCartProps>,
+  payload: models.CreateProcessProps<models.AddToCartPayload>,
 ) => {
   const path = 'carts';
   return apiMapping('auth', path, 'cart', 'v1', 'CREATE', payload.data);
 };
 
 const updateCart = (
-  payload: models.UpdateProcessProps<models.CartUpdateProps>,
+  payload: models.UpdateProcessProps<models.CartUpdatePayload>,
 ) => {
   const path = `carts/${payload.data.cartId}`;
   return apiMapping('auth', path, 'cart', 'v1', 'PATCH', payload.data);

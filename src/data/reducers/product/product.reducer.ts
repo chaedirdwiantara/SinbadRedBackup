@@ -20,7 +20,10 @@ export const productInitialState = {
   detail: productDetailInitialState,
 };
 /** === REDUCER === */
-export const productReducer = ({ list }: ProductState, action: any) => ({
+export const productReducer = (
+  { list, detail }: ProductState,
+  action: any,
+) => ({
   list: productListReducer(list, action),
-  detail: productDetailReducer(list, action),
+  detail: productDetailReducer(detail, action),
 });

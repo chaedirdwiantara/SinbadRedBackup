@@ -17,7 +17,7 @@ export const AuthMeReducer = simplifyReducer(authMeInitialState, {
   /** Success */
   [types.AUTH_ME_SUCCESS](
     state = authMeInitialState,
-    action: models.DetailSuccessAction<models.AuthMeSuccessProps>,
+    action: models.DetailSuccessAction<models.AuthMeSuccess>,
   ) {
     return {
       ...state,
