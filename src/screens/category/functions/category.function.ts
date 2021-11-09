@@ -38,7 +38,7 @@ const getCategory1stLevelIndex = (
       return data.findIndex((d) => d.id === id);
     } else {
       // Find first category in 1st level list that has descendants
-      return data.findIndex((d) => d.hasChild);
+      return data.findIndex((d) => d.children.length > 0);
     }
   }
 
