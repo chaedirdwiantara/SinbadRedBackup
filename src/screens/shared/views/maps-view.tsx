@@ -109,7 +109,7 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onSuccessGetPosition={(position) => {
-          if (merchantData.longitude === null) {
+          if (merchantData?.longitude === null) {
             saveStoreData({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
@@ -117,8 +117,8 @@ const MapsView = () => {
             getAddress(position.coords);
           } else {
             getAddress({
-              latitude: merchantData.latitude || 0,
-              longitude: merchantData.longitude || 0,
+              latitude: merchantData?.latitude || 0,
+              longitude: merchantData?.longitude || 0,
             });
           }
         }}
