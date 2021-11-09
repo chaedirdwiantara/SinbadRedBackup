@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/core';
 import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image } from 'react-native';
 import MapView, { LatLng } from 'react-native-maps';
 import {
@@ -12,8 +12,7 @@ import {
   SnbButton,
   SnbText,
   SnbContainer,
-  SnbMaps,
-  SnbSvgIcon,
+  SnbMaps
 } from 'react-native-sinbad-ui';
 
 const MapsView = () => {
@@ -25,10 +24,14 @@ const MapsView = () => {
   const { getLocation, locations, resetLocation } = useLocations();
   const [showModal, setShowModal] = React.useState(false);
   const { saveStoreData, merchantData } = useMerchant();
+  const [isUnmounted, setIsUnmounted] = useState(false);
 
   React.useEffect(() => {
     resetLocation();
-    return resetLocation;
+    return () => {
+      setIsUnmounted(true);
+      resetLocation();
+    };
   }, []);
 
   React.useEffect(() => {
@@ -50,18 +53,22 @@ const MapsView = () => {
         `&latlng=${coords?.latitude},${coords?.longitude}`,
         'GET',
       );
-      if (results?.length > 0) {
-        setDesc(results[0].formatted_address);
-        setAddress(extractAddress(results[0].address_components));
-      } else if (error_message) {
-        setDesc(error_message);
-      } else {
+      if (!isUnmounted) {
+        if (results?.length > 0) {
+          setDesc(results[0].formatted_address);
+          setAddress(extractAddress(results[0].address_components));
+        } else if (error_message) {
+          setDesc(error_message);
+        } else {
+          setDesc('Alamat tidak ditemukan');
+        }
+        setLoadingDesc(false);
+      }
+    } catch (error) {
+      if (!isUnmounted) {
+        setLoadingDesc(false);
         setDesc('Alamat tidak ditemukan');
       }
-      setLoadingDesc(false);
-    } catch (error) {
-      setLoadingDesc(false);
-      setDesc('Alamat tidak ditemukan');
     }
   };
 
@@ -108,13 +115,19 @@ const MapsView = () => {
         contentDesc={desc}
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
-        onSuccessGetPosition={(position) => {
-          if (merchantData?.longitude === null) {
-            saveStoreData({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
+        onSuccessGetPosition={(position, refMaps, refMarker) => {
+          if (merchantData.longitude === null) {
+            refMaps.current?.animateToRegion({
+              ...position,
+              latitudeDelta: 0.02,
+              longitudeDelta: 0.02,
             });
-            getAddress(position.coords);
+            refMarker.current?.animateMarkerToCoordinate(position);
+            saveStoreData({
+              latitude: position.latitude,
+              longitude: position.longitude,
+            });
+            getAddress(position);
           } else {
             getAddress({
               latitude: merchantData?.latitude || 0,
@@ -125,7 +138,6 @@ const MapsView = () => {
       />
       <SnbBottomSheet
         actionIcon="close"
-        action
         closeAction={() => {
           setShowModal(false);
         }}
