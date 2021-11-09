@@ -9,12 +9,13 @@ import {
   color,
   SnbText,
   styles,
+  SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
   goToVoucherDetail,
   useSearchKeyword,
-  useSelectedSupplierVoucher,
+  useSelectedSellerVoucher,
   useSelectedSinbadVoucher,
   countPotentialDiscount,
   useVoucherListMore,
@@ -33,10 +34,10 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   const { stateVoucher } = React.useContext(contexts.VoucherContext);
   const voucherCartListState = stateVoucher.voucherCart.detail;
   const {
-    selectedSupplierVoucher,
-    setSelectedSupplierVoucher,
-    resetSelectedSupplierVoucher,
-  } = useSelectedSupplierVoucher();
+    selectedSellerVoucher,
+    setSelectedSellerVoucher,
+    resetSelectedSellerVoucher,
+  } = useSelectedSellerVoucher();
   const {
     selectedSinbadVoucher,
     setSelectedSinbadVoucher,
@@ -50,23 +51,26 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   React.useEffect(() => {
     setVoucherListData(route.params.voucherList);
     setSelectedSinbadVoucher(route.params.selectedSinbadVoucher);
-    setSelectedSupplierVoucher(route.params.selectedSupplierVoucher);
+    setSelectedSellerVoucher(route.params.selectedSellerVoucher);
   }, []);
   /** === VIEW === */
   /** => empty */
   const renderEmpty = (messageTitle: string, messageBody: string) => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
+    const image = () => {
+      return (
         <Image
           source={require('../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
-        <View style={{ marginTop: 16 }}>
-          <SnbText.H4>{messageTitle}</SnbText.H4>
-        </View>
-        <View>
-          <SnbText.B3>{messageBody}</SnbText.B3>
-        </View>
+      );
+    };
+    return (
+      <View style={VoucherCartListStyles.singleContainer}>
+        <SnbEmptyData
+          title={messageTitle}
+          subtitle={messageBody}
+          image={image()}
+        />
       </View>
     );
   };
@@ -80,7 +84,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
         buttonTitle={'Reset'}
         buttonAction={() => {
           resetSelectedSinbadVoucher();
-          resetSelectedSupplierVoucher();
+          resetSelectedSellerVoucher();
           dispatch(Actions.saveSelectedVouchers(null));
         }}
       />
@@ -139,7 +143,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
         </View>
         {route.params.voucherGroupType === 'sinbad_voucher'
           ? renderSinbadVoucherCard(voucherListData)
-          : renderSupplierVoucherCard(voucherListData)}
+          : renderSellerVoucherCard(voucherListData)}
       </View>
     );
   };
@@ -175,7 +179,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
             />
             <TouchableOpacity
               testID={`voucherCartListMoreView.sinbadVoucherDetailTouchable${index}`}
-              onPress={() => goToVoucherDetail(item.voucherId)}>
+              onPress={() => goToVoucherDetail(item.voucherId, 'sinbad')}>
               <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
             </TouchableOpacity>
           </View>
@@ -183,15 +187,15 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
       );
     });
   };
-  /** => supplier voucher card */
-  const renderSupplierVoucherCard = (
-    voucherList: models.SupplierVoucherListProps[],
+  /** => seller voucher card */
+  const renderSellerVoucherCard = (
+    voucherList: models.SellerVoucherListProps[],
   ) => {
     return voucherList.map((item, index) => {
-      const isIdActive = selectedSupplierVoucher.some(
+      const isIdActive = selectedSellerVoucher.some(
         (element) => element.id === item.id,
       );
-      const isInvoiceGroupIdActive = selectedSupplierVoucher.some(
+      const isInvoiceGroupIdActive = selectedSellerVoucher.some(
         (element) => element.invoiceGroupId === item.invoiceGroupId,
       );
       return (
@@ -204,16 +208,16 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
           onPress={() => {
             if (isInvoiceGroupIdActive) {
               if (!isIdActive) {
-                const tempArray = selectedSupplierVoucher.filter((element) => {
+                const tempArray = selectedSellerVoucher.filter((element) => {
                   return item.invoiceGroupId !== element.invoiceGroupId;
                 });
                 tempArray.push(item);
-                setSelectedSupplierVoucher(tempArray);
+                setSelectedSellerVoucher(tempArray);
               }
             } else {
-              const tempArray = [...selectedSupplierVoucher];
+              const tempArray = [...selectedSellerVoucher];
               tempArray.push(item);
-              setSelectedSupplierVoucher(tempArray);
+              setSelectedSellerVoucher(tempArray);
             }
           }}>
           <View style={VoucherCartListStyles.voucherCardLeftContent}>
@@ -238,7 +242,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
               testID={`voucherCartListMoreView.${camelize(
                 item.invoiceGroupName,
               )}DetailTouchable${index}`}
-              onPress={() => goToVoucherDetail(item.id)}>
+              onPress={() => goToVoucherDetail(item.id, 'seller')}>
               <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
             </TouchableOpacity>
           </View>
@@ -249,8 +253,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** => footer section */
   const renderFooterSection = () => {
     if (
-      (selectedSinbadVoucher === null &&
-        selectedSupplierVoucher.length === 0) ||
+      (selectedSinbadVoucher === null && selectedSellerVoucher.length === 0) ||
       voucherCartListState.data === null
     ) {
       return null;
@@ -259,16 +262,14 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
       <View style={[VoucherCartListStyles.footerSection, styles.shadowStyle]}>
         <View>
           <SnbText.B3 color={color.black60}>{`${
-            countPotentialDiscount(
-              selectedSinbadVoucher,
-              selectedSupplierVoucher,
-            ).totalSelectedVoucher
+            countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
+              .totalSelectedVoucher
           } Voucher Terpilih`}</SnbText.B3>
           <SnbText.C1 color={color.yellow50}>
             {`Potensi Potongan: ${toCurrency(
               countPotentialDiscount(
                 selectedSinbadVoucher,
-                selectedSupplierVoucher,
+                selectedSellerVoucher,
               ).totalDiscount,
             )}`}
           </SnbText.C1>
@@ -282,7 +283,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
               dispatch(
                 Actions.saveSelectedVouchers({
                   sinbadVoucher: selectedSinbadVoucher,
-                  supplierVouchers: selectedSupplierVoucher,
+                  sellerVouchers: selectedSellerVoucher,
                 }),
               );
               goBack();

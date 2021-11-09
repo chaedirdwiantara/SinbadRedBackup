@@ -4,18 +4,28 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
-import SplashView from '@screen/intro/views/splash.view';
+import { IntroSplashView, IntroSinbadView } from '../screens/intro/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
 
 const StackNavigator: React.FC = () => {
-  /** => this for intro */
-  const IntroNav = () => {
+  /** => this for intro splash */
+  const IntroSplashNav = () => {
     return (
       <Screen
-        name="Intro"
-        component={SplashView}
+        name="Splash"
+        component={IntroSplashView}
+        options={{ headerShown: false }}
+      />
+    );
+  };
+  /** => this for intro sinbad */
+  const IntroSinbadNav = () => {
+    return (
+      <Screen
+        name="IntroSinbad"
+        component={IntroSinbadView}
         options={{ headerShown: false }}
       />
     );
@@ -45,8 +55,9 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName={'Intro'}>
-      {IntroNav()}
+    <Navigator initialRouteName={'Splash'}>
+      {IntroSplashNav()}
+      {IntroSinbadNav()}
       {tabNav()}
       {projectNav()}
     </Navigator>

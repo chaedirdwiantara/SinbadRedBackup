@@ -17,6 +17,10 @@ import {
   NotificationContext,
 } from './notification/NotificationProvider';
 import { BannerProvider, BannerContext } from './banner/BannerProvider';
+import {
+  ShopingCartProvider,
+  ShopingCartContext,
+} from './oms/shoping-cart/ShopingCartProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -33,6 +37,7 @@ export const providers = [
   NotificationProvider,
   TagProvider,
   BannerProvider,
+  ShopingCartProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -48,4 +53,5 @@ export const contexts = {
   NotificationContext,
   TagContext,
   BannerContext,
+  ShopingCartContext,
 };

@@ -21,7 +21,8 @@
           "@type": ["./src/data/types"],
           "@types": ["./src/data/types/index"],
           "@navigation": ["./core/functions/navigation/index"],
-          "@svg": ["./src/assets/svg/Svg.tsx"]
+          "@svg": ["./src/assets/svg/Svg.tsx"],
+          "@image": ["./src/assets/images"]
         }
       }
     ]

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useInput, useRegister } from '@screen/auth/functions';
+import { setErrorMessage, useInput, useMerchant } from '@screen/auth/functions';
 import { useCheckEmailAvailability } from '@screen/auth/functions/register-hooks.functions';
 import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
@@ -16,16 +16,16 @@ import {
 const Content: React.FC = () => {
   const { checkEmail, checkEmailAvailability, resetCheckEmail } =
     useCheckEmailAvailability();
-  const { saveRegisterUserData } = useRegister();
+  const { saveUserData } = useMerchant();
   const { navigate } = useNavigation();
-  const name = useInput('Test');
-  const idNumber = useInput('3375020801940003');
-  const taxNumber = useInput('123456789123456');
-  const email = useInput('mazhuda@gmail.com');
+  const name = useInput();
+  const idNumber = useInput();
+  const taxNumber = useInput();
+  const email = useInput();
 
   React.useEffect(() => {
     if (checkEmailAvailability.data !== null) {
-      saveRegisterUserData({
+      saveUserData({
         name: name.value,
         email: email.value,
         idNo: idNumber.value,
@@ -34,7 +34,35 @@ const Content: React.FC = () => {
       resetCheckEmail();
       navigate(REGISTER_STEP_2_VIEW);
     }
+
+    if (checkEmailAvailability.error !== null) {
+      email.setMessageError(setErrorMessage(checkEmailAvailability.error.code));
+    }
   }, [checkEmailAvailability]);
+
+  React.useEffect(() => {
+    if (idNumber.value.length === 16 || idNumber.value === '') {
+      idNumber.setMessageError('');
+    } else {
+      idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
+    }
+    if (taxNumber.value.length === 15 || taxNumber.value === '') {
+      taxNumber.setMessageError('');
+    } else {
+      taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
+    }
+  }, [idNumber.value, taxNumber.value]);
+
+  /** VALIDATE EMAIL */
+  const validateEmail = (data: string) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(data) || !data) {
+      email.setMessageError('');
+    } else {
+      email.setMessageError('Pastikan email yang Anda masukkan benar');
+    }
+    email.setValue(data);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -60,9 +88,15 @@ const Content: React.FC = () => {
               labelText="Nama Pemilik Toko"
               placeholder="Masukkan nama pemilik toko"
               mandatory
+              maxLength={64}
             />
           </View>
-          <View style={{ height: 92, padding: 16 }}>
+          <View
+            style={{
+              height: 92,
+              padding: 16,
+              marginBottom: idNumber.valMsgError ? 8 : 0,
+            }}>
             <SnbTextField.Text
               {...idNumber}
               mandatory
@@ -72,7 +106,12 @@ const Content: React.FC = () => {
               keyboardType="number-pad"
             />
           </View>
-          <View style={{ height: 92, padding: 16 }}>
+          <View
+            style={{
+              height: 92,
+              padding: 16,
+              marginBottom: taxNumber.valMsgError ? 8 : 0,
+            }}>
             <SnbTextField.Text
               {...taxNumber}
               labelText="Nomor NPWP Pemilik"
@@ -84,10 +123,10 @@ const Content: React.FC = () => {
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
             <SnbTextField.Text
               {...email}
-              maxLength={32}
               labelText="Alamat Email Pemilik"
               placeholder="Masukkan alamat email anda"
               keyboardType="email-address"
+              onChangeText={(text) => validateEmail(text)}
             />
           </View>
         </ScrollView>
@@ -103,7 +142,7 @@ const Content: React.FC = () => {
             if (email.value !== '') {
               checkEmail({ email: email.value });
             } else {
-              saveRegisterUserData({
+              saveUserData({
                 name: name.value,
                 email: email.value,
                 idNo: idNumber.value,
@@ -115,7 +154,13 @@ const Content: React.FC = () => {
           type="primary"
           shadow
           loading={checkEmailAvailability.loading}
-          disabled={name.value === '' || idNumber.value === ''}
+          disabled={
+            name.value === '' ||
+            idNumber.value === '' ||
+            idNumber.valMsgError !== '' ||
+            taxNumber.valMsgError !== '' ||
+            email.valMsgError !== ''
+          }
         />
       </View>
     </View>

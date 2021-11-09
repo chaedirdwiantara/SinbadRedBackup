@@ -81,3 +81,38 @@ export const extractAddress = (data: any) => {
   });
   return dataAddress;
 };
+
+export const setErrorMessage = (code: number) => {
+  switch (code) {
+    case 10002: {
+      return 'Email yang Anda masukkan telah terdaftar';
+    }
+    case 10003: {
+      return 'Format email yang Anda masukkan salah';
+    }
+    case 10004: {
+      return 'No. HP harus berupa angka';
+    }
+    case 10005: {
+      return 'No. Hp yang Anda masukkan sudah terdaftar';
+    }
+    case 10006: {
+      return 'No. Hp tidak boleh kosong';
+    }
+    case 10007: {
+      return 'No. Hp yang Anda masukkan tidak terdaftar';
+    }
+    case 10008: {
+      return 'Kode OTP salah/kadaluarsa';
+    }
+    case 10009: {
+      return 'Data user tidak valid';
+    }
+    case 10010: {
+      return 'ID Toko/Password yang Anda masukkan salah';
+    }
+    default: {
+      return 'Terjadi kesalahan';
+    }
+  }
+};

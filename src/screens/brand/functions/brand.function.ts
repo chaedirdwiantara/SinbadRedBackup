@@ -1,9 +1,13 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT INTERNAL === */
 import { NavigationAction } from '@navigation';
-/** === FUNCTION === */
-/** => go back */
+import * as models from '@models';
+/** === FUNCTIONS === */
 const goBack = () => {
   NavigationAction.back();
 };
 
-export { goBack };
+const goToProduct = (brand: models.BrandListSuccessProps) => {
+  NavigationAction.navigate('BrandProductView', { brand });
+};
+
+export { goBack, goToProduct };

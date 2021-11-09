@@ -29,7 +29,7 @@ export interface IStep1Data {
   email?: string;
 }
 
-export interface IRegisterMerchantProcess {
+export interface IMerchantData {
   urbanId?: number | null;
   topSellingBrand?: string;
   mostWantedBrand?: string;

@@ -10,7 +10,6 @@ import * as models from '@models';
 import * as Actions from '@actions';
 /** === FUNCTION === */
 /** => collect data */
-/** brand */
 const useUserData = () => {
   const data: models.UserProps = useSelector(
     (state: RootState) => state.permanent.user,
@@ -62,8 +61,6 @@ const useConfirmNewPassword = () => {
     },
   };
 };
-
-/** => collect data */
 /** => call detail action */
 const useStoreDetailAction = () => {
   const dispatch = useDispatch();
@@ -85,6 +82,9 @@ const useChangePassword = () => {
       data: models.UpdateProcessProps<{}>,
     ) => {
       dispatch(Actions.changePasswordProcess(contextDispatch, data));
+    },
+    resetChangePassword: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.changePasswordReset());
     },
   };
 };

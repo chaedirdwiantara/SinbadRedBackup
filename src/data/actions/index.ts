@@ -16,6 +16,7 @@ export * from './promo';
 export * from './brand';
 export * from './notification';
 export * from './banner';
+export * from './supplier';
 /**
  * ================================================================
  * NOTES

@@ -11,9 +11,9 @@ import {
   SnbCardMultiButtonType1,
   SnbCardButtonType2,
   SnbSvgIcon,
+  SnbTextSeeMoreType1,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
-import Svg from '@svg';
 /** === IMPORT STYLE HERE === */
 import UserStyles from '../styles/user.style';
 /** === IMPORT FUNCTION HERE === */
@@ -21,7 +21,6 @@ import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
-import { LoginPhoneView } from '@screen/auth/views';
 
 const UserView: FC = () => {
   /** === HOOK === */
@@ -30,8 +29,7 @@ const UserView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useFocusEffect(
     React.useCallback(() => {
-      const storeDetail = storeDetailAction.detail(dispatchUser);
-      return storeDetail;
+      storeDetailAction.detail(dispatchUser, { id: '' });
     }, []),
   );
   /** === FUNCTION FOR HOOK === */
@@ -55,17 +53,20 @@ const UserView: FC = () => {
   };
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
+    const source = data?.imageUrl
+      ? { uri: data?.imageUrl }
+      : require('../../../assets/images/sinbad_image/avatar.png');
     return (
       <View style={UserStyles.headerInformationContainer}>
         <View style={UserStyles.imageContainer}>
-          {data?.imageUrl ? (
-            <Image source={{ uri: data.imageUrl }} style={UserStyles.image} />
-          ) : (
-            <Svg name={'avatar'} size={50} color={color.red50} />
-          )}
+          <Image source={source} style={UserStyles.image} />
         </View>
         <View style={UserStyles.userInfo}>
-          <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+          <View style={{ marginLeft: -18 }}>
+            <SnbTextSeeMoreType1 line={1}>
+              <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
+            </SnbTextSeeMoreType1>
+          </View>
           <SnbText.C1 color={color.white}>
             Kelengkapan profil {countPercentageProfileComplete()}%
           </SnbText.C1>
@@ -186,26 +187,27 @@ const UserView: FC = () => {
   };
   /** => content */
   const content = () => {
-    if (stateUser.detail.loading) {
+    if (stateUser.detail.loading || !stateUser.detail.data) {
       return <LoadingPage />;
     }
-
     if (stateUser.detail.data) {
       return (
-        <ScrollView
-          scrollEventThrottle={16}
-          showsVerticalScrollIndicator={false}>
-          {contentItem()}
-        </ScrollView>
+        <View>
+          {header()}
+          <ScrollView
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}>
+            {contentItem()}
+          </ScrollView>
+        </View>
       );
     }
   };
   /** this for main view */
   return (
-    <SnbContainer color={'grey'}>
-      {header()}
-      {content()}
-    </SnbContainer>
+    <View style={{ flex: 1 }}>
+      <SnbContainer color={'grey'}>{content()}</SnbContainer>
+    </View>
   );
 };
 

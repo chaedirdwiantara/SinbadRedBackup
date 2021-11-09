@@ -15,11 +15,15 @@ import PriceRangeSlider from './PriceRangeSlider';
 import { useKeyboardListener } from '@core/functions/hook/keyboard-listener';
 import { usePriceRangeFilter } from '@core/functions/product';
 /** === IMPORT TYPE */
-import { BottomActionPressHandlerType } from '@core/components/product/list/BottomAction';
+import {
+  BottomActionPressHandlerType,
+  PriceRange,
+} from '@core/components/product/list/BottomAction';
 /** === IMPORT STYLE */
 import { ModalActionStyle } from '@core/styles';
 /** === TYPE === */
 interface FilterActionProps {
+  appliedFilterQuery: PriceRange | null;
   onButtonPress: ({
     type,
     value,
@@ -31,7 +35,10 @@ interface FilterActionProps {
 /** === CONSTANT === */
 const { height } = Dimensions.get('window');
 /** === COMPONENTS === */
-const FilterAction: FC<FilterActionProps> = ({ onButtonPress }) => {
+const FilterAction: FC<FilterActionProps> = ({
+  appliedFilterQuery,
+  onButtonPress,
+}) => {
   /** === HOOKS === */
   const { keyboardVisible } = useKeyboardListener();
   const {
@@ -42,7 +49,7 @@ const FilterAction: FC<FilterActionProps> = ({ onButtonPress }) => {
     resetValues,
     handleSliderChange,
     handleSliderFinishChange,
-  } = usePriceRangeFilter();
+  } = usePriceRangeFilter(appliedFilterQuery);
   /** === VIEW === */
   return (
     <View

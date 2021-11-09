@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { Alert } from 'react-native';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
@@ -155,9 +155,14 @@ export const useSortIndex = (initialIndex: number | null) => {
   return { activeIndex, setActiveSortIndex };
 };
 
-export const usePriceRangeFilter = () => {
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(0);
+export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
+  const filterIsApplied = appliedFilterQuery !== null;
+  const [minPrice, setMinPrice] = useState(
+    filterIsApplied ? appliedFilterQuery.minPrice : 0,
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    filterIsApplied ? appliedFilterQuery.maxPrice : 0,
+  );
 
   const resetValues = () => {
     setMinPrice(0);
@@ -189,7 +194,9 @@ export const useRegisterSupplierModal = () => {
   const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
     useState(false);
 
-  const sendSupplierData = () => {
+  const sendSupplierData = (
+    setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
+  ) => {
     // Hit api send-store-supplier
     Alert.alert(
       'Send Data to Suplier',
@@ -202,7 +209,10 @@ export const useRegisterSupplierModal = () => {
         },
         {
           text: 'OK',
-          onPress: () => setRegisterSupplierModalVisible(false),
+          onPress: () => {
+            setRegisterSupplierModalVisible(false);
+            setOrderModalVisible(true);
+          },
         },
       ],
     );
@@ -212,5 +222,19 @@ export const useRegisterSupplierModal = () => {
     visible: registerSupplierModalVisible,
     setVisible: setRegisterSupplierModalVisible,
     sendSupplierData,
+  };
+};
+
+export const useOrderModalVisibility = () => {
+  const [orderModalVisible, setOrderModalVisible] = useState(false);
+
+  const toggleModalVisible = () => {
+    setOrderModalVisible((prevVisible) => !prevVisible);
+  };
+
+  return {
+    orderModalVisible,
+    setOrderModalVisible,
+    toggleModalVisible,
   };
 };

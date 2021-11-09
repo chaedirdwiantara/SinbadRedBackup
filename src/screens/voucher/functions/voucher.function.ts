@@ -8,9 +8,8 @@ const goBack = () => {
   NavigationAction.back();
 };
 /** => go to voucher detail */
-const goToVoucherDetail = (voucherId: number) => {
-  // NavigationAction.navigate('VoucherDetailView', { voucherId: voucherId.toString() });
-  NavigationAction.navigate('VoucherDetailView', { voucherId: 1 });
+const goToVoucherDetail = (voucherId: number, type: string) => {
+  NavigationAction.navigate('VoucherDetailView', { voucherId, type });
 };
 /** => go to voucher cart list more */
 const goToVoucherCartListMore = ({
@@ -18,26 +17,26 @@ const goToVoucherCartListMore = ({
   voucherGroupName,
   voucherGroupType,
   selectedSinbadVoucher,
-  selectedSupplierVoucher,
+  selectedSellerVoucher,
 }: {
-  voucherList: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[];
+  voucherList: models.SinbadVoucherProps[] | models.SellerVoucherListProps[];
   voucherGroupName: string;
-  voucherGroupType: 'sinbad_voucher' | 'supplier_voucher';
+  voucherGroupType: 'sinbad_voucher' | 'seller_voucher';
   selectedSinbadVoucher: models.SinbadVoucherProps | null;
-  selectedSupplierVoucher: models.SupplierVoucherListProps[];
+  selectedSellerVoucher: models.SellerVoucherListProps[];
 }) => {
   NavigationAction.navigate('VoucherCartListMoreView', {
     voucherList,
     voucherGroupName,
     voucherGroupType,
     selectedSinbadVoucher,
-    selectedSupplierVoucher,
+    selectedSellerVoucher,
   });
 };
 /** => count potential discount */
 const countPotentialDiscount = (
   sinbadVoucher: models.SinbadVoucherProps | null,
-  supplierVouchers: models.SupplierVoucherListProps[],
+  sellerVouchers: models.SellerVoucherListProps[],
 ) => {
   let totalDiscount = 0;
   let totalSelectedVoucher = 0;
@@ -45,7 +44,7 @@ const countPotentialDiscount = (
     totalDiscount += sinbadVoucher.benefitRebate;
     totalSelectedVoucher += 1;
   }
-  supplierVouchers.map((item) => {
+  sellerVouchers.map((item) => {
     totalDiscount += item.benefitRebate;
     totalSelectedVoucher += 1;
   });

@@ -5,10 +5,9 @@ import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/core';
 /** === IMPORT COMPONENTS === */
 import ProductList from '@core/components/product/list';
-import { AddToCartModal } from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
-import { useProductListActions, useOrderModalVisibility } from '../functions';
+import { useProductListActions } from '../functions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 /** === TYPES === */
@@ -44,7 +43,6 @@ const ProductView: FC = () => {
     stateProduct: { list: productListState },
     dispatchProduct,
   } = useProductContext();
-  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
 
   useEffect(() => {
     fetch(dispatchProduct, { categoryId: category.id });
@@ -92,11 +90,6 @@ const ProductView: FC = () => {
           }
         />
       </View>
-      <AddToCartModal
-        open={orderModalVisible}
-        closeAction={() => setOrderModalVisible(false)}
-        onAddToCartPress={() => console.log('Add to cart pressed')}
-      />
     </SnbContainer>
   );
 };

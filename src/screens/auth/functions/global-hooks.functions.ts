@@ -74,8 +74,13 @@ export const useInput = (initialState: string = '') => {
   };
 
   const setMessageError = (message: string) => {
-    setType('error');
-    setValMsgError(message);
+    if (message !== '') {
+      setType('error');
+      setValMsgError(message);
+    } else {
+      setType('default');
+      setValMsgError('');
+    }
   };
 
   return {
@@ -147,25 +152,6 @@ export const useCamera = () => {
     saveCapturedImage,
     capturedImage,
     resetCamera,
-  };
-};
-
-export const useUploadImage = () => {
-  const dispatch = useDispatch();
-  const { uploadedImage } = useSelector((state: any) => state.global);
-
-  const uploadImage = (data: models.IUploadImage) => {
-    dispatch(Actions.uploadImageProcess(data));
-  };
-
-  const resetUploadImage = () => {
-    dispatch(Actions.resetUploadImage());
-  };
-
-  return {
-    uploadImage,
-    resetUploadImage,
-    state: uploadedImage,
   };
 };
 
@@ -271,5 +257,29 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
     onChangeText,
     clearText,
     valMsgError,
+  };
+};
+
+export const useMerchant = () => {
+  const dispatch = useDispatch();
+  const state = useSelector((state: any) => state.auth);
+  const merchantData: models.IMerchantData = state.merchantData;
+  const saveStoreData = (data: models.IMerchantData) => {
+    dispatch(Actions.saveStoreData(data));
+  };
+
+  const saveUserData = (data: models.User) => {
+    dispatch(Actions.saveUserData(data));
+  };
+
+  const resetMerchantData = () => {
+    dispatch(Actions.resetMerchantData());
+  };
+
+  return {
+    saveStoreData,
+    saveUserData,
+    resetMerchantData,
+    merchantData,
   };
 };

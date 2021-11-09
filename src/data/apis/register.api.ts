@@ -15,7 +15,7 @@ const checkEmailAvailability = (
   return apiAuth(path, 'v1', 'GET');
 };
 
-const registerMerchant = (data: models.IRegisterMerchantProcess) => {
+const registerMerchant = (data: models.IMerchantData) => {
   const path = 'registration';
   return apiAuth(path, 'v1', 'POST', data);
 };

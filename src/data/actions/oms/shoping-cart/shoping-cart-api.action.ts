@@ -1,0 +1,32 @@
+/** === IMPORT INTERNAL === */
+import * as models from '@models';
+import * as types from '@types';
+/** === ACTIONS === */
+/** => Process */
+export const cartViewProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({ type: types.CART_VIEW_PROCESS, payload });
+  return {
+    type: types.CART_VIEW_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** => Success */
+export const cartViewSuccess = (
+  payload: models.DetailSuccessProps<models.CartSuccessProps>,
+): models.DetailSuccessAction<models.CartSuccessProps> => {
+  return { type: types.CART_VIEW_SUCCESS, payload };
+};
+/** => Failed */
+export const cartViewFailed = (
+  payload: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.CART_VIEW_FAILED, payload };
+};
+/** => Reset */
+export const cartViewReset = () => {
+  return { type: types.CART_VIEW_RESET };
+};

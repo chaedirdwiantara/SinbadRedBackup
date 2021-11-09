@@ -4,6 +4,8 @@
  * ============================================================
  */
 export * from './verification-order/verification-order-api.action';
+export * from './shoping-cart/shoping-cart-api.action';
+export * from './shoping-cart/add-to-cart-api.action';
 /**
  * ================================================================
  * NOTES

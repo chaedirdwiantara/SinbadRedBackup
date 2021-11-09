@@ -97,3 +97,195 @@ export const profileEditFailed = (
 export const profileEditReset = () => {
   return { type: types.PROFILE_EDIT_RESET };
 };
+/** === CHANGE EMAIL === */
+/** => process */
+export const changeEmailProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_EMAIL_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_EMAIL_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeEmailSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_EMAIL_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeEmailFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_EMAIL_FAILED, payload: data };
+};
+/** => reset */
+export const changeEmailReset = () => {
+  return { type: types.CHANGE_EMAIL_RESET };
+};
+/** === VERIFICATION EMAIL === */
+/** => process */
+export const verificationEmailProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_EMAIL_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_EMAIL_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationEmailSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_EMAIL_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationEmailFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_EMAIL_FAILED, payload: data };
+};
+/** => reset */
+export const verificationEmailReset = () => {
+  return { type: types.VERIFICATION_EMAIL_RESET };
+};
+/** === CHANGE MOBILE PHONE === */
+/** => process */
+export const changeMobilePhoneProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_MOBILE_PHONE_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_MOBILE_PHONE_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeMobilePhoneSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_MOBILE_PHONE_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeMobilePhoneFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_MOBILE_PHONE_FAILED, payload: data };
+};
+/** => reset */
+export const changeMobilePhoneReset = () => {
+  return { type: types.CHANGE_MOBILE_PHONE_RESET };
+};
+/** === VERIFICATION MOBILE PHONE === */
+/** => process */
+export const verificationMobilePhoneProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_MOBILE_PHONE_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_MOBILE_PHONE_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationMobilePhoneSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationMobilePhoneFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_FAILED, payload: data };
+};
+/** => reset */
+export const verificationMobilePhoneReset = () => {
+  return { type: types.VERIFICATION_MOBILE_PHONE_RESET };
+};
+/** === CHANGE BANK ACCOUNT === */
+/** => process */
+export const changeBankAccountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CHANGE_BANK_ACCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CHANGE_BANK_ACCOUNT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const changeBankAccountSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CHANGE_BANK_ACCOUNT_SUCCESS, payload: data };
+};
+/** => failed */
+export const changeBankAccountFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CHANGE_BANK_ACCOUNT_FAILED, payload: data };
+};
+/** => reset */
+export const changeBankAccountReset = () => {
+  return { type: types.CHANGE_BANK_ACCOUNT_RESET };
+};
+/** === VERIFICATION BANK ACCOUNT === */
+/** => process */
+export const verificationBankAccountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.VERIFICATION_BANK_ACCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.VERIFICATION_BANK_ACCOUNT_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const verificationBankAccountSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_SUCCESS, payload: data };
+};
+/** => failed */
+export const verificationBankAccountFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_FAILED, payload: data };
+};
+/** => reset */
+export const verificationBankAccountReset = () => {
+  return { type: types.VERIFICATION_BANK_ACCOUNT_RESET };
+};

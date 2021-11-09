@@ -10,13 +10,18 @@ import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 import RegisterSupplierModal from './RegisterSupplierModal';
+import AddToCartModal from './AddToCartModal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
   priceSortOptions,
   useRegisterSupplierModal,
+  useOrderModalVisibility,
 } from '@core/functions/product';
-import { useTagListActions } from '@screen/product/functions';
+import {
+  useTagListActions,
+  useProductDetailAction,
+} from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
@@ -38,6 +43,7 @@ interface ProductListProps {
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
   activeCategory?: CategoryType;
+  activeBrandId?: string;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -52,6 +58,7 @@ const ProductList: FC<ProductListProps> = ({
   onLoadMore,
   activeKeyword = '',
   activeCategory,
+  activeBrandId,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -59,6 +66,8 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+
   const {
     sortModalVisible,
     sortActive,
@@ -72,13 +81,17 @@ const ProductList: FC<ProductListProps> = ({
   } = useBottomAction(onFetch, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
+    tags: selectedTags,
   });
   const registerSupplierModal = useRegisterSupplierModal();
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
+  const productDetailActions = useProductDetailAction();
   const {
     stateProduct: {
       list: { loading: productLoading },
     },
+    dispatchProduct,
   } = useProductContext();
   const {
     stateTag: {
@@ -95,8 +108,17 @@ const ProductList: FC<ProductListProps> = ({
   }, [productLoading]);
 
   useEffect(() => {
-    tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
+    tagActions.fetch(dispatchTag, {
+      categoryId: selectedCategory?.id,
+      keyword: searchKeyword,
+      brandId: activeBrandId,
+    });
   }, [selectedCategory, keywordSearched]);
+
+  const handleOrderPress = (product: models.ProductList) => {
+    registerSupplierModal.setVisible(true);
+    productDetailActions.fetch(dispatchProduct, product.id);
+  };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -105,14 +127,12 @@ const ProductList: FC<ProductListProps> = ({
     sortBy: sortQuery?.sortBy,
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
+    tags: selectedTags,
   };
 
   const handleTagPress = (tags: Array<string>) => {
-    const queryOptions = {
-      ...derivedQueryOptions,
-      tags,
-    };
-    onFetch(queryOptions);
+    setSelectedTags(tags);
+    onFetch({ ...derivedQueryOptions, tags });
   };
   /** === VIEW === */
   return (
@@ -121,13 +141,15 @@ const ProductList: FC<ProductListProps> = ({
         title={selectedCategory ? selectedCategory.name : headerTitle}
         type={headerType}
         setSearchKeyword={setSearchKeyword}
+        keyword={searchKeyword}
         onSearch={() => {
-          const queryOptions = {
-            ...derivedQueryOptions,
-            keyword: searchKeyword,
-          };
           setKeywordSearched(true);
-          onFetch(queryOptions);
+          onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
+        }}
+        onSearchClear={() => {
+          setSearchKeyword('');
+          setKeywordSearched(true);
+          onFetch({ ...derivedQueryOptions, keyword: '' });
         }}
       />
       {categoryTabs && (
@@ -137,12 +159,8 @@ const ProductList: FC<ProductListProps> = ({
           selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
           selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
           onTabChange={(category) => {
-            const queryOptions = {
-              ...derivedQueryOptions,
-              categoryId: category.id,
-            };
             setSelectedCategory(category);
-            onFetch(queryOptions);
+            onFetch({ ...derivedQueryOptions, categoryId: category.id });
           }}
         />
       )}
@@ -153,7 +171,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -164,7 +182,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -185,7 +203,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={sortModalVisible}
         title="Urutkan"
-        action={true}
         actionIcon="close"
         content={
           <Action.Sort
@@ -200,17 +217,31 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={filterModalVisible}
         title="Filter"
-        action={true}
         actionIcon="close"
-        content={<Action.Filter onButtonPress={handleActionClick} />}
+        content={
+          <Action.Filter
+            appliedFilterQuery={filterQuery}
+            onButtonPress={handleActionClick}
+          />
+        }
         closeAction={() => handleActionClick({ type: 'filter' })}
       />
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
         visible={registerSupplierModal.visible}
-        onSubmit={registerSupplierModal.sendSupplierData}
+        onSubmit={() =>
+          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+        }
         onClose={() => registerSupplierModal.setVisible(false)}
       />
+      {/* Add to Cart Modal */}
+      {orderModalVisible && (
+        <AddToCartModal
+          open={orderModalVisible}
+          closeAction={() => setOrderModalVisible(false)}
+          onAddToCartPress={() => console.log('Add to cart pressed')}
+        />
+      )}
     </SnbContainer>
   );
 };

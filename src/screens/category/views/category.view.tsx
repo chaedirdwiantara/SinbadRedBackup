@@ -9,10 +9,10 @@ import {
   color,
   SnbIcon,
 } from 'react-native-sinbad-ui';
+import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import Menu from '@core/components/Menu';
 /** === IMPORT FUNCTIONS === */
-import { NavigationAction } from '@navigation';
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import {
   goBack,
@@ -25,12 +25,18 @@ import {
 import * as models from '@models';
 /** === IMPORT STYLE === */
 import CategoryStyle from '../styles/category.style';
+/** === TYPES === */
+type CategoryRouteParams = {
+  Category: {
+    categoryId?: string;
+  };
+};
+
+type CategoryRouteProps = RouteProp<CategoryRouteParams, 'Category'>;
 /** === COMPONENT === */
 const CategoryView: React.FC = () => {
   /** === HOOKS === */
-  const {
-    params: { id: categoryId },
-  } = NavigationAction.useGetNavParams();
+  const { params } = useRoute<CategoryRouteProps>();
   const { fetchList } = useCategoryAction();
   const {
     stateCategory: {
@@ -54,7 +60,7 @@ const CategoryView: React.FC = () => {
   useEffect(() => {
     if (categoryLevelState.data.length > 0) {
       setSelected1stLevelIndex(
-        getCategory1stLevelIndex(categoryLevelState.data, categoryId),
+        getCategory1stLevelIndex(categoryLevelState.data, params?.categoryId),
       );
     }
   }, [categoryLevelState.data.length]);
