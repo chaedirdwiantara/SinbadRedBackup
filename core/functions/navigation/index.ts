@@ -6,10 +6,12 @@ import {
   goToMenu,
   backToPage,
   resetToHome,
+  resetToIntroSinbad,
 } from '../../navigations/RootNavigation';
 import {
   useGetNavParams,
   useCustomBackHardware,
+  useFocusEffect,
 } from './navigation-hook.function';
 /** === EXPORT ALL === */
 export const NavigationAction = {
@@ -19,8 +21,10 @@ export const NavigationAction = {
   goToMenu,
   backToPage,
   resetToHome,
+  resetToIntroSinbad,
   useGetNavParams,
   useCustomBackHardware,
+  useFocusEffect,
 };
 /**
  * ================================================================

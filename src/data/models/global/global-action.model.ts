@@ -1,10 +1,5 @@
 /** === IMPORT EXTERNAL MODEL === */
 import { UploadImageSaveProps } from './global.model';
-/** === FCM FLAG === */
-export interface IsFCMAction {
-  type: string;
-  payload: boolean;
-}
 /** === UPLOAD IMAGE === */
 export interface uploadImageAction {
   type: string;
@@ -38,7 +33,8 @@ export interface IListSelection {
     | 'listUrban'
     | 'listVehicleAccessAmount'
     | 'listUrbanID'
-    | 'listVehicleAccess';
+    | 'listVehicleAccess'
+    | 'listBank';
   params?: string;
   meta?: {
     skip?: number;

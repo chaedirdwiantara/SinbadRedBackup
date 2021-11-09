@@ -2,6 +2,7 @@ import { ErrorProps } from './error.model';
 /** === GET ITEM === */
 export interface DetailItemProps<T> {
   loading: boolean;
+  refresh?: boolean;
   data: T | null;
   error: ErrorProps | null;
 }

@@ -3,7 +3,9 @@
  * REGISTER ALL ACTIONS HERE
  * ============================================================
  */
-export * from './flag-rtdb';
+export * from './permanent';
+export * from './global';
+export * from './auth';
 /**
  * ================================================================
  * NOTES

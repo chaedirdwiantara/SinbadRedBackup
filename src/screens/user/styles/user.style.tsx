@@ -23,6 +23,7 @@ const UserStyles = StyleSheet.create({
   userInfo: {
     justifyContent: 'space-between',
     paddingVertical: 5,
+    width: '80%',
   },
   bodyTitleContainer: {
     flexDirection: 'row',

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import {
   useInput,
-  useRegister,
+  useMerchant,
   useTextFieldSelect,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_6_VIEW } from '@screen/auth/functions/screens_name';
@@ -18,13 +18,20 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const storeName = useInput('Test Toko');
-  const storeSize = useInput('24');
-  const topBrand = useInput('Rinso');
-  const wantedBrand = useInput('Rinso Matic');
-  const { saveRegisterStoreData } = useRegister();
+  const { saveStoreData, merchantData } = useMerchant();
+  const storeName = useInput(merchantData.name);
+  const storeSize = useInput(merchantData.largeArea);
+  const topBrand = useInput(merchantData.topSellingBrand);
+  const wantedBrand = useInput(merchantData.mostWantedBrand);
   const { navigate } = useNavigation();
   const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const [numOfEmployee, setNumOfEmployee] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    if (selectedItem?.type === 'listNumOfEmployee') {
+      setNumOfEmployee(selectedItem.item);
+    }
+  }, [selectedItem]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -56,11 +63,7 @@ const Content: React.FC = () => {
             <SnbTextFieldSelect
               labelText="Jumlah Karyawan"
               placeholder="Masukkan jumlah karyawan"
-              value={
-                selectedItem?.type === 'listNumOfEmployee'
-                  ? selectedItem?.item.amount
-                  : ''
-              }
+              value={numOfEmployee?.amount || merchantData.numberOfEmployee}
               type="default"
               onPress={() => {
                 gotoSelection({ type: 'listNumOfEmployee' });
@@ -75,6 +78,7 @@ const Content: React.FC = () => {
               labelText="Ukuran Toko"
               placeholder="Masukkan ukuran toko Anda"
               keyboardType="number-pad"
+              rightText="m²"
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -101,12 +105,13 @@ const Content: React.FC = () => {
         <SnbButton.Single
           title="Selanjutnya"
           onPress={() => {
-            saveRegisterStoreData({
+            saveStoreData({
               name: storeName.value,
               topSellingBrand: topBrand.value,
               mostWantedBrand: wantedBrand.value,
               largeArea: storeSize.value,
-              numberOfEmployee: selectedItem?.item.amount || '',
+              numberOfEmployee:
+                numOfEmployee?.amount || merchantData.numberOfEmployee,
             });
             navigate(REGISTER_STEP_6_VIEW);
           }}

@@ -40,3 +40,22 @@ export interface LoginSuccessProps {
 export interface LogoutSuccesProps {
   message: string;
 }
+
+/** === SELLER ID === */
+export interface SellerId {
+  id: number;
+}
+
+/** === AUTH ME DATA === */
+export interface AuthMeDataProps {
+  sessionActiveUntil: Date;
+  sessionExpiredUntil: Date;
+  user: UserAuthDataProps;
+  isActiveStore: boolean;
+  approvalStatus: 'guest' | 'rejected' | 'verified' | 'pending' | 'updating';
+  sellerIds: SellerId[];
+}
+
+export interface AuthMeSuccessProps {
+  data: AuthMeDataProps;
+}

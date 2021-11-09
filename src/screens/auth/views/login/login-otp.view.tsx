@@ -1,5 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
-import { maskPhone, useAuthAction, useOTP } from '@screen/auth/functions';
+import {
+  maskPhone,
+  setErrorMessage,
+  useAuthAction,
+  useOTP,
+} from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
@@ -9,16 +14,13 @@ const LoginOTPView: React.FC = () => {
   const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
   const { resetVerifyOTP, mobilePhone } = useOTP();
   const [hide, setHide] = React.useState(true);
-  const [otpSuccess, setOtpSuccess] = React.useState(false);
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      setOtpSuccess(true);
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
     if (verifyOTP.error !== null) {
-      setOtpSuccess(false);
       setHide(false);
     }
   }, [verifyOTP]);
@@ -32,17 +34,20 @@ const LoginOTPView: React.FC = () => {
       />
       <OTPContent
         onVerifyOTP={(otp) => {
+          setHide(true);
           resetVerifyOTP();
           verificationOTP({ mobilePhone, otp });
         }}
-        otpSuccess={otpSuccess}
-        hideIcon={hide}
-        loading={verifyOTP.loading}
-        phoneNo={maskPhone(mobilePhone)}
         resend={() => {
           requestOTP({ mobilePhone });
         }}
-        errorMessage={verifyOTP.error?.message || ''}
+        errorMessage={
+          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
+        }
+        hideIcon={hide}
+        otpSuccess={verifyOTP.data !== null}
+        loading={verifyOTP.loading}
+        phoneNo={maskPhone(mobilePhone)}
       />
     </SnbContainer>
   );

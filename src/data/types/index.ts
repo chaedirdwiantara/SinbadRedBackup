@@ -3,6 +3,7 @@
  * ALL VARIABLE THAT WILL USED BY ACTIONS, REDUCERS, AND SAGAS
  * ============================================================
  */
+export * from '@core/data/types';
 export * from './global.type';
 export * from './register.type';
 export * from './auth.type';
@@ -16,6 +17,7 @@ export * from './brand.type';
 export * from './user.type';
 export * from './notification.type';
 export * from './oms';
+export * from './supplier';
 /**
  * ================================================================
  * NOTES

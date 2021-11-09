@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import {
   renderIF,
   useInput,
-  useRegister,
+  useMerchant,
   useTextFieldSelect,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_7_VIEW } from '@screen/auth/functions/screens_name';
@@ -20,27 +20,37 @@ import {
 } from 'react-native-sinbad-ui';
 
 const Content: React.FC = () => {
-  const { saveRegisterStoreData, registerData } = useRegister();
-  const address = useInput();
-  const noteAddress = useInput('Catatan Alamat');
-  const vehicleAccessibilityAmount = useInput();
+  const { saveStoreData, merchantData } = useMerchant();
+  const address = useInput(merchantData.address);
+  const noteAddress = useInput(merchantData.noteAddress);
+  const vehicleAccessibilityAmount = useInput(
+    merchantData.vehicleAccessibilityAmount?.toString() || '',
+  );
   const { gotoSelection, selectedItem } = useTextFieldSelect();
   const { navigate } = useNavigation();
+  const [vehicleAccessibility, setVehicleAccessibility] =
+    React.useState<any>(null);
   let mapRef = React.useRef<MapView>(null);
 
   React.useEffect(() => {
-    if (registerData.longitude !== null) {
+    if (selectedItem?.type === 'listVehicleAccess') {
+      setVehicleAccessibility(selectedItem.item);
+    }
+  }, [selectedItem]);
+
+  React.useEffect(() => {
+    if (merchantData.longitude !== null) {
       mapRef.current?.animateToRegion({
-        latitude: registerData?.latitude || 0,
-        longitude: registerData?.longitude || 0,
+        latitude: merchantData?.latitude || 0,
+        longitude: merchantData?.longitude || 0,
         longitudeDelta: 0.02,
         latitudeDelta: 0.02,
       });
     }
-    if (registerData.address !== '') {
-      address.setValue(registerData.address || '');
+    if (merchantData.address !== '') {
+      address.setValue(merchantData.address || '');
     }
-  }, [registerData]);
+  }, [merchantData]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,9 +77,13 @@ const Content: React.FC = () => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+              <View style={{ flexDirection: 'row' }}>
+                <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+                <View style={{ marginHorizontal: 2 }} />
+                <SnbText.H4 color={color.red60}>*</SnbText.H4>
+              </View>
               {renderIF(
-                registerData.longitude !== null,
+                merchantData.longitude !== null,
                 <TouchableOpacity onPress={() => navigate('MapsView')}>
                   <SnbText.B4>Ubah</SnbText.B4>
                 </TouchableOpacity>,
@@ -77,12 +91,12 @@ const Content: React.FC = () => {
             </View>
             <View style={{ paddingVertical: 4 }} />
             {renderIF(
-              registerData.longitude !== null,
+              merchantData.longitude !== null,
               <MapView
                 ref={mapRef}
                 initialRegion={{
-                  latitude: registerData?.latitude || 0,
-                  longitude: registerData?.longitude || 0,
+                  latitude: merchantData?.latitude || 0,
+                  longitude: merchantData?.longitude || 0,
                   latitudeDelta: 0.02,
                   longitudeDelta: 0.02,
                 }}
@@ -92,8 +106,8 @@ const Content: React.FC = () => {
                 style={styles.pinPoint}>
                 <Marker
                   coordinate={{
-                    latitude: registerData?.latitude || 0,
-                    longitude: registerData?.longitude || 0,
+                    latitude: merchantData?.latitude || 0,
+                    longitude: merchantData?.longitude || 0,
                   }}
                 />
               </MapView>,
@@ -125,9 +139,8 @@ const Content: React.FC = () => {
             <SnbTextFieldSelect
               labelText="Aksesibilitas Kendaraan"
               value={
-                selectedItem?.type === 'listVehicleAccess'
-                  ? selectedItem?.item.name
-                  : ''
+                vehicleAccessibility?.name ||
+                merchantData.vehicleAccessibilityId
               }
               placeholder="Pilih aksesibitas kendaraan"
               type="default"
@@ -139,7 +152,6 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...vehicleAccessibilityAmount}
-              mandatory
               labelText="Kapasitas Jalan"
               placeholder="Masukkan kapasitas jalan"
               keyboardType="phone-pad"
@@ -155,10 +167,11 @@ const Content: React.FC = () => {
         <SnbButton.Single
           title="Selanjutnya"
           onPress={() => {
-            saveRegisterStoreData({
+            saveStoreData({
               address: address.value,
               noteAddress: noteAddress.value,
-              vehicleAccessibilityId: selectedItem?.item?.id || null,
+              vehicleAccessibilityId:
+                vehicleAccessibility?.id || merchantData.vehicleAccessibilityId,
               vehicleAccessibilityAmount: Number(
                 vehicleAccessibilityAmount.value,
               ),
@@ -168,7 +181,12 @@ const Content: React.FC = () => {
           type="primary"
           shadow
           loading={false}
-          disabled={address.value === '' || noteAddress.value === ''}
+          disabled={
+            address.value === '' ||
+            noteAddress.value === '' ||
+            vehicleAccessibilityAmount.value === '' ||
+            merchantData.urbanId === null
+          }
         />
       </View>
     </View>
