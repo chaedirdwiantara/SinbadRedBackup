@@ -5,15 +5,14 @@ import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import MapView, { LatLng } from 'react-native-maps';
 import {
   SnbBottomSheet,
   SnbButton,
   SnbText,
   SnbContainer,
-  SnbMaps,
-  SnbSvgIcon,
+  SnbMaps
 } from 'react-native-sinbad-ui';
 
 const MapsView = () => {
@@ -131,8 +130,8 @@ const MapsView = () => {
             getAddress(position);
           } else {
             getAddress({
-              latitude: merchantData.latitude || 0,
-              longitude: merchantData.longitude || 0,
+              latitude: merchantData?.latitude || 0,
+              longitude: merchantData?.longitude || 0,
             });
           }
         }}
@@ -145,7 +144,10 @@ const MapsView = () => {
         content={
           <View>
             <View style={{ alignItems: 'center', margin: 16 }}>
-              <SnbSvgIcon name="error_circle" size={160} />
+              <Image
+                source={require('../../../assets/images/sinbad_image/no_gps.png')}
+                style={{ height: 190, width: undefined, aspectRatio: 1 / 1 }}
+              />
             </View>
             <SnbText.B2 align="center">Area tidak ditemukan</SnbText.B2>
             <View style={{ marginVertical: 8 }} />

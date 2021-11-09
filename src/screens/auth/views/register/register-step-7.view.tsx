@@ -6,7 +6,13 @@ import {
   useRegister,
 } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image, ToastAndroid, Dimensions } from 'react-native';
+import {
+  View,
+  Image,
+  ToastAndroid,
+  Dimensions,
+  ScrollView,
+} from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -37,6 +43,7 @@ const Content: React.FC = () => {
   const [checked, setChecked] = React.useState<'unselect' | 'selected'>(
     'unselect',
   );
+  const [messageError, setMessageError] = React.useState('');
 
   React.useEffect(() => {
     resetRegister();
@@ -83,9 +90,13 @@ const Content: React.FC = () => {
     }
     if (registerState.data?.data?.isCreated === false) {
       setShowModalFailed(true);
+      setMessageError(
+        'Registrasi berhasil, silahkan tunggu beberapa saat untuk login',
+      );
     }
     if (registerState.error !== null) {
       setShowModalFailed(true);
+      setMessageError('Toko gagal dibuat karena ada kesalahan pada server');
     }
   }, [registerState]);
 
@@ -198,16 +209,16 @@ const Content: React.FC = () => {
             }}
           />
           <View style={{ marginVertical: 16 }}>
-            <SnbText.B3 align="center">
-              Toko gagal dibuat karena ada kesalahan pada server
-            </SnbText.B3>
+            <SnbText.B3 align="center">{messageError}</SnbText.B3>
           </View>
-          <SnbButton.Single
-            title="Tutup"
-            type="primary"
-            disabled={false}
-            onPress={() => setShowModalFailed(false)}
-          />
+          <View style={{ height: 75 }}>
+            <SnbButton.Single
+              title="Tutup"
+              type="primary"
+              disabled={false}
+              onPress={() => setShowModalFailed(false)}
+            />
+          </View>
         </View>
       );
     }
@@ -215,29 +226,33 @@ const Content: React.FC = () => {
     if (showModalPrivacyPolicy) {
       return (
         <View>
-          <View style={{ padding: 16 }}>
-            <SnbText.B1 align="justify">
-              Kebijakan Privasi ini adalah bentuk komitmen dari Sinbad untuk
-              menghargai dan melindungi setiap data atau informasi pribadi
-              Pengguna aplikasi Sinbad (selanjutnya disebut sebagai "aplikasi").
-              {'\n'}
-              {'\n'}
-              Kebijakan Privasi ini menetapkan dasar atas perolehan,
-              pengumpulan, pengolahan, penganalisisan, penampilan, pembukaan,
-              dan/atau segala bentuk pengelolaan yang terkait dengan data atau
-              informasi yang Pengguna berikan kepada Sinbad atau yang Sinbad
-              kumpulkan dari Pengguna, termasuk data pribadi Pengguna, baik pada
-              saat pengguna mengakses aplikasi dan mempergunakan layanan-layanan
-              pada aplikasi (selanjutnya disebut sebagai "data").
-              {'\n'}
-              {'\n'}
-              Dengan mengakses dan/atau mempergunakan layanan Sinbad, Pengguna
-              menyatakan bahwa setiap data Pengguna merupakan data yang benar
-              dan sah, serta Pengguna memberikan persetujuan kepada Sinbad untuk
-              memperoleh, mengumpulkan, menyimpan, mengelola dan mempergunakan
-              data tersebut sebagaimana tercantum dalam Kebijakan Privasi
-              Sinbad.
-            </SnbText.B1>
+          <View style={{ padding: 16, height: '80%' }}>
+            <ScrollView>
+              <SnbText.B3 align="justify">
+                Kebijakan Privasi ini adalah bentuk komitmen dari Sinbad untuk
+                menghargai dan melindungi setiap data atau informasi pribadi
+                Pengguna aplikasi Sinbad (selanjutnya disebut sebagai
+                "aplikasi").
+                {'\n'}
+                {'\n'}
+                Kebijakan Privasi ini menetapkan dasar atas perolehan,
+                pengumpulan, pengolahan, penganalisisan, penampilan, pembukaan,
+                dan/atau segala bentuk pengelolaan yang terkait dengan data atau
+                informasi yang Pengguna berikan kepada Sinbad atau yang Sinbad
+                kumpulkan dari Pengguna, termasuk data pribadi Pengguna, baik
+                pada saat pengguna mengakses aplikasi dan mempergunakan
+                layanan-layanan pada aplikasi (selanjutnya disebut sebagai
+                "data").
+                {'\n'}
+                {'\n'}
+                Dengan mengakses dan/atau mempergunakan layanan Sinbad, Pengguna
+                menyatakan bahwa setiap data Pengguna merupakan data yang benar
+                dan sah, serta Pengguna memberikan persetujuan kepada Sinbad
+                untuk memperoleh, mengumpulkan, menyimpan, mengelola dan
+                mempergunakan data tersebut sebagaimana tercantum dalam
+                Kebijakan Privasi Sinbad.
+              </SnbText.B3>
+            </ScrollView>
             <View
               style={{
                 flexDirection: 'row',
@@ -252,20 +267,24 @@ const Content: React.FC = () => {
               />
               <View style={{ marginHorizontal: 4 }} />
               <SnbText.B3 color={color.black60}>
-                Saya menyetujui Syarat & Ketentuan yang berlaku
+                Saya menyetujui{' '}
+                <SnbText.B3 color={color.red50}> Kebijakan Privasi </SnbText.B3>{' '}
+                yang berlaku
               </SnbText.B3>
             </View>
           </View>
-          <SnbButton.Single
-            title="Setuju"
-            type="primary"
-            disabled={checked === 'unselect'}
-            onPress={() => {
-              setShowModalPrivacyPolicy(false);
-              resetRegister();
-              register();
-            }}
-          />
+          <View style={{ height: 75 }}>
+            <SnbButton.Single
+              title="Setuju"
+              type="primary"
+              disabled={checked === 'unselect'}
+              onPress={() => {
+                setShowModalPrivacyPolicy(false);
+                resetRegister();
+                register();
+              }}
+            />
+          </View>
         </View>
       );
     }
@@ -302,6 +321,7 @@ const Content: React.FC = () => {
         }}
         title={showModalFailed ? 'Gagal Membuat Toko' : 'Kebijakan Privasi'}
         content={renderSheetContent()}
+        size={showModalFailed ? 'normal' : 'halfscreen'}
       />
     </View>
   );
