@@ -6,6 +6,7 @@ import {
   OtpRequestProps,
   OtpGetSuccessProps,
   LoginPhoneNumberProps,
+  AuthMeSuccessProps,
 } from './auth.model';
 import { ErrorProps } from '@models';
 /** === LOGIN WITH USERNAME === */
@@ -68,6 +69,21 @@ export interface LogoutSuccessAction {
 }
 /** => failed */
 export interface LogoutFailedAction {
+  type: string;
+  payload: ErrorProps;
+}
+/** === AUTH ME === */
+/** process */
+export interface AuthMeProcessAction {
+  type: string;
+}
+/** => success */
+export interface AuthMeSuccessAction {
+  type: string;
+  payload: AuthMeSuccessProps;
+}
+/** => failed */
+export interface AuthMeFailedAction {
   type: string;
   payload: ErrorProps;
 }

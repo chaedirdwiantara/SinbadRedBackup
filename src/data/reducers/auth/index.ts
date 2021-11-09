@@ -6,6 +6,7 @@ import { merchantData } from './register-data.reducer';
 import { verifyOTP } from './verify-otp.reducer';
 import { requestOTP } from './request-otp.reducer';
 import { register } from './register';
+import { AuthMeReducer } from './auth-me.reducer';
 
 export const auth = combineReducers({
   checkPhoneNoAvailability,
@@ -15,4 +16,5 @@ export const auth = combineReducers({
   verifyOTP,
   requestOTP,
   register,
+  AuthMeReducer,
 });

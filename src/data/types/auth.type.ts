@@ -17,6 +17,11 @@ export const VERIFICATION_OTP_FAILED = 'VerificationOTPFailed';
 export const LOGOUT_PROCESS = 'LogoutProcess';
 export const LOGOUT_SUCCESS = 'LogoutSuccess';
 export const LOGOUT_FAILED = 'LogoutFailed';
+/** => Me */
+export const AUTH_ME_PROCESS = 'AuthMeProcess';
+export const AUTH_ME_SUCCESS = 'AuthMeSuccess';
+export const AUTH_ME_FAILED = 'AuthMeFailed';
+export const AUTH_ME_RESET = 'AuthMeReset';
 /**
  * ================================================================
  * NOTES

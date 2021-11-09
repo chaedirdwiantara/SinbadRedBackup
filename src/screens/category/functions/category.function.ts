@@ -25,8 +25,8 @@ const goToProduct = (
   });
 };
 
-const goToCategory = (id?: string) => {
-  NavigationAction.navigate('CategoryView', { id });
+const goToCategory = (categoryId?: string) => {
+  NavigationAction.navigate('CategoryView', { categoryId });
 };
 
 const getCategory1stLevelIndex = (

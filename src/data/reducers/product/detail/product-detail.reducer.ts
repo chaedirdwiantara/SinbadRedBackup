@@ -4,12 +4,13 @@ import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
 export type ProductDetailInitialProps =
-  models.DetailItemProps<models.ProductDetailSuccessProps>;
+  models.DetailItemProps<models.ProductDetail>;
 /** === INITIAL STATE === */
 export const productDetailInitialState: ProductDetailInitialProps = {
   data: null,
-  error: null,
   loading: false,
+  refresh: false,
+  error: null,
 };
 /** === REDUCER === */
 export const productDetailReducer = simplifyReducer(productDetailInitialState, {
@@ -23,23 +24,30 @@ export const productDetailReducer = simplifyReducer(productDetailInitialState, {
   /** => Succeeded */
   [types.PRODUCT_DETAIL_SUCCESS](
     state = productDetailInitialState,
-    action: models.DetailSuccessAction<models.ProductDetailSuccessProps>,
+    { payload }: models.DetailSuccessAction<models.ProductDetail>,
   ) {
     return {
       ...state,
-      data: action.payload.data,
+      data: payload.data,
       loading: false,
     };
   },
   /** => Failed */
   [types.PRODUCT_DETAIL_FAILED](
     state = productDetailInitialState,
-    action: models.DetailFailedAction,
+    { payload }: models.DetailFailedAction,
   ) {
     return {
       ...state,
       loading: false,
-      error: action.payload,
+      error: payload,
+    };
+  },
+  /** => Refresh */
+  [types.PRODUCT_DETAIL_REFRESH]() {
+    return {
+      ...productDetailInitialState,
+      refresh: true,
     };
   },
   /** => Reset */

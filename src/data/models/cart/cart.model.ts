@@ -1,4 +1,3 @@
-import * as models from '@models';
 /** === CART LIST === */
 export interface ProductCart {
   productId: string;

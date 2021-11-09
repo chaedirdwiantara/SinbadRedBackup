@@ -1,13 +1,13 @@
 import { createContext, Dispatch } from 'react';
 
 import {
-  TagInitialProps,
+  TagState,
   tagInitialState,
   tagReducer,
 } from '@reducer/product/tag/tag.reducer';
 
 const TagContext = createContext<{
-  stateTag: TagInitialProps;
+  stateTag: TagState;
   dispatchTag: Dispatch<any>;
 }>({
   stateTag: tagInitialState,
