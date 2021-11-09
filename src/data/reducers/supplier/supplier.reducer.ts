@@ -14,7 +14,7 @@ import {
 export type SupplierInitialProps = models.SupplierSegmentationProps &
   models.CreateProps;
 
-interface SupplierState {
+export interface SupplierState {
   segmentation: SupplierSegmentationInitialProps;
   create: SendDataToSupplierInitialProps;
 }

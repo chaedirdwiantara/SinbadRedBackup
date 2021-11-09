@@ -9,7 +9,7 @@ export interface VoucherItem {
   voucherId: number;
 }
 
-export interface CartUpdateProps {
+export interface CartUpdatePayload {
   cartId: string;
   storeId: number;
   products: ProductItem[];

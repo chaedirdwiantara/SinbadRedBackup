@@ -1,10 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import { Dispatch, SetStateAction } from 'react';
-import {
-  DeterminateCheckboxStatus,
-  CheckboxStatus,
-  CartInvoiceGroup,
-} from '@models';
+import { CartInvoiceGroup } from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
@@ -24,9 +20,9 @@ const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
 
   invoiceGroups.forEach((invoiceGroup) => {
     invoiceGroup.brands.forEach((brand) => {
-      if (brand.selected !== 'unselect') {
+      if (brand.selected) {
         brand.products.forEach((product) => {
-          if (product.selected === 'selected') {
+          if (product.selected) {
             totalPrice += product.displayPrice;
           }
         });
@@ -70,13 +66,13 @@ const handleSelectedProductChange = (
   invoiceGroupIndex: number,
   brandIndex: number,
   productIndex: number,
-  selected: DeterminateCheckboxStatus,
+  selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
     Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
@@ -89,7 +85,7 @@ const handleSelectedProductChange = (
   let totalSelectedCount = productSelectedCount;
   currentProduct.selected = selected;
 
-  if (selected === 'selected') {
+  if (selected) {
     currentBrand.selectedCount += 1;
     totalSelectedCount += 1;
   } else {
@@ -98,18 +94,18 @@ const handleSelectedProductChange = (
   }
 
   if (currentBrand.selectedCount === 0) {
-    currentBrand.selected = 'unselect';
+    currentBrand.selected = false;
   }
 
   if (
     currentBrand.selectedCount > 0 &&
     currentBrand.selectedCount < currentBrand.products.length
   ) {
-    currentBrand.selected = 'indeterminate';
+    currentBrand.selected = false;
   }
 
   if (currentBrand.selectedCount === currentBrand.products.length) {
-    currentBrand.selected = 'selected';
+    currentBrand.selected = true;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -117,11 +113,11 @@ const handleSelectedProductChange = (
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
   if (totalSelectedCount === 0) {
-    setAllProductsSelected('unselect');
+    setAllProductsSelected(false);
   } else if (totalSelectedCount === totalProducts) {
-    setAllProductsSelected('selected');
+    setAllProductsSelected(true);
   } else {
-    setAllProductsSelected('indeterminate');
+    setAllProductsSelected(false);
   }
 
   setInvoiceGroups(invoiceGroupsCopy);
@@ -131,13 +127,13 @@ const handleSelectedProductChange = (
 const handleSelectedBrandChange = (
   invoiceGroupIndex: number,
   brandIndex: number,
-  selected: DeterminateCheckboxStatus,
+  selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
     Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
@@ -149,7 +145,7 @@ const handleSelectedBrandChange = (
   let totalSelectedCount = productSelectedCount;
   currentBrand.selected = selected;
 
-  if (selected === 'selected') {
+  if (selected) {
     if (currentBrand.selectedCount === currentBrand.products.length) {
       totalSelectedCount += currentBrand.products.length;
     } else {
@@ -160,7 +156,7 @@ const handleSelectedBrandChange = (
 
     currentBrand.selectedCount = currentBrand.products.length;
     currentBrand.products.forEach((product) => {
-      product.selected = 'selected';
+      product.selected = false;
     });
   } else {
     if (currentBrand.selectedCount === currentBrand.products.length) {
@@ -172,7 +168,7 @@ const handleSelectedBrandChange = (
 
     currentBrand.selectedCount = 0;
     currentBrand.products.forEach((product) => {
-      product.selected = 'unselect';
+      product.selected = false;
     });
   }
 
@@ -180,11 +176,11 @@ const handleSelectedBrandChange = (
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
   if (totalSelectedCount === 0) {
-    setAllProductsSelected('unselect');
+    setAllProductsSelected(false);
   } else if (totalSelectedCount === totalProducts) {
-    setAllProductsSelected('selected');
+    setAllProductsSelected(true);
   } else {
-    setAllProductsSelected('indeterminate');
+    setAllProductsSelected(false);
   }
 
   setInvoiceGroups(invoiceGroupsCopy);
@@ -192,23 +188,23 @@ const handleSelectedBrandChange = (
 };
 /** => handle when select all flag is selected or unselected */
 const handleAllSelectedProductsChange = (
-  selected: DeterminateCheckboxStatus,
+  selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
     Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   setProductSelectedCount: Dispatch<SetStateAction<number>>,
-  setAllProductsSelected: Dispatch<SetStateAction<CheckboxStatus>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
-  const totalSelectedCount = selected === 'selected' ? totalProducts : 0;
+  const totalSelectedCount = selected === true ? totalProducts : 0;
 
   invoiceGroupsCopy.forEach((invoiceGroup) => {
     invoiceGroup.brands.forEach((brand) => {
       brand.selected = selected;
-      brand.selectedCount = selected === 'selected' ? brand.products.length : 0;
+      brand.selectedCount = selected === true ? brand.products.length : 0;
       brand.products.forEach((product) => {
         product.selected = selected;
       });
@@ -228,7 +224,7 @@ const handleProductDelete = (
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
-  console.log(`${deletedProduct.name} deleted`);
+  console.log(`${deletedProduct.productName} deleted`);
 };
 
 export {

@@ -19,9 +19,10 @@ export interface CartBrand {
   brandName: string;
   selected: boolean;
   products: CartProduct[];
+  selectedCount: number;
 }
 
-export interface ParcelCart {
+export interface CartInvoiceGroup {
   cartParcelId: string;
   invoiceGroupId: string;
   invoiceGroupName: string;
@@ -37,7 +38,7 @@ export interface ParcelCart {
 export interface CartSuccessProps {
   verificationResult?: any;
   cartId: string;
-  data: ParcelCart[];
+  data: CartInvoiceGroup[];
   storeId: 1;
   createdAt: string;
   updatedAt: string;

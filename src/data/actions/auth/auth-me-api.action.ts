@@ -7,7 +7,7 @@ export const authMeProcess = (): models.AuthMeProcessAction => {
 };
 /** => success */
 export const authMeSuccess = (
-  payload: models.AuthMeSuccessProps,
+  payload: models.AuthMeSuccess,
 ): models.AuthMeSuccessAction => {
   return { type: types.AUTH_ME_SUCCESS, payload };
 };

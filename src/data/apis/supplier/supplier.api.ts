@@ -4,7 +4,7 @@ import * as models from '@models';
 /** === FUNCTIONS === */
 const getSegmentation = (payload: models.DetailProcessProps) => {
   const path = `stores/suppliers/${payload.id}`;
-  return apiMapping<models.SupplierSegmentationSuccessProps>(
+  return apiMapping<models.SupplierSegmentation>(
     'auth',
     path,
     'account',

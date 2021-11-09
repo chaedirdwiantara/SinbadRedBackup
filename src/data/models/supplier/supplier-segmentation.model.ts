@@ -3,7 +3,7 @@ import * as models from '@models';
 export interface DataSuppliers {
   warehouseId: number;
   supplierStoreId: number;
-  supplierId: number;
+  sellerId: number;
   clusterId?: number;
   typeId?: number;
   groupId?: number;
@@ -11,15 +11,11 @@ export interface DataSuppliers {
   approvalStatus: 'guest' | 'rejected' | 'verified' | 'pending' | 'updating';
 }
 
-export interface SupplierSegmentationSuccessProps {
+export interface SupplierSegmentation {
   storeId: number;
   isActiveStore: boolean;
   dataSuppliers: DataSuppliers;
 }
-
-export interface SupplierSegmentationItemProps
-  extends models.DetailItemProps<SupplierSegmentationSuccessProps> {}
-
 export interface SupplierSegmentationProps {
-  segmentation: SupplierSegmentationItemProps;
+  segmentation: models.DetailItemProps<SupplierSegmentation>;
 }
