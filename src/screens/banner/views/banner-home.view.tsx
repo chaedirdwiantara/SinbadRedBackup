@@ -1,10 +1,10 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
 /** === IMPORT STYLE HERE === */
 /** === IMPORT FUNCTION HERE === */
-import { goToBannerDetail, goToBanner } from '../functions';
-
+import { goToBannerDetail, goToBanner, useBannerAction } from '../functions';
+import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BannerSlider from '@core/components/BannerSlider';
 /** === INTERFACE === */
@@ -13,36 +13,28 @@ interface Props {
 }
 /** === COMPONENT === */
 const BannerHomeView: React.FC<Props> = () => {
+  /** === STATE === */
+  const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const bannerAction = useBannerAction();
+  const bannerSliderState = stateBanner.bannerSlider.list;
+  /** === HOOK === */
+  /** => effect */
+  useEffect(() => {
+    bannerAction.slider(dispatchBanner);
+  }, []);
   /** => main */
-  return (
-    <View testID={'bannerHome'}>
+  /** => content */
+  const content = () => {
+    return (
       <BannerSlider
-        goToDetail={() => goToBannerDetail()}
-        data={[
-          {
-            imageUrl:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/dummy_images/ovaltine_banner.png',
-            id: '1',
-            promo: null,
-          },
-          {
-            imageUrl:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/promo/Promo+banner+dua+belibis+buy+2+get+1+-+new.png',
-            id: '2',
-            promo: null,
-          },
-          {
-            imageUrl:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/promo/banner+promo+wipol-1.png',
-            id: '3',
-            promo: null,
-          },
-        ]}
-        loading={false}
+        goToDetail={(data) => goToBannerDetail(data.id)}
+        data={bannerSliderState.data}
+        loading={bannerSliderState.loading}
         seeAll={() => goToBanner()}
       />
-    </View>
-  );
+    );
+  };
+  return <View testID={'bannerHome'}>{content()}</View>;
 };
 
 export default BannerHomeView;

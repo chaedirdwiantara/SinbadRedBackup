@@ -1,11 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   View,
   ScrollView,
   Image,
   FlatList,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import moment from 'moment';
 import {
@@ -17,10 +18,15 @@ import {
   SnbDivider,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
+import RenderHtml from 'react-native-render-html';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
-import { goBack } from '../functions';
+import { goBack, useBannerAction } from '../functions';
+import { contexts } from '@contexts';
+import LoadingPage from '@core/components/LoadingPage';
 import { BannerDetailStyles } from '../styles';
+
+const { width } = Dimensions.get('window');
 interface RecommendedProduct {
   id: string;
   name: string;
@@ -94,10 +100,19 @@ const termsAndCondition = [
 ];
 
 /** === COMPONENT === */
-const BannerDetailView: React.FC = () => {
+const BannerDetailView: React.FC = ({ route }: any) => {
   /** === STATE === */
   const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
+  const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const bannerAction = useBannerAction();
+  const bannerDetailState = stateBanner.bannerGeneral.detail;
   /** === HOOK === */
+  React.useEffect(() => {
+    bannerAction.detail(dispatchBanner, route.params.bannerId);
+    return () => {
+      bannerAction.resetDetail(dispatchBanner);
+    };
+  }, []);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -120,8 +135,9 @@ const BannerDetailView: React.FC = () => {
   const renderBanner = () => {
     return (
       <Image
+        defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
         source={{
-          uri: 'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
+          uri: bannerDetailState.data?.imageUrl,
         }}
         style={{
           height: 180,
@@ -134,14 +150,27 @@ const BannerDetailView: React.FC = () => {
   /** => promo card information */
   const renderPromoCardInformation = () => {
     return (
-      <View style={{ marginTop: -90 }}>
-        <SnbCardInfoType2.Header
-          title={'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM'}>
+      <View style={{ marginTop: -65 }}>
+        <SnbCardInfoType2.Header title={bannerDetailState.data?.header}>
           <SnbCardInfoType2.Row
             label={'Berlaku Sampai'}
-            text={moment(new Date()).format('DD MMM YYYY')}
+            text={moment(bannerDetailState.data?.activeTo).format(
+              'DD MMM YYYY',
+            )}
           />
         </SnbCardInfoType2.Header>
+      </View>
+    );
+  };
+
+  /** => voucher description */
+  const renderPromoDescriptionHtml = () => {
+    const sourceHtml = {
+      html: bannerDetailState.data?.description,
+    };
+    return (
+      <View style={BannerDetailStyles.sectionContainer}>
+        <RenderHtml contentWidth={width} source={sourceHtml} />
       </View>
     );
   };
@@ -156,11 +185,7 @@ const BannerDetailView: React.FC = () => {
           toggleShowMore={'Lihat Semua'}
           toggleShowLess={'Lihat Lebih Sedikit'}
           content={
-            <SnbText.B1>
-              {
-                'Semoga Anda dan keluarga selalu diberikan kesehatan dan terhindar dari wabah Virus Corona yang melanda bumi ini. Jaga kesehatan, jaga kebersihan, dan konsumsi makanan sehat. Tetap semangat menjemput rezeki bersama Sinbad !'
-              }
-            </SnbText.B1>
+            <SnbText.B1>{bannerDetailState.data?.description}</SnbText.B1>
           }
         />
       </View>
@@ -291,18 +316,34 @@ const BannerDetailView: React.FC = () => {
     );
   };
 
-  /** => main */
-  return (
-    <SnbContainer color="grey">
+  const content = () => {
+    return (
       <ScrollView showsVerticalScrollIndicator={false}>
         {renderHeader()}
         {renderBanner()}
         {renderPromoCardInformation()}
-        {renderPromoDescription()}
-        {renderPromoTnC()}
-        {renderRecommendationProduct()}
+        {bannerDetailState.data?.bannerType === 'general'
+          ? renderPromoDescriptionHtml()
+          : renderPromoDescription()}
+        {bannerDetailState.data?.bannerType === 'general' ? (
+          <View />
+        ) : (
+          renderPromoTnC()
+        )}
+        {bannerDetailState.data?.bannerType === 'general' ? (
+          <View />
+        ) : (
+          renderRecommendationProduct()
+        )}
         {renderModalFullTnC()}
       </ScrollView>
+    );
+  };
+
+  /** => main */
+  return (
+    <SnbContainer color="grey">
+      {!bannerDetailState.loading ? <View>{content()}</View> : <LoadingPage />}
     </SnbContainer>
   );
 };

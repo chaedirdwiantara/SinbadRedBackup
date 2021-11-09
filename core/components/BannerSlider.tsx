@@ -10,32 +10,23 @@ import {
 } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
 const { width } = Dimensions.get('window');
+import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { usePrevious } from '@core/functions/hook/prev-value';
 /** === INTERFACE === */
-interface PropsDataItem {
-  imageUrl: string;
-  id: string;
-  promo: null | {
-    base: 'sku' | 'brand';
-  };
-}
-
 interface PropsData {
-  data: PropsDataItem[];
+  data: models.BannerSliderSuccessProps[];
   loading: boolean;
   seeAll: () => void;
-  goToDetail: (data: PropsDataItem) => void;
+  goToDetail: (data: models.BannerSliderSuccessProps) => void;
 }
 
 const BannerSlider: React.FC<PropsData> = (props) => {
   /** === STATE === */
-  const [staticData] = React.useState(props.data);
-  const [scrollData] = React.useState<PropsDataItem[]>([
-    props.data[props.data.length - 1],
-    ...props.data,
-    props.data[0],
-  ]);
+  const [staticData, setStaticData] = React.useState(props.data);
+  const [scrollData, setScrollData] = React.useState<
+    models.BannerSliderSuccessProps[]
+  >([props.data[props.data.length - 1], ...props.data, props.data[0]]);
   const [page, setPage] = React.useState(0);
   const [layoutWidth, setLayoutWidth] = React.useState(0);
   const [contentOffsetWidth, setContentOffsetWidth] = React.useState(0);
@@ -46,6 +37,15 @@ const BannerSlider: React.FC<PropsData> = (props) => {
   const autoScrollTime: any = React.useRef(null);
   const endDragTime: any = React.useRef(null);
   /** === EFFECT === */
+  React.useEffect(() => {
+    setStaticData(props.data);
+    setScrollData([
+      props.data[props.data.length - 1],
+      ...props.data,
+      props.data[0],
+    ]);
+  }, [props.data]);
+
   React.useEffect(() => {
     clearAutoScrollTime();
     clearEndDragTime();
@@ -204,13 +204,16 @@ const BannerSlider: React.FC<PropsData> = (props) => {
     );
   };
   /** => content item */
-  const contentItem = (data: PropsDataItem, index: number) => {
+  const contentItem = (
+    data: models.BannerSliderSuccessProps,
+    index: number,
+  ) => {
     return (
       <View key={index} style={{ width }}>
         <TouchableWithoutFeedback onPress={() => props.goToDetail(data)}>
           <Image
             defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
-            source={{ uri: data.imageUrl }}
+            source={{ uri: data?.imageUrl }}
             style={styles.imageBanner}
             resizeMode={'stretch'}
           />

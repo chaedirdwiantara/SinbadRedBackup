@@ -12,6 +12,7 @@ import PromoSaga from './promo.saga';
 import VoucherSaga from './voucher.saga';
 import BrandSaga from './brand.saga';
 import NotificationSaga from './notification.saga';
+import BannerSaga from './banner.saga';
 
 function* rootSaga() {
   yield all([fork(ProductSaga)]);
@@ -28,6 +29,7 @@ function* rootSaga() {
   yield all([fork(BrandSaga)]);
   yield all([fork(NotificationSaga)]);
   yield all([fork(ProductTagSaga)]);
+  yield all([fork(BannerSaga)]);
 }
 
 export default rootSaga;
