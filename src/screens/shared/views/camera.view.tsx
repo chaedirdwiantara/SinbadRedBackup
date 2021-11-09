@@ -1,14 +1,17 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useCamera } from '@screen/auth/functions';
 import React from 'react';
 import { SnbCamera } from 'react-native-sinbad-ui';
 import ImageEditor from '@react-native-community/image-editor';
-import RNFS from 'react-native-fs';
+import { useUploadImageAction } from '@core/functions/hook/upload-image';
+import { contexts } from '@contexts';
+import { useCamera } from '@screen/auth/functions';
 
 const CameraView = () => {
   const { goBack } = useNavigation();
-  const { saveCapturedImage } = useCamera();
+  const { save } = useUploadImageAction();
   const { params }: any = useRoute();
+  const { saveCapturedImage } = useCamera();
+  const { dispatchGlobal } = React.useContext(contexts.GlobalContext);
   return (
     <SnbCamera
       title={params?.title}
@@ -16,7 +19,7 @@ const CameraView = () => {
       showFlipCameraButton={params?.type === 'selfie'}
       showFlashCameraButton={params?.type === 'selfie'}
       includeBase64
-      onImageCaptured={async (result: any, resolution) => {
+      onImageCaptured={async (result: any, _) => {
         let url = '';
         const width = result.width - result.width * 0.3;
         const x = result.width * 0.15;
@@ -46,14 +49,11 @@ const CameraView = () => {
           default:
             break;
         }
-        const croppedImage = await RNFS.readFile(url, 'base64');
+        save(dispatchGlobal, url);
         saveCapturedImage({
-          ...result,
-          croppedImage,
-          resolution,
+          url,
           type: params?.type,
         });
-        RNFS.unlink(url);
         goBack();
       }}
       focusPoints={params.focusPoints}

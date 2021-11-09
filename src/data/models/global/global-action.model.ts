@@ -33,7 +33,8 @@ export interface IListSelection {
     | 'listUrban'
     | 'listVehicleAccessAmount'
     | 'listUrbanID'
-    | 'listVehicleAccess';
+    | 'listVehicleAccess'
+    | 'listBank';
   params?: string;
   meta?: {
     skip?: number;

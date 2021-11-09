@@ -1,7 +1,7 @@
 import { navigate } from '@core/navigations/RootNavigation';
 import apiMaps from '@core/services/apiMaps';
 import { useNavigation } from '@react-navigation/core';
-import { extractAddress, useRegister } from '@screen/auth/functions';
+import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
@@ -24,11 +24,16 @@ const MapsView = () => {
   const [address, setAddress] = React.useState<any>();
   const { getLocation, locations, resetLocation } = useLocations();
   const [showModal, setShowModal] = React.useState(false);
-  const { saveRegisterStoreData, registerData } = useRegister();
+  const { saveStoreData, merchantData } = useMerchant();
+
+  React.useEffect(() => {
+    resetLocation();
+    return resetLocation;
+  }, []);
 
   React.useEffect(() => {
     if (locations.data?.length > 0) {
-      saveRegisterStoreData({
+      saveStoreData({
         address: desc === 'Alamat tidak ditemukan' ? '' : desc,
         urbanId: locations?.data[0]?.id,
       });
@@ -36,7 +41,6 @@ const MapsView = () => {
     } else if (locations.data?.length === 0) {
       setShowModal(true);
     }
-    return resetLocation;
   }, [locations]);
 
   const getAddress = async (coords?: LatLng) => {
@@ -65,8 +69,8 @@ const MapsView = () => {
     <SnbContainer color="white">
       <SnbMaps.Type1
         initialRegion={{
-          latitude: registerData?.latitude || -6.25511,
-          longitude: registerData?.longitude || 106.808,
+          latitude: merchantData?.latitude || -6.25511,
+          longitude: merchantData?.longitude || 106.808,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}
@@ -79,7 +83,7 @@ const MapsView = () => {
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           });
-          saveRegisterStoreData({
+          saveStoreData({
             latitude: coords?.latitude,
             longitude: coords?.longitude,
           });
@@ -105,16 +109,16 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onSuccessGetPosition={(position) => {
-          if (registerData.longitude === null) {
-            saveRegisterStoreData({
+          if (merchantData.longitude === null) {
+            saveStoreData({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
             });
             getAddress(position.coords);
           } else {
             getAddress({
-              latitude: registerData.latitude || 0,
-              longitude: registerData.longitude || 0,
+              latitude: merchantData.latitude || 0,
+              longitude: merchantData.longitude || 0,
             });
           }
         }}

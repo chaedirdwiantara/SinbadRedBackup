@@ -3,7 +3,8 @@ import {
   maskPhone,
   useCheckPhoneNoAvailability,
   useOTP,
-  useRegister,
+  useMerchant,
+  setErrorMessage,
 } from '@screen/auth/functions';
 import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
 import { OTPContent } from '@screen/auth/views/shared';
@@ -15,18 +16,19 @@ const RegisterOTPView: React.FC = () => {
   const { verifyOTPRegister, verifyOTP, mobilePhone } = useOTP();
   const { goBack, replace }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
-  const { saveRegisterUserData } = useRegister();
+  const { saveUserData, resetMerchantData } = useMerchant();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      saveRegisterUserData({ mobilePhone });
+      resetMerchantData();
+      saveUserData({ mobilePhone });
       replace(REGISTER_STEP_1_VIEW);
     }
     if (verifyOTP.error !== null) {
       setHide(false);
     }
-  }, [verifyOTP.data]);
+  }, [verifyOTP]);
 
   return (
     <SnbContainer color="white">
@@ -36,20 +38,23 @@ const RegisterOTPView: React.FC = () => {
         title="Kode Verifikasi"
       />
       <OTPContent
-        onVerifyOTP={(otp) =>
+        onVerifyOTP={(otp) => {
+          setHide(true);
           verifyOTPRegister({
             mobilePhone,
             otp,
-          })
+          });
+        }}
+        resend={() => {
+          checkPhone({ mobilePhoneNo: mobilePhone });
+        }}
+        errorMessage={
+          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
         }
         otpSuccess={verifyOTP.data !== null}
         hideIcon={hide}
         loading={verifyOTP.loading}
         phoneNo={maskPhone(mobilePhone)}
-        errorMessage={verifyOTP.error?.message || ''}
-        resend={() => {
-          checkPhone({ mobilePhoneNo: mobilePhone });
-        }}
       />
     </SnbContainer>
   );

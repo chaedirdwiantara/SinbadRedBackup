@@ -59,8 +59,8 @@ export const checkEmailAvailabilityFailed = (
 
 // REGISTER MERCHANT ACTION
 export const merchantRegisterProcess = (
-  data: models.IRegisterMerchantProcess,
-): models.IRegisterAction<models.IRegisterMerchantProcess> => {
+  data: models.IMerchantData,
+): models.IRegisterAction<models.IMerchantData> => {
   return {
     type: types.REGISTER_MERCHANT_PROCESS,
     payload: data,

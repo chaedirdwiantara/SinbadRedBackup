@@ -1,13 +1,16 @@
-import { useNavigation } from '@react-navigation/core';
-import { renderIF, useAuthAction, useInputPhone } from '@screen/auth/functions';
+import {
+  setErrorMessage,
+  useAuthAction,
+  useInputPhone,
+} from '@screen/auth/functions';
 import {
   LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
   REGISTER_VIEW,
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
-import React from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, ScrollView, BackHandler } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
@@ -15,11 +18,17 @@ import {
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import { useNavigation } from '@react-navigation/core';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
   const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
   const phone = useInputPhone();
+  const { reset } = useNavigation();
+
+  React.useEffect(() => {
+    return resetRequestOTP;
+  }, []);
 
   React.useEffect(() => {
     if (requestOTPState.data !== null) {
@@ -27,10 +36,21 @@ const Content: React.FC = () => {
       navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
     }
     if (requestOTPState.error !== null) {
-      phone.setMessageError(requestOTPState.error.message);
+      phone.setMessageError(setErrorMessage(requestOTPState.error.code));
     }
-    return resetRequestOTP;
   }, [requestOTPState]);
+
+  useEffect(() => {
+    const backAction = () => {
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -66,7 +86,10 @@ const Content: React.FC = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="ID Toko"
-          onPress={() => navigate(LOGIN_ID_VIEW)}
+          onPress={() => {
+            phone.clearText();
+            navigate(LOGIN_ID_VIEW);
+          }}
           type="secondary"
           disabled={false}
         />
@@ -78,7 +101,10 @@ const Content: React.FC = () => {
         <SnbButton.Dynamic
           title="Daftar"
           size="small"
-          onPress={() => navigate(REGISTER_VIEW)}
+          onPress={() => {
+            phone.clearText();
+            navigate(REGISTER_VIEW);
+          }}
           type="tertiary"
           disabled={false}
         />
@@ -87,21 +113,16 @@ const Content: React.FC = () => {
   );
 };
 
-const LoginPhoneView: React.FC<{ asComponent: boolean }> = ({
-  asComponent,
-}: any) => {
+const LoginPhoneView = () => {
   const { reset } = useNavigation();
 
   return (
     <SnbContainer color="white">
-      {renderIF(
-        !asComponent,
-        <SnbTopNav.Type3
-          backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-          type="white"
-          title=""
-        />,
-      )}
+      <SnbTopNav.Type3
+        backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+        type="white"
+        title=""
+      />
       <Content />
     </SnbContainer>
   );

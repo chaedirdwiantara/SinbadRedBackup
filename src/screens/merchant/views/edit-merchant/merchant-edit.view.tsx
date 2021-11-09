@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import { ScrollView } from 'react-native';
+import { ScrollView, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** MODULE PAGE */
 import MerchantEditPartialView from './merchant-edit-partial.view';
@@ -10,6 +10,18 @@ interface Props {
 }
 
 const MerchantEditView: FC<Props> = (props) => {
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -30,52 +42,11 @@ const MerchantEditView: FC<Props> = (props) => {
       case 'merchantOwnerName':
       case 'merchantOwnerEmail':
       case 'merchantOwnerTaxNo':
-      case 'merchantAddress':
       case 'merchantOwnerPhoneNo':
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
         return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            // source={props.navigation.state.params.source}
-            showButton
-          />
-        );
-      case 'merchantOwnerImageTax':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'tax'}
-          />
-        );
-      case 'merchantOwnerImageId':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'id'}
-          />
-        );
-      case 'merchantOwnerImageSelfie':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'selfie'}
-          />
-        );
-      case 'merchantAccountImage':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            showButton={false}
-            // showButtonOpenCamera
-            // typeCamera={'merchant'}
-          />
+          <MerchantEditPartialView type={props.route.params.type} showButton />
         );
       default:
         break;
@@ -83,8 +54,6 @@ const MerchantEditView: FC<Props> = (props) => {
   };
   /** => content */
   const content = () => {
-    console.log('nih:', props.route.params);
-
     return (
       <ScrollView
         contentContainerStyle={{ flex: 1 }}

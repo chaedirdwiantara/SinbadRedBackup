@@ -1,10 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import {
-  renderIF,
-  useCamera,
-  useRegister,
-  useUploadImage,
-} from '@screen/auth/functions';
+import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import { REGISTER_STEP_5_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, Image, ToastAndroid, Dimensions } from 'react-native';
@@ -16,17 +11,32 @@ import {
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import { contexts } from '@contexts';
+import { useUploadImageAction } from '@core/functions/hook/upload-image';
 
 const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { uploadImage, resetUploadImage, state: uploadData } = useUploadImage();
-  const { registerData, saveRegisterUserData } = useRegister();
+  const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
+  const { stateGlobal, dispatchGlobal } = React.useContext(
+    contexts.GlobalContext,
+  );
+  const { upload, save } = useUploadImageAction();
 
   React.useEffect(() => {
-    if (uploadData.data !== null && capturedImage.data?.type === 'npwp') {
+    return () => {
+      save(dispatchGlobal, '');
+      resetCamera();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (
+      stateGlobal.uploadImage.data !== null &&
+      capturedImage.data?.type === 'npwp'
+    ) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Berhasil Diupload',
         ToastAndroid.LONG,
@@ -34,12 +44,11 @@ const Content: React.FC = () => {
         0,
         height * 0.25,
       );
-      saveRegisterUserData({ taxImageUrl: uploadData.data?.url });
-      resetUploadImage();
+      saveUserData({ taxImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
-    if (uploadData.error !== null) {
+    if (stateGlobal.uploadImage.error !== null) {
       ToastAndroid.showWithGravityAndOffset(
         'Foto Gagal Diupload',
         ToastAndroid.LONG,
@@ -48,50 +57,59 @@ const Content: React.FC = () => {
         height * 0.25,
       );
     }
-  }, [uploadData]);
+  }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   const renderUploadPhotoRules = () => {
     return (
-      <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-        imgSrc="https://s3-alpha-sig.figma.com/img/4f9b/2a06/d04d4acef65a83217d814ed9aa953a31?Expires=1631491200&Signature=X0oHSl7mxGiCRnqORNSDZGjneF7zeUChvEG5nUF5nUmKZZTcEvsVys1nf28ZJFS9zC9MxNpXvWHVqUEeU5xwWseYoex4BayzFXlniyZkKH0LPk7kP4AjeI7MNJosQCSfFLsOmwdItAHXF4PVfBUcp6NZy-BFOMSeWtswxHx78hwCEgM-391d4L2k5fp--hEDxaj5tM41ayxVts9cp6ZdPS~hb-u6bNoK4AKd2TubnW001dPt-8rzBHux6jdOON3gouO-ZC3ZLoCvafLayYsl76jUE7DwM7qjWbfYU0DPDU2IGDDc00yE53R0vCz8hB0kbQTm0wu0sln0gdg6TQpDkw__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-        title="Unggah Foto NPWP"
-        buttonLabel="Ambil Foto NPWP"
-        rules={[
-          'Pastikan NPWP sesuai dengan identitas Anda',
-          'NPWP Tidak silau dan tidak buram',
-          'Pastikan NPWP bisa terbaca dengan jelas',
-          'Hindari Tangan Menutupi NPWP',
-        ]}
-        action={() => openCamera('npwp')}
-      />
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <SnbUploadPhotoRules
+            rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
+            imgSrc={require('../../../../assets/images/npwp_image.png')}
+            title="Unggah Foto NPWP"
+            buttonLabel="Ambil Foto NPWP"
+            rules={[
+              'Pastikan NPWP sesuai dengan identitas Anda',
+              'NPWP Tidak silau dan tidak buram',
+              'Pastikan NPWP bisa terbaca dengan jelas',
+              'Hindari Tangan Menutupi NPWP',
+            ]}
+            action={() => openCamera('npwp')}
+          />
+        </View>
+        <View style={{ height: 72 }}>
+          <SnbButton.Single
+            type="secondary"
+            title="Lewati"
+            onPress={() => navigate(REGISTER_STEP_5_VIEW)}
+            disabled={false}
+          />
+        </View>
+      </View>
     );
   };
 
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage?.data?.type === 'npwp';
-    let uri: string | undefined = '';
     let action = () => {
-      resetCamera();
-      resetUploadImage();
       navigate(REGISTER_STEP_5_VIEW);
     };
 
+    let uri: string | undefined = '';
     if (isImageCaptured) {
-      uri = `data:image/jpg;base64,${capturedImage?.data?.croppedImage}`;
+      uri = capturedImage?.data?.url;
       action = () => {
-        const payload = {
-          base64: `data:image/png;base64,${capturedImage?.data.croppedImage}`,
-          currentFilePath: registerData?.user?.taxImageUrl || null,
-        };
-        uploadImage(payload);
+        upload(dispatchGlobal, capturedImage.data.url);
       };
     } else {
-      uri = registerData.user?.taxImageUrl;
+      uri = merchantData.user?.taxImageUrl;
     }
 
     return (
       <View style={{ flex: 1 }}>
+        <View style={{ margin: 16, marginBottom: 0 }}>
+          <SnbText.B3>Unggah Foto NPWP</SnbText.B3>
+        </View>
         <Image
           resizeMode="contain"
           source={{ uri }}
@@ -108,7 +126,7 @@ const Content: React.FC = () => {
             <SnbButton.Dynamic
               size="small"
               type="tertiary"
-              title="Ulangi"
+              title="Ubah Foto"
               onPress={() => openCamera('npwp')}
               disabled={false}
             />
@@ -117,10 +135,10 @@ const Content: React.FC = () => {
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
               shadow
-              loading={uploadData?.loading}
+              disabled={stateGlobal.uploadImage.loading}
+              loading={stateGlobal.uploadImage.loading}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               onPress={action}
-              disabled={uploadData?.loading}
             />
           </View>
         </View>
@@ -129,7 +147,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    registerData?.user?.taxImageUrl !== '' ||
+    merchantData?.user?.taxImageUrl !== '' ||
     capturedImage.data?.type === 'npwp';
 
   return (
