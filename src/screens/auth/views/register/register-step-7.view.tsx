@@ -43,6 +43,7 @@ const Content: React.FC = () => {
   const [checked, setChecked] = React.useState<'unselect' | 'selected'>(
     'unselect',
   );
+  const [messageError, setMessageError] = React.useState('');
 
   React.useEffect(() => {
     resetRegister();
@@ -89,9 +90,13 @@ const Content: React.FC = () => {
     }
     if (registerState.data?.data?.isCreated === false) {
       setShowModalFailed(true);
+      setMessageError(
+        'Registrasi berhasil, silahkan tunggu beberapa saat untuk login',
+      );
     }
     if (registerState.error !== null) {
       setShowModalFailed(true);
+      setMessageError('Toko gagal dibuat karena ada kesalahan pada server');
     }
   }, [registerState]);
 
@@ -204,9 +209,7 @@ const Content: React.FC = () => {
             }}
           />
           <View style={{ marginVertical: 16 }}>
-            <SnbText.B3 align="center">
-              Toko gagal dibuat karena ada kesalahan pada server
-            </SnbText.B3>
+            <SnbText.B3 align="center">{messageError}</SnbText.B3>
           </View>
           <View style={{ height: 75 }}>
             <SnbButton.Single
