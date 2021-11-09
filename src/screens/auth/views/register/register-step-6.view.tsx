@@ -155,6 +155,7 @@ const Content: React.FC = () => {
               labelText="Kapasitas Jalan"
               placeholder="Masukkan kapasitas jalan"
               keyboardType="phone-pad"
+              helpText={'Jumlah kendaraan yang bisa melewati jalan menuju Toko'}
             />
           </View>
         </ScrollView>

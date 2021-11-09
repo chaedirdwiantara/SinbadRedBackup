@@ -252,7 +252,12 @@ const Content: React.FC = () => {
               />
               <View style={{ marginHorizontal: 4 }} />
               <SnbText.B3 color={color.black60}>
-                Saya menyetujui Syarat & Ketentuan yang berlaku
+                Saya menyetujui{' '}
+                <SnbText.B3 color={color.red50}>
+                  {' '}
+                  Syarat & Ketentuan{' '}
+                </SnbText.B3>{' '}
+                yang berlaku
               </SnbText.B3>
             </View>
           </View>
