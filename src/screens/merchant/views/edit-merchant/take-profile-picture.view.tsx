@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { SnbContainer, color, SnbIcon } from 'react-native-sinbad-ui';
+import { SnbContainer, color } from 'react-native-sinbad-ui';
 import { RNCamera } from 'react-native-camera';
 import {
   View,
@@ -129,7 +129,7 @@ const TakeProfilePictureView: FC = () => {
           <TouchableOpacity
             style={styles.boxCircleCamera}
             onPress={() => takePicture()}>
-            <SnbIcon size={32} name={'camera'} color={color.white} />
+            <View style={styles.cirleButton} />
           </TouchableOpacity>
         </View>
       </RNCamera>
@@ -159,10 +159,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   boxCircleCamera: {
+    borderColor: color.white,
     borderWidth: 2,
     borderRadius: 40,
-    padding: 10,
-    borderColor: color.white,
+    padding: 4,
+    margin: 16,
+  },
+  cirleButton: {
+    backgroundColor: color.white,
+    borderRadius: 100,
+    width: 40,
+    height: 40,
   },
 });
 export default TakeProfilePictureView;
