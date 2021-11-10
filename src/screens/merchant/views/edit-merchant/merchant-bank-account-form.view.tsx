@@ -80,7 +80,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
     return () => backHandler.remove();
   }, []);
-  console.log('state:', stateUser.detail.data?.ownerData);
 
   /** function */
   const checkButton = () => {
