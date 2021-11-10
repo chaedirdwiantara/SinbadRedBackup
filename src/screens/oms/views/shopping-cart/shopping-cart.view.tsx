@@ -164,32 +164,6 @@ const OmsShoppingCartView: FC = () => {
     // this need an improvement after the cart integrated
     count(dispatchVoucher);
   }, []);
-
-  /**
-   * RTDB SECTION
-   * - listen flag potentialDiscountId, isPotentialDiscountLoading
-   * - fetch `potensial-discount` endpoint if data ready
-   */
-  const dataFlag = useDataFlagRTDB();
-  const prevPotentionDiscountLoading = usePrevious(
-    dataFlag.isPotentialDiscountLoading,
-  );
-  useCheckFlagByTask('potentialDiscountId');
-  useCheckFlagByTask('isPotentialDiscountLoading');
-  React.useEffect(() => {
-    if (
-      prevPotentionDiscountLoading === true &&
-      dataFlag.isPotentialDiscountLoading === false
-    ) {
-      if (dataFlag.potentialDiscountId) {
-        verificationOrderDetail(
-          dispatchVerificationOrder,
-          dataFlag.potentialDiscountId,
-        );
-        goToVerificationOrder();
-      }
-    }
-  }, [dataFlag.isPotentialDiscountLoading]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
