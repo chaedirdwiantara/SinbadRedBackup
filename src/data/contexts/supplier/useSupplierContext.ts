@@ -1,4 +1,3 @@
-import { contexts } from '@contexts';
 import { useContext } from 'react';
 
 import { SupplierContext } from './supplier.context';
@@ -10,5 +9,5 @@ export const useSupplierContext = () => {
     throw new Error('useSupplierContext was used outside of SupplierProvider');
   }
 
-  return contexts;
+  return context;
 };
