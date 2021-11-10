@@ -10,8 +10,8 @@ export interface VoucherItem {
 }
 
 export interface CartUpdatePayload {
+  action: string;
   cartId: string;
-  storeId: number;
   products: ProductItem[];
   voucherIds: VoucherItem[];
 }
