@@ -1,5 +1,4 @@
 /** === IMPORT INTERNAL === */
-import * as models from '@models';
 import {
   supplierSegmentationInitialState,
   SupplierSegmentationInitialProps,
@@ -10,10 +9,6 @@ import {
   SendDataToSupplierInitialProps,
   sendDataToSupplierReducer,
 } from './send-data-to-supplier.reducer';
-/** === TYPES === */
-export type SupplierInitialProps = models.SupplierSegmentationProps &
-  models.CreateProps;
-
 export interface SupplierState {
   segmentation: SupplierSegmentationInitialProps;
   create: SendDataToSupplierInitialProps;

@@ -4,31 +4,35 @@ import { useState } from 'react';
 
 export interface MerchantStatus {
   sinbadStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
-  supplierStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
+  supplierStatus:
+    | 'verified'
+    | 'rejected'
+    | 'updating'
+    | 'pending'
+    | 'guest'
+    | null;
 }
 
 export interface DataMerchant {
-  type: 'close' | 'sendDataToSupplier' | 'goToProfile';
+  type: 'close' | 'sendDataToSupplier';
 }
 
 export const useCheckDataSupplier = () => {
   /** => state */
-  const [modalUserUnverified, setModalUserUnverified] = useState(false);
-  const [modalUserRejected, setModalUserRejected] = useState(false);
-  const [modalUserSendData, setModalUserSendData] = useState(false);
-  const [modalCheckDataSupplier, setModalCheckDataSupplier] = useState(false);
+  const [modalWaitingApproval, setModalWaitingApproval] = useState(false);
+  const [modalRejectApproval, setModalRejectApproval] = useState(false);
+  const [modalRegisterSupplier, setModalRegisterSupplier] = useState(false);
 
   /** => parentFunction */
   const parentFunction = (data: DataMerchant) => {
     switch (data.type) {
       case 'close':
-        //
+        setModalWaitingApproval(false);
+        setModalRejectApproval(false);
+        setModalRegisterSupplier(false);
         break;
       case 'sendDataToSupplier':
-        //
-        break;
-      case 'goToProfile':
-        //
+        setModalRegisterSupplier(true);
         break;
       default:
         break;
@@ -49,7 +53,7 @@ export const useCheckDataSupplier = () => {
         userUpdating(supplierStatus);
         break;
       case 'pending':
-        userPending();
+        userPending(supplierStatus);
         break;
       case 'guest':
         userGuest(supplierStatus);
@@ -61,8 +65,8 @@ export const useCheckDataSupplier = () => {
 
   /** CHECK USER MATRIX*/
   /** STATUS VERIFIED */
-  const userVerified = (supplier: string) => {
-    if (supplier === 'guest') {
+  const userVerified = (supplier: string | null) => {
+    if (supplier === 'guest' || supplier == null) {
       showSendData();
     } else {
       //addSkuToCartAfterCheckVerified
@@ -73,20 +77,28 @@ export const useCheckDataSupplier = () => {
     showRejected();
   };
   /** STATUS UPDATING */
-  const userUpdating = (supplier: string) => {
-    if (supplier === 'guest' || supplier === 'verified') {
+  const userUpdating = (supplier: string | null) => {
+    if (supplier == null) {
+      showSendData();
+    } else if (supplier === 'guest' || supplier === 'verified') {
       showUnverified();
     } else {
       //addSkuToCartAfterCheckVerified
     }
   };
   /** STATUS PENDING */
-  const userPending = () => {
-    showUnverified();
+  const userPending = (supplier: string | null) => {
+    if (supplier == null) {
+      showSendData();
+    } else {
+      showUnverified();
+    }
   };
   /** STATUS GUEST */
-  const userGuest = (supplier: string) => {
-    if (supplier !== 'pending') {
+  const userGuest = (supplier: string | null) => {
+    if (supplier == null) {
+      showSendData();
+    } else {
       showUnverified();
     }
   };
@@ -94,25 +106,21 @@ export const useCheckDataSupplier = () => {
   /** CHANGE MODAL STATE STATUS */
   const showUnverified = () => {
     //close Open Order
-    setModalUserUnverified(true);
-    setModalCheckDataSupplier(true);
+    setModalWaitingApproval(true);
   };
   const showRejected = () => {
     //close Open Order
-    setModalUserRejected(true);
-    setModalCheckDataSupplier(true);
+    setModalRejectApproval(true);
   };
   const showSendData = () => {
     //close Open Order
-    setModalUserSendData(true);
-    setModalCheckDataSupplier(true);
+    setModalRegisterSupplier(true);
   };
 
   return {
-    modalUserRejected,
-    modalUserUnverified,
-    modalUserSendData,
-    modalCheckDataSupplier,
+    modalRejectApproval,
+    modalWaitingApproval,
+    modalRegisterSupplier,
     parentFunction,
     checkUser,
   };

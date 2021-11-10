@@ -1,5 +1,4 @@
 /** === IMPORT INTERNAL === */
-import * as models from '@models';
 import {
   cartViewInitialState,
   CartViewInitialProps,
@@ -15,11 +14,7 @@ import {
   CartUpdateInitialProps,
   cartUpdateReducer,
 } from './shoping-cart-update.reducer';
-/** === TYPES === */
-export type ShopingCartInitialProps = models.ShopingCartProps &
-  models.CreateProps &
-  models.UpdateProps;
-interface ShopingCartState {
+export interface ShopingCartState {
   cart: CartViewInitialProps;
   create: AddToCartInitialProps;
   update: CartUpdateInitialProps;

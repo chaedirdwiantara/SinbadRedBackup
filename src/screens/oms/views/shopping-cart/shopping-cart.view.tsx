@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState, useMemo, Fragment } from 'react';
+import React, { FC, useState, useMemo, Fragment, useEffect } from 'react';
 import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
@@ -36,144 +36,29 @@ import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
 import { useDataVoucher } from '@core/redux/Data';
 import { RecommendationHomeView } from '@screen/recommendation/views';
-/** === DUMMIES === */
-const noImage =
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png';
-const invoiceGroupDummies: Array<CartInvoiceGroup> = [
-  {
-    invoiceGroupId: '1',
-    invoiceGroupName: 'TRS DNE',
-    cartParcelId: '1',
-    portfolioId: '1',
-    supplierId: 1,
-    channelId: 1,
-    groupId: 1,
-    typeId: 1,
-    clusterId: 1,
-    brands: [
-      {
-        brandId: '1',
-        brandName: 'SGM',
-        selected: false,
-        selectedCount: 0,
-        products: [
-          {
-            productId: '1',
-            productName: 'SGM ANANDA 1 1000GR GA',
-            urlImages: noImage,
-            stock: 5,
-            selected: false,
-            qty: 1,
-            displayPrice: 76097,
-            priceBeforeTax: 76097,
-            priceAfterTax: 76097,
-            warehouseId: 2,
-            uom: 'Pcs',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    invoiceGroupId: '2',
-    invoiceGroupName: 'Lakme',
-    cartParcelId: '1',
-    portfolioId: '1',
-    supplierId: 1,
-    channelId: 1,
-    groupId: 1,
-    typeId: 1,
-    clusterId: 1,
-    brands: [
-      {
-        brandId: '2',
-        brandName: 'Lakme',
-        selected: false,
-        selectedCount: 0,
-        products: [
-          {
-            productId: '2',
-            productName: 'LAKME CC CREAM ALMOND',
-            urlImages:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-            stock: 2,
-            selected: false,
-            qty: 1,
-            displayPrice: 77891,
-            priceBeforeTax: 77891,
-            priceAfterTax: 77891,
-            warehouseId: 2,
-            uom: 'Pcs',
-          },
-          {
-            productId: '3',
-            productName: 'LAKME BLUR PERFECT CREAMER',
-            urlImages:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-            stock: 10,
-            selected: false,
-            qty: 1,
-            displayPrice: 150000,
-            priceBeforeTax: 150000,
-            priceAfterTax: 150000,
-            warehouseId: 2,
-            uom: 'Pcs',
-          },
-        ],
-      },
-      {
-        brandId: '3',
-        brandName: 'Lakme 2',
-        selected: false,
-        selectedCount: 0,
-        products: [
-          {
-            productId: '4',
-            productName: ' LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR ',
-            qty: 1,
-            stock: 4,
-            displayPrice: 98782,
-            priceBeforeTax: 98782,
-            priceAfterTax: 98782,
-            warehouseId: 2,
-            selected: false,
-            urlImages:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-            uom: 'Pcs',
-          },
-          {
-            productId: '5',
-            productName: 'LAKME BIPHASED MAKEUP REMOVER ',
-            qty: 1,
-            stock: 12,
-            displayPrice: 72000,
-            priceBeforeTax: 72000,
-            priceAfterTax: 72000,
-            warehouseId: 2,
-            selected: false,
-            urlImages:
-              'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-            uom: 'Pcs',
-          },
-        ],
-      },
-    ],
-  },
-];
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import { useCartViewActions } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
 const userName = 'Edward';
 const address =
   'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt.,Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
-  const [invoiceGroups, setInvoiceGroups] =
-    useState<Array<CartInvoiceGroup>>(invoiceGroupDummies);
+  const [invoiceGroups, setInvoiceGroups] = useState<Array<CartInvoiceGroup>>(
+    [],
+  );
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const totalProducts = useMemo(() => getTotalProducts(invoiceGroups), []);
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
+
+  const cartViewActions = useCartViewActions();
+  const {
+    stateShopingCart: { cart: cartState },
+    dispatchShopingCart,
+  } = useShopingCartContext();
   /** => this example */
   const { verificationOrderCreate } = useVerficationOrderAction();
   const { stateVerificationOrder, dispatchVerificationOrder } =
@@ -183,15 +68,23 @@ const OmsShoppingCartView: FC = () => {
     contexts.VoucherContext,
   );
   const voucherData = useDataVoucher();
-  React.useEffect(() => {
+  useEffect(() => {
     count(dispatchVoucher);
+    cartViewActions.fetch(dispatchShopingCart, '6183b3030623df001cb62346');
   }, []);
-  React.useEffect(() => {
+  useEffect(() => {
     if (stateVerificationOrder.create.data !== null) {
       setIsConfirmCheckoutDialogOpen(false);
       goToVerificationOrder();
     }
   }, [stateVerificationOrder.create.data]);
+  useEffect(() => {
+    if (cartState !== null && cartState.data !== null) {
+      setInvoiceGroups(cartState.data.data);
+    } else {
+      setInvoiceGroups([]);
+    }
+  }, [cartState]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {

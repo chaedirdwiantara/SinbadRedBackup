@@ -10,7 +10,11 @@ import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
 import AddToCartModal from './AddToCartModal';
-import { RegisterSupplierModal } from '@core/components/modal';
+import {
+  RegisterSupplierModal,
+  RejectApprovalModal,
+  WaitingApprovalModal,
+} from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
@@ -26,6 +30,8 @@ import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierSegmentationAction } from '@core/functions/supplier/supplier-hook.function';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth } from '@core/redux/Data';
+import { useCheckDataSupplier } from '@core/functions/supplier';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -104,8 +110,17 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchTag,
   } = useTagContext();
-  const { dispatchSupplier } = useSupplierContext();
+  const { me } = useDataAuth();
+  const {
+    stateSupplier: {
+      segmentation: { data: dataSegmentation },
+    },
+    dispatchSupplier,
+  } = useSupplierContext();
   const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
+  /** => check data supplier and sinbad status */
+  const { checkUser, modalRejectApproval, modalWaitingApproval } =
+    useCheckDataSupplier();
 
   useEffect(() => {
     if (!productLoading) {
@@ -121,11 +136,26 @@ const ProductList: FC<ProductListProps> = ({
     });
   }, [selectedCategory, keywordSearched]);
 
+  useEffect(() => {
+    if (me.data !== null && dataSegmentation !== null) {
+      if (dataSegmentation.dataSuppliers !== null) {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+        });
+      } else {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: null,
+        });
+      }
+    }
+  }, [me.data, dataSegmentation]);
+
   const handleOrderPress = (product: models.ProductList) => {
     authCoreAction.me();
     supplierSegmentationAction.fetch(dispatchSupplier, product.supplierId);
     productDetailActions.fetch(dispatchProduct, product.id);
-    registerSupplierModal.setVisible(true);
   };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -241,6 +271,23 @@ const ProductList: FC<ProductListProps> = ({
           registerSupplierModal.sendSupplierData(setOrderModalVisible)
         }
         onClose={() => registerSupplierModal.setVisible(false)}
+      />
+      {/* Waiting Approval Modal */}
+      <WaitingApprovalModal
+        visible={modalWaitingApproval}
+        onSubmit={() =>
+          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+        }
+        onClose={() => registerSupplierModal.setVisible(false)}
+      />
+      {/* Reject Approval Modal */}
+      <RejectApprovalModal
+        visible={modalRejectApproval}
+        onSubmit={() =>
+          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+        }
+        onClose={() => registerSupplierModal.setVisible(false)}
+        isCallCS={true}
       />
       {/* Add to Cart Modal */}
       {orderModalVisible && (

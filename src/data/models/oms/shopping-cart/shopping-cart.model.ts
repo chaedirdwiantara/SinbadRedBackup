@@ -39,7 +39,7 @@ export interface CartSuccessProps {
   verificationResult?: any;
   cartId: string;
   data: CartInvoiceGroup[];
-  storeId: 1;
+  storeId: number;
   createdAt: string;
   updatedAt: string;
   isActiveStore: boolean;
