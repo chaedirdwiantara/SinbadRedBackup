@@ -148,7 +148,13 @@ const OmsShoppingCartView: FC = () => {
    */
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
-  const { verificationOrderDetail } = useVerficationOrderAction();
+  const { verificationOrderCreate } = useVerficationOrderAction();
+  React.useEffect(() => {
+    if (stateVerificationOrder.create.data !== null) {
+      setIsConfirmCheckoutDialogOpen(false);
+      goToVerificationOrder();
+    }
+  }, [stateVerificationOrder.create.data]);
 
   /**
    * VOUCHER SECTION
@@ -393,7 +399,9 @@ const OmsShoppingCartView: FC = () => {
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() => {}}
+      ok={() => {
+        verificationOrderCreate(dispatchVerificationOrder, {});
+      }}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
       loading={stateVerificationOrder.detail.loading}
     />
