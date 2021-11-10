@@ -266,6 +266,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantAccountName':
         return merchantName.value === storeData?.storeAccount.name;
       case 'merchantAccountPhoneNo':
+        return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
           largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
@@ -439,8 +440,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
           value={merchantPhoneNo.value}
-          onChangeText={(text) => merchantPhoneNo.setValue(text)}
+          onChangeText={(text) => {
+            const cleanNumber = text.replace(/[^0-9]/g, '');
+            merchantPhoneNo.setValue(cleanNumber);
+          }}
           clearText={() => merchantPhoneNo.setValue('')}
+          maxLength={14}
         />
       </View>
     );

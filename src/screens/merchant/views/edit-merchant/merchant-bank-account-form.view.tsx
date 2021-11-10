@@ -80,12 +80,26 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
     return () => backHandler.remove();
   }, []);
+  console.log('state:', stateUser.detail.data?.ownerData);
+
   /** function */
   const checkButton = () => {
-    if (bankId.value && bankAccountNo.value && bankAccountName.value) {
-      return false;
-    } else {
+    if (
+      bankId.value === bankData?.bankId &&
+      bankAccountNo.value === bankData?.bankAccountNo &&
+      bankAccountName.value === bankData?.bankAccountName &&
+      bankBranchName.value === bankData?.bankBranchName &&
+      stateUser.detail.data?.ownerData.info.isBankAccountVerified === true
+    ) {
       return true;
+    } else if (
+      bankId.value === null ||
+      bankAccountNo.value === '' ||
+      bankAccountName.value === ''
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
   const confirm = () => {
