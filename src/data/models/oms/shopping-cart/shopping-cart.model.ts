@@ -1,7 +1,4 @@
 import * as models from '@models';
-export type DeterminateCheckboxStatus = 'selected' | 'unselect';
-
-export type CheckboxStatus = DeterminateCheckboxStatus | 'indeterminate';
 
 export interface CartProduct {
   productId: string;
@@ -22,9 +19,10 @@ export interface CartBrand {
   brandName: string;
   selected: boolean;
   products: CartProduct[];
+  selectedCount: number;
 }
 
-export interface ParcelCart {
+export interface CartInvoiceGroup {
   cartParcelId: string;
   invoiceGroupId: string;
   invoiceGroupName: string;
@@ -40,8 +38,8 @@ export interface ParcelCart {
 export interface CartSuccessProps {
   verificationResult?: any;
   cartId: string;
-  data: ParcelCart[];
-  storeId: 1;
+  data: CartInvoiceGroup[];
+  storeId: number;
   createdAt: string;
   updatedAt: string;
   isActiveStore: boolean;

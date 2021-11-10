@@ -1,13 +1,13 @@
 import { createContext, Dispatch } from 'react';
 
 import {
-  ShopingCartInitialProps,
+  ShopingCartState,
   shopingCartInitialState,
   shopingCartReducer,
 } from '@reducer/oms/shoping-cart/shoping-cart.reducer';
 
 const ShopingCartContext = createContext<{
-  stateShopingCart: ShopingCartInitialProps;
+  stateShopingCart: ShopingCartState;
   dispatchShopingCart: Dispatch<any>;
 }>({
   stateShopingCart: shopingCartInitialState,

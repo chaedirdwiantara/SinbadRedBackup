@@ -3,7 +3,8 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type AuthMeUsernameProps = models.DetailItemProps<models.AuthData>;
+export type AuthMeUsernameProps =
+  models.DetailItemProps<models.AuthMeDataProps>;
 /** === INITIAL STATE HERE === */
 export const authMeInitialState: AuthMeUsernameProps = {
   data: null,
