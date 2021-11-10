@@ -14,10 +14,10 @@ import {
   SnbNumberCounter,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { CartProduct, CartBrand, CartInvoiceGroup } from '@models';
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 import {
   goToVerificationOrder,
@@ -37,7 +37,10 @@ import { ShoppingCartStyles } from '../../styles';
 import { useDataVoucher } from '@core/redux/Data';
 import { RecommendationHomeView } from '@screen/recommendation/views';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
-import { useCartViewActions } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import {
+  useCartViewActions,
+  useCartUpdateActions,
+} from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
 const userName = 'Edward';
 const address =
   'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt.,Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730';
@@ -55,14 +58,15 @@ const OmsShoppingCartView: FC = () => {
     useState(false);
 
   const cartViewActions = useCartViewActions();
+  const cartUpdateActions = useCartUpdateActions();
   const {
     stateShopingCart: { cart: cartState },
     dispatchShopingCart,
   } = useShopingCartContext();
   /** => this example */
-  const { verificationOrderCreate } = useVerficationOrderAction();
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
+  const { stateVerificationOrder } = React.useContext(
+    contexts.VerificationOrderContext,
+  );
   const { count } = useCountAllVoucherAction();
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
@@ -85,6 +89,30 @@ const OmsShoppingCartView: FC = () => {
       setInvoiceGroups([]);
     }
   }, [cartState]);
+
+  /** Confirmation checkout submit */
+  const onSubmitCheckout = () => {
+    const params: models.CartUpdatePayload = {
+      cartId: '6183b3030623df001cb62346',
+      action: 'submit',
+      products: [],
+      voucherIds: [],
+    };
+
+    invoiceGroups.forEach((item) => {
+      item.brands.forEach((el) => {
+        el.products.forEach((product) => {
+          params.products.push({
+            productId: product.productId,
+            qty: product.qty,
+            selected: product.selected,
+          });
+        });
+      });
+    });
+
+    cartUpdateActions.fetch(dispatchShopingCart, params);
+  };
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -308,87 +336,12 @@ const OmsShoppingCartView: FC = () => {
       )}
     </Fragment>
   );
-  /** => Confirmation Dialog */
-  // const renderConfirmationDialog = () => (
-  //   <SnbDialog
-  //     open={isModalOpen}
-  //     title="Konfirmasi"
-  //     content="Konfirmasi order dan lanjut ke Checkout?"
-  //     ok={() => {
-  //       goToVerificationOrder();
-  //       setIsConfirmCheckoutDialogOpen(false);
-  //     }}
-  //     cancel={() => setIsConfirmCheckoutDialogOpen(false)}
-  //   />
-  // );
   const renderConfirmationDialog = () => (
     <SnbDialog
       open={isConfirmCheckoutDialogOpen}
       title="Konfirmasi"
       content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={() =>
-        verificationOrderCreate(dispatchVerificationOrder, {
-          data: {
-            _id: 1,
-            data: [
-              {
-                invoiceGroupId: '1',
-                portfolioId: null,
-                brands: [
-                  {
-                    brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
-                    products: [
-                      {
-                        productId: '9536f526-2447-11ec-9621-0242ac130002',
-                        qty: 2,
-                        displayPrice: 201000,
-                        priceBeforeTax: 201000,
-                        priceAfterTax: 221100,
-                        warehouseId: 1,
-                      },
-                      {
-                        productId: '997fd26a-2447-11ec-9621-0242ac130002',
-                        qty: 1,
-                        displayPrice: 216000,
-                        priceBeforeTax: 216000,
-                        priceAfterTax: 237600,
-                        warehouseId: 1,
-                      },
-                      {
-                        productId: '19d816be-24db-11ec-9621-0242ac130002',
-                        qty: 2,
-                        displayPrice: 240000,
-                        priceBeforeTax: 240000,
-                        priceAfterTax: 264000,
-                        warehouseId: 1,
-                      },
-                      {
-                        productId: '32039060-24db-11ec-9621-0242ac130002',
-                        qty: 2,
-                        displayPrice: 204000,
-                        priceBeforeTax: 204000,
-                        priceAfterTax: 224400,
-                        warehouseId: 1,
-                      },
-                    ],
-                  },
-                ],
-                supplierId: 1,
-                channelId: 1,
-                groupId: 1,
-                typeId: 1,
-                clusterId: 1,
-              },
-            ],
-            isActiveStore: false,
-            voucherIds: [],
-            storeId: 1,
-            salesId: 1,
-            platform: 'sinbad_app',
-            userId: 1,
-          },
-        })
-      }
+      ok={onSubmitCheckout}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
       loading={stateVerificationOrder.create.loading}
     />
