@@ -156,7 +156,7 @@ const handleSelectedBrandChange = (
 
     currentBrand.selectedCount = currentBrand.products.length;
     currentBrand.products.forEach((product) => {
-      product.selected = false;
+      product.selected = true;
     });
   } else {
     if (currentBrand.selectedCount === currentBrand.products.length) {

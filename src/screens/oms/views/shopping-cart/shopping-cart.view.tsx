@@ -3,18 +3,20 @@ import React, { FC, useState, useMemo, Fragment, useEffect } from 'react';
 import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
   SnbText,
   SnbCheckbox,
-  SnbButton,
   SnbIcon,
   color,
   SnbDialog,
-  SnbDivider,
   SnbNumberCounter,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '../../../../../core/functions/global/currency-format';
 import * as models from '@models';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { ShoppingCartEmpty } from './shopping-cart-empty.view';
+import { ShoppingCartHeader } from './shopping-cart-header.view';
+import { ShoppingCartFooter } from './shopping-cart-footer.view';
+import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { CartProduct, CartBrand, CartInvoiceGroup } from '@models';
@@ -23,28 +25,17 @@ import {
   goToVerificationOrder,
   getTotalProducts,
   handleSelectedProductChange,
-  goBack,
   handleProductQuantityChange,
   handleProductDelete,
   handleSelectedBrandChange,
-  handleAllSelectedProductsChange,
-  getTotalPrice,
-  goToVoucherCartList,
-  goToCategory,
 } from '../../functions';
-import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
-import { useDataVoucher } from '@core/redux/Data';
-import { RecommendationHomeView } from '@screen/recommendation/views';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
   useCartUpdateActions,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
-const userName = 'Edward';
-const address =
-  'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt.,Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -87,10 +78,7 @@ const OmsShoppingCartView: FC = () => {
 
   /** Voucher Cart */
   const { count } = useCountAllVoucherAction();
-  const { stateVoucher, dispatchVoucher } = React.useContext(
-    contexts.VoucherContext,
-  );
-  const voucherData = useDataVoucher();
+  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   React.useEffect(() => {
     if (cartState.data !== null) {
       count(dispatchVoucher);
@@ -178,60 +166,6 @@ const OmsShoppingCartView: FC = () => {
     });
   };
   /** === VIEW === */
-  /** => Header */
-  const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Keranjang'}
-        backAction={() => goBack()}
-      />
-    );
-  };
-  /** => Empty Cart */
-  const renderEmptyCart = () => (
-    <Fragment>
-      <View style={{ padding: 16, alignItems: 'center', marginBottom: 24 }}>
-        <Image
-          source={require('../../../../assets/images/oms_empty_cart.png')}
-          width={180}
-          style={{ marginTop: 24, marginBottom: 16 }}
-        />
-        <View style={{ marginBottom: 4 }}>
-          <SnbText.H4>Keranjang Kosong</SnbText.H4>
-        </View>
-        <SnbText.B3 align={'center'}>
-          Yuk, Isi keranjang kamu dengan produk - produk di Sinbad
-        </SnbText.B3>
-      </View>
-      <View style={{ height: 80, borderStyle: 'dashed' }}>
-        <SnbButton.Single
-          type="primary"
-          title="Tambah Produk"
-          disabled={false}
-          onPress={goToCategory}
-        />
-      </View>
-      <RecommendationHomeView />
-    </Fragment>
-  );
-  /** => Shipping Address */
-  const renderShippingAddress = () => (
-    <View style={ShoppingCartStyles.cardContainer}>
-      <View style={ShoppingCartStyles.topCardSlot}>
-        <SnbText.B4>Alamat Pengiriman</SnbText.B4>
-      </View>
-      <View style={ShoppingCartStyles.verticalBottomCardSlot}>
-        <View style={{ marginBottom: 6 }}>
-          <SnbText.B4>{userName}</SnbText.B4>
-        </View>
-        <View style={{ marginBottom: 6 }}>
-          <SnbText.C2>Alamat 1 (default)</SnbText.C2>
-        </View>
-        <SnbText.B3>{address}</SnbText.B3>
-      </View>
-    </View>
-  );
   /** => Product */
   const renderProduct = (
     product: CartProduct,
@@ -392,144 +326,47 @@ const OmsShoppingCartView: FC = () => {
       )}
     </View>
   );
-  /** => Invoice Group List */
-  const renderInvoiceGroupList = () => (
-    <Fragment>
-      {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) =>
-        renderInvoiceGroup(invoiceGroup, invoiceGroupIndex),
-      )}
-    </Fragment>
-  );
-  const renderConfirmationDialog = () => (
-    <SnbDialog
-      open={isConfirmCheckoutDialogOpen}
-      title="Konfirmasi"
-      content="Konfirmasi order dan lanjut ke Checkout?"
-      ok={onSubmitCheckout}
-      cancel={() => setIsConfirmCheckoutDialogOpen(false)}
-      loading={stateVerificationOrder.create.loading || updateCartState.loading}
-    />
-  );
-  /** => voucher tag */
-  const renderVoucherTag = () => {
-    const { countVoucher } = stateVoucher;
-    if (
-      countVoucher.detail.data?.total !== 0 &&
-      countVoucher.detail.loading !== true
-    ) {
-      return (
-        <View>
-          <TouchableOpacity
-            onPress={() => goToVoucherCartList()}
-            style={ShoppingCartStyles.voucherTagContainer}>
-            <View style={ShoppingCartStyles.voucherTagLeftContainer}>
-              <View style={ShoppingCartStyles.voucherTagIconContainer}>
-                <SnbIcon name={'local_offer'} size={16} color={color.white} />
-              </View>
-              <View style={{ justifyContent: 'center' }}>
-                {voucherData.dataVouchers !== null ? (
-                  <>
-                    <SnbText.C1
-                      color={color.green50}>{`Potensi potongan ${toCurrency(
-                      countPotentialDiscount(
-                        voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.sellerVouchers,
-                      ).totalDiscount,
-                      {
-                        withPrefix: false,
-                        withFraction: false,
-                      },
-                    )}`}</SnbText.C1>
-                    <SnbText.C2 color={color.green50}>{`${
-                      countPotentialDiscount(
-                        voucherData.dataVouchers.sinbadVoucher,
-                        voucherData.dataVouchers.sellerVouchers,
-                      ).totalSelectedVoucher
-                    } Voucher terpilih`}</SnbText.C2>
-                  </>
-                ) : (
-                  <SnbText.B3
-                    color={
-                      color.green50
-                    }>{`Anda memiliki ${stateVoucher.countVoucher.detail.data?.total} voucher`}</SnbText.B3>
-                )}
-              </View>
-            </View>
-            <View style={ShoppingCartStyles.voucherTagRightContainer}>
-              <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
-              <SnbIcon name={'chevron_right'} size={24} color={color.red50} />
-            </View>
-          </TouchableOpacity>
-          <SnbDivider />
-        </View>
-      );
-    }
-  };
-  /** => Footer */
-  const renderFooter = () => (
-    <View style={ShoppingCartStyles.footerContainer}>
-      {renderVoucherTag()}
-      <View style={ShoppingCartStyles.footerBody}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbCheckbox
-            status={allProductsSelected ? 'selected' : 'unselect'}
-            onPress={() =>
-              handleAllSelectedProductsChange(
-                allProductsSelected === false ? true : false,
-                [invoiceGroups, setInvoiceGroups],
-                setProductSelectedCount,
-                setAllProductsSelected,
-                totalProducts,
-              )
-            }
-          />
-          <View style={{ marginLeft: 10 }}>
-            <SnbText.B3>Pilih Semua</SnbText.B3>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginRight: 10, alignItems: 'flex-end' }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 4,
-              }}>
-              <View style={{ marginRight: 6 }}>
-                <SnbText.B3>Total:</SnbText.B3>
-              </View>
-              <SnbText.B2 color={color.red50}>
-                {toCurrency(getTotalPrice(invoiceGroups))}
-              </SnbText.B2>
-            </View>
-            <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
-          </View>
-          <SnbButton.Dynamic
-            type="primary"
-            title="Checkout"
-            size="small"
-            onPress={() => setIsConfirmCheckoutDialogOpen(true)}
-          />
-        </View>
-      </View>
-    </View>
-  );
+
   /** => Main */
   return (
     <SnbContainer color="white">
-      {renderHeader()}
+      <ShoppingCartHeader />
       {invoiceGroups.length > 0 ? (
         <Fragment>
           <ScrollView>
-            {renderShippingAddress()}
-            {renderInvoiceGroupList()}
+            <ShippingAddress />
+            {/* Invoice Group List */}
+            <Fragment>
+              {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) =>
+                renderInvoiceGroup(invoiceGroup, invoiceGroupIndex),
+              )}
+            </Fragment>
           </ScrollView>
-          {renderFooter()}
+          <ShoppingCartFooter
+            allProductsSelected={allProductsSelected}
+            invoiceGroups={invoiceGroups}
+            setInvoiceGroups={setInvoiceGroups}
+            setProductSelectedCount={setProductSelectedCount}
+            setAllProductsSelected={setAllProductsSelected}
+            totalProducts={totalProducts}
+            productSelectedCount={productSelectedCount}
+            setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
+          />
         </Fragment>
       ) : (
-        renderEmptyCart()
+        <ShoppingCartEmpty />
       )}
-      {renderConfirmationDialog()}
+      {/* Confirmation Modal Checkout */}
+      <SnbDialog
+        open={isConfirmCheckoutDialogOpen}
+        title="Konfirmasi"
+        content="Konfirmasi order dan lanjut ke Checkout?"
+        ok={onSubmitCheckout}
+        cancel={() => setIsConfirmCheckoutDialogOpen(false)}
+        loading={
+          stateVerificationOrder.create.loading || updateCartState.loading
+        }
+      />
     </SnbContainer>
   );
 };
@@ -541,8 +378,8 @@ export default OmsShoppingCartView;
  * ================================================================
  * createdBy: hasapu (team)
  * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Maulana Ghozi
+ * updatedDate: 11112021
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
