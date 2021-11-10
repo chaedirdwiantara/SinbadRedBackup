@@ -73,6 +73,7 @@ const MerchantEditPhotoView = () => {
   const { params }: any = useRoute();
   const { editProfile } = MerchantHookFunc.useEditProfile();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
@@ -122,7 +123,6 @@ const MerchantEditPhotoView = () => {
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
-      reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
     };
   }, []);
@@ -155,8 +155,7 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
-      editMerchantAction.reset(dispatchSupplier);
+      editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
 
@@ -181,7 +180,6 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
     }
