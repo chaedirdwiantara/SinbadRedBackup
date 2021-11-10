@@ -41,6 +41,7 @@ import {
   useCartViewActions,
   useCartUpdateActions,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 const userName = 'Edward';
 const address =
   'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt.,Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730';
@@ -60,28 +61,45 @@ const OmsShoppingCartView: FC = () => {
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const {
-    stateShopingCart: { cart: cartState },
+    stateShopingCart: { cart: cartState, update: updateCartState },
     dispatchShopingCart,
   } = useShopingCartContext();
-  /** => this example */
-  const { stateVerificationOrder } = React.useContext(
-    contexts.VerificationOrderContext,
-  );
+
+  /**
+   * Verification Order
+   */
+  const { stateVerificationOrder, dispatchVerificationOrder } =
+    React.useContext(contexts.VerificationOrderContext);
+  const { verificationOrderCreate } = useVerficationOrderAction();
+  useEffect(() => {
+    /** => handle close modal if fetch is done */
+    if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
+      setIsConfirmCheckoutDialogOpen(false);
+    }
+    /** => below is the action if the update cart & potential discount fetch success */
+    if (
+      stateVerificationOrder.create.data !== null &&
+      updateCartState.data != null
+    ) {
+      goToVerificationOrder();
+    }
+  }, [stateVerificationOrder.create.data, updateCartState.data]);
+
+  /** Voucher Cart */
   const { count } = useCountAllVoucherAction();
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
   );
   const voucherData = useDataVoucher();
+  React.useEffect(() => {
+    if (cartState.data !== null) {
+      count(dispatchVoucher);
+    }
+  }, [cartState]);
+
   useEffect(() => {
-    count(dispatchVoucher);
     cartViewActions.fetch(dispatchShopingCart, '6183b3030623df001cb62346');
   }, []);
-  useEffect(() => {
-    if (stateVerificationOrder.create.data !== null) {
-      setIsConfirmCheckoutDialogOpen(false);
-      goToVerificationOrder();
-    }
-  }, [stateVerificationOrder.create.data]);
   useEffect(() => {
     if (cartState !== null && cartState.data !== null) {
       setInvoiceGroups(cartState.data.data);
@@ -111,7 +129,53 @@ const OmsShoppingCartView: FC = () => {
       });
     });
 
+    /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
+    /** => fetch post potential discount */
+    verificationOrderCreate(dispatchVerificationOrder, {
+      id: 1,
+      data: [
+        {
+          invoiceGroupId: '1',
+          portfolioId: null,
+          brands: [
+            {
+              brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
+              products: [
+                {
+                  productId: '9536f526-2447-11ec-9621-0242ac130002',
+                  qty: 2,
+                  displayPrice: 201000,
+                  priceBeforeTax: 201000,
+                  priceAfterTax: 221100,
+                  warehouseId: 1,
+                },
+                {
+                  productId: '997fd26a-2447-11ec-9621-0242ac130002',
+                  qty: 1,
+                  displayPrice: 216000,
+                  priceBeforeTax: 216000,
+                  priceAfterTax: 237600,
+                  warehouseId: 1,
+                },
+              ],
+            },
+          ],
+          sellerId: 1,
+          channelId: 1,
+          groupId: 1,
+          typeId: 1,
+          clustderI: 1,
+        },
+      ],
+      isActiveStore: true,
+      voucherIds: [],
+      buyerId: 1,
+      salesId: 1,
+      platform: 'sinbad_app',
+      userId: 1,
+      deviceId: '140a03751468cd95',
+    });
   };
   /** === VIEW === */
   /** => Header */
@@ -343,7 +407,7 @@ const OmsShoppingCartView: FC = () => {
       content="Konfirmasi order dan lanjut ke Checkout?"
       ok={onSubmitCheckout}
       cancel={() => setIsConfirmCheckoutDialogOpen(false)}
-      loading={stateVerificationOrder.detail.loading}
+      loading={stateVerificationOrder.create.loading || updateCartState.loading}
     />
   );
   /** => voucher tag */
