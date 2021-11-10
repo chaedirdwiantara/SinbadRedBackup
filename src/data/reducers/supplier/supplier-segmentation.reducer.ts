@@ -4,7 +4,7 @@ import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
 export type SupplierSegmentationInitialProps =
-  models.DetailItemProps<models.SupplierSegmentationSuccessProps>;
+  models.DetailItemProps<models.SupplierSegmentation>;
 /** === INITIAL STATE === */
 export const supplierSegmentationInitialState: SupplierSegmentationInitialProps =
   {
@@ -27,7 +27,7 @@ export const supplierSegmentationReducer = simplifyReducer(
     /** => Success */
     [types.SUPPLIER_SEGMENTATION_SUCCESS](
       state = supplierSegmentationInitialState,
-      action: models.DetailSuccessAction<models.SupplierSegmentationSuccessProps>,
+      action: models.DetailSuccessAction<models.SupplierSegmentation>,
     ) {
       return {
         ...state,

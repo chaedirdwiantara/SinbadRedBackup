@@ -1,6 +1,5 @@
-export interface AddToCartProps {
+export interface AddToCartPayload {
   cartId?: string;
-  deviceId: string;
   isActiveStore: boolean;
   selected: boolean;
   stock: number;

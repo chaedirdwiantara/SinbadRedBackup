@@ -16,8 +16,8 @@ export const supplierSegmentationProcess = (
 };
 /** Succeeded */
 export const supplierSegmentationSuccess = (
-  payload: models.DetailSuccessProps<models.SupplierSegmentationSuccessProps>,
-): models.DetailSuccessAction<models.SupplierSegmentationSuccessProps> => {
+  payload: models.DetailSuccessProps<models.SupplierSegmentation>,
+): models.DetailSuccessAction<models.SupplierSegmentation> => {
   return { type: types.SUPPLIER_SEGMENTATION_SUCCESS, payload };
 };
 /** => Failed */

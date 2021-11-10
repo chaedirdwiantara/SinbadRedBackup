@@ -21,7 +21,7 @@ const verificationOTP = (data: models.LoginPhoneNumber) => {
 /** => me */
 const me = () => {
   const path = 'me';
-  return apiAuth<models.LoginSuccess>(path, 'v1', 'GET');
+  return apiAuth<models.AuthMeSuccess>(path, 'v1', 'GET');
 };
 /** => logout */
 const logout = () => {

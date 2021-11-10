@@ -32,7 +32,7 @@ const logout = () => {
 /** => auth me */
 const getAuthMe = () => {
   const path = 'me';
-  return apiAuth<models.AuthMeSuccessProps>(path, 'v1', 'GET');
+  return apiAuth<models.AuthMeSuccess>(path, 'v1', 'GET');
 };
 
 /** === EXPORT FUNCTIONS === */

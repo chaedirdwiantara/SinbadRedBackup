@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 
-const useSupplierSegmentationAction = () => {
+export const useSupplierSegmentationAction = () => {
   const dispatch = useDispatch();
 
   return {
@@ -15,5 +15,3 @@ const useSupplierSegmentationAction = () => {
     },
   };
 };
-
-export { useSupplierSegmentationAction };

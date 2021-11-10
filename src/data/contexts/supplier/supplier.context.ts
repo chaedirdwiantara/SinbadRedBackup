@@ -1,13 +1,13 @@
 import { createContext, Dispatch } from 'react';
 
 import {
-  SupplierInitialProps,
+  SupplierState,
   supplierInitialState,
   supplierReducer,
 } from '@reducer/supplier/supplier.reducer';
 
 const SupplierContext = createContext<{
-  stateSupplier: SupplierInitialProps;
+  stateSupplier: SupplierState;
   dispatchSupplier: Dispatch<any>;
 }>({
   stateSupplier: supplierInitialState,
