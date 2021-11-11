@@ -1,12 +1,12 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, RefreshControl } from 'react-native';
 import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
-// import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
+import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
@@ -69,7 +69,7 @@ const ProductDetailView: FC = () => {
     stateProduct: { detail: productDetailState },
     dispatchProduct,
   } = useProductContext();
-  const { fetch } = useProductDetailAction();
+  const { fetch, refresh } = useProductDetailAction();
   const [promoModalVisible, setPromoModalVisible] = useState(false);
 
   useEffect(() => {
@@ -128,7 +128,13 @@ const ProductDetailView: FC = () => {
       <ProductDetailHeader cartBadge={10} />
       {/* Content */}
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={productDetailState.refresh!}
+              onRefresh={() => refresh(dispatchProduct, productId)}
+            />
+          }>
           <ProductDetailCarousel images={productDetailState.data?.images!} />
           <ProductDetailMainInfo
             name={productDetailState.data?.name!}
@@ -138,14 +144,13 @@ const ProductDetailView: FC = () => {
             unit={productDetailState.data?.unit!}
             isExclusive={productDetailState.data?.isExclusive!}
             stock={defaultProperties.stock}
-            hasPromo={false} // When promoList.length > 0, for now it'll be set to false
+            hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
-          {/* Will be hidden temporarily */}
-          {/* <ProductDetailSupplierInfo
+          <ProductDetailSupplierInfo
             logo={productDetailDummy.supplier.logoUrl}
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
-          /> */}
+          />
           {potentialPromoProductList.data.length > 0 && (
             <PromoSection
               description={productDetailDummy.promoList[0].shortDescription}
