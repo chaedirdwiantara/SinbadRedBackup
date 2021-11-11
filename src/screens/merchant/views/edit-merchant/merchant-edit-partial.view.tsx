@@ -54,19 +54,19 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
   // COMPLETNESS DATA
   const numberOfEmployee = useInput(
-    storeData?.storeDetailCompleteness?.numberOfEmployee || '',
+    storeData?.storeDetailCompleteness?.numberOfEmployee || null,
   );
   const vehicleAccessibility = useInput(
-    storeData?.storeDetailCompleteness?.vehicleAccessibility || '',
+    storeData?.storeDetailCompleteness?.vehicleAccessibility || null,
   );
   const largeArea = useInput(
-    storeData?.storeDetailCompleteness?.largeArea || '',
+    storeData?.storeDetailCompleteness?.largeArea || null,
   );
   const topBrand = useInput(
-    storeData?.storeDetailCompleteness?.topSellingBrand || '',
+    storeData?.storeDetailCompleteness?.topSellingBrand || null,
   );
   const wantedBrand = useInput(
-    storeData?.storeDetailCompleteness?.mostWantedBrand || '',
+    storeData?.storeDetailCompleteness?.mostWantedBrand || null,
   );
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
@@ -266,6 +266,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantAccountName':
         return merchantName.value === storeData?.storeAccount.name;
       case 'merchantAccountPhoneNo':
+        return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
           largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
@@ -274,7 +275,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           wantedBrand.value ===
             storeData?.storeDetailCompleteness.mostWantedBrand &&
           vehicleAccessibilityAmount.value ===
-            `${storeData?.storeDetailCompleteness.vehicleAccessibilityAmount}` &&
+            storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
           vehicleAccessibility.value.id ===
             storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
           numberOfEmployee.value ===
@@ -285,6 +286,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
     }
   };
+
   /**
    * ================================
    * SWITCH VIEW
@@ -324,7 +326,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Lengkap Pemilik'}
-          placeholder={'Masukan Nama Lengkap Pemilik'}
+          placeholder={'Masukkan Nama Lengkap Pemilik'}
           type={'default'}
           value={ownerName.value}
           onChangeText={(text) => ownerName.setValue(text)}
@@ -340,7 +342,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'E-mail'}
-          placeholder={'Masukan E-mail'}
+          placeholder={'Masukkan E-mail'}
           type={emailIsNotValid ? 'error' : 'default'}
           value={ownerEmail.value}
           onChangeText={(text) => validateEmail(text)}
@@ -356,7 +358,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone'}
-          placeholder={'Masukan nomor handphone Anda'}
+          placeholder={'Masukkan nomor handphone Anda'}
           type={'default'}
           value={mobilePhone.value}
           onChangeText={(text) => mobilePhone.setValue(text)}
@@ -373,7 +375,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
-          placeholder={'Masukan Nomor KTP maks. 16 Digit'}
+          placeholder={'Masukkan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
           value={noKtp.value}
           onChangeText={(text) => {
@@ -394,7 +396,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
-          placeholder={'Masukan Nomor NPWP maks.15 Digit'}
+          placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
           value={noNPWP.value}
           onChangeText={(text) => {
@@ -420,7 +422,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nama Toko'}
-          placeholder={'Masukan Nama Toko'}
+          placeholder={'Masukkan Nama Toko'}
           type={'default'}
           value={merchantName.value}
           onChangeText={(text) => merchantName.setValue(text)}
@@ -435,11 +437,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
         <SnbTextField.Text
           labelText={'Nomor Handphone Toko'}
-          placeholder={'Masukan Nomor Handphone Toko'}
+          placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
           value={merchantPhoneNo.value}
-          onChangeText={(text) => merchantPhoneNo.setValue(text)}
+          onChangeText={(text) => {
+            const cleanNumber = text.replace(/[^0-9]/g, '');
+            merchantPhoneNo.setValue(cleanNumber);
+          }}
           clearText={() => merchantPhoneNo.setValue('')}
+          maxLength={14}
         />
       </View>
     );
@@ -462,7 +468,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Ukuran Toko'}
-            placeholder={'Masukan Ukuran Toko'}
+            placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
             value={largeArea.value}
             onChangeText={(text) => largeArea.setValue(text)}
@@ -473,8 +479,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Top Brand Selling'}
-            placeholder={'Masukan Top Brand Selling'}
+            labelText={'Merk Paling Laku'}
+            placeholder={'Masukkan Merk Paling Laku'}
             type={'default'}
             value={topBrand.value}
             onChangeText={(text) => topBrand.setValue(text)}
@@ -483,8 +489,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Wanted Brand'}
-            placeholder={'Masukan Wanted Brand'}
+            labelText={'Merk Paling Diinginkan'}
+            placeholder={'Masukkan Merk Paling Diinginkan'}
             type={'default'}
             value={wantedBrand.value}
             onChangeText={(text) => wantedBrand.setValue(text)}
@@ -500,12 +506,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}
+            mandatory
           />
         </View>
         <View>
           <SnbTextField.Text
             labelText={'Jumlah Akses Jalan'}
-            placeholder={'Masukan Jumlah Akses Jalan'}
+            placeholder={'Masukkan Jumlah Akses Jalan'}
             type={'default'}
             value={
               vehicleAccessibilityAmount.value

@@ -173,7 +173,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Email',
-          value: ownerData?.profile.email,
+          value: ownerData?.profile.email ? ownerData?.profile.email : '-',
           action: ownerData?.profile.email ? 'ubah' : 'tambah',
           type: 'merchantOwnerEmail',
           title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
@@ -191,7 +191,9 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: ownerData?.profile.bankAccount.bankAccountNo,
+          value: ownerData?.profile.bankAccount.bankAccountNo
+            ? ownerData?.profile.bankAccount.bankAccountNo
+            : '-',
           action: ownerData?.profile.bankAccount.bankAccountNo
             ? 'ubah'
             : 'tambah',
@@ -210,7 +212,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxNo,
+          value: ownerData?.profile.taxNo ? ownerData?.profile.taxNo : '-',
           action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
           title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',

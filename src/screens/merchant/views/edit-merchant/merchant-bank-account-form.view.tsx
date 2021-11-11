@@ -59,6 +59,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.navigate('MerchantOtpView', {
         type: 'bankAccount',
         data: stateUser.detail.data?.ownerData.profile.mobilePhone,
+        bankData: {
+          bankId: bankId.value,
+          accountName: bankAccountName.value,
+          accountNo: bankAccountNo.value,
+          branch: bankBranchName.value,
+        },
       });
     }
   }, [stateMerchant]);
@@ -74,12 +80,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
     return () => backHandler.remove();
   }, []);
+
   /** function */
   const checkButton = () => {
-    if (bankId.value && bankAccountNo.value && bankAccountName.value) {
-      return false;
-    } else {
+    if (
+      bankId.value === bankData?.bankId &&
+      bankAccountNo.value === bankData?.bankAccountNo &&
+      bankAccountName.value === bankData?.bankAccountName &&
+      bankBranchName.value === bankData?.bankBranchName &&
+      stateUser.detail.data?.ownerData.info.isBankAccountVerified === true
+    ) {
       return true;
+    } else if (
+      bankId.value === null ||
+      bankAccountNo.value === '' ||
+      bankAccountName.value === ''
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
   const confirm = () => {
@@ -121,7 +140,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nomor Rekening'}
-            placeholder={'Masukan Nomor Rekening'}
+            placeholder={'Masukkan Nomor Rekening'}
             type={'default'}
             value={bankAccountNo.value}
             onChangeText={(text) => bankAccountNo.setValue(text)}
@@ -135,7 +154,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nama Lengkap Pemilik Rekening'}
-            placeholder={'Masukan Nama Lengkap Pemilik Rekening'}
+            placeholder={'Masukkan Nama Lengkap'}
             type={'default'}
             value={bankAccountName.value}
             onChangeText={(text) => bankAccountName.setValue(text)}
@@ -147,7 +166,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Nama Cabang'}
-            placeholder={'Masukan Nama Cabang'}
+            placeholder={'Masukkan Nama Cabang'}
             type={'default'}
             value={bankBranchName.value}
             onChangeText={(text) => bankBranchName.setValue(text)}
