@@ -13,7 +13,7 @@ import {
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
 import { HistoryStyle } from '@screen/history/styles';
-import { CountDownTimer } from '../components';
+import { CountDownTimer } from './CountDownTimer';
 /** === TYPES === */
 export interface HistoryStatusColor {
   white: string;

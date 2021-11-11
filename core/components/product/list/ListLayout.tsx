@@ -33,7 +33,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
       <View key={index} style={{ minHeight: 100, marginHorizontal: 16 }}>
         <ProductListCard
           name={item.name}
-          imageUrl={item.thumbnail ?? item.image}
+          imageUrl={item.thumbnail}
           price={item.currentPrice ?? 0}
           isBundle={item.isBundle}
           isPromo={item.isPromo}

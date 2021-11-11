@@ -9,8 +9,8 @@ const goToShoppingCart = () => {
   NavigationAction.navigate('OmsShoppingCartView');
 };
 
-const goToProductDetail = () => {
-  NavigationAction.navigate('ProductDetailView');
+const goToSupplier = () => {
+  NavigationAction.navigate('SupplierView');
 };
 
-export { goBack, goToShoppingCart, goToProductDetail };
+export { goBack, goToShoppingCart, goToSupplier };
