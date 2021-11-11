@@ -1,8 +1,9 @@
 /** === IMPORT PACKAGES === */
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION === */
-import { useDataPermanent } from '@core/redux/Data';
+import { useDataPermanent, useDataCart } from '@core/redux/Data';
 import * as Actions from '../../data/actions';
+import * as models from '@models';
 /** === FUNCTION === */
 export const useCartId = () => {
   const dataPermanent = useDataPermanent();
@@ -11,6 +12,17 @@ export const useCartId = () => {
     getCartId: dataPermanent.cartId,
     setCartId: (value: string | null) => {
       dispatch(Actions.cartId(value));
+    },
+  };
+};
+
+export const useCartVerification = () => {
+  const dataCart = useDataCart();
+  const dispatch = useDispatch();
+  return {
+    getCartVerification: dataCart,
+    setCartVerification: (data: models.CartSuccessProps) => {
+      dispatch(Actions.verificationCart(data));
     },
   };
 };

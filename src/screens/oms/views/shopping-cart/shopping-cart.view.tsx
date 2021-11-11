@@ -18,6 +18,8 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { useCartVerification } from '@core/functions/cart';
+/** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { CartProduct, CartBrand, CartInvoiceGroup } from '@models';
 import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
@@ -55,6 +57,8 @@ const OmsShoppingCartView: FC = () => {
     stateShopingCart: { cart: cartState, update: updateCartState },
     dispatchShopingCart,
   } = useShopingCartContext();
+  /** => handle verification cart */
+  const { setCartVerification } = useCartVerification();
 
   /**
    * Verification Order
@@ -90,7 +94,21 @@ const OmsShoppingCartView: FC = () => {
   }, []);
   useEffect(() => {
     if (cartState !== null && cartState.data !== null) {
+      let totalProductsSelected = 0;
       setInvoiceGroups(cartState.data.data);
+      cartState.data.data.forEach((item) => {
+        item.brands.forEach((el) => {
+          el.products.forEach((product) => {
+            if (product.selected) {
+              totalProductsSelected += 1;
+            }
+          });
+        });
+      });
+      if (totalProductsSelected === totalProducts) {
+        setAllProductsSelected(true);
+      }
+      setProductSelectedCount(totalProductsSelected);
     } else {
       setInvoiceGroups([]);
     }
@@ -98,11 +116,26 @@ const OmsShoppingCartView: FC = () => {
 
   /** Confirmation checkout submit */
   const onSubmitCheckout = () => {
+    if (cartState.data === null) {
+      /** DO SOMETHING */
+      /** Show modal error/retry */
+      return;
+    }
     const params: models.CartUpdatePayload = {
-      cartId: '6183b3030623df001cb62346',
+      cartId: cartState.data.cartId,
+      storeId: cartState.data.storeId,
       action: 'submit',
       products: [],
       voucherIds: [],
+    };
+
+    const paramsPotensialDiscount: models.CartSuccessProps = {
+      cartId: cartState.data.cartId,
+      data: invoiceGroups,
+      storeId: cartState.data.storeId,
+      isActiveStore: cartState.data.isActiveStore,
+      platform: cartState.data.platform,
+      userId: cartState.data.userId,
     };
 
     invoiceGroups.forEach((item) => {
@@ -119,50 +152,11 @@ const OmsShoppingCartView: FC = () => {
 
     /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
+    /** => update state verification cart */
+    setCartVerification(paramsPotensialDiscount);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {
-      id: 1,
-      data: [
-        {
-          invoiceGroupId: '1',
-          portfolioId: null,
-          brands: [
-            {
-              brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
-              products: [
-                {
-                  productId: '9536f526-2447-11ec-9621-0242ac130002',
-                  qty: 2,
-                  displayPrice: 201000,
-                  priceBeforeTax: 201000,
-                  priceAfterTax: 221100,
-                  warehouseId: 1,
-                },
-                {
-                  productId: '997fd26a-2447-11ec-9621-0242ac130002',
-                  qty: 1,
-                  displayPrice: 216000,
-                  priceBeforeTax: 216000,
-                  priceAfterTax: 237600,
-                  warehouseId: 1,
-                },
-              ],
-            },
-          ],
-          sellerId: 1,
-          channelId: 1,
-          groupId: 1,
-          typeId: 1,
-          clustderI: 1,
-        },
-      ],
-      isActiveStore: true,
-      voucherIds: [],
-      buyerId: 1,
-      salesId: 1,
-      platform: 'sinbad_app',
-      userId: 1,
-      deviceId: '140a03751468cd95',
+      data: paramsPotensialDiscount,
     });
   };
   /** === VIEW === */
