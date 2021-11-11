@@ -44,7 +44,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   key={product.id}
                   product={product}
                   index={productIndex}
-                  onOrderPress={onOrderPress}
+                  onOrderPress={() => onOrderPress(product)}
                 />
               ),
           )}
@@ -57,7 +57,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   key={product.id}
                   product={product}
                   index={productIndex}
-                  onOrderPress={onOrderPress}
+                  onOrderPress={() => onOrderPress(product)}
                 />
               ),
           )}

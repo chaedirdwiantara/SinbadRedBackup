@@ -42,13 +42,15 @@ const CategoryTabList: FC<CategoryTabListProps> = ({
   /** === DERIVED VALUES === */
   const categoryLevelList: Array<ProductCategoryTab> =
     level === '2'
-      ? categoryList[selectedFirstLevelIndex].child
-      : categoryList[selectedFirstLevelIndex].child[selectedSecondLevelIndex]
-          .child;
+      ? categoryList[selectedFirstLevelIndex].children
+      : categoryList[selectedFirstLevelIndex].children[selectedSecondLevelIndex]
+          .children;
   const parentCategory =
     level === '2'
       ? categoryList[selectedFirstLevelIndex]
-      : categoryList[selectedFirstLevelIndex].child[selectedSecondLevelIndex];
+      : categoryList[selectedFirstLevelIndex].children[
+          selectedSecondLevelIndex
+        ];
   const categoryNames = [
     'Semua',
     ...categoryLevelList.map((category) => category.name),

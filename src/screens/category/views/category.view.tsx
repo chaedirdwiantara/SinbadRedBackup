@@ -9,10 +9,10 @@ import {
   color,
   SnbIcon,
 } from 'react-native-sinbad-ui';
+import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import Menu from '@core/components/Menu';
 /** === IMPORT FUNCTIONS === */
-import { NavigationAction } from '@navigation';
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import {
   goBack,
@@ -25,12 +25,18 @@ import {
 import * as models from '@models';
 /** === IMPORT STYLE === */
 import CategoryStyle from '../styles/category.style';
+/** === TYPES === */
+type CategoryRouteParams = {
+  Category: {
+    categoryId?: string;
+  };
+};
+
+type CategoryRouteProps = RouteProp<CategoryRouteParams, 'Category'>;
 /** === COMPONENT === */
 const CategoryView: React.FC = () => {
   /** === HOOKS === */
-  const {
-    params: { id: categoryId },
-  } = NavigationAction.useGetNavParams();
+  const { params } = useRoute<CategoryRouteProps>();
   const { fetchList } = useCategoryAction();
   const {
     stateCategory: {
@@ -54,7 +60,7 @@ const CategoryView: React.FC = () => {
   useEffect(() => {
     if (categoryLevelState.data.length > 0) {
       setSelected1stLevelIndex(
-        getCategory1stLevelIndex(categoryLevelState.data, categoryId),
+        getCategory1stLevelIndex(categoryLevelState.data, params?.categoryId),
       );
     }
   }, [categoryLevelState.data.length]);
@@ -85,7 +91,9 @@ const CategoryView: React.FC = () => {
           index === selected1stLevelIndex ? color.white : color.black10,
       }}
       onPress={() =>
-        item.hasChild ? setSelected1stLevelIndex(index) : goToProduct(item)
+        item.children.length > 0
+          ? setSelected1stLevelIndex(index)
+          : goToProduct(item)
       }>
       <View style={{ alignItems: 'center', width: 80 }}>
         {globalIcon(item.icon, 32)}
@@ -117,7 +125,7 @@ const CategoryView: React.FC = () => {
               : CategoryStyle.level2LayoutInactive
           }
           onPress={() => {
-            if (item.hasChild) {
+            if (item.children.length > 0) {
               handle2ndLevelIdChange(item.id);
               handle2ndLevelIndexChange(index);
             } else {
@@ -128,7 +136,7 @@ const CategoryView: React.FC = () => {
           <View style={{ marginLeft: 8 }}>
             <SnbText.B3>{item.name}</SnbText.B3>
           </View>
-          {item.hasChild && (
+          {item.children.length > 0 && (
             <View style={{ flex: 1, alignItems: 'flex-end' }}>
               <SnbIcon name={iconName} size={24} color={color.black40} />
             </View>
@@ -169,22 +177,20 @@ const CategoryView: React.FC = () => {
   };
   /** => Third Level List */
   const renderthirdLevelList = (item: models.CategoryLevel2) => {
-    const additionalData = [
+    const additionalData: Array<models.CategoryLevel3> = [
       {
         id: item.id,
         name: 'Lihat Semua',
         icon: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png',
-        hasChild: false,
-        child: [],
       },
     ];
 
     return (
-      item.hasChild &&
+      item.children.length > 0 &&
       selected2ndLevelId === item.id && (
         <View style={CategoryStyle.level3layout}>
           <Menu
-            data={[...additionalData, ...item.child]}
+            data={[...additionalData, ...item.children]}
             column={3}
             renderItem={renderThirdLevelItem}
           />
@@ -221,12 +227,12 @@ const CategoryView: React.FC = () => {
           </View>
           {
             // Second Level List
-            categoryLevelState.data[selected1stLevelIndex]?.child.length >
+            categoryLevelState.data[selected1stLevelIndex]?.children.length >
               0 && (
               <View style={{ flex: 1 }}>
                 <FlatList
                   contentContainerStyle={{ paddingBottom: 100, padding: 16 }}
-                  data={categoryLevelState.data[selected1stLevelIndex].child}
+                  data={categoryLevelState.data[selected1stLevelIndex].children}
                   renderItem={renderSecondLevelItem}
                   keyExtractor={(_, index) => index.toString()}
                   showsVerticalScrollIndicator={false}

@@ -6,12 +6,30 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 /** === FUNCTION === */
-/** => voucher cart list action */
+/** => count all voucher action */
+const useCountAllVoucherAction = () => {
+  const dispatch = useDispatch();
+  return {
+    count: (contextDispatch: (action: any) => any) => {
+      dispatch(
+        Actions.countAllVoucherProcess(contextDispatch, { id: 'unused' }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.countAllVoucherReset());
+    },
+  };
+};
+/** => voucher cart detail action */
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
+    detail: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      type: string,
+    ) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id, type }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.voucherDetailReset());
@@ -45,13 +63,11 @@ const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
     list: (contextDispatch: (action: any) => any) => {
-      console.log('called 1');
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
-      console.log('called 1 - r');
       contextDispatch(Actions.voucherCartListReset());
     },
   };
@@ -66,21 +82,19 @@ const useSearchKeyword = () => {
     keyword,
   };
 };
-/** => set selected supplier voucher */
-const useSelectedSupplierVoucher = () => {
-  const [selectedSupplierVoucher, setSelectedSupplierVoucher] = React.useState<
-    models.SupplierVoucherListProps[]
+/** => set selected seller voucher */
+const useSelectedSellerVoucher = () => {
+  const [selectedSellerVoucher, setSelectedSellerVoucher] = React.useState<
+    models.SellerVoucherListProps[]
   >([]);
   return {
-    setSelectedSupplierVoucher: (
-      voucher: models.SupplierVoucherListProps[],
-    ) => {
-      setSelectedSupplierVoucher(voucher);
+    setSelectedSellerVoucher: (voucher: models.SellerVoucherListProps[]) => {
+      setSelectedSellerVoucher(voucher);
     },
-    resetSelectedSupplierVoucher: () => {
-      setSelectedSupplierVoucher([]);
+    resetSelectedSellerVoucher: () => {
+      setSelectedSellerVoucher([]);
     },
-    selectedSupplierVoucher,
+    selectedSellerVoucher,
   };
 };
 /** => set selected sinbad voucher */
@@ -100,17 +114,17 @@ const useSelectedSinbadVoucher = () => {
 /** => set voucher list local data (this is for list more view) */
 const useVoucherListMore = () => {
   const [voucherListData, setVoucherListData] = React.useState<
-    models.SinbadVoucherProps[] | models.SupplierVoucherListProps[]
+    models.SinbadVoucherProps[] | models.SellerVoucherListProps[]
   >([]);
   return {
     setVoucherListData: (
-      voucher: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[],
+      voucher: models.SinbadVoucherProps[] | models.SellerVoucherListProps[],
     ) => {
       setVoucherListData(voucher);
     },
     searchVoucherListData: (
       initialData:
-        | models.SupplierVoucherListProps[]
+        | models.SellerVoucherListProps[]
         | models.SinbadVoucherProps[],
       keyword: string,
     ) => {
@@ -124,8 +138,8 @@ const useVoucherListMore = () => {
 };
 /** => set voucher list local data (this is for list view) */
 const useVoucherList = () => {
-  const [supplierVoucher, setSupplierVoucher] = React.useState<
-    models.SupplierVoucherProps[]
+  const [sellerVoucher, setSellerVoucher] = React.useState<
+    models.SellerVoucherProps[]
   >([]);
   const [sinbadVoucher, setSinbadVoucher] = React.useState<
     models.SinbadVoucherProps[]
@@ -133,28 +147,28 @@ const useVoucherList = () => {
   const { stateVoucher } = React.useContext(contexts.VoucherContext);
   return {
     updateVoucherList: (
-      supplierVoucherList: models.SupplierVoucherProps[],
+      sellerVoucherList: models.SellerVoucherProps[],
       sinbadVoucherList: models.SinbadVoucherProps[],
     ) => {
-      setSupplierVoucher(supplierVoucherList);
+      setSellerVoucher(sellerVoucherList);
       setSinbadVoucher(sinbadVoucherList);
     },
     searchVoucher: (keyword: string) => {
       if (stateVoucher.voucherCart.detail.data !== null) {
-        const filteredSupplierVoucher: Array<models.SupplierVoucherProps> = [];
-        stateVoucher.voucherCart.detail.data.supplierVouchers.map((item) => {
-          const filteredSubSupplierVoucher = item.voucherList.filter(
+        const filteredSellerVoucher: Array<models.SellerVoucherProps> = [];
+        stateVoucher.voucherCart.detail.data.sellerVouchers.map((item) => {
+          const filteredSubSellerVoucher = item.voucherList.filter(
             (element) => {
               return element.voucherName
                 .toLowerCase()
                 .includes(keyword.toLowerCase());
             },
           );
-          if (filteredSubSupplierVoucher.length > 0) {
-            filteredSupplierVoucher.push({
+          if (filteredSubSellerVoucher.length > 0) {
+            filteredSellerVoucher.push({
               invoiceGroupId: item.invoiceGroupId,
               invoiceGroupName: item.invoiceGroupName,
-              voucherList: filteredSubSupplierVoucher,
+              voucherList: filteredSubSellerVoucher,
             });
           }
         });
@@ -164,19 +178,17 @@ const useVoucherList = () => {
               .toLowerCase()
               .includes(keyword.toLowerCase());
           });
-        setSupplierVoucher(filteredSupplierVoucher);
+        setSellerVoucher(filteredSellerVoucher);
         setSinbadVoucher(filteredSinbadVoucher);
       }
     },
     resetVoucherData: () => {
       if (stateVoucher.voucherCart.detail.data !== null) {
-        setSupplierVoucher(
-          stateVoucher.voucherCart.detail.data.supplierVouchers,
-        );
+        setSellerVoucher(stateVoucher.voucherCart.detail.data.sellerVouchers);
         setSinbadVoucher(stateVoucher.voucherCart.detail.data.sinbadVouchers);
       }
     },
-    supplierVoucher,
+    sellerVoucher,
     sinbadVoucher,
   };
 };
@@ -187,9 +199,10 @@ export {
   useVoucherCartListAction,
   useSearchKeyword,
   useSelectedSinbadVoucher,
-  useSelectedSupplierVoucher,
+  useSelectedSellerVoucher,
   useVoucherListMore,
   useVoucherList,
+  useCountAllVoucherAction,
 };
 /**
  * ================================================================

@@ -14,6 +14,10 @@ const backToCart = () => {
 const goToVerificationOrder = () => {
   NavigationAction.navigate('OmsVerificationOrderView');
 };
+/** => go to verification order */
+const goToVoucherCartList = () => {
+  NavigationAction.navigate('VoucherCartListView');
+};
 /** => go to cart 3 */
 const goToCart3 = () => {
   NavigationAction.navigate('OmsShoppingCart3View');
@@ -42,6 +46,10 @@ const goToHistoryDetail = (section: 'order' | 'payment') => {
 const goToPaymentPromoList = () => {
   NavigationAction.navigate('PromoPaymentListView');
 };
+/** => go to category product */
+const goToCategory = () => {
+  NavigationAction.navigate('CategoryView');
+};
 
 export {
   goBack,
@@ -54,4 +62,6 @@ export {
   goToHome,
   goToHistoryDetail,
   goToPaymentPromoList,
+  goToVoucherCartList,
+  goToCategory,
 };

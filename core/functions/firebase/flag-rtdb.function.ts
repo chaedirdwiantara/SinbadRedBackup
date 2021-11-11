@@ -22,7 +22,7 @@ const useCheckFlagByTask = async (task: string) => {
     const flag = database()
       .ref(`sinbadApp/${uniqueId}/flag/${task}`)
       .on('value', (data) => {
-        dispatch(CoreAction.isFlagChange({ key: task, value: data.val() }));
+        dispatch(CoreAction.isFlagRTDBChange({ key: task, value: data.val() }));
       });
     return () =>
       database().ref(`sinbadApp/${uniqueId}/flag/${task}`).off('value', flag);

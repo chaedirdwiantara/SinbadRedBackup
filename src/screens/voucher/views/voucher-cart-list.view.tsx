@@ -9,6 +9,7 @@ import {
   color,
   SnbText,
   styles,
+  SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import {
   goBack,
@@ -17,7 +18,7 @@ import {
   useSearchKeyword,
   useVoucherList,
   useVoucherCartListAction,
-  useSelectedSupplierVoucher,
+  useSelectedSellerVoucher,
   useSelectedSinbadVoucher,
   countPotentialDiscount,
 } from '../functions';
@@ -31,6 +32,7 @@ import * as Actions from '@actions';
 import { useDispatch } from 'react-redux';
 import { useDataVoucher } from '@core/redux/Data';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -38,22 +40,23 @@ const VoucherCartListView: FC = () => {
     contexts.VoucherContext,
   );
   const {
-    selectedSupplierVoucher,
-    setSelectedSupplierVoucher,
-    resetSelectedSupplierVoucher,
-  } = useSelectedSupplierVoucher();
+    selectedSellerVoucher,
+    setSelectedSellerVoucher,
+    resetSelectedSellerVoucher,
+  } = useSelectedSellerVoucher();
   const {
     selectedSinbadVoucher,
     setSelectedSinbadVoucher,
     resetSelectedSinbadVoucher,
   } = useSelectedSinbadVoucher();
   const {
-    supplierVoucher,
+    sellerVoucher,
     sinbadVoucher,
     updateVoucherList,
     searchVoucher,
     resetVoucherData,
   } = useVoucherList();
+  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucher.voucherCart.detail;
@@ -64,7 +67,7 @@ const VoucherCartListView: FC = () => {
     voucherCartListAction.list(dispatchVoucher);
     if (voucherData.dataVouchers !== null) {
       setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
+      setSelectedSellerVoucher(voucherData.dataVouchers.sellerVouchers);
     }
     return () => {
       voucherCartListAction.reset(dispatchVoucher);
@@ -73,18 +76,24 @@ const VoucherCartListView: FC = () => {
   React.useEffect(() => {
     if (voucherData.dataVouchers !== null) {
       setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
-      setSelectedSupplierVoucher(voucherData.dataVouchers.supplierVouchers);
+      setSelectedSellerVoucher(voucherData.dataVouchers.sellerVouchers);
     } else if (voucherData.dataVouchers === null) {
       setSelectedSinbadVoucher(null);
-      setSelectedSupplierVoucher([]);
+      setSelectedSellerVoucher([]);
     }
   }, [voucherData.dataVouchers]);
   React.useEffect(() => {
+    console.log('test', voucherCartListState);
+    // if fetching success
     if (voucherCartListState.data !== null) {
       updateVoucherList(
-        voucherCartListState.data.supplierVouchers,
+        voucherCartListState.data.sellerVouchers,
         voucherCartListState.data.sinbadVouchers,
       );
+    }
+    // if fetching error
+    if (voucherCartListState.error !== null) {
+      setErrorModalOpen(true);
     }
   }, [voucherCartListState]);
   /** === VIEW === */
@@ -98,7 +107,7 @@ const VoucherCartListView: FC = () => {
         buttonTitle={'Reset'}
         buttonAction={() => {
           resetSelectedSinbadVoucher();
-          resetSelectedSupplierVoucher();
+          resetSelectedSellerVoucher();
           dispatch(Actions.saveSelectedVouchers(null));
         }}
       />
@@ -161,7 +170,7 @@ const VoucherCartListView: FC = () => {
                   voucherList: sinbadVoucher,
                   voucherGroupName: 'Sinbad Voucher',
                   voucherGroupType: 'sinbad_voucher',
-                  selectedSupplierVoucher: selectedSupplierVoucher,
+                  selectedSellerVoucher: selectedSellerVoucher,
                   selectedSinbadVoucher: selectedSinbadVoucher,
                 })
               }>
@@ -209,7 +218,7 @@ const VoucherCartListView: FC = () => {
               />
               <TouchableOpacity
                 testID={`voucherCartListView.sinbadVoucherDetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.voucherId)}>
+                onPress={() => goToVoucherDetail(item.voucherId, 'sinbad')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -218,9 +227,9 @@ const VoucherCartListView: FC = () => {
       }
     });
   };
-  /** => supplier voucher list */
-  const renderSupplierVoucherList = () => {
-    return supplierVoucher.map((item, index) => {
+  /** => seller voucher list */
+  const renderSellerVoucherList = () => {
+    return sellerVoucher.map((item, index) => {
       return (
         <View key={index} style={VoucherCartListStyles.voucherSection}>
           <View style={VoucherCartListStyles.voucherSectionHeader}>
@@ -246,8 +255,8 @@ const VoucherCartListView: FC = () => {
                   goToVoucherCartListMore({
                     voucherList: item.voucherList,
                     voucherGroupName: item.invoiceGroupName,
-                    voucherGroupType: 'supplier_voucher',
-                    selectedSupplierVoucher: selectedSupplierVoucher,
+                    voucherGroupType: 'seller_voucher',
+                    selectedSellerVoucher: selectedSellerVoucher,
                     selectedSinbadVoucher: selectedSinbadVoucher,
                   })
                 }>
@@ -258,21 +267,21 @@ const VoucherCartListView: FC = () => {
               <View />
             )}
           </View>
-          {renderSupplierVoucherCard(item.voucherList)}
+          {renderSellerVoucherCard(item.voucherList)}
         </View>
       );
     });
   };
-  /** => supplier voucher card */
-  const renderSupplierVoucherCard = (
-    voucherList: models.SupplierVoucherListProps[],
+  /** => seller voucher card */
+  const renderSellerVoucherCard = (
+    voucherList: models.SellerVoucherListProps[],
   ) => {
     return voucherList.map((item, index) => {
       if (index < 3) {
-        const isIdActive = selectedSupplierVoucher.some(
+        const isIdActive = selectedSellerVoucher.some(
           (element) => element.id === item.id,
         );
-        const isInvoiceGroupIdActive = selectedSupplierVoucher.some(
+        const isInvoiceGroupIdActive = selectedSellerVoucher.some(
           (element) => element.invoiceGroupId === item.invoiceGroupId,
         );
         return (
@@ -285,18 +294,16 @@ const VoucherCartListView: FC = () => {
             onPress={() => {
               if (isInvoiceGroupIdActive) {
                 if (!isIdActive) {
-                  const tempArray = selectedSupplierVoucher.filter(
-                    (element) => {
-                      return item.invoiceGroupId !== element.invoiceGroupId;
-                    },
-                  );
+                  const tempArray = selectedSellerVoucher.filter((element) => {
+                    return item.invoiceGroupId !== element.invoiceGroupId;
+                  });
                   tempArray.push(item);
-                  setSelectedSupplierVoucher(tempArray);
+                  setSelectedSellerVoucher(tempArray);
                 }
               } else {
-                const tempArray = [...selectedSupplierVoucher];
+                const tempArray = [...selectedSellerVoucher];
                 tempArray.push(item);
-                setSelectedSupplierVoucher(tempArray);
+                setSelectedSellerVoucher(tempArray);
               }
             }}>
             <View style={VoucherCartListStyles.voucherCardLeftContent}>
@@ -321,7 +328,7 @@ const VoucherCartListView: FC = () => {
                 testID={`voucherCartListView.${camelize(
                   item.invoiceGroupName,
                 )}DetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.id)}>
+                onPress={() => goToVoucherDetail(item.id, 'seller')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
@@ -333,8 +340,7 @@ const VoucherCartListView: FC = () => {
   /** => footer section */
   const renderFooterSection = () => {
     if (
-      (selectedSinbadVoucher === null &&
-        selectedSupplierVoucher.length === 0) ||
+      (selectedSinbadVoucher === null && selectedSellerVoucher.length === 0) ||
       voucherCartListState.data === null
     ) {
       return null;
@@ -343,16 +349,14 @@ const VoucherCartListView: FC = () => {
       <View style={[VoucherCartListStyles.footerSection, styles.shadowStyle]}>
         <View>
           <SnbText.B3 color={color.black60}>{`${
-            countPotentialDiscount(
-              selectedSinbadVoucher,
-              selectedSupplierVoucher,
-            ).totalSelectedVoucher
+            countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
+              .totalSelectedVoucher
           } Voucher Terpilih`}</SnbText.B3>
           <SnbText.C1 color={color.yellow50}>
             {`Potensi Potongan: ${toCurrency(
               countPotentialDiscount(
                 selectedSinbadVoucher,
-                selectedSupplierVoucher,
+                selectedSellerVoucher,
               ).totalDiscount,
             )}`}
           </SnbText.C1>
@@ -366,7 +370,7 @@ const VoucherCartListView: FC = () => {
               dispatch(
                 Actions.saveSelectedVouchers({
                   sinbadVoucher: selectedSinbadVoucher,
-                  supplierVouchers: selectedSupplierVoucher,
+                  sellerVouchers: selectedSellerVoucher,
                 }),
               );
               goBack();
@@ -380,18 +384,21 @@ const VoucherCartListView: FC = () => {
   };
   /** => empty */
   const renderEmpty = (messageTitle: string, messageBody: string) => {
-    return (
-      <View style={VoucherCartListStyles.singleContainer}>
+    const image = () => {
+      return (
         <Image
           source={require('../../../assets/images/voucher_empty.png')}
           style={VoucherCartListStyles.emptyImage}
         />
-        <View style={{ marginTop: 16 }}>
-          <SnbText.H4>{messageTitle}</SnbText.H4>
-        </View>
-        <View>
-          <SnbText.B3>{messageBody}</SnbText.B3>
-        </View>
+      );
+    };
+    return (
+      <View style={VoucherCartListStyles.singleContainer}>
+        <SnbEmptyData
+          title={messageTitle}
+          subtitle={messageBody}
+          image={image()}
+        />
       </View>
     );
   };
@@ -399,7 +406,7 @@ const VoucherCartListView: FC = () => {
   const renderVoucherSection = () => {
     if (
       voucherCartListState.data?.sinbadVouchers.length === 0 &&
-      voucherCartListState.data?.supplierVouchers.length === 0
+      voucherCartListState.data?.sellerVouchers.length === 0
     ) {
       return renderEmpty(
         'Voucher Tidak Tersedia',
@@ -407,7 +414,7 @@ const VoucherCartListView: FC = () => {
       );
     } else if (
       sinbadVoucher.length === 0 &&
-      supplierVoucher.length === 0 &&
+      sellerVoucher.length === 0 &&
       keyword !== ''
     ) {
       return renderEmpty(
@@ -418,12 +425,27 @@ const VoucherCartListView: FC = () => {
       return (
         <ScrollView showsVerticalScrollIndicator={false}>
           {renderSinbadVoucherList()}
-          {renderSupplierVoucherList()}
+          {renderSellerVoucherList()}
         </ScrollView>
       );
     }
   };
-  console.log(stateVoucher);
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={isErrorModalOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          setErrorModalOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -435,6 +457,8 @@ const VoucherCartListView: FC = () => {
         <LoadingPage />
       )}
       {renderFooterSection()}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

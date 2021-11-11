@@ -1,5 +1,6 @@
 /** === EXPORT ALL === */
 export * from './banner.function';
+export * from './banner-hook.function';
 /**
  * ================================================================
  * NOTES

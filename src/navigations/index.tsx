@@ -7,8 +7,10 @@ import CategoryNav from './category.navigation';
 import ProductNav from './product.navigation';
 import PromoNav from './promo.navigation';
 import BannerNav from './banner.navigation';
+import HistoryNav from './history.navigation';
 import BrandNav from './brand.navigations';
 import SearchNav from './search.navigation';
+import VoucherNav from './voucher.navigation';
 import HelpNav from './help.navigation';
 import NotificationNav from './notification.navigations';
 
@@ -22,8 +24,10 @@ const index = {
   ...ProductNav,
   ...PromoNav,
   ...BannerNav,
+  ...HistoryNav,
   ...BrandNav,
   ...SearchNav,
+  ...VoucherNav,
   ...HelpNav,
   ...NotificationNav,
 };

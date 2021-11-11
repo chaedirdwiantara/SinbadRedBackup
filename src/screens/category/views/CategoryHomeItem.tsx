@@ -15,7 +15,11 @@ export const CategoryHomeItem: FC<CategoryHomeItemProps> = (props) => (
   <TouchableOpacity style={{ alignItems: 'center' }} onPress={props.onPress}>
     <View style={CategoryHomeStyle.itemContainer}>
       <Image
-        source={{ uri: props.icon }}
+        source={
+          props.icon
+            ? { uri: props.icon }
+            : require('../../../assets/images/sinbadopacity.png')
+        }
         style={{ width: '100%', height: '100%' }}
       />
     </View>

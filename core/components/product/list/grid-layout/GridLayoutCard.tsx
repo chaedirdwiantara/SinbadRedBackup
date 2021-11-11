@@ -35,8 +35,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
       isPromo={product.isPromo}
       isExclusive={product.isExclusive}
       onCardPress={() => {
-        // Fetch product detail
-        goToProductDetail();
+        goToProductDetail(product.id);
       }}
       withOrderButton={true}
       onOrderPress={() => onOrderPress(product)}
