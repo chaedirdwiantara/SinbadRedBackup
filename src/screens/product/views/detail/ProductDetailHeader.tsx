@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbIcon, SnbBadge, color } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTION ===  */
-import { goBack } from '@screen/product/functions';
+import { goBack, goToShoppingCart } from '@screen/product/functions';
 /** === IMPORT STYLE ===  */
 import { ProductDetailStyle } from '@screen/product/styles';
 /** === TYPE ===  */
@@ -20,7 +20,9 @@ export const ProductDetailHeader: FC<ProductDetailHeaderProps> = ({
       style={ProductDetailStyle.navigationButton}>
       <SnbIcon name="arrow_back" size={24} color={color.white} />
     </TouchableOpacity>
-    <TouchableOpacity style={ProductDetailStyle.navigationButton}>
+    <TouchableOpacity
+      onPress={goToShoppingCart}
+      style={ProductDetailStyle.navigationButton}>
       <View style={ProductDetailStyle.cartBadge}>
         <SnbBadge.Hint color="red" value={cartBadge} />
       </View>
