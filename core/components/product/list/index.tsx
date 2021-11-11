@@ -154,7 +154,7 @@ const ProductList: FC<ProductListProps> = ({
 
   const handleOrderPress = (product: models.ProductList) => {
     authCoreAction.me();
-    supplierSegmentationAction.fetch(dispatchSupplier, product.supplierId);
+    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
   };
   /** === DERIVED === */
