@@ -1,5 +1,6 @@
 /** === IMPORT PACKAGES === */
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
+import { Alert } from 'react-native';
 /** === IMPORT TYPES === */
 
 export interface MerchantStatus {
@@ -24,7 +25,7 @@ export const useCheckDataSupplier = () => {
   const [modalRegisterSupplier, setModalRegisterSupplier] = useState(false);
 
   /** => parentFunction */
-  const parentFunction = (data: DataMerchant) => {
+  const onFunctionActions = (data: DataMerchant) => {
     switch (data.type) {
       case 'close':
         setModalWaitingApproval(false);
@@ -121,7 +122,42 @@ export const useCheckDataSupplier = () => {
     modalRejectApproval,
     modalWaitingApproval,
     modalRegisterSupplier,
-    parentFunction,
+    onFunctionActions,
     checkUser,
+  };
+};
+
+export const useRegisterSupplierModal = () => {
+  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
+    useState(false);
+
+  const sendSupplierData = (
+    setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
+  ) => {
+    // Hit api send-store-supplier
+    Alert.alert(
+      'Send Data to Suplier',
+      'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => setRegisterSupplierModalVisible(false),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            setRegisterSupplierModalVisible(false);
+            setOrderModalVisible(true);
+          },
+        },
+      ],
+    );
+  };
+
+  return {
+    visible: registerSupplierModalVisible,
+    setVisible: setRegisterSupplierModalVisible,
+    sendSupplierData,
   };
 };

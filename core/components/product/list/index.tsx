@@ -19,7 +19,6 @@ import {
 import {
   useBottomAction,
   priceSortOptions,
-  useRegisterSupplierModal,
   useOrderModalVisibility,
 } from '@core/functions/product';
 import {
@@ -31,7 +30,10 @@ import { useSupplierSegmentationAction } from '@core/functions/supplier/supplier
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
-import { useCheckDataSupplier } from '@core/functions/supplier';
+import {
+  useCheckDataSupplier,
+  useRegisterSupplierModal,
+} from '@core/functions/supplier';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -119,8 +121,12 @@ const ProductList: FC<ProductListProps> = ({
   } = useSupplierContext();
   const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
   /** => check data supplier and sinbad status */
-  const { checkUser, modalRejectApproval, modalWaitingApproval } =
-    useCheckDataSupplier();
+  const {
+    checkUser,
+    modalRejectApproval,
+    modalWaitingApproval,
+    onFunctionActions,
+  } = useCheckDataSupplier();
 
   useEffect(() => {
     if (!productLoading) {
@@ -137,6 +143,7 @@ const ProductList: FC<ProductListProps> = ({
   }, [selectedCategory, keywordSearched]);
 
   useEffect(() => {
+    console.log('[TEST]: ', me.data, dataSegmentation);
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
         checkUser({
@@ -154,7 +161,7 @@ const ProductList: FC<ProductListProps> = ({
 
   const handleOrderPress = (product: models.ProductList) => {
     authCoreAction.me();
-    supplierSegmentationAction.fetch(dispatchSupplier, product.supplierId);
+    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
   };
   /** === DERIVED === */
@@ -275,18 +282,14 @@ const ProductList: FC<ProductListProps> = ({
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
-        onSubmit={() =>
-          registerSupplierModal.sendSupplierData(setOrderModalVisible)
-        }
-        onClose={() => registerSupplierModal.setVisible(false)}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
       />
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={() =>
-          registerSupplierModal.sendSupplierData(setOrderModalVisible)
-        }
-        onClose={() => registerSupplierModal.setVisible(false)}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
         isCallCS={true}
       />
       {/* Add to Cart Modal */}

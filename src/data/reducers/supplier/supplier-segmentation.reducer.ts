@@ -29,6 +29,7 @@ export const supplierSegmentationReducer = simplifyReducer(
       state = supplierSegmentationInitialState,
       action: models.DetailSuccessAction<models.SupplierSegmentation>,
     ) {
+      console.log('[SUPPLIER_SEGMENTATION_SUCCESS]: ', action);
       return {
         ...state,
         data: action.payload.data,
