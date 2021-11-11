@@ -1,43 +1,33 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useState, useMemo, Fragment, useEffect } from 'react';
-import { View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import {
-  SnbContainer,
-  SnbText,
-  SnbCheckbox,
-  SnbIcon,
-  color,
-  SnbDialog,
-  SnbNumberCounter,
-} from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
-import * as models from '@models';
+import { ScrollView } from 'react-native';
+import { SnbContainer, SnbDialog } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useCartVerification } from '@core/functions/cart';
+import { useCartSelected, useCartId } from '@core/functions/cart';
+import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
-import { CartProduct, CartBrand, CartInvoiceGroup } from '@models';
-import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 import {
-  goToVerificationOrder,
-  getTotalProducts,
-  handleSelectedProductChange,
-  handleProductQuantityChange,
-  handleProductDelete,
-  handleSelectedBrandChange,
-} from '../../functions';
-import { ShoppingCartStyles } from '../../styles';
+  CartInvoiceGroup,
+  CartUpdatePayload,
+  CartSelected,
+  CartSelectedData,
+  CartSelectedBrand,
+  CartSelectedProduct,
+} from '@models';
+import { goToVerificationOrder, getTotalProducts } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
   useCartUpdateActions,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -47,7 +37,10 @@ const OmsShoppingCartView: FC = () => {
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
-  const totalProducts = useMemo(() => getTotalProducts(invoiceGroups), []);
+  const totalProducts = useMemo(
+    () => getTotalProducts(invoiceGroups),
+    [invoiceGroups.length],
+  );
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
 
@@ -58,7 +51,8 @@ const OmsShoppingCartView: FC = () => {
     dispatchShopingCart,
   } = useShopingCartContext();
   /** => handle verification cart */
-  const { setCartVerification } = useCartVerification();
+  const { setCartSelected } = useCartSelected();
+  const { getCartId } = useCartId();
 
   /**
    * Verification Order
@@ -89,9 +83,14 @@ const OmsShoppingCartView: FC = () => {
     }
   }, [cartState]);
 
+  /** Get Cart View */
   useEffect(() => {
-    cartViewActions.fetch(dispatchShopingCart, '6183b3030623df001cb62346');
+    if (getCartId !== null) {
+      cartViewActions.fetch(dispatchShopingCart, getCartId);
+    }
   }, []);
+
+  /** Listen changes cartState */
   useEffect(() => {
     if (cartState !== null && cartState.data !== null) {
       let totalProductsSelected = 0;
@@ -121,7 +120,7 @@ const OmsShoppingCartView: FC = () => {
       /** Show modal error/retry */
       return;
     }
-    const params: models.CartUpdatePayload = {
+    const params: CartUpdatePayload = {
       cartId: cartState.data.cartId,
       storeId: cartState.data.storeId,
       action: 'submit',
@@ -129,198 +128,69 @@ const OmsShoppingCartView: FC = () => {
       voucherIds: [],
     };
 
-    const paramsPotensialDiscount: models.CartSuccessProps = {
-      cartId: cartState.data.cartId,
-      data: invoiceGroups,
-      storeId: cartState.data.storeId,
-      isActiveStore: cartState.data.isActiveStore,
-      platform: cartState.data.platform,
-      userId: cartState.data.userId,
-    };
+    const dataSelected: CartSelectedData[] = [];
 
-    invoiceGroups.forEach((item) => {
-      item.brands.forEach((el) => {
-        el.products.forEach((product) => {
+    invoiceGroups.forEach((invoiceGroup) => {
+      /** => initial brand selected */
+      const brandsSelected: CartSelectedBrand[] = [];
+      invoiceGroup.brands.forEach((brand) => {
+        /** => initial product selected */
+        const productsSelected: CartSelectedProduct[] = [];
+        brand.products.forEach((product) => {
           params.products.push({
             productId: product.productId,
             qty: product.qty,
             selected: product.selected,
           });
+
+          if (product.selected) {
+            /** => insert product selected */
+            productsSelected.push({
+              productId: product.productId,
+              qty: product.qty,
+              displayPrice: product.displayPrice,
+              priceBeforeTax: product.priceBeforeTax,
+              priceAfterTax: product.priceAfterTax,
+              warehouseId: product.warehouseId,
+            });
+          }
+        });
+        /** => insert brand selected */
+        brandsSelected.push({
+          brandId: brand.brandId,
+          products: productsSelected,
         });
       });
+      /** => insert data selected */
+      dataSelected.push({
+        invoiceGroupId: invoiceGroup.invoiceGroupId,
+        portfolioId: invoiceGroup.portfolioId,
+        brands: brandsSelected,
+        sellerId: invoiceGroup.supplierId,
+        channelId: invoiceGroup.channelId,
+        groupId: invoiceGroup.groupId,
+        typeId: invoiceGroup.typeId,
+        clustderId: invoiceGroup.clusterId,
+      });
     });
+
+    const paramsCartSelected: CartSelected = {
+      id: cartState.data.cartId,
+      data: dataSelected,
+      isActiveStore: cartState.data.isActiveStore,
+      salesId: cartState.data.userId,
+    };
 
     /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
     /** => update state verification cart */
-    setCartVerification(paramsPotensialDiscount);
+    setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {
-      data: paramsPotensialDiscount,
+      data: paramsCartSelected,
     });
   };
   /** === VIEW === */
-  /** => Product */
-  const renderProduct = (
-    product: CartProduct,
-    productIndex: number,
-    brand: CartBrand,
-    brandIndex: number,
-    invoiceGroupIndex: number,
-  ) => {
-    const productPrice = toCurrency(product.displayPrice);
-    return (
-      <View
-        style={{
-          ...ShoppingCartStyles.horizontalBottomCardSlot,
-          paddingBottom: 18,
-          borderBottomWidth: productIndex === brand.products.length - 1 ? 0 : 1,
-          borderStyle: 'solid',
-          borderBottomColor: color.black10,
-        }}
-        key={product.productName}>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ marginRight: 20, marginLeft: 4 }}>
-            <SnbCheckbox
-              status={product.selected ? 'selected' : 'unselect'}
-              onPress={() =>
-                handleSelectedProductChange(
-                  invoiceGroupIndex,
-                  brandIndex,
-                  productIndex,
-                  product.selected ? false : true,
-                  [invoiceGroups, setInvoiceGroups],
-                  [productSelectedCount, setProductSelectedCount],
-                  setAllProductsSelected,
-                  totalProducts,
-                )
-              }
-            />
-          </View>
-          <Image
-            source={{ uri: product.urlImages }}
-            style={{ marginRight: 8, width: 77, height: 77 }}
-          />
-          <View>
-            <View style={{ marginBottom: 12, maxWidth: 160 }}>
-              <SnbText.B4>{product.productName}</SnbText.B4>
-            </View>
-            <View style={{ marginBottom: 12 }}>
-              <SnbText.B4 color={color.red50}>{productPrice}</SnbText.B4>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <SnbNumberCounter
-                value={product.qty}
-                onIncrease={() =>
-                  handleProductQuantityChange(
-                    invoiceGroupIndex,
-                    brandIndex,
-                    productIndex,
-                    'increase',
-                    [invoiceGroups, setInvoiceGroups],
-                  )
-                }
-                onDecrease={() =>
-                  handleProductQuantityChange(
-                    invoiceGroupIndex,
-                    brandIndex,
-                    productIndex,
-                    'decrease',
-                    [invoiceGroups, setInvoiceGroups],
-                  )
-                }
-                minusDisabled={product.qty === 1}
-                plusDisabled={product.qty === product.stock}
-              />
-            </View>
-          </View>
-        </View>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-          }}>
-          <TouchableOpacity
-            onPress={() =>
-              handleProductDelete(
-                invoiceGroupIndex,
-                brandIndex,
-                productIndex,
-                invoiceGroups,
-              )
-            }>
-            <SnbIcon name="delete_outline" color={color.black60} size={32} />
-          </TouchableOpacity>
-          {product.stock <= 3 && (
-            <SnbText.B3
-              color={
-                color.red50
-              }>{`Tersisa ${product.stock} ${product.uom}`}</SnbText.B3>
-          )}
-        </View>
-      </View>
-    );
-  };
-  /** => Brand */
-  const renderBrand = (
-    brand: CartBrand,
-    brandIndex: number,
-    invoiceGroupIndex: number,
-  ) => (
-    <Fragment key={brand.brandName}>
-      <View
-        style={{
-          ...ShoppingCartStyles.topCardSlot,
-          borderStyle: 'solid',
-          borderTopWidth: brandIndex === 0 ? 0 : 1,
-          borderTopColor: color.black10,
-        }}>
-        <View style={{ marginRight: 20, marginLeft: 4 }}>
-          <SnbCheckbox
-            status={brand.selected ? 'selected' : 'unselect'}
-            onPress={() =>
-              handleSelectedBrandChange(
-                invoiceGroupIndex,
-                brandIndex,
-                brand.selected === false ? true : false,
-                [invoiceGroups, setInvoiceGroups],
-                [productSelectedCount, setProductSelectedCount],
-                setAllProductsSelected,
-                totalProducts,
-              )
-            }
-          />
-        </View>
-        <SnbText.B4>{brand.brandName}</SnbText.B4>
-      </View>
-      {brand.products.map((product, productIndex) =>
-        renderProduct(
-          product,
-          productIndex,
-          brand,
-          brandIndex,
-          invoiceGroupIndex,
-        ),
-      )}
-    </Fragment>
-  );
-  /** => Invoice Group */
-  const renderInvoiceGroup = (
-    invoiceGroup: CartInvoiceGroup,
-    invoiceGroupIndex: number,
-  ) => (
-    <View
-      style={ShoppingCartStyles.cardContainer}
-      key={invoiceGroup.invoiceGroupName}>
-      <View style={ShoppingCartStyles.topCardSlot}>
-        <SnbText.B4>{invoiceGroup.invoiceGroupName}</SnbText.B4>
-      </View>
-      {invoiceGroup.brands.map((brand, brandIndex) =>
-        renderBrand(brand, brandIndex, invoiceGroupIndex),
-      )}
-    </View>
-  );
-
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -331,9 +201,19 @@ const OmsShoppingCartView: FC = () => {
             <ShippingAddress />
             {/* Invoice Group List */}
             <Fragment>
-              {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) =>
-                renderInvoiceGroup(invoiceGroup, invoiceGroupIndex),
-              )}
+              {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) => (
+                <ShoppingCartInvoiceGroup
+                  key={invoiceGroup.invoiceGroupId.toString()}
+                  invoiceGroup={invoiceGroup}
+                  invoiceGroupIndex={invoiceGroupIndex}
+                  invoiceGroups={invoiceGroups}
+                  setInvoiceGroups={setInvoiceGroups}
+                  productSelectedCount={productSelectedCount}
+                  setProductSelectedCount={setProductSelectedCount}
+                  setAllProductsSelected={setAllProductsSelected}
+                  totalProducts={totalProducts}
+                />
+              ))}
             </Fragment>
           </ScrollView>
           <ShoppingCartFooter

@@ -16,12 +16,12 @@ export const useCartId = () => {
   };
 };
 
-export const useCartVerification = () => {
+export const useCartSelected = () => {
   const dataCart = useDataCart();
   const dispatch = useDispatch();
   return {
-    getCartVerification: dataCart,
-    setCartVerification: (data: models.CartSuccessProps) => {
+    getCartSelected: dataCart,
+    setCartSelected: (data: models.CartSelected) => {
       dispatch(Actions.verificationCart(data));
     },
   };

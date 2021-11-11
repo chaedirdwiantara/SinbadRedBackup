@@ -38,8 +38,8 @@ export interface CartSuccessProps {
   cartId: string;
   data: CartInvoiceGroup[];
   storeId: number;
-  createdAt?: string;
-  updatedAt?: string;
+  createdAt: string;
+  updatedAt: string;
   isActiveStore: boolean;
   platform: string;
   userId: number;

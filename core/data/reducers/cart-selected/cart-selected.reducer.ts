@@ -3,30 +3,27 @@ import * as types from '../../types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
-const initialState: models.CartSuccessProps = {
-  cartId: '',
+const initialState: models.CartSelected = {
+  id: 0,
   data: [],
-  storeId: 0,
   isActiveStore: false,
-  platform: '',
-  userId: 0,
+  voucherIds: [],
+  salesId: 0,
 };
 
 /** === FUNCTION === */
 export const verificationCartCore = simplifyReducer(initialState, {
   /** => FOR SAVE PAYLOAD VERIFICATION CART FLAG */
-  [types.UPDATE_VERIFICATION_CART](
+  [types.UPDATE_CART_SELECTED](
     state = initialState,
     action: models.UpdateVerificationCart,
   ) {
     return {
       ...state,
-      cartId: action.payload.cartId,
+      id: action.payload.id,
       data: action.payload.data,
-      storeId: action.payload.storeId,
       isActiveStore: action.payload.isActiveStore,
-      platform: action.payload.platform,
-      userId: action.payload.userId,
+      salesId: action.payload.salesId,
     };
   },
 });

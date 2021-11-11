@@ -6,7 +6,7 @@
 export * from './permanent';
 export * from './global';
 export * from './auth';
-export * from './verification-cart';
+export * from './cart-selected';
 /**
  * ================================================================
  * NOTES
