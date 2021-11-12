@@ -10,6 +10,7 @@ export interface ProductLayoutProps {
   isRefreshing: boolean;
   onRefresh: () => void;
   onLoadMore: () => void;
+  loading: boolean;
 }
 
 export type ProductHeaderType = 'default' | 'search';
