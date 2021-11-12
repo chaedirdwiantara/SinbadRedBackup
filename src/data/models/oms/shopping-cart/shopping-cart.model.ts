@@ -1,5 +1,3 @@
-import * as models from '@models';
-
 export interface CartProduct {
   productId: string;
   productName: string;
@@ -45,11 +43,4 @@ export interface CartSuccessProps {
   isActiveStore: boolean;
   platform: string;
   userId: number;
-}
-
-export interface ShopingCartItemProps
-  extends models.DetailItemProps<CartSuccessProps> {}
-
-export interface ShopingCartProps {
-  cart: ShopingCartItemProps;
 }

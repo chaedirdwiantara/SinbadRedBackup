@@ -3,7 +3,7 @@ import * as models from '@models';
 export interface ProductList {
   id: string;
   name: string;
-  supplierId: string;
+  sellerId: string;
   originalPrice: number;
   currentPrice: number | null;
   isBundle: boolean;

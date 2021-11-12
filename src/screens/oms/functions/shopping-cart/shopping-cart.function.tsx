@@ -83,29 +83,27 @@ const handleSelectedProductChange = (
   const currentBrand = currentInvoiceGroup.brands[brandIndex];
   const currentProduct = currentBrand.products[productIndex];
   let totalSelectedCount = productSelectedCount;
-  currentProduct.selected = selected;
 
+  let selectedCount = 0;
+  currentBrand.products.forEach((product) => {
+    if (product.selected) {
+      selectedCount++;
+    }
+  });
+
+  currentProduct.selected = selected;
   if (selected) {
-    currentBrand.selectedCount += 1;
+    selectedCount += 1;
     totalSelectedCount += 1;
   } else {
-    currentBrand.selectedCount -= 1;
+    selectedCount -= 1;
     totalSelectedCount -= 1;
   }
 
-  if (currentBrand.selectedCount === 0) {
-    currentBrand.selected = false;
-  }
-
-  if (
-    currentBrand.selectedCount > 0 &&
-    currentBrand.selectedCount < currentBrand.products.length
-  ) {
-    currentBrand.selected = false;
-  }
-
-  if (currentBrand.selectedCount === currentBrand.products.length) {
+  if (selectedCount === currentBrand.products.length) {
     currentBrand.selected = true;
+  } else {
+    currentBrand.selected = false;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -145,28 +143,34 @@ const handleSelectedBrandChange = (
   let totalSelectedCount = productSelectedCount;
   currentBrand.selected = selected;
 
+  let selectedCount = 0;
+  currentBrand.products.forEach((product) => {
+    if (product.selected) {
+      selectedCount++;
+    }
+  });
+
   if (selected) {
-    if (currentBrand.selectedCount === currentBrand.products.length) {
+    if (selectedCount === currentBrand.products.length) {
       totalSelectedCount += currentBrand.products.length;
     } else {
       // Only adds unselected count
-      totalSelectedCount +=
-        currentBrand.products.length - currentBrand.selectedCount;
+      totalSelectedCount += currentBrand.products.length - selectedCount;
     }
 
-    currentBrand.selectedCount = currentBrand.products.length;
+    selectedCount = currentBrand.products.length;
     currentBrand.products.forEach((product) => {
-      product.selected = false;
+      product.selected = true;
     });
   } else {
-    if (currentBrand.selectedCount === currentBrand.products.length) {
+    if (selectedCount === currentBrand.products.length) {
       totalSelectedCount -= currentBrand.products.length;
     } else {
       // Only substracts selected count
-      totalSelectedCount -= currentBrand.selectedCount;
+      totalSelectedCount -= selectedCount;
     }
 
-    currentBrand.selectedCount = 0;
+    selectedCount = 0;
     currentBrand.products.forEach((product) => {
       product.selected = false;
     });
