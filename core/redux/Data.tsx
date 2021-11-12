@@ -22,7 +22,7 @@ const useDataAuth = (): AuthProps => {
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
-const useDataVoucher = () => {
+const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
 const useDataCart = () => {

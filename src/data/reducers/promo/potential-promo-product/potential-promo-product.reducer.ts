@@ -5,8 +5,9 @@ import {
   potentialPromoProductListReducer,
 } from './potential-promo-product-list.reducer';
 /** === TYPE HERE === */
-export type PotentialPromoProductInitialProps =
-  models.ListProps<models.PotentialPromoProductProps>;
+export type PotentialPromoProductInitialProps = models.ListProps<
+  models.PotentialPromoProductProps[]
+>;
 /** === INITIAL HERE === */
 export const potentialPromoProductInitialState = {
   list: potentialPromoProductListInitialState,
