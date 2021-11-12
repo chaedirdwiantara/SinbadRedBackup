@@ -2,7 +2,6 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 import { Alert } from 'react-native';
 /** === IMPORT TYPES === */
-
 export interface MerchantStatus {
   sinbadStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
   supplierStatus:
@@ -16,9 +15,12 @@ export interface MerchantStatus {
 
 export interface DataMerchant {
   type: 'close' | 'sendDataToSupplier';
+  onSendDataSupplier?: () => void;
 }
 
-export const useCheckDataSupplier = () => {
+export const useCheckDataSupplier = (
+  setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
+) => {
   /** => state */
   const [modalWaitingApproval, setModalWaitingApproval] = useState(false);
   const [modalRejectApproval, setModalRejectApproval] = useState(false);
@@ -33,7 +35,10 @@ export const useCheckDataSupplier = () => {
         setModalRegisterSupplier(false);
         break;
       case 'sendDataToSupplier':
-        setModalRegisterSupplier(true);
+        //hit endpoint
+        if (data.onSendDataSupplier) {
+          data.onSendDataSupplier();
+        }
         break;
       default:
         break;
@@ -71,6 +76,7 @@ export const useCheckDataSupplier = () => {
       showSendData();
     } else {
       //addSkuToCartAfterCheckVerified
+      setOrderModalVisible(true);
     }
   };
   /** STATUS REJECTED */
@@ -85,6 +91,7 @@ export const useCheckDataSupplier = () => {
       showUnverified();
     } else {
       //addSkuToCartAfterCheckVerified
+      setOrderModalVisible(true);
     }
   };
   /** STATUS PENDING */
