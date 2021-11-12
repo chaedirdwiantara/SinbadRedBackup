@@ -203,7 +203,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           topSellingBrand: topBrand.value,
           mostWantedBrand: wantedBrand.value,
           vehicleAccessibilityId: vehicleAccessibility.value.id,
-          vehicleAccessibilityAmount: Number(vehicleAccessibilityAmount.value),
+          vehicleAccessibilityAmount: vehicleAccessibilityAmount.value
+            ? Number(vehicleAccessibilityAmount.value)
+            : null,
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
@@ -269,24 +271,24 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
-          largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
-          topBrand.value ===
-            storeData?.storeDetailCompleteness.topSellingBrand &&
-          wantedBrand.value ===
-            storeData?.storeDetailCompleteness.mostWantedBrand &&
-          vehicleAccessibilityAmount.value ===
-            storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
-          vehicleAccessibility.value.id ===
-            storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
-          numberOfEmployee.value ===
-            storeData?.storeDetailCompleteness.numberOfEmployee
+          (largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
+            topBrand.value ===
+              storeData?.storeDetailCompleteness.topSellingBrand &&
+            wantedBrand.value ===
+              storeData?.storeDetailCompleteness.mostWantedBrand &&
+            vehicleAccessibilityAmount.value ===
+              storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
+            vehicleAccessibility.value.id ===
+              storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
+            numberOfEmployee.value ===
+              storeData?.storeDetailCompleteness.numberOfEmployee) ||
+          vehicleAccessibility.value.id === null
         );
       case 'merchantAddress':
       default:
         break;
     }
   };
-
   /**
    * ================================
    * SWITCH VIEW
@@ -458,7 +460,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={numberOfEmployee.value}
+            value={numberOfEmployee.value ? numberOfEmployee.value : ''}
             onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -470,7 +472,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
-            value={largeArea.value}
+            value={largeArea.value ? largeArea.value : ''}
             onChangeText={(text) => largeArea.setValue(text)}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
@@ -482,7 +484,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Merk Paling Laku'}
             placeholder={'Masukkan Merk Paling Laku'}
             type={'default'}
-            value={topBrand.value}
+            value={topBrand.value ? topBrand.value : ''}
             onChangeText={(text) => topBrand.setValue(text)}
             clearText={() => topBrand.setValue('')}
           />
@@ -492,7 +494,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Merk Paling Diinginkan'}
             placeholder={'Masukkan Merk Paling Diinginkan'}
             type={'default'}
-            value={wantedBrand.value}
+            value={wantedBrand.value ? wantedBrand.value : ''}
             onChangeText={(text) => wantedBrand.setValue(text)}
             clearText={() => wantedBrand.setValue('')}
           />
@@ -501,7 +503,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={vehicleAccessibility.value.name}
+            value={
+              vehicleAccessibility.value.name
+                ? vehicleAccessibility.value.name
+                : ''
+            }
             onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
@@ -517,7 +523,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             value={
               vehicleAccessibilityAmount.value
                 ? `${vehicleAccessibilityAmount.value}`
-                : vehicleAccessibilityAmount.value
+                : ''
             }
             onChangeText={(text) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
@@ -542,7 +548,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
           onPress={() => confirm()}
-          disabled={checkButton() || false}
+          disabled={
+            checkButton() || false || stateMerchant.merchantEdit.loading
+          }
+          loading={stateMerchant.merchantEdit.loading}
         />
       </View>
     ) : (
