@@ -82,7 +82,7 @@ const Content: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
-    if (registerState.data?.data?.isCreated) {
+    if (registerState.data?.data?.isCreated === true) {
       reset({
         index: 0,
         routes: [{ name: 'Home' }],
@@ -90,9 +90,7 @@ const Content: React.FC = () => {
     }
     if (registerState.data?.data?.isCreated === false) {
       setShowModalFailed(true);
-      setMessageError(
-        'Registrasi berhasil, silahkan tunggu beberapa saat untuk login',
-      );
+      setMessageError('Toko gagal dibuat karena ada kesalahan pada server');
     }
     if (registerState.error !== null) {
       setShowModalFailed(true);

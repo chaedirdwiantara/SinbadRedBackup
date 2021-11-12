@@ -64,8 +64,6 @@ const Content: React.FC = () => {
     }
   };
 
-  console.log('address:', address.value);
-
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -98,7 +96,8 @@ const Content: React.FC = () => {
               </View>
               {renderIF(
                 merchantData.longitude !== null,
-                <TouchableOpacity onPress={() => navigate('MapsView')}>
+                <TouchableOpacity
+                  onPress={() => navigate('MapsView', { action: 'register' })}>
                   <SnbText.B4>Ubah</SnbText.B4>
                 </TouchableOpacity>,
               )}
@@ -126,7 +125,7 @@ const Content: React.FC = () => {
                 />
               </MapView>,
               <TouchableOpacity
-                onPress={() => navigate('MapsView')}
+                onPress={() => navigate('MapsView', { action: 'register' })}
                 style={styles.pinPoint}>
                 <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
               </TouchableOpacity>,

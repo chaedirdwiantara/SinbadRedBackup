@@ -100,10 +100,8 @@ const MerchantEditAddressView = () => {
       data.noteAddress = noteAddress.value;
     }
     editMerchant(dispatchSupplier, { data });
-    console.log('data:', data);
   };
 
-  console.log('map:', storeAddress);
   return (
     <SnbContainer color={'white'}>
       <SnbTopNav.Type3
@@ -121,7 +119,8 @@ const MerchantEditAddressView = () => {
                 alignItems: 'center',
               }}>
               <SnbText.H4>Koordinat Lokasi</SnbText.H4>
-              <TouchableOpacity onPress={() => navigate('MapsView')}>
+              <TouchableOpacity
+                onPress={() => navigate('MapsView', { action: 'edit' })}>
                 <SnbText.B4>Ubah</SnbText.B4>
               </TouchableOpacity>
             </View>

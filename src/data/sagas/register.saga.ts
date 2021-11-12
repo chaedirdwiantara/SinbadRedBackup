@@ -41,7 +41,7 @@ function* registerMerchant(
       registerApi.registerMerchant(action.payload),
     );
     if (registerReponse) {
-      yield delay(2000);
+      yield delay(3000);
       const response: models.IRegisterMerchantDetail = yield call(() =>
         registerApi.registermerchantDetail(registerReponse),
       );
