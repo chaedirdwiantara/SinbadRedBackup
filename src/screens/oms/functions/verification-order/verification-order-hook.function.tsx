@@ -1,5 +1,4 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
