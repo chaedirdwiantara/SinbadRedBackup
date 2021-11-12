@@ -1,6 +1,7 @@
+import { contexts } from '@contexts';
 import { navigate } from '@core/navigations/RootNavigation';
 import apiMaps from '@core/services/apiMaps';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
@@ -12,24 +13,32 @@ import {
   SnbButton,
   SnbText,
   SnbContainer,
-  SnbMaps
+  SnbMaps,
 } from 'react-native-sinbad-ui';
 
 const MapsView = () => {
   const [desc, setDesc] = React.useState('');
   const [loadingDesc, setLoadingDesc] = React.useState(false);
-  const [loading] = React.useState(false);
-  const { goBack } = useNavigation();
   const [address, setAddress] = React.useState<any>();
-  const { getLocation, locations, resetLocation } = useLocations();
   const [showModal, setShowModal] = React.useState(false);
+  const [isMounted, setIsMounted] = useState(true);
+  const [position, setPosition] = useState<LatLng | null>(null);
+  const { goBack } = useNavigation();
   const { saveStoreData, merchantData } = useMerchant();
-  const [isUnmounted, setIsUnmounted] = useState(false);
+  const { getLocation, locations, resetLocation } = useLocations();
+  const { stateUser } = React.useContext(contexts.UserContext);
+  const { storeAddress }: any = stateUser.detail.data?.storeData || {};
+  const { params }: any = useRoute();
 
   React.useEffect(() => {
+    if (params?.action === 'edit') {
+      setDesc(storeAddress.address || '');
+    } else {
+      setDesc(merchantData.address || '');
+    }
     resetLocation();
     return () => {
-      setIsUnmounted(true);
+      setIsMounted(false);
       resetLocation();
     };
   }, []);
@@ -39,9 +48,17 @@ const MapsView = () => {
       saveStoreData({
         address: desc === 'Alamat tidak ditemukan' ? '' : desc,
         urbanId: locations?.data[0]?.id,
+        latitude: position?.latitude,
+        longitude: position?.longitude,
       });
       goBack();
-    } else if (locations.data?.length === 0) {
+    }
+
+    if (locations.data?.length === 0 || locations.error !== null) {
+      saveStoreData({
+        latitude: position?.latitude,
+        longitude: position?.longitude,
+      });
       setShowModal(true);
     }
   }, [locations]);
@@ -53,19 +70,21 @@ const MapsView = () => {
         `&latlng=${coords?.latitude},${coords?.longitude}`,
         'GET',
       );
-      if (!isUnmounted) {
+      if (isMounted) {
         if (results?.length > 0) {
           setDesc(results[0].formatted_address);
           setAddress(extractAddress(results[0].address_components));
         } else if (error_message) {
+          setAddress(null);
           setDesc(error_message);
         } else {
+          setAddress(null);
           setDesc('Alamat tidak ditemukan');
         }
         setLoadingDesc(false);
       }
     } catch (error) {
-      if (!isUnmounted) {
+      if (isMounted) {
         setLoadingDesc(false);
         setDesc('Alamat tidak ditemukan');
       }
@@ -76,8 +95,10 @@ const MapsView = () => {
     <SnbContainer color="white">
       <SnbMaps.Type1
         initialRegion={{
-          latitude: merchantData?.latitude || -6.25511,
-          longitude: merchantData?.longitude || 106.808,
+          latitude:
+            merchantData?.latitude || storeAddress?.latitude || -6.25511,
+          longitude:
+            merchantData?.longitude || storeAddress?.longitude || 106.808,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}
@@ -90,13 +111,15 @@ const MapsView = () => {
             latitudeDelta: 0.02,
             longitudeDelta: 0.02,
           });
-          saveStoreData({
+          setPosition({
             latitude: coords?.latitude,
             longitude: coords?.longitude,
           });
           getAddress(coords);
         }}
-        disableMainButton={locations.loading || loadingDesc}
+        disableMainButton={
+          locations.loading || loadingDesc || storeAddress?.address === desc
+        }
         mainButtonAction={() => {
           if (address) {
             getLocation({
@@ -111,27 +134,33 @@ const MapsView = () => {
           }
         }}
         contentTitle="Detail Alamat"
-        loading={loading}
+        loading={locations.loading}
         contentDesc={desc}
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
-        onSuccessGetPosition={(position, refMaps, refMarker) => {
-          if (merchantData.longitude === null) {
+        onFailedGetPosition={console.log}
+        onSuccessGetPosition={(geoPosition, refMaps, refMarker) => {
+          if (
+            merchantData.longitude === null &&
+            params?.action === 'register'
+          ) {
             refMaps.current?.animateToRegion({
-              ...position,
+              ...geoPosition,
               latitudeDelta: 0.02,
               longitudeDelta: 0.02,
             });
-            refMarker.current?.animateMarkerToCoordinate(position);
-            saveStoreData({
-              latitude: position.latitude,
-              longitude: position.longitude,
+            refMarker.current?.animateMarkerToCoordinate(geoPosition);
+            setPosition({
+              latitude: geoPosition.latitude,
+              longitude: geoPosition.longitude,
             });
-            getAddress(position);
+            getAddress(geoPosition);
           } else {
             getAddress({
-              latitude: merchantData?.latitude || 0,
-              longitude: merchantData?.longitude || 0,
+              latitude:
+                merchantData?.latitude || storeAddress?.latitude || -6.25511,
+              longitude:
+                merchantData?.longitude || storeAddress?.longitude || 106.808,
             });
           }
         }}
@@ -160,6 +189,10 @@ const MapsView = () => {
               <SnbButton.Single
                 title="Masukkan Lokasi Manual"
                 onPress={() => {
+                  saveStoreData({
+                    latitude: position?.latitude,
+                    longitude: position?.longitude,
+                  });
                   setShowModal(false);
                   navigate(INPUT_MANUAL_LOCATION_VIEW);
                 }}

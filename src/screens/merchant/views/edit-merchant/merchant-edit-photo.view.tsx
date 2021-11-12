@@ -123,6 +123,7 @@ const MerchantEditPhotoView = () => {
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
+      editProfileAction.reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
     };
   }, []);
@@ -154,9 +155,10 @@ const MerchantEditPhotoView = () => {
         0,
         240,
       );
-      goBack();
+      editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
+      goBack();
     }
 
     if (stateMerchant.profileEdit.error !== null) {
@@ -179,9 +181,10 @@ const MerchantEditPhotoView = () => {
         0,
         240,
       );
-      goBack();
+      editProfileAction.reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
+      goBack();
     }
 
     if (stateMerchant.merchantEdit.error !== null) {

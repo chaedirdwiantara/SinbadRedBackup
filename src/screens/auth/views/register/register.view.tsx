@@ -10,6 +10,7 @@ import { View, ScrollView, BackHandler } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
+  SnbDialog,
   SnbText,
   SnbTextField,
   SnbTopNav,

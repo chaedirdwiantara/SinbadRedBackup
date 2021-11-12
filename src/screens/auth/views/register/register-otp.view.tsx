@@ -23,7 +23,9 @@ const RegisterOTPView: React.FC = () => {
       setHide(false);
       resetMerchantData();
       saveUserData({ mobilePhone });
-      replace(REGISTER_STEP_1_VIEW);
+      setTimeout(() => {
+        replace(REGISTER_STEP_1_VIEW);
+      }, 100);
     }
     if (verifyOTP.error !== null) {
       setHide(false);

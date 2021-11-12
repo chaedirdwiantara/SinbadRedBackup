@@ -18,7 +18,9 @@ const LoginOTPView: React.FC = () => {
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      reset({ index: 0, routes: [{ name: 'Home' }] });
+      setTimeout(() => {
+        reset({ index: 0, routes: [{ name: 'Home' }] });
+      }, 100);
     }
     if (verifyOTP.error !== null) {
       setHide(false);
