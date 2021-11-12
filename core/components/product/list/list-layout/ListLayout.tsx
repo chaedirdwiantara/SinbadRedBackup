@@ -2,13 +2,15 @@
 import React, { FC } from 'react';
 import { View, FlatList } from 'react-native';
 /** === IMPORT COMPONENTS === */
+import { EmptyState } from '@core/components/EmptyState';
 import { ProductListCard } from '@core/components/ProductListCard';
-import ProductTagList from './ProductTagList';
+import ProductTagList from '../ProductTagList';
+import { ListSkeleton } from './ListSkeleton';
 /** === IMPORT FUNCTION === */
 import { goToProductDetail } from '@core/functions/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
-import { ProductLayoutProps } from './product-list-core.type';
+import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
 const ListLayout: FC<ProductLayoutProps> = ({
   products,
@@ -19,6 +21,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
   isRefreshing,
   onRefresh,
   onLoadMore,
+  loading,
 }) => {
   /** === VIEW === */
   /** => List Card */
@@ -47,6 +50,16 @@ const ListLayout: FC<ProductLayoutProps> = ({
       </View>
     );
   };
+  /** => Loading */
+  if (loading) {
+    return <ListSkeleton />;
+  }
+  /** => Empty */
+  if (!loading && products.length === 0) {
+    return (
+      <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+    );
+  }
   /** => Main */
   return (
     <View style={{ flex: 1 }}>

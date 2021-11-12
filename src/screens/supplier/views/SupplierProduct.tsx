@@ -3,7 +3,7 @@ import React, { FC, Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
 /** === IMPORT COMPONENTS ===  */
 import GridLayout from '@core/components/product/list/grid-layout/GridLayout';
-import ListLayout from '@core/components/product/list/ListLayout';
+import ListLayout from '@core/components/product/list/list-layout/ListLayout';
 import { SupplierBrandList } from './SupplierBrandList';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
@@ -73,6 +73,7 @@ export const SupplierProduct: FC<SupplierProductProps> = ({
           isRefreshing={isRefreshing}
           onRefresh={() => onRefresh(derivedQueryOptions)}
           onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          loading={false}
         />
       ) : (
         <ListLayout
@@ -85,6 +86,7 @@ export const SupplierProduct: FC<SupplierProductProps> = ({
           isRefreshing={isRefreshing}
           onRefresh={() => onRefresh(derivedQueryOptions)}
           onLoadMore={() => onLoadMore(derivedQueryOptions)}
+          loading={false}
         />
       )}
     </View>
