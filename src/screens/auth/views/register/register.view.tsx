@@ -55,15 +55,6 @@ const Content: React.FC = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <SnbDialog
-        open={true}
-        title="Siapkan KTP Anda"
-        ok={() => {}}
-        okText="Lanjutkan"
-        cancelText="Batal"
-        cancel={() => {}}
-        content={'Test'}
-      />
       <View style={{ padding: 16 }}>
         <SnbText.H1>DAFTAR</SnbText.H1>
       </View>
