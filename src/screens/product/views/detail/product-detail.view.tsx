@@ -7,7 +7,7 @@ import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
 // import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
-// import { PromoSection } from './PromoSection';
+import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
 import { ActionButton } from './ActionButton';
@@ -17,6 +17,8 @@ import { PromoModal } from './PromoModal';
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
+import { contexts } from '@contexts';
+import { usePotentialPromoProductAction } from '@screen/promo/functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -73,6 +75,25 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     fetch(dispatchProduct, productId);
   }, []);
+
+  /**
+   * Potential Promo Product
+   * - only fetch when the product data is ready
+   */
+  const {
+    statePromo: { potentialPromoProduct: potentialPromoProduct },
+    dispatchPromo,
+  } = React.useContext(contexts.PromoContext);
+  const potentialPromoProductList = potentialPromoProduct.list;
+  const potentialPromoProductAction = usePotentialPromoProductAction();
+  /** => potential promo product effect */
+  React.useEffect(() => {
+    if (productDetailState.data !== null) {
+      const { id } = productDetailState.data;
+      potentialPromoProductAction.list(dispatchPromo, id);
+    }
+  }, [productDetailState]);
+
   /** === DERIVED === */
   const defaultProperties = {
     isAvailable: productDetailState.data?.isAvailable ?? true,
@@ -125,13 +146,12 @@ const ProductDetailView: FC = () => {
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
           /> */}
-          {/* When promoList.length > 0 */}
-          {/* {productDetailDummy.promoList.length > 0 && (
+          {potentialPromoProductList.data.length > 0 && (
             <PromoSection
               description={productDetailDummy.promoList[0].shortDescription}
               onPress={() => setPromoModalVisible(true)}
             />
-          )} */}
+          )}
           {defaultProperties.isBundle && (
             <ProductDetailSection title="Promosi Bundle Special">
               <SnbText.B3>Promo Bundle Data</SnbText.B3>
