@@ -276,7 +276,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               storeData?.storeDetailCompleteness.topSellingBrand &&
             wantedBrand.value ===
               storeData?.storeDetailCompleteness.mostWantedBrand &&
-            vehicleAccessibilityAmount.value ===
+            Number(vehicleAccessibilityAmount.value) ===
               storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
               storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
@@ -452,6 +452,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
+  console.log('data:', vehicleAccessibilityAmount.value);
+
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
     return (
@@ -527,7 +529,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             }
             onChangeText={(text) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
-              vehicleAccessibilityAmount.setValue(cleanNumber);
+              vehicleAccessibilityAmount.setValue(`${cleanNumber}`);
             }}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
