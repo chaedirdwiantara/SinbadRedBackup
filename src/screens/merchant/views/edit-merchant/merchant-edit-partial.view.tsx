@@ -452,8 +452,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
-  console.log('data:', vehicleAccessibilityAmount.value);
-
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
     return (
