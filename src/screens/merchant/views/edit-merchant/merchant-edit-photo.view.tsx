@@ -112,13 +112,6 @@ const MerchantEditPhotoView = () => {
         );
         break;
       }
-      case 'store': {
-        setImageUrl(
-          stateUser.detail.data?.storeData.storeInformation.storeAccount
-            .imageUrl,
-        );
-        break;
-      }
     }
     return () => {
       save(dispatchGlobal, '');
@@ -262,7 +255,12 @@ const MerchantEditPhotoView = () => {
               resizeMode: 'contain',
               height: undefined,
               width: '100%',
-              aspectRatio: params?.type === 'selfie' ? 6 / 5 : 8 / 5,
+              aspectRatio:
+                params?.type === 'selfie'
+                  ? 6 / 5
+                  : params?.type === 'store'
+                  ? 8 / 7
+                  : 8 / 5,
               marginTop: 24,
             }}
           />
