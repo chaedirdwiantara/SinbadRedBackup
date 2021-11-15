@@ -16,6 +16,8 @@ import {
   SnbMaps,
 } from 'react-native-sinbad-ui';
 
+const DEFAULT_LOCATION: LatLng = { longitude: 106.808, latitude: -6.25511 };
+
 const MapsView = () => {
   const [desc, setDesc] = React.useState('');
   const [loadingDesc, setLoadingDesc] = React.useState(false);
@@ -34,7 +36,12 @@ const MapsView = () => {
     if (params?.action === 'edit') {
       setDesc(storeAddress.address || '');
     } else {
-      setDesc(merchantData.address || '');
+      if (merchantData.address) {
+        setDesc(merchantData.address || '');
+      } else {
+        setPosition(DEFAULT_LOCATION);
+        getAddress(DEFAULT_LOCATION);
+      }
     }
     resetLocation();
     return () => {
@@ -96,9 +103,13 @@ const MapsView = () => {
       <SnbMaps.Type1
         initialRegion={{
           latitude:
-            merchantData?.latitude || storeAddress?.latitude || -6.25511,
+            merchantData?.latitude ||
+            storeAddress?.latitude ||
+            DEFAULT_LOCATION.latitude,
           longitude:
-            merchantData?.longitude || storeAddress?.longitude || 106.808,
+            merchantData?.longitude ||
+            storeAddress?.longitude ||
+            DEFAULT_LOCATION.longitude,
           latitudeDelta: 0.02,
           longitudeDelta: 0.02,
         }}
@@ -118,7 +129,10 @@ const MapsView = () => {
           getAddress(coords);
         }}
         disableMainButton={
-          locations.loading || loadingDesc || storeAddress?.address === desc
+          locations.loading ||
+          loadingDesc ||
+          storeAddress?.address === desc ||
+          desc === ''
         }
         mainButtonAction={() => {
           if (address) {

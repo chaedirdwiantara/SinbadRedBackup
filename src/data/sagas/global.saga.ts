@@ -13,7 +13,7 @@ function* uploadImage(action: models.IRegisterAction<models.IUploadImage>) {
       GlobalApi.uploadImage(action.payload),
     );
     yield put(ActionCreators.uploadImageSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield put(ActionCreators.uploadImageFailed(error));
   }
 }

@@ -52,18 +52,6 @@ const Content: React.FC = () => {
     }
   }, [merchantData]);
 
-  const checkButton = () => {
-    if (
-      address.value !== '' &&
-      merchantData?.latitude !== null &&
-      merchantData?.longitude !== null
-    ) {
-      return false;
-    } else {
-      return true;
-    }
-  };
-
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -143,6 +131,7 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...noteAddress}
+              mandatory
               labelText="Catatan Alamat"
               placeholder="Masukkan catatan alamat"
             />
@@ -150,6 +139,7 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextFieldSelect
               labelText="Aksesibilitas Kendaraan"
+              mandatory
               value={
                 vehicleAccessibility?.name ||
                 merchantData.vehicleAccessibilityId
@@ -194,7 +184,12 @@ const Content: React.FC = () => {
           type="primary"
           shadow
           loading={false}
-          disabled={checkButton()}
+          disabled={
+            address.value === '' ||
+            noteAddress.value === '' ||
+            vehicleAccessibility === null ||
+            merchantData.urbanId === null
+          }
         />
       </View>
     </View>
