@@ -29,6 +29,7 @@ export * from './brand';
 export * from './notification';
 export * from './banner';
 export * from './supplier';
+export * from './history';
 /**
  * ================================================================
  * NOTES
