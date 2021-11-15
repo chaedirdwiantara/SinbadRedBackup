@@ -529,7 +529,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             }
             onChangeText={(text) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
-              vehicleAccessibilityAmount.setValue(`${cleanNumber}`);
+              vehicleAccessibilityAmount.setValue(cleanNumber);
             }}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
