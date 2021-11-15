@@ -6617,10 +6617,8 @@ react-native-screens@3.1.1:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-3.1.1.tgz#2cd4496c5e3ed1ffbaf77962b8fcc10be3af2158"
   integrity sha512-cjhK85T8LQ7uqqmwvLb8FKNk1RfgJd1jtbUm1lOxUmJreFki5Wh2SUlx0DAvNG35U6quGD15KPYRducGa+M04g==
 
-react-native-sinbad-ui@^1.0.0:
+"react-native-sinbad-ui@file:../rn-sinbad-ui":
   version "1.0.0"
-  resolved "http://lib.sinbad.web.id/react-native-sinbad-ui/-/react-native-sinbad-ui-1.0.0.tgz#a157d7050e4e7c59d919ba4c5f148ffb8ce62977"
-  integrity sha512-Albmno2jpaxRaZ96ZI5pcUtSQ5e+SYaLHLwANlBBB7w/5Op/vDu4Za1yl6G2jkxzEU8ZTi/Cv/d3oW3VtEtOuA==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
