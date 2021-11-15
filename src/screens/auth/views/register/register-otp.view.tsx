@@ -25,7 +25,7 @@ const RegisterOTPView: React.FC = () => {
       saveUserData({ mobilePhone });
       setTimeout(() => {
         replace(REGISTER_STEP_1_VIEW);
-      }, 100);
+      }, 250);
     }
     if (verifyOTP.error !== null) {
       setHide(false);
