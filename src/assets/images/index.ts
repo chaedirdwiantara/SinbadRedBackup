@@ -9,5 +9,5 @@ export const Images = {
   emptyCart: require('./oms_empty_cart.png'),
   selfie: require('./selfie_image.png'),
   store: require('./store_image.png'),
-  emptyVoucher: require('./voucher_empty'),
+  emptyVoucher: require('./voucher_empty.png'),
 };
