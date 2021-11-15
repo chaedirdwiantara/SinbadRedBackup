@@ -20,7 +20,7 @@ const LoginOTPView: React.FC = () => {
       setHide(false);
       setTimeout(() => {
         reset({ index: 0, routes: [{ name: 'Home' }] });
-      }, 100);
+      }, 250);
     }
     if (verifyOTP.error !== null) {
       setHide(false);
