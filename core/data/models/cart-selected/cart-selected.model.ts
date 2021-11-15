@@ -33,5 +33,4 @@ export interface CartSelected {
   data: CartSelectedData[];
   isActiveStore: boolean;
   voucherIds?: VoucherId[];
-  salesId: number;
 }
