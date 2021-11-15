@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import {
   SnbContainer,
@@ -15,9 +15,15 @@ const ListAndSearchView = () => {
   const { params }: any = useRoute();
   const { getSelection, listSelection, selectedItem, onSelectedItem } =
     useTextFieldSelect();
+  const [search, setSearch] = useState('');
 
   React.useEffect(() => {
-    getSelection(params);
+    const data = {
+      type: params.type,
+      params: params.params,
+      meta: { keyword: search },
+    };
+    getSelection(data);
   }, []);
 
   React.useEffect(() => {
@@ -26,17 +32,36 @@ const ListAndSearchView = () => {
     }
   }, [selectedItem]);
 
+  const searchData = () => {
+    const data = {
+      type: params.type,
+      params: params.params,
+      meta: { keyword: search },
+    };
+    getSelection(data);
+  };
+
   return (
     <SnbContainer color="white">
       <SafeAreaView style={{ flex: 1 }}>
-        <SnbTopNav.Type7
-          type="red"
-          placeholder="Pilih jumlah karyawan"
-          enter={() => {}}
-          backAction={goBack}
-          clearText={() => {}}
-          onChangeText={() => {}}
-        />
+        {params.type === 'listNumOfEmployee' ? (
+          <SnbTopNav.Type3
+            type="red"
+            backAction={goBack}
+            title={'Jumlah Karyawan'}
+          />
+        ) : (
+          <SnbTopNav.Type7
+            type="red"
+            placeholder="Pilih jumlah karyawan"
+            enter={() => searchData()}
+            backAction={goBack}
+            clearText={() => setSearch('')}
+            onChangeText={(text) => setSearch(text)}
+            value={search}
+          />
+        )}
+
         <FlatList
           data={listSelection.data}
           keyExtractor={(el, index) => index.toString()}
