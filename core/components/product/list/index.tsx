@@ -19,15 +19,19 @@ import {
 import {
   useBottomAction,
   priceSortOptions,
-  useRegisterSupplierModal,
   useOrderModalVisibility,
 } from '@core/functions/product';
 import {
   useTagListActions,
   useProductDetailAction,
+  useAddToCart,
 } from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
-import { useSupplierSegmentationAction } from '@core/functions/supplier/supplier-hook.function';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import {
+  useSupplierSegmentationAction,
+  useSendDataToSupplierActions,
+} from '@core/functions/supplier/supplier-hook.function';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
@@ -76,6 +80,8 @@ const ProductList: FC<ProductListProps> = ({
     CategoryType | undefined
   >(activeCategory);
   const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [productSelected, setProductSelected] =
+    useState<models.ProductList | null>(null);
 
   const {
     sortModalVisible,
@@ -92,18 +98,21 @@ const ProductList: FC<ProductListProps> = ({
     categoryId: selectedCategory?.id,
     tags: selectedTags,
   });
-  const registerSupplierModal = useRegisterSupplierModal();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailAction();
+  const addToCartActions = useAddToCart();
   const supplierSegmentationAction = useSupplierSegmentationAction();
+  const sendDataToSupplierActions = useSendDataToSupplierActions();
   const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
       list: { loading: productLoading },
+      detail: { data: productDetailState },
     },
     dispatchProduct,
   } = useProductContext();
+  const { dispatchShopingCart } = useShopingCartContext();
   const {
     stateTag: {
       list: { data: tagList },
@@ -119,8 +128,13 @@ const ProductList: FC<ProductListProps> = ({
   } = useSupplierContext();
   const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
   /** => check data supplier and sinbad status */
-  const { checkUser, modalRejectApproval, modalWaitingApproval } =
-    useCheckDataSupplier();
+  const {
+    checkUser,
+    modalRejectApproval,
+    modalWaitingApproval,
+    modalRegisterSupplier,
+    onFunctionActions,
+  } = useCheckDataSupplier(setOrderModalVisible);
 
   useEffect(() => {
     if (!productLoading) {
@@ -152,10 +166,57 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [me.data, dataSegmentation]);
 
+  /** => action send data to supplier */
+  const onSendDataSupplier = () => {
+    if (productSelected !== null) {
+      sendDataToSupplierActions.fetch(dispatchSupplier, {
+        supplierId: productSelected?.sellerId,
+      });
+    }
+    onFunctionActions({ type: 'close' });
+  };
+
+  /** => action from buttom confirmation checkout */
   const handleOrderPress = (product: models.ProductList) => {
+    setProductSelected(product);
     authCoreAction.me();
-    supplierSegmentationAction.fetch(dispatchSupplier, product.supplierId);
+    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
+  };
+
+  /** => action submit add to cart  */
+  const onSubmitAddToCart = () => {
+    if (
+      productDetailState === null ||
+      dataSegmentation === null ||
+      dataSegmentation.dataSuppliers === null
+    ) {
+      /** => DO SOMETHING */
+      /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
+      return;
+    }
+    const params: models.AddToCartPayload = {
+      cartId: productDetailState?.id,
+      isActiveStore: dataSegmentation.isActiveStore,
+      selected: true,
+      stock: 100,
+      productId: productDetailState.id,
+      qty: 90,
+      displayPrice: productDetailState.originalPrice,
+      priceBeforeTax:
+        productDetailState.currentPrice ?? productDetailState.originalPrice,
+      priceAfterTax:
+        productDetailState.currentPriceAfterTax ??
+        productDetailState.originalPrice,
+      uom: productDetailState.unit,
+      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      supplierId: dataSegmentation.dataSuppliers.sellerId,
+      channelId: dataSegmentation.dataSuppliers.channelId,
+      groupId: dataSegmentation.dataSuppliers.groupId,
+      typeId: dataSegmentation.dataSuppliers.typeId,
+      clusterId: dataSegmentation.dataSuppliers.clusterId,
+    };
+    addToCartActions.fetch(dispatchShopingCart, params);
   };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -266,27 +327,26 @@ const ProductList: FC<ProductListProps> = ({
       />
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
-        visible={registerSupplierModal.visible}
+        visible={modalRegisterSupplier}
         onSubmit={() =>
-          registerSupplierModal.sendSupplierData(setOrderModalVisible)
+          onFunctionActions({
+            type: 'sendDataToSupplier',
+            onSendDataSupplier: onSendDataSupplier,
+          })
         }
-        onClose={() => registerSupplierModal.setVisible(false)}
+        onClose={() => onFunctionActions({ type: 'close' })}
       />
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
-        onSubmit={() =>
-          registerSupplierModal.sendSupplierData(setOrderModalVisible)
-        }
-        onClose={() => registerSupplierModal.setVisible(false)}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
       />
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={() =>
-          registerSupplierModal.sendSupplierData(setOrderModalVisible)
-        }
-        onClose={() => registerSupplierModal.setVisible(false)}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
@@ -294,7 +354,7 @@ const ProductList: FC<ProductListProps> = ({
         <AddToCartModal
           open={orderModalVisible}
           closeAction={() => setOrderModalVisible(false)}
-          onAddToCartPress={() => console.log('Add to cart pressed')}
+          onAddToCartPress={onSubmitAddToCart}
         />
       )}
     </SnbContainer>

@@ -1,3 +1,3 @@
 export interface SendDataSupplierProps {
-  supplierId: number;
+  supplierId: string | number;
 }

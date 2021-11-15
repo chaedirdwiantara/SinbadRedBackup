@@ -16,8 +16,8 @@ import {
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { goBack } from '@screen/history/functions';
-import { HistoryDetailStyle } from '@screen/history/styles';
+import { goBack } from '../functions';
+import { HistoryDetailStyle } from '../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../components';
 /** === TYPES === */
 type HistoryStackParamList = {
