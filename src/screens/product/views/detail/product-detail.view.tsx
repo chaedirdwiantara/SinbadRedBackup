@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
-/** === IMPORT COMPONENT === */
+/** === IMPORT COMPONENTS === */
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -13,6 +13,7 @@ import { ProductDetailSectionItem } from './ProductDetailSectionItem';
 import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
+import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
@@ -93,11 +94,13 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading) {
+  if (productDetailState.loading && productDetailState.data !== null) {
     return (
-      <View>
-        <SnbText.H4>Loading...</SnbText.H4>
-      </View>
+      <SnbContainer color="white">
+        <SnbStatusBar type="transparent1" />
+        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailSkeleton />
+      </SnbContainer>
     );
   }
   /** => Main */
