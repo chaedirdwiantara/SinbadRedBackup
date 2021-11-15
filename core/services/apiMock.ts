@@ -8,7 +8,7 @@ const apiMock = async <T>(
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  method: 'GET' | 'POST' | 'PATCH' | 'PUT',
+  method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE',
   params?: object,
 ): Promise<T> => {
   /** === SET HEADER === */
