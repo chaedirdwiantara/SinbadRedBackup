@@ -11,7 +11,8 @@ import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useCartSelected, useCartId } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
-import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
+import { getSelectedVouchers } from '@screen/voucher/functions';
+import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -75,13 +76,7 @@ const OmsShoppingCartView: FC = () => {
   }, [stateVerificationOrder.create.data, updateCartState.data]);
 
   /** Voucher Cart */
-  const { count } = useCountAllVoucherAction();
-  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
-  React.useEffect(() => {
-    if (cartState.data !== null) {
-      count(dispatchVoucher);
-    }
-  }, [cartState]);
+  const voucherData = useDataVoucher();
 
   /** Get Cart View */
   useEffect(() => {
@@ -179,6 +174,7 @@ const OmsShoppingCartView: FC = () => {
       data: dataSelected,
       isActiveStore: cartState.data.isActiveStore,
       salesId: cartState.data.userId,
+      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
     };
 
     /** => fetch post update cart */
