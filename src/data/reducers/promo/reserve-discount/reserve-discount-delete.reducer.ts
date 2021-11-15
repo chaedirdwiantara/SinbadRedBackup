@@ -26,18 +26,18 @@ export const reserveDiscountDeleteReducer = simplifyReducer(
     /** => detail success */
     [types.DELETE_RESERVE_DISCOUNT_SUCCESS](
       state = reserveDiscountDeleteInitialState,
-      action: models.DetailSuccessAction<models.PromoPaymentDetailSuccessProps>,
+      action: models.DeleteSuccessAction,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
       };
     },
     /** => detail failed */
     [types.DELETE_RESERVE_DISCOUNT_FAILED](
       state = reserveDiscountDeleteInitialState,
-      action: models.DetailFailedAction,
+      action: models.DeleteFailedAction,
     ) {
       return {
         ...state,

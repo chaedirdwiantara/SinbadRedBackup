@@ -58,7 +58,7 @@ const deleteReserveDiscount = (data: models.DeleteProcessProps) => {
     path,
     'discount',
     'v1',
-    'LIST',
+    'DELETE',
   );
 };
 
