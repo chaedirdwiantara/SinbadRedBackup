@@ -5,9 +5,9 @@ import { useNavigation, useRoute } from '@react-navigation/core';
 import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Image } from 'react-native';
-import MapView, { LatLng } from 'react-native-maps';
+import MapView, { LatLng, Region } from 'react-native-maps';
 import {
   SnbBottomSheet,
   SnbButton,
@@ -23,14 +23,26 @@ const MapsView = () => {
   const [loadingDesc, setLoadingDesc] = React.useState(false);
   const [address, setAddress] = React.useState<any>();
   const [showModal, setShowModal] = React.useState(false);
-  const [isMounted, setIsMounted] = useState(true);
-  const [position, setPosition] = useState<LatLng | null>(null);
+  const [isMounted, setIsMounted] = React.useState(true);
+  const [position, setPosition] = React.useState<LatLng | null>(null);
   const { goBack } = useNavigation();
   const { saveStoreData, merchantData } = useMerchant();
   const { getLocation, locations, resetLocation } = useLocations();
   const { stateUser } = React.useContext(contexts.UserContext);
   const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   const { params }: any = useRoute();
+  const [region, setRegion] = React.useState<Region>({
+    latitude:
+      merchantData?.latitude ||
+      storeAddress?.latitude ||
+      DEFAULT_LOCATION.latitude,
+    longitude:
+      merchantData?.longitude ||
+      storeAddress?.longitude ||
+      DEFAULT_LOCATION.longitude,
+    latitudeDelta: 0.02,
+    longitudeDelta: 0.02,
+  });
 
   React.useEffect(() => {
     if (params?.action === 'edit') {
@@ -101,18 +113,7 @@ const MapsView = () => {
   return (
     <SnbContainer color="white">
       <SnbMaps.Type1
-        initialRegion={{
-          latitude:
-            merchantData?.latitude ||
-            storeAddress?.latitude ||
-            DEFAULT_LOCATION.latitude,
-          longitude:
-            merchantData?.longitude ||
-            storeAddress?.longitude ||
-            DEFAULT_LOCATION.longitude,
-          latitudeDelta: 0.02,
-          longitudeDelta: 0.02,
-        }}
+        initialRegion={region}
         onDragEnd={(
           coords: LatLng,
           mapRef: React.MutableRefObject<MapView | null>,
@@ -153,7 +154,7 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onFailedGetPosition={console.log}
-        onSuccessGetPosition={(geoPosition, refMaps, refMarker) => {
+        onSuccessGetPosition={(geoPosition, refMaps, _) => {
           if (
             merchantData.longitude === null &&
             params?.action === 'register'
@@ -163,7 +164,7 @@ const MapsView = () => {
               latitudeDelta: 0.02,
               longitudeDelta: 0.02,
             });
-            refMarker.current?.animateMarkerToCoordinate(geoPosition);
+            setRegion({ ...region, ...geoPosition });
             setPosition({
               latitude: geoPosition.latitude,
               longitude: geoPosition.longitude,
