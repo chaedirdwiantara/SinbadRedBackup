@@ -24,11 +24,11 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
     case 'listVehicleAccess': {
-      path = 'vehicle-accessibilities/all';
+      path = `vehicle-accessibilities/all?keyword=${data.meta?.keyword}`;
       break;
     }
     case 'listProvince': {
-      path = 'provinces/all';
+      path = `provinces/all?keyword=${data.meta?.keyword}`;
       break;
     }
     case 'listCity': {

@@ -112,18 +112,10 @@ const MerchantEditPhotoView = () => {
         );
         break;
       }
-      case 'store': {
-        setImageUrl(
-          stateUser.detail.data?.storeData.storeInformation.storeAccount
-            .imageUrl,
-        );
-        break;
-      }
     }
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
-      editProfileAction.reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
     };
   }, []);
@@ -155,10 +147,9 @@ const MerchantEditPhotoView = () => {
         0,
         240,
       );
-      editMerchantAction.reset(dispatchSupplier);
+      goBack();
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
-      goBack();
     }
 
     if (stateMerchant.profileEdit.error !== null) {
@@ -181,10 +172,9 @@ const MerchantEditPhotoView = () => {
         0,
         240,
       );
-      editProfileAction.reset(dispatchSupplier);
+      goBack();
       editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser, { id: '' });
-      goBack();
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
@@ -257,37 +247,43 @@ const MerchantEditPhotoView = () => {
     }
     return (
       <View style={{ flex: 1 }}>
-        <Image
-          resizeMode="contain"
-          source={{ uri }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 1,
-            margin: 16,
-          }}
-        />
-        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
-          <View style={{ height: 72 }}>
-            <SnbButton.Dynamic
-              size="small"
-              type="tertiary"
-              title="Ubah Foto"
-              onPress={() => openCamera(params?.type)}
-              disabled={false}
-            />
+        <View style={{ flex: 1 }}>
+          <Image
+            resizeMode="contain"
+            source={{ uri }}
+            style={{
+              resizeMode: 'contain',
+              height: undefined,
+              width: '100%',
+              aspectRatio:
+                params?.type === 'selfie'
+                  ? 6 / 5
+                  : params?.type === 'store'
+                  ? 8 / 7
+                  : 8 / 5,
+              marginTop: 24,
+            }}
+          />
+          <View style={{ justifyContent: 'space-between' }}>
+            <View style={{ height: 72, marginTop: 12 }}>
+              <SnbButton.Dynamic
+                size="small"
+                type="tertiary"
+                title="Ubah Foto"
+                onPress={() => openCamera(params?.type)}
+                disabled={false}
+              />
+            </View>
           </View>
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
-              type={'primary'}
-              title={'Simpan'}
-              shadow
-              onPress={action}
-              loading={stateGlobal.uploadImage.loading}
-              disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
-            />
-          </View>
+        </View>
+        <View style={{ height: 75 }}>
+          <SnbButton.Single
+            type={'primary'}
+            title={'Simpan'}
+            onPress={action}
+            loading={stateGlobal.uploadImage.loading}
+            disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+          />
         </View>
       </View>
     );

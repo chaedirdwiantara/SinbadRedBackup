@@ -18,6 +18,7 @@ const CameraView = () => {
       subtitle={params?.subtitle}
       showFlipCameraButton={params?.type === 'selfie'}
       showFlashCameraButton={params?.type === 'selfie'}
+      type={params?.type === 'selfie' ? 'front' : 'back'}
       includeBase64
       onImageCaptured={async (result: any, _) => {
         let url = '';

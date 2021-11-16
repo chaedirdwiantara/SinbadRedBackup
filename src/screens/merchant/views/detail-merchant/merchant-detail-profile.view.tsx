@@ -219,7 +219,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Foto Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.taxImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.taxImageUrl ? true : false,
           type: 'npwp',
@@ -227,7 +227,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Foto KTP',
-          value: ownerData?.profile.idImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.idImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.idImageUrl ? true : false,
           type: 'ktp',
@@ -235,7 +235,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Foto Selfie + KTP',
-          value: ownerData?.profile.selfieImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.selfieImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.selfieImageUrl ? true : false,
           type: 'selfie',
