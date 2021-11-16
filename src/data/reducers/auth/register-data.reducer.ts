@@ -2,7 +2,7 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 import * as types from '@types';
 import * as models from '@models';
 
-const INITIAL_STATE: models.IRegisterMerchantProcess = {
+const INITIAL_STATE: models.IMerchantData = {
   urbanId: null,
   topSellingBrand: '',
   mostWantedBrand: '',
@@ -28,10 +28,10 @@ const INITIAL_STATE: models.IRegisterMerchantProcess = {
   },
 };
 
-export const registerData = simplifyReducer(INITIAL_STATE, {
-  [types.SAVE_REGISTER_STORE_DATA](
+export const merchantData = simplifyReducer(INITIAL_STATE, {
+  [types.SAVE_STORE_DATA](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IRegisterMerchantProcess>,
+    action: models.IRegisterAction<models.IMerchantData>,
   ) {
     return {
       ...state,
@@ -42,7 +42,7 @@ export const registerData = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.SAVE_REGISTER_USER_DATA](
+  [types.SAVE_USER_DATA](
     state = INITIAL_STATE,
     action: models.IRegisterAction<models.User>,
   ) {
@@ -55,7 +55,7 @@ export const registerData = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.RESET_REGISTER_DATA]() {
+  [types.RESET_MERCHANT_DATA]() {
     return INITIAL_STATE;
   },
 });

@@ -1,22 +1,43 @@
 /** === IMPORT PACKAGE HERE === */
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { RootState } from '@reducers';
 /** === IMPORT MODEL === */
-import * as flagModel from '../data/models/flag-rtdb/flag-rtdb.model';
+import * as models from '@models';
+/** === IMPORT TYPE === */
+import type { AuthProps } from '../data/reducers/auth';
 /** === FUNCTION === */
+/** => for data permanent */
+const useDataPermanent = (): models.Permanent => {
+  return useSelector((state: RootState) => state.permanentCore);
+};
+/** => flag RTDB */
+const useDataFlagRTDB = (): models.FlagRTDB => {
+  return useSelector((state: RootState) => state.globalCore.flagRTDB);
+};
+/** => for auth data */
+const useDataAuth = (): AuthProps => {
+  return useSelector((state: RootState) => state.authCore);
+};
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
-const useDataVoucher = () => {
+const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
-/** => flag RTDB */
-const useDataFlagRTDB = (): flagModel.FlagRTDB => {
-  return useSelector((state: RootState) => state.flagRTDB);
+const useDataCart = () => {
+  return useSelector((state: RootState) => state.verificationCartCore);
 };
+
 /** === EXPORT === */
-export { useDataGlobal, useDataVoucher, useDataFlagRTDB };
+export {
+  useDataPermanent,
+  useDataGlobal,
+  useDataVoucher,
+  useDataFlagRTDB,
+  useDataAuth,
+  useDataCart,
+};
 /**
  * ================================================================
  * NOTES

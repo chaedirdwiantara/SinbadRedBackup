@@ -1,45 +1,32 @@
-/** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
+/** === IMPORT PACKAGES ===  */
+import React, { FC, useEffect } from 'react';
 import { View, FlatList, Dimensions } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENTS === */
 import { BrandCard } from '@core/components/BrandCard';
-import { goBack, useBrandAction } from '../functions';
-import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
+/** === IMPORT FUNCTIONS === */
+import { useBrandContext } from 'src/data/contexts/brand/useBrandContext';
+import { goBack, goToProduct, useBrandListAction } from '../functions';
+/** === IMPORT TYPES === */
 import * as models from '@models';
-
+/** === CONSTANTS === */
 const { width } = Dimensions.get('window');
-
 /** === COMPONENT === */
-const BannerView: React.FC = () => {
-  /** === HOOK === */
-  const { stateBrand, dispatchBrand } = React.useContext(contexts.BrandContext);
-  const brandAction = useBrandAction();
-  const brandListState = stateBrand.list;
-  /** => effect */
-  React.useEffect(() => {
-    brandAction.list(dispatchBrand);
-  }, []);
+const BrandView: FC = () => {
+  /** === HOOKS === */
+  const {
+    stateBrand: { list: brandListState },
+    dispatchBrand,
+  } = useBrandContext();
+  const { fetch, loadMore, refresh } = useBrandListAction();
 
-  const onHandleLoadMore = () => {
-    if (stateBrand.list.data) {
-      if (stateBrand.list.data.length < stateBrand.list.total) {
-        brandAction.loadMore(dispatchBrand, stateBrand.list);
-      }
-    }
-  };
+  useEffect(() => {
+    fetch(dispatchBrand);
+  }, []);
   /** === VIEW === */
-  /** => header */
-  const header = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Brand Kami'}
-        backAction={() => goBack()}
-      />
-    );
-  };
-  const renderBrandCard = ({
+  /** => Brand Item */
+  const renderBrandItem = ({
     item,
     index,
   }: {
@@ -52,59 +39,39 @@ const BannerView: React.FC = () => {
         imageUrl={item.image}
         height={0.25 * width}
         width={0.21 * width}
-        onCardPress={() => console.log(`${item.image} pressed`)}
+        onCardPress={() => goToProduct(item)}
       />
     </View>
   );
-  /** => Brand List */
-  const renderBrandList = () => {
-    return (
-      <FlatList
-        contentContainerStyle={{
-          paddingVertical: 20,
-          paddingHorizontal: 0.01 * width,
-        }}
-        showsHorizontalScrollIndicator
-        data={brandListState.data}
-        renderItem={renderBrandCard}
-        keyExtractor={(item) => item.id}
-        numColumns={4}
-        onEndReachedThreshold={0.1}
-        onEndReached={onHandleLoadMore}
-      />
-    );
-  };
-  /** => content */
-  const content = () => {
-    return (
+  /** => Main */
+  return (
+    <SnbContainer color="white">
+      <SnbTopNav.Type3 type="red" title="Brand Kami" backAction={goBack} />
       <View style={{ flex: 1 }}>
         {!brandListState.loading && brandListState.data.length !== 0 ? (
-          <View>{renderBrandList()}</View>
+          <View>
+            <FlatList
+              contentContainerStyle={{
+                paddingVertical: 20,
+                paddingHorizontal: 0.01 * width,
+              }}
+              showsHorizontalScrollIndicator
+              data={brandListState.data}
+              renderItem={renderBrandItem}
+              keyExtractor={(item) => item.id}
+              numColumns={4}
+              onEndReachedThreshold={0.1}
+              onEndReached={() => loadMore(dispatchBrand, brandListState)}
+              refreshing={brandListState.refresh}
+              onRefresh={() => refresh(dispatchBrand)}
+            />
+          </View>
         ) : (
           <LoadingPage />
         )}
       </View>
-    );
-  };
-  /** => main */
-  return (
-    <SnbContainer color="white">
-      {header()}
-      {content()}
     </SnbContainer>
   );
 };
 
-export default BannerView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
- * updatedBy: -
- * updatedDate: -
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default BrandView;

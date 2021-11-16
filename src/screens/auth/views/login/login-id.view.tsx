@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import { useInput } from '@screen/auth/functions';
+import { setErrorMessage, useInput } from '@screen/auth/functions';
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 import { REGISTER_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
@@ -15,8 +15,8 @@ import {
 
 const Content: React.FC = () => {
   const { navigate, reset } = useNavigation();
-  const storeID = useInput('08966666670');
-  const password = useInput('sinbad');
+  const storeID = useInput();
+  const password = useInput();
   const { loginUserName, loginIDState, resetLoginUsername } = useAuthAction();
 
   React.useEffect(() => {
@@ -26,8 +26,12 @@ const Content: React.FC = () => {
       resetLoginUsername();
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
-    if (loginIDState.error) {
-      password.setMessageError(loginIDState.error.message);
+    if (loginIDState.error !== null) {
+      if (loginIDState.error.status === 401) {
+        password.setMessageError('ID Toko/Kata Sandi yang Anda masukkan salah');
+      } else {
+        password.setMessageError(setErrorMessage(loginIDState.error.code));
+      }
     }
   }, [loginIDState]);
 
@@ -52,17 +56,14 @@ const Content: React.FC = () => {
           {...password}
           labelText="Kata Sandi"
           placeholder="Masukkan kata sandi Anda"
-          // secureTextEntry={!loginIDState.visiblePassword}
-          // suffixIconName={
-          //   loginIDState.visiblePassword ? 'visibility' : 'visibility_off'
-          // }
-          // suffixAction={func.toggleVisibilityPassword}
+          type={password.valMsgError ? 'error' : 'default'}
         />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
         <SnbButton.Single
           title="Masuk"
           onPress={() => {
+            password.setMessageError('');
             const data = {
               username: storeID.value,
               password: password.value,

@@ -67,12 +67,29 @@ const useProductListActions = () => {
 
 const useProductDetailAction = () => {
   const dispatch = useDispatch();
+
   return {
-    detail: (contextDispatch: (action: any) => any, id: string) => {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.productDetailRefresh());
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.productDetailReset());
+    },
+  };
+};
+
+const useAddToCart = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.AddToCartPayload,
+    ) => {
+      dispatch(Actions.addToCartProcess(contextDispatch, { data }));
     },
   };
 };
@@ -109,17 +126,6 @@ const useTagListActions = () => {
   };
 };
 
-/** === Add to Cart Modal Related === */
-const useOrderModalVisibility = () => {
-  const [orderModalVisible, setOrderModalVisible] = useState(false);
-
-  const toggleModalVisible = () => {
-    setOrderModalVisible((prevVisible) => !prevVisible);
-  };
-
-  return { orderModalVisible, setOrderModalVisible, toggleModalVisible };
-};
-
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
@@ -142,8 +148,8 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
 
 export {
   useProductListActions,
-  useOrderModalVisibility,
   useOrderQuantity,
   useProductDetailAction,
+  useAddToCart,
   useTagListActions,
 };

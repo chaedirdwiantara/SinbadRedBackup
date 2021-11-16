@@ -10,8 +10,8 @@ const goToBanner = () => {
   NavigationAction.navigate('BannerListView');
 };
 /** => go to banner Detail */
-const goToBannerDetail = () => {
-  NavigationAction.navigate('BannerDetailView');
+const goToBannerDetail = (id: number) => {
+  NavigationAction.navigate('BannerDetailView', { bannerId: id });
 };
 
 export { goBack, goToBanner, goToBannerDetail };

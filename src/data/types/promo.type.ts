@@ -15,3 +15,8 @@ export const PROMO_GENERAL_DETAIL_PROCESS = 'PromoGeneralDetailProcess';
 export const PROMO_GENERAL_DETAIL_SUCCESS = 'PromoGeneralDetailSuccess';
 export const PROMO_GENERAL_DETAIL_FAILED = 'PromoGeneralDetailFailed';
 export const PROMO_GENERAL_DETAIL_RESET = 'PromoGeneralDetailReset';
+// POTENTIAL PROMO PRODUCT
+export const POTENTIAL_PROMO_PRODUCT_PROCESS = 'PotentialPromoListProcess';
+export const POTENTIAL_PROMO_PRODUCT_SUCCESS = 'PotentialPromoListSuccess';
+export const POTENTIAL_PROMO_PRODUCT_FAILED = 'PotentialPromoListFailed';
+export const POTENTIAL_PROMO_PRODUCT_RESET = 'PotentialPromoListReset';

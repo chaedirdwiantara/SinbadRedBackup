@@ -49,5 +49,12 @@ export const verificationOrderDetailReducer = simplifyReducer(
     [types.VERIFICATION_ORDER_DETAIL_RESET]() {
       return verificationOrderDetailInitialState;
     },
+    /** => process */
+    [types.VERIFICATION_ORDER_DETAIL_LOADING]() {
+      return {
+        ...verificationOrderDetailInitialState,
+        loading: true,
+      };
+    },
   },
 );

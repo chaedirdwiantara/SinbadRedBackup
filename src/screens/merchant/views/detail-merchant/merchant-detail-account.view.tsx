@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity } from 'react-native';
+import { ScrollView, View, TouchableOpacity, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
@@ -11,6 +11,18 @@ import { contexts } from '@contexts';
 const MerchantDetailAccountView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      NavigationAction.back();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   /**
    * =======================
    * FUNCTIONAL
@@ -20,10 +32,15 @@ const MerchantDetailAccountView: FC = () => {
     switch (data.type) {
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
-      case 'merchantAccountImage':
         NavigationAction.navigate('MerchantEditView', {
           title: data.title,
           type: data.type,
+        });
+        break;
+      case 'merchantAccountImage':
+        NavigationAction.navigate('MerchantEditPhotoView', {
+          title: data.title,
+          type: 'store',
         });
         break;
       default:
@@ -89,12 +106,9 @@ const MerchantDetailAccountView: FC = () => {
           })}
           {renderContentSection({
             key: 'Nomor Handphone',
-            fontColor: storeData?.storeAccount.phoneNo
-              ? color.black100
-              : color.red50,
             value: storeData?.storeAccount.phoneNo
               ? storeData?.storeAccount.phoneNo
-              : 'Gagal Verifikasi',
+              : '-',
             action: storeData?.storeAccount.phoneNo ? 'ubah' : 'tambah',
             type: 'merchantAccountPhoneNo',
             title: storeData?.storeAccount.phoneNo
@@ -105,11 +119,13 @@ const MerchantDetailAccountView: FC = () => {
             key: 'Foto Toko',
             fontColor: storeData?.storeAccount.imageUrl
               ? color.green50
-              : color.red50,
+              : color.black100,
             value: storeData?.storeAccount.imageUrl
               ? 'Berhasil Di Upload'
-              : 'Gagal Verifikasi',
+              : '-',
             action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
+            type: 'merchantAccountImage',
+            title: 'Foto Toko',
           })}
         </View>
       </ScrollView>

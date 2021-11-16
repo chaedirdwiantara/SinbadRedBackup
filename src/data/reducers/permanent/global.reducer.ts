@@ -4,7 +4,6 @@ import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
 const initialState: models.GlobalProps = {
-  dataCart: null,
   isFCM: false,
 };
 /** === FUNCTION HERE === */

@@ -17,26 +17,26 @@ const goToVoucherCartListMore = ({
   voucherGroupName,
   voucherGroupType,
   selectedSinbadVoucher,
-  selectedSupplierVoucher,
+  selectedSellerVoucher,
 }: {
-  voucherList: models.SinbadVoucherProps[] | models.SupplierVoucherListProps[];
+  voucherList: models.SinbadVoucherProps[] | models.SellerVoucherListProps[];
   voucherGroupName: string;
-  voucherGroupType: 'sinbad_voucher' | 'supplier_voucher';
+  voucherGroupType: 'sinbad_voucher' | 'seller_voucher';
   selectedSinbadVoucher: models.SinbadVoucherProps | null;
-  selectedSupplierVoucher: models.SupplierVoucherListProps[];
+  selectedSellerVoucher: models.SellerVoucherListProps[];
 }) => {
   NavigationAction.navigate('VoucherCartListMoreView', {
     voucherList,
     voucherGroupName,
     voucherGroupType,
     selectedSinbadVoucher,
-    selectedSupplierVoucher,
+    selectedSellerVoucher,
   });
 };
 /** => count potential discount */
 const countPotentialDiscount = (
   sinbadVoucher: models.SinbadVoucherProps | null,
-  supplierVouchers: models.SupplierVoucherListProps[],
+  sellerVouchers: models.SellerVoucherListProps[],
 ) => {
   let totalDiscount = 0;
   let totalSelectedVoucher = 0;
@@ -44,11 +44,35 @@ const countPotentialDiscount = (
     totalDiscount += sinbadVoucher.benefitRebate;
     totalSelectedVoucher += 1;
   }
-  supplierVouchers.map((item) => {
+  sellerVouchers.map((item) => {
     totalDiscount += item.benefitRebate;
     totalSelectedVoucher += 1;
   });
   return { totalDiscount, totalSelectedVoucher };
+};
+/** => get selected vouchers */
+const getSelectedVouchers = (
+  voucherState: models.selectedVoucherDataProps | null,
+) => {
+  if (voucherState === null) {
+    return [];
+  }
+  const voucherArr = [];
+  /** => seller voucher */
+  voucherState.sellerVouchers.map((item) => {
+    voucherArr.push({
+      type: 'seller_voucher',
+      voucherId: item.voucherId,
+    });
+  });
+  /** => sinbad voucher */
+  if (voucherState.sinbadVoucher !== null) {
+    voucherArr.push({
+      type: 'sinbad_voucher',
+      voucherId: voucherState.sinbadVoucher.voucherId,
+    });
+  }
+  return voucherArr;
 };
 
 export {
@@ -56,4 +80,5 @@ export {
   goToVoucherDetail,
   goToVoucherCartListMore,
   countPotentialDiscount,
+  getSelectedVouchers,
 };

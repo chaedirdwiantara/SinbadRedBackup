@@ -25,8 +25,8 @@ const goToProduct = (
   });
 };
 
-const goToCategory = (id?: string) => {
-  NavigationAction.navigate('CategoryView', { id });
+const goToCategory = (categoryId?: string) => {
+  NavigationAction.navigate('CategoryView', { categoryId });
 };
 
 const getCategory1stLevelIndex = (
@@ -38,7 +38,7 @@ const getCategory1stLevelIndex = (
       return data.findIndex((d) => d.id === id);
     } else {
       // Find first category in 1st level list that has descendants
-      return data.findIndex((d) => d.hasChild);
+      return data.findIndex((d) => d.children.length > 0);
     }
   }
 

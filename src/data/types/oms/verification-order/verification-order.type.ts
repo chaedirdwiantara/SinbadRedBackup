@@ -12,6 +12,8 @@ export const VERIFICATION_ORDER_DETAIL_SUCCESS =
   'VerificationOrderDetailSuccess';
 export const VERIFICATION_ORDER_DETAIL_FAILED = 'VerificationOrderDetailFailed';
 export const VERIFICATION_ORDER_DETAIL_RESET = 'VerificationOrderDetailReset';
+export const VERIFICATION_ORDER_DETAIL_LOADING =
+  'VerificationOrderDetailLoading';
 /**
  * ================================================================
  * NOTES

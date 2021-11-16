@@ -95,3 +95,35 @@ export const promoGeneralDetailFailed = (
 export const promoGeneralDetailReset = () => {
   return { type: types.PROMO_GENERAL_DETAIL_RESET };
 };
+/** === POTENTIAL PROMO PRODUCT === */
+/** => potential promo product process */
+export const potentialPromoProductProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({
+    type: types.POTENTIAL_PROMO_PRODUCT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.POTENTIAL_PROMO_PRODUCT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => potential promo product success */
+export const potentialPromoProductSuccess = (
+  data: models.ListSuccessProps<models.PotentialPromoProductProps[]>,
+): models.ListSuccessAction<models.PotentialPromoProductProps[]> => {
+  return { type: types.POTENTIAL_PROMO_PRODUCT_SUCCESS, payload: data };
+};
+/** => potential promo product failed */
+export const potentialPromoProductFailed = (
+  data: models.ErrorProps,
+): models.ListFailedAction => {
+  return { type: types.POTENTIAL_PROMO_PRODUCT_FAILED, payload: data };
+};
+/** => potential promo product reset */
+export const potentialPromoProductReset = () => {
+  return { type: types.POTENTIAL_PROMO_PRODUCT_RESET };
+};

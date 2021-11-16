@@ -9,15 +9,33 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './ListLayout';
 import BottomAction from './BottomAction';
-import RegisterSupplierModal from './RegisterSupplierModal';
+import AddToCartModal from './AddToCartModal';
+import {
+  RegisterSupplierModal,
+  RejectApprovalModal,
+  WaitingApprovalModal,
+} from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
   priceSortOptions,
-  useRegisterSupplierModal,
+  useOrderModalVisibility,
 } from '@core/functions/product';
-import { useTagListActions } from '@screen/product/functions';
+import {
+  useTagListActions,
+  useProductDetailAction,
+  useAddToCart,
+} from '@screen/product/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import {
+  useSupplierSegmentationAction,
+  useSendDataToSupplierActions,
+} from '@core/functions/supplier/supplier-hook.function';
+import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth } from '@core/redux/Data';
+import { useCheckDataSupplier } from '@core/functions/supplier';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -38,6 +56,7 @@ interface ProductListProps {
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
   activeCategory?: CategoryType;
+  activeBrandId?: string;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -52,6 +71,7 @@ const ProductList: FC<ProductListProps> = ({
   onLoadMore,
   activeKeyword = '',
   activeCategory,
+  activeBrandId,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -59,6 +79,10 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [productSelected, setProductSelected] =
+    useState<models.ProductList | null>(null);
+
   const {
     sortModalVisible,
     sortActive,
@@ -72,21 +96,45 @@ const ProductList: FC<ProductListProps> = ({
   } = useBottomAction(onFetch, {
     keyword: searchKeyword,
     categoryId: selectedCategory?.id,
+    tags: selectedTags,
   });
-  const registerSupplierModal = useRegisterSupplierModal();
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const tagActions = useTagListActions();
+  const productDetailActions = useProductDetailAction();
+  const addToCartActions = useAddToCart();
+  const supplierSegmentationAction = useSupplierSegmentationAction();
+  const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
       list: { loading: productLoading },
+      detail: { data: productDetailState },
     },
+    dispatchProduct,
   } = useProductContext();
+  const { dispatchShopingCart } = useShopingCartContext();
   const {
     stateTag: {
       list: { data: tagList },
     },
     dispatchTag,
   } = useTagContext();
+  const { me } = useDataAuth();
+  const {
+    stateSupplier: {
+      segmentation: { data: dataSegmentation },
+    },
+    dispatchSupplier,
+  } = useSupplierContext();
   const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
+  /** => check data supplier and sinbad status */
+  const {
+    checkUser,
+    modalRejectApproval,
+    modalWaitingApproval,
+    modalRegisterSupplier,
+    onFunctionActions,
+  } = useCheckDataSupplier(setOrderModalVisible);
 
   useEffect(() => {
     if (!productLoading) {
@@ -95,8 +143,81 @@ const ProductList: FC<ProductListProps> = ({
   }, [productLoading]);
 
   useEffect(() => {
-    tagActions.fetch(dispatchTag, { categoryId: selectedCategory?.id });
+    tagActions.fetch(dispatchTag, {
+      categoryId: selectedCategory?.id,
+      keyword: searchKeyword,
+      brandId: activeBrandId,
+    });
   }, [selectedCategory, keywordSearched]);
+
+  useEffect(() => {
+    if (me.data !== null && dataSegmentation !== null) {
+      if (dataSegmentation.dataSuppliers !== null) {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+        });
+      } else {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: null,
+        });
+      }
+    }
+  }, [me.data, dataSegmentation]);
+
+  /** => action send data to supplier */
+  const onSendDataSupplier = () => {
+    if (productSelected !== null) {
+      sendDataToSupplierActions.fetch(dispatchSupplier, {
+        supplierId: productSelected?.sellerId,
+      });
+    }
+    onFunctionActions({ type: 'close' });
+  };
+
+  /** => action from buttom confirmation checkout */
+  const handleOrderPress = (product: models.ProductList) => {
+    setProductSelected(product);
+    authCoreAction.me();
+    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+    productDetailActions.fetch(dispatchProduct, product.id);
+  };
+
+  /** => action submit add to cart  */
+  const onSubmitAddToCart = () => {
+    if (
+      productDetailState === null ||
+      dataSegmentation === null ||
+      dataSegmentation.dataSuppliers === null
+    ) {
+      /** => DO SOMETHING */
+      /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
+      return;
+    }
+    const params: models.AddToCartPayload = {
+      cartId: productDetailState?.id,
+      isActiveStore: dataSegmentation.isActiveStore,
+      selected: true,
+      stock: 100,
+      productId: productDetailState.id,
+      qty: 90,
+      displayPrice: productDetailState.originalPrice,
+      priceBeforeTax:
+        productDetailState.currentPrice ?? productDetailState.originalPrice,
+      priceAfterTax:
+        productDetailState.currentPriceAfterTax ??
+        productDetailState.originalPrice,
+      uom: productDetailState.unit,
+      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      supplierId: dataSegmentation.dataSuppliers.sellerId,
+      channelId: dataSegmentation.dataSuppliers.channelId,
+      groupId: dataSegmentation.dataSuppliers.groupId,
+      typeId: dataSegmentation.dataSuppliers.typeId,
+      clusterId: dataSegmentation.dataSuppliers.clusterId,
+    };
+    addToCartActions.fetch(dispatchShopingCart, params);
+  };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -105,14 +226,12 @@ const ProductList: FC<ProductListProps> = ({
     sortBy: sortQuery?.sortBy,
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
+    tags: selectedTags,
   };
 
   const handleTagPress = (tags: Array<string>) => {
-    const queryOptions = {
-      ...derivedQueryOptions,
-      tags,
-    };
-    onFetch(queryOptions);
+    setSelectedTags(tags);
+    onFetch({ ...derivedQueryOptions, tags });
   };
   /** === VIEW === */
   return (
@@ -121,13 +240,15 @@ const ProductList: FC<ProductListProps> = ({
         title={selectedCategory ? selectedCategory.name : headerTitle}
         type={headerType}
         setSearchKeyword={setSearchKeyword}
+        keyword={searchKeyword}
         onSearch={() => {
-          const queryOptions = {
-            ...derivedQueryOptions,
-            keyword: searchKeyword,
-          };
           setKeywordSearched(true);
-          onFetch(queryOptions);
+          onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
+        }}
+        onSearchClear={() => {
+          setSearchKeyword('');
+          setKeywordSearched(true);
+          onFetch({ ...derivedQueryOptions, keyword: '' });
         }}
       />
       {categoryTabs && (
@@ -137,12 +258,8 @@ const ProductList: FC<ProductListProps> = ({
           selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
           selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
           onTabChange={(category) => {
-            const queryOptions = {
-              ...derivedQueryOptions,
-              categoryId: category.id,
-            };
             setSelectedCategory(category);
-            onFetch(queryOptions);
+            onFetch({ ...derivedQueryOptions, categoryId: category.id });
           }}
         />
       )}
@@ -153,7 +270,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -164,7 +281,7 @@ const ProductList: FC<ProductListProps> = ({
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
-            onOrderPress={() => registerSupplierModal.setVisible(true)}
+            onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -185,7 +302,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={sortModalVisible}
         title="Urutkan"
-        action={true}
         actionIcon="close"
         content={
           <Action.Sort
@@ -200,17 +316,47 @@ const ProductList: FC<ProductListProps> = ({
       <SnbBottomSheet
         open={filterModalVisible}
         title="Filter"
-        action={true}
         actionIcon="close"
-        content={<Action.Filter onButtonPress={handleActionClick} />}
+        content={
+          <Action.Filter
+            appliedFilterQuery={filterQuery}
+            onButtonPress={handleActionClick}
+          />
+        }
         closeAction={() => handleActionClick({ type: 'filter' })}
       />
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
-        visible={registerSupplierModal.visible}
-        onSubmit={registerSupplierModal.sendSupplierData}
-        onClose={() => registerSupplierModal.setVisible(false)}
+        visible={modalRegisterSupplier}
+        onSubmit={() =>
+          onFunctionActions({
+            type: 'sendDataToSupplier',
+            onSendDataSupplier: onSendDataSupplier,
+          })
+        }
+        onClose={() => onFunctionActions({ type: 'close' })}
       />
+      {/* Waiting Approval Modal */}
+      <WaitingApprovalModal
+        visible={modalWaitingApproval}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
+      />
+      {/* Reject Approval Modal */}
+      <RejectApprovalModal
+        visible={modalRejectApproval}
+        onSubmit={() => onFunctionActions({ type: 'close' })}
+        onClose={() => onFunctionActions({ type: 'close' })}
+        isCallCS={true}
+      />
+      {/* Add to Cart Modal */}
+      {orderModalVisible && (
+        <AddToCartModal
+          open={orderModalVisible}
+          closeAction={() => setOrderModalVisible(false)}
+          onAddToCartPress={onSubmitAddToCart}
+        />
+      )}
     </SnbContainer>
   );
 };

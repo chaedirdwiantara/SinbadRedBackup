@@ -16,7 +16,7 @@ function* verficationOrderCreate(action: models.CreateProcessAction) {
       ActionCreators.verificationOrderCreateSuccess(response),
     );
     yield put(ActionCreators.verificationOrderCreateSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(
       ActionCreators.verificationOrderCreateFailed(error),
     );
@@ -35,7 +35,7 @@ function* verficationOrderDetail(action: models.DetailProcessAction) {
     );
 
     yield put(ActionCreators.verificationOrderDetailSuccess(response));
-  } catch (error) {
+  } catch (error: any) {
     yield action.contextDispatch(
       ActionCreators.verificationOrderDetailFailed(error),
     );

@@ -3,7 +3,7 @@ import * as models from '@models';
 export interface ProductList {
   id: string;
   name: string;
-  supplierId: string;
+  sellerId: string;
   originalPrice: number;
   currentPrice: number | null;
   isBundle: boolean;
@@ -33,10 +33,6 @@ export interface ProductListItemProps
   canLoadMore: boolean;
 }
 
-export interface ProductListProps {
-  list: ProductListItemProps;
-}
-
 interface ProductListPagination {
   limit: number;
   skip: number;
@@ -58,7 +54,7 @@ export interface ProductImage {
   url: string;
 }
 
-export interface ProductDetailSuccessProps {
+export interface ProductDetail {
   id: string;
   supplierCode: string;
   supplierId: string;
@@ -76,8 +72,17 @@ export interface ProductDetailSuccessProps {
   multipleQtyType: string;
   brand: string;
   subBrand: string;
-  category?: string[] | string | null;
+  category?: Array<string> | null;
   unit: string;
-  tags: string[];
-  images: ProductImage[];
+  tags: Array<string>;
+  images: Array<ProductImage>;
+  originalPrice: number;
+  currentPrice: number | null;
+  currentPriceAfterTax: number | null;
+  isBonus: boolean;
+  isExclusive: boolean;
+  isPromo: boolean;
+  isAvailable?: boolean;
+  isBundle?: boolean;
+  promoList: Array<models.PotentialPromoProductProps>;
 }

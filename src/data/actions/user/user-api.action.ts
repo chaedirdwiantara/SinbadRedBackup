@@ -6,7 +6,7 @@ export const storeDetailProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.STORE_DETAIL_PROCESS, payload: data });
   return { type: types.STORE_DETAIL_PROCESS, payload: data, contextDispatch };
 };
 /** => store detail success */
@@ -48,4 +48,8 @@ export const changePasswordFailed = (
   data: models.ErrorProps,
 ): models.UpdateFailedAction => {
   return { type: types.CHANGE_PASSWORD_FAILED, payload: data };
+};
+/** => reset */
+export const changePasswordReset = () => {
+  return { type: types.CHANGE_PASSWORD_RESET };
 };

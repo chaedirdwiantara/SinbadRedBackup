@@ -1,6 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
-import { TouchableOpacity, View, Image, FlatList } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  FlatList,
+  Dimensions,
+} from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -9,47 +15,43 @@ import {
   SnbIcon,
   SnbTextField,
 } from 'react-native-sinbad-ui';
-import { goBack, goToBannerDetail } from '../functions';
+import moment from 'moment';
+import RenderHtml from 'react-native-render-html';
+import { goBack, goToBannerDetail, useBannerAction } from '../functions';
+import { contexts } from '@contexts';
+import * as models from '@models';
+import LoadingPage from '@core/components/LoadingPage';
 import { BannerStyles } from '../styles';
 
-/** === MOCK === */
-const bannerList = [
-  {
-    id: 1,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-  {
-    id: 2,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-  {
-    id: 3,
-    imageUrl:
-      'https://images.tokopedia.net/img/cache/1200/NXCtjv/2021/9/22/9f12eb8f-41d9-4618-83eb-f47cd636617f.png.webp',
-    title: 'Khusus untuk kamu, iya kamu ! Dapatkan Promo Voucher SGM',
-    description:
-      'SINBAD mengadakan diskon hingga 5% untuk pembelian SGM. Jangan sampai ketinggalan promo dari SINBAD !',
-    expiredAt: '31 Jan 2020',
-  },
-];
+const { width } = Dimensions.get('window');
 
 /** === COMPONENT === */
 const BannerListView: React.FC = () => {
+  /** === STATE === */
+  const [searchText, setSearchText] = useState('');
+  const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const bannerAction = useBannerAction();
+  const bannerlistState = stateBanner.bannerGeneral.list;
   /** === HOOK === */
+  /** => effect */
+  useEffect(() => {
+    bannerAction.list(dispatchBanner, searchText);
+  }, []);
   /** === FUNCTION === */
-  /** => handle fatch more */
-  const handleFatchMore = () => {
-    //function to handle lazy load
+  /** => handle load more */
+  const onHandleLoadMore = () => {
+    if (stateBanner.bannerGeneral.list.data) {
+      if (
+        stateBanner.bannerGeneral.list.data.length <
+        stateBanner.bannerGeneral.list.total
+      ) {
+        bannerAction.loadMore(dispatchBanner, stateBanner.bannerGeneral.list);
+      }
+    }
+  };
+  /** => handle search */
+  const onHandleSearch = () => {
+    bannerAction.list(dispatchBanner, searchText);
   };
   /** === VIEW === */
   /** => header */
@@ -69,28 +71,39 @@ const BannerListView: React.FC = () => {
       <View style={BannerStyles.search}>
         <SnbTextField.Text
           noBorder
-          value={''}
+          value={searchText}
           type={'default'}
           placeholder="Cari di Sinbad"
-          onChangeText={() => {}}
-          clearText={() => {}}
+          onChangeText={(text) => setSearchText(text)}
+          clearText={() => setSearchText('')}
           autoCapitalize="none"
           keyboardType="default"
           returnKeyType="search"
-          enter={() => {}}
+          enter={() => onHandleSearch()}
           prefixIconName="search"
+          suffixIconName={searchText !== '' ? 'cancel' : undefined}
+          // suffixIconName="cancel"
         />
       </View>
     );
   };
 
-  /** => list banner */
-  const renderListBanner = ({ item }: { item: any; index: number }) => {
+  /** => banner card */
+  const renderBannerCard = ({
+    item,
+  }: {
+    item: models.BannerListSuccessProps;
+    index: number;
+  }) => {
+    const sourceHtml = {
+      html: item.description,
+    };
     return (
       <View style={BannerStyles.bannerCardContainer}>
         {/* Image */}
         <View>
           <Image
+            defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
             style={BannerStyles.imageCard}
             source={{
               uri: item.imageUrl,
@@ -99,9 +112,9 @@ const BannerListView: React.FC = () => {
         </View>
         {/* Info */}
         <View style={{ padding: 16, backgroundColor: 'white' }}>
-          <SnbText.B2>{item.title}</SnbText.B2>
+          <SnbText.B2>{item.header}</SnbText.B2>
           <View style={{ marginTop: 8 }}>
-            <SnbText.B3 color={color.black80}>{item.description}</SnbText.B3>
+            <RenderHtml contentWidth={width} source={sourceHtml} />
           </View>
         </View>
         {/* Foter */}
@@ -110,42 +123,60 @@ const BannerListView: React.FC = () => {
             <SnbIcon name={'calender'} color={color.black60} size={16} />
             <View style={{ marginLeft: 7 }}>
               <SnbText.C1 color={color.black60}>
-                Berlaku sampai {item.expiredAt}
+                Berlaku sampai {moment(item.activeTo).format('DD MMM YYYY')}
               </SnbText.C1>
             </View>
           </View>
-          <TouchableOpacity
-            style={BannerStyles.buttonDetail}
-            onPress={() => goToBannerDetail()}>
-            <SnbText.B2 color={'white'}>Detail</SnbText.B2>
-          </TouchableOpacity>
+          {item.bannerType === 'general' ? (
+            <TouchableOpacity
+              style={BannerStyles.buttonDetail}
+              onPress={() => goToBannerDetail(item.id)}>
+              <SnbText.B2 color={'white'}>Detail</SnbText.B2>
+            </TouchableOpacity>
+          ) : (
+            <View />
+          )}
         </View>
       </View>
+    );
+  };
+
+  /** => Banner List */
+  const renderBannerList = () => {
+    return (
+      <FlatList
+        data={bannerlistState.data}
+        renderItem={renderBannerCard}
+        keyExtractor={(item) => item.id.toString()}
+        onEndReachedThreshold={0.1}
+        onEndReached={onHandleLoadMore}
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{
+          paddingVertical: 20,
+          paddingHorizontal: 0.04 * width,
+        }}
+      />
     );
   };
 
   /** => content */
   const content = () => {
     return (
-      <View style={{ margin: 16, paddingBottom: 150 }}>
-        <FlatList
-          data={bannerList}
-          renderItem={renderListBanner}
-          keyExtractor={(item) => item.id.toString()}
-          onEndReachedThreshold={0.1}
-          onEndReached={handleFatchMore}
-          showsVerticalScrollIndicator={true}
-        />
+      <View style={{ flex: 1 }}>
+        {!bannerlistState.loading && bannerlistState.data.length > 0 ? (
+          <View>{renderBannerList()}</View>
+        ) : (
+          <View />
+        )}
       </View>
     );
   };
-
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {search()}
-      {content()}
+      {bannerlistState.loading ? <LoadingPage /> : content()}
     </SnbContainer>
   );
 };

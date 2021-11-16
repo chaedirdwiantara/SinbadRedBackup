@@ -1,8 +1,11 @@
-import { BrandView } from '@screen/brand/views';
+import { BrandView, BrandProductView } from '@screen/brand/views';
 
 const BrandNav = {
   BrandView: {
     component: BrandView,
+  },
+  BrandProductView: {
+    component: BrandProductView,
   },
 };
 

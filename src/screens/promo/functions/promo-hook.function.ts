@@ -41,8 +41,24 @@ const usePromoGeneralAction = () => {
     },
   };
 };
+/** => potential promo product action */
+const usePotentialPromoProductAction = () => {
+  const dispatch = useDispatch();
+  return {
+    list: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.potentialPromoProductProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.potentialPromoProductReset());
+    },
+  };
+};
 /** === EXPORT === */
-export { usePromoPaymentAction, usePromoGeneralAction };
+export {
+  usePromoPaymentAction,
+  usePromoGeneralAction,
+  usePotentialPromoProductAction,
+};
 /**
  * ================================================================
  * NOTES
