@@ -106,7 +106,10 @@ const ListAndSearchView = () => {
           keyExtractor={(el, index) => index.toString()}
           contentContainerStyle={{
             flexGrow: 1,
-            justifyContent: 'center',
+            justifyContent:
+              listSelection.data?.length === 0 || listSelection.error
+                ? 'center'
+                : 'flex-start',
           }}
           ListEmptyComponent={() => {
             const { data, error } = listSelection;
