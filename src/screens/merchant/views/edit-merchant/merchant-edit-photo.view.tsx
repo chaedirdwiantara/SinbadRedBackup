@@ -241,8 +241,6 @@ const MerchantEditPhotoView = () => {
       upload(dispatchGlobal, capturedImage.data.url);
     };
 
-    console.log('capt:', capturedImage?.data?.url);
-
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
