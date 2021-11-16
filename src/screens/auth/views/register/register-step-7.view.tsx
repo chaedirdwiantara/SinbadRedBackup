@@ -96,13 +96,6 @@ const Content: React.FC = () => {
     }
   }, [registerState]);
 
-  const setTitle = () => {
-    if (showModalPrivacyPolicy) {
-      return 'Kebijakan Privasi';
-    }
-    return '';
-  };
-
   const renderUploadPhotoRules = () => {
     return (
       <View style={{ flex: 1 }}>
@@ -199,46 +192,6 @@ const Content: React.FC = () => {
   };
 
   const renderSheetContent = () => {
-    if (showModalSuccess) {
-      return (
-        <View>
-          <Image
-            source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
-            style={{
-              height: 160,
-              width: 160,
-              alignSelf: 'center',
-              marginVertical: 16,
-            }}
-          />
-          <View style={{ margin: 16 }}>
-            <SnbText.B2 align="center">
-              Selamat, Akun Anda sudah Terdaftar
-            </SnbText.B2>
-            <View style={{ marginVertical: 8 }} />
-            <SnbText.B3 align="center">
-              Akun Anda berhasil terdaftar. Nikmati kemudahan berbelanja dengan
-              menggunakan aplikasi Sinbad.
-            </SnbText.B3>
-          </View>
-          <View style={{ height: 75 }}>
-            <SnbButton.Single
-              title="Selesai"
-              type="primary"
-              disabled={false}
-              onPress={() => {
-                setShowModalSuccess(false);
-                reset({
-                  index: 0,
-                  routes: [{ name: 'LoginPhoneView' }],
-                });
-              }}
-            />
-          </View>
-        </View>
-      );
-    }
-
     if (showModalFailed) {
       return (
         <View>
@@ -361,19 +314,54 @@ const Content: React.FC = () => {
         open={showModalFailed || showModalPrivacyPolicy || showModalSuccess}
         actionIcon="close"
         closeAction={() => {
-          if (showModalSuccess) {
-            reset({
-              index: 0,
-              routes: [{ name: 'LoginPhoneView' }],
-            });
-          }
           setShowModalFailed(false);
           setShowModalPrivacyPolicy(false);
-          setShowModalSuccess(false);
         }}
-        title={setTitle()}
+        title={showModalPrivacyPolicy ? 'Kebijakan Privasi' : ''}
         content={renderSheetContent()}
         size={showModalPrivacyPolicy ? 'halfscreen' : 'normal'}
+      />
+      <SnbBottomSheet
+        open={showModalSuccess}
+        title=""
+        content={
+          <View>
+            <Image
+              source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
+              style={{
+                height: 160,
+                width: 160,
+                alignSelf: 'center',
+                marginVertical: 16,
+              }}
+            />
+            <View style={{ margin: 16 }}>
+              <SnbText.B2 align="center">
+                Selamat, Akun Anda sudah Terdaftar
+              </SnbText.B2>
+              <View style={{ marginVertical: 8 }} />
+              <SnbText.B3 align="center">
+                Akun Anda berhasil terdaftar. Nikmati kemudahan berbelanja
+                dengan menggunakan aplikasi Sinbad.
+              </SnbText.B3>
+            </View>
+            <View style={{ height: 75 }}>
+              <SnbButton.Single
+                title="Selesai"
+                type="primary"
+                disabled={false}
+                onPress={() => {
+                  setShowModalSuccess(false);
+                  reset({
+                    index: 0,
+                    routes: [{ name: 'LoginPhoneView' }],
+                  });
+                }}
+              />
+            </View>
+          </View>
+        }
+        size="normal"
       />
     </View>
   );
