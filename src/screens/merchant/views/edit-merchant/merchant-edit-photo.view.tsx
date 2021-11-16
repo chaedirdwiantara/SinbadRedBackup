@@ -86,6 +86,8 @@ const MerchantEditPhotoView = () => {
   const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
 
   React.useEffect(() => {
+    editProfileAction.reset(dispatchSupplier);
+    editMerchantAction.reset(dispatchSupplier);
     switch (params.type) {
       case 'npwp': {
         setImageUrl(
@@ -123,7 +125,7 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data !== null) {
       setImageUrl(stateGlobal.uploadImage.data.url);
-      handleUpdatePhoto();
+      handleUpdatePhoto(stateGlobal.uploadImage.data.url);
       resetCamera();
     }
 
@@ -188,27 +190,28 @@ const MerchantEditPhotoView = () => {
     }
   }, [stateMerchant.merchantEdit]);
 
-  const handleUpdatePhoto = () => {
+  const handleUpdatePhoto = (image: string) => {
     save(dispatchGlobal, '');
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: imageUrl });
+        Object.assign(data, { taxImageUrl: image });
         editProfile(dispatchSupplier, { data });
+
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: imageUrl });
+        Object.assign(data, { idImageUrl: image });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: imageUrl });
+        Object.assign(data, { selfieImageUrl: image });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: imageUrl });
+        Object.assign(data, { image: image });
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
         });
@@ -234,14 +237,15 @@ const MerchantEditPhotoView = () => {
 
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage.data !== null;
-    let action = handleUpdatePhoto;
+    let action = () => {
+      upload(dispatchGlobal, capturedImage.data.url);
+    };
+
+    console.log('capt:', capturedImage?.data?.url);
 
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
-      action = () => {
-        upload(dispatchGlobal, capturedImage.data.url);
-      };
     } else {
       uri = imageUrl;
     }
