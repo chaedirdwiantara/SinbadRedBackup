@@ -138,13 +138,13 @@ const Content: React.FC = () => {
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextFieldSelect
-              labelText="Aksesibilitas Kendaraan"
+              labelText="Akses Jalan"
               mandatory
               value={
                 vehicleAccessibility?.name ||
                 merchantData.vehicleAccessibilityId
               }
-              placeholder="Pilih aksesibitas kendaraan"
+              placeholder="Pilih akses jalan"
               type="default"
               onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
               rightType="icon"

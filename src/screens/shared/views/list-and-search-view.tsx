@@ -19,9 +19,8 @@ const ListAndSearchView = () => {
 
   React.useEffect(() => {
     const data = {
-      type: params.type,
-      params: params.params,
-      meta: { keyword: search },
+      ...params,
+      meta: { ...params.meta, keyword: search },
     };
     getSelection(data);
   }, []);

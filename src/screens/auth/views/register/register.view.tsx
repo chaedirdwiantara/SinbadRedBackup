@@ -97,7 +97,7 @@ const RegisterView: React.FC = () => {
           goBack();
         }}
         ok={() => setShowModalKTPPreparation(false)}
-        content="Mohon siapkan KTP probadi Anda"
+        content="Mohon siapkan KTP pribadi Anda"
       />
     </SnbContainer>
   );
