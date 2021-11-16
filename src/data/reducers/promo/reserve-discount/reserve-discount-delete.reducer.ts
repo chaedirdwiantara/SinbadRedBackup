@@ -45,9 +45,5 @@ export const reserveDiscountDeleteReducer = simplifyReducer(
         error: action.payload,
       };
     },
-    /** => detail reset */
-    [types.DELETE_RESERVE_DISCOUNT_RESET]() {
-      return reserveDiscountDeleteInitialState;
-    },
   },
 );
