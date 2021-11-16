@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import Html from '@core/components/Html';
 import {
@@ -28,6 +28,7 @@ import {
   useParcelDetailModal,
   useTermsAndConditionsModal,
 } from '../../functions/checkout';
+import LoadingPage from '@core/components/LoadingPage';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -278,6 +279,13 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelsModal = usePaymentChannelModal();
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
+  const [loadingPage, setLoadingPage] = useState(true);
+
+  /** Set Loading Page */
+  useEffect(() => {
+    setTimeout(() => setLoadingPage(false), 1000);
+  }, []);
+
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -787,6 +795,22 @@ const OmsCheckoutView: FC = () => {
       />
     );
   };
+
+  /**
+   * Render Body
+   * @returns { Component } - Return Body
+   */
+  const renderBody = () => {
+    return loadingPage ? (
+      <LoadingPage />
+    ) : (
+      <>
+        {renderContent()}
+        {renderModals()}
+      </>
+    );
+  };
+
   /** => modals */
   const renderModals = () => {
     return (
@@ -802,8 +826,7 @@ const OmsCheckoutView: FC = () => {
   return (
     <SnbContainer color="grey">
       {renderHeader()}
-      {renderContent()}
-      {renderModals()}
+      {renderBody()}
     </SnbContainer>
   );
 };
