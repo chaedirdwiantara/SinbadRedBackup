@@ -53,7 +53,7 @@ const MerchantDetailAccountView: FC = () => {
     return (
       <SnbTopNav.Type3
         type="red"
-        title="Informasi Toko"
+        title="Akun Toko"
         backAction={() => NavigationAction.back()}
       />
     );
