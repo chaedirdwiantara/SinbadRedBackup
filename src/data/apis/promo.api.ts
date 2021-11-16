@@ -61,6 +61,19 @@ const deleteReserveDiscount = (data: models.DeleteProcessProps) => {
     'DELETE',
   );
 };
+/** => create reserve discount */
+const createReserveDiscount = (data: models.CreateProcessProps<{}>) => {
+  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
+  const path = 'reserve-discount';
+  return apiMappingMock<models.CreateSuccessProps>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PromoApi = {
@@ -69,4 +82,5 @@ export const PromoApi = {
   promoGeneralDetail,
   potentialPromoProduct,
   deleteReserveDiscount,
+  createReserveDiscount,
 };

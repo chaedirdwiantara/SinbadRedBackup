@@ -24,4 +24,12 @@ export const POTENTIAL_PROMO_PRODUCT_RESET = 'PotentialPromoListReset';
 export const DELETE_RESERVE_DISCOUNT_PROCESS = 'DeleteReserveDiscountProcess';
 export const DELETE_RESERVE_DISCOUNT_SUCCESS = 'DeleteReserveDiscountSuccess';
 export const DELETE_RESERVE_DISCOUNT_FAILED = 'DeleteReserveDiscountFailed';
-export const DELETE_RESERVE_DISCOUNT_RESET = 'DeleteReserveDiscountReset';
+// CREATE RESERVE DISCOUNT
+export const CREATE_RESERVE_DISCOUNT_PROCESS = 'CreateReserveDiscountProcess';
+export const CREATE_RESERVE_DISCOUNT_FAILED = 'CreateReserveDiscountFailed';
+export const CREATE_RESERVE_DISCOUNT_SUCCESS = 'CreateReserveDiscountSuccess';
+// DETAIL RESERVE DISCOUNT
+export const DETAIL_RESERVE_DISCOUNT_PROCESS = 'DetailReserveDiscountProcess';
+export const DETAIL_RESERVE_DISCOUNT_FAILED = 'DetailReserveDiscountFailed';
+export const DETAIL_RESERVE_DISCOUNT_RESET = 'DetailReserveDiscountReset';
+export const DETAIL_RESERVE_DISCOUNT_SUCCESS = 'DetailReserveDiscountSuccess';
