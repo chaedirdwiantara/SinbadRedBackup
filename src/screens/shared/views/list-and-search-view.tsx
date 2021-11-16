@@ -1,7 +1,13 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
-import React, { useState } from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Image,
+} from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -16,6 +22,7 @@ const ListAndSearchView = () => {
   const { getSelection, listSelection, selectedItem, onSelectedItem } =
     useTextFieldSelect();
   const [search, setSearch] = useState('');
+  const [clearSearch, setClearSearch] = useState(false);
 
   React.useEffect(() => {
     const data = {
@@ -40,6 +47,36 @@ const ListAndSearchView = () => {
     getSelection(data);
   };
 
+  useEffect(() => {
+    if (search === '' && clearSearch) {
+      searchData();
+      setClearSearch(false);
+    }
+  }, [clearSearch]);
+
+  const renderEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Image
+          style={{ height: 180, width: undefined, aspectRatio: 1 / 1 }}
+          source={require('../../../assets/images/sinbad_image/cry_sinbad.png')}
+        />
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 16,
+          }}>
+          <SnbText.B2>Data tidak ditemukan</SnbText.B2>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SnbContainer color="white">
       <SafeAreaView style={{ flex: 1 }}>
@@ -55,7 +92,10 @@ const ListAndSearchView = () => {
             placeholder="Pilih jumlah karyawan"
             enter={() => searchData()}
             backAction={goBack}
-            clearText={() => setSearch('')}
+            clearText={() => {
+              setSearch('');
+              setClearSearch(true);
+            }}
             onChangeText={(text) => setSearch(text)}
             value={search}
           />
@@ -64,20 +104,22 @@ const ListAndSearchView = () => {
         <FlatList
           data={listSelection.data}
           keyExtractor={(el, index) => index.toString()}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent: 'center',
+          }}
           ListEmptyComponent={() => {
             const { data, error } = listSelection;
             if (data?.length === 0 || error) {
+              return renderEmpty();
+            } else {
               return (
-                <SnbText.B3 color={color.red70}>Tidak Ada Data</SnbText.B3>
+                <View style={{ marginVertical: 48 }}>
+                  <SnbProgress size={40} />
+                  <View style={{ marginVertical: 8 }} />
+                </View>
               );
             }
-            return (
-              <View style={{ marginVertical: 48 }}>
-                <SnbProgress />
-                <View style={{ marginVertical: 8 }} />
-                <SnbText.B3 align="center">Memuat Data...</SnbText.B3>
-              </View>
-            );
           }}
           renderItem={({ item, index }) => {
             const backgroundColor =
