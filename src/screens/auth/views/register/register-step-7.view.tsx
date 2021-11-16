@@ -38,6 +38,7 @@ const Content: React.FC = () => {
   const { register, registerState, resetRegister } = useRegister();
   const { reset } = useNavigation();
   const [showModalFailed, setShowModalFailed] = React.useState(false);
+  const [showModalSuccess, setShowModalSuccess] = React.useState(false);
   const [showModalPrivacyPolicy, setShowModalPrivacyPolicy] =
     React.useState(false);
   const [checked, setChecked] = React.useState<'unselect' | 'selected'>(
@@ -83,10 +84,7 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (registerState.data?.data?.isCreated === true) {
-      reset({
-        index: 0,
-        routes: [{ name: 'Home' }],
-      });
+      setShowModalSuccess(true);
     }
     if (registerState.data?.data?.isCreated === false) {
       setShowModalFailed(true);
@@ -97,6 +95,13 @@ const Content: React.FC = () => {
       setMessageError('Toko gagal dibuat karena ada kesalahan pada server');
     }
   }, [registerState]);
+
+  const setTitle = () => {
+    if (showModalPrivacyPolicy) {
+      return 'Kebijakan Privasi';
+    }
+    return '';
+  };
 
   const renderUploadPhotoRules = () => {
     return (
@@ -194,6 +199,46 @@ const Content: React.FC = () => {
   };
 
   const renderSheetContent = () => {
+    if (showModalSuccess) {
+      return (
+        <View>
+          <Image
+            source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
+            style={{
+              height: 160,
+              width: 160,
+              alignSelf: 'center',
+              marginVertical: 16,
+            }}
+          />
+          <View style={{ margin: 16 }}>
+            <SnbText.B2 align="center">
+              Selamat, Akun Anda sudah Terdaftar
+            </SnbText.B2>
+            <View style={{ marginVertical: 8 }} />
+            <SnbText.B3 align="center">
+              Akun Anda berhasil terdaftar. Nikmati kemudahan berbelanja dengan
+              menggunakan aplikasi Sinbad.
+            </SnbText.B3>
+          </View>
+          <View style={{ height: 75 }}>
+            <SnbButton.Single
+              title="Selesai"
+              type="primary"
+              disabled={false}
+              onPress={() => {
+                setShowModalSuccess(false);
+                reset({
+                  index: 0,
+                  routes: [{ name: 'LoginPhoneView' }],
+                });
+              }}
+            />
+          </View>
+        </View>
+      );
+    }
+
     if (showModalFailed) {
       return (
         <View>
@@ -206,7 +251,9 @@ const Content: React.FC = () => {
               marginVertical: 16,
             }}
           />
-          <View style={{ marginVertical: 16 }}>
+          <View style={{ margin: 16 }}>
+            <SnbText.B2 align="center">Toko Anda Gagal Dibuat</SnbText.B2>
+            <View style={{ marginVertical: 8 }} />
             <SnbText.B3 align="center">{messageError}</SnbText.B3>
           </View>
           <View style={{ height: 75 }}>
@@ -311,15 +358,22 @@ const Content: React.FC = () => {
         renderUploadPhotoRules(),
       )}
       <SnbBottomSheet
-        open={showModalFailed || showModalPrivacyPolicy}
+        open={showModalFailed || showModalPrivacyPolicy || showModalSuccess}
         actionIcon="close"
         closeAction={() => {
+          if (showModalSuccess) {
+            reset({
+              index: 0,
+              routes: [{ name: 'LoginPhoneView' }],
+            });
+          }
           setShowModalFailed(false);
           setShowModalPrivacyPolicy(false);
+          setShowModalSuccess(false);
         }}
-        title={showModalFailed ? 'Gagal Membuat Toko' : 'Kebijakan Privasi'}
+        title={setTitle()}
         content={renderSheetContent()}
-        size={showModalFailed ? 'normal' : 'halfscreen'}
+        size={showModalPrivacyPolicy ? 'halfscreen' : 'normal'}
       />
     </View>
   );
