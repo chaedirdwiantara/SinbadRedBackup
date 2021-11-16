@@ -86,7 +86,7 @@ const OmsShoppingCartView: FC = () => {
    * Reserve Discount
    */
   const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { del, resetDel } = useReserveDiscountAction();
+  const reserveDiscountAction = useReserveDiscountAction();
 
   /** Get Cart View */
   useEffect(() => {
@@ -95,8 +95,8 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
 
     /** => will be change later, delete reserve discount */
-    resetDel(dispatchPromo);
-    del(dispatchPromo, '1abcd');
+    // reserveDiscountAction.del(dispatchPromo, '1abcd');
+    reserveDiscountAction.create(dispatchPromo, {});
   }, []);
 
   /** Listen changes cartState */

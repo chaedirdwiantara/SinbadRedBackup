@@ -94,6 +94,23 @@ function* deleteReservePromo(action: models.DeleteProcessAction) {
     yield put(ActionCreators.deleteReserveDiscountFailed(error));
   }
 }
+/** => create reserve promo */
+function* createReservePromo(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return PromoApi.createReserveDiscount(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.createReserveDiscountSuccess(response),
+    );
+    yield put(ActionCreators.createReserveDiscountSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.createReserveDiscountFailed(error),
+    );
+    yield put(ActionCreators.createReserveDiscountFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* PromoSaga() {
   yield takeLatest(types.PROMO_PAYMENT_LIST_PROCESS, promoPaymentList);
@@ -104,6 +121,7 @@ function* PromoSaga() {
     potentialPromoProduct,
   );
   yield takeLatest(types.DELETE_RESERVE_DISCOUNT_PROCESS, deleteReservePromo);
+  yield takeLatest(types.CREATE_RESERVE_DISCOUNT_PROCESS, createReservePromo);
 }
 
 export default PromoSaga;
