@@ -2,6 +2,8 @@
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { SnbText, styles, color } from 'react-native-sinbad-ui';
+/** === IMPORT FUNCTIONS ===  */
+import { goToSupplier } from '@screen/product/functions';
 /** === IMPORT STYLE ===  */
 import { ProductDetailStyle } from '@screen/product/styles';
 /** === TYPE ===  */
@@ -36,7 +38,7 @@ export const ProductDetailSupplierInfo: FC<ProductDetailSupplierInfoProps> = ({
         </View>
         <TouchableOpacity
           style={ProductDetailStyle.supplierButton}
-          onPress={() => console.log('See supplier pressed')}>
+          onPress={goToSupplier}>
           <SnbText.C1 color={color.red70}>Lihat Supplier</SnbText.C1>
         </TouchableOpacity>
       </View>

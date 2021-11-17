@@ -1,18 +1,20 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, RefreshControl } from 'react-native';
 import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
-/** === IMPORT COMPONENT === */
+/** === IMPORT COMPONENTS === */
+import { EmptyState } from '@core/components/EmptyState';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
-// import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
+import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
 import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
+import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
@@ -69,7 +71,7 @@ const ProductDetailView: FC = () => {
     stateProduct: { detail: productDetailState },
     dispatchProduct,
   } = useProductContext();
-  const { fetch } = useProductDetailAction();
+  const { fetch, refresh } = useProductDetailAction();
   const [promoModalVisible, setPromoModalVisible] = useState(false);
 
   useEffect(() => {
@@ -114,11 +116,35 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading) {
+  if (productDetailState.loading || productDetailState.data === null) {
     return (
-      <View>
-        <SnbText.H4>Loading...</SnbText.H4>
-      </View>
+      <SnbContainer color="white">
+        <SnbStatusBar type="transparent1" />
+        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailSkeleton />
+      </SnbContainer>
+    );
+  }
+  /** => Error */
+  if (!productDetailState.loading && productDetailState.error) {
+    return (
+      <SnbContainer color="white">
+        <SnbStatusBar type="transparent1" />
+        <ProductDetailHeader cartBadge={10} />
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={productDetailState.refresh!}
+              onRefresh={() => refresh(dispatchProduct, productId)}
+            />
+          }>
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        </ScrollView>
+      </SnbContainer>
     );
   }
   /** => Main */
@@ -128,7 +154,13 @@ const ProductDetailView: FC = () => {
       <ProductDetailHeader cartBadge={10} />
       {/* Content */}
       <View style={{ flex: 1 }}>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={productDetailState.refresh!}
+              onRefresh={() => refresh(dispatchProduct, productId)}
+            />
+          }>
           <ProductDetailCarousel images={productDetailState.data?.images!} />
           <ProductDetailMainInfo
             name={productDetailState.data?.name!}
@@ -138,14 +170,13 @@ const ProductDetailView: FC = () => {
             unit={productDetailState.data?.unit!}
             isExclusive={productDetailState.data?.isExclusive!}
             stock={defaultProperties.stock}
-            hasPromo={false} // When promoList.length > 0, for now it'll be set to false
+            hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
-          {/* Will be hidden temporarily */}
-          {/* <ProductDetailSupplierInfo
+          <ProductDetailSupplierInfo
             logo={productDetailDummy.supplier.logoUrl}
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
-          /> */}
+          />
           {potentialPromoProductList.data.length > 0 && (
             <PromoSection
               description={productDetailDummy.promoList[0].shortDescription}

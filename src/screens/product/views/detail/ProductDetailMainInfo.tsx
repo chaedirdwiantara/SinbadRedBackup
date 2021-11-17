@@ -33,7 +33,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
     <SnbText.H4>{name}</SnbText.H4>
     <View style={{ marginVertical: 8 }}>
       <SnbText.B2 color={color.red50}>
-        {toCurrency(currentPrice, { withFraction: false })}
+        {toCurrency(currentPrice ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
     {stock > minQty && (
@@ -46,7 +46,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {hasPromo && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <SnbText.B3 color={color.black40}>
-              {toCurrency(originalPrice, {
+              {toCurrency(originalPrice ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>

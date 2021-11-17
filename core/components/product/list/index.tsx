@@ -7,7 +7,7 @@ import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
 import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
-import ListLayout from './ListLayout';
+import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
 import AddToCartModal from './AddToCartModal';
 import {
@@ -107,7 +107,7 @@ const ProductList: FC<ProductListProps> = ({
   const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
-      list: { loading: productLoading },
+      list: { loading: productLoading, error: productError },
       detail: { data: productDetailState },
     },
     dispatchProduct,
@@ -274,6 +274,8 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
+            loading={productLoading}
+            error={productError}
           />
         ) : (
           <ListLayout
@@ -285,6 +287,8 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
+            loading={productLoading}
+            error={productError}
           />
         )}
       </View>
