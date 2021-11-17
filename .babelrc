@@ -23,7 +23,10 @@
           "@navigation": ["./core/functions/navigation/index"],
           "@svg": ["./src/assets/svg/Svg.tsx"],
           "@image": ["./src/assets/images"],
-          "@assets": ["./scr/assets/index"]
+          "@assets": ["./scr/assets/index"],
+          "react-native-sinbad-ui": [
+            "./node_modules/@sinbad/react-native-sinbad-ui"
+          ]
         }
       }
     ]
