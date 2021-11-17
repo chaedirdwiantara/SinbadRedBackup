@@ -18,7 +18,7 @@ export interface SortOption {
   sort: 'asc' | 'desc';
 }
 
-type SortQuery = Omit<SortOption, 'name'>;
+export type SortQuery = Omit<SortOption, 'name'>;
 /** === CONSTANT === */
 export const priceSortOptions: Array<SortOption> = [
   {
