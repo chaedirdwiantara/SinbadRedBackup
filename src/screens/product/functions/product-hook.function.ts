@@ -12,16 +12,21 @@ const callProcessAction = (
   skip: number,
   limit: number,
   queryOptions?: models.ProductListQueryOptions,
+  subModule?: models.ProductSubModule,
 ) => {
-  return Actions.productListProcess(contextDispatch, {
-    loading,
-    skip,
-    limit,
-    ...queryOptions,
-  });
+  return Actions.productListProcess(
+    contextDispatch,
+    {
+      loading,
+      skip,
+      limit,
+      ...queryOptions,
+    },
+    subModule,
+  );
 };
 
-const useProductListActions = () => {
+const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
   const limit = 10;
 
@@ -32,7 +37,14 @@ const useProductListActions = () => {
     ) => {
       contextDispatch(Actions.productListReset());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callProcessAction(
+          contextDispatch,
+          true,
+          0,
+          limit,
+          queryOptions,
+          subModule,
+        ),
       );
     },
     refresh: (
@@ -41,7 +53,14 @@ const useProductListActions = () => {
     ) => {
       contextDispatch(Actions.productListRefresh());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callProcessAction(
+          contextDispatch,
+          true,
+          0,
+          limit,
+          queryOptions,
+          subModule,
+        ),
       );
     },
     loadMore: (
@@ -58,6 +77,7 @@ const useProductListActions = () => {
             paginationQueries.skip + limit,
             limit,
             queryOptions,
+            subModule,
           ),
         );
       }

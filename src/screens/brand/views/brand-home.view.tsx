@@ -5,9 +5,8 @@ import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { BrandCard } from '@core/components/BrandCard';
 /** === IMPORT FUNCTIONS === */
-import { NavigationAction } from '@navigation';
 import { useBrandContext } from 'src/data/contexts/brand/useBrandContext';
-import { useBrandListAction, goToProduct } from '../functions';
+import { useBrandListAction, goToProduct, goToBrandList } from '../functions';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 /** === IMPORT STYLES === */
@@ -56,7 +55,7 @@ const BrandHomeView: FC = () => {
           <SnbText.B4>Brand Kami</SnbText.B4>
           <TouchableOpacity
             style={{ justifyContent: 'center', alignItems: 'center' }}
-            onPress={() => NavigationAction.navigate('BrandView')}>
+            onPress={goToBrandList}>
             <SnbText.C2 color={color.red50}>Lihat Semua</SnbText.C2>
           </TouchableOpacity>
         </View>
