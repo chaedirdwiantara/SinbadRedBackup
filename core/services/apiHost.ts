@@ -12,8 +12,11 @@ export default apiHost;
  * LIST HOST
  * ==========================================
  * - DEV
- * api: https://ms-api-dev.sinbad.web.id
- * auth: https://ms-auth-dev.sinbad.web.id
+ * api: http://ms-api-dev.sinbad.web.id
+ * auth: http://ms-auth-dev.sinbad.web.id
+ * * - STAGING
+ * api: https://ms-api-stg.sinbad.web.id
+ * auth: https://ms-auth-stg.sinbad.web.id
  * - PROD
  * api: https://ms-api.sinbad.web.id
  * auth: https://ms-auth.sinbad.web.id

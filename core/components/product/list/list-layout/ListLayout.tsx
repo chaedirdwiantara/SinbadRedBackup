@@ -14,6 +14,7 @@ import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
 const ListLayout: FC<ProductLayoutProps> = ({
   products,
+  withTags = true,
   tags,
   onTagPress,
   tagListComponentKey,
@@ -24,6 +25,14 @@ const ListLayout: FC<ProductLayoutProps> = ({
   loading,
   error,
 }) => {
+  /** === DERIVED === */
+  const flatListHeaderComponent = withTags ? (
+    <ProductTagList
+      key={tagListComponentKey}
+      tags={tags}
+      onTagPress={onTagPress}
+    />
+  ) : null;
   /** === VIEW === */
   /** => List Card */
   const renderListCard = ({
@@ -38,7 +47,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
         <ProductListCard
           name={item.name}
           imageUrl={item.thumbnail}
-          price={item.currentPrice ?? 0}
+          currentPrice={item.currentPrice}
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           isExclusive={item.isExclusive}
@@ -90,14 +99,11 @@ const ListLayout: FC<ProductLayoutProps> = ({
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        contentContainerStyle={{ paddingBottom: 24 }}
-        ListHeaderComponent={
-          <ProductTagList
-            key={tagListComponentKey}
-            tags={tags}
-            onTagPress={onTagPress}
-          />
-        }
+        contentContainerStyle={{
+          paddingBottom: 24,
+          paddingTop: !withTags ? 14 : 0,
+        }}
+        ListHeaderComponent={flatListHeaderComponent}
         data={products}
         renderItem={renderListCard}
         keyExtractor={(item) => item.id}

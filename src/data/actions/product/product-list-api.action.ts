@@ -6,9 +6,15 @@ import * as types from '@types';
 export const productListProcess = (
   contextDispatch: (action: any) => any,
   payload: models.ProductListProcessProps,
-): models.ListProcessAction => {
+  subModule?: models.ProductSubModule,
+): models.ProductListProcessAction => {
   contextDispatch({ type: types.PRODUCT_LIST_PROCESS, payload });
-  return { type: types.PRODUCT_LIST_PROCESS, payload, contextDispatch };
+  return {
+    type: types.PRODUCT_LIST_PROCESS,
+    payload,
+    contextDispatch,
+    subModule,
+  };
 };
 /** => Succeeded */
 export const productListSuccess = (
