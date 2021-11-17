@@ -2,6 +2,7 @@ import * as models from '@models';
 
 export interface ProductLayoutProps {
   products: Array<models.ProductList>;
+  withTags?: boolean;
   tags: Array<string>;
   onTagPress: (tags: Array<string>) => void;
   /** To reset ProductTagList component every time category changes by changing it's key. */

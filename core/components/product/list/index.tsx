@@ -23,19 +23,19 @@ import {
   useOrderModalVisibility,
 } from '@core/functions/product';
 import {
+  useCheckDataSupplier,
+  useSupplierSegmentationAction,
+  useSendDataToSupplierActions,
+} from '@core/functions/supplier';
+import { useDataAuth } from '@core/redux/Data';
+import {
   useTagListActions,
   useProductDetailAction,
   useAddToCart,
 } from '@screen/product/functions';
-import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
-import {
-  useSupplierSegmentationAction,
-  useSendDataToSupplierActions,
-} from '@core/functions/supplier/supplier-hook.function';
+import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
-import { useDataAuth } from '@core/redux/Data';
-import { useCheckDataSupplier } from '@core/functions/supplier';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -48,7 +48,7 @@ interface ProductListProps {
   products: Array<models.ProductList>;
   headerType?: ProductHeaderType;
   headerTitle?: string;
-  categoryTabs?: boolean;
+  withCategoryTabs?: boolean;
   categoryTabsConfig?: CategoryTabsConfig;
   isRefreshing: boolean;
   onRefresh: (queryOptions: models.ProductListQueryOptions) => void;
@@ -57,11 +57,13 @@ interface ProductListProps {
   activeKeyword?: string;
   activeCategory?: CategoryType;
   activeBrandId?: string;
+  withBottomAction?: boolean;
+  withTags?: boolean;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
   products,
-  categoryTabs = false,
+  withCategoryTabs = false,
   categoryTabsConfig,
   headerType = 'default',
   headerTitle,
@@ -72,6 +74,8 @@ const ProductList: FC<ProductListProps> = ({
   activeKeyword = '',
   activeCategory,
   activeBrandId,
+  withBottomAction = true,
+  withTags = true,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -143,53 +147,7 @@ const ProductList: FC<ProductListProps> = ({
     modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier(setOrderModalVisible);
-
-  useEffect(() => {
-    if (!productLoading) {
-      setKeywordSearched(false);
-    }
-  }, [productLoading]);
-
-  /** => Do something when success add to cart */
-  useEffect(() => {
-    if (addToCartData !== null) {
-      setProductSelected(null);
-      setOrderModalVisible(false);
-      supplierSegmentationAction.reset(dispatchSupplier);
-    }
-  }, [addToCartData]);
-
-  /** => Do something when success send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierData !== null) {
-      onFunctionActions({ type: 'close' });
-    }
-  }, [sendToSupplierData]);
-
-  useEffect(() => {
-    tagActions.fetch(dispatchTag, {
-      categoryId: selectedCategory?.id,
-      keyword: searchKeyword,
-      brandId: activeBrandId,
-    });
-  }, [selectedCategory, keywordSearched]);
-
-  useEffect(() => {
-    if (me.data !== null && dataSegmentation !== null) {
-      if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
-      } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
-      }
-    }
-  }, [dataSegmentation]);
-
+  /** === FUNCTIONS === */
   /** => action send data to supplier */
   const onSendDataSupplier = () => {
     if (productSelected !== null) {
@@ -243,6 +201,59 @@ const ProductList: FC<ProductListProps> = ({
 
     addToCartActions.fetch(dispatchShopingCart, params);
   };
+
+  const handleTagPress = (tags: Array<string>) => {
+    setSelectedTags(tags);
+    onFetch({ ...derivedQueryOptions, tags });
+  };
+  /** === EFFECT HOOKS === */
+  useEffect(() => {
+    if (!productLoading) {
+      setKeywordSearched(false);
+    }
+  }, [productLoading]);
+
+  /** => Do something when success add to cart */
+  useEffect(() => {
+    if (addToCartData !== null) {
+      setProductSelected(null);
+      setOrderModalVisible(false);
+      supplierSegmentationAction.reset(dispatchSupplier);
+    }
+  }, [addToCartData]);
+
+  /** => Do something when success send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierData !== null) {
+      onFunctionActions({ type: 'close' });
+    }
+  }, [sendToSupplierData]);
+
+  useEffect(() => {
+    if (withTags) {
+      tagActions.fetch(dispatchTag, {
+        categoryId: selectedCategory?.id,
+        keyword: searchKeyword,
+        brandId: activeBrandId,
+      });
+    }
+  }, [selectedCategory, keywordSearched, withTags]);
+
+  useEffect(() => {
+    if (me.data !== null && dataSegmentation !== null) {
+      if (dataSegmentation.dataSuppliers !== null) {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+        });
+      } else {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: null,
+        });
+      }
+    }
+  }, [dataSegmentation]);
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -252,11 +263,6 @@ const ProductList: FC<ProductListProps> = ({
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
     tags: selectedTags,
-  };
-
-  const handleTagPress = (tags: Array<string>) => {
-    setSelectedTags(tags);
-    onFetch({ ...derivedQueryOptions, tags });
   };
   /** === VIEW === */
   return (
@@ -276,7 +282,7 @@ const ProductList: FC<ProductListProps> = ({
           onFetch({ ...derivedQueryOptions, keyword: '' });
         }}
       />
-      {categoryTabs && (
+      {withCategoryTabs && (
         <CategoryTabList
           level={categoryTabsConfig?.level!}
           selectedFirstLevelIndex={categoryTabsConfig?.firstLevelIndex!}
@@ -292,6 +298,7 @@ const ProductList: FC<ProductListProps> = ({
         {layoutDisplay === 'grid' ? (
           <GridLayout
             products={products}
+            withTags={withTags}
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
@@ -305,6 +312,7 @@ const ProductList: FC<ProductListProps> = ({
         ) : (
           <ListLayout
             products={products}
+            withTags={withTags}
             tags={tagNames}
             onTagPress={handleTagPress}
             tagListComponentKey={selectedCategory?.id}
@@ -317,16 +325,18 @@ const ProductList: FC<ProductListProps> = ({
           />
         )}
       </View>
-      <BottomAction
-        sort={true}
-        filter={true}
-        layout={true}
-        category={true}
-        sortActive={sortActive}
-        filterActive={filterActive}
-        layoutDisplay={layoutDisplay}
-        onActionPress={handleActionClick}
-      />
+      {withBottomAction && (
+        <BottomAction
+          sort={true}
+          filter={true}
+          layout={true}
+          category={true}
+          sortActive={sortActive}
+          filterActive={filterActive}
+          layoutDisplay={layoutDisplay}
+          onActionPress={handleActionClick}
+        />
+      )}
       {/* Sort Modal */}
       <SnbBottomSheet
         open={sortModalVisible}
