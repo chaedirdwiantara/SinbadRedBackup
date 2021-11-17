@@ -448,6 +448,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           }}
           clearText={() => merchantPhoneNo.setValue('')}
           maxLength={14}
+          keyboardType={'number-pad'}
         />
       </View>
     );

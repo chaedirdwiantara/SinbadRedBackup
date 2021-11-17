@@ -42,7 +42,7 @@ const ListAndSearchView = () => {
     const data = {
       type: params.type,
       params: params.params,
-      meta: { keyword: search },
+      meta: { keyword: search, limit: 100 },
     };
     getSelection(data);
   };
