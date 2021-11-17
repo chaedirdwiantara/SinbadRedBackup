@@ -13,6 +13,7 @@ import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
 const GridLayout: FC<ProductLayoutProps> = ({
   products,
+  withTags = true,
   tags,
   onTagPress,
   tagListComponentKey,
@@ -70,12 +71,14 @@ const GridLayout: FC<ProductLayoutProps> = ({
           }
         }}
         scrollEventThrottle={10}>
-        <ProductTagList
-          key={tagListComponentKey}
-          tags={tags}
-          onTagPress={onTagPress}
-        />
-        <View style={{ flexDirection: 'row' }}>
+        {withTags && (
+          <ProductTagList
+            key={tagListComponentKey}
+            tags={tags}
+            onTagPress={onTagPress}
+          />
+        )}
+        <View style={{ flexDirection: 'row', paddingTop: !withTags ? 14 : 0 }}>
           <View style={{ flex: 1 }}>
             {products.map(
               (product, productIndex) =>
