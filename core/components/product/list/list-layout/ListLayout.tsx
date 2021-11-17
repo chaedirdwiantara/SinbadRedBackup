@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import { ProductListCard } from '@core/components/ProductListCard';
@@ -22,6 +22,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
   onRefresh,
   onLoadMore,
   loading,
+  error,
 }) => {
   /** === VIEW === */
   /** => List Card */
@@ -54,10 +55,35 @@ const ListLayout: FC<ProductLayoutProps> = ({
   if (loading) {
     return <ListSkeleton />;
   }
+  /** => Error */
+  if (!loading && error) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }>
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        </ScrollView>
+      </View>
+    );
+  }
   /** => Empty */
   if (!loading && products.length === 0) {
     return (
-      <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }>
+          <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+        </ScrollView>
+      </View>
     );
   }
   /** => Main */

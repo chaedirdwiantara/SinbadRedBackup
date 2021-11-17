@@ -107,7 +107,7 @@ const ProductList: FC<ProductListProps> = ({
   const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
-      list: { loading: productLoading },
+      list: { loading: productLoading, error: productError },
       detail: { data: productDetailState },
     },
     dispatchProduct,
@@ -275,6 +275,7 @@ const ProductList: FC<ProductListProps> = ({
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={productLoading}
+            error={productError}
           />
         ) : (
           <ListLayout
@@ -287,6 +288,7 @@ const ProductList: FC<ProductListProps> = ({
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={productLoading}
+            error={productError}
           />
         )}
       </View>

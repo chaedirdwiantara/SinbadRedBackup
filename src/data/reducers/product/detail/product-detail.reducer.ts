@@ -30,6 +30,7 @@ export const productDetailReducer = simplifyReducer(productDetailInitialState, {
       ...state,
       data: payload.data,
       loading: false,
+      error: null,
     };
   },
   /** => Failed */

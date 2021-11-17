@@ -21,14 +21,40 @@ const GridLayout: FC<ProductLayoutProps> = ({
   onRefresh,
   onLoadMore,
   loading,
+  error,
 }) => {
   if (loading) {
     return <GridSkeleton />;
   }
 
+  if (!loading && error) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }>
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        </ScrollView>
+      </View>
+    );
+  }
+
   if (!loading && products.length === 0) {
     return (
-      <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }>
+          <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
+        </ScrollView>
+      </View>
     );
   }
 

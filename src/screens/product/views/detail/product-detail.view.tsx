@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
+import { EmptyState } from '@core/components/EmptyState';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -115,12 +116,34 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading && productDetailState.data !== null) {
+  if (productDetailState.loading || productDetailState.data === null) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
         <ProductDetailHeader cartBadge={10} />
         <ProductDetailSkeleton />
+      </SnbContainer>
+    );
+  }
+  /** => Error */
+  if (!productDetailState.loading && productDetailState.error) {
+    return (
+      <SnbContainer color="white">
+        <SnbStatusBar type="transparent1" />
+        <ProductDetailHeader cartBadge={10} />
+        <ScrollView
+          contentContainerStyle={{ flex: 1 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={productDetailState.refresh!}
+              onRefresh={() => refresh(dispatchProduct, productId)}
+            />
+          }>
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        </ScrollView>
       </SnbContainer>
     );
   }
