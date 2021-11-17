@@ -5,6 +5,7 @@ import { SnbText, color } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { ProductGridCard } from '@core/components/ProductGridCard';
+import { HorizontalGridSkeleton } from '@core/components/product/HorizontalGridSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useProductListActions } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
@@ -67,14 +68,18 @@ const RecommendationHomeView: FC = () => {
           <SnbText.C2 color={color.red50}>Lihat Semua</SnbText.C2>
         </TouchableOpacity>
       </View>
-      <FlatList
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        data={productListState.data}
-        renderItem={renderProductCard}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
-      />
+      {productListState.loading ? (
+        <HorizontalGridSkeleton />
+      ) : (
+        <FlatList
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={productListState.data}
+          renderItem={renderProductCard}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+        />
+      )}
     </View>
   );
 };
