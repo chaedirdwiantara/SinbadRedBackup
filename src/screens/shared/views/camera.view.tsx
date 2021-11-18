@@ -57,7 +57,7 @@ const CameraView = () => {
         });
         goBack();
       }}
-      focusPoints={params.focusPoints}
+      focusPoints={params?.focusPoints}
     />
   );
 };
