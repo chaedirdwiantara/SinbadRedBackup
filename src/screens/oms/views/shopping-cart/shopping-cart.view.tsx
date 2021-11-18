@@ -12,7 +12,7 @@ import { ShippingAddress } from './shipping-address.view';
 import { useCartSelected, useCartId } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import { useReserveDiscountAction } from '@screen/promo/functions';
+// import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -30,6 +30,8 @@ import {
   useCartViewActions,
   useCartUpdateActions,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+// import { useReserveStockContext } from 'src/data/contexts/product/reserve-stock/useReserveStockContext';
+// import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -80,10 +82,16 @@ const OmsShoppingCartView: FC = () => {
   const voucherData = useDataVoucher();
 
   /**
-   * Reserve Discount
+   * Reserve Section
+   * - Cancel Reserve Stock
+   * - Cancel Reserve Discount (Promo & Voucher)
+   * - Proceed Reserve Stock
+   * - Proceed Reserve Discount
    */
-  const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const reserveDiscountAction = useReserveDiscountAction();
+  // const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  // const reserveDiscountAction = useReserveDiscountAction();
+  // const { dispatchReserveStock } = useReserveStockContext();
+  // const reserveStockAction = useReserveStockAction();
 
   /** Get Cart View */
   useEffect(() => {
@@ -92,7 +100,9 @@ const OmsShoppingCartView: FC = () => {
     }
     /** => will be change later, delete reserve discount */
     // reserveDiscountAction.del(dispatchPromo, '1abcd');
-    reserveDiscountAction.create(dispatchPromo, {});
+    // reserveDiscountAction.create(dispatchPromo, {});
+    // reserveStockAction.del(dispatchReserveStock, '1abcd');
+    // reserveStockAction.create(dispatchReserveStock, {});
   }, []);
 
   /** Listen changes cartState */
