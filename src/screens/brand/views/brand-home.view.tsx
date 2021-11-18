@@ -1,7 +1,8 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
+import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import { BrandCard } from '@core/components/BrandCard';
 /** === IMPORT FUNCTIONS === */
@@ -20,9 +21,11 @@ const BrandHomeView: FC = () => {
   } = useBrandContext();
   const { fetch } = useBrandListAction();
 
-  useEffect(() => {
-    fetch(dispatchBrand);
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetch(dispatchBrand);
+    }, []),
+  );
   /** === VIEW === */
   /** === Brand Item === */
   const renderBrandItem = ({
