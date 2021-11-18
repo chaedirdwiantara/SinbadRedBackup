@@ -1409,10 +1409,10 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@sinbad/react-native-sinbad-ui@1.0.1":
-  version "1.0.1"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.1.tgz#676ae8556d46b2d4d7ba2038e74ec6b13075125a"
-  integrity sha512-+xOusNHFVhWcREcExhgj7dnVvkRleLDGqExn8W8FuPaHb35NrxQwRY2BeqsirpGbdspbFhJHx3NHReND0AChnQ==
+"@sinbad/react-native-sinbad-ui@1.0.2":
+  version "1.0.2"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.2.tgz#8b74abd6440c3525cf52a4d92bb08432d4925628"
+  integrity sha512-w4ROrCaJMKB5XulZ/VBrD1DCdAkmn5RtNy3dowAvK3sNyCa3MIICweoIOYHHS6E+p2+WO71w2MZWWKPkUz0Z7Q==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
