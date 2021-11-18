@@ -23,9 +23,6 @@ const BrandView: FC = () => {
 
   useEffect(() => {
     fetch(dispatchBrand);
-    return () => {
-      fetch(dispatchBrand);
-    };
   }, []);
   /** === VIEW === */
   /** => Brand Item */
