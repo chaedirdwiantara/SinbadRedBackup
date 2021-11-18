@@ -482,7 +482,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
             value={largeArea.value ? largeArea.value : ''}
-            onChangeText={(text) => largeArea.setValue(text)}
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              largeArea.setValue(cleanNumber);
+            }}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
             rightText={'m²'}
