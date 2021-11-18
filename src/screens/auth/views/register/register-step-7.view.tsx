@@ -25,6 +25,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
+import RegisterProgress from '../shared/register-progress.component';
 
 const { height } = Dimensions.get('screen');
 
@@ -192,6 +193,48 @@ const Content: React.FC = () => {
   };
 
   const renderSheetContent = () => {
+    if (showModalSuccess) {
+      return (
+        <View>
+          <Image
+            source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
+            style={{
+              height: 160,
+              width: 160,
+              alignSelf: 'center',
+              marginVertical: 16,
+            }}
+          />
+          <View style={{ margin: 16 }}>
+            <SnbText.B2 align="center">
+              Selamat, Akun Anda sudah Terdaftar
+            </SnbText.B2>
+            <View style={{ marginVertical: 8 }} />
+            <SnbText.B3 align="center">
+              Akun Anda berhasil terdaftar. Nikmati kemudahan berbelanja dengan
+              menggunakan aplikasi Sinbad.
+            </SnbText.B3>
+          </View>
+          <View style={{ height: 75 }}>
+            <SnbButton.Single
+              title="Selesai"
+              type="primary"
+              disabled={false}
+              onPress={() => {
+                setShowModalSuccess(false);
+                setShowModalPrivacyPolicy(false);
+                setShowModalFailed(false);
+                reset({
+                  index: 0,
+                  routes: [{ name: 'LoginPhoneView' }],
+                });
+              }}
+            />
+          </View>
+        </View>
+      );
+    }
+
     if (showModalFailed) {
       return (
         <View>
@@ -214,7 +257,10 @@ const Content: React.FC = () => {
               title="Tutup"
               type="primary"
               disabled={false}
-              onPress={() => setShowModalFailed(false)}
+              onPress={() => {
+                setShowModalPrivacyPolicy(false);
+                setShowModalFailed(false);
+              }}
             />
           </View>
         </View>
@@ -223,7 +269,7 @@ const Content: React.FC = () => {
 
     if (showModalPrivacyPolicy) {
       return (
-        <View>
+        <View style={{ height: '100%' }}>
           <View style={{ padding: 16, height: '80%' }}>
             <ScrollView>
               <SnbText.B3 align="justify">
@@ -278,6 +324,7 @@ const Content: React.FC = () => {
               disabled={checked === 'unselect'}
               onPress={() => {
                 setShowModalPrivacyPolicy(false);
+                setShowModalFailed(false);
                 resetRegister();
                 register();
               }}
@@ -297,14 +344,8 @@ const Content: React.FC = () => {
     <View style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16 }}>
         <SnbText.H1>DAFTAR</SnbText.H1>
-        <View style={{ marginTop: 16 }}>
-          <SnbText.B4>7/7 Data Toko</SnbText.B4>
-          <View style={{ marginVertical: 4 }} />
-          <View
-            style={{ height: 8, backgroundColor: color.red60, borderRadius: 8 }}
-          />
-        </View>
       </View>
+      <RegisterProgress step={7} title="Data Toko" />
       {renderIF(
         isImageAvailable,
         renderImagePreview(),
@@ -312,56 +353,9 @@ const Content: React.FC = () => {
       )}
       <SnbBottomSheet
         open={showModalFailed || showModalPrivacyPolicy || showModalSuccess}
-        actionIcon="close"
-        closeAction={() => {
-          setShowModalFailed(false);
-          setShowModalPrivacyPolicy(false);
-        }}
         title={showModalPrivacyPolicy ? 'Kebijakan Privasi' : ''}
         content={renderSheetContent()}
         size={showModalPrivacyPolicy ? 'halfscreen' : 'normal'}
-      />
-      <SnbBottomSheet
-        open={showModalSuccess}
-        title=""
-        content={
-          <View>
-            <Image
-              source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
-              style={{
-                height: 160,
-                width: 160,
-                alignSelf: 'center',
-                marginVertical: 16,
-              }}
-            />
-            <View style={{ margin: 16 }}>
-              <SnbText.B2 align="center">
-                Selamat, Akun Anda sudah Terdaftar
-              </SnbText.B2>
-              <View style={{ marginVertical: 8 }} />
-              <SnbText.B3 align="center">
-                Akun Anda berhasil terdaftar. Nikmati kemudahan berbelanja
-                dengan menggunakan aplikasi Sinbad.
-              </SnbText.B3>
-            </View>
-            <View style={{ height: 75 }}>
-              <SnbButton.Single
-                title="Selesai"
-                type="primary"
-                disabled={false}
-                onPress={() => {
-                  setShowModalSuccess(false);
-                  reset({
-                    index: 0,
-                    routes: [{ name: 'LoginPhoneView' }],
-                  });
-                }}
-              />
-            </View>
-          </View>
-        }
-        size="normal"
       />
     </View>
   );
