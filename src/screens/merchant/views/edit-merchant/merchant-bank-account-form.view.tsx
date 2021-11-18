@@ -130,7 +130,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Pilih Nama Bank'}
             type={'default'}
             value={bankName.value}
-            onPress={() => gotoSelection({ type: 'listBank' })}
+            onPress={() => gotoSelection({ type: 'listBank', action: 'edit' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Nama Bank'}

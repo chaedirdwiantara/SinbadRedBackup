@@ -25,6 +25,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
+import RegisterProgress from '../shared/register-progress.component';
 
 const { height } = Dimensions.get('screen');
 
@@ -223,7 +224,7 @@ const Content: React.FC = () => {
 
     if (showModalPrivacyPolicy) {
       return (
-        <View>
+        <View style={{ height: '100%' }}>
           <View style={{ padding: 16, height: '80%' }}>
             <ScrollView>
               <SnbText.B3 align="justify">
@@ -297,14 +298,8 @@ const Content: React.FC = () => {
     <View style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16 }}>
         <SnbText.H1>DAFTAR</SnbText.H1>
-        <View style={{ marginTop: 16 }}>
-          <SnbText.B4>7/7 Data Toko</SnbText.B4>
-          <View style={{ marginVertical: 4 }} />
-          <View
-            style={{ height: 8, backgroundColor: color.red60, borderRadius: 8 }}
-          />
-        </View>
       </View>
+      <RegisterProgress step={7} title="Data Toko" />
       {renderIF(
         isImageAvailable,
         renderImagePreview(),
