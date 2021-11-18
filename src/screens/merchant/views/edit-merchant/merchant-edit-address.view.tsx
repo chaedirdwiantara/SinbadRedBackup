@@ -98,11 +98,7 @@ const MerchantEditAddressView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3
-        type="red"
-        title="Edit Alamat Toko"
-        backAction={goBack}
-      />
+      <SnbTopNav.Type3 type="red" title="Alamat Toko" backAction={goBack} />
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ marginTop: 16, marginHorizontal: 16 }}>
