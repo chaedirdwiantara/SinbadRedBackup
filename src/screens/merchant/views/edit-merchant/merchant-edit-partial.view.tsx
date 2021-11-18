@@ -247,6 +247,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
+    const dataVehicleAccessibilityAmount = vehicleAccessibilityAmount.value
+      ? Number(vehicleAccessibilityAmount.value)
+      : null;
+    const dataTopBrand = topBrand.value ? topBrand.value : null;
+    const dataWantedBrand = wantedBrand.value ? wantedBrand.value : null;
+    const dataLargeArea = largeArea.value ? largeArea.value : null;
     switch (props.type) {
       case 'merchantOwnerName':
         return ownerName.value === ownerData?.name;
@@ -271,12 +277,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
-          (largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
-            topBrand.value ===
+          (dataLargeArea === storeData?.storeDetailCompleteness.largeArea &&
+            dataTopBrand ===
               storeData?.storeDetailCompleteness.topSellingBrand &&
-            wantedBrand.value ===
+            dataWantedBrand ===
               storeData?.storeDetailCompleteness.mostWantedBrand &&
-            Number(vehicleAccessibilityAmount.value) ===
+            dataVehicleAccessibilityAmount ===
               storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
               storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
