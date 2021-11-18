@@ -60,3 +60,7 @@ export const verificationOrderDetailFailed = (
 export const verificationOrderDetailReset = () => {
   return { type: types.VERIFICATION_ORDER_DETAIL_RESET };
 };
+/** => loading */
+export const verificationOrderDetailLoading = () => {
+  return { type: types.VERIFICATION_ORDER_DETAIL_LOADING };
+};
