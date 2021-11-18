@@ -49,7 +49,7 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
     case 'listBank': {
-      path = 'banks/all';
+      path = `banks/all?keyword=${data.meta?.keyword}`;
       break;
     }
   }

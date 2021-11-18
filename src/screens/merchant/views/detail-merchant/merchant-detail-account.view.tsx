@@ -7,14 +7,20 @@ import { color } from 'react-native-sinbad-ui';
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { MerchantHookFunc } from '../../function';
 
 const MerchantDetailAccountView: FC = () => {
   /** === HOOK === */
   const { stateUser } = React.useContext(contexts.UserContext);
+  const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
+  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
       NavigationAction.back();
+      editMerchantAction.reset(dispatchSupplier);
+      editProfileAction.reset(dispatchSupplier);
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -54,7 +60,11 @@ const MerchantDetailAccountView: FC = () => {
       <SnbTopNav.Type3
         type="red"
         title="Akun Toko"
-        backAction={() => NavigationAction.back()}
+        backAction={() => {
+          NavigationAction.back();
+          editMerchantAction.reset(dispatchSupplier);
+          editProfileAction.reset(dispatchSupplier);
+        }}
       />
     );
   };
