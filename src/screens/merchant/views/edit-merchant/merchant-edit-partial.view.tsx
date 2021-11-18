@@ -468,7 +468,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
             value={numberOfEmployee.value ? numberOfEmployee.value : ''}
-            onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
+            onPress={() =>
+              gotoSelection({ type: 'listNumOfEmployee', action: 'edit' })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
@@ -515,7 +517,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
                 ? vehicleAccessibility.value.name
                 : ''
             }
-            onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
+            onPress={() =>
+              gotoSelection({ type: 'listVehicleAccess', action: 'edit' })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}

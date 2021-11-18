@@ -17,7 +17,6 @@ export * from './global.model';
 export * from './user.model';
 export * from './register';
 export * from './global';
-export * from './auth';
 export * from './product';
 export * from './user';
 export * from './merchant';

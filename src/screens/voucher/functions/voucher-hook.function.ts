@@ -113,9 +113,7 @@ const useSelectedSinbadVoucher = () => {
 };
 /** => set voucher list local data (this is for list more view) */
 const useVoucherListMore = () => {
-  const [voucherListData, setVoucherListData] = React.useState<
-    models.SinbadVoucherProps[] | models.SellerVoucherListProps[]
-  >([]);
+  const [voucherListData, setVoucherListData] = React.useState<any>([]);
   return {
     setVoucherListData: (
       voucher: models.SinbadVoucherProps[] | models.SellerVoucherListProps[],

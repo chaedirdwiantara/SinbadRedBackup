@@ -77,4 +77,17 @@ export const ProductDetailStyle = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: color.black10,
   },
+  sectionSeparatorSkeleton: {
+    marginLeft: 16,
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderColor: color.black10,
+  },
+  sectionItemSkeleton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+    paddingHorizontal: 16,
+  },
 });

@@ -5,13 +5,13 @@ import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
-  color,
   SnbButton,
   SnbContainer,
   SnbText,
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import RegisterProgress from '../shared/register-progress.component';
 
 const Content: React.FC = () => {
   const { checkEmail, checkEmailAvailability, resetCheckEmail } =
@@ -71,17 +71,7 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
           </View>
-          <View style={{ margin: 16 }}>
-            <SnbText.B4>1/7 Profil Pemilik</SnbText.B4>
-            <View style={{ marginVertical: 4 }} />
-            <View
-              style={{
-                height: 8,
-                backgroundColor: color.red60,
-                borderRadius: 8,
-              }}
-            />
-          </View>
+          <RegisterProgress step={1} title="Profil Pemilik" />
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
               {...name}

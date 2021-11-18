@@ -18,6 +18,7 @@ import {
   SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import RegisterProgress from '../shared/register-progress.component';
 
 const Content: React.FC = () => {
   const { saveStoreData, merchantData } = useMerchant();
@@ -59,17 +60,8 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
           </View>
-          <View style={{ margin: 16 }}>
-            <SnbText.B4>6/7 Data Toko</SnbText.B4>
-            <View style={{ marginVertical: 4 }} />
-            <View
-              style={{
-                height: 8,
-                backgroundColor: color.red60,
-                borderRadius: 8,
-              }}
-            />
-          </View>
+          <RegisterProgress step={6} title="Data Toko" />
+
           <View style={{ paddingHorizontal: 16 }}>
             <View
               style={{

@@ -43,7 +43,9 @@ const apiGeneral = async <T>(
   const handleErrors = (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
-        NavigationAction.navigate('LoginPhoneView');
+        if (response.status === 401) {
+          NavigationAction.navigate('LoginPhoneView');
+        }
         throwError(response);
       }
       return response.json().then((error: ErrorProps) => {
@@ -79,7 +81,7 @@ const apiGeneral = async <T>(
   /** === MAIN FUNCTION === */
   return fetch(
     `${apiHost.base}/${module}/api/${version}/sinbad-app/${
-      access === 'public' ? '/public/' : ''
+      access === 'public' ? 'public/' : ''
     }${path}`,
     reqBody,
   )

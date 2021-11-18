@@ -22,9 +22,13 @@ const useDataAuth = (): AuthProps => {
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
-const useDataVoucher = () => {
+const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
+const useDataCart = () => {
+  return useSelector((state: RootState) => state.verificationCartCore);
+};
+
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -32,6 +36,7 @@ export {
   useDataVoucher,
   useDataFlagRTDB,
   useDataAuth,
+  useDataCart,
 };
 /**
  * ================================================================
