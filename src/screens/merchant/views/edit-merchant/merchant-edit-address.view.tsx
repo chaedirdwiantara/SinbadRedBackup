@@ -64,23 +64,17 @@ const MerchantEditAddressView = () => {
   }, [merchantData]);
 
   const handleDisableButton = () => {
-    if (address.value === '') {
+    if (address.value !== '' && noteAddress.value !== '') {
       if (
-        noteAddress.value === '' ||
-        noteAddress.value === storeAddress?.noteAddress
+        noteAddress.value === storeAddress?.noteAddress &&
+        address.value === storeAddress?.address
       ) {
         return true;
       } else {
         return false;
       }
-    } else if (address.value === storeAddress?.address) {
-      if (noteAddress.value === storeAddress?.noteAddress) {
-        return true;
-      } else {
-        return false;
-      }
     } else {
-      return false;
+      return true;
     }
   };
 
@@ -172,6 +166,7 @@ const MerchantEditAddressView = () => {
                 labelText="Catatan Alamat"
                 placeholder="Masukkan Catatan Alamat"
                 maxLength={200}
+                mandatory
               />
             </View>
           </View>
