@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbChipsSlider } from 'react-native-sinbad-ui';
 /** === IMPORT TYPE ===  */
-import { Tag } from './product-list-core.type';
+import { ITag } from './product-list-core.type';
 /** === TYPE === */
 interface ProductTagListProps {
-  tags: Array<Tag>;
-  onTagPress: (index: number, tag: Tag) => void;
+  tags: Array<ITag>;
+  onTagPress: (index: number, tag: ITag) => void;
 }
 /** === COMPONENT === */
 const ProductTagList: FC<ProductTagListProps> = ({ tags, onTagPress }) => (

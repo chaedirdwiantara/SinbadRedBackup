@@ -11,7 +11,7 @@ import {
   SortIndex,
   PriceRange,
 } from '@core/components/product/list/BottomAction';
-import { ProductDisplayState } from '@core/components/product/list/product-list-core.type';
+import { EProductDisplayState } from '@core/components/product/list/product-list-core.type';
 /** === TYPE ===  */
 export interface SortOption {
   name: string;
@@ -252,7 +252,7 @@ export const useProductDisplayState = ({
   productsLength,
 }: UseProductDisplayStateParams) => {
   const [displayState, setDisplayState] =
-    useState<ProductDisplayState>('empty');
+    useState<EProductDisplayState>('empty');
 
   useEffect(() => {
     if (loading) {
