@@ -10,6 +10,8 @@ export interface ProductLayoutProps {
   isRefreshing: boolean;
   onRefresh: () => void;
   onLoadMore: () => void;
+  loading: boolean;
+  error: models.ErrorProps | null;
 }
 
 export type ProductHeaderType = 'default' | 'search';
