@@ -44,7 +44,7 @@ const usePromoGeneralAction = () => {
 const usePotentialPromoProductAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any, id: string) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.potentialPromoProductProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
