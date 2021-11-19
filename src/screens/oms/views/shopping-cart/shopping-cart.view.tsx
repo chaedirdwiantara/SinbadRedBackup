@@ -13,10 +13,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import {
-  useReserveDiscountAction,
-  usePotentialPromoProductAction,
-} from '@screen/promo/functions';
+// import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -115,27 +112,6 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
-  }, []);
-
-  /** Example Section */
-  /**
-   * Potential Promo Product
-   * - only fetch when the product data is ready
-   */
-  const {
-    statePromo: { potentialPromoProduct: potentialPromoProduct },
-    dispatchPromo,
-  } = React.useContext(contexts.PromoContext);
-  const potentialPromoProductList = potentialPromoProduct.detail;
-  const potentialPromoProductAction = usePotentialPromoProductAction();
-  /** => potential promo product effect */
-  React.useEffect(() => {
-    console.log('check');
-    potentialPromoProductAction.reset(dispatchPromo);
-    potentialPromoProductAction.detail(
-      dispatchPromo,
-      '6149f9c2a5868baca3e6f8ec',
-    );
   }, []);
 
   /** Listen changes cartState */
