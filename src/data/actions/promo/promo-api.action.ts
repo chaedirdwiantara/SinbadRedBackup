@@ -113,8 +113,8 @@ export const potentialPromoProductProcess = (
 };
 /** => potential promo product success */
 export const potentialPromoProductSuccess = (
-  data: models.ListSuccessProps<models.PotentialPromoProductProps[]>,
-): models.ListSuccessAction<models.PotentialPromoProductProps[]> => {
+  data: models.DetailSuccessProps<models.PotentialPromoProductProps>,
+): models.DetailSuccessAction<models.PotentialPromoProductProps> => {
   return { type: types.POTENTIAL_PROMO_PRODUCT_SUCCESS, payload: data };
 };
 /** => potential promo product failed */

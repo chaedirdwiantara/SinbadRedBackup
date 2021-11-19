@@ -61,11 +61,10 @@ function* promoGeneralDetail(action: models.DetailProcessAction) {
 /** => potential promo product */
 function* potentialPromoProduct(action: models.DetailProcessAction) {
   try {
-    const response: models.ListSuccessProps<
-      models.PotentialPromoProductProps[]
-    > = yield call(() => {
-      return PromoApi.potentialPromoProduct(action.payload);
-    });
+    const response: models.DetailSuccessProps<models.PotentialPromoProductProps> =
+      yield call(() => {
+        return PromoApi.potentialPromoProduct(action.payload);
+      });
     yield action.contextDispatch(
       ActionCreators.potentialPromoProductSuccess(response),
     );

@@ -29,6 +29,15 @@ export interface PromoGeneralDetailSuccessProps {
   termsAndCondition: string[];
 }
 export interface PotentialPromoProductProps {
+  flexiCombo: PotentialPromoProductFlexiCombo[];
+  crossSelling: PotentialPromoProductCrossSelling[];
+}
+export interface PotentialPromoProductFlexiCombo {
   promoSellerId: string;
   shortDescription: string;
+}
+export interface PotentialPromoProductCrossSelling {
+  promoSellerId: string;
+  name: string;
+  description: string;
 }
