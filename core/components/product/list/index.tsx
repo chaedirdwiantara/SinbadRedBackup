@@ -42,7 +42,7 @@ import {
   ProductHeaderType,
   CategoryTabsConfig,
   CategoryType,
-  Tag,
+  ITag,
 } from './product-list-core.type';
 /** === TYPE === */
 interface ProductListProps {
@@ -84,7 +84,7 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
-  const [localTags, setLocalTags] = useState<Array<Tag>>([]);
+  const [localTags, setLocalTags] = useState<Array<ITag>>([]);
   const selectedTags: Array<string> = useMemo(
     () =>
       localTags.filter((tag) => tag.selected).map((filtered) => filtered.value),
@@ -253,7 +253,7 @@ const ProductList: FC<ProductListProps> = ({
   }, [selectedCategory, keywordSearched, withTags]);
 
   useEffect(() => {
-    const tagsFromContext: Array<Tag> = tagList.map((tag) => ({
+    const tagsFromContext: Array<ITag> = tagList.map((tag) => ({
       value: tag.tags,
       selected: false,
     }));

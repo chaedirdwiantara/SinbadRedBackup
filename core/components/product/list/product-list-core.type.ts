@@ -3,8 +3,8 @@ import * as models from '@models';
 export interface ProductLayoutProps {
   products: Array<models.ProductList>;
   withTags?: boolean;
-  tags: Array<Tag>;
-  onTagPress: (index: number, tag: Tag) => void;
+  tags: Array<ITag>;
+  onTagPress: (index: number, tag: ITag) => void;
   onOrderPress: (item: models.ProductList) => void;
   isRefreshing: boolean;
   onRefresh: () => void;
@@ -29,9 +29,9 @@ export type CategoryType =
   | models.CategoryLevel2
   | models.CategoryLevel3;
 
-export interface Tag {
+export interface ITag {
   value: string;
   selected: boolean;
 }
 
-export type ProductDisplayState = 'loading' | 'error' | 'empty' | 'success';
+export type EProductDisplayState = 'loading' | 'error' | 'empty' | 'success';
