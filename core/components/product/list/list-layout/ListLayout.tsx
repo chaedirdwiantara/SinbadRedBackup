@@ -6,8 +6,11 @@ import { EmptyState } from '@core/components/EmptyState';
 import { ProductListCard } from '@core/components/ProductListCard';
 import ProductTagList from '../ProductTagList';
 import { ListSkeleton } from './ListSkeleton';
-/** === IMPORT FUNCTION === */
-import { goToProductDetail } from '@core/functions/product';
+/** === IMPORT FUNCTIONS === */
+import {
+  goToProductDetail,
+  useProductDisplayState,
+} from '@core/functions/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import { ProductLayoutProps } from '../product-list-core.type';
@@ -17,7 +20,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
   withTags = true,
   tags,
   onTagPress,
-  tagListComponentKey,
   onOrderPress,
   isRefreshing,
   onRefresh,
@@ -25,13 +27,16 @@ const ListLayout: FC<ProductLayoutProps> = ({
   loading,
   error,
 }) => {
+  /** === HOOK ===  */
+  const displayState = useProductDisplayState({
+    loading,
+    error,
+    productsLength: products.length,
+  });
   /** === DERIVED === */
-  const flatListHeaderComponent = withTags ? (
-    <ProductTagList
-      key={tagListComponentKey}
-      tags={tags}
-      onTagPress={onTagPress}
-    />
+  const hasTags = withTags && tags.length > 0;
+  const tagList = hasTags ? (
+    <ProductTagList tags={tags} onTagPress={onTagPress} />
   ) : null;
   /** === VIEW === */
   /** => List Card */
@@ -61,11 +66,11 @@ const ListLayout: FC<ProductLayoutProps> = ({
     );
   };
   /** => Loading */
-  if (loading) {
+  if (displayState === 'loading') {
     return <ListSkeleton />;
   }
   /** => Error */
-  if (!loading && error) {
+  if (displayState === 'error') {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -82,7 +87,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
     );
   }
   /** => Empty */
-  if (!loading && products.length === 0) {
+  if (displayState === 'empty') {
     return (
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -90,6 +95,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }>
+          {tagList}
           <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
         </ScrollView>
       </View>
@@ -103,7 +109,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           paddingBottom: 24,
           paddingTop: !withTags ? 14 : 0,
         }}
-        ListHeaderComponent={flatListHeaderComponent}
+        ListHeaderComponent={tagList}
         data={products}
         renderItem={renderListCard}
         keyExtractor={(item) => item.id}

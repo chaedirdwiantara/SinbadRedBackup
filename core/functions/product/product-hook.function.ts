@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { Alert } from 'react-native';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
@@ -11,6 +11,7 @@ import {
   SortIndex,
   PriceRange,
 } from '@core/components/product/list/BottomAction';
+import { ProductDisplayState } from '@core/components/product/list/product-list-core.type';
 /** === TYPE ===  */
 export interface SortOption {
   name: string;
@@ -19,6 +20,12 @@ export interface SortOption {
 }
 
 export type SortQuery = Omit<SortOption, 'name'>;
+
+interface UseProductDisplayStateParams {
+  loading: boolean;
+  error: models.ErrorProps | null;
+  productsLength: number;
+}
 /** === CONSTANT === */
 export const priceSortOptions: Array<SortOption> = [
   {
@@ -237,4 +244,27 @@ export const useOrderModalVisibility = () => {
     setOrderModalVisible,
     toggleModalVisible,
   };
+};
+
+export const useProductDisplayState = ({
+  loading,
+  error,
+  productsLength,
+}: UseProductDisplayStateParams) => {
+  const [displayState, setDisplayState] =
+    useState<ProductDisplayState>('empty');
+
+  useEffect(() => {
+    if (loading) {
+      setDisplayState('loading');
+    } else if (!loading && error) {
+      setDisplayState('error');
+    } else if (!loading && productsLength === 0) {
+      setDisplayState('empty');
+    } else {
+      setDisplayState('success');
+    }
+  }, [loading, error, productsLength]);
+
+  return displayState;
 };

@@ -42,6 +42,7 @@ import {
   ProductHeaderType,
   CategoryTabsConfig,
   CategoryType,
+  Tag,
 } from './product-list-core.type';
 /** === TYPE === */
 interface ProductListProps {
@@ -83,7 +84,12 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
-  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const [localTags, setLocalTags] = useState<Array<Tag>>([]);
+  const selectedTags: Array<string> = useMemo(
+    () =>
+      localTags.filter((tag) => tag.selected).map((filtered) => filtered.value),
+    [localTags],
+  );
   const [productSelected, setProductSelected] =
     useState<models.ProductList | null>(null);
 
@@ -131,7 +137,6 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchSupplier,
   } = useSupplierContext();
-  const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
   /** => check data supplier and sinbad status */
   const {
     checkUser,
@@ -194,8 +199,16 @@ const ProductList: FC<ProductListProps> = ({
     addToCartActions.fetch(dispatchShopingCart, params);
   };
 
-  const handleTagPress = (tags: Array<string>) => {
-    setSelectedTags(tags);
+  const handleTagPress = (tagIndex: number) => {
+    const toggledTag = localTags[tagIndex];
+    toggledTag.selected = !toggledTag.selected;
+    const updatedTags = [...localTags];
+    updatedTags[tagIndex] = toggledTag;
+    const tags = updatedTags
+      .filter((tag) => tag.selected)
+      .map((filtered) => filtered.value);
+
+    setLocalTags(updatedTags);
     onFetch({ ...derivedQueryOptions, tags });
   };
   /** === EFFECT HOOKS === */
@@ -214,6 +227,14 @@ const ProductList: FC<ProductListProps> = ({
       });
     }
   }, [selectedCategory, keywordSearched, withTags]);
+
+  useEffect(() => {
+    const tagsFromContext: Array<Tag> = tagList.map((tag) => ({
+      value: tag.tags,
+      selected: false,
+    }));
+    setLocalTags(tagsFromContext);
+  }, [tagList]);
 
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
@@ -265,8 +286,10 @@ const ProductList: FC<ProductListProps> = ({
           selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
           selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
           onTabChange={(category) => {
+            const queryOptionsCopy = Object.assign({}, derivedQueryOptions);
+            delete queryOptionsCopy.tags;
             setSelectedCategory(category);
-            onFetch({ ...derivedQueryOptions, categoryId: category.id });
+            onFetch({ ...queryOptionsCopy, categoryId: category.id });
           }}
         />
       )}
@@ -275,9 +298,8 @@ const ProductList: FC<ProductListProps> = ({
           <GridLayout
             products={products}
             withTags={withTags}
-            tags={tagNames}
+            tags={localTags}
             onTagPress={handleTagPress}
-            tagListComponentKey={selectedCategory?.id}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
@@ -289,9 +311,8 @@ const ProductList: FC<ProductListProps> = ({
           <ListLayout
             products={products}
             withTags={withTags}
-            tags={tagNames}
+            tags={localTags}
             onTagPress={handleTagPress}
-            tagListComponentKey={selectedCategory?.id}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
