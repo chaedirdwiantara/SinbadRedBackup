@@ -118,7 +118,10 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading || productDetailState.data === null) {
+  if (
+    productDetailState.loading ||
+    (productDetailState.data === null && !productDetailState.error)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
