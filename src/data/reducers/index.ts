@@ -8,7 +8,7 @@ import {
   globalCore,
   permanentCore,
   authCore,
-  verificationCartCore,
+  cartSelectedCore,
 } from '@core/data/reducers';
 import { permanent } from './permanent';
 import { auth } from './auth';
@@ -23,7 +23,7 @@ export const rootReducer = combineReducers({
   auth,
   global,
   voucher,
-  verificationCartCore,
+  cartSelectedCore,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
