@@ -5,9 +5,8 @@ import * as types from '@types';
 /** => Process */
 export const getCheckoutProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.DetailProcessProps,
 ): Omit<models.DetailProcessAction, 'payload'> => {
-  contextDispatch({ type: types.GET_CHECKOUT_PROCESS, payload });
+  contextDispatch({ type: types.GET_CHECKOUT_PROCESS });
   return {
     type: types.GET_CHECKOUT_PROCESS,
     contextDispatch,
