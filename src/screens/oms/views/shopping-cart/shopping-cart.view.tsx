@@ -11,7 +11,9 @@ import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useCartSelected, useCartId } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
-import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
+import { getSelectedVouchers } from '@screen/voucher/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
+import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -75,19 +77,22 @@ const OmsShoppingCartView: FC = () => {
   }, [stateVerificationOrder.create.data, updateCartState.data]);
 
   /** Voucher Cart */
-  const { count } = useCountAllVoucherAction();
-  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
-  React.useEffect(() => {
-    if (cartState.data !== null) {
-      count(dispatchVoucher);
-    }
-  }, [cartState]);
+  const voucherData = useDataVoucher();
+
+  /**
+   * Reserve Discount
+   */
+  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { del, resetDel } = useReserveDiscountAction();
 
   /** Get Cart View */
   useEffect(() => {
     if (getCartId !== null) {
       cartViewActions.fetch(dispatchShopingCart, getCartId);
     }
+    /** => will be change later, delete reserve discount */
+    resetDel(dispatchPromo);
+    del(dispatchPromo, '1abcd');
   }, []);
 
   /** Listen changes cartState */
@@ -178,7 +183,7 @@ const OmsShoppingCartView: FC = () => {
       id: cartState.data.cartId,
       data: dataSelected,
       isActiveStore: cartState.data.isActiveStore,
-      salesId: cartState.data.userId,
+      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
     };
 
     /** => fetch post update cart */
