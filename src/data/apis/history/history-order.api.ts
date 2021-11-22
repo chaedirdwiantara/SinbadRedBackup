@@ -3,8 +3,9 @@ import * as models from '@models';
 
 const orderStatus = () => {
   const path = 'order-parcels/status';
+  // order/api/v1/sinbad-app/order-parcels/status
   return apiMapping<models.DetailSuccessProps<models.OrderStatusSuccessProps>>(
-    'public',
+    'auth',
     path,
     'order',
     'v1',

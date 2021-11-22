@@ -16,7 +16,7 @@ import { goBack, goToHistoryDetail } from '../functions';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
-import {} from 'src/data/contexts/history/';
+import { useOrderStatusContext } from 'src/data/contexts/history/useOrderStatusContext';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -174,9 +174,11 @@ const HistoryListView: FC = () => {
   >('');
   const getOrderStatus = useOrderStatusActions();
 
+  // Fetch API
+  const { dispatchOrderStatus } = useOrderStatusContext();
   useEffect(() => {
-    getOrderStatus.fetch();
-  });
+    getOrderStatus.fetch(dispatchOrderStatus);
+  }, []);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {

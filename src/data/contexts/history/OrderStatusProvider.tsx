@@ -1,12 +1,12 @@
 import React, { FC, useReducer, useMemo } from 'react';
 
 import {
-  HistoryContext,
+  OrderStatusContext,
   orderStatusHistoryReducer,
   OrderStatusInitialState,
 } from './order-status.context';
 
-const HistoryProvider: FC = ({ children }) => {
+const OrderStatusProvider: FC = ({ children }) => {
   const [stateOrderStatus, dispatchOrderStatus] = useReducer(
     orderStatusHistoryReducer,
     OrderStatusInitialState,
@@ -19,10 +19,10 @@ const HistoryProvider: FC = ({ children }) => {
     [stateOrderStatus, dispatchOrderStatus],
   );
   return (
-    <HistoryContext.Provider value={contextValue}>
+    <OrderStatusContext.Provider value={contextValue}>
       {children}
-    </HistoryContext.Provider>
+    </OrderStatusContext.Provider>
   );
 };
 
-export { HistoryProvider, HistoryContext };
+export { OrderStatusProvider, OrderStatusContext };

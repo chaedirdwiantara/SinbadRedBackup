@@ -6,7 +6,7 @@ import {
   orderStatusHistoryReducer,
 } from '@reducer/history/history.reducer';
 
-const HistoryContext = createContext<{
+const OrderStatusContext = createContext<{
   stateOrderStatus: OrderStatusState;
   dispatchOrderStatus: Dispatch<any>;
 }>({
@@ -14,4 +14,8 @@ const HistoryContext = createContext<{
   dispatchOrderStatus: () => null,
 });
 
-export { HistoryContext, orderStatusHistoryReducer, OrderStatusInitialState };
+export {
+  OrderStatusContext,
+  orderStatusHistoryReducer,
+  OrderStatusInitialState,
+};
