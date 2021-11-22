@@ -15,6 +15,7 @@ import {
 /** === TYPE HERE === */
 export type UserInitialProps = models.DetailProps<models.StoreDetail> &
   models.UpdateProps;
+
 /** === INITIAL HERE === */
 export const userInitialState = {
   detail: userDetailInitialState,

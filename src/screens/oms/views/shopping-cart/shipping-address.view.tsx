@@ -5,16 +5,16 @@ import { SnbText } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '../../styles';
-/** === DUMMY === */
-const userName = 'Edward';
-const address =
-  'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt.,Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730';
 
 /** === COMPONENT === */
 export const ShippingAddress: FC = () => {
-  const { stateUser } = React.useContext(contexts.UserContext);
+  const {
+    stateUser: {
+      detail: { data: storeDetail },
+    },
+  } = React.useContext(contexts.UserContext);
 
-  console.log('[stateUser]: ', stateUser);
+  console.log('[stateUser]: ', storeDetail);
   return (
     <View style={ShoppingCartStyles.cardContainer}>
       <View style={ShoppingCartStyles.topCardSlot}>
@@ -22,12 +22,12 @@ export const ShippingAddress: FC = () => {
       </View>
       <View style={ShoppingCartStyles.verticalBottomCardSlot}>
         <View style={{ marginBottom: 6 }}>
-          <SnbText.B4>{userName}</SnbText.B4>
+          <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4>
         </View>
         <View style={{ marginBottom: 6 }}>
           <SnbText.C2>Alamat 1 (default)</SnbText.C2>
         </View>
-        <SnbText.B3>{address}</SnbText.B3>
+        <SnbText.B3>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B3>
       </View>
     </View>
   );
