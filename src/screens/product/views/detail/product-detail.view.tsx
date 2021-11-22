@@ -90,7 +90,11 @@ const ProductDetailView: FC = () => {
   React.useEffect(() => {
     if (productDetailState.data !== null) {
       const { id } = productDetailState.data;
-      potentialPromoProductAction.list(dispatchPromo, id);
+      potentialPromoProductAction.reset(dispatchPromo);
+      potentialPromoProductAction.list(
+        dispatchPromo,
+        '6149f9c2a5868baca3e6f8ec',
+      );
     }
   }, [productDetailState]);
 
@@ -148,7 +152,7 @@ const ProductDetailView: FC = () => {
           /> */}
           {potentialPromoProductList.data.length > 0 && (
             <PromoSection
-              description={productDetailDummy.promoList[0].shortDescription}
+              description={potentialPromoProductList.data[0].shortDescription}
               onPress={() => setPromoModalVisible(true)}
             />
           )}
@@ -195,7 +199,7 @@ const ProductDetailView: FC = () => {
       <PromoModal
         visible={promoModalVisible}
         onClose={() => setPromoModalVisible(false)}
-        promoList={productDetailDummy.promoList}
+        promoList={potentialPromoProductList.data}
       />
     </SnbContainer>
   );
