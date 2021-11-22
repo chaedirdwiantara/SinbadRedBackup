@@ -54,16 +54,35 @@ export interface IInvoiceCheckout {
   totalPromoPayment: number;
   totalPaymentFee: number;
   totalPayment: number;
-  paymentType: IPaymentType;
-  paymentChannel: IPaymentChannel;
+  paymentType: IPaymentType | null;
+  paymentChannel: IPaymentChannel | null;
   promoSellers: IPromoSeller[];
   vouchers: IVoucherCheckout[];
   brands: IBrandCheckout[];
 }
 
 export interface CheckoutDataMaster {
-  cartId: string;
-  userId: number;
-  storeId: number;
+  cartId: string | null;
   invoices: IInvoiceCheckout[];
+}
+
+export interface ReserveDiscount {
+  invoiceGroupId: string;
+  promoSellers: IPromoSeller[];
+  vouchers: IVoucherCheckout[];
+  totalPromoSellerAndVoucher: number;
+}
+
+export interface PaymentTypeChannel {
+  invoiceGroupId: string;
+  totalFee: number;
+  totalPayment: number;
+  promoPayment: number;
+  paymentType: IPaymentType;
+  paymentChannel: IPaymentChannel;
+}
+
+export interface PromoPayment {
+  invoiceGroupId: string;
+  totalPromoPayment: number;
 }
