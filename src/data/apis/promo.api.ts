@@ -76,6 +76,18 @@ const createReserveDiscount = (
     data,
   );
 };
+/** => reserve discount detail */
+const reserveDiscountDetail = (data: models.DetailProcessProps) => {
+  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
+  const path = `reserved-discount/${data.id}`;
+  return apiMappingMock<models.ReserveDiscountDetail>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'DETAIL',
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PromoApi = {
@@ -85,4 +97,5 @@ export const PromoApi = {
   potentialPromoProduct,
   deleteReserveDiscount,
   createReserveDiscount,
+  reserveDiscountDetail,
 };

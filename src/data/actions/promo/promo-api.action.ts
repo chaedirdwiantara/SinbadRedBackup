@@ -183,3 +183,36 @@ export const createReserveDiscountFailed = (
 ): models.CreateFailedAction => {
   return { type: types.CREATE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
+
+/** === DETAIL RESERVE DISCOUNT === */
+/** => detail reserve discount process */
+export const detailReserveDiscountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({
+    type: types.DETAIL_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.DETAIL_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => detail reserve discount success */
+export const detailReserveDiscountSuccess = (
+  data: models.DetailSuccessProps<models.ReserveDiscountDetail>,
+): models.DetailSuccessAction<models.ReserveDiscountDetail> => {
+  return { type: types.DETAIL_RESERVE_DISCOUNT_SUCCESS, payload: data };
+};
+/** => detail reserve discount failed */
+export const detailReserveDiscountFailed = (
+  data: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.DETAIL_RESERVE_DISCOUNT_FAILED, payload: data };
+};
+/** => detail reserve discount reset */
+export const detailReserveDiscountReset = () => {
+  return { type: types.DETAIL_RESERVE_DISCOUNT_RESET };
+};
