@@ -11,7 +11,6 @@ import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useCartSelected } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
-import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
@@ -93,9 +92,8 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     cartViewActions.fetch(dispatchShopingCart);
     storeDetailAction.detail(dispatchUser);
-    if (getCartId !== null) {
-      cartViewActions.fetch(dispatchShopingCart, getCartId);
-    }
+    cartViewActions.fetch(dispatchShopingCart);
+
     /** => will be change later, delete reserve discount */
     resetDel(dispatchPromo);
     del(dispatchPromo, '1abcd');
