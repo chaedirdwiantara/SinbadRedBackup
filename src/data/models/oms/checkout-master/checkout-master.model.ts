@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 export interface IPaymentTypeCheckout {
+=======
+export interface IPaymentType {
+>>>>>>> 4d5c297 (flow merging checkout master)
   id: number;
   name: string;
   iconUrl: string;
 }
 
+<<<<<<< HEAD
 export interface IPaymentChannelCheckout {
+=======
+export interface IPaymentChannel {
+>>>>>>> 4d5c297 (flow merging checkout master)
   id: number;
   name: string;
   iconUrl: string;
@@ -14,7 +22,11 @@ export interface IPromoSeller {
   id: number;
   name: string;
   benefitType: string;
+<<<<<<< HEAD
   amount: number | null;
+=======
+  amount: number;
+>>>>>>> 4d5c297 (flow merging checkout master)
   productName: string | null;
   bonusQty: number | null;
 }
@@ -43,6 +55,7 @@ export interface IBrandCheckout {
 }
 
 export interface IInvoiceCheckout {
+<<<<<<< HEAD
   invoiceGroupId: string;
   totalProduct: number;
   totalPriceBeforeTax: number;
@@ -57,6 +70,23 @@ export interface IInvoiceCheckout {
   paymentChannel?: IPaymentChannelCheckout | null;
   promoSellers?: IPromoSeller[];
   vouchers?: IVoucherCheckout[];
+=======
+  cartParcelId: string;
+  invoiceGroupId: string;
+  invoiceGroupName: string;
+  totalProduct: number;
+  totalPriceBeforeTax: number;
+  PPN: number;
+  isPotentialPromoPayment: boolean;
+  totalPromoSellerAndVoucher: number;
+  totalPromoPayment: number;
+  totalPaymentFee: number;
+  totalPayment: number;
+  paymentType: IPaymentType | null;
+  paymentChannel: IPaymentChannel | null;
+  promoSellers: IPromoSeller[];
+  vouchers: IVoucherCheckout[];
+>>>>>>> 4d5c297 (flow merging checkout master)
   brands: IBrandCheckout[];
 }
 
@@ -77,15 +107,23 @@ export interface PaymentTypeChannel {
   totalFee: number;
   totalPayment: number;
   promoPayment: number;
+<<<<<<< HEAD
   paymentType: IPaymentTypeCheckout;
   paymentChannel: IPaymentChannelCheckout;
+=======
+  paymentType: IPaymentType;
+  paymentChannel: IPaymentChannel;
+>>>>>>> 4d5c297 (flow merging checkout master)
 }
 
 export interface PromoPayment {
   invoiceGroupId: string;
   totalPromoPayment: number;
 }
+<<<<<<< HEAD
 
 export interface CartIdPayload {
   cartId: string | null;
 }
+=======
+>>>>>>> 4d5c297 (flow merging checkout master)
