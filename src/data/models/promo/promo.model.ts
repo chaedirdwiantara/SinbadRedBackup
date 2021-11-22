@@ -44,7 +44,7 @@ export interface PotentialPromoProductCrossSelling {
 }
 export interface ReserveDiscountPostPayload {
   id: string;
-  data: [];
+  data: ReserveDiscountPayloadData[];
   isActiveStore: boolean;
   voucherIds: models.VoucherId[];
   potentialDiscountId: string;
@@ -61,7 +61,7 @@ export interface ReserveDiscountPayloadData {
 }
 export interface ReserveDiscountPayloadBrands {
   brandId: string;
-  prodcuts: ReserveDiscountPayloadProducts[];
+  products: ReserveDiscountPayloadProducts[];
 }
 export interface ReserveDiscountPayloadProducts {
   productId: string;
@@ -70,4 +70,37 @@ export interface ReserveDiscountPayloadProducts {
   priceBeforeTax: number;
   priceAfterTax: number;
   warehouseId: number;
+}
+export interface ReserveDiscountDetail {
+  promoMatch: ReserveDiscountPromoMatch[];
+  promoNotMatch: ReserveDiscountPromoNotMatch[];
+}
+export interface ReserveDiscountPromoMatch {
+  invoiceGroupId: string;
+  promoSellers: ReserveDiscountPromoSellers[];
+  vouchers: ReserveDiscountVouchers[];
+  totalPromoSellerAndVoucher: number;
+}
+export interface ReserveDiscountPromoNotMatch {
+  amount: ReserveDiscountNotMatchData[];
+  bonus: ReserveDiscountNotMatchData[];
+}
+export interface ReserveDiscountPromoSellers {
+  id: number;
+  name: string;
+  benefitType: string;
+  amount: number | null;
+  productName: string | null;
+  bonusQty: number | null;
+}
+export interface ReserveDiscountVouchers {
+  id: number;
+  name: string;
+  amount: number;
+}
+export interface ReserveDiscountNotMatchData {
+  productId: string;
+  productName: string;
+  productImage: string;
+  promoSellers: Array<string>;
 }
