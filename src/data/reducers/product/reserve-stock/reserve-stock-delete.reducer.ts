@@ -3,29 +3,28 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type ReserveDiscountDeleteInitialProps = models.DeleteItemProps;
+type ReserveStockDeleteInitialProps = models.DeleteItemProps;
 /** === INITIAL STATE HERE === */
-export const reserveDiscountDeleteInitialState: ReserveDiscountDeleteInitialProps =
-  {
-    data: null,
-    error: null,
-    loading: false,
-  };
+export const reserveStockDeleteInitialState: ReserveStockDeleteInitialProps = {
+  data: null,
+  error: null,
+  loading: false,
+};
 /** === FUNCTION HERE === */
-export const reserveDiscountDeleteReducer = simplifyReducer(
-  reserveDiscountDeleteInitialState,
+export const reserveStockDeleteReducer = simplifyReducer(
+  reserveStockDeleteInitialState,
   {
     /** ===> DETAIL */
     /** => detail process */
-    [types.DELETE_RESERVE_DISCOUNT_PROCESS]() {
+    [types.DELETE_RESERVE_STOCK_PROCESS]() {
       return {
-        ...reserveDiscountDeleteInitialState,
+        ...reserveStockDeleteInitialState,
         loading: true,
       };
     },
     /** => detail success */
-    [types.DELETE_RESERVE_DISCOUNT_SUCCESS](
-      state = reserveDiscountDeleteInitialState,
+    [types.DELETE_RESERVE_STOCK_SUCCESS](
+      state = reserveStockDeleteInitialState,
       action: models.DeleteSuccessAction,
     ) {
       return {
@@ -35,8 +34,8 @@ export const reserveDiscountDeleteReducer = simplifyReducer(
       };
     },
     /** => detail failed */
-    [types.DELETE_RESERVE_DISCOUNT_FAILED](
-      state = reserveDiscountDeleteInitialState,
+    [types.DELETE_RESERVE_STOCK_FAILED](
+      state = reserveStockDeleteInitialState,
       action: models.DeleteFailedAction,
     ) {
       return {
