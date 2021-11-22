@@ -4,7 +4,7 @@ import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
 const initialState: models.CartSelected = {
-  id: 0,
+  id: '',
   data: [],
   isActiveStore: false,
   voucherIds: [],
@@ -12,11 +12,11 @@ const initialState: models.CartSelected = {
 };
 
 /** === FUNCTION === */
-export const verificationCartCore = simplifyReducer(initialState, {
-  /** => FOR SAVE PAYLOAD VERIFICATION CART FLAG */
+export const cartSelectedCore = simplifyReducer(initialState, {
+  /** => FOR SAVE PAYLOAD CART SELECTED FLAG */
   [types.UPDATE_CART_SELECTED](
     state = initialState,
-    action: models.UpdateVerificationCart,
+    action: models.UpdateCartSelected,
   ) {
     return {
       ...state,

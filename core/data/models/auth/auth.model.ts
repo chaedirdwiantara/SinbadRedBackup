@@ -45,3 +45,17 @@ export interface LoginSuccess {
 export interface LogoutSuccess {
   message: string;
 }
+
+/** === AUTH ME DATA === */
+export interface AuthMeDataProps {
+  sessionActiveUntil: Date;
+  sessionExpiredUntil: Date;
+  user: UserAuthData;
+  isActiveStore: boolean;
+  approvalStatus: 'guest' | 'rejected' | 'verified' | 'pending' | 'updating';
+  sellerIds: UserSellerAuthData[];
+}
+
+export interface AuthMeSuccess {
+  data: AuthMeDataProps;
+}
