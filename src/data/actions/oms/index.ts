@@ -7,6 +7,7 @@ export * from './verification-order/verification-order-api.action';
 export * from './shoping-cart/shoping-cart-api.action';
 export * from './shoping-cart/add-to-cart-api.action';
 export * from './shoping-cart/shoping-cart-update-api.action';
+export * from './checkout/checkout-api.action';
 /**
  * ================================================================
  * NOTES
