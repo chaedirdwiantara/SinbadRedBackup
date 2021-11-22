@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment action */
 const usePromoPaymentAction = () => {
@@ -59,8 +60,15 @@ const useReserveDiscountAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveDiscountProcess(contextDispatch, { id }));
     },
-    create: (contextDispatch: (action: any) => any, data: {}) => {
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.ReserveDiscountPostPayload,
+    ) => {
       dispatch(Actions.createReserveDiscountProcess(contextDispatch, { data }));
+    },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveDiscountReset());
+      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
     },
   };
 };
