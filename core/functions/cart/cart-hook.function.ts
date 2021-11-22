@@ -22,7 +22,7 @@ export const useCartSelected = () => {
   return {
     getCartSelected: dataCart,
     setCartSelected: (data: models.CartSelected) => {
-      dispatch(Actions.verificationCart(data));
+      dispatch(Actions.updateCartSelected(data));
     },
   };
 };

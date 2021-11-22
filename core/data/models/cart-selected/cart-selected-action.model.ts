@@ -1,6 +1,6 @@
 import * as models from '@models';
-/** => update verification cart payload */
-export interface UpdateVerificationCart {
+/** => update cart selected payload */
+export interface UpdateCartSelected {
   type: string;
   payload: models.CartSelected;
 }

@@ -26,7 +26,7 @@ const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
 const useDataCart = () => {
-  return useSelector((state: RootState) => state.verificationCartCore);
+  return useSelector((state: RootState) => state.cartSelectedCore);
 };
 
 /** === EXPORT === */
