@@ -113,8 +113,8 @@ export const potentialPromoProductProcess = (
 };
 /** => potential promo product success */
 export const potentialPromoProductSuccess = (
-  data: models.ListSuccessProps<models.PotentialPromoProductProps[]>,
-): models.ListSuccessAction<models.PotentialPromoProductProps[]> => {
+  data: models.DetailSuccessProps<models.PotentialPromoProductProps>,
+): models.DetailSuccessAction<models.PotentialPromoProductProps> => {
   return { type: types.POTENTIAL_PROMO_PRODUCT_SUCCESS, payload: data };
 };
 /** => potential promo product failed */
@@ -155,7 +155,31 @@ export const deleteReserveDiscountFailed = (
 ): models.DeleteFailedAction => {
   return { type: types.DELETE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
-/** => delete reserve disount reset */
-export const deleteReserveDiscountReset = () => {
-  return { type: types.DELETE_RESERVE_DISCOUNT_RESET };
+/** === CREATE RESERVE DISCOUNT === */
+/** => create reserve discount process */
+export const createReserveDiscountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<{}>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CREATE_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CREATE_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => create reserve discount success */
+export const createReserveDiscountSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CREATE_RESERVE_DISCOUNT_SUCCESS, payload: data };
+};
+/** => create reserve discount failed */
+export const createReserveDiscountFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CREATE_RESERVE_DISCOUNT_FAILED, payload: data };
 };

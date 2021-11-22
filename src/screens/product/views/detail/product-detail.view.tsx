@@ -86,14 +86,14 @@ const ProductDetailView: FC = () => {
     statePromo: { potentialPromoProduct: potentialPromoProduct },
     dispatchPromo,
   } = React.useContext(contexts.PromoContext);
-  const potentialPromoProductList = potentialPromoProduct.list;
+  const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
   /** => potential promo product effect */
   React.useEffect(() => {
     if (productDetailState.data !== null) {
       const { id } = productDetailState.data;
       potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.list(
+      potentialPromoProductAction.detail(
         dispatchPromo,
         '6149f9c2a5868baca3e6f8ec',
       );
@@ -181,12 +181,15 @@ const ProductDetailView: FC = () => {
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
           />
-          {potentialPromoProductList.data.length > 0 && (
-            <PromoSection
-              description={potentialPromoProductList.data[0].shortDescription}
-              onPress={() => setPromoModalVisible(true)}
-            />
-          )}
+          {potentialPromoProductList.data !== null &&
+            potentialPromoProductList.data.flexiCombo.length > 0 && (
+              <PromoSection
+                description={
+                  potentialPromoProductList.data.flexiCombo[0].shortDescription
+                }
+                onPress={() => setPromoModalVisible(true)}
+              />
+            )}
           {defaultProperties.isBundle && (
             <ProductDetailSection title="Promosi Bundle Special">
               <SnbText.B3>Promo Bundle Data</SnbText.B3>
@@ -230,7 +233,7 @@ const ProductDetailView: FC = () => {
       <PromoModal
         visible={promoModalVisible}
         onClose={() => setPromoModalVisible(false)}
-        promoList={potentialPromoProductList.data}
+        promoList={potentialPromoProductList.data?.flexiCombo || []}
       />
     </SnbContainer>
   );

@@ -8,7 +8,7 @@ import * as models from '@models';
 interface PromoModalProps {
   visible: boolean;
   onClose: () => void;
-  promoList: Array<models.PotentialPromoProductProps>;
+  promoList: Array<models.PotentialPromoProductFlexiCombo>;
 }
 /** === CONSTANT === */
 const { height } = Dimensions.get('window');

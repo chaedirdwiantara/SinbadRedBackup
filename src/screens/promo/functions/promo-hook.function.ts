@@ -44,7 +44,7 @@ const usePromoGeneralAction = () => {
 const usePotentialPromoProductAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any, id: string) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.potentialPromoProductProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -59,8 +59,8 @@ const useReserveDiscountAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveDiscountProcess(contextDispatch, { id }));
     },
-    resetDel: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.deleteReserveDiscountReset());
+    create: (contextDispatch: (action: any) => any, data: {}) => {
+      dispatch(Actions.createReserveDiscountProcess(contextDispatch, { data }));
     },
   };
 };
