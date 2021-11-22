@@ -5,3 +5,8 @@ export interface OrderStatus {
 }
 
 export interface OrderStatusSuccessProps extends Array<OrderStatus> {}
+
+export interface DetailOrderStatusProcessAction {
+  type: string;
+  contextDispatch: (action: any) => any;
+}

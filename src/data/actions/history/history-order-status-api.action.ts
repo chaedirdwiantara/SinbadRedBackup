@@ -5,12 +5,10 @@ import * as types from '@types';
 /** Process */
 export const orderStatusProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.DetailProcessProps,
-): models.DetailProcessAction => {
+): models.DetailOrderStatusProcessAction => {
   contextDispatch({ type: types.HISTORY_ORDER_STATUS_PROCESS });
   return {
     type: types.HISTORY_ORDER_STATUS_PROCESS,
-    payload,
     contextDispatch,
   };
 };

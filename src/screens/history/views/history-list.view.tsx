@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import {
   SnbContainer,
@@ -15,6 +15,8 @@ import {
 import { goBack, goToHistoryDetail } from '../functions';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
+import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
+import {} from 'src/data/contexts/history/';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -170,6 +172,11 @@ const HistoryListView: FC = () => {
   const [activeOrderStatus, setActiveOrderStatus] = useState<
     typeof orderStatus[number]['key'] | ''
   >('');
+  const getOrderStatus = useOrderStatusActions();
+
+  useEffect(() => {
+    getOrderStatus.fetch();
+  });
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
