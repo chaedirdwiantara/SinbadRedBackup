@@ -10,7 +10,6 @@ export interface ProductList {
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
-  image: string;
   thumbnail: string;
 }
 
@@ -21,6 +20,7 @@ export interface ProductListProcessProps extends models.ListProcessProps {
   categoryId?: string;
   minPrice?: number;
   maxPrice?: number;
+  sellerId?: string;
 }
 
 export type ProductListQueryOptions = Omit<
@@ -57,7 +57,7 @@ export interface ProductImage {
 export interface ProductDetail {
   id: string;
   supplierCode: string;
-  supplierId: string;
+  sellerId: string;
   name: string;
   detail: string;
   description: string;

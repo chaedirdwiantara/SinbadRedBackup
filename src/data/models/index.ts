@@ -13,6 +13,8 @@ export * from '@core/models/create.model';
 export * from '@core/models/create-action.model';
 export * from '@core/models/update.model';
 export * from '@core/models/update-action.model';
+export * from '@core/models/delete.model';
+export * from '@core/models/delete-action.model';
 export * from './global.model';
 export * from './user.model';
 export * from './register';

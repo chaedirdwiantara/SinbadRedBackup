@@ -25,7 +25,7 @@ export interface CartSelectedData {
 
 export interface VoucherId {
   type: string;
-  id: number;
+  voucherId: number;
 }
 
 export interface CartSelected {
@@ -33,5 +33,4 @@ export interface CartSelected {
   data: CartSelectedData[];
   isActiveStore: boolean;
   voucherIds?: VoucherId[];
-  salesId: number;
 }
