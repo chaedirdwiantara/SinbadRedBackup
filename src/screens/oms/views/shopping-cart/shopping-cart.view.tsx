@@ -87,8 +87,19 @@ const OmsShoppingCartView: FC = () => {
    * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
    */
-  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const {
+    dispatchPromo,
+    statePromo: { reserveDiscount: stateReserveDiscount },
+  } = React.useContext(contexts.PromoContext);
   const reserveDiscountAction = useReserveDiscountAction();
+  React.useEffect(() => {
+    if (stateReserveDiscount.create.data !== null) {
+      reserveDiscountAction.detail(
+        dispatchPromo,
+        stateReserveDiscount.create.data.id,
+      );
+    }
+  }, [stateReserveDiscount.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -96,12 +107,13 @@ const OmsShoppingCartView: FC = () => {
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
 
-    reserveDiscountAction.create(dispatchPromo, {
+    /** => fetch create reserved-discount */
+    const getReservedDiscountPayload = {
       id: '0684fb2600bf',
       data: [
         {
           invoiceGroupId: '1',
-          portfolioId: null,
+          portfolioId: '1',
           brands: [
             {
               brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
@@ -129,13 +141,14 @@ const OmsShoppingCartView: FC = () => {
           channelId: 1,
           groupId: 1,
           typeId: 1,
-          clustderI: 1,
+          clusterId: 1,
         },
       ],
       isActiveStore: true,
       voucherIds: [],
       potentialDiscountId: '619301e80cdfdd300bb0e7f6',
-    });
+    };
+    reserveDiscountAction.create(dispatchPromo, getReservedDiscountPayload);
   }, []);
 
   /** Listen changes cartState */
