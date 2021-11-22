@@ -1,3 +1,4 @@
+import * as models from '@models';
 /** === PROMO PAYMENT LIST === */
 /** => success props */
 export interface PromoPaymentListSuccessProps {
@@ -40,4 +41,33 @@ export interface PotentialPromoProductCrossSelling {
   promoSellerId: string;
   name: string;
   description: string;
+}
+export interface ReserveDiscountPostPayload {
+  id: string;
+  data: [];
+  isActiveStore: boolean;
+  voucherIds: models.VoucherId[];
+  potentialDiscountId: string;
+}
+export interface ReserveDiscountPayloadData {
+  invoiceGroupId: string;
+  portfolioId: string;
+  brands: ReserveDiscountPayloadBrands[];
+  sellerId: number;
+  channelId: number;
+  groupId: number;
+  typeId: number;
+  clusterId: number;
+}
+export interface ReserveDiscountPayloadBrands {
+  brandId: string;
+  prodcuts: ReserveDiscountPayloadProducts[];
+}
+export interface ReserveDiscountPayloadProducts {
+  productId: string;
+  qty: number;
+  displayPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  warehouseId: number;
 }

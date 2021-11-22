@@ -13,7 +13,7 @@ import { useCartSelected } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-// import { useReserveDiscountAction } from '@screen/promo/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -31,8 +31,6 @@ import {
   useCartViewActions,
   useCartUpdateActions,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-// import { useReserveStockContext } from 'src/data/contexts/product/reserve-stock/useReserveStockContext';
-// import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -88,13 +86,9 @@ const OmsShoppingCartView: FC = () => {
    * Reserve Section
    * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
-   * - Proceed Reserve Stock
-   * - Proceed Reserve Discount
    */
-  // const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  // const reserveDiscountAction = useReserveDiscountAction();
-  // const { dispatchReserveStock } = useReserveStockContext();
-  // const reserveStockAction = useReserveStockAction();
+  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const reserveDiscountAction = useReserveDiscountAction();
 
   /** Get Cart View */
   useEffect(() => {
@@ -102,11 +96,46 @@ const OmsShoppingCartView: FC = () => {
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
 
-    /** => will be change later, delete reserve discount */
-    // reserveDiscountAction.del(dispatchPromo, '1abcd');
-    // reserveDiscountAction.create(dispatchPromo, {});
-    // reserveStockAction.del(dispatchReserveStock, '1abcd');
-    // reserveStockAction.create(dispatchReserveStock, {});
+    reserveDiscountAction.create(dispatchPromo, {
+      id: '0684fb2600bf',
+      data: [
+        {
+          invoiceGroupId: '1',
+          portfolioId: null,
+          brands: [
+            {
+              brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
+              products: [
+                {
+                  productId: '9536f526-2447-11ec-9621-0242ac130002',
+                  qty: 2,
+                  displayPrice: 201000,
+                  priceBeforeTax: 201000,
+                  priceAfterTax: 221100,
+                  warehouseId: 1,
+                },
+                {
+                  productId: '997fd26a-2447-11ec-9621-0242ac130002',
+                  qty: 1,
+                  displayPrice: 216000,
+                  priceBeforeTax: 216000,
+                  priceAfterTax: 237600,
+                  warehouseId: 1,
+                },
+              ],
+            },
+          ],
+          sellerId: 1,
+          channelId: 1,
+          groupId: 1,
+          typeId: 1,
+          clustderI: 1,
+        },
+      ],
+      isActiveStore: true,
+      voucherIds: [],
+      potentialDiscountId: '619301e80cdfdd300bb0e7f6',
+    });
   }, []);
 
   /** Listen changes cartState */
