@@ -159,7 +159,7 @@ export const deleteReserveDiscountFailed = (
 /** => create reserve discount process */
 export const createReserveDiscountProcess = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<{}>,
+  data: models.CreateProcessProps<models.ReserveDiscountPostPayload>,
 ): models.CreateProcessAction => {
   contextDispatch({
     type: types.CREATE_RESERVE_DISCOUNT_PROCESS,
