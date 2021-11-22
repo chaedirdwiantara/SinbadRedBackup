@@ -9,7 +9,6 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useCartSelected } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
@@ -30,6 +29,7 @@ import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useSho
 import {
   useCartViewActions,
   useCartUpdateActions,
+  useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {

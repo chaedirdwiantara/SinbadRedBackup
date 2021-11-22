@@ -8,8 +8,3 @@ export interface IsIntroSinbadAction {
   type: string;
   payload: boolean;
 }
-
-export interface CartId {
-  type: string;
-  payload: string | null;
-}

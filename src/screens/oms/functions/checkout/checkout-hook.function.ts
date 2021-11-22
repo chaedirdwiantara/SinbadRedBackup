@@ -1,9 +1,43 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useDataCheckout } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTION === */
+/** => master data checkout */
+const useCheckoutMaster = () => {
+  const dataCheckout = useDataCheckout();
+  const dispatch = useDispatch();
+  return {
+    getCheckoutMaster: dataCheckout,
+    setInvoiceBrand: (data: models.CheckoutDataMaster) => {
+      dispatch(Actions.mergeCheckoutInvoiceBrand(data));
+    },
+    setReserveDiscount: (data: models.ReserveDiscount[]) => {
+      dispatch(Actions.mergeReserveDiscountCheckout(data));
+    },
+    setPaymentChannel: (data: models.PaymentTypeChannel[]) => {
+      dispatch(Actions.updatePaymentChannelCheckout(data));
+    },
+    setPromoPayment: (data: models.PromoPayment[]) => {
+      dispatch(Actions.updatePromoPayementCheckout(data));
+    },
+  };
+};
+/** => checkout actions */
+export const useCheckoutViewActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.getCheckoutProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.getCheckoutReset);
+    },
+  };
+};
 /** => promo general action */
 const usePaymentDetailAccorrdion = () => {
   const [active, setActive] = React.useState<number | null>(null);
@@ -69,6 +103,7 @@ const usePaymentChannelModal = () => {
 };
 /** === EXPORT === */
 export {
+  useCheckoutMaster,
   usePaymentDetailAccorrdion,
   useTermsAndConditionsModal,
   useParcelDetailModal,

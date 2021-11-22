@@ -1,5 +1,5 @@
 /** === IMPORT HERE === */
-import * as types from '../../types';
+import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
@@ -11,7 +11,7 @@ const initialState: models.CartSelected = {
 };
 
 /** === FUNCTION === */
-export const cartSelectedCore = simplifyReducer(initialState, {
+export const cartSelected = simplifyReducer(initialState, {
   /** => FOR SAVE PAYLOAD CART SELECTED FLAG */
   [types.UPDATE_CART_SELECTED](
     state = initialState,
