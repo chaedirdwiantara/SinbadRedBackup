@@ -34,25 +34,6 @@ interface HistoryItem {
 }
 /** === CONSTANTS AND DUMMIES === */
 const historyTabs = ['Tagihan', 'Order'];
-const paymentStatus = [
-  { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-  { key: 'unpaid', value: 'Tidak Dibayar' },
-  { key: 'overdue', value: 'Overdue' },
-  { key: 'paid', value: 'Dibayar' },
-  { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-  { key: 'refunded', value: 'Dikembalikan' },
-] as const;
-const orderStatus = [
-  { key: 'confirmation', value: 'Menunggu Konfirmasi' },
-  { key: 'verified', value: 'Verifikasi' },
-  { key: 'on_packing', value: 'Dikemas' },
-  { key: 'on_delivery', value: 'Dikirim' },
-  { key: 'delivered', value: 'Diterima' },
-  { key: 'done', value: 'Selesai' },
-  { key: 'partial_pending', value: 'Pending Partial' },
-  { key: 'supplier_pending', value: 'Pending Supplier' },
-  { key: 'canceled', value: 'Batal' },
-] as const;
 const paymentStatusColor: Record<PaymentStatusKey, keyof HistoryStatusColor> = {
   waiting_for_payment: 'yellow',
   unpaid: 'white',
@@ -166,13 +147,10 @@ const HistoryListView: FC = () => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
-  const [activePaymentStatus, setActivePaymentStatus] = useState<
-    typeof paymentStatus[number]['key'] | ''
-  >('');
-  const [activeOrderStatus, setActiveOrderStatus] = useState<
-    typeof orderStatus[number]['key'] | ''
-  >('');
+  const [activePaymentStatus, setActivePaymentStatus] = useState('');
+  const [activeOrderStatus, setActiveOrderStatus] = useState('');
   const getOrderStatus = useOrderStatusActions();
+  const getHistoryList = () => console.log('Get History List');
 
   /**
    * GET ORDER STATUS
@@ -182,7 +160,17 @@ const HistoryListView: FC = () => {
   );
   useEffect(() => {
     getOrderStatus.fetch(dispatchOrderStatus);
+    getHistoryList();
   }, []);
+
+  /** GET HISTORY LIST */
+  useEffect(() => {
+    console.log(activeTab === 0 ? 'Payment Tab' : 'Order Tab');
+    console.log('Order Status', activeOrderStatus);
+    console.log('Payment Status', activePaymentStatus);
+    activeTab === 0 ? setActiveOrderStatus('') : setActivePaymentStatus('');
+    getHistoryList();
+  }, [activeOrderStatus, activePaymentStatus, activeTab]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -226,14 +214,17 @@ const HistoryListView: FC = () => {
   /** => Status List */
   const renderStatusList = () => {
     // ini nanti diganti
-    const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
     const setActiveStatus =
       activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
 
-    return !stateOrderStatus.orderStatus.loading &&
-      stateOrderStatus.orderStatus.data !== null ? (
+    const statusList =
+      activeTab === 0
+        ? stateOrderStatus.orderStatus
+        : stateOrderStatus.orderStatus;
+
+    return !statusList.loading && statusList.data !== null ? (
       <View>
         <ScrollView
           horizontal={true}
@@ -242,7 +233,7 @@ const HistoryListView: FC = () => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {stateOrderStatus.orderStatus.data.map((status, index) => (
+          {statusList.data.map((status, index) => (
             <View key={index} style={{ marginRight: 16 }}>
               <SnbChips.Choice
                 text={status.title}
