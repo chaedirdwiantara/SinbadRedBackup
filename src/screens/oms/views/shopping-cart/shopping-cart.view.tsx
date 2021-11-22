@@ -9,8 +9,9 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useCartSelected, useCartId } from '@core/functions/cart';
+import { useCartSelected } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
@@ -46,15 +47,17 @@ const OmsShoppingCartView: FC = () => {
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
 
+  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const {
     stateShopingCart: { cart: cartState, update: updateCartState },
     dispatchShopingCart,
   } = useShopingCartContext();
+
   /** => handle verification cart */
   const { setCartSelected } = useCartSelected();
-  const { getCartId } = useCartId();
 
   /**
    * Verification Order
@@ -87,9 +90,10 @@ const OmsShoppingCartView: FC = () => {
 
   /** Get Cart View */
   useEffect(() => {
-    if (getCartId !== null) {
-      cartViewActions.fetch(dispatchShopingCart, getCartId);
-    }
+    cartViewActions.fetch(dispatchShopingCart);
+    storeDetailAction.detail(dispatchUser);
+    cartViewActions.fetch(dispatchShopingCart);
+
     /** => will be change later, delete reserve discount */
     resetDel(dispatchPromo);
     del(dispatchPromo, '1abcd');
@@ -126,7 +130,6 @@ const OmsShoppingCartView: FC = () => {
       return;
     }
     const params: CartUpdatePayload = {
-      cartId: cartState.data.cartId,
       storeId: cartState.data.storeId,
       action: 'submit',
       products: [],
