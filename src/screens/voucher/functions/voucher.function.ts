@@ -53,7 +53,7 @@ const countPotentialDiscount = (
 /** => get selected vouchers */
 const getSelectedVouchers = (
   voucherState: models.selectedVoucherDataProps | null,
-) => {
+): models.VoucherId[] => {
   if (voucherState === null) {
     return [];
   }

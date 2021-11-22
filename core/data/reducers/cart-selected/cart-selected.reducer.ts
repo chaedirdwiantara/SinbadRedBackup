@@ -4,11 +4,10 @@ import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === INITIAL STATE HERE === */
 const initialState: models.CartSelected = {
-  id: 0,
+  id: '',
   data: [],
   isActiveStore: false,
   voucherIds: [],
-  salesId: 0,
 };
 
 /** === FUNCTION === */
@@ -23,7 +22,6 @@ export const verificationCartCore = simplifyReducer(initialState, {
       id: action.payload.id,
       data: action.payload.data,
       isActiveStore: action.payload.isActiveStore,
-      salesId: action.payload.salesId,
     };
   },
 });
