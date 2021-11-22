@@ -28,7 +28,7 @@ import {
   useParcelDetailModal,
   useTermsAndConditionsModal,
   usePaymentAction,
-  useSelectedPaymentType
+  useSelectedPaymentType,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -130,13 +130,13 @@ const OmsCheckoutView: FC = () => {
       data: {
         cartParcels: [
           {
-            invoiceGroupId:"abcdef12345",
-            totalCartParcel:50000.00
-        },
-        {
-            invoiceGroupId:"abcdef12346",
-            totalCartParcel:60000.00
-        }
+            invoiceGroupId: 'abcdef12345',
+            totalCartParcel: 50000.0,
+          },
+          {
+            invoiceGroupId: 'abcdef12346',
+            totalCartParcel: 60000.0,
+          },
         ],
       },
     };
@@ -340,15 +340,16 @@ const OmsCheckoutView: FC = () => {
     const dataPostTC = {
       data: {
         buyerId: 1234,
-        orderParcels: [{
-          invoiceGroupId: "234324234",
-          paymentChannelId: 2,
-          paymentTypeId: 2
-        }
-      ]
+        orderParcels: [
+          {
+            invoiceGroupId: '234324234',
+            paymentChannelId: 2,
+            paymentTypeId: 2,
+          },
+        ],
       },
     };
-    
+
     const content = () => {
       return (
         <View style={CheckoutStyle.bottomContentContainer}>
@@ -363,8 +364,8 @@ const OmsCheckoutView: FC = () => {
           type={'primary'}
           onPress={() => {
             paymentAction.tCCreate(dispatchPayment, dataPostTC);
-            termsAndConditionModal.setOpen(true)}
-          }
+            termsAndConditionModal.setOpen(true);
+          }}
           content={content()}
           title={'Buat Pesanan'}
         />
@@ -386,28 +387,32 @@ const OmsCheckoutView: FC = () => {
   /** => terms and conditions modal */
   const renderTermsAndConditionModal = () => {
     const paymentTypesTermsConditions = () => {
-      return statePayment?.paymentTCDetail?.data?.paymentTypes.map((item, index) => {
-        return (
-          <View key={index} style={{ marginBottom: 12 }}>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.H4>{item.name}</SnbText.H4>
+      return statePayment?.paymentTCDetail?.data?.paymentTypes.map(
+        (item, index) => {
+          return (
+            <View key={index} style={{ marginBottom: 12 }}>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.H4>{item.name}</SnbText.H4>
+              </View>
+              <Html value={item.term} fontSize={12} />
             </View>
-            <Html value={item.term} fontSize={12} />
-          </View>
-        );
-      });
+          );
+        },
+      );
     };
     const paymentChannelTermsConditions = () => {
-      return statePayment?.paymentTCDetail?.data?.paymentChannels.map((item, index) => {
-        return (
-          <View key={index} style={{ marginBottom: 12 }}>
-            <View style={{ marginBottom: 8 }}>
-              <SnbText.H4>{item.name}</SnbText.H4>
+      return statePayment?.paymentTCDetail?.data?.paymentChannels.map(
+        (item, index) => {
+          return (
+            <View key={index} style={{ marginBottom: 12 }}>
+              <View style={{ marginBottom: 8 }}>
+                <SnbText.H4>{item.name}</SnbText.H4>
+              </View>
+              <Html value={item.term} fontSize={12} />
             </View>
-            <Html value={item.term} fontSize={12} />
-          </View>
-        );
-      });
+          );
+        },
+      );
     };
     const button = () => {
       return (
@@ -569,34 +574,45 @@ const OmsCheckoutView: FC = () => {
     const totalCartParcel = 100000;
     const paymentTypeId = 1;
     const content = () => {
-      return !statePayment?.paymentTypesList?.loading ?(
+      return !statePayment?.paymentTypesList?.loading ? (
         <View>
-          {statePayment?.paymentTypesList?.data.map((item : any, index : number) => {
-            const dataPaymentType = {
-              id : item.id,
-              name : item.name,
-              iconUrl: item.iconUrl
-            }
-            return (
-              <SnbListButtonType1
-                key={index}
-                image={item.iconUrl}
-                title={item.name}
-                description={item.description}
-                type={'one'}
-                badge={item.promoPaymentAvailable ? true : false}
-                textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
-                onPress={() => {
-                  paymentAction.channelsList(dispatchPayment, invoiceGroupId, totalCartParcel, paymentTypeId)
-                  paymentTypesModal.setOpen(false);
-                  paymentChannelsModal.setOpen(true);
-                  paymentType.setSelectedPaymentType(dataPaymentType)
-                }}
-              />
-            );
-          })}
+          {statePayment?.paymentTypesList?.data.map(
+            (item: any, index: number) => {
+              const dataPaymentType = {
+                id: item.id,
+                name: item.name,
+                iconUrl: item.iconUrl,
+              };
+              return (
+                <SnbListButtonType1
+                  key={index}
+                  image={item.iconUrl}
+                  title={item.name}
+                  description={item.description}
+                  type={'one'}
+                  badge={item.promoPaymentAvailable ? true : false}
+                  textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
+                  onPress={() => {
+                    paymentAction.channelsList(
+                      dispatchPayment,
+                      invoiceGroupId,
+                      totalCartParcel,
+                      paymentTypeId,
+                    );
+                    paymentTypesModal.setOpen(false);
+                    paymentChannelsModal.setOpen(true);
+                    paymentType.setSelectedPaymentType(dataPaymentType);
+                  }}
+                />
+              );
+            },
+          )}
         </View>
-      ) : <View style={{ height: '30%', marginTop: 100 }}><LoadingPage/></View>;
+      ) : (
+        <View style={{ height: '30%', marginTop: 100 }}>
+          <LoadingPage />
+        </View>
+      );
     };
     return (
       <SnbBottomSheet
@@ -704,7 +720,10 @@ const OmsCheckoutView: FC = () => {
         open={paymentChannelsModal.isOpen}
         content={content()}
         title={'Metode Pembayaran'}
-        closeAction={() => {paymentTypesModal.setOpen(true); paymentChannelsModal.setOpen(false)}}
+        closeAction={() => {
+          paymentTypesModal.setOpen(true);
+          paymentChannelsModal.setOpen(false);
+        }}
         actionIcon={'back'}
         size={'halfscreen'}
       />
