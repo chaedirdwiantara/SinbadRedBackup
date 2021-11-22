@@ -1,5 +1,4 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -53,11 +52,24 @@ const usePotentialPromoProductAction = () => {
     },
   };
 };
+/** => reserve discount action */
+const useReserveDiscountAction = () => {
+  const dispatch = useDispatch();
+  return {
+    del: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.deleteReserveDiscountProcess(contextDispatch, { id }));
+    },
+    resetDel: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.deleteReserveDiscountReset());
+    },
+  };
+};
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
   usePromoGeneralAction,
   usePotentialPromoProductAction,
+  useReserveDiscountAction,
 };
 /**
  * ================================================================
