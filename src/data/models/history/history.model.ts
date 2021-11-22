@@ -1,7 +1,7 @@
 export interface OrderStatus {
-  status: String;
-  title: String;
-  detail: String;
+  status: string;
+  title: string;
+  detail: string;
 }
 
 export interface OrderStatusSuccessProps extends Array<OrderStatus> {}

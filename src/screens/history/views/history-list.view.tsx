@@ -16,7 +16,7 @@ import { goBack, goToHistoryDetail } from '../functions';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
-import { useOrderStatusContext } from 'src/data/contexts/history/useOrderStatusContext';
+import { contexts } from '@contexts';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -174,8 +174,12 @@ const HistoryListView: FC = () => {
   >('');
   const getOrderStatus = useOrderStatusActions();
 
-  // Fetch API
-  const { dispatchOrderStatus } = useOrderStatusContext();
+  /**
+   * GET ORDER STATUS
+   */
+  const { dispatchOrderStatus, stateOrderStatus } = React.useContext(
+    contexts.OrderStatusContext,
+  );
   useEffect(() => {
     getOrderStatus.fetch(dispatchOrderStatus);
   }, []);
@@ -228,7 +232,8 @@ const HistoryListView: FC = () => {
     const setActiveStatus =
       activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
 
-    return (
+    return !stateOrderStatus.orderStatus.loading &&
+      stateOrderStatus.orderStatus.data !== null ? (
       <View>
         <ScrollView
           horizontal={true}
@@ -237,25 +242,20 @@ const HistoryListView: FC = () => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          <View style={{ marginRight: 16 }}>
-            <SnbChips.Choice
-              text="Semua"
-              status={activeStatus === '' ? 'active' : 'inactive'}
-              onPress={() => setActiveStatus('')}
-            />
-          </View>
-          {statusList.map((status) => (
-            <View key={status.key} style={{ marginRight: 16 }}>
+          {stateOrderStatus.orderStatus.data.map((status, index) => (
+            <View key={index} style={{ marginRight: 16 }}>
               <SnbChips.Choice
-                text={status.value}
-                status={status.key === activeStatus ? 'active' : 'inactive'}
-                onPress={() => setActiveStatus(status.key as any)}
+                text={status.title}
+                status={status.status === activeStatus ? 'active' : 'inactive'}
+                onPress={() => setActiveStatus(status.status as any)}
               />
             </View>
           ))}
           <View style={{ width: 16 }} />
         </ScrollView>
       </View>
+    ) : (
+      <View />
     );
   };
   /** => Payment List */
