@@ -28,6 +28,9 @@ const useDataVoucher = (): models.VoucherDataProps => {
 const useDataCart = () => {
   return useSelector((state: RootState) => state.cartSelectedCore);
 };
+const useDataCheckout = () => {
+  return useSelector((state: RootState) => state.checkoutCore);
+};
 
 /** === EXPORT === */
 export {
@@ -37,6 +40,7 @@ export {
   useDataFlagRTDB,
   useDataAuth,
   useDataCart,
+  useDataCheckout,
 };
 /**
  * ================================================================
