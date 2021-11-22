@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDataCart } from '@core/redux/Data';
 /** === FUNCTIONS === */
 
 export const useCartViewActions = () => {
@@ -43,6 +44,17 @@ export const useCartUpdateActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.cartUpdateReset);
+    },
+  };
+};
+
+export const useCartSelected = () => {
+  const dataCart = useDataCart();
+  const dispatch = useDispatch();
+  return {
+    getCartSelected: dataCart,
+    setCartSelected: (data: models.CartSelected) => {
+      dispatch(Actions.updateCartSelected(data));
     },
   };
 };

@@ -551,7 +551,6 @@ const OmsCheckoutView: FC = () => {
         content={content()}
         title={'Syarat & Ketentuan'}
         closeAction={() => termsAndConditionModal.setOpen(false)}
-        action={true}
         actionIcon={'close'}
       />
     );
@@ -666,7 +665,6 @@ const OmsCheckoutView: FC = () => {
         content={content()}
         title={'Detail Pesanan'}
         closeAction={() => parcelDetailModal.setModalOpen(false)}
-        action={true}
         actionIcon={'close'}
       />
     );
@@ -702,17 +700,16 @@ const OmsCheckoutView: FC = () => {
         content={content()}
         title={'Tipe Pembayaran'}
         closeAction={() => paymentTypesModal.setOpen(false)}
-        action={true}
         actionIcon={'close'}
       />
     );
   };
   /** => payment channels modal */
   const renderPaymentChannelsModal = () => {
-    const contentChannelTypes = (paymentTypes) => {
+    const contentChannelTypes = (paymentTypes: any) => {
       return (
         <>
-          {paymentTypes.map((item, index) => {
+          {paymentTypes.map((item: any, index: number) => {
             const description =
               item.status === 'enabled'
                 ? `Total Biaya ${toCurrency(item.totalPayment)}`
@@ -731,10 +728,10 @@ const OmsCheckoutView: FC = () => {
         </>
       );
     };
-    const contentChannelGroups = (paymentGroups) => {
+    const contentChannelGroups = (paymentGroups: any) => {
       return (
         <View>
-          {paymentGroups.map((item, index) => {
+          {paymentGroups.map((item: any, index: number) => {
             return (
               <React.Fragment key={index}>
                 <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
@@ -789,9 +786,7 @@ const OmsCheckoutView: FC = () => {
         content={content()}
         title={'Metode Pembayaran'}
         closeAction={() => paymentChannelsModal.setOpen(false)}
-        action={true}
         actionIcon={'close'}
-        fullsize={true}
       />
     );
   };
