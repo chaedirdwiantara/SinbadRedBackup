@@ -62,7 +62,9 @@ const deleteReserveDiscount = (data: models.DeleteProcessProps) => {
   );
 };
 /** => create reserve discount */
-const createReserveDiscount = (data: models.CreateProcessProps<{}>) => {
+const createReserveDiscount = (
+  data: models.CreateProcessProps<models.ReserveDiscountPostPayload>,
+) => {
   const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = 'reserve-discount';
   return apiMappingMock<models.CreateSuccessProps>(
