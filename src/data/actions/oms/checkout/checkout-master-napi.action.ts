@@ -19,7 +19,7 @@ export const updatePaymentChannelCheckout = (
   return { type: types.UPDATE_PAYMENT_CHANNEL_CHECKOUT, payload };
 };
 /** => Update Total Promo Payment */
-export const updatePromoPayementCheckout = (
+export const updatePromoPaymentCheckout = (
   payload: models.PromoPayment[],
 ): models.UpdatePromoPaymentCheckout => {
   return { type: types.UPDATE_PROMO_PAYMENT_CHECKOUT, payload };
