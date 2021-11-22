@@ -22,7 +22,7 @@ const useCheckoutMaster = () => {
       dispatch(Actions.updatePaymentChannelCheckout(data));
     },
     setPromoPayment: (data: models.PromoPayment[]) => {
-      dispatch(Actions.updatePromoPayementCheckout(data));
+      dispatch(Actions.updatePromoPaymentCheckout(data));
     },
   };
 };
