@@ -15,18 +15,27 @@ export const checkout = simplifyReducer(initialState, {
     state = initialState,
     action: models.MergeCheckoutInvoiceBrand,
   ) {
-    const invoices = [];
     const allSupplier = action.payload.invoices;
-
-    for (let i = 0; i < allSupplier.length; i++) {
-      invoices.push({
-        ...allSupplier[i],
-        ...state.invoices.find(
-          (itmInner) =>
-            itmInner.invoiceGroupId === allSupplier[i].invoiceGroupId,
-        ),
-      });
-    }
+    const invoices: models.IInvoiceCheckout[] = allSupplier.map((item) => {
+      return {
+        cartParcelId: item.cartParcelId,
+        invoiceGroupId: item.invoiceGroupId,
+        invoiceGroupName: item.invoiceGroupName,
+        totalProduct: item.totalProduct,
+        totalPriceBeforeTax: item.totalPriceBeforeTax,
+        PPN: item.PPN,
+        isPotentialPromoPayment: item.isPotentialPromoPayment,
+        totalPromoSellerAndVoucher: 0,
+        totalPromoPayment: 0,
+        totalPaymentFee: 0,
+        totalPayment: 0,
+        paymentType: null,
+        paymentChannel: null,
+        promoSellers: [],
+        vouchers: [],
+        brands: item.brands,
+      };
+    });
 
     return {
       ...state,
@@ -40,38 +49,16 @@ export const checkout = simplifyReducer(initialState, {
     action: models.MergeReserveDiscountCheckout,
   ) {
     let invoices: models.IInvoiceCheckout[] = [];
-    if (state.invoices.length === 0) {
-      action.payload.forEach((item) => {
-        invoices.push({
-          cartParcelId: '',
-          invoiceGroupId: item.invoiceGroupId,
-          invoiceGroupName: '',
-          totalProduct: 0,
-          totalPriceBeforeTax: 0,
-          PPN: 0,
-          isPotentialPromoPayment: false,
-          totalPromoSellerAndVoucher: item.totalPromoSellerAndVoucher,
-          totalPromoPayment: 0,
-          totalPaymentFee: 0,
-          totalPayment: 0,
-          paymentType: null,
-          paymentChannel: null,
-          promoSellers: item.promoSellers,
-          vouchers: item.vouchers,
-          brands: [],
-        });
+    for (let i = 0; i < state.invoices.length; i++) {
+      invoices.push({
+        ...state.invoices[i],
+        ...action.payload.find(
+          (itmInner) =>
+            itmInner.invoiceGroupId === state.invoices[i].invoiceGroupId,
+        ),
       });
-    } else {
-      for (let i = 0; i < state.invoices.length; i++) {
-        invoices.push({
-          ...state.invoices[i],
-          ...action.payload.find(
-            (itmInner) =>
-              itmInner.invoiceGroupId === state.invoices[i].invoiceGroupId,
-          ),
-        });
-      }
     }
+
     return {
       ...state,
       invoices: invoices,
