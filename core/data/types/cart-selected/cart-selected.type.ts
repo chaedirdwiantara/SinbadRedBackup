@@ -1,4 +1,4 @@
-/** => Get Verification Cart Payload*/
+/** => Get Cart Selected Payload*/
 export const GET_CART_SELECTED = 'GetCartSelected';
-/** => Update Verification Cart Payload */
+/** => Update Cart Selected Payload */
 export const UPDATE_CART_SELECTED = 'UpdateCartSelected';
