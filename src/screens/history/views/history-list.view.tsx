@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import {
   SnbContainer,
@@ -12,7 +12,9 @@ import {
   SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 import { goBack, goToHistoryDetail } from '../functions';
+import { usePaymentStatus } from '../functions/history.hook.function';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 /** === TYPES === */
@@ -32,24 +34,17 @@ interface HistoryItem {
 }
 /** === CONSTANTS AND DUMMIES === */
 const historyTabs = ['Tagihan', 'Order'];
-const paymentStatus = [
-  { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-  { key: 'unpaid', value: 'Tidak Dibayar' },
-  { key: 'overdue', value: 'Overdue' },
-  { key: 'paid', value: 'Dibayar' },
-  { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-  { key: 'refunded', value: 'Dikembalikan' },
-] as const;
 const orderStatus = [
-  { key: 'confirmation', value: 'Menunggu Konfirmasi' },
-  { key: 'verified', value: 'Verifikasi' },
-  { key: 'on_packing', value: 'Dikemas' },
-  { key: 'on_delivery', value: 'Dikirim' },
-  { key: 'delivered', value: 'Diterima' },
-  { key: 'done', value: 'Selesai' },
-  { key: 'partial_pending', value: 'Pending Partial' },
-  { key: 'supplier_pending', value: 'Pending Supplier' },
-  { key: 'canceled', value: 'Batal' },
+  { status: '', title: 'Semua' },
+  { status: 'confirmation', title: 'Menunggu Konfirmasi' },
+  { status: 'verified', title: 'Verifikasi' },
+  { status: 'on_packing', title: 'Dikemas' },
+  { status: 'on_delivery', title: 'Dikirim' },
+  { status: 'delivered', title: 'Diterima' },
+  { status: 'done', title: 'Selesai' },
+  { status: 'partial_pending', title: 'Pending Partial' },
+  { status: 'supplier_pending', title: 'Pending Supplier' },
+  { status: 'canceled', title: 'Batal' },
 ] as const;
 const paymentStatusColor: Record<PaymentStatusKey, keyof HistoryStatusColor> = {
   waiting_for_payment: 'yellow',
@@ -170,6 +165,16 @@ const HistoryListView: FC = () => {
   const [activeOrderStatus, setActiveOrderStatus] = useState<
     typeof orderStatus[number]['key'] | ''
   >('');
+  const getPaymentStatus = usePaymentStatus();
+  const { stateHistory, dispatchHistory } = React.useContext(
+    contexts.HistoryContext,
+  );
+
+  /** EFFECTS */
+  useEffect(() => {
+    getPaymentStatus.list(dispatchHistory);
+  }, []);
+
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -213,6 +218,8 @@ const HistoryListView: FC = () => {
   /** => Status List */
   const renderStatusList = () => {
     // ini nanti diganti
+    console.log(stateHistory, 'STATE HISTORY');
+    const paymentStatus = stateHistory?.paymentStatus?.data
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
@@ -228,19 +235,12 @@ const HistoryListView: FC = () => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          <View style={{ marginRight: 16 }}>
-            <SnbChips.Choice
-              text="Semua"
-              status={activeStatus === '' ? 'active' : 'inactive'}
-              onPress={() => setActiveStatus('')}
-            />
-          </View>
-          {statusList.map((status) => (
-            <View key={status.key} style={{ marginRight: 16 }}>
+          {statusList.map((item) => (
+            <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
-                text={status.value}
-                status={status.key === activeStatus ? 'active' : 'inactive'}
-                onPress={() => setActiveStatus(status.key as any)}
+                text={item.title}
+                status={item.status === activeStatus ? 'active' : 'inactive'}
+                onPress={() => setActiveStatus(item.status as any)}
               />
             </View>
           ))}
