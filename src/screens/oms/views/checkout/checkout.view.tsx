@@ -28,6 +28,7 @@ import {
   useParcelDetailModal,
   useTermsAndConditionsModal,
   usePaymentAction,
+  useSelectedPaymentType
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -80,175 +81,6 @@ const dummyPaymentDetail = [
     type: 'normal',
   },
 ];
-const dummyPaymentTypes = {
-  data: {
-    supplierId: 1,
-    paymentTypes: [
-      {
-        id: 1,
-        name: 'Bayar Sekarang',
-        iconUrl:
-          'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/pay_now.png',
-        description:
-          'Parcel akan diproses setelah pembayaran diselesaikan dalam tenggat waktu tertentu',
-        terms:
-          '<ul><li class=p1>Pembeli harus membayar dalam waktu 24 jam setelah pesanan dibuat.</li><li class=p1>Pesanan tidak akan diproses apabila pembayaran belum dilakukan.</li><li class=p1>Apabila pembayaran melewati batas waktu, maka pesanan akan dibatalkan.</li></ul>',
-        availableStatus: true,
-        promoPaymentAvailable: true,
-      },
-      {
-        id: 2,
-        name: 'Bayar Nanti',
-        iconUrl:
-          'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/pay_later.png',
-        description:
-          'Parcel langsung diproses dan tagihan akan ditagihkan ketika parcel diterima oleh pembeli',
-        terms:
-          '<ul><li class=p1>Pembayaran jatuh tempo mulai dihitung setelah status pesanan berubah untuk dikirimkan</li><li class=p1>Toko harus membayar pada tanggal jatuh tempo pengiriman</li><li class=p1>Jika toko tidak membayar pada tanggal jatuh tempo, toko bertanggung jawab untuk membayar hutang</li></ul>',
-        availableStatus: true,
-        promoPaymentAvailable: false,
-      },
-      {
-        id: 3,
-        name: 'Bayar Di Tempat',
-        iconUrl:
-          'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
-        description:
-          'Parcel akan diproses dan pembayaran akan ditagihkan sesuai dengan Term of Payment',
-        terms:
-          '<ul><li class=p1>Pembeli harap melunasi tagihan saat pesanan diterima.</li><li class=p1>Pembeli harus melunasi tagihan secara penuh (100%). Jika pembayaran tidak sesuai dengan syarat yang ditentukan maka pesanan akan dibatalkan.</li></ul>',
-        availableStatus: true,
-        promoPaymentAvailable: false,
-      },
-    ],
-  },
-};
-const dummyPaymentChannel = {
-  data: {
-    paymentTypeId: 1,
-    paymentChannels: [
-      {
-        id: 1,
-        name: 'Tunai',
-        type: [
-          {
-            id: 1,
-            name: 'Tunai',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/intersection.png',
-            totalFee: 0,
-            totalPayment: 0,
-            status: 'disabled',
-            message: 'Tidak tersedia untuk transaksi ini',
-            paymentPromo: null,
-          },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Virtual Account',
-        type: [
-          {
-            id: 2,
-            name: 'Bank BCA Virtual Account',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bca.png',
-            totalFee: 4400,
-            totalPayment: 104400,
-            status: 'enabled',
-            message: 'Minimum Pesanan Rp. 10.000',
-            paymentPromo: {
-              orderParcelId: 6665,
-              paymentChannelId: 2,
-              promoPaymentId: 0,
-              promoPaymentAvailable: false,
-              promoPaymentDescription: '',
-              promoPaymentAmount: 0,
-            },
-          },
-          {
-            id: 3,
-            name: 'Bank BNI Virtual Account',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bni.png',
-            totalFee: 4400,
-            totalPayment: 0,
-            status: 'disabled',
-            message: 'Minimum Pesanan Rp. 10.000',
-            paymentPromo: {
-              orderParcelId: 6665,
-              paymentChannelId: 3,
-              promoPaymentId: 0,
-              promoPaymentAvailable: false,
-              promoPaymentDescription: '',
-              promoPaymentAmount: 0,
-            },
-          },
-          {
-            id: 4,
-            name: 'Bank BRI Virtual Account',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bri.png',
-            totalFee: 3850,
-            totalPayment: 0,
-            status: 'disabled',
-            message: 'Minimum Pesanan Rp. 10.000',
-            paymentPromo: {
-              orderParcelId: 6665,
-              paymentChannelId: 4,
-              promoPaymentId: 0,
-              promoPaymentAvailable: false,
-              promoPaymentDescription: '',
-              promoPaymentAmount: 0,
-            },
-          },
-          {
-            id: 5,
-            name: 'Bank Mandiri Virtual Account',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/mandiri.png',
-            totalFee: 4400,
-            totalPayment: 0,
-            status: 'disabled',
-            message: 'Minimum Pesanan Rp. 10.000',
-            paymentPromo: {
-              orderParcelId: 6665,
-              paymentChannelId: 5,
-              promoPaymentId: 0,
-              promoPaymentAvailable: false,
-              promoPaymentDescription: '',
-              promoPaymentAmount: 0,
-            },
-          },
-        ],
-      },
-      {
-        id: 3,
-        name: 'Outlet',
-        type: [
-          {
-            id: 6,
-            name: 'Alfamart',
-            image:
-              'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/alfamart.png',
-            totalFee: 5000,
-            totalPayment: 0,
-            status: 'disabled',
-            message: 'Minimum Pesanan Rp. 25.000',
-            paymentPromo: {
-              orderParcelId: 6665,
-              paymentChannelId: 6,
-              promoPaymentId: 0,
-              promoPaymentAvailable: false,
-              promoPaymentDescription: '',
-              promoPaymentAmount: 0,
-            },
-          },
-        ],
-      },
-    ],
-  },
-};
 const dummyTermsAndConditions = {
   data: {
     storeId: 101,
@@ -282,12 +114,14 @@ const OmsCheckoutView: FC = () => {
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
   const paymentAction = usePaymentAction();
+  const paymentType = useSelectedPaymentType();
   const [loadingPage, setLoadingPage] = useState(true);
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
 
   console.log(statePayment, 'status payment')
+console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
 
   /** Set Loading Page */
   useEffect(() => {
@@ -688,10 +522,18 @@ const OmsCheckoutView: FC = () => {
   };
   /** => payment types modal */
   const renderPaymentTypesModal = () => {
+    const invoiceGroupId = 'abcdef12345';
+    const totalCartParcel = 100000;
+    const paymentTypeId = 1;
     const content = () => {
       return !statePayment?.paymentTypesList?.loading ?(
         <View>
           {statePayment?.paymentTypesList?.data.map((item : any, index : number) => {
+            const dataPaymentType = {
+              id : item.id,
+              name : item.name,
+              iconUrl: item.iconUrl
+            }
             return (
               <SnbListButtonType1
                 key={index}
@@ -702,8 +544,10 @@ const OmsCheckoutView: FC = () => {
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
                 onPress={() => {
+                  paymentAction.channelsList(dispatchPayment, invoiceGroupId, totalCartParcel, paymentTypeId)
                   paymentTypesModal.setOpen(false);
                   paymentChannelsModal.setOpen(true);
+                  paymentType.setSelectedPaymentType(dataPaymentType)
                 }}
               />
             );
@@ -733,6 +577,13 @@ const OmsCheckoutView: FC = () => {
               item.status === 'enabled'
                 ? `Total Biaya ${toCurrency(item.totalPayment)}`
                 : item.message;
+            const selectedPaymentChannels = [
+              {
+                id: item.id,
+                name: item.name,
+                iconUrl: item.iconUrl,
+              },
+            ];
             return (
               <SnbListButtonType1
                 key={index}
@@ -740,7 +591,11 @@ const OmsCheckoutView: FC = () => {
                 description={description}
                 image={item.image}
                 type={'two'}
-                disabled={item.status === 'disabled' ? true : false}
+                disabled={item.status !== 'disabled' ? true : false}
+                onPress={() => {
+                  paymentChannelsModal.setOpen(false);
+                  // setSelectedPaymentChannels(selectedPaymentChannels);
+                }}
               />
             );
           })}
@@ -752,26 +607,27 @@ const OmsCheckoutView: FC = () => {
         <View>
           {paymentGroups.map((item: any, index: number) => {
             return (
-              <React.Fragment key={index}>
-                <View style={{ paddingHorizontal: 16, marginTop: 16 }}>
+              <View key={index} style={{ marginBottom: 16 }}>
+                <View style={{ marginTop: 16 }}>
                   <SnbText.H4>{item.name}</SnbText.H4>
                 </View>
                 {contentChannelTypes(item.type)}
-              </React.Fragment>
+              </View>
             );
           })}
         </View>
       );
     };
     const content = () => {
+      const selectedPaymentType = paymentType.selectedPaymentType;
       return (
-        <View>
-          <View
-            style={{
-              backgroundColor: color.white,
-              paddingHorizontal: 16,
-              marginBottom: 8,
-            }}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: color.white,
+            paddingHorizontal: 16,
+          }}>
+          <View>
             <SnbText.H4>Tipe Pembayaran</SnbText.H4>
             <View
               style={{
@@ -780,37 +636,36 @@ const OmsCheckoutView: FC = () => {
               }}>
               <Image
                 source={{
-                  uri: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
+                  uri: selectedPaymentType?.iconUrl,
                 }}
                 style={CheckoutStyle.mediumIcon}
               />
-              <SnbText.B1>Bayar Sekarang</SnbText.B1>
+              <SnbText.B1>{selectedPaymentType?.name}</SnbText.B1>
             </View>
           </View>
-          <View
-            style={{
-              backgroundColor: color.white,
-            }}>
-            <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-              <SnbText.H4>Pilih Metode Pembayaran</SnbText.H4>
-            </View>
-            <ScrollView>
-            {contentChannelGroups(dummyPaymentChannel.data.paymentChannels)}
-          </ScrollView>
+          <View style={{ paddingTop: 16 }}>
+            <SnbText.H4>Pilih Metode Pembayaran</SnbText.H4>
           </View>
+          {!statePayment?.paymentChannelsList.loading ? (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {contentChannelGroups(statePayment.paymentChannelsList.data)}
+            </ScrollView>
+          ) : (
+            <LoadingPage />
+          )}
         </View>
       );
     };
-    return (
+    return statePayment?.paymentChannelsList ? (
       <SnbBottomSheet
         open={paymentChannelsModal.isOpen}
         content={content()}
         title={'Metode Pembayaran'}
-        closeAction={() => paymentChannelsModal.setOpen(false)}
-        actionIcon={'close'}
+        closeAction={() => {paymentTypesModal.setOpen(true); paymentChannelsModal.setOpen(false)}}
+        actionIcon={'back'}
         size={'halfscreen'}
       />
-    );
+    ) : null;
   };
 
   /**
