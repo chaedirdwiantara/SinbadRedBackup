@@ -23,9 +23,25 @@ function* paymentTypesList(action: models.ListProcessAction) {
   }
 }
 
+function* paymentChannelsList(action: models.ListProcessAction) {
+  try {
+    const response: models.ListSuccessProps<models.IPaymentChannelsList[]> = yield call(
+      () => {
+        return PaymentApi.paymentChannelsList(action.payload);
+      },
+    );
+    yield action.contextDispatch(ActionCreators.paymentChannelsListSuccess(response));
+    yield put(ActionCreators.paymentChannelsListSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.paymentChannelsListFailed(error));
+    yield put(ActionCreators.paymentChannelsListFailed(error));
+  }
+}
+
 /** === LISTEN FUNCTION === */
 function* PaymentSaga() {
     yield takeLatest(types.PAYMENT_TYPES_LIST_PROCESS, paymentTypesList);
+    yield takeLatest(types.PAYMENT_CHANNELS_LIST_PROCESS, paymentChannelsList);
   }
   
   export default PaymentSaga;

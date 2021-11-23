@@ -24,6 +24,7 @@ export interface ListProcessProps {
   invoiceGroupId?:string;
   totalCartParcel?:number;
   page?:number;
+  paymentTypeId?: number;
 }
 /** === THIS FOR PAGINATION === */
 export interface Pagination {
