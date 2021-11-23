@@ -121,8 +121,36 @@ const usePaymentAction = () => {
         }),
       );
     },
+    channelsList: (
+      contextDispatch: (action: any) => any,
+      invoiceGroupId: string,
+      totalCartParcel: number,
+      paymentTypeId: number,
+    ) => {
+      dispatch(
+        Actions.paymentChannelsListProcess(contextDispatch, {
+          loading: true,
+          limit: 0,
+          skip: 0,
+          page:1,
+          invoiceGroupId,
+          totalCartParcel,
+          paymentTypeId
+        }),
+      );
+    },
   };
 };
+
+const useSelectedPaymentType = () => {
+  const [selectedPaymentType, setSelectedPaymentType] = React.useState({})
+    return {
+      setSelectedPaymentType: (value: object) => {
+        setSelectedPaymentType(value);
+      },
+      selectedPaymentType,
+    };
+}
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -131,7 +159,8 @@ export {
   useParcelDetailModal,
   usePaymentTypeModal,
   usePaymentChannelModal,
-  usePaymentAction
+  usePaymentAction,
+  useSelectedPaymentType
 };
 /**
  * ================================================================
