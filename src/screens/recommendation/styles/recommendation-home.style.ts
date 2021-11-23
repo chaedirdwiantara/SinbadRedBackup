@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
-const RecommendationHomeStyle = StyleSheet.create({
+export const RecommendationHomeStyle = StyleSheet.create({
   container: {
     backgroundColor: color.white,
     paddingBottom: 16,
@@ -15,5 +15,3 @@ const RecommendationHomeStyle = StyleSheet.create({
     marginBottom: 12,
   },
 });
-
-export default RecommendationHomeStyle;
