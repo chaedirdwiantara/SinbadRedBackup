@@ -15,13 +15,14 @@ import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
+import { BundleSection } from './BundleSection';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
-import { BundleSection } from './BundleSection';
+import { goToBundle } from '../../functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -227,7 +228,13 @@ const ProductDetailView: FC = () => {
           disabled={
             defaultProperties.stock < (productDetailState.data?.minQty ?? 1)
           }
-          onPress={() => console.log('Add to cart pressed')}
+          onPress={() => {
+            if (defaultProperties.isBundle) {
+              goToBundle();
+            } else {
+              console.log('Add to cart pressed');
+            }
+          }}
         />
       ) : (
         <UnavailableSkuFlag />
