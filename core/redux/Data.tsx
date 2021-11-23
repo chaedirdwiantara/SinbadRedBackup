@@ -26,10 +26,10 @@ const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
 const useDataCart = () => {
-  return useSelector((state: RootState) => state.cartSelectedCore);
+  return useSelector((state: RootState) => state.cartSelected);
 };
 const useDataCheckout = () => {
-  return useSelector((state: RootState) => state.checkoutCore);
+  return useSelector((state: RootState) => state.checkout);
 };
 
 /** === EXPORT === */
