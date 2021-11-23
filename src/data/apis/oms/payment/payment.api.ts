@@ -8,7 +8,7 @@ const paymentTypesList = (data: models.ListProcessProps) => {
   return apiMapping<models.IPaymentTypesList[]>(
     'auth',
     path,
-    'account',
+    'payment',
     'v1',
     'LIST',
   );

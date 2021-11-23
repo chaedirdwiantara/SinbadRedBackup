@@ -8,6 +8,9 @@ export interface IPaymentTypesList {
     promoPaymentAvailable?: boolean;
   }
   
+  export interface IPaymentTypes {
+    paymentTypes:IPaymentTypesList[]
+  }
   export interface IPaymentChannelsList {
     id: number;
     name: string;
