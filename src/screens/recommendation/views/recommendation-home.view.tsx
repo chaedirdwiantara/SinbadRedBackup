@@ -6,6 +6,7 @@ import { SnbText, color } from 'react-native-sinbad-ui';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 /** === STYLE === */
 import RecommendationHomeStyle from '../styles/recommendation-home.style';
+import { NavigationAction } from '@core/functions/navigation';
 /** === TYPE === */
 interface RecommendedProduct {
   id: string;
@@ -98,7 +99,8 @@ const RecommendationHomeView: FC = () => {
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}
-        onCardPress={() => console.log(`${item.name} pressed`)}
+        onCardPress={() => {console.log(`${item.name} pressed`)
+      NavigationAction.navigate('OmsCheckoutView')}}
       />
     </View>
   );
