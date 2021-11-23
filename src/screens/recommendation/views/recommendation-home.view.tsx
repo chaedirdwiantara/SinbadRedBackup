@@ -99,7 +99,8 @@ const RecommendationHomeView: FC = () => {
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}
-        onCardPress={() => console.log(`${item.name} pressed`)}
+        onCardPress={() => {console.log(`${item.name} pressed`)
+      NavigationAction.navigate('OmsCheckoutView')}}
       />
     </View>
   );
