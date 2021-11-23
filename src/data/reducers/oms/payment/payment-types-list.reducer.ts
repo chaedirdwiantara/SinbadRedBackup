@@ -35,7 +35,7 @@ export const paymentTypesListReducer = simplifyReducer(paymentTypesListInitialSt
   ) {
     return {
       ...state,
-      data: [...action.payload.data?.paymentTypes],
+      data: [...action.payload.data.paymentTypes],
       loading: false,
     };
   },
