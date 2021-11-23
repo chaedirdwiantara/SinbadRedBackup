@@ -27,8 +27,10 @@ import {
   usePaymentChannelModal,
   useParcelDetailModal,
   useTermsAndConditionsModal,
+  usePaymentAction
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
+import { contexts } from '@contexts';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -279,13 +281,21 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelsModal = usePaymentChannelModal();
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
+  const paymentAction = usePaymentAction()
   const [loadingPage, setLoadingPage] = useState(true);
+  const { statePayment, dispatchPayment} = React.useContext(contexts.PaymentContext);
 
   /** Set Loading Page */
   useEffect(() => {
     setTimeout(() => setLoadingPage(false), 1000);
   }, []);
 
+  useEffect(() => {
+    const invoiceGroupId = 'abcdef12345';
+    const totalCartParcel = 100000;
+    const page = 1;
+    paymentAction.typeslist(dispatchPayment, invoiceGroupId, totalCartParcel,page)
+  }, [])
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
