@@ -25,14 +25,7 @@ export interface ListProcessDefaultProps {
   limit: number;
   sort?: 'asc' | 'desc';
   sortBy?: string;
-<<<<<<< HEAD
   keyword?: string;
-=======
-  search?: string;
-  invoiceGroupId?:string;
-  totalCartParcel?:number;
-  page?:number;
->>>>>>> 44abd74 (integrate payment types)
 }
 
 export type ListProcessProps<T = object> = ListProcessDefaultProps & T;
