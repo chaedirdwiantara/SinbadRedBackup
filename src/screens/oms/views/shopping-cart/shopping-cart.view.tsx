@@ -31,6 +31,8 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { useReserveStockContext } from 'src/data/contexts/product';
+import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -91,64 +93,19 @@ const OmsShoppingCartView: FC = () => {
     dispatchPromo,
     statePromo: { reserveDiscount: stateReserveDiscount },
   } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock, stateReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
   React.useEffect(() => {
-    if (stateReserveDiscount.create.data !== null) {
-      reserveDiscountAction.detail(
-        dispatchPromo,
-        stateReserveDiscount.create.data.id,
-      );
-    }
-  }, [stateReserveDiscount.create]);
+    reserveDiscountAction.del(dispatchPromo, '1');
+    reserveStockAction.del(dispatchReserveStock, '1');
+  }, []);
 
   /** Get Cart View */
   useEffect(() => {
     cartViewActions.fetch(dispatchShopingCart);
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
-
-    /** => fetch create reserved-discount */
-    const getReservedDiscountPayload = {
-      id: '0684fb2600bf',
-      data: [
-        {
-          invoiceGroupId: '1',
-          portfolioId: '1',
-          brands: [
-            {
-              brandId: '0684fb26-00bf-11ec-9a03-0242ac130003',
-              products: [
-                {
-                  productId: '9536f526-2447-11ec-9621-0242ac130002',
-                  qty: 2,
-                  displayPrice: 201000,
-                  priceBeforeTax: 201000,
-                  priceAfterTax: 221100,
-                  warehouseId: 1,
-                },
-                {
-                  productId: '997fd26a-2447-11ec-9621-0242ac130002',
-                  qty: 1,
-                  displayPrice: 216000,
-                  priceBeforeTax: 216000,
-                  priceAfterTax: 237600,
-                  warehouseId: 1,
-                },
-              ],
-            },
-          ],
-          sellerId: 1,
-          channelId: 1,
-          groupId: 1,
-          typeId: 1,
-          clusterId: 1,
-        },
-      ],
-      isActiveStore: true,
-      voucherIds: [],
-      potentialDiscountId: '619301e80cdfdd300bb0e7f6',
-    };
-    reserveDiscountAction.create(dispatchPromo, getReservedDiscountPayload);
   }, []);
 
   /** Listen changes cartState */
