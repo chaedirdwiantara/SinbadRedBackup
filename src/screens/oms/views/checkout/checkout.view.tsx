@@ -27,7 +27,7 @@ import {
   usePaymentChannelModal,
   useParcelDetailModal,
   useTermsAndConditionsModal,
-  usePaymentAction
+  usePaymentAction,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -281,21 +281,19 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelsModal = usePaymentChannelModal();
   const parcelDetailModal = useParcelDetailModal();
   const termsAndConditionModal = useTermsAndConditionsModal();
-  const paymentAction = usePaymentAction()
+  const paymentAction = usePaymentAction();
   const [loadingPage, setLoadingPage] = useState(true);
-  const { statePayment, dispatchPayment} = React.useContext(contexts.PaymentContext);
+  const { statePayment, dispatchPayment } = React.useContext(
+    contexts.PaymentContext,
+  );
+
+  console.log(statePayment, 'status payment')
 
   /** Set Loading Page */
   useEffect(() => {
     setTimeout(() => setLoadingPage(false), 1000);
   }, []);
 
-  useEffect(() => {
-    const invoiceGroupId = 'abcdef12345';
-    const totalCartParcel = 100000;
-    const page = 1;
-    paymentAction.typeslist(dispatchPayment, invoiceGroupId, totalCartParcel,page)
-  }, [])
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -372,6 +370,9 @@ const OmsCheckoutView: FC = () => {
   };
   /** => payment type section */
   const renderPaymentTypeSection = () => {
+    const invoiceGroupId = 'abcdef12345';
+    const totalCartParcel = 100000;
+    const page = 1;
     return (
       <View style={{ marginTop: 16 }}>
         <SnbText.H4>Tipe Pembayaran</SnbText.H4>
@@ -379,6 +380,12 @@ const OmsCheckoutView: FC = () => {
         {renderPaymentPromoBadge()}
         <TouchableOpacity
           onPress={() => {
+            paymentAction.typeslist(
+              dispatchPayment,
+              invoiceGroupId,
+              totalCartParcel,
+              page,
+            );
             paymentTypesModal.setOpen(true);
           }}
           style={CheckoutStyle.selectPaymentButton}>
@@ -682,9 +689,9 @@ const OmsCheckoutView: FC = () => {
   /** => payment types modal */
   const renderPaymentTypesModal = () => {
     const content = () => {
-      return (
+      return !statePayment?.paymentTypesList?.loading ?(
         <View>
-          {dummyPaymentTypes.data.paymentTypes.map((item, index) => {
+          {statePayment?.paymentTypesList?.data.map((item : any, index : number) => {
             return (
               <SnbListButtonType1
                 key={index}
@@ -702,14 +709,16 @@ const OmsCheckoutView: FC = () => {
             );
           })}
         </View>
-      );
+      ) : <View style={{ height: '30%', marginTop: 100 }}><LoadingPage/></View>;
     };
     return (
       <SnbBottomSheet
         open={paymentTypesModal.isOpen}
         content={content()}
         title={'Tipe Pembayaran'}
-        closeAction={() => paymentTypesModal.setOpen(false)}
+        closeAction={() => {
+          paymentTypesModal.setOpen(false);
+        }}
         actionIcon={'close'}
       />
     );
@@ -756,7 +765,7 @@ const OmsCheckoutView: FC = () => {
     };
     const content = () => {
       return (
-        <ScrollView>
+        <View>
           <View
             style={{
               backgroundColor: color.white,
@@ -785,9 +794,11 @@ const OmsCheckoutView: FC = () => {
             <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
               <SnbText.H4>Pilih Metode Pembayaran</SnbText.H4>
             </View>
+            <ScrollView>
             {contentChannelGroups(dummyPaymentChannel.data.paymentChannels)}
+          </ScrollView>
           </View>
-        </ScrollView>
+        </View>
       );
     };
     return (
@@ -797,6 +808,7 @@ const OmsCheckoutView: FC = () => {
         title={'Metode Pembayaran'}
         closeAction={() => paymentChannelsModal.setOpen(false)}
         actionIcon={'close'}
+        size={'halfscreen'}
       />
     );
   };
