@@ -21,6 +21,9 @@ export interface ListProcessProps {
   sort?: 'asc' | 'desc';
   sortBy?: string;
   search?: string;
+  invoiceGroupId?:string;
+  totalCartParcel?:number;
+  page?:number;
 }
 /** === THIS FOR PAGINATION === */
 export interface Pagination {

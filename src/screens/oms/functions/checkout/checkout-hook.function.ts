@@ -101,6 +101,28 @@ const usePaymentChannelModal = () => {
     isOpen,
   };
 };
+const usePaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    typeslist: (
+      contextDispatch: (action: any) => any,
+      invoiceGroupId: string,
+      totalCartParcel: number,
+      page: number,
+    ) => {
+      dispatch(
+        Actions.paymentTypesListProcess(contextDispatch, {
+          loading: true,
+          limit: 0,
+          skip: 0,
+          invoiceGroupId,
+          totalCartParcel,
+          page
+        }),
+      );
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -109,6 +131,7 @@ export {
   useParcelDetailModal,
   usePaymentTypeModal,
   usePaymentChannelModal,
+  usePaymentAction
 };
 /**
  * ================================================================
