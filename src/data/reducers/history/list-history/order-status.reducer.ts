@@ -10,7 +10,6 @@ export const orderStatusInitialState: OrderStatusInitialProps = {
   data: null,
   error: null,
   loading: false,
-  refresh: false,
 };
 /** === REDUCER === */
 export const orderStatusReducer = simplifyReducer(orderStatusInitialState, {
@@ -42,9 +41,5 @@ export const orderStatusReducer = simplifyReducer(orderStatusInitialState, {
       error: action.payload,
       loading: false,
     };
-  },
-  /** Refresh */
-  [types.HISTORY_ORDER_STATUS_REFRESH]() {
-    return { ...orderStatusInitialState, loading: true };
   },
 });
