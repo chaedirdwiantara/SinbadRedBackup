@@ -14,3 +14,22 @@ export interface PromoPaymentListProcessAction {
   payload: PromoPaymentListProcessProps;
   contextDispatch: (action: any) => any;
 }
+export interface CheckPromoPaymentGetPayload {
+  paymentTypeId: number;
+  paymentChannelId: Array<number>;
+  parcelPrice: number;
+  invoiceGroupId: string;
+  sellerId: number;
+}
+export interface CheckPromoPaymentListProcessAction {
+  type: string;
+  payload: CheckPromoPaymentGetPayload;
+  contextDispatch: (action: any) => any;
+}
+export interface CheckAllPromoPaymentPostPayload {
+  invoiceGroupId: string;
+  cartParcelId: string;
+  paymentTypeId: number;
+  paymentChannelId: number;
+  parcelPrice: number;
+}
