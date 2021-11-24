@@ -103,9 +103,17 @@ const OmsShoppingCartView: FC = () => {
   const { dispatchReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
+  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
   React.useEffect(() => {
     reserveDiscountAction.del(dispatchPromo, '1');
     reserveStockAction.del(dispatchReserveStock, '1');
+    // checkPromoPaymentAction.list(dispatchPromo, {
+    //   paymentTypeId: 1,
+    //   paymentChannelId: [1, 2, 3],
+    //   parcelPrice: 9000,
+    //   invoiceGroupId: '2',
+    //   sellerId: 1,
+    // });
   }, []);
 
   /** Get Cart View */
