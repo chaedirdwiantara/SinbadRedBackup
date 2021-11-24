@@ -22,7 +22,7 @@ export const useSendDataToSupplierActions = () => {
   return {
     fetch: (
       contextDispatch: (action: any) => any,
-      data: models.SendDataSupplierProps,
+      data: models.SendDataSupplierPayload,
     ) => {
       dispatch(Actions.sendDataToSupplierProcess(contextDispatch, { data }));
     },
