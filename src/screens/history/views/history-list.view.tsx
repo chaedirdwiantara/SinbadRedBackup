@@ -12,7 +12,9 @@ import {
   SnbChips,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
 import { goBack, goToHistoryDetail } from '../functions';
+import { usePaymentStatus } from '../functions/history.hook.function';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
@@ -150,6 +152,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const [activePaymentStatus, setActivePaymentStatus] = useState('');
   const [activeOrderStatus, setActiveOrderStatus] = useState('');
   const getOrderStatus = useOrderStatusActions();
+  const getPaymentStatus = usePaymentStatus();
   const getHistoryList = () => console.log('Get History List');
 
   /**
@@ -158,7 +161,12 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const { dispatchOrderStatus, stateOrderStatus } = React.useContext(
     contexts.OrderStatusContext,
   );
+  const { stateHistory, dispatchHistory } = React.useContext(
+    contexts.HistoryContext,
+  );
+
   useEffect(() => {
+    getPaymentStatus.list(dispatchHistory);
     getOrderStatus.fetch(dispatchOrderStatus);
     getHistoryList();
   }, []);
@@ -174,6 +182,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
     return unsubscribe;
   }, [activeOrderStatus, activePaymentStatus, activeTab, navigation]);
+
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -217,15 +226,19 @@ const HistoryListView: FC = ({ navigation }: any) => {
   /** => Status List */
   const renderStatusList = () => {
     // ini nanti diganti
+    console.log(stateHistory, 'STATE HISTORY');
+    const paymentStatus = stateHistory?.paymentStatus?.data;
+    const orderStatus = stateOrderStatus?.orderStatus?.data;
+    const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
     const setActiveStatus =
       activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
 
-    const statusList =
-      activeTab === 0
-        ? stateOrderStatus.orderStatus
-        : stateOrderStatus.orderStatus;
+    // const statusList =
+    //   activeTab === 0
+    //     ? stateOrderStatus.orderStatus
+    //     : stateOrderStatus.orderStatus;
 
     return !statusList.loading && statusList.data !== null ? (
       <View>
@@ -236,12 +249,12 @@ const HistoryListView: FC = ({ navigation }: any) => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {statusList.data.map((status, index) => (
-            <View key={index} style={{ marginRight: 16 }}>
+          {statusList.map((item) => (
+            <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
-                text={status.title}
-                status={status.status === activeStatus ? 'active' : 'inactive'}
-                onPress={() => setActiveStatus(status.status as any)}
+                text={item.title}
+                status={item.status === activeStatus ? 'active' : 'inactive'}
+                onPress={() => setActiveStatus(item.status as any)}
               />
             </View>
           ))}

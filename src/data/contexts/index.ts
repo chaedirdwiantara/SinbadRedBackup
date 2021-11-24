@@ -25,6 +25,7 @@ import {
   OrderStatusProvider,
   OrderStatusContext,
 } from './history/OrderStatusProvider';
+import { HistoryProvider, HistoryContext } from './history/HistoryProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -43,6 +44,7 @@ export const providers = [
   BannerProvider,
   ShopingCartProvider,
   OrderStatusProvider,
+  HistoryProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -60,4 +62,5 @@ export const contexts = {
   BannerContext,
   ShopingCartContext,
   OrderStatusContext,
+  HistoryContext,
 };

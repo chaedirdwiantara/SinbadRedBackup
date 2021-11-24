@@ -16,7 +16,8 @@ import BrandSaga from './brand.saga';
 import NotificationSaga from './notification.saga';
 import BannerSaga from './banner.saga';
 import SupplierSaga from './supplier/supplier.saga';
-import HistorySaga from './history/order-status.saga';
+import HistoryOrderSaga from './history/order-status.saga';
+import HistorySaga from './history.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -38,6 +39,7 @@ function* rootSaga() {
   yield all([fork(CartSaga)]);
   yield all([fork(SupplierSaga)]);
   yield all([fork(HistorySaga)]);
+  yield all([fork(HistoryOrderSaga)]);
 }
 
 export default rootSaga;
