@@ -21,6 +21,7 @@ import {
   goBack,
   goToHistoryDetail,
 } from '@screen/history/functions';
+import { OrderStatus } from '@models';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -241,7 +242,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {statusList.data.map((item: any) => (
+          {statusList.data.map((item: OrderStatus) => (
             <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
                 text={item.title}
