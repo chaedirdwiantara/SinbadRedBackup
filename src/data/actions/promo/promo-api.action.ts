@@ -284,3 +284,36 @@ export const createCheckAllPromoPaymentFailed = (
 ): models.CreateFailedAction => {
   return { type: types.CREATE_CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
+
+/** === GET CHECK ALL PROMO PAYMENT === */
+/** => process */
+export const getCheckAllPromoPaymentProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({
+    type: types.GET_CHECK_PROMO_PAYMENT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.GET_CHECK_PROMO_PAYMENT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const getCheckAllPromoPaymentSuccess = (
+  data: models.ListSuccessProps<models.CheckAllPromoPaymentGetData[]>,
+): models.ListSuccessAction<models.CheckAllPromoPaymentGetData[]> => {
+  return { type: types.GET_CHECK_PROMO_PAYMENT_SUCCESS, payload: data };
+};
+/** =>failed */
+export const getCheckAllPromoPaymentFailed = (
+  data: models.ErrorProps,
+): models.ListFailedAction => {
+  return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED, payload: data };
+};
+/** => reset */
+export const getCheckAllPromoPaymentReset = () => {
+  return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED };
+};

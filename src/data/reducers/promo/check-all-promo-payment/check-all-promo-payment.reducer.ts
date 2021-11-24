@@ -4,13 +4,23 @@ import {
   checkAllPromoPaymentCreateReducer,
   checkAllPromoPaymentCreateInitialState,
 } from './check-all-promo-payment-create.reducer';
+import {
+  checkAllPromoPaymentListReducer,
+  checkAllPromoPaymentListInitialState,
+} from './check-all-promo-payment-list.reducer';
 /** === TYPE HERE === */
-export type CheckAllPromoPaymentInitialProps = models.CreateProps;
+export type CheckAllPromoPaymentInitialProps = models.CreateProps &
+  models.ListProps<models.CheckAllPromoPaymentGetData[]>;
 /** === INITIAL HERE === */
-export const reserveDiscountInitialState = {
+export const checkAllPromoPaymentInitialState = {
   create: checkAllPromoPaymentCreateInitialState,
+  list: checkAllPromoPaymentListInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const reserveDiscountReducer = ({ create }: any, action: any) => ({
+export const checkAllPromoPaymentReducer = (
+  { create, list }: any,
+  action: any,
+) => ({
   create: checkAllPromoPaymentCreateReducer(create, action),
+  list: checkAllPromoPaymentListReducer(list, action),
 });
