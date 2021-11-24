@@ -3,32 +3,28 @@ import {
   OrderStatusInitialProps,
   orderStatusInitialState,
   orderStatusReducer,
-} from './order-status.reducer';
+} from './list-history/order-status.reducer';
 
 import {
   paymentStatusListReducer,
   paymentStatusListInitialState,
 } from './list-history/payment-status-list.reducer';
-export interface OrderStatusState {
+
+export interface HistoryListState {
   orderStatus: OrderStatusInitialProps;
+  paymentStatus: any;
 }
-
-export const OrderStatusInitialState = {
-  orderStatus: orderStatusInitialState,
-};
-
-export const orderStatusHistoryReducer = (
-  { orderStatus }: OrderStatusState,
-  action: any,
-) => ({
-  orderStatus: orderStatusReducer(orderStatus, action),
-});
 
 /** === INITIAL STATE === */
 export const historyInitialState = {
   paymentStatus: paymentStatusListInitialState,
+  orderStatus: orderStatusInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const historyReducer = ({ paymentStatus }: any, action: any) => ({
+export const historyReducer = (
+  { paymentStatus, orderStatus }: HistoryListState,
+  action: any,
+) => ({
   paymentStatus: paymentStatusListReducer(paymentStatus, action),
+  orderStatus: orderStatusReducer(orderStatus, action),
 });

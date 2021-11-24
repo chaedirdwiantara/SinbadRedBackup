@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-    HistoryInitialProps,
-    historyInitialState,
-    historyReducer,
+  HistoryListState,
+  historyInitialState,
+  historyReducer,
 } from '@reducer/history/history.reducer';
 const HistoryContext = React.createContext<{
   // state: InitialStateType;
-  stateHistory: HistoryInitialProps;
+  stateHistory: HistoryListState;
   dispatchHistory: React.Dispatch<any>;
 }>({
   // state: initialState,

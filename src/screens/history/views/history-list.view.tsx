@@ -18,7 +18,6 @@ import { usePaymentStatus } from '../functions/history.hook.function';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
 import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
-import { contexts } from '@contexts';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -154,20 +153,16 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const getOrderStatus = useOrderStatusActions();
   const getPaymentStatus = usePaymentStatus();
   const getHistoryList = () => console.log('Get History List');
-
-  /**
-   * GET ORDER STATUS
-   */
-  const { dispatchOrderStatus, stateOrderStatus } = React.useContext(
-    contexts.OrderStatusContext,
-  );
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
 
+  /**
+   * GET ORDER STATUS
+   */
   useEffect(() => {
     getPaymentStatus.list(dispatchHistory);
-    getOrderStatus.fetch(dispatchOrderStatus);
+    getOrderStatus.fetch(dispatchHistory);
     getHistoryList();
   }, []);
 
@@ -228,7 +223,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
     // ini nanti diganti
     console.log(stateHistory, 'STATE HISTORY');
     const paymentStatus = stateHistory?.paymentStatus?.data;
-    const orderStatus = stateOrderStatus?.orderStatus?.data;
+    const orderStatus = stateHistory?.orderStatus?.data;
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
@@ -249,7 +244,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {statusList.map((item) => (
+          {statusList.map((item: any) => (
             <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
                 text={item.title}
