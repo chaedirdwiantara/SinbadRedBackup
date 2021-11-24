@@ -1,3 +1,3 @@
-export interface SendDataSupplierProps {
-  supplierId: string | number;
+export interface SendDataSupplierPayload {
+  supplierId: number | string;
 }
