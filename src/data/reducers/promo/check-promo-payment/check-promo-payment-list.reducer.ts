@@ -25,11 +25,10 @@ export const checkPromoPaymentListReducer = simplifyReducer(
     /** => list process */
     [types.CHECK_PROMO_PAYMENT_PROCESS](
       state = checkPromoPaymentListInitialState,
-      action: models.ListProcessAction,
     ) {
       return {
         ...state,
-        loading: action.payload.loading,
+        loading: true,
         error: null,
       };
     },
@@ -42,10 +41,6 @@ export const checkPromoPaymentListReducer = simplifyReducer(
         ...state,
         data: [...state.data, ...action.payload.data],
         loading: false,
-        loadMore: false,
-        refresh: false,
-        total: action.payload.meta.total,
-        skip: action.payload.meta.skip,
       };
     },
     /** => list failed */
@@ -56,8 +51,6 @@ export const checkPromoPaymentListReducer = simplifyReducer(
       return {
         ...state,
         loading: false,
-        loadMore: false,
-        refresh: false,
         error: action.payload,
       };
     },
