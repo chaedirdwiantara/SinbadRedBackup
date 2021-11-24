@@ -88,6 +88,26 @@ const reserveDiscountDetail = (data: models.DetailProcessProps) => {
     'DETAIL',
   );
 };
+/** => check promo payment */
+const checkPromoPayment = (data: models.CheckPromoPaymentGetPayload) => {
+  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
+  let arrPaymentChannelId = '';
+  data.paymentChannelId.map((item, index) => {
+    if (index === 0) {
+      arrPaymentChannelId = `${item}`;
+    } else {
+      arrPaymentChannelId = `${arrPaymentChannelId},${item}`;
+    }
+  });
+  const path = `check-promo-payment?paymentTypeId=${data.paymentTypeId}&paymentChannelId=${arrPaymentChannelId}&parcelPrice=${data.parcelPrice}&invoiceGroupId=${data.invoiceGroupId}&sellerId=${data.sellerId}`;
+  return apiMappingMock<models.CheckPromoPaymentGetData[]>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'LIST',
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PromoApi = {
@@ -98,4 +118,5 @@ export const PromoApi = {
   deleteReserveDiscount,
   createReserveDiscount,
   reserveDiscountDetail,
+  checkPromoPayment,
 };

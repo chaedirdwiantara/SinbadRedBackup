@@ -19,12 +19,18 @@ import {
   reserveDiscountReducer,
   ReserveDiscountInitialProps,
 } from './reserve-discount/reserve-discount.reducer';
+import {
+  checkPromoPaymentInitialState,
+  checkPromoPaymentReducer,
+  CheckPromoPaymentInitialProps,
+} from './check-promo-payment/check-promo-payment.reducer';
 /** === TYPE HERE === */
 export type PromoInitialProps = {
   promoPayment: PromoPaymentInitialProps;
   promoGeneral: PromoGeneralInitialProps;
   potentialPromoProduct: PotentialPromoProductInitialProps;
   reserveDiscount: ReserveDiscountInitialProps;
+  checkPromoPayment: CheckPromoPaymentInitialProps;
 };
 /** === INITIAL HERE === */
 export const promoInitialState = {
@@ -32,10 +38,17 @@ export const promoInitialState = {
   promoGeneral: promoGeneralInitialState,
   potentialPromoProduct: potentialPromoProductInitialState,
   reserveDiscount: reserveDiscountInitialState,
+  checkPromoPayment: checkPromoPaymentInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const promoReducer = (
-  { promoPayment, promoGeneral, potentialPromoProduct, reserveDiscount }: any,
+  {
+    promoPayment,
+    promoGeneral,
+    potentialPromoProduct,
+    reserveDiscount,
+    checkPromoPayment,
+  }: any,
   action: any,
 ) => ({
   promoPayment: promoPaymentReducer(promoPayment, action),
@@ -45,4 +58,5 @@ export const promoReducer = (
     action,
   ),
   reserveDiscount: reserveDiscountReducer(reserveDiscount, action),
+  checkPromoPayment: checkPromoPaymentReducer(checkPromoPayment, action),
 });

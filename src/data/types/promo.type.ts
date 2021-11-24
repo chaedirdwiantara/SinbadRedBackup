@@ -33,3 +33,21 @@ export const DETAIL_RESERVE_DISCOUNT_PROCESS = 'DetailReserveDiscountProcess';
 export const DETAIL_RESERVE_DISCOUNT_FAILED = 'DetailReserveDiscountFailed';
 export const DETAIL_RESERVE_DISCOUNT_RESET = 'DetailReserveDiscountReset';
 export const DETAIL_RESERVE_DISCOUNT_SUCCESS = 'DetailReserveDiscountSuccess';
+// CHECK PROMO PAYMENT
+export const CHECK_PROMO_PAYMENT_PROCESS = 'CheckPromoPaymentProcess';
+export const CHECK_PROMO_PAYMENT_FAILED = 'CheckPromoPaymentFailed';
+export const CHECK_PROMO_PAYMENT_RESET = 'CheckPromoPaymentReset';
+export const CHECK_PROMO_PAYMENT_SUCCESS = 'CheckPromoPaymentSuccess';
+// CREATE CHECK ALL PROMO PAYMENT
+export const CREATE_CHECK_PROMO_PAYMENT_PROCESS =
+  'CreateCheckPromoPaymentProcess';
+export const CREATE_CHECK_PROMO_PAYMENT_FAILED =
+  'CreateCheckPromoPaymentFailed';
+export const CREATE_CHECK_PROMO_PAYMENT_RESET = 'CreateCheckPromoPaymentReset';
+export const CREATE_CHECK_PROMO_PAYMENT_SUCCESS =
+  'CreateCheckPromoPaymentSuccess';
+// GET CHECK ALL PROMO PAYMENT
+export const GET_CHECK_PROMO_PAYMENT_PROCESS = 'GetCheckPromoPaymentProcess';
+export const GET_CHECK_PROMO_PAYMENT_FAILED = 'GetCheckPromoPaymentFailed';
+export const GET_CHECK_PROMO_PAYMENT_RESET = 'GetCheckPromoPaymentReset';
+export const GET_CHECK_PROMO_PAYMENT_SUCCESS = 'GetCheckPromoPaymentSuccess';
