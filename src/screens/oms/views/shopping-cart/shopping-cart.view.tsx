@@ -94,7 +94,10 @@ const OmsShoppingCartView: FC = () => {
    */
   const {
     dispatchPromo,
-    statePromo: { reserveDiscount: stateReserveDiscount },
+    statePromo: {
+      reserveDiscount: stateReserveDiscount,
+      checkAllPromoPayment: stateCheckAllPromoPayment,
+    },
   } = React.useContext(contexts.PromoContext);
   const { dispatchReserveStock, stateReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
@@ -128,6 +131,14 @@ const OmsShoppingCartView: FC = () => {
       },
     ]);
   }, []);
+  React.useEffect(() => {
+    if (stateCheckAllPromoPayment.create.data !== null) {
+      checkAllPromoPaymentAction.list(
+        dispatchPromo,
+        stateCheckAllPromoPayment.create.data.id,
+      );
+    }
+  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {

@@ -97,6 +97,10 @@ const useCheckAllPromoPaymentAction = () => {
         Actions.createCheckAllPromoPaymentProcess(contextDispatch, { data }),
       );
     },
+    list: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.getCheckAllPromoPaymentReset());
+      dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
+    },
   };
 };
 /** === EXPORT === */
