@@ -24,8 +24,61 @@ const paymentChannelsList = (data: models.ListProcessProps) => {
     'LIST',
   );
 };
+
+/** ==> post terms and condition */
+const postTermsAndCondition = (data: {}) => {
+  // const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const path = 'terms-conditions';
+  return apiMapping('auth', path, 'payment', 'v1', 'CREATE', data)
+}
+
+/** => payment terms and condition create */
+const paymentTCCreate = (data: {}) => {
+  console.log(data, 'DATA');
+  
+  // const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const path = 'terms-conditions';
+  return apiMapping('auth', path, 'payment', 'v1', 'CREATE', data)
+}
+
+/** =>  payment terms and condition detail */
+const paymentTCDetail = (data: models.DetailProcessProps) => {
+  // const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const path = `data/${data.id}`;
+  return apiMapping<models.IPaymentTermsAndConditionDetailProps>(
+    'auth',
+    path,
+    'payment',
+    'v1',
+    'DETAIL',
+  );
+};
+/** => payment last payment channel create */
+const paymentLastChannelCreate = (data: {}) => {
+  const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const path = 'last-channels';
+  return apiMapping('auth', path, 'payment', 'v1', 'CREATE', data)
+}
+
+/** =>  payment last payment channel detail */
+const paymentLastChannelDetail = (data: models.DetailProcessProps) => {
+  const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const path = `data/${data.id}`;
+  return apiMapping<models.IPaymentTermsAndConditionDetailProps>(
+    'auth',
+    path,
+    'payment',
+    'v1',
+    'DETAIL',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const PaymentApi = {
     paymentTypesList,
-    paymentChannelsList
+    paymentChannelsList,
+    postTermsAndCondition,
+    paymentTCCreate,
+    paymentTCDetail,
+    paymentLastChannelCreate,
+    paymentLastChannelDetail
   };
