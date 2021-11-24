@@ -17,6 +17,7 @@ import { goBack, goToHistoryDetail } from '../functions';
 import { usePaymentStatus } from '../functions/history.hook.function';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
+import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -34,18 +35,6 @@ interface HistoryItem {
 }
 /** === CONSTANTS AND DUMMIES === */
 const historyTabs = ['Tagihan', 'Order'];
-const orderStatus = [
-  { status: '', title: 'Semua' },
-  { status: 'confirmation', title: 'Menunggu Konfirmasi' },
-  { status: 'verified', title: 'Verifikasi' },
-  { status: 'on_packing', title: 'Dikemas' },
-  { status: 'on_delivery', title: 'Dikirim' },
-  { status: 'delivered', title: 'Diterima' },
-  { status: 'done', title: 'Selesai' },
-  { status: 'partial_pending', title: 'Pending Partial' },
-  { status: 'supplier_pending', title: 'Pending Supplier' },
-  { status: 'canceled', title: 'Batal' },
-] as const;
 const paymentStatusColor: Record<PaymentStatusKey, keyof HistoryStatusColor> = {
   waiting_for_payment: 'yellow',
   unpaid: 'white',
@@ -155,25 +144,39 @@ const orders: Array<HistoryItem> = [
   },
 ];
 /** === COMPONENT === */
-const HistoryListView: FC = () => {
+const HistoryListView: FC = ({ navigation }: any) => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
-  const [activePaymentStatus, setActivePaymentStatus] = useState<
-    typeof paymentStatus[number]['key'] | ''
-  >('');
-  const [activeOrderStatus, setActiveOrderStatus] = useState<
-    typeof orderStatus[number]['key'] | ''
-  >('');
+  const [activePaymentStatus, setActivePaymentStatus] = useState('');
+  const [activeOrderStatus, setActiveOrderStatus] = useState('');
+  const getOrderStatus = useOrderStatusActions();
   const getPaymentStatus = usePaymentStatus();
+  const getHistoryList = () => console.log('Get History List');
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
 
-  /** EFFECTS */
+  /**
+   * GET ORDER STATUS
+   */
   useEffect(() => {
     getPaymentStatus.list(dispatchHistory);
+    getOrderStatus.fetch(dispatchHistory);
+    getHistoryList();
   }, []);
+
+  /** GET HISTORY LIST */
+  useEffect(() => {
+    /** Add navigation listener */
+    const unsubscribe = navigation.addListener('focus', () => {
+      getHistoryList();
+    });
+    activeTab === 0 ? setActiveOrderStatus('') : setActivePaymentStatus('');
+    getHistoryList();
+
+    return unsubscribe;
+  }, [activeOrderStatus, activePaymentStatus, activeTab, navigation]);
 
   /** === VIEW === */
   /** => Header */
@@ -219,14 +222,20 @@ const HistoryListView: FC = () => {
   const renderStatusList = () => {
     // ini nanti diganti
     console.log(stateHistory, 'STATE HISTORY');
-    const paymentStatus = stateHistory?.paymentStatus?.data
+    const paymentStatus = stateHistory?.paymentStatus?.data;
+    const orderStatus = stateHistory?.orderStatus?.data;
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
     const setActiveStatus =
       activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
 
-    return (
+    // const statusList =
+    //   activeTab === 0
+    //     ? stateOrderStatus.orderStatus
+    //     : stateOrderStatus.orderStatus;
+
+    return !statusList.loading && statusList.data !== null ? (
       <View>
         <ScrollView
           horizontal={true}
@@ -235,7 +244,7 @@ const HistoryListView: FC = () => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {statusList.map((item) => (
+          {statusList.map((item: any) => (
             <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
                 text={item.title}
@@ -247,6 +256,8 @@ const HistoryListView: FC = () => {
           <View style={{ width: 16 }} />
         </ScrollView>
       </View>
+    ) : (
+      <View />
     );
   };
   /** => Payment List */
