@@ -15,3 +15,19 @@ export const useOrderStatusActions = () => {
     },
   };
 };
+
+export const usePaymentStatus = () => {
+  const dispatch = useDispatch();
+  const data = { loading: true, limit: 0, skip: 0 };
+  return {
+    list: (contextDispatch: (action: any) => any) => {
+      dispatch(
+        Actions.paymentStatusListProcess(contextDispatch, {
+          loading: true,
+          limit: 0,
+          skip: 0,
+        }),
+      );
+    },
+  };
+};

@@ -13,11 +13,15 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
-import { goBack, goToHistoryDetail } from '../functions';
-import { usePaymentStatus } from '../functions/history.hook.function';
 import { HistoryStyle } from '../styles';
 import { HistoryCard, HistoryStatusColor } from '../components';
-import { useOrderStatusActions } from '@screen/history/functions/history-list/history-list.hook.function';
+import {
+  useOrderStatusActions,
+  usePaymentStatus,
+  goBack,
+  goToHistoryDetail,
+} from '@screen/history/functions';
+import { OrderStatus } from '@models';
 /** === TYPES === */
 type PaymentStatusKey = typeof paymentStatus[number]['key'];
 type OrderStatusKey = typeof orderStatus[number]['key'];
@@ -221,19 +225,13 @@ const HistoryListView: FC = ({ navigation }: any) => {
   /** => Status List */
   const renderStatusList = () => {
     // ini nanti diganti
-    console.log(stateHistory, 'STATE HISTORY');
-    const paymentStatus = stateHistory?.paymentStatus?.data;
-    const orderStatus = stateHistory?.orderStatus?.data;
+    const paymentStatus = stateHistory?.paymentStatus;
+    const orderStatus = stateHistory?.orderStatus;
     const statusList = activeTab === 0 ? paymentStatus : orderStatus;
     const activeStatus =
       activeTab === 0 ? activePaymentStatus : activeOrderStatus;
     const setActiveStatus =
       activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
-
-    // const statusList =
-    //   activeTab === 0
-    //     ? stateOrderStatus.orderStatus
-    //     : stateOrderStatus.orderStatus;
 
     return !statusList.loading && statusList.data !== null ? (
       <View>
@@ -244,7 +242,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             paddingVertical: 8,
             paddingHorizontal: 16,
           }}>
-          {statusList.map((item: any) => (
+          {statusList.data.map((item: OrderStatus) => (
             <View key={item.status} style={{ marginRight: 16 }}>
               <SnbChips.Choice
                 text={item.title}
