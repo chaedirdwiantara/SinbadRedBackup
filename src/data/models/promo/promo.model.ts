@@ -1,6 +1,5 @@
 import * as models from '@models';
 /** === PROMO PAYMENT LIST === */
-/** => success props */
 export interface PromoPaymentListSuccessProps {
   id: number;
   name: string;
@@ -103,4 +102,22 @@ export interface ReserveDiscountNotMatchData {
   productName: string;
   productImage: string;
   promoSellers: Array<string>;
+}
+export interface CheckPromoPaymentGetData {
+  paymentChannelId: number;
+  promoPaymentId: number;
+  promoPaymentAvailable: boolean;
+  promoPaymentDescription: string | null;
+  promoPaymentAmount: number | null;
+}
+export interface CheckAllPromoPaymentGetData {
+  invoiceGroupId: string;
+  cartParcelId: string;
+  paymentTypeId: number;
+  paymentChannelId: number;
+  parcelPrice: number;
+  promoPaymentId: number;
+  promoPaymentAvailable: boolean;
+  promoPaymentDescription: string;
+  promoPaymentAmount: number;
 }
