@@ -5,8 +5,13 @@ import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE ===  */
 import { AccordionStyle } from '@core/styles';
 /** === TYPE === */
+export interface IAccordionData {
+  name: string;
+  description: string;
+}
+
 interface AccordionProps {
-  data: Array<{ name: string; description: string }>;
+  data: Array<IAccordionData>;
 }
 /** === COMPONENT === */
 export const Accordion: FC<AccordionProps> = ({ data }) => {
