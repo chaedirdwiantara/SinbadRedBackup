@@ -60,7 +60,7 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
     </View>
     {brand.products.map((product, productIndex) => (
       <ShoppingCartProduct
-        key={product.productId.toString()}
+        key={productIndex.toString()}
         product={product}
         productIndex={productIndex}
         brand={brand}

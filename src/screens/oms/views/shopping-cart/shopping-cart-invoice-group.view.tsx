@@ -37,7 +37,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
     </View>
     {invoiceGroup.brands.map((brand, brandIndex) => (
       <ShoppingCartBrand
-        key={brand.brandId.toString()}
+        key={brandIndex.toString()}
         brand={brand}
         brandIndex={brandIndex}
         invoiceGroupIndex={invoiceGroupIndex}
