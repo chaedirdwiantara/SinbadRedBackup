@@ -135,6 +135,14 @@ const OmsShoppingCartView: FC = () => {
       },
     ]);
   }, []);
+  React.useEffect(() => {
+    if (stateCheckAllPromoPayment.create.data !== null) {
+      checkAllPromoPaymentAction.list(
+        dispatchPromo,
+        stateCheckAllPromoPayment.create.data.id,
+      );
+    }
+  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
