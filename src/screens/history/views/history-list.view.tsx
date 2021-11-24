@@ -143,7 +143,7 @@ const orders: Array<HistoryItem> = [
   },
 ];
 /** === COMPONENT === */
-const HistoryListView: FC = () => {
+const HistoryListView: FC = ({ navigation }: any) => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
@@ -165,12 +165,15 @@ const HistoryListView: FC = () => {
 
   /** GET HISTORY LIST */
   useEffect(() => {
-    console.log(activeTab === 0 ? 'Payment Tab' : 'Order Tab');
-    console.log('Order Status', activeOrderStatus);
-    console.log('Payment Status', activePaymentStatus);
+    /** Add navigation listener */
+    const unsubscribe = navigation.addListener('focus', () => {
+      getHistoryList();
+    });
     activeTab === 0 ? setActiveOrderStatus('') : setActivePaymentStatus('');
     getHistoryList();
-  }, [activeOrderStatus, activePaymentStatus, activeTab]);
+
+    return unsubscribe;
+  }, [activeOrderStatus, activePaymentStatus, activeTab, navigation]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
