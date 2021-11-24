@@ -8,6 +8,7 @@ export const supplierSegmentationProcess = (
   payload: models.DetailProcessProps,
 ): models.DetailProcessAction => {
   contextDispatch({ type: types.SUPPLIER_SEGMENTATION_PROCESS, payload });
+
   return {
     type: types.SUPPLIER_SEGMENTATION_PROCESS,
     payload,
