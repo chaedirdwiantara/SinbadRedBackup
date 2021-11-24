@@ -13,4 +13,8 @@ const goToSupplier = () => {
   NavigationAction.navigate('SupplierView');
 };
 
-export { goBack, goToShoppingCart, goToSupplier };
+const goToBundle = () => {
+  NavigationAction.navigate('ProductBundleView');
+};
+
+export { goBack, goToShoppingCart, goToSupplier, goToBundle };

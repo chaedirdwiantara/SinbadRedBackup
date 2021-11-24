@@ -21,6 +21,7 @@ import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
+import { goToBundle } from '../../functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -221,7 +222,13 @@ const ProductDetailView: FC = () => {
           disabled={
             defaultProperties.stock < (productDetailState.data?.minQty ?? 1)
           }
-          onPress={() => console.log('Add to cart pressed')}
+          onPress={() => {
+            if (defaultProperties.isBundle) {
+              goToBundle();
+            } else {
+              console.log('Add to cart pressed');
+            }
+          }}
         />
       ) : (
         <UnavailableSkuFlag />
