@@ -43,7 +43,6 @@ export const CREATE_CHECK_PROMO_PAYMENT_PROCESS =
   'CreateCheckPromoPaymentProcess';
 export const CREATE_CHECK_PROMO_PAYMENT_FAILED =
   'CreateCheckPromoPaymentFailed';
-export const CREATE_CHECK_PROMO_PAYMENT_RESET = 'CreateCheckPromoPaymentReset';
 export const CREATE_CHECK_PROMO_PAYMENT_SUCCESS =
   'CreateCheckPromoPaymentSuccess';
 // GET CHECK ALL PROMO PAYMENT

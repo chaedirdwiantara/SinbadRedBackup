@@ -255,3 +255,32 @@ export const checkPromoPaymentFailed = (
 export const checkPromoPaymentReset = () => {
   return { type: types.CHECK_PROMO_PAYMENT_FAILED };
 };
+
+/** === CREATE CHECK ALL PROMO PAYMENT === */
+/** => process */
+export const createCheckAllPromoPaymentProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<models.CheckAllPromoPaymentPostPayload[]>,
+): models.CreateProcessAction => {
+  contextDispatch({
+    type: types.CREATE_CHECK_PROMO_PAYMENT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.CREATE_CHECK_PROMO_PAYMENT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => success */
+export const createCheckAllPromoPaymentSuccess = (
+  data: models.CreateSuccessProps,
+): models.CreateSuccessAction => {
+  return { type: types.CREATE_CHECK_PROMO_PAYMENT_SUCCESS, payload: data };
+};
+/** => failed */
+export const createCheckAllPromoPaymentFailed = (
+  data: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.CREATE_CHECK_PROMO_PAYMENT_FAILED, payload: data };
+};
