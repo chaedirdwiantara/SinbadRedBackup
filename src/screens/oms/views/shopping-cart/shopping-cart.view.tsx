@@ -12,7 +12,10 @@ import { ShippingAddress } from './shipping-address.view';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import { useReserveDiscountAction } from '@screen/promo/functions';
+import {
+  useCheckAllPromoPaymentAction,
+  useReserveDiscountAction,
+} from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -97,6 +100,7 @@ const OmsShoppingCartView: FC = () => {
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
   // const checkPromoPaymentAction = useCheckPromoPaymentAction();
+  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
     reserveDiscountAction.del(dispatchPromo, '1');
     reserveStockAction.del(dispatchReserveStock, '1');
@@ -107,6 +111,22 @@ const OmsShoppingCartView: FC = () => {
     //   invoiceGroupId: '2',
     //   sellerId: 1,
     // });
+    checkAllPromoPaymentAction.create(dispatchPromo, [
+      {
+        invoiceGroupId: '4',
+        cartParcelId: '1',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+      {
+        invoiceGroupId: '5',
+        cartParcelId: '2',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+    ]);
   }, []);
 
   /** Get Cart View */
