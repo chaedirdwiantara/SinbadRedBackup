@@ -5,6 +5,7 @@ import {
   DetailSuccessProps,
   CreateSuccessProps,
   UpdateSuccessProps,
+  DeleteSuccessProps,
 } from '@models';
 /** === FUNCTION === */
 const apiMappingMock = <T>(
@@ -12,7 +13,7 @@ const apiMappingMock = <T>(
   path: string,
   module: 'account' | 'cart' | 'product' | 'discount' | 'auth',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH' | 'DELETE',
   params?: object,
 ) => {
   switch (type) {
@@ -59,6 +60,15 @@ const apiMappingMock = <T>(
         module,
         version,
         'PATCH',
+        params,
+      );
+    case 'DELETE':
+      return apiMock<DeleteSuccessProps>(
+        mockHost,
+        path,
+        module,
+        version,
+        'DELETE',
         params,
       );
     default:

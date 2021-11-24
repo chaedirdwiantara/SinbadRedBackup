@@ -7,11 +7,11 @@ import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
 /** => Cart view */
-function* cartView(action: models.DetailProcessAction) {
+function* cartView(action: Omit<models.DetailProcessAction, 'payload'>) {
   try {
     const response: models.DetailSuccessProps<models.CartSuccessProps> =
       yield call(() => {
-        return CartApi.getCartView(action.payload);
+        return CartApi.getCartView();
       });
     yield action.contextDispatch(ActionCreators.cartViewSuccess(response));
     yield put(ActionCreators.cartViewSuccess(response));

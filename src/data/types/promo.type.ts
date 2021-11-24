@@ -20,3 +20,8 @@ export const POTENTIAL_PROMO_PRODUCT_PROCESS = 'PotentialPromoListProcess';
 export const POTENTIAL_PROMO_PRODUCT_SUCCESS = 'PotentialPromoListSuccess';
 export const POTENTIAL_PROMO_PRODUCT_FAILED = 'PotentialPromoListFailed';
 export const POTENTIAL_PROMO_PRODUCT_RESET = 'PotentialPromoListReset';
+// DELETE RESERVE DISCOUNT
+export const DELETE_RESERVE_DISCOUNT_PROCESS = 'DeleteReserveDiscountProcess';
+export const DELETE_RESERVE_DISCOUNT_SUCCESS = 'DeleteReserveDiscountSuccess';
+export const DELETE_RESERVE_DISCOUNT_FAILED = 'DeleteReserveDiscountFailed';
+export const DELETE_RESERVE_DISCOUNT_RESET = 'DeleteReserveDiscountReset';

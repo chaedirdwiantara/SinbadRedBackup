@@ -45,7 +45,7 @@ const MerchantEditAddressView = () => {
       goBack();
       reset(dispatchSupplier);
       resetMerchantData();
-      detail(dispatchUser, { id: '' });
+      detail(dispatchUser);
     }
   }, [stateMerchant]);
 
