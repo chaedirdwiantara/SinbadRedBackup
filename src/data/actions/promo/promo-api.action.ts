@@ -227,8 +227,8 @@ export const detailReserveDiscountReset = () => {
 /** => process */
 export const checkPromoPaymentProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
+  data: models.CheckPromoPaymentGetPayload,
+): models.CheckPromoPaymentListProcessAction => {
   contextDispatch({
     type: types.CHECK_PROMO_PAYMENT_PROCESS,
     payload: data,

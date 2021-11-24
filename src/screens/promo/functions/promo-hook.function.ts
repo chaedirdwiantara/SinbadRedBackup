@@ -72,12 +72,26 @@ const useReserveDiscountAction = () => {
     },
   };
 };
+/** => check payment promo action */
+const useCheckPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    list: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckPromoPaymentGetPayload,
+    ) => {
+      dispatch(Actions.checkPromoPaymentReset());
+      dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
   usePromoGeneralAction,
   usePotentialPromoProductAction,
   useReserveDiscountAction,
+  useCheckPromoPaymentAction,
 };
 /**
  * ================================================================
