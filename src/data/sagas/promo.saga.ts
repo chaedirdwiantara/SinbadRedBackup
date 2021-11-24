@@ -144,6 +144,23 @@ function* checkPromoPayment(action: models.CheckPromoPaymentListProcessAction) {
     yield put(ActionCreators.checkPromoPaymentFailed(error));
   }
 }
+/** => create check all promo payment */
+function* createCheckAllPromoPayment(action: models.CreateProcessAction) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return PromoApi.createCheckAllPromoPayment(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.createCheckAllPromoPaymentSuccess(response),
+    );
+    yield put(ActionCreators.createCheckAllPromoPaymentSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.createCheckAllPromoPaymentFailed(error),
+    );
+    yield put(ActionCreators.createCheckAllPromoPaymentFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* PromoSaga() {
   yield takeLatest(types.PROMO_PAYMENT_LIST_PROCESS, promoPaymentList);
@@ -160,6 +177,10 @@ function* PromoSaga() {
     reserveDiscountDetail,
   );
   yield takeLatest(types.CHECK_PROMO_PAYMENT_PROCESS, checkPromoPayment);
+  yield takeLatest(
+    types.CREATE_CHECK_PROMO_PAYMENT_PROCESS,
+    createCheckAllPromoPayment,
+  );
 }
 
 export default PromoSaga;

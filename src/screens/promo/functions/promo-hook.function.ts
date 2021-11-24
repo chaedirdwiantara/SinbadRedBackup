@@ -72,7 +72,7 @@ const useReserveDiscountAction = () => {
     },
   };
 };
-/** => check payment promo action */
+/** => check promo payment action */
 const useCheckPromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -85,6 +85,20 @@ const useCheckPromoPaymentAction = () => {
     },
   };
 };
+/** => check all promo payment action */
+const useCheckAllPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckAllPromoPaymentPostPayload[],
+    ) => {
+      dispatch(
+        Actions.createCheckAllPromoPaymentProcess(contextDispatch, { data }),
+      );
+    },
+  };
+};
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
@@ -92,6 +106,7 @@ export {
   usePotentialPromoProductAction,
   useReserveDiscountAction,
   useCheckPromoPaymentAction,
+  useCheckAllPromoPaymentAction,
 };
 /**
  * ================================================================

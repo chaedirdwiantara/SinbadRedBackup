@@ -108,6 +108,21 @@ const checkPromoPayment = (data: models.CheckPromoPaymentGetPayload) => {
     'LIST',
   );
 };
+/** => create check all promo payment */
+const createCheckAllPromoPayment = (
+  data: models.CreateProcessProps<models.CheckAllPromoPaymentPostPayload[]>,
+) => {
+  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
+  const path = 'check-all-promo-payment';
+  return apiMappingMock<models.CreateSuccessProps>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PromoApi = {
@@ -119,4 +134,5 @@ export const PromoApi = {
   createReserveDiscount,
   reserveDiscountDetail,
   checkPromoPayment,
+  createCheckAllPromoPayment,
 };
