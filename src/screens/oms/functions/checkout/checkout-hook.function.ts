@@ -139,6 +139,29 @@ const usePaymentAction = () => {
         }),
       );
     },
+    tCCreate: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
+    },
+    tCDetail: (
+      contextDispatch: (action: any) => any,
+      id: string,
+    ) => {
+      dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
+    }, lastChannelCreate: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.paymentLastChannelCreateProcess(contextDispatch, data));
+    },
+    lastChannelDetail: (
+      contextDispatch: (action: any) => any,
+      id: string,
+    ) => {
+      dispatch(Actions.paymentLastChannelDetailProcess(contextDispatch, { id }));
+    },
   };
 };
 

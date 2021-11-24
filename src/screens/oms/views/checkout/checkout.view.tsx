@@ -120,14 +120,42 @@ const OmsCheckoutView: FC = () => {
     contexts.PaymentContext,
   );
 
-  console.log(statePayment, 'status payment')
-console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
-
   /** Set Loading Page */
   useEffect(() => {
     setTimeout(() => setLoadingPage(false), 1000);
   }, []);
 
+  React.useEffect(() => {
+    const dataLastChannel = {
+      data: {
+        cartParcels: [
+          {
+            invoiceGroupId:"abcdef12345",
+            totalCartParcel:50000.00
+        },
+        {
+            invoiceGroupId:"abcdef12346",
+            totalCartParcel:60000.00
+        }
+        ],
+      },
+    };
+    paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
+  }, []);
+  /** => get payment terms and conditions detail on success post TC  */
+  React.useEffect(() => {
+    const dataTC = statePayment?.paymentTCCreate.data;
+    if (dataTC) {
+      paymentAction.tCDetail(dispatchPayment, dataTC.id);
+    }
+  }, [statePayment?.paymentTCCreate.data]);
+  /** => get mongo data last type channels */
+  React.useEffect(() => {
+    const lastChannelId = statePayment?.paymentLastChannelCreate?.data?.id;
+    if (lastChannelId) {
+      paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
+    }
+  }, [statePayment.paymentLastChannelCreate]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -309,6 +337,18 @@ console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
   };
   /** => bottom */
   const renderBottom = () => {
+    const dataPostTC = {
+      data: {
+        buyerId: 1234,
+        orderParcels: [{
+          invoiceGroupId: "234324234",
+          paymentChannelId: 2,
+          paymentTypeId: 2
+        }
+      ]
+      },
+    };
+    
     const content = () => {
       return (
         <View style={CheckoutStyle.bottomContentContainer}>
@@ -321,7 +361,10 @@ console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
       <View style={{ height: 75 }}>
         <SnbButton.Content
           type={'primary'}
-          onPress={() => termsAndConditionModal.setOpen(true)}
+          onPress={() => {
+            paymentAction.tCCreate(dispatchPayment, dataPostTC);
+            termsAndConditionModal.setOpen(true)}
+          }
           content={content()}
           title={'Buat Pesanan'}
         />
@@ -343,7 +386,7 @@ console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
   /** => terms and conditions modal */
   const renderTermsAndConditionModal = () => {
     const paymentTypesTermsConditions = () => {
-      return dummyTermsAndConditions.data.paymentTypes.map((item, index) => {
+      return statePayment?.paymentTCDetail?.data?.paymentTypes.map((item, index) => {
         return (
           <View key={index} style={{ marginBottom: 12 }}>
             <View style={{ marginBottom: 8 }}>
@@ -355,7 +398,7 @@ console.log(paymentType.selectedPaymentType, 'SELECTED PAYMENT');
       });
     };
     const paymentChannelTermsConditions = () => {
-      return dummyTermsAndConditions.data.paymentChannels.map((item, index) => {
+      return statePayment?.paymentTCDetail?.data?.paymentChannels.map((item, index) => {
         return (
           <View key={index} style={{ marginBottom: 12 }}>
             <View style={{ marginBottom: 8 }}>
