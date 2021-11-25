@@ -16,3 +16,9 @@ export const CART_UPDATE_SUCCESS = 'CartUpdateSuccess';
 export const CART_UPDATE_FAILED = 'CartUpdateFailed';
 export const CART_UPDATE_REFRESH = 'CartUpdateRefresh';
 export const CART_UPDATE_RESET = 'CartUpdateReset';
+/** Cart Total Product */
+export const CART_TOTAL_PRODUCT_PROCESS = 'CartTotalProductProcess';
+export const CART_TOTAL_PRODUCT_SUCCESS = 'CartTotalProductSuccess';
+export const CART_TOTAL_PRODUCT_FAILED = 'CartTotalProductFailed';
+export const CART_TOTAL_PRODUCT_REFRESH = 'CartTotalProductRefresh';
+export const CART_TOTAL_PRODUCT_RESET = 'CartTotalProductReset';
