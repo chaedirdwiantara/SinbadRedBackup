@@ -13,9 +13,9 @@ export const checkout = simplifyReducer(initialState, {
   /** => Save Merge Invoice Brand */
   [types.MERGE_CHECKOUT_INVOICE_BRAND](
     state = initialState,
-    action: models.MergeCheckoutInvoiceBrand,
+    { payload }: models.MergeCheckoutInvoiceBrand,
   ) {
-    const allSupplier = action.payload.invoices;
+    const allSupplier = payload.invoices;
     const invoices: models.IInvoiceCheckout[] = allSupplier.map((item) => {
       return {
         cartParcelId: item.cartParcelId,
@@ -39,20 +39,20 @@ export const checkout = simplifyReducer(initialState, {
 
     return {
       ...state,
-      cartId: action.payload.cartId,
+      cartId: payload.cartId,
       invoices: invoices,
     };
   },
   /** => Merge reserve discount checkout */
   [types.MERGE_RESERVE_DISCOUNT_CHECKOUT](
     state = initialState,
-    action: models.MergeReserveDiscountCheckout,
+    { payload }: models.MergeReserveDiscountCheckout,
   ) {
     let invoices: models.IInvoiceCheckout[] = [];
     for (let i = 0; i < state.invoices.length; i++) {
       invoices.push({
         ...state.invoices[i],
-        ...action.payload.find(
+        ...payload.find(
           (itmInner) =>
             itmInner.invoiceGroupId === state.invoices[i].invoiceGroupId,
         ),
@@ -67,14 +67,14 @@ export const checkout = simplifyReducer(initialState, {
   /** => Update payment channel checkout */
   [types.UPDATE_PAYMENT_CHANNEL_CHECKOUT](
     state = initialState,
-    action: models.UpdatePaymentChannelCheckout,
+    { payload }: models.UpdatePaymentChannelCheckout,
   ) {
     let invoices = [];
 
     for (let i = 0; i < state.invoices.length; i++) {
       invoices.push({
         ...state.invoices[i],
-        ...action.payload.find(
+        ...payload.find(
           (itmInner) =>
             itmInner.invoiceGroupId === state.invoices[i].invoiceGroupId,
         ),
@@ -89,14 +89,14 @@ export const checkout = simplifyReducer(initialState, {
   /** => Update payment channel checkout */
   [types.UPDATE_PROMO_PAYMENT_CHECKOUT](
     state = initialState,
-    action: models.UpdatePromoPaymentCheckout,
+    { payload }: models.UpdatePromoPaymentCheckout,
   ) {
     let invoices = [];
 
     for (let i = 0; i < state.invoices.length; i++) {
       invoices.push({
         ...state.invoices[i],
-        ...action.payload.find(
+        ...payload.find(
           (itmInner) =>
             itmInner.invoiceGroupId === state.invoices[i].invoiceGroupId,
         ),
@@ -106,6 +106,16 @@ export const checkout = simplifyReducer(initialState, {
     return {
       ...state,
       invoices: invoices,
+    };
+  },
+  /** => Update Cart id checkout */
+  [types.UPDATE_CART_ID_CHECKOUT](
+    state = initialState,
+    { payload }: models.UpdateCartIdCheckout,
+  ) {
+    return {
+      ...state,
+      cartId: payload.cartId,
     };
   },
 });
