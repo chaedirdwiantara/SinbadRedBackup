@@ -183,7 +183,7 @@ const OmsShoppingCartView: FC = () => {
         invoiceGroupId: invoiceGroup.invoiceGroupId,
         portfolioId: invoiceGroup.portfolioId,
         brands: brandsSelected,
-        sellerId: invoiceGroup.supplierId,
+        sellerId: invoiceGroup.sellerId,
         channelId: invoiceGroup.channelId,
         groupId: invoiceGroup.groupId,
         typeId: invoiceGroup.typeId,
