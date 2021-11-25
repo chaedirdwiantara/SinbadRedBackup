@@ -15,9 +15,9 @@ export interface IPaymentChannelsList {
 }
 
 export interface IPaymentTermsAndConditionDetailProps {
-  storeId : number;
-  paymentTypes : IPaymentType[]
-  paymentChannels: IPaymentChannel[]
+  storeId: number;
+  paymentTypes: IPaymentType[];
+  paymentChannels: IPaymentChannel[];
 }
 interface IPaymentChannelType {
   id: number;
@@ -28,30 +28,30 @@ interface IPaymentChannelType {
   message: string;
 }
 
-interface IPaymentType {
-  paymentTypeId : number;
+export interface IPaymentType {
+  paymentTypeId: number;
   name: string;
   term: string;
 }
 
-interface IPaymentChannel {
-  paymentChannelId : number;
+export interface IPaymentChannel {
+  paymentChannelId: number;
   name: string;
   term: string;
 }
 
 export interface IPaymentLastChannelDetailProps {
-  buyerId : number;
-  paymentTypeChannels : IPaymentTypeChannels[]
+  buyerId: number;
+  paymentTypeChannels: IPaymentTypeChannels[];
 }
 
 export interface ISelectedPaymentChannels {
-  id:number;
+  id: number;
   name: string;
   iconUrl: string;
 }
 interface IPaymentTypeChannels {
-  invoiceGroupId : number;
+  invoiceGroupId: number;
   totalFee: number;
   totalPayment: number;
   paymentType: ILastPaymentTypeChannel[];
@@ -59,7 +59,7 @@ interface IPaymentTypeChannels {
 }
 
 interface ILastPaymentTypeChannel {
-  id : number;
+  id: number;
   name: string;
   iconUrl: string;
 }
