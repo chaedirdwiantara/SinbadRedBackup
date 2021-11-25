@@ -5,24 +5,24 @@ import * as models from '@models';
 /** => payment detail process */
 export const historyPaymentDetailProcess = (
     contextDispatch: (action: any) => any,
-    data: models.DetailProcessProps,
+    payload: models.DetailProcessProps,
   ): models.DetailProcessAction => {
-    contextDispatch({ type: types.HISTORY_PAYMENT_DETAIL_PROCESS, payload: data });
+    contextDispatch({ type: types.HISTORY_PAYMENT_DETAIL_PROCESS, payload });
     return {
       type: types.HISTORY_PAYMENT_DETAIL_PROCESS,
-      payload: data,
+      payload,
       contextDispatch,
     };
   };
   /** => banner detail success */
   export const historyPaymentDetailSuccess = (
-    data: models.DetailSuccessProps<models.PaymentDetailSuccessProps>,
+    payload: models.DetailSuccessProps<models.PaymentDetailSuccessProps>,
   ): models.DetailSuccessAction<models.PaymentDetailSuccessProps> => {
-    return { type: types.HISTORY_PAYMENT_DETAIL_SUCCESS, payload: data };
+    return { type: types.HISTORY_PAYMENT_DETAIL_SUCCESS, payload };
   };
   /** => banner detail failed */
   export const historyPaymentDetailFailed = (
-    data: models.ErrorProps,
+    payload: models.ErrorProps,
   ): models.DetailFailedAction => {
-    return { type: types.HISTORY_PAYMENT_DETAIL_FAILED, payload: data };
+    return { type: types.HISTORY_PAYMENT_DETAIL_FAILED, payload };
   };
