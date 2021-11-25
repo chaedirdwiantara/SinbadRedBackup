@@ -19,3 +19,8 @@ export interface UpdatePromoPaymentCheckout {
   type: string;
   payload: models.PromoPayment[];
 }
+/** => update cart id */
+export interface UpdateCartIdCheckout {
+  type: string;
+  payload: models.CartIdPayload;
+}

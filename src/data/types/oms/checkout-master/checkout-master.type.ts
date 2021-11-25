@@ -8,3 +8,5 @@ export const MERGE_RESERVE_DISCOUNT_CHECKOUT = 'MergeReserveDiscountCheckout';
 export const UPDATE_PAYMENT_CHANNEL_CHECKOUT = 'UpdatePaymentChannelCheckout';
 /** => Update promo payment */
 export const UPDATE_PROMO_PAYMENT_CHECKOUT = 'UpdatePromoPaymentCheckout';
+/** => Update CartId */
+export const UPDATE_CART_ID_CHECKOUT = 'UpdateCartIdCheckout';

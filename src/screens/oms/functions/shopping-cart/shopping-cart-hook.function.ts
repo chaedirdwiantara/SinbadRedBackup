@@ -58,3 +58,15 @@ export const useCartSelected = () => {
     },
   };
 };
+
+export const useCartTotalProductActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartTotalProductProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.cartTotalProductReset);
+    },
+  };
+};
