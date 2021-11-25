@@ -51,10 +51,9 @@ const potentialPromoProduct = (data: models.DetailProcessProps) => {
 };
 /** => delete reserve discount */
 const deleteReserveDiscount = (data: models.DeleteProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = `reserve-discount/${data.id}`;
-  return apiMappingMock<models.DeleteSuccessProps>(
-    mockHost,
+  const path = `reserved-discount/${data.id}`;
+  return apiMapping<models.DeleteSuccessProps>(
+    'auth',
     path,
     'discount',
     'v1',
@@ -62,13 +61,10 @@ const deleteReserveDiscount = (data: models.DeleteProcessProps) => {
   );
 };
 /** => create reserve discount */
-const createReserveDiscount = (
-  data: models.CreateProcessProps<models.ReserveDiscountPostPayload>,
-) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = 'reserve-discount';
-  return apiMappingMock<models.CreateSuccessProps>(
-    mockHost,
+const createReserveDiscount = (data: models.ReserveDiscountPostPayload) => {
+  const path = 'reserved-discount';
+  return apiMapping<models.CreateSuccessProps>(
+    'auth',
     path,
     'discount',
     'v1',
@@ -78,10 +74,9 @@ const createReserveDiscount = (
 };
 /** => reserve discount detail */
 const reserveDiscountDetail = (data: models.DetailProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = `reserved-discount/${data.id}`;
-  return apiMappingMock<models.ReserveDiscountDetail>(
-    mockHost,
+  return apiMapping<models.ReserveDiscountDetail>(
+    'auth',
     path,
     'discount',
     'v1',
