@@ -1,10 +1,10 @@
-export interface IPaymentType {
+export interface IPaymentTypeCheckout {
   id: number;
   name: string;
   iconUrl: string;
 }
 
-export interface IPaymentChannel {
+export interface IPaymentChannelCheckout {
   id: number;
   name: string;
   iconUrl: string;
@@ -48,14 +48,15 @@ export interface IInvoiceCheckout {
   invoiceGroupName: string;
   totalProduct: number;
   totalPriceBeforeTax: number;
-  PPN: number;
+  totalPriceAfterTax: number;
+  tax: number | null;
   isPotentialPromoPayment: boolean;
   totalPromoSellerAndVoucher: number;
   totalPromoPayment: number;
   totalPaymentFee: number;
   totalPayment: number;
-  paymentType: IPaymentType | null;
-  paymentChannel: IPaymentChannel | null;
+  paymentType: IPaymentTypeCheckout | null;
+  paymentChannel: IPaymentChannelCheckout | null;
   promoSellers: IPromoSeller[];
   vouchers: IVoucherCheckout[];
   brands: IBrandCheckout[];
@@ -78,11 +79,15 @@ export interface PaymentTypeChannel {
   totalFee: number;
   totalPayment: number;
   promoPayment: number;
-  paymentType: IPaymentType;
-  paymentChannel: IPaymentChannel;
+  paymentType: IPaymentTypeCheckout;
+  paymentChannel: IPaymentChannelCheckout;
 }
 
 export interface PromoPayment {
   invoiceGroupId: string;
   totalPromoPayment: number;
+}
+
+export interface CartIdPayload {
+  cartId: string | null;
 }

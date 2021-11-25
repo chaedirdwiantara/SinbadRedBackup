@@ -14,7 +14,6 @@ const getCartView = () => {
 };
 
 const addToCart = (payload: models.AddToCartPayload) => {
-  console.log('[PAYLOAD ADD TO CART]: ', payload);
   const path = 'carts';
   return apiMapping('auth', path, 'cart', 'v1', 'CREATE', payload);
 };
