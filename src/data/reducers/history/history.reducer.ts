@@ -8,11 +8,12 @@ import {
 import {
   paymentStatusListReducer,
   paymentStatusListInitialState,
+  PaymentStatusListInitialProps
 } from './list-history/payment-status-list.reducer';
 
 export interface HistoryListState {
   orderStatus: OrderStatusInitialProps;
-  paymentStatus: any;
+  paymentStatus: PaymentStatusListInitialProps;
 }
 
 /** === INITIAL STATE === */
