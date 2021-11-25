@@ -120,7 +120,7 @@ const usePaymentAction = () => {
           skip: 0,
           invoiceGroupId,
           totalCartParcel,
-          page
+          page,
         }),
       );
     },
@@ -135,10 +135,10 @@ const usePaymentAction = () => {
           loading: true,
           limit: 0,
           skip: 0,
-          page:1,
+          page: 1,
           invoiceGroupId,
           totalCartParcel,
-          paymentTypeId
+          paymentTypeId,
         }),
       );
     },
@@ -148,35 +148,33 @@ const usePaymentAction = () => {
     ) => {
       dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
     },
-    tCDetail: (
-      contextDispatch: (action: any) => any,
-      id: string,
-    ) => {
+    tCDetail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
-    }, lastChannelCreate: (
+    },
+    lastChannelCreate: (
       contextDispatch: (action: any) => any,
       data: models.CreateProcessProps<{}>,
     ) => {
       dispatch(Actions.paymentLastChannelCreateProcess(contextDispatch, data));
     },
-    lastChannelDetail: (
-      contextDispatch: (action: any) => any,
-      id: string,
-    ) => {
-      dispatch(Actions.paymentLastChannelDetailProcess(contextDispatch, { id }));
+    lastChannelDetail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.paymentLastChannelDetailProcess(contextDispatch, { id }),
+      );
     },
   };
 };
 
 const useSelectedPaymentType = () => {
-  const [selectedPaymentType, setSelectedPaymentType] = React.useState({})
-    return {
-      setSelectedPaymentType: (value: object) => {
-        setSelectedPaymentType(value);
-      },
-      selectedPaymentType,
-    };
-}
+  const [selectedPaymentType, setSelectedPaymentType] =
+    React.useState<models.IPaymentTypeCheckout | null>(null);
+  return {
+    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
+      setSelectedPaymentType(value);
+    },
+    selectedPaymentType,
+  };
+};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -186,7 +184,7 @@ export {
   usePaymentTypeModal,
   usePaymentChannelModal,
   usePaymentAction,
-  useSelectedPaymentType
+  useSelectedPaymentType,
 };
 /**
  * ================================================================
