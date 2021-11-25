@@ -1,4 +1,3 @@
-/** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { ScrollView, TouchableOpacity, View, Image } from 'react-native';
 import {
@@ -23,6 +22,13 @@ import {
   VerificationOrderDetailVoucherList,
 } from '@models';
 import LoadingPage from '@core/components/LoadingPage';
+import { useReserveStockContext } from 'src/data/contexts/product';
+import { useReserveStockAction } from '@screen/product/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
+import { getSelectedVouchers } from '@screen/voucher/functions';
+import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import moment from 'moment';
+import { useDataVoucher } from '@core/redux/Data';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -35,6 +41,47 @@ const OmsVerificationOrderView: FC = () => {
     contexts.VerificationOrderContext,
   );
   const verificationOrderDetailData = stateVerificationOrder.detail.data;
+
+  /**
+   * RESERVE SECTION
+   * - POST Reserve Stock
+   * - GET Reserve Stock
+   * - POST Reserve Discount (Promo & Voucher)
+   * - GET Reserve Discount (Promo & Voucher)
+   */
+  const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock, stateReserveStock } = useReserveStockContext();
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
+  /** => get cart data */
+  const { getCartSelected } = useCartSelected();
+  /** => get voucher data */
+  const voucherData = useDataVoucher();
+  React.useEffect(() => {
+    if (
+      statePromo.reserveDiscount.create.data !== null &&
+      stateReserveStock.create.data !== null
+    ) {
+      /** => fetch GET `reserved-discount` */
+      reserveDiscountAction.detail(
+        dispatchPromo,
+        statePromo.reserveDiscount.create.data.id,
+      );
+      /** => fetch GET `reserved stock */
+    }
+  }, [statePromo.reserveDiscount.create, stateReserveStock.create]);
+
+  /** => handleContinueToPayment */
+  const handleContinuePayment = () => {
+    const createReserveDiscountParams = {
+      ...getCartSelected,
+      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+      potentialDiscountId: stateVerificationOrder.create.data?.id,
+      reservedAt: moment().format().toString(),
+    };
+    reserveStockAction.create(dispatchReserveStock, '1');
+    reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
+  };
 
   /** === VIEW === */
   /** => header */
@@ -318,7 +365,7 @@ const OmsVerificationOrderView: FC = () => {
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
               disabled={false}
-              onPress={() => goToCheckout()}
+              onPress={() => handleContinuePayment()}
             />
           </View>
         </View>
