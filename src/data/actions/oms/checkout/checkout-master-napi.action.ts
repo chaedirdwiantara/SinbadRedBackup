@@ -24,3 +24,9 @@ export const updatePromoPaymentCheckout = (
 ): models.UpdatePromoPaymentCheckout => {
   return { type: types.UPDATE_PROMO_PAYMENT_CHECKOUT, payload };
 };
+/** => Update cart id */
+export const updateCartIdCheckout = (
+  payload: models.CartIdPayload,
+): models.UpdateCartIdCheckout => {
+  return { type: types.UPDATE_CART_ID_CHECKOUT, payload };
+};
