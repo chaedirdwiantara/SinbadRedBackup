@@ -70,6 +70,15 @@ const apiMapping = <T>(
         'DELETE',
         params,
       );
+    case 'DELETE':
+      return apiGeneral<DeleteSuccessProps>(
+        access,
+        path,
+        module,
+        version,
+        'DELETE',
+        params,
+      );
     default:
       break;
   }
