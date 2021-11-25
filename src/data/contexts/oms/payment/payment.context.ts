@@ -1,13 +1,8 @@
 import React from 'react';
 import {
-  MerchantInitialProps,
-  supplierInitialState,
-  merchantReducer,
-} from '@reducer/merchant/merchant.reducer';
-import {
-    PaymentInitialProps,
-    paymentInitialState,
-    paymentReducer
+  PaymentInitialProps,
+  paymentInitialState,
+  paymentReducer,
 } from '@reducer/oms/payment/payment.reducer';
 const PaymentContext = React.createContext<{
   // state: InitialStateType;
