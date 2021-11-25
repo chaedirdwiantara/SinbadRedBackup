@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -16,9 +16,11 @@ import {
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { goBack } from '../functions';
+import { goBack, usePaymentDetail } from '../functions';
 import { HistoryDetailStyle } from '../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../components';
+import { contexts } from '@contexts';
+import LoadingPage from '@core/components/LoadingPage';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment' };
@@ -142,6 +144,16 @@ const HistoryDetailView: FC = () => {
   const canceledProducts = seeMoreCanceledProducts
     ? historyDetailDummy.canceledProducts.slice(0, 2)
     : historyDetailDummy.canceledProducts;
+  const getPaymentDetail = usePaymentDetail();
+  const { stateHistory, dispatchHistory } = React.useContext(
+    contexts.HistoryContext,
+  );
+  console.log(stateHistory, 'STATE hISTORY');
+
+  /** === EFFECTS === */
+  useEffect(() => {
+    getPaymentDetail.detail(dispatchHistory, 123123);
+  }, []);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -251,7 +263,8 @@ const HistoryDetailView: FC = () => {
   );
   /** => Payment Info */
   const renderPaymentInfo = () => (
-    <HistoryDetailCard title="Informasi Pembayaran">
+    !stateHistory.paymentDetail?.loading ? 
+    (<HistoryDetailCard title="Informasi Pembayaran">
       {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
       {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
       <HistoryDetailCardDivider />
@@ -290,7 +303,7 @@ const HistoryDetailView: FC = () => {
         toCurrency(historyDetailDummy.payment.paymentTotal),
         'bold',
       )}
-    </HistoryDetailCard>
+    </HistoryDetailCard>) : <LoadingPage/>
   );
   /** => Order Refund Info */
   const renderOrderRefundInfo = () => (
