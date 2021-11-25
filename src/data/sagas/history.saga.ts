@@ -2,6 +2,7 @@
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT INTERNAL === */
 import { PaymentStatusApi } from 'src/data/apis/history/list-history/payment-status.api';
+import { HistoryPaymentApi } from '../apis/history/history-payment.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
@@ -21,9 +22,28 @@ function* paymentStatusList(action: models.ListProcessAction) {
       yield put(ActionCreators.paymentStatusListFailed(error));
     }
 }
+/** === FUNCTIONS === */
+/** Payment Detail */
+function* paymentDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.PaymentDetailSuccessProps> =
+      yield call(() => {
+        return HistoryPaymentApi.paymentDetail();
+      });
+    yield action.contextDispatch(ActionCreators.historyPaymentDetailSuccess(response));
+    yield put(ActionCreators.historyPaymentDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.historyPaymentDetailFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.historyPaymentDetailFailed(error as models.ErrorProps));
+  }
+}
+
 /** === LISTENER === */
 function* HistorySaga() {
   yield takeLatest(types.PAYMENT_STATUS_LIST_PROCESS, paymentStatusList);
+  yield takeLatest(types.HISTORY_PAYMENT_DETAIL_PROCESS, paymentDetail);
 }
 
 export default HistorySaga;

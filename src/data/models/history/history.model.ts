@@ -10,3 +10,26 @@ export interface DetailOrderStatusProcessAction {
   type: string;
   contextDispatch: (action: any) => any;
 }
+
+export interface PaymentType{
+  id: number,
+  name: string
+}
+
+export interface PaymentChannel{
+  id: number,
+  name: string,
+  icon: string,
+  description: string
+}
+export interface PaymentDetailSuccessProps {
+  id: 12345,
+  paymentType: PaymentType,
+  paymentChannel: PaymentChannel,
+  paymentFee: number,
+  totalPayment: number,
+  deliveredTotalPayment: number,
+  refundTotal: number,
+  expiredPaymentTime: string,
+  refundedTime: string
+}
