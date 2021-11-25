@@ -198,9 +198,10 @@ const usePaymentAction = () => {
 };
 
 const useSelectedPaymentType = () => {
-  const [selectedPaymentType, setSelectedPaymentType] = React.useState({});
+  const [selectedPaymentType, setSelectedPaymentType] =
+    React.useState<models.IPaymentTypeCheckout | null>(null);
   return {
-    setSelectedPaymentType: (value: object) => {
+    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
       setSelectedPaymentType(value);
     },
     selectedPaymentType,
