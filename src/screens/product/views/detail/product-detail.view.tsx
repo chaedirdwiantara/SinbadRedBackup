@@ -97,7 +97,7 @@ const ProductDetailView: FC = () => {
       potentialPromoProductAction.reset(dispatchPromo);
       potentialPromoProductAction.detail(dispatchPromo, id);
     }
-  }, [productDetailState]);
+  }, [productDetailState.data]);
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -132,7 +132,10 @@ const ProductDetailView: FC = () => {
     );
   }
   /** => Error */
-  if (!productDetailState.loading && productDetailState.error) {
+  if (
+    !productDetailState.loading &&
+    (productDetailState.error || productDetailState.data?.name === undefined)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
@@ -230,7 +233,7 @@ const ProductDetailView: FC = () => {
           }
           onPress={() => {
             if (defaultProperties.isBundle) {
-              goToBundle();
+              goToBundle(productId);
             } else {
               console.log('Add to cart pressed');
             }

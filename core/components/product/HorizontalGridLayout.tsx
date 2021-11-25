@@ -14,6 +14,7 @@ interface HorizontalGridLayoutProps {
   loading: boolean;
   withOrderButton?: boolean;
   onEndReached?: () => void;
+  onCardPress?: (item: models.ProductList, index: number) => void;
 }
 /** === COMPONENT === */
 export const HorizontalGridLayout: FC<HorizontalGridLayoutProps> = ({
@@ -21,6 +22,7 @@ export const HorizontalGridLayout: FC<HorizontalGridLayoutProps> = ({
   loading,
   withOrderButton = false,
   onEndReached,
+  onCardPress,
 }) => {
   /** === VIEW === */
   /** === Product Card === */
@@ -47,7 +49,13 @@ export const HorizontalGridLayout: FC<HorizontalGridLayoutProps> = ({
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}
-        onCardPress={() => goToProductDetail(item.id)}
+        onCardPress={() => {
+          if (onCardPress) {
+            onCardPress(item, index);
+          } else {
+            goToProductDetail(item.id);
+          }
+        }}
         withOrderButton={withOrderButton}
         onOrderPress={() => console.log(`${item.name} is added to cart`)}
       />
