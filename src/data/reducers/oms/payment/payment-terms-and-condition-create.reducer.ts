@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentTermsAndConditionCreateInitialProps = models.CreateItemProps;
+export type PaymentTermsAndConditionCreateInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
 export const paymentTermsAndConditionCreateInitialState: PaymentTermsAndConditionCreateInitialProps =
   {
@@ -13,7 +13,7 @@ export const paymentTermsAndConditionCreateInitialState: PaymentTermsAndConditio
   };
 /** === FUNCTION HERE === */
 export const paymentTermsAndConditionCreateReducer = simplifyReducer(
-    paymentTermsAndConditionCreateInitialState,
+  paymentTermsAndConditionCreateInitialState,
   {
     /** ===> DETAIL */
     /** => create process */

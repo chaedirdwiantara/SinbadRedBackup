@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentLastChannelDetailInitialProps = models.DetailItemProps<{}>;
+export type PaymentLastChannelDetailInitialProps = models.DetailItemProps<{}>;
 /** === INITIAL STATE HERE === */
 export const paymentLastChannelDetailInitialState: PaymentLastChannelDetailInitialProps =
   {
@@ -47,8 +47,8 @@ export const paymentLastChannelDetailReducer = simplifyReducer(
     },
 
     /** => reset */
-    [types.PAYMENT_LAST_CHANNEL_DETAIL_RESET](){
-      return paymentLastChannelDetailInitialState
-    }
-  }
+    [types.PAYMENT_LAST_CHANNEL_DETAIL_RESET]() {
+      return paymentLastChannelDetailInitialState;
+    },
+  },
 );
