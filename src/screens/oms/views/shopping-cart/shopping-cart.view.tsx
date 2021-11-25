@@ -187,7 +187,7 @@ const OmsShoppingCartView: FC = () => {
         channelId: invoiceGroup.channelId,
         groupId: invoiceGroup.groupId,
         typeId: invoiceGroup.typeId,
-        clustderId: invoiceGroup.clusterId,
+        clusterId: invoiceGroup.clusterId,
       });
     });
 
