@@ -24,6 +24,9 @@ const useCheckoutMaster = () => {
     setPromoPayment: (data: models.PromoPayment[]) => {
       dispatch(Actions.updatePromoPaymentCheckout(data));
     },
+    setCartId: (data: models.CartIdPayload) => {
+      dispatch(Actions.updateCartIdCheckout(data));
+    },
   };
 };
 /** => checkout actions */
