@@ -12,10 +12,7 @@ import { ShippingAddress } from './shipping-address.view';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import {
-  useCheckAllPromoPaymentAction,
-  useReserveDiscountAction,
-} from '@screen/promo/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -69,7 +66,8 @@ const OmsShoppingCartView: FC = () => {
    */
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
-  const { verificationOrderCreate } = useVerficationOrderAction();
+  const { verificationOrderCreate, verificationOrderDetail } =
+    useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
     if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
@@ -80,9 +78,13 @@ const OmsShoppingCartView: FC = () => {
       stateVerificationOrder.create.data !== null &&
       updateCartState.data != null
     ) {
+      verificationOrderDetail(
+        dispatchVerificationOrder,
+        stateVerificationOrder.create.data.id,
+      );
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.create.data, updateCartState.data]);
+  }, [stateVerificationOrder.create, updateCartState]);
 
   /** Voucher Cart */
   const voucherData = useDataVoucher();
@@ -92,53 +94,14 @@ const OmsShoppingCartView: FC = () => {
    * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
    */
-  const {
-    dispatchPromo,
-    statePromo: {
-      reserveDiscount: stateReserveDiscount,
-      checkAllPromoPayment: stateCheckAllPromoPayment,
-    },
-  } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock, stateReserveStock } = useReserveStockContext();
+  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
-  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
-  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
     reserveDiscountAction.del(dispatchPromo, '1');
     reserveStockAction.del(dispatchReserveStock, '1');
-    // checkPromoPaymentAction.list(dispatchPromo, {
-    //   paymentTypeId: 1,
-    //   paymentChannelId: [1, 2, 3],
-    //   parcelPrice: 9000,
-    //   invoiceGroupId: '2',
-    //   sellerId: 1,
-    // });
-    checkAllPromoPaymentAction.create(dispatchPromo, [
-      {
-        invoiceGroupId: '4',
-        cartParcelId: '1',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-      {
-        invoiceGroupId: '5',
-        cartParcelId: '2',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-    ]);
   }, []);
-  React.useEffect(() => {
-    if (stateCheckAllPromoPayment.create.data !== null) {
-      checkAllPromoPaymentAction.list(
-        dispatchPromo,
-        stateCheckAllPromoPayment.create.data.id,
-      );
-    }
-  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -178,10 +141,8 @@ const OmsShoppingCartView: FC = () => {
       return;
     }
     const params: CartUpdatePayload = {
-      storeId: cartState.data.storeId,
       action: 'submit',
       products: [],
-      voucherIds: [],
     };
 
     const dataSelected: CartSelectedData[] = [];
@@ -234,16 +195,23 @@ const OmsShoppingCartView: FC = () => {
       id: cartState.data.cartId,
       data: dataSelected,
       isActiveStore: cartState.data.isActiveStore,
+    };
+
+    const paramsVerificationCreate: CartSelected = {
+      id: cartState.data.cartId,
+      data: dataSelected,
+      isActiveStore: cartState.data.isActiveStore,
       voucherIds: getSelectedVouchers(voucherData.dataVouchers),
     };
 
     /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
     /** => update state verification cart */
+    console.log(paramsVerificationCreate);
     setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {
-      data: paramsCartSelected,
+      data: paramsVerificationCreate,
     });
   };
   /** === VIEW === */
