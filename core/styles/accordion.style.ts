@@ -17,4 +17,9 @@ export const AccordionStyle = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 16,
   },
+  skeleton: {
+    height: 24,
+    width: '100%',
+    borderRadius: 6,
+  },
 });
