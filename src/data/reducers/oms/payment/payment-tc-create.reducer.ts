@@ -3,17 +3,16 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentTCCreateInitialProps = models.CreateItemProps;
+export type PaymentTCCreateInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
-export const paymentTCCreateInitialState: PaymentTCCreateInitialProps =
-  {
-    data: null,
-    error: null,
-    loading: false,
-  };
+export const paymentTCCreateInitialState: PaymentTCCreateInitialProps = {
+  data: null,
+  error: null,
+  loading: false,
+};
 /** === FUNCTION HERE === */
 export const paymentTCCreateReducer = simplifyReducer(
-    paymentTCCreateInitialState,
+  paymentTCCreateInitialState,
   {
     /** ===> DETAIL */
     /** => create process */
