@@ -47,6 +47,7 @@ export interface ReserveDiscountPostPayload {
   isActiveStore: boolean;
   voucherIds: models.VoucherId[];
   potentialDiscountId: string;
+  reservedAt: string;
 }
 export interface ReserveDiscountPayloadData {
   invoiceGroupId: string;
