@@ -17,7 +17,7 @@ const deleteReserveStock = (data: models.DeleteProcessProps) => {
 /** => create reserve stock */
 const createReserveStock = (data: models.CreateProcessProps<{}>) => {
   const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = 'reserve-discount';
+  const path = 'reserve-stock';
   return apiMappingMock<models.CreateSuccessProps>(
     mockHost,
     path,

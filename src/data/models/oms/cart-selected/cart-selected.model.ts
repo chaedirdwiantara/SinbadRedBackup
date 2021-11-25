@@ -20,7 +20,7 @@ export interface CartSelectedData {
   channelId: number;
   groupId: number;
   typeId: number;
-  clustderId: number;
+  clusterId: number;
 }
 
 export interface VoucherId {
