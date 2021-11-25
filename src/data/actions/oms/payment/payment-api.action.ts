@@ -7,13 +7,17 @@ export const paymentTypesListProcess = (
   data: models.ListProcessProps,
 ): models.ListProcessAction => {
   contextDispatch({ type: types.PAYMENT_TYPES_LIST_PROCESS, payload: data });
-  return { type: types.PAYMENT_TYPES_LIST_PROCESS, payload: data, contextDispatch };
+  return {
+    type: types.PAYMENT_TYPES_LIST_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
 };
 /** => payment types success */
 export const paymentTypesListSuccess = (
   data: models.ListSuccessProps<models.IPaymentTypesList[]>,
 ): models.ListSuccessAction<models.IPaymentTypesList[]> => {
-  return { type: types.PAYMENT_TYPES_LIST_SUCCESS, payload: data};
+  return { type: types.PAYMENT_TYPES_LIST_SUCCESS, payload: data };
 };
 /** => payment types failed */
 export const paymentTypesListFailed = (
@@ -29,13 +33,17 @@ export const paymentChannelsListProcess = (
   data: models.ListProcessProps,
 ): models.ListProcessAction => {
   contextDispatch({ type: types.PAYMENT_CHANNELS_LIST_PROCESS, payload: data });
-  return { type: types.PAYMENT_CHANNELS_LIST_PROCESS, payload: data, contextDispatch };
+  return {
+    type: types.PAYMENT_CHANNELS_LIST_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
 };
 /** => payment channels success */
 export const paymentChannelsListSuccess = (
   data: models.ListSuccessProps<models.IPaymentChannelsList[]>,
 ): models.ListSuccessAction<models.IPaymentChannelsList[]> => {
-  return { type: types.PAYMENT_CHANNELS_LIST_SUCCESS, payload: data};
+  return { type: types.PAYMENT_CHANNELS_LIST_SUCCESS, payload: data };
 };
 /** => payment channels failed */
 export const paymentChannelsListFailed = (
@@ -64,13 +72,19 @@ export const paymentTermsAndConditionCreateProcess = (
 export const paymentTermsAndConditionCreateSuccess = (
   data: models.CreateSuccessProps,
 ): models.CreateSuccessAction => {
-  return { type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_SUCCESS, payload: data };
+  return {
+    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_SUCCESS,
+    payload: data,
+  };
 };
 /** payment terms and condition create failed */
 export const paymentTermsAndConditionCreateFailed = (
   data: models.ErrorProps,
 ): models.CreateFailedAction => {
-  return { type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_FAILED, payload: data };
+  return {
+    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_FAILED,
+    payload: data,
+  };
 };
 
 /** => payment terms and condition create process */
