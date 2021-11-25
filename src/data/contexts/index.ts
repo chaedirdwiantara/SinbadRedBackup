@@ -25,6 +25,7 @@ import {
   PaymentProvider,
   PaymentContext
 } from './oms/payment/PaymentProvider';
+import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -42,7 +43,8 @@ export const providers = [
   TagProvider,
   BannerProvider,
   ShopingCartProvider,
-  PaymentProvider
+  PaymentProvider,
+  SupplierProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -59,5 +61,6 @@ export const contexts = {
   TagContext,
   BannerContext,
   ShopingCartContext,
-  PaymentContext
+  PaymentContext,
+  SupplierContext,
 };

@@ -48,7 +48,8 @@ export interface IInvoiceCheckout {
   invoiceGroupName: string;
   totalProduct: number;
   totalPriceBeforeTax: number;
-  PPN: number;
+  totalPriceAfterTax: number;
+  tax: number | null;
   isPotentialPromoPayment: boolean;
   totalPromoSellerAndVoucher: number;
   totalPromoPayment: number;
@@ -85,4 +86,8 @@ export interface PaymentTypeChannel {
 export interface PromoPayment {
   invoiceGroupId: string;
   totalPromoPayment: number;
+}
+
+export interface CartIdPayload {
+  cartId: string | null;
 }

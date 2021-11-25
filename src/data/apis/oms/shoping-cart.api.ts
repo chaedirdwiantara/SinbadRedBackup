@@ -23,8 +23,20 @@ const updateCart = (payload: models.CartUpdatePayload) => {
   return apiMapping('auth', path, 'cart', 'v1', 'PATCH', payload);
 };
 
+const getCartTotalProduct = () => {
+  const path = 'carts/total-product';
+  return apiMapping<models.CartTotalProductSuccess>(
+    'auth',
+    path,
+    'cart',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const CartApi = {
   getCartView,
   addToCart,
   updateCart,
+  getCartTotalProduct,
 };

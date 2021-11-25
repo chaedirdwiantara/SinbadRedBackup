@@ -6,3 +6,4 @@ export * from './checkout/checkout.model';
 export * from './cart-selected';
 export * from './checkout-master';
 export * from './payment';
+export * from './shopping-cart/cart-total-product.model';

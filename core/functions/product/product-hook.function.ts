@@ -1,6 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import { useState, Dispatch, SetStateAction } from 'react';
-import { Alert } from 'react-native';
+import { useState } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
 /** === IMPORT TYPES ===  */
@@ -187,41 +186,6 @@ export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
     resetValues,
     handleSliderChange,
     handleSliderFinishChange,
-  };
-};
-
-export const useRegisterSupplierModal = () => {
-  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
-    useState(false);
-
-  const sendSupplierData = (
-    setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
-  ) => {
-    // Hit api send-store-supplier
-    Alert.alert(
-      'Send Data to Suplier',
-      'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => setRegisterSupplierModalVisible(false),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            setRegisterSupplierModalVisible(false);
-            setOrderModalVisible(true);
-          },
-        },
-      ],
-    );
-  };
-
-  return {
-    visible: registerSupplierModalVisible,
-    setVisible: setRegisterSupplierModalVisible,
-    sendSupplierData,
   };
 };
 
