@@ -28,13 +28,18 @@ export const ProductBundleStyle = StyleSheet.create({
     color: 'white',
     marginTop: -6,
   },
-  sectionTitleContainer: {
+  sectionTitleContent: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 16,
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: color.black10,
+  },
+  sectionTitleContainer: {
+    width: '100%',
+    marginVertical: 12,
+    paddingHorizontal: 16,
   },
   mainInfoContainer: {
     flexDirection: 'row',

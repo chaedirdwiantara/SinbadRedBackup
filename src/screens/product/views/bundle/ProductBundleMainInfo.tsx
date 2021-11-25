@@ -7,6 +7,8 @@ import {
   SnbToolTips,
   color,
 } from '@sinbad/react-native-sinbad-ui';
+/** === IMPORT COMPONENTS ===  */
+import { ProductBundleMainInfoSkeleton } from './ProductBundleMainInfoSkeleton';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */
@@ -20,6 +22,7 @@ interface ProductBundleMainInfoProps {
   packagedQty: number;
   minQty: number;
   minQtyType: string;
+  loading: boolean;
 }
 /** === COMPONENT === */
 export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
@@ -31,6 +34,10 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
     false,
   );
   /** === VIEW === */
+  if (props.loading) {
+    return <ProductBundleMainInfoSkeleton />;
+  }
+
   return (
     <View style={ProductBundleStyle.mainInfoContainer}>
       <Image
@@ -50,7 +57,11 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
             <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
           </View>
         )}
-        <SnbText.B3>{props.name}</SnbText.B3>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}>
+            <SnbText.B3>{props.name}</SnbText.B3>
+          </View>
+        </View>
         <View
           style={{
             marginVertical: 4,

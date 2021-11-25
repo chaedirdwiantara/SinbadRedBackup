@@ -1,13 +1,7 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, ScrollView } from 'react-native';
-import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbNumberCounter,
-  color,
-} from '@sinbad/react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { Accordion } from '@core/components/Accordion';
 import { HorizontalGridLayout } from '@core/components/product/HorizontalGridLayout';
@@ -15,16 +9,16 @@ import { ActionButton } from '../detail/ActionButton';
 import { PromoSuggestion } from './PromoSuggestion';
 import { SectionTitle } from './SectionTitle';
 import { ProductBundleMainInfo } from './ProductBundleMainInfo';
+import { QuantityModifier } from './QuantityModifier';
 /** === IMPORT FUNCTIONS === */
+import { NavigationAction } from '@core/functions/navigation';
 import { useProductContext } from 'src/data/contexts/product';
 import {
-  goBack,
+  goBackFromBundleToDetail,
   goToShoppingCart,
   useOrderQuantity,
-  useProductListActions,
+  useProductDetailAction,
 } from '../../functions';
-/** === IMPORT STYLE === */
-import { ProductBundleStyle } from '../../styles';
 /** === DUMMY === */
 const otherPropertiesDummy = {
   affiliatedPromos: [
@@ -40,30 +34,52 @@ const otherPropertiesDummy = {
 const ProductBundleView: FC = () => {
   /** === HOOKS === */
   const {
+    params: { id: productId },
+  } = NavigationAction.useGetNavParams();
+  const [currentProductId, setCurrentProductId] = useState(productId);
+  const {
     stateProduct: {
-      list: productListState,
-      detail: { data: productDetailContext },
+      list: productListState, // Temporarily used as related products state, will be changed later.
+      detail: { data: productDetail, loading: productDetailLoading },
     },
     dispatchProduct,
   } = useProductContext();
-  const [productDetail] = useState(productDetailContext);
   const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
     minQty: productDetail?.minQty,
   });
-  const { loadMore } = useProductListActions();
+  const { fetch } = useProductDetailAction();
+
+  useEffect(() => {
+    // Will not fetch on mount. Will only fetch when one of the related products is pressed,
+    // which will change the currentProductId state.
+    if (currentProductId !== productId) {
+      fetch(dispatchProduct, currentProductId);
+
+      // Other fetch process are as follows:
+      // Hit I and II at the same time (Endpoint names still needs confirmation).
+
+      // I. Products Related
+      // 1. Fetch from /product-cross-selling/${currentProductId}
+      // 2. Array of Ids got from the first step is used as a payload to hit POST to /pdp-by-id
+      // 3. Id got from the previous POST request will be used to fetch the real data from /pdp-by-id/${id}
+
+      // II. Promos Related
+      // 1. Fetch from /promo-cross-selling/${currentProductId}
+    }
+  }, [currentProductId]);
   /** === VIEW === */
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type5
         title="Bundle"
-        backAction={goBack}
+        backAction={() => goBackFromBundleToDetail(currentProductId)}
         type="red"
         iconName="cart"
         iconAction={goToShoppingCart}
         iconValue={100}
       />
       <ScrollView>
-        <PromoSuggestion />
+        <PromoSuggestion loading={productDetailLoading} />
         <ProductBundleMainInfo
           imageUrl={productDetail?.images[0].url}
           isExclusive={productDetail?.isExclusive!}
@@ -72,37 +88,48 @@ const ProductBundleView: FC = () => {
           packagedQty={productDetail?.packagedQty!}
           minQty={productDetail?.minQty!}
           minQtyType={productDetail?.minQtyType!}
+          loading={productDetailLoading}
         />
-        <View style={ProductBundleStyle.quantityModifierContainer}>
-          <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
-          <SnbNumberCounter
-            value={orderQty}
-            onIncrease={increaseOrderQty}
-            onDecrease={decreaseOrderQty}
-            minusDisabled={orderQty === productDetail?.minQty}
-          />
-        </View>
-        <SectionTitle title="PRODUK TERKAIT" />
+        <QuantityModifier
+          title="Jumlah/pcs"
+          loading={productDetailLoading}
+          qty={orderQty}
+          onIncrease={increaseOrderQty}
+          onDecrease={decreaseOrderQty}
+          minusDisabled={orderQty === productDetail?.minQty}
+        />
+        <SectionTitle
+          title="PRODUK TERKAIT"
+          loading={productListState.loading} // relatedProductsState.loading
+        />
         <HorizontalGridLayout
           data={productListState.data}
-          loading={productListState.loading}
+          loading={productListState.loading} // relatedProductsState.loading
           withOrderButton={true}
           // onEndReached={() =>
-          //   loadMore(dispatchProduct, {
-          //     skip: productListState.skip,
-          //     canLoadMore: productListState.canLoadMore,
+          //   loadMore(dispatchProductBundle, {
+          //     skip: relatedProductsState.skip,
+          //     canLoadMore: relatedProductsState.canLoadMore,
           //   })
           // }
+          onCardPress={(item) => {
+            setCurrentProductId(item.id);
+          }}
         />
-        <SectionTitle title="PROMO TERKAIT" />
+        <SectionTitle
+          title="PROMO TERKAIT"
+          loading={false} // relatedPromosState.loading
+        />
         <View style={{ marginBottom: 16 }}>
-          <Accordion data={otherPropertiesDummy.affiliatedPromos} />
+          <Accordion
+            data={otherPropertiesDummy.affiliatedPromos}
+            loading={false} // relatedPromosState.loading
+          />
         </View>
       </ScrollView>
       <ActionButton
-        disabled={false}
         title="Tambah ke Keranjang"
-        onPress={() => null}
+        onPress={() => console.log('Add to cart pressed')}
       />
     </SnbContainer>
   );
