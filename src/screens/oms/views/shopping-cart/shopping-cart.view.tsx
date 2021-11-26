@@ -8,6 +8,7 @@ import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
+import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
@@ -219,40 +220,46 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader />
-      {invoiceGroups.length > 0 ? (
-        <Fragment>
-          <ScrollView>
-            <ShippingAddress />
-            {/* Invoice Group List */}
-            <Fragment>
-              {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) => (
-                <ShoppingCartInvoiceGroup
-                  key={invoiceGroup.invoiceGroupId.toString()}
-                  invoiceGroup={invoiceGroup}
-                  invoiceGroupIndex={invoiceGroupIndex}
-                  invoiceGroups={invoiceGroups}
-                  setInvoiceGroups={setInvoiceGroups}
-                  productSelectedCount={productSelectedCount}
-                  setProductSelectedCount={setProductSelectedCount}
-                  setAllProductsSelected={setAllProductsSelected}
-                  totalProducts={totalProducts}
-                />
-              ))}
-            </Fragment>
-          </ScrollView>
-          <ShoppingCartFooter
-            allProductsSelected={allProductsSelected}
-            invoiceGroups={invoiceGroups}
-            setInvoiceGroups={setInvoiceGroups}
-            setProductSelectedCount={setProductSelectedCount}
-            setAllProductsSelected={setAllProductsSelected}
-            totalProducts={totalProducts}
-            productSelectedCount={productSelectedCount}
-            setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
-          />
-        </Fragment>
+      {cartState.loading ? (
+        <LoadingPage />
       ) : (
-        <ShoppingCartEmpty />
+        <>
+          {invoiceGroups.length > 0 ? (
+            <Fragment>
+              <ScrollView>
+                <ShippingAddress />
+                {/* Invoice Group List */}
+                <Fragment>
+                  {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) => (
+                    <ShoppingCartInvoiceGroup
+                      key={invoiceGroup.invoiceGroupId.toString()}
+                      invoiceGroup={invoiceGroup}
+                      invoiceGroupIndex={invoiceGroupIndex}
+                      invoiceGroups={invoiceGroups}
+                      setInvoiceGroups={setInvoiceGroups}
+                      productSelectedCount={productSelectedCount}
+                      setProductSelectedCount={setProductSelectedCount}
+                      setAllProductsSelected={setAllProductsSelected}
+                      totalProducts={totalProducts}
+                    />
+                  ))}
+                </Fragment>
+              </ScrollView>
+              <ShoppingCartFooter
+                allProductsSelected={allProductsSelected}
+                invoiceGroups={invoiceGroups}
+                setInvoiceGroups={setInvoiceGroups}
+                setProductSelectedCount={setProductSelectedCount}
+                setAllProductsSelected={setAllProductsSelected}
+                totalProducts={totalProducts}
+                productSelectedCount={productSelectedCount}
+                setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
+              />
+            </Fragment>
+          ) : (
+            <ShoppingCartEmpty />
+          )}
+        </>
       )}
       {/* Confirmation Modal Checkout */}
       <SnbDialog
