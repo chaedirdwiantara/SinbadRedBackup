@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, Image, ScrollView } from 'react-native';
 import {

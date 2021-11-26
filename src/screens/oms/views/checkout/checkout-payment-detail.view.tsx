@@ -1,10 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
-import { usePaymentDetailAccorrdion } from '../../functions/checkout';
+import {
+  usePaymentDetailAccorrdion,
+  handleSubTotalPrice,
+} from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
 export interface IPaymentDetail {
@@ -25,32 +28,6 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
   const paymentAccordion = usePaymentDetailAccorrdion();
   const isActive = paymentAccordion.active === 1;
 
-  /** === FUNCTION === */
-  /** => sub total function */
-  const handleSubTotal = () => {
-    let total = 0;
-    if (data.totalPriceBeforeTax) {
-      total += data.totalPriceBeforeTax;
-    }
-
-    if (data.totalPriceAfterTax && data.totalPriceBeforeTax) {
-      total += data.totalPriceAfterTax - data.totalPriceBeforeTax;
-    }
-
-    if (data.totalPaymentFee) {
-      total += data.totalPaymentFee;
-    }
-
-    if (data.totalPromoSellerAndVoucher) {
-      total -= data.totalPromoSellerAndVoucher;
-    }
-
-    if (data.totalPromoPayment) {
-      total -= data.totalPromoPayment;
-    }
-
-    return toCurrency(total);
-  };
   return (
     <View>
       {isActive ? (
@@ -104,7 +81,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.H4>Sub Total</SnbText.H4>
           </View>
         </View>
-        <SnbText.H4>{handleSubTotal()}</SnbText.H4>
+        <SnbText.H4>{handleSubTotalPrice(data)}</SnbText.H4>
       </TouchableOpacity>
     </View>
   );

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { Image } from 'react-native';
 import { SnbSKUList } from 'react-native-sinbad-ui';
