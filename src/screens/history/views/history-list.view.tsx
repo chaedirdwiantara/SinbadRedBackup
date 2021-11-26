@@ -18,6 +18,7 @@ import { HistoryCard, HistoryStatusColor } from '../components';
 import {
   useOrderStatusActions,
   usePaymentStatus,
+  useHistoryListActions,
   goBack,
   goToHistoryDetail,
 } from '@screen/history/functions';
@@ -156,7 +157,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const [activeOrderStatus, setActiveOrderStatus] = useState('');
   const getOrderStatus = useOrderStatusActions();
   const getPaymentStatus = usePaymentStatus();
-  const getHistoryList = () => console.log('Get History List');
+  const getHistoryList = useHistoryListActions();
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
@@ -167,20 +168,23 @@ const HistoryListView: FC = ({ navigation }: any) => {
   useEffect(() => {
     getPaymentStatus.list(dispatchHistory);
     getOrderStatus.fetch(dispatchHistory);
-    getHistoryList();
+    getHistoryList.fetch(dispatchHistory);
   }, []);
 
   /** GET HISTORY LIST */
   useEffect(() => {
+    activeTab === 0 ? setActiveOrderStatus('') : setActivePaymentStatus('');
+    getHistoryList.fetch(dispatchHistory);
+  }, [activeOrderStatus, activePaymentStatus, activeTab]);
+
+  /** PAGE LISTENER */
+  useEffect(() => {
     /** Add navigation listener */
     const unsubscribe = navigation.addListener('focus', () => {
-      getHistoryList();
+      getHistoryList.fetch(dispatchHistory);
+      return unsubscribe;
     });
-    activeTab === 0 ? setActiveOrderStatus('') : setActivePaymentStatus('');
-    getHistoryList();
-
-    return unsubscribe;
-  }, [activeOrderStatus, activePaymentStatus, activeTab, navigation]);
+  }, [navigation]);
 
   /** === VIEW === */
   /** => Header */
