@@ -3,13 +3,13 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentLastChannelCreateInitialProps = models.CreateItemProps;
+export type PaymentLastChannelCreateInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
 const INITIAL_STATE = {
   data: null,
-    error: null,
-    loading: false,
-}
+  error: null,
+  loading: false,
+};
 export const paymentLastChannelCreateInitialState: PaymentLastChannelCreateInitialProps =
   {
     data: null,
@@ -18,7 +18,7 @@ export const paymentLastChannelCreateInitialState: PaymentLastChannelCreateIniti
   };
 /** === FUNCTION HERE === */
 export const paymentLastChannelCreateReducer = simplifyReducer(
-    paymentLastChannelCreateInitialState,
+  paymentLastChannelCreateInitialState,
   {
     /** ===> DETAIL */
     /** => create process */
@@ -31,28 +31,28 @@ export const paymentLastChannelCreateReducer = simplifyReducer(
     /** => create success */
     [types.PAYMENT_LAST_CHANNEL_CREATE_SUCCESS](
       state = paymentLastChannelCreateInitialState,
-      action: models.CreateSuccessAction,
+      { payload }: models.CreateSuccessAction,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => create failed */
     [types.PAYMENT_LAST_CHANNEL_CREATE_FAILED](
       state = paymentLastChannelCreateInitialState,
-      action: models.CreateFailedAction,
+      { payload }: models.CreateFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
     /** => reset */
     [types.PAYMENT_LAST_CHANNEL_CREATE_RESET]() {
       return INITIAL_STATE;
     },
-  }
+  },
 );

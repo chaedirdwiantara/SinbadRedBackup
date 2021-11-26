@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentTermsAndConditionCreateInitialProps = models.CreateItemProps;
+export type PaymentTermsAndConditionCreateInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
 export const paymentTermsAndConditionCreateInitialState: PaymentTermsAndConditionCreateInitialProps =
   {
@@ -13,7 +13,7 @@ export const paymentTermsAndConditionCreateInitialState: PaymentTermsAndConditio
   };
 /** === FUNCTION HERE === */
 export const paymentTermsAndConditionCreateReducer = simplifyReducer(
-    paymentTermsAndConditionCreateInitialState,
+  paymentTermsAndConditionCreateInitialState,
   {
     /** ===> DETAIL */
     /** => create process */
@@ -26,23 +26,23 @@ export const paymentTermsAndConditionCreateReducer = simplifyReducer(
     /** => create success */
     [types.PAYMENT_TERMS_AND_CONDITION_CREATE_SUCCESS](
       state = paymentTermsAndConditionCreateInitialState,
-      action: models.CreateSuccessAction,
+      { payload }: models.CreateSuccessAction,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => create failed */
     [types.PAYMENT_TERMS_AND_CONDITION_CREATE_FAILED](
       state = paymentTermsAndConditionCreateInitialState,
-      action: models.CreateFailedAction,
+      { payload }: models.CreateFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
   },

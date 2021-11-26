@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentLastChannelDetailInitialProps = models.DetailItemProps<{}>;
+export type PaymentLastChannelDetailInitialProps = models.DetailItemProps<{}>;
 /** === INITIAL STATE HERE === */
 export const paymentLastChannelDetailInitialState: PaymentLastChannelDetailInitialProps =
   {
@@ -26,29 +26,31 @@ export const paymentLastChannelDetailReducer = simplifyReducer(
     /** => success */
     [types.PAYMENT_LAST_CHANNEL_DETAIL_SUCCESS](
       state = paymentLastChannelDetailInitialState,
-      action: models.DetailSuccessAction<models.IPaymentLastChannelDetailProps>,
+      {
+        payload,
+      }: models.DetailSuccessAction<models.IPaymentLastChannelDetailProps>,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => failed */
     [types.PAYMENT_LAST_CHANNEL_DETAIL_FAILED](
       state = paymentLastChannelDetailInitialState,
-      action: models.DetailFailedAction,
+      { payload }: models.DetailFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
 
     /** => reset */
-    [types.PAYMENT_LAST_CHANNEL_DETAIL_RESET](){
-      return paymentLastChannelDetailInitialState
-    }
-  }
+    [types.PAYMENT_LAST_CHANNEL_DETAIL_RESET]() {
+      return paymentLastChannelDetailInitialState;
+    },
+  },
 );
