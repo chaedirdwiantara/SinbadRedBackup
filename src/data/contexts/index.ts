@@ -25,9 +25,7 @@ import {
   ReserveStockProvider,
   ReserveStockContext,
 } from './product/reserve-stock/ReserveStockProvider';
-  PaymentProvider,
-  PaymentContext
-} from './oms/payment/PaymentProvider';
+import { PaymentProvider, PaymentContext } from './oms/payment/PaymentProvider';
 import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
