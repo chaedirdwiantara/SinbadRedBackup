@@ -73,7 +73,7 @@ export interface ReserveDiscountPayloadProducts {
 }
 export interface ReserveDiscountDetail {
   promoMatch: ReserveDiscountPromoMatch[];
-  promoNotMatch: ReserveDiscountPromoNotMatch[];
+  promoNotMatch: ReserveDiscountPromoNotMatch;
 }
 export interface ReserveDiscountPromoMatch {
   invoiceGroupId: string;
