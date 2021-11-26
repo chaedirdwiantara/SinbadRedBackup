@@ -35,7 +35,7 @@ export const paymentTypesListReducer = simplifyReducer(
     /** => list success */
     [types.PAYMENT_TYPES_LIST_SUCCESS](
       state = paymentTypesListInitialState,
-      { payload }: models.ListSuccessAction<models.IPaymentTypesList[]>,
+      { payload }: models.ListSuccessAction<models.IPaymentTypeListSuccess>,
     ) {
       return {
         ...state,

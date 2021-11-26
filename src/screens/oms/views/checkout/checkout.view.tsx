@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
@@ -14,6 +14,12 @@ import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
+/** === IMPORT EXTERNAL FUNCTION === */
+import {
+  useCheckoutViewActions,
+  useCheckoutMaster,
+} from '@screen/oms/functions/checkout/checkout-hook.function';
+import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 /** === DUMMIES === */
 const dummySKU = [
   {
@@ -41,41 +47,47 @@ const dummySKU = [
       'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
   },
 ];
-const dummyPaymentDetail = [
-  {
-    name: 'Total Barang (2)',
-    value: 330596,
-    type: 'normal',
-  },
-  {
-    name: 'Total Potongan Harga',
-    value: 626,
-    type: 'price_cut',
-  },
-  {
-    name: 'PPN 10%',
-    value: 32997,
-    type: 'normal',
-  },
-  {
-    name: 'Layanan Pembayaran',
-    value: 4400,
-    type: 'normal',
-  },
-];
+
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
+  const checkoutViewActions = useCheckoutViewActions();
+  const {
+    stateCheckout: {
+      checkout: {
+        data: checkoutData,
+        loading: checkoutLoading,
+        error: checkoutError,
+      },
+    },
+    dispatchCheckout,
+  } = useCheckoutContext();
+  const { setInvoiceBrand, getCheckoutMaster } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
-  const [loadingPage, setLoadingPage] = useState(true);
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
 
   /** Set Loading Page */
   useEffect(() => {
-    setTimeout(() => setLoadingPage(false), 1000);
+    checkoutViewActions.fetch(dispatchCheckout);
   }, []);
+
+  useEffect(() => {
+    if (checkoutData) {
+      setInvoiceBrand(checkoutData);
+    }
+  }, [checkoutData]);
+
+  useEffect(() => {
+    console.log('[getCheckoutMaster]: ', getCheckoutMaster);
+  }, [getCheckoutMaster.invoices.length]);
+
+  useEffect(() => {
+    if (!checkoutError) {
+      console.log('ERROR CHECKOUT: ', checkoutError);
+    }
+  }, [checkoutError]);
 
   React.useEffect(() => {
     const dataLastChannel = {
@@ -112,18 +124,23 @@ const OmsCheckoutView: FC = () => {
   return (
     <SnbContainer color="grey">
       <CheckoutHeader />
-      {loadingPage ? (
+      {checkoutLoading ? (
         <LoadingPage />
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
-            <CheckoutInvoiceGroupView
-              products={dummySKU}
-              paymentDetails={dummyPaymentDetail}
-            />
+            {Array.isArray(getCheckoutMaster.invoices) &&
+              getCheckoutMaster.invoices.length > 0 &&
+              getCheckoutMaster.invoices.map((invoiceGroup) => (
+                <CheckoutInvoiceGroupView
+                  key={invoiceGroup.invoiceGroupId}
+                  products={dummySKU}
+                  data={invoiceGroup}
+                />
+              ))}
           </ScrollView>
-          <CheckoutBottomView />
+          <CheckoutBottomView data={getCheckoutMaster.invoices} />
           <ModalPaymentType />
           <ModalPaymentChannels />
           <ModalParcelDetail />

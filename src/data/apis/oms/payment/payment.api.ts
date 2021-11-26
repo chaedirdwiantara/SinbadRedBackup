@@ -5,7 +5,7 @@ import * as models from '@models';
 /** => payment types list */
 const paymentTypesList = (data: models.IPaymentTypeProcessProps) => {
   const path = `types?invoiceGroupId=${data.invoiceGroupId}&totalCartParcel=${data.totalCartParcel}&page=${data.page}`;
-  return apiMapping<models.IPaymentTypesList[]>(
+  return apiMapping<models.ListSuccessProps<models.IPaymentTypeListSuccess>>(
     'auth',
     path,
     'payment',
