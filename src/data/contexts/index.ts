@@ -25,6 +25,9 @@ import {
   ReserveStockProvider,
   ReserveStockContext,
 } from './product/reserve-stock/ReserveStockProvider';
+  PaymentProvider,
+  PaymentContext
+} from './oms/payment/PaymentProvider';
 import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
@@ -44,6 +47,7 @@ export const providers = [
   BannerProvider,
   ShopingCartProvider,
   ReserveStockProvider,
+  PaymentProvider,
   SupplierProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
@@ -62,5 +66,6 @@ export const contexts = {
   BannerContext,
   ShopingCartContext,
   ReserveStockContext,
+  PaymentContext,
   SupplierContext,
 };

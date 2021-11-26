@@ -6,6 +6,7 @@ import { SnbText, color } from 'react-native-sinbad-ui';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 /** === STYLE === */
 import RecommendationHomeStyle from '../styles/recommendation-home.style';
+import { NavigationAction } from '@core/functions/navigation';
 /** === TYPE === */
 interface RecommendedProduct {
   id: string;

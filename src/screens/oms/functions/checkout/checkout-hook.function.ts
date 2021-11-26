@@ -104,6 +104,77 @@ const usePaymentChannelModal = () => {
     isOpen,
   };
 };
+const usePaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    typeslist: (
+      contextDispatch: (action: any) => any,
+      invoiceGroupId: string,
+      totalCartParcel: number,
+      page: number,
+    ) => {
+      dispatch(
+        Actions.paymentTypesListProcess(contextDispatch, {
+          loading: true,
+          limit: 0,
+          skip: 0,
+          invoiceGroupId,
+          totalCartParcel,
+          page,
+        }),
+      );
+    },
+    channelsList: (
+      contextDispatch: (action: any) => any,
+      invoiceGroupId: string,
+      totalCartParcel: number,
+      paymentTypeId: number,
+    ) => {
+      dispatch(
+        Actions.paymentChannelsListProcess(contextDispatch, {
+          loading: true,
+          limit: 0,
+          skip: 0,
+          page: 1,
+          invoiceGroupId,
+          totalCartParcel,
+          paymentTypeId,
+        }),
+      );
+    },
+    tCCreate: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
+    },
+    tCDetail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
+    },
+    lastChannelCreate: (
+      contextDispatch: (action: any) => any,
+      data: models.CreateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.paymentLastChannelCreateProcess(contextDispatch, data));
+    },
+    lastChannelDetail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.paymentLastChannelDetailProcess(contextDispatch, { id }),
+      );
+    },
+  };
+};
+
+const useSelectedPaymentType = () => {
+  const [selectedPaymentType, setSelectedPaymentType] =
+    React.useState<models.IPaymentTypeCheckout | null>(null);
+  return {
+    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
+      setSelectedPaymentType(value);
+    },
+    selectedPaymentType,
+  };
+};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -112,6 +183,8 @@ export {
   useParcelDetailModal,
   usePaymentTypeModal,
   usePaymentChannelModal,
+  usePaymentAction,
+  useSelectedPaymentType,
 };
 /**
  * ================================================================

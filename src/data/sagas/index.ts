@@ -18,6 +18,7 @@ import BannerSaga from './banner.saga';
 import SupplierSaga from './supplier/supplier.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
 import ProductReserveStockSaga from './product/reserve-stock.saga';
+import PaymentSaga from './oms/payment/payment.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -40,6 +41,7 @@ function* rootSaga() {
   yield all([fork(SupplierSaga)]);
   yield all([fork(CheckoutSaga)]);
   yield all([fork(ProductReserveStockSaga)]);
+  yield all([fork(PaymentSaga)]);
 }
 
 export default rootSaga;
