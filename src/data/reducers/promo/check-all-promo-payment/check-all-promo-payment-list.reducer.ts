@@ -3,11 +3,11 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PotentialPromoProductListInitialProps = models.ListItemProps<
-  models.PotentialPromoProductProps[]
+type CheckAllPromoPaymentListInitialProps = models.ListItemProps<
+  models.CheckAllPromoPaymentGetData[]
 >;
 /** === INITIAL STATE HERE === */
-export const potentialPromoProductListInitialState: PotentialPromoProductListInitialProps =
+export const checkAllPromoPaymentListInitialState: CheckAllPromoPaymentListInitialProps =
   {
     data: [],
     error: null,
@@ -18,25 +18,24 @@ export const potentialPromoProductListInitialState: PotentialPromoProductListIni
     skip: 0,
   };
 /** === FUNCTION HERE === */
-export const potentialPromoProductListReducer = simplifyReducer(
-  potentialPromoProductListInitialState,
+export const checkAllPromoPaymentListReducer = simplifyReducer(
+  checkAllPromoPaymentListInitialState,
   {
     /** ===> LIST */
     /** => list process */
-    [types.POTENTIAL_PROMO_PRODUCT_PROCESS](
-      state = potentialPromoProductListInitialState,
-      action: models.ListProcessAction,
+    [types.GET_CHECK_PROMO_PAYMENT_PROCESS](
+      state = checkAllPromoPaymentListInitialState,
     ) {
       return {
         ...state,
-        loading: action.payload.loading,
+        loading: true,
         error: null,
       };
     },
     /** => list success */
-    [types.POTENTIAL_PROMO_PRODUCT_SUCCESS](
-      state = potentialPromoProductListInitialState,
-      action: models.ListSuccessAction<models.PotentialPromoProductProps[]>,
+    [types.GET_CHECK_PROMO_PAYMENT_SUCCESS](
+      state = checkAllPromoPaymentListInitialState,
+      action: models.ListSuccessAction<models.PromoPaymentListSuccessProps[]>,
     ) {
       return {
         ...state,
@@ -45,8 +44,8 @@ export const potentialPromoProductListReducer = simplifyReducer(
       };
     },
     /** => list failed */
-    [types.POTENTIAL_PROMO_PRODUCT_FAILED](
-      state = potentialPromoProductListInitialState,
+    [types.GET_CHECK_PROMO_PAYMENT_FAILED](
+      state = checkAllPromoPaymentListInitialState,
       action: models.ListFailedAction,
     ) {
       return {
@@ -56,8 +55,8 @@ export const potentialPromoProductListReducer = simplifyReducer(
       };
     },
     /** => list reset */
-    [types.POTENTIAL_PROMO_PRODUCT_RESET]() {
-      return potentialPromoProductListInitialState;
+    [types.GET_CHECK_PROMO_PAYMENT_RESET]() {
+      return checkAllPromoPaymentListInitialState;
     },
   },
 );

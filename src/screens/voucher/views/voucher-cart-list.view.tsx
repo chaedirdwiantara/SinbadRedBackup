@@ -327,7 +327,7 @@ const VoucherCartListView: FC = () => {
                 testID={`voucherCartListView.${camelize(
                   item.invoiceGroupName,
                 )}DetailTouchable${index}`}
-                onPress={() => goToVoucherDetail(item.id, 'seller')}>
+                onPress={() => goToVoucherDetail(item.voucherId, 'seller')}>
                 <SnbText.B2 color={color.green50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>

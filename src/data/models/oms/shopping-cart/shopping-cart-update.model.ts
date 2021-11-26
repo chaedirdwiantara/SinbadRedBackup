@@ -4,14 +4,7 @@ export interface ProductItem {
   selected: boolean;
 }
 
-export interface VoucherItem {
-  type: string;
-  voucherId: number;
-}
-
 export interface CartUpdatePayload {
-  storeId: number;
   action: string;
   products: ProductItem[];
-  voucherIds: VoucherItem[];
 }

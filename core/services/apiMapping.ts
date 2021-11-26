@@ -5,6 +5,7 @@ import {
   DetailSuccessProps,
   CreateSuccessProps,
   UpdateSuccessProps,
+  DeleteSuccessProps,
 } from '@models';
 /** === FUNCTION === */
 const apiMapping = <T>(
@@ -20,7 +21,7 @@ const apiMapping = <T>(
     | 'banner'
     | 'payment',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH' | 'DELETE',
   params?: object,
 ) => {
   switch (type) {
@@ -67,6 +68,15 @@ const apiMapping = <T>(
         module,
         version,
         'PATCH',
+        params,
+      );
+    case 'DELETE':
+      return apiGeneral<DeleteSuccessProps>(
+        access,
+        path,
+        module,
+        version,
+        'DELETE',
         params,
       );
     default:

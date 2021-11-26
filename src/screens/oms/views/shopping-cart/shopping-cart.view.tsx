@@ -31,6 +31,8 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { useReserveStockContext } from 'src/data/contexts/product';
+import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -64,7 +66,8 @@ const OmsShoppingCartView: FC = () => {
    */
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
-  const { verificationOrderCreate } = useVerficationOrderAction();
+  const { verificationOrderCreate, verificationOrderDetail } =
+    useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
     if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
@@ -75,28 +78,36 @@ const OmsShoppingCartView: FC = () => {
       stateVerificationOrder.create.data !== null &&
       updateCartState.data != null
     ) {
+      verificationOrderDetail(
+        dispatchVerificationOrder,
+        stateVerificationOrder.create.data.id,
+      );
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.create.data, updateCartState.data]);
+  }, [stateVerificationOrder.create, updateCartState]);
 
   /** Voucher Cart */
   const voucherData = useDataVoucher();
 
   /**
-   * Reserve Discount
+   * Reserve Section
+   * - Cancel Reserve Stock
+   * - Cancel Reserve Discount (Promo & Voucher)
    */
   const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { del, resetDel } = useReserveDiscountAction();
+  const { dispatchReserveStock } = useReserveStockContext();
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
+  React.useEffect(() => {
+    reserveDiscountAction.del(dispatchPromo, '1');
+    reserveStockAction.del(dispatchReserveStock, '1');
+  }, []);
 
   /** Get Cart View */
   useEffect(() => {
     cartViewActions.fetch(dispatchShopingCart);
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
-
-    /** => will be change later, delete reserve discount */
-    resetDel(dispatchPromo);
-    del(dispatchPromo, '1abcd');
   }, []);
 
   /** Listen changes cartState */
@@ -130,10 +141,8 @@ const OmsShoppingCartView: FC = () => {
       return;
     }
     const params: CartUpdatePayload = {
-      storeId: cartState.data.storeId,
       action: 'submit',
       products: [],
-      voucherIds: [],
     };
 
     const dataSelected: CartSelectedData[] = [];
@@ -174,15 +183,21 @@ const OmsShoppingCartView: FC = () => {
         invoiceGroupId: invoiceGroup.invoiceGroupId,
         portfolioId: invoiceGroup.portfolioId,
         brands: brandsSelected,
-        sellerId: invoiceGroup.supplierId,
+        sellerId: invoiceGroup.sellerId,
         channelId: invoiceGroup.channelId,
         groupId: invoiceGroup.groupId,
         typeId: invoiceGroup.typeId,
-        clustderId: invoiceGroup.clusterId,
+        clusterId: invoiceGroup.clusterId,
       });
     });
 
     const paramsCartSelected: CartSelected = {
+      id: cartState.data.cartId,
+      data: dataSelected,
+      isActiveStore: cartState.data.isActiveStore,
+    };
+
+    const paramsVerificationCreate: CartSelected = {
       id: cartState.data.cartId,
       data: dataSelected,
       isActiveStore: cartState.data.isActiveStore,
@@ -192,10 +207,11 @@ const OmsShoppingCartView: FC = () => {
     /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
     /** => update state verification cart */
+    console.log(paramsVerificationCreate);
     setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {
-      data: paramsCartSelected,
+      data: paramsVerificationCreate,
     });
   };
   /** === VIEW === */

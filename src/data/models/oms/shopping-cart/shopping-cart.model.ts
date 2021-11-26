@@ -26,7 +26,7 @@ export interface CartInvoiceGroup {
   invoiceGroupName: string;
   portfolioId: string;
   brands: CartBrand[];
-  supplierId: number;
+  sellerId: number;
   channelId: number;
   groupId: number;
   typeId: number;

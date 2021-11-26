@@ -1,18 +1,17 @@
 /** === IMPORT HERE === */
 import * as models from '@models';
 import {
-  potentialPromoProductListInitialState,
-  potentialPromoProductListReducer,
-} from './potential-promo-product-list.reducer';
+  potentialPromoProductDetailInitialState,
+  potentialPromoProductDetailReducer,
+} from './potential-promo-product-detail.reducer';
 /** === TYPE HERE === */
-export type PotentialPromoProductInitialProps = models.ListProps<
-  models.PotentialPromoProductProps[]
->;
+export type PotentialPromoProductInitialProps =
+  models.DetailProps<models.PotentialPromoProductProps>;
 /** === INITIAL HERE === */
 export const potentialPromoProductInitialState = {
-  list: potentialPromoProductListInitialState,
+  detail: potentialPromoProductDetailInitialState,
 };
 /** === EXPORT ALL HERE === */
-export const potentialPromoProductReducer = ({ list }: any, action: any) => ({
-  list: potentialPromoProductListReducer(list, action),
+export const potentialPromoProductReducer = ({ detail }: any, action: any) => ({
+  detail: potentialPromoProductDetailReducer(detail, action),
 });

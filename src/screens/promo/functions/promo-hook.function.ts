@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment action */
 const usePromoPaymentAction = () => {
@@ -44,7 +45,7 @@ const usePromoGeneralAction = () => {
 const usePotentialPromoProductAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any, id: string) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.potentialPromoProductProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -59,8 +60,46 @@ const useReserveDiscountAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveDiscountProcess(contextDispatch, { id }));
     },
-    resetDel: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.deleteReserveDiscountReset());
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.ReserveDiscountPostPayload,
+    ) => {
+      dispatch(Actions.createReserveDiscountProcess(contextDispatch, data));
+    },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveDiscountReset());
+      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
+    },
+  };
+};
+/** => check promo payment action */
+const useCheckPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    list: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckPromoPaymentGetPayload,
+    ) => {
+      dispatch(Actions.checkPromoPaymentReset());
+      dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
+    },
+  };
+};
+/** => check all promo payment action */
+const useCheckAllPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckAllPromoPaymentPostPayload[],
+    ) => {
+      dispatch(
+        Actions.createCheckAllPromoPaymentProcess(contextDispatch, { data }),
+      );
+    },
+    list: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.getCheckAllPromoPaymentReset());
+      dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
     },
   };
 };
@@ -70,6 +109,8 @@ export {
   usePromoGeneralAction,
   usePotentialPromoProductAction,
   useReserveDiscountAction,
+  useCheckPromoPaymentAction,
+  useCheckAllPromoPaymentAction,
 };
 /**
  * ================================================================
