@@ -1,12 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { toCurrency } from '@core/functions/global/currency-format';
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import {
   useTermsAndConditionsModal,
   usePaymentAction,
+  handleTotalPrice,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
@@ -21,39 +21,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   const termsAndConditionModal = useTermsAndConditionsModal();
   const paymentAction = usePaymentAction();
   const { dispatchPayment } = React.useContext(contexts.PaymentContext);
-
-  /** === FUNCTION === */
-  /** => function total price */
-  const handleTotal = () => {
-    let total = 0;
-
-    data.forEach((invoice) => {
-      let subTotal = 0;
-      if (invoice.totalPriceBeforeTax) {
-        subTotal += invoice.totalPriceBeforeTax;
-      }
-
-      if (invoice.totalPriceAfterTax && invoice.totalPriceBeforeTax) {
-        subTotal += invoice.totalPriceAfterTax - invoice.totalPriceBeforeTax;
-      }
-
-      if (invoice.totalPaymentFee) {
-        subTotal += invoice.totalPaymentFee;
-      }
-
-      if (invoice.totalPromoSellerAndVoucher) {
-        subTotal -= invoice.totalPromoSellerAndVoucher;
-      }
-
-      if (invoice.totalPromoPayment) {
-        subTotal -= invoice.totalPromoPayment;
-      }
-
-      total += subTotal;
-    });
-
-    return toCurrency(total);
-  };
 
   /** => main */
   const dataPostTC = {
@@ -72,7 +39,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
         <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>{handleTotal()}</SnbText.H4>
+        <SnbText.H4 color={color.red50}>{handleTotalPrice(data)}</SnbText.H4>
       </View>
     );
   };
