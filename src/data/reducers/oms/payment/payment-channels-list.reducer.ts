@@ -7,16 +7,14 @@ export type PaymentChannelsListInitialProps = models.ListItemProps<
   models.IPaymentChannelsList[]
 >;
 /** === INITIAL STATE HERE === */
-export const paymentChannelsListInitialState: PaymentChannelsListInitialProps =
-  {
-    data: [],
-    error: null,
-    loading: false,
-    loadMore: false,
-    refresh: false,
-    total: 0,
-    skip: 0,
-  };
+export const paymentChannelsListInitialState: Omit<
+  PaymentChannelsListInitialProps,
+  'loadMore' | 'refresh' | 'total' | 'skip'
+> = {
+  data: [],
+  error: null,
+  loading: false,
+};
 /** === FUNCTION HERE === */
 export const paymentChannelsListReducer = simplifyReducer(
   paymentChannelsListInitialState,
@@ -25,34 +23,34 @@ export const paymentChannelsListReducer = simplifyReducer(
     /** => list process */
     [types.PAYMENT_CHANNELS_LIST_PROCESS](
       state = paymentChannelsListInitialState,
-      action: models.ListProcessAction,
+      { payload }: models.ListProcessAction,
     ) {
       return {
         ...state,
-        loading: action.payload.loading,
+        loading: payload.loading,
         error: null,
       };
     },
     /** => list success */
     [types.PAYMENT_CHANNELS_LIST_SUCCESS](
       state = paymentChannelsListInitialState,
-      action: models.ListSuccessAction<models.IPaymentChannelsList[]>,
+      { payload }: models.ListSuccessAction<models.IPaymentChannelsList[]>,
     ) {
       return {
         ...state,
-        data: [...action.payload.data],
+        data: [...payload.data],
         loading: false,
       };
     },
     /** => list failed */
     [types.PAYMENT_CHANNELS_LIST_FAILED](
       state = paymentChannelsListInitialState,
-      action: models.ListFailedAction,
+      { payload }: models.ListFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
   },

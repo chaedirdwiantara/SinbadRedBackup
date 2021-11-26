@@ -26,23 +26,25 @@ export const paymentLastChannelDetailReducer = simplifyReducer(
     /** => success */
     [types.PAYMENT_LAST_CHANNEL_DETAIL_SUCCESS](
       state = paymentLastChannelDetailInitialState,
-      action: models.DetailSuccessAction<models.IPaymentLastChannelDetailProps>,
+      {
+        payload,
+      }: models.DetailSuccessAction<models.IPaymentLastChannelDetailProps>,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => failed */
     [types.PAYMENT_LAST_CHANNEL_DETAIL_FAILED](
       state = paymentLastChannelDetailInitialState,
-      action: models.DetailFailedAction,
+      { payload }: models.DetailFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
 
