@@ -1,41 +1,49 @@
 /** === IMPORT PACKAGE HERE === */
 import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { MerchantApi } from '../apis/merchant.api';
 import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
 import { PaymentApi } from 'src/data/apis/oms/payment/payment.api';
-import { paymentTermsAndConditionCreateFailed } from '@actions';
 /** === FUNCTION === */
 /** => list example */
-function* paymentTypesList(action: models.ListProcessAction) {
+function* paymentTypesList(action: models.IPaymentTypeListProcessAction) {
   try {
-    const response: models.ListSuccessProps<models.IPaymentTypesList[]> = yield call(
-      () => {
+    const response: models.ListSuccessProps<models.IPaymentTypeListSuccess> =
+      yield call(() => {
         return PaymentApi.paymentTypesList(action.payload);
-      },
+      });
+    yield action.contextDispatch(
+      ActionCreators.paymentTypesListSuccess(response),
     );
-    yield action.contextDispatch(ActionCreators.paymentTypesListSuccess(response));
     yield put(ActionCreators.paymentTypesListSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.paymentTypesListFailed(error));
-    yield put(ActionCreators.paymentTypesListFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.paymentTypesListFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.paymentTypesListFailed(error as models.ErrorProps),
+    );
   }
 }
 
 function* paymentChannelsList(action: models.ListProcessAction) {
   try {
-    const response: models.ListSuccessProps<models.IPaymentChannelsList[]> = yield call(
-      () => {
+    const response: models.ListSuccessProps<models.IPaymentChannelsList[]> =
+      yield call(() => {
         return PaymentApi.paymentChannelsList(action.payload);
-      },
+      });
+    yield action.contextDispatch(
+      ActionCreators.paymentChannelsListSuccess(response),
     );
-    yield action.contextDispatch(ActionCreators.paymentChannelsListSuccess(response));
     yield put(ActionCreators.paymentChannelsListSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.paymentChannelsListFailed(error));
-    yield put(ActionCreators.paymentChannelsListFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.paymentChannelsListFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.paymentChannelsListFailed(error as models.ErrorProps),
+    );
   }
 }
 
@@ -45,11 +53,21 @@ function* paymentTermsAndConditionCreate(action: models.CreateProcessAction) {
     const response: models.CreateSuccessProps = yield call(() => {
       return PaymentApi.postTermsAndCondition(action.payload);
     });
-    yield action.contextDispatch(ActionCreators.paymentTermsAndConditionCreateSuccess(response));
+    yield action.contextDispatch(
+      ActionCreators.paymentTermsAndConditionCreateSuccess(response),
+    );
     yield put(ActionCreators.paymentTermsAndConditionCreateSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.paymentTermsAndConditionCreateFailed(error));
-    yield put(ActionCreators.paymentTermsAndConditionCreateFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.paymentTermsAndConditionCreateFailed(
+        error as models.ErrorProps,
+      ),
+    );
+    yield put(
+      ActionCreators.paymentTermsAndConditionCreateFailed(
+        error as models.ErrorProps,
+      ),
+    );
   }
 }
 /** => payment terms and condition create  */
@@ -62,11 +80,11 @@ function* paymentTCCreate(action: models.CreateProcessAction) {
       ActionCreators.paymentTCCreateSuccess(response),
     );
     yield put(ActionCreators.paymentTCCreateSuccess(response));
-  } catch (error:any) {
+  } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.paymentTCCreateFailed(error),
+      ActionCreators.paymentTCCreateFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.paymentTCCreateFailed(error));
+    yield put(ActionCreators.paymentTCCreateFailed(error as models.ErrorProps));
   }
 }
 
@@ -82,11 +100,11 @@ function* paymentTCDetail(action: models.DetailProcessAction) {
     );
 
     yield put(ActionCreators.paymentTCDetailSuccess(response));
-  } catch (error:any) {
+  } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.paymentTCDetailFailed(error),
+      ActionCreators.paymentTCDetailFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.paymentTCDetailFailed(error));
+    yield put(ActionCreators.paymentTCDetailFailed(error as models.ErrorProps));
   }
 }
 
@@ -102,9 +120,11 @@ function* paymentLastChannelCreate(action: models.CreateProcessAction) {
     yield put(ActionCreators.paymentLastChannelCreateSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.paymentLastChannelCreateFailed(error),
+      ActionCreators.paymentLastChannelCreateFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.paymentLastChannelCreateFailed(error));
+    yield put(
+      ActionCreators.paymentLastChannelCreateFailed(error as models.ErrorProps),
+    );
   }
 }
 
@@ -122,21 +142,32 @@ function* paymentLastChannelDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.paymentLastChannelDetailSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.paymentLastChannelDetailFailed(error),
+      ActionCreators.paymentLastChannelDetailFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.paymentLastChannelDetailFailed(error));
+    yield put(
+      ActionCreators.paymentLastChannelDetailFailed(error as models.ErrorProps),
+    );
   }
 }
 
 /** === LISTEN FUNCTION === */
 function* PaymentSaga() {
-    yield takeLatest(types.PAYMENT_TYPES_LIST_PROCESS, paymentTypesList);
-    yield takeLatest(types.PAYMENT_CHANNELS_LIST_PROCESS, paymentChannelsList);
-    yield takeLatest(types.PAYMENT_TC_CREATE_PROCESS, paymentTCCreate);
-    yield takeLatest(types.PAYMENT_TC_DETAIL_PROCESS, paymentTCDetail);
-  yield takeLatest(types.PAYMENT_LAST_CHANNEL_CREATE_PROCESS, paymentLastChannelCreate);
-  yield takeLatest(types.PAYMENT_LAST_CHANNEL_DETAIL_PROCESS, paymentLastChannelDetail);
-    yield takeLatest(types.PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS, paymentTermsAndConditionCreate)
-  }
-  
-  export default PaymentSaga;
+  yield takeLatest(types.PAYMENT_TYPES_LIST_PROCESS, paymentTypesList);
+  yield takeLatest(types.PAYMENT_CHANNELS_LIST_PROCESS, paymentChannelsList);
+  yield takeLatest(types.PAYMENT_TC_CREATE_PROCESS, paymentTCCreate);
+  yield takeLatest(types.PAYMENT_TC_DETAIL_PROCESS, paymentTCDetail);
+  yield takeLatest(
+    types.PAYMENT_LAST_CHANNEL_CREATE_PROCESS,
+    paymentLastChannelCreate,
+  );
+  yield takeLatest(
+    types.PAYMENT_LAST_CHANNEL_DETAIL_PROCESS,
+    paymentLastChannelDetail,
+  );
+  yield takeLatest(
+    types.PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS,
+    paymentTermsAndConditionCreate,
+  );
+}
+
+export default PaymentSaga;

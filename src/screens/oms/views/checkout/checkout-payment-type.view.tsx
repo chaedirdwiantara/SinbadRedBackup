@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { SnbText, SnbDivider, color, SnbIcon } from 'react-native-sinbad-ui';
@@ -10,8 +10,15 @@ import {
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutPaymentPromoBadge } from './checkout-payment-promo-badge.view';
+import * as models from '@models';
+/** === TYPES === */
+interface CheckoutPaymentTypeViewProps {
+  data: models.IInvoiceCheckout;
+}
 /** === COMPONENT === */
-export const CheckoutPaymentTypeView: FC = () => {
+export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
+  data,
+}) => {
   /** === HOOK === */
   const paymentTypesModal = usePaymentTypeModal();
   const paymentAction = usePaymentAction();
@@ -24,7 +31,7 @@ export const CheckoutPaymentTypeView: FC = () => {
     <View style={{ marginTop: 16 }}>
       <SnbText.H4>Tipe Pembayaran</SnbText.H4>
       <SnbDivider style={{ marginVertical: 8 }} />
-      <CheckoutPaymentPromoBadge />
+      {data.isPotentialPaymentPromo && <CheckoutPaymentPromoBadge />}
       <TouchableOpacity
         onPress={() => {
           paymentAction.typeslist(

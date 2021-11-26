@@ -1,16 +1,22 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { toCurrency } from '@core/functions/global/currency-format';
-import CheckoutStyle from '@screen/oms/styles/checkout/checkout.style';
+import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import {
   useTermsAndConditionsModal,
   usePaymentAction,
+  handleTotalPrice,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
+/** === TYPE === */
+import * as models from '@models';
+
+interface CheckoutBottomViewProps {
+  data: models.IInvoiceCheckout[];
+}
 /** === COMPONENT === */
-export const CheckoutBottomView: FC = () => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   /** === HOOK === */
   const termsAndConditionModal = useTermsAndConditionsModal();
   const paymentAction = usePaymentAction();
@@ -19,14 +25,13 @@ export const CheckoutBottomView: FC = () => {
   /** => main */
   const dataPostTC = {
     data: {
-      buyerId: 1234,
-      orderParcels: [
-        {
-          invoiceGroupId: '234324234',
-          paymentChannelId: 2,
-          paymentTypeId: 2,
-        },
-      ],
+      orderParcels: data.map((invoiceGroup) => {
+        return {
+          invoiceGroupId: invoiceGroup.invoiceGroupId,
+          paymentTypeId: invoiceGroup.paymentType?.id,
+          paymentChannelId: invoiceGroup.paymentChannel?.id,
+        };
+      }),
     },
   };
 
@@ -34,7 +39,7 @@ export const CheckoutBottomView: FC = () => {
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
         <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>{toCurrency(990000)}</SnbText.H4>
+        <SnbText.H4 color={color.red50}>{handleTotalPrice(data)}</SnbText.H4>
       </View>
     );
   };
