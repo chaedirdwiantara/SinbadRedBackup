@@ -8,7 +8,7 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => master data checkout */
 const useCheckoutMaster = () => {
-  const dataCheckout = useDataCheckout();
+  const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
   const dispatch = useDispatch();
   return {
     getCheckoutMaster: dataCheckout,

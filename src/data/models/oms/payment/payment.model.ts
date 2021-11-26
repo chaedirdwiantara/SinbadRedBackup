@@ -9,6 +9,18 @@ export interface IPaymentChannelProcessProps extends models.ListProcessProps {
   invoiceGroupId: string;
   totalCartParcel: number;
   paymentTypeId: number;
+  page: number;
+}
+
+export interface IPaymentTypeListSuccess {
+  supplierId: number;
+  paymentTypes: models.IPaymentTypesList[];
+}
+
+export interface IPaymentTypeListProcessAction {
+  type: string;
+  payload: IPaymentTypeProcessProps;
+  contextDispatch: (action: any) => any;
 }
 export interface IPaymentTypesList {
   id: number;

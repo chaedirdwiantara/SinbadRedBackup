@@ -6,6 +6,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import { usePaymentDetailAccorrdion } from '../../functions/checkout';
 /** === TYPE === */
+import * as models from '@models';
 export interface IPaymentDetail {
   name: string;
   value: number;
@@ -13,39 +14,79 @@ export interface IPaymentDetail {
 }
 
 export interface CheckoutPaymentDetailViewProps {
-  paymentDetails: IPaymentDetail[];
+  data: models.IInvoiceCheckout;
 }
 
 /** === COMPONENT === */
 export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
-  paymentDetails,
+  data,
 }) => {
   /** === HOOK === */
   const paymentAccordion = usePaymentDetailAccorrdion();
-
   const isActive = paymentAccordion.active === 1;
+
+  /** === FUNCTION === */
+  /** => sub total function */
+  const handleSubTotal = () => {
+    let total = 0;
+    if (data.totalPriceBeforeTax) {
+      total += data.totalPriceBeforeTax;
+    }
+
+    if (data.totalPriceAfterTax && data.totalPriceBeforeTax) {
+      total += data.totalPriceAfterTax - data.totalPriceBeforeTax;
+    }
+
+    if (data.totalPaymentFee) {
+      total += data.totalPaymentFee;
+    }
+
+    if (data.totalPromoSellerAndVoucher) {
+      total -= data.totalPromoSellerAndVoucher;
+    }
+
+    if (data.totalPromoPayment) {
+      total -= data.totalPromoPayment;
+    }
+
+    return toCurrency(total);
+  };
   return (
     <View>
       {isActive ? (
         <View style={{ marginLeft: 32 }}>
-          {paymentDetails.map((item, index) => {
-            return (
-              <View key={index} style={CheckoutStyle.detailItemContainer}>
-                <SnbText.B3
-                  color={
-                    item.type === 'normal' ? color.black100 : color.green50
-                  }>
-                  {item.name}
-                </SnbText.B3>
-                <SnbText.B3
-                  color={
-                    item.type === 'normal' ? color.black100 : color.green50
-                  }>
-                  {toCurrency(item.value)}
-                </SnbText.B3>
-              </View>
-            );
-          })}
+          <View style={CheckoutStyle.detailItemContainer}>
+            <SnbText.B3 color={color.black100}>
+              {`Total Barang ${data.totalProduct}`}
+            </SnbText.B3>
+            <SnbText.B3 color={color.black100}>
+              {toCurrency(data.totalPriceBeforeTax)}
+            </SnbText.B3>
+          </View>
+          <View style={CheckoutStyle.detailItemContainer}>
+            <SnbText.B3 color={color.green50}>Total Potongan Harga</SnbText.B3>
+            <SnbText.B3 color={color.green50}>
+              {toCurrency(data.totalPromoSellerAndVoucher ?? 0)}
+            </SnbText.B3>
+          </View>
+          <View style={CheckoutStyle.detailItemContainer}>
+            <SnbText.B3 color={color.black100}>{`PPN ${data.tax}%`}</SnbText.B3>
+            <SnbText.B3 color={color.black100}>
+              {toCurrency(data.totalPriceAfterTax - data.totalPriceBeforeTax)}
+            </SnbText.B3>
+          </View>
+          <View style={CheckoutStyle.detailItemContainer}>
+            <SnbText.B3 color={color.green50}>Promo Pembayaran</SnbText.B3>
+            <SnbText.B3 color={color.green50}>
+              {toCurrency(data.totalPromoPayment ?? 0)}
+            </SnbText.B3>
+          </View>
+          <View style={CheckoutStyle.detailItemContainer}>
+            <SnbText.B3 color={color.black100}>Layanan Pembayaran</SnbText.B3>
+            <SnbText.B3 color={color.black100}>
+              {toCurrency(data.totalPaymentFee ?? 0)}
+            </SnbText.B3>
+          </View>
         </View>
       ) : (
         <View />
@@ -63,7 +104,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.H4>Sub Total</SnbText.H4>
           </View>
         </View>
-        <SnbText.H4>Rp367.367,00</SnbText.H4>
+        <SnbText.H4>{handleSubTotal()}</SnbText.H4>
       </TouchableOpacity>
     </View>
   );
