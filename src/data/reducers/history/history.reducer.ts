@@ -10,21 +10,30 @@ import {
   paymentStatusListInitialState,
 } from './list-history/payment-status-list.reducer';
 
+import {
+  HistoryListInitialProps,
+  historyListInitialState,
+  historyListReducer,
+} from './list-history/history-list.reducer';
+
 export interface HistoryListState {
   orderStatus: OrderStatusInitialProps;
   paymentStatus: any;
+  list: HistoryListInitialProps;
 }
 
 /** === INITIAL STATE === */
 export const historyInitialState = {
   paymentStatus: paymentStatusListInitialState,
   orderStatus: orderStatusInitialState,
+  list: historyListInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const historyReducer = (
-  { paymentStatus, orderStatus }: HistoryListState,
+  { paymentStatus, orderStatus, list }: HistoryListState,
   action: any,
 ) => ({
   paymentStatus: paymentStatusListReducer(paymentStatus, action),
   orderStatus: orderStatusReducer(orderStatus, action),
+  list: historyListReducer(list, action),
 });
