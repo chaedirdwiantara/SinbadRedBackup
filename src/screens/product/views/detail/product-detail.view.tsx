@@ -21,6 +21,7 @@ import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
+import { BundleSection } from './BundleSection';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -93,10 +94,7 @@ const ProductDetailView: FC = () => {
     if (productDetailState.data !== null) {
       const { id } = productDetailState.data;
       potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(
-        dispatchPromo,
-        '6149f9c2a5868baca3e6f8ec',
-      );
+      potentialPromoProductAction.detail(dispatchPromo, id);
     }
   }, [productDetailState]);
 
@@ -190,11 +188,12 @@ const ProductDetailView: FC = () => {
                 onPress={() => setPromoModalVisible(true)}
               />
             )}
-          {defaultProperties.isBundle && (
-            <ProductDetailSection title="Promosi Bundle Special">
-              <SnbText.B3>Promo Bundle Data</SnbText.B3>
-            </ProductDetailSection>
-          )}
+          {potentialPromoProductList.data !== null &&
+            potentialPromoProductList.data.crossSelling.length > 0 && (
+              <BundleSection
+                bundleList={potentialPromoProductList.data.crossSelling}
+              />
+            )}
           <ProductDetailSection title="Informasi Produk">
             <ProductDetailSectionItem
               name="Minimal Pembelian"
