@@ -104,12 +104,9 @@ const OmsShoppingCartView: FC = () => {
    */
   const {
     dispatchPromo,
-    statePromo: {
-      reserveDiscount: stateReserveDiscount,
-      checkAllPromoPayment: stateCheckAllPromoPayment,
-    },
+    statePromo: { checkAllPromoPayment: stateCheckAllPromoPayment },
   } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock, stateReserveStock } = useReserveStockContext();
+  const { dispatchReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
   // const checkPromoPaymentAction = useCheckPromoPaymentAction();

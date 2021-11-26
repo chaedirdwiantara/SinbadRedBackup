@@ -16,7 +16,6 @@ export const CheckoutAddressView: FC = () => {
     <View style={CheckoutStyle.addessSection}>
       <SnbText.B2>Alamat Pengiriman</SnbText.B2>
       <SnbDivider style={{ marginVertical: 8 }} />
-
       <View style={{ marginBottom: 6 }}>
         <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4>
       </View>
