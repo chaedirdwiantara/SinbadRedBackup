@@ -24,34 +24,34 @@ export const paymentTypesListReducer = simplifyReducer(
     /** => list process */
     [types.PAYMENT_TYPES_LIST_PROCESS](
       state = paymentTypesListInitialState,
-      action: models.ListProcessAction,
+      { payload }: models.ListProcessAction,
     ) {
       return {
         ...state,
-        loading: action.payload.loading,
+        loading: payload.loading,
         error: null,
       };
     },
     /** => list success */
     [types.PAYMENT_TYPES_LIST_SUCCESS](
       state = paymentTypesListInitialState,
-      action: models.ListSuccessAction<models.IPaymentTypesList[]>,
+      { payload }: models.ListSuccessAction<models.IPaymentTypesList[]>,
     ) {
       return {
         ...state,
-        data: [...action.payload.data.paymentTypes],
+        data: [...payload.data.paymentTypes],
         loading: false,
       };
     },
     /** => list failed */
     [types.PAYMENT_TYPES_LIST_FAILED](
       state = paymentTypesListInitialState,
-      action: models.ListFailedAction,
+      { payload }: models.ListFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
   },
