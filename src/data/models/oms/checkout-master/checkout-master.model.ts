@@ -43,22 +43,20 @@ export interface IBrandCheckout {
 }
 
 export interface IInvoiceCheckout {
-  cartParcelId: string;
   invoiceGroupId: string;
-  invoiceGroupName: string;
   totalProduct: number;
   totalPriceBeforeTax: number;
   totalPriceAfterTax: number;
   tax: number | null;
-  isPotentialPromoPayment: boolean;
-  totalPromoSellerAndVoucher: number;
-  totalPromoPayment: number;
-  totalPaymentFee: number;
-  totalPayment: number;
-  paymentType: IPaymentTypeCheckout | null;
-  paymentChannel: IPaymentChannelCheckout | null;
-  promoSellers: IPromoSeller[];
-  vouchers: IVoucherCheckout[];
+  isPotentialPaymentPromo: boolean;
+  totalPromoSellerAndVoucher?: number;
+  totalPromoPayment?: number;
+  totalPaymentFee?: number;
+  totalPayment?: number;
+  paymentType?: IPaymentTypeCheckout | null;
+  paymentChannel?: IPaymentChannelCheckout | null;
+  promoSellers?: IPromoSeller[];
+  vouchers?: IVoucherCheckout[];
   brands: IBrandCheckout[];
 }
 

@@ -63,10 +63,10 @@ const paymentLastChannelCreate = (data: {}) => {
 
 /** =>  payment last payment channel detail */
 const paymentLastChannelDetail = (data: models.DetailProcessProps) => {
-  // const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
+  const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `data/${data.id}`;
   return apiMappingMock<models.IPaymentTermsAndConditionDetailProps>(
-    'auth',
+    mockHost,
     path,
     'payment',
     'v1',
