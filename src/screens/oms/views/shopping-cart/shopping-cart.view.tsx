@@ -25,7 +25,11 @@ import {
   CartSelectedBrand,
   CartSelectedProduct,
 } from '@models';
-import { goToVerificationOrder, getTotalProducts } from '../../functions';
+import {
+  goToVerificationOrder,
+  getTotalProducts,
+  goToCheckout,
+} from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
@@ -214,6 +218,7 @@ const OmsShoppingCartView: FC = () => {
     verificationOrderCreate(dispatchVerificationOrder, {
       data: paramsVerificationCreate,
     });
+    goToCheckout();
   };
   /** === VIEW === */
   /** => Main */
