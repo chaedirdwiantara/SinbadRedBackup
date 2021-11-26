@@ -4,7 +4,7 @@ import * as models from '@models';
 /** => payment types process */
 export const paymentTypesListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
+  data: models.IPaymentTypeProcessProps,
 ): models.ListProcessAction => {
   contextDispatch({ type: types.PAYMENT_TYPES_LIST_PROCESS, payload: data });
   return {
@@ -15,8 +15,8 @@ export const paymentTypesListProcess = (
 };
 /** => payment types success */
 export const paymentTypesListSuccess = (
-  data: models.ListSuccessProps<models.IPaymentTypesList[]>,
-): models.ListSuccessAction<models.IPaymentTypesList[]> => {
+  data: models.ListSuccessProps<models.IPaymentTypeListSuccess>,
+): models.ListSuccessAction<models.IPaymentTypeListSuccess> => {
   return { type: types.PAYMENT_TYPES_LIST_SUCCESS, payload: data };
 };
 /** => payment types failed */
@@ -30,7 +30,7 @@ export const paymentTypesListFailed = (
 /** => payment channels process */
 export const paymentChannelsListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
+  data: models.IPaymentChannelProcessProps,
 ): models.ListProcessAction => {
   contextDispatch({ type: types.PAYMENT_CHANNELS_LIST_PROCESS, payload: data });
   return {

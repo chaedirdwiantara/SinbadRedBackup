@@ -18,13 +18,12 @@ export const checkout = simplifyReducer(initialState, {
     const allSupplier = payload.invoices;
     const invoices: models.IInvoiceCheckout[] = allSupplier.map((item) => {
       return {
-        cartParcelId: item.cartParcelId,
         invoiceGroupId: item.invoiceGroupId,
-        invoiceGroupName: item.invoiceGroupName,
         totalProduct: item.totalProduct,
         totalPriceBeforeTax: item.totalPriceBeforeTax,
-        PPN: item.PPN,
-        isPotentialPromoPayment: item.isPotentialPromoPayment,
+        totalPriceAfterTax: item.totalPriceAfterTax,
+        tax: item.tax,
+        isPotentialPaymentPromo: item.isPotentialPaymentPromo,
         totalPromoSellerAndVoucher: 0,
         totalPromoPayment: 0,
         totalPaymentFee: 0,

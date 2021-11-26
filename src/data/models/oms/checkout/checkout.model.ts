@@ -16,19 +16,16 @@ export interface BrandCheckout {
 }
 
 export interface InvoiceCheckout {
-  cartParcelId: string;
   invoiceGroupId: string;
-  invoiceGroupName: string;
   totalProduct: number;
   totalPriceBeforeTax: number;
-  PPN: number;
-  isPotentialPromoPayment: boolean;
+  totalPriceAfterTax: number;
+  tax: number;
+  isPotentialPaymentPromo: boolean;
   brands: BrandCheckout[];
 }
 
 export interface CheckoutSuccess {
   cartId: string;
-  userId: number;
-  storeId: number;
-  data: InvoiceCheckout[];
+  invoices: InvoiceCheckout[];
 }

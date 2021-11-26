@@ -11,32 +11,39 @@ import { CheckoutPaymentTypeView } from './checkout-payment-type.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 /** === TYPE === */
 import { IProductCheckout } from './checkout-sku-list.view';
-import { IPaymentDetail } from './checkout-payment-detail.view';
+import * as models from '@models';
 
 interface CheckoutInvoiceGroupViewProps {
   products: IProductCheckout[];
-  paymentDetails: IPaymentDetail[];
+  data: models.IInvoiceCheckout;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   products,
-  paymentDetails,
+  data,
 }) => {
   /** === HOOK === */
   const parcelDetailModal = useParcelDetailModal();
 
   return (
     <View style={CheckoutStyle.invoiceGroupListContainer}>
-      <View style={CheckoutStyle.headerSection}>
-        <SnbText.H4>Danone</SnbText.H4>
-        <TouchableOpacity onPress={() => parcelDetailModal.setModalOpen(true)}>
-          <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
-        </TouchableOpacity>
-      </View>
-      <CheckoutSKUListView products={products} />
+      {Array.isArray(data.brands) &&
+        data.brands.length > 0 &&
+        data.brands.map((brand) => (
+          <View key={brand.brandId}>
+            <View style={CheckoutStyle.headerSection}>
+              <SnbText.H4>{brand.brandName}</SnbText.H4>
+              <TouchableOpacity
+                onPress={() => parcelDetailModal.setModalOpen(true)}>
+                <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
+              </TouchableOpacity>
+            </View>
+            <CheckoutSKUListView products={products} />
+          </View>
+        ))}
       <CheckoutShipmentDetailView />
-      <CheckoutPaymentTypeView />
-      <CheckoutPaymentDetailView paymentDetails={paymentDetails} />
+      <CheckoutPaymentTypeView data={data} />
+      <CheckoutPaymentDetailView data={data} />
     </View>
   );
 };
