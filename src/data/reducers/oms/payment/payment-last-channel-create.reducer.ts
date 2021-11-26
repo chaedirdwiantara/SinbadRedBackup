@@ -31,23 +31,23 @@ export const paymentLastChannelCreateReducer = simplifyReducer(
     /** => create success */
     [types.PAYMENT_LAST_CHANNEL_CREATE_SUCCESS](
       state = paymentLastChannelCreateInitialState,
-      action: models.CreateSuccessAction,
+      { payload }: models.CreateSuccessAction,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => create failed */
     [types.PAYMENT_LAST_CHANNEL_CREATE_FAILED](
       state = paymentLastChannelCreateInitialState,
-      action: models.CreateFailedAction,
+      { payload }: models.CreateFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
     /** => reset */

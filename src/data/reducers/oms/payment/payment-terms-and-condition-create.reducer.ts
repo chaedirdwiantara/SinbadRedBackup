@@ -26,23 +26,23 @@ export const paymentTermsAndConditionCreateReducer = simplifyReducer(
     /** => create success */
     [types.PAYMENT_TERMS_AND_CONDITION_CREATE_SUCCESS](
       state = paymentTermsAndConditionCreateInitialState,
-      action: models.CreateSuccessAction,
+      { payload }: models.CreateSuccessAction,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload.data,
         loading: false,
       };
     },
     /** => create failed */
     [types.PAYMENT_TERMS_AND_CONDITION_CREATE_FAILED](
       state = paymentTermsAndConditionCreateInitialState,
-      action: models.CreateFailedAction,
+      { payload }: models.CreateFailedAction,
     ) {
       return {
         ...state,
         loading: false,
-        error: action.payload,
+        error: payload,
       };
     },
   },

@@ -1,3 +1,15 @@
+import * as models from '@models';
+export interface IPaymentTypeProcessProps extends models.ListProcessProps {
+  invoiceGroupId: string;
+  totalCartParcel: number;
+  page: number;
+}
+
+export interface IPaymentChannelProcessProps extends models.ListProcessProps {
+  invoiceGroupId: string;
+  totalCartParcel: number;
+  paymentTypeId: number;
+}
 export interface IPaymentTypesList {
   id: number;
   name: string;
