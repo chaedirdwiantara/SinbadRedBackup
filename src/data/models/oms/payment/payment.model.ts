@@ -69,7 +69,7 @@ export interface IPaymentLastChannelDetailProps {
   paymentTypeChannels: IPaymentTypeChannels[];
 }
 
-export interface ISelectedPaymentChannels {
+export interface ISelectedPaymentType {
   id: number;
   name: string;
   iconUrl: string;
@@ -86,4 +86,22 @@ interface ILastPaymentTypeChannel {
   id: number;
   name: string;
   iconUrl: string;
+}
+
+export interface IPaymentChannels {
+  id: number;
+  name: string;
+  image: string;
+  totalFee: number;
+  status: string;
+  message: string;
+  totalPayment: number;
+  promoPaymentAvailable: boolean;
+  promPaymentDescription: string | null;
+  promoPaymentAmount: number | null;
+}
+export interface IPaymentChannelsModal {
+  invoiceGroupId: number;
+  paymentType: ISelectedPaymentType;
+  paymentChannels: IPaymentChannels[];
 }

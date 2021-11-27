@@ -16,8 +16,16 @@ import {
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
+
+interface PaymentChannelsModalProps {
+  isOpen: boolean;
+  close: () => void;
+}
 /** === COMPONENT === */
-export const ModalPaymentChannels: FC = () => {
+export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
+  isOpen,
+  close,
+}) => {
   /** === HOOK === */
   const paymentTypesModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
@@ -105,13 +113,10 @@ export const ModalPaymentChannels: FC = () => {
   };
   return statePayment?.paymentChannelsList ? (
     <SnbBottomSheet
-      open={paymentChannelsModal.isOpen}
+      open={isOpen}
       content={content()}
       title={'Metode Pembayaran'}
-      closeAction={() => {
-        paymentTypesModal.setOpen(true);
-        paymentChannelsModal.setOpen(false);
-      }}
+      closeAction={close}
       actionIcon={'back'}
       size={'halfscreen'}
     />

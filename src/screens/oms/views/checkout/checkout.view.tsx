@@ -18,6 +18,8 @@ import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import {
   useCheckoutViewActions,
   useCheckoutMaster,
+  usePaymentTypeModal,
+  usePaymentChannelModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 /** === DUMMIES === */
@@ -52,6 +54,8 @@ const dummySKU = [
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const checkoutViewActions = useCheckoutViewActions();
+  const paymentTypeModal = usePaymentTypeModal();
+  const paymentChannelsModal = usePaymentChannelModal();
   const {
     stateCheckout: {
       checkout: {
@@ -120,6 +124,26 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
     }
   }, [statePayment.paymentLastChannelCreate]);
+
+  const invoiceGroupId = '123';
+  const totalCartParcel = 3456;
+  const paymentTypeId = 1;
+
+  const selectedPaymentType = () => {
+    paymentChannelsModal.setOpen(true);
+    paymentTypeModal.setOpen(false);
+    paymentAction.channelsList(
+      dispatchPayment,
+      invoiceGroupId,
+      totalCartParcel,
+      paymentTypeId,
+    );
+  };
+
+  const closeModalPaymentChannel = () => {
+    paymentChannelsModal.setOpen(false);
+    paymentTypeModal.setOpen(true);
+  };
   /** === VIEW === */
   return (
     <SnbContainer color="grey">
@@ -137,12 +161,20 @@ const OmsCheckoutView: FC = () => {
                   key={invoiceGroup.invoiceGroupId}
                   products={dummySKU}
                   data={invoiceGroup}
+                  openModalPaymentType={() => paymentTypeModal.setOpen(true)}
                 />
               ))}
           </ScrollView>
           <CheckoutBottomView data={getCheckoutMaster.invoices} />
-          <ModalPaymentType />
-          <ModalPaymentChannels />
+          <ModalPaymentType
+            isOpen={paymentTypeModal.isOpen}
+            close={paymentTypeModal.close}
+            openModalPaymentChannels={selectedPaymentType}
+          />
+          <ModalPaymentChannels
+            isOpen={paymentChannelsModal.isOpen}
+            close={closeModalPaymentChannel}
+          />
           <ModalParcelDetail />
           <ModalTermAndCondition />
         </>
