@@ -32,6 +32,9 @@ const useDataCheckout = () => {
   return useSelector((state: RootState) => state.checkout);
 };
 
+const useDataPaymentChannels = () => {
+  return useSelector((state: RootState) => state.paymentChannelsModal);
+};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -41,6 +44,7 @@ export {
   useDataAuth,
   useDataCart,
   useDataCheckout,
+  useDataPaymentChannels,
 };
 /**
  * ================================================================

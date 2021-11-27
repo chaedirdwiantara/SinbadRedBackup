@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useDataCheckout } from '@core/redux/Data';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDataCheckout, useDataPaymentChannels } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -39,6 +39,26 @@ export const useCheckoutViewActions = () => {
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.getCheckoutReset);
     },
+  };
+};
+/** => master data payment channels modal  */
+const usePaymentChannelsData = () => {
+  const { paymentType } = useSelector(
+    (state: any) => state.paymentChannelsModal,
+  );
+  const dataPaymentChannels: models.IPaymentChannelsModal =
+    useDataPaymentChannels();
+  const dispatch = useDispatch();
+
+  return {
+    getPaymentChannels: dataPaymentChannels,
+    setPaymentChannels: (data: models.IPaymentChannelsModal) => {
+      dispatch(Actions.mergePaymentChannels(data));
+    },
+    setSelectedPaymentType: (data: models.ISelectedPaymentType) => {
+      dispatch(Actions.selectedPaymentType(data));
+    },
+    paymentType: paymentType,
   };
 };
 /** => promo general action */
@@ -99,7 +119,6 @@ const usePaymentTypeModal = () => {
 /** => payment types modal */
 const usePaymentChannelModal = () => {
   const [isOpen, setOpen] = React.useState(false);
-  console.log(isOpen, 'IS OPEN channels');
   return {
     setOpen: (value: boolean) => {
       setOpen(value);
@@ -190,6 +209,7 @@ export {
   usePaymentChannelModal,
   usePaymentAction,
   useSelectedPaymentType,
+  usePaymentChannelsData,
 };
 /**
  * ================================================================
