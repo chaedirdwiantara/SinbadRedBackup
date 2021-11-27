@@ -10,9 +10,9 @@ import {
   SnbListButtonType1,
 } from 'react-native-sinbad-ui';
 import {
-  usePaymentTypeModal,
   usePaymentChannelModal,
   useSelectedPaymentType,
+  usePaymentChannelsData,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -27,10 +27,11 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
   close,
 }) => {
   /** === HOOK === */
-  const paymentTypesModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
   const paymentType = useSelectedPaymentType();
+  const paymentChannelData = usePaymentChannelsData();
   const { statePayment } = React.useContext(contexts.PaymentContext);
+
   const contentChannelTypes = (paymentTypes: any) => {
     return (
       <>
@@ -91,11 +92,11 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
             }}>
             <Image
               source={{
-                uri: selectedPaymentType?.iconUrl,
+                uri: paymentChannelData?.paymentType?.iconUrl,
               }}
               style={CheckoutStyle.mediumIcon}
             />
-            <SnbText.B1>{selectedPaymentType?.name}</SnbText.B1>
+            <SnbText.B1>{paymentChannelData?.paymentType?.name}</SnbText.B1>
           </View>
         </View>
         <View style={{ paddingTop: 16 }}>

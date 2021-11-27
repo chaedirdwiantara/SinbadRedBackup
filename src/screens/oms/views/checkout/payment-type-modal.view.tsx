@@ -2,14 +2,10 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbBottomSheet, SnbListButtonType1 } from 'react-native-sinbad-ui';
-import {
-  usePaymentTypeModal,
-  usePaymentChannelModal,
-  usePaymentAction,
-  useSelectedPaymentType,
-} from '../../functions/checkout';
+import { usePaymentChannelsData } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
+import * as models from '@models';
 
 interface PaymentTypeModalProps {
   isOpen: boolean;
@@ -23,27 +19,23 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
   openModalPaymentChannels,
 }) => {
   /** === HOOK === */
-  const paymentCHannelsModal = usePaymentChannelModal();
-  const paymentAction = usePaymentAction();
-  const paymentType = useSelectedPaymentType();
-  const { statePayment, dispatchPayment } = React.useContext(
-    contexts.PaymentContext,
-  );
+  const { statePayment } = React.useContext(contexts.PaymentContext);
+  const paymentChannels = usePaymentChannelsData();
 
-  const invoiceGroupId = '123';
-  const totalCartParcel = 3456;
-  const paymentTypeId = 1;
-
+  const selectPaymentType = (data: models.IPaymentTypesList) => {
+    const dataUpdatePaymentType = {
+      id: data.id,
+      name: data.name,
+      iconUrl: data.iconUrl,
+    };
+    paymentChannels.setSelectedPaymentType(dataUpdatePaymentType);
+    openModalPaymentChannels();
+  };
   const content = () => {
     return !statePayment?.paymentTypesList?.loading ? (
       <View>
         {statePayment?.paymentTypesList?.data.map(
           (item: any, index: number) => {
-            const dataPaymentType = {
-              id: item.id,
-              name: item.name,
-              iconUrl: item.iconUrl,
-            };
             return (
               <SnbListButtonType1
                 key={index}
@@ -53,7 +45,7 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
                 type={'one'}
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
-                onPress={openModalPaymentChannels}
+                onPress={() => selectPaymentType(item)}
               />
             );
           },
