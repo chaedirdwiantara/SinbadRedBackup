@@ -127,7 +127,6 @@ const usePaymentTypeModal = () => {
 /** => payment types modal */
 const usePaymentChannelModal = () => {
   const [isOpen, setOpen] = React.useState(false);
-  console.log(isOpen, 'IS OPEN channels');
   return {
     setOpen: (value: boolean) => {
       setOpen(value);
