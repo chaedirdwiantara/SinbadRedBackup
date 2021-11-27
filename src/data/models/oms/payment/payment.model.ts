@@ -96,12 +96,22 @@ export interface IPaymentChannels {
   status: string;
   message: string;
   totalPayment: number;
-  promoPaymentAvailable: boolean;
+  promoPaymentAvailable: boolean | null;
   promPaymentDescription: string | null;
   promoPaymentAmount: number | null;
 }
 export interface IPaymentChannelsModal {
-  invoiceGroupId: number;
-  paymentType: ISelectedPaymentType;
+  invoiceGroupId: number | null;
+  paymentType: ISelectedPaymentType | null;
   paymentChannels: IPaymentChannels[];
+}
+
+export interface IUpdatePaymentType {
+  type: string;
+  payload: ISelectedPaymentType;
+}
+
+export interface IMergePaymentChannels {
+  type: string;
+  payload: IPaymentChannelsModal;
 }

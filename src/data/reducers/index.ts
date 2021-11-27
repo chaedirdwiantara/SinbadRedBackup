@@ -9,7 +9,7 @@ import { permanent } from './permanent';
 import { auth } from './auth';
 import { global } from './global';
 import { voucher } from './voucher/voucher-local-data.reducer';
-import { checkout, cartSelected } from './oms';
+import { checkout, cartSelected, paymentChannelsModal } from './oms';
 
 export const rootReducer = combineReducers({
   permanentCore,
@@ -21,6 +21,7 @@ export const rootReducer = combineReducers({
   voucher,
   cartSelected,
   checkout,
+  paymentChannelsModal,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
