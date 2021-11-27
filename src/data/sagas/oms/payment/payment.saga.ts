@@ -9,7 +9,7 @@ import { PaymentApi } from 'src/data/apis/oms/payment/payment.api';
 /** => list example */
 function* paymentTypesList(action: models.IPaymentTypeListProcessAction) {
   try {
-    const response: models.ListSuccessProps<models.IPaymentTypeListSuccess> =
+    const response: models.ListSuccessProps<models.IPaymentTypesList[]> =
       yield call(() => {
         return PaymentApi.paymentTypesList(action.payload);
       });

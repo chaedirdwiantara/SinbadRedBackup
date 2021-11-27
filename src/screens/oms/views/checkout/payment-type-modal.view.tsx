@@ -10,19 +10,28 @@ import {
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
+
+interface PaymentTypeModalProps {
+  isOpen: boolean;
+  close: () => void;
+  openModalPaymentChannels: () => void;
+}
 /** === COMPONENT === */
-export const ModalPaymentType: FC = () => {
+export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
+  isOpen,
+  close,
+  openModalPaymentChannels,
+}) => {
   /** === HOOK === */
-  const paymentTypesModal = usePaymentTypeModal();
-  const paymentChannelsModal = usePaymentChannelModal();
+  const paymentCHannelsModal = usePaymentChannelModal();
   const paymentAction = usePaymentAction();
   const paymentType = useSelectedPaymentType();
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
 
-  const invoiceGroupId = 'abcdef12345';
-  const totalCartParcel = 100000;
+  const invoiceGroupId = '123';
+  const totalCartParcel = 3456;
   const paymentTypeId = 1;
 
   const content = () => {
@@ -44,17 +53,7 @@ export const ModalPaymentType: FC = () => {
                 type={'one'}
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
-                onPress={() => {
-                  paymentAction.channelsList(
-                    dispatchPayment,
-                    invoiceGroupId,
-                    totalCartParcel,
-                    paymentTypeId,
-                  );
-                  paymentTypesModal.setOpen(false);
-                  paymentChannelsModal.setOpen(true);
-                  paymentType.setSelectedPaymentType(dataPaymentType);
-                }}
+                onPress={openModalPaymentChannels}
               />
             );
           },
@@ -69,12 +68,10 @@ export const ModalPaymentType: FC = () => {
 
   return (
     <SnbBottomSheet
-      open={paymentTypesModal.isOpen}
+      open={isOpen}
       content={content()}
       title={'Tipe Pembayaran'}
-      closeAction={() => {
-        paymentTypesModal.setOpen(false);
-      }}
+      closeAction={close}
       actionIcon={'close'}
     />
   );
