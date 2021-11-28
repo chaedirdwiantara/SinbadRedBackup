@@ -70,8 +70,6 @@ export const checkout = simplifyReducer(initialState, {
   ) {
     let invoices = [];
     for (let i = 0; i < state.invoices.length; i++) {
-      console.log(state.invoices, payload);
-
       invoices.push({
         ...state.invoices[i],
         ...payload.find(

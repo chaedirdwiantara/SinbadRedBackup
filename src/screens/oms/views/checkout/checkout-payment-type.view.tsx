@@ -33,6 +33,7 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
   const invoiceGroupId = data?.invoiceGroupId;
   const totalCartParcel = 100000;
   const page = 1;
+  console.log(data.paymentType);
 
   return (
     <View style={{ marginTop: 16 }}>
