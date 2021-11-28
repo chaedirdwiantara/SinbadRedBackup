@@ -197,16 +197,6 @@ const usePaymentAction = () => {
   };
 };
 
-const useSelectedPaymentType = () => {
-  const [selectedPaymentType, setSelectedPaymentType] =
-    React.useState<models.IPaymentTypeCheckout | null>(null);
-  return {
-    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
-      setSelectedPaymentType(value);
-    },
-    selectedPaymentType,
-  };
-};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -217,7 +207,6 @@ export {
   usePaymentChannelModal,
   usePaymentAction,
   usePaymentChannelsData,
-  useSelectedPaymentType,
 };
 /**
  * ================================================================
