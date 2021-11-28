@@ -31,7 +31,6 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
   const checkoutMaster = useCheckoutMaster();
   const paymentChannelData = usePaymentChannelsData();
   const { statePayment } = React.useContext(contexts.PaymentContext);
-
   const selectedPaymentChannel = (item: any) => {
     const dataUpdatePaymentChannels = [
       {

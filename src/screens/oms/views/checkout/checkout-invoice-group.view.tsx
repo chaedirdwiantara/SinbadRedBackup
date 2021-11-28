@@ -17,12 +17,14 @@ interface CheckoutInvoiceGroupViewProps {
   products: IProductCheckout[];
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
+  index: number;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   products,
   data,
   openModalPaymentType,
+  index,
 }) => {
   /** === HOOK === */
   const parcelDetailModal = useParcelDetailModal();
@@ -47,6 +49,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       <CheckoutPaymentTypeView
         data={data}
         openModalPaymentType={openModalPaymentType}
+        index={index}
       />
       <CheckoutPaymentDetailView data={data} />
     </View>

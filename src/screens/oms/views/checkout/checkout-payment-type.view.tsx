@@ -30,10 +30,10 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
   const lastTypeChannel = statePayment.paymentLastChannelDetail;
   const dataLastTypeChannel = lastTypeChannel?.data?.paymentTypeChannels;
   const loadingLastTypeChanel = lastTypeChannel?.loading;
-
   const invoiceGroupId = 'abcdef12345';
   const totalCartParcel = 100000;
   const page = 1;
+  console.log(data.paymentType);
 
   return (
     <View style={{ marginTop: 16 }}>
@@ -52,17 +52,17 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
             openModalPaymentType(false);
           }}
           style={CheckoutStyle.selectPaymentButton}>
-          {dataLastTypeChannel ? (
+          {data.paymentType && data.paymentChannel ? (
             <>
               <Image
                 source={{
-                  uri: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_type_icon/cod.png',
+                  uri: data?.paymentType?.iconUrl,
                 }}
                 style={CheckoutStyle.smallIcon}
               />
               <View style={{ flex: 1 }}>
                 <SnbText.B1 color={color.black80}>
-                  Bayar Di Tempat - Tunai
+                  {data?.paymentType?.name} - {data?.paymentChannel?.name}
                 </SnbText.B1>
               </View>
             </>
