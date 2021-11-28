@@ -11,36 +11,6 @@ const initialState: models.IPaymentChannelsModal = {
 
 /** === FUNCTION === */
 export const paymentChannelsModal = simplifyReducer(initialState, {
-  /** => save data payment channels */
-  [types.MERGE_PAYMENT_CHANNELS](
-    state = initialState,
-    { payload }: models.IMergePaymentChannels,
-  ) {
-    const paymentType = payload.paymentType;
-    const dataPaymentChannels = payload.paymentChannels;
-    const paymentChannels: models.IPaymentChannels[] = dataPaymentChannels?.map(
-      (item) => {
-        return {
-          id: item.id,
-          name: item.name,
-          image: item.image,
-          totalFee: item.totalFee,
-          status: item.status,
-          message: item.message,
-          totalPayment: item.totalPayment,
-          promoPaymentAmount: null,
-          promPaymentDescription: null,
-          promoPaymentAvailable: null,
-        };
-      },
-    );
-    return {
-      ...state,
-      invoiceGroupId: payload.invoiceGroupId,
-      paymentType,
-      paymentChannels,
-    };
-  },
   [types.SELECTED_PAYMENT_TYPE](
     state = initialState,
     { payload }: models.IUpdatePaymentType,
@@ -53,6 +23,35 @@ export const paymentChannelsModal = simplifyReducer(initialState, {
     return {
       ...state,
       paymentType,
+    };
+  },
+  [types.UPDATE_PAYMENT_CHANNELS](
+    state = initialState,
+    { payload }: models.IUpdatePaymentChannel,
+  ) {
+    const paymentChannels: models.IPaymentChannels[] = payload?.map((item) => {
+      return {
+        id: item.id,
+        name: item.name,
+        type: item.type.map((detail) => {
+          return {
+            id: detail.id,
+            name: detail.name,
+            image: detail.image,
+            totalFee: detail.totalFee,
+            status: detail.status,
+            message: detail.message,
+            totalPayment: detail.totalPayment,
+            promoPaymentAvailable: null,
+            promPaymentDescription: null,
+            promoPaymentAmount: null,
+          };
+        }),
+      };
+    });
+    return {
+      ...state,
+      paymentChannels,
     };
   },
 });

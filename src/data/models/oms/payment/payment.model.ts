@@ -88,7 +88,7 @@ interface ILastPaymentTypeChannel {
   iconUrl: string;
 }
 
-export interface IPaymentChannels {
+export interface IPaymentChannelsDetail {
   id: number;
   name: string;
   image: string;
@@ -99,6 +99,11 @@ export interface IPaymentChannels {
   promoPaymentAvailable: boolean | null;
   promPaymentDescription: string | null;
   promoPaymentAmount: number | null;
+}
+export interface IPaymentChannels {
+  id: number;
+  name: string;
+  type: IPaymentChannelsDetail[];
 }
 export interface IPaymentChannelsModal {
   invoiceGroupId: number | null;
@@ -111,6 +116,10 @@ export interface IUpdatePaymentType {
   payload: ISelectedPaymentType;
 }
 
+export interface IUpdatePaymentChannel {
+  type: string;
+  payload: IPaymentChannels[];
+}
 export interface IMergePaymentChannels {
   type: string;
   payload: IPaymentChannelsModal;

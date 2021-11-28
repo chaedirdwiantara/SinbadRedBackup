@@ -43,7 +43,7 @@ export const useCheckoutViewActions = () => {
 };
 /** => master data payment channels modal  */
 const usePaymentChannelsData = () => {
-  const { paymentType } = useSelector(
+  const { paymentType, paymentChannels } = useSelector(
     (state: any) => state.paymentChannelsModal,
   );
   const dataPaymentChannels: models.IPaymentChannelsModal =
@@ -52,13 +52,14 @@ const usePaymentChannelsData = () => {
 
   return {
     getPaymentChannels: dataPaymentChannels,
-    setPaymentChannels: (data: models.IPaymentChannelsModal) => {
-      dispatch(Actions.mergePaymentChannels(data));
-    },
     setSelectedPaymentType: (data: models.ISelectedPaymentType) => {
       dispatch(Actions.selectedPaymentType(data));
     },
+    setPaymentChannels: (data: models.IPaymentChannels[]) => {
+      dispatch(Actions.listPaymentChannel(data));
+    },
     paymentType: paymentType,
+    paymentChannels: paymentChannels,
   };
 };
 /** => promo general action */
@@ -189,16 +190,6 @@ const usePaymentAction = () => {
   };
 };
 
-const useSelectedPaymentType = () => {
-  const [selectedPaymentType, setSelectedPaymentType] =
-    React.useState<models.IPaymentTypeCheckout | null>(null);
-  return {
-    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
-      setSelectedPaymentType(value);
-    },
-    selectedPaymentType,
-  };
-};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -208,7 +199,6 @@ export {
   usePaymentTypeModal,
   usePaymentChannelModal,
   usePaymentAction,
-  useSelectedPaymentType,
   usePaymentChannelsData,
 };
 /**

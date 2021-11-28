@@ -10,9 +10,8 @@ import {
   SnbListButtonType1,
 } from 'react-native-sinbad-ui';
 import {
-  usePaymentChannelModal,
-  useSelectedPaymentType,
   usePaymentChannelsData,
+  useCheckoutMaster,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -20,18 +19,33 @@ import { contexts } from '@contexts';
 interface PaymentChannelsModalProps {
   isOpen: boolean;
   close: () => void;
+  back: () => void;
 }
 /** === COMPONENT === */
 export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
   isOpen,
   close,
+  back,
 }) => {
   /** === HOOK === */
-  const paymentChannelsModal = usePaymentChannelModal();
-  const paymentType = useSelectedPaymentType();
+  const checkoutMaster = useCheckoutMaster();
   const paymentChannelData = usePaymentChannelsData();
   const { statePayment } = React.useContext(contexts.PaymentContext);
 
+  const selectedPaymentChannel = (item: any) => {
+    const dataUpdatePaymentChannels = [
+      {
+        invoiceGroupId: '160000000000000000000000',
+        totalFee: item.totalFee,
+        totalPayment: item.totalPayment,
+        promoPayment: item.promoPayment,
+        paymentType: paymentChannelData.paymentType,
+        paymentChannel: { id: item.id, name: item.name, iconUrl: item.image },
+      },
+    ];
+    checkoutMaster.setPaymentChannel(dataUpdatePaymentChannels);
+    close();
+  };
   const contentChannelTypes = (paymentTypes: any) => {
     return (
       <>
@@ -48,10 +62,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
               image={item.image}
               type={'two'}
               disabled={item.status !== 'disabled' ? true : false}
-              onPress={() => {
-                paymentChannelsModal.setOpen(false);
-                // setSelectedPaymentChannels(selectedPaymentChannels);
-              }}
+              onPress={() => selectedPaymentChannel(item)}
             />
           );
         })}
@@ -75,7 +86,6 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
     );
   };
   const content = () => {
-    const selectedPaymentType = paymentType.selectedPaymentType;
     return (
       <View
         style={{
@@ -104,7 +114,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
         </View>
         {!statePayment?.paymentChannelsList.loading ? (
           <ScrollView showsVerticalScrollIndicator={false}>
-            {contentChannelGroups(statePayment.paymentChannelsList.data)}
+            {contentChannelGroups(paymentChannelData?.paymentChannels)}
           </ScrollView>
         ) : (
           <LoadingPage />
@@ -117,7 +127,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
       open={isOpen}
       content={content()}
       title={'Metode Pembayaran'}
-      closeAction={close}
+      closeAction={back}
       actionIcon={'back'}
       size={'halfscreen'}
     />
