@@ -14,6 +14,7 @@ import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
+import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION === */
 import {
   useCheckoutViewActions,
@@ -97,18 +98,19 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutError]);
 
   React.useEffect(() => {
+    const invoices = getCheckoutMaster?.invoices;
+    const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
+      (item) => {
+        return {
+          invoiceGroupId: item.invoiceGroupId,
+          totalCartParcel:
+            item.totalPriceAfterTax - item?.totalPromoSellerAndVoucher,
+        };
+      },
+    );
     const dataLastChannel = {
       data: {
-        cartParcels: [
-          {
-            invoiceGroupId: 'abcdef12345',
-            totalCartParcel: 50000.0,
-          },
-          {
-            invoiceGroupId: 'abcdef12346',
-            totalCartParcel: 60000.0,
-          },
-        ],
+        cartParcels,
       },
     };
     paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
@@ -150,14 +152,10 @@ const OmsCheckoutView: FC = () => {
   };
 
   const closePaymentChannel = () => {
-    console.log('CLOSE');
-
     paymentChannelsModal.setOpen(false);
   };
 
   const backModalPaymentChannel = () => {
-    console.log('back modal payment channel');
-
     paymentChannelsModal.setOpen(false);
     paymentTypeModal.setOpen(true);
   };
@@ -173,12 +171,13 @@ const OmsCheckoutView: FC = () => {
             <CheckoutAddressView />
             {Array.isArray(getCheckoutMaster.invoices) &&
               getCheckoutMaster.invoices.length > 0 &&
-              getCheckoutMaster.invoices.map((invoiceGroup) => (
+              getCheckoutMaster.invoices.map((invoiceGroup, index) => (
                 <CheckoutInvoiceGroupView
                   key={invoiceGroup.invoiceGroupId}
                   products={dummySKU}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
+                  index={index}
                 />
               ))}
           </ScrollView>
