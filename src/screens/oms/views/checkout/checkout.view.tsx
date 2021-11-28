@@ -20,9 +20,10 @@ import {
   useCheckoutMaster,
   usePaymentTypeModal,
   usePaymentChannelModal,
+  usePaymentChannelsData,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
-/** === DUMMIES === */
+
 const dummySKU = [
   {
     urlImages:
@@ -56,6 +57,7 @@ const OmsCheckoutView: FC = () => {
   const checkoutViewActions = useCheckoutViewActions();
   const paymentTypeModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
+  const paymentChannelData = usePaymentChannelsData();
   const {
     stateCheckout: {
       checkout: {
@@ -71,6 +73,7 @@ const OmsCheckoutView: FC = () => {
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { paymentChannelsList } = statePayment;
 
   /** Set Loading Page */
   useEffect(() => {
@@ -124,6 +127,12 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
     }
   }, [statePayment.paymentLastChannelCreate]);
+  /** => insert data payment channel to payment channel modal master */
+  useEffect(() => {
+    if (paymentChannelsList) {
+      paymentChannelData.setPaymentChannels(paymentChannelsList.data);
+    }
+  }, [paymentChannelsList]);
 
   const invoiceGroupId = '123';
   const totalCartParcel = 3456;
@@ -140,7 +149,15 @@ const OmsCheckoutView: FC = () => {
     );
   };
 
-  const closeModalPaymentChannel = () => {
+  const closePaymentChannel = () => {
+    console.log('CLOSE');
+
+    paymentChannelsModal.setOpen(false);
+  };
+
+  const backModalPaymentChannel = () => {
+    console.log('back modal payment channel');
+
     paymentChannelsModal.setOpen(false);
     paymentTypeModal.setOpen(true);
   };
@@ -173,7 +190,8 @@ const OmsCheckoutView: FC = () => {
           />
           <ModalPaymentChannels
             isOpen={paymentChannelsModal.isOpen}
-            close={closeModalPaymentChannel}
+            back={backModalPaymentChannel}
+            close={closePaymentChannel}
           />
           <ModalParcelDetail />
           <ModalTermAndCondition />
