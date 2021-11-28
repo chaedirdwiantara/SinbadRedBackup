@@ -124,3 +124,8 @@ export interface IMergePaymentChannels {
   type: string;
   payload: IPaymentChannelsModal;
 }
+
+export interface ILastChannelCreateProps {
+  invoiceGroupId: string;
+  totalCartParcel: number;
+}
