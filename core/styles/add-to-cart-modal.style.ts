@@ -20,7 +20,6 @@ export const AddToCartModalStyle = StyleSheet.create({
     borderRadius: 50,
   },
   mainContentContainer: {
-    flex: 1,
     flexDirection: 'row',
     paddingHorizontal: 16,
     marginBottom: 24,
