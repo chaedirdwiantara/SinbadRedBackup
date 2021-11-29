@@ -62,11 +62,13 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
-  const { setInvoiceBrand, getCheckoutMaster } = useCheckoutMaster();
+  const { setInvoiceBrand, getCheckoutMaster, setReserveDiscount } =
+    useCheckoutMaster();
   const paymentAction = usePaymentAction();
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { statePromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -81,6 +83,10 @@ const OmsCheckoutView: FC = () => {
 
   useEffect(() => {
     console.log('[getCheckoutMaster]: ', getCheckoutMaster);
+    /** => merge data reserve */
+    if (statePromo.reserveDiscount.detail.data !== null) {
+      setReserveDiscount(statePromo.reserveDiscount.detail.data.promoMatch);
+    }
   }, [getCheckoutMaster.invoices.length]);
 
   useEffect(() => {
