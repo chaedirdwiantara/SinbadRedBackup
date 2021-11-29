@@ -151,7 +151,7 @@ const MerchantEditPhotoView = () => {
       );
       goBack();
       editProfileAction.reset(dispatchSupplier);
-      detail(dispatchUser, { id: '' });
+      detail(dispatchUser);
     }
 
     if (stateMerchant.profileEdit.error !== null) {
@@ -176,7 +176,7 @@ const MerchantEditPhotoView = () => {
       );
       goBack();
       editMerchantAction.reset(dispatchSupplier);
-      detail(dispatchUser, { id: '' });
+      detail(dispatchUser);
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
