@@ -2,39 +2,40 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbBottomSheet, SnbListButtonType1 } from 'react-native-sinbad-ui';
-import {
-  usePaymentTypeModal,
-  usePaymentChannelModal,
-  usePaymentAction,
-  useSelectedPaymentType,
-} from '../../functions/checkout';
+import { usePaymentChannelsData } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
+import * as models from '@models';
+
+interface PaymentTypeModalProps {
+  isOpen: boolean;
+  close: () => void;
+  openModalPaymentChannels: () => void;
+}
 /** === COMPONENT === */
-export const ModalPaymentType: FC = () => {
+export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
+  isOpen,
+  close,
+  openModalPaymentChannels,
+}) => {
   /** === HOOK === */
-  const paymentTypesModal = usePaymentTypeModal();
-  const paymentChannelsModal = usePaymentChannelModal();
-  const paymentAction = usePaymentAction();
-  const paymentType = useSelectedPaymentType();
-  const { statePayment, dispatchPayment } = React.useContext(
-    contexts.PaymentContext,
-  );
+  const { statePayment } = React.useContext(contexts.PaymentContext);
+  const paymentChannels = usePaymentChannelsData();
 
-  const invoiceGroupId = 'abcdef12345';
-  const totalCartParcel = 100000;
-  const paymentTypeId = 1;
-
+  const selectPaymentType = (data: models.IPaymentTypesList) => {
+    const dataUpdatePaymentType = {
+      id: data.id,
+      name: data.name,
+      iconUrl: data.iconUrl,
+    };
+    paymentChannels.setSelectedPaymentType(dataUpdatePaymentType);
+    openModalPaymentChannels();
+  };
   const content = () => {
     return !statePayment?.paymentTypesList?.loading ? (
       <View>
         {statePayment?.paymentTypesList?.data.map(
           (item: any, index: number) => {
-            const dataPaymentType = {
-              id: item.id,
-              name: item.name,
-              iconUrl: item.iconUrl,
-            };
             return (
               <SnbListButtonType1
                 key={index}
@@ -44,17 +45,7 @@ export const ModalPaymentType: FC = () => {
                 type={'one'}
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
-                onPress={() => {
-                  paymentAction.channelsList(
-                    dispatchPayment,
-                    invoiceGroupId,
-                    totalCartParcel,
-                    paymentTypeId,
-                  );
-                  paymentTypesModal.setOpen(false);
-                  paymentChannelsModal.setOpen(true);
-                  paymentType.setSelectedPaymentType(dataPaymentType);
-                }}
+                onPress={() => selectPaymentType(item)}
               />
             );
           },
@@ -69,12 +60,10 @@ export const ModalPaymentType: FC = () => {
 
   return (
     <SnbBottomSheet
-      open={paymentTypesModal.isOpen}
+      open={isOpen}
       content={content()}
       title={'Tipe Pembayaran'}
-      closeAction={() => {
-        paymentTypesModal.setOpen(false);
-      }}
+      closeAction={close}
       actionIcon={'close'}
     />
   );

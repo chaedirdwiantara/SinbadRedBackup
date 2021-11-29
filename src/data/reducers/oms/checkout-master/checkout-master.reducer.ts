@@ -69,7 +69,6 @@ export const checkout = simplifyReducer(initialState, {
     { payload }: models.UpdatePaymentChannelCheckout,
   ) {
     let invoices = [];
-
     for (let i = 0; i < state.invoices.length; i++) {
       invoices.push({
         ...state.invoices[i],

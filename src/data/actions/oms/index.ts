@@ -12,6 +12,7 @@ export * from './checkout/checkout-master-napi.action';
 export * from './shoping-cart/cart-selected-napi.action';
 export * from './payment/payment-api.action';
 export * from './shoping-cart/cart-total-product-api.action';
+export * from './payment/payment-channels.api.action';
 /**
  * ================================================================
  * NOTES

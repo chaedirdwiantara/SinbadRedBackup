@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useDataCheckout } from '@core/redux/Data';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDataCheckout, useDataPaymentChannels } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -39,6 +39,31 @@ export const useCheckoutViewActions = () => {
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.getCheckoutReset);
     },
+  };
+};
+/** => master data payment channels modal  */
+const usePaymentChannelsData = () => {
+  const { paymentType, paymentChannels, invoiceGroupId } = useSelector(
+    (state: any) => state.paymentChannelsModal,
+  );
+  const dataPaymentChannels: models.IPaymentChannelsModal =
+    useDataPaymentChannels();
+  const dispatch = useDispatch();
+
+  return {
+    getPaymentChannels: dataPaymentChannels,
+    setSelectedPaymentType: (data: models.ISelectedPaymentType) => {
+      dispatch(Actions.selectedPaymentType(data));
+    },
+    setPaymentChannels: (data: models.IPaymentChannels[]) => {
+      dispatch(Actions.listPaymentChannel(data));
+    },
+    updateInvoiceGroupId: (id: string) => {
+      dispatch(Actions.updataInvoiceGroupId(id));
+    },
+    paymentType: paymentType,
+    paymentChannels: paymentChannels,
+    invoiceGroupId: invoiceGroupId,
   };
 };
 /** => promo general action */
@@ -92,6 +117,8 @@ const usePaymentTypeModal = () => {
       setOpen(value);
     },
     isOpen,
+    open: () => setOpen(true),
+    close: () => setOpen(false),
   };
 };
 /** => payment types modal */
@@ -102,6 +129,8 @@ const usePaymentChannelModal = () => {
       setOpen(value);
     },
     isOpen,
+    open: () => setOpen(true),
+    close: () => setOpen(false),
   };
 };
 const usePaymentAction = () => {
@@ -165,16 +194,6 @@ const usePaymentAction = () => {
   };
 };
 
-const useSelectedPaymentType = () => {
-  const [selectedPaymentType, setSelectedPaymentType] =
-    React.useState<models.IPaymentTypeCheckout | null>(null);
-  return {
-    setSelectedPaymentType: (value: models.IPaymentTypeCheckout) => {
-      setSelectedPaymentType(value);
-    },
-    selectedPaymentType,
-  };
-};
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -184,7 +203,7 @@ export {
   usePaymentTypeModal,
   usePaymentChannelModal,
   usePaymentAction,
-  useSelectedPaymentType,
+  usePaymentChannelsData,
 };
 /**
  * ================================================================
