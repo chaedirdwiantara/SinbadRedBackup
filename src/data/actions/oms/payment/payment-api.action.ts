@@ -15,8 +15,8 @@ export const paymentTypesListProcess = (
 };
 /** => payment types success */
 export const paymentTypesListSuccess = (
-  data: models.ListSuccessProps<models.IPaymentTypeListSuccess>,
-): models.ListSuccessAction<models.IPaymentTypeListSuccess> => {
+  data: models.ListSuccessProps<models.IPaymentTypesList[]>,
+): models.ListSuccessAction<models.IPaymentTypesList[]> => {
   return { type: types.PAYMENT_TYPES_LIST_SUCCESS, payload: data };
 };
 /** => payment types failed */

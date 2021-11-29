@@ -14,13 +14,17 @@ import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
+import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION === */
 import {
   useCheckoutViewActions,
   useCheckoutMaster,
+  usePaymentTypeModal,
+  usePaymentChannelModal,
+  usePaymentChannelsData,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
-/** === DUMMIES === */
+
 const dummySKU = [
   {
     urlImages:
@@ -52,6 +56,9 @@ const dummySKU = [
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const checkoutViewActions = useCheckoutViewActions();
+  const paymentTypeModal = usePaymentTypeModal();
+  const paymentChannelsModal = usePaymentChannelModal();
+  const paymentChannelData = usePaymentChannelsData();
   const {
     stateCheckout: {
       checkout: {
@@ -67,6 +74,7 @@ const OmsCheckoutView: FC = () => {
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { paymentChannelsList } = statePayment;
 
   /** Set Loading Page */
   useEffect(() => {
@@ -90,18 +98,19 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutError]);
 
   React.useEffect(() => {
+    const invoices = getCheckoutMaster?.invoices;
+    const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
+      (item) => {
+        return {
+          invoiceGroupId: item.invoiceGroupId,
+          totalCartParcel:
+            item.totalPriceAfterTax - item?.totalPromoSellerAndVoucher,
+        };
+      },
+    );
     const dataLastChannel = {
       data: {
-        cartParcels: [
-          {
-            invoiceGroupId: 'abcdef12345',
-            totalCartParcel: 50000.0,
-          },
-          {
-            invoiceGroupId: 'abcdef12346',
-            totalCartParcel: 60000.0,
-          },
-        ],
+        cartParcels,
       },
     };
     paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
@@ -120,6 +129,36 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
     }
   }, [statePayment.paymentLastChannelCreate]);
+  /** => insert data payment channel to payment channel modal master */
+  useEffect(() => {
+    if (paymentChannelsList) {
+      paymentChannelData.setPaymentChannels(paymentChannelsList.data);
+    }
+  }, [paymentChannelsList]);
+
+  const invoiceGroupId = '123';
+  const totalCartParcel = 3456;
+  const paymentTypeId = 1;
+
+  const selectedPaymentType = () => {
+    paymentChannelsModal.setOpen(true);
+    paymentTypeModal.setOpen(false);
+    paymentAction.channelsList(
+      dispatchPayment,
+      invoiceGroupId,
+      totalCartParcel,
+      paymentTypeId,
+    );
+  };
+
+  const closePaymentChannel = () => {
+    paymentChannelsModal.setOpen(false);
+  };
+
+  const backModalPaymentChannel = () => {
+    paymentChannelsModal.setOpen(false);
+    paymentTypeModal.setOpen(true);
+  };
   /** === VIEW === */
   return (
     <SnbContainer color="grey">
@@ -132,17 +171,27 @@ const OmsCheckoutView: FC = () => {
             <CheckoutAddressView />
             {Array.isArray(getCheckoutMaster.invoices) &&
               getCheckoutMaster.invoices.length > 0 &&
-              getCheckoutMaster.invoices.map((invoiceGroup) => (
+              getCheckoutMaster.invoices.map((invoiceGroup, index) => (
                 <CheckoutInvoiceGroupView
                   key={invoiceGroup.invoiceGroupId}
                   products={dummySKU}
                   data={invoiceGroup}
+                  openModalPaymentType={() => paymentTypeModal.setOpen(true)}
+                  index={index}
                 />
               ))}
           </ScrollView>
           <CheckoutBottomView data={getCheckoutMaster.invoices} />
-          <ModalPaymentType />
-          <ModalPaymentChannels />
+          <ModalPaymentType
+            isOpen={paymentTypeModal.isOpen}
+            close={paymentTypeModal.close}
+            openModalPaymentChannels={selectedPaymentType}
+          />
+          <ModalPaymentChannels
+            isOpen={paymentChannelsModal.isOpen}
+            back={backModalPaymentChannel}
+            close={closePaymentChannel}
+          />
           <ModalParcelDetail />
           <ModalTermAndCondition />
         </>

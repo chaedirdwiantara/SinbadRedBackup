@@ -1,12 +1,14 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMapping';
+import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => payment types list */
 const paymentTypesList = (data: models.IPaymentTypeProcessProps) => {
+  const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `types?invoiceGroupId=${data.invoiceGroupId}&totalCartParcel=${data.totalCartParcel}&page=${data.page}`;
-  return apiMapping<models.ListSuccessProps<models.IPaymentTypeListSuccess>>(
-    'auth',
+  return apiMappingMock<models.IPaymentTypesList[]>(
+    mockHost,
     path,
     'payment',
     'v1',
@@ -15,9 +17,10 @@ const paymentTypesList = (data: models.IPaymentTypeProcessProps) => {
 };
 /** ==> payment channels list */
 const paymentChannelsList = (data: models.IPaymentChannelProcessProps) => {
+  const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `channels?invoiceGroupId=${data.invoiceGroupId}&paymentTypeId=${data.paymentTypeId}&totalCartParcel=${data.totalCartParcel}`;
-  return apiMapping<models.IPaymentChannelsList[]>(
-    'auth',
+  return apiMappingMock<models.IPaymentChannelsList[]>(
+    mockHost,
     path,
     'payment',
     'v1',
@@ -34,8 +37,6 @@ const postTermsAndCondition = (data: {}) => {
 
 /** => payment terms and condition create */
 const paymentTCCreate = (data: {}) => {
-  console.log(data, 'DATA');
-
   // const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = 'terms-conditions';
   return apiMapping('auth', path, 'payment', 'v1', 'CREATE', data);
