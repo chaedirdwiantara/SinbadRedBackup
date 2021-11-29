@@ -41,7 +41,10 @@ const GridLayout: FC<ProductLayoutProps> = ({
     <View style={{ flex: 1 }}>
       <ScrollView
         contentContainerStyle={{
-          flex: displayState === 'empty' ? 1 : undefined,
+          flex:
+            displayState === 'empty' || displayState === 'error'
+              ? 1
+              : undefined,
         }}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
