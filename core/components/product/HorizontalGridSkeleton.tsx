@@ -1,28 +1,21 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, ScrollView } from 'react-native';
 /** === IMPORT COMPONENT === */
 import { HorizontalGridCardSkeleton } from './HorizontalGridCardSkeleton';
 /** === COMPONENT === */
-export const HorizontalGridSkeleton: FC = () => {
-  /** === VIEW === */
-  /** => Skeleton Item */
-  const renderSkeletonItem = (props: any) => (
-    <HorizontalGridCardSkeleton key={props.index} />
-  );
-  /** => Main */
-  return (
-    <View style={{ flex: 1 }}>
-      <FlatList
-        horizontal={true}
-        contentContainerStyle={{ paddingHorizontal: 12 }}
-        data={Array(8).fill(0)}
-        scrollEnabled={false}
-        showsHorizontalScrollIndicator={false}
-        renderItem={renderSkeletonItem}
-        ItemSeparatorComponent={() => <View style={{ width: 6 }} />}
-        keyExtractor={(_, index) => index.toString()}
-      />
-    </View>
-  );
-};
+export const HorizontalGridSkeleton: FC = () => (
+  <View style={{ flex: 1 }}>
+    <ScrollView
+      horizontal={true}
+      scrollEnabled={false}
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={{ paddingHorizontal: 12 }}>
+      {Array(8)
+        .fill(0)
+        .map((_, index) => (
+          <HorizontalGridCardSkeleton key={index} />
+        ))}
+    </ScrollView>
+  </View>
+);

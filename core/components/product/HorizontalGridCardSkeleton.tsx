@@ -32,7 +32,7 @@ const textSkeletonStyles = [
 ];
 /** === COMPONENT === */
 export const HorizontalGridCardSkeleton: FC = () => (
-  <View style={{ width: 192 }}>
+  <View style={{ width: 192, marginRight: 6 }}>
     <View
       style={{
         width: '100%',
