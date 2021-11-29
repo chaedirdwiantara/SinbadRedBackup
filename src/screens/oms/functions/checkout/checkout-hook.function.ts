@@ -43,7 +43,7 @@ export const useCheckoutViewActions = () => {
 };
 /** => master data payment channels modal  */
 const usePaymentChannelsData = () => {
-  const { paymentType, paymentChannels } = useSelector(
+  const { paymentType, paymentChannels, invoiceGroupId } = useSelector(
     (state: any) => state.paymentChannelsModal,
   );
   const dataPaymentChannels: models.IPaymentChannelsModal =
@@ -58,8 +58,12 @@ const usePaymentChannelsData = () => {
     setPaymentChannels: (data: models.IPaymentChannels[]) => {
       dispatch(Actions.listPaymentChannel(data));
     },
+    updateInvoiceGroupId: (id: string) => {
+      dispatch(Actions.updataInvoiceGroupId(id));
+    },
     paymentType: paymentType,
     paymentChannels: paymentChannels,
+    invoiceGroupId: invoiceGroupId,
   };
 };
 /** => promo general action */
