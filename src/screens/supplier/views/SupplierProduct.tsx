@@ -1,92 +1,54 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 /** === IMPORT COMPONENTS ===  */
-import GridLayout from '@core/components/product/list/grid-layout/GridLayout';
-import ListLayout from '@core/components/product/list/list-layout/ListLayout';
-import { SupplierBrandList } from './SupplierBrandList';
+import { SupplierProductGridLayout } from './SupplierProductGridLayout';
+import { SupplierProductListLayout } from './SupplierProductListLayout';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
-import {
-  LayoutDisplay,
-  PriceRange,
-} from '@core/components/product/list/BottomAction';
-import { SortQuery } from '@core/functions/product';
+import { LayoutDisplay } from '@core/components/product/list/BottomAction';
+import { ITag } from '@core/components/product/list/product-list-core.type';
 /** === TYPE === */
 interface SupplierProductProps {
-  brands: Array<models.BrandListSuccessProps>;
-  tags: Array<string>;
+  tags: Array<ITag>;
   products: Array<models.ProductList>;
-  isRefreshing: boolean;
-  onRefresh: (queryOptions: models.ProductListQueryOptions) => void;
-  onFetch: (queryOptions: models.ProductListQueryOptions) => void;
-  onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
-  sellerId: string;
   layoutDisplay: LayoutDisplay;
-  sortQuery: SortQuery | null;
-  filterQuery: PriceRange | null;
-  selectedTags: Array<string>;
-  setSelectedTags: Dispatch<SetStateAction<Array<string>>>;
+  onTagPress: (index: number, tag: ITag) => void;
+  loading: boolean;
+  error: models.ErrorProps | null;
 }
 /** === COMPONENT === */
 export const SupplierProduct: FC<SupplierProductProps> = ({
-  brands,
   tags,
   products,
-  isRefreshing,
-  onRefresh,
-  onFetch,
-  onLoadMore,
-  sellerId,
   layoutDisplay,
-  sortQuery,
-  filterQuery,
-  selectedTags,
-  setSelectedTags,
+  onTagPress,
+  loading,
+  error,
 }) => {
-  /** === DERIVEDS === */
-  const derivedQueryOptions: models.ProductListQueryOptions = {
-    sort: sortQuery?.sort,
-    sortBy: sortQuery?.sortBy,
-    minPrice: filterQuery?.minPrice,
-    maxPrice: filterQuery?.maxPrice,
-    sellerId,
-    tags: selectedTags,
-  };
-
-  const handleTagPress = (currentTags: Array<string>) => {
-    setSelectedTags(currentTags);
-    onFetch({ ...derivedQueryOptions, tags: currentTags });
-  };
-  /** === VIEW === */
   return (
     <View style={{ flex: 1 }}>
-      <SupplierBrandList brands={brands} />
       {layoutDisplay === 'grid' ? (
-        <GridLayout
+        <SupplierProductGridLayout
           products={products}
           tags={tags}
-          onTagPress={handleTagPress}
+          onTagPress={onTagPress}
           onOrderPress={(product) =>
-            console.log('Add to Cart pressed', { product })
+            console.log(`${product.name} is added to Cart`)
           }
-          isRefreshing={isRefreshing}
-          onRefresh={() => onRefresh(derivedQueryOptions)}
-          onLoadMore={() => onLoadMore(derivedQueryOptions)}
-          loading={false}
+          loading={loading}
+          error={error}
         />
       ) : (
-        <ListLayout
+        <SupplierProductListLayout
           products={products}
           tags={tags}
-          onTagPress={handleTagPress}
+          onTagPress={onTagPress}
           onOrderPress={(product) =>
-            console.log('Add to Cart pressed', { product })
+            console.log(`${product.name} is added to Cart`)
           }
-          isRefreshing={isRefreshing}
-          onRefresh={() => onRefresh(derivedQueryOptions)}
-          onLoadMore={() => onLoadMore(derivedQueryOptions)}
-          loading={false}
+          loading={loading}
+          error={error}
         />
       )}
     </View>
