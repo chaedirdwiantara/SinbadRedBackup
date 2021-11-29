@@ -15,7 +15,7 @@ export const PromoSuggestion: FC<PromoSuggestionProps> = ({ loading }) => {
   if (loading) {
     return (
       <SkeletonAnimator>
-        <View style={{ height: 48, width: '100%', borderRadius: 8 }} />
+        <View style={{ height: 48, width: '100%' }} />
       </SkeletonAnimator>
     );
   }

@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import React, { FC, useState, useEffect, useReducer } from 'react';
+import { ScrollView, View, RefreshControl } from 'react-native';
 import {
   SnbContainer,
   SnbTabs,
@@ -14,24 +14,54 @@ import { SupplierHeader } from './SupplierHeader';
 import { SupplierInfo } from './SupplierInfo';
 import { SupplierProfile } from './SupplierProfile';
 import { SupplierProduct } from './SupplierProduct';
+import { SupplierBrandList } from './SupplierBrandList';
 /** === IMPORT FUNCTIONS ===  */
-import { useBottomAction, priceSortOptions } from '@core/functions/product';
-import { useProductListActions } from '@screen/product/functions';
-import { useProductContext } from 'src/data/contexts/product';
+import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
+import {
+  useBottomAction,
+  priceSortOptions,
+  useProductTags,
+} from '@core/functions/product';
+import { useBrandListAction } from '@screen/brand/functions';
+import {
+  useProductListActions,
+  useTagListActions,
+} from '@screen/product/functions';
+import { useBrandContext } from 'src/data/contexts/brand/useBrandContext';
+import { useProductContext, useTagContext } from 'src/data/contexts/product';
+/** === IMPORT TYPE === */
+import * as models from '@models';
 /** === IMPORT DUMMY === */
 import { supplierDummy } from './supplier.dummy';
 /** === COMPONENT === */
 const SupplierView: FC = () => {
   /** === HOOKS === */
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
-
+  const {
+    stateBrand: { list: brandListState },
+    dispatchBrand,
+  } = useBrandContext();
+  const { dispatchTag } = useTagContext();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
   } = useProductContext();
-  const { fetch, refresh, loadMore } = useProductListActions();
+  const { fetch: fetchBrands } = useBrandListAction();
+  const { fetch: fetchTags } = useTagListActions();
+  const { fetch, loadMore } = useProductListActions();
+
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const fetchProductFnWithTags = (currentTags: Array<string>) => {
+    fetch(dispatchProduct, {
+      ...productQueryOptions,
+      tags: currentTags,
+    });
+  };
+  const { tags, selectedTags, handleTagPress } = useProductTags(
+    fetchProductFnWithTags,
+  );
+  // Only for the sake of running fetching functions again if refresh is triggered
+  const [refreshCount, triggerRefresh] = useReducer((state) => state + 1, 0);
 
   const {
     sortModalVisible,
@@ -44,9 +74,41 @@ const SupplierView: FC = () => {
     layoutDisplay,
     handleActionClick,
   } = useBottomAction((queryOptions) => fetch(dispatchProduct, queryOptions), {
-    sellerId: supplierDummy.id,
     tags: selectedTags,
+    // sellerId query is not implemented yet at the back
+    // sellerId: supplierDummy.id,
   });
+
+  useEffect(() => {
+    fetchBrands(dispatchBrand, {
+      // sellerId query is not implemented yet at the back
+      // sellerId: supplierDummy.id
+    });
+  }, [refreshCount]);
+
+  useEffect(() => {
+    fetchTags(dispatchTag, {
+      // sellerId query is not implemented yet at the back
+      // sellerId: supplierDummy.id
+    });
+  }, [refreshCount]);
+
+  useEffect(() => {
+    fetch(dispatchProduct, {
+      // sellerId query is not implemented yet at the back
+      // sellerId: supplierDummy.id
+    });
+  }, [refreshCount]);
+  /** === DERIVED === */
+  const productQueryOptions: models.ProductListQueryOptions = {
+    sort: sortQuery?.sort,
+    sortBy: sortQuery?.sortBy,
+    minPrice: filterQuery?.minPrice,
+    maxPrice: filterQuery?.maxPrice,
+    tags: selectedTags,
+    // sellerId query is not implemented yet at the back
+    // sellerId: supplierDummy.id,
+  };
   /** === VIEW === */
   return (
     <SnbContainer color="white">
@@ -56,7 +118,29 @@ const SupplierView: FC = () => {
         onKeywordChange={(value: string) => setSearchKeyword(value)}
         cartBadge={10}
       />
-      <ScrollView style={{ flex: 1 }} stickyHeaderIndices={[1]}>
+      <ScrollView
+        stickyHeaderIndices={[1]}
+        refreshControl={
+          <RefreshControl
+            refreshing={productListState.refresh}
+            onRefresh={triggerRefresh}
+          />
+        }
+        onScroll={({ nativeEvent }) => {
+          if (scrollHasReachedEnd(nativeEvent)) {
+            if (!productListState.loading) {
+              loadMore(
+                dispatchProduct,
+                {
+                  skip: productListState.skip,
+                  canLoadMore: productListState.canLoadMore,
+                },
+                productQueryOptions,
+              );
+            }
+          }
+        }}
+        scrollEventThrottle={10}>
         <SupplierInfo
           name={supplierDummy.name}
           urbanCity={supplierDummy.urbanCity}
@@ -71,30 +155,20 @@ const SupplierView: FC = () => {
           />
         </View>
         {activeTabIndex === 0 ? (
-          <SupplierProduct
-            brands={supplierDummy.brands}
-            tags={supplierDummy.tags}
-            products={supplierDummy.products}
-            isRefreshing={false}
-            onRefresh={(queryOptions) => refresh(dispatchProduct, queryOptions)}
-            onFetch={(queryOptions) => fetch(dispatchProduct, queryOptions)}
-            onLoadMore={(queryOptions) =>
-              loadMore(
-                dispatchProduct,
-                {
-                  skip: productListState.skip,
-                  canLoadMore: productListState.canLoadMore,
-                },
-                queryOptions,
-              )
-            }
-            sellerId={supplierDummy.id}
-            layoutDisplay={layoutDisplay}
-            sortQuery={sortQuery}
-            filterQuery={filterQuery}
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-          />
+          <>
+            <SupplierBrandList
+              brands={brandListState.data}
+              loading={brandListState.loading}
+            />
+            <SupplierProduct
+              tags={tags}
+              products={productListState.data}
+              layoutDisplay={layoutDisplay}
+              onTagPress={handleTagPress}
+              loading={productListState.loading}
+              error={productListState.error}
+            />
+          </>
         ) : (
           <SupplierProfile
             description={supplierDummy.description}
