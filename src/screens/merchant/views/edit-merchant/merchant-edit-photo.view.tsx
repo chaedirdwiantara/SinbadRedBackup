@@ -62,6 +62,9 @@ function setImage(type: string) {
     case 'selfie': {
       return require('../../../../assets/images/selfie_image.png');
     }
+    case 'store': {
+      return require('../../../../assets/images/store_image.png');
+    }
     default:
       return ' ';
   }
