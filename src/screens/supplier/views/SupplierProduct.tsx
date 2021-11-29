@@ -14,6 +14,7 @@ interface SupplierProductProps {
   products: Array<models.ProductList>;
   layoutDisplay: LayoutDisplay;
   onTagPress: (index: number, tag: ITag) => void;
+  onOrderPress: (product: models.ProductList) => void;
   loading: boolean;
   error: models.ErrorProps | null;
 }
@@ -23,6 +24,7 @@ export const SupplierProduct: FC<SupplierProductProps> = ({
   products,
   layoutDisplay,
   onTagPress,
+  onOrderPress,
   loading,
   error,
 }) => {
@@ -33,9 +35,7 @@ export const SupplierProduct: FC<SupplierProductProps> = ({
           products={products}
           tags={tags}
           onTagPress={onTagPress}
-          onOrderPress={(product) =>
-            console.log(`${product.name} is added to Cart`)
-          }
+          onOrderPress={onOrderPress}
           loading={loading}
           error={error}
         />
@@ -44,9 +44,7 @@ export const SupplierProduct: FC<SupplierProductProps> = ({
           products={products}
           tags={tags}
           onTagPress={onTagPress}
-          onOrderPress={(product) =>
-            console.log(`${product.name} is added to Cart`)
-          }
+          onOrderPress={onOrderPress}
           loading={loading}
           error={error}
         />

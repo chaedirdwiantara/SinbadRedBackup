@@ -165,6 +165,10 @@ const SupplierView: FC = () => {
               products={productListState.data}
               layoutDisplay={layoutDisplay}
               onTagPress={handleTagPress}
+              onOrderPress={(product) => {
+                // Will be moved to it's own function later
+                console.log(`${product.name} is added to Cart`);
+              }}
               loading={productListState.loading}
               error={productListState.error}
             />
