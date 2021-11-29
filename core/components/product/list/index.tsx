@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -21,6 +21,7 @@ import {
   useBottomAction,
   priceSortOptions,
   useOrderModalVisibility,
+  useProductTags,
 } from '@core/functions/product';
 import {
   useCheckDataSupplier,
@@ -42,7 +43,6 @@ import {
   ProductHeaderType,
   CategoryTabsConfig,
   CategoryType,
-  ITag,
 } from './product-list-core.type';
 /** === TYPE === */
 interface ProductListProps {
@@ -84,11 +84,11 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
-  const [localTags, setLocalTags] = useState<Array<ITag>>([]);
-  const selectedTags: Array<string> = useMemo(
-    () =>
-      localTags.filter((tag) => tag.selected).map((filtered) => filtered.value),
-    [localTags],
+  const fetchProductFnWithTags = (currentTags: Array<string>) => {
+    onFetch({ ...derivedQueryOptions, tags: currentTags });
+  };
+  const { tags, selectedTags, handleTagPress } = useProductTags(
+    fetchProductFnWithTags,
   );
   const [productSelected, setProductSelected] =
     useState<models.ProductList | null>(null);
@@ -130,12 +130,7 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchShopingCart,
   } = useShopingCartContext();
-  const {
-    stateTag: {
-      list: { data: tagList },
-    },
-    dispatchTag,
-  } = useTagContext();
+  const { dispatchTag } = useTagContext();
   const { me } = useDataAuth();
   const {
     stateSupplier: {
@@ -206,19 +201,6 @@ const ProductList: FC<ProductListProps> = ({
 
     addToCartActions.fetch(dispatchShopingCart, params);
   };
-
-  const handleTagPress = (tagIndex: number) => {
-    const toggledTag = localTags[tagIndex];
-    toggledTag.selected = !toggledTag.selected;
-    const updatedTags = [...localTags];
-    updatedTags[tagIndex] = toggledTag;
-    const tags = updatedTags
-      .filter((tag) => tag.selected)
-      .map((filtered) => filtered.value);
-
-    setLocalTags(updatedTags);
-    onFetch({ ...derivedQueryOptions, tags });
-  };
   /** === EFFECT HOOKS === */
   useEffect(() => {
     if (!productLoading) {
@@ -251,14 +233,6 @@ const ProductList: FC<ProductListProps> = ({
       });
     }
   }, [selectedCategory, keywordSearched, withTags]);
-
-  useEffect(() => {
-    const tagsFromContext: Array<ITag> = tagList.map((tag) => ({
-      value: tag.tags,
-      selected: false,
-    }));
-    setLocalTags(tagsFromContext);
-  }, [tagList]);
 
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
@@ -322,7 +296,7 @@ const ProductList: FC<ProductListProps> = ({
           <GridLayout
             products={products}
             withTags={withTags}
-            tags={localTags}
+            tags={tags}
             onTagPress={handleTagPress}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
@@ -335,7 +309,7 @@ const ProductList: FC<ProductListProps> = ({
           <ListLayout
             products={products}
             withTags={withTags}
-            tags={localTags}
+            tags={tags}
             onTagPress={handleTagPress}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}

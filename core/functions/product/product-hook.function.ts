@@ -1,7 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
+import { useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 import {
@@ -10,7 +11,10 @@ import {
   SortIndex,
   PriceRange,
 } from '@core/components/product/list/BottomAction';
-import { EProductDisplayState } from '@core/components/product/list/product-list-core.type';
+import {
+  EProductDisplayState,
+  ITag,
+} from '@core/components/product/list/product-list-core.type';
 /** === TYPE ===  */
 export interface SortOption {
   name: string;
@@ -216,7 +220,7 @@ export const useProductDisplayState = ({
   productsLength,
 }: UseProductDisplayStateParams) => {
   const [displayState, setDisplayState] =
-    useState<EProductDisplayState>('empty');
+    useState<EProductDisplayState>('success');
 
   useEffect(() => {
     if (loading) {
@@ -231,4 +235,42 @@ export const useProductDisplayState = ({
   }, [loading, error, productsLength]);
 
   return displayState;
+};
+
+export const useProductTags = (
+  fetchProductFn: (tags: Array<string>) => void,
+) => {
+  const {
+    stateTag: {
+      list: { data: tagsFromContext },
+    },
+  } = useTagContext();
+  const [tags, setTags] = useState<Array<ITag>>([]);
+  const selectedTags: Array<string> = useMemo(
+    () => tags.filter((tag) => tag.selected).map((filtered) => filtered.value),
+    [tags],
+  );
+
+  useEffect(() => {
+    const formattedTags: Array<ITag> = tagsFromContext.map((tag) => ({
+      value: tag.tags,
+      selected: false,
+    }));
+    setTags(formattedTags);
+  }, [tagsFromContext]);
+
+  const handleTagPress = (tagIndex: number) => {
+    const toggledTag = tags[tagIndex];
+    toggledTag.selected = !toggledTag.selected;
+    const updatedTags = [...tags];
+    updatedTags[tagIndex] = toggledTag;
+    const tagsQuery = updatedTags
+      .filter((tag) => tag.selected)
+      .map((filtered) => filtered.value);
+
+    setTags(updatedTags);
+    fetchProductFn(tagsQuery);
+  };
+
+  return { tags, selectedTags, handleTagPress };
 };
