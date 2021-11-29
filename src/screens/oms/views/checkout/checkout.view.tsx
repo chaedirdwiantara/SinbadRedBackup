@@ -96,9 +96,12 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutData]);
 
   useEffect(() => {
-    console.log('[getCheckoutMaster]: ', getCheckoutMaster);
     /** => merge data reserve */
-    if (statePromo.reserveDiscount.detail.data !== null) {
+    if (
+      Array.isArray(getCheckoutMaster.invoices) &&
+      getCheckoutMaster.invoices.length > 0 &&
+      statePromo.reserveDiscount.detail.data !== null
+    ) {
       setReserveDiscount(statePromo.reserveDiscount.detail.data.promoMatch);
     }
   }, [getCheckoutMaster.invoices.length]);
