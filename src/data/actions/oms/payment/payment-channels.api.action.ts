@@ -14,3 +14,9 @@ export const listPaymentChannel = (
 ): models.IUpdatePaymentChannel => {
   return { type: types.UPDATE_PAYMENT_CHANNELS, payload };
 };
+
+export const updataInvoiceGroupId = (
+  payload: string,
+): models.IUpdateInvoiceChannel => {
+  return { type: types.UPDATE_INVOICE_GROUP_ID, payload };
+};

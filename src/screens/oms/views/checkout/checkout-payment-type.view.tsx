@@ -4,8 +4,8 @@ import React, { FC } from 'react';
 import { View, TouchableOpacity, Image } from 'react-native';
 import { SnbText, SnbDivider, color, SnbIcon } from 'react-native-sinbad-ui';
 import {
-  usePaymentTypeModal,
   usePaymentAction,
+  usePaymentChannelsData,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
@@ -28,12 +28,11 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
     contexts.PaymentContext,
   );
   const lastTypeChannel = statePayment.paymentLastChannelDetail;
-  const dataLastTypeChannel = lastTypeChannel?.data?.paymentTypeChannels;
   const loadingLastTypeChanel = lastTypeChannel?.loading;
-  const invoiceGroupId = 'abcdef12345';
+  const paymentChannelData = usePaymentChannelsData();
+  const invoiceGroupId = data?.invoiceGroupId;
   const totalCartParcel = 100000;
   const page = 1;
-  console.log(data.paymentType);
 
   return (
     <View style={{ marginTop: 16 }}>
@@ -50,6 +49,7 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
               page,
             );
             openModalPaymentType(false);
+            paymentChannelData.updateInvoiceGroupId(invoiceGroupId);
           }}
           style={CheckoutStyle.selectPaymentButton}>
           {data.paymentType && data.paymentChannel ? (

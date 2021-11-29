@@ -25,6 +25,16 @@ export const paymentChannelsModal = simplifyReducer(initialState, {
       paymentType,
     };
   },
+  [types.UPDATE_INVOICE_GROUP_ID](
+    state = initialState,
+    { payload }: models.IUpdateInvoiceChannel,
+  ) {
+    const invoiceGroupId = payload;
+    return {
+      ...state,
+      invoiceGroupId,
+    };
+  },
   [types.UPDATE_PAYMENT_CHANNELS](
     state = initialState,
     { payload }: models.IUpdatePaymentChannel,

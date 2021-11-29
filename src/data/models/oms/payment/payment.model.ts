@@ -129,3 +129,8 @@ export interface ILastChannelCreateProps {
   invoiceGroupId: string;
   totalCartParcel: number;
 }
+
+export interface IUpdateInvoiceChannel {
+  type: string;
+  payload: string;
+}
