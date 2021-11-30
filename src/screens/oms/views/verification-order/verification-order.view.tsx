@@ -62,34 +62,38 @@ const OmsVerificationOrderView: FC = () => {
   const { getCartSelected } = useCartSelected();
   /** => get voucher data */
   const voucherData = useDataVoucher();
+  /** => if POST reserved-discount & reserved-stock both fail */
   React.useEffect(() => {
-    /** => check if both POST loading done */
+    /** => if POST reserved-discount error */
     if (
-      !statePromo.reserveDiscount.create.loading &&
+      statePromo.reserveDiscount.create.error !== null &&
       !stateReserveStock.create.loading
     ) {
-      /** => if POST reserved-discount error */
-      if (statePromo.reserveDiscount.create.error !== null) {
-        /** => if error voucher */
-        if (statePromo.reserveDiscount.create.error.code === 140037) {
-          setErrorVoucher(true);
-        }
+      /** => if error voucher */
+      if (statePromo.reserveDiscount.create.error.code === 140037) {
+        setErrorVoucher(true);
       }
-      /** => if POST reserved-stock error */
-      /** => if POST both reserved-discount & reserved-stock success */
-      if (
-        statePromo.reserveDiscount.create.data !== null &&
-        stateReserveStock.create.data !== null
-      ) {
-        /** => fetch GET `reserved-discount` */
-        reserveDiscountAction.detail(
-          dispatchPromo,
-          statePromo.reserveDiscount.create.data.id,
-        );
-        /** => fetch GET `reserved stock */
-      }
+      /** => if error fetch */
+      // do something
     }
-  }, [statePromo.reserveDiscount.create, stateReserveStock.create]);
+    /** => if POST reserved-stock error */
+    // do something
+  }, [statePromo.reserveDiscount.create.error, stateReserveStock.create.error]);
+  /** => if POST reserved-discount & reserved-stock both success */
+  React.useEffect(() => {
+    if (
+      statePromo.reserveDiscount.create.data !== null &&
+      stateReserveStock.create.data !== null
+    ) {
+      /** => fetch GET `reserved-discount` */
+      reserveDiscountAction.detail(
+        dispatchPromo,
+        statePromo.reserveDiscount.create.data.id,
+      );
+      /** => fetch GET `reserved stock */
+      // do something
+    }
+  }, [statePromo.reserveDiscount.create.data, stateReserveStock.create.data]);
 
   /** => effect for listen GET reserved-discount */
   React.useEffect(() => {
