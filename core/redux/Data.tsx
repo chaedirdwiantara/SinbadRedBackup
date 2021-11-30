@@ -31,7 +31,6 @@ const useDataCart = () => {
 const useDataCheckout = () => {
   return useSelector((state: RootState) => state.checkout);
 };
-
 const useDataPaymentChannels = () => {
   return useSelector((state: RootState) => state.paymentChannelsModal);
 };
