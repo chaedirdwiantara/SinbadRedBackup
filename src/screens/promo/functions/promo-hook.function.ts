@@ -101,8 +101,13 @@ const useCheckAllPromoPaymentAction = () => {
       dispatch(Actions.getCheckAllPromoPaymentReset());
       dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
     },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveDiscountReset());
+      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
+    },
   };
 };
+
 /** === EXPORT === */
 export {
   usePromoPaymentAction,

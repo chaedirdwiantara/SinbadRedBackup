@@ -13,7 +13,10 @@ import LoadingPage from '@core/components/LoadingPage';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import { useReserveDiscountAction } from '@screen/promo/functions';
+import {
+  useCheckAllPromoPaymentAction,
+  useReserveDiscountAction,
+} from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -25,7 +28,11 @@ import {
   CartSelectedBrand,
   CartSelectedProduct,
 } from '@models';
-import { goToVerificationOrder, getTotalProducts } from '../../functions';
+import {
+  goToVerificationOrder,
+  getTotalProducts,
+  goToCheckout,
+} from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
@@ -95,14 +102,50 @@ const OmsShoppingCartView: FC = () => {
    * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
    */
-  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const {
+    dispatchPromo,
+    statePromo: { checkAllPromoPayment: stateCheckAllPromoPayment },
+  } = React.useContext(contexts.PromoContext);
   const { dispatchReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
+  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
+  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
     reserveDiscountAction.del(dispatchPromo, '1');
     reserveStockAction.del(dispatchReserveStock, '1');
+    // checkPromoPaymentAction.list(dispatchPromo, {
+    //   paymentTypeId: 1,
+    //   paymentChannelId: [1, 2, 3],
+    //   parcelPrice: 9000,
+    //   invoiceGroupId: '2',
+    //   sellerId: 1,
+    // });
+    checkAllPromoPaymentAction.create(dispatchPromo, [
+      {
+        invoiceGroupId: '4',
+        cartParcelId: '1',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+      {
+        invoiceGroupId: '5',
+        cartParcelId: '2',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+    ]);
   }, []);
+  React.useEffect(() => {
+    if (stateCheckAllPromoPayment.create.data !== null) {
+      checkAllPromoPaymentAction.list(
+        dispatchPromo,
+        stateCheckAllPromoPayment.create.data.id,
+      );
+    }
+  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -214,6 +257,7 @@ const OmsShoppingCartView: FC = () => {
     verificationOrderCreate(dispatchVerificationOrder, {
       data: paramsVerificationCreate,
     });
+    goToCheckout();
   };
   /** === VIEW === */
   /** => Main */

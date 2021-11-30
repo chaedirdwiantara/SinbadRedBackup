@@ -52,7 +52,6 @@ const dummySKU = [
       'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
   },
 ];
-
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -74,8 +73,8 @@ const OmsCheckoutView: FC = () => {
   const {
     setInvoiceBrand,
     getCheckoutMaster,
-    setPaymentChannel,
     setReserveDiscount,
+    setPaymentChannel,
   } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
   const { statePayment, dispatchPayment } = React.useContext(
