@@ -3,22 +3,21 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import {
-  useTermsAndConditionsModal,
-  usePaymentAction,
-  handleTotalPrice,
-} from '../../functions/checkout';
+import { usePaymentAction, handleTotalPrice } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
 
 interface CheckoutBottomViewProps {
   data: models.IInvoiceCheckout[];
+  openTCModal: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
+  data,
+  openTCModal,
+}) => {
   /** === HOOK === */
-  const termsAndConditionModal = useTermsAndConditionsModal();
   const paymentAction = usePaymentAction();
   const { dispatchPayment } = React.useContext(contexts.PaymentContext);
 
@@ -28,13 +27,17 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
       orderParcels: data.map((invoiceGroup) => {
         return {
           invoiceGroupId: invoiceGroup.invoiceGroupId,
-          paymentTypeId: invoiceGroup.paymentType?.id,
-          paymentChannelId: invoiceGroup.paymentChannel?.id,
+          paymentTypeId: invoiceGroup.paymentType?.id ?? null,
+          paymentChannelId: invoiceGroup.paymentChannel?.id ?? null,
         };
       }),
     },
   };
 
+  const pressButton = () => {
+    openTCModal();
+    paymentAction.tCCreate(dispatchPayment, dataPostTC);
+  };
   const content = () => {
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
@@ -47,10 +50,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
     <View style={{ height: 75 }}>
       <SnbButton.Content
         type={'primary'}
-        onPress={() => {
-          paymentAction.tCCreate(dispatchPayment, dataPostTC);
-          termsAndConditionModal.setOpen(true);
-        }}
+        onPress={pressButton}
         content={content()}
         title={'Buat Pesanan'}
       />

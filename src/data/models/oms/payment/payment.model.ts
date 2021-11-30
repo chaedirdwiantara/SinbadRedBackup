@@ -134,3 +134,15 @@ export interface IUpdateInvoiceChannel {
   type: string;
   payload: string;
 }
+
+export interface IPromoPaymentChannel {
+  paymentChannelId: number;
+  promPaymentDescription: boolean | null;
+  promoPaymentAmount: number | null;
+  promoPaymentAvailable: number | null;
+}
+
+export interface IUpdatePromoPaymentChannel {
+  type: string;
+  payload: IPromoPaymentChannel[];
+}

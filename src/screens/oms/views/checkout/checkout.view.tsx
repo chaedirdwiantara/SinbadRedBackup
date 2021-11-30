@@ -22,6 +22,7 @@ import {
   usePaymentTypeModal,
   usePaymentChannelModal,
   usePaymentChannelsData,
+  useTermsAndConditionsModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 
@@ -59,6 +60,7 @@ const OmsCheckoutView: FC = () => {
   const paymentTypeModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
   const paymentChannelData = usePaymentChannelsData();
+  const paymentTCModal = useTermsAndConditionsModal();
   const {
     stateCheckout: {
       checkout: {
@@ -69,14 +71,18 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
-  const { setInvoiceBrand, getCheckoutMaster, setReserveDiscount } =
-    useCheckoutMaster();
+  const {
+    setInvoiceBrand,
+    getCheckoutMaster,
+    setPaymentChannel,
+    setReserveDiscount,
+  } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
   const { statePromo } = React.useContext(contexts.PromoContext);
-  const { paymentChannelsList } = statePayment;
 
   /** Set Loading Page */
   useEffect(() => {
@@ -108,21 +114,24 @@ const OmsCheckoutView: FC = () => {
 
   React.useEffect(() => {
     const invoices = getCheckoutMaster?.invoices;
-    const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
-      (item) => {
-        return {
-          invoiceGroupId: item.invoiceGroupId,
-          totalCartParcel:
-            item.totalPriceAfterTax - item?.totalPromoSellerAndVoucher,
-        };
-      },
-    );
-    const dataLastChannel = {
-      data: {
-        cartParcels,
-      },
-    };
-    paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
+    if (invoices.length > 0) {
+      const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
+        (item) => {
+          return {
+            invoiceGroupId: item.invoiceGroupId,
+            totalCartParcel:
+              item.totalPriceAfterTax - (item?.totalPromoSellerAndVoucher ?? 0),
+          };
+        },
+      );
+      const dataLastChannel = {
+        data: {
+          cartParcels,
+        },
+      };
+
+      paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
+    }
   }, []);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
@@ -135,7 +144,10 @@ const OmsCheckoutView: FC = () => {
   React.useEffect(() => {
     const lastChannelId = statePayment?.paymentLastChannelCreate?.data?.id;
     if (lastChannelId) {
-      paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
+      paymentAction.lastChannelDetail(
+        dispatchPayment,
+        '619483869b2758b18d3d207f',
+      );
     }
   }, [statePayment.paymentLastChannelCreate]);
   /** => insert data payment channel to payment channel modal master */
@@ -144,7 +156,14 @@ const OmsCheckoutView: FC = () => {
       paymentChannelData.setPaymentChannels(paymentChannelsList.data);
     }
   }, [paymentChannelsList]);
-
+  /** => insert data last payment channel to checkout master */
+  useEffect(() => {
+    const dataLastPaymentChannel =
+      paymentLastChannelDetail?.data?.paymentTypeChannels;
+    if (dataLastPaymentChannel) {
+      setPaymentChannel(dataLastPaymentChannel);
+    }
+  }, [paymentLastChannelDetail]);
   const invoiceGroupId = '123';
   const totalCartParcel = 3456;
   const paymentTypeId = 1;
@@ -168,6 +187,9 @@ const OmsCheckoutView: FC = () => {
     paymentChannelsModal.setOpen(false);
     paymentTypeModal.setOpen(true);
   };
+
+  console.log(paymentTCModal.isOpen, 'OPEN TC MODAL');
+
   /** === VIEW === */
   return (
     <SnbContainer color="grey">
@@ -190,7 +212,10 @@ const OmsCheckoutView: FC = () => {
                 />
               ))}
           </ScrollView>
-          <CheckoutBottomView data={getCheckoutMaster.invoices} />
+          <CheckoutBottomView
+            data={getCheckoutMaster.invoices}
+            openTCModal={() => paymentTCModal.setOpen(true)}
+          />
           <ModalPaymentType
             isOpen={paymentTypeModal.isOpen}
             close={paymentTypeModal.close}
@@ -202,7 +227,10 @@ const OmsCheckoutView: FC = () => {
             close={closePaymentChannel}
           />
           <ModalParcelDetail />
-          <ModalTermAndCondition />
+          <ModalTermAndCondition
+            isOpen={paymentTCModal.isOpen}
+            close={() => paymentTCModal.setOpen(false)}
+          />
         </>
       )}
     </SnbContainer>
