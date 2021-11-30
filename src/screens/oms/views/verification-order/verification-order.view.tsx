@@ -30,6 +30,7 @@ import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-ca
 import moment from 'moment';
 import { useDataVoucher } from '@core/redux/Data';
 import { ErrorPromoModal } from './ErrorPromoModal';
+import { ErrorVoucherModal } from './ErrorVoucherModal';
 import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
@@ -161,7 +162,7 @@ const OmsVerificationOrderView: FC = () => {
               {renderDiscountDetail(
                 item.promos,
                 item.vouchers,
-                item.priceAfterDiscount,
+                item.promoPrice + item.voucherPrice,
                 index,
               )}
             </React.Fragment>
@@ -450,6 +451,7 @@ const OmsVerificationOrderView: FC = () => {
         visible={isErrorPromo}
         onBackToCart={() => {
           setErrorPromo(false);
+          goBack();
         }}
         onContinueToPayment={() => {
           setErrorPromo(false);
@@ -460,6 +462,18 @@ const OmsVerificationOrderView: FC = () => {
         bonusPromoList={
           statePromo.reserveDiscount.detail.data.promoNotMatch.bonus
         }
+      />
+    );
+  };
+  /** => error voucher modal */
+  const renderErrorVoucherModal = () => {
+    return (
+      <ErrorVoucherModal
+        visible={isErrorVoucher}
+        onBackToCart={() => {
+          setErrorVoucher(false);
+          goBack();
+        }}
       />
     );
   };
@@ -479,6 +493,7 @@ const OmsVerificationOrderView: FC = () => {
       )}
       {/* modal */}
       {renderErrorPromoModal()}
+      {renderErrorVoucherModal()}
     </SnbContainer>
   );
 };

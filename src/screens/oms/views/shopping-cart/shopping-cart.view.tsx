@@ -173,23 +173,27 @@ const OmsShoppingCartView: FC = () => {
             });
           }
         });
-        /** => insert brand selected */
-        brandsSelected.push({
-          brandId: brand.brandId,
-          products: productsSelected,
+        if (productsSelected.length > 0) {
+          /** => insert brand selected */
+          brandsSelected.push({
+            brandId: brand.brandId,
+            products: productsSelected,
+          });
+        }
+      });
+      if (brandsSelected.length > 0) {
+        /** => insert data selected */
+        dataSelected.push({
+          invoiceGroupId: invoiceGroup.invoiceGroupId,
+          portfolioId: invoiceGroup.portfolioId,
+          brands: brandsSelected,
+          sellerId: invoiceGroup.sellerId,
+          channelId: invoiceGroup.channelId,
+          groupId: invoiceGroup.groupId,
+          typeId: invoiceGroup.typeId,
+          clusterId: invoiceGroup.clusterId,
         });
-      });
-      /** => insert data selected */
-      dataSelected.push({
-        invoiceGroupId: invoiceGroup.invoiceGroupId,
-        portfolioId: invoiceGroup.portfolioId,
-        brands: brandsSelected,
-        sellerId: invoiceGroup.sellerId,
-        channelId: invoiceGroup.channelId,
-        groupId: invoiceGroup.groupId,
-        typeId: invoiceGroup.typeId,
-        clusterId: invoiceGroup.clusterId,
-      });
+      }
     });
 
     const paramsCartSelected: CartSelected = {
