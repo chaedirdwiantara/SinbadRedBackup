@@ -28,6 +28,7 @@ export const DELETE_RESERVE_DISCOUNT_FAILED = 'DeleteReserveDiscountFailed';
 export const CREATE_RESERVE_DISCOUNT_PROCESS = 'CreateReserveDiscountProcess';
 export const CREATE_RESERVE_DISCOUNT_FAILED = 'CreateReserveDiscountFailed';
 export const CREATE_RESERVE_DISCOUNT_SUCCESS = 'CreateReserveDiscountSuccess';
+export const CREATE_RESERVE_DISCOUNT_RESET = 'CreateReserveDiscountReset';
 // DETAIL RESERVE DISCOUNT
 export const DETAIL_RESERVE_DISCOUNT_PROCESS = 'DetailReserveDiscountProcess';
 export const DETAIL_RESERVE_DISCOUNT_FAILED = 'DetailReserveDiscountFailed';
