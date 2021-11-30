@@ -4,7 +4,6 @@ import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
 export type PaymentLastChannelDetailInitialProps = models.DetailItemProps<{}>;
-
 /** === INITIAL STATE HERE === */
 export const paymentLastChannelDetailInitialState: PaymentLastChannelDetailInitialProps =
   {
