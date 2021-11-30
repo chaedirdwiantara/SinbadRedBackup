@@ -14,7 +14,7 @@ export interface IPromoSeller {
   id: number;
   name: string;
   benefitType: string;
-  amount: number;
+  amount: number | null;
   productName: string | null;
   bonusQty: number | null;
 }
