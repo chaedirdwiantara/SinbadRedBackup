@@ -106,6 +106,7 @@ export interface IPaymentChannels {
   type: IPaymentChannelsDetail[];
 }
 export interface IPaymentChannelsModal {
+  totalCartParcel: number | 0;
   invoiceGroupId: number | null;
   paymentType: ISelectedPaymentType | null;
   paymentChannels: IPaymentChannels[];
@@ -145,4 +146,9 @@ export interface IPromoPaymentChannel {
 export interface IUpdatePromoPaymentChannel {
   type: string;
   payload: IPromoPaymentChannel[];
+}
+
+export interface IUpdateTotalCartParcel {
+  type: string;
+  payload: number;
 }

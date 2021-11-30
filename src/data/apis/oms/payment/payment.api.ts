@@ -7,8 +7,8 @@ import * as models from '@models';
 const paymentTypesList = (data: models.IPaymentTypeProcessProps) => {
   const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `types?invoiceGroupId=${data.invoiceGroupId}&totalCartParcel=${data.totalCartParcel}&page=${data.page}`;
-  return apiMappingMock<models.IPaymentTypesList[]>(
-    mockHost,
+  return apiMapping<models.IPaymentTypesList[]>(
+    'auth',
     path,
     'payment',
     'v1',
@@ -19,8 +19,8 @@ const paymentTypesList = (data: models.IPaymentTypeProcessProps) => {
 const paymentChannelsList = (data: models.IPaymentChannelProcessProps) => {
   const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `channels?invoiceGroupId=${data.invoiceGroupId}&paymentTypeId=${data.paymentTypeId}&totalCartParcel=${data.totalCartParcel}`;
-  return apiMappingMock<models.IPaymentChannelsList[]>(
-    mockHost,
+  return apiMapping<models.IPaymentChannelsList[]>(
+    'auth',
     path,
     'payment',
     'v1',
@@ -65,8 +65,8 @@ const paymentLastChannelCreate = (data: {}) => {
 const paymentLastChannelDetail = (data: models.DetailProcessProps) => {
   const mockHost = 'https://e83f8833-2b3c-4ebe-8fbb-e0d4b8e30b81.mock.pstmn.io';
   const path = `data/${data.id}`;
-  return apiMappingMock<models.IPaymentTermsAndConditionDetailProps>(
-    mockHost,
+  return apiMapping<models.IPaymentTermsAndConditionDetailProps>(
+    'auth',
     path,
     'payment',
     'v1',
