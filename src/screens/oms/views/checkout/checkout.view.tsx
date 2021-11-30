@@ -111,10 +111,11 @@ const OmsCheckoutView: FC = () => {
       console.log('ERROR CHECKOUT: ', checkoutError);
     }
   }, [checkoutError]);
-
+  /** for post last payment channel */
   React.useEffect(() => {
     const invoices = getCheckoutMaster?.invoices;
-    if (invoices.length > 0) {
+
+    if (invoices.length > 0 && !paymentLastChannelDetail.data) {
       const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
         (item) => {
           return {
@@ -132,7 +133,7 @@ const OmsCheckoutView: FC = () => {
 
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
-  }, []);
+  }, [getCheckoutMaster.invoices]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
     const dataTC = statePayment?.paymentTCCreate.data;
@@ -144,10 +145,7 @@ const OmsCheckoutView: FC = () => {
   React.useEffect(() => {
     const lastChannelId = statePayment?.paymentLastChannelCreate?.data?.id;
     if (lastChannelId) {
-      paymentAction.lastChannelDetail(
-        dispatchPayment,
-        '619483869b2758b18d3d207f',
-      );
+      paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
     }
   }, [statePayment.paymentLastChannelCreate]);
   /** => insert data payment channel to payment channel modal master */
@@ -164,31 +162,31 @@ const OmsCheckoutView: FC = () => {
       setPaymentChannel(dataLastPaymentChannel);
     }
   }, [paymentLastChannelDetail]);
-  const invoiceGroupId = '123';
-  const totalCartParcel = 3456;
-  const paymentTypeId = 1;
-
-  const selectedPaymentType = () => {
+  /** => function after select payment type */
+  const selectedPaymentType = (item: any) => {
+    const invoiceGroupId = paymentChannelData?.invoiceGroupId;
+    const totalCartParcel = paymentChannelData?.totalCartParcel;
+    const paymentTypeId = item?.id;
     paymentChannelsModal.setOpen(true);
     paymentTypeModal.setOpen(false);
-    paymentAction.channelsList(
-      dispatchPayment,
-      invoiceGroupId,
-      totalCartParcel,
-      paymentTypeId,
-    );
+    if (invoiceGroupId && paymentTypeId) {
+      paymentAction.channelsList(
+        dispatchPayment,
+        invoiceGroupId,
+        totalCartParcel,
+        paymentTypeId,
+      );
+    }
   };
-
+  /** => for close payment channel modal */
   const closePaymentChannel = () => {
     paymentChannelsModal.setOpen(false);
   };
-
+  /** for back from payment channel modal */
   const backModalPaymentChannel = () => {
     paymentChannelsModal.setOpen(false);
     paymentTypeModal.setOpen(true);
   };
-
-  console.log(paymentTCModal.isOpen, 'OPEN TC MODAL');
 
   /** === VIEW === */
   return (

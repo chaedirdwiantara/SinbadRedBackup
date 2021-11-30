@@ -26,3 +26,9 @@ export const updatePromoPaymentChannel = (
 ): models.IUpdatePromoPaymentChannel => {
   return { type: types.UPDATE_PROMO_PAYMENT_CHANNEL, payload };
 };
+
+export const updataTotalCartParcel = (
+  payload: number,
+): models.IUpdateTotalCartParcel => {
+  return { type: types.UPDATE_TOTAL_CART_PARCEL, payload };
+};

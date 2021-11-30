@@ -77,10 +77,7 @@ const OmsVerificationOrderView: FC = () => {
       }
       /** => if POST reserved-stock error */
       /** => if POST both reserved-discount & reserved-stock success */
-      if (
-        statePromo.reserveDiscount.create.data !== null &&
-        stateReserveStock.create.data !== null
-      ) {
+      if (statePromo.reserveDiscount.create.data !== null) {
         /** => fetch GET `reserved-discount` */
         reserveDiscountAction.detail(
           dispatchPromo,

@@ -27,11 +27,14 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
-  const lastTypeChannel = statePayment.paymentLastChannelDetail;
-  const loadingLastTypeChanel = lastTypeChannel?.loading;
+
+  const { paymentLastChannelCreate, paymentLastChannelDetail } = statePayment;
+  const loadingLastTypeChanel =
+    paymentLastChannelDetail?.loading || paymentLastChannelCreate?.loading;
   const paymentChannelData = usePaymentChannelsData();
   const invoiceGroupId = data?.invoiceGroupId;
-  const totalCartParcel = 100000;
+  const totalCartParcel =
+    (data.totalPriceAfterTax ?? 0) - (data.totalPromoSellerAndVoucher ?? 0);
   const page = 1;
 
   return (
@@ -50,6 +53,7 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
             );
             openModalPaymentType(false);
             paymentChannelData.updateInvoiceGroupId(invoiceGroupId);
+            paymentChannelData.updateTotalCartParcel(totalCartParcel);
           }}
           style={CheckoutStyle.selectPaymentButton}>
           {data.paymentType && data.paymentChannel ? (
