@@ -13,10 +13,17 @@ import { useTermsAndConditionsModal } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { IPaymentChannel, IPaymentType } from '@model/oms';
+
+interface ModalTermAndCondition {
+  isOpen: boolean;
+  close: () => void;
+}
 /** === COMPONENT === */
-export const ModalTermAndCondition: FC = () => {
+export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
+  isOpen,
+  close,
+}) => {
   /** === HOOK === */
-  const termsAndConditionModal = useTermsAndConditionsModal();
   const { statePayment } = React.useContext(contexts.PaymentContext);
 
   const paymentTypesTermsConditions = () => {
@@ -55,7 +62,7 @@ export const ModalTermAndCondition: FC = () => {
           disabled={false}
           type={'primary'}
           onPress={() => {
-            termsAndConditionModal.setOpen(false);
+            close;
             goToCheckoutSuccess();
           }}
         />
@@ -79,10 +86,10 @@ export const ModalTermAndCondition: FC = () => {
   };
   return (
     <SnbBottomSheet
-      open={termsAndConditionModal.isOpen}
+      open={isOpen}
       content={content()}
       title={'Syarat & Ketentuan'}
-      closeAction={() => termsAndConditionModal.setOpen(false)}
+      closeAction={close}
       actionIcon={'close'}
     />
   );

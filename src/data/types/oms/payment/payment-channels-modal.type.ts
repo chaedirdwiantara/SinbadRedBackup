@@ -8,3 +8,5 @@ export const SELECTED_PAYMENT_CHANNEL = 'SelectedPaymentChannel';
 export const UPDATE_PAYMENT_CHANNELS = 'UpdatePaymentChannels';
 /** => update invoice group id */
 export const UPDATE_INVOICE_GROUP_ID = 'UpdateInvoiceGroupId';
+/** => const update promo data */
+export const UPDATE_PROMO_PAYMENT_CHANNEL = 'UpdatePromoPaymentChannel';

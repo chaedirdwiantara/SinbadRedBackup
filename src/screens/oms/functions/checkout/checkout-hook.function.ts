@@ -61,6 +61,9 @@ const usePaymentChannelsData = () => {
     updateInvoiceGroupId: (id: string) => {
       dispatch(Actions.updataInvoiceGroupId(id));
     },
+    updatePromoPaymentChannel: (data: models.IPromoPaymentChannel[]) => {
+      dispatch(Actions.updatePromoPaymentChannel(data));
+    },
     paymentType: paymentType,
     paymentChannels: paymentChannels,
     invoiceGroupId: invoiceGroupId,
