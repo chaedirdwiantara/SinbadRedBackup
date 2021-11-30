@@ -11,14 +11,17 @@ function* storeDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.StoreDetail> = yield call(
       () => {
+        //get detail store not send store id. store id is handled at backend
         return UserApi.storeDetail();
       },
     );
     yield action.contextDispatch(ActionCreators.storeDetailSuccess(response));
     yield put(ActionCreators.storeDetailSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.storeDetailFailed(error));
-    yield put(ActionCreators.storeDetailFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.storeDetailFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.storeDetailFailed(error as models.ErrorProps));
   }
 }
 /** => change password  */
@@ -31,9 +34,11 @@ function* changePassword(action: models.UpdateProcessAction) {
       ActionCreators.changePasswordSuccess(response),
     );
     yield put(ActionCreators.changePasswordSuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.changePasswordFailed(error));
-    yield put(ActionCreators.changePasswordFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.changePasswordFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.changePasswordFailed(error as models.ErrorProps));
   }
 }
 /** === LISTEN FUNCTION === */

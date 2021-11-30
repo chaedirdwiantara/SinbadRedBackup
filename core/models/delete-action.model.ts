@@ -1,19 +1,19 @@
 /** === IMPORT EXTERNAL MODEL === */
-import { UpdateSuccessProps } from './update.model';
+import { DeleteSuccessProps, DeleteProcessProps } from './delete.model';
 import { ErrorProps } from './error.model';
 /** === PROCESS === */
-export interface UpdateProcessAction<T> {
+export interface DeleteProcessAction {
   type: string;
-  payload: T;
+  payload: DeleteProcessProps;
   contextDispatch: (action: any) => any;
 }
 /** === SUCCESS === */
-export interface UpdateSuccessAction {
+export interface DeleteSuccessAction {
   type: string;
-  payload: UpdateSuccessProps;
+  payload: DeleteSuccessProps;
 }
 /** === FAILED === */
-export interface UpdateFailedAction {
+export interface DeleteFailedAction {
   type: string;
   payload: ErrorProps;
 }
