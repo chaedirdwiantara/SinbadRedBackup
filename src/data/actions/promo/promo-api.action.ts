@@ -194,7 +194,7 @@ export const createReserveDiscountReset = (
   contextDispatch: (action: any) => any,
 ) => {
   contextDispatch({
-    type: types.DETAIL_RESERVE_DISCOUNT_RESET,
+    type: types.CREATE_RESERVE_DISCOUNT_RESET,
   });
   return { type: types.CREATE_RESERVE_DISCOUNT_RESET };
 };

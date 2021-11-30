@@ -197,6 +197,11 @@ const OmsCheckoutView: FC = () => {
     backToCartModal.setOpen(false);
     reserveDiscountAction.resetCreate(dispatchPromo);
     reserveDiscountAction.resetDetail(dispatchPromo);
+    /**
+     * TO DO:
+     * - add reset for reserveStock create
+     * - add reset for reserveStock detail
+     */
     backToCart();
   };
 
