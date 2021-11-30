@@ -41,14 +41,6 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorStock, setErrorStock] = React.useState(false);
   const [isErrorNetwork, setErrorNetwork] = React.useState();
 
-  const { verificationCreateReset } = useVerficationOrderAction();
-
-  React.useEffect(() => {
-    return () => {
-      verificationCreateReset();
-    };
-  });
-
   /**
    * VERIFICATION-ORDER SECTION
    */

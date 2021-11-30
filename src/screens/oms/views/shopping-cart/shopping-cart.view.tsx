@@ -70,8 +70,11 @@ const OmsShoppingCartView: FC = () => {
    */
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
-  const { verificationOrderCreate, verificationOrderDetail } =
-    useVerficationOrderAction();
+  const {
+    verificationOrderCreate,
+    verificationOrderDetail,
+    verificationCreateReset,
+  } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
     if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
@@ -148,6 +151,10 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
+
+    return () => {
+      verificationCreateReset(dispatchVerificationOrder);
+    };
   }, []);
 
   /** Listen changes cartState */
@@ -251,7 +258,6 @@ const OmsShoppingCartView: FC = () => {
     /** => fetch post update cart */
     cartUpdateActions.fetch(dispatchShopingCart, params);
     /** => update state verification cart */
-    console.log(paramsVerificationCreate);
     setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {

@@ -64,12 +64,16 @@ const useReserveDiscountAction = () => {
       contextDispatch: (action: any) => any,
       data: models.ReserveDiscountPostPayload,
     ) => {
-      dispatch(Actions.createReserveDiscountReset());
       dispatch(Actions.createReserveDiscountProcess(contextDispatch, data));
     },
     detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.detailReserveDiscountReset());
       dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
+    },
+    resetCreate: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createReserveDiscountReset(contextDispatch));
+    },
+    resetDetail: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.detailReserveDiscountReset(contextDispatch));
     },
   };
 };

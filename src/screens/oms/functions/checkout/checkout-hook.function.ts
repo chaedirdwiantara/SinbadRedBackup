@@ -199,6 +199,16 @@ const usePaymentAction = () => {
     },
   };
 };
+/** => back to cart modal confirmation */
+const useBackToCartModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 
 /** === EXPORT === */
 export {
@@ -210,6 +220,7 @@ export {
   usePaymentChannelModal,
   usePaymentAction,
   usePaymentChannelsData,
+  useBackToCartModal,
 };
 /**
  * ================================================================
