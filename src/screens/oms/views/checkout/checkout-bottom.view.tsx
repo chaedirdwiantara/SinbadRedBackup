@@ -40,9 +40,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   };
 
   const pressButton = () => {
-    const checker = (x) =>
-      x.filter((e) => e.paymentTypeDetail && e.paymentMethodDetail).length ===
-      x.length;
     openTCModal();
     paymentAction.tCCreate(dispatchPayment, dataPostTC);
   };
