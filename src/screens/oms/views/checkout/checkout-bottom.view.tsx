@@ -3,12 +3,7 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import {
-  useTermsAndConditionsModal,
-  usePaymentAction,
-  handleTotalPrice,
-  useCheckoutMaster,
-} from '../../functions/checkout';
+import { usePaymentAction, handleTotalPrice } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -40,9 +35,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   };
 
   const pressButton = () => {
-    const checker = (x) =>
-      x.filter((e) => e.paymentTypeDetail && e.paymentMethodDetail).length ===
-      x.length;
     openTCModal();
     paymentAction.tCCreate(dispatchPayment, dataPostTC);
   };
