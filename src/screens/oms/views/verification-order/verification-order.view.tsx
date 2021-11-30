@@ -31,7 +31,8 @@ import moment from 'moment';
 import { useDataVoucher } from '@core/redux/Data';
 import { ErrorPromoModal } from './ErrorPromoModal';
 import { ErrorVoucherModal } from './ErrorVoucherModal';
-import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
+import { useDispatch } from 'react-redux';
+import * as Actions from '@actions';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -40,6 +41,8 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
   const [isErrorNetwork, setErrorNetwork] = React.useState();
+
+  const dispatch = useDispatch();
 
   /**
    * VERIFICATION-ORDER SECTION
@@ -78,8 +81,10 @@ const OmsVerificationOrderView: FC = () => {
       /** => if error fetch */
       // do something
     }
-    /** => if POST reserved-stock error */
-    // do something
+    /**
+     * TO DO:
+     * - add logic if POST reserved-stock error
+     */
   }, [statePromo.reserveDiscount.create.error, stateReserveStock.create.error]);
   /** => if POST reserved-discount & reserved-stock both success */
   React.useEffect(() => {
@@ -464,6 +469,7 @@ const OmsVerificationOrderView: FC = () => {
         visible={isErrorVoucher}
         onBackToCart={() => {
           setErrorVoucher(false);
+          dispatch(Actions.saveSelectedVouchers(null));
           goBack();
         }}
       />
