@@ -5,12 +5,10 @@ import * as types from '@types';
 /** => Process */
 export const cartViewProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.DetailProcessProps,
-): models.DetailProcessAction => {
-  contextDispatch({ type: types.CART_VIEW_PROCESS, payload });
+): Omit<models.DetailProcessAction, 'payload'> => {
+  contextDispatch({ type: types.CART_VIEW_PROCESS });
   return {
     type: types.CART_VIEW_PROCESS,
-    payload,
     contextDispatch,
   };
 };

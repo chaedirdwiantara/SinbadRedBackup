@@ -65,11 +65,9 @@ const useConfirmNewPassword = () => {
 const useStoreDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (
-      contextDispatch: (action: any) => any,
-      data: models.DetailProcessProps,
-    ) => {
-      dispatch(Actions.storeDetailProcess(contextDispatch, data));
+    detail: (contextDispatch: (action: any) => any) => {
+      //get detail store not send store id. store id is handled at backend
+      dispatch(Actions.storeDetailProcess(contextDispatch, { id: '' }));
     },
   };
 };
