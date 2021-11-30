@@ -20,7 +20,7 @@ const addToCart = (payload: models.AddToCartPayload) => {
 
 const updateCart = (payload: models.CartUpdatePayload) => {
   const path = 'carts';
-  return apiMapping('auth', path, 'cart', 'v1', 'PATCH', payload);
+  return apiMapping('auth', path, 'cart', 'v1', 'UPDATE', payload);
 };
 
 const getCartTotalProduct = () => {
