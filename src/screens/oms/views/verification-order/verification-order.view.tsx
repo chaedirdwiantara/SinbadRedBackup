@@ -30,6 +30,8 @@ import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-ca
 import moment from 'moment';
 import { useDataVoucher } from '@core/redux/Data';
 import { ErrorPromoModal } from './ErrorPromoModal';
+import { ErrorVoucherModal } from './ErrorVoucherModal';
+import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -38,6 +40,14 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
   const [isErrorNetwork, setErrorNetwork] = React.useState();
+
+  const { verificationCreateReset } = useVerficationOrderAction();
+
+  React.useEffect(() => {
+    return () => {
+      verificationCreateReset();
+    };
+  });
 
   /**
    * VERIFICATION-ORDER SECTION
@@ -62,34 +72,35 @@ const OmsVerificationOrderView: FC = () => {
   const { getCartSelected } = useCartSelected();
   /** => get voucher data */
   const voucherData = useDataVoucher();
+  /** => if POST reserved-discount & reserved-stock both fail */
   React.useEffect(() => {
-    /** => check if both POST loading done */
+    /** => if POST reserved-discount error */
     if (
-      !statePromo.reserveDiscount.create.loading &&
+      statePromo.reserveDiscount.create.error !== null &&
       !stateReserveStock.create.loading
     ) {
-      /** => if POST reserved-discount error */
-      if (statePromo.reserveDiscount.create.error !== null) {
-        /** => if error voucher */
-        if (statePromo.reserveDiscount.create.error.code === 140037) {
-          setErrorVoucher(true);
-        }
+      /** => if error voucher */
+      if (statePromo.reserveDiscount.create.error.code === 140037) {
+        setErrorVoucher(true);
       }
-      /** => if POST reserved-stock error */
-      /** => if POST both reserved-discount & reserved-stock success */
-      if (
-        statePromo.reserveDiscount.create.data !== null &&
-        stateReserveStock.create.data !== null
-      ) {
-        /** => fetch GET `reserved-discount` */
-        reserveDiscountAction.detail(
-          dispatchPromo,
-          statePromo.reserveDiscount.create.data.id,
-        );
-        /** => fetch GET `reserved stock */
-      }
+      /** => if error fetch */
+      // do something
     }
-  }, [statePromo.reserveDiscount.create, stateReserveStock.create]);
+    /** => if POST reserved-stock error */
+    // do something
+  }, [statePromo.reserveDiscount.create.error, stateReserveStock.create.error]);
+  /** => if POST reserved-discount & reserved-stock both success */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.create.data !== null) {
+      /** => fetch GET `reserved-discount` */
+      reserveDiscountAction.detail(
+        dispatchPromo,
+        statePromo.reserveDiscount.create.data.id,
+      );
+      /** => fetch GET `reserved stock */
+      // do something
+    }
+  }, [statePromo.reserveDiscount.create.data]);
 
   /** => effect for listen GET reserved-discount */
   React.useEffect(() => {
@@ -151,7 +162,7 @@ const OmsVerificationOrderView: FC = () => {
               {renderDiscountDetail(
                 item.promos,
                 item.vouchers,
-                item.priceAfterDiscount,
+                item.promoPrice + item.voucherPrice,
                 index,
               )}
             </React.Fragment>
@@ -180,7 +191,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -365,7 +376,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -440,6 +451,7 @@ const OmsVerificationOrderView: FC = () => {
         visible={isErrorPromo}
         onBackToCart={() => {
           setErrorPromo(false);
+          goBack();
         }}
         onContinueToPayment={() => {
           setErrorPromo(false);
@@ -450,6 +462,18 @@ const OmsVerificationOrderView: FC = () => {
         bonusPromoList={
           statePromo.reserveDiscount.detail.data.promoNotMatch.bonus
         }
+      />
+    );
+  };
+  /** => error voucher modal */
+  const renderErrorVoucherModal = () => {
+    return (
+      <ErrorVoucherModal
+        visible={isErrorVoucher}
+        onBackToCart={() => {
+          setErrorVoucher(false);
+          goBack();
+        }}
       />
     );
   };
@@ -469,6 +493,7 @@ const OmsVerificationOrderView: FC = () => {
       )}
       {/* modal */}
       {renderErrorPromoModal()}
+      {renderErrorVoucherModal()}
     </SnbContainer>
   );
 };

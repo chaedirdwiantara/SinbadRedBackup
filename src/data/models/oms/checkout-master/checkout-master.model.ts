@@ -13,7 +13,7 @@ export interface IPaymentChannelCheckout {
 export interface IPromoSeller {
   id: number;
   name: string;
-  benefitType: string;
+  benefitType: 'amount' | 'percent' | 'qty';
   amount: number | null;
   productName: string | null;
   bonusQty: number | null;

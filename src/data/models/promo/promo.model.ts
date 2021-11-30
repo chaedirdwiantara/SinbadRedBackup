@@ -88,7 +88,7 @@ export interface ReserveDiscountPromoNotMatch {
 export interface ReserveDiscountPromoSellers {
   id: number;
   name: string;
-  benefitType: string;
+  benefitType: 'amount' | 'percent' | 'qty';
   amount: number | null;
   productName: string | null;
   bonusQty: number | null;

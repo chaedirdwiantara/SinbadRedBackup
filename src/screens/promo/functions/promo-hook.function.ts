@@ -64,6 +64,7 @@ const useReserveDiscountAction = () => {
       contextDispatch: (action: any) => any,
       data: models.ReserveDiscountPostPayload,
     ) => {
+      dispatch(Actions.createReserveDiscountReset());
       dispatch(Actions.createReserveDiscountProcess(contextDispatch, data));
     },
     detail: (contextDispatch: (action: any) => any, id: string) => {

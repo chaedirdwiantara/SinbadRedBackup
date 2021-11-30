@@ -28,11 +28,7 @@ import {
   CartSelectedBrand,
   CartSelectedProduct,
 } from '@models';
-import {
-  goToVerificationOrder,
-  getTotalProducts,
-  goToCheckout,
-} from '../../functions';
+import { goToVerificationOrder, getTotalProducts } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
@@ -84,7 +80,7 @@ const OmsShoppingCartView: FC = () => {
     /** => below is the action if the update cart & potential discount fetch success */
     if (
       stateVerificationOrder.create.data !== null &&
-      updateCartState.data != null
+      updateCartState.data !== null
     ) {
       verificationOrderDetail(
         dispatchVerificationOrder,
@@ -216,23 +212,27 @@ const OmsShoppingCartView: FC = () => {
             });
           }
         });
-        /** => insert brand selected */
-        brandsSelected.push({
-          brandId: brand.brandId,
-          products: productsSelected,
+        if (productsSelected.length > 0) {
+          /** => insert brand selected */
+          brandsSelected.push({
+            brandId: brand.brandId,
+            products: productsSelected,
+          });
+        }
+      });
+      if (brandsSelected.length > 0) {
+        /** => insert data selected */
+        dataSelected.push({
+          invoiceGroupId: invoiceGroup.invoiceGroupId,
+          portfolioId: invoiceGroup.portfolioId,
+          brands: brandsSelected,
+          sellerId: invoiceGroup.sellerId,
+          channelId: invoiceGroup.channelId,
+          groupId: invoiceGroup.groupId,
+          typeId: invoiceGroup.typeId,
+          clusterId: invoiceGroup.clusterId,
         });
-      });
-      /** => insert data selected */
-      dataSelected.push({
-        invoiceGroupId: invoiceGroup.invoiceGroupId,
-        portfolioId: invoiceGroup.portfolioId,
-        brands: brandsSelected,
-        sellerId: invoiceGroup.sellerId,
-        channelId: invoiceGroup.channelId,
-        groupId: invoiceGroup.groupId,
-        typeId: invoiceGroup.typeId,
-        clusterId: invoiceGroup.clusterId,
-      });
+      }
     });
 
     const paramsCartSelected: CartSelected = {
@@ -257,7 +257,6 @@ const OmsShoppingCartView: FC = () => {
     verificationOrderCreate(dispatchVerificationOrder, {
       data: paramsVerificationCreate,
     });
-    goToCheckout();
   };
   /** === VIEW === */
   /** => Main */
