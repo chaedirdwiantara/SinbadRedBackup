@@ -1,5 +1,5 @@
 /** === IMPORT EXTERNAL MODEL === */
-import { DeleteProcessProps, DeleteSuccessProps } from './delete.model';
+import { DeleteSuccessProps, DeleteProcessProps } from './delete.model';
 import { ErrorProps } from './error.model';
 /** === PROCESS === */
 export interface DeleteProcessAction {
