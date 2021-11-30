@@ -64,4 +64,31 @@ export const paymentChannelsModal = simplifyReducer(initialState, {
       paymentChannels,
     };
   },
+  /** => Update payment channel checkout */
+  [types.UPDATE_PROMO_PAYMENT_CHANNEL](
+    state = initialState,
+    { payload }: models.IUpdatePromoPaymentChannel,
+  ) {
+    let newPaymentChannels = [];
+    for (let i = 0; i < state.paymentChannels.length; i++) {
+      let newTypes = [];
+      for (let y = 0; y < state.paymentChannels[i].type.length; y++) {
+        newTypes.push({
+          ...state.paymentChannels[i].type[y],
+          ...payload.find(
+            (itmInner) =>
+              itmInner.paymentChannelId === state.paymentChannels[i].type[y].id,
+          ),
+        });
+      }
+      newPaymentChannels.push({
+        ...state.paymentChannels[i],
+        type: newTypes,
+      });
+    }
+    return {
+      ...state,
+      paymentChannels: newPaymentChannels,
+    };
+  },
 });

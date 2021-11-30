@@ -20,3 +20,9 @@ export const updataInvoiceGroupId = (
 ): models.IUpdateInvoiceChannel => {
   return { type: types.UPDATE_INVOICE_GROUP_ID, payload };
 };
+
+export const updatePromoPaymentChannel = (
+  payload: models.IPromoPaymentChannel[],
+): models.IUpdatePromoPaymentChannel => {
+  return { type: types.UPDATE_PROMO_PAYMENT_CHANNEL, payload };
+};

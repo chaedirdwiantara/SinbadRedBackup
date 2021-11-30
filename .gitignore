@@ -1,7 +1,7 @@
 # OSX
 #
 .DS_Store
-
+.vscode/
 # Xcode
 #
 build/
@@ -38,7 +38,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-
+.env
 # BUCK
 buck-out/
 \.buckd/
