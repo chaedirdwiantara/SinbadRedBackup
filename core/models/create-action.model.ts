@@ -2,9 +2,9 @@
 import { CreateSuccessProps } from './create.model';
 import { ErrorProps } from './error.model';
 /** === PROCESS === */
-export interface CreateProcessAction {
+export interface CreateProcessAction<T> {
   type: string;
-  payload: any;
+  payload: T;
   contextDispatch: (action: any) => any;
 }
 /** === SUCCESS === */

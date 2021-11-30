@@ -1,4 +1,13 @@
 import { ErrorProps } from './error.model';
+/** === THIS FOR PROCESS CREATE DATA === */
+export interface UpdateProcessProps<T> {
+  data: T;
+}
+/**
+ * ================================
+ * VERSION 1
+ * ================================
+ */
 /** === THIS FOR DATA SUCCESS UPDATE === */
 export interface DataSuccessUpdateProps {
   id: string;
@@ -19,7 +28,29 @@ export interface UpdateItemProps {
 export interface UpdateProps {
   update: UpdateItemProps;
 }
-/** === THIS FOR PROCESS CREATE DATA === */
-export interface UpdateProcessProps<T> {
-  data: T;
+/**
+ * ================================
+ * VERSION 2
+ * ================================
+ */
+/** === THIS FOR DATA SUCCESS UPDATE === */
+export interface DataSuccessUpdateV2Props {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+/** === THIS FOR SUCCESS UPDATE DATA === */
+export interface UpdateSuccessV2Props {
+  data: DataSuccessUpdateV2Props;
+  message: string;
+  code: number;
+}
+/** === THIS FOR CREATE PROCESS === */
+export interface UpdateItemV2Props {
+  loading: boolean;
+  data: DataSuccessUpdateV2Props | null;
+  error: ErrorProps | null;
+}
+export interface UpdateV2Props {
+  update: UpdateItemV2Props;
 }
