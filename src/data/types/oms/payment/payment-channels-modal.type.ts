@@ -10,3 +10,5 @@ export const UPDATE_PAYMENT_CHANNELS = 'UpdatePaymentChannels';
 export const UPDATE_INVOICE_GROUP_ID = 'UpdateInvoiceGroupId';
 /** => const update promo data */
 export const UPDATE_PROMO_PAYMENT_CHANNEL = 'UpdatePromoPaymentChannel';
+/** => update total cart parcel */
+export const UPDATE_TOTAL_CART_PARCEL = 'UpdateTotalCartParcel';

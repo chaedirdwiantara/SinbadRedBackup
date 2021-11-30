@@ -60,7 +60,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
               description={description}
               image={item.image}
               type={'two'}
-              disabled={item.status !== 'disabled' ? true : false}
+              disabled={item.status === 'disabled' ? true : false}
               onPress={() => selectedPaymentChannel(item)}
             />
           );

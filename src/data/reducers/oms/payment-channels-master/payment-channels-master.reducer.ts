@@ -6,6 +6,7 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 const initialState: models.IPaymentChannelsModal = {
   invoiceGroupId: null,
   paymentType: null,
+  totalCartParcel: 0,
   paymentChannels: [],
 };
 
@@ -89,6 +90,16 @@ export const paymentChannelsModal = simplifyReducer(initialState, {
     return {
       ...state,
       paymentChannels: newPaymentChannels,
+    };
+  },
+  [types.UPDATE_TOTAL_CART_PARCEL](
+    state = initialState,
+    { payload }: models.IUpdateTotalCartParcel,
+  ) {
+    const totalCartParcel = payload;
+    return {
+      ...state,
+      totalCartParcel,
     };
   },
 });

@@ -43,9 +43,8 @@ export const useCheckoutViewActions = () => {
 };
 /** => master data payment channels modal  */
 const usePaymentChannelsData = () => {
-  const { paymentType, paymentChannels, invoiceGroupId } = useSelector(
-    (state: any) => state.paymentChannelsModal,
-  );
+  const { paymentType, paymentChannels, invoiceGroupId, totalCartParcel } =
+    useSelector((state: any) => state.paymentChannelsModal);
   const dataPaymentChannels: models.IPaymentChannelsModal =
     useDataPaymentChannels();
   const dispatch = useDispatch();
@@ -61,12 +60,16 @@ const usePaymentChannelsData = () => {
     updateInvoiceGroupId: (id: string) => {
       dispatch(Actions.updataInvoiceGroupId(id));
     },
+    updateTotalCartParcel: (value: number) => {
+      dispatch(Actions.updataTotalCartParcel(value));
+    },
     updatePromoPaymentChannel: (data: models.IPromoPaymentChannel[]) => {
       dispatch(Actions.updatePromoPaymentChannel(data));
     },
     paymentType: paymentType,
     paymentChannels: paymentChannels,
     invoiceGroupId: invoiceGroupId,
+    totalCartParcel: totalCartParcel,
   };
 };
 /** => promo general action */

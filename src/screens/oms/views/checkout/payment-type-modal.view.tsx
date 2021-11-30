@@ -10,7 +10,7 @@ import * as models from '@models';
 interface PaymentTypeModalProps {
   isOpen: boolean;
   close: () => void;
-  openModalPaymentChannels: () => void;
+  openModalPaymentChannels: (item: any) => void;
 }
 /** === COMPONENT === */
 export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
@@ -29,7 +29,7 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
       iconUrl: data.iconUrl,
     };
     paymentChannels.setSelectedPaymentType(dataUpdatePaymentType);
-    openModalPaymentChannels();
+    openModalPaymentChannels(data);
   };
   const content = () => {
     return !statePayment?.paymentTypesList?.loading ? (
