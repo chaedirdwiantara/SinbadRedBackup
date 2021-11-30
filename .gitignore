@@ -65,3 +65,4 @@ buck-out/
 # iOS
 GoogleService-Info.plist
 GoogleService*
+/android/fastlane/config/sinbad.json
