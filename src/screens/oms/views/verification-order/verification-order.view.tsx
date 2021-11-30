@@ -30,6 +30,7 @@ import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-ca
 import moment from 'moment';
 import { useDataVoucher } from '@core/redux/Data';
 import { ErrorPromoModal } from './ErrorPromoModal';
+import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -38,6 +39,14 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
   const [isErrorNetwork, setErrorNetwork] = React.useState();
+
+  const { verificationCreateReset } = useVerficationOrderAction();
+
+  React.useEffect(() => {
+    return () => {
+      verificationCreateReset();
+    };
+  });
 
   /**
    * VERIFICATION-ORDER SECTION
@@ -81,10 +90,7 @@ const OmsVerificationOrderView: FC = () => {
   }, [statePromo.reserveDiscount.create.error, stateReserveStock.create.error]);
   /** => if POST reserved-discount & reserved-stock both success */
   React.useEffect(() => {
-    if (
-      statePromo.reserveDiscount.create.data !== null &&
-      stateReserveStock.create.data !== null
-    ) {
+    if (statePromo.reserveDiscount.create.data !== null) {
       /** => fetch GET `reserved-discount` */
       reserveDiscountAction.detail(
         dispatchPromo,
@@ -93,7 +99,7 @@ const OmsVerificationOrderView: FC = () => {
       /** => fetch GET `reserved stock */
       // do something
     }
-  }, [statePromo.reserveDiscount.create.data, stateReserveStock.create.data]);
+  }, [statePromo.reserveDiscount.create.data]);
 
   /** => effect for listen GET reserved-discount */
   React.useEffect(() => {
@@ -184,7 +190,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -369,7 +375,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>

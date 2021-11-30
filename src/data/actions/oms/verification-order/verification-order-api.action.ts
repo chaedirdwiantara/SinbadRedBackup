@@ -28,6 +28,10 @@ export const verificationOrderCreateFailed = (
 ): models.CreateFailedAction => {
   return { type: types.VERIFICATION_ORDER_CREATE_FAILED, payload: data };
 };
+/** => reset */
+export const verificationOrderCreateReset = () => {
+  return { type: types.VERIFICATION_ORDER_CREATE_RESET };
+};
 /** === DETAIL === */
 /** => process */
 export const verificationOrderDetailProcess = (
