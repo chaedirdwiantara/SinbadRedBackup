@@ -14,7 +14,7 @@ import {
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useOrderQuantity } from '@screen/product/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '../../../styles';
 import { PromoSection } from './PromoSection';
@@ -23,20 +23,28 @@ interface AddToCartModalProps {
   open: boolean;
   closeAction: () => void;
   onAddToCartPress: () => void;
+  orderQty: number;
+  increaseOrderQty: () => void;
+  decreaseOrderQty: () => void;
 }
 /** === COMPONENT ===  */
 const AddToCartModal: FC<AddToCartModalProps> = ({
   open,
   closeAction,
   onAddToCartPress,
+  orderQty,
+  increaseOrderQty,
+  decreaseOrderQty,
 }) => {
   /** === HOOKS ===  */
   const {
     stateProduct: { detail: productDetailState },
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetailState?.data?.minQty,
-  });
+  const {
+    stateShopingCart: {
+      create: { loading: addToCartLoading },
+    },
+  } = useShopingCartContext();
   const [tooltipVisible, toggleTooltipVisible] = useReducer(
     (prevVisible) => !prevVisible,
     false,
@@ -140,6 +148,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
       </View>
       <SnbButton.Dynamic
+        loading={addToCartLoading}
         size="small"
         type="primary"
         title="Tambah ke Keranjang"

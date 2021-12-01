@@ -16,6 +16,7 @@ import LoadingPage from '@core/components/LoadingPage';
 interface CheckoutPaymentTypeViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
+  index: number;
 }
 /** === COMPONENT === */
 export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({

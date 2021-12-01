@@ -111,10 +111,15 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty } = useOrderQuantity({
+  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
     minQty: productDetailState?.minQty,
   });
-  const { dispatchShopingCart } = useShopingCartContext();
+  const {
+    stateShopingCart: {
+      create: { data: addToCartData },
+    },
+    dispatchShopingCart,
+  } = useShopingCartContext();
   const {
     stateTag: {
       list: { data: tagList },
@@ -125,6 +130,7 @@ const ProductList: FC<ProductListProps> = ({
   const {
     stateSupplier: {
       segmentation: { data: dataSegmentation },
+      create: { data: sendToSupplierData },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -143,6 +149,22 @@ const ProductList: FC<ProductListProps> = ({
       setKeywordSearched(false);
     }
   }, [productLoading]);
+
+  /** => Do something when success add to cart */
+  useEffect(() => {
+    if (addToCartData !== null) {
+      setProductSelected(null);
+      setOrderModalVisible(false);
+      supplierSegmentationAction.reset(dispatchSupplier);
+    }
+  }, [addToCartData]);
+
+  /** => Do something when success send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierData !== null) {
+      onFunctionActions({ type: 'close' });
+    }
+  }, [sendToSupplierData]);
 
   useEffect(() => {
     tagActions.fetch(dispatchTag, {
@@ -175,8 +197,6 @@ const ProductList: FC<ProductListProps> = ({
         supplierId: productSelected.sellerId,
       });
     }
-    onFunctionActions({ type: 'close' });
-    setProductSelected(null);
   };
 
   /** => action from buttom confirmation checkout */
@@ -219,8 +239,9 @@ const ProductList: FC<ProductListProps> = ({
       clusterId: dataSegmentation.dataSuppliers.clusterId,
     };
 
+    console.log('[PARAMS ADD TO CART]: ', params);
+
     addToCartActions.fetch(dispatchShopingCart, params);
-    setOrderModalVisible(false);
   };
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -360,6 +381,9 @@ const ProductList: FC<ProductListProps> = ({
       {/* Add to Cart Modal */}
       {orderModalVisible && (
         <AddToCartModal
+          orderQty={orderQty}
+          increaseOrderQty={increaseOrderQty}
+          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={() => setOrderModalVisible(false)}
           onAddToCartPress={onSubmitAddToCart}

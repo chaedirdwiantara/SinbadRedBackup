@@ -1,4 +1,4 @@
-export interface ProductItem {
+export interface IProductItemUpdateCart {
   productId: string;
   qty: number;
   selected: boolean;
@@ -6,5 +6,5 @@ export interface ProductItem {
 
 export interface CartUpdatePayload {
   action: string;
-  products: ProductItem[];
+  products: IProductItemUpdateCart[];
 }
