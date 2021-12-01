@@ -32,8 +32,6 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-import { useReserveStockContext } from 'src/data/contexts/product';
-import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
