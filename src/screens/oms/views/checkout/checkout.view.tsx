@@ -23,8 +23,12 @@ import {
   usePaymentChannelModal,
   usePaymentChannelsData,
   useTermsAndConditionsModal,
+  useBackToCartModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
+import { BackToCartModal } from './checkout-back-to-cart-modal';
+import { useReserveDiscountAction } from '@screen/promo/functions';
+import { backToCart } from '@screen/oms/functions';
 
 const dummySKU = [
   {
@@ -55,6 +59,8 @@ const dummySKU = [
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
+  const backToCartModal = useBackToCartModal();
+  const reserveDiscountAction = useReserveDiscountAction();
   const checkoutViewActions = useCheckoutViewActions();
   const paymentTypeModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
@@ -81,7 +87,7 @@ const OmsCheckoutView: FC = () => {
     contexts.PaymentContext,
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
-  const { statePromo } = React.useContext(contexts.PromoContext);
+  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -186,11 +192,27 @@ const OmsCheckoutView: FC = () => {
     paymentChannelsModal.setOpen(false);
     paymentTypeModal.setOpen(true);
   };
+  /** handle back to cart */
+  const handleBackToCart = () => {
+    backToCartModal.setOpen(false);
+    reserveDiscountAction.resetCreate(dispatchPromo);
+    reserveDiscountAction.resetDetail(dispatchPromo);
+    /**
+     * TO DO:
+     * - add reset for reserveStock create
+     * - add reset for reserveStock detail
+     */
+    backToCart();
+  };
 
   /** === VIEW === */
   return (
     <SnbContainer color="grey">
-      <CheckoutHeader />
+      <CheckoutHeader
+        backAction={() => {
+          backToCartModal.setOpen(true);
+        }}
+      />
       {checkoutLoading ? (
         <LoadingPage />
       ) : (
@@ -227,6 +249,13 @@ const OmsCheckoutView: FC = () => {
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
             close={() => paymentTCModal.setOpen(false)}
+          />
+          <BackToCartModal
+            isOpen={backToCartModal.isOpen}
+            handleNoAction={() => {
+              backToCartModal.setOpen(false);
+            }}
+            handleOkAction={handleBackToCart}
           />
         </>
       )}

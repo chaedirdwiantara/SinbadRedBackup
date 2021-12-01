@@ -190,7 +190,12 @@ export const createReserveDiscountFailed = (
   return { type: types.CREATE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => create reserve discount reset */
-export const createReserveDiscountReset = () => {
+export const createReserveDiscountReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.CREATE_RESERVE_DISCOUNT_RESET,
+  });
   return { type: types.CREATE_RESERVE_DISCOUNT_RESET };
 };
 
@@ -223,7 +228,12 @@ export const detailReserveDiscountFailed = (
   return { type: types.DETAIL_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => detail reserve discount reset */
-export const detailReserveDiscountReset = () => {
+export const detailReserveDiscountReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.DETAIL_RESERVE_DISCOUNT_RESET,
+  });
   return { type: types.DETAIL_RESERVE_DISCOUNT_RESET };
 };
 
