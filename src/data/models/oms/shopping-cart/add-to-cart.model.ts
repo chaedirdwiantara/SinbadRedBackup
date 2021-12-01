@@ -1,5 +1,4 @@
 export interface AddToCartPayload {
-  cartId?: string | null;
   isActiveStore: boolean;
   selected: boolean;
   stock: number;
@@ -10,7 +9,7 @@ export interface AddToCartPayload {
   priceAfterTax: number;
   uom: string;
   warehouseId: number;
-  supplierId: number;
+  sellerId: number;
   channelId: number | null;
   groupId: number | null;
   typeId: number | null;

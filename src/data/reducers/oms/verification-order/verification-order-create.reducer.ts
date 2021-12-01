@@ -45,5 +45,9 @@ export const verificationOrderCreateReducer = simplifyReducer(
         error: action.payload,
       };
     },
+    /** => reset */
+    [types.VERIFICATION_ORDER_CREATE_RESET]() {
+      return verificationOrderCreateInitialState;
+    },
   },
 );

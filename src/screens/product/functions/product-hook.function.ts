@@ -126,6 +126,19 @@ const useTagListActions = () => {
   };
 };
 
+/** => reserve stock action */
+const useReserveStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    del: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.deleteReserveStockProcess(contextDispatch, { id }));
+    },
+    create: (contextDispatch: (action: any) => any, data: {}) => {
+      dispatch(Actions.createReserveStockProcess(contextDispatch, { data }));
+    },
+  };
+};
+
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
@@ -152,4 +165,5 @@ export {
   useProductDetailAction,
   useAddToCart,
   useTagListActions,
+  useReserveStockAction,
 };

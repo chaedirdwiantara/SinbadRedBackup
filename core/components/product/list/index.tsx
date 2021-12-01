@@ -16,6 +16,7 @@ import {
   WaitingApprovalModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
+import { useOrderQuantity } from '@screen/product/functions';
 import {
   useBottomAction,
   priceSortOptions,
@@ -33,7 +34,6 @@ import {
   useSendDataToSupplierActions,
 } from '@core/functions/supplier/supplier-hook.function';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
-import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
 import { useCheckDataSupplier } from '@core/functions/supplier';
 /** === IMPORT TYPES === */
@@ -104,7 +104,6 @@ const ProductList: FC<ProductListProps> = ({
   const addToCartActions = useAddToCart();
   const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
-  const authCoreAction = useAuthCoreAction();
   const {
     stateProduct: {
       list: { loading: productLoading, error: productError },
@@ -112,7 +111,15 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { dispatchShopingCart } = useShopingCartContext();
+  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
+    minQty: productDetailState?.minQty,
+  });
+  const {
+    stateShopingCart: {
+      create: { data: addToCartData },
+    },
+    dispatchShopingCart,
+  } = useShopingCartContext();
   const {
     stateTag: {
       list: { data: tagList },
@@ -123,6 +130,7 @@ const ProductList: FC<ProductListProps> = ({
   const {
     stateSupplier: {
       segmentation: { data: dataSegmentation },
+      create: { data: sendToSupplierData },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -141,6 +149,22 @@ const ProductList: FC<ProductListProps> = ({
       setKeywordSearched(false);
     }
   }, [productLoading]);
+
+  /** => Do something when success add to cart */
+  useEffect(() => {
+    if (addToCartData !== null) {
+      setProductSelected(null);
+      setOrderModalVisible(false);
+      supplierSegmentationAction.reset(dispatchSupplier);
+    }
+  }, [addToCartData]);
+
+  /** => Do something when success send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierData !== null) {
+      onFunctionActions({ type: 'close' });
+    }
+  }, [sendToSupplierData]);
 
   useEffect(() => {
     tagActions.fetch(dispatchTag, {
@@ -164,22 +188,20 @@ const ProductList: FC<ProductListProps> = ({
         });
       }
     }
-  }, [me.data, dataSegmentation]);
+  }, [dataSegmentation]);
 
   /** => action send data to supplier */
   const onSendDataSupplier = () => {
     if (productSelected !== null) {
       sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: productSelected?.sellerId,
+        supplierId: productSelected.sellerId,
       });
     }
-    onFunctionActions({ type: 'close' });
   };
 
   /** => action from buttom confirmation checkout */
   const handleOrderPress = (product: models.ProductList) => {
     setProductSelected(product);
-    authCoreAction.me();
     supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
   };
@@ -195,13 +217,13 @@ const ProductList: FC<ProductListProps> = ({
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
       return;
     }
+
     const params: models.AddToCartPayload = {
-      cartId: productDetailState?.id,
       isActiveStore: dataSegmentation.isActiveStore,
       selected: true,
-      stock: 100,
+      stock: 1000,
       productId: productDetailState.id,
-      qty: 90,
+      qty: orderQty,
       displayPrice: productDetailState.originalPrice,
       priceBeforeTax:
         productDetailState.currentPrice ?? productDetailState.originalPrice,
@@ -210,12 +232,15 @@ const ProductList: FC<ProductListProps> = ({
         productDetailState.originalPrice,
       uom: productDetailState.unit,
       warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-      supplierId: dataSegmentation.dataSuppliers.sellerId,
+      sellerId: Number(productDetailState.sellerId),
       channelId: dataSegmentation.dataSuppliers.channelId,
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
     };
+
+    console.log('[PARAMS ADD TO CART]: ', params);
+
     addToCartActions.fetch(dispatchShopingCart, params);
   };
   /** === DERIVED === */
@@ -356,6 +381,9 @@ const ProductList: FC<ProductListProps> = ({
       {/* Add to Cart Modal */}
       {orderModalVisible && (
         <AddToCartModal
+          orderQty={orderQty}
+          increaseOrderQty={increaseOrderQty}
+          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={() => setOrderModalVisible(false)}
           onAddToCartPress={onSubmitAddToCart}
