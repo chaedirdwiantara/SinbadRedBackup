@@ -29,33 +29,6 @@ import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutCo
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useReserveDiscountAction } from '@screen/promo/functions';
 import { backToCart } from '@screen/oms/functions';
-
-const dummySKU = [
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-];
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -224,7 +197,6 @@ const OmsCheckoutView: FC = () => {
               checkoutMaster.invoices.map((invoiceGroup, index) => (
                 <CheckoutInvoiceGroupView
                   key={invoiceGroup.invoiceGroupId}
-                  products={dummySKU}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
                   index={index}
