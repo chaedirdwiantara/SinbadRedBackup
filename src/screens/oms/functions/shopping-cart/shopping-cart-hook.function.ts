@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
-import { useDataCartSelected, useDataCartMaster } from '@core/redux/Data';
+import {
+  useDataCartSelected,
+  useDataCartMaster,
+  useDataTotalProductCart,
+} from '@core/redux/Data';
 /** === FUNCTIONS === */
 
 export const useCartViewActions = () => {
@@ -60,13 +64,16 @@ export const useCartSelected = () => {
 };
 
 export const useCartTotalProductActions = () => {
+  const dataTotalProductCart: models.CartTotalProductSuccess =
+    useDataTotalProductCart().data;
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartTotalProductProcess(contextDispatch));
+    dataTotalProductCart: dataTotalProductCart,
+    fetch: () => {
+      dispatch(Actions.cartTotalProductProcess());
     },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.cartTotalProductReset);
+    reset: () => {
+      dispatch(Actions.cartTotalProductReset());
     },
   };
 };

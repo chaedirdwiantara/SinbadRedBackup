@@ -10,11 +10,9 @@ import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
 import { CheckoutPaymentTypeView } from './checkout-payment-type.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 /** === TYPE === */
-import { IProductCheckout } from './checkout-sku-list.view';
 import * as models from '@models';
 
 interface CheckoutInvoiceGroupViewProps {
-  products: IProductCheckout[];
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
   index: number;

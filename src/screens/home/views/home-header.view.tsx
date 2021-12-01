@@ -3,6 +3,8 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
+import { useCartTotalProductActions } from '@screen/oms/functions';
+
 /** === IMPORT STYLE HERE === */
 import HomeStyles from '../styles/home.style';
 /** === INTERFACE === */
@@ -11,11 +13,14 @@ interface HeaderProps {
 }
 /** === COMPONENT === */
 const HomeHeaderView: FC<HeaderProps> = (props) => {
+  const { dataTotalProductCart } = useCartTotalProductActions();
+
   /** === VIEW === */
   /** => main */
   return (
     <View style={HomeStyles.topNavContainer}>
       <SnbTopNav.Type8
+        value={''}
         goToSearch={() => NavigationAction.navigate('SearchView')}
         type={props.headerChange ? 'red' : 'transparent1'}
         placeholder="Cari di Sinbad"
@@ -25,7 +30,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
         icon1Value={100}
         icon1Name="notifications_none"
         icon1Action={() => NavigationAction.navigate('NotificationView')}
-        icon2Value={100}
+        icon2Value={dataTotalProductCart.totalProduct}
         icon2Name="cart"
         icon2Action={() => NavigationAction.navigate('OmsShoppingCartView')}
       />
