@@ -32,6 +32,7 @@ import { ErrorVoucherModal } from './ErrorVoucherModal';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import { usePrevious } from '@core/functions/hook/prev-value';
+import { capitalize } from '@core/functions/global/capitalize';
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -203,7 +204,7 @@ const OmsVerificationOrderView: FC = () => {
                   {item.promoOwner !== 'none' ? (
                     <SnbBadge.Label
                       type={'error'}
-                      value={item.promoOwner}
+                      value={capitalize(item.promoOwner)}
                       iconName={'local_offer'}
                     />
                   ) : (
@@ -231,7 +232,7 @@ const OmsVerificationOrderView: FC = () => {
                   {item.voucherOwner !== 'none' ? (
                     <SnbBadge.Label
                       type={'error'}
-                      value={item.voucherOwner}
+                      value={capitalize(item.voucherOwner)}
                       iconName={'local_offer'}
                     />
                   ) : (
