@@ -71,6 +71,8 @@ const OmsShoppingCartView: FC = () => {
     },
     dispatchShopingCart,
   } = useShopingCartContext();
+  const { dispatchReserveStock } = useReserveStockContext();
+  const reserveStockAction = useReserveStockAction();
 
   /** => handle verification cart */
   const { setCartSelected } = useCartSelected();
@@ -108,13 +110,10 @@ const OmsShoppingCartView: FC = () => {
 
   /**
    * Reserve Section
-   * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
    */
   const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock } = useReserveStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
-  const reserveStockAction = useReserveStockAction();
   React.useEffect(() => {
     if (checkoutMaster.cartId) {
       reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
