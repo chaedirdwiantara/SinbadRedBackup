@@ -70,8 +70,6 @@ const OmsShoppingCartView: FC = () => {
     },
     dispatchShopingCart,
   } = useShopingCartContext();
-  const { dispatchReserveStock } = useReserveStockContext();
-  const reserveStockAction = useReserveStockAction();
 
   /** => handle verification cart */
   const { setCartSelected } = useCartSelected();
