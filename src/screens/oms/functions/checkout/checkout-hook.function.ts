@@ -11,7 +11,7 @@ const useCheckoutMaster = () => {
   const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
   const dispatch = useDispatch();
   return {
-    getCheckoutMaster: dataCheckout,
+    checkoutMaster: dataCheckout,
     setInvoiceBrand: (data: models.CheckoutDataMaster) => {
       dispatch(Actions.mergeCheckoutInvoiceBrand(data));
     },

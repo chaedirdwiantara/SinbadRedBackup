@@ -78,7 +78,7 @@ const OmsCheckoutView: FC = () => {
   } = useCheckoutContext();
   const {
     setInvoiceBrand,
-    getCheckoutMaster,
+    checkoutMaster,
     setReserveDiscount,
     setPaymentChannel,
   } = useCheckoutMaster();
@@ -103,13 +103,13 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     /** => merge data reserve */
     if (
-      Array.isArray(getCheckoutMaster.invoices) &&
-      getCheckoutMaster.invoices.length > 0 &&
+      Array.isArray(checkoutMaster.invoices) &&
+      checkoutMaster.invoices.length > 0 &&
       statePromo.reserveDiscount.detail.data !== null
     ) {
       setReserveDiscount(statePromo.reserveDiscount.detail.data.promoMatch);
     }
-  }, [getCheckoutMaster.invoices.length]);
+  }, [checkoutMaster.invoices.length]);
 
   useEffect(() => {
     if (!checkoutError) {
@@ -118,7 +118,7 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutError]);
   /** for post last payment channel */
   React.useEffect(() => {
-    const invoices = getCheckoutMaster?.invoices;
+    const invoices = checkoutMaster?.invoices;
 
     if (invoices.length > 0 && !paymentLastChannelDetail.data) {
       const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
@@ -138,7 +138,7 @@ const OmsCheckoutView: FC = () => {
 
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
-  }, [getCheckoutMaster.invoices]);
+  }, [checkoutMaster.invoices]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
     const dataTC = statePayment?.paymentTCCreate.data;
@@ -219,9 +219,9 @@ const OmsCheckoutView: FC = () => {
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
-            {Array.isArray(getCheckoutMaster.invoices) &&
-              getCheckoutMaster.invoices.length > 0 &&
-              getCheckoutMaster.invoices.map((invoiceGroup, index) => (
+            {Array.isArray(checkoutMaster.invoices) &&
+              checkoutMaster.invoices.length > 0 &&
+              checkoutMaster.invoices.map((invoiceGroup, index) => (
                 <CheckoutInvoiceGroupView
                   key={invoiceGroup.invoiceGroupId}
                   products={dummySKU}
@@ -232,7 +232,7 @@ const OmsCheckoutView: FC = () => {
               ))}
           </ScrollView>
           <CheckoutBottomView
-            data={getCheckoutMaster.invoices}
+            data={checkoutMaster.invoices}
             openTCModal={() => paymentTCModal.setOpen(true)}
           />
           <ModalPaymentType
