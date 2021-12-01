@@ -14,7 +14,6 @@ export const ShippingAddress: FC = () => {
     },
   } = React.useContext(contexts.UserContext);
 
-  console.log('[stateUser]: ', storeDetail);
   return (
     <View style={ShoppingCartStyles.cardContainer}>
       <View style={ShoppingCartStyles.topCardSlot}>
@@ -23,9 +22,6 @@ export const ShippingAddress: FC = () => {
       <View style={ShoppingCartStyles.verticalBottomCardSlot}>
         <View style={{ marginBottom: 6 }}>
           <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4>
-        </View>
-        <View style={{ marginBottom: 6 }}>
-          <SnbText.C2>Alamat 1 (default)</SnbText.C2>
         </View>
         <SnbText.B3>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B3>
       </View>

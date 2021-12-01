@@ -4,16 +4,17 @@
  * ============================================================
  */
 import { combineReducers } from 'redux';
-import {
-  globalCore,
-  permanentCore,
-  authCore,
-  verificationCartCore,
-} from '@core/data/reducers';
+import { globalCore, permanentCore, authCore } from '@core/data/reducers';
 import { permanent } from './permanent';
 import { auth } from './auth';
 import { global } from './global';
 import { voucher } from './voucher/voucher-local-data.reducer';
+import {
+  checkout,
+  cartSelected,
+  paymentChannelsModal,
+  cartMaster,
+} from './oms';
 
 export const rootReducer = combineReducers({
   permanentCore,
@@ -23,7 +24,10 @@ export const rootReducer = combineReducers({
   auth,
   global,
   voucher,
-  verificationCartCore,
+  cartSelected,
+  checkout,
+  paymentChannelsModal,
+  cartMaster,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

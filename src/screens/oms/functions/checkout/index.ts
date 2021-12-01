@@ -1,5 +1,6 @@
 /** === EXPORT ALL === */
 export * from './checkout-hook.function';
+export * from './checkout.function';
 /**
  * ================================================================
  * NOTES

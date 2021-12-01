@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useReducer } from 'react';
-import {
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbBottomSheet,
   SnbText,
@@ -20,34 +14,42 @@ import {
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useOrderQuantity } from '@screen/product/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '../../../styles';
+import { PromoSection } from './PromoSection';
 /** === TYPE ===  */
 interface AddToCartModalProps {
   open: boolean;
   closeAction: () => void;
   onAddToCartPress: () => void;
+  orderQty: number;
+  increaseOrderQty: () => void;
+  decreaseOrderQty: () => void;
 }
-/** === CONSTANT ===  */
-const { height } = Dimensions.get('window');
 /** === COMPONENT ===  */
 const AddToCartModal: FC<AddToCartModalProps> = ({
   open,
   closeAction,
   onAddToCartPress,
+  orderQty,
+  increaseOrderQty,
+  decreaseOrderQty,
 }) => {
   /** === HOOKS ===  */
   const {
     stateProduct: { detail: productDetailState },
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetailState?.data?.minQty,
-  });
+  const {
+    stateShopingCart: {
+      create: { loading: addToCartLoading },
+    },
+  } = useShopingCartContext();
   const [tooltipVisible, toggleTooltipVisible] = useReducer(
     (prevVisible) => !prevVisible,
     false,
   );
+
   /** === VIEW ===  */
   /** => Quantity Modifier */
   const renderQuantityModifier = () => (
@@ -63,28 +65,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   );
   /** => Promo List */
   const renderPromoList = () => {
-    return (
-      productDetailState?.data !== null &&
-      Array.isArray(productDetailState.data.promoList) &&
-      productDetailState?.data?.promoList.length > 0 && (
-        <View style={{ paddingHorizontal: 16 }}>
-          <SnbText.C1 color={color.black60}>Promo</SnbText.C1>
-          <View style={{ marginTop: 8, marginBottom: 16 }}>
-            <SnbText.C1>Anda berpotensi mendapatkan Promo</SnbText.C1>
-          </View>
-          <View style={{ height: height * 0.15 }}>
-            <ScrollView>
-              {productDetailState.data.promoList.length > 0 &&
-                productDetailState.data.promoList.map((promo, promoIndex) => (
-                  <View key={promoIndex} style={{ marginBottom: 8 }}>
-                    <SnbText.C1>{promo.shortDescription}</SnbText.C1>
-                  </View>
-                ))}
-            </ScrollView>
-          </View>
-        </View>
-      )
-    );
+    return <PromoSection />;
   };
   /** => Exclusive Tag */
   const renderExclusiveTag = () => {
@@ -167,6 +148,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
       </View>
       <SnbButton.Dynamic
+        loading={addToCartLoading}
         size="small"
         type="primary"
         title="Tambah ke Keranjang"
