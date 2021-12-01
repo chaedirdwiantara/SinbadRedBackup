@@ -34,6 +34,7 @@ import {
   goToVerificationOrder,
   getTotalProducts,
   useCartMasterActions,
+  useCheckoutMaster,
 } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
@@ -62,6 +63,7 @@ const OmsShoppingCartView: FC = () => {
     useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
+  const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
@@ -122,8 +124,10 @@ const OmsShoppingCartView: FC = () => {
   // const checkPromoPaymentAction = useCheckPromoPaymentAction();
   const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
-    reserveDiscountAction.del(dispatchPromo, '1');
-    reserveStockAction.del(dispatchReserveStock, '1');
+    if (checkoutMaster.cartId) {
+      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
+      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+    }
     // checkPromoPaymentAction.list(dispatchPromo, {
     //   paymentTypeId: 1,
     //   paymentChannelId: [1, 2, 3],

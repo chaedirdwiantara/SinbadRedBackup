@@ -29,33 +29,6 @@ import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutCo
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useReserveDiscountAction } from '@screen/promo/functions';
 import { backToCart } from '@screen/oms/functions';
-
-const dummySKU = [
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/24982598-9f5e-42cd-8be1-5fb58cce2d82.png',
-  },
-  {
-    urlImages:
-      'https://cdn.zeplin.io/5d10749da41ede711b156f2e/assets/49c90592-a684-4bff-9b94-08f65d9e1a24.png',
-  },
-];
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -78,7 +51,7 @@ const OmsCheckoutView: FC = () => {
   } = useCheckoutContext();
   const {
     setInvoiceBrand,
-    getCheckoutMaster,
+    checkoutMaster,
     setReserveDiscount,
     setPaymentChannel,
   } = useCheckoutMaster();
@@ -103,13 +76,13 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     /** => merge data reserve */
     if (
-      Array.isArray(getCheckoutMaster.invoices) &&
-      getCheckoutMaster.invoices.length > 0 &&
+      Array.isArray(checkoutMaster.invoices) &&
+      checkoutMaster.invoices.length > 0 &&
       statePromo.reserveDiscount.detail.data !== null
     ) {
       setReserveDiscount(statePromo.reserveDiscount.detail.data.promoMatch);
     }
-  }, [getCheckoutMaster.invoices.length]);
+  }, [checkoutMaster.invoices.length]);
 
   useEffect(() => {
     if (!checkoutError) {
@@ -118,7 +91,7 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutError]);
   /** for post last payment channel */
   React.useEffect(() => {
-    const invoices = getCheckoutMaster?.invoices;
+    const invoices = checkoutMaster?.invoices;
 
     if (invoices.length > 0 && !paymentLastChannelDetail.data) {
       const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
@@ -138,7 +111,7 @@ const OmsCheckoutView: FC = () => {
 
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
-  }, [getCheckoutMaster.invoices]);
+  }, [checkoutMaster.invoices]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
     const dataTC = statePayment?.paymentTCCreate.data;
@@ -219,12 +192,11 @@ const OmsCheckoutView: FC = () => {
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
-            {Array.isArray(getCheckoutMaster.invoices) &&
-              getCheckoutMaster.invoices.length > 0 &&
-              getCheckoutMaster.invoices.map((invoiceGroup, index) => (
+            {Array.isArray(checkoutMaster.invoices) &&
+              checkoutMaster.invoices.length > 0 &&
+              checkoutMaster.invoices.map((invoiceGroup, index) => (
                 <CheckoutInvoiceGroupView
                   key={invoiceGroup.invoiceGroupId}
-                  products={dummySKU}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
                   index={index}
@@ -232,7 +204,7 @@ const OmsCheckoutView: FC = () => {
               ))}
           </ScrollView>
           <CheckoutBottomView
-            data={getCheckoutMaster.invoices}
+            data={checkoutMaster.invoices}
             openTCModal={() => paymentTCModal.setOpen(true)}
           />
           <ModalPaymentType
