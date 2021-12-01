@@ -4,3 +4,7 @@ export interface BrandListSuccessProps {
   image: string;
   name: string;
 }
+
+export interface BrandListQueryOptions {
+  sellerId?: string;
+}

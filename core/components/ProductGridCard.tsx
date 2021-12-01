@@ -12,7 +12,7 @@ interface ProductGridCardProps {
   flexOne?: boolean;
   name: string;
   imageUrl: string;
-  price: number;
+  originalPrice: number;
   currentPrice?: number;
   isBundle?: boolean;
   isPromo?: boolean;
@@ -24,7 +24,7 @@ interface ProductGridCardProps {
 
 interface ProductGridCardInfoProps {
   name: string;
-  price: number;
+  originalPrice: number;
   currentPrice?: number;
 }
 /** === COMPONENTS === */
@@ -61,20 +61,20 @@ const ExclusiveTag = () => (
 
 const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
   name,
+  originalPrice,
   currentPrice,
-  price,
 }) => {
   /** === DERIVED VALUES === */
-  const hasCurrentPrice = Boolean(currentPrice);
-  const usedPrice = hasCurrentPrice ? currentPrice! : price;
+  const hasDiscount = originalPrice !== currentPrice;
+  const usedPrice = hasDiscount ? currentPrice! : originalPrice;
   /** === VIEW === */
   return (
     <>
       <SnbText.C1 color={color.black100}>{name}</SnbText.C1>
-      {hasCurrentPrice && (
+      {hasDiscount && (
         <View style={{ marginTop: 8 }}>
           <SnbText.C3 color={color.black40}>
-            {toCurrency(price, { withFraction: false })}
+            {toCurrency(originalPrice, { withFraction: false })}
           </SnbText.C3>
         </View>
       )}
@@ -115,7 +115,7 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
         <View style={{ padding: 12 }}>
           <ProductGridCardInfo
             name={props.name}
-            price={props.price}
+            originalPrice={props.originalPrice}
             currentPrice={props.currentPrice}
           />
           {props.withOrderButton && (
