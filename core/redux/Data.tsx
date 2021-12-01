@@ -37,6 +37,9 @@ const useDataPaymentChannels = () => {
 const useDataCartMaster = () => {
   return useSelector((state: RootState) => state.cartMaster);
 };
+const useDataTotalProductCart = () => {
+  return useSelector((state: RootState) => state.cartTotalProduct);
+};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -48,6 +51,7 @@ export {
   useDataCheckout,
   useDataPaymentChannels,
   useDataCartMaster,
+  useDataTotalProductCart,
 };
 /**
  * ================================================================

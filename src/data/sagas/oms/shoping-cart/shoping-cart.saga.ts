@@ -23,7 +23,9 @@ function* cartView(action: Omit<models.DetailProcessAction, 'payload'>) {
   }
 }
 /** => Add to cart */
-function* addToCart(action: models.CreateProcessAction) {
+function* addToCart(
+  action: models.CreateProcessAction<models.AddToCartPayload>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return CartApi.addToCart(action.payload);
@@ -38,7 +40,9 @@ function* addToCart(action: models.CreateProcessAction) {
   }
 }
 /** => Update */
-function* updateCart(action: models.UpdateProcessAction) {
+function* updateCart(
+  action: models.UpdateProcessAction<models.CartUpdatePayload>,
+) {
   try {
     const response: models.UpdateSuccessProps = yield call(() => {
       return CartApi.updateCart(action.payload);
@@ -53,22 +57,14 @@ function* updateCart(action: models.UpdateProcessAction) {
   }
 }
 /** => Cart view */
-function* cartTotalProduct(
-  action: Omit<models.DetailProcessAction, 'payload'>,
-) {
+function* cartTotalProduct() {
   try {
     const response: models.DetailSuccessProps<models.CartTotalProductSuccess> =
       yield call(() => {
         return CartApi.getCartTotalProduct();
       });
-    yield action.contextDispatch(
-      ActionCreators.cartTotalProductSuccess(response),
-    );
     yield put(ActionCreators.cartTotalProductSuccess(response));
   } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.cartTotalProductFailed(error as models.ErrorProps),
-    );
     yield put(
       ActionCreators.cartTotalProductFailed(error as models.ErrorProps),
     );

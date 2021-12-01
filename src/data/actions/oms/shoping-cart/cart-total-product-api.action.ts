@@ -3,13 +3,12 @@ import * as models from '@models';
 import * as types from '@types';
 /** === ACTIONS === */
 /** => Process */
-export const cartTotalProductProcess = (
-  contextDispatch: (action: any) => any,
-): Omit<models.DetailProcessAction, 'payload'> => {
-  contextDispatch({ type: types.CART_TOTAL_PRODUCT_PROCESS });
+export const cartTotalProductProcess = (): Omit<
+  models.DetailProcessAction,
+  'payload' | 'contextDispatch'
+> => {
   return {
     type: types.CART_TOTAL_PRODUCT_PROCESS,
-    contextDispatch,
   };
 };
 /** => Success */
