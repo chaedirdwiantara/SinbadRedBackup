@@ -12,7 +12,10 @@ const serializeTagsQs = (tags?: Array<string>) => {
   }
 };
 
-const getList = (payload: models.ProductListProcessProps) => {
+const getList = (
+  payload: models.ProductListProcessProps,
+  subModule?: models.ProductSubModule,
+) => {
   const qs = serializeQs({
     skip: payload.skip,
     limit: payload.limit,
@@ -26,10 +29,13 @@ const getList = (payload: models.ProductListProcessProps) => {
   });
   const tagQs =
     payload.tags !== undefined ? `&${serializeTagsQs(payload.tags)}` : '';
+  const path = subModule
+    ? `products/${subModule}?${qs}`
+    : `products?${qs}${tagQs}`;
 
   return apiMapping<Array<models.ProductList>>(
     'public',
-    `products?${qs}${tagQs}`,
+    path,
     'product',
     'v1',
     'LIST',
