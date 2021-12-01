@@ -14,31 +14,23 @@ import {
   CartUpdateInitialProps,
   cartUpdateReducer,
 } from './shoping-cart-update.reducer';
-import {
-  cartTotalProductInitialState,
-  CartTotalProductInitialProps,
-  cartTotalProductReducer,
-} from './cart-total-product.reducer';
 export interface ShopingCartState {
   cart: CartViewInitialProps;
   create: AddToCartInitialProps;
   update: CartUpdateInitialProps;
-  totalProduct: CartTotalProductInitialProps;
 }
 /** === INITIAL STATE === */
 export const shopingCartInitialState = {
   cart: cartViewInitialState,
   create: addToCartInitialState,
   update: cartUpdateInitialState,
-  totalProduct: cartTotalProductInitialState,
 };
 /** === REDUCER === */
 export const shopingCartReducer = (
-  { cart, create, update, totalProduct }: ShopingCartState,
+  { cart, create, update }: ShopingCartState,
   action: any,
 ) => ({
   cart: cartViewReducer(cart, action),
   create: addToCartReducer(create, action),
   update: cartUpdateReducer(update, action),
-  totalProduct: cartTotalProductReducer(totalProduct, action),
 });

@@ -3,6 +3,8 @@ export * from './oms.function';
 export * from './oms-hook.function';
 export * from './shopping-cart/shopping-cart.function';
 export * from './checkout-success/checkout-success.function';
+export * from './shopping-cart/shopping-cart-hook.function';
+export * from './checkout';
 /**
  * ================================================================
  * NOTES

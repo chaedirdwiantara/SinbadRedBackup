@@ -10,18 +10,15 @@ import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
 import { CheckoutPaymentTypeView } from './checkout-payment-type.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 /** === TYPE === */
-import { IProductCheckout } from './checkout-sku-list.view';
 import * as models from '@models';
 
 interface CheckoutInvoiceGroupViewProps {
-  products: IProductCheckout[];
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
   index: number;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
-  products,
   data,
   openModalPaymentType,
   index,
@@ -42,7 +39,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                 <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
               </TouchableOpacity>
             </View>
-            <CheckoutSKUListView products={products} />
+            <CheckoutSKUListView products={brand.products} />
           </View>
         ))}
       <CheckoutShipmentDetailView />

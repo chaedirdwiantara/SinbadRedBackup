@@ -26,5 +26,8 @@ export const useSendDataToSupplierActions = () => {
     ) => {
       dispatch(Actions.sendDataToSupplierProcess(contextDispatch, { data }));
     },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.sendDataToSupplierReset(contextDispatch));
+    },
   };
 };

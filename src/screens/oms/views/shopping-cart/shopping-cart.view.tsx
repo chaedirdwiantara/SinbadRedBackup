@@ -18,14 +18,21 @@ import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
-  CartInvoiceGroup,
   CartUpdatePayload,
   CartSelected,
   CartSelectedData,
   CartSelectedBrand,
   CartSelectedProduct,
+  CartInvoiceGroup,
+  CartBrand,
+  CartProduct,
 } from '@models';
-import { goToVerificationOrder, getTotalProducts } from '../../functions';
+import {
+  goToVerificationOrder,
+  getTotalProducts,
+  useCartMasterActions,
+  useCheckoutMaster,
+} from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
@@ -35,25 +42,31 @@ import {
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
-  const [invoiceGroups, setInvoiceGroups] = useState<Array<CartInvoiceGroup>>(
-    [],
-  );
+  const { cartMaster, setCartMaster, deleteProduct, setCartMasterData } =
+    useCartMasterActions();
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
+  const [productIdRemoveSelected, setProductIdRemoveSelected] = useState<
+    string | null
+  >(null);
   const totalProducts = useMemo(
-    () => getTotalProducts(invoiceGroups),
-    [invoiceGroups.length],
+    () => getTotalProducts(cartMaster.data),
+    [cartMaster.data.length],
   );
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
+  const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const {
-    stateShopingCart: { cart: cartState, update: updateCartState },
+    stateShopingCart: {
+      cart: { data: cartViewData, loading: cartViewLoading },
+      update: { data: updateCartData, loading: updateCartLoading },
+    },
     dispatchShopingCart,
   } = useShopingCartContext();
 
@@ -72,13 +85,13 @@ const OmsShoppingCartView: FC = () => {
   } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
-    if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
+    if (!stateVerificationOrder.create.loading && !updateCartLoading) {
       setIsConfirmCheckoutDialogOpen(false);
     }
     /** => below is the action if the update cart & potential discount fetch success */
     if (
       stateVerificationOrder.create.data !== null &&
-      updateCartState.data !== null
+      updateCartData !== null
     ) {
       verificationOrderDetail(
         dispatchVerificationOrder,
@@ -86,7 +99,7 @@ const OmsShoppingCartView: FC = () => {
       );
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.create, updateCartState]);
+  }, [stateVerificationOrder.create, updateCartData]);
 
   /** Voucher Cart */
   const voucherData = useDataVoucher();
@@ -98,10 +111,10 @@ const OmsShoppingCartView: FC = () => {
   const { dispatchPromo } = React.useContext(contexts.PromoContext);
   const reserveDiscountAction = useReserveDiscountAction();
   React.useEffect(() => {
-    if (cartState.data !== null) {
-      reserveDiscountAction.del(dispatchPromo, cartState.data.cartId);
+    if (checkoutMaster.cartId) {
+      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
     }
-  }, [cartState]);
+  }, []);
 
   /** Get Cart View */
   useEffect(() => {
@@ -116,30 +129,63 @@ const OmsShoppingCartView: FC = () => {
 
   /** Listen changes cartState */
   useEffect(() => {
-    if (cartState !== null && cartState.data !== null) {
+    if (cartViewData !== null) {
       let totalProductsSelected = 0;
-      setInvoiceGroups(cartState.data.data);
-      cartState.data.data.forEach((item) => {
-        item.brands.forEach((el) => {
-          el.products.forEach((product) => {
+      const data: CartInvoiceGroup[] = [];
+      cartViewData.data.forEach((invoiceGroup) => {
+        let isEmptyBrand = true;
+        const brands: CartBrand[] = [];
+        invoiceGroup.brands.forEach((brand) => {
+          let isEmptyProduct = true;
+          let brandSelected = false;
+          const products: CartProduct[] = [];
+          brand.products.forEach((product) => {
             if (product.selected) {
               totalProductsSelected += 1;
+              brandSelected = true;
             }
+            products.push(product);
+            isEmptyProduct = false;
           });
+          if (!isEmptyProduct) {
+            brands.push({
+              ...brand,
+              selected: brandSelected,
+              products: products,
+            });
+            isEmptyBrand = false;
+          }
         });
+        if (!isEmptyBrand) {
+          data.push({ ...invoiceGroup, brands: brands });
+        }
       });
       if (totalProductsSelected === totalProducts) {
         setAllProductsSelected(true);
       }
+
+      setCartMaster({
+        ...cartViewData,
+        data: data,
+        dataEmptyStock: [],
+        dataNotFound: [],
+      });
       setProductSelectedCount(totalProductsSelected);
-    } else {
-      setInvoiceGroups([]);
     }
-  }, [cartState]);
+  }, [cartViewData]);
+
+  /** Listen product id will be removed */
+  useEffect(() => {
+    if (productIdRemoveSelected !== null && updateCartData !== null) {
+      //call action remove product from redux
+      deleteProduct({ productId: productIdRemoveSelected });
+      setProductIdRemoveSelected(null);
+    }
+  }, [productIdRemoveSelected, updateCartData]);
 
   /** Confirmation checkout submit */
   const onSubmitCheckout = () => {
-    if (cartState.data === null) {
+    if (cartViewData === null) {
       /** DO SOMETHING */
       /** Show modal error/retry */
       return;
@@ -151,7 +197,7 @@ const OmsShoppingCartView: FC = () => {
 
     const dataSelected: CartSelectedData[] = [];
 
-    invoiceGroups.forEach((invoiceGroup) => {
+    cartMaster.data.forEach((invoiceGroup) => {
       /** => initial brand selected */
       const brandsSelected: CartSelectedBrand[] = [];
       invoiceGroup.brands.forEach((brand) => {
@@ -200,15 +246,15 @@ const OmsShoppingCartView: FC = () => {
     });
 
     const paramsCartSelected: CartSelected = {
-      id: cartState.data.cartId,
+      id: cartViewData.cartId,
       data: dataSelected,
-      isActiveStore: cartState.data.isActiveStore,
+      isActiveStore: cartViewData.isActiveStore,
     };
 
     const paramsVerificationCreate: CartSelected = {
-      id: cartState.data.cartId,
+      id: cartViewData.cartId,
       data: dataSelected,
-      isActiveStore: cartState.data.isActiveStore,
+      isActiveStore: cartViewData.isActiveStore,
       voucherIds: getSelectedVouchers(voucherData.dataVouchers),
     };
 
@@ -226,35 +272,36 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader />
-      {cartState.loading ? (
+      {cartViewLoading ? (
         <LoadingPage />
       ) : (
         <>
-          {invoiceGroups.length > 0 ? (
+          {Array.isArray(cartMaster.data) && cartMaster.data.length > 0 ? (
             <Fragment>
               <ScrollView>
                 <ShippingAddress />
                 {/* Invoice Group List */}
                 <Fragment>
-                  {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) => (
+                  {cartMaster.data.map((invoiceGroup, invoiceGroupIndex) => (
                     <ShoppingCartInvoiceGroup
                       key={invoiceGroup.invoiceGroupId.toString()}
                       invoiceGroup={invoiceGroup}
                       invoiceGroupIndex={invoiceGroupIndex}
-                      invoiceGroups={invoiceGroups}
-                      setInvoiceGroups={setInvoiceGroups}
+                      invoiceGroups={cartMaster.data}
+                      setInvoiceGroups={setCartMasterData}
                       productSelectedCount={productSelectedCount}
                       setProductSelectedCount={setProductSelectedCount}
                       setAllProductsSelected={setAllProductsSelected}
                       totalProducts={totalProducts}
+                      setProductIdRemoveSelected={setProductIdRemoveSelected}
                     />
                   ))}
                 </Fragment>
               </ScrollView>
               <ShoppingCartFooter
                 allProductsSelected={allProductsSelected}
-                invoiceGroups={invoiceGroups}
-                setInvoiceGroups={setInvoiceGroups}
+                invoiceGroups={cartMaster.data}
+                setInvoiceGroups={setCartMasterData}
                 setProductSelectedCount={setProductSelectedCount}
                 setAllProductsSelected={setAllProductsSelected}
                 totalProducts={totalProducts}
@@ -274,9 +321,7 @@ const OmsShoppingCartView: FC = () => {
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
         cancel={() => setIsConfirmCheckoutDialogOpen(false)}
-        loading={
-          stateVerificationOrder.create.loading || updateCartState.loading
-        }
+        loading={stateVerificationOrder.create.loading || updateCartLoading}
       />
     </SnbContainer>
   );

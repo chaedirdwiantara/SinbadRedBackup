@@ -3,7 +3,11 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
-import { useDataCart } from '@core/redux/Data';
+import {
+  useDataCartSelected,
+  useDataCartMaster,
+  useDataTotalProductCart,
+} from '@core/redux/Data';
 /** === FUNCTIONS === */
 
 export const useCartViewActions = () => {
@@ -49,7 +53,7 @@ export const useCartUpdateActions = () => {
 };
 
 export const useCartSelected = () => {
-  const dataCart = useDataCart();
+  const dataCart = useDataCartSelected();
   const dispatch = useDispatch();
   return {
     getCartSelected: dataCart,
@@ -60,13 +64,33 @@ export const useCartSelected = () => {
 };
 
 export const useCartTotalProductActions = () => {
+  const dataTotalProductCart: models.CartTotalProductSuccess =
+    useDataTotalProductCart().data;
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartTotalProductProcess(contextDispatch));
+    dataTotalProductCart: dataTotalProductCart,
+    fetch: () => {
+      dispatch(Actions.cartTotalProductProcess());
     },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.cartTotalProductReset);
+    reset: () => {
+      dispatch(Actions.cartTotalProductReset());
+    },
+  };
+};
+
+export const useCartMasterActions = () => {
+  const dataCart: models.ICartMaster = useDataCartMaster();
+  const dispatch = useDispatch();
+  return {
+    cartMaster: dataCart,
+    setCartMaster: (data: models.ICartMaster) => {
+      dispatch(Actions.updateCartMaster(data));
+    },
+    setCartMasterData: (data: models.CartInvoiceGroup[]) => {
+      dispatch(Actions.updateCartMasterData(data));
+    },
+    deleteProduct: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProduct(data));
     },
   };
 };
