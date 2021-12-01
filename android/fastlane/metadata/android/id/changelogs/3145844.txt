@@ -1,0 +1,4 @@
+Sinbad Red versi 4.9.1
+
+Updated Sinbad Apps:
+* Fix Google Maps Issue

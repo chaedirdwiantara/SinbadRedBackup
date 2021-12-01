@@ -67,4 +67,5 @@ GoogleService-Info.plist
 GoogleService*
 
 # keystore
-android/app/mplus_sinbad.jks
+/android/app/mplus_sinbad.jks
+/android/fastlane/config/sinbad.json
