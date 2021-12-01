@@ -8,41 +8,55 @@ import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
+import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useCartSelected } from '@core/functions/cart';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import { useReserveDiscountAction } from '@screen/promo/functions';
+import {
+  useCheckAllPromoPaymentAction,
+  useReserveDiscountAction,
+} from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
-  CartInvoiceGroup,
   CartUpdatePayload,
   CartSelected,
   CartSelectedData,
   CartSelectedBrand,
   CartSelectedProduct,
+  CartInvoiceGroup,
+  CartBrand,
+  CartProduct,
 } from '@models';
-import { goToVerificationOrder, getTotalProducts } from '../../functions';
+import {
+  goToVerificationOrder,
+  getTotalProducts,
+  useCartMasterActions,
+} from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCartViewActions,
   useCartUpdateActions,
+  useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { useReserveStockContext } from 'src/data/contexts/product';
+import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
-  const [invoiceGroups, setInvoiceGroups] = useState<Array<CartInvoiceGroup>>(
-    [],
-  );
+  const { cartMaster, setCartMaster, deleteProduct, setCartMasterData } =
+    useCartMasterActions();
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
+  const [productIdRemoveSelected, setProductIdRemoveSelected] = useState<
+    string | null
+  >(null);
   const totalProducts = useMemo(
-    () => getTotalProducts(invoiceGroups),
-    [invoiceGroups.length],
+    () => getTotalProducts(cartMaster.data),
+    [cartMaster.data.length],
   );
   const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
     useState(false);
@@ -52,7 +66,10 @@ const OmsShoppingCartView: FC = () => {
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const {
-    stateShopingCart: { cart: cartState, update: updateCartState },
+    stateShopingCart: {
+      cart: { data: cartViewData, loading: cartViewLoading },
+      update: { data: updateCartData, loading: updateCartLoading },
+    },
     dispatchShopingCart,
   } = useShopingCartContext();
 
@@ -64,29 +81,81 @@ const OmsShoppingCartView: FC = () => {
    */
   const { stateVerificationOrder, dispatchVerificationOrder } =
     React.useContext(contexts.VerificationOrderContext);
-  const { verificationOrderCreate } = useVerficationOrderAction();
+  const {
+    verificationOrderCreate,
+    verificationOrderDetail,
+    verificationCreateReset,
+  } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
-    if (!stateVerificationOrder.create.loading && !updateCartState.loading) {
+    if (!stateVerificationOrder.create.loading && !updateCartLoading) {
       setIsConfirmCheckoutDialogOpen(false);
     }
     /** => below is the action if the update cart & potential discount fetch success */
     if (
       stateVerificationOrder.create.data !== null &&
-      updateCartState.data != null
+      updateCartData !== null
     ) {
+      verificationOrderDetail(
+        dispatchVerificationOrder,
+        stateVerificationOrder.create.data.id,
+      );
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.create.data, updateCartState.data]);
+  }, [stateVerificationOrder.create, updateCartData]);
 
   /** Voucher Cart */
   const voucherData = useDataVoucher();
 
   /**
-   * Reserve Discount
+   * Reserve Section
+   * - Cancel Reserve Stock
+   * - Cancel Reserve Discount (Promo & Voucher)
    */
-  const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { del, resetDel } = useReserveDiscountAction();
+  const {
+    dispatchPromo,
+    statePromo: { checkAllPromoPayment: stateCheckAllPromoPayment },
+  } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = useReserveStockContext();
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
+  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
+  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
+  React.useEffect(() => {
+    reserveDiscountAction.del(dispatchPromo, '1');
+    reserveStockAction.del(dispatchReserveStock, '1');
+    // checkPromoPaymentAction.list(dispatchPromo, {
+    //   paymentTypeId: 1,
+    //   paymentChannelId: [1, 2, 3],
+    //   parcelPrice: 9000,
+    //   invoiceGroupId: '2',
+    //   sellerId: 1,
+    // });
+    checkAllPromoPaymentAction.create(dispatchPromo, [
+      {
+        invoiceGroupId: '4',
+        cartParcelId: '1',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+      {
+        invoiceGroupId: '5',
+        cartParcelId: '2',
+        paymentTypeId: 1,
+        paymentChannelId: 1,
+        parcelPrice: 100000,
+      },
+    ]);
+  }, []);
+  React.useEffect(() => {
+    if (stateCheckAllPromoPayment.create.data !== null) {
+      checkAllPromoPaymentAction.list(
+        dispatchPromo,
+        stateCheckAllPromoPayment.create.data.id,
+      );
+    }
+  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -94,51 +163,82 @@ const OmsShoppingCartView: FC = () => {
     storeDetailAction.detail(dispatchUser);
     cartViewActions.fetch(dispatchShopingCart);
 
-    /** => will be change later, delete reserve discount */
-    resetDel(dispatchPromo);
-    del(dispatchPromo, '1abcd');
+    return () => {
+      verificationCreateReset(dispatchVerificationOrder);
+    };
   }, []);
 
   /** Listen changes cartState */
   useEffect(() => {
-    if (cartState !== null && cartState.data !== null) {
+    if (cartViewData !== null) {
       let totalProductsSelected = 0;
-      setInvoiceGroups(cartState.data.data);
-      cartState.data.data.forEach((item) => {
-        item.brands.forEach((el) => {
-          el.products.forEach((product) => {
+      const data: CartInvoiceGroup[] = [];
+      cartViewData.data.forEach((invoiceGroup) => {
+        let isEmptyBrand = true;
+        const brands: CartBrand[] = [];
+        invoiceGroup.brands.forEach((brand) => {
+          let isEmptyProduct = true;
+          let brandSelected = false;
+          const products: CartProduct[] = [];
+          brand.products.forEach((product) => {
             if (product.selected) {
               totalProductsSelected += 1;
+              brandSelected = true;
             }
+            products.push(product);
+            isEmptyProduct = false;
           });
+          if (!isEmptyProduct) {
+            brands.push({
+              ...brand,
+              selected: brandSelected,
+              products: products,
+            });
+            isEmptyBrand = false;
+          }
         });
+        if (!isEmptyBrand) {
+          data.push({ ...invoiceGroup, brands: brands });
+        }
       });
       if (totalProductsSelected === totalProducts) {
         setAllProductsSelected(true);
       }
+
+      setCartMaster({
+        ...cartViewData,
+        data: data,
+        dataEmptyStock: [],
+        dataNotFound: [],
+      });
       setProductSelectedCount(totalProductsSelected);
-    } else {
-      setInvoiceGroups([]);
     }
-  }, [cartState]);
+  }, [cartViewData]);
+
+  /** Listen product id will be removed */
+  useEffect(() => {
+    if (productIdRemoveSelected !== null && updateCartData !== null) {
+      //call action remove product from redux
+      deleteProduct({ productId: productIdRemoveSelected });
+      setProductIdRemoveSelected(null);
+    }
+  }, [productIdRemoveSelected, updateCartData]);
 
   /** Confirmation checkout submit */
   const onSubmitCheckout = () => {
-    if (cartState.data === null) {
+    if (cartViewData === null) {
       /** DO SOMETHING */
       /** Show modal error/retry */
       return;
     }
     const params: CartUpdatePayload = {
-      storeId: cartState.data.storeId,
       action: 'submit',
       products: [],
-      voucherIds: [],
     };
 
     const dataSelected: CartSelectedData[] = [];
 
-    invoiceGroups.forEach((invoiceGroup) => {
+    cartMaster.data.forEach((invoiceGroup) => {
       /** => initial brand selected */
       const brandsSelected: CartSelectedBrand[] = [];
       invoiceGroup.brands.forEach((brand) => {
@@ -163,29 +263,39 @@ const OmsShoppingCartView: FC = () => {
             });
           }
         });
-        /** => insert brand selected */
-        brandsSelected.push({
-          brandId: brand.brandId,
-          products: productsSelected,
+        if (productsSelected.length > 0) {
+          /** => insert brand selected */
+          brandsSelected.push({
+            brandId: brand.brandId,
+            products: productsSelected,
+          });
+        }
+      });
+      if (brandsSelected.length > 0) {
+        /** => insert data selected */
+        dataSelected.push({
+          invoiceGroupId: invoiceGroup.invoiceGroupId,
+          portfolioId: invoiceGroup.portfolioId,
+          brands: brandsSelected,
+          sellerId: invoiceGroup.sellerId,
+          channelId: invoiceGroup.channelId,
+          groupId: invoiceGroup.groupId,
+          typeId: invoiceGroup.typeId,
+          clusterId: invoiceGroup.clusterId,
         });
-      });
-      /** => insert data selected */
-      dataSelected.push({
-        invoiceGroupId: invoiceGroup.invoiceGroupId,
-        portfolioId: invoiceGroup.portfolioId,
-        brands: brandsSelected,
-        sellerId: invoiceGroup.supplierId,
-        channelId: invoiceGroup.channelId,
-        groupId: invoiceGroup.groupId,
-        typeId: invoiceGroup.typeId,
-        clustderId: invoiceGroup.clusterId,
-      });
+      }
     });
 
     const paramsCartSelected: CartSelected = {
-      id: cartState.data.cartId,
+      id: cartViewData.cartId,
       data: dataSelected,
-      isActiveStore: cartState.data.isActiveStore,
+      isActiveStore: cartViewData.isActiveStore,
+    };
+
+    const paramsVerificationCreate: CartSelected = {
+      id: cartViewData.cartId,
+      data: dataSelected,
+      isActiveStore: cartViewData.isActiveStore,
       voucherIds: getSelectedVouchers(voucherData.dataVouchers),
     };
 
@@ -195,7 +305,7 @@ const OmsShoppingCartView: FC = () => {
     setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
     verificationOrderCreate(dispatchVerificationOrder, {
-      data: paramsCartSelected,
+      data: paramsVerificationCreate,
     });
   };
   /** === VIEW === */
@@ -203,40 +313,47 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader />
-      {invoiceGroups.length > 0 ? (
-        <Fragment>
-          <ScrollView>
-            <ShippingAddress />
-            {/* Invoice Group List */}
-            <Fragment>
-              {invoiceGroups.map((invoiceGroup, invoiceGroupIndex) => (
-                <ShoppingCartInvoiceGroup
-                  key={invoiceGroup.invoiceGroupId.toString()}
-                  invoiceGroup={invoiceGroup}
-                  invoiceGroupIndex={invoiceGroupIndex}
-                  invoiceGroups={invoiceGroups}
-                  setInvoiceGroups={setInvoiceGroups}
-                  productSelectedCount={productSelectedCount}
-                  setProductSelectedCount={setProductSelectedCount}
-                  setAllProductsSelected={setAllProductsSelected}
-                  totalProducts={totalProducts}
-                />
-              ))}
-            </Fragment>
-          </ScrollView>
-          <ShoppingCartFooter
-            allProductsSelected={allProductsSelected}
-            invoiceGroups={invoiceGroups}
-            setInvoiceGroups={setInvoiceGroups}
-            setProductSelectedCount={setProductSelectedCount}
-            setAllProductsSelected={setAllProductsSelected}
-            totalProducts={totalProducts}
-            productSelectedCount={productSelectedCount}
-            setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
-          />
-        </Fragment>
+      {cartViewLoading ? (
+        <LoadingPage />
       ) : (
-        <ShoppingCartEmpty />
+        <>
+          {Array.isArray(cartMaster.data) && cartMaster.data.length > 0 ? (
+            <Fragment>
+              <ScrollView>
+                <ShippingAddress />
+                {/* Invoice Group List */}
+                <Fragment>
+                  {cartMaster.data.map((invoiceGroup, invoiceGroupIndex) => (
+                    <ShoppingCartInvoiceGroup
+                      key={invoiceGroup.invoiceGroupId.toString()}
+                      invoiceGroup={invoiceGroup}
+                      invoiceGroupIndex={invoiceGroupIndex}
+                      invoiceGroups={cartMaster.data}
+                      setInvoiceGroups={setCartMasterData}
+                      productSelectedCount={productSelectedCount}
+                      setProductSelectedCount={setProductSelectedCount}
+                      setAllProductsSelected={setAllProductsSelected}
+                      totalProducts={totalProducts}
+                      setProductIdRemoveSelected={setProductIdRemoveSelected}
+                    />
+                  ))}
+                </Fragment>
+              </ScrollView>
+              <ShoppingCartFooter
+                allProductsSelected={allProductsSelected}
+                invoiceGroups={cartMaster.data}
+                setInvoiceGroups={setCartMasterData}
+                setProductSelectedCount={setProductSelectedCount}
+                setAllProductsSelected={setAllProductsSelected}
+                totalProducts={totalProducts}
+                productSelectedCount={productSelectedCount}
+                setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
+              />
+            </Fragment>
+          ) : (
+            <ShoppingCartEmpty />
+          )}
+        </>
       )}
       {/* Confirmation Modal Checkout */}
       <SnbDialog
@@ -245,9 +362,7 @@ const OmsShoppingCartView: FC = () => {
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
         cancel={() => setIsConfirmCheckoutDialogOpen(false)}
-        loading={
-          stateVerificationOrder.create.loading || updateCartState.loading
-        }
+        loading={stateVerificationOrder.create.loading || updateCartLoading}
       />
     </SnbContainer>
   );

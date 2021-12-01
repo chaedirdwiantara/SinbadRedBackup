@@ -11,7 +11,7 @@ import {
 const apiMappingMock = <T>(
   mockHost: string,
   path: string,
-  module: 'account' | 'cart' | 'product' | 'discount' | 'auth',
+  module: 'account' | 'cart' | 'product' | 'discount' | 'auth' | 'payment',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
   type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE',
   params?: object,

@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => Process */
 export const sendDataToSupplierProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.CreateProcessProps<{}>,
-): models.CreateProcessAction => {
+  payload: models.CreateProcessProps<models.SendDataSupplierPayload>,
+): models.CreateProcessAction<models.SendDataSupplierPayload> => {
   contextDispatch({
     type: types.SEND_DATA_SUPPLIER_PROCESS,
     payload,
@@ -33,6 +33,11 @@ export const sendDataToSupplierRefresh = () => {
   return { type: types.SEND_DATA_SUPPLIER_REFRESH };
 };
 /** => Reset */
-export const sendDataToSupplierReset = () => {
+export const sendDataToSupplierReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.SEND_DATA_SUPPLIER_RESET,
+  });
   return { type: types.SEND_DATA_SUPPLIER_RESET };
 };
