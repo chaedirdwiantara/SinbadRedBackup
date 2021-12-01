@@ -21,7 +21,6 @@ interface CheckoutInvoiceGroupViewProps {
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
-  products,
   data,
   openModalPaymentType,
   index,
@@ -42,7 +41,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                 <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
               </TouchableOpacity>
             </View>
-            <CheckoutSKUListView products={products} />
+            <CheckoutSKUListView products={brand.products} />
           </View>
         ))}
       <CheckoutShipmentDetailView />

@@ -25,7 +25,7 @@ const useDataGlobal = () => {
 const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
-const useDataCart = () => {
+const useDataCartSelected = () => {
   return useSelector((state: RootState) => state.cartSelected);
 };
 const useDataCheckout = () => {
@@ -34,6 +34,9 @@ const useDataCheckout = () => {
 const useDataPaymentChannels = () => {
   return useSelector((state: RootState) => state.paymentChannelsModal);
 };
+const useDataCartMaster = () => {
+  return useSelector((state: RootState) => state.cartMaster);
+};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -41,9 +44,10 @@ export {
   useDataVoucher,
   useDataFlagRTDB,
   useDataAuth,
-  useDataCart,
+  useDataCartSelected,
   useDataCheckout,
   useDataPaymentChannels,
+  useDataCartMaster,
 };
 /**
  * ================================================================

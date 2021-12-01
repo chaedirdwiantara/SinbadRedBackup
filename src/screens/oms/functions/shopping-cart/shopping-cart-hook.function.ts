@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
 import * as models from '@models';
-import { useDataCart } from '@core/redux/Data';
+import { useDataCartSelected, useDataCartMaster } from '@core/redux/Data';
 /** === FUNCTIONS === */
 
 export const useCartViewActions = () => {
@@ -49,7 +49,7 @@ export const useCartUpdateActions = () => {
 };
 
 export const useCartSelected = () => {
-  const dataCart = useDataCart();
+  const dataCart = useDataCartSelected();
   const dispatch = useDispatch();
   return {
     getCartSelected: dataCart,
@@ -67,6 +67,23 @@ export const useCartTotalProductActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.cartTotalProductReset);
+    },
+  };
+};
+
+export const useCartMasterActions = () => {
+  const dataCart: models.ICartMaster = useDataCartMaster();
+  const dispatch = useDispatch();
+  return {
+    cartMaster: dataCart,
+    setCartMaster: (data: models.ICartMaster) => {
+      dispatch(Actions.updateCartMaster(data));
+    },
+    setCartMasterData: (data: models.CartInvoiceGroup[]) => {
+      dispatch(Actions.updateCartMasterData(data));
+    },
+    deleteProduct: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProduct(data));
     },
   };
 };
