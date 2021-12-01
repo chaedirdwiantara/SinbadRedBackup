@@ -14,6 +14,7 @@ import VoucherNav from './voucher.navigation';
 import HelpNav from './help.navigation';
 import NotificationNav from './notification.navigations';
 import SupplierNav from './supplier.navigation';
+import RecommendationNav from './recommendation.navigation';
 
 const index = {
   ...OmsNav,
@@ -32,6 +33,7 @@ const index = {
   ...HelpNav,
   ...NotificationNav,
   ...SupplierNav,
+  ...RecommendationNav,
 };
 
 export default index;

@@ -13,10 +13,16 @@ import { HomeHookFunc } from '../functions';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
+import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useDataTotalProductCart } from '@core/redux/Data';
+import { useCheckoutMaster } from '@screen/oms/functions';
 /** === COMPONENT === */
 const HomeView: React.FC = () => {
   /** === HOOK === */
   const { action, state } = HomeHookFunc.useHeaderChange();
+  const { data } = useDataTotalProductCart();
+  const { setCartId } = useCheckoutMaster();
+  const cartTotalProductActions = useCartTotalProductActions();
   useGetTokenNotLogin();
   setFlagByDeviceId();
   const { me } = useAuthCoreAction();
@@ -24,10 +30,20 @@ const HomeView: React.FC = () => {
   const changeHeader = (height: number) => {
     height > 100 ? action(true) : action(false);
   };
-  /** === VIEW === */
+
+  /** => initial */
   React.useEffect(() => {
     me();
+    cartTotalProductActions.fetch();
   }, []);
+
+  /** => listen changes data cart id */
+  React.useEffect(() => {
+    if (data && data.cartId) {
+      setCartId({ cartId: data.cartId });
+    }
+  }, [data.cartId]);
+
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={state} />;

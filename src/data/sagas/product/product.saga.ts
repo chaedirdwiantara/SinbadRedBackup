@@ -7,12 +7,13 @@ import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
 /** => List */
-function* productList(action: models.ListProcessAction) {
+function* productList(action: models.ProductListProcessAction) {
   try {
     const response: models.ListSuccessProps<Array<models.ProductList>> =
       yield call(() => {
         return ProductApi.getList(
           action.payload as models.ProductListProcessProps,
+          action.subModule,
         );
       });
     yield action.contextDispatch(ActionCreators.productListSuccess(response));

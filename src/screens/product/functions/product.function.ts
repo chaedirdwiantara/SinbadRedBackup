@@ -13,4 +13,18 @@ const goToSupplier = () => {
   NavigationAction.navigate('SupplierView');
 };
 
-export { goBack, goToShoppingCart, goToSupplier };
+const goToBundle = (id: string) => {
+  NavigationAction.navigate('ProductBundleView', { id });
+};
+
+const goBackFromBundleToDetail = (id: string) => {
+  NavigationAction.navigate('ProductDetailView', { id });
+};
+
+export {
+  goBack,
+  goToShoppingCart,
+  goToSupplier,
+  goToBundle,
+  goBackFromBundleToDetail,
+};
