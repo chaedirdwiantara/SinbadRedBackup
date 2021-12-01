@@ -407,6 +407,12 @@ const OmsVerificationOrderView: FC = () => {
                 statePromo.reserveDiscount.create.loading ||
                 statePromo.reserveDiscount.detail.loading
               }
+              disabled={
+                verificationOrderDetailData.grandTotal.grandTotalPrice === 0 ||
+                verificationOrderDetailData.grandTotal.grandTotalPrice -
+                  verificationOrderDetailData.grandTotal.grandTotalDiscount <
+                  0
+              }
               onPress={() => handleContinuePayment()}
             />
           </View>
