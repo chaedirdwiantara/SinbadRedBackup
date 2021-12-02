@@ -227,6 +227,7 @@ const OmsShoppingCartView: FC = () => {
             productId: product.productId,
             qty: product.qty,
             selected: product.selected,
+            stock: product.stock,
           });
 
           if (product.selected) {
