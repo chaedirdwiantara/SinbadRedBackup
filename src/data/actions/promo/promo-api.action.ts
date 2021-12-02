@@ -283,8 +283,8 @@ export const checkPromoPaymentReset = () => {
 /** => process */
 export const createCheckAllPromoPaymentProcess = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<models.CheckAllPromoPaymentPostPayload[]>,
-): models.CreateProcessAction => {
+  data: models.CheckAllPromoPaymentPostPayload[],
+): models.CreateProcessAction<models.CheckAllPromoPaymentPostPayload[]> => {
   contextDispatch({
     type: types.CREATE_CHECK_PROMO_PAYMENT_PROCESS,
     payload: data,
