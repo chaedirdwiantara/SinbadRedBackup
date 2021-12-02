@@ -65,9 +65,20 @@ const OmsCheckoutView: FC = () => {
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
   const { statePromo } = React.useContext(contexts.PromoContext);
 
+  const { resetCheckoutMasterData } = useCheckoutMaster();
+
   /** Set Loading Page */
   useEffect(() => {
     checkoutViewActions.fetch(dispatchCheckout);
+
+    return () => {
+      /** => reset get checkout data */
+      checkoutViewActions.reset(dispatchCheckout);
+      /** => reset checkout master data */
+      resetCheckoutMasterData();
+      /** => reset local voucher data */
+      dispatch(Actions.saveSelectedVouchers(null));
+    };
   }, []);
 
   useEffect(() => {
@@ -170,8 +181,6 @@ const OmsCheckoutView: FC = () => {
   };
   /** handle back to cart */
   const handleBackToCart = () => {
-    /** => reset local voucher data */
-    dispatch(Actions.saveSelectedVouchers(null));
     backToCartModal.setOpen(false);
     backToCart();
   };
