@@ -27,13 +27,16 @@ import {
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
-import { useReserveDiscountAction } from '@screen/promo/functions';
+import { useDispatch } from 'react-redux';
+import * as Actions from '@actions';
 import { backToCart, goToCheckoutSuccess } from '@screen/oms/functions';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
-  const reserveDiscountAction = useReserveDiscountAction();
+  /** => used for reset voucher */
+  const dispatch = useDispatch();
+
   const checkoutViewActions = useCheckoutViewActions();
   const paymentTypeModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
@@ -54,17 +57,27 @@ const OmsCheckoutView: FC = () => {
     checkoutMaster,
     setReserveDiscount,
     setPaymentChannel,
+    resetCheckoutMasterData,
   } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
-  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { statePromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
   useEffect(() => {
     checkoutViewActions.fetch(dispatchCheckout);
+
+    return () => {
+      /** => reset get checkout data */
+      checkoutViewActions.reset(dispatchCheckout);
+      /** => reset checkout master data */
+      resetCheckoutMasterData();
+      /** => reset local voucher data */
+      dispatch(Actions.saveSelectedVouchers(null));
+    };
   }, []);
 
   useEffect(() => {
@@ -179,13 +192,6 @@ const OmsCheckoutView: FC = () => {
   /** handle back to cart */
   const handleBackToCart = () => {
     backToCartModal.setOpen(false);
-    reserveDiscountAction.resetCreate(dispatchPromo);
-    reserveDiscountAction.resetDetail(dispatchPromo);
-    /**
-     * TO DO:
-     * - add reset for reserveStock create
-     * - add reset for reserveStock detail
-     */
     backToCart();
   };
 

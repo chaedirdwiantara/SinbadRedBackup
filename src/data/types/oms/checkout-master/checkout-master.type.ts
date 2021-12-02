@@ -10,3 +10,5 @@ export const UPDATE_PAYMENT_CHANNEL_CHECKOUT = 'UpdatePaymentChannelCheckout';
 export const UPDATE_PROMO_PAYMENT_CHECKOUT = 'UpdatePromoPaymentCheckout';
 /** => Update CartId */
 export const UPDATE_CART_ID_CHECKOUT = 'UpdateCartIdCheckout';
+/** => Reset Checkout Master Data */
+export const RESET_CHECKOUT_MASTER_DATA = 'ResetCheckoutMasterData';

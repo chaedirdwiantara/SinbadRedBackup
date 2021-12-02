@@ -13,10 +13,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import {
-  useCheckAllPromoPaymentAction,
-  useReserveDiscountAction,
-} from '@screen/promo/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -42,7 +39,6 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-import { useReserveStockContext } from 'src/data/contexts/product';
 import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -96,7 +92,7 @@ const OmsShoppingCartView: FC = () => {
   const {
     verificationOrderCreate,
     verificationOrderDetail,
-    verificationCreateReset,
+    verificationReset,
   } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
@@ -121,55 +117,21 @@ const OmsShoppingCartView: FC = () => {
 
   /**
    * Reserve Section
-   * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
+   * - Cancel Reserve Stock
    */
-  const {
-    dispatchPromo,
-    statePromo: { checkAllPromoPayment: stateCheckAllPromoPayment },
-  } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock } = useReserveStockContext();
+  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
+  );
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
-  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
-  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
     if (checkoutMaster.cartId) {
       reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
       reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
     }
-    // checkPromoPaymentAction.list(dispatchPromo, {
-    //   paymentTypeId: 1,
-    //   paymentChannelId: [1, 2, 3],
-    //   parcelPrice: 9000,
-    //   invoiceGroupId: '2',
-    //   sellerId: 1,
-    // });
-    checkAllPromoPaymentAction.create(dispatchPromo, [
-      {
-        invoiceGroupId: '4',
-        cartParcelId: '1',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-      {
-        invoiceGroupId: '5',
-        cartParcelId: '2',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-    ]);
   }, []);
-  React.useEffect(() => {
-    if (stateCheckAllPromoPayment.create.data !== null) {
-      checkAllPromoPaymentAction.list(
-        dispatchPromo,
-        stateCheckAllPromoPayment.create.data.id,
-      );
-    }
-  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -178,7 +140,9 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
 
     return () => {
-      verificationCreateReset(dispatchVerificationOrder);
+      verificationReset(dispatchVerificationOrder);
+      reserveDiscountAction.resetDelete(dispatchPromo);
+      reserveStockAction.resetDelete(dispatchReserveStock);
     };
   }, []);
 

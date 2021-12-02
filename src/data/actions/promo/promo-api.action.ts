@@ -160,6 +160,15 @@ export const deleteReserveDiscountFailed = (
 ): models.DeleteFailedAction => {
   return { type: types.DELETE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
+/** => delete reserve discount reset */
+export const deleteReserveDiscountReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.DELETE_RESERVE_DISCOUNT_RESET,
+  });
+  return { type: types.DELETE_RESERVE_DISCOUNT_RESET };
+};
 
 /** === CREATE RESERVE DISCOUNT === */
 /** => create reserve discount process */
