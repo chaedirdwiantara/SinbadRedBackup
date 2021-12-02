@@ -39,6 +39,8 @@ interface ShoppingCartProductProps {
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
   setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -54,6 +56,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setAllProductsSelected,
   totalProducts,
   setProductIdRemoveSelected,
+  setSassionQty,
 }) => {
   const { dispatchShopingCart } = useShopingCartContext();
   const cartUpdateActions = useCartUpdateActions();
@@ -122,6 +125,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   productIndex,
                   'increase',
                   [invoiceGroups, setInvoiceGroups],
+                  product.qty,
+                  setSassionQty,
                 )
               }
               onDecrease={() =>
@@ -131,10 +136,12 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   productIndex,
                   'decrease',
                   [invoiceGroups, setInvoiceGroups],
+                  product.qty,
+                  setSassionQty,
                 )
               }
-              minusDisabled={product.qty === 1}
-              plusDisabled={product.qty === product.stock}
+              minusDisabled={product.qty <= 1}
+              plusDisabled={product.qty >= product.stock}
             />
           </View>
         </View>
@@ -156,7 +163,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
-        {product.stock <= 10 && (
+        {product.stock <= 50 && (
           <SnbText.B3
             color={
               color.red50
