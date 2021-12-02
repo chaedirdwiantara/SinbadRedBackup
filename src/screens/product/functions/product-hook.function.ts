@@ -12,16 +12,21 @@ const callProcessAction = (
   skip: number,
   limit: number,
   queryOptions?: models.ProductListQueryOptions,
+  subModule?: models.ProductSubModule,
 ) => {
-  return Actions.productListProcess(contextDispatch, {
-    loading,
-    skip,
-    limit,
-    ...queryOptions,
-  });
+  return Actions.productListProcess(
+    contextDispatch,
+    {
+      loading,
+      skip,
+      limit,
+      ...queryOptions,
+    },
+    subModule,
+  );
 };
 
-const useProductListActions = () => {
+const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
   const limit = 10;
 
@@ -32,7 +37,14 @@ const useProductListActions = () => {
     ) => {
       contextDispatch(Actions.productListReset());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callProcessAction(
+          contextDispatch,
+          true,
+          0,
+          limit,
+          queryOptions,
+          subModule,
+        ),
       );
     },
     refresh: (
@@ -41,7 +53,14 @@ const useProductListActions = () => {
     ) => {
       contextDispatch(Actions.productListRefresh());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callProcessAction(
+          contextDispatch,
+          true,
+          0,
+          limit,
+          queryOptions,
+          subModule,
+        ),
       );
     },
     loadMore: (
@@ -58,6 +77,7 @@ const useProductListActions = () => {
             paginationQueries.skip + limit,
             limit,
             queryOptions,
+            subModule,
           ),
         );
       }
@@ -126,6 +146,19 @@ const useTagListActions = () => {
   };
 };
 
+/** => reserve stock action */
+const useReserveStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    del: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.deleteReserveStockProcess(contextDispatch, { id }));
+    },
+    create: (contextDispatch: (action: any) => any, data: {}) => {
+      dispatch(Actions.createReserveStockProcess(contextDispatch, { data }));
+    },
+  };
+};
+
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
@@ -152,4 +185,5 @@ export {
   useProductDetailAction,
   useAddToCart,
   useTagListActions,
+  useReserveStockAction,
 };

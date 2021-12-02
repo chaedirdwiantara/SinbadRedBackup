@@ -15,12 +15,14 @@ import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
+import { BundleSection } from './BundleSection';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
+import { goToBundle } from '../../functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -86,19 +88,16 @@ const ProductDetailView: FC = () => {
     statePromo: { potentialPromoProduct: potentialPromoProduct },
     dispatchPromo,
   } = React.useContext(contexts.PromoContext);
-  const potentialPromoProductList = potentialPromoProduct.list;
+  const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
   /** => potential promo product effect */
   React.useEffect(() => {
     if (productDetailState.data !== null) {
       const { id } = productDetailState.data;
       potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.list(
-        dispatchPromo,
-        '6149f9c2a5868baca3e6f8ec',
-      );
+      potentialPromoProductAction.detail(dispatchPromo, id);
     }
-  }, [productDetailState]);
+  }, [productDetailState.data]);
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -120,7 +119,10 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading || productDetailState.data === null) {
+  if (
+    productDetailState.loading ||
+    (productDetailState.data === null && !productDetailState.error)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
@@ -130,7 +132,10 @@ const ProductDetailView: FC = () => {
     );
   }
   /** => Error */
-  if (!productDetailState.loading && productDetailState.error) {
+  if (
+    !productDetailState.loading &&
+    (productDetailState.error || productDetailState.data?.name === undefined)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
@@ -181,17 +186,21 @@ const ProductDetailView: FC = () => {
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
           />
-          {potentialPromoProductList.data.length > 0 && (
-            <PromoSection
-              description={potentialPromoProductList.data[0].shortDescription}
-              onPress={() => setPromoModalVisible(true)}
-            />
-          )}
-          {defaultProperties.isBundle && (
-            <ProductDetailSection title="Promosi Bundle Special">
-              <SnbText.B3>Promo Bundle Data</SnbText.B3>
-            </ProductDetailSection>
-          )}
+          {potentialPromoProductList.data !== null &&
+            potentialPromoProductList.data.flexiCombo.length > 0 && (
+              <PromoSection
+                description={
+                  potentialPromoProductList.data.flexiCombo[0].shortDescription
+                }
+                onPress={() => setPromoModalVisible(true)}
+              />
+            )}
+          {potentialPromoProductList.data !== null &&
+            potentialPromoProductList.data.crossSelling.length > 0 && (
+              <BundleSection
+                bundleList={potentialPromoProductList.data.crossSelling}
+              />
+            )}
           <ProductDetailSection title="Informasi Produk">
             <ProductDetailSectionItem
               name="Minimal Pembelian"
@@ -222,7 +231,13 @@ const ProductDetailView: FC = () => {
           disabled={
             defaultProperties.stock < (productDetailState.data?.minQty ?? 1)
           }
-          onPress={() => console.log('Add to cart pressed')}
+          onPress={() => {
+            if (defaultProperties.isBundle) {
+              goToBundle(productId);
+            } else {
+              console.log('Add to cart pressed');
+            }
+          }}
         />
       ) : (
         <UnavailableSkuFlag />
@@ -230,7 +245,7 @@ const ProductDetailView: FC = () => {
       <PromoModal
         visible={promoModalVisible}
         onClose={() => setPromoModalVisible(false)}
-        promoList={potentialPromoProductList.data}
+        promoList={potentialPromoProductList.data?.flexiCombo || []}
       />
     </SnbContainer>
   );

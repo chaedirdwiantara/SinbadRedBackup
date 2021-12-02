@@ -12,11 +12,12 @@ interface ShoppingCartInvoiceGroupProps {
   invoiceGroup: CartInvoiceGroup;
   invoiceGroupIndex: number;
   invoiceGroups: CartInvoiceGroup[];
-  setInvoiceGroups: Dispatch<SetStateAction<CartInvoiceGroup[]>>;
+  setInvoiceGroups: (any: CartInvoiceGroup[]) => void;
   productSelectedCount: number;
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
+  setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -28,6 +29,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
+  setProductIdRemoveSelected,
 }) => (
   <View
     style={ShoppingCartStyles.cardContainer}
@@ -37,7 +39,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
     </View>
     {invoiceGroup.brands.map((brand, brandIndex) => (
       <ShoppingCartBrand
-        key={brand.brandId.toString()}
+        key={brandIndex.toString()}
         brand={brand}
         brandIndex={brandIndex}
         invoiceGroupIndex={invoiceGroupIndex}
@@ -47,6 +49,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
         setProductSelectedCount={setProductSelectedCount}
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
+        setProductIdRemoveSelected={setProductIdRemoveSelected}
       />
     ))}
   </View>

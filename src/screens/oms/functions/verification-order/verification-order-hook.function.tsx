@@ -12,14 +12,17 @@ const useVerficationOrderAction = () => {
       contextDispatch: (action: any) => any,
       data: models.CreateProcessProps<{}>,
     ) => {
-      dispatch(Actions.verificationOrderDetailReset());
       dispatch(Actions.verificationOrderCreateProcess(contextDispatch, data));
     },
     verificationOrderDetail: (
       contextDispatch: (action: any) => any,
       id: string,
     ) => {
+      dispatch(Actions.verificationOrderDetailReset());
       dispatch(Actions.verificationOrderDetailProcess(contextDispatch, { id }));
+    },
+    verificationCreateReset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.verificationOrderCreateReset(contextDispatch));
     },
   };
 };

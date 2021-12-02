@@ -10,6 +10,7 @@ export interface TagListProcessProps {
   keyword?: string;
   brandId?: string;
   categoryId?: string;
+  sellerId?: string;
 }
 
 export type TagListQueryOptions = Omit<TagListProcessProps, 'loading'>;

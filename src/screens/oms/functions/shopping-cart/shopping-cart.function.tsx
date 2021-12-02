@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import { Dispatch, SetStateAction } from 'react';
-import { CartInvoiceGroup } from '@models';
+import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
@@ -40,7 +40,7 @@ const handleProductQuantityChange = (
   action: 'increase' | 'decrease',
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
@@ -69,7 +69,7 @@ const handleSelectedProductChange = (
   selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
@@ -128,7 +128,7 @@ const handleSelectedBrandChange = (
   selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
@@ -225,10 +225,15 @@ const handleProductDelete = (
   brandIndex: number,
   productIndex: number,
   invoiceGroups: Array<CartInvoiceGroup>,
+  onRemoveProduct: (any: IProductItemUpdateCart) => void,
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
-  console.log(`${deletedProduct.productName} deleted`);
+  onRemoveProduct({
+    productId: deletedProduct.productId,
+    qty: 0,
+    selected: false,
+  });
 };
 
 export {

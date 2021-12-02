@@ -13,11 +13,10 @@ const getSegmentation = (payload: models.DetailProcessProps) => {
   );
 };
 
-const createSupplierStore = (
-  payload: models.CreateProcessProps<models.SendDataSupplierProps>,
-) => {
+const createSupplierStore = (payload: models.SendDataSupplierPayload) => {
+  console.log('[payload]: ', payload);
   const path = 'supplier-stores';
-  return apiMapping('auth', path, 'account', 'v1', 'CREATE', payload.data);
+  return apiMapping('auth', path, 'account', 'v1', 'CREATE', payload);
 };
 
 export const SupplierApi = {

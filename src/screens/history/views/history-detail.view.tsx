@@ -16,7 +16,7 @@ import {
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { goBack, usePaymentDetail } from '../functions';
+import { goBack, usePaymentDetail, goToHistoryInvoice } from '../functions';
 import { HistoryDetailStyle } from '../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../components';
 import { contexts } from '@contexts';
@@ -229,7 +229,7 @@ const HistoryDetailView: FC = () => {
     <HistoryDetailCard
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
-      onActionClick={() => console.log('See invoice pressed')}>
+      onActionClick={() => goToHistoryInvoice()}>
       {renderCardItem('Nomor Pesanan', historyDetailDummy.invoice.orderId)}
       {renderCardItem(
         'Nomor Referensi',
@@ -262,49 +262,51 @@ const HistoryDetailView: FC = () => {
     </HistoryDetailCard>
   );
   /** => Payment Info */
-  const renderPaymentInfo = () => (
-    !stateHistory.paymentDetail?.loading ? 
-    (<HistoryDetailCard title="Informasi Pembayaran">
-      {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
-      {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
-      <HistoryDetailCardDivider />
-      {renderCardItem(
-        'Sub-total pesanan (90)',
-        toCurrency(historyDetailDummy.payment.subtotal),
-      )}
-      {historyDetailDummy.payment.freeProducts.map((product) =>
-        renderCardItem(
-          `${product.name} (${product.qty} ${product.uom})`,
-          'FREE',
-          'green',
-        ),
-      )}
-      {renderCardItem(
-        'Ongkos Kirim',
-        toCurrency(historyDetailDummy.payment.deliveryFee),
-      )}
-      {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
-      {renderCardItem(
-        'Total Pesanan',
-        toCurrency(historyDetailDummy.payment.orderTotal),
-        'bold',
-      )}
-      <HistoryDetailCardDivider />
-      {renderCardItem(
-        'Promo Pembayaran',
-        toCurrency(historyDetailDummy.payment.promo),
-      )}
-      {renderCardItem(
-        'Layanan Pembayaran',
-        toCurrency(historyDetailDummy.payment.serviceFee),
-      )}
-      {renderCardItem(
-        'Total Pembayaran Pesanan',
-        toCurrency(historyDetailDummy.payment.paymentTotal),
-        'bold',
-      )}
-    </HistoryDetailCard>) : <LoadingPage/>
-  );
+  const renderPaymentInfo = () =>
+    !stateHistory.paymentDetail?.loading ? (
+      <HistoryDetailCard title="Informasi Pembayaran">
+        {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
+        {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
+        <HistoryDetailCardDivider />
+        {renderCardItem(
+          'Sub-total pesanan (90)',
+          toCurrency(historyDetailDummy.payment.subtotal),
+        )}
+        {historyDetailDummy.payment.freeProducts.map((product) =>
+          renderCardItem(
+            `${product.name} (${product.qty} ${product.uom})`,
+            'FREE',
+            'green',
+          ),
+        )}
+        {renderCardItem(
+          'Ongkos Kirim',
+          toCurrency(historyDetailDummy.payment.deliveryFee),
+        )}
+        {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
+        {renderCardItem(
+          'Total Pesanan',
+          toCurrency(historyDetailDummy.payment.orderTotal),
+          'bold',
+        )}
+        <HistoryDetailCardDivider />
+        {renderCardItem(
+          'Promo Pembayaran',
+          toCurrency(historyDetailDummy.payment.promo),
+        )}
+        {renderCardItem(
+          'Layanan Pembayaran',
+          toCurrency(historyDetailDummy.payment.serviceFee),
+        )}
+        {renderCardItem(
+          'Total Pembayaran Pesanan',
+          toCurrency(historyDetailDummy.payment.paymentTotal),
+          'bold',
+        )}
+      </HistoryDetailCard>
+    ) : (
+      <LoadingPage />
+    );
   /** => Order Refund Info */
   const renderOrderRefundInfo = () => (
     <HistoryDetailCard title="Informasi Pengembalian">
