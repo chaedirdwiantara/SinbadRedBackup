@@ -20,6 +20,12 @@ import {
   VerificationOrderDetailNonPromoList,
   VerificationOrderDetailPromoList,
   VerificationOrderDetailVoucherList,
+  CartSelectedData,
+  CartSelectedBrand,
+  CartSelectedProduct,
+  ReserveStockPayloadData,
+  ReserveStockPayloadBrand,
+  ReserveStockPayloadProducts,
 } from '@models';
 import LoadingPage from '@core/components/LoadingPage';
 import { useReserveDiscountAction } from '@screen/promo/functions';
@@ -31,8 +37,9 @@ import { ErrorPromoModal } from './ErrorPromoModal';
 import { ErrorVoucherModal } from './ErrorVoucherModal';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
-import { usePrevious } from '@core/functions/hook/prev-value';
 import { capitalize } from '@core/functions/global/capitalize';
+import { useReserveStockAction } from '@screen/product/functions';
+
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
@@ -40,7 +47,6 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorPromo, setErrorPromo] = React.useState(false);
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
-  const [isErrorNetwork, setErrorNetwork] = React.useState();
 
   const dispatch = useDispatch();
 
@@ -54,37 +60,80 @@ const OmsVerificationOrderView: FC = () => {
 
   /**
    * RESERVE SECTION
-   * - POST Reserve Discount (Promo & Voucher)
-   * - GET Reserve Discount (Promo & Voucher)
+   * - POST reserved-discount (Promo & Voucher)
+   * - GET reserved-discount (Promo & Voucher)
+   * - POST reserved-stock
+   * - GET reserved-stock
    */
-  const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
-  const reserveDiscountAction = useReserveDiscountAction();
+
   /** => get cart data */
   const { getCartSelected } = useCartSelected();
   /** => get voucher data */
   const voucherData = useDataVoucher();
 
-  const prevReserveDiscountError = usePrevious(
-    statePromo.reserveDiscount.create.error,
+  const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock, stateReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
   );
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
 
+  /**
+   * Listen Error POST reserved-stock
+   * - error stock
+   * - error fetch
+   */
   React.useEffect(() => {
-    /** => if POST reserved-discount error */
-    if (
-      statePromo.reserveDiscount.create.error !== null &&
-      prevReserveDiscountError === null
-    ) {
-      /** => if error voucher */
+    if (stateReserveStock.create.error !== null) {
+      if (stateReserveStock.create.error.code === 140037) {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      }
+    }
+  }, [stateReserveStock.create.error]);
+
+  /**
+   * Listen Success POST reserved-stock
+   * - if success, hit POST reserved-discount
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.create.data !== null) {
+      const createReserveDiscountParams = {
+        ...getCartSelected,
+        voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+        potentialDiscountId: stateVerificationOrder.create.data?.id,
+        reservedAt: moment().format().toString(),
+      };
+      reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
+    }
+  }, [stateReserveStock.create.data]);
+
+  /**
+   * Listen Success GET error message reserved-stock
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.detail.data !== null) {
+      setErrorStock(true);
+    }
+  }, [stateReserveStock.detail.data]);
+
+  /**
+   * Listen Error POST reserved-discount
+   * - error voucher
+   * - error fetch
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.create.error !== null) {
       if (statePromo.reserveDiscount.create.error.code === 140037) {
         setErrorVoucher(true);
       }
-      /** => if error fetch */
-      // do something
     }
   }, [statePromo.reserveDiscount.create.error]);
+
+  /**
+   * Listen Success POST reserved-discount
+   */
   React.useEffect(() => {
     if (statePromo.reserveDiscount.create.data !== null) {
-      /** => fetch GET `reserved-discount` */
       reserveDiscountAction.detail(
         dispatchPromo,
         statePromo.reserveDiscount.create.data.id,
@@ -92,34 +141,55 @@ const OmsVerificationOrderView: FC = () => {
     }
   }, [statePromo.reserveDiscount.create.data]);
 
-  /** => effect for listen GET reserved-discount */
+  /**
+   * Listen Success GET reserved-discount
+   * - error promo
+   * - not error promo
+   */
   React.useEffect(() => {
     if (statePromo.reserveDiscount.detail.data !== null) {
-      /** => if error promo */
       if (
         statePromo.reserveDiscount.detail.data.promoNotMatch.amount.length >
           0 ||
         statePromo.reserveDiscount.detail.data.promoNotMatch.bonus.length > 0
       ) {
-        /** show modal error promo (bisa lanjut ke pembayaran) */
         setErrorPromo(true);
       } else {
-        /** => if not error promo
-         * pre-checkout codes should be in here! */
         goToCheckout();
       }
     }
-  }, [statePromo.reserveDiscount.detail]);
+  }, [statePromo.reserveDiscount.detail.data]);
 
   /** => handleContinueToPayment */
   const handleContinuePayment = () => {
-    const createReserveDiscountParams = {
-      ...getCartSelected,
-      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
-      potentialDiscountId: stateVerificationOrder.create.data?.id,
+    const invoices: ReserveStockPayloadData[] = [];
+    getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+      const brands: ReserveStockPayloadBrand[] = [];
+      invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+        const products: ReserveStockPayloadProducts[] = [];
+        brandArr.products.map((productArr: CartSelectedProduct) => {
+          products.push({
+            productId: productArr.productId,
+            qty: productArr.qty,
+            warehouseId: productArr.warehouseId,
+          });
+        });
+        brands.push({
+          brandId: brandArr.brandId,
+          products,
+        });
+      });
+      invoices.push({
+        invoiceGroupId: invoiceArr.invoiceGroupId,
+        brands,
+      });
+    });
+    const createReserveStockParams = {
+      id: getCartSelected.id,
+      data: invoices,
       reservedAt: moment().format().toString(),
     };
-    reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
+    reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
   };
 
   /** === VIEW === */

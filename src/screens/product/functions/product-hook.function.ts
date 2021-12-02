@@ -153,8 +153,14 @@ const useReserveStockAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveStockProcess(contextDispatch, { id }));
     },
-    create: (contextDispatch: (action: any) => any, data: {}) => {
-      dispatch(Actions.createReserveStockProcess(contextDispatch, { data }));
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.ReserveStockPayload,
+    ) => {
+      dispatch(Actions.createReserveStockProcess(contextDispatch, data));
+    },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveStockProcess(contextDispatch, { id }));
     },
   };
 };

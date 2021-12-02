@@ -39,6 +39,7 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -109,9 +110,14 @@ const OmsShoppingCartView: FC = () => {
   /**
    * Reserve Section
    * - Cancel Reserve Discount (Promo & Voucher)
+   * - Cancel Reserve Stock
    */
   const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
+  );
   const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
   React.useEffect(() => {
     if (checkoutMaster.cartId) {
       reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
