@@ -43,8 +43,8 @@ const goToHistoryDetail = (section: 'order' | 'payment') => {
   NavigationAction.navigate('OmsHistoryDetailView', { section });
 };
 /** => go to voucher detail */
-const goToPaymentPromoList = () => {
-  NavigationAction.navigate('PromoPaymentListView');
+const goToPaymentPromoList = (invoiceGroupId: string) => {
+  NavigationAction.navigate('PromoPaymentListView', { invoiceGroupId });
 };
 /** => go to category product */
 const goToCategory = () => {
