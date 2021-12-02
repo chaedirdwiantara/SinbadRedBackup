@@ -48,7 +48,17 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
 
+  /** => used for reset voucher */
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    return () => {
+      /** => reset reserve discount context */
+      reserveDiscountAction.resetPostGet(dispatchPromo);
+      /** => reset reserve stock context */
+      reserveStockAction.resetPostGet(dispatchReserveStock);
+    };
+  }, []);
 
   /**
    * VERIFICATION-ORDER SECTION
@@ -534,9 +544,9 @@ const OmsVerificationOrderView: FC = () => {
       <ErrorVoucherModal
         visible={isErrorVoucher}
         onBackToCart={() => {
-          setErrorVoucher(false);
+          /** => reset local voucher data */
           dispatch(Actions.saveSelectedVouchers(null));
-          reserveDiscountAction.resetCreate(dispatchPromo);
+          setErrorVoucher(false);
           goBack();
         }}
       />

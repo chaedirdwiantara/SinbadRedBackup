@@ -28,12 +28,17 @@ import {
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useReserveDiscountAction } from '@screen/promo/functions';
+import { useReserveStockAction } from '@screen/product/functions';
 import { backToCart } from '@screen/oms/functions';
+import { useDispatch } from 'react-redux';
+import * as Actions from '@actions';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
-  const reserveDiscountAction = useReserveDiscountAction();
+  /** => used for reset voucher */
+  const dispatch = useDispatch();
+
   const checkoutViewActions = useCheckoutViewActions();
   const paymentTypeModal = usePaymentTypeModal();
   const paymentChannelsModal = usePaymentChannelModal();
@@ -61,6 +66,9 @@ const OmsCheckoutView: FC = () => {
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
+  );
 
   /** Set Loading Page */
   useEffect(() => {
@@ -167,14 +175,9 @@ const OmsCheckoutView: FC = () => {
   };
   /** handle back to cart */
   const handleBackToCart = () => {
+    /** => reset local voucher data */
+    dispatch(Actions.saveSelectedVouchers(null));
     backToCartModal.setOpen(false);
-    reserveDiscountAction.resetCreate(dispatchPromo);
-    reserveDiscountAction.resetDetail(dispatchPromo);
-    /**
-     * TO DO:
-     * - add reset for reserveStock create
-     * - add reset for reserveStock detail
-     */
     backToCart();
   };
 

@@ -142,6 +142,13 @@ const useReserveStockAction = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.detailReserveStockProcess(contextDispatch, { id }));
     },
+    resetPostGet: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createReserveStockReset(contextDispatch));
+      dispatch(Actions.detailReserveStockReset(contextDispatch));
+    },
+    resetDelete: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.deleteReserveStockReset(contextDispatch));
+    },
   };
 };
 
