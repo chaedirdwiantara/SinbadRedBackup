@@ -30,12 +30,21 @@ import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import { backToCart, goToCheckoutSuccess } from '@screen/oms/functions';
+import {
+  useCheckPromoPaymentAction,
+  useCheckAllPromoPaymentAction,
+} from '@screen/promo/functions';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   /** => used for reset voucher */
   const dispatch = useDispatch();
+
+  /** => this for payment channel modal */
+  const checkPromoPaymentAction = useCheckPromoPaymentAction();
+  /** => this for last payment channel */
+  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
 
   const checkoutViewActions = useCheckoutViewActions();
   const paymentTypeModal = usePaymentTypeModal();
@@ -64,7 +73,7 @@ const OmsCheckoutView: FC = () => {
     contexts.PaymentContext,
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
-  const { statePromo } = React.useContext(contexts.PromoContext);
+  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -160,10 +169,71 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     const dataLastPaymentChannel =
       paymentLastChannelDetail?.data?.paymentTypeChannels;
+
     if (dataLastPaymentChannel) {
       setPaymentChannel(dataLastPaymentChannel);
+
+      /** => fetch promo payment channel */
+      const checkAllPromoPaymentParams = dataLastPaymentChannel.map(
+        (item: any) => {
+          return {
+            invoiceGroupId: item.invoiceGroupId,
+            paymentTypeId: item.paymentType.id,
+            paymentChannelId: item.paymentChannel.id,
+            parcelPrice: item.totalPayment - item.totalFee,
+          };
+        },
+      );
+      checkAllPromoPaymentAction.create(
+        dispatchPromo,
+        checkAllPromoPaymentParams,
+      );
     }
   }, [paymentLastChannelDetail]);
+  useEffect(() => {
+    if (statePromo.checkAllPromoPayment.create.data !== null) {
+      checkAllPromoPaymentAction.list(
+        dispatchPromo,
+        statePromo.checkAllPromoPayment.create.data.id,
+      );
+    }
+  }, [statePromo.checkAllPromoPayment.create]);
+  /** => get promo payment list that match payment channel list */
+  useEffect(() => {
+    if (
+      paymentChannelData.paymentChannels.length > 0 &&
+      statePromo.checkPromoPayment.list.data.length === 0
+    ) {
+      const paymentChannelId: Array<number> = [];
+      paymentChannelData.paymentChannels.map(
+        (item: models.IPaymentChannels) => {
+          paymentChannelId.push(item.id);
+        },
+      );
+      const checkPromoPaymentParams = {
+        paymentTypeId: paymentChannelData.paymentType.id,
+        paymentChannelId,
+        parcelPrice: paymentChannelData.totalCartParcel,
+        invoiceGroupId: paymentChannelData.invoiceGroupId,
+      };
+      /** => fetch promo payment */
+      checkPromoPaymentAction.list(dispatchPromo, checkPromoPaymentParams);
+    }
+  }, [paymentChannelData.paymentChannels]);
+  /** => insert data promo payment to channel modal master */
+  useEffect(() => {
+    if (statePromo.checkPromoPayment.list.data.length > 0) {
+      const payload = statePromo.checkPromoPayment.list.data.map((item) => {
+        return {
+          paymentChannelId: item.paymentChannelId,
+          promPaymentDescription: item.promoPaymentDescription,
+          promoPaymentAmount: item.promoPaymentAmount,
+          promoPaymentAvailable: item.promoPaymentAvailable,
+        };
+      });
+      paymentChannelData.updatePromoPaymentChannel(payload);
+    }
+  }, [statePromo.checkPromoPayment.list]);
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
     const invoiceGroupId = paymentChannelData?.invoiceGroupId;
