@@ -23,7 +23,7 @@ const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
       if (brand.selected) {
         brand.products.forEach((product) => {
           if (product.selected) {
-            totalPrice += product.displayPrice;
+            totalPrice += Number(product.displayPrice) * Number(product.qty);
           }
         });
       }
@@ -49,9 +49,9 @@ const handleProductQuantityChange = (
   const currentBrand = currentInvoiceGroup.brands[brandIndex];
   const currentProduct = currentBrand.products[productIndex];
 
-  if (action === 'increase') {
+  if (action === 'increase' && currentProduct.qty < currentProduct.stock) {
     currentProduct.qty += 1;
-  } else {
+  } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty -= 1;
   }
 
