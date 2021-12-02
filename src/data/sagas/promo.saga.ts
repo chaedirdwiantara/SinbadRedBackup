@@ -145,7 +145,9 @@ function* checkPromoPayment(action: models.CheckPromoPaymentListProcessAction) {
   }
 }
 /** => create check all promo payment */
-function* createCheckAllPromoPayment(action: models.CreateProcessAction) {
+function* createCheckAllPromoPayment(
+  action: models.CreateProcessAction<models.CheckAllPromoPaymentPostPayload[]>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return PromoApi.createCheckAllPromoPayment(action.payload);
