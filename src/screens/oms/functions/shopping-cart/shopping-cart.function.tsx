@@ -236,6 +236,7 @@ const handleProductDelete = (
     productId: deletedProduct.productId,
     qty: 0,
     selected: false,
+    stock: deletedProduct.stock,
   });
 };
 
