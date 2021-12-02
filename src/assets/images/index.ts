@@ -10,4 +10,5 @@ export const Images = {
   selfie: require('./selfie_image.png'),
   store: require('./store_image.png'),
   emptyVoucher: require('./voucher_empty.png'),
+  opacityPlaceholder: require('./sinbadopacity.png'),
 };

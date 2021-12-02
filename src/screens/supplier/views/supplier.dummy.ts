@@ -41,16 +41,16 @@ export const supplierDummy = {
   address:
     'Graha Sucofindo Lantai 9, 13, 14, 15, D, Jl. Raya Pasar Minggu, RT.4/RW.1, Pancoran, Kec. Pancoran, Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12780',
   tags: [
-    'FREESIA',
-    '6X20X29G',
-    'FRISKIES',
-    'SKIN',
-    'STRAP',
-    'FILMA',
-    'VELVET',
-    'MAMAMIA',
-    '70GR',
-    'SAVOURY',
+    { value: 'FREESIA', selected: false },
+    { value: '6X20X29G', selected: false },
+    { value: 'FRISKIES', selected: false },
+    { value: 'SKIN', selected: false },
+    { value: 'STRAP', selected: false },
+    { value: 'FILMA', selected: false },
+    { value: 'VELVET', selected: false },
+    { value: 'MAMAMIA', selected: false },
+    { value: '70GR', selected: false },
+    { value: 'SAVOURY', selected: false },
   ],
   products: [
     {

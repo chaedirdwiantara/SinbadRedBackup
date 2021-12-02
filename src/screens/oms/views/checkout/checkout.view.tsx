@@ -27,9 +27,9 @@ import {
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
-import { backToCart } from '@screen/oms/functions';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
+import { backToCart, goToCheckoutSuccess } from '@screen/oms/functions';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -125,9 +125,20 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
   }, [checkoutMaster.invoices]);
+  /** => navigate to Checkout success if there is no payment TC */
+  useEffect(() => {
+    const detailTC = statePayment?.paymentTCDetail?.data;
+    if (detailTC) {
+      if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
+        paymentTCModal.setOpen(true);
+      } else {
+        goToCheckoutSuccess();
+      }
+    }
+  }, [statePayment?.paymentTCDetail?.data]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
-    const dataTC = statePayment?.paymentTCCreate.data;
+    const dataTC = statePayment?.paymentTCCreate?.data;
     if (dataTC) {
       paymentAction.tCDetail(dispatchPayment, dataTC.id);
     }

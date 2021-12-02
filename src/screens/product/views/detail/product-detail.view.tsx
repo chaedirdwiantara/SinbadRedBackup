@@ -15,13 +15,15 @@ import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
+import { BundleSection } from './BundleSection';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductDetailAction } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
-import { BundleSection } from './BundleSection';
+import { goToBundle } from '../../functions';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -89,6 +91,8 @@ const ProductDetailView: FC = () => {
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
+  const { dataTotalProductCart } = useCartTotalProductActions();
+
   /** => potential promo product effect */
   React.useEffect(() => {
     if (productDetailState.data !== null) {
@@ -96,7 +100,7 @@ const ProductDetailView: FC = () => {
       potentialPromoProductAction.reset(dispatchPromo);
       potentialPromoProductAction.detail(dispatchPromo, id);
     }
-  }, [productDetailState]);
+  }, [productDetailState.data]);
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -118,21 +122,27 @@ const ProductDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Loading */
-  if (productDetailState.loading || productDetailState.data === null) {
+  if (
+    productDetailState.loading ||
+    (productDetailState.data === null && !productDetailState.error)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
         <ProductDetailSkeleton />
       </SnbContainer>
     );
   }
   /** => Error */
-  if (!productDetailState.loading && productDetailState.error) {
+  if (
+    !productDetailState.loading &&
+    (productDetailState.error || productDetailState.data?.name === undefined)
+  ) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
         <ScrollView
           contentContainerStyle={{ flex: 1 }}
           refreshControl={
@@ -153,7 +163,7 @@ const ProductDetailView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbStatusBar type="transparent1" />
-      <ProductDetailHeader cartBadge={10} />
+      <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
       {/* Content */}
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -224,7 +234,13 @@ const ProductDetailView: FC = () => {
           disabled={
             defaultProperties.stock < (productDetailState.data?.minQty ?? 1)
           }
-          onPress={() => console.log('Add to cart pressed')}
+          onPress={() => {
+            if (defaultProperties.isBundle) {
+              goToBundle(productId);
+            } else {
+              console.log('Add to cart pressed');
+            }
+          }}
         />
       ) : (
         <UnavailableSkuFlag />

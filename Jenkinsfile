@@ -110,15 +110,9 @@ pipeline {
             steps {
                 script{
                     withAWS(credentials: "${AWS_CREDENTIAL}") {
-                        s3Download(file: 'index.js', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/index.js", force: true)
-                        s3Download(file: 'src/services/apiHost.js', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/apiHost.js", force: true)
                         s3Download(file: 'android/app/google-services.json', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/google-services.json", force: true)
                         s3Download(file: 'android/app/mplus_sinbad.jks', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/mplus_sinbad.jks", force: true)
-                        s3Download(file: 'android/app/src/main/res/values/strings.xml', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/strings.xml", force: true)
                         s3Download(file: '.env', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/.env", force: true)
-                        if(SINBAD_ENV == 'production') {
-                            s3Download(file: 'android/app/newrelic.properties', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/newrelic.properties", force: true)
-                        }
                     }
                 }
             }

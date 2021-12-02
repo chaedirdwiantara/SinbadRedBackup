@@ -55,8 +55,18 @@ const OmsShoppingCartView: FC = () => {
     () => getTotalProducts(cartMaster.data),
     [cartMaster.data.length],
   );
-  const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
-    useState(false);
+  const [
+    modalConfirmationCheckoutVisible,
+    setModalConfirmationCheckoutVisible,
+  ] = useState(false);
+  const [
+    modalConfirmationRemoveProductVisible,
+    setModalConfirmationRemoveProductVisible,
+  ] = useState(false);
+  const [loadingRemoveProduct, setLoadingRemoveProduct] = useState(false);
+  const [sassionQty, setSassionQty] = useState<number>(
+    Math.random() * 10000000,
+  );
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -87,7 +97,7 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     /** => handle close modal if fetch is done */
     if (!stateVerificationOrder.create.loading && !updateCartLoading) {
-      setIsConfirmCheckoutDialogOpen(false);
+      setModalConfirmationCheckoutVisible(false);
     }
     /** => below is the action if the update cart & potential discount fetch success */
     if (
@@ -276,6 +286,10 @@ const OmsShoppingCartView: FC = () => {
       data: paramsVerificationCreate,
     });
   };
+
+  const onRemoveProduct = () => {
+    setLoadingRemoveProduct(true);
+  };
   /** === VIEW === */
   /** => Main */
   return (
@@ -303,6 +317,8 @@ const OmsShoppingCartView: FC = () => {
                       setAllProductsSelected={setAllProductsSelected}
                       totalProducts={totalProducts}
                       setProductIdRemoveSelected={setProductIdRemoveSelected}
+                      sassionQty={sassionQty}
+                      setSassionQty={setSassionQty}
                     />
                   ))}
                 </Fragment>
@@ -315,7 +331,7 @@ const OmsShoppingCartView: FC = () => {
                 setAllProductsSelected={setAllProductsSelected}
                 totalProducts={totalProducts}
                 productSelectedCount={productSelectedCount}
-                setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
+                openModalCheckout={setModalConfirmationCheckoutVisible}
               />
             </Fragment>
           ) : (
@@ -325,12 +341,20 @@ const OmsShoppingCartView: FC = () => {
       )}
       {/* Confirmation Modal Checkout */}
       <SnbDialog
-        open={isConfirmCheckoutDialogOpen}
+        open={modalConfirmationCheckoutVisible}
         title="Konfirmasi"
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
-        cancel={() => setIsConfirmCheckoutDialogOpen(false)}
+        cancel={() => setModalConfirmationCheckoutVisible(false)}
         loading={stateVerificationOrder.create.loading || updateCartLoading}
+      />
+      <SnbDialog
+        open={modalConfirmationRemoveProductVisible}
+        title="Hapus Product"
+        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
+        ok={onRemoveProduct}
+        cancel={() => setModalConfirmationRemoveProductVisible(false)}
+        loading={loadingRemoveProduct}
       />
     </SnbContainer>
   );

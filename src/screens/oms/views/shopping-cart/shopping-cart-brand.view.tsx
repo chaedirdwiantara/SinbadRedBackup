@@ -20,6 +20,8 @@ interface ShoppingCartBrandProps {
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
   setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
@@ -33,6 +35,8 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   setAllProductsSelected,
   totalProducts,
   setProductIdRemoveSelected,
+  sassionQty,
+  setSassionQty,
 }) => (
   <Fragment key={brand.brandName}>
     <View
@@ -75,6 +79,8 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
         setProductIdRemoveSelected={setProductIdRemoveSelected}
+        sassionQty={sassionQty}
+        setSassionQty={setSassionQty}
       />
     ))}
   </Fragment>
