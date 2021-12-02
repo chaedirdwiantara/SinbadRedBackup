@@ -42,7 +42,9 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
     <View style={{ marginTop: 16 }}>
       <SnbText.H4>Tipe Pembayaran</SnbText.H4>
       <SnbDivider style={{ marginVertical: 8 }} />
-      {data.isPotentialPaymentPromo && <CheckoutPaymentPromoBadge />}
+      {data.isPotentialPaymentPromo && (
+        <CheckoutPaymentPromoBadge invoiceGroupId={data.invoiceGroupId} />
+      )}
       {!loadingLastTypeChanel ? (
         <TouchableOpacity
           onPress={() => {

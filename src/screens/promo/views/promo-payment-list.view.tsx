@@ -18,7 +18,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import LoadingPage from '@core/components/LoadingPage';
 import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
-const PromoPaymentList: FC = () => {
+const PromoPaymentList: FC = ({ route }: any) => {
   /** === HOOK === */
   const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
@@ -26,7 +26,7 @@ const PromoPaymentList: FC = () => {
   const promoPaymentListState = statePromo.promoPayment.list;
   /** => effect */
   React.useEffect(() => {
-    promoPaymentAction.list(dispatchPromo, '2');
+    promoPaymentAction.list(dispatchPromo, route.params.invoiceGroupId);
     return () => {
       promoPaymentAction.resetList(dispatchPromo);
     };
@@ -69,13 +69,14 @@ const PromoPaymentList: FC = () => {
                 title={item.name}
                 subTitle1={`Promo potongan sebesar ${toCurrency(
                   item.discountRebate,
+                  { withFraction: false },
                 )}`}
                 subTitle2={`Berlaku ${moment(new Date(item.startDate)).format(
                   'DD MMM',
                 )} - ${moment(new Date(item.endDate)).format('DD MMM YYYY')}`}
                 left={() => renderImagePaymentPromo(item.image)}
                 type={'goTo'}
-                onPress={() => goToPromoPaymentDetail(1)}
+                onPress={() => goToPromoPaymentDetail(item.id)}
               />
             </View>
           );
