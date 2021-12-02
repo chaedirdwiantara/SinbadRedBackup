@@ -16,6 +16,7 @@ import {
   handleProductQuantityChange,
   useCartUpdateActions,
 } from '../../functions';
+import { goToProductDetail } from '@core/functions/product';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { ShoppingCartStyles } from '../../styles';
 import {
@@ -38,6 +39,8 @@ interface ShoppingCartProductProps {
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
   setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -53,6 +56,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setAllProductsSelected,
   totalProducts,
   setProductIdRemoveSelected,
+  setSassionQty,
 }) => {
   const { dispatchShopingCart } = useShopingCartContext();
   const cartUpdateActions = useCartUpdateActions();
@@ -94,14 +98,18 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
             }
           />
         </View>
-        <Image
-          source={{ uri: product.urlImages }}
-          style={{ marginRight: 8, width: 77, height: 77 }}
-        />
+        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
+          <Image
+            source={{ uri: product.urlImages }}
+            style={{ marginRight: 8, width: 77, height: 77 }}
+          />
+        </TouchableOpacity>
         <View>
-          <View style={{ marginBottom: 12, maxWidth: 160 }}>
+          <TouchableOpacity
+            onPress={() => goToProductDetail(product.productId)}
+            style={{ marginBottom: 12, maxWidth: 160 }}>
             <SnbText.B4>{product.productName}</SnbText.B4>
-          </View>
+          </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
               {toCurrency(product.displayPrice)}
@@ -117,6 +125,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   productIndex,
                   'increase',
                   [invoiceGroups, setInvoiceGroups],
+                  product.qty,
+                  setSassionQty,
                 )
               }
               onDecrease={() =>
@@ -126,10 +136,12 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   productIndex,
                   'decrease',
                   [invoiceGroups, setInvoiceGroups],
+                  product.qty,
+                  setSassionQty,
                 )
               }
-              minusDisabled={product.qty === 1}
-              plusDisabled={product.qty === product.stock}
+              minusDisabled={product.qty <= 1}
+              plusDisabled={product.qty >= product.stock}
             />
           </View>
         </View>
@@ -151,7 +163,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
-        {product.stock <= 10 && (
+        {product.stock <= 50 && (
           <SnbText.B3
             color={
               color.red50

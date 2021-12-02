@@ -69,11 +69,12 @@ const useReserveDiscountAction = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
     },
-    resetCreate: (contextDispatch: (action: any) => any) => {
+    resetPostGet: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.createReserveDiscountReset(contextDispatch));
-    },
-    resetDetail: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.detailReserveDiscountReset(contextDispatch));
+    },
+    resetDelete: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.deleteReserveDiscountReset(contextDispatch));
     },
   };
 };
