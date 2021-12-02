@@ -27,8 +27,6 @@ import {
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
-import { useReserveDiscountAction } from '@screen/promo/functions';
-import { useReserveStockAction } from '@screen/product/functions';
 import { backToCart } from '@screen/oms/functions';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
@@ -65,10 +63,7 @@ const OmsCheckoutView: FC = () => {
     contexts.PaymentContext,
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
-  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock } = React.useContext(
-    contexts.ReserveStockContext,
-  );
+  const { statePromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
   useEffect(() => {
