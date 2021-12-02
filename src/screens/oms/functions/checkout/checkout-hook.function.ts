@@ -27,6 +27,9 @@ const useCheckoutMaster = () => {
     setCartId: (data: models.CartIdPayload) => {
       dispatch(Actions.updateCartIdCheckout(data));
     },
+    resetCheckoutMasterData: () => {
+      dispatch(Actions.resetCheckoutMasterData());
+    },
   };
 };
 /** => checkout actions */
@@ -37,7 +40,7 @@ export const useCheckoutViewActions = () => {
       dispatch(Actions.getCheckoutProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.getCheckoutReset);
+      contextDispatch(Actions.getCheckoutReset(contextDispatch));
     },
   };
 };
