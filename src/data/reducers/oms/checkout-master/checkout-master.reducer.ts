@@ -116,4 +116,11 @@ export const checkout = simplifyReducer(initialState, {
       cartId: payload.cartId,
     };
   },
+  /** => Reset Invoices */
+  [types.RESET_CHECKOUT_MASTER_DATA](state = initialState) {
+    return {
+      ...state,
+      invoices: [],
+    };
+  },
 });

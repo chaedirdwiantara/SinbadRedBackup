@@ -25,6 +25,9 @@ export const getCheckoutFailed = (
   return { type: types.GET_CHECKOUT_FAILED, payload };
 };
 /** => Reset */
-export const getCheckoutReset = () => {
+export const getCheckoutReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.GET_CHECKOUT_RESET,
+  });
   return { type: types.GET_CHECKOUT_RESET };
 };

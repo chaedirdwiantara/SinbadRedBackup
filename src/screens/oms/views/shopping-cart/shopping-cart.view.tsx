@@ -13,10 +13,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import { getSelectedVouchers } from '@screen/voucher/functions';
-import {
-  useCheckAllPromoPaymentAction,
-  useReserveDiscountAction,
-} from '@screen/promo/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
 import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -42,7 +39,6 @@ import {
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-import { useReserveStockContext } from 'src/data/contexts/product';
 import { useReserveStockAction } from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -59,8 +55,18 @@ const OmsShoppingCartView: FC = () => {
     () => getTotalProducts(cartMaster.data),
     [cartMaster.data.length],
   );
-  const [isConfirmCheckoutDialogOpen, setIsConfirmCheckoutDialogOpen] =
-    useState(false);
+  const [
+    modalConfirmationCheckoutVisible,
+    setModalConfirmationCheckoutVisible,
+  ] = useState(false);
+  const [
+    modalConfirmationRemoveProductVisible,
+    setModalConfirmationRemoveProductVisible,
+  ] = useState(false);
+  const [loadingRemoveProduct, setLoadingRemoveProduct] = useState(false);
+  const [sassionQty, setSassionQty] = useState<number>(
+    Math.random() * 10000000,
+  );
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -86,12 +92,12 @@ const OmsShoppingCartView: FC = () => {
   const {
     verificationOrderCreate,
     verificationOrderDetail,
-    verificationCreateReset,
+    verificationReset,
   } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
     if (!stateVerificationOrder.create.loading && !updateCartLoading) {
-      setIsConfirmCheckoutDialogOpen(false);
+      setModalConfirmationCheckoutVisible(false);
     }
     /** => below is the action if the update cart & potential discount fetch success */
     if (
@@ -111,55 +117,21 @@ const OmsShoppingCartView: FC = () => {
 
   /**
    * Reserve Section
-   * - Cancel Reserve Stock
    * - Cancel Reserve Discount (Promo & Voucher)
+   * - Cancel Reserve Stock
    */
-  const {
-    dispatchPromo,
-    statePromo: { checkAllPromoPayment: stateCheckAllPromoPayment },
-  } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock } = useReserveStockContext();
+  const { dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
+  );
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
-  // const checkPromoPaymentAction = useCheckPromoPaymentAction();
-  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
   React.useEffect(() => {
     if (checkoutMaster.cartId) {
       reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
       reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
     }
-    // checkPromoPaymentAction.list(dispatchPromo, {
-    //   paymentTypeId: 1,
-    //   paymentChannelId: [1, 2, 3],
-    //   parcelPrice: 9000,
-    //   invoiceGroupId: '2',
-    //   sellerId: 1,
-    // });
-    checkAllPromoPaymentAction.create(dispatchPromo, [
-      {
-        invoiceGroupId: '4',
-        cartParcelId: '1',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-      {
-        invoiceGroupId: '5',
-        cartParcelId: '2',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        parcelPrice: 100000,
-      },
-    ]);
   }, []);
-  React.useEffect(() => {
-    if (stateCheckAllPromoPayment.create.data !== null) {
-      checkAllPromoPaymentAction.list(
-        dispatchPromo,
-        stateCheckAllPromoPayment.create.data.id,
-      );
-    }
-  }, [stateCheckAllPromoPayment.create]);
 
   /** Get Cart View */
   useEffect(() => {
@@ -168,7 +140,9 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
 
     return () => {
-      verificationCreateReset(dispatchVerificationOrder);
+      verificationReset(dispatchVerificationOrder);
+      reserveDiscountAction.resetDelete(dispatchPromo);
+      reserveStockAction.resetDelete(dispatchReserveStock);
     };
   }, []);
 
@@ -312,6 +286,10 @@ const OmsShoppingCartView: FC = () => {
       data: paramsVerificationCreate,
     });
   };
+
+  const onRemoveProduct = () => {
+    setLoadingRemoveProduct(true);
+  };
   /** === VIEW === */
   /** => Main */
   return (
@@ -339,6 +317,8 @@ const OmsShoppingCartView: FC = () => {
                       setAllProductsSelected={setAllProductsSelected}
                       totalProducts={totalProducts}
                       setProductIdRemoveSelected={setProductIdRemoveSelected}
+                      sassionQty={sassionQty}
+                      setSassionQty={setSassionQty}
                     />
                   ))}
                 </Fragment>
@@ -351,7 +331,7 @@ const OmsShoppingCartView: FC = () => {
                 setAllProductsSelected={setAllProductsSelected}
                 totalProducts={totalProducts}
                 productSelectedCount={productSelectedCount}
-                setIsConfirmCheckoutDialogOpen={setIsConfirmCheckoutDialogOpen}
+                openModalCheckout={setModalConfirmationCheckoutVisible}
               />
             </Fragment>
           ) : (
@@ -361,12 +341,20 @@ const OmsShoppingCartView: FC = () => {
       )}
       {/* Confirmation Modal Checkout */}
       <SnbDialog
-        open={isConfirmCheckoutDialogOpen}
+        open={modalConfirmationCheckoutVisible}
         title="Konfirmasi"
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
-        cancel={() => setIsConfirmCheckoutDialogOpen(false)}
+        cancel={() => setModalConfirmationCheckoutVisible(false)}
         loading={stateVerificationOrder.create.loading || updateCartLoading}
+      />
+      <SnbDialog
+        open={modalConfirmationRemoveProductVisible}
+        title="Hapus Product"
+        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
+        ok={onRemoveProduct}
+        cancel={() => setModalConfirmationRemoveProductVisible(false)}
+        loading={loadingRemoveProduct}
       />
     </SnbContainer>
   );

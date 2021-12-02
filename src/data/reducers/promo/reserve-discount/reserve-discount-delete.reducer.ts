@@ -15,15 +15,15 @@ export const reserveDiscountDeleteInitialState: ReserveDiscountDeleteInitialProp
 export const reserveDiscountDeleteReducer = simplifyReducer(
   reserveDiscountDeleteInitialState,
   {
-    /** ===> DETAIL */
-    /** => detail process */
+    /** ===> DELETE */
+    /** => process */
     [types.DELETE_RESERVE_DISCOUNT_PROCESS]() {
       return {
         ...reserveDiscountDeleteInitialState,
         loading: true,
       };
     },
-    /** => detail success */
+    /** => success */
     [types.DELETE_RESERVE_DISCOUNT_SUCCESS](
       state = reserveDiscountDeleteInitialState,
       action: models.DeleteSuccessAction,
@@ -34,7 +34,7 @@ export const reserveDiscountDeleteReducer = simplifyReducer(
         loading: false,
       };
     },
-    /** => detail failed */
+    /** => failed */
     [types.DELETE_RESERVE_DISCOUNT_FAILED](
       state = reserveDiscountDeleteInitialState,
       action: models.DeleteFailedAction,
@@ -44,6 +44,10 @@ export const reserveDiscountDeleteReducer = simplifyReducer(
         loading: false,
         error: action.payload,
       };
+    },
+    /** => reset */
+    [types.DELETE_RESERVE_DISCOUNT_RESET]() {
+      return reserveDiscountDeleteInitialState;
     },
   },
 );

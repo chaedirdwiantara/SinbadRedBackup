@@ -44,5 +44,9 @@ export const reserveStockCreateReducer = simplifyReducer(
         error: action.payload,
       };
     },
+    /** => create reset */
+    [types.CREATE_RESERVE_STOCK_RESET]() {
+      return reserveStockCreateInitialState;
+    },
   },
 );
