@@ -84,7 +84,7 @@ const OmsShoppingCartView: FC = () => {
   const {
     verificationOrderCreate,
     verificationOrderDetail,
-    verificationCreateReset,
+    verificationReset,
   } = useVerficationOrderAction();
   useEffect(() => {
     /** => handle close modal if fetch is done */
@@ -132,7 +132,9 @@ const OmsShoppingCartView: FC = () => {
     cartViewActions.fetch(dispatchShopingCart);
 
     return () => {
-      verificationCreateReset(dispatchVerificationOrder);
+      verificationReset(dispatchVerificationOrder);
+      reserveDiscountAction.resetDelete(dispatchPromo);
+      reserveStockAction.resetDelete(dispatchReserveStock);
     };
   }, []);
 
