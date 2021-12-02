@@ -57,6 +57,7 @@ const OmsCheckoutView: FC = () => {
     checkoutMaster,
     setReserveDiscount,
     setPaymentChannel,
+    resetCheckoutMasterData,
   } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
   const { statePayment, dispatchPayment } = React.useContext(
@@ -64,8 +65,6 @@ const OmsCheckoutView: FC = () => {
   );
   const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
   const { statePromo } = React.useContext(contexts.PromoContext);
-
-  const { resetCheckoutMasterData } = useCheckoutMaster();
 
   /** Set Loading Page */
   useEffect(() => {
