@@ -44,10 +44,29 @@ function* createReserveStock(action: models.CreateProcessAction) {
     );
   }
 }
+/** => DETAIL */
+function* detailReserveStock(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.ReserveStockError> =
+      yield call(() => {
+        return ReserveStockApi.getErrorReserveStock(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.detailReserveStockSuccess(response),
+    );
+    yield put(ActionCreators.detailReserveStockSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.detailReserveStockFailed(error),
+    );
+    yield put(ActionCreators.detailReserveStockFailed(error));
+  }
+}
 /** === LISTENER === */
 function* ReserveStockSaga() {
   yield takeLatest(types.DELETE_RESERVE_STOCK_PROCESS, deleteReserveStock);
   yield takeLatest(types.CREATE_RESERVE_STOCK_PROCESS, createReserveStock);
+  yield takeLatest(types.DETAIL_RESERVE_STOCK_PROCESS, detailReserveStock);
 }
 
 export default ReserveStockSaga;
