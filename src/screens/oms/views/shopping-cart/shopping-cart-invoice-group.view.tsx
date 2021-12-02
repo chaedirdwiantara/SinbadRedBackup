@@ -18,6 +18,8 @@ interface ShoppingCartInvoiceGroupProps {
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
   setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -30,6 +32,8 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   setAllProductsSelected,
   totalProducts,
   setProductIdRemoveSelected,
+  sassionQty,
+  setSassionQty,
 }) => (
   <View
     style={ShoppingCartStyles.cardContainer}
@@ -50,6 +54,8 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
         setProductIdRemoveSelected={setProductIdRemoveSelected}
+        sassionQty={sassionQty}
+        setSassionQty={setSassionQty}
       />
     ))}
   </View>
