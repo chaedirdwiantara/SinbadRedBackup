@@ -78,7 +78,7 @@ const useReserveDiscountAction = () => {
     },
   };
 };
-/** => check promo payment action */
+/** => check promo payment action (this for payment channel modal) */
 const useCheckPromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -91,7 +91,7 @@ const useCheckPromoPaymentAction = () => {
     },
   };
 };
-/** => check all promo payment action */
+/** => check all promo payment action (this for get last payment channel) */
 const useCheckAllPromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -100,16 +100,12 @@ const useCheckAllPromoPaymentAction = () => {
       data: models.CheckAllPromoPaymentPostPayload[],
     ) => {
       dispatch(
-        Actions.createCheckAllPromoPaymentProcess(contextDispatch, { data }),
+        Actions.createCheckAllPromoPaymentProcess(contextDispatch, data),
       );
     },
     list: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.getCheckAllPromoPaymentReset());
       dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
-    },
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.detailReserveDiscountReset());
-      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
     },
   };
 };
