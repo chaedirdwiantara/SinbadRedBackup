@@ -485,7 +485,9 @@ const OmsVerificationOrderView: FC = () => {
               title={'Lanjut Ke Pembayaran'}
               loading={
                 statePromo.reserveDiscount.create.loading ||
-                statePromo.reserveDiscount.detail.loading
+                statePromo.reserveDiscount.detail.loading ||
+                stateReserveStock.create.loading ||
+                stateReserveStock.detail.loading
               }
               disabled={
                 verificationOrderDetailData.grandTotal.grandTotalPrice === 0 ||
