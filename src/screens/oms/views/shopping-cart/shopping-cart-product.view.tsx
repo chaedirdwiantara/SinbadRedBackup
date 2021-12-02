@@ -16,6 +16,7 @@ import {
   handleProductQuantityChange,
   useCartUpdateActions,
 } from '../../functions';
+import { goToProductDetail } from '@core/functions/product';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { ShoppingCartStyles } from '../../styles';
 import {
@@ -94,14 +95,18 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
             }
           />
         </View>
-        <Image
-          source={{ uri: product.urlImages }}
-          style={{ marginRight: 8, width: 77, height: 77 }}
-        />
+        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
+          <Image
+            source={{ uri: product.urlImages }}
+            style={{ marginRight: 8, width: 77, height: 77 }}
+          />
+        </TouchableOpacity>
         <View>
-          <View style={{ marginBottom: 12, maxWidth: 160 }}>
+          <TouchableOpacity
+            onPress={() => goToProductDetail(product.productId)}
+            style={{ marginBottom: 12, maxWidth: 160 }}>
             <SnbText.B4>{product.productName}</SnbText.B4>
-          </View>
+          </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
               {toCurrency(product.displayPrice)}

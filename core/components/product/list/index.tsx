@@ -17,6 +17,7 @@ import {
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import { useOrderQuantity } from '@screen/product/functions';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 import {
   useBottomAction,
   priceSortOptions,
@@ -109,6 +110,7 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   });
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
+  const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailAction();
   const addToCartActions = useAddToCart();
@@ -214,6 +216,7 @@ const ProductList: FC<ProductListProps> = ({
       setProductSelected(null);
       setOrderModalVisible(false);
       supplierSegmentationAction.reset(dispatchSupplier);
+      cartTotalProductActions.fetch();
     }
   }, [addToCartData]);
 
