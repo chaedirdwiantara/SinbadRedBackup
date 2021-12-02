@@ -68,6 +68,9 @@ const OmsShoppingCartView: FC = () => {
     setModalConfirmationRemoveProductVisible,
   ] = useState(false);
   const [loadingRemoveProduct, setLoadingRemoveProduct] = useState(false);
+  const [sassionQty, setSassionQty] = useState<number>(
+    Math.random() * 10000000,
+  );
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -350,6 +353,8 @@ const OmsShoppingCartView: FC = () => {
                       setAllProductsSelected={setAllProductsSelected}
                       totalProducts={totalProducts}
                       setProductIdRemoveSelected={setProductIdRemoveSelected}
+                      sassionQty={sassionQty}
+                      setSassionQty={setSassionQty}
                     />
                   ))}
                 </Fragment>
