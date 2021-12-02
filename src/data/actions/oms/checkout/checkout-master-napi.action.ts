@@ -30,3 +30,7 @@ export const updateCartIdCheckout = (
 ): models.UpdateCartIdCheckout => {
   return { type: types.UPDATE_CART_ID_CHECKOUT, payload };
 };
+/** => reset checkout master data */
+export const resetCheckoutMasterData = () => {
+  return { type: types.RESET_CHECKOUT_MASTER_DATA };
+};

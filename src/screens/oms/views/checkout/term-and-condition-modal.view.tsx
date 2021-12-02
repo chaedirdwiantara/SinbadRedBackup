@@ -9,7 +9,6 @@ import {
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import { goToCheckoutSuccess } from '../../functions';
-import { useTermsAndConditionsModal } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { IPaymentChannel, IPaymentType } from '@model/oms';
@@ -27,7 +26,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
   const { statePayment } = React.useContext(contexts.PaymentContext);
 
   const paymentTypesTermsConditions = () => {
-    return statePayment?.paymentTCDetail?.data?.paymentTypes.map(
+    return statePayment?.paymentTCDetail?.data?.paymentTypes?.map(
       (item: IPaymentType, index: number) => {
         return (
           <View key={index} style={{ marginBottom: 12 }}>
@@ -41,7 +40,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
     );
   };
   const paymentChannelTermsConditions = () => {
-    return statePayment?.paymentTCDetail?.data?.paymentChannels.map(
+    return statePayment?.paymentTCDetail?.data?.paymentChannels?.map(
       (item: IPaymentChannel, index: number) => {
         return (
           <View key={index} style={{ marginBottom: 12 }}>
@@ -62,7 +61,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
           disabled={false}
           type={'primary'}
           onPress={() => {
-            close;
+            close();
             goToCheckoutSuccess();
           }}
         />

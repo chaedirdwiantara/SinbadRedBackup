@@ -35,7 +35,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   };
 
   const pressButton = () => {
-    openTCModal();
     paymentAction.tCCreate(dispatchPayment, dataPostTC);
   };
   const content = () => {

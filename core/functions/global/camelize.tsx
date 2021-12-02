@@ -1,8 +1,3 @@
-/** === TYPE === */
-interface ToCurrencyOptions {
-  withPrefix?: boolean;
-  withFraction?: boolean;
-}
 /** === FUNCTION === */
 const camelize = (str: string) => {
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {

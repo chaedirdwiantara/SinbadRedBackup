@@ -1,29 +1,39 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMappingMock from '@core/services/apiMappingMock';
+import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => delete reserve stock */
 const deleteReserveStock = (data: models.DeleteProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = `reserve-stock/${data.id}`;
-  return apiMappingMock<models.DeleteSuccessProps>(
-    mockHost,
+  const path = `warehouse-products/unreserve-stock/${data.id}`;
+  return apiMapping<models.DeleteSuccessProps>(
+    'auth',
     path,
-    'discount',
+    'warehouse',
     'v1',
     'DELETE',
   );
 };
 /** => create reserve stock */
-const createReserveStock = (data: models.CreateProcessProps<{}>) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = 'reserve-stock';
-  return apiMappingMock<models.CreateSuccessProps>(
-    mockHost,
+const createReserveStock = (data: models.ReserveStockPayload) => {
+  const path = 'warehouse-products/reserve-stock';
+  return apiMapping<models.CreateSuccessProps>(
+    'auth',
     path,
-    'discount',
+    'warehouse',
     'v1',
     'CREATE',
+    data,
+  );
+};
+/** => get error reserve stock */
+const getErrorReserveStock = (data: models.DetailProcessProps) => {
+  const path = `warehouse-products/get-stock-error/${data.id}`;
+  return apiMapping<models.ReserveStockError>(
+    'auth',
+    path,
+    'warehouse',
+    'v1',
+    'DETAIL',
     data,
   );
 };
@@ -32,4 +42,5 @@ const createReserveStock = (data: models.CreateProcessProps<{}>) => {
 export const ReserveStockApi = {
   deleteReserveStock,
   createReserveStock,
+  getErrorReserveStock,
 };
