@@ -4,10 +4,10 @@ export const PAYMENT_TYPES_LIST_SUCCESS = 'PaymentTypesListSuccess';
 export const PAYMENT_TYPES_LIST_FAILED = 'PaymentTypesListFailed';
 
 /** ==> PAYMENT CHANNELS LIST */
-export const PAYMENT_CHANNELS_LIST_PROCESS = 'PayemntChannelsListProcess';
-export const PAYMENT_CHANNELS_LIST_SUCCESS = 'PayemntChannelsListSuccess';
-export const PAYMENT_CHANNELS_LIST_FAILED = 'PayemntChannelsListFailed';
-export const PAYMENT_CHANNELS_LIST_RESET = 'PayemntChannelsListReset';
+export const PAYMENT_CHANNELS_LIST_PROCESS = 'PaymentChannelsListProcess';
+export const PAYMENT_CHANNELS_LIST_SUCCESS = 'PaymentChannelsListSuccess';
+export const PAYMENT_CHANNELS_LIST_FAILED = 'PaymentChannelsListFailed';
+export const PAYMENT_CHANNELS_LIST_RESET = 'PaymentChannelsListReset';
 
 /** ==> PAYMENT TERMS AND CONDITION */
 export const PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS =
