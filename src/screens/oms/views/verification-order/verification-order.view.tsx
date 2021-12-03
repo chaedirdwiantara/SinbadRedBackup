@@ -172,34 +172,41 @@ const OmsVerificationOrderView: FC = () => {
 
   /** => handleContinueToPayment */
   const handleContinuePayment = () => {
-    const invoices: ReserveStockPayloadData[] = [];
-    getCartSelected.data.map((invoiceArr: CartSelectedData) => {
-      const brands: ReserveStockPayloadBrand[] = [];
-      invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
-        const products: ReserveStockPayloadProducts[] = [];
-        brandArr.products.map((productArr: CartSelectedProduct) => {
-          products.push({
-            productId: productArr.productId,
-            qty: productArr.qty,
-            warehouseId: productArr.warehouseId,
-          });
-        });
-        brands.push({
-          brandId: brandArr.brandId,
-          products,
-        });
-      });
-      invoices.push({
-        invoiceGroupId: invoiceArr.invoiceGroupId,
-        brands,
-      });
-    });
-    const createReserveStockParams = {
-      id: getCartSelected.id,
-      data: invoices,
+    // const invoices: ReserveStockPayloadData[] = [];
+    // getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+    //   const brands: ReserveStockPayloadBrand[] = [];
+    //   invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+    //     const products: ReserveStockPayloadProducts[] = [];
+    //     brandArr.products.map((productArr: CartSelectedProduct) => {
+    //       products.push({
+    //         productId: productArr.productId,
+    //         qty: productArr.qty,
+    //         warehouseId: productArr.warehouseId,
+    //       });
+    //     });
+    //     brands.push({
+    //       brandId: brandArr.brandId,
+    //       products,
+    //     });
+    //   });
+    //   invoices.push({
+    //     invoiceGroupId: invoiceArr.invoiceGroupId,
+    //     brands,
+    //   });
+    // });
+    // const createReserveStockParams = {
+    //   id: getCartSelected.id,
+    //   data: invoices,
+    //   reservedAt: moment().format().toString(),
+    // };
+    // reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+    const createReserveDiscountParams = {
+      ...getCartSelected,
+      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+      potentialDiscountId: stateVerificationOrder.create.data?.id,
       reservedAt: moment().format().toString(),
     };
-    reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+    reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
   };
 
   /** === VIEW === */
