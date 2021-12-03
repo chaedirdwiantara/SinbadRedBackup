@@ -66,6 +66,7 @@ const OmsCheckoutView: FC = () => {
     checkoutMaster,
     setReserveDiscount,
     setPaymentChannel,
+    setPromoPayment,
     resetCheckoutMasterData,
   } = useCheckoutMaster();
   const paymentAction = usePaymentAction();
@@ -190,6 +191,7 @@ const OmsCheckoutView: FC = () => {
       );
     }
   }, [paymentLastChannelDetail]);
+  /** => post promo payment that match last payment channel */
   useEffect(() => {
     if (statePromo.checkAllPromoPayment.create.data !== null) {
       checkAllPromoPaymentAction.list(
@@ -198,6 +200,19 @@ const OmsCheckoutView: FC = () => {
       );
     }
   }, [statePromo.checkAllPromoPayment.create]);
+  /** => post promo payment that match last payment channel */
+  useEffect(() => {
+    if (statePromo.checkAllPromoPayment.list.data.length > 0) {
+      const promoPaymentLastChannel =
+        statePromo.checkAllPromoPayment.list.data.map((item) => {
+          return {
+            invoiceGroupId: item.invoiceGroupId,
+            totalPromoPayment: item.promoPaymentAmount,
+          };
+        });
+      setPromoPayment(promoPaymentLastChannel);
+    }
+  }, [statePromo.checkAllPromoPayment.list]);
   /** => get promo payment list that match payment channel list */
   useEffect(() => {
     if (
