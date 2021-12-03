@@ -9,7 +9,7 @@ import { ListSkeleton } from '@core/components/product/list/list-layout/ListSkel
 /** === IMPORT FUNCTIONS === */
 import {
   goToProductDetail,
-  useProductDisplayState,
+  useListDisplayState,
 } from '@core/functions/product';
 /** === IMPORT TYPE === */
 import { SupplierProductLayoutProps } from './types';
@@ -23,10 +23,10 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
   error,
 }) => {
   /** === HOOK ===  */
-  const displayState = useProductDisplayState({
+  const displayState = useListDisplayState({
     loading,
     error,
-    productsLength: products.length,
+    dataLength: products.length,
   });
   /** === DERIVED === */
   const hasTags = tags.length > 0;

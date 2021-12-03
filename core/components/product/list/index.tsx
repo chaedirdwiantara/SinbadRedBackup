@@ -17,8 +17,6 @@ import {
   ProductNotCoverageModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
-import { useOrderQuantity } from '@screen/product/functions';
-import { useCartTotalProductActions } from '@screen/oms/functions';
 import {
   useBottomAction,
   priceSortOptions,
@@ -36,7 +34,9 @@ import {
   useProductDetailAction,
   useAddToCart,
   useStockValidationAction,
+  useOrderQuantity,
 } from '@screen/product/functions';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
