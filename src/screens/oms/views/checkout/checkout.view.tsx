@@ -87,6 +87,8 @@ const OmsCheckoutView: FC = () => {
       resetCheckoutMasterData();
       /** => reset local voucher data */
       dispatch(Actions.saveSelectedVouchers(null));
+      /** => reset check-all-promo-payment context data */
+      checkAllPromoPaymentAction.reset(dispatchPromo);
     };
   }, []);
 
@@ -268,6 +270,8 @@ const OmsCheckoutView: FC = () => {
   /** => for close payment channel modal */
   const closePaymentChannel = () => {
     paymentChannelsModal.setOpen(false);
+    /** => reset check-promo-payment context data */
+    checkPromoPaymentAction.reset(dispatchPromo);
   };
   /** for back from payment channel modal */
   const backModalPaymentChannel = () => {

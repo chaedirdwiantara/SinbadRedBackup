@@ -86,8 +86,10 @@ const useCheckPromoPaymentAction = () => {
       contextDispatch: (action: any) => any,
       data: models.CheckPromoPaymentGetPayload,
     ) => {
-      dispatch(Actions.checkPromoPaymentReset());
       dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkPromoPaymentReset(contextDispatch));
     },
   };
 };
@@ -104,8 +106,11 @@ const useCheckAllPromoPaymentAction = () => {
       );
     },
     list: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.getCheckAllPromoPaymentReset());
       dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createCheckAllPromoPaymentReset(contextDispatch));
+      dispatch(Actions.getCheckAllPromoPaymentReset(contextDispatch));
     },
   };
 };

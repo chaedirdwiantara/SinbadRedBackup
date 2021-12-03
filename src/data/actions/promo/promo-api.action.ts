@@ -275,8 +275,13 @@ export const checkPromoPaymentFailed = (
   return { type: types.CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
 /** => reset */
-export const checkPromoPaymentReset = () => {
-  return { type: types.CHECK_PROMO_PAYMENT_FAILED };
+export const checkPromoPaymentReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.CHECK_PROMO_PAYMENT_RESET,
+  });
+  return { type: types.CHECK_PROMO_PAYMENT_RESET };
 };
 
 /** === CREATE CHECK ALL PROMO PAYMENT === */
@@ -306,6 +311,15 @@ export const createCheckAllPromoPaymentFailed = (
   data: models.ErrorProps,
 ): models.CreateFailedAction => {
   return { type: types.CREATE_CHECK_PROMO_PAYMENT_FAILED, payload: data };
+};
+/** => reset */
+export const createCheckAllPromoPaymentReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.CREATE_CHECK_PROMO_PAYMENT_RESET,
+  });
+  return { type: types.CREATE_CHECK_PROMO_PAYMENT_RESET };
 };
 
 /** === GET CHECK ALL PROMO PAYMENT === */
@@ -337,6 +351,11 @@ export const getCheckAllPromoPaymentFailed = (
   return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
 /** => reset */
-export const getCheckAllPromoPaymentReset = () => {
-  return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED };
+export const getCheckAllPromoPaymentReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.GET_CHECK_PROMO_PAYMENT_RESET,
+  });
+  return { type: types.GET_CHECK_PROMO_PAYMENT_RESET };
 };
