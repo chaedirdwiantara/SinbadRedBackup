@@ -7,6 +7,7 @@ export const PAYMENT_TYPES_LIST_FAILED = 'PaymentTypesListFailed';
 export const PAYMENT_CHANNELS_LIST_PROCESS = 'PayemntChannelsListProcess';
 export const PAYMENT_CHANNELS_LIST_SUCCESS = 'PayemntChannelsListSuccess';
 export const PAYMENT_CHANNELS_LIST_FAILED = 'PayemntChannelsListFailed';
+export const PAYMENT_CHANNELS_LIST_RESET = 'PayemntChannelsListReset';
 
 /** ==> PAYMENT TERMS AND CONDITION */
 export const PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS =

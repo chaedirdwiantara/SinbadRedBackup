@@ -207,6 +207,9 @@ const usePaymentAction = () => {
       dispatch(Actions.paymentLastChannelCreateReset(contextDispatch));
       dispatch(Actions.paymentLastChannelDetailReset(contextDispatch));
     },
+    resetChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentChannelsListReset(contextDispatch));
+    },
   };
 };
 /** => back to cart modal confirmation */
