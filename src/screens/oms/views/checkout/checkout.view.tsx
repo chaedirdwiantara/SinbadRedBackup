@@ -140,7 +140,7 @@ const OmsCheckoutView: FC = () => {
 
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
-  }, [checkoutMaster.invoices]);
+  }, [checkoutMaster.invoices.length]);
   /** => navigate to Checkout success if there is no payment TC */
   useEffect(() => {
     const detailTC = statePayment?.paymentTCDetail?.data;
