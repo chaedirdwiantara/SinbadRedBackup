@@ -51,6 +51,15 @@ export const paymentChannelsListFailed = (
 ): models.ListFailedAction => {
   return { type: types.PAYMENT_CHANNELS_LIST_FAILED, payload: data };
 };
+/** => payment channels reset */
+export const paymentChannelsListReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.PAYMENT_CHANNELS_LIST_RESET });
+  return {
+    type: types.PAYMENT_CHANNELS_LIST_RESET,
+  };
+};
 
 /** ==> payment terms and condition */
 /** => payment terms and condition create process */

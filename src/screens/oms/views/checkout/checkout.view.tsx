@@ -85,8 +85,6 @@ const OmsCheckoutView: FC = () => {
       checkoutViewActions.reset(dispatchCheckout);
       /** => reset checkout master data */
       resetCheckoutMasterData();
-      /** => reset payment modal master data (payment channel) */
-      paymentChannelData.resetPaymentModalMasterData();
       /** => reset local voucher data */
       dispatch(Actions.saveSelectedVouchers(null));
       /** => reset check-all-promo-payment context data */
@@ -274,12 +272,16 @@ const OmsCheckoutView: FC = () => {
   /** => for close payment channel modal */
   const closePaymentChannel = () => {
     paymentChannelsModal.setOpen(false);
+    /** => reset payment channel list context data */
+    paymentAction.resetChannelList(dispatchPayment);
     /** => reset check-promo-payment context data */
     checkPromoPaymentAction.reset(dispatchPromo);
+    /** => reset payment modal master data (payment channel) */
+    paymentChannelData.resetPaymentModalMasterData();
   };
   /** for back from payment channel modal */
   const backModalPaymentChannel = () => {
-    paymentChannelsModal.setOpen(false);
+    closePaymentChannel();
     paymentTypeModal.setOpen(true);
   };
   /** handle back to cart */
