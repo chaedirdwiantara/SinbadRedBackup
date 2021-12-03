@@ -12,7 +12,7 @@ import {
   PriceRange,
 } from '@core/components/product/list/BottomAction';
 import {
-  EProductDisplayState,
+  ListDisplayState,
   ITag,
 } from '@core/components/product/list/product-list-core.type';
 /** === TYPE ===  */
@@ -24,10 +24,10 @@ export interface SortOption {
 
 export type SortQuery = Omit<SortOption, 'name'>;
 
-interface UseProductDisplayStateParams {
+interface UseListDisplayStateParams {
   loading: boolean;
   error: models.ErrorProps | null;
-  productsLength: number;
+  dataLength: number;
 }
 /** === CONSTANT === */
 export const priceSortOptions: Array<SortOption> = [
@@ -214,25 +214,24 @@ export const useOrderModalVisibility = () => {
   };
 };
 
-export const useProductDisplayState = ({
+export const useListDisplayState = ({
   loading,
   error,
-  productsLength,
-}: UseProductDisplayStateParams) => {
-  const [displayState, setDisplayState] =
-    useState<EProductDisplayState>('success');
+  dataLength,
+}: UseListDisplayStateParams) => {
+  const [displayState, setDisplayState] = useState<ListDisplayState>('success');
 
   useEffect(() => {
     if (loading) {
       setDisplayState('loading');
     } else if (!loading && error) {
       setDisplayState('error');
-    } else if (!loading && productsLength === 0) {
+    } else if (!loading && dataLength === 0) {
       setDisplayState('empty');
     } else {
       setDisplayState('success');
     }
-  }, [loading, error, productsLength]);
+  }, [loading, error, dataLength]);
 
   return displayState;
 };
