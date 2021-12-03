@@ -102,7 +102,11 @@ export const paymentChannelsModal = simplifyReducer(initialState, {
       totalCartParcel,
     };
   },
-  [types.RESET_PAYMENT_MODAL_MASTER_DATA]() {
-    return initialState;
+  [types.RESET_PAYMENT_MODAL_MASTER_DATA](state = initialState) {
+    return {
+      ...state,
+      paymentType: null,
+      paymentChannels: [],
+    };
   },
 });
