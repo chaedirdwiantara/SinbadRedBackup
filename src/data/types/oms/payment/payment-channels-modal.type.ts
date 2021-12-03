@@ -12,3 +12,5 @@ export const UPDATE_INVOICE_GROUP_ID = 'UpdateInvoiceGroupId';
 export const UPDATE_PROMO_PAYMENT_CHANNEL = 'UpdatePromoPaymentChannel';
 /** => update total cart parcel */
 export const UPDATE_TOTAL_CART_PARCEL = 'UpdateTotalCartParcel';
+/** => reset payment channel modal master data */
+export const RESET_PAYMENT_MODAL_MASTER_DATA = 'ResetPaymentModalMasterData';
