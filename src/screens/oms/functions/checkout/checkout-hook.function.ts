@@ -69,6 +69,9 @@ const usePaymentChannelsData = () => {
     updatePromoPaymentChannel: (data: models.IPromoPaymentChannel[]) => {
       dispatch(Actions.updatePromoPaymentChannel(data));
     },
+    resetPaymentModalMasterData: () => {
+      dispatch(Actions.resetPaymentModalMasterData());
+    },
     paymentType: paymentType,
     paymentChannels: paymentChannels,
     invoiceGroupId: invoiceGroupId,
@@ -199,6 +202,13 @@ const usePaymentAction = () => {
       dispatch(
         Actions.paymentLastChannelDetailProcess(contextDispatch, { id }),
       );
+    },
+    resetLastChannel: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentLastChannelCreateReset(contextDispatch));
+      dispatch(Actions.paymentLastChannelDetailReset(contextDispatch));
+    },
+    resetChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentChannelsListReset(contextDispatch));
     },
   };
 };

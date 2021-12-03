@@ -61,7 +61,9 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
           />
           <SnbCardInfoType2.Row
             label={'Promo Potongan'}
-            text={toCurrency(promoPaymentDetailState.data.discountRebate)}
+            text={toCurrency(promoPaymentDetailState.data.discountRebate, {
+              withFraction: false,
+            })}
           />
         </SnbCardInfoType2.Header>
       </View>
