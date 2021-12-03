@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 /** === FUNCTION === */
-/** => call verification action */
+/** => verification action */
 const useVerficationOrderAction = () => {
   const dispatch = useDispatch();
   return {
@@ -26,8 +26,17 @@ const useVerficationOrderAction = () => {
     },
   };
 };
+/** => reserve data action */
+const useReserveDataAction = () => {
+  const dispatch = useDispatch();
+  return {
+    setReservedAt: (time: string) => {
+      dispatch(Actions.setReservedAt({ reservedAt: time }));
+    },
+  };
+};
 /** === EXPORT === */
-export { useVerficationOrderAction };
+export { useVerficationOrderAction, useReserveDataAction };
 /**
  * ================================================================
  * NOTES

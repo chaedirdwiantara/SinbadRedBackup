@@ -39,6 +39,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import { capitalize } from '@core/functions/global/capitalize';
 import { useReserveStockAction } from '@screen/product/functions';
+import { useReserveDataAction } from '../../functions/verification-order/verification-order-hook.function';
 
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
@@ -47,6 +48,12 @@ const OmsVerificationOrderView: FC = () => {
   const [isErrorPromo, setErrorPromo] = React.useState(false);
   const [isErrorVoucher, setErrorVoucher] = React.useState(false);
   const [isErrorStock, setErrorStock] = React.useState(false);
+
+  const reserveDataAction = useReserveDataAction();
+  const { getCartSelected } = useCartSelected();
+  const voucherData = useDataVoucher();
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
 
   /** => used for reset voucher */
   const dispatch = useDispatch();
@@ -75,18 +82,10 @@ const OmsVerificationOrderView: FC = () => {
    * - POST reserved-stock
    * - GET reserved-stock
    */
-
-  /** => get cart data */
-  const { getCartSelected } = useCartSelected();
-  /** => get voucher data */
-  const voucherData = useDataVoucher();
-
   const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
   const { dispatchReserveStock, stateReserveStock } = React.useContext(
     contexts.ReserveStockContext,
   );
-  const reserveDiscountAction = useReserveDiscountAction();
-  const reserveStockAction = useReserveStockAction();
 
   /**
    * Listen Error POST reserved-stock
@@ -200,11 +199,13 @@ const OmsVerificationOrderView: FC = () => {
     //   reservedAt: moment().format().toString(),
     // };
     // reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+    const reservedAt = moment().format().toString();
+    reserveDataAction.setReservedAt(reservedAt);
     const createReserveDiscountParams = {
       ...getCartSelected,
       voucherIds: getSelectedVouchers(voucherData.dataVouchers),
       potentialDiscountId: stateVerificationOrder.create.data?.id,
-      reservedAt: moment().format().toString(),
+      reservedAt,
     };
     reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
   };
