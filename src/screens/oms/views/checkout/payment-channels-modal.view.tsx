@@ -35,7 +35,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
     const dataUpdatePaymentChannels = [
       {
         invoiceGroupId: paymentChannelData.invoiceGroupId,
-        totalFee: item.totalFee,
+        totalPaymentFee: item.totalFee,
         totalPayment: item.totalPayment,
         totalPromoPayment: item.promoPaymentAmount,
         paymentType: paymentChannelData.paymentType,
