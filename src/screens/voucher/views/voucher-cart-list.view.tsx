@@ -21,6 +21,7 @@ import {
   useSelectedSellerVoucher,
   useSelectedSinbadVoucher,
   countPotentialDiscount,
+  useVoucherLocalData,
 } from '../functions';
 import { VoucherCartListStyles } from '../styles';
 import { contexts } from '@contexts';
@@ -28,9 +29,6 @@ import * as models from '@models';
 import SvgIcon from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { camelize } from '@core/functions/global/camelize';
-import * as Actions from '@actions';
-import { useDispatch } from 'react-redux';
-import { useDataVoucher } from '@core/redux/Data';
 import LoadingPage from '@core/components/LoadingPage';
 import BottomModalError from '@core/components/BottomModalError';
 /** === COMPONENT === */
@@ -56,32 +54,39 @@ const VoucherCartListView: FC = () => {
     searchVoucher,
     resetVoucherData,
   } = useVoucherList();
+  const voucherLocalDataAction = useVoucherLocalData();
   const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucher.voucherCart.detail;
-  const voucherData = useDataVoucher();
-  const dispatch = useDispatch();
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.list(dispatchVoucher);
-    if (voucherData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
-      setSelectedSellerVoucher(voucherData.dataVouchers.sellerVouchers);
+    if (voucherLocalDataAction.selectedVoucher !== null) {
+      setSelectedSinbadVoucher(
+        voucherLocalDataAction.selectedVoucher.sinbadVoucher,
+      );
+      setSelectedSellerVoucher(
+        voucherLocalDataAction.selectedVoucher.sellerVouchers,
+      );
     }
     return () => {
       voucherCartListAction.reset(dispatchVoucher);
     };
   }, []);
   React.useEffect(() => {
-    if (voucherData.dataVouchers !== null) {
-      setSelectedSinbadVoucher(voucherData.dataVouchers.sinbadVoucher);
-      setSelectedSellerVoucher(voucherData.dataVouchers.sellerVouchers);
-    } else if (voucherData.dataVouchers === null) {
+    if (voucherLocalDataAction.selectedVoucher !== null) {
+      setSelectedSinbadVoucher(
+        voucherLocalDataAction.selectedVoucher.sinbadVoucher,
+      );
+      setSelectedSellerVoucher(
+        voucherLocalDataAction.selectedVoucher.sellerVouchers,
+      );
+    } else if (voucherLocalDataAction.selectedVoucher === null) {
       setSelectedSinbadVoucher(null);
       setSelectedSellerVoucher([]);
     }
-  }, [voucherData.dataVouchers]);
+  }, [voucherLocalDataAction.selectedVoucher]);
   React.useEffect(() => {
     // if fetching success
     if (voucherCartListState.data !== null) {
@@ -107,7 +112,7 @@ const VoucherCartListView: FC = () => {
         buttonAction={() => {
           resetSelectedSinbadVoucher();
           resetSelectedSellerVoucher();
-          dispatch(Actions.saveSelectedVouchers(null));
+          voucherLocalDataAction.reset();
         }}
       />
     );
@@ -366,12 +371,10 @@ const VoucherCartListView: FC = () => {
             type={'primary'}
             title={'Gunakan Voucher'}
             onPress={() => {
-              dispatch(
-                Actions.saveSelectedVouchers({
-                  sinbadVoucher: selectedSinbadVoucher,
-                  sellerVouchers: selectedSellerVoucher,
-                }),
-              );
+              voucherLocalDataAction.set({
+                sinbadVoucher: selectedSinbadVoucher,
+                sellerVouchers: selectedSellerVoucher,
+              });
               goBack();
             }}
             disabled={false}

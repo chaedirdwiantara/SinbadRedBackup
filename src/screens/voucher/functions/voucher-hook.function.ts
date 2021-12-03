@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
+import { useDataVoucher } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => count all voucher action */
 const useCountAllVoucherAction = () => {
@@ -190,6 +191,28 @@ const useVoucherList = () => {
     sinbadVoucher,
   };
 };
+/** => */
+const useVoucherLocalData = () => {
+  const dispatch = useDispatch();
+  const voucherData = useDataVoucher();
+  return {
+    set: ({
+      sinbadVoucher,
+      sellerVouchers,
+    }: models.selectedVoucherDataProps) => {
+      dispatch(
+        Actions.saveSelectedVouchers({
+          sinbadVoucher,
+          sellerVouchers,
+        }),
+      );
+    },
+    reset: () => {
+      dispatch(Actions.saveSelectedVouchers(null));
+    },
+    selectedVoucher: voucherData.dataVouchers,
+  };
+};
 /** === EXPORT === */
 export {
   useVoucherListItemModal,
@@ -201,6 +224,7 @@ export {
   useVoucherListMore,
   useVoucherList,
   useCountAllVoucherAction,
+  useVoucherLocalData,
 };
 /**
  * ================================================================
