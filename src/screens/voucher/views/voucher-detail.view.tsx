@@ -225,10 +225,9 @@ const VoucherDetailView: FC = ({ route }: any) => {
             </View>
           }
           title={type}
-          action={true}
           actionIcon={'close'}
           closeAction={() => modalHandleClose()}
-          fullsize={true}
+          size={'fullscreen'}
         />
       </View>
     );
