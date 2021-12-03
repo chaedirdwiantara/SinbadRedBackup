@@ -138,9 +138,9 @@ export interface IUpdateInvoiceChannel {
 
 export interface IPromoPaymentChannel {
   paymentChannelId: number;
-  promPaymentDescription: boolean | null;
+  promPaymentDescription: string | null;
   promoPaymentAmount: number | null;
-  promoPaymentAvailable: number | null;
+  promoPaymentAvailable: boolean | null;
 }
 
 export interface IUpdatePromoPaymentChannel {

@@ -51,6 +51,15 @@ export const paymentChannelsListFailed = (
 ): models.ListFailedAction => {
   return { type: types.PAYMENT_CHANNELS_LIST_FAILED, payload: data };
 };
+/** => payment channels reset */
+export const paymentChannelsListReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.PAYMENT_CHANNELS_LIST_RESET });
+  return {
+    type: types.PAYMENT_CHANNELS_LIST_RESET,
+  };
+};
 
 /** ==> payment terms and condition */
 /** => payment terms and condition create process */
@@ -204,14 +213,24 @@ export const paymentLastChannelDetailFailed = (
 };
 
 /** reset last payment channel create  */
-export const paymentLastChannelCreateReset = () => {
+export const paymentLastChannelCreateReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.PAYMENT_LAST_CHANNEL_CREATE_RESET,
+  });
   return {
     type: types.PAYMENT_LAST_CHANNEL_CREATE_RESET,
   };
 };
 
 /** reset last payment channel detail  */
-export const paymentLastChannelDetailReset = () => {
+export const paymentLastChannelDetailReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
+  });
   return {
     type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
   };
