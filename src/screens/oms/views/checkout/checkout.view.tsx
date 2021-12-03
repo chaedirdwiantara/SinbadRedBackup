@@ -85,10 +85,14 @@ const OmsCheckoutView: FC = () => {
       checkoutViewActions.reset(dispatchCheckout);
       /** => reset checkout master data */
       resetCheckoutMasterData();
+      /** => reset payment modal master data (payment channel) */
+      paymentChannelData.resetPaymentModalMasterData();
       /** => reset local voucher data */
       dispatch(Actions.saveSelectedVouchers(null));
       /** => reset check-all-promo-payment context data */
       checkAllPromoPaymentAction.reset(dispatchPromo);
+      /** => reset payment last channel context data */
+      paymentAction.resetLastChannel(dispatchPayment);
     };
   }, []);
 
@@ -116,7 +120,7 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutError]);
   /** for post last payment channel */
   React.useEffect(() => {
-    const invoices = checkoutMaster?.invoices;
+    const invoices = checkoutMaster.invoices;
 
     if (invoices.length > 0 && !paymentLastChannelDetail.data) {
       const cartParcels: models.ILastChannelCreateProps[] = invoices.map(

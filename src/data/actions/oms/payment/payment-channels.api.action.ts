@@ -32,3 +32,7 @@ export const updataTotalCartParcel = (
 ): models.IUpdateTotalCartParcel => {
   return { type: types.UPDATE_TOTAL_CART_PARCEL, payload };
 };
+
+export const resetPaymentModalMasterData = () => {
+  return { type: types.RESET_PAYMENT_MODAL_MASTER_DATA };
+};
