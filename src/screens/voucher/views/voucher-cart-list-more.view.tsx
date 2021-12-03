@@ -25,9 +25,8 @@ import * as models from '@models';
 import SvgIcon from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { camelize } from '@core/functions/global/camelize';
-import * as Actions from '@actions';
-import { useDispatch } from 'react-redux';
 import { contexts } from '@contexts';
+import { useVoucherLocalData } from '../functions';
 /** === COMPONENT === */
 const VoucherCartListMoreView: FC = ({ route }: any) => {
   /** === HOOK === */
@@ -46,7 +45,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
   const { voucherListData, setVoucherListData, searchVoucherListData } =
     useVoucherListMore();
   const { keyword, changeKeyword } = useSearchKeyword();
-  const dispatch = useDispatch();
+  const voucherLocalDataAction = useVoucherLocalData();
   /** => effect */
   React.useEffect(() => {
     setVoucherListData(route.params.voucherList);
@@ -85,7 +84,7 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
         buttonAction={() => {
           resetSelectedSinbadVoucher();
           resetSelectedSellerVoucher();
-          dispatch(Actions.saveSelectedVouchers(null));
+          voucherLocalDataAction.reset();
         }}
       />
     );
@@ -280,12 +279,10 @@ const VoucherCartListMoreView: FC = ({ route }: any) => {
             type={'primary'}
             title={'Gunakan Voucher'}
             onPress={() => {
-              dispatch(
-                Actions.saveSelectedVouchers({
-                  sinbadVoucher: selectedSinbadVoucher,
-                  sellerVouchers: selectedSellerVoucher,
-                }),
-              );
+              voucherLocalDataAction.set({
+                sinbadVoucher: selectedSinbadVoucher,
+                sellerVouchers: selectedSellerVoucher,
+              });
               goBack();
             }}
             disabled={false}

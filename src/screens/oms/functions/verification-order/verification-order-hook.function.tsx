@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -35,8 +36,37 @@ const useReserveDataAction = () => {
     },
   };
 };
+/** => promo accordion */
+const usePromoAccordion = () => {
+  const [activeIndex, setIndex] = React.useState<number | null>(null);
+  return {
+    setIndex: (newIndex: number) => {
+      if (activeIndex === newIndex) {
+        setIndex(null);
+      } else {
+        setIndex(newIndex);
+      }
+    },
+    activeIndex,
+  };
+};
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** === EXPORT === */
-export { useVerficationOrderAction, useReserveDataAction };
+export {
+  useVerficationOrderAction,
+  useReserveDataAction,
+  usePromoAccordion,
+  useStandardModalState,
+};
 /**
  * ================================================================
  * NOTES
