@@ -8,7 +8,3 @@ export const isFCM = (data: boolean): models.IsFCMAction => {
 export const isIntroSinbad = (data: boolean): models.IsIntroSinbadAction => {
   return { type: types.IS_INTRO_SINBAD, payload: data };
 };
-/** => FOR SAVE CART ID FLAG */
-export const cartId = (data: string | null): models.CartId => {
-  return { type: types.CART_ID, payload: data };
-};

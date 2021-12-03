@@ -14,11 +14,14 @@ interface ShoppingCartBrandProps {
   brandIndex: number;
   invoiceGroupIndex: number;
   invoiceGroups: CartInvoiceGroup[];
-  setInvoiceGroups: Dispatch<SetStateAction<CartInvoiceGroup[]>>;
+  setInvoiceGroups: (any: CartInvoiceGroup[]) => void;
   productSelectedCount: number;
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
+  setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
@@ -31,6 +34,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
+  setProductIdRemoveSelected,
+  sassionQty,
+  setSassionQty,
 }) => (
   <Fragment key={brand.brandName}>
     <View
@@ -60,7 +66,7 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
     </View>
     {brand.products.map((product, productIndex) => (
       <ShoppingCartProduct
-        key={product.productId.toString()}
+        key={productIndex.toString()}
         product={product}
         productIndex={productIndex}
         brand={brand}
@@ -72,6 +78,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
         setProductSelectedCount={setProductSelectedCount}
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
+        setProductIdRemoveSelected={setProductIdRemoveSelected}
+        sassionQty={sassionQty}
+        setSassionQty={setSassionQty}
       />
     ))}
   </Fragment>

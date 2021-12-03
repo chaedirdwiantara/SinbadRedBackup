@@ -16,6 +16,7 @@ interface SupplierBrandCardProps {
 
 interface SupplierBrandListProps {
   brands: Array<models.BrandListSuccessProps>;
+  loading?: boolean;
 }
 /** === COMPONENTS === */
 const SupplierBrandCard: FC<SupplierBrandCardProps> = ({

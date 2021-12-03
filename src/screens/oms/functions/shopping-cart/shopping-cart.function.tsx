@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import { Dispatch, SetStateAction } from 'react';
-import { CartInvoiceGroup } from '@models';
+import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
@@ -23,7 +23,7 @@ const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
       if (brand.selected) {
         brand.products.forEach((product) => {
           if (product.selected) {
-            totalPrice += product.displayPrice;
+            totalPrice += Number(product.displayPrice) * Number(product.qty);
           }
         });
       }
@@ -40,8 +40,10 @@ const handleProductQuantityChange = (
   action: 'increase' | 'decrease',
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
+  currentQty: number,
+  setSassionQty: Dispatch<SetStateAction<number>>,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -49,10 +51,10 @@ const handleProductQuantityChange = (
   const currentBrand = currentInvoiceGroup.brands[brandIndex];
   const currentProduct = currentBrand.products[productIndex];
 
-  if (action === 'increase') {
-    currentProduct.qty += 1;
-  } else {
-    currentProduct.qty -= 1;
+  if (action === 'increase' && currentProduct.qty < currentProduct.stock) {
+    currentProduct.qty = currentQty + 1;
+  } else if (action === 'decrease' && currentProduct.qty > 0) {
+    currentProduct.qty = currentQty - 1;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -60,6 +62,7 @@ const handleProductQuantityChange = (
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
   setInvoiceGroups(invoiceGroupsCopy);
+  setSassionQty(Math.random() * 10000000);
 };
 /** => handle when product is selected or unselected */
 const handleSelectedProductChange = (
@@ -69,7 +72,7 @@ const handleSelectedProductChange = (
   selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
@@ -100,10 +103,10 @@ const handleSelectedProductChange = (
     totalSelectedCount -= 1;
   }
 
-  if (selectedCount === currentBrand.products.length) {
-    currentBrand.selected = true;
-  } else {
+  if (selectedCount === 0) {
     currentBrand.selected = false;
+  } else {
+    currentBrand.selected = true;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -128,7 +131,7 @@ const handleSelectedBrandChange = (
   selected: boolean,
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
-    Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
+    (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
@@ -225,10 +228,16 @@ const handleProductDelete = (
   brandIndex: number,
   productIndex: number,
   invoiceGroups: Array<CartInvoiceGroup>,
+  onRemoveProduct: (any: IProductItemUpdateCart) => void,
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
-  console.log(`${deletedProduct.productName} deleted`);
+  onRemoveProduct({
+    productId: deletedProduct.productId,
+    qty: 0,
+    selected: false,
+    stock: deletedProduct.stock,
+  });
 };
 
 export {

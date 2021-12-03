@@ -1,0 +1,4 @@
+Sekarang anda bisa :
+- Melihat daftar tagihan berjalan di halaman utama aplikasi anda
+- Melihat Pembayaran tagihan hutang (bayar nanti)
+- Melihat Notifikasi pembayaran tagihan hutang

@@ -19,12 +19,24 @@ import {
   reserveDiscountReducer,
   ReserveDiscountInitialProps,
 } from './reserve-discount/reserve-discount.reducer';
+import {
+  checkPromoPaymentInitialState,
+  checkPromoPaymentReducer,
+  CheckPromoPaymentInitialProps,
+} from './check-promo-payment/check-promo-payment.reducer';
+import {
+  checkAllPromoPaymentInitialState,
+  checkAllPromoPaymentReducer,
+  CheckAllPromoPaymentInitialProps,
+} from './check-all-promo-payment/check-all-promo-payment.reducer';
 /** === TYPE HERE === */
 export type PromoInitialProps = {
   promoPayment: PromoPaymentInitialProps;
   promoGeneral: PromoGeneralInitialProps;
   potentialPromoProduct: PotentialPromoProductInitialProps;
   reserveDiscount: ReserveDiscountInitialProps;
+  checkPromoPayment: CheckPromoPaymentInitialProps;
+  checkAllPromoPayment: CheckAllPromoPaymentInitialProps;
 };
 /** === INITIAL HERE === */
 export const promoInitialState = {
@@ -32,10 +44,19 @@ export const promoInitialState = {
   promoGeneral: promoGeneralInitialState,
   potentialPromoProduct: potentialPromoProductInitialState,
   reserveDiscount: reserveDiscountInitialState,
+  checkPromoPayment: checkPromoPaymentInitialState,
+  checkAllPromoPayment: checkAllPromoPaymentInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const promoReducer = (
-  { promoPayment, promoGeneral, potentialPromoProduct, reserveDiscount }: any,
+  {
+    promoPayment,
+    promoGeneral,
+    potentialPromoProduct,
+    reserveDiscount,
+    checkPromoPayment,
+    checkAllPromoPayment,
+  }: any,
   action: any,
 ) => ({
   promoPayment: promoPaymentReducer(promoPayment, action),
@@ -45,4 +66,9 @@ export const promoReducer = (
     action,
   ),
   reserveDiscount: reserveDiscountReducer(reserveDiscount, action),
+  checkPromoPayment: checkPromoPaymentReducer(checkPromoPayment, action),
+  checkAllPromoPayment: checkAllPromoPaymentReducer(
+    checkAllPromoPayment,
+    action,
+  ),
 });

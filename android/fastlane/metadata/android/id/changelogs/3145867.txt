@@ -1,0 +1,4 @@
+Hi, Pemilik Toko! Kami baru saja melucurkan fitur informasi supplier untuk toko. 
+Anda bisa melihat status dari masing-masing supplier beserta alasannya jika Toko Anda ditolak.
+Anda juga dapat melihat informasi penjual produk, sehingga Anda tidak perlu khawatir lagi untuk membeli barang di Sinbad,
+yuk segera update aplikasi Sinbad Anda, dan temukan kemudahan berbelanja hanya di Sinbad!

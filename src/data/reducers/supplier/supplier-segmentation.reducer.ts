@@ -27,22 +27,23 @@ export const supplierSegmentationReducer = simplifyReducer(
     /** => Success */
     [types.SUPPLIER_SEGMENTATION_SUCCESS](
       state = supplierSegmentationInitialState,
-      action: models.DetailSuccessAction<models.SupplierSegmentation>,
+      { payload }: models.DetailSuccessAction<models.SupplierSegmentation>,
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: payload,
         loading: false,
+        error: null,
       };
     },
     /** Failed */
     [types.SUPPLIER_SEGMENTATION_FAILED](
       state = supplierSegmentationInitialState,
-      action: models.DetailFailedAction,
+      { payload }: models.DetailFailedAction,
     ) {
       return {
         ...state,
-        error: action.payload,
+        error: payload,
         loading: false,
       };
     },

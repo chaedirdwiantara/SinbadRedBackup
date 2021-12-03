@@ -5,7 +5,7 @@ export interface ProductList {
   name: string;
   sellerId: string;
   originalPrice: number;
-  currentPrice: number | null;
+  currentPrice: number;
   isBundle: boolean;
   isBonus: boolean;
   isExclusive: boolean;
@@ -57,7 +57,7 @@ export interface ProductImage {
 export interface ProductDetail {
   id: string;
   supplierCode: string;
-  sellerId: string;
+  sellerId: number;
   name: string;
   detail: string;
   description: string;
@@ -85,4 +85,10 @@ export interface ProductDetail {
   isAvailable?: boolean;
   isBundle?: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+}
+
+export type ProductSubModule = 'recommendations' | undefined;
+
+export interface ProductListProcessAction extends models.ListProcessAction {
+  subModule?: ProductSubModule;
 }

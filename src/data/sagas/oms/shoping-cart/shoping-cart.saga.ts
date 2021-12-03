@@ -23,7 +23,9 @@ function* cartView(action: Omit<models.DetailProcessAction, 'payload'>) {
   }
 }
 /** => Add to cart */
-function* addToCart(action: models.CreateProcessAction) {
+function* addToCart(
+  action: models.CreateProcessAction<models.AddToCartPayload>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return CartApi.addToCart(action.payload);
@@ -38,7 +40,9 @@ function* addToCart(action: models.CreateProcessAction) {
   }
 }
 /** => Update */
-function* updateCart(action: models.UpdateProcessAction) {
+function* updateCart(
+  action: models.UpdateProcessAction<models.CartUpdatePayload>,
+) {
   try {
     const response: models.UpdateSuccessProps = yield call(() => {
       return CartApi.updateCart(action.payload);
@@ -52,11 +56,26 @@ function* updateCart(action: models.UpdateProcessAction) {
     yield put(ActionCreators.cartUpdateFailed(error as models.ErrorProps));
   }
 }
+/** => Cart view */
+function* cartTotalProduct() {
+  try {
+    const response: models.DetailSuccessProps<models.CartTotalProductSuccess> =
+      yield call(() => {
+        return CartApi.getCartTotalProduct();
+      });
+    yield put(ActionCreators.cartTotalProductSuccess(response));
+  } catch (error) {
+    yield put(
+      ActionCreators.cartTotalProductFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_VIEW_PROCESS, cartView);
   yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
   yield takeLatest(types.CART_UPDATE_PROCESS, updateCart);
+  yield takeLatest(types.CART_TOTAL_PRODUCT_PROCESS, cartTotalProduct);
 }
 
 export default CartSaga;

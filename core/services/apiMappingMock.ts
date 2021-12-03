@@ -11,9 +11,16 @@ import {
 const apiMappingMock = <T>(
   mockHost: string,
   path: string,
-  module: 'account' | 'cart' | 'product' | 'discount' | 'auth' | 'order',
+  module:
+    | 'account'
+    | 'cart'
+    | 'product'
+    | 'discount'
+    | 'auth'
+    | 'order'
+    | 'payment',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  type: 'LIST' | 'DETAIL' | 'CREATE' | 'PUT' | 'PATCH' | 'DELETE',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE',
   params?: object,
 ) => {
   switch (type) {
@@ -44,16 +51,7 @@ const apiMappingMock = <T>(
         'POST',
         params,
       );
-    case 'PUT':
-      return apiMock<UpdateSuccessProps>(
-        mockHost,
-        path,
-        module,
-        version,
-        'PUT',
-        params,
-      );
-    case 'PATCH':
+    case 'UPDATE':
       return apiMock<UpdateSuccessProps>(
         mockHost,
         path,

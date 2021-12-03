@@ -1,4 +1,3 @@
-/** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { ScrollView, TouchableOpacity, View, Image } from 'react-native';
 import {
@@ -21,12 +20,45 @@ import {
   VerificationOrderDetailNonPromoList,
   VerificationOrderDetailPromoList,
   VerificationOrderDetailVoucherList,
+  CartSelectedData,
+  CartSelectedBrand,
+  CartSelectedProduct,
+  ReserveStockPayloadData,
+  ReserveStockPayloadBrand,
+  ReserveStockPayloadProducts,
 } from '@models';
 import LoadingPage from '@core/components/LoadingPage';
+import { useReserveDiscountAction } from '@screen/promo/functions';
+import { getSelectedVouchers } from '@screen/voucher/functions';
+import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import moment from 'moment';
+import { useDataVoucher } from '@core/redux/Data';
+import { ErrorPromoModal } from './ErrorPromoModal';
+import { ErrorVoucherModal } from './ErrorVoucherModal';
+import { useDispatch } from 'react-redux';
+import * as Actions from '@actions';
+import { capitalize } from '@core/functions/global/capitalize';
+import { useReserveStockAction } from '@screen/product/functions';
+
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
   const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
+  const [isErrorPromo, setErrorPromo] = React.useState(false);
+  const [isErrorVoucher, setErrorVoucher] = React.useState(false);
+  const [isErrorStock, setErrorStock] = React.useState(false);
+
+  /** => used for reset voucher */
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    return () => {
+      /** => reset reserve discount context */
+      reserveDiscountAction.resetPostGet(dispatchPromo);
+      /** => reset reserve stock context */
+      reserveStockAction.resetPostGet(dispatchReserveStock);
+    };
+  }, []);
 
   /**
    * VERIFICATION-ORDER SECTION
@@ -35,6 +67,140 @@ const OmsVerificationOrderView: FC = () => {
     contexts.VerificationOrderContext,
   );
   const verificationOrderDetailData = stateVerificationOrder.detail.data;
+
+  /**
+   * RESERVE SECTION
+   * - POST reserved-discount (Promo & Voucher)
+   * - GET reserved-discount (Promo & Voucher)
+   * - POST reserved-stock
+   * - GET reserved-stock
+   */
+
+  /** => get cart data */
+  const { getCartSelected } = useCartSelected();
+  /** => get voucher data */
+  const voucherData = useDataVoucher();
+
+  const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
+  const { dispatchReserveStock, stateReserveStock } = React.useContext(
+    contexts.ReserveStockContext,
+  );
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
+
+  /**
+   * Listen Error POST reserved-stock
+   * - error stock
+   * - error fetch
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.create.error !== null) {
+      if (stateReserveStock.create.error.code === 140037) {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      }
+    }
+  }, [stateReserveStock.create.error]);
+
+  /**
+   * Listen Success POST reserved-stock
+   * - if success, hit POST reserved-discount
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.create.data !== null) {
+      const createReserveDiscountParams = {
+        ...getCartSelected,
+        voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+        potentialDiscountId: stateVerificationOrder.create.data?.id,
+        reservedAt: moment().format().toString(),
+      };
+      reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
+    }
+  }, [stateReserveStock.create.data]);
+
+  /**
+   * Listen Success GET error message reserved-stock
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.detail.data !== null) {
+      setErrorStock(true);
+    }
+  }, [stateReserveStock.detail.data]);
+
+  /**
+   * Listen Error POST reserved-discount
+   * - error voucher
+   * - error fetch
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.create.error !== null) {
+      if (statePromo.reserveDiscount.create.error.code === 140037) {
+        setErrorVoucher(true);
+      }
+    }
+  }, [statePromo.reserveDiscount.create.error]);
+
+  /**
+   * Listen Success POST reserved-discount
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.create.data !== null) {
+      reserveDiscountAction.detail(
+        dispatchPromo,
+        statePromo.reserveDiscount.create.data.id,
+      );
+    }
+  }, [statePromo.reserveDiscount.create.data]);
+
+  /**
+   * Listen Success GET reserved-discount
+   * - error promo
+   * - not error promo
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.detail.data !== null) {
+      if (
+        statePromo.reserveDiscount.detail.data.promoNotMatch.amount.length >
+          0 ||
+        statePromo.reserveDiscount.detail.data.promoNotMatch.bonus.length > 0
+      ) {
+        setErrorPromo(true);
+      } else {
+        goToCheckout();
+      }
+    }
+  }, [statePromo.reserveDiscount.detail.data]);
+
+  /** => handleContinueToPayment */
+  const handleContinuePayment = () => {
+    const invoices: ReserveStockPayloadData[] = [];
+    getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+      const brands: ReserveStockPayloadBrand[] = [];
+      invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+        const products: ReserveStockPayloadProducts[] = [];
+        brandArr.products.map((productArr: CartSelectedProduct) => {
+          products.push({
+            productId: productArr.productId,
+            qty: productArr.qty,
+            warehouseId: productArr.warehouseId,
+          });
+        });
+        brands.push({
+          brandId: brandArr.brandId,
+          products,
+        });
+      });
+      invoices.push({
+        invoiceGroupId: invoiceArr.invoiceGroupId,
+        brands,
+      });
+    });
+    const createReserveStockParams = {
+      id: getCartSelected.id,
+      data: invoices,
+      reservedAt: moment().format().toString(),
+    };
+    reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+  };
 
   /** === VIEW === */
   /** => header */
@@ -65,7 +231,7 @@ const OmsVerificationOrderView: FC = () => {
               {renderDiscountDetail(
                 item.promos,
                 item.vouchers,
-                item.priceAfterDiscount,
+                item.promoPrice + item.voucherPrice,
                 index,
               )}
             </React.Fragment>
@@ -94,7 +260,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -118,7 +284,7 @@ const OmsVerificationOrderView: FC = () => {
                   {item.promoOwner !== 'none' ? (
                     <SnbBadge.Label
                       type={'error'}
-                      value={item.promoOwner}
+                      value={capitalize(item.promoOwner)}
                       iconName={'local_offer'}
                     />
                   ) : (
@@ -146,7 +312,7 @@ const OmsVerificationOrderView: FC = () => {
                   {item.voucherOwner !== 'none' ? (
                     <SnbBadge.Label
                       type={'error'}
-                      value={item.voucherOwner}
+                      value={capitalize(item.voucherOwner)}
                       iconName={'local_offer'}
                     />
                   ) : (
@@ -279,7 +445,7 @@ const OmsVerificationOrderView: FC = () => {
           </SnbText.C2>
           <View style={VerificationOrderStyle.listItemProductPriceContainer}>
             <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.priceBeforeTax)}</SnbText.C2>
+            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
           </View>
         </View>
       </View>
@@ -317,8 +483,19 @@ const OmsVerificationOrderView: FC = () => {
             <SnbButton.Single
               type={'primary'}
               title={'Lanjut Ke Pembayaran'}
-              disabled={false}
-              onPress={() => goToCheckout()}
+              loading={
+                statePromo.reserveDiscount.create.loading ||
+                statePromo.reserveDiscount.detail.loading ||
+                stateReserveStock.create.loading ||
+                stateReserveStock.detail.loading
+              }
+              disabled={
+                verificationOrderDetailData.grandTotal.grandTotalPrice === 0 ||
+                verificationOrderDetailData.grandTotal.grandTotalPrice -
+                  verificationOrderDetailData.grandTotal.grandTotalDiscount <
+                  0
+              }
+              onPress={() => handleContinuePayment()}
             />
           </View>
         </View>
@@ -339,6 +516,44 @@ const OmsVerificationOrderView: FC = () => {
       </View>
     );
   };
+  /** => error promo modal */
+  const renderErrorPromoModal = () => {
+    if (statePromo.reserveDiscount.detail.data === null) {
+      return null;
+    }
+    return (
+      <ErrorPromoModal
+        visible={isErrorPromo}
+        onBackToCart={() => {
+          setErrorPromo(false);
+          goBack();
+        }}
+        onContinueToPayment={() => {
+          setErrorPromo(false);
+        }}
+        amountPromoList={
+          statePromo.reserveDiscount.detail.data.promoNotMatch.amount
+        }
+        bonusPromoList={
+          statePromo.reserveDiscount.detail.data.promoNotMatch.bonus
+        }
+      />
+    );
+  };
+  /** => error voucher modal */
+  const renderErrorVoucherModal = () => {
+    return (
+      <ErrorVoucherModal
+        visible={isErrorVoucher}
+        onBackToCart={() => {
+          /** => reset local voucher data */
+          dispatch(Actions.saveSelectedVouchers(null));
+          setErrorVoucher(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -353,6 +568,9 @@ const OmsVerificationOrderView: FC = () => {
           {renderBottom()}
         </>
       )}
+      {/* modal */}
+      {renderErrorPromoModal()}
+      {renderErrorVoucherModal()}
     </SnbContainer>
   );
 };
