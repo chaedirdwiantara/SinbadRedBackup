@@ -85,8 +85,6 @@ const OmsCheckoutView: FC = () => {
       checkoutViewActions.reset(dispatchCheckout);
       /** => reset checkout master data */
       resetCheckoutMasterData();
-      /** => reset payment modal master data (payment channel) */
-      paymentChannelData.resetPaymentModalMasterData();
       /** => reset local voucher data */
       dispatch(Actions.saveSelectedVouchers(null));
       /** => reset check-all-promo-payment context data */
