@@ -45,5 +45,9 @@ export const checkAllPromoPaymentCreateReducer = simplifyReducer(
         error: action.payload,
       };
     },
+    /** => create reset */
+    [types.CREATE_CHECK_PROMO_PAYMENT_RESET]() {
+      return checkAllPromoPaymentCreateInitialState;
+    },
   },
 );
