@@ -88,7 +88,7 @@ const PromoPaymentList: FC = ({ route }: any) => {
     const image = () => {
       return (
         <Image
-          source={require('../../../assets/images/voucher_empty.png')}
+          source={require('../../../../assets/images/voucher_empty.png')}
           style={PromoPaymentListStyles.emptyImage}
         />
       );
@@ -121,7 +121,7 @@ const PromoPaymentList: FC = ({ route }: any) => {
         isOpen={promoPaymentListError.isOpen}
         errorTitle={'Terjadi kesalahan'}
         errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
         buttonTitle={'Ok'}
         buttonOnPress={() => {
           promoPaymentListError.setOpen(false);
