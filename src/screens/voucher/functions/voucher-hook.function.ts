@@ -37,28 +37,6 @@ const useVoucherDetailAction = () => {
     },
   };
 };
-/** => set voucher tnc & instruction modal */
-const useVoucherListItemModal = () => {
-  const [isTncModalOpen, setTncModalOpen] = React.useState(false);
-  const [isInstructionModalOpen, setInstructionModalOpen] =
-    React.useState(false);
-  return {
-    handleOpenTncModal: () => {
-      setTncModalOpen(true);
-    },
-    handleCloseTnCModal: () => {
-      setTncModalOpen(false);
-    },
-    handleOpenInstructionModal: () => {
-      setInstructionModalOpen(true);
-    },
-    handleCloseInstructionModal: () => {
-      setInstructionModalOpen(false);
-    },
-    isTncModalOpen,
-    isInstructionModalOpen,
-  };
-};
 /** => voucher cart list action */
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
@@ -213,9 +191,18 @@ const useVoucherLocalData = () => {
     selectedVoucher: voucherData.dataVouchers,
   };
 };
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** === EXPORT === */
 export {
-  useVoucherListItemModal,
   useVoucherDetailAction,
   useVoucherCartListAction,
   useSearchKeyword,
@@ -225,6 +212,7 @@ export {
   useVoucherList,
   useCountAllVoucherAction,
   useVoucherLocalData,
+  useStandardModalState,
 };
 /**
  * ================================================================
