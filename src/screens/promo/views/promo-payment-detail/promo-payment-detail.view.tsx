@@ -114,7 +114,7 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
         isOpen={promoPaymentDetailError.isOpen}
         errorTitle={'Terjadi kesalahan'}
         errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
         buttonTitle={'Ok'}
         buttonOnPress={() => {
           promoPaymentDetailError.setOpen(false);
