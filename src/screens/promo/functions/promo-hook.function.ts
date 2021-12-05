@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -114,6 +115,16 @@ const useCheckAllPromoPaymentAction = () => {
     },
   };
 };
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 
 /** === EXPORT === */
 export {
@@ -123,6 +134,7 @@ export {
   useReserveDiscountAction,
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
+  useStandardModalState,
 };
 /**
  * ================================================================
