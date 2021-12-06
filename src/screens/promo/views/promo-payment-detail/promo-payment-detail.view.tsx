@@ -1,24 +1,32 @@
+/** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, ScrollView } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
   color,
   SnbCardInfoType2,
   SnbText,
   SnbDivider,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack, usePromoPaymentAction } from '../functions';
-import { PromoPaymentDetailStyles } from '../styles';
-import { contexts } from '@contexts';
-import { toCurrency } from '@core/functions/global/currency-format';
+/** === IMPORT COMPONENT HERE === */
 import LoadingPage from '@core/components/LoadingPage';
 import BottomModalError from '@core/components/BottomModalError';
+import { PromoPaymentDetailHeader } from './promo-payment-detail-header.view';
+/** === IMPORT INTERNAL FUNCTION HERE === */
+import {
+  goBack,
+  usePromoPaymentAction,
+  useStandardModalState,
+} from '../../functions';
+import { PromoPaymentDetailStyles } from '../../styles';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { contexts } from '@contexts';
+import { toCurrency } from '@core/functions/global/currency-format';
 /** === COMPONENT === */
 const PromoPaymentDetail: FC = ({ route }: any) => {
   /** === HOOK === */
-  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
+  const promoPaymentDetailError = useStandardModalState();
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentDetailState = statePromo.promoPayment.detail;
@@ -31,13 +39,13 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
   }, []);
   React.useEffect(() => {
     if (promoPaymentDetailState.error !== null) {
-      setErrorModalOpen(true);
+      promoPaymentDetailError.setOpen(true);
     }
   }, [promoPaymentDetailState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
-    return <SnbTopNav.Type3 type="red" title="" backAction={() => goBack()} />;
+    return <PromoPaymentDetailHeader />;
   };
   /** => red background */
   const renderRedBackground = () => {
@@ -103,13 +111,13 @@ const PromoPaymentDetail: FC = ({ route }: any) => {
   const renderErrorModal = () => {
     return (
       <BottomModalError
-        isOpen={isErrorModalOpen}
+        isOpen={promoPaymentDetailError.isOpen}
         errorTitle={'Terjadi kesalahan'}
         errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
         buttonTitle={'Ok'}
         buttonOnPress={() => {
-          setErrorModalOpen(false);
+          promoPaymentDetailError.setOpen(false);
           goBack();
         }}
       />

@@ -1,26 +1,31 @@
+/** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, Image, ScrollView } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
   SnbCardButtonType1,
   SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
+/** === IMPORT COMPONENT HERE === */
+import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
+import { PromoPaymentListHeader } from './promo-payment-list-header.view';
+/** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   goBack,
   usePromoPaymentAction,
   goToPromoPaymentDetail,
-} from '../functions';
-import { PromoPaymentListStyles } from '../styles';
-import { contexts } from '@contexts';
+  useStandardModalState,
+} from '../../functions';
+import { PromoPaymentListStyles } from '../../styles';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
 import { toCurrency } from '@core/functions/global/currency-format';
-import LoadingPage from '@core/components/LoadingPage';
-import BottomModalError from '@core/components/BottomModalError';
+import { contexts } from '@contexts';
 /** === COMPONENT === */
 const PromoPaymentList: FC = ({ route }: any) => {
   /** === HOOK === */
-  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
+  const promoPaymentListError = useStandardModalState();
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentListState = statePromo.promoPayment.list;
@@ -33,19 +38,13 @@ const PromoPaymentList: FC = ({ route }: any) => {
   }, []);
   React.useEffect(() => {
     if (promoPaymentListState.error !== null) {
-      setErrorModalOpen(true);
+      promoPaymentListError.setOpen(true);
     }
   }, [promoPaymentListState]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title="Promo Pembayaran"
-        backAction={() => goBack()}
-      />
-    );
+    return <PromoPaymentListHeader />;
   };
   /** => image payment promo */
   const renderImagePaymentPromo = (imageUrl: string) => {
@@ -89,7 +88,7 @@ const PromoPaymentList: FC = ({ route }: any) => {
     const image = () => {
       return (
         <Image
-          source={require('../../../assets/images/voucher_empty.png')}
+          source={require('../../../../assets/images/voucher_empty.png')}
           style={PromoPaymentListStyles.emptyImage}
         />
       );
@@ -119,13 +118,13 @@ const PromoPaymentList: FC = ({ route }: any) => {
   const renderErrorModal = () => {
     return (
       <BottomModalError
-        isOpen={isErrorModalOpen}
+        isOpen={promoPaymentListError.isOpen}
         errorTitle={'Terjadi kesalahan'}
         errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../assets/images/cry_sinbad.png')}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
         buttonTitle={'Ok'}
         buttonOnPress={() => {
-          setErrorModalOpen(false);
+          promoPaymentListError.setOpen(false);
           goBack();
         }}
       />

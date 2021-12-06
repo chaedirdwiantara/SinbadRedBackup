@@ -1,6 +1,6 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
-import PromoPaymentListView from './promo-payment-list.view';
-import PromoPaymentDetailView from './promo-payment-detail.view';
+import PromoPaymentListView from './promo-payment-list/promo-payment-list.view';
+import PromoPaymentDetailView from './promo-payment-detail/promo-payment-detail.view';
 import PromoDetailView from './promo-detail.view';
 /** === EXPORT ALL === */
 export { PromoPaymentListView, PromoPaymentDetailView, PromoDetailView };
