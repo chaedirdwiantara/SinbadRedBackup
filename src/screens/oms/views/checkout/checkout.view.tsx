@@ -76,8 +76,13 @@ const OmsCheckoutView: FC = () => {
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
-  const { paymentChannelsList, paymentLastChannelDetail, paymentTypesList } =
-    statePayment;
+  const {
+    paymentChannelsList,
+    paymentLastChannelDetail,
+    paymentTypesList,
+    paymentTCCreate,
+    paymentTCDetail,
+  } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
@@ -100,12 +105,23 @@ const OmsCheckoutView: FC = () => {
     };
   }, []);
   useEffect(() => {
-    if (paymentTypesList.error || paymentChannelsList.error) {
+    if (
+      paymentTypesList.error ||
+      paymentChannelsList.error ||
+      paymentTCCreate.error ||
+      paymentTCDetail.error
+    ) {
       paymentTypeModal.setOpen(false);
       paymentChannelsModal.setOpen(false);
+      paymentTCModal.setOpen(false);
       errorBottomModal.setOpen(true);
     }
-  }, [paymentTypesList.error, paymentChannelsList.error]);
+  }, [
+    paymentTypesList.error,
+    paymentChannelsList.error,
+    paymentTCCreate.error,
+    paymentTCDetail.error,
+  ]);
   useEffect(() => {
     if (checkoutData) {
       setInvoiceBrand(checkoutData);
