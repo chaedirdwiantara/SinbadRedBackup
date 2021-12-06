@@ -5,3 +5,4 @@ export * from './payment-channels-master';
 export * from './cart-master';
 export * from './shoping-cart/cart-total-product.reducer';
 export * from './reserve-data';
+export * from './checkout/checkout.reducer';
