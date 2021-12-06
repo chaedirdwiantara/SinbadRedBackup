@@ -24,6 +24,7 @@ import {
   usePaymentChannelsData,
   useTermsAndConditionsModal,
   useBackToCartModal,
+  useErrorModalBottom,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -34,6 +35,7 @@ import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
 } from '@screen/promo/functions';
+import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -51,6 +53,7 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelsModal = usePaymentChannelModal();
   const paymentChannelData = usePaymentChannelsData();
   const paymentTCModal = useTermsAndConditionsModal();
+  const errorBottomModal = useErrorModalBottom();
   const {
     stateCheckout: {
       checkout: {
@@ -73,7 +76,13 @@ const OmsCheckoutView: FC = () => {
   const { statePayment, dispatchPayment } = React.useContext(
     contexts.PaymentContext,
   );
-  const { paymentChannelsList, paymentLastChannelDetail } = statePayment;
+  const {
+    paymentChannelsList,
+    paymentLastChannelDetail,
+    paymentTypesList,
+    paymentTCCreate,
+    paymentTCDetail,
+  } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
 
   /** Set Loading Page */
@@ -91,9 +100,28 @@ const OmsCheckoutView: FC = () => {
       checkAllPromoPaymentAction.reset(dispatchPromo);
       /** => reset payment last channel context data */
       paymentAction.resetLastChannel(dispatchPayment);
+      /** => reset payment types list context data */
+      paymentAction.resetTypesList(dispatchPayment);
     };
   }, []);
-
+  useEffect(() => {
+    if (
+      paymentTypesList.error ||
+      paymentChannelsList.error ||
+      paymentTCCreate.error ||
+      paymentTCDetail.error
+    ) {
+      paymentTypeModal.setOpen(false);
+      paymentChannelsModal.setOpen(false);
+      paymentTCModal.setOpen(false);
+      errorBottomModal.setOpen(true);
+    }
+  }, [
+    paymentTypesList.error,
+    paymentChannelsList.error,
+    paymentTCCreate.error,
+    paymentTCDetail.error,
+  ]);
   useEffect(() => {
     if (checkoutData) {
       setInvoiceBrand(checkoutData);
@@ -289,6 +317,12 @@ const OmsCheckoutView: FC = () => {
     backToCartModal.setOpen(false);
     backToCart();
   };
+  /** close modal terms and condition */
+  const closeModalTC = () => {
+    paymentTCModal.setOpen(false);
+    paymentAction.resetTCCreate(dispatchPayment);
+    paymentAction.resetTCDetail(dispatchPayment);
+  };
 
   /** === VIEW === */
   return (
@@ -332,7 +366,7 @@ const OmsCheckoutView: FC = () => {
           <ModalParcelDetail />
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
-            close={() => paymentTCModal.setOpen(false)}
+            close={() => closeModalTC()}
           />
           <BackToCartModal
             isOpen={backToCartModal.isOpen}
@@ -340,6 +374,10 @@ const OmsCheckoutView: FC = () => {
               backToCartModal.setOpen(false);
             }}
             handleOkAction={handleBackToCart}
+          />
+          <ModalBottomErrorCheckout
+            isOpen={errorBottomModal.isOpen}
+            close={() => errorBottomModal.setOpen(false)}
           />
         </>
       )}
