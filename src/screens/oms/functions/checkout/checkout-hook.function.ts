@@ -210,10 +210,30 @@ const usePaymentAction = () => {
     resetChannelList: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.paymentChannelsListReset(contextDispatch));
     },
+    resetTypesList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.resetPaymentTypesList(contextDispatch));
+    },
+    resetTCCreate: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentTCCreateReset(contextDispatch));
+    },
+    resetTCDetail: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentTCDetailReset(contextDispatch));
+    },
   };
 };
 /** => back to cart modal confirmation */
 const useBackToCartModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
+
+/** => error fetch api */
+const useErrorModalBottom = () => {
   const [isOpen, setOpen] = React.useState(false);
   return {
     setOpen: (value: boolean) => {
@@ -234,6 +254,7 @@ export {
   usePaymentAction,
   usePaymentChannelsData,
   useBackToCartModal,
+  useErrorModalBottom,
 };
 /**
  * ================================================================
