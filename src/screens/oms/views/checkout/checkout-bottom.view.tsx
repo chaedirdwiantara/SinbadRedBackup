@@ -13,10 +13,7 @@ interface CheckoutBottomViewProps {
   openTCModal: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
-  data,
-  openTCModal,
-}) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
   const { dispatchPayment } = React.useContext(contexts.PaymentContext);

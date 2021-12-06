@@ -301,6 +301,12 @@ const OmsCheckoutView: FC = () => {
     backToCartModal.setOpen(false);
     backToCart();
   };
+  /** close modal terms and condition */
+  const closeModalTC = () => {
+    paymentTCModal.setOpen(false);
+    paymentAction.resetTCCreate(dispatchPayment);
+    paymentAction.resetTCDetail(dispatchPayment);
+  };
 
   /** === VIEW === */
   return (
@@ -344,7 +350,7 @@ const OmsCheckoutView: FC = () => {
           <ModalParcelDetail />
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
-            close={() => paymentTCModal.setOpen(false)}
+            close={() => closeModalTC()}
           />
           <BackToCartModal
             isOpen={backToCartModal.isOpen}
