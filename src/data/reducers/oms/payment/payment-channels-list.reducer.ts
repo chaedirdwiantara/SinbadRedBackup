@@ -53,5 +53,9 @@ export const paymentChannelsListReducer = simplifyReducer(
         error: payload,
       };
     },
+    /** => list reset */
+    [types.PAYMENT_CHANNELS_LIST_RESET]() {
+      return paymentChannelsListInitialState;
+    },
   },
 );

@@ -34,10 +34,10 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
   const selectedPaymentChannel = (item: any) => {
     const dataUpdatePaymentChannels = [
       {
-        invoiceGroupId: paymentChannelData?.invoiceGroupId,
-        totalFee: item.totalFee,
+        invoiceGroupId: paymentChannelData.invoiceGroupId,
+        totalPaymentFee: item.totalFee,
         totalPayment: item.totalPayment,
-        promoPayment: item.promoPayment,
+        totalPromoPayment: item.promoPaymentAmount,
         paymentType: paymentChannelData.paymentType,
         paymentChannel: { id: item.id, name: item.name, iconUrl: item.image },
       },
@@ -60,8 +60,15 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
               description={description}
               image={item.image}
               type={'two'}
-              disabled={item.status === 'disabled' ? true : false}
+              disabled={
+                item.status === 'disabled' ||
+                item.promoPaymentAvailable === null
+                  ? true
+                  : false
+              }
               onPress={() => selectedPaymentChannel(item)}
+              badge={item.promoPaymentAvailable}
+              textBadge={item.promPaymentDescription}
             />
           );
         })}

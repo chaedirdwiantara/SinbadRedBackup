@@ -48,29 +48,6 @@ function* paymentChannelsList(action: models.ListProcessAction) {
 }
 
 /** => payment terms and condition create  */
-function* paymentTermsAndConditionCreate(action: models.CreateProcessAction) {
-  try {
-    const response: models.CreateSuccessProps = yield call(() => {
-      return PaymentApi.postTermsAndCondition(action.payload);
-    });
-    yield action.contextDispatch(
-      ActionCreators.paymentTermsAndConditionCreateSuccess(response),
-    );
-    yield put(ActionCreators.paymentTermsAndConditionCreateSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.paymentTermsAndConditionCreateFailed(
-        error as models.ErrorProps,
-      ),
-    );
-    yield put(
-      ActionCreators.paymentTermsAndConditionCreateFailed(
-        error as models.ErrorProps,
-      ),
-    );
-  }
-}
-/** => payment terms and condition create  */
 function* paymentTCCreate(action: models.CreateProcessAction) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
@@ -163,10 +140,6 @@ function* PaymentSaga() {
   yield takeLatest(
     types.PAYMENT_LAST_CHANNEL_DETAIL_PROCESS,
     paymentLastChannelDetail,
-  );
-  yield takeLatest(
-    types.PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS,
-    paymentTermsAndConditionCreate,
   );
 }
 
