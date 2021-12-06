@@ -1091,7 +1091,7 @@
     htmlparser2 "^7.1.2"
     ramda "^0.27.1"
 
-"@ptomasroos/react-native-multi-slider@^2.2.2":
+"@ptomasroos/react-native-multi-slider@2.2.2":
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/@ptomasroos/react-native-multi-slider/-/react-native-multi-slider-2.2.2.tgz#35a97fb8c355627c6a2ded010b360ac5728b44ad"
   integrity sha512-HWyCnRD3Z3SbHK2FLWYmBBqd1B4iXipeKv1+AK0FoY/CElEDTEixHE8hN60TsqxalPrznn798LE2Q4tHuCiyaA==
@@ -1409,10 +1409,10 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
-"@sinbad/react-native-sinbad-ui@1.0.5":
-  version "1.0.5"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.5.tgz#dfda601e92508e8fe37ea9de7d72eed61e7f9faa"
-  integrity sha512-m1aDmnJq9oGRdvwyBnsxLW8GiCPKyHE8UTBnmoxy7eXU1p2HVu++oAE2oZdcaN1kqhlO+Ml53ZCACJNrq98QZA==
+"@sinbad/react-native-sinbad-ui@1.0.6":
+  version "1.0.6"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.6.tgz#5e0d0c07bc9f99ba519ab5140911119e0a5cee97"
+  integrity sha512-IwPVNAmZlrs3UJ7xUoxrQKa7r0mkdRzIltY9wtLo9H7n9I4kyoB9qSz2P2TPEzrTzlsiAOxcvsMtOPaXRip8qQ==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
@@ -4888,9 +4888,9 @@ jetifier@^1.6.2:
   integrity sha512-3Zi16h6L5tXDRQJTb221cnRoVG9/9OvreLdLU2/ZjRv/GILL+2Cemt0IKvkowwkDpvouAU1DQPOJ7qaiHeIdrw==
 
 joi@^17.2.1:
-  version "17.4.3"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-17.4.3.tgz#462941fd994f11fcb92f59ba9f004706b9a45d17"
-  integrity sha512-8W3oOogFRuy2aLAdlhMpzS4fNBIMiyIa3xBaBYMFgA272/d5sob1DAth6jjo+5VrOlzbEgmbBGbU4cLrffPKog==
+  version "17.5.0"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-17.5.0.tgz#7e66d0004b5045d971cf416a55fb61d33ac6e011"
+  integrity sha512-R7hR50COp7StzLnDi4ywOXHrBrgNXuUUfJWIR5lPY5Bm/pOD3jZaTwpluUXVLRWcoWZxkrHBBJ5hLxgnlehbdw==
   dependencies:
     "@hapi/hoek" "^9.0.0"
     "@hapi/topo" "^5.0.0"
@@ -6627,7 +6627,7 @@ react-native-reanimated@2.1.0:
     mockdate "^3.0.2"
     string-hash-64 "^1.0.3"
 
-react-native-render-html@^6.3.0:
+react-native-render-html@6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/react-native-render-html/-/react-native-render-html-6.3.0.tgz#2b2401ce9c4383960656c98863b5732313f12acb"
   integrity sha512-ix/riwS+fGGIFe8w710x747aVSbzCPN56tQVKGo3jZjuh8grPaHYs0kW7up74DXJl9YdqP2hEM98fSu+a02bTQ==

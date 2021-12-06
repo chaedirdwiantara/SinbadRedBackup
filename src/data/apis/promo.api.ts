@@ -84,7 +84,6 @@ const reserveDiscountDetail = (data: models.DetailProcessProps) => {
 };
 /** => check promo payment */
 const checkPromoPayment = (data: models.CheckPromoPaymentGetPayload) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   let arrPaymentChannelId = '';
   data.paymentChannelId.map((item, index) => {
     if (index === 0) {
@@ -93,9 +92,9 @@ const checkPromoPayment = (data: models.CheckPromoPaymentGetPayload) => {
       arrPaymentChannelId = `${arrPaymentChannelId},${item}`;
     }
   });
-  const path = `check-promo-payment?paymentTypeId=${data.paymentTypeId}&paymentChannelId=${arrPaymentChannelId}&parcelPrice=${data.parcelPrice}&invoiceGroupId=${data.invoiceGroupId}&sellerId=${data.sellerId}`;
-  return apiMappingMock<models.CheckPromoPaymentGetData[]>(
-    mockHost,
+  const path = `check-promo-payment?paymentTypeId=${data.paymentTypeId}&paymentChannelId=${arrPaymentChannelId}&parcelPrice=${data.parcelPrice}&invoiceGroupId=${data.invoiceGroupId}`;
+  return apiMapping<models.CheckPromoPaymentGetData[]>(
+    'auth',
     path,
     'discount',
     'v1',
@@ -104,12 +103,11 @@ const checkPromoPayment = (data: models.CheckPromoPaymentGetPayload) => {
 };
 /** => create check all promo payment */
 const createCheckAllPromoPayment = (
-  data: models.CreateProcessProps<models.CheckAllPromoPaymentPostPayload[]>,
+  data: models.CheckAllPromoPaymentPostPayload[],
 ) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = 'check-all-promo-payment';
-  return apiMappingMock<models.CreateSuccessProps>(
-    mockHost,
+  return apiMapping<models.CreateSuccessProps>(
+    'auth',
     path,
     'discount',
     'v1',
@@ -119,10 +117,9 @@ const createCheckAllPromoPayment = (
 };
 /** => get check all promo payment */
 const getCheckAllPromoPayment = (data: models.DetailProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = `check-all-promo-payment/${data.id}`;
-  return apiMappingMock<models.CheckAllPromoPaymentGetData[]>(
-    mockHost,
+  return apiMapping<models.CheckAllPromoPaymentGetData[]>(
+    'auth',
     path,
     'discount',
     'v1',

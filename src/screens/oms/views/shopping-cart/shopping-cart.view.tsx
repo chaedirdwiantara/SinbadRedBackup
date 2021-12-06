@@ -12,9 +12,11 @@ import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
-import { getSelectedVouchers } from '@screen/voucher/functions';
+import {
+  getSelectedVouchers,
+  useVoucherLocalData,
+} from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
-import { useDataVoucher } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -102,7 +104,8 @@ const OmsShoppingCartView: FC = () => {
     /** => below is the action if the update cart & potential discount fetch success */
     if (
       stateVerificationOrder.create.data !== null &&
-      updateCartData !== null
+      updateCartData !== null &&
+      productIdRemoveSelected === null
     ) {
       verificationOrderDetail(
         dispatchVerificationOrder,
@@ -113,7 +116,7 @@ const OmsShoppingCartView: FC = () => {
   }, [stateVerificationOrder.create, updateCartData]);
 
   /** Voucher Cart */
-  const voucherData = useDataVoucher();
+  const voucherLocalData = useVoucherLocalData();
 
   /**
    * Reserve Section
@@ -227,6 +230,7 @@ const OmsShoppingCartView: FC = () => {
             productId: product.productId,
             qty: product.qty,
             selected: product.selected,
+            stock: product.stock,
           });
 
           if (product.selected) {
@@ -274,7 +278,7 @@ const OmsShoppingCartView: FC = () => {
       id: cartViewData.cartId,
       data: dataSelected,
       isActiveStore: cartViewData.isActiveStore,
-      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+      voucherIds: getSelectedVouchers(voucherLocalData.selectedVoucher),
     };
 
     /** => fetch post update cart */
