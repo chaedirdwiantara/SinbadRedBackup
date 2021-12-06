@@ -104,7 +104,8 @@ const OmsShoppingCartView: FC = () => {
     /** => below is the action if the update cart & potential discount fetch success */
     if (
       stateVerificationOrder.create.data !== null &&
-      updateCartData !== null
+      updateCartData !== null &&
+      productIdRemoveSelected === null
     ) {
       verificationOrderDetail(
         dispatchVerificationOrder,
