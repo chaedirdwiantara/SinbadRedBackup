@@ -9,6 +9,7 @@ import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import { ErrorPromoModal } from './error-promo-modal';
 import { ErrorVoucherModal } from './error-voucher-modal';
+import { ErrorStockModal } from './error-stock-modal';
 import { VerificationOrderHeader } from './verification-order-header.view';
 import { VerificationOrderDiscountList } from './verification-order-discount-list.view';
 import { VerificationOrderBonusList } from './verification-order-bonus-list.view';
@@ -88,8 +89,6 @@ const OmsVerificationOrderView: FC = () => {
   React.useEffect(() => {
     if (stateReserveStock.create.error !== null) {
       reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
-      if (stateReserveStock.create.error.code === 140037) {
-      }
     }
   }, [stateReserveStock.create.error]);
 
@@ -309,6 +308,23 @@ const OmsVerificationOrderView: FC = () => {
       />
     );
   };
+  /** => error stock modal */
+  const renderErrorStockModal = () => {
+    if (stateReserveStock.detail.data === null) {
+      return null;
+    }
+    return (
+      <ErrorStockModal
+        visible={errorStockModal.isOpen}
+        errorData={stateReserveStock.detail.data}
+        onBackToCart={() => {
+          // tambahkan code buat edit cart data disini cc: mas ghozi
+          errorStockModal.setOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -326,6 +342,7 @@ const OmsVerificationOrderView: FC = () => {
       {/* modal */}
       {renderErrorPromoModal()}
       {renderErrorVoucherModal()}
+      {renderErrorStockModal()}
     </SnbContainer>
   );
 };
