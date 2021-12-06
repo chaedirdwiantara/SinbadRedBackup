@@ -1,55 +1,47 @@
+/** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { ScrollView, TouchableOpacity, View, Image } from 'react-native';
-import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbDivider,
-  color,
-  SnbIcon,
-  SnbBadge,
-  SnbButton,
-} from 'react-native-sinbad-ui';
-import { goBack, goToCheckout } from '../../functions';
-import { VerificationOrderStyle } from '../../styles';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
-import { contexts } from '@contexts';
-import {
-  VerificationOrderDetailBonusProduct,
-  VerificationOrderDetailPromoProduct,
-  VerificationOrderDetailNonPromoList,
-  VerificationOrderDetailPromoList,
-  VerificationOrderDetailVoucherList,
-  CartSelectedData,
-  CartSelectedBrand,
-  CartSelectedProduct,
-  ReserveStockPayloadData,
-  ReserveStockPayloadBrand,
-  ReserveStockPayloadProducts,
-} from '@models';
-import LoadingPage from '@core/components/LoadingPage';
-import { useReserveDiscountAction } from '@screen/promo/functions';
-import { getSelectedVouchers } from '@screen/voucher/functions';
-import { useCartSelected } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+import { ScrollView, View } from 'react-native';
+import { SnbContainer, SnbText, SnbDivider } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { useDataVoucher } from '@core/redux/Data';
-import { ErrorPromoModal } from './ErrorPromoModal';
-import { ErrorVoucherModal } from './ErrorVoucherModal';
-import { useDispatch } from 'react-redux';
-import * as Actions from '@actions';
-import { capitalize } from '@core/functions/global/capitalize';
+import { VerificationOrderStyle } from '../../styles';
+import { contexts } from '@contexts';
+/** === IMPORT COMPONENT HERE === */
+import LoadingPage from '@core/components/LoadingPage';
+import { ErrorPromoModal } from './error-promo-modal';
+import { ErrorVoucherModal } from './error-voucher-modal';
+import { VerificationOrderHeader } from './verification-order-header.view';
+import { VerificationOrderDiscountList } from './verification-order-discount-list.view';
+import { VerificationOrderBonusList } from './verification-order-bonus-list.view';
+import { VerificationOrderNonDiscountList } from './verification-order-non-discount-list.view';
+import { VerificationOrderBottom } from './verification-order-bottom.view';
+/** === IMPORT INTERNAL FUNCTION HERE === */
+import {
+  goBack,
+  goToCheckout,
+  useReserveDataAction,
+  useCartSelected,
+  useStandardModalState,
+} from '../../functions';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useReserveStockAction } from '@screen/product/functions';
+import {
+  useVoucherLocalData,
+  getSelectedVouchers,
+} from '@screen/voucher/functions';
+import { useReserveDiscountAction } from '@screen/promo/functions';
 
 /** === COMPONENT === */
 const OmsVerificationOrderView: FC = () => {
   /** === HOOK === */
-  const [activeSpoiler, setActiveSpoiler] = React.useState<null | number>(null);
-  const [isErrorPromo, setErrorPromo] = React.useState(false);
-  const [isErrorVoucher, setErrorVoucher] = React.useState(false);
-  const [isErrorStock, setErrorStock] = React.useState(false);
+  const errorPromoModal = useStandardModalState();
+  const errorVoucherModal = useStandardModalState();
+  const errorStockModal = useStandardModalState();
 
-  /** => used for reset voucher */
-  const dispatch = useDispatch();
+  const reserveDataAction = useReserveDataAction();
+  const { getCartSelected } = useCartSelected();
+  const voucherLocalDataAction = useVoucherLocalData();
+  const reserveDiscountAction = useReserveDiscountAction();
+  const reserveStockAction = useReserveStockAction();
 
   React.useEffect(() => {
     return () => {
@@ -75,18 +67,10 @@ const OmsVerificationOrderView: FC = () => {
    * - POST reserved-stock
    * - GET reserved-stock
    */
-
-  /** => get cart data */
-  const { getCartSelected } = useCartSelected();
-  /** => get voucher data */
-  const voucherData = useDataVoucher();
-
   const { dispatchPromo, statePromo } = React.useContext(contexts.PromoContext);
   const { dispatchReserveStock, stateReserveStock } = React.useContext(
     contexts.ReserveStockContext,
   );
-  const reserveDiscountAction = useReserveDiscountAction();
-  const reserveStockAction = useReserveStockAction();
 
   /**
    * Listen Error POST reserved-stock
@@ -109,7 +93,7 @@ const OmsVerificationOrderView: FC = () => {
     if (stateReserveStock.create.data !== null) {
       const createReserveDiscountParams = {
         ...getCartSelected,
-        voucherIds: getSelectedVouchers(voucherData.dataVouchers),
+        voucherIds: getSelectedVouchers(voucherLocalDataAction.selectedVoucher),
         potentialDiscountId: stateVerificationOrder.create.data?.id,
         reservedAt: moment().format().toString(),
       };
@@ -122,7 +106,7 @@ const OmsVerificationOrderView: FC = () => {
    */
   React.useEffect(() => {
     if (stateReserveStock.detail.data !== null) {
-      setErrorStock(true);
+      errorStockModal.setOpen(true);
     }
   }, [stateReserveStock.detail.data]);
 
@@ -134,7 +118,7 @@ const OmsVerificationOrderView: FC = () => {
   React.useEffect(() => {
     if (statePromo.reserveDiscount.create.error !== null) {
       if (statePromo.reserveDiscount.create.error.code === 140037) {
-        setErrorVoucher(true);
+        errorVoucherModal.setOpen(true);
       }
     }
   }, [statePromo.reserveDiscount.create.error]);
@@ -163,7 +147,7 @@ const OmsVerificationOrderView: FC = () => {
           0 ||
         statePromo.reserveDiscount.detail.data.promoNotMatch.bonus.length > 0
       ) {
-        setErrorPromo(true);
+        errorPromoModal.setOpen(true);
       } else {
         goToCheckout();
       }
@@ -172,283 +156,81 @@ const OmsVerificationOrderView: FC = () => {
 
   /** => handleContinueToPayment */
   const handleContinuePayment = () => {
-    const invoices: ReserveStockPayloadData[] = [];
-    getCartSelected.data.map((invoiceArr: CartSelectedData) => {
-      const brands: ReserveStockPayloadBrand[] = [];
-      invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
-        const products: ReserveStockPayloadProducts[] = [];
-        brandArr.products.map((productArr: CartSelectedProduct) => {
-          products.push({
-            productId: productArr.productId,
-            qty: productArr.qty,
-            warehouseId: productArr.warehouseId,
-          });
-        });
-        brands.push({
-          brandId: brandArr.brandId,
-          products,
-        });
-      });
-      invoices.push({
-        invoiceGroupId: invoiceArr.invoiceGroupId,
-        brands,
-      });
-    });
-    const createReserveStockParams = {
-      id: getCartSelected.id,
-      data: invoices,
-      reservedAt: moment().format().toString(),
+    // const invoices: ReserveStockPayloadData[] = [];
+    // getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+    //   const brands: ReserveStockPayloadBrand[] = [];
+    //   invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+    //     const products: ReserveStockPayloadProducts[] = [];
+    //     brandArr.products.map((productArr: CartSelectedProduct) => {
+    //       products.push({
+    //         productId: productArr.productId,
+    //         qty: productArr.qty,
+    //         warehouseId: productArr.warehouseId,
+    //       });
+    //     });
+    //     brands.push({
+    //       brandId: brandArr.brandId,
+    //       products,
+    //     });
+    //   });
+    //   invoices.push({
+    //     invoiceGroupId: invoiceArr.invoiceGroupId,
+    //     brands,
+    //   });
+    // });
+    // const createReserveStockParams = {
+    //   id: getCartSelected.id,
+    //   data: invoices,
+    //   reservedAt: moment().format().toString(),
+    // };
+    // reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+    const reservedAt = moment().format().toString();
+    reserveDataAction.setReservedAt(reservedAt);
+    const createReserveDiscountParams = {
+      ...getCartSelected,
+      voucherIds: getSelectedVouchers(voucherLocalDataAction.selectedVoucher),
+      potentialDiscountId: stateVerificationOrder.create.data?.id,
+      reservedAt,
     };
-    reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
+    reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
   };
 
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Verifikasi Order'}
-        backAction={() => goBack()}
-      />
-    );
+    return <VerificationOrderHeader />;
   };
   /** => discount list */
   const renderDiscountList = () => {
-    if (verificationOrderDetailData?.promoProducts.length === 0) {
+    if (verificationOrderDetailData === null) {
       return null;
     }
     return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${verificationOrderDetailData?.promoProducts.length} SKU)`}</SnbText.B4>
-        </View>
-        {verificationOrderDetailData?.promoProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              {renderDiscountItem(item)}
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-              {renderDiscountDetail(
-                item.promos,
-                item.vouchers,
-                item.promoPrice + item.voucherPrice,
-                index,
-              )}
-            </React.Fragment>
-          );
-        })}
-      </View>
-    );
-  };
-  /** => discount item */
-  const renderDiscountItem = (item: VerificationOrderDetailPromoProduct) => {
-    return (
-      <View style={VerificationOrderStyle.listItemContainer}>
-        <Image
-          source={{
-            uri: item.productImageUrl,
-          }}
-          style={VerificationOrderStyle.listItemProductImage}
-        />
-        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
-          <View style={VerificationOrderStyle.listItemProductNameContainer}>
-            <SnbText.B4>{item.productName}</SnbText.B4>
-          </View>
-          <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
-          <SnbText.C2 color={color.red50}>
-            {toCurrency(item.displayPrice)}
-          </SnbText.C2>
-          <View style={VerificationOrderStyle.listItemProductPriceContainer}>
-            <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
-          </View>
-        </View>
-      </View>
-    );
-  };
-  /** => discount detail */
-  const renderDiscountDetail = (
-    promoList: VerificationOrderDetailPromoList[],
-    voucherList: VerificationOrderDetailVoucherList[],
-    totalDiscount: number,
-    itemIndex: number,
-  ) => {
-    const isActive = activeSpoiler === itemIndex;
-    return (
-      <View>
-        {isActive ? (
-          <View style={VerificationOrderStyle.listItemProductDiscountList}>
-            {promoList.map((item, index) => {
-              return (
-                <React.Fragment key={index}>
-                  {item.promoOwner !== 'none' ? (
-                    <SnbBadge.Label
-                      type={'error'}
-                      value={capitalize(item.promoOwner)}
-                      iconName={'local_offer'}
-                    />
-                  ) : (
-                    <View />
-                  )}
-                  <View
-                    style={VerificationOrderStyle.listItemProductDiscountItem}>
-                    <View
-                      style={
-                        VerificationOrderStyle.listItemProductDiscountName
-                      }>
-                      <SnbText.B3>{item.promoSellerName}</SnbText.B3>
-                    </View>
-                    <SnbText.B3 color={color.green50}>
-                      {toCurrency(item.promoAmount)}
-                    </SnbText.B3>
-                  </View>
-                  <SnbDivider style={{ marginBottom: 12 }} />
-                </React.Fragment>
-              );
-            })}
-            {voucherList.map((item, index) => {
-              return (
-                <React.Fragment key={index}>
-                  {item.voucherOwner !== 'none' ? (
-                    <SnbBadge.Label
-                      type={'error'}
-                      value={capitalize(item.voucherOwner)}
-                      iconName={'local_offer'}
-                    />
-                  ) : (
-                    <View />
-                  )}
-                  <View
-                    style={VerificationOrderStyle.listItemProductDiscountItem}>
-                    <View
-                      style={
-                        VerificationOrderStyle.listItemProductDiscountName
-                      }>
-                      <SnbText.B3>{item.voucherSellerName}</SnbText.B3>
-                    </View>
-                    <SnbText.B3 color={color.green50}>
-                      {toCurrency(item.voucherAmount)}
-                    </SnbText.B3>
-                  </View>
-                  <SnbDivider style={VerificationOrderStyle.listDivider} />
-                </React.Fragment>
-              );
-            })}
-          </View>
-        ) : (
-          <View />
-        )}
-        <TouchableOpacity
-          onPress={() => {
-            if (isActive) {
-              setActiveSpoiler(null);
-            } else {
-              setActiveSpoiler(itemIndex);
-            }
-          }}
-          style={VerificationOrderStyle.listItemProductDiscountTouchable}>
-          <View
-            style={
-              VerificationOrderStyle.listItemProductDiscountTotalTextContainer
-            }>
-            <SnbIcon
-              name={isActive ? 'expand_less' : 'expand_more'}
-              size={24}
-              color={color.black100}
-            />
-            <SnbText.B4>Total Potongan</SnbText.B4>
-          </View>
-          <SnbText.B4>{toCurrency(totalDiscount)}</SnbText.B4>
-        </TouchableOpacity>
-      </View>
+      <VerificationOrderDiscountList
+        promoProducts={verificationOrderDetailData.promoProducts}
+      />
     );
   };
   /** => bonus list */
   const renderBonusList = () => {
-    if (verificationOrderDetailData?.bonusProducts.length === 0) {
+    if (verificationOrderDetailData === null) {
       return null;
     }
     return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
-        </View>
-        {verificationOrderDetailData?.bonusProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              {renderBonusItem(item)}
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-            </React.Fragment>
-          );
-        })}
-      </View>
-    );
-  };
-  /** => bonus item */
-  const renderBonusItem = (item: VerificationOrderDetailBonusProduct) => {
-    return (
-      <View style={VerificationOrderStyle.listItemContainer}>
-        <Image
-          source={{
-            uri: item.bonusProductImageUrl,
-          }}
-          style={VerificationOrderStyle.listItemProductImage}
-        />
-        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
-          <View style={VerificationOrderStyle.listItemProductNameContainer}>
-            <SnbText.B4>{item.bonusProductName}</SnbText.B4>
-          </View>
-          <SnbText.C3>{item.promoSellerName}</SnbText.C3>
-          <SnbText.C2>{`x${item.bonusQty} Pcs`}</SnbText.C2>
-        </View>
-      </View>
+      <VerificationOrderBonusList
+        bonusProducts={verificationOrderDetailData.bonusProducts}
+      />
     );
   };
   /** => non-discount list */
   const renderNonDiscountList = () => {
-    if (verificationOrderDetailData?.nonPromoProducts.length === 0) {
+    if (verificationOrderDetailData === null) {
       return null;
     }
     return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
-        </View>
-        {verificationOrderDetailData?.nonPromoProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              {renderNonDiscountItem(item)}
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-            </React.Fragment>
-          );
-        })}
-      </View>
-    );
-  };
-  /** => non-discount item */
-  const renderNonDiscountItem = (item: VerificationOrderDetailNonPromoList) => {
-    return (
-      <View style={VerificationOrderStyle.listItemContainer}>
-        <Image
-          source={{
-            uri: item.productImageUrl,
-          }}
-          style={VerificationOrderStyle.listItemProductImage}
-        />
-        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
-          <View style={VerificationOrderStyle.listItemProductNameContainer}>
-            <SnbText.B4>{item.productName}</SnbText.B4>
-          </View>
-          <SnbText.C2>{`x${item.qty} Pcs`}</SnbText.C2>
-          <SnbText.C2 color={color.red50}>
-            {toCurrency(item.displayPrice)}
-          </SnbText.C2>
-          <View style={VerificationOrderStyle.listItemProductPriceContainer}>
-            <SnbText.C2>Total</SnbText.C2>
-            <SnbText.C2>{toCurrency(item.displayPrice * item.qty)}</SnbText.C2>
-          </View>
-        </View>
-      </View>
+      <VerificationOrderNonDiscountList
+        nonPromoProducts={verificationOrderDetailData.nonPromoProducts}
+      />
     );
   };
   /** => bottom */
@@ -457,49 +239,22 @@ const OmsVerificationOrderView: FC = () => {
       return null;
     }
     return (
-      <View style={VerificationOrderStyle.bottomContainer}>
-        <View>
-          <View style={VerificationOrderStyle.bottomTextContainer}>
-            <SnbText.B4>Total (Sebelum Pajak)</SnbText.B4>
-            <SnbDivider style={{ marginVertical: 8 }} />
-            <View style={VerificationOrderStyle.bottomTextRow}>
-              <SnbText.B3>Total Transaksi</SnbText.B3>
-              <SnbText.B3>
-                {toCurrency(
-                  verificationOrderDetailData.grandTotal.grandTotalPrice,
-                )}
-              </SnbText.B3>
-            </View>
-            <View style={VerificationOrderStyle.bottomTextRow}>
-              <SnbText.B3>Total Potongan</SnbText.B3>
-              <SnbText.B3 color={color.green50}>
-                {toCurrency(
-                  verificationOrderDetailData.grandTotal.grandTotalDiscount,
-                )}
-              </SnbText.B3>
-            </View>
-          </View>
-          <View style={VerificationOrderStyle.bottomButtonContainer}>
-            <SnbButton.Single
-              type={'primary'}
-              title={'Lanjut Ke Pembayaran'}
-              loading={
-                statePromo.reserveDiscount.create.loading ||
-                statePromo.reserveDiscount.detail.loading ||
-                stateReserveStock.create.loading ||
-                stateReserveStock.detail.loading
-              }
-              disabled={
-                verificationOrderDetailData.grandTotal.grandTotalPrice === 0 ||
-                verificationOrderDetailData.grandTotal.grandTotalPrice -
-                  verificationOrderDetailData.grandTotal.grandTotalDiscount <
-                  0
-              }
-              onPress={() => handleContinuePayment()}
-            />
-          </View>
-        </View>
-      </View>
+      <VerificationOrderBottom
+        data={verificationOrderDetailData}
+        buttonDisabled={
+          verificationOrderDetailData.grandTotal.grandTotalPrice === 0 ||
+          verificationOrderDetailData.grandTotal.grandTotalPrice -
+            verificationOrderDetailData.grandTotal.grandTotalDiscount <
+            0
+        }
+        buttonLoading={
+          statePromo.reserveDiscount.create.loading ||
+          statePromo.reserveDiscount.detail.loading ||
+          stateReserveStock.create.loading ||
+          stateReserveStock.detail.loading
+        }
+        buttonOnPress={handleContinuePayment}
+      />
     );
   };
   /** => content */
@@ -523,13 +278,14 @@ const OmsVerificationOrderView: FC = () => {
     }
     return (
       <ErrorPromoModal
-        visible={isErrorPromo}
+        visible={errorPromoModal.isOpen}
         onBackToCart={() => {
-          setErrorPromo(false);
+          errorPromoModal.setOpen(false);
           goBack();
         }}
         onContinueToPayment={() => {
-          setErrorPromo(false);
+          errorPromoModal.setOpen(false);
+          goToCheckout();
         }}
         amountPromoList={
           statePromo.reserveDiscount.detail.data.promoNotMatch.amount
@@ -544,11 +300,11 @@ const OmsVerificationOrderView: FC = () => {
   const renderErrorVoucherModal = () => {
     return (
       <ErrorVoucherModal
-        visible={isErrorVoucher}
+        visible={errorVoucherModal.isOpen}
         onBackToCart={() => {
           /** => reset local voucher data */
-          dispatch(Actions.saveSelectedVouchers(null));
-          setErrorVoucher(false);
+          voucherLocalDataAction.reset();
+          errorVoucherModal.setOpen(false);
           goBack();
         }}
       />

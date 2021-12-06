@@ -26,6 +26,16 @@ export const paymentTypesListFailed = (
   return { type: types.PAYMENT_TYPES_LIST_FAILED, payload: data };
 };
 
+/** => payment channels reset */
+export const resetPaymentTypesList = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.RESET_PAYMENT_TYPES_LIST });
+  return {
+    type: types.RESET_PAYMENT_TYPES_LIST,
+  };
+};
+
 /** ==> payment channels list */
 /** => payment channels process */
 export const paymentChannelsListProcess = (
@@ -51,39 +61,13 @@ export const paymentChannelsListFailed = (
 ): models.ListFailedAction => {
   return { type: types.PAYMENT_CHANNELS_LIST_FAILED, payload: data };
 };
-
-/** ==> payment terms and condition */
-/** => payment terms and condition create process */
-export const paymentTermsAndConditionCreateProcess = (
+/** => payment channels reset */
+export const paymentChannelsListReset = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<{}>,
-): models.CreateProcessAction => {
-  contextDispatch({
-    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS,
-    payload: data,
-  });
+) => {
+  contextDispatch({ type: types.PAYMENT_CHANNELS_LIST_RESET });
   return {
-    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_PROCESS,
-    payload: data.data,
-    contextDispatch,
-  };
-};
-/** => payment terms and condition create success */
-export const paymentTermsAndConditionCreateSuccess = (
-  data: models.CreateSuccessProps,
-): models.CreateSuccessAction => {
-  return {
-    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_SUCCESS,
-    payload: data,
-  };
-};
-/** payment terms and condition create failed */
-export const paymentTermsAndConditionCreateFailed = (
-  data: models.ErrorProps,
-): models.CreateFailedAction => {
-  return {
-    type: types.PAYMENT_TERMS_AND_CONDITION_CREATE_FAILED,
-    payload: data,
+    type: types.PAYMENT_CHANNELS_LIST_RESET,
   };
 };
 
@@ -114,6 +98,15 @@ export const paymentTCCreateFailed = (
 ): models.CreateFailedAction => {
   return { type: types.PAYMENT_TC_CREATE_FAILED, payload: data };
 };
+/** reset last payment channel detail  */
+export const paymentTCCreateReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.RESET_PAYMENT_TC_CREATE,
+  });
+  return {
+    type: types.RESET_PAYMENT_TC_CREATE,
+  };
+};
 
 /** === PAYMENT TERMS AND CONDITION DETAIL === */
 /** => process */
@@ -142,6 +135,15 @@ export const paymentTCDetailFailed = (
   data: models.ErrorProps,
 ): models.DetailFailedAction => {
   return { type: types.PAYMENT_TC_DETAIL_FAILED, payload: data };
+};
+/** reset last payment channel detail  */
+export const paymentTCDetailReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.RESET_PAYMENT_TC_DETAIL,
+  });
+  return {
+    type: types.RESET_PAYMENT_TC_DETAIL,
+  };
 };
 
 /** === PAYMENT LAST PAYMENT CHANNEL CREATE  */
@@ -173,7 +175,17 @@ export const paymentLastChannelCreateFailed = (
 ): models.CreateFailedAction => {
   return { type: types.PAYMENT_LAST_CHANNEL_CREATE_FAILED, payload: data };
 };
-
+/** reset last payment channel create  */
+export const paymentLastChannelCreateReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.PAYMENT_LAST_CHANNEL_CREATE_RESET,
+  });
+  return {
+    type: types.PAYMENT_LAST_CHANNEL_CREATE_RESET,
+  };
+};
 /** === PAYMENT LAST PAYMENT CHANNELS DETAIL === */
 /** => process */
 export const paymentLastChannelDetailProcess = (
@@ -203,15 +215,13 @@ export const paymentLastChannelDetailFailed = (
   return { type: types.PAYMENT_LAST_CHANNEL_DETAIL_FAILED, payload: data };
 };
 
-/** reset last payment channel create  */
-export const paymentLastChannelCreateReset = () => {
-  return {
-    type: types.PAYMENT_LAST_CHANNEL_CREATE_RESET,
-  };
-};
-
 /** reset last payment channel detail  */
-export const paymentLastChannelDetailReset = () => {
+export const paymentLastChannelDetailReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
+  });
   return {
     type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
   };

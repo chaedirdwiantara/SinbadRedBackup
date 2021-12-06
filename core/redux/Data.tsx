@@ -40,6 +40,9 @@ const useDataCartMaster = () => {
 const useDataTotalProductCart = () => {
   return useSelector((state: RootState) => state.cartTotalProduct);
 };
+const useDataReserve = (): models.ReserveData => {
+  return useSelector((state: RootState) => state.reserveData);
+};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -52,6 +55,7 @@ export {
   useDataPaymentChannels,
   useDataCartMaster,
   useDataTotalProductCart,
+  useDataReserve,
 };
 /**
  * ================================================================

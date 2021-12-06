@@ -54,5 +54,13 @@ export const paymentTypesListReducer = simplifyReducer(
         error: payload,
       };
     },
+    /** reset */
+    [types.RESET_PAYMENT_TYPES_LIST]() {
+      return {
+        loading: false,
+        error: null,
+        data: [],
+      };
+    },
   },
 );
