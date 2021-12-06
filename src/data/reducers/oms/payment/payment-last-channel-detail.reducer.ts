@@ -9,7 +9,7 @@ export const paymentLastChannelDetailInitialState: PaymentLastChannelDetailIniti
   {
     data: null,
     error: null,
-    loading: true,
+    loading: false,
   };
 /** === FUNCTION HERE === */
 export const paymentLastChannelDetailReducer = simplifyReducer(
