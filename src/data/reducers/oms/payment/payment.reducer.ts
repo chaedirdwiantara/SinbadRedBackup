@@ -21,11 +21,6 @@ import {
   PaymentTCDetailInitialProps,
 } from './payment-tc-detail.reducer';
 import {
-  paymentTermsAndConditionCreateInitialState,
-  paymentTermsAndConditionCreateReducer,
-  PaymentTermsAndConditionCreateInitialProps,
-} from './payment-terms-and-condition-create.reducer';
-import {
   paymentLastChannelCreateReducer,
   paymentLastChannelCreateInitialState,
   PaymentLastChannelCreateInitialProps,
@@ -41,7 +36,6 @@ import {
 export const paymentInitialState = {
   paymentTypesList: paymentTypesListInitialState,
   paymentChannelsList: paymentChannelsListInitialState,
-  paymentTermsAndConditionCreate: paymentTermsAndConditionCreateInitialState,
   paymentTCCreate: paymentTCCreateInitialState,
   paymentTCDetail: paymentTCDetailInitialState,
   paymentLastChannelCreate: paymentLastChannelCreateInitialState,
@@ -51,8 +45,7 @@ export const paymentInitialState = {
 export interface paymentInitialState {
   paymentTypesList: PaymentTypesListInitialProps;
   paymentChannelsList: PaymentChannelsListInitialProps;
-  paymentTermsAndConditionCreate: PaymentTCCreateInitialProps;
-  paymentTCCreate: PaymentTermsAndConditionCreateInitialProps;
+  paymentTCCreate: PaymentTCCreateInitialProps;
   paymentTCDetail: PaymentTCDetailInitialProps;
   paymentLastChannelCreate: PaymentLastChannelCreateInitialProps;
   paymentLastChannelDetail: PaymentLastChannelDetailInitialProps;
@@ -63,7 +56,6 @@ export const paymentReducer = (
   {
     paymentTypesList,
     paymentChannelsList,
-    paymentTermsAndConditionCreate,
     paymentTCCreate,
     paymentTCDetail,
     paymentLastChannelCreate,
@@ -75,10 +67,6 @@ export const paymentReducer = (
   paymentChannelsList: paymentChannelsListReducer(paymentChannelsList, action),
   paymentTCCreate: paymentTCCreateReducer(paymentTCCreate, action),
   paymentTCDetail: paymentTCDetailReducer(paymentTCDetail, action),
-  paymentTermsAndConditionCreate: paymentTermsAndConditionCreateReducer(
-    paymentTermsAndConditionCreate,
-    action,
-  ),
   paymentLastChannelCreate: paymentLastChannelCreateReducer(
     paymentLastChannelCreate,
     action,
