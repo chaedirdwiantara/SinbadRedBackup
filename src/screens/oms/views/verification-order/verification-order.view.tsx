@@ -184,7 +184,6 @@ const OmsVerificationOrderView: FC = () => {
     //   reservedAt: moment().format().toString(),
     // };
     // reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
-<<<<<<< HEAD
     const reservedAt = moment().format().toString();
     reserveDataAction.setReservedAt(reservedAt);
     const createReserveDiscountParams = {
@@ -192,13 +191,6 @@ const OmsVerificationOrderView: FC = () => {
       voucherIds: getSelectedVouchers(voucherLocalDataAction.selectedVoucher),
       potentialDiscountId: stateVerificationOrder.create.data?.id,
       reservedAt,
-=======
-    const createReserveDiscountParams = {
-      ...getCartSelected,
-      voucherIds: getSelectedVouchers(voucherData.dataVouchers),
-      potentialDiscountId: stateVerificationOrder.create.data?.id,
-      reservedAt: moment().format().toString(),
->>>>>>> ba3d9a8c (bypass reserve stock process)
     };
     reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
   };
