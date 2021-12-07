@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 /** === IMPORT TYPES === */
 export interface MerchantStatus {
   sinbadStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
@@ -17,9 +17,7 @@ export interface DataMerchant {
   onSendDataSupplier?: () => void;
 }
 
-export const useCheckDataSupplier = (
-  setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
-) => {
+export const useCheckDataSupplier = () => {
   /** => state */
   const [modalWaitingApproval, setModalWaitingApproval] = useState(false);
   const [modalRejectApproval, setModalRejectApproval] = useState(false);
@@ -76,7 +74,7 @@ export const useCheckDataSupplier = (
     } else {
       //addSkuToCartAfterCheckVerified
       onFunctionActions({ type: 'close' });
-      setOrderModalVisible(true);
+      // setOrderModalVisible(true);
     }
   };
   /** STATUS REJECTED */
@@ -92,7 +90,7 @@ export const useCheckDataSupplier = (
     } else {
       //addSkuToCartAfterCheckVerified
       onFunctionActions({ type: 'close' });
-      setOrderModalVisible(true);
+      // setOrderModalVisible(true);
     }
   };
   /** STATUS PENDING */
