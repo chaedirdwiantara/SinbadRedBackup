@@ -71,11 +71,11 @@ const useReserveDiscountAction = () => {
       dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
     },
     resetPostGet: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.createReserveDiscountReset(contextDispatch));
-      dispatch(Actions.detailReserveDiscountReset(contextDispatch));
+      contextDispatch(Actions.createReserveDiscountReset());
+      contextDispatch(Actions.detailReserveDiscountReset());
     },
     resetDelete: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.deleteReserveDiscountReset(contextDispatch));
+      contextDispatch(Actions.deleteReserveDiscountReset());
     },
   };
 };
@@ -90,7 +90,7 @@ const useCheckPromoPaymentAction = () => {
       dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.checkPromoPaymentReset(contextDispatch));
+      contextDispatch(Actions.checkPromoPaymentReset());
     },
   };
 };
@@ -110,8 +110,8 @@ const useCheckAllPromoPaymentAction = () => {
       dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.createCheckAllPromoPaymentReset(contextDispatch));
-      dispatch(Actions.getCheckAllPromoPaymentReset(contextDispatch));
+      contextDispatch(Actions.createCheckAllPromoPaymentReset());
+      contextDispatch(Actions.getCheckAllPromoPaymentReset());
     },
   };
 };

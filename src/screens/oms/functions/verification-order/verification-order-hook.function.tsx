@@ -23,8 +23,8 @@ const useVerficationOrderAction = () => {
       dispatch(Actions.verificationOrderDetailProcess(contextDispatch, { id }));
     },
     verificationReset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.verificationOrderCreateReset(contextDispatch));
-      dispatch(Actions.verificationOrderDetailReset());
+      contextDispatch(Actions.verificationOrderCreateReset());
+      contextDispatch(Actions.verificationOrderDetailReset());
     },
   };
 };
