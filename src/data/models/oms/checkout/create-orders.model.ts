@@ -43,8 +43,8 @@ export interface CreateOrderBrandProduct {
 }
 
 export interface CreateOrderVerification {
-  promosSeller: Array<CreateOrderVerificationPromo> | [];
-  vouchersSeller: Array<CreateOrderVerificationVoucher> | [];
+  promosSeller: Array<CreateOrderVerificationPromo>;
+  vouchersSeller: Array<CreateOrderVerificationVoucher>;
 }
 
 export interface CreateOrderVerificationPromo {
