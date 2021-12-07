@@ -197,6 +197,9 @@ const ProductList: FC<ProductListProps> = ({
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      brandId: productDetailState.brandId,
+      productName: productDetailState.name,
+      urlImages: productDetailState.images[0].url,
     };
 
     console.log('[PARAMS ADD TO CART]: ', params);

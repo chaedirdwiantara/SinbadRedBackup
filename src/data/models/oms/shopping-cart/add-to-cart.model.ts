@@ -14,4 +14,7 @@ export interface AddToCartPayload {
   groupId: number | null;
   typeId: number | null;
   clusterId: number | null;
+  brandId: string;
+  productName: string;
+  urlImages: string;
 }

@@ -85,6 +85,7 @@ export interface ProductDetail {
   isAvailable?: boolean;
   isBundle?: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+  brandId: string;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
