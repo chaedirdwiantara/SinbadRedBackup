@@ -146,6 +146,7 @@ const OmsShoppingCartView: FC = () => {
       verificationReset(dispatchVerificationOrder);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
+      voucherLocalData.reset();
     };
   }, []);
 
