@@ -161,12 +161,7 @@ export const deleteReserveDiscountFailed = (
   return { type: types.DELETE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => delete reserve discount reset */
-export const deleteReserveDiscountReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.DELETE_RESERVE_DISCOUNT_RESET,
-  });
+export const deleteReserveDiscountReset = () => {
   return { type: types.DELETE_RESERVE_DISCOUNT_RESET };
 };
 
@@ -199,12 +194,7 @@ export const createReserveDiscountFailed = (
   return { type: types.CREATE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => create reserve discount reset */
-export const createReserveDiscountReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.CREATE_RESERVE_DISCOUNT_RESET,
-  });
+export const createReserveDiscountReset = () => {
   return { type: types.CREATE_RESERVE_DISCOUNT_RESET };
 };
 
@@ -237,12 +227,7 @@ export const detailReserveDiscountFailed = (
   return { type: types.DETAIL_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => detail reserve discount reset */
-export const detailReserveDiscountReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.DETAIL_RESERVE_DISCOUNT_RESET,
-  });
+export const detailReserveDiscountReset = () => {
   return { type: types.DETAIL_RESERVE_DISCOUNT_RESET };
 };
 
@@ -275,12 +260,7 @@ export const checkPromoPaymentFailed = (
   return { type: types.CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
 /** => reset */
-export const checkPromoPaymentReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.CHECK_PROMO_PAYMENT_RESET,
-  });
+export const checkPromoPaymentReset = () => {
   return { type: types.CHECK_PROMO_PAYMENT_RESET };
 };
 
@@ -313,12 +293,7 @@ export const createCheckAllPromoPaymentFailed = (
   return { type: types.CREATE_CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
 /** => reset */
-export const createCheckAllPromoPaymentReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.CREATE_CHECK_PROMO_PAYMENT_RESET,
-  });
+export const createCheckAllPromoPaymentReset = () => {
   return { type: types.CREATE_CHECK_PROMO_PAYMENT_RESET };
 };
 
@@ -351,11 +326,6 @@ export const getCheckAllPromoPaymentFailed = (
   return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED, payload: data };
 };
 /** => reset */
-export const getCheckAllPromoPaymentReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.GET_CHECK_PROMO_PAYMENT_RESET,
-  });
+export const getCheckAllPromoPaymentReset = () => {
   return { type: types.GET_CHECK_PROMO_PAYMENT_RESET };
 };

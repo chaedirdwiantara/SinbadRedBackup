@@ -29,12 +29,7 @@ export const verificationOrderCreateFailed = (
   return { type: types.VERIFICATION_ORDER_CREATE_FAILED, payload: data };
 };
 /** => reset */
-export const verificationOrderCreateReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.VERIFICATION_ORDER_CREATE_RESET,
-  });
+export const verificationOrderCreateReset = () => {
   return { type: types.VERIFICATION_ORDER_CREATE_RESET };
 };
 /** === DETAIL === */
