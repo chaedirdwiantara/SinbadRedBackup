@@ -4,13 +4,15 @@ import { View, FlatList, Dimensions } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { BrandCard } from '@core/components/BrandCard';
-import LoadingPage from '@core/components/LoadingPage';
+import { EmptyState } from '@core/components/EmptyState';
+import { BrandListSkeleton } from './BrandListSkeleton';
 /** === IMPORT FUNCTIONS === */
+import { useListDisplayState } from '@core/functions/product';
 import { useBrandContext } from 'src/data/contexts/brand/useBrandContext';
 import { goBack, goToProduct, useBrandListAction } from '../functions';
-/** === IMPORT TYPES === */
+/** === IMPORT TYPE === */
 import * as models from '@models';
-/** === CONSTANTS === */
+/** === CONSTANT === */
 const { width } = Dimensions.get('window');
 /** === COMPONENT === */
 const BrandView: FC = () => {
@@ -20,6 +22,11 @@ const BrandView: FC = () => {
     dispatchBrand,
   } = useBrandContext();
   const { fetch, loadMore, refresh } = useBrandListAction();
+  const displayState = useListDisplayState({
+    loading: brandListState.loading,
+    error: brandListState.error,
+    dataLength: brandListState.data.length,
+  });
 
   useEffect(() => {
     fetch(dispatchBrand);
@@ -30,10 +37,15 @@ const BrandView: FC = () => {
     item,
     index,
   }: {
-    item: models.BrandListSuccessProps;
+    item: models.BrandListItem;
     index: number;
   }) => (
-    <View key={index} style={{ paddingHorizontal: 5, paddingVertical: 5 }}>
+    <View
+      key={index}
+      style={{
+        marginRight: index + (1 % 4) === 0 ? 0 : 8,
+        marginVertical: 4,
+      }}>
       <BrandCard
         id={item.id}
         imageUrl={item.image}
@@ -48,14 +60,27 @@ const BrandView: FC = () => {
     <SnbContainer color="white">
       <SnbTopNav.Type3 type="red" title="Brand Kami" backAction={goBack} />
       <View style={{ flex: 1 }}>
-        {!brandListState.loading && brandListState.data.length !== 0 ? (
+        {displayState === 'loading' && <BrandListSkeleton />}
+        {displayState === 'error' && (
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        )}
+        {displayState === 'empty' && (
+          <EmptyState
+            title="Terjadi Kesalahan"
+            description="Boleh coba refresh lagi?"
+          />
+        )}
+        {displayState === 'success' && (
           <View>
             <FlatList
               contentContainerStyle={{
-                paddingVertical: 20,
-                paddingHorizontal: 0.01 * width,
+                paddingTop: 8,
+                paddingBottom: 16,
+                paddingHorizontal: 12,
               }}
-              showsHorizontalScrollIndicator
               data={brandListState.data}
               renderItem={renderBrandItem}
               keyExtractor={(item) => item.id}
@@ -66,8 +91,6 @@ const BrandView: FC = () => {
               onRefresh={() => refresh(dispatchBrand)}
             />
           </View>
-        ) : (
-          <LoadingPage />
         )}
       </View>
     </SnbContainer>

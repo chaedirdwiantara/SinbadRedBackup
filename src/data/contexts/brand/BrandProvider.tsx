@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { FC, useReducer, useMemo } from 'react';
+
 import { BrandContext, brandReducer, brandInitialState } from './brand.context';
 
-const BrandProvider: React.FC = ({ children }) => {
-  const [stateBrand, dispatchBrand] = React.useReducer(
+const BrandProvider: FC = ({ children }) => {
+  const [stateBrand, dispatchBrand] = useReducer(
     brandReducer,
     brandInitialState,
   );
-  const valueProvider = React.useMemo(
+  const valueProvider = useMemo(
     () => ({
       stateBrand,
       dispatchBrand,
     }),
     [stateBrand, dispatchBrand],
   );
+
   return (
     <BrandContext.Provider value={valueProvider}>
       {children}
