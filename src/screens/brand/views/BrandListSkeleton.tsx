@@ -4,7 +4,7 @@ import { View, ScrollView, Dimensions } from 'react-native';
 /** === IMPORT COMPONENT === */
 import { BrandCardSkeleton } from '@core/components/product/HorizontalBrandSkeleton';
 /** === IMPORT STYLES === */
-import BrandHStyle from '../styles/brand.style';
+import BrandStyle from '../styles/brand.style';
 /** === CONSTANTS === */
 const { width } = Dimensions.get('window');
 /** === COMPONENT === */
@@ -13,7 +13,7 @@ export const BrandListSkeleton: FC = () => (
     <ScrollView
       scrollEnabled={false}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={BrandHStyle.skeletonContainer}>
+      contentContainerStyle={BrandStyle.skeletonContainer}>
       {Array(20)
         .fill(0)
         .map((_, index) => (
