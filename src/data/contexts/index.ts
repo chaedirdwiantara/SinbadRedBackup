@@ -31,7 +31,11 @@ import {
   CheckoutProvider,
   CheckoutContext,
 } from './oms/checkout/CheckoutProvider';
+<<<<<<< HEAD
 import { HistoryProvider, HistoryContext } from './history/HistoryProvider';
+=======
+import { StockProvider, StockContext } from './product/stock/StockProvider';
+>>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -53,7 +57,11 @@ export const providers = [
   SupplierProvider,
   ReserveStockProvider,
   CheckoutProvider,
+<<<<<<< HEAD
   HistoryProvider,
+=======
+  StockProvider,
+>>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -74,5 +82,9 @@ export const contexts = {
   SupplierContext,
   ReserveStockContext,
   CheckoutContext,
+<<<<<<< HEAD
   HistoryContext,
+=======
+  StockContext,
+>>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
 };

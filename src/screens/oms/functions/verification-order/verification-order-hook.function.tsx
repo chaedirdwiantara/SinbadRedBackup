@@ -1,10 +1,11 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
 /** === FUNCTION === */
-/** => call verification action */
+/** => verification action */
 const useVerficationOrderAction = () => {
   const dispatch = useDispatch();
   return {
@@ -18,16 +19,54 @@ const useVerficationOrderAction = () => {
       contextDispatch: (action: any) => any,
       id: string,
     ) => {
-      dispatch(Actions.verificationOrderDetailReset());
       dispatch(Actions.verificationOrderDetailProcess(contextDispatch, { id }));
     },
-    verificationCreateReset: (contextDispatch: (action: any) => any) => {
+    verificationReset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.verificationOrderCreateReset(contextDispatch));
+      dispatch(Actions.verificationOrderDetailReset());
     },
   };
 };
+/** => reserve data action */
+const useReserveDataAction = () => {
+  const dispatch = useDispatch();
+  return {
+    setReservedAt: (time: string) => {
+      dispatch(Actions.setReservedAt({ reservedAt: time }));
+    },
+  };
+};
+/** => promo accordion */
+const usePromoAccordion = () => {
+  const [activeIndex, setIndex] = React.useState<number | null>(null);
+  return {
+    setIndex: (newIndex: number) => {
+      if (activeIndex === newIndex) {
+        setIndex(null);
+      } else {
+        setIndex(newIndex);
+      }
+    },
+    activeIndex,
+  };
+};
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** === EXPORT === */
-export { useVerficationOrderAction };
+export {
+  useVerficationOrderAction,
+  useReserveDataAction,
+  usePromoAccordion,
+  useStandardModalState,
+};
 /**
  * ================================================================
  * NOTES

@@ -23,7 +23,7 @@ const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
       if (brand.selected) {
         brand.products.forEach((product) => {
           if (product.selected) {
-            totalPrice += product.displayPrice;
+            totalPrice += Number(product.displayPrice) * Number(product.qty);
           }
         });
       }
@@ -42,6 +42,8 @@ const handleProductQuantityChange = (
     Array<CartInvoiceGroup>,
     (any: CartInvoiceGroup[]) => void,
   ],
+  currentQty: number,
+  setSassionQty: Dispatch<SetStateAction<number>>,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -49,10 +51,10 @@ const handleProductQuantityChange = (
   const currentBrand = currentInvoiceGroup.brands[brandIndex];
   const currentProduct = currentBrand.products[productIndex];
 
-  if (action === 'increase') {
-    currentProduct.qty += 1;
-  } else {
-    currentProduct.qty -= 1;
+  if (action === 'increase' && currentProduct.qty < currentProduct.stock) {
+    currentProduct.qty = currentQty + 1;
+  } else if (action === 'decrease' && currentProduct.qty > 0) {
+    currentProduct.qty = currentQty - 1;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -60,6 +62,7 @@ const handleProductQuantityChange = (
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
   setInvoiceGroups(invoiceGroupsCopy);
+  setSassionQty(Math.random() * 10000000);
 };
 /** => handle when product is selected or unselected */
 const handleSelectedProductChange = (
@@ -100,10 +103,10 @@ const handleSelectedProductChange = (
     totalSelectedCount -= 1;
   }
 
-  if (selectedCount === currentBrand.products.length) {
-    currentBrand.selected = true;
-  } else {
+  if (selectedCount === 0) {
     currentBrand.selected = false;
+  } else {
+    currentBrand.selected = true;
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -233,6 +236,7 @@ const handleProductDelete = (
     productId: deletedProduct.productId,
     qty: 0,
     selected: false,
+    stock: deletedProduct.stock,
   });
 };
 

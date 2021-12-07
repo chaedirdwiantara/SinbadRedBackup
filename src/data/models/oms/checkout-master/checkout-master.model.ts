@@ -74,9 +74,9 @@ export interface ReserveDiscount {
 
 export interface PaymentTypeChannel {
   invoiceGroupId: string;
-  totalFee: number;
+  totalPaymentFee: number;
   totalPayment: number;
-  promoPayment: number;
+  totalPromoPayment: number;
   paymentType: IPaymentTypeCheckout;
   paymentChannel: IPaymentChannelCheckout;
 }

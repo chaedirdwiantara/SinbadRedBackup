@@ -4,14 +4,18 @@ import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import { goToPaymentPromoList } from '../../functions';
+/** === INTERFACES === */
+interface CheckoutPaymentPromoBadgeProps {
+  invoiceGroupId: string;
+}
 /** === COMPONENT === */
-export const CheckoutPaymentPromoBadge: FC = () => {
-  /** === HOOK === */
-
+export const CheckoutPaymentPromoBadge: FC<CheckoutPaymentPromoBadgeProps> = ({
+  invoiceGroupId,
+}) => {
   /** => main */
   return (
     <TouchableOpacity
-      onPress={() => goToPaymentPromoList()}
+      onPress={() => goToPaymentPromoList(invoiceGroupId)}
       style={CheckoutStyle.paymentPromoBadgeContainer}>
       <SnbIcon name={'info'} color={color.yellow50} size={24} />
       <View style={{ flexDirection: 'row' }}>

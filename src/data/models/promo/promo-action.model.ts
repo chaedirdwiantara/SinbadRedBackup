@@ -19,7 +19,6 @@ export interface CheckPromoPaymentGetPayload {
   paymentChannelId: Array<number>;
   parcelPrice: number;
   invoiceGroupId: string;
-  sellerId: number;
 }
 export interface CheckPromoPaymentListProcessAction {
   type: string;

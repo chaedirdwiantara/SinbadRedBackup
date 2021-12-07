@@ -97,7 +97,7 @@ const useProductDetailAction = () => {
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productDetailReset());
+      dispatch(Actions.productDetailReset(contextDispatch));
     },
   };
 };
@@ -110,6 +110,9 @@ const useAddToCart = () => {
       data: models.AddToCartPayload,
     ) => {
       dispatch(Actions.addToCartProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.addToCartReset(contextDispatch));
     },
   };
 };
@@ -153,8 +156,21 @@ const useReserveStockAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveStockProcess(contextDispatch, { id }));
     },
-    create: (contextDispatch: (action: any) => any, data: {}) => {
-      dispatch(Actions.createReserveStockProcess(contextDispatch, { data }));
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.ReserveStockPayload,
+    ) => {
+      dispatch(Actions.createReserveStockProcess(contextDispatch, data));
+    },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveStockProcess(contextDispatch, { id }));
+    },
+    resetPostGet: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.createReserveStockReset(contextDispatch));
+      dispatch(Actions.detailReserveStockReset(contextDispatch));
+    },
+    resetDelete: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.deleteReserveStockReset(contextDispatch));
     },
   };
 };
@@ -179,6 +195,29 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   return { orderQty, increaseOrderQty, decreaseOrderQty };
 };
 
+const useStockValidationAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      dispatch(Actions.stockValidationProcess(contextDispatch, data));
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      contextDispatch(Actions.stockValidationRefresh());
+      dispatch(Actions.stockValidationProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.stockValidationReset(contextDispatch));
+    },
+  };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -186,4 +225,5 @@ export {
   useAddToCart,
   useTagListActions,
   useReserveStockAction,
+  useStockValidationAction,
 };

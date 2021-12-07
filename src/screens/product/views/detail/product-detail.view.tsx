@@ -23,6 +23,7 @@ import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle } from '../../functions';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -90,6 +91,8 @@ const ProductDetailView: FC = () => {
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
+  const { dataTotalProductCart } = useCartTotalProductActions();
+
   /** => potential promo product effect */
   React.useEffect(() => {
     if (productDetailState.data !== null) {
@@ -126,7 +129,7 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
         <ProductDetailSkeleton />
       </SnbContainer>
     );
@@ -139,7 +142,7 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={10} />
+        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
         <ScrollView
           contentContainerStyle={{ flex: 1 }}
           refreshControl={
@@ -160,7 +163,7 @@ const ProductDetailView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbStatusBar type="transparent1" />
-      <ProductDetailHeader cartBadge={10} />
+      <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
       {/* Content */}
       <View style={{ flex: 1 }}>
         <ScrollView

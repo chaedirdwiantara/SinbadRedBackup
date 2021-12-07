@@ -2,7 +2,10 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbBottomSheet, SnbListButtonType1 } from 'react-native-sinbad-ui';
-import { usePaymentChannelsData } from '../../functions/checkout';
+import {
+  usePaymentChannelsData,
+  usePaymentAction,
+} from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
 import * as models from '@models';
@@ -19,9 +22,12 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
   openModalPaymentChannels,
 }) => {
   /** === HOOK === */
-  const { statePayment } = React.useContext(contexts.PaymentContext);
+  const { statePayment, dispatchPayment } = React.useContext(
+    contexts.PaymentContext,
+  );
   const paymentChannels = usePaymentChannelsData();
-
+  const paymentAction = usePaymentAction();
+  /** handle on select payment type */
   const selectPaymentType = (data: models.IPaymentTypesList) => {
     const dataUpdatePaymentType = {
       id: data.id,
@@ -30,6 +36,11 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
     };
     paymentChannels.setSelectedPaymentType(dataUpdatePaymentType);
     openModalPaymentChannels(data);
+  };
+  /** handle close payment type modal */
+  const closePaymentType = () => {
+    close();
+    paymentAction.resetTypesList(dispatchPayment);
   };
   const content = () => {
     return !statePayment?.paymentTypesList?.loading ? (
@@ -63,7 +74,7 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
       open={isOpen}
       content={content()}
       title={'Tipe Pembayaran'}
-      closeAction={close}
+      closeAction={() => closePaymentType()}
       actionIcon={'close'}
     />
   );
