@@ -14,6 +14,7 @@ import {
   RegisterSupplierModal,
   RejectApprovalModal,
   WaitingApprovalModal,
+  ProductNotCoverageModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import { useOrderQuantity } from '@screen/product/functions';
@@ -34,10 +35,12 @@ import {
   useTagListActions,
   useProductDetailAction,
   useAddToCart,
+  useStockValidationAction,
 } from '@screen/product/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -93,6 +96,7 @@ const ProductList: FC<ProductListProps> = ({
   );
   const [productSelected, setProductSelected] =
     useState<models.ProductList | null>(null);
+  const [modalNotCoverage, setModalNotCoverage] = useState(false);
 
   const {
     sortModalVisible,
@@ -116,6 +120,7 @@ const ProductList: FC<ProductListProps> = ({
   const addToCartActions = useAddToCart();
   const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const stockValidationActions = useStockValidationAction();
   const {
     stateProduct: {
       list: { loading: productLoading, error: productError },
@@ -133,6 +138,12 @@ const ProductList: FC<ProductListProps> = ({
     dispatchShopingCart,
   } = useShopingCartContext();
   const { dispatchTag } = useTagContext();
+  const {
+    stateStock: {
+      validation: { data: dataStock, error: errorStock },
+    },
+    dispatchStock,
+  } = useStockContext();
   const { me } = useDataAuth();
   const {
     stateSupplier: {
@@ -148,7 +159,7 @@ const ProductList: FC<ProductListProps> = ({
     modalWaitingApproval,
     modalRegisterSupplier,
     onFunctionActions,
-  } = useCheckDataSupplier(setOrderModalVisible);
+  } = useCheckDataSupplier();
   /** === FUNCTIONS === */
   /** => action send data to supplier */
   const onSendDataSupplier = () => {
@@ -166,12 +177,27 @@ const ProductList: FC<ProductListProps> = ({
     productDetailActions.fetch(dispatchProduct, product.id);
   };
 
+  /** => action close modal add to cart */
+  const handleCloseModal = () => {
+    supplierSegmentationAction.reset(dispatchSupplier);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
+    /**
+     *
+     * reset stock validation
+     */
+    setModalNotCoverage(false);
+    setOrderModalVisible(false);
+    onFunctionActions({ type: 'close' });
+  };
+
   /** => action submit add to cart  */
   const onSubmitAddToCart = () => {
     if (
       productDetailState === null ||
       dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null
+      dataSegmentation.dataSuppliers === null ||
+      dataStock === null
     ) {
       /** => DO SOMETHING */
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
@@ -181,8 +207,11 @@ const ProductList: FC<ProductListProps> = ({
     const params: models.AddToCartPayload = {
       isActiveStore: dataSegmentation.isActiveStore,
       selected: true,
-      stock: 1000,
+      stock: dataStock.stock,
       productId: productDetailState.id,
+      productName: productDetailState.name,
+      brandId: productDetailState.brandId,
+      urlImages: productDetailState?.images[0]?.url ?? '',
       qty: orderQty,
       displayPrice: productDetailState.originalPrice,
       priceBeforeTax:
@@ -199,8 +228,6 @@ const ProductList: FC<ProductListProps> = ({
       clusterId: dataSegmentation.dataSuppliers.clusterId,
     };
 
-    console.log('[PARAMS ADD TO CART]: ', params);
-
     addToCartActions.fetch(dispatchShopingCart, params);
   };
   /** === EFFECT HOOKS === */
@@ -214,8 +241,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (addToCartData !== null) {
       setProductSelected(null);
-      setOrderModalVisible(false);
-      supplierSegmentationAction.reset(dispatchSupplier);
+      handleCloseModal();
       cartTotalProductActions.fetch();
     }
   }, [addToCartData]);
@@ -226,6 +252,38 @@ const ProductList: FC<ProductListProps> = ({
       onFunctionActions({ type: 'close' });
     }
   }, [sendToSupplierData]);
+
+  /** => Listen data segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (
+      dataSegmentation &&
+      dataSegmentation.dataSuppliers &&
+      productDetailState
+    ) {
+      stockValidationActions.fetch(dispatchStock, {
+        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+        productId: productDetailState.id,
+      });
+    }
+  }, [dataSegmentation, productDetailState]);
+
+  /** Listen Data Stock */
+  useEffect(() => {
+    if (dataStock && productDetailState) {
+      setOrderModalVisible(true);
+    }
+  }, [dataStock, productDetailState]);
+
+  /** Listen Error Stock */
+  useEffect(() => {
+    if (errorStock && productDetailState) {
+      if (errorStock.code === 11004) {
+        setOrderModalVisible(true);
+      } else {
+        setModalNotCoverage(true);
+      }
+    }
+  }, [errorStock && productDetailState]);
 
   useEffect(() => {
     if (withTags) {
@@ -371,19 +429,19 @@ const ProductList: FC<ProductListProps> = ({
             onSendDataSupplier: onSendDataSupplier,
           })
         }
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onClose={handleCloseModal}
       />
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
-        onSubmit={() => onFunctionActions({ type: 'close' })}
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
       />
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={() => onFunctionActions({ type: 'close' })}
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
@@ -393,10 +451,15 @@ const ProductList: FC<ProductListProps> = ({
           increaseOrderQty={increaseOrderQty}
           decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
-          closeAction={() => setOrderModalVisible(false)}
+          closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
         />
       )}
+      {/* Product not coverage modal */}
+      <ProductNotCoverageModal
+        isOpen={modalNotCoverage}
+        close={handleCloseModal}
+      />
     </SnbContainer>
   );
 };

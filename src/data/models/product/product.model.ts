@@ -71,6 +71,7 @@ export interface ProductDetail {
   multipleQty: number;
   multipleQtyType: string;
   brand: string;
+  brandId: string;
   subBrand: string;
   category?: Array<string> | null;
   unit: string;

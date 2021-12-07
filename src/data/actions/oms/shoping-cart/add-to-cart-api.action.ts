@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => Process */
 export const addToCartProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.CreateProcessProps<{}>,
-): models.CreateProcessAction => {
+  payload: models.CreateProcessProps<models.AddToCartPayload>,
+): models.CreateProcessAction<models.AddToCartPayload> => {
   contextDispatch({
     type: types.ADD_TO_CART_PROCESS,
     payload,
@@ -33,6 +33,9 @@ export const addToCartRefresh = () => {
   return { type: types.ADD_TO_CART_REFRESH };
 };
 /** => Reset */
-export const addToCartReset = () => {
+export const addToCartReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.ADD_TO_CART_RESET,
+  });
   return { type: types.ADD_TO_CART_RESET };
 };

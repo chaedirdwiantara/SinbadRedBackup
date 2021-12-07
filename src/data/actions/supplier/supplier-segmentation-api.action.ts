@@ -32,6 +32,9 @@ export const supplierSegmentationRefresh = () => {
   return { type: types.SUPPLIER_SEGMENTATION_REFRESH };
 };
 /** => Reset */
-export const supplierSegmentationReset = () => {
+export const supplierSegmentationReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.SUPPLIER_SEGMENTATION_RESET });
   return { type: types.SUPPLIER_SEGMENTATION_RESET };
 };

@@ -31,6 +31,7 @@ export const productDetailRefresh = () => {
   return { type: types.PRODUCT_DETAIL_REFRESH };
 };
 /** => Reset */
-export const productDetailReset = () => {
+export const productDetailReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({ type: types.PRODUCT_DETAIL_RESET });
   return { type: types.PRODUCT_DETAIL_RESET };
 };

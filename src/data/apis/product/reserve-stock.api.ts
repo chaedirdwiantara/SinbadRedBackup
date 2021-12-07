@@ -34,7 +34,6 @@ const getErrorReserveStock = (data: models.DetailProcessProps) => {
     'warehouse',
     'v1',
     'DETAIL',
-    data,
   );
 };
 
