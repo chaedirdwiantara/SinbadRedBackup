@@ -15,7 +15,7 @@ export const reserveData = simplifyReducer(initialState, {
   ) {
     return {
       ...state,
-      reservedAt: payload,
+      reservedAt: payload.reservedAt,
     };
   },
 });
