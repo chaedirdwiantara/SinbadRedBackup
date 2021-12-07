@@ -12,7 +12,7 @@ export const useSupplierSegmentationAction = () => {
       dispatch(Actions.supplierSegmentationProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.supplierSegmentationReset());
+      dispatch(Actions.supplierSegmentationReset(contextDispatch));
     },
   };
 };
