@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDataReserve } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => verification action */
 const useVerficationOrderAction = () => {
@@ -30,10 +31,12 @@ const useVerficationOrderAction = () => {
 /** => reserve data action */
 const useReserveDataAction = () => {
   const dispatch = useDispatch();
+  const reserveData = useDataReserve();
   return {
     setReservedAt: (time: string) => {
       dispatch(Actions.setReservedAt({ reservedAt: time }));
     },
+    reserveData,
   };
 };
 /** => promo accordion */
@@ -60,12 +63,23 @@ const useStandardModalState = () => {
     isOpen,
   };
 };
+/** => standard boolean state */
+const useStandardLoadingState = () => {
+  const [isLoading, setLoading] = React.useState(false);
+  return {
+    setLoading: (value: boolean) => {
+      setLoading(value);
+    },
+    isLoading,
+  };
+};
 /** === EXPORT === */
 export {
   useVerficationOrderAction,
   useReserveDataAction,
   usePromoAccordion,
   useStandardModalState,
+  useStandardLoadingState,
 };
 /**
  * ================================================================
