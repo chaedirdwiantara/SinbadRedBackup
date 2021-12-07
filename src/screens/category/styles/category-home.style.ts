@@ -16,6 +16,16 @@ const CategoryHomeStyle = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 10,
   },
+  itemNameSkeletonContainer: {
+    justifyContent: 'center',
+    width: '75%',
+    height: 36,
+  },
+  itemNameSkeleton: {
+    width: '100%',
+    height: 16,
+    borderRadius: 16,
+  },
 });
 
 export default CategoryHomeStyle;
