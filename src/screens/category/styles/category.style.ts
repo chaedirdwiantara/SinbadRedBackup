@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { styles } from 'react-native-sinbad-ui';
+import { styles, color } from 'react-native-sinbad-ui';
 
-const CategoryStyles = StyleSheet.create({
+const CategoryStyle = StyleSheet.create({
   categoryHomeContainer: {
     flex: 1,
     padding: 16,
@@ -31,6 +31,23 @@ const CategoryStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+  level1SkeletonContainer: {
+    width: 96,
+    padding: 12,
+    backgroundColor: color.black60,
+  },
+  level1Skeleton: {
+    width: '100%',
+    height: 64,
+    marginBottom: 10,
+    borderRadius: 16,
+  },
+  level2Skeleton: {
+    width: '100%',
+    height: 56,
+    marginBottom: 10,
+    borderRadius: 16,
+  },
 });
 
-export default CategoryStyles;
+export default CategoryStyle;
