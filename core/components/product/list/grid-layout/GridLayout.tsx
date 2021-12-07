@@ -8,7 +8,7 @@ import GridLayoutCard from './GridLayoutCard';
 import { GridSkeleton } from './GridSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
-import { useProductDisplayState } from '@core/functions/product';
+import { useListDisplayState } from '@core/functions/product';
 /** === IMPORT TYPE === */
 import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
@@ -25,10 +25,10 @@ const GridLayout: FC<ProductLayoutProps> = ({
   error,
 }) => {
   /** === HOOK ===  */
-  const displayState = useProductDisplayState({
+  const displayState = useListDisplayState({
     loading,
     error,
-    productsLength: products.length,
+    dataLength: products.length,
   });
   /** === DERIVED ===  */
   const hasTags = withTags && tags.length > 0;
