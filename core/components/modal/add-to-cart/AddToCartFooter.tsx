@@ -13,11 +13,13 @@ import { AddToCartModalStyle } from '@core/styles';
 interface AddToCartFooterProps {
   onAddToCartPress: () => void;
   orderQty: number;
+  disabled: boolean;
 }
 /** === COMPONENT ===  */
 export const AddToCartFooter: FC<AddToCartFooterProps> = ({
   onAddToCartPress,
   orderQty,
+  disabled,
 }) => {
   /** === HOOKS ===  */
   const {
@@ -32,7 +34,8 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
   } = useShopingCartContext();
   const {
     stateStock: {
-      validation: { data: dataStock, error: errorStock },
+      validation: { error: errorStock },
+      detail: { error: errorStockDetail },
     },
   } = useStockContext();
 
@@ -51,10 +54,12 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
       </View>
       <SnbButton.Dynamic
         loading={addToCartLoading}
-        disabled={dataStock === null}
+        disabled={disabled}
         size="small"
         type="primary"
-        title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
+        title={
+          errorStock || errorStockDetail ? 'Stock Habis' : 'Tambah ke Keranjang'
+        }
         radius={6}
         onPress={onAddToCartPress}
       />

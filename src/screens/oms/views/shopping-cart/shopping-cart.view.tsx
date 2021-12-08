@@ -28,6 +28,8 @@ import {
   CartInvoiceGroup,
   CartBrand,
   CartProduct,
+  IProductItemUpdateCart,
+  ICartMasterProductNotAvailable,
 } from '@models';
 import {
   goToVerificationOrder,
@@ -36,12 +38,19 @@ import {
   useCheckoutMaster,
 } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import { usePromoContext } from 'src/data/contexts/promo/usePromoContext';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
+import { useReserveStockContext } from 'src/data/contexts/product';
+import { useVerificationOrderContext } from 'src/data/contexts/oms/verification-order/useVerificationOrderContext';
 import {
   useCartViewActions,
   useCartUpdateActions,
   useCartSelected,
 } from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
-import { useReserveStockAction } from '@screen/product/functions';
+import {
+  useReserveStockAction,
+  useStockInformationAction,
+} from '@screen/product/functions';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
@@ -50,9 +59,8 @@ const OmsShoppingCartView: FC = () => {
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
-  const [productIdRemoveSelected, setProductIdRemoveSelected] = useState<
-    string | null
-  >(null);
+  const [productRemoveSelected, setProductRemoveSelected] =
+    useState<IProductItemUpdateCart | null>(null);
   const totalProducts = useMemo(
     () => getTotalProducts(cartMaster.data),
     [cartMaster.data.length],
@@ -78,7 +86,11 @@ const OmsShoppingCartView: FC = () => {
   const {
     stateShopingCart: {
       cart: { data: cartViewData, loading: cartViewLoading },
-      update: { data: updateCartData, loading: updateCartLoading },
+      update: {
+        data: updateCartData,
+        loading: updateCartLoading,
+        error: updateCartError,
+      },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
@@ -89,31 +101,20 @@ const OmsShoppingCartView: FC = () => {
   /**
    * Verification Order
    */
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
+  const {
+    stateVerificationOrder: {
+      create: {
+        data: dataCreateVerificationOrder,
+        loading: loadingCreateVerificationOrder,
+      },
+    },
+    dispatchVerificationOrder,
+  } = useVerificationOrderContext();
   const {
     verificationOrderCreate,
     verificationOrderDetail,
     verificationReset,
   } = useVerficationOrderAction();
-  useEffect(() => {
-    /** => handle close modal if fetch is done */
-    if (!stateVerificationOrder.create.loading && !updateCartLoading) {
-      setModalConfirmationCheckoutVisible(false);
-    }
-    /** => below is the action if the update cart & potential discount fetch success */
-    if (
-      stateVerificationOrder.create.data !== null &&
-      updateCartData !== null &&
-      productIdRemoveSelected === null
-    ) {
-      verificationOrderDetail(
-        dispatchVerificationOrder,
-        stateVerificationOrder.create.data.id,
-      );
-      goToVerificationOrder();
-    }
-  }, [stateVerificationOrder.create, updateCartData]);
 
   /** Voucher Cart */
   const voucherLocalData = useVoucherLocalData();
@@ -123,88 +124,45 @@ const OmsShoppingCartView: FC = () => {
    * - Cancel Reserve Discount (Promo & Voucher)
    * - Cancel Reserve Stock
    */
-  const { dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { dispatchReserveStock } = React.useContext(
-    contexts.ReserveStockContext,
-  );
+  const { dispatchPromo } = usePromoContext();
+  const {
+    stateReserveStock: {
+      delete: { data: cancelStockData },
+    },
+    dispatchReserveStock,
+  } = useReserveStockContext();
+  const { dispatchStock } = useStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
-  React.useEffect(() => {
-    if (checkoutMaster.cartId) {
-      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
-      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+  const stockInformationAction = useStockInformationAction();
+
+  /** => action remove product and show comfirmation dialog */
+  const onRemoveProduct = (productRemove: IProductItemUpdateCart) => {
+    setProductRemoveSelected(productRemove);
+    setModalConfirmationRemoveProductVisible(true);
+  };
+
+  /** => action confirmation remove product */
+  const onConfirmRemoveProduct = () => {
+    if (!productRemoveSelected) {
+      /** do something or show modal retry */
+      return;
     }
-  }, []);
 
-  /** Get Cart View */
-  useEffect(() => {
-    cartViewActions.fetch(dispatchShopingCart);
-    storeDetailAction.detail(dispatchUser);
-    cartViewActions.fetch(dispatchShopingCart);
-
-    return () => {
-      verificationReset(dispatchVerificationOrder);
-      reserveDiscountAction.resetDelete(dispatchPromo);
-      reserveStockAction.resetDelete(dispatchReserveStock);
-      voucherLocalData.reset();
+    setLoadingRemoveProduct(true);
+    const params = {
+      action: 'submit',
+      products: [productRemoveSelected],
     };
-  }, []);
+    cartUpdateActions.fetch(dispatchShopingCart, params);
+  };
 
-  /** Listen changes cartState */
-  useEffect(() => {
-    if (cartViewData !== null) {
-      let totalProductsSelected = 0;
-      const data: CartInvoiceGroup[] = [];
-      cartViewData.data.forEach((invoiceGroup) => {
-        let isEmptyBrand = true;
-        const brands: CartBrand[] = [];
-        invoiceGroup.brands.forEach((brand) => {
-          let isEmptyProduct = true;
-          let brandSelected = false;
-          const products: CartProduct[] = [];
-          brand.products.forEach((product) => {
-            if (product.selected) {
-              totalProductsSelected += 1;
-              brandSelected = true;
-            }
-            products.push(product);
-            isEmptyProduct = false;
-          });
-          if (!isEmptyProduct) {
-            brands.push({
-              ...brand,
-              selected: brandSelected,
-              products: products,
-            });
-            isEmptyBrand = false;
-          }
-        });
-        if (!isEmptyBrand) {
-          data.push({ ...invoiceGroup, brands: brands });
-        }
-      });
-      if (totalProductsSelected === totalProducts) {
-        setAllProductsSelected(true);
-      }
-
-      setCartMaster({
-        ...cartViewData,
-        data: data,
-        dataEmptyStock: [],
-        dataNotFound: [],
-      });
-      setProductSelectedCount(totalProductsSelected);
-    }
-  }, [cartViewData]);
-
-  /** Listen product id will be removed */
-  useEffect(() => {
-    if (productIdRemoveSelected !== null && updateCartData !== null) {
-      //call action remove product from redux
-      deleteProduct({ productId: productIdRemoveSelected });
-      setProductIdRemoveSelected(null);
-    }
-  }, [productIdRemoveSelected, updateCartData]);
+  /** => action cancel remove product */
+  const onCancelRemoveProduct = () => {
+    setProductRemoveSelected(null);
+    setLoadingRemoveProduct(false);
+    setModalConfirmationRemoveProductVisible(false);
+  };
 
   /** Confirmation checkout submit */
   const onSubmitCheckout = () => {
@@ -293,9 +251,119 @@ const OmsShoppingCartView: FC = () => {
     );
   };
 
-  const onRemoveProduct = () => {
-    setLoadingRemoveProduct(true);
-  };
+  /** => did mounted */
+  useEffect(() => {
+    cartViewActions.fetch(dispatchShopingCart);
+    storeDetailAction.detail(dispatchUser);
+    if (checkoutMaster.cartId) {
+      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
+      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+    }
+  }, []);
+
+  /** => Listen data cancel reserve stock */
+  useEffect(() => {
+    if (checkoutMaster.cartId && cancelStockData !== null) {
+      stockInformationAction.fetch(dispatchStock, checkoutMaster.cartId);
+    }
+  }, [cancelStockData]);
+
+  /** => Listen create verification order and update cart navigating to order verification screen  */
+  useEffect(() => {
+    /** => below is the action if the update cart & potential discount fetch success */
+    if (
+      dataCreateVerificationOrder !== null &&
+      updateCartData !== null &&
+      productRemoveSelected === null
+    ) {
+      verificationOrderDetail(
+        dispatchVerificationOrder,
+        dataCreateVerificationOrder.id,
+      );
+      setModalConfirmationCheckoutVisible(false);
+      goToVerificationOrder();
+    }
+  }, [dataCreateVerificationOrder, updateCartData]);
+
+  /** Listen changes cartState */
+  useEffect(() => {
+    if (cartViewData !== null) {
+      let totalProductsSelected = 0;
+      const data: CartInvoiceGroup[] = [];
+      const dataEmptyStock: ICartMasterProductNotAvailable[] = [];
+      const dataNotFound: ICartMasterProductNotAvailable[] = [];
+      cartViewData.data.forEach((invoiceGroup) => {
+        let isEmptyBrand = true;
+        const brands: CartBrand[] = [];
+        invoiceGroup.brands.forEach((brand) => {
+          let isEmptyProduct = true;
+          let brandSelected = false;
+          const products: CartProduct[] = [];
+          brand.products.forEach((product) => {
+            if (product.selected) {
+              totalProductsSelected += 1;
+              brandSelected = true;
+            }
+            products.push(product);
+            isEmptyProduct = false;
+          });
+          if (!isEmptyProduct) {
+            brands.push({
+              ...brand,
+              selected: brandSelected,
+              products: products,
+            });
+            isEmptyBrand = false;
+          }
+        });
+        if (!isEmptyBrand) {
+          data.push({ ...invoiceGroup, brands: brands });
+        }
+      });
+      if (totalProductsSelected === totalProducts) {
+        setAllProductsSelected(true);
+      }
+
+      setCartMaster({
+        ...cartViewData,
+        data: data,
+        dataEmptyStock: dataEmptyStock,
+        dataNotFound: dataNotFound,
+        others: [],
+      });
+      setProductSelectedCount(totalProductsSelected);
+    }
+  }, [cartViewData]);
+
+  /** Listen product will be removed */
+  useEffect(() => {
+    if (productRemoveSelected !== null && updateCartData !== null) {
+      //call action remove product from redux
+      deleteProduct({ productId: productRemoveSelected.productId });
+      setProductRemoveSelected(null);
+      setLoadingRemoveProduct(false);
+      setSassionQty(Math.random() * 10000000);
+      setModalConfirmationRemoveProductVisible(false);
+      cartUpdateActions.reset(dispatchShopingCart);
+    }
+  }, [productRemoveSelected, updateCartData]);
+
+  /** Listen error remove */
+  useEffect(() => {
+    if (productRemoveSelected !== null && updateCartError !== null) {
+      setLoadingRemoveProduct(false);
+    }
+  }, [productRemoveSelected, updateCartError]);
+
+  /** did will unmound */
+  useEffect(() => {
+    return () => {
+      verificationReset(dispatchVerificationOrder);
+      reserveDiscountAction.resetDelete(dispatchPromo);
+      reserveStockAction.resetDelete(dispatchReserveStock);
+    };
+  }, []);
+
   /** === VIEW === */
   /** => Main */
   return (
@@ -322,9 +390,9 @@ const OmsShoppingCartView: FC = () => {
                       setProductSelectedCount={setProductSelectedCount}
                       setAllProductsSelected={setAllProductsSelected}
                       totalProducts={totalProducts}
-                      setProductIdRemoveSelected={setProductIdRemoveSelected}
                       sassionQty={sassionQty}
                       setSassionQty={setSassionQty}
+                      onRemoveProduct={onRemoveProduct}
                     />
                   ))}
                 </Fragment>
@@ -352,14 +420,14 @@ const OmsShoppingCartView: FC = () => {
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
         cancel={() => setModalConfirmationCheckoutVisible(false)}
-        loading={stateVerificationOrder.create.loading || updateCartLoading}
+        loading={loadingCreateVerificationOrder || updateCartLoading}
       />
       <SnbDialog
         open={modalConfirmationRemoveProductVisible}
-        title="Hapus Product"
-        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
-        ok={onRemoveProduct}
-        cancel={() => setModalConfirmationRemoveProductVisible(false)}
+        title="Konfirmasi"
+        content="Apakah Anda yakin untuk menghapus barang?"
+        ok={onConfirmRemoveProduct}
+        cancel={onCancelRemoveProduct}
         loading={loadingRemoveProduct}
       />
     </SnbContainer>
