@@ -69,34 +69,34 @@ export const promoPaymentDetailReset = () => {
   return { type: types.PROMO_PAYMENT_DETAIL_RESET };
 };
 
-/** === PROMO GENERAL DETAIL === */
-/** => promo general detail process */
-export const promoGeneralDetailProcess = (
+/** === PROMO SELLER DETAIL === */
+/** => process */
+export const promoSellerDetailProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types.PROMO_GENERAL_DETAIL_PROCESS, payload: data });
+  contextDispatch({ type: types.PROMO_SELLER_DETAIL_PROCESS, payload: data });
   return {
-    type: types.PROMO_GENERAL_DETAIL_PROCESS,
+    type: types.PROMO_SELLER_DETAIL_PROCESS,
     payload: data,
     contextDispatch,
   };
 };
-/** => promo general detail success */
-export const promoGeneralDetailSuccess = (
-  data: models.DetailSuccessProps<models.PromoGeneralDetailSuccessProps>,
-): models.DetailSuccessAction<models.PromoGeneralDetailSuccessProps> => {
-  return { type: types.PROMO_GENERAL_DETAIL_SUCCESS, payload: data };
+/** => success */
+export const promoSellerDetailSuccess = (
+  data: models.DetailSuccessProps<models.PromoSellerDetailSuccessProps>,
+): models.DetailSuccessAction<models.PromoSellerDetailSuccessProps> => {
+  return { type: types.PROMO_SELLER_DETAIL_SUCCESS, payload: data };
 };
-/** => promo general detail failed */
-export const promoGeneralDetailFailed = (
+/** => failed */
+export const promoSellerDetailFailed = (
   data: models.ErrorProps,
 ): models.DetailFailedAction => {
-  return { type: types.PROMO_GENERAL_DETAIL_FAILED, payload: data };
+  return { type: types.PROMO_SELLER_DETAIL_FAILED, payload: data };
 };
-/** => promo general detail reset */
-export const promoGeneralDetailReset = () => {
-  return { type: types.PROMO_GENERAL_DETAIL_RESET };
+/** => reset */
+export const promoSellerDetailReset = () => {
+  return { type: types.PROMO_SELLER_DETAIL_RESET };
 };
 
 /** === POTENTIAL PROMO PRODUCT === */

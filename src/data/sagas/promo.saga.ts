@@ -40,22 +40,20 @@ function* promoPaymentDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.promoPaymentDetailFailed(error));
   }
 }
-/** => promo general detail */
-function* promoGeneralDetail(action: models.DetailProcessAction) {
+/** => promo seller detail */
+function* promoSellerDetail(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.PromoGeneralDetailSuccessProps> =
+    const response: models.DetailSuccessProps<models.PromoSellerDetailSuccessProps> =
       yield call(() => {
-        return PromoApi.promoGeneralDetail(action.payload);
+        return PromoApi.promoSellerDetail(action.payload);
       });
     yield action.contextDispatch(
-      ActionCreators.promoGeneralDetailSuccess(response),
+      ActionCreators.promoSellerDetailSuccess(response),
     );
-    yield put(ActionCreators.promoGeneralDetailSuccess(response));
+    yield put(ActionCreators.promoSellerDetailSuccess(response));
   } catch (error: any) {
-    yield action.contextDispatch(
-      ActionCreators.promoGeneralDetailFailed(error),
-    );
-    yield put(ActionCreators.promoGeneralDetailFailed(error));
+    yield action.contextDispatch(ActionCreators.promoSellerDetailFailed(error));
+    yield put(ActionCreators.promoSellerDetailFailed(error));
   }
 }
 /** => potential promo product */
@@ -188,7 +186,7 @@ function* getCheckAllPromoPayment(action: models.DetailProcessAction) {
 function* PromoSaga() {
   yield takeLatest(types.PROMO_PAYMENT_LIST_PROCESS, promoPaymentList);
   yield takeLatest(types.PROMO_PAYMENT_DETAIL_PROCESS, promoPaymentDetail);
-  yield takeLatest(types.PROMO_GENERAL_DETAIL_PROCESS, promoGeneralDetail);
+  yield takeLatest(types.PROMO_SELLER_DETAIL_PROCESS, promoSellerDetail);
   yield takeLatest(
     types.POTENTIAL_PROMO_PRODUCT_PROCESS,
     potentialPromoProduct,
