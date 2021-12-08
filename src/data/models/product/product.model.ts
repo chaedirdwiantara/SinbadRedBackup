@@ -57,7 +57,7 @@ export interface ProductImage {
 export interface ProductDetail {
   id: string;
   supplierCode: string;
-  sellerId: number;
+  sellerId: string;
   name: string;
   detail: string;
   description: string;
