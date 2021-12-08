@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDataCheckout } from '@core/redux/Data';
+import { useDataCheckout, useDataReserve } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -17,22 +17,21 @@ const useCreateOrders = () => {
     verification: {},
   };
 
+  // => Mapping Invoice Group
   dataCheckout.invoices.map((invoice) => {
     const dataInvoice = {
-      // => Mapping Invoice Group
+      //   sellerId: ? <to be update>
       invoiceGroupId: invoice.invoiceGroupId,
+      //   invoiceGroupName: ? <to be update>
       paymentTypeId: invoice.paymentType?.id,
       paymentChannelId: invoice.paymentChannel?.id,
-      paylaterTypeId: invoice.paylaterType?.id, // Not defined on Interface
+      paylaterTypeId: null,
       brands: [] as any,
-      //   supplierId: ?
-      //   portfolioId: ?
-      //   invoiceGroupName: ?
-      //   sellerId: ?
-      //   channelId: ?
-      //   groupId: ?
-      //   typeId: ?
-      //   clusterId: ?
+      //   portfolioId: ? -> Optional for sinbad White
+      //   channelId: ? <to be update>
+      //   groupId: ? <to be update>
+      //   typeId: ? <to be update>
+      //   clusterId: ? <to be update>
     };
 
     // Mapping Order Brand Products
@@ -40,7 +39,7 @@ const useCreateOrders = () => {
       const dataBrands = {
         brandId: brand.brandId,
         brandName: brand.brandName,
-        product: brand.products, // Missing warehouseId
+        product: brand.products, // Missing warehouseId <to be updated>
       };
       dataInvoice.brands.push(dataBrands);
     });
@@ -63,4 +62,27 @@ const useCreateOrders = () => {
   };
 };
 
-export { useCreateOrders };
+const useExpiredTime = () => {
+  const [isOpen, setOpen] = useState(false);
+  const reserveData = useDataReserve();
+
+  const calculateExpiredTime = () => {
+    const dateReserved = new Date(reserveData.reservedAt as string);
+    const dateCurrent = new Date();
+
+    const timeReserved = dateReserved.getTime() / 1000 + 600;
+    const timeNow = dateCurrent.getTime() / 1000;
+
+    if (timeReserved >= timeNow) {
+      setOpen(false);
+      return false;
+    } else {
+      setOpen(true);
+      return true;
+    }
+  };
+
+  return { check: () => calculateExpiredTime(), isOpen };
+};
+
+export { useCreateOrders, useExpiredTime };
