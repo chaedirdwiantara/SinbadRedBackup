@@ -7,6 +7,7 @@ export interface ProductCheckout {
   priceBeforeTax: number;
   priceAfterTax: number;
   uom: string;
+  warehouseId: number;
 }
 
 export interface BrandCheckout {
@@ -23,6 +24,12 @@ export interface InvoiceCheckout {
   tax: number;
   isPotentialPaymentPromo: boolean;
   brands: BrandCheckout[];
+  invoiceGroupName: string;
+  sellerId: number;
+  channelId: number;
+  groupId: number;
+  typeId: number;
+  clusterId: number;
 }
 
 export interface CheckoutSuccess {
