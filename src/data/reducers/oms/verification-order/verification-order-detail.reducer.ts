@@ -3,7 +3,8 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type VerificationOrderDetailInitialProps = models.DetailItemProps<{}>;
+export type VerificationOrderDetailInitialProps =
+  models.DetailItemProps<models.VerificationOrderDetailProps>;
 /** === INITIAL STATE HERE === */
 export const verificationOrderDetailInitialState: VerificationOrderDetailInitialProps =
   {

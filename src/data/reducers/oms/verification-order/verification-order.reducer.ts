@@ -1,16 +1,19 @@
 /** === IMPORT HERE === */
-import * as models from '@models';
 import {
   verificationOrderCreateReducer,
   verificationOrderCreateInitialState,
+  VerificationOrderCreateInitialProps,
 } from './verification-order-create.reducer';
 import {
   verificationOrderDetailInitialState,
   verificationOrderDetailReducer,
+  VerificationOrderDetailInitialProps,
 } from './verification-order-detail.reducer';
 /** === TYPE HERE === */
-export type VerificationOrderInitialProps = models.CreateProps &
-  models.DetailProps<models.VerificationOrderDetailProps>;
+export interface VerificationOrderState {
+  create: VerificationOrderCreateInitialProps;
+  detail: VerificationOrderDetailInitialProps;
+}
 /** === INITIAL HERE === */
 export const verificationOrderInitialState = {
   create: verificationOrderCreateInitialState,
@@ -18,7 +21,7 @@ export const verificationOrderInitialState = {
 };
 /** === EXPORT ALL HERE === */
 export const verificationOrderReducer = (
-  { create, detail }: any,
+  { create, detail }: VerificationOrderState,
   action: any,
 ) => ({
   create: verificationOrderCreateReducer(create, action),
