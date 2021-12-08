@@ -82,7 +82,11 @@ const useExpiredTime = () => {
     }
   };
 
-  return { check: () => calculateExpiredTime(), isOpen };
+  return {
+    check: () => calculateExpiredTime(),
+    setOpen: (value: boolean) => setOpen(value),
+    isOpen,
+  };
 };
 
 export { useCreateOrders, useExpiredTime };

@@ -14,6 +14,7 @@ import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
+import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION === */
 import {
@@ -30,7 +31,11 @@ import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutCo
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
-import { backToCart, goToCheckoutSuccess } from '@screen/oms/functions';
+import {
+  backToCart,
+  goToCheckoutSuccess,
+  useExpiredTime,
+} from '@screen/oms/functions';
 import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
@@ -54,6 +59,7 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelData = usePaymentChannelsData();
   const paymentTCModal = useTermsAndConditionsModal();
   const errorBottomModal = useErrorModalBottom();
+  const expiredTime = useExpiredTime();
   const {
     stateCheckout: {
       checkout: {
@@ -315,6 +321,7 @@ const OmsCheckoutView: FC = () => {
   /** handle back to cart */
   const handleBackToCart = () => {
     backToCartModal.setOpen(false);
+    expiredTime.setOpen(false);
     backToCart();
   };
   /** close modal terms and condition */
@@ -378,6 +385,10 @@ const OmsCheckoutView: FC = () => {
           <ModalBottomErrorCheckout
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
+          />
+          <ModalBottomErrorExpiredTime
+            isOpen={expiredTime.isOpen}
+            close={handleBackToCart}
           />
         </>
       )}
