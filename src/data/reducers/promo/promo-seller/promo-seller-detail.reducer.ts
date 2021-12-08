@@ -3,30 +3,30 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PromoGeneralDetailInitialProps =
-  models.DetailItemProps<models.PromoGeneralDetailSuccessProps>;
+type PromoSellerDetailInitialProps =
+  models.DetailItemProps<models.PromoSellerDetailSuccessProps>;
 /** === INITIAL STATE HERE === */
-export const promoGeneralDetailInitialState: PromoGeneralDetailInitialProps = {
+export const promoSellerDetailInitialState: PromoSellerDetailInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === FUNCTION HERE === */
-export const promoGeneralDetailReducer = simplifyReducer(
-  promoGeneralDetailInitialState,
+export const promoSellerDetailReducer = simplifyReducer(
+  promoSellerDetailInitialState,
   {
     /** ===> DETAIL */
     /** => detail process */
-    [types.PROMO_GENERAL_DETAIL_PROCESS]() {
+    [types.PROMO_SELLER_DETAIL_PROCESS]() {
       return {
-        ...promoGeneralDetailInitialState,
+        ...promoSellerDetailInitialState,
         loading: true,
       };
     },
     /** => detail success */
-    [types.PROMO_GENERAL_DETAIL_SUCCESS](
-      state = promoGeneralDetailInitialState,
-      action: models.DetailSuccessAction<models.PromoGeneralDetailSuccessProps>,
+    [types.PROMO_SELLER_DETAIL_SUCCESS](
+      state = promoSellerDetailInitialState,
+      action: models.DetailSuccessAction<models.PromoSellerDetailSuccessProps>,
     ) {
       return {
         ...state,
@@ -35,8 +35,8 @@ export const promoGeneralDetailReducer = simplifyReducer(
       };
     },
     /** => detail failed */
-    [types.PROMO_GENERAL_DETAIL_FAILED](
-      state = promoGeneralDetailInitialState,
+    [types.PROMO_SELLER_DETAIL_FAILED](
+      state = promoSellerDetailInitialState,
       action: models.DetailFailedAction,
     ) {
       return {
@@ -46,8 +46,8 @@ export const promoGeneralDetailReducer = simplifyReducer(
       };
     },
     /** => detail reset */
-    [types.PROMO_GENERAL_DETAIL_RESET]() {
-      return promoGeneralDetailInitialState;
+    [types.PROMO_SELLER_DETAIL_RESET]() {
+      return promoSellerDetailInitialState;
     },
   },
 );

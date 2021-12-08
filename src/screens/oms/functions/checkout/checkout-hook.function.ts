@@ -78,7 +78,7 @@ const usePaymentChannelsData = () => {
     totalCartParcel: totalCartParcel,
   };
 };
-/** => promo general action */
+/** => payment detail accordion */
 const usePaymentDetailAccorrdion = () => {
   const [active, setActive] = React.useState<number | null>(null);
   return {
