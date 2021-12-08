@@ -24,27 +24,28 @@ export const cartViewReducer = simplifyReducer(cartViewInitialState, {
   /** => Success */
   [types.CART_VIEW_SUCCESS](
     state = cartViewInitialState,
-    action: models.DetailSuccessAction<models.CartSuccessProps>,
+    { payload }: models.DetailSuccessAction<models.CartSuccessProps>,
   ) {
     return {
       ...state,
-      data: action.payload.data,
+      data: payload.data,
       loading: false,
+      error: null,
     };
   },
   /** => Failed */
   [types.CART_VIEW_FAILED](
     state = cartViewInitialState,
-    action: models.DetailFailedAction,
+    { payload }: models.DetailFailedAction,
   ) {
     return {
       ...state,
-      error: action.payload,
+      error: payload,
       loading: false,
     };
   },
   /** => Refresh */
-  [types.TAG_LIST_REFRESH]() {
+  [types.CART_VIEW_REFRESH]() {
     return {
       ...cartViewInitialState,
       loading: true,

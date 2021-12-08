@@ -13,7 +13,7 @@ import * as models from '@models';
 /** === TYPES === */
 type BrandProductRouteParams = {
   BrandProduct: {
-    brand: models.BrandListSuccessProps;
+    brand: models.BrandListItem;
   };
 };
 

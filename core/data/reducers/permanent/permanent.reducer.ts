@@ -6,7 +6,6 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 const initialState: models.Permanent = {
   isFCM: false,
   isIntroSinbad: false,
-  cartId: null,
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
@@ -25,13 +24,6 @@ export const permanentCore = simplifyReducer(initialState, {
     return {
       ...state,
       isIntroSinbad: action.payload,
-    };
-  },
-  /** => FOR SAVE CART ID FLAG */
-  [types.CART_ID](state = initialState, action: models.CartId) {
-    return {
-      ...state,
-      cartId: action.payload,
     };
   },
 });

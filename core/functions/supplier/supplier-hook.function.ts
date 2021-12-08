@@ -12,7 +12,7 @@ export const useSupplierSegmentationAction = () => {
       dispatch(Actions.supplierSegmentationProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.supplierSegmentationReset());
+      dispatch(Actions.supplierSegmentationReset(contextDispatch));
     },
   };
 };
@@ -22,9 +22,27 @@ export const useSendDataToSupplierActions = () => {
   return {
     fetch: (
       contextDispatch: (action: any) => any,
-      data: models.SendDataSupplierProps,
+      data: models.SendDataSupplierPayload,
     ) => {
       dispatch(Actions.sendDataToSupplierProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.sendDataToSupplierReset(contextDispatch));
+    },
+  };
+};
+
+export const useSupplierSegmentationDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.supplierSegmentationDetailProcess(contextDispatch, { id }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.supplierSegmentationDetailReset(contextDispatch));
     },
   };
 };

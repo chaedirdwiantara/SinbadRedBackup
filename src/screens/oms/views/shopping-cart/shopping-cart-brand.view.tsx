@@ -7,18 +7,21 @@ import { ShoppingCartProduct } from './shopping-cart-product.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { handleSelectedBrandChange } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup, CartBrand } from '@models';
+import { CartInvoiceGroup, CartBrand, IProductItemUpdateCart } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartBrandProps {
   brand: CartBrand;
   brandIndex: number;
   invoiceGroupIndex: number;
   invoiceGroups: CartInvoiceGroup[];
-  setInvoiceGroups: Dispatch<SetStateAction<CartInvoiceGroup[]>>;
+  setInvoiceGroups: (any: CartInvoiceGroup[]) => void;
   productSelectedCount: number;
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
+  onRemoveProduct: (any: IProductItemUpdateCart) => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
@@ -31,6 +34,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
+  sassionQty,
+  setSassionQty,
+  onRemoveProduct,
 }) => (
   <Fragment key={brand.brandName}>
     <View
@@ -60,7 +66,7 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
     </View>
     {brand.products.map((product, productIndex) => (
       <ShoppingCartProduct
-        key={product.productId.toString()}
+        key={productIndex.toString()}
         product={product}
         productIndex={productIndex}
         brand={brand}
@@ -72,6 +78,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
         setProductSelectedCount={setProductSelectedCount}
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
+        sassionQty={sassionQty}
+        setSassionQty={setSassionQty}
+        onRemoveProduct={onRemoveProduct}
       />
     ))}
   </Fragment>

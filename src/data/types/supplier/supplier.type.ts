@@ -16,3 +16,12 @@ export const SEND_DATA_SUPPLIER_SUCCESS = 'SendDataSupplierSuccess';
 export const SEND_DATA_SUPPLIER_FAILED = 'SendDataSupplierFailed';
 export const SEND_DATA_SUPPLIER_REFRESH = 'SendDataSupplierRefresh';
 export const SEND_DATA_SUPPLIER_RESET = 'SendDataSupplierReset';
+/** => Segmentation */
+export const SUPPLIER_SEGMENTATION2_PROCESS =
+  'SupplierSegmentationDetailProcess';
+export const SUPPLIER_SEGMENTATION2_SUCCESS =
+  'SupplierSegmentationDetailSuccess';
+export const SUPPLIER_SEGMENTATION2_FAILED = 'SupplierSegmentationDetailFailed';
+export const SUPPLIER_SEGMENTATION2_REFRESH =
+  'SupplierSegmentationDetailRefresh';
+export const SUPPLIER_SEGMENTATION2_RESET = 'SupplierSegmentationDetailReset';
