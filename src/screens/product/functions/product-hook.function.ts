@@ -241,6 +241,23 @@ const useStockValidationDetailAction = () => {
   };
 };
 
+const useStockInformationAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.stockInformationProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.stockValidationDetailRefresh());
+      dispatch(Actions.stockInformationProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.stockInformationReset(contextDispatch));
+    },
+  };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -250,4 +267,5 @@ export {
   useReserveStockAction,
   useStockValidationAction,
   useStockValidationDetailAction,
+  useStockInformationAction,
 };

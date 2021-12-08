@@ -8,6 +8,7 @@ const initialState: models.ICartMaster = {
   data: [],
   dataEmptyStock: [],
   dataNotFound: [],
+  others: [],
   storeId: 0,
   createdAt: '',
   updatedAt: '',

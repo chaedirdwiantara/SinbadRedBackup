@@ -3,9 +3,23 @@ import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTIONS === */
 
-const getStockValidation = (payload: models.StockValidationProcessProps) => {
-  const path = `warehouse-products/stock-validations?warehouseId=${payload.warehouseId}&productId=${payload.productId}`;
+const getStockValidation = ({
+  warehouseId,
+  productId,
+}: models.StockValidationProcessProps) => {
+  const path = `warehouse-products/stock-validations?warehouseId=${warehouseId}&productId=${productId}`;
   return apiMapping<models.IStockValidaitonSuccess>(
+    'auth',
+    path,
+    'warehouse',
+    'v1',
+    'DETAIL',
+  );
+};
+
+const getStockInformation = ({ id }: models.DetailProcessProps) => {
+  const path = `warehouse-products/get-stock-error/${id}`;
+  return apiMapping<models.IStockInformationSuccess>(
     'auth',
     path,
     'warehouse',
@@ -16,4 +30,5 @@ const getStockValidation = (payload: models.StockValidationProcessProps) => {
 
 export const WarehouseApi = {
   getStockValidation,
+  getStockInformation,
 };
