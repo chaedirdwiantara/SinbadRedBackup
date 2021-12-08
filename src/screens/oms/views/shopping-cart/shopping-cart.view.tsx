@@ -41,6 +41,7 @@ import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useSho
 import { usePromoContext } from 'src/data/contexts/promo/usePromoContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useReserveStockContext } from 'src/data/contexts/product';
+import { useVerificationOrderContext } from 'src/data/contexts/oms/verification-order/useVerificationOrderContext';
 import {
   useCartViewActions,
   useCartUpdateActions,
@@ -100,8 +101,15 @@ const OmsShoppingCartView: FC = () => {
   /**
    * Verification Order
    */
-  const { stateVerificationOrder, dispatchVerificationOrder } =
-    React.useContext(contexts.VerificationOrderContext);
+  const {
+    stateVerificationOrder: {
+      create: {
+        data: dataCreateVerificationOrder,
+        loading: loadingCreateVerificationOrder,
+      },
+    },
+    dispatchVerificationOrder,
+  } = useVerificationOrderContext();
   const {
     verificationOrderCreate,
     verificationOrderDetail,
@@ -262,23 +270,20 @@ const OmsShoppingCartView: FC = () => {
 
   /** => Listen create verification order and update cart navigating to order verification screen  */
   useEffect(() => {
-    /** => handle close modal if fetch is done */
-    if (!stateVerificationOrder.create.loading && !updateCartLoading) {
-      setModalConfirmationCheckoutVisible(false);
-    }
     /** => below is the action if the update cart & potential discount fetch success */
     if (
-      stateVerificationOrder.create.data !== null &&
+      dataCreateVerificationOrder !== null &&
       updateCartData !== null &&
       productRemoveSelected === null
     ) {
       verificationOrderDetail(
         dispatchVerificationOrder,
-        stateVerificationOrder.create.data.id,
+        dataCreateVerificationOrder.id,
       );
+      setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
     }
-  }, [stateVerificationOrder.create, updateCartData]);
+  }, [dataCreateVerificationOrder, updateCartData]);
 
   /** Listen changes cartState */
   useEffect(() => {
@@ -415,7 +420,7 @@ const OmsShoppingCartView: FC = () => {
         content="Konfirmasi order dan lanjut ke Checkout?"
         ok={onSubmitCheckout}
         cancel={() => setModalConfirmationCheckoutVisible(false)}
-        loading={stateVerificationOrder.create.loading || updateCartLoading}
+        loading={loadingCreateVerificationOrder || updateCartLoading}
       />
       <SnbDialog
         open={modalConfirmationRemoveProductVisible}
