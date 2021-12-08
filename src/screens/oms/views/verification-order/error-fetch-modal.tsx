@@ -8,11 +8,13 @@ import { ImagesSinbad } from 'src/assets';
 interface ErrorFetchModal {
   visible: boolean;
   onPressRetry: () => void;
+  buttonText: string;
 }
 /** === COMPONENT ===  */
 export const ErrorFetchModal: FC<ErrorFetchModal> = ({
   visible,
   onPressRetry,
+  buttonText,
 }) => {
   return (
     <BottomModalError
@@ -20,7 +22,7 @@ export const ErrorFetchModal: FC<ErrorFetchModal> = ({
       errorTitle={'Terjadi kesalahan'}
       errorSubtitle={'Silahkan mencoba kembali'}
       errorImage={ImagesSinbad.snbCry}
-      buttonTitle={'Retry'}
+      buttonTitle={buttonText}
       buttonOnPress={onPressRetry}
     />
   );

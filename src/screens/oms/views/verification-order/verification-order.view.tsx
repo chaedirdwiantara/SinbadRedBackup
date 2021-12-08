@@ -135,6 +135,7 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Ulangi');
       }
     }
   }, [stateReserveStock.create.error]);
@@ -174,6 +175,7 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
+      errorFetchModal.setErrorText('Ulangi');
     }
   }, [stateReserveStock.detail.error]);
 
@@ -186,6 +188,13 @@ const OmsVerificationOrderView: FC = () => {
     if (statePromo.reserveDiscount.create.error !== null) {
       if (statePromo.reserveDiscount.create.error.code === 140037) {
         errorVoucherModal.setOpen(true);
+      } else if (statePromo.reserveDiscount.create.error.code === 140032) {
+        const action = () => {
+          goBack();
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Kembali Ke Keranjang');
       } else {
         const action = () => {
           const createReserveDiscountParams = {
@@ -203,6 +212,7 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Ulangi');
       }
     }
   }, [statePromo.reserveDiscount.create.error]);
@@ -253,6 +263,7 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
+      errorFetchModal.setErrorText('Ulangi');
     }
   }, [statePromo.reserveDiscount.detail.error]);
 
@@ -431,6 +442,7 @@ const OmsVerificationOrderView: FC = () => {
           errorFetchModal.setOpen(false);
           errorFetchModal.errorAction();
         }}
+        buttonText={errorFetchModal.errorText}
       />
     );
   };
