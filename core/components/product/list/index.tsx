@@ -9,12 +9,12 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
-import AddToCartModal from './AddToCartModal';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
   WaitingApprovalModal,
   ProductNotCoverageModal,
+  AddToCartModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import {
@@ -170,7 +170,7 @@ const ProductList: FC<ProductListProps> = ({
     }
   };
 
-  /** => action from buttom confirmation checkout */
+  /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
     setProductSelected(product);
     supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
@@ -182,10 +182,6 @@ const ProductList: FC<ProductListProps> = ({
     supplierSegmentationAction.reset(dispatchSupplier);
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
-    /**
-     *
-     * reset stock validation
-     */
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });

@@ -37,7 +37,12 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
           <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
             <Image
               source={require('../../../../src/assets/images/sinbad_image/failed_error.png')}
-              style={{ width: 200, marginBottom: 16 }}
+              style={{
+                height: 148,
+                width: '100%',
+                resizeMode: 'contain',
+                marginBottom: 16,
+              }}
             />
             <SnbText.B2 color={color.black100}>
               Akun kamu gagal verifikasi nih
@@ -56,15 +61,17 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
               onPress={onSubmit}
               disabled={false}
             />
-            {isCallCS && (
+          </View>
+          {isCallCS && (
+            <View style={{ height: 72 }}>
               <SnbButton.Single
                 type="primary"
                 title="Hubungi CS"
                 onPress={onHanldeCallCS}
                 disabled={false}
               />
-            )}
-          </View>
+            </View>
+          )}
         </View>
       }
       closeAction={onClose}

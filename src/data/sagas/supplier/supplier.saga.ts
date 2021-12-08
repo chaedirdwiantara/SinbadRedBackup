@@ -26,8 +26,34 @@ function* supplierSegmentation(action: models.DetailProcessAction) {
     );
   }
 }
+/** => Segmentation detail*/
+function* supplierSegmentationDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.SupplierSegmentation> =
+      yield call(() => {
+        return SupplierApi.getSegmentation(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.supplierSegmentationDetailSuccess(response),
+    );
+    yield put(ActionCreators.supplierSegmentationDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.supplierSegmentationDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+    yield put(
+      ActionCreators.supplierSegmentationDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+  }
+}
 /** => Send data to supplier */
-function* sendDataToSupplier(action: models.CreateProcessAction) {
+function* sendDataToSupplier(
+  action: models.CreateProcessAction<models.SendDataSupplierPayload>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return SupplierApi.createSupplierStore(action.payload);
@@ -49,6 +75,10 @@ function* sendDataToSupplier(action: models.CreateProcessAction) {
 function* SupplierSaga() {
   yield takeLatest(types.SUPPLIER_SEGMENTATION_PROCESS, supplierSegmentation);
   yield takeLatest(types.SEND_DATA_SUPPLIER_PROCESS, sendDataToSupplier);
+  yield takeLatest(
+    types.SUPPLIER_SEGMENTATION2_PROCESS,
+    supplierSegmentationDetail,
+  );
 }
 
 export default SupplierSaga;

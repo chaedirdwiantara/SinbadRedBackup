@@ -31,3 +31,18 @@ export const useSendDataToSupplierActions = () => {
     },
   };
 };
+
+export const useSupplierSegmentationDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.supplierSegmentationDetailProcess(contextDispatch, { id }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.supplierSegmentationDetailReset(contextDispatch));
+    },
+  };
+};
