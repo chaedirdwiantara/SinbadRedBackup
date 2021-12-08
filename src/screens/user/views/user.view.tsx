@@ -103,6 +103,19 @@ const UserView: FC = () => {
               {
                 icon: (
                   <SnbIconHint
+                    iconName={'assignment_complete'}
+                    size={24}
+                    badgeColor="yellow"
+                    iconColor={color.red50}
+                  />
+                ),
+                title: 'Quest',
+                subtitle: null,
+                onPress: () => NavigationAction.navigate('QuestListView'),
+              },
+              {
+                icon: (
+                  <SnbIconHint
                     iconName={'warehouse'}
                     size={24}
                     badgeColor="yellow"
