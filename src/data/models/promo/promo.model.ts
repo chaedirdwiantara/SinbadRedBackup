@@ -17,16 +17,13 @@ export interface PromoPaymentDetailSuccessProps {
   discountRebate: number;
   termAndConditions: string[];
 }
-/** === PROMO GENERAL DETAIL === */
-export interface PromoGeneralDetailSuccessProps {
+/** === PROMO SELLER DETAIL === */
+export interface PromoSellerDetailSuccessProps {
   id: number;
   name: string;
-  shortDescription: string;
-  header: string;
-  imageUrl: string;
-  startDate: string;
   endDate: string;
-  termsAndCondition: string[];
+  shortDescription: string;
+  imageUrl: string;
 }
 export interface PotentialPromoProductProps {
   flexiCombo: PotentialPromoProductFlexiCombo[];
