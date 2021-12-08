@@ -44,7 +44,8 @@ const VoucherDetailView: FC = ({ route }: any) => {
           uri: voucherDetailState.data?.imageUrl,
         }}
         style={{
-          height: 180,
+          aspectRatio: 4 / 2,
+          height: undefined,
           width: '100%',
         }}
       />
