@@ -294,7 +294,11 @@ const OmsVerificationOrderView: FC = () => {
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
-    return <VerificationOrderHeader />;
+    return (
+      <VerificationOrderHeader
+        isLoading={loadingVerificationToCheckout.isLoading}
+      />
+    );
   };
   /** => discount list */
   const renderDiscountList = () => {
