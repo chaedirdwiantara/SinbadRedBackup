@@ -14,17 +14,20 @@ interface AddToCartFooterProps {
   onAddToCartPress: () => void;
   orderQty: number;
   disabled: boolean;
+  isFromProductDetail?: boolean;
 }
 /** === COMPONENT ===  */
 export const AddToCartFooter: FC<AddToCartFooterProps> = ({
   onAddToCartPress,
   orderQty,
   disabled,
+  isFromProductDetail,
 }) => {
   /** === HOOKS ===  */
   const {
     stateProduct: {
       detail: { data: dataProductDetail },
+      cart: { data: dataProductDetailCart },
     },
   } = useProductContext();
   const {
@@ -44,25 +47,46 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
       <View style={{ marginRight: 16 }}>
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           <SnbText.B3>Total: </SnbText.B3>
-          <SnbText.B4 color={color.red50}>
-            {toCurrency(dataProductDetail?.currentPrice ?? 0 * orderQty, {
-              withFraction: false,
-            })}
-          </SnbText.B4>
+          {isFromProductDetail ? (
+            <SnbText.B4 color={color.red50}>
+              {toCurrency((dataProductDetail?.currentPrice ?? 0) * orderQty, {
+                withFraction: false,
+              })}
+            </SnbText.B4>
+          ) : (
+            <SnbText.B4 color={color.red50}>
+              {toCurrency(
+                (dataProductDetailCart?.currentPrice ?? 0) * orderQty,
+                {
+                  withFraction: false,
+                },
+              )}
+            </SnbText.B4>
+          )}
         </View>
         <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
       </View>
-      <SnbButton.Dynamic
-        loading={addToCartLoading}
-        disabled={disabled}
-        size="small"
-        type="primary"
-        title={
-          errorStock || errorStockDetail ? 'Stock Habis' : 'Tambah ke Keranjang'
-        }
-        radius={6}
-        onPress={onAddToCartPress}
-      />
+      {isFromProductDetail ? (
+        <SnbButton.Dynamic
+          loading={addToCartLoading}
+          disabled={disabled}
+          size="small"
+          type="primary"
+          title={errorStockDetail ? 'Stock Habis' : 'Tambah ke Keranjang'}
+          radius={6}
+          onPress={onAddToCartPress}
+        />
+      ) : (
+        <SnbButton.Dynamic
+          loading={addToCartLoading}
+          disabled={disabled}
+          size="small"
+          type="primary"
+          title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
+          radius={6}
+          onPress={onAddToCartPress}
+        />
+      )}
     </View>
   );
 };

@@ -102,6 +102,23 @@ const useProductDetailAction = () => {
   };
 };
 
+const useProductDetailCartAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailCartProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.productDetailCartRefresh());
+      dispatch(Actions.productDetailCartProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.productDetailCartReset(contextDispatch));
+    },
+  };
+};
+
 const useAddToCart = () => {
   const dispatch = useDispatch();
   return {
@@ -268,4 +285,5 @@ export {
   useStockValidationAction,
   useStockValidationDetailAction,
   useStockInformationAction,
+  useProductDetailCartAction,
 };

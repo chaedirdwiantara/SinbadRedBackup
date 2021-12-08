@@ -1,7 +1,14 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
-import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
+import {
+  SnbText,
+  SnbContainer,
+  SnbStatusBar,
+  SnbToast,
+  SnbIcon,
+  color,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import { ProductDetailHeader } from './ProductDetailHeader';
@@ -97,6 +104,8 @@ const ProductDetailView: FC = () => {
   const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
+  const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
+  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -125,7 +134,7 @@ const ProductDetailView: FC = () => {
   });
   const {
     stateShopingCart: {
-      create: { data: addToCartData },
+      create: { data: addToCartData, error: addToCartError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
@@ -150,20 +159,7 @@ const ProductDetailView: FC = () => {
     modalWaitingApproval,
     modalRegisterSupplier,
     onFunctionActions,
-  } = useCheckDataSupplier();
-
-  /** => function open add to cart modal */
-  const handleOpenAddToCartModal = () => {
-    if (
-      !modalRegisterSupplier &&
-      !modalRejectApproval &&
-      !modalWaitingApproval
-    ) {
-      setOrderModalVisible(true);
-    } else {
-      onFunctionActions({ type: 'close' });
-    }
-  };
+  } = useCheckDataSupplier(setOrderModalVisible);
 
   /** => action from button order */
   const handleOrderPress = () => {
@@ -179,7 +175,6 @@ const ProductDetailView: FC = () => {
           supplierStatus: null,
         });
       }
-      handleOpenAddToCartModal();
     } else {
       NavigationAction.navigate('LoginPhoneView');
     }
@@ -196,6 +191,7 @@ const ProductDetailView: FC = () => {
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
+    addToCartActions.reset(dispatchShopingCart);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
   };
@@ -220,6 +216,7 @@ const ProductDetailView: FC = () => {
       productName: dataProduct.name,
       brandId: dataProduct.brandId,
       urlImages: dataProduct?.images[0]?.url ?? '',
+      minQty: dataProduct.minQty,
       qty: orderQty,
       displayPrice: dataProduct.originalPrice,
       priceBeforeTax: dataProduct.currentPrice ?? dataProduct.originalPrice,
@@ -261,7 +258,7 @@ const ProductDetailView: FC = () => {
   const defaultProperties = {
     isAvailable: isAvailable,
     isBundle: dataProduct?.isBundle ?? false,
-    stock: dataStock?.stock ?? 10,
+    stock: dataStock?.stock ?? 0,
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
@@ -310,6 +307,12 @@ const ProductDetailView: FC = () => {
   /** => Do something when success send data to supplier */
   useEffect(() => {
     if (sendToSupplierData !== null) {
+      if (dataProduct) {
+        supplierSegmentationAction.fetch(
+          dispatchSupplier,
+          dataProduct.sellerId,
+        );
+      }
       onFunctionActions({ type: 'close' });
     }
   }, [sendToSupplierData]);
@@ -320,8 +323,27 @@ const ProductDetailView: FC = () => {
       handleCloseModal();
       cartTotalProductActions.fetch();
       supplierSegmentationAction.reset(dispatchSupplier);
+      setToastSuccessAddCart(true);
     }
   }, [addToCartData]);
+
+  /** => Do something when error add to cart */
+  useEffect(() => {
+    if (addToCartError !== null) {
+      setToastFailedAddCart(true);
+      addToCartActions.reset(dispatchShopingCart);
+    }
+  }, [addToCartError]);
+
+  /** close toast listener */
+  useEffect(() => {
+    if (toastSuccessAddCart || toastFailedAddCart) {
+      setTimeout(() => {
+        setToastSuccessAddCart(false);
+        setToastFailedAddCart(false);
+      }, 2000);
+    }
+  }, [toastSuccessAddCart, toastFailedAddCart]);
 
   /** => Did Unmount */
   useEffect(() => {
@@ -436,7 +458,7 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {defaultProperties.isAvailable ? (
+      {isAvailable ? (
         <ActionButton
           title={getActionButtonTitle()}
           disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
@@ -490,8 +512,27 @@ const ProductDetailView: FC = () => {
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
           disabled={dataStock === null}
+          isFromProductDetail={true}
         />
       )}
+      {/* Toast success add cart */}
+      <SnbToast
+        open={toastSuccessAddCart}
+        message={'Produk berhasil ditambahkan ke keranjang'}
+        close={() => setToastSuccessAddCart(false)}
+        position={'top'}
+        leftItem={
+          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
+        }
+      />
+      {/* Toast failed add cart */}
+      <SnbToast
+        open={toastFailedAddCart}
+        message={'Produk gagal ditambahkan ke keranjang'}
+        close={() => setToastFailedAddCart(false)}
+        position={'top'}
+        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      />
     </SnbContainer>
   );
 };
