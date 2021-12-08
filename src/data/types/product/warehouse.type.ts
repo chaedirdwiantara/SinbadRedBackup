@@ -1,0 +1,12 @@
+/** => Get stock validation */
+export const STOCK_VALIDATION_PROCESS = 'StockValidationProcess';
+export const STOCK_VALIDATION_SUCCESS = 'StockValidationSuccess';
+export const STOCK_VALIDATION_REFRESH = 'StockValidationRefresh';
+export const STOCK_VALIDATION_FAILED = 'StockValidationFailed';
+export const STOCK_VALIDATION_RESET = 'StockValidationReset';
+/** => Get stock validation detail */
+export const STOCK_VALIDATION_DETAIL_PROCESS = 'StockValidationDetailProcess';
+export const STOCK_VALIDATION_DETAIL_SUCCESS = 'StockValidationDetailSuccess';
+export const STOCK_VALIDATION_DETAIL_REFRESH = 'StockValidationDetailRefresh';
+export const STOCK_VALIDATION_DETAIL_FAILED = 'StockValidationDetailFailed';
+export const STOCK_VALIDATION_DETAIL_RESET = 'StockValidationDetailReset';

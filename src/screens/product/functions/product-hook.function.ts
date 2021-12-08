@@ -97,7 +97,7 @@ const useProductDetailAction = () => {
       dispatch(Actions.productDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.productDetailReset());
+      dispatch(Actions.productDetailReset(contextDispatch));
     },
   };
 };
@@ -110,6 +110,9 @@ const useAddToCart = () => {
       data: models.AddToCartPayload,
     ) => {
       dispatch(Actions.addToCartProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.addToCartReset(contextDispatch));
     },
   };
 };
@@ -192,6 +195,52 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   return { orderQty, increaseOrderQty, decreaseOrderQty };
 };
 
+const useStockValidationAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      dispatch(Actions.stockValidationProcess(contextDispatch, data));
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      contextDispatch(Actions.stockValidationRefresh());
+      dispatch(Actions.stockValidationProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.stockValidationReset(contextDispatch));
+    },
+  };
+};
+
+const useStockValidationDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      dispatch(Actions.stockValidationDetailProcess(contextDispatch, data));
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      contextDispatch(Actions.stockValidationDetailRefresh());
+      dispatch(Actions.stockValidationDetailProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.stockValidationDetailReset(contextDispatch));
+    },
+  };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -199,4 +248,6 @@ export {
   useAddToCart,
   useTagListActions,
   useReserveStockAction,
+  useStockValidationAction,
+  useStockValidationDetailAction,
 };

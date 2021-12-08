@@ -12,7 +12,7 @@ export const useSupplierSegmentationAction = () => {
       dispatch(Actions.supplierSegmentationProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.supplierSegmentationReset());
+      dispatch(Actions.supplierSegmentationReset(contextDispatch));
     },
   };
 };
@@ -28,6 +28,21 @@ export const useSendDataToSupplierActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.sendDataToSupplierReset(contextDispatch));
+    },
+  };
+};
+
+export const useSupplierSegmentationDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.supplierSegmentationDetailProcess(contextDispatch, { id }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.supplierSegmentationDetailReset(contextDispatch));
     },
   };
 };

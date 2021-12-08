@@ -15,7 +15,7 @@ interface SupplierBrandCardProps {
 }
 
 interface SupplierBrandListProps {
-  brands: Array<models.BrandListSuccessProps>;
+  brands: Array<models.BrandListItem>;
   loading?: boolean;
 }
 /** === COMPONENTS === */
@@ -34,7 +34,7 @@ export const SupplierBrandList: FC<SupplierBrandListProps> = ({ brands }) => {
     item,
     index,
   }: {
-    item: models.BrandListSuccessProps;
+    item: models.BrandListItem;
     index: number;
   }) => (
     <View key={index} style={{ paddingHorizontal: 5, paddingVertical: 5 }}>

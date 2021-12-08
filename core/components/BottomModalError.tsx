@@ -19,13 +19,18 @@ const BottomModalError: FC<Props> = (props) => {
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Image
           source={props.errorImage}
-          style={{ height: 148, width: '100%', resizeMode: 'contain' }}
+          style={{
+            height: 148,
+            width: '100%',
+            resizeMode: 'contain',
+            marginBottom: 16,
+          }}
         />
         <View style={{ alignItems: 'center' }}>
           <SnbText.H4>{props.errorTitle}</SnbText.H4>
           <SnbText.B1>{props.errorSubtitle}</SnbText.B1>
         </View>
-        <View style={{ height: 75 }}>
+        <View style={{ marginTop: 32, height: 75 }}>
           <SnbButton.Single
             title={props.buttonTitle}
             onPress={() => props.buttonOnPress()}

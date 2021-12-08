@@ -6,7 +6,7 @@ const goBack = () => {
   NavigationAction.back();
 };
 
-const goToProduct = (brand: models.BrandListSuccessProps) => {
+const goToProduct = (brand: models.BrandListItem) => {
   NavigationAction.navigate('BrandProductView', { brand });
 };
 

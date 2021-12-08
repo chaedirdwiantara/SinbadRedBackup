@@ -42,19 +42,11 @@ const useSelected2ndLevelCategory = () => {
   >(null);
 
   const handle2ndLevelIdChange = (id: string) => {
-    if (selected2ndLevelId === id) {
-      setSelected2ndLevelId(null);
-    } else {
-      setSelected2ndLevelId(id);
-    }
+    setSelected2ndLevelId(id);
   };
 
   const handle2ndLevelIndexChange = (index: number) => {
-    if (index === selected2ndLevelIndex) {
-      setSelected2ndLevelIndex(null);
-    } else {
-      setSelected2ndLevelIndex(index);
-    }
+    setSelected2ndLevelIndex(index);
   };
 
   return {
