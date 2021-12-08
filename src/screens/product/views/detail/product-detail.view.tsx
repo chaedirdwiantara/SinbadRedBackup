@@ -16,14 +16,38 @@ import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { BundleSection } from './BundleSection';
+import {
+  RegisterSupplierModal,
+  RejectApprovalModal,
+  WaitingApprovalModal,
+  AddToCartModal,
+} from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
-import { useProductDetailAction } from '@screen/product/functions';
-import { useProductContext } from 'src/data/contexts/product';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle } from '../../functions';
+/** === IMPORT HOOKS === */
+import {
+  useCheckDataSupplier,
+  useSendDataToSupplierActions,
+  useSupplierSegmentationDetailAction,
+} from '@core/functions/supplier';
+import {
+  useProductDetailAction,
+  useAddToCart,
+  useStockValidationDetailAction,
+  useOrderQuantity,
+} from '@screen/product/functions';
+import { useOrderModalVisibility } from '@core/functions/product';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import { useProductContext } from 'src/data/contexts/product';
+import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
+import { useDataAuth } from '@core/redux/Data';
 import { useCartTotalProductActions } from '@screen/oms/functions';
+import * as models from '@models';
+
 /** === DUMMY === */
 const productDetailDummy = {
   id: '1',
@@ -70,16 +94,146 @@ const ProductDetailView: FC = () => {
   const {
     params: { id: productId },
   } = NavigationAction.useGetNavParams();
+  const [promoModalVisible, setPromoModalVisible] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(true);
+  const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
+
+  /** => actions */
+  const addToCartActions = useAddToCart();
+  const stockValidationActions = useStockValidationDetailAction();
+  const productDetailActions = useProductDetailAction();
+  const supplierSegmentationAction = useSupplierSegmentationDetailAction();
+  const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const cartTotalProductActions = useCartTotalProductActions();
+  const { dataTotalProductCart } = useCartTotalProductActions();
+  const { me } = useDataAuth();
+
+  /** => context */
   const {
-    stateProduct: { detail: productDetailState },
+    stateProduct: {
+      detail: {
+        data: dataProduct,
+        loading: productLoading,
+        error: errorProduct,
+        refresh: refreshProduct,
+      },
+    },
     dispatchProduct,
   } = useProductContext();
-  const { fetch, refresh } = useProductDetailAction();
-  const [promoModalVisible, setPromoModalVisible] = useState(false);
+  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
+    minQty: dataProduct?.minQty,
+  });
+  const {
+    stateShopingCart: {
+      create: { data: addToCartData },
+    },
+    dispatchShopingCart,
+  } = useShopingCartContext();
+  const {
+    stateSupplier: {
+      detail: { data: dataSegmentation },
+      create: { data: sendToSupplierData },
+    },
+    dispatchSupplier,
+  } = useSupplierContext();
+  const {
+    stateStock: {
+      detail: { data: dataStock, error: errorStock },
+    },
+    dispatchStock,
+  } = useStockContext();
 
-  useEffect(() => {
-    fetch(dispatchProduct, productId);
-  }, []);
+  /** => check data supplier and sinbad status */
+  const {
+    checkUser,
+    modalRejectApproval,
+    modalWaitingApproval,
+    modalRegisterSupplier,
+    onFunctionActions,
+  } = useCheckDataSupplier();
+
+  /** => function open add to cart modal */
+  const handleOpenAddToCartModal = () => {
+    if (
+      !modalRegisterSupplier &&
+      !modalRejectApproval &&
+      !modalWaitingApproval
+    ) {
+      setOrderModalVisible(true);
+    } else {
+      onFunctionActions({ type: 'close' });
+    }
+  };
+
+  /** => action from button order */
+  const handleOrderPress = () => {
+    if (me.data !== null && dataSegmentation !== null) {
+      if (dataSegmentation.dataSuppliers !== null) {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+        });
+      } else {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: null,
+        });
+      }
+      handleOpenAddToCartModal();
+    }
+  };
+
+  /** => action send data to supplier */
+  const onSendDataSupplier = () => {
+    if (dataProduct !== null) {
+      sendDataToSupplierActions.fetch(dispatchSupplier, {
+        supplierId: dataProduct.sellerId,
+      });
+    }
+  };
+
+  /** => action close modal add to cart */
+  const handleCloseModal = () => {
+    setOrderModalVisible(false);
+    onFunctionActions({ type: 'close' });
+  };
+
+  const onSubmitAddToCart = () => {
+    if (
+      dataProduct === null ||
+      dataSegmentation === null ||
+      dataSegmentation.dataSuppliers === null ||
+      dataStock === null
+    ) {
+      /** => DO SOMETHING */
+      /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
+      return;
+    }
+
+    const params: models.AddToCartPayload = {
+      isActiveStore: dataSegmentation.isActiveStore,
+      selected: true,
+      stock: dataStock.stock,
+      productId: dataProduct.id,
+      productName: dataProduct.name,
+      brandId: dataProduct.brandId,
+      urlImages: dataProduct?.images[0]?.url ?? '',
+      qty: orderQty,
+      displayPrice: dataProduct.originalPrice,
+      priceBeforeTax: dataProduct.currentPrice ?? dataProduct.originalPrice,
+      priceAfterTax:
+        dataProduct.currentPriceAfterTax ?? dataProduct.originalPrice,
+      uom: dataProduct.unit,
+      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      sellerId: Number(dataProduct.sellerId),
+      channelId: dataSegmentation.dataSuppliers.channelId,
+      groupId: dataSegmentation.dataSuppliers.groupId,
+      typeId: dataSegmentation.dataSuppliers.typeId,
+      clusterId: dataSegmentation.dataSuppliers.clusterId,
+    };
+
+    addToCartActions.fetch(dispatchShopingCart, params);
+  };
 
   /**
    * Potential Promo Product
@@ -91,26 +245,25 @@ const ProductDetailView: FC = () => {
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
-  const { dataTotalProductCart } = useCartTotalProductActions();
 
   /** => potential promo product effect */
   React.useEffect(() => {
-    if (productDetailState.data !== null) {
-      const { id } = productDetailState.data;
+    if (dataProduct !== null) {
+      const { id } = dataProduct;
       potentialPromoProductAction.reset(dispatchPromo);
       potentialPromoProductAction.detail(dispatchPromo, id);
     }
-  }, [productDetailState.data]);
+  }, [dataProduct]);
 
   /** === DERIVED === */
   const defaultProperties = {
-    isAvailable: productDetailState.data?.isAvailable ?? true,
-    isBundle: productDetailState.data?.isBundle ?? false,
-    stock: 5,
+    isAvailable: isAvailable,
+    isBundle: dataProduct?.isBundle ?? false,
+    stock: dataStock?.stock ?? 0,
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
-    if (defaultProperties.stock > (productDetailState.data?.minQty ?? 1)) {
+    if (defaultProperties.stock > (dataProduct?.minQty ?? 1)) {
       if (defaultProperties.isBundle) {
         return 'Check Promo Bundle';
       } else {
@@ -120,12 +273,64 @@ const ProductDetailView: FC = () => {
 
     return 'Stock Habis';
   };
+  /** === EFFECT LISTENER === */
+  /** => Did Mounted */
+  useEffect(() => {
+    productDetailActions.fetch(dispatchProduct, productId);
+  }, []);
+
+  /** => Listen data product success */
+  useEffect(() => {
+    if (dataProduct) {
+      supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
+    }
+  }, [dataProduct]);
+
+  /** => Listen data segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (dataSegmentation && dataSegmentation.dataSuppliers && dataProduct) {
+      stockValidationActions.fetch(dispatchStock, {
+        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+        productId: dataProduct.id,
+      });
+    }
+  }, [dataSegmentation, dataProduct]);
+
+  /** Listen Error Stock */
+  useEffect(() => {
+    if (errorStock && dataProduct) {
+      if (errorStock.code === 400) {
+        setIsAvailable(false);
+      }
+    }
+  }, [errorStock && dataProduct]);
+
+  /** => Do something when success send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierData !== null) {
+      onFunctionActions({ type: 'close' });
+    }
+  }, [sendToSupplierData]);
+
+  /** => Do something when success add to cart */
+  useEffect(() => {
+    if (addToCartData !== null) {
+      handleCloseModal();
+      cartTotalProductActions.fetch();
+      supplierSegmentationAction.reset(dispatchSupplier);
+    }
+  }, [addToCartData]);
+
+  /** => Did Unmount */
+  useEffect(() => {
+    return () => {
+      stockValidationActions.reset(dispatchStock);
+    };
+  }, []);
+
   /** === VIEW === */
   /** => Loading */
-  if (
-    productDetailState.loading ||
-    (productDetailState.data === null && !productDetailState.error)
-  ) {
+  if (productLoading || (dataProduct === null && !errorProduct)) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
@@ -135,10 +340,7 @@ const ProductDetailView: FC = () => {
     );
   }
   /** => Error */
-  if (
-    !productDetailState.loading &&
-    (productDetailState.error || productDetailState.data?.name === undefined)
-  ) {
+  if (!productLoading && (errorProduct || dataProduct?.name === undefined)) {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
@@ -147,8 +349,10 @@ const ProductDetailView: FC = () => {
           contentContainerStyle={{ flex: 1 }}
           refreshControl={
             <RefreshControl
-              refreshing={productDetailState.refresh!}
-              onRefresh={() => refresh(dispatchProduct, productId)}
+              refreshing={refreshProduct!}
+              onRefresh={() =>
+                productDetailActions.refresh(dispatchProduct, productId)
+              }
             />
           }>
           <EmptyState
@@ -169,18 +373,20 @@ const ProductDetailView: FC = () => {
         <ScrollView
           refreshControl={
             <RefreshControl
-              refreshing={productDetailState.refresh!}
-              onRefresh={() => refresh(dispatchProduct, productId)}
+              refreshing={refreshProduct!}
+              onRefresh={() =>
+                productDetailActions.refresh(dispatchProduct, productId)
+              }
             />
           }>
-          <ProductDetailCarousel images={productDetailState.data?.images!} />
+          <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
-            name={productDetailState.data?.name!}
-            originalPrice={productDetailState.data?.originalPrice!}
-            currentPrice={productDetailState.data?.currentPrice!}
-            minQty={productDetailState.data?.minQty!}
-            unit={productDetailState.data?.unit!}
-            isExclusive={productDetailState.data?.isExclusive!}
+            name={dataProduct?.name!}
+            originalPrice={dataProduct?.originalPrice!}
+            currentPrice={dataProduct?.currentPrice!}
+            minQty={dataProduct?.minQty!}
+            unit={dataProduct?.unit!}
+            isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
@@ -207,23 +413,23 @@ const ProductDetailView: FC = () => {
           <ProductDetailSection title="Informasi Produk">
             <ProductDetailSectionItem
               name="Minimal Pembelian"
-              value={`${productDetailState.data?.minQty} ${productDetailState.data?.unit}`}
+              value={`${dataProduct?.minQty} ${dataProduct?.unit}`}
             />
             <ProductDetailSectionItem
               name="Jumlah per-Dus"
-              value={`${productDetailState.data?.packagedQty} ${productDetailState.data?.unit}`}
+              value={`${dataProduct?.packagedQty} ${dataProduct?.unit}`}
             />
             <ProductDetailSectionItem
               name="Berat"
-              value={`${productDetailState.data?.productWeight} gr`}
+              value={`${dataProduct?.productWeight} gr`}
               bottomSpaces={0}
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText.B3>{productDetailState.data?.detail}</SnbText.B3>
+            <SnbText.B3>{dataProduct?.detail}</SnbText.B3>
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
-            <SnbText.B3>{productDetailState.data?.description}</SnbText.B3>
+            <SnbText.B3>{dataProduct?.description}</SnbText.B3>
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
@@ -231,14 +437,12 @@ const ProductDetailView: FC = () => {
       {defaultProperties.isAvailable ? (
         <ActionButton
           title={getActionButtonTitle()}
-          disabled={
-            defaultProperties.stock < (productDetailState.data?.minQty ?? 1)
-          }
+          disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
           onPress={() => {
             if (defaultProperties.isBundle) {
               goToBundle(productId);
             } else {
-              console.log('Add to cart pressed');
+              handleOrderPress();
             }
           }}
         />
@@ -250,6 +454,42 @@ const ProductDetailView: FC = () => {
         onClose={() => setPromoModalVisible(false)}
         promoList={potentialPromoProductList.data?.flexiCombo || []}
       />
+      {/* Register Supplier Modal */}
+      <RegisterSupplierModal
+        visible={modalRegisterSupplier}
+        onSubmit={() =>
+          onFunctionActions({
+            type: 'sendDataToSupplier',
+            onSendDataSupplier: onSendDataSupplier,
+          })
+        }
+        onClose={handleCloseModal}
+      />
+      {/* Waiting Approval Modal */}
+      <WaitingApprovalModal
+        visible={modalWaitingApproval}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
+      />
+      {/* Reject Approval Modal */}
+      <RejectApprovalModal
+        visible={modalRejectApproval}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
+        isCallCS={true}
+      />
+      {/* Add to Cart Modal */}
+      {orderModalVisible && (
+        <AddToCartModal
+          orderQty={orderQty}
+          increaseOrderQty={increaseOrderQty}
+          decreaseOrderQty={decreaseOrderQty}
+          open={orderModalVisible}
+          closeAction={handleCloseModal}
+          onAddToCartPress={onSubmitAddToCart}
+          disabled={dataStock === null}
+        />
+      )}
     </SnbContainer>
   );
 };

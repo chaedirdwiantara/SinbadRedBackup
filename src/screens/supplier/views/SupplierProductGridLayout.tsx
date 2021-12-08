@@ -7,7 +7,7 @@ import ProductTagList from '@core/components/product/list/ProductTagList';
 import GridLayoutCard from '@core/components/product/list/grid-layout/GridLayoutCard';
 import { GridSkeleton } from '@core/components/product/list/grid-layout/GridSkeleton';
 /** === IMPORT FUNCTIONS === */
-import { useProductDisplayState } from '@core/functions/product';
+import { useListDisplayState } from '@core/functions/product';
 /** === IMPORT TYPE === */
 import { SupplierProductLayoutProps } from './types';
 /** === COMPONENT === */
@@ -20,10 +20,10 @@ export const SupplierProductGridLayout: FC<SupplierProductLayoutProps> = ({
   error,
 }) => {
   /** === HOOK ===  */
-  const displayState = useProductDisplayState({
+  const displayState = useListDisplayState({
     loading,
     error,
-    productsLength: products.length,
+    dataLength: products.length,
   });
   /** === DERIVED ===  */
   const hasTags = tags.length > 0;

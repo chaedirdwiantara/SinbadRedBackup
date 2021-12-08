@@ -19,7 +19,7 @@ export const goToSearchProduct = (keyword: string) => {
   NavigationAction.navigate('SearchProductView', { keyword });
 };
 
-export const goToBrandProduct = (brand: models.BrandListSuccessProps) => {
+export const goToBrandProduct = (brand: models.BrandListItem) => {
   NavigationAction.navigate('BrandProductView', { brand });
 };
 

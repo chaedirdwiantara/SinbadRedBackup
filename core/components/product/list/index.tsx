@@ -9,16 +9,14 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
-import AddToCartModal from './AddToCartModal';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
   WaitingApprovalModal,
   ProductNotCoverageModal,
+  AddToCartModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
-import { useOrderQuantity } from '@screen/product/functions';
-import { useCartTotalProductActions } from '@screen/oms/functions';
 import {
   useBottomAction,
   priceSortOptions,
@@ -36,7 +34,9 @@ import {
   useProductDetailAction,
   useAddToCart,
   useStockValidationAction,
+  useOrderQuantity,
 } from '@screen/product/functions';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
@@ -170,8 +170,11 @@ const ProductList: FC<ProductListProps> = ({
     }
   };
 
-  /** => action from buttom confirmation checkout */
+  /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
+    supplierSegmentationAction.reset(dispatchSupplier);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
     setProductSelected(product);
     supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
@@ -179,13 +182,6 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
-    supplierSegmentationAction.reset(dispatchSupplier);
-    productDetailActions.reset(dispatchProduct);
-    stockValidationActions.reset(dispatchStock);
-    /**
-     *
-     * reset stock validation
-     */
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
@@ -226,6 +222,9 @@ const ProductList: FC<ProductListProps> = ({
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      brandId: productDetailState.brandId,
+      productName: productDetailState.name,
+      urlImages: productDetailState.images[0].url,
     };
 
     addToCartActions.fetch(dispatchShopingCart, params);
@@ -241,7 +240,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (addToCartData !== null) {
       setProductSelected(null);
-      handleCloseModal();
+      setOrderModalVisible(false);
       cartTotalProductActions.fetch();
     }
   }, [addToCartData]);
@@ -453,6 +452,7 @@ const ProductList: FC<ProductListProps> = ({
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
+          disabled={dataStock === null}
         />
       )}
       {/* Product not coverage modal */}

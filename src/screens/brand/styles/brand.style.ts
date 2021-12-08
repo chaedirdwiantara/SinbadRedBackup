@@ -8,6 +8,13 @@ const BrandStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  skeletonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+  },
 });
 
 export default BrandStyles;

@@ -57,7 +57,7 @@ export interface ProductImage {
 export interface ProductDetail {
   id: string;
   supplierCode: string;
-  sellerId: number;
+  sellerId: string;
   name: string;
   detail: string;
   description: string;
@@ -86,6 +86,7 @@ export interface ProductDetail {
   isAvailable?: boolean;
   isBundle?: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+  brandId: string;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
