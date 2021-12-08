@@ -170,7 +170,7 @@ export const deleteReserveDiscountReset = () => {
 export const createReserveDiscountProcess = (
   contextDispatch: (action: any) => any,
   data: models.ReserveDiscountPostPayload,
-): models.CreateProcessAction => {
+): models.CreateProcessAction<models.ReserveDiscountPostPayload> => {
   contextDispatch({
     type: types.CREATE_RESERVE_DISCOUNT_PROCESS,
     payload: data,

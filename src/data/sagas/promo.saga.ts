@@ -94,7 +94,9 @@ function* deleteReservePromo(action: models.DeleteProcessAction) {
   }
 }
 /** => create reserve promo */
-function* createReservePromo(action: models.CreateProcessAction) {
+function* createReservePromo(
+  action: models.CreateProcessAction<models.ReserveDiscountPostPayload>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return PromoApi.createReserveDiscount(action.payload);

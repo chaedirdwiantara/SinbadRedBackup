@@ -12,7 +12,7 @@ const useVerficationOrderAction = () => {
   return {
     verificationOrderCreate: (
       contextDispatch: (action: any) => any,
-      data: models.CreateProcessProps<{}>,
+      data: models.CartSelected,
     ) => {
       dispatch(Actions.verificationOrderCreateProcess(contextDispatch, data));
     },
