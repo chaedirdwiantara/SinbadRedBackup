@@ -146,6 +146,7 @@ const OmsShoppingCartView: FC = () => {
       verificationReset(dispatchVerificationOrder);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
+      voucherLocalData.reset();
     };
   }, []);
 
@@ -286,9 +287,10 @@ const OmsShoppingCartView: FC = () => {
     /** => update state verification cart */
     setCartSelected(paramsCartSelected);
     /** => fetch post potential discount */
-    verificationOrderCreate(dispatchVerificationOrder, {
-      data: paramsVerificationCreate,
-    });
+    verificationOrderCreate(
+      dispatchVerificationOrder,
+      paramsVerificationCreate,
+    );
   };
 
   const onRemoveProduct = () => {
