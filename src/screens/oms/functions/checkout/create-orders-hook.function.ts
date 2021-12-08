@@ -63,14 +63,14 @@ const useCreateOrders = () => {
 };
 
 const useExpiredTime = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = React.useState(false);
   const reserveData = useDataReserve();
 
   const calculateExpiredTime = () => {
     const dateReserved = new Date(reserveData.reservedAt as string);
     const dateCurrent = new Date();
 
-    const timeReserved = dateReserved.getTime() / 1000 + 600;
+    const timeReserved = dateReserved.getTime() / 1000 + 300;
     const timeNow = dateCurrent.getTime() / 1000;
 
     if (timeReserved >= timeNow) {
@@ -82,7 +82,11 @@ const useExpiredTime = () => {
     }
   };
 
-  return { check: () => calculateExpiredTime(), isOpen };
+  return {
+    check: () => calculateExpiredTime(),
+    setOpen: (value: boolean) => setOpen(value),
+    isOpen,
+  };
 };
 
 export { useCreateOrders, useExpiredTime };

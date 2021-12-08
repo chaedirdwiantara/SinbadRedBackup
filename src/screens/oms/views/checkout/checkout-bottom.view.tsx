@@ -7,6 +7,7 @@ import {
   usePaymentAction,
   handleTotalPrice,
   useCheckoutMaster,
+  useExpiredTime,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
@@ -27,6 +28,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   /** === HOOK === */
   const paymentAction = usePaymentAction();
   const { checkoutMaster } = useCheckoutMaster();
+  const expiredTime = useExpiredTime();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
@@ -50,7 +52,11 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
     const totalCartInvoices = checkoutMaster.invoices;
     if (selectedInvoiceChannel.length === totalCartInvoices.length) {
-      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      if (!expiredTime.check()) {
+        paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      } else {
+        expiredTime.setOpen(true);
+      }
     } else {
       openErrorWarning();
       setTimeout(() => {
@@ -58,6 +64,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
       }, 2000);
     }
   };
+
   const content = () => {
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
@@ -66,6 +73,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
       </View>
     );
   };
+
   return (
     <View style={{ height: 75 }}>
       <SnbButton.Content
