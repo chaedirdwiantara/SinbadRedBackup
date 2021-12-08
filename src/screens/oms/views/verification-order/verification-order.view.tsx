@@ -19,9 +19,10 @@ import { VerificationOrderBottom } from './verification-order-bottom.view';
 import {
   goBack,
   goToCheckout,
-  // useReserveDataAction,
+  useReserveDataAction,
   useCartSelected,
   useStandardModalState,
+  useStandardLoadingState,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useReserveStockAction } from '@screen/product/functions';
@@ -46,7 +47,9 @@ const OmsVerificationOrderView: FC = () => {
   const errorVoucherModal = useStandardModalState();
   const errorStockModal = useStandardModalState();
 
-  // const reserveDataAction = useReserveDataAction();
+  const loadingVerificationToCheckout = useStandardLoadingState();
+
+  const reserveDataAction = useReserveDataAction();
   const { getCartSelected } = useCartSelected();
   const voucherLocalDataAction = useVoucherLocalData();
   const reserveDiscountAction = useReserveDiscountAction();
@@ -102,7 +105,7 @@ const OmsVerificationOrderView: FC = () => {
         ...getCartSelected,
         voucherIds: getSelectedVouchers(voucherLocalDataAction.selectedVoucher),
         potentialDiscountId: stateVerificationOrder.create.data?.id,
-        reservedAt: moment().format().toString(),
+        reservedAt: reserveDataAction.reserveData.reservedAt,
       };
       reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
     }
@@ -163,6 +166,9 @@ const OmsVerificationOrderView: FC = () => {
 
   /** => handleContinueToPayment */
   const handleContinuePayment = () => {
+    loadingVerificationToCheckout.setLoading(true);
+    const reservedAt = moment().format().toString();
+    reserveDataAction.setReservedAt(reservedAt);
     const invoices: ReserveStockPayloadData[] = [];
     getCartSelected.data.map((invoiceArr: CartSelectedData) => {
       const brands: ReserveStockPayloadBrand[] = [];
@@ -188,7 +194,7 @@ const OmsVerificationOrderView: FC = () => {
     const createReserveStockParams = {
       id: getCartSelected.id,
       data: invoices,
-      reservedAt: moment().format().toString(),
+      reservedAt,
     };
     reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
   };
@@ -245,12 +251,7 @@ const OmsVerificationOrderView: FC = () => {
             verificationOrderDetailData.grandTotal.grandTotalDiscount <
             0
         }
-        buttonLoading={
-          statePromo.reserveDiscount.create.loading ||
-          statePromo.reserveDiscount.detail.loading ||
-          stateReserveStock.create.loading ||
-          stateReserveStock.detail.loading
-        }
+        buttonLoading={loadingVerificationToCheckout.isLoading}
         buttonOnPress={handleContinuePayment}
       />
     );

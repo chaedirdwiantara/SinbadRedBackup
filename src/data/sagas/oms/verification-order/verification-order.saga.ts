@@ -7,7 +7,9 @@ import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => verification order create  */
-function* verficationOrderCreate(action: models.CreateProcessAction) {
+function* verficationOrderCreate(
+  action: models.CreateProcessAction<models.CartSelected>,
+) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
       return VerificationOrderApi.verficationOrderCreate(action.payload);

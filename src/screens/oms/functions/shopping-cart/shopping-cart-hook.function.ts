@@ -47,7 +47,7 @@ export const useCartUpdateActions = () => {
       dispatch(Actions.cartUpdateProcess(contextDispatch, { data }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.cartUpdateReset);
+      dispatch(Actions.cartUpdateReset(contextDispatch));
     },
   };
 };

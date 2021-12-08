@@ -318,7 +318,6 @@ const ProductDetailView: FC = () => {
       handleCloseModal();
       cartTotalProductActions.fetch();
       supplierSegmentationAction.reset(dispatchSupplier);
-      productDetailActions.reset(dispatchProduct);
     }
   }, [addToCartData]);
 
@@ -488,6 +487,7 @@ const ProductDetailView: FC = () => {
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
+          disabled={dataStock === null}
         />
       )}
     </SnbContainer>

@@ -1,3 +1,4 @@
+import * as models from '@models';
 export interface IPaymentTypeCheckout {
   id: number;
   name: string;
@@ -25,30 +26,7 @@ export interface IVoucherCheckout {
   amount: number;
 }
 
-export interface IProductCheckout {
-  productId: string;
-  productName: string;
-  urlImages: string;
-  qty: number;
-  displayPrice: number;
-  priceBeforeTax: number;
-  priceAfterTax: number;
-  uom: string;
-}
-
-export interface IBrandCheckout {
-  brandId: string;
-  brandName: string;
-  products: IProductCheckout[];
-}
-
-export interface IInvoiceCheckout {
-  invoiceGroupId: string;
-  totalProduct: number;
-  totalPriceBeforeTax: number;
-  totalPriceAfterTax: number;
-  tax: number | null;
-  isPotentialPaymentPromo: boolean;
+export interface IInvoiceCheckout extends models.InvoiceCheckout {
   totalPromoSellerAndVoucher?: number;
   totalPromoPayment?: number;
   totalPaymentFee?: number;
@@ -57,7 +35,6 @@ export interface IInvoiceCheckout {
   paymentChannel?: IPaymentChannelCheckout | null;
   promoSellers?: IPromoSeller[];
   vouchers?: IVoucherCheckout[];
-  brands: IBrandCheckout[];
 }
 
 export interface CheckoutDataMaster {
