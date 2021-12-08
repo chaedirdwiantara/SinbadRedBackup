@@ -285,7 +285,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             dataVehicleAccessibilityAmount ===
               storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
-              storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
+              storeData?.storeDetailCompleteness.vehicleAccessibility?.id &&
             numberOfEmployee.value ===
               storeData?.storeDetailCompleteness.numberOfEmployee) ||
           vehicleAccessibility.value.id === null
