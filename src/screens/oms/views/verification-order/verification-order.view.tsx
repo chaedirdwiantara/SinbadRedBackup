@@ -10,6 +10,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { ErrorPromoModal } from './error-promo-modal';
 import { ErrorVoucherModal } from './error-voucher-modal';
 import { ErrorStockModal } from './error-stock-modal';
+import { ErrorFetchModal } from './error-fetch-modal';
 import { VerificationOrderHeader } from './verification-order-header.view';
 import { VerificationOrderDiscountList } from './verification-order-discount-list.view';
 import { VerificationOrderBonusList } from './verification-order-bonus-list.view';
@@ -23,6 +24,7 @@ import {
   useCartSelected,
   useStandardModalState,
   useStandardLoadingState,
+  useFailedFetchState,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useReserveStockAction } from '@screen/product/functions';
@@ -46,6 +48,7 @@ const OmsVerificationOrderView: FC = () => {
   const errorPromoModal = useStandardModalState();
   const errorVoucherModal = useStandardModalState();
   const errorStockModal = useStandardModalState();
+  const errorFetchModal = useFailedFetchState();
 
   const loadingVerificationToCheckout = useStandardLoadingState();
 
@@ -91,7 +94,48 @@ const OmsVerificationOrderView: FC = () => {
    */
   React.useEffect(() => {
     if (stateReserveStock.create.error !== null) {
-      reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      if (stateReserveStock.create.error.code === 11008) {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      } else {
+        const action = () => {
+          loadingVerificationToCheckout.setLoading(true);
+          const reservedAt = moment().format().toString();
+          reserveDataAction.setReservedAt(reservedAt);
+          const invoices: ReserveStockPayloadData[] = [];
+          getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+            const brands: ReserveStockPayloadBrand[] = [];
+            invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+              const products: ReserveStockPayloadProducts[] = [];
+              brandArr.products.map((productArr: CartSelectedProduct) => {
+                products.push({
+                  productId: productArr.productId,
+                  qty: productArr.qty,
+                  warehouseId: productArr.warehouseId,
+                });
+              });
+              brands.push({
+                brandId: brandArr.brandId,
+                products,
+              });
+            });
+            invoices.push({
+              invoiceGroupId: invoiceArr.invoiceGroupId,
+              brands,
+            });
+          });
+          const createReserveStockParams = {
+            id: getCartSelected.id,
+            data: invoices,
+            reservedAt,
+          };
+          reserveStockAction.create(
+            dispatchReserveStock,
+            createReserveStockParams,
+          );
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
+      }
     }
   }, [stateReserveStock.create.error]);
 
@@ -121,6 +165,19 @@ const OmsVerificationOrderView: FC = () => {
   }, [stateReserveStock.detail.data]);
 
   /**
+   * Listen Error GET error message reserved-stock
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.detail.error !== null) {
+      const action = () => {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      };
+      errorFetchModal.setOpen(true);
+      errorFetchModal.setErrorAction(() => action);
+    }
+  }, [stateReserveStock.detail.error]);
+
+  /**
    * Listen Error POST reserved-discount
    * - error voucher
    * - error fetch
@@ -129,6 +186,23 @@ const OmsVerificationOrderView: FC = () => {
     if (statePromo.reserveDiscount.create.error !== null) {
       if (statePromo.reserveDiscount.create.error.code === 140037) {
         errorVoucherModal.setOpen(true);
+      } else {
+        const action = () => {
+          const createReserveDiscountParams = {
+            ...getCartSelected,
+            voucherIds: getSelectedVouchers(
+              voucherLocalDataAction.selectedVoucher,
+            ),
+            potentialDiscountId: stateVerificationOrder.create.data?.id,
+            reservedAt: reserveDataAction.reserveData.reservedAt,
+          };
+          reserveDiscountAction.create(
+            dispatchPromo,
+            createReserveDiscountParams,
+          );
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
       }
     }
   }, [statePromo.reserveDiscount.create.error]);
@@ -164,7 +238,25 @@ const OmsVerificationOrderView: FC = () => {
     }
   }, [statePromo.reserveDiscount.detail.data]);
 
-  /** => handleContinueToPayment */
+  /**
+   * Listen Error GET reserved-discount
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.detail.error !== null) {
+      const action = () => {
+        if (statePromo.reserveDiscount.create.data !== null) {
+          reserveDiscountAction.detail(
+            dispatchPromo,
+            statePromo.reserveDiscount.create.data.id,
+          );
+        }
+      };
+      errorFetchModal.setOpen(true);
+      errorFetchModal.setErrorAction(() => action);
+    }
+  }, [statePromo.reserveDiscount.detail.error]);
+
+  /** => handle continue to payment */
   const handleContinuePayment = () => {
     loadingVerificationToCheckout.setLoading(true);
     const reservedAt = moment().format().toString();
@@ -326,6 +418,18 @@ const OmsVerificationOrderView: FC = () => {
       />
     );
   };
+  /** => error fetch modal */
+  const renderFetchStockModal = () => {
+    return (
+      <ErrorFetchModal
+        visible={errorFetchModal.isOpen}
+        onPressRetry={() => {
+          errorFetchModal.setOpen(false);
+          errorFetchModal.errorAction();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -344,6 +448,7 @@ const OmsVerificationOrderView: FC = () => {
       {renderErrorPromoModal()}
       {renderErrorVoucherModal()}
       {renderErrorStockModal()}
+      {renderFetchStockModal()}
     </SnbContainer>
   );
 };

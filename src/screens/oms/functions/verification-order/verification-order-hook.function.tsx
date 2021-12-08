@@ -73,6 +73,21 @@ const useStandardLoadingState = () => {
     isLoading,
   };
 };
+/** => standard boolean state */
+const useFailedFetchState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  const [errorAction, setErrorAction] = React.useState<Function>(() => {});
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setErrorAction: (value: () => void) => {
+      setErrorAction(value);
+    },
+    isOpen,
+    errorAction,
+  };
+};
 /** === EXPORT === */
 export {
   useVerficationOrderAction,
@@ -80,6 +95,7 @@ export {
   usePromoAccordion,
   useStandardModalState,
   useStandardLoadingState,
+  useFailedFetchState,
 };
 /**
  * ================================================================
