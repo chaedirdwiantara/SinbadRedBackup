@@ -30,15 +30,15 @@ const usePromoPaymentAction = () => {
     },
   };
 };
-/** => promo general action */
+/** => promo seller action */
 const usePromoGeneralAction = () => {
   const dispatch = useDispatch();
   return {
     detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.promoGeneralDetailProcess(contextDispatch, { id }));
+      dispatch(Actions.promoSellerDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.promoGeneralDetailReset());
+      contextDispatch(Actions.promoSellerDetailReset());
     },
   };
 };
