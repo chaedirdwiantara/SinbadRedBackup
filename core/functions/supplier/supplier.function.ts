@@ -74,7 +74,6 @@ export const useCheckDataSupplier = () => {
     } else {
       //addSkuToCartAfterCheckVerified
       onFunctionActions({ type: 'close' });
-      // setOrderModalVisible(true);
     }
   };
   /** STATUS REJECTED */
@@ -90,7 +89,6 @@ export const useCheckDataSupplier = () => {
     } else {
       //addSkuToCartAfterCheckVerified
       onFunctionActions({ type: 'close' });
-      // setOrderModalVisible(true);
     }
   };
   /** STATUS PENDING */
