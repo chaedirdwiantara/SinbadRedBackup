@@ -12,21 +12,19 @@ import { VoucherDetailInstruction } from './voucher-detail-instruction.view';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import { useVoucherDetailAction } from '../../functions';
 import { contexts } from '@contexts';
+import { NavigationAction } from '@core/functions/navigation';
 /** === COMPONENT === */
-const VoucherDetailView: FC = ({ route }: any) => {
+const VoucherDetailView: FC = () => {
   /** === HOOK === */
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
   );
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
+  const { id, other } = NavigationAction.useGetNavParams().params;
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(
-      dispatchVoucher,
-      route.params.voucherId,
-      route.params.type,
-    );
+    voucherDetailAction.detail(dispatchVoucher, id, other.type);
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
