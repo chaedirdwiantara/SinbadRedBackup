@@ -28,6 +28,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   const {
     stateStock: {
       validation: { data: dataStock },
+      detail: { data: dataStockDetail },
     },
   } = useStockContext();
   /** => Main */
@@ -41,6 +42,15 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           onDecrease={decreaseOrderQty}
           minusDisabled={orderQty <= dataProductDetail?.minQty}
           plusDisabled={orderQty >= dataStock?.stock}
+        />
+      )}
+      {dataStockDetail && dataProductDetail && (
+        <SnbNumberCounter
+          value={orderQty}
+          onIncrease={increaseOrderQty}
+          onDecrease={decreaseOrderQty}
+          minusDisabled={orderQty <= dataProductDetail?.minQty}
+          plusDisabled={orderQty >= dataStockDetail?.stock}
         />
       )}
     </View>

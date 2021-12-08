@@ -172,6 +172,9 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
+    supplierSegmentationAction.reset(dispatchSupplier);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
     setProductSelected(product);
     supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
     productDetailActions.fetch(dispatchProduct, product.id);
@@ -179,9 +182,6 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
-    supplierSegmentationAction.reset(dispatchSupplier);
-    productDetailActions.reset(dispatchProduct);
-    stockValidationActions.reset(dispatchStock);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
@@ -240,7 +240,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (addToCartData !== null) {
       setProductSelected(null);
-      handleCloseModal();
+      setOrderModalVisible(false);
       cartTotalProductActions.fetch();
     }
   }, [addToCartData]);
@@ -452,6 +452,7 @@ const ProductList: FC<ProductListProps> = ({
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
+          disabled={dataStock === null}
         />
       )}
       {/* Product not coverage modal */}

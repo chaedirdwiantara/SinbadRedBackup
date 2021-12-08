@@ -16,6 +16,7 @@ interface AddToCartModalProps {
   orderQty: number;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
+  disabled: boolean;
 }
 /** === COMPONENT ===  */
 const AddToCartModal: FC<AddToCartModalProps> = ({
@@ -25,6 +26,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   orderQty,
   increaseOrderQty,
   decreaseOrderQty,
+  disabled,
 }) => {
   /** => Content */
   const renderContent = () => (
@@ -37,6 +39,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         decreaseOrderQty={decreaseOrderQty}
       />
       <AddToCartFooter
+        disabled={disabled}
         orderQty={orderQty}
         onAddToCartPress={onAddToCartPress}
       />

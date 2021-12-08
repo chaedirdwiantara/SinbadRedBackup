@@ -14,10 +14,8 @@ import {
   handleSelectedProductChange,
   handleProductDelete,
   handleProductQuantityChange,
-  useCartUpdateActions,
 } from '../../functions';
 import { goToProductDetail } from '@core/functions/product';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { ShoppingCartStyles } from '../../styles';
 import {
   CartBrand,
@@ -38,9 +36,9 @@ interface ShoppingCartProductProps {
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
-  setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
+  onRemoveProduct: (any: IProductItemUpdateCart) => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -55,21 +53,9 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
-  setProductIdRemoveSelected,
   setSassionQty,
+  onRemoveProduct,
 }) => {
-  const { dispatchShopingCart } = useShopingCartContext();
-  const cartUpdateActions = useCartUpdateActions();
-
-  const onRemoveProduct = (productRemove: IProductItemUpdateCart) => {
-    const params = {
-      action: 'submit',
-      products: [productRemove],
-    };
-    setProductIdRemoveSelected(productRemove.productId);
-    cartUpdateActions.fetch(dispatchShopingCart, params);
-  };
-
   return (
     <View
       style={{
