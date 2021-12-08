@@ -7,7 +7,7 @@ import { ShoppingCartProduct } from './shopping-cart-product.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { handleSelectedBrandChange } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup, CartBrand } from '@models';
+import { CartInvoiceGroup, CartBrand, IProductItemUpdateCart } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartBrandProps {
   brand: CartBrand;
@@ -19,9 +19,9 @@ interface ShoppingCartBrandProps {
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
-  setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
+  onRemoveProduct: (any: IProductItemUpdateCart) => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
@@ -34,9 +34,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
-  setProductIdRemoveSelected,
   sassionQty,
   setSassionQty,
+  onRemoveProduct,
 }) => (
   <Fragment key={brand.brandName}>
     <View
@@ -78,9 +78,9 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
         setProductSelectedCount={setProductSelectedCount}
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
-        setProductIdRemoveSelected={setProductIdRemoveSelected}
         sassionQty={sassionQty}
         setSassionQty={setSassionQty}
+        onRemoveProduct={onRemoveProduct}
       />
     ))}
   </Fragment>

@@ -5,7 +5,7 @@ import * as models from '@models';
 export const cartUpdateProcess = (
   contextDispatch: (action: any) => any,
   payload: models.UpdateProcessProps<{}>,
-): models.UpdateProcessAction => {
+): models.UpdateProcessAction<{}> => {
   contextDispatch({
     type: types.CART_UPDATE_PROCESS,
     payload,
@@ -33,6 +33,9 @@ export const cartUpdateRefresh = () => {
   return { type: types.CART_UPDATE_REFRESH };
 };
 /** => Reset */
-export const cartUpdateReset = () => {
+export const cartUpdateReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.CART_UPDATE_RESET,
+  });
   return { type: types.CART_UPDATE_RESET };
 };
