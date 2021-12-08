@@ -23,12 +23,11 @@ const PromoDetail: FC = () => {
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoGeneralAction = usePromoSellerAction();
   const promoSellerDetailState = statePromo.promoSeller.detail;
-  const { promoId } = NavigationAction.useGetNavParams().params;
-  console.log(NavigationAction.useGetNavParams().params);
+  const { id } = NavigationAction.useGetNavParams().params;
   /** === HOOK === */
   /** => effect */
   React.useEffect(() => {
-    promoGeneralAction.detail(dispatchPromo, promoId);
+    promoGeneralAction.detail(dispatchPromo, id);
     return () => {
       promoGeneralAction.reset(dispatchPromo);
     };
