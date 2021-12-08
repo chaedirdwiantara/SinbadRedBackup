@@ -19,6 +19,7 @@ export const checkout = simplifyReducer(initialState, {
     const invoices: models.IInvoiceCheckout[] = allSupplier.map((item) => {
       return {
         invoiceGroupId: item.invoiceGroupId,
+        invoiceGroupName: item.invoiceGroupName,
         totalProduct: item.totalProduct,
         totalPriceBeforeTax: item.totalPriceBeforeTax,
         totalPriceAfterTax: item.totalPriceAfterTax,
@@ -33,6 +34,11 @@ export const checkout = simplifyReducer(initialState, {
         promoSellers: [],
         vouchers: [],
         brands: item.brands,
+        sellerId: item.sellerId,
+        channelId: item.channelId,
+        groupId: item.groupId,
+        typeId: item.typeId,
+        clusterId: item.clusterId,
       };
     });
 
