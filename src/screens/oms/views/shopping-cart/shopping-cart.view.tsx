@@ -377,7 +377,7 @@ const OmsShoppingCartView: FC = () => {
       setTimeout(() => {
         setToastSuccessRemoveProduct(false);
         setToastFailedRemoveProduct(false);
-      }, 2000);
+      }, 1500);
     }
   }, [toastSuccessRemoveProduct, toastFailedRemoveProduct]);
 
