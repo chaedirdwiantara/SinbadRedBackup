@@ -180,6 +180,8 @@ const ProductDetailView: FC = () => {
         });
       }
       handleOpenAddToCartModal();
+    } else {
+      NavigationAction.navigate('LoginPhoneView');
     }
   };
 
@@ -248,7 +250,7 @@ const ProductDetailView: FC = () => {
 
   /** => potential promo product effect */
   React.useEffect(() => {
-    if (dataProduct !== null) {
+    if (dataProduct !== null && me.data !== null) {
       const { id } = dataProduct;
       potentialPromoProductAction.reset(dispatchPromo);
       potentialPromoProductAction.detail(dispatchPromo, id);
@@ -259,7 +261,7 @@ const ProductDetailView: FC = () => {
   const defaultProperties = {
     isAvailable: isAvailable,
     isBundle: dataProduct?.isBundle ?? false,
-    stock: dataStock?.stock ?? 0,
+    stock: dataStock?.stock ?? 10,
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
@@ -281,7 +283,7 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data product success */
   useEffect(() => {
-    if (dataProduct) {
+    if (dataProduct && me.data !== null) {
       supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
     }
   }, [dataProduct]);
@@ -390,11 +392,11 @@ const ProductDetailView: FC = () => {
             stock={defaultProperties.stock}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
-          <ProductDetailSupplierInfo
+          {/* <ProductDetailSupplierInfo // Hide temporarily
             logo={productDetailDummy.supplier.logoUrl}
             name={productDetailDummy.supplier.name}
             urbanCity={productDetailDummy.supplier.urbanCity}
-          />
+          /> */}
           {potentialPromoProductList.data !== null &&
             potentialPromoProductList.data.flexiCombo.length > 0 && (
               <PromoSection
