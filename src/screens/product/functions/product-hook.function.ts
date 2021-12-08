@@ -82,6 +82,18 @@ const useProductDetailAction = () => {
   };
 };
 
+const useAddToCart = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.AddToCartPayload,
+    ) => {
+      dispatch(Actions.addToCartProcess(contextDispatch, { data }));
+    },
+  };
+};
+
 /** === Fetch Product Tag List Related === */
 const useTagListActions = () => {
   const dispatch = useDispatch();
@@ -138,5 +150,6 @@ export {
   useProductListActions,
   useOrderQuantity,
   useProductDetailAction,
+  useAddToCart,
   useTagListActions,
 };

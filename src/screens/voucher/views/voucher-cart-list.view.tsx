@@ -83,7 +83,6 @@ const VoucherCartListView: FC = () => {
     }
   }, [voucherData.dataVouchers]);
   React.useEffect(() => {
-    console.log('test', voucherCartListState);
     // if fetching success
     if (voucherCartListState.data !== null) {
       updateVoucherList(

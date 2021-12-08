@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
+import * as models from '@models';
 
 export const useSupplierSegmentationAction = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,18 @@ export const useSupplierSegmentationAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.supplierSegmentationReset());
+    },
+  };
+};
+
+export const useSendDataToSupplierActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.SendDataSupplierProps,
+    ) => {
+      dispatch(Actions.sendDataToSupplierProcess(contextDispatch, { data }));
     },
   };
 };

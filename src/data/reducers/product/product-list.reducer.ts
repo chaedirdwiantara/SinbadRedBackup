@@ -39,6 +39,7 @@ export const productListReducer = simplifyReducer(productListInitialState, {
       loading: false,
       loadMore: false,
       refresh: false,
+      error: null,
       total: payload.meta.total,
       skip: payload.meta.skip,
       canLoadMore: payload.meta.canLoadMore,

@@ -113,8 +113,8 @@ export const potentialPromoProductProcess = (
 };
 /** => potential promo product success */
 export const potentialPromoProductSuccess = (
-  data: models.ListSuccessProps<models.PotentialPromoProductProps>,
-): models.ListSuccessAction<models.PotentialPromoProductProps> => {
+  data: models.ListSuccessProps<models.PotentialPromoProductProps[]>,
+): models.ListSuccessAction<models.PotentialPromoProductProps[]> => {
   return { type: types.POTENTIAL_PROMO_PRODUCT_SUCCESS, payload: data };
 };
 /** => potential promo product failed */
@@ -126,4 +126,36 @@ export const potentialPromoProductFailed = (
 /** => potential promo product reset */
 export const potentialPromoProductReset = () => {
   return { type: types.POTENTIAL_PROMO_PRODUCT_RESET };
+};
+/** === DELETE RESERVE DISCOUNT === */
+/** => delete reserve discount process */
+export const deleteReserveDiscountProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.DeleteProcessProps,
+): models.DeleteProcessAction => {
+  contextDispatch({
+    type: types.DELETE_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+  });
+  return {
+    type: types.DELETE_RESERVE_DISCOUNT_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => delete reserve discount success */
+export const deleteReserveDiscountSuccess = (
+  data: models.DeleteSuccessProps,
+): models.DeleteSuccessAction => {
+  return { type: types.DELETE_RESERVE_DISCOUNT_SUCCESS, payload: data };
+};
+/** => delete reserve discount failed */
+export const deleteReserveDiscountFailed = (
+  data: models.ErrorProps,
+): models.DeleteFailedAction => {
+  return { type: types.DELETE_RESERVE_DISCOUNT_FAILED, payload: data };
+};
+/** => delete reserve disount reset */
+export const deleteReserveDiscountReset = () => {
+  return { type: types.DELETE_RESERVE_DISCOUNT_RESET };
 };

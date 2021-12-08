@@ -26,7 +26,9 @@
       "@types": ["src/data/types/index"],
       "@navigation": ["core/functions/navigation/index"],
       "@svg": ["src/assets/svg/Svg"],
-      "@image/*": ["src/assets/images/*"]
+      "@image/*": ["src/assets/images/*"],
+      "@assets": ["src/assets/index"],
+      "react-native-sinbad-ui": ["node_modules/@sinbad/react-native-sinbad-ui"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true

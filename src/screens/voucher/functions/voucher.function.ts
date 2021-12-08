@@ -50,10 +50,35 @@ const countPotentialDiscount = (
   });
   return { totalDiscount, totalSelectedVoucher };
 };
+/** => get selected vouchers */
+const getSelectedVouchers = (
+  voucherState: models.selectedVoucherDataProps | null,
+): models.VoucherId[] => {
+  if (voucherState === null) {
+    return [];
+  }
+  const voucherArr = [];
+  /** => seller voucher */
+  voucherState.sellerVouchers.map((item) => {
+    voucherArr.push({
+      type: 'seller_voucher',
+      voucherId: item.voucherId,
+    });
+  });
+  /** => sinbad voucher */
+  if (voucherState.sinbadVoucher !== null) {
+    voucherArr.push({
+      type: 'sinbad_voucher',
+      voucherId: voucherState.sinbadVoucher.voucherId,
+    });
+  }
+  return voucherArr;
+};
 
 export {
   goBack,
   goToVoucherDetail,
   goToVoucherCartListMore,
   countPotentialDiscount,
+  getSelectedVouchers,
 };

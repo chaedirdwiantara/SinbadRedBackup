@@ -14,7 +14,7 @@ interface ProductDetailCarouselProps {
 const { width } = Dimensions.get('window');
 /** === COMPONENT ===  */
 export const ProductDetailCarousel: FC<ProductDetailCarouselProps> = ({
-  images,
+  images = [],
 }) => {
   /** === HOOKS === */
   const carouselRef = useRef();

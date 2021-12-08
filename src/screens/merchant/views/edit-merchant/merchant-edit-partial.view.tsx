@@ -41,17 +41,17 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     useTextFieldSelect();
   const storeData = stateUser.detail.data?.storeData.storeInformation;
   // USER DATA
-  const ownerName = useInput(ownerData?.name || '');
-  const ownerEmail = useInput(ownerData?.email || '');
-  const noKtp = useInput(ownerData?.idNo || '');
-  const noNPWP = useInput(ownerData?.taxNo || '');
-  const mobilePhone = useInput(ownerData?.mobilePhone || '');
+  const ownerName = useInput(ownerData?.name || null);
+  const ownerEmail = useInput(ownerData?.email || null);
+  const noKtp = useInput(ownerData?.idNo || null);
+  const noNPWP = useInput(ownerData?.taxNo || null);
+  const mobilePhone = useInput(ownerData?.mobilePhone || null);
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorIdNumber, setErrorIdNumber] = useState(false);
   const [errorTaxNumber, setErrorTaxNumber] = useState(false);
   //MERCHANT DATA
   const merchantName = useInput(storeData?.storeAccount?.name || '');
-  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
+  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || null);
   // COMPLETNESS DATA
   const numberOfEmployee = useInput(
     storeData?.storeDetailCompleteness?.numberOfEmployee || null,
@@ -255,24 +255,31 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     const dataLargeArea = largeArea.value ? largeArea.value : null;
     switch (props.type) {
       case 'merchantOwnerName':
-        return ownerName.value === ownerData?.name;
+        return ownerName.value === ownerData?.name || !ownerName.value;
       case 'merchantOwnerEmail':
         return (
           (stateUser.detail.data?.ownerData.info.isEmailVerified &&
             ownerEmail.value === ownerData?.email) ||
-          emailIsNotValid
+          emailIsNotValid ||
+          !ownerEmail.value
         );
       case 'merchantOwnerIdNo':
-        return errorIdNumber || noKtp.value === ownerData?.idNo;
+        return errorIdNumber || noKtp.value === ownerData?.idNo || !noKtp.value;
       case 'merchantOwnerTaxNo':
-        return errorTaxNumber || noNPWP.value === ownerData?.taxNo;
+        return (
+          errorTaxNumber || noNPWP.value === ownerData?.taxNo || !noNPWP.value
+        );
       case 'merchantOwnerPhoneNo':
         return (
-          stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
-          mobilePhone.value === ownerData?.mobilePhone
+          (stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
+            mobilePhone.value === ownerData?.mobilePhone) ||
+          !mobilePhone.value
         );
       case 'merchantAccountName':
-        return merchantName.value === storeData?.storeAccount.name;
+        return (
+          merchantName.value === storeData?.storeAccount.name ||
+          !merchantName.value
+        );
       case 'merchantAccountPhoneNo':
         return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
@@ -336,7 +343,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukkan Nama Lengkap Pemilik'}
           type={'default'}
-          value={ownerName.value}
+          value={ownerName.value ? ownerName.value : ''}
           onChangeText={(text) => ownerName.setValue(text)}
           clearText={() => ownerName.setValue('')}
           maxLength={64}
@@ -352,7 +359,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'E-mail'}
           placeholder={'Masukkan E-mail'}
           type={emailIsNotValid ? 'error' : 'default'}
-          value={ownerEmail.value}
+          value={ownerEmail.value ? ownerEmail.value : ''}
           onChangeText={(text) => validateEmail(text)}
           clearText={() => ownerEmail.setValue('')}
           valMsgError={'Pastikan email yang Anda masukkan benar'}
@@ -368,7 +375,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone'}
           placeholder={'Masukkan nomor handphone Anda'}
           type={'default'}
-          value={mobilePhone.value}
+          value={mobilePhone.value ? mobilePhone.value : ''}
           onChangeText={(text) => mobilePhone.setValue(text)}
           clearText={() => mobilePhone.setValue('')}
           maxLength={14}
@@ -385,7 +392,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukkan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
-          value={noKtp.value}
+          value={noKtp.value ? noKtp.value : ''}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkIdNoFormat(cleanNumber);
@@ -406,7 +413,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
-          value={noNPWP.value}
+          value={noNPWP.value ? noNPWP.value : ''}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkTaxNoFormat(cleanNumber);
@@ -447,7 +454,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
-          value={merchantPhoneNo.value}
+          value={merchantPhoneNo.value ? merchantPhoneNo.value : ''}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             merchantPhoneNo.setValue(cleanNumber);
@@ -482,7 +489,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
             value={largeArea.value ? largeArea.value : ''}
-            onChangeText={(text) => largeArea.setValue(text)}
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              largeArea.setValue(cleanNumber);
+            }}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
             rightText={'m²'}

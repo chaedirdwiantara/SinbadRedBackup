@@ -8,8 +8,8 @@ import * as models from '@models';
 export const useCartViewActions = () => {
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.cartViewProcess(contextDispatch, { id }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartViewProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.cartViewReset);

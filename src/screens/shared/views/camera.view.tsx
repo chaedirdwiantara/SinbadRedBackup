@@ -20,6 +20,7 @@ const CameraView = () => {
       showFlashCameraButton={params?.type === 'selfie'}
       type={params?.type === 'selfie' ? 'front' : 'back'}
       includeBase64
+      topOffset={params?.type === 'selfie' ? 80 : 100}
       onImageCaptured={async (result: any, _) => {
         const width = result.width - result.width * 0.3;
         const x = result.width * 0.15;
