@@ -4,6 +4,7 @@ export interface CartProduct {
   urlImages: string;
   stock: number;
   selected: boolean;
+  minQty: number;
   qty: number;
   displayPrice: number;
   priceBeforeTax: number;
