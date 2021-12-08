@@ -21,7 +21,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   );
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(loadingTCCreate, loadingTCDetail);
 
   /** => main */
   const dataPostTC = {

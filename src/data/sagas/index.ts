@@ -19,12 +19,9 @@ import SupplierSaga from './supplier/supplier.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
 import PaymentSaga from './oms/payment/payment.saga';
 import ProductReserveStockSaga from './product/reserve-stock.saga';
-<<<<<<< HEAD
 import HistoryOrderSaga from './history/order-status.saga';
 import HistorySaga from './history.saga';
-=======
 import StockSaga from './product/stock.saga';
->>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -48,12 +45,9 @@ function* rootSaga() {
   yield all([fork(CheckoutSaga)]);
   yield all([fork(PaymentSaga)]);
   yield all([fork(ProductReserveStockSaga)]);
-<<<<<<< HEAD
   yield all([fork(HistorySaga)]);
   yield all([fork(HistoryOrderSaga)]);
-=======
   yield all([fork(StockSaga)]);
->>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
 }
 
 export default rootSaga;

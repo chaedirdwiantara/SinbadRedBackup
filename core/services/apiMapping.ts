@@ -19,13 +19,9 @@ const apiMapping = <T>(
     | 'auth'
     | 'common'
     | 'banner'
-<<<<<<< HEAD
     | 'order'
-    | 'payment',
-=======
     | 'payment'
     | 'warehouse',
->>>>>>> ed78743302ea3668d09c893893a696bfd87d795a
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
   type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE',
   params?: object,

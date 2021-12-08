@@ -5,6 +5,7 @@ import {
   SnbContainer,
   SnbText,
   SnbTopNav,
+  SnbPdf,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
