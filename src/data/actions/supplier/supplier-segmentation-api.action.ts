@@ -38,3 +38,39 @@ export const supplierSegmentationReset = (
   contextDispatch({ type: types.SUPPLIER_SEGMENTATION_RESET });
   return { type: types.SUPPLIER_SEGMENTATION_RESET };
 };
+/** Process */
+export const supplierSegmentationDetailProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.DetailProcessProps,
+): models.DetailProcessAction => {
+  contextDispatch({ type: types.SUPPLIER_SEGMENTATION2_PROCESS, payload });
+
+  return {
+    type: types.SUPPLIER_SEGMENTATION2_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** Succeeded */
+export const supplierSegmentationDetailSuccess = (
+  payload: models.DetailSuccessProps<models.SupplierSegmentation>,
+): models.DetailSuccessAction<models.SupplierSegmentation> => {
+  return { type: types.SUPPLIER_SEGMENTATION2_SUCCESS, payload };
+};
+/** => Failed */
+export const supplierSegmentationDetailFailed = (
+  payload: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.SUPPLIER_SEGMENTATION2_FAILED, payload };
+};
+/** => Refresh */
+export const supplierSegmentationDetailRefresh = () => {
+  return { type: types.SUPPLIER_SEGMENTATION2_REFRESH };
+};
+/** => Reset */
+export const supplierSegmentationDetailReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.SUPPLIER_SEGMENTATION2_RESET });
+  return { type: types.SUPPLIER_SEGMENTATION2_RESET };
+};

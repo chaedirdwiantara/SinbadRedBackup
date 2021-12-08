@@ -218,6 +218,29 @@ const useStockValidationAction = () => {
   };
 };
 
+const useStockValidationDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      dispatch(Actions.stockValidationDetailProcess(contextDispatch, data));
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      data: models.StockValidationProcessProps,
+    ) => {
+      contextDispatch(Actions.stockValidationDetailRefresh());
+      dispatch(Actions.stockValidationDetailProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.stockValidationDetailReset(contextDispatch));
+    },
+  };
+};
+
 export {
   useProductListActions,
   useOrderQuantity,
@@ -226,4 +249,5 @@ export {
   useTagListActions,
   useReserveStockAction,
   useStockValidationAction,
+  useStockValidationDetailAction,
 };

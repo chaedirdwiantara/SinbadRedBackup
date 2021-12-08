@@ -24,9 +24,33 @@ function* stockValidation(action: models.StockValidationProcessAction) {
     yield put(ActionCreators.stockValidationFailed(error as models.ErrorProps));
   }
 }
+/** => Stock validation detail */
+function* stockValidationDetail(action: models.StockValidationProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.IStockValidaitonSuccess> =
+      yield call(() => {
+        return WarehouseApi.getStockValidation(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.stockValidationDetailSuccess(response),
+    );
+    yield put(ActionCreators.stockValidationDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.stockValidationDetailFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.stockValidationDetailFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER === */
 function* ProductSaga() {
   yield takeLatest(types.STOCK_VALIDATION_PROCESS, stockValidation);
+  yield takeLatest(
+    types.STOCK_VALIDATION_DETAIL_PROCESS,
+    stockValidationDetail,
+  );
 }
 
 export default ProductSaga;
