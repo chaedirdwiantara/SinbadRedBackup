@@ -26,7 +26,7 @@ export const checkout = simplifyReducer(initialState, {
         isPotentialPaymentPromo: item.isPotentialPaymentPromo,
         totalPromoSellerAndVoucher: 0,
         totalPromoPayment: 0,
-        totalPaymentFee: 0,
+        totalFee: 0,
         totalPayment: 0,
         paymentType: null,
         paymentChannel: null,

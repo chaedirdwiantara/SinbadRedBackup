@@ -51,7 +51,7 @@ export interface IInvoiceCheckout {
   isPotentialPaymentPromo: boolean;
   totalPromoSellerAndVoucher?: number;
   totalPromoPayment?: number;
-  totalPaymentFee?: number;
+  totalFee?: number;
   totalPayment?: number;
   paymentType?: IPaymentTypeCheckout | null;
   paymentChannel?: IPaymentChannelCheckout | null;
@@ -74,7 +74,7 @@ export interface ReserveDiscount {
 
 export interface PaymentTypeChannel {
   invoiceGroupId: string;
-  totalPaymentFee: number;
+  totalFee: number;
   totalPayment: number;
   totalPromoPayment: number;
   paymentType: IPaymentTypeCheckout;
