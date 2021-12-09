@@ -66,9 +66,13 @@ export interface CreateOrderVerificationPromoDetail {
 }
 
 export interface CreateOrderVerificationVoucher {
-  invoiceGroupId: string;
-  productId: string;
-  voucherId: string;
+  voucherId: number;
   voucherName: string;
-  voucherRebate: number;
+  invoiceGroupId: string;
+  vouchers: Array<CreateOrderVerificationVoucherDetail>;
+}
+
+export interface CreateOrderVerificationVoucherDetail {
+  productId: string;
+  voucherRrebate: number;
 }
