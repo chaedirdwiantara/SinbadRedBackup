@@ -12,17 +12,20 @@ interface AddToCartQuantityModifierProps {
   orderQty: number;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
+  isFromProductDetail?: boolean;
 }
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
   increaseOrderQty,
   decreaseOrderQty,
+  isFromProductDetail,
 }) => {
   /** === HOOKS ===  */
   const {
     stateProduct: {
       detail: { data: dataProductDetail },
+      cart: { data: dataProductDetailCart },
     },
   } = useProductContext();
   const {
@@ -35,16 +38,16 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
       <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
-      {dataStock && dataProductDetail && (
+      {dataStock && dataProductDetailCart && (
         <SnbNumberCounter
           value={orderQty}
           onIncrease={increaseOrderQty}
           onDecrease={decreaseOrderQty}
-          minusDisabled={orderQty <= dataProductDetail?.minQty}
+          minusDisabled={orderQty <= dataProductDetailCart?.minQty}
           plusDisabled={orderQty >= dataStock?.stock}
         />
       )}
-      {dataStockDetail && dataProductDetail && (
+      {isFromProductDetail && dataStockDetail && dataProductDetail && (
         <SnbNumberCounter
           value={orderQty}
           onIncrease={increaseOrderQty}

@@ -12,7 +12,7 @@ export const addToCartProcess = (
   });
   return {
     type: types.ADD_TO_CART_PROCESS,
-    payload: payload.data,
+    payload,
     contextDispatch,
   };
 };
