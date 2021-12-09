@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { SnbText, SnbDivider } from 'react-native-sinbad-ui';
 import { VerificationOrderDetailNonPromoList } from '@models';
 import { VerificationOrderStyle } from '../../styles';
-import { VerificationOrderNonDiscountItem} from './verification-order-non-discount-item.view';
+import { VerificationOrderNonDiscountItem } from './verification-order-non-discount-item.view';
 /** === INTERFACE ===  */
 interface VerificationOrderNonDiscountListProps {
   nonPromoProducts: VerificationOrderDetailNonPromoList[];

@@ -243,6 +243,27 @@ const useErrorModalBottom = () => {
   };
 };
 
+/** => failed fetch state */
+const useCheckoutFailedFetchState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  const [errorAction, setErrorAction] = React.useState<Function>(() => {});
+  const [errorText, setErrorText] = React.useState('');
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setErrorAction: (value: () => void) => {
+      setErrorAction(value);
+    },
+    setErrorText: (value: string) => {
+      setErrorText(value);
+    },
+    isOpen,
+    errorAction,
+    errorText,
+  };
+};
+
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -255,6 +276,7 @@ export {
   usePaymentChannelsData,
   useBackToCartModal,
   useErrorModalBottom,
+  useCheckoutFailedFetchState,
 };
 /**
  * ================================================================

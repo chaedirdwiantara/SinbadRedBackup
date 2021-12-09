@@ -9,7 +9,7 @@ export interface StockErrorChange {
   productId: string;
   name: string;
   thumbnail: string;
-  currentQty: number;
+  currentStock: number;
   qty: number;
 }
 
