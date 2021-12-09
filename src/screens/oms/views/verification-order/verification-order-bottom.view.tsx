@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { SnbText, SnbDivider, color, SnbButton } from 'react-native-sinbad-ui';
 import { VerificationOrderDetailProps } from '@models';
 import { VerificationOrderStyle } from '../../styles';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { toCurrency } from '@core/functions/global/currency-format';
 /** === INTERFACE ===  */
 interface VerificationOrderBottomProps {
   data: VerificationOrderDetailProps;
