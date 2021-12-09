@@ -153,11 +153,14 @@ const MapsView = () => {
           }
         }}
         contentTitle="Detail Alamat"
-        loading={locations.loading}
+        loading={locations.loading || isGettingCurrentPosition}
         contentDesc={desc}
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
-        onFailedGetPosition={(error) => setDesc(error.message)}
+        onFailedGetPosition={() => {
+          setDesc('Alamat tidak ditemukan');
+          setIsGettingCurrentPosition(false);
+        }}
         onSuccessGetPosition={(geoPosition, refMaps, _) => {
           if (
             merchantData.longitude === null &&
