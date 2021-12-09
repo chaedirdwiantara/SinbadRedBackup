@@ -71,6 +71,7 @@ export interface ReserveDiscountPayloadProducts {
 export interface ReserveDiscountDetail {
   promoMatch: ReserveDiscountPromoMatch[];
   promoNotMatch: ReserveDiscountPromoNotMatch;
+  discountVerification: ReserveDiscountVerification;
 }
 export interface ReserveDiscountPromoMatch {
   invoiceGroupId: string;
@@ -118,4 +119,35 @@ export interface CheckAllPromoPaymentGetData {
   promoPaymentAvailable: boolean;
   promoPaymentDescription: string;
   promoPaymentAmount: number;
+}
+export interface ReserveDiscountVerification {
+  promosSeller: ReserveDiscountVerificationPromosSeller[];
+  vouchersSeller: [];
+}
+export interface ReserveDiscountVerificationPromosSeller {
+  invoiceGroupId: string;
+  productId: string;
+  promos: ReserveDiscountVerificationPromos[];
+}
+export interface ReserveDiscountVerificationPromos {
+  promoId: number;
+  promoName: string;
+  promoFreeProduct: ReserveDiscountPromoFreeProduct | null;
+  promoRebate: number | null;
+  promoOwner: string;
+}
+export interface ReserveDiscountPromoFreeProduct {
+  productId: string;
+  qty: number;
+  uom: string;
+}
+export interface ReserveDiscountVerificationVouchersSeller {
+  voucherId: number;
+  voucherName: string;
+  invoiceGroupId: string;
+  vouchers: [];
+}
+export interface ReserveDiscountVerificationVouchers {
+  productId: string;
+  voucherRebate: number;
 }
