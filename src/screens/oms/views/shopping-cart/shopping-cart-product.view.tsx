@@ -126,7 +126,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   setSassionQty,
                 )
               }
-              minusDisabled={product.qty <= 1}
+              minusDisabled={product.qty <= product.minQty}
               plusDisabled={product.qty >= product.stock}
             />
           </View>
