@@ -24,7 +24,7 @@ import {
   useCartSelected,
   useStandardModalState,
   useStandardLoadingState,
-  useFailedFetchState,
+  useVerificationFailedFetchState,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useReserveStockAction } from '@screen/product/functions';
@@ -48,7 +48,7 @@ const OmsVerificationOrderView: FC = () => {
   const errorPromoModal = useStandardModalState();
   const errorVoucherModal = useStandardModalState();
   const errorStockModal = useStandardModalState();
-  const errorFetchModal = useFailedFetchState();
+  const errorFetchModal = useVerificationFailedFetchState();
 
   const loadingVerificationToCheckout = useStandardLoadingState();
 
@@ -438,7 +438,7 @@ const OmsVerificationOrderView: FC = () => {
     return (
       <ErrorFetchModal
         visible={errorFetchModal.isOpen}
-        onPressRetry={() => {
+        onPress={() => {
           errorFetchModal.setOpen(false);
           errorFetchModal.errorAction();
         }}

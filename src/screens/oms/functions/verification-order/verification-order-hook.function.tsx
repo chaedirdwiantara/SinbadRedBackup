@@ -73,8 +73,8 @@ const useStandardLoadingState = () => {
     isLoading,
   };
 };
-/** => standard boolean state */
-const useFailedFetchState = () => {
+/** => failed fetch state */
+const useVerificationFailedFetchState = () => {
   const [isOpen, setOpen] = React.useState(false);
   const [errorAction, setErrorAction] = React.useState<Function>(() => {});
   const [errorText, setErrorText] = React.useState('');
@@ -100,7 +100,7 @@ export {
   usePromoAccordion,
   useStandardModalState,
   useStandardLoadingState,
-  useFailedFetchState,
+  useVerificationFailedFetchState,
 };
 /**
  * ================================================================
