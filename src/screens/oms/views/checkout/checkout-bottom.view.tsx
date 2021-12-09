@@ -7,7 +7,7 @@ import {
   usePaymentAction,
   handleTotalPrice,
   useExpiredTime,
-} from '../../functions/checkout';
+} from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -26,7 +26,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   );
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(loadingTCCreate, loadingTCDetail);
 
   /** => main */
   const dataPostTC = {
@@ -44,6 +43,9 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   const pressButton = () => {
     if (!expiredTime.check()) {
       paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    } else {
+      console.log('Session Expired', expiredTime.isOpen);
+      expiredTime.setOpen(true);
     }
   };
   const content = () => {
