@@ -94,7 +94,7 @@ const OmsVerificationOrderView: FC = () => {
    */
   React.useEffect(() => {
     if (stateReserveStock.create.error !== null) {
-      if (stateReserveStock.create.error.code === 11008) {
+      if (stateReserveStock.create.error.code === 50080000001) {
         reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
       } else {
         const action = () => {
