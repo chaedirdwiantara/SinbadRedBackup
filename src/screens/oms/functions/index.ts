@@ -6,6 +6,7 @@ export * from './checkout-success/checkout-success.function';
 export * from './shopping-cart/shopping-cart-hook.function';
 export * from './checkout';
 export * from './verification-order/verification-order-hook.function';
+export * from './checkout/create-orders-hook.function';
 /**
  * ================================================================
  * NOTES
