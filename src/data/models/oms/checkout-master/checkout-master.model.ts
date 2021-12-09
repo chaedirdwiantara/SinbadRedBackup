@@ -29,7 +29,7 @@ export interface IVoucherCheckout {
 export interface IInvoiceCheckout extends models.InvoiceCheckout {
   totalPromoSellerAndVoucher?: number;
   totalPromoPayment?: number;
-  totalPaymentFee?: number;
+  totalFee?: number;
   totalPayment?: number;
   paymentType?: IPaymentTypeCheckout | null;
   paymentChannel?: IPaymentChannelCheckout | null;
@@ -51,7 +51,7 @@ export interface ReserveDiscount {
 
 export interface PaymentTypeChannel {
   invoiceGroupId: string;
-  totalPaymentFee: number;
+  totalFee: number;
   totalPayment: number;
   totalPromoPayment: number;
   paymentType: IPaymentTypeCheckout;

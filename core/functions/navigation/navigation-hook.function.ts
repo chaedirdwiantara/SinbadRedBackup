@@ -4,12 +4,14 @@ import { BackHandler } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === TYPE === */
-/** => for params route */
-type ParamList = {
-  Data: {
-    id: string;
-    name: string;
-  };
+/** => param default */
+interface ParamListDefault {
+  id: string;
+  name: string;
+}
+
+type ParamList<T> = {
+  Data: ParamListDefault & T;
 };
 /** === FUNCTION === */
 /** => custom back for hardware */
@@ -28,8 +30,8 @@ const useCustomBackHardware = (BackAction: () => void) => {
   }, []);
 };
 /** => get data from navigation's params */
-const useGetNavParams = () => {
-  return useRoute<RouteProp<ParamList, 'Data'>>();
+const useGetNavParams = <T = object>() => {
+  return useRoute<RouteProp<ParamList<T>, 'Data'>>();
 };
 /** === EXPORT === */
 export { useGetNavParams, useCustomBackHardware, useFocusEffect };

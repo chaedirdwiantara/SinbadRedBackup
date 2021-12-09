@@ -163,17 +163,13 @@ const CategoryView: React.FC = () => {
           ].name
         : item?.name;
 
-    if (item) {
-      item.name = categoryName;
-    }
-
     return (
       item && (
         <TouchableOpacity
           key={index}
           onPress={() =>
             goToProduct(
-              item,
+              { ...item, name: categoryName },
               selected1stLevelIndex,
               selected2ndLevelIndex as number,
               index,
