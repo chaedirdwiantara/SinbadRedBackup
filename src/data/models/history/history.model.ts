@@ -1,3 +1,5 @@
+import { UrlTile } from 'react-native-maps';
+
 export interface OrderStatus {
   status: string;
   title: string;
@@ -11,25 +13,31 @@ export interface DetailOrderStatusProcessAction {
   contextDispatch: (action: any) => any;
 }
 
-export interface PaymentType{
-  id: number,
-  name: string
+export interface PaymentType {
+  id: number;
+  name: string;
 }
 
-export interface PaymentChannel{
-  id: number,
-  name: string,
-  icon: string,
-  description: string
+export interface PaymentChannel {
+  id: number;
+  name: string;
+  icon: string;
+  description: string;
 }
 export interface PaymentDetailSuccessProps {
-  id: 12345,
-  paymentType: PaymentType,
-  paymentChannel: PaymentChannel,
-  paymentFee: number,
-  totalPayment: number,
-  deliveredTotalPayment: number,
-  refundTotal: number,
-  expiredPaymentTime: string,
-  refundedTime: string
+  id: 12345;
+  paymentType: PaymentType;
+  paymentChannel: PaymentChannel;
+  paymentFee: number;
+  totalPayment: number;
+  deliveredTotalPayment: number;
+  refundTotal: number;
+  expiredPaymentTime: string;
+  refundedTime: string;
+}
+
+export interface PaymentInvoiceSuccessProps {
+  id: number;
+  fileName: string;
+  url: string;
 }

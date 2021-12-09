@@ -16,9 +16,14 @@ import {
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { goBack, usePaymentDetail, goToHistoryInvoice } from '../functions';
-import { HistoryDetailStyle } from '../styles';
-import { HistoryDetailCardDivider, HistoryDetailCard } from '../components';
+import {
+  goBack,
+  usePaymentDetail,
+  goToHistoryInvoice,
+  usePaymentInvoice,
+} from '../../functions';
+import { HistoryDetailStyle } from '../../styles';
+import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 /** === TYPES === */
@@ -145,6 +150,7 @@ const HistoryDetailView: FC = () => {
     ? historyDetailDummy.canceledProducts.slice(0, 2)
     : historyDetailDummy.canceledProducts;
   const getPaymentDetail = usePaymentDetail();
+  const getInvoiceDetail = usePaymentInvoice();
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
@@ -154,6 +160,11 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, 123123);
   }, []);
+  /** === FUNCTION === */
+  const getInvoice = (id: number) => {
+    goToHistoryInvoice();
+    getInvoiceDetail.detail(dispatchHistory, id);
+  };
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -229,7 +240,7 @@ const HistoryDetailView: FC = () => {
     <HistoryDetailCard
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
-      onActionClick={() => goToHistoryInvoice()}>
+      onActionClick={() => getInvoice(17)}>
       {renderCardItem('Nomor Pesanan', historyDetailDummy.invoice.orderId)}
       {renderCardItem(
         'Nomor Referensi',

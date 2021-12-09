@@ -12,3 +12,14 @@ export const usePaymentDetail = () => {
     },
   };
 };
+
+export const usePaymentInvoice = () => {
+  const dispatch = useDispatch();
+  return {
+    detail: (contextDispatch: (action: any) => any, id: number) => {
+      dispatch(
+        Actions.historyPaymentInvoiceDetailProcess(contextDispatch, { id }),
+      );
+    },
+  };
+};

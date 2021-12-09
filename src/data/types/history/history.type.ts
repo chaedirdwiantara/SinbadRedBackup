@@ -8,3 +8,8 @@ export const HISTORY_ORDER_STATUS_REFRESH = 'HistoryOrderStatusRefresh';
 export const HISTORY_PAYMENT_DETAIL_PROCESS = 'HistoryPaymentDetailProcess';
 export const HISTORY_PAYMENT_DETAIL_SUCCESS = 'HistoryPaymentDetailSuccess';
 export const HISTORY_PAYMENT_DETAIL_FAILED = 'HistoryPaymentDetailFailed';
+
+/** HISTORY INVOICE DETAIL */
+export const HISTORY_INVOICE_DETAIL_PROCESS = 'HistoryInvoiceDetailProcess';
+export const HISTORY_INVOICE_DETAIL_SUCCESS = 'HistoryInvoiceDetailSuccess';
+export const HISTORY_INVOICE_DETAIL_FAILED = 'HistoryInvoiceDetailFailed';

@@ -1,7 +1,7 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import HistoryListView from './history-list.view';
-import HistoryDetailView from './history-detail.view';
-import HistoryInvoiceView from './history-invoice.view';
+import HistoryDetailView from './history-detail/history-detail.view';
+import HistoryInvoiceView from './history-invoice/history-invoice.view';
 /** === EXPORT ALL === */
 export { HistoryListView, HistoryDetailView, HistoryInvoiceView };
 /**
