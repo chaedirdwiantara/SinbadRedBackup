@@ -1,64 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDataCheckout, useDataReserve } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
 
 /** === FUNCTION === */
 /** => Create Orders */
 const useCreateOrders = () => {
+  const [isOpen, setOpen] = useState(false);
   const dispatch = useDispatch();
   const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
+  const { statePromo } = useContext(contexts.PromoContext);
 
-  const createOrdersData: any = {
-    cartId: dataCheckout.cartId,
-    data: [],
-    verification: {},
-  };
-
-  // => Mapping Invoice Group
-  dataCheckout.invoices.map((invoice) => {
-    const dataInvoice = {
-      //   sellerId: ? <to be update>
-      invoiceGroupId: invoice.invoiceGroupId,
-      //   invoiceGroupName: ? <to be update>
-      paymentTypeId: invoice.paymentType?.id,
-      paymentChannelId: invoice.paymentChannel?.id,
-      paylaterTypeId: null,
-      brands: [] as any,
-      //   portfolioId: ? -> Optional for sinbad White
-      //   channelId: ? <to be update>
-      //   groupId: ? <to be update>
-      //   typeId: ? <to be update>
-      //   clusterId: ? <to be update>
+  const transformData = (contextDispatch: any) => {
+    const createOrdersData: any = {
+      cartId: dataCheckout.cartId,
+      data: [],
+      verification: {},
     };
 
-    // Mapping Order Brand Products
-    invoice.brands.map((brand) => {
-      const dataBrands = {
-        brandId: brand.brandId,
-        brandName: brand.brandName,
-        product: brand.products, // Missing warehouseId <to be updated>
+    // => Mapping Invoice Group
+    dataCheckout.invoices.map((invoice) => {
+      const dataInvoice = {
+        sellerId: invoice.sellerId,
+        invoiceGroupId: invoice.invoiceGroupId,
+        invoiceGroupName: invoice.invoiceGroupName,
+        paymentTypeId: invoice.paymentType?.id,
+        paymentChannelId: invoice.paymentChannel?.id,
+        paylaterTypeId: null,
+        brands: [] as any,
+        portfolioId: null,
+        channelId: invoice.channelId,
+        groupId: invoice.groupId,
+        typeId: invoice.typeId,
+        clusterId: invoice.clusterId,
       };
-      dataInvoice.brands.push(dataBrands);
+
+      // Mapping Order Brand Products
+      invoice.brands.map((brand) => {
+        const dataBrands = {
+          brandId: brand.brandId,
+          brandName: brand.brandName,
+          product: brand.products, // Missing warehouseId <to be updated>
+        };
+        dataInvoice.brands.push(dataBrands);
+      });
+
+      createOrdersData.verification = {
+        promosSeller: invoice.promoSellers,
+        vouchersSeller: invoice.vouchers,
+      };
+
+      // Push Order Brand Products
+      createOrdersData.data.push(dataInvoice);
     });
 
-    createOrdersData.verification = {
-      promosSeller: invoice.promoSellers,
-      vouchersSeller: invoice.vouchers,
-    };
+    console.log('Checkout Master', dataCheckout);
+    console.log('Create Orders', createOrdersData);
+    console.log('Discount Data', statePromo.reserveDiscount.detail);
 
-    // Push Order Brand Products
-    createOrdersData.data.push(dataInvoice);
-  });
+    dispatch(
+      Actions.createOrdersProcess(contextDispatch, { data: createOrdersData }),
+    );
+  };
 
   return {
     create: (contextDispatch: (actions: any) => any) => {
-      console.log('Checkout Master', dataCheckout);
-      console.log('Create Orders', createOrdersData);
-      //   dispatch(Actions.createOrdersProcess(contextDispatch, { data }));
+      transformData(contextDispatch);
     },
+    get: () => console.log('Get Order Id'),
+    setOpen: (value: boolean) => setOpen(value),
+    isOpen,
   };
 };
 
@@ -74,9 +88,11 @@ const useExpiredTime = () => {
     const timeNow = dateCurrent.getTime() / 1000;
 
     if (timeReserved >= timeNow) {
+      console.log('go to TNC');
       setOpen(false);
       return false;
     } else {
+      console.log('Open Modal Session Expired');
       setOpen(true);
       return true;
     }

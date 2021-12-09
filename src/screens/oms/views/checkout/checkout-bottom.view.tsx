@@ -8,7 +8,7 @@ import {
   handleTotalPrice,
   useCheckoutMaster,
   useExpiredTime,
-} from '../../functions/checkout';
+} from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
