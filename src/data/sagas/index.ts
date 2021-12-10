@@ -27,7 +27,6 @@ function* rootSaga() {
   yield all([fork(AuthSaga)]);
   yield all([fork(UserSaga)]);
   yield all([fork(MerchantSaga)]);
-  yield all([fork(GlobalSaga)]);
   yield all([fork(RegisterSaga)]);
   yield all([fork(VerificationOrderSaga)]);
   yield all([fork(VoucherSaga)]);

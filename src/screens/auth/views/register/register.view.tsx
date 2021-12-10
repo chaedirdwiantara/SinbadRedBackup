@@ -10,6 +10,7 @@ import { View, ScrollView, BackHandler } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
+  SnbDialog,
   SnbText,
   SnbTextField,
   SnbTopNav,
@@ -79,11 +80,25 @@ const Content: React.FC = () => {
 
 const RegisterView: React.FC = () => {
   const { goBack } = useNavigation();
+  const [showModalKTPPreparation, setShowModalKTPPreparation] =
+    React.useState<boolean>(true);
 
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
+      <SnbDialog
+        title="Mulai Daftar"
+        open={showModalKTPPreparation}
+        okText="OK"
+        cancelText="Batal"
+        cancel={() => {
+          setShowModalKTPPreparation(false);
+          goBack();
+        }}
+        ok={() => setShowModalKTPPreparation(false)}
+        content="Mohon siapkan KTP pribadi Anda"
+      />
     </SnbContainer>
   );
 };

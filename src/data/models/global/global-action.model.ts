@@ -41,6 +41,7 @@ export interface IListSelection {
     limit?: number;
     keyword?: string;
   };
+  action?: 'create' | 'edit' | undefined;
 }
 export interface IUrbanID {
   params?: string;
