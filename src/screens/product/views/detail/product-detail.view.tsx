@@ -23,6 +23,7 @@ import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { BundleSection } from './BundleSection';
+import Html from '@core/components/Html';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
@@ -450,7 +451,9 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText.B3>{dataProduct?.detail}</SnbText.B3>
+            {dataProduct && dataProduct.detail && (
+              <Html value={dataProduct.detail} fontSize={12} />
+            )}
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
             <SnbText.B3>{dataProduct?.description}</SnbText.B3>
@@ -458,20 +461,24 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {isAvailable ? (
-        <ActionButton
-          title={getActionButtonTitle()}
-          disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
-          onPress={() => {
-            if (defaultProperties.isBundle) {
-              goToBundle(productId);
-            } else {
-              handleOrderPress();
-            }
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
+      {(dataProduct !== null || errorProduct !== null) && (
+        <React.Fragment>
+          {isAvailable ? (
+            <ActionButton
+              title={getActionButtonTitle()}
+              disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
+              onPress={() => {
+                if (defaultProperties.isBundle) {
+                  goToBundle(productId);
+                } else {
+                  handleOrderPress();
+                }
+              }}
+            />
+          ) : (
+            <UnavailableSkuFlag />
+          )}
+        </React.Fragment>
       )}
       <PromoModal
         visible={promoModalVisible}
