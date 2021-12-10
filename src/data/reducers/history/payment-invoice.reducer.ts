@@ -31,7 +31,7 @@ export const paymentInvoiceReducer = simplifyReducer(
       return {
         ...state,
         data: action.payload.data,
-        loading: false,
+        loading: true,
       };
     },
     /** Failed */
@@ -44,6 +44,11 @@ export const paymentInvoiceReducer = simplifyReducer(
         error: action.payload,
         loading: false,
       };
+    },
+
+    /** => reset */
+    [types.HISTORY_INVOICE_DETAIL_RESET]() {
+      return paymentInvoiceInitialState;
     },
   },
 );

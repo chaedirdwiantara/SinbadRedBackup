@@ -13,3 +13,4 @@ export const HISTORY_PAYMENT_DETAIL_FAILED = 'HistoryPaymentDetailFailed';
 export const HISTORY_INVOICE_DETAIL_PROCESS = 'HistoryInvoiceDetailProcess';
 export const HISTORY_INVOICE_DETAIL_SUCCESS = 'HistoryInvoiceDetailSuccess';
 export const HISTORY_INVOICE_DETAIL_FAILED = 'HistoryInvoiceDetailFailed';
+export const HISTORY_INVOICE_DETAIL_RESET = 'HistoryInvoiceDetailReset';

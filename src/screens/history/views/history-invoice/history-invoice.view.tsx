@@ -3,11 +3,11 @@ import React, { FC } from 'react';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   SnbContainer,
-  SnbText,
   SnbTopNav,
   SnbPdf,
 } from '@sinbad/react-native-sinbad-ui';
-import { View } from 'react-native';
+import { usePaymentInvoice } from '../../functions';
+import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
 type HistoryInvoiceParam = {
@@ -17,16 +17,23 @@ type HistoryInvoiceParam = {
 type HistoryInvoiceRouteProp = RouteProp<HistoryInvoiceParam, 'Invoice'>;
 /** === COMPONENT === */
 const HistoryInvoiceView: FC = () => {
+  const { reset } = usePaymentInvoice();
+  const { stateHistory, dispatchHistory } = React.useContext(
+    contexts.HistoryContext,
+  );
+  const goBackFunction = () => {
+    goBack();
+    reset(dispatchHistory);
+  };
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
     return (
       <SnbTopNav.Type5
         type="red"
-        title="Contoh Title"
-        backAction={() => console.log('this example for back action')}
-        iconValue={100}
-        iconName="notifications"
+        title="Detail Faktur"
+        backAction={() => goBackFunction()}
+        iconName="download"
         iconAction={() => console.log('this example for icon action')}
       />
     );

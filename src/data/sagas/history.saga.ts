@@ -50,7 +50,7 @@ function* paymentInvoice(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.PaymentInvoiceSuccessProps> =
       yield call(() => {
-        return HistoryPaymentApi.paymentInvoiceDetail();
+        return HistoryPaymentApi.paymentInvoiceDetail(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.historyPaymentInvoiceDetailSuccess(response),

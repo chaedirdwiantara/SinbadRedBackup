@@ -21,5 +21,12 @@ export const usePaymentInvoice = () => {
         Actions.historyPaymentInvoiceDetailProcess(contextDispatch, { id }),
       );
     },
+    reset: (contextDispatch: (action: any) => any) => {
+      console.log('reset');
+
+      contextDispatch(
+        Actions.historyPaymentInvoiceDetailReset(contextDispatch),
+      );
+    },
   };
 };

@@ -154,15 +154,21 @@ const HistoryDetailView: FC = () => {
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
-  console.log(stateHistory, 'STATE hISTORY');
+  const { paymentInvoice } = stateHistory;
+  console.log(paymentInvoice, 'STATE hISTORY');
 
   /** === EFFECTS === */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, 123123);
   }, []);
+
+  useEffect(() => {
+    if (paymentInvoice.data) {
+      goToHistoryInvoice();
+    }
+  }, [paymentInvoice.data]);
   /** === FUNCTION === */
   const getInvoice = (id: number) => {
-    goToHistoryInvoice();
     getInvoiceDetail.detail(dispatchHistory, id);
   };
   /** === VIEW === */
@@ -240,7 +246,8 @@ const HistoryDetailView: FC = () => {
     <HistoryDetailCard
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
-      onActionClick={() => getInvoice(17)}>
+      actionLoading={paymentInvoice.loading}
+      onActionClick={() => getInvoice(1495865)}>
       {renderCardItem('Nomor Pesanan', historyDetailDummy.invoice.orderId)}
       {renderCardItem(
         'Nomor Referensi',

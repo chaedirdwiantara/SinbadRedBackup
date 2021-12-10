@@ -37,7 +37,6 @@ export interface PaymentDetailSuccessProps {
 }
 
 export interface PaymentInvoiceSuccessProps {
-  id: number;
   fileName: string;
   url: string;
 }

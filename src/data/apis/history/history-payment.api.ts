@@ -10,8 +10,10 @@ const paymentDetail = () => {
   >(mockHost, path, 'payment', 'v1', 'DETAIL');
 };
 
-const paymentInvoiceDetail = () => {
-  const path = 'invoice';
+const paymentInvoiceDetail = (data: models.DetailProcessProps) => {
+  console.log(data, 'DATA');
+
+  const path = `invoice/${data.id}`;
   return apiMapping<
     models.DetailSuccessProps<models.PaymentInvoiceSuccessProps>
   >('auth', path, 'payment', 'v1', 'DETAIL');

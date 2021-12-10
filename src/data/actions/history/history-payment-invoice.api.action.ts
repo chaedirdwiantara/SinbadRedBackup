@@ -26,3 +26,15 @@ export const historyPaymentInvoiceDetailFailed = (
 ): models.DetailFailedAction => {
   return { type: types.HISTORY_INVOICE_DETAIL_FAILED, payload };
 };
+
+/** payment invoice reser  */
+export const historyPaymentInvoiceDetailReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.HISTORY_INVOICE_DETAIL_RESET,
+  });
+  return {
+    type: types.HISTORY_INVOICE_DETAIL_RESET,
+  };
+};
