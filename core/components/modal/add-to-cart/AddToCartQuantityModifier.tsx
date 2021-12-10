@@ -12,17 +12,20 @@ interface AddToCartQuantityModifierProps {
   orderQty: number;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
+  isFromProductDetail?: boolean;
 }
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
   increaseOrderQty,
   decreaseOrderQty,
+  isFromProductDetail,
 }) => {
   /** === HOOKS ===  */
   const {
     stateProduct: {
       detail: { data: dataProductDetail },
+      cart: { data: dataProductDetailCart },
     },
   } = useProductContext();
   const {
@@ -35,23 +38,37 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
       <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
-      {dataStock && dataProductDetail && (
-        <SnbNumberCounter
-          value={orderQty}
-          onIncrease={increaseOrderQty}
-          onDecrease={decreaseOrderQty}
-          minusDisabled={orderQty <= dataProductDetail?.minQty}
-          plusDisabled={orderQty >= dataStock?.stock}
-        />
+      {dataStock && dataProductDetailCart && (
+        <React.Fragment>
+          {dataStock.stock < 50 && (
+            <SnbText.B3 color={color.red50}>
+              {`Tersisa ${dataStock.stock} ${dataProductDetailCart.unit}`}
+            </SnbText.B3>
+          )}
+          <SnbNumberCounter
+            value={orderQty}
+            onIncrease={increaseOrderQty}
+            onDecrease={decreaseOrderQty}
+            minusDisabled={orderQty <= dataProductDetailCart?.minQty}
+            plusDisabled={orderQty >= dataStock?.stock}
+          />
+        </React.Fragment>
       )}
-      {dataStockDetail && dataProductDetail && (
-        <SnbNumberCounter
-          value={orderQty}
-          onIncrease={increaseOrderQty}
-          onDecrease={decreaseOrderQty}
-          minusDisabled={orderQty <= dataProductDetail?.minQty}
-          plusDisabled={orderQty >= dataStockDetail?.stock}
-        />
+      {isFromProductDetail && dataStockDetail && dataProductDetail && (
+        <React.Fragment>
+          {dataStockDetail.stock <= 50 && (
+            <SnbText.B3 color={color.red50}>
+              {`Tersisa ${dataStockDetail.stock} ${dataProductDetail.unit}`}
+            </SnbText.B3>
+          )}
+          <SnbNumberCounter
+            value={orderQty}
+            onIncrease={increaseOrderQty}
+            onDecrease={decreaseOrderQty}
+            minusDisabled={orderQty <= dataProductDetail?.minQty}
+            plusDisabled={orderQty >= dataStockDetail?.stock}
+          />
+        </React.Fragment>
       )}
     </View>
   );

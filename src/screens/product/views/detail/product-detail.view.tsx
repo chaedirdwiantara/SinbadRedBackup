@@ -1,7 +1,14 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
-import { SnbText, SnbContainer, SnbStatusBar } from 'react-native-sinbad-ui';
+import {
+  SnbText,
+  SnbContainer,
+  SnbStatusBar,
+  SnbToast,
+  SnbIcon,
+  color,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import { ProductDetailHeader } from './ProductDetailHeader';
@@ -16,6 +23,7 @@ import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { BundleSection } from './BundleSection';
+import Html from '@core/components/Html';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
@@ -97,6 +105,12 @@ const ProductDetailView: FC = () => {
   const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
+  const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
+  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
+  const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
+    useState(false);
+  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
+    useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -125,14 +139,14 @@ const ProductDetailView: FC = () => {
   });
   const {
     stateShopingCart: {
-      create: { data: addToCartData },
+      create: { data: addToCartData, error: addToCartError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
   const {
     stateSupplier: {
       detail: { data: dataSegmentation },
-      create: { data: sendToSupplierData },
+      create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -150,20 +164,7 @@ const ProductDetailView: FC = () => {
     modalWaitingApproval,
     modalRegisterSupplier,
     onFunctionActions,
-  } = useCheckDataSupplier();
-
-  /** => function open add to cart modal */
-  const handleOpenAddToCartModal = () => {
-    if (
-      !modalRegisterSupplier &&
-      !modalRejectApproval &&
-      !modalWaitingApproval
-    ) {
-      setOrderModalVisible(true);
-    } else {
-      onFunctionActions({ type: 'close' });
-    }
-  };
+  } = useCheckDataSupplier(setOrderModalVisible);
 
   /** => action from button order */
   const handleOrderPress = () => {
@@ -179,7 +180,6 @@ const ProductDetailView: FC = () => {
           supplierStatus: null,
         });
       }
-      handleOpenAddToCartModal();
     } else {
       NavigationAction.navigate('LoginPhoneView');
     }
@@ -196,6 +196,7 @@ const ProductDetailView: FC = () => {
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
+    addToCartActions.reset(dispatchShopingCart);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
   };
@@ -220,6 +221,7 @@ const ProductDetailView: FC = () => {
       productName: dataProduct.name,
       brandId: dataProduct.brandId,
       urlImages: dataProduct?.images[0]?.url ?? '',
+      minQty: dataProduct.minQty,
       qty: orderQty,
       displayPrice: dataProduct.originalPrice,
       priceBeforeTax: dataProduct.currentPrice ?? dataProduct.originalPrice,
@@ -261,7 +263,7 @@ const ProductDetailView: FC = () => {
   const defaultProperties = {
     isAvailable: isAvailable,
     isBundle: dataProduct?.isBundle ?? false,
-    stock: dataStock?.stock ?? 10,
+    stock: dataStock?.stock ?? 0,
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
@@ -310,9 +312,25 @@ const ProductDetailView: FC = () => {
   /** => Do something when success send data to supplier */
   useEffect(() => {
     if (sendToSupplierData !== null) {
+      if (dataProduct) {
+        supplierSegmentationAction.fetch(
+          dispatchSupplier,
+          dataProduct.sellerId,
+        );
+      }
       onFunctionActions({ type: 'close' });
+      setToastSuccessRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
     }
   }, [sendToSupplierData]);
+
+  /** => Do something when error send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierError !== null) {
+      setToastFailedRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    }
+  }, [sendToSupplierError]);
 
   /** => Do something when success add to cart */
   useEffect(() => {
@@ -320,8 +338,39 @@ const ProductDetailView: FC = () => {
       handleCloseModal();
       cartTotalProductActions.fetch();
       supplierSegmentationAction.reset(dispatchSupplier);
+      setToastSuccessAddCart(true);
     }
   }, [addToCartData]);
+
+  /** => Do something when error add to cart */
+  useEffect(() => {
+    if (addToCartError !== null) {
+      setToastFailedAddCart(true);
+      addToCartActions.reset(dispatchShopingCart);
+    }
+  }, [addToCartError]);
+
+  /** close toast listener */
+  useEffect(() => {
+    if (
+      toastSuccessAddCart ||
+      toastFailedAddCart ||
+      toastSuccessRegisterSupplier ||
+      toastFailedRegisterSupplier
+    ) {
+      setTimeout(() => {
+        setToastSuccessAddCart(false);
+        setToastFailedAddCart(false);
+        setToastSuccessRegisterSupplier(false);
+        setToastFailedRegisterSupplier(false);
+      }, 1500);
+    }
+  }, [
+    toastSuccessAddCart,
+    toastFailedAddCart,
+    toastSuccessRegisterSupplier,
+    toastFailedRegisterSupplier,
+  ]);
 
   /** => Did Unmount */
   useEffect(() => {
@@ -428,7 +477,9 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText.B3>{dataProduct?.detail}</SnbText.B3>
+            {dataProduct && dataProduct.detail && (
+              <Html value={dataProduct.detail} fontSize={12} />
+            )}
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
             <SnbText.B3>{dataProduct?.description}</SnbText.B3>
@@ -436,20 +487,24 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {defaultProperties.isAvailable ? (
-        <ActionButton
-          title={getActionButtonTitle()}
-          disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
-          onPress={() => {
-            if (defaultProperties.isBundle) {
-              goToBundle(productId);
-            } else {
-              handleOrderPress();
-            }
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
+      {(dataProduct !== null || errorProduct !== null) && (
+        <React.Fragment>
+          {isAvailable ? (
+            <ActionButton
+              title={getActionButtonTitle()}
+              disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
+              onPress={() => {
+                if (defaultProperties.isBundle) {
+                  goToBundle(productId);
+                } else {
+                  handleOrderPress();
+                }
+              }}
+            />
+          ) : (
+            <UnavailableSkuFlag />
+          )}
+        </React.Fragment>
       )}
       <PromoModal
         visible={promoModalVisible}
@@ -490,8 +545,27 @@ const ProductDetailView: FC = () => {
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
           disabled={dataStock === null}
+          isFromProductDetail={true}
         />
       )}
+      {/* Toast success add cart */}
+      <SnbToast
+        open={toastSuccessAddCart}
+        message={'Produk berhasil ditambahkan ke keranjang'}
+        close={() => setToastSuccessAddCart(false)}
+        position={'top'}
+        leftItem={
+          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
+        }
+      />
+      {/* Toast failed add cart */}
+      <SnbToast
+        open={toastFailedAddCart}
+        message={'Produk gagal ditambahkan ke keranjang'}
+        close={() => setToastFailedAddCart(false)}
+        position={'top'}
+        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      />
     </SnbContainer>
   );
 };

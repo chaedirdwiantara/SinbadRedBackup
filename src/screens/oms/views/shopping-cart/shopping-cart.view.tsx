@@ -1,7 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useState, useMemo, Fragment, useEffect } from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer, SnbDialog } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbDialog,
+  SnbToast,
+  SnbIcon,
+  color,
+} from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
@@ -46,7 +52,8 @@ import {
   useCartViewActions,
   useCartUpdateActions,
   useCartSelected,
-} from '@screen/oms/functions/shopping-cart/shopping-cart-hook.function';
+  useCartTotalProductActions,
+} from '@screen/oms/functions';
 import {
   useReserveStockAction,
   useStockInformationAction,
@@ -77,12 +84,17 @@ const OmsShoppingCartView: FC = () => {
   const [sassionQty, setSassionQty] = useState<number>(
     Math.random() * 10000000,
   );
+  const [toastSuccessRemoveProduct, setToastSuccessRemoveProduct] =
+    useState(false);
+  const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
+    useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
+  const cartTotalProductActions = useCartTotalProductActions();
   const {
     stateShopingCart: {
       cart: { data: cartViewData, loading: cartViewLoading },
@@ -339,11 +351,16 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartData !== null) {
       //call action remove product from redux
+      if (productRemoveSelected.selected) {
+        setProductSelectedCount(productSelectedCount - 1);
+      }
+      setToastSuccessRemoveProduct(true);
       deleteProduct({ productId: productRemoveSelected.productId });
       setProductRemoveSelected(null);
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
       setModalConfirmationRemoveProductVisible(false);
+      cartTotalProductActions.fetch();
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
@@ -351,9 +368,21 @@ const OmsShoppingCartView: FC = () => {
   /** Listen error remove */
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartError !== null) {
+      setToastFailedRemoveProduct(true);
       setLoadingRemoveProduct(false);
+      cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartError]);
+
+  /** close toast listener */
+  useEffect(() => {
+    if (toastSuccessRemoveProduct || toastFailedRemoveProduct) {
+      setTimeout(() => {
+        setToastSuccessRemoveProduct(false);
+        setToastFailedRemoveProduct(false);
+      }, 1500);
+    }
+  }, [toastSuccessRemoveProduct, toastFailedRemoveProduct]);
 
   /** did will unmound */
   useEffect(() => {
@@ -429,6 +458,24 @@ const OmsShoppingCartView: FC = () => {
         ok={onConfirmRemoveProduct}
         cancel={onCancelRemoveProduct}
         loading={loadingRemoveProduct}
+      />
+      {/* Toast success add cart */}
+      <SnbToast
+        open={toastSuccessRemoveProduct}
+        message={'Produk berhasil dihapus dari keranjang'}
+        close={() => setToastSuccessRemoveProduct(false)}
+        position={'top'}
+        leftItem={
+          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
+        }
+      />
+      {/* Toast failed add cart */}
+      <SnbToast
+        open={toastFailedRemoveProduct}
+        message={'Produk gagal dihapus dari keranjang'}
+        close={() => setToastFailedRemoveProduct(false)}
+        position={'top'}
+        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
     </SnbContainer>
   );
