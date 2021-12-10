@@ -23,6 +23,7 @@ import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { BundleSection } from './BundleSection';
+import Html from '@core/components/Html';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
@@ -106,6 +107,10 @@ const ProductDetailView: FC = () => {
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
   const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
+  const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
+    useState(false);
+  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
+    useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -141,7 +146,7 @@ const ProductDetailView: FC = () => {
   const {
     stateSupplier: {
       detail: { data: dataSegmentation },
-      create: { data: sendToSupplierData },
+      create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -314,8 +319,18 @@ const ProductDetailView: FC = () => {
         );
       }
       onFunctionActions({ type: 'close' });
+      setToastSuccessRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
     }
   }, [sendToSupplierData]);
+
+  /** => Do something when error send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierError !== null) {
+      setToastFailedRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    }
+  }, [sendToSupplierError]);
 
   /** => Do something when success add to cart */
   useEffect(() => {
@@ -337,13 +352,25 @@ const ProductDetailView: FC = () => {
 
   /** close toast listener */
   useEffect(() => {
-    if (toastSuccessAddCart || toastFailedAddCart) {
+    if (
+      toastSuccessAddCart ||
+      toastFailedAddCart ||
+      toastSuccessRegisterSupplier ||
+      toastFailedRegisterSupplier
+    ) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
         setToastFailedAddCart(false);
-      }, 2000);
+        setToastSuccessRegisterSupplier(false);
+        setToastFailedRegisterSupplier(false);
+      }, 1500);
     }
-  }, [toastSuccessAddCart, toastFailedAddCart]);
+  }, [
+    toastSuccessAddCart,
+    toastFailedAddCart,
+    toastSuccessRegisterSupplier,
+    toastFailedRegisterSupplier,
+  ]);
 
   /** => Did Unmount */
   useEffect(() => {
@@ -450,7 +477,9 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText.B3>{dataProduct?.detail}</SnbText.B3>
+            {dataProduct && dataProduct.detail && (
+              <Html value={dataProduct.detail} fontSize={12} />
+            )}
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
             <SnbText.B3>{dataProduct?.description}</SnbText.B3>
@@ -458,20 +487,24 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {isAvailable ? (
-        <ActionButton
-          title={getActionButtonTitle()}
-          disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
-          onPress={() => {
-            if (defaultProperties.isBundle) {
-              goToBundle(productId);
-            } else {
-              handleOrderPress();
-            }
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
+      {(dataProduct !== null || errorProduct !== null) && (
+        <React.Fragment>
+          {isAvailable ? (
+            <ActionButton
+              title={getActionButtonTitle()}
+              disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
+              onPress={() => {
+                if (defaultProperties.isBundle) {
+                  goToBundle(productId);
+                } else {
+                  handleOrderPress();
+                }
+              }}
+            />
+          ) : (
+            <UnavailableSkuFlag />
+          )}
+        </React.Fragment>
       )}
       <PromoModal
         visible={promoModalVisible}

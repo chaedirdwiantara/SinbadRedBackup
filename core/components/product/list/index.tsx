@@ -108,6 +108,10 @@ const ProductList: FC<ProductListProps> = ({
   const [loadingPreparation, setLoadingPreparation] = useState(false);
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
   const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
+  const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
+    useState(false);
+  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
+    useState(false);
 
   const {
     sortModalVisible,
@@ -159,7 +163,7 @@ const ProductList: FC<ProductListProps> = ({
   const {
     stateSupplier: {
       segmentation: { data: dataSegmentation },
-      create: { data: sendToSupplierData },
+      create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -266,20 +270,42 @@ const ProductList: FC<ProductListProps> = ({
 
   /** close toast listener */
   useEffect(() => {
-    if (toastSuccessAddCart || toastFailedAddCart) {
+    if (
+      toastSuccessAddCart ||
+      toastFailedAddCart ||
+      toastSuccessRegisterSupplier ||
+      toastFailedRegisterSupplier
+    ) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
         setToastFailedAddCart(false);
+        setToastSuccessRegisterSupplier(false);
+        setToastFailedRegisterSupplier(false);
       }, 1500);
     }
-  }, [toastSuccessAddCart, toastFailedAddCart]);
+  }, [
+    toastSuccessAddCart,
+    toastFailedAddCart,
+    toastSuccessRegisterSupplier,
+    toastFailedRegisterSupplier,
+  ]);
 
   /** => Do something when success send data to supplier */
   useEffect(() => {
     if (sendToSupplierData !== null) {
       onFunctionActions({ type: 'close' });
+      setToastSuccessRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
     }
   }, [sendToSupplierData]);
+
+  /** => Do something when error send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierError !== null) {
+      setToastFailedRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    }
+  }, [sendToSupplierError]);
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
@@ -514,6 +540,24 @@ const ProductList: FC<ProductListProps> = ({
         open={toastFailedAddCart}
         message={'Produk gagal ditambahkan ke keranjang'}
         close={() => setToastFailedAddCart(false)}
+        position={'top'}
+        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      />
+      {/* Toast success register supplier */}
+      <SnbToast
+        open={toastSuccessRegisterSupplier}
+        message={'Berhasil kirim data ke supplier'}
+        close={() => setToastSuccessRegisterSupplier(false)}
+        position={'top'}
+        leftItem={
+          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
+        }
+      />
+      {/* Toast failed register supplier */}
+      <SnbToast
+        open={toastFailedRegisterSupplier}
+        message={'Gagal kirim data ke supplier'}
+        close={() => setToastFailedRegisterSupplier(false)}
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
