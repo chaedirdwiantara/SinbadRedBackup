@@ -4,15 +4,15 @@ import * as models from '@models';
 /** => Process */
 export const cartUpdateProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.UpdateProcessProps<{}>,
-): models.UpdateProcessAction => {
+  payload: models.UpdateProcessProps<models.CartUpdatePayload>,
+): models.UpdateProcessAction<models.CartUpdatePayload> => {
   contextDispatch({
     type: types.CART_UPDATE_PROCESS,
     payload,
   });
   return {
     type: types.CART_UPDATE_PROCESS,
-    payload: payload.data,
+    payload,
     contextDispatch,
   };
 };
@@ -33,6 +33,9 @@ export const cartUpdateRefresh = () => {
   return { type: types.CART_UPDATE_REFRESH };
 };
 /** => Reset */
-export const cartUpdateReset = () => {
+export const cartUpdateReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.CART_UPDATE_RESET,
+  });
   return { type: types.CART_UPDATE_RESET };
 };

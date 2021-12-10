@@ -11,7 +11,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
-import Menu from '@core/components/Menu';
+import { CategoryListSkeleton } from './CategoryListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import {
@@ -21,6 +21,7 @@ import {
   useCategoryAction,
   useSelected2ndLevelCategory,
 } from '../functions';
+import { Images } from 'src/assets';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 /** === IMPORT STYLE === */
@@ -68,7 +69,11 @@ const CategoryView: React.FC = () => {
   /** => Global Icon */
   const globalIcon = (image: string, size: number) => {
     return image ? (
-      <Image source={{ uri: image }} style={{ width: size, height: size }} />
+      <Image
+        defaultSource={Images.opacityPlaceholder}
+        source={{ uri: image }}
+        style={{ width: size, height: size }}
+      />
     ) : (
       <SnbSvgIcon name="sinbad" size={size} />
     );
@@ -112,7 +117,7 @@ const CategoryView: React.FC = () => {
     index: number;
   }) => {
     const iconName =
-      item.id === selected2ndLevelId ? 'expand_more' : 'expand_less';
+      item.id === selected2ndLevelId ? 'expand_less' : 'expand_more';
 
     return (
       <View style={{ paddingBottom: 8 }}>
@@ -133,13 +138,11 @@ const CategoryView: React.FC = () => {
             }
           }}>
           {globalIcon(item.icon, 32)}
-          <View style={{ marginLeft: 8 }}>
+          <View style={{ marginLeft: 8, flex: 1 }}>
             <SnbText.B3>{item.name}</SnbText.B3>
           </View>
           {item.children.length > 0 && (
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              <SnbIcon name={iconName} size={24} color={color.black40} />
-            </View>
+            <SnbIcon name={iconName} size={24} color={color.black40} />
           )}
         </TouchableOpacity>
         {renderthirdLevelList(item)}
@@ -150,23 +153,46 @@ const CategoryView: React.FC = () => {
   const renderThirdLevelItem = ({
     item,
     index,
+    total,
   }: {
     item: models.CategoryLevel3;
     index: number;
+    total: number;
   }) => {
+    // Set 2nd level category name if "Lihat Semua" is clicked
+    const categoryName =
+      index === 0
+        ? categoryLevelState.data[selected1stLevelIndex].children[
+            selected2ndLevelIndex ?? 0
+          ].name
+        : item?.name;
+    const rowNumber = Math.ceil((index + 1) / 3);
+    const totalAtRow = rowNumber * 3;
+    let flexStyle: any = {};
+
+    if (total >= totalAtRow) {
+      flexStyle.flex = 1;
+    }
+
     return (
       item && (
         <TouchableOpacity
           key={index}
           onPress={() =>
             goToProduct(
-              item,
+              { ...item, name: categoryName },
               selected1stLevelIndex,
               selected2ndLevelIndex as number,
               index,
             )
           }
-          style={CategoryStyle.level3layoutItem}>
+          style={[
+            CategoryStyle.level3layoutItem,
+            {
+              marginLeft: index === 0 || index % 3 === 0 ? 0 : 8,
+              ...flexStyle,
+            },
+          ]}>
           {globalIcon(item.icon, 64)}
           <View style={{ marginTop: 4 }}>
             <SnbText.C1 align={'center'}>{item.name}</SnbText.C1>
@@ -177,23 +203,23 @@ const CategoryView: React.FC = () => {
   };
   /** => Third Level List */
   const renderthirdLevelList = (item: models.CategoryLevel2) => {
-    const additionalData: Array<models.CategoryLevel3> = [
-      {
-        id: item.id,
-        name: 'Lihat Semua',
-        icon: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png',
-      },
-    ];
+    const seeAllCategory: models.CategoryLevel3 = {
+      id: item.id,
+      name: 'Lihat Semua',
+      icon: 'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png',
+    };
 
     return (
       item.children.length > 0 &&
       selected2ndLevelId === item.id && (
         <View style={CategoryStyle.level3layout}>
-          <Menu
-            data={[...additionalData, ...item.children]}
-            column={3}
-            renderItem={renderThirdLevelItem}
-          />
+          {[seeAllCategory, ...item.children].map((category, categoryIndex) =>
+            renderThirdLevelItem({
+              item: category,
+              index: categoryIndex,
+              total: item.children.length + 1, // +1 from seeAllCategory
+            }),
+          )}
         </View>
       )
     );
@@ -207,9 +233,7 @@ const CategoryView: React.FC = () => {
         backAction={goBack}
       />
       {categoryLevelState.loading || categoryLevelState.data.length === 0 ? (
-        <View>
-          <SnbText.B1>loading</SnbText.B1>
-        </View>
+        <CategoryListSkeleton />
       ) : (
         <View style={{ flexDirection: 'row', flex: 1 }}>
           {/* First Level List */}

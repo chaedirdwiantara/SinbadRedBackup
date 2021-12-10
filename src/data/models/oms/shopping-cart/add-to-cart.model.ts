@@ -6,6 +6,7 @@ export interface AddToCartPayload {
   selected: boolean;
   stock: number;
   productId: string;
+  minQty: number;
   qty: number;
   displayPrice: number;
   priceBeforeTax: number;

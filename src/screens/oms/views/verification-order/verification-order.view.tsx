@@ -10,6 +10,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { ErrorPromoModal } from './error-promo-modal';
 import { ErrorVoucherModal } from './error-voucher-modal';
 import { ErrorStockModal } from './error-stock-modal';
+import { ErrorFetchModal } from './error-fetch-modal';
 import { VerificationOrderHeader } from './verification-order-header.view';
 import { VerificationOrderDiscountList } from './verification-order-discount-list.view';
 import { VerificationOrderBonusList } from './verification-order-bonus-list.view';
@@ -19,9 +20,11 @@ import { VerificationOrderBottom } from './verification-order-bottom.view';
 import {
   goBack,
   goToCheckout,
-  // useReserveDataAction,
+  useReserveDataAction,
   useCartSelected,
   useStandardModalState,
+  useStandardLoadingState,
+  useVerificationFailedFetchState,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useReserveStockAction } from '@screen/product/functions';
@@ -45,8 +48,11 @@ const OmsVerificationOrderView: FC = () => {
   const errorPromoModal = useStandardModalState();
   const errorVoucherModal = useStandardModalState();
   const errorStockModal = useStandardModalState();
+  const errorFetchModal = useVerificationFailedFetchState();
 
-  // const reserveDataAction = useReserveDataAction();
+  const loadingVerificationToCheckout = useStandardLoadingState();
+
+  const reserveDataAction = useReserveDataAction();
   const { getCartSelected } = useCartSelected();
   const voucherLocalDataAction = useVoucherLocalData();
   const reserveDiscountAction = useReserveDiscountAction();
@@ -88,7 +94,49 @@ const OmsVerificationOrderView: FC = () => {
    */
   React.useEffect(() => {
     if (stateReserveStock.create.error !== null) {
-      reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      if (stateReserveStock.create.error.code === 50080000001) {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      } else {
+        const action = () => {
+          loadingVerificationToCheckout.setLoading(true);
+          const reservedAt = moment().format().toString();
+          reserveDataAction.setReservedAt(reservedAt);
+          const invoices: ReserveStockPayloadData[] = [];
+          getCartSelected.data.map((invoiceArr: CartSelectedData) => {
+            const brands: ReserveStockPayloadBrand[] = [];
+            invoiceArr.brands.map((brandArr: CartSelectedBrand) => {
+              const products: ReserveStockPayloadProducts[] = [];
+              brandArr.products.map((productArr: CartSelectedProduct) => {
+                products.push({
+                  productId: productArr.productId,
+                  qty: productArr.qty,
+                  warehouseId: productArr.warehouseId,
+                });
+              });
+              brands.push({
+                brandId: brandArr.brandId,
+                products,
+              });
+            });
+            invoices.push({
+              invoiceGroupId: invoiceArr.invoiceGroupId,
+              brands,
+            });
+          });
+          const createReserveStockParams = {
+            id: getCartSelected.id,
+            data: invoices,
+            reservedAt,
+          };
+          reserveStockAction.create(
+            dispatchReserveStock,
+            createReserveStockParams,
+          );
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Ulangi');
+      }
     }
   }, [stateReserveStock.create.error]);
 
@@ -102,7 +150,7 @@ const OmsVerificationOrderView: FC = () => {
         ...getCartSelected,
         voucherIds: getSelectedVouchers(voucherLocalDataAction.selectedVoucher),
         potentialDiscountId: stateVerificationOrder.create.data?.id,
-        reservedAt: moment().format().toString(),
+        reservedAt: reserveDataAction.reserveData.reservedAt,
       };
       reserveDiscountAction.create(dispatchPromo, createReserveDiscountParams);
     }
@@ -118,6 +166,20 @@ const OmsVerificationOrderView: FC = () => {
   }, [stateReserveStock.detail.data]);
 
   /**
+   * Listen Error GET error message reserved-stock
+   */
+  React.useEffect(() => {
+    if (stateReserveStock.detail.error !== null) {
+      const action = () => {
+        reserveStockAction.detail(dispatchReserveStock, getCartSelected.id);
+      };
+      errorFetchModal.setOpen(true);
+      errorFetchModal.setErrorAction(() => action);
+      errorFetchModal.setErrorText('Ulangi');
+    }
+  }, [stateReserveStock.detail.error]);
+
+  /**
    * Listen Error POST reserved-discount
    * - error voucher
    * - error fetch
@@ -126,6 +188,31 @@ const OmsVerificationOrderView: FC = () => {
     if (statePromo.reserveDiscount.create.error !== null) {
       if (statePromo.reserveDiscount.create.error.code === 140037) {
         errorVoucherModal.setOpen(true);
+      } else if (statePromo.reserveDiscount.create.error.code === 140032) {
+        const action = () => {
+          goBack();
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Kembali Ke Keranjang');
+      } else {
+        const action = () => {
+          const createReserveDiscountParams = {
+            ...getCartSelected,
+            voucherIds: getSelectedVouchers(
+              voucherLocalDataAction.selectedVoucher,
+            ),
+            potentialDiscountId: stateVerificationOrder.create.data?.id,
+            reservedAt: reserveDataAction.reserveData.reservedAt,
+          };
+          reserveDiscountAction.create(
+            dispatchPromo,
+            createReserveDiscountParams,
+          );
+        };
+        errorFetchModal.setOpen(true);
+        errorFetchModal.setErrorAction(() => action);
+        errorFetchModal.setErrorText('Ulangi');
       }
     }
   }, [statePromo.reserveDiscount.create.error]);
@@ -161,8 +248,30 @@ const OmsVerificationOrderView: FC = () => {
     }
   }, [statePromo.reserveDiscount.detail.data]);
 
-  /** => handleContinueToPayment */
+  /**
+   * Listen Error GET reserved-discount
+   */
+  React.useEffect(() => {
+    if (statePromo.reserveDiscount.detail.error !== null) {
+      const action = () => {
+        if (statePromo.reserveDiscount.create.data !== null) {
+          reserveDiscountAction.detail(
+            dispatchPromo,
+            statePromo.reserveDiscount.create.data.id,
+          );
+        }
+      };
+      errorFetchModal.setOpen(true);
+      errorFetchModal.setErrorAction(() => action);
+      errorFetchModal.setErrorText('Ulangi');
+    }
+  }, [statePromo.reserveDiscount.detail.error]);
+
+  /** => handle continue to payment */
   const handleContinuePayment = () => {
+    loadingVerificationToCheckout.setLoading(true);
+    const reservedAt = moment().format().toString();
+    reserveDataAction.setReservedAt(reservedAt);
     const invoices: ReserveStockPayloadData[] = [];
     getCartSelected.data.map((invoiceArr: CartSelectedData) => {
       const brands: ReserveStockPayloadBrand[] = [];
@@ -188,7 +297,7 @@ const OmsVerificationOrderView: FC = () => {
     const createReserveStockParams = {
       id: getCartSelected.id,
       data: invoices,
-      reservedAt: moment().format().toString(),
+      reservedAt,
     };
     reserveStockAction.create(dispatchReserveStock, createReserveStockParams);
   };
@@ -196,7 +305,11 @@ const OmsVerificationOrderView: FC = () => {
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
-    return <VerificationOrderHeader />;
+    return (
+      <VerificationOrderHeader
+        isLoading={loadingVerificationToCheckout.isLoading}
+      />
+    );
   };
   /** => discount list */
   const renderDiscountList = () => {
@@ -245,12 +358,7 @@ const OmsVerificationOrderView: FC = () => {
             verificationOrderDetailData.grandTotal.grandTotalDiscount <
             0
         }
-        buttonLoading={
-          statePromo.reserveDiscount.create.loading ||
-          statePromo.reserveDiscount.detail.loading ||
-          stateReserveStock.create.loading ||
-          stateReserveStock.detail.loading
-        }
+        buttonLoading={loadingVerificationToCheckout.isLoading}
         buttonOnPress={handleContinuePayment}
       />
     );
@@ -325,6 +433,19 @@ const OmsVerificationOrderView: FC = () => {
       />
     );
   };
+  /** => error fetch modal */
+  const renderFetchStockModal = () => {
+    return (
+      <ErrorFetchModal
+        visible={errorFetchModal.isOpen}
+        onPress={() => {
+          errorFetchModal.setOpen(false);
+          errorFetchModal.errorAction();
+        }}
+        buttonText={errorFetchModal.errorText}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -343,6 +464,7 @@ const OmsVerificationOrderView: FC = () => {
       {renderErrorPromoModal()}
       {renderErrorVoucherModal()}
       {renderErrorStockModal()}
+      {renderFetchStockModal()}
     </SnbContainer>
   );
 };

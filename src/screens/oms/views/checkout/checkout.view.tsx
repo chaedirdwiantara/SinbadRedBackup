@@ -25,6 +25,7 @@ import {
   useTermsAndConditionsModal,
   useBackToCartModal,
   useErrorModalBottom,
+  useCheckoutFailedFetchState,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -36,6 +37,7 @@ import {
   useCheckAllPromoPaymentAction,
 } from '@screen/promo/functions';
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
+import { ErrorFetchModal } from './checkout-error-fetch-modal';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -54,6 +56,7 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelData = usePaymentChannelsData();
   const paymentTCModal = useTermsAndConditionsModal();
   const errorBottomModal = useErrorModalBottom();
+  const errorFetchModal = useCheckoutFailedFetchState();
   const {
     stateCheckout: {
       checkout: {
@@ -281,6 +284,27 @@ const OmsCheckoutView: FC = () => {
       });
       paymentChannelData.updatePromoPaymentChannel(payload);
     }
+    // if error
+    if (statePromo.checkPromoPayment.list.error !== null) {
+      const action = () => {
+        const paymentChannelId: Array<number> = [];
+        paymentChannelData.paymentChannels.map(
+          (item: models.IPaymentChannels) => {
+            paymentChannelId.push(item.id);
+          },
+        );
+        const checkPromoPaymentParams = {
+          paymentTypeId: paymentChannelData.paymentType.id,
+          paymentChannelId,
+          parcelPrice: paymentChannelData.totalCartParcel,
+          invoiceGroupId: paymentChannelData.invoiceGroupId,
+        };
+        checkPromoPaymentAction.list(dispatchPromo, checkPromoPaymentParams);
+      };
+      errorFetchModal.setOpen(true);
+      errorFetchModal.setErrorAction(() => action);
+      errorFetchModal.setErrorText('Ulangi');
+    }
   }, [statePromo.checkPromoPayment.list]);
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
@@ -360,7 +384,7 @@ const OmsCheckoutView: FC = () => {
             openModalPaymentChannels={selectedPaymentType}
           />
           <ModalPaymentChannels
-            isOpen={paymentChannelsModal.isOpen}
+            isOpen={paymentChannelsModal.isOpen && !errorFetchModal.isOpen}
             back={backModalPaymentChannel}
             close={closePaymentChannel}
           />
@@ -379,6 +403,14 @@ const OmsCheckoutView: FC = () => {
           <ModalBottomErrorCheckout
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
+          />
+          <ErrorFetchModal
+            visible={errorFetchModal.isOpen}
+            onPress={() => {
+              errorFetchModal.setOpen(false);
+              errorFetchModal.errorAction();
+            }}
+            buttonText={errorFetchModal.errorText}
           />
         </>
       )}

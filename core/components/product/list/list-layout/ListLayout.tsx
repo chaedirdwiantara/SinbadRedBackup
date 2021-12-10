@@ -9,7 +9,7 @@ import { ListSkeleton } from './ListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import {
   goToProductDetail,
-  useProductDisplayState,
+  useListDisplayState,
 } from '@core/functions/product';
 /** === IMPORT TYPES === */
 import * as models from '@models';
@@ -28,10 +28,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
   error,
 }) => {
   /** === HOOK ===  */
-  const displayState = useProductDisplayState({
+  const displayState = useListDisplayState({
     loading,
     error,
-    productsLength: products.length,
+    dataLength: products.length,
   });
   /** === DERIVED === */
   const hasTags = withTags && tags.length > 0;

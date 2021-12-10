@@ -23,16 +23,18 @@ import { PromoPaymentDetailStyles } from '../../styles';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { NavigationAction } from '@core/functions/navigation';
 /** === COMPONENT === */
-const PromoPaymentDetail: FC = ({ route }: any) => {
+const PromoPaymentDetail: FC = () => {
   /** === HOOK === */
   const promoPaymentDetailError = useStandardModalState();
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const promoPaymentAction = usePromoPaymentAction();
   const promoPaymentDetailState = statePromo.promoPayment.detail;
+  const { id } = NavigationAction.useGetNavParams().params;
   /** => effect */
   React.useEffect(() => {
-    promoPaymentAction.detail(dispatchPromo, route.params.promoPaymentId);
+    promoPaymentAction.detail(dispatchPromo, id);
     return () => {
       promoPaymentAction.resetDetail(dispatchPromo);
     };

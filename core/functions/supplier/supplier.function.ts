@@ -17,7 +17,9 @@ export interface DataMerchant {
   onSendDataSupplier?: () => void;
 }
 
-export const useCheckDataSupplier = () => {
+export const useCheckDataSupplier = (
+  setOrderModalVisible?: Dispatch<SetStateAction<boolean>>,
+) => {
   /** => state */
   const [modalWaitingApproval, setModalWaitingApproval] = useState(false);
   const [modalRejectApproval, setModalRejectApproval] = useState(false);
@@ -74,7 +76,9 @@ export const useCheckDataSupplier = () => {
     } else {
       //addSkuToCartAfterCheckVerified
       onFunctionActions({ type: 'close' });
-      // setOrderModalVisible(true);
+      if (setOrderModalVisible) {
+        setOrderModalVisible(true);
+      }
     }
   };
   /** STATUS REJECTED */
@@ -89,8 +93,10 @@ export const useCheckDataSupplier = () => {
       showUnverified();
     } else {
       //addSkuToCartAfterCheckVerified
+      if (setOrderModalVisible) {
+        setOrderModalVisible(true);
+      }
       onFunctionActions({ type: 'close' });
-      // setOrderModalVisible(true);
     }
   };
   /** STATUS PENDING */

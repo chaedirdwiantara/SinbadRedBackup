@@ -7,6 +7,8 @@ import {
   SnbText,
   SnbButton,
 } from 'react-native-sinbad-ui';
+const sinbadCry = require('@image/sinbad_image/cry_sinbad.png');
+
 /** === TYPE === */
 interface WaitingApprovalModalProps {
   visible: boolean;
@@ -30,8 +32,13 @@ const WaitingApprovalModal: FC<WaitingApprovalModalProps> = ({
         }}>
         <View style={{ alignItems: 'center', paddingHorizontal: 16 }}>
           <Image
-            source={require('../../../../src/assets/images/sinbad_image/cry_sinbad.png')}
-            style={{ width: 200, marginBottom: 16 }}
+            source={sinbadCry}
+            style={{
+              height: 148,
+              width: '100%',
+              resizeMode: 'contain',
+              marginBottom: 16,
+            }}
           />
           <SnbText.B2 color={color.black100}>
             Sedang Menunggu Verifikasi..
