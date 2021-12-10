@@ -351,6 +351,9 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartData !== null) {
       //call action remove product from redux
+      if (productRemoveSelected.selected) {
+        setProductSelectedCount(productSelectedCount - 1);
+      }
       setToastSuccessRemoveProduct(true);
       deleteProduct({ productId: productRemoveSelected.productId });
       setProductRemoveSelected(null);
