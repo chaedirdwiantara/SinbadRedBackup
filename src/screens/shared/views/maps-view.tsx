@@ -26,7 +26,7 @@ const MapsView = () => {
   const [isMounted, setIsMounted] = React.useState(true);
   const [position, setPosition] = React.useState<LatLng | null>(null);
   const [isGettingCurrentPosition, setIsGettingCurrentPosition] =
-    React.useState<boolean>(true);
+    React.useState<boolean>(false);
   const { goBack } = useNavigation();
   const { saveStoreData, merchantData } = useMerchant();
   const { getLocation, locations, resetLocation } = useLocations();
@@ -53,6 +53,7 @@ const MapsView = () => {
       if (merchantData.address) {
         setDesc(merchantData.address || '');
       } else {
+        setIsGettingCurrentPosition(true);
         setDesc('Mendapatkan lokasi anda. . .');
         setPosition(DEFAULT_LOCATION);
       }
@@ -158,8 +159,10 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onFailedGetPosition={() => {
-          setDesc('Alamat tidak ditemukan');
-          setIsGettingCurrentPosition(false);
+          if (params?.action === 'register') {
+            setDesc('Alamat tidak ditemukan');
+            setIsGettingCurrentPosition(false);
+          }
         }}
         onSuccessGetPosition={(geoPosition, refMaps, _) => {
           if (
@@ -177,17 +180,12 @@ const MapsView = () => {
               longitude: geoPosition.longitude,
             });
             getAddress(geoPosition);
-          } else {
+          } else if (params?.action !== 'edit') {
             getAddress({
-              latitude:
-                merchantData?.latitude ||
-                storeAddress?.latitude ||
-                DEFAULT_LOCATION.latitude,
-              longitude:
-                merchantData?.longitude ||
-                storeAddress?.longitude ||
-                DEFAULT_LOCATION.longitude,
+              latitude: merchantData?.latitude || DEFAULT_LOCATION.latitude,
+              longitude: merchantData?.longitude || DEFAULT_LOCATION.longitude,
             });
+          } else {
           }
         }}
       />
