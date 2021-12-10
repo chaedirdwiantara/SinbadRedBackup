@@ -40,6 +40,7 @@ function* editProfile(action: models.UpdateProcessAction) {
     const response: models.UpdateSuccessProps = yield call(() => {
       return MerchantApi.editProfile(action.payload);
     });
+
     yield action.contextDispatch(ActionCreators.profileEditSuccess(response));
     yield put(ActionCreators.profileEditSuccess(response));
   } catch (error: any) {
