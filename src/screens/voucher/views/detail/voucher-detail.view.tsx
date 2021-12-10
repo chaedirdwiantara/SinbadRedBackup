@@ -18,6 +18,10 @@ import {
 } from '../../functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
+/** === INTERFACE === */
+interface NavigationParams {
+  type: string;
+}
 /** === COMPONENT === */
 const VoucherDetailView: FC = () => {
   /** === HOOK === */
@@ -26,7 +30,8 @@ const VoucherDetailView: FC = () => {
   );
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
-  const { id, type } = NavigationAction.useGetNavParams().params;
+  const { id, type } =
+    NavigationAction.useGetNavParams<NavigationParams>().params;
   const voucherDetailError = useStandardModalState();
   /** => effect */
   React.useEffect(() => {
