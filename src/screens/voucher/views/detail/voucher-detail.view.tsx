@@ -9,8 +9,13 @@ import { VoucherDetailCardInfo } from './voucher-detail-card-info.view';
 import { VoucherDetailDescription } from './voucher-detail-description.view';
 import { VoucherDetailTnC } from './voucher-detail-tnc.view';
 import { VoucherDetailInstruction } from './voucher-detail-instruction.view';
+import BottomModalError from '@core/components/BottomModalError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { useVoucherDetailAction } from '../../functions';
+import {
+  useVoucherDetailAction,
+  useStandardModalState,
+  goBack,
+} from '../../functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
 /** === COMPONENT === */
@@ -22,6 +27,7 @@ const VoucherDetailView: FC = () => {
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
   const { id, type } = NavigationAction.useGetNavParams().params;
+  const voucherDetailError = useStandardModalState();
   /** => effect */
   React.useEffect(() => {
     voucherDetailAction.detail(dispatchVoucher, id, type);
@@ -29,6 +35,11 @@ const VoucherDetailView: FC = () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
   }, []);
+  React.useEffect(() => {
+    if (stateVoucher.voucherGeneral.detail.error !== null) {
+      voucherDetailError.setOpen(true);
+    }
+  }, [stateVoucher.voucherGeneral.detail.error]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -95,6 +106,22 @@ const VoucherDetailView: FC = () => {
       />
     );
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={voucherDetailError.isOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          voucherDetailError.setOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -110,6 +137,8 @@ const VoucherDetailView: FC = () => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };
