@@ -2,7 +2,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 import {
-  SnbText,
   SnbContainer,
   SnbStatusBar,
   SnbToast,
@@ -11,6 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
+import Html from '@core/components/Html';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -23,7 +23,6 @@ import { UnavailableSkuFlag } from './UnavailableSkuFlag';
 import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
 import { BundleSection } from './BundleSection';
-import Html from '@core/components/Html';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
@@ -55,46 +54,11 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 import { useDataAuth } from '@core/redux/Data';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import * as models from '@models';
-
 /** === DUMMY === */
-const productDetailDummy = {
-  id: '1',
-  name: 'LAKME CC CREAM ALMOND',
-  images: [
-    {
-      url: 'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-    },
-    {
-      url: 'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
-    },
-  ],
-  currentPrice: 77891,
-  originalPrice: 85680,
-  packagedQty: 5,
-  minQty: 1,
-  unit: 'Pcs',
-  isExclusive: true,
-  detail: 'It is what it is.',
-  description: 'Good for skin obviously, experience the difference!',
-  productWeight: 100,
-  promoList: [
-    {
-      promoSellerId: '6149f9c2a5868baca3e6f8eb',
-      shortDescription:
-        'Setiap pembelian produk Lakme sebesar 2jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 1%.\nSetiap pembelian di atas 5jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 2%',
-    },
-    {
-      promoSellerId: '6149f9c2a5868baca3e6f8eb',
-      shortDescription:
-        'Setiap pembelian produk Lakme sebesar 10jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 3%.',
-    },
-  ],
-  supplier: {
-    name: 'Depo Berkah Abadi',
-    urbanCity: 'Jakarta Barat',
-    logoUrl: '',
-  },
-  discount: '10%',
+const supplierDummy = {
+  name: 'Depo Berkah Abadi',
+  urbanCity: 'Jakarta Barat',
+  logoUrl: '',
 };
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
@@ -442,9 +406,9 @@ const ProductDetailView: FC = () => {
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
           {/* <ProductDetailSupplierInfo // Hide temporarily
-            logo={productDetailDummy.supplier.logoUrl}
-            name={productDetailDummy.supplier.name}
-            urbanCity={productDetailDummy.supplier.urbanCity}
+            logo={supplierDummy.logoUrl}
+            name={supplierDummy.name}
+            urbanCity={supplierDummy.urbanCity}
           /> */}
           {potentialPromoProductList.data !== null &&
             potentialPromoProductList.data.flexiCombo.length > 0 && (
@@ -477,12 +441,10 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            {dataProduct && dataProduct.detail && (
-              <Html value={dataProduct.detail} fontSize={12} />
-            )}
+            <Html value={dataProduct?.detail ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
-            <SnbText.B3>{dataProduct?.description}</SnbText.B3>
+            <Html value={dataProduct?.description ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
