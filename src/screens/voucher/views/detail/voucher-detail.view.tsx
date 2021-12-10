@@ -21,10 +21,10 @@ const VoucherDetailView: FC = () => {
   );
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
-  const { id, other } = NavigationAction.useGetNavParams().params;
+  const { id, type } = NavigationAction.useGetNavParams().params;
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(dispatchVoucher, id, other.type);
+    voucherDetailAction.detail(dispatchVoucher, id, type);
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
