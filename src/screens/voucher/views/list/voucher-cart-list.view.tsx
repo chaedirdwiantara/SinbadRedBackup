@@ -21,6 +21,7 @@ import {
   useSelectedSellerVoucher,
   useSelectedSinbadVoucher,
   useVoucherLocalData,
+  useStandardModalState,
 } from '../../functions';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
@@ -46,7 +47,7 @@ const VoucherCartListView: FC = () => {
     resetVoucherData,
   } = useVoucherList();
   const voucherLocalDataAction = useVoucherLocalData();
-  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
+  const errorModal = useStandardModalState();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
   const voucherCartListState = stateVoucher.voucherCart.detail;
@@ -88,7 +89,7 @@ const VoucherCartListView: FC = () => {
     }
     // if fetching error
     if (voucherCartListState.error !== null) {
-      setErrorModalOpen(true);
+      errorModal.setOpen(true);
     }
   }, [voucherCartListState]);
   /** === VIEW === */
@@ -207,13 +208,13 @@ const VoucherCartListView: FC = () => {
   const renderErrorModal = () => {
     return (
       <BottomModalError
-        isOpen={isErrorModalOpen}
+        isOpen={errorModal.isOpen}
         errorTitle={'Terjadi kesalahan'}
         errorSubtitle={'Silahkan mencoba kembali'}
         errorImage={require('../../../../assets/images/cry_sinbad.png')}
         buttonTitle={'Ok'}
         buttonOnPress={() => {
-          setErrorModalOpen(false);
+          errorModal.setOpen(false);
           goBack();
         }}
       />
