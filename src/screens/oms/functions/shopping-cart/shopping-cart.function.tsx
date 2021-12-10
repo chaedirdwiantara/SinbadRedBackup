@@ -235,7 +235,7 @@ const handleProductDelete = (
   onRemoveProduct({
     productId: deletedProduct.productId,
     qty: 0,
-    selected: false,
+    selected: deletedProduct.selected,
     stock: deletedProduct.stock,
   });
 };
