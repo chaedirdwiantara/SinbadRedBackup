@@ -48,34 +48,38 @@ const apiGeneral = async <T>(
         }
         throwError(response);
       }
-      return response.json().then((error: ErrorProps) => {
-        throwFinalError(error);
-      });
+      return response
+        .json()
+        .then((error: ErrorProps & { error: string; statusCode: number }) => {
+          throwFinalError(error);
+        });
     }
     return response;
   };
   /** === HANDLE MAIN ERROR RESPONSE === */
-  const handleMainErrors = (error: ErrorProps) => {
+  const handleMainErrors = (
+    error: ErrorProps & { error: string; statusCode: number },
+  ) => {
     throwFinalError(error);
   };
-  /** === THROW ERROR === */
+  /** === THROW ERROR FOR CONTENT TYPE TEXT/HTML === */
   const throwError = (response: any) => {
     throw {
-      status: response.status,
       message: response.statusText,
-      errorMessage: 'Data Error From Header',
+      errorMessage: response.statusText,
       type: response.type,
-      code: 0,
+      code: response.status,
     };
   };
   /** === THROW FINAL ERROR === */
-  const throwFinalError = (error: ErrorProps) => {
+  const throwFinalError = (
+    error: ErrorProps & { error: string; statusCode: number },
+  ) => {
     throw {
-      status: error.status,
       message: error.message,
-      errorMessage: error.errorMessage,
-      type: error.type,
-      code: error.code,
+      errorMessage: error.errorMessage ? error.errorMessage : error.message,
+      type: error.type ? error.type : error.error,
+      code: error.code ? error.code : error.statusCode,
     };
   };
   /** === MAIN FUNCTION === */
