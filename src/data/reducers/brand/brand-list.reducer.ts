@@ -1,12 +1,12 @@
-/** === IMPORT HERE === */
+/** === IMPORT INTERNAL === */
 import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
-/** === TYPE HERE === */
-type BrandListInitialProps = models.ListItemProps<
-  models.BrandListSuccessProps[]
+/** === TYPE === */
+export type BrandListInitialProps = models.ListItemProps<
+  models.BrandListItem[]
 >;
-/** === INITIAL STATE HERE */
+/** === INITIAL STATE */
 export const brandlistInitialState: BrandListInitialProps = {
   data: [],
   error: null,
@@ -16,60 +16,59 @@ export const brandlistInitialState: BrandListInitialProps = {
   total: 0,
   skip: 0,
 };
-/** === FUNCTION HERE === */
+/** === REDUCER === */
 export const brandListReducer = simplifyReducer(brandlistInitialState, {
-  /** ===> LIST */
-  /** => list process */
+  /** => Process */
   [types.BRAND_LIST_PROCESS](
     state = brandlistInitialState,
-    action: models.ListProcessAction,
+    { payload }: models.ListProcessAction,
   ) {
     return {
       ...state,
-      loading: action.payload.loading,
+      loading: payload.loading,
       error: null,
     };
   },
-  /** => list success */
+  /** => Succeeded */
   [types.BRAND_LIST_SUCCESS](
     state = brandlistInitialState,
-    action: models.ListSuccessAction<models.BrandListSuccessProps[]>,
+    { payload }: models.ListSuccessAction<models.BrandListItem[]>,
   ) {
     return {
       ...state,
-      data: [...state.data, ...action.payload.data],
+      data: [...state.data, ...payload.data],
       loading: false,
       loadMore: false,
       refresh: false,
-      total: action.payload.meta.total,
-      skip: action.payload.meta.skip,
+      total: payload.meta.total,
+      skip: payload.meta.skip,
     };
   },
-  /** => list failed */
+  /** => Failed */
   [types.BRAND_LIST_FAILED](
     state = brandlistInitialState,
-    action: models.ListFailedAction,
+    { payload }: models.ListFailedAction,
   ) {
     return {
       ...state,
       loading: false,
       loadMore: false,
       refresh: false,
-      error: action.payload,
+      error: payload,
     };
   },
-  /** => list reset */
+  /** => Reset */
   [types.BRAND_LIST_RESET]() {
     return brandlistInitialState;
   },
-  /** => list refresh */
+  /** => Refresh */
   [types.BRAND_LIST_REFRESH]() {
     return {
       ...brandlistInitialState,
       refresh: true,
     };
   },
-  /** => list load more */
+  /** => Load More */
   [types.BRAND_LIST_LOADMORE](state = brandlistInitialState) {
     return {
       ...state,

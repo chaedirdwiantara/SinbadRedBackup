@@ -1,11 +1,10 @@
-/** === IMPORT EXTERNAL FUNCTION === */
+/** === IMPORT INTERNAL === */
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 /** === FUNCTION === */
-/** => brand list */
-const brandList = (data: models.ListProcessProps) => {
-  const path = `brands?limit=${data.limit}&skip=${data.skip}`;
-  return apiMapping<models.BrandListSuccessProps[]>(
+const getList = (payload: models.ListProcessProps) => {
+  const path = `brands?limit=${payload.limit}&skip=${payload.skip}`;
+  return apiMapping<models.BrandListItem[]>(
     'public',
     path,
     'product',
@@ -14,7 +13,6 @@ const brandList = (data: models.ListProcessProps) => {
   );
 };
 
-/** === EXPORT FUNCTIONS === */
 export const BrandApi = {
-  brandList,
+  getList,
 };

@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { TouchableWithoutFeedback, View } from 'react-native';
+import { TouchableWithoutFeedback, View, Image } from 'react-native';
 import { SnbText, color, styles } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { HistoryDetailStyle } from '../styles';
@@ -10,6 +10,7 @@ interface HistoryDetailCardProps {
   title: string;
   actionTitle?: string;
   onActionClick?: () => void;
+  actionLoading?: boolean;
 }
 /** === COMPONENTS === */
 export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
@@ -17,6 +18,7 @@ export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
   children,
   actionTitle,
   onActionClick,
+  actionLoading,
 }) => (
   <View>
     <View style={styles.shadowForBox10}>
@@ -25,7 +27,14 @@ export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
         {actionTitle && (
           <TouchableWithoutFeedback onPress={onActionClick}>
             <View>
-              <SnbText.B4 color={color.red50}>{actionTitle}</SnbText.B4>
+              {!actionLoading ? (
+                <SnbText.B4 color={color.red50}>{actionTitle}</SnbText.B4>
+              ) : (
+                <Image
+                  source={require('../../../assets/gif/loading/load_more.gif')}
+                  style={{ height: 16, width: 50 }}
+                />
+              )}
             </View>
           </TouchableWithoutFeedback>
         )}

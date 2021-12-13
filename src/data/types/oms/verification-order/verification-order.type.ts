@@ -5,6 +5,7 @@ export const VERIFICATION_ORDER_CREATE_PROCESS =
 export const VERIFICATION_ORDER_CREATE_SUCCESS =
   'VerificationOrderCreateSuccess';
 export const VERIFICATION_ORDER_CREATE_FAILED = 'VerificationOrderCreateFailed';
+export const VERIFICATION_ORDER_CREATE_RESET = 'VerificationOrderCreateReset';
 /** => verification order detail */
 export const VERIFICATION_ORDER_DETAIL_PROCESS =
   'VerificationOrderDetailProcess';

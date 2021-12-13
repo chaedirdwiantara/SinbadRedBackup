@@ -1,7 +1,9 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment action */
 const usePromoPaymentAction = () => {
@@ -28,15 +30,15 @@ const usePromoPaymentAction = () => {
     },
   };
 };
-/** => promo general action */
-const usePromoGeneralAction = () => {
+/** => promo seller action */
+const usePromoSellerAction = () => {
   const dispatch = useDispatch();
   return {
     detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.promoGeneralDetailProcess(contextDispatch, { id }));
+      dispatch(Actions.promoSellerDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.promoGeneralDetailReset());
+      contextDispatch(Actions.promoSellerDetailReset());
     },
   };
 };
@@ -44,7 +46,7 @@ const usePromoGeneralAction = () => {
 const usePotentialPromoProductAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any, id: string) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.potentialPromoProductProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -59,17 +61,80 @@ const useReserveDiscountAction = () => {
     del: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.deleteReserveDiscountProcess(contextDispatch, { id }));
     },
-    resetDel: (contextDispatch: (action: any) => any) => {
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.ReserveDiscountPostPayload,
+    ) => {
+      dispatch(Actions.createReserveDiscountProcess(contextDispatch, data));
+    },
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
+    },
+    resetPostGet: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.createReserveDiscountReset());
+      contextDispatch(Actions.detailReserveDiscountReset());
+    },
+    resetDelete: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.deleteReserveDiscountReset());
     },
   };
 };
+/** => check promo payment action (this for payment channel modal) */
+const useCheckPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    list: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckPromoPaymentGetPayload,
+    ) => {
+      dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.checkPromoPaymentReset());
+    },
+  };
+};
+/** => check all promo payment action (this for get last payment channel) */
+const useCheckAllPromoPaymentAction = () => {
+  const dispatch = useDispatch();
+  return {
+    create: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckAllPromoPaymentPostPayload[],
+    ) => {
+      dispatch(
+        Actions.createCheckAllPromoPaymentProcess(contextDispatch, data),
+      );
+    },
+    list: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.createCheckAllPromoPaymentReset());
+      contextDispatch(Actions.getCheckAllPromoPaymentReset());
+    },
+  };
+};
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
+
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
-  usePromoGeneralAction,
+  usePromoSellerAction,
   usePotentialPromoProductAction,
   useReserveDiscountAction,
+  useCheckPromoPaymentAction,
+  useCheckAllPromoPaymentAction,
+  useStandardModalState,
 };
 /**
  * ================================================================

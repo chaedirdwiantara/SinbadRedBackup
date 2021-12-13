@@ -50,11 +50,7 @@ const useSelected2ndLevelCategory = () => {
   };
 
   const handle2ndLevelIndexChange = (index: number) => {
-    if (index === selected2ndLevelIndex) {
-      setSelected2ndLevelIndex(null);
-    } else {
-      setSelected2ndLevelIndex(index);
-    }
+    setSelected2ndLevelIndex(index);
   };
 
   return {

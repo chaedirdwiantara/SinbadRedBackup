@@ -4,6 +4,7 @@ export interface CartProduct {
   urlImages: string;
   stock: number;
   selected: boolean;
+  minQty: number;
   qty: number;
   displayPrice: number;
   priceBeforeTax: number;
@@ -26,7 +27,7 @@ export interface CartInvoiceGroup {
   invoiceGroupName: string;
   portfolioId: string;
   brands: CartBrand[];
-  supplierId: number;
+  sellerId: number;
   channelId: number;
   groupId: number;
   typeId: number;

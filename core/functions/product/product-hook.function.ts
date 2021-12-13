@@ -1,8 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import { useState, Dispatch, SetStateAction } from 'react';
-import { Alert } from 'react-native';
+import { useState, useEffect, useMemo } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
+import { useTagContext } from 'src/data/contexts/product';
 /** === IMPORT TYPES ===  */
 import * as models from '@models';
 import {
@@ -11,6 +11,10 @@ import {
   SortIndex,
   PriceRange,
 } from '@core/components/product/list/BottomAction';
+import {
+  ListDisplayState,
+  ITag,
+} from '@core/components/product/list/product-list-core.type';
 /** === TYPE ===  */
 export interface SortOption {
   name: string;
@@ -19,6 +23,12 @@ export interface SortOption {
 }
 
 export type SortQuery = Omit<SortOption, 'name'>;
+
+interface UseListDisplayStateParams {
+  loading: boolean;
+  error: models.ErrorProps | null;
+  dataLength: number;
+}
 /** === CONSTANT === */
 export const priceSortOptions: Array<SortOption> = [
   {
@@ -190,41 +200,6 @@ export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
   };
 };
 
-export const useRegisterSupplierModal = () => {
-  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
-    useState(false);
-
-  const sendSupplierData = (
-    setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
-  ) => {
-    // Hit api send-store-supplier
-    Alert.alert(
-      'Send Data to Suplier',
-      'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => setRegisterSupplierModalVisible(false),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            setRegisterSupplierModalVisible(false);
-            setOrderModalVisible(true);
-          },
-        },
-      ],
-    );
-  };
-
-  return {
-    visible: registerSupplierModalVisible,
-    setVisible: setRegisterSupplierModalVisible,
-    sendSupplierData,
-  };
-};
-
 export const useOrderModalVisibility = () => {
   const [orderModalVisible, setOrderModalVisible] = useState(false);
 
@@ -237,4 +212,64 @@ export const useOrderModalVisibility = () => {
     setOrderModalVisible,
     toggleModalVisible,
   };
+};
+
+export const useListDisplayState = ({
+  loading,
+  error,
+  dataLength,
+}: UseListDisplayStateParams) => {
+  const [displayState, setDisplayState] = useState<ListDisplayState>('success');
+
+  useEffect(() => {
+    if (loading) {
+      setDisplayState('loading');
+    } else if (!loading && error) {
+      setDisplayState('error');
+    } else if (!loading && dataLength === 0) {
+      setDisplayState('empty');
+    } else {
+      setDisplayState('success');
+    }
+  }, [loading, error, dataLength]);
+
+  return displayState;
+};
+
+export const useProductTags = (
+  fetchProductFn: (tags: Array<string>) => void,
+) => {
+  const {
+    stateTag: {
+      list: { data: tagsFromContext },
+    },
+  } = useTagContext();
+  const [tags, setTags] = useState<Array<ITag>>([]);
+  const selectedTags: Array<string> = useMemo(
+    () => tags.filter((tag) => tag.selected).map((filtered) => filtered.value),
+    [tags],
+  );
+
+  useEffect(() => {
+    const formattedTags: Array<ITag> = tagsFromContext.map((tag) => ({
+      value: tag.tags,
+      selected: false,
+    }));
+    setTags(formattedTags);
+  }, [tagsFromContext]);
+
+  const handleTagPress = (tagIndex: number) => {
+    const toggledTag = tags[tagIndex];
+    toggledTag.selected = !toggledTag.selected;
+    const updatedTags = [...tags];
+    updatedTags[tagIndex] = toggledTag;
+    const tagsQuery = updatedTags
+      .filter((tag) => tag.selected)
+      .map((filtered) => filtered.value);
+
+    setTags(updatedTags);
+    fetchProductFn(tagsQuery);
+  };
+
+  return { tags, selectedTags, handleTagPress };
 };

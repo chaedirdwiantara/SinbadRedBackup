@@ -56,7 +56,7 @@ const CategoryProductView: FC = () => {
         <ProductList
           products={productListState.data}
           activeCategory={category}
-          categoryTabs={categoryFirstLevelIndex !== undefined} // Only for 2nd and 3rd level categories
+          withCategoryTabs={categoryFirstLevelIndex !== undefined} // Only for 2nd and 3rd level categories
           categoryTabsConfig={
             categoryFirstLevelIndex !== undefined
               ? {

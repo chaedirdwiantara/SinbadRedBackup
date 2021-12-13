@@ -1,0 +1,14 @@
+/** => Get Checkout Master */
+export const GET_CHECKOUT_MASTER = 'GetCheckoutMater';
+/** => Merge invoices  */
+export const MERGE_CHECKOUT_INVOICE_BRAND = 'MergeCheckoutInvoiceBrand';
+/** => Merge Reserve Discount Data */
+export const MERGE_RESERVE_DISCOUNT_CHECKOUT = 'MergeReserveDiscountCheckout';
+/** => Update payment type channel */
+export const UPDATE_PAYMENT_CHANNEL_CHECKOUT = 'UpdatePaymentChannelCheckout';
+/** => Update promo payment */
+export const UPDATE_PROMO_PAYMENT_CHECKOUT = 'UpdatePromoPaymentCheckout';
+/** => Update CartId */
+export const UPDATE_CART_ID_CHECKOUT = 'UpdateCartIdCheckout';
+/** => Reset Checkout Master Data */
+export const RESET_CHECKOUT_MASTER_DATA = 'ResetCheckoutMasterData';

@@ -5,5 +5,11 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react-native/no-inline-styles': 'off',
     'comma-dangle': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
 };

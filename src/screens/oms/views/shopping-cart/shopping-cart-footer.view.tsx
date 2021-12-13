@@ -21,7 +21,7 @@ interface ShoppingCartFooterProps {
   setAllProductsSelected: (any: any) => void;
   totalProducts: any;
   productSelectedCount: number;
-  setIsConfirmCheckoutDialogOpen: (any: any) => void;
+  openModalCheckout: (any: any) => void;
 }
 /** === COMPONENT === */
 export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
@@ -32,7 +32,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
   setAllProductsSelected,
   totalProducts,
   productSelectedCount,
-  setIsConfirmCheckoutDialogOpen,
+  openModalCheckout,
 }) => {
   return (
     <View style={ShoppingCartStyles.footerContainer}>
@@ -76,7 +76,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
             type="primary"
             title="Checkout"
             size="small"
-            onPress={() => setIsConfirmCheckoutDialogOpen(true)}
+            onPress={() => openModalCheckout(true)}
           />
         </View>
       </View>

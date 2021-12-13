@@ -4,24 +4,24 @@ import * as models from '@models';
 /** => list supplier process */
 export const paymentStatusListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
+  payload: models.ListProcessProps,
 ): models.ListProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types, payload });
   return {
     type: types.PAYMENT_STATUS_LIST_PROCESS,
-    payload: data,
+    payload,
     contextDispatch,
   };
 };
 /** => list supplier success */
 export const paymentStatusListSuccess = (
-  data: models.ListSuccessProps<models.IPaymentStatusList[]>,
+  payload: models.ListSuccessProps<models.IPaymentStatusList[]>,
 ): models.ListSuccessAction<models.IPaymentStatusList[]> => {
-  return { type: types.PAYMENT_STATUS_LIST_SUCCESS, payload: data };
+  return { type: types.PAYMENT_STATUS_LIST_SUCCESS, payload };
 };
 /** => list supplier failed */
 export const paymentStatusListFailed = (
-  data: models.ErrorProps,
+  payload: models.ErrorProps,
 ): models.ListFailedAction => {
-  return { type: types.PAYMENT_STATUS_LIST_FAILED, payload: data };
+  return { type: types.PAYMENT_STATUS_LIST_FAILED, payload };
 };

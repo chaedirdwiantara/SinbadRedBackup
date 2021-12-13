@@ -1,16 +1,19 @@
 export interface AddToCartPayload {
-  cartId?: string | null;
   isActiveStore: boolean;
+  brandId: string;
+  productName: string;
+  urlImages: string;
   selected: boolean;
   stock: number;
   productId: string;
+  minQty: number;
   qty: number;
   displayPrice: number;
   priceBeforeTax: number;
   priceAfterTax: number;
   uom: string;
   warehouseId: number;
-  supplierId: number;
+  sellerId: number;
   channelId: number | null;
   groupId: number | null;
   typeId: number | null;

@@ -21,7 +21,18 @@ import {
   ShopingCartProvider,
   ShopingCartContext,
 } from './oms/shoping-cart/ShopingCartProvider';
+import { PaymentProvider, PaymentContext } from './oms/payment/PaymentProvider';
+import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
+import {
+  ReserveStockProvider,
+  ReserveStockContext,
+} from './product/reserve-stock/ReserveStockProvider';
+import {
+  CheckoutProvider,
+  CheckoutContext,
+} from './oms/checkout/CheckoutProvider';
 import { HistoryProvider, HistoryContext } from './history/HistoryProvider';
+import { StockProvider, StockContext } from './product/stock/StockProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -39,7 +50,12 @@ export const providers = [
   TagProvider,
   BannerProvider,
   ShopingCartProvider,
+  PaymentProvider,
+  SupplierProvider,
+  ReserveStockProvider,
+  CheckoutProvider,
   HistoryProvider,
+  StockProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -56,5 +72,10 @@ export const contexts = {
   TagContext,
   BannerContext,
   ShopingCartContext,
+  PaymentContext,
+  SupplierContext,
+  ReserveStockContext,
+  CheckoutContext,
   HistoryContext,
+  StockContext,
 };

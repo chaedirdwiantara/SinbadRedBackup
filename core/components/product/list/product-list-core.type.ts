@@ -2,10 +2,9 @@ import * as models from '@models';
 
 export interface ProductLayoutProps {
   products: Array<models.ProductList>;
-  tags: Array<string>;
-  onTagPress: (tags: Array<string>) => void;
-  /** To reset ProductTagList component every time category changes by changing it's key. */
-  tagListComponentKey?: string;
+  withTags?: boolean;
+  tags: Array<ITag>;
+  onTagPress: (index: number, tag: ITag) => void;
   onOrderPress: (item: models.ProductList) => void;
   isRefreshing: boolean;
   onRefresh: () => void;
@@ -29,3 +28,10 @@ export type CategoryType =
   | models.CategoryLevel
   | models.CategoryLevel2
   | models.CategoryLevel3;
+
+export interface ITag {
+  value: string;
+  selected: boolean;
+}
+
+export type ListDisplayState = 'loading' | 'error' | 'empty' | 'success';

@@ -7,12 +7,13 @@ import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
 /** => List */
-function* productList(action: models.ListProcessAction) {
+function* productList(action: models.ProductListProcessAction) {
   try {
     const response: models.ListSuccessProps<Array<models.ProductList>> =
       yield call(() => {
         return ProductApi.getList(
           action.payload as models.ProductListProcessProps,
+          action.subModule,
         );
       });
     yield action.contextDispatch(ActionCreators.productListSuccess(response));
@@ -40,10 +41,31 @@ function* productDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.productDetailFailed(error as models.ErrorProps));
   }
 }
+/** => Cart */
+function* productDetailCart(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.ProductDetail> =
+      yield call(() => {
+        return ProductApi.getDetail(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.productDetailCartSuccess(response),
+    );
+    yield put(ActionCreators.productDetailCartSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.productDetailCartFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.productDetailCartFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER === */
 function* ProductSaga() {
   yield takeLatest(types.PRODUCT_LIST_PROCESS, productList);
   yield takeLatest(types.PRODUCT_DETAIL_PROCESS, productDetail);
+  yield takeLatest(types.PRODUCT_DETAIL_CART_PROCESS, productDetailCart);
 }
 
 export default ProductSaga;

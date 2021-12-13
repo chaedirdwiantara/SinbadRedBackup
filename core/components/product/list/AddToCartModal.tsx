@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useReducer } from 'react';
-import {
-  View,
-  Image,
-  Dimensions,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbBottomSheet,
   SnbText,
@@ -20,76 +14,74 @@ import {
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useOrderQuantity } from '@screen/product/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '../../../styles';
+import { PromoSection } from './PromoSection';
 /** === TYPE ===  */
 interface AddToCartModalProps {
   open: boolean;
   closeAction: () => void;
   onAddToCartPress: () => void;
+  orderQty: number;
+  increaseOrderQty: () => void;
+  decreaseOrderQty: () => void;
 }
-/** === CONSTANT ===  */
-const { height } = Dimensions.get('window');
 /** === COMPONENT ===  */
 const AddToCartModal: FC<AddToCartModalProps> = ({
   open,
   closeAction,
   onAddToCartPress,
+  orderQty,
+  increaseOrderQty,
+  decreaseOrderQty,
 }) => {
   /** === HOOKS ===  */
   const {
-    stateProduct: { detail: productDetailState },
+    stateProduct: {
+      detail: { data: dataProductDetail },
+    },
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetailState?.data?.minQty,
-  });
+  const {
+    stateShopingCart: {
+      create: { loading: addToCartLoading },
+    },
+  } = useShopingCartContext();
+  const {
+    stateStock: {
+      validation: { data: dataStock, error: errorStock },
+    },
+  } = useStockContext();
   const [tooltipVisible, toggleTooltipVisible] = useReducer(
     (prevVisible) => !prevVisible,
     false,
   );
+
   /** === VIEW ===  */
   /** => Quantity Modifier */
   const renderQuantityModifier = () => (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
       <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
-      <SnbNumberCounter
-        value={orderQty}
-        onIncrease={increaseOrderQty}
-        onDecrease={decreaseOrderQty}
-        minusDisabled={orderQty === productDetailState?.data?.minQty}
-      />
+      {dataStock && dataProductDetail && (
+        <SnbNumberCounter
+          value={orderQty}
+          onIncrease={increaseOrderQty}
+          onDecrease={decreaseOrderQty}
+          minusDisabled={orderQty <= dataProductDetail?.minQty}
+          plusDisabled={orderQty >= dataStock?.stock}
+        />
+      )}
     </View>
   );
   /** => Promo List */
   const renderPromoList = () => {
-    return (
-      productDetailState?.data !== null &&
-      Array.isArray(productDetailState.data.promoList) &&
-      productDetailState?.data?.promoList.length > 0 && (
-        <View style={{ paddingHorizontal: 16 }}>
-          <SnbText.C1 color={color.black60}>Promo</SnbText.C1>
-          <View style={{ marginTop: 8, marginBottom: 16 }}>
-            <SnbText.C1>Anda berpotensi mendapatkan Promo</SnbText.C1>
-          </View>
-          <View style={{ height: height * 0.15 }}>
-            <ScrollView>
-              {productDetailState.data.promoList.length > 0 &&
-                productDetailState.data.promoList.map((promo, promoIndex) => (
-                  <View key={promoIndex} style={{ marginBottom: 8 }}>
-                    <SnbText.C1>{promo.shortDescription}</SnbText.C1>
-                  </View>
-                ))}
-            </ScrollView>
-          </View>
-        </View>
-      )
-    );
+    return <PromoSection />;
   };
   /** => Exclusive Tag */
   const renderExclusiveTag = () => {
     return (
-      productDetailState?.data?.isExclusive && (
+      dataProductDetail?.isExclusive && (
         <View style={AddToCartModalStyle.exclusiveTagContainer}>
           <SnbIcon
             name="stars"
@@ -106,16 +98,16 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   const renderProductData = () => (
     <View style={AddToCartModalStyle.mainContentContainer}>
       <Image
-        source={{ uri: productDetailState?.data?.images[0].url }}
+        source={{ uri: dataProductDetail?.images[0].url }}
         style={AddToCartModalStyle.image}
       />
       <View style={{ marginLeft: 16 }}>
         {renderExclusiveTag()}
-        <SnbText.C1>{productDetailState?.data?.name}</SnbText.C1>
+        <SnbText.C1>{dataProductDetail?.name}</SnbText.C1>
         <View style={AddToCartModalStyle.priceContainer}>
           <View style={{ marginRight: 8 }}>
             <SnbText.B3 color={color.red50}>
-              {toCurrency(productDetailState?.data?.currentPrice ?? 0, {
+              {toCurrency(dataProductDetail?.currentPrice ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>
@@ -138,12 +130,12 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row' }}>
           <SnbText.C1>
             per-Dus{' '}
-            {`${productDetailState?.data?.packagedQty} ${productDetailState?.data?.minQtyType}`}
+            {`${dataProductDetail?.packagedQty} ${dataProductDetail?.minQtyType}`}
           </SnbText.C1>
           <View style={AddToCartModalStyle.lineSeparator} />
           <SnbText.C1>
             min.pembelian{' '}
-            {`${productDetailState?.data?.minQty} ${productDetailState?.data?.minQtyType}`}
+            {`${dataProductDetail?.minQty} ${dataProductDetail?.minQtyType}`}
           </SnbText.C1>
         </View>
       </View>
@@ -156,20 +148,19 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           <SnbText.B3>Total: </SnbText.B3>
           <SnbText.B4 color={color.red50}>
-            {toCurrency(
-              productDetailState?.data?.currentPrice ?? 0 * orderQty,
-              {
-                withFraction: false,
-              },
-            )}
+            {toCurrency(dataProductDetail?.currentPrice ?? 0 * orderQty, {
+              withFraction: false,
+            })}
           </SnbText.B4>
         </View>
         <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
       </View>
       <SnbButton.Dynamic
+        loading={addToCartLoading}
+        disabled={dataStock === null}
         size="small"
         type="primary"
-        title="Tambah ke Keranjang"
+        title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
         radius={6}
         onPress={onAddToCartPress}
       />
