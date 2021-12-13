@@ -189,8 +189,11 @@ const QuestListView: FC = () => {
       </TouchableOpacity>
     );
   };
+
   /** => Quest List */
   const renderQuestList = () => {
+    // return <ScrollView style={{ padding: 8 }}>{renderCardList()}</ScrollView>;
+
     return (
       <View style={{ paddingVertical: 8, flex: 1 }}>
         <FlatList
