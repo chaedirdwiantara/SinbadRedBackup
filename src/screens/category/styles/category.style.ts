@@ -23,13 +23,16 @@ const CategoryStyle = StyleSheet.create({
   },
   level3layout: {
     ...styles.shadowForBox10,
-    paddingTop: 4,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 8,
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
   level3layoutItem: {
     alignItems: 'center',
     marginBottom: 16,
+    minWidth: '25%',
   },
   level1SkeletonContainer: {
     width: 96,

@@ -1,7 +1,6 @@
 import {
   renderIF,
   formatter,
-  handleMessageError,
   maskPhone,
   extractAddress,
   setErrorMessage,
@@ -31,7 +30,6 @@ export {
   useInputPhone,
   useInput,
   useInputFormat,
-  handleMessageError,
   maskPhone,
   useOTP,
   useAuthAction,

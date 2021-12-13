@@ -4,15 +4,15 @@ import * as models from '@models';
 /** => Process */
 export const cartUpdateProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.UpdateProcessProps<{}>,
-): models.UpdateProcessAction<{}> => {
+  payload: models.UpdateProcessProps<models.CartUpdatePayload>,
+): models.UpdateProcessAction<models.CartUpdatePayload> => {
   contextDispatch({
     type: types.CART_UPDATE_PROCESS,
     payload,
   });
   return {
     type: types.CART_UPDATE_PROCESS,
-    payload: payload.data,
+    payload,
     contextDispatch,
   };
 };

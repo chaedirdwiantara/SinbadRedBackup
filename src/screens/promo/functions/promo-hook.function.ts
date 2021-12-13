@@ -31,7 +31,7 @@ const usePromoPaymentAction = () => {
   };
 };
 /** => promo seller action */
-const usePromoGeneralAction = () => {
+const usePromoSellerAction = () => {
   const dispatch = useDispatch();
   return {
     detail: (contextDispatch: (action: any) => any, id: string) => {
@@ -129,7 +129,7 @@ const useStandardModalState = () => {
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
-  usePromoGeneralAction,
+  usePromoSellerAction,
   usePotentialPromoProductAction,
   useReserveDiscountAction,
   useCheckPromoPaymentAction,

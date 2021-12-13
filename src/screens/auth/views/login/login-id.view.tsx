@@ -27,11 +27,7 @@ const Content: React.FC = () => {
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
     if (loginIDState.error !== null) {
-      if (loginIDState.error.status === 401) {
-        password.setMessageError('ID Toko/Kata Sandi yang Anda masukkan salah');
-      } else {
-        password.setMessageError(setErrorMessage(loginIDState.error.code));
-      }
+      password.setMessageError(setErrorMessage(loginIDState.error.code));
     }
   }, [loginIDState]);
 
@@ -57,6 +53,7 @@ const Content: React.FC = () => {
           labelText="Kata Sandi"
           placeholder="Masukkan kata sandi Anda"
           type={password.valMsgError ? 'error' : 'default'}
+          secureTextEntry
         />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
