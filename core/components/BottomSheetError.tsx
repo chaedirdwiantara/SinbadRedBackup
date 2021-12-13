@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
-import { NavigationAction } from '@core/functions/navigation';
+import { NavigationAction } from '@navigation';
 import Svg from '@svg';
 /** === DATA === */
 const errorData = [
