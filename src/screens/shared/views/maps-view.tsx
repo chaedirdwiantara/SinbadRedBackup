@@ -159,7 +159,7 @@ const MapsView = () => {
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
         onFailedGetPosition={() => {
-          if (params?.action === 'register') {
+          if (params?.action === 'register' && isGettingCurrentPosition) {
             setDesc('Alamat tidak ditemukan');
             setIsGettingCurrentPosition(false);
           }
