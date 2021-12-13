@@ -26,6 +26,7 @@ import { HistoryDetailStyle } from '../../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
+import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment' };
@@ -154,12 +155,12 @@ const HistoryDetailView: FC = () => {
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
-  const { paymentInvoice } = stateHistory;
-  console.log(paymentInvoice, 'STATE hISTORY');
+  const { paymentInvoice, paymentDetail } = stateHistory;
+  console.log(paymentDetail, 'STATE hISTORY');
 
   /** === EFFECTS === */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, 123123);
+    getPaymentDetail.detail(dispatchHistory, 1495867);
   }, []);
 
   useEffect(() => {
@@ -281,48 +282,52 @@ const HistoryDetailView: FC = () => {
   );
   /** => Payment Info */
   const renderPaymentInfo = () =>
-    !stateHistory.paymentDetail?.loading ? (
-      <HistoryDetailCard title="Informasi Pembayaran">
-        {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
-        {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
-        <HistoryDetailCardDivider />
-        {renderCardItem(
-          'Sub-total pesanan (90)',
-          toCurrency(historyDetailDummy.payment.subtotal),
-        )}
-        {historyDetailDummy.payment.freeProducts.map((product) =>
-          renderCardItem(
-            `${product.name} (${product.qty} ${product.uom})`,
-            'FREE',
-            'green',
-          ),
-        )}
-        {renderCardItem(
-          'Ongkos Kirim',
-          toCurrency(historyDetailDummy.payment.deliveryFee),
-        )}
-        {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
-        {renderCardItem(
-          'Total Pesanan',
-          toCurrency(historyDetailDummy.payment.orderTotal),
-          'bold',
-        )}
-        <HistoryDetailCardDivider />
-        {renderCardItem(
-          'Promo Pembayaran',
-          toCurrency(historyDetailDummy.payment.promo),
-        )}
-        {renderCardItem(
-          'Layanan Pembayaran',
-          toCurrency(historyDetailDummy.payment.serviceFee),
-        )}
-        {renderCardItem(
-          'Total Pembayaran Pesanan',
-          toCurrency(historyDetailDummy.payment.paymentTotal),
-          'bold',
-        )}
-      </HistoryDetailCard>
+    !paymentDetail?.loading ? (
+      <HistoryDetailPaymentInformation
+        renderCardItem={() => renderCardItem(key, value, type)}
+        dataPayment={paymentDetail.data}
+      />
     ) : (
+      // <HistoryDetailCard title="Informasi Pembayaran">
+      //   {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
+      //   {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
+      //   <HistoryDetailCardDivider />
+      //   {renderCardItem(
+      //     'Sub-total pesanan (90)',
+      //     toCurrency(historyDetailDummy.payment.subtotal),
+      //   )}
+      //   {historyDetailDummy.payment.freeProducts.map((product) =>
+      //     renderCardItem(
+      //       `${product.name} (${product.qty} ${product.uom})`,
+      //       'FREE',
+      //       'green',
+      //     ),
+      //   )}
+      //   {renderCardItem(
+      //     'Ongkos Kirim',
+      //     toCurrency(historyDetailDummy.payment.deliveryFee),
+      //   )}
+      //   {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
+      //   {renderCardItem(
+      //     'Total Pesanan',
+      //     toCurrency(historyDetailDummy.payment.orderTotal),
+      //     'bold',
+      //   )}
+      //   <HistoryDetailCardDivider />
+      //   {renderCardItem(
+      //     'Promo Pembayaran',
+      //     toCurrency(historyDetailDummy.payment.promo),
+      //   )}
+      //   {renderCardItem(
+      //     'Layanan Pembayaran',
+      //     toCurrency(historyDetailDummy.payment.serviceFee),
+      //   )}
+      //   {renderCardItem(
+      //     'Total Pembayaran Pesanan',
+      //     toCurrency(historyDetailDummy.payment.paymentTotal),
+      //     'bold',
+      //   )}
+      // </HistoryDetailCard>
       <LoadingPage />
     );
   /** => Order Refund Info */

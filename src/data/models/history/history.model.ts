@@ -25,7 +25,7 @@ export interface PaymentChannel {
   description: string;
 }
 export interface PaymentDetailSuccessProps {
-  id: 12345;
+  id: number;
   paymentType: PaymentType;
   paymentChannel: PaymentChannel;
   paymentFee: number;
