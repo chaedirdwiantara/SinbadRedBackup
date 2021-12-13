@@ -10,8 +10,9 @@ import {
   SnbIcon,
 } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/native';
-/** === IMPORT COMPONENT === */
+/** === IMPORT COMPONENTS === */
 import Menu from '@core/components/Menu';
+import { CategoryListSkeleton } from './CategoryListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import {
@@ -154,13 +155,21 @@ const CategoryView: React.FC = () => {
     item: models.CategoryLevel3;
     index: number;
   }) => {
+    // Set 2nd level category name if "Lihat Semua" is clicked
+    const categoryName =
+      index === 0
+        ? categoryLevelState.data[selected1stLevelIndex].children[
+            selected2ndLevelIndex ?? 0
+          ].name
+        : item?.name;
+
     return (
       item && (
         <TouchableOpacity
           key={index}
           onPress={() =>
             goToProduct(
-              item,
+              { ...item, name: categoryName },
               selected1stLevelIndex,
               selected2ndLevelIndex as number,
               index,
@@ -207,9 +216,7 @@ const CategoryView: React.FC = () => {
         backAction={goBack}
       />
       {categoryLevelState.loading || categoryLevelState.data.length === 0 ? (
-        <View>
-          <SnbText.B1>loading</SnbText.B1>
-        </View>
+        <CategoryListSkeleton />
       ) : (
         <View style={{ flexDirection: 'row', flex: 1 }}>
           {/* First Level List */}

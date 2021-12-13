@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
-const CheckoutStyle = StyleSheet.create({
+export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
     padding: 16,
     marginTop: 8,

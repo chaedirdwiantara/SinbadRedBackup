@@ -1,11 +1,11 @@
-import { ProductView, ProductDetailView } from '@screen/product/views';
+import { ProductDetailView, ProductBundleView } from '@screen/product/views';
 
 const ProductNav = {
-  ProductView: {
-    component: ProductView,
-  },
   ProductDetailView: {
     component: ProductDetailView,
+  },
+  ProductBundleView: {
+    component: ProductBundleView,
   },
 };
 

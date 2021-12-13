@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useMemo } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -9,33 +9,38 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
-import AddToCartModal from './AddToCartModal';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
   WaitingApprovalModal,
+  ProductNotCoverageModal,
+  AddToCartModal,
 } from '@core/components/modal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
   priceSortOptions,
   useOrderModalVisibility,
+  useProductTags,
 } from '@core/functions/product';
+import {
+  useCheckDataSupplier,
+  useSupplierSegmentationAction,
+  useSendDataToSupplierActions,
+} from '@core/functions/supplier';
+import { useDataAuth } from '@core/redux/Data';
 import {
   useTagListActions,
   useProductDetailAction,
   useAddToCart,
+  useStockValidationAction,
+  useOrderQuantity,
 } from '@screen/product/functions';
-import { useProductContext, useTagContext } from 'src/data/contexts/product';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
-import {
-  useSupplierSegmentationAction,
-  useSendDataToSupplierActions,
-} from '@core/functions/supplier/supplier-hook.function';
+import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
-import { useAuthCoreAction } from '@core/functions/auth';
-import { useDataAuth } from '@core/redux/Data';
-import { useCheckDataSupplier } from '@core/functions/supplier';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import {
@@ -48,7 +53,7 @@ interface ProductListProps {
   products: Array<models.ProductList>;
   headerType?: ProductHeaderType;
   headerTitle?: string;
-  categoryTabs?: boolean;
+  withCategoryTabs?: boolean;
   categoryTabsConfig?: CategoryTabsConfig;
   isRefreshing: boolean;
   onRefresh: (queryOptions: models.ProductListQueryOptions) => void;
@@ -57,11 +62,13 @@ interface ProductListProps {
   activeKeyword?: string;
   activeCategory?: CategoryType;
   activeBrandId?: string;
+  withBottomAction?: boolean;
+  withTags?: boolean;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
   products,
-  categoryTabs = false,
+  withCategoryTabs = false,
   categoryTabsConfig,
   headerType = 'default',
   headerTitle,
@@ -72,6 +79,8 @@ const ProductList: FC<ProductListProps> = ({
   activeKeyword = '',
   activeCategory,
   activeBrandId,
+  withBottomAction = true,
+  withTags = true,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -79,9 +88,15 @@ const ProductList: FC<ProductListProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryType | undefined
   >(activeCategory);
-  const [selectedTags, setSelectedTags] = useState<Array<string>>([]);
+  const fetchProductFnWithTags = (currentTags: Array<string>) => {
+    onFetch({ ...derivedQueryOptions, tags: currentTags });
+  };
+  const { tags, selectedTags, handleTagPress } = useProductTags(
+    fetchProductFnWithTags,
+  );
   const [productSelected, setProductSelected] =
     useState<models.ProductList | null>(null);
+  const [modalNotCoverage, setModalNotCoverage] = useState(false);
 
   const {
     sortModalVisible,
@@ -99,12 +114,13 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   });
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
+  const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailAction();
   const addToCartActions = useAddToCart();
   const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
-  const authCoreAction = useAuthCoreAction();
+  const stockValidationActions = useStockValidationAction();
   const {
     stateProduct: {
       list: { loading: productLoading, error: productError },
@@ -112,21 +128,30 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { dispatchShopingCart } = useShopingCartContext();
+  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
+    minQty: productDetailState?.minQty,
+  });
   const {
-    stateTag: {
-      list: { data: tagList },
+    stateShopingCart: {
+      create: { data: addToCartData },
     },
-    dispatchTag,
-  } = useTagContext();
+    dispatchShopingCart,
+  } = useShopingCartContext();
+  const { dispatchTag } = useTagContext();
+  const {
+    stateStock: {
+      validation: { data: dataStock, error: errorStock },
+    },
+    dispatchStock,
+  } = useStockContext();
   const { me } = useDataAuth();
   const {
     stateSupplier: {
       segmentation: { data: dataSegmentation },
+      create: { data: sendToSupplierData },
     },
     dispatchSupplier,
   } = useSupplierContext();
-  const tagNames = useMemo(() => tagList.map((tag) => tag.tags), [tagList]);
   /** => check data supplier and sinbad status */
   const {
     checkUser,
@@ -134,21 +159,140 @@ const ProductList: FC<ProductListProps> = ({
     modalWaitingApproval,
     modalRegisterSupplier,
     onFunctionActions,
-  } = useCheckDataSupplier(setOrderModalVisible);
+  } = useCheckDataSupplier();
+  /** === FUNCTIONS === */
+  /** => action send data to supplier */
+  const onSendDataSupplier = () => {
+    if (productSelected !== null) {
+      sendDataToSupplierActions.fetch(dispatchSupplier, {
+        supplierId: productSelected.sellerId,
+      });
+    }
+  };
 
+  /** => action from buttom order */
+  const handleOrderPress = (product: models.ProductList) => {
+    supplierSegmentationAction.reset(dispatchSupplier);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
+    setProductSelected(product);
+    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+    productDetailActions.fetch(dispatchProduct, product.id);
+  };
+
+  /** => action close modal add to cart */
+  const handleCloseModal = () => {
+    setModalNotCoverage(false);
+    setOrderModalVisible(false);
+    onFunctionActions({ type: 'close' });
+  };
+
+  /** => action submit add to cart  */
+  const onSubmitAddToCart = () => {
+    if (
+      productDetailState === null ||
+      dataSegmentation === null ||
+      dataSegmentation.dataSuppliers === null ||
+      dataStock === null
+    ) {
+      /** => DO SOMETHING */
+      /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
+      return;
+    }
+
+    const params: models.AddToCartPayload = {
+      isActiveStore: dataSegmentation.isActiveStore,
+      selected: true,
+      stock: dataStock.stock,
+      productId: productDetailState.id,
+      productName: productDetailState.name,
+      brandId: productDetailState.brandId,
+      urlImages: productDetailState?.images[0]?.url ?? '',
+      qty: orderQty,
+      displayPrice: productDetailState.originalPrice,
+      priceBeforeTax:
+        productDetailState.currentPrice ?? productDetailState.originalPrice,
+      priceAfterTax:
+        productDetailState.currentPriceAfterTax ??
+        productDetailState.originalPrice,
+      uom: productDetailState.unit,
+      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      sellerId: Number(productDetailState.sellerId),
+      channelId: dataSegmentation.dataSuppliers.channelId,
+      groupId: dataSegmentation.dataSuppliers.groupId,
+      typeId: dataSegmentation.dataSuppliers.typeId,
+      clusterId: dataSegmentation.dataSuppliers.clusterId,
+      brandId: productDetailState.brandId,
+      productName: productDetailState.name,
+      urlImages: productDetailState.images[0].url,
+    };
+
+    addToCartActions.fetch(dispatchShopingCart, params);
+  };
+  /** === EFFECT HOOKS === */
   useEffect(() => {
     if (!productLoading) {
       setKeywordSearched(false);
     }
   }, [productLoading]);
 
+  /** => Do something when success add to cart */
   useEffect(() => {
-    tagActions.fetch(dispatchTag, {
-      categoryId: selectedCategory?.id,
-      keyword: searchKeyword,
-      brandId: activeBrandId,
-    });
-  }, [selectedCategory, keywordSearched]);
+    if (addToCartData !== null) {
+      setProductSelected(null);
+      setOrderModalVisible(false);
+      cartTotalProductActions.fetch();
+    }
+  }, [addToCartData]);
+
+  /** => Do something when success send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierData !== null) {
+      onFunctionActions({ type: 'close' });
+    }
+  }, [sendToSupplierData]);
+
+  /** => Listen data segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (
+      dataSegmentation &&
+      dataSegmentation.dataSuppliers &&
+      productDetailState
+    ) {
+      stockValidationActions.fetch(dispatchStock, {
+        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+        productId: productDetailState.id,
+      });
+    }
+  }, [dataSegmentation, productDetailState]);
+
+  /** Listen Data Stock */
+  useEffect(() => {
+    if (dataStock && productDetailState) {
+      setOrderModalVisible(true);
+    }
+  }, [dataStock, productDetailState]);
+
+  /** Listen Error Stock */
+  useEffect(() => {
+    if (errorStock && productDetailState) {
+      if (errorStock.code === 11004) {
+        setOrderModalVisible(true);
+      } else {
+        setModalNotCoverage(true);
+      }
+    }
+  }, [errorStock && productDetailState]);
+
+  useEffect(() => {
+    if (withTags) {
+      tagActions.fetch(dispatchTag, {
+        categoryId: selectedCategory?.id,
+        keyword: searchKeyword,
+        brandId: activeBrandId,
+      });
+    }
+  }, [selectedCategory, keywordSearched, withTags]);
 
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
@@ -164,60 +308,7 @@ const ProductList: FC<ProductListProps> = ({
         });
       }
     }
-  }, [me.data, dataSegmentation]);
-
-  /** => action send data to supplier */
-  const onSendDataSupplier = () => {
-    if (productSelected !== null) {
-      sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: productSelected?.sellerId,
-      });
-    }
-    onFunctionActions({ type: 'close' });
-  };
-
-  /** => action from buttom confirmation checkout */
-  const handleOrderPress = (product: models.ProductList) => {
-    setProductSelected(product);
-    authCoreAction.me();
-    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-    productDetailActions.fetch(dispatchProduct, product.id);
-  };
-
-  /** => action submit add to cart  */
-  const onSubmitAddToCart = () => {
-    if (
-      productDetailState === null ||
-      dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null
-    ) {
-      /** => DO SOMETHING */
-      /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
-      return;
-    }
-    const params: models.AddToCartPayload = {
-      cartId: productDetailState?.id,
-      isActiveStore: dataSegmentation.isActiveStore,
-      selected: true,
-      stock: 100,
-      productId: productDetailState.id,
-      qty: 90,
-      displayPrice: productDetailState.originalPrice,
-      priceBeforeTax:
-        productDetailState.currentPrice ?? productDetailState.originalPrice,
-      priceAfterTax:
-        productDetailState.currentPriceAfterTax ??
-        productDetailState.originalPrice,
-      uom: productDetailState.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-      supplierId: dataSegmentation.dataSuppliers.sellerId,
-      channelId: dataSegmentation.dataSuppliers.channelId,
-      groupId: dataSegmentation.dataSuppliers.groupId,
-      typeId: dataSegmentation.dataSuppliers.typeId,
-      clusterId: dataSegmentation.dataSuppliers.clusterId,
-    };
-    addToCartActions.fetch(dispatchShopingCart, params);
-  };
+  }, [dataSegmentation]);
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,
@@ -227,11 +318,6 @@ const ProductList: FC<ProductListProps> = ({
     minPrice: filterQuery?.minPrice,
     maxPrice: filterQuery?.maxPrice,
     tags: selectedTags,
-  };
-
-  const handleTagPress = (tags: Array<string>) => {
-    setSelectedTags(tags);
-    onFetch({ ...derivedQueryOptions, tags });
   };
   /** === VIEW === */
   return (
@@ -251,15 +337,17 @@ const ProductList: FC<ProductListProps> = ({
           onFetch({ ...derivedQueryOptions, keyword: '' });
         }}
       />
-      {categoryTabs && (
+      {withCategoryTabs && (
         <CategoryTabList
           level={categoryTabsConfig?.level!}
           selectedFirstLevelIndex={categoryTabsConfig?.firstLevelIndex!}
           selectedSecondLevelIndex={categoryTabsConfig?.secondLevelIndex!}
           selectedThirdLevelIndex={categoryTabsConfig?.thirdLevelIndex}
           onTabChange={(category) => {
+            const queryOptionsCopy = Object.assign({}, derivedQueryOptions);
+            delete queryOptionsCopy.tags;
             setSelectedCategory(category);
-            onFetch({ ...derivedQueryOptions, categoryId: category.id });
+            onFetch({ ...queryOptionsCopy, categoryId: category.id });
           }}
         />
       )}
@@ -267,9 +355,9 @@ const ProductList: FC<ProductListProps> = ({
         {layoutDisplay === 'grid' ? (
           <GridLayout
             products={products}
-            tags={tagNames}
+            withTags={withTags}
+            tags={tags}
             onTagPress={handleTagPress}
-            tagListComponentKey={selectedCategory?.id}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
@@ -280,9 +368,9 @@ const ProductList: FC<ProductListProps> = ({
         ) : (
           <ListLayout
             products={products}
-            tags={tagNames}
+            withTags={withTags}
+            tags={tags}
             onTagPress={handleTagPress}
-            tagListComponentKey={selectedCategory?.id}
             onOrderPress={(product) => handleOrderPress(product)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
@@ -292,16 +380,18 @@ const ProductList: FC<ProductListProps> = ({
           />
         )}
       </View>
-      <BottomAction
-        sort={true}
-        filter={true}
-        layout={true}
-        category={true}
-        sortActive={sortActive}
-        filterActive={filterActive}
-        layoutDisplay={layoutDisplay}
-        onActionPress={handleActionClick}
-      />
+      {withBottomAction && (
+        <BottomAction
+          sort={true}
+          filter={true}
+          layout={true}
+          category={true}
+          sortActive={sortActive}
+          filterActive={filterActive}
+          layoutDisplay={layoutDisplay}
+          onActionPress={handleActionClick}
+        />
+      )}
       {/* Sort Modal */}
       <SnbBottomSheet
         open={sortModalVisible}
@@ -338,29 +428,38 @@ const ProductList: FC<ProductListProps> = ({
             onSendDataSupplier: onSendDataSupplier,
           })
         }
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onClose={handleCloseModal}
       />
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
-        onSubmit={() => onFunctionActions({ type: 'close' })}
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
       />
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={() => onFunctionActions({ type: 'close' })}
-        onClose={() => onFunctionActions({ type: 'close' })}
+        onSubmit={handleCloseModal}
+        onClose={handleCloseModal}
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
       {orderModalVisible && (
         <AddToCartModal
+          orderQty={orderQty}
+          increaseOrderQty={increaseOrderQty}
+          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
-          closeAction={() => setOrderModalVisible(false)}
+          closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
+          disabled={dataStock === null}
         />
       )}
+      {/* Product not coverage modal */}
+      <ProductNotCoverageModal
+        isOpen={modalNotCoverage}
+        close={handleCloseModal}
+      />
     </SnbContainer>
   );
 };

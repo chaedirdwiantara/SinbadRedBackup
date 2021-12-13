@@ -25,6 +25,8 @@ const MapsView = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [isMounted, setIsMounted] = React.useState(true);
   const [position, setPosition] = React.useState<LatLng | null>(null);
+  const [isGettingCurrentPosition, setIsGettingCurrentPosition] =
+    React.useState<boolean>(false);
   const { goBack } = useNavigation();
   const { saveStoreData, merchantData } = useMerchant();
   const { getLocation, locations, resetLocation } = useLocations();
@@ -51,8 +53,9 @@ const MapsView = () => {
       if (merchantData.address) {
         setDesc(merchantData.address || '');
       } else {
+        setIsGettingCurrentPosition(true);
+        setDesc('Mendapatkan lokasi anda. . .');
         setPosition(DEFAULT_LOCATION);
-        getAddress(DEFAULT_LOCATION);
       }
     }
     resetLocation();
@@ -83,6 +86,7 @@ const MapsView = () => {
   }, [locations]);
 
   const getAddress = async (coords?: LatLng) => {
+    setIsGettingCurrentPosition(false);
     setLoadingDesc(true);
     try {
       const { results, error_message } = await apiMaps(
@@ -133,7 +137,8 @@ const MapsView = () => {
           locations.loading ||
           loadingDesc ||
           storeAddress?.address === desc ||
-          desc === ''
+          desc === '' ||
+          isGettingCurrentPosition
         }
         mainButtonAction={() => {
           if (address) {
@@ -149,11 +154,16 @@ const MapsView = () => {
           }
         }}
         contentTitle="Detail Alamat"
-        loading={locations.loading}
+        loading={locations.loading || isGettingCurrentPosition}
         contentDesc={desc}
         leftButtonAction={goBack}
         descLoading={loadingDesc || desc === ''}
-        onFailedGetPosition={console.log}
+        onFailedGetPosition={() => {
+          if (params?.action === 'register' && isGettingCurrentPosition) {
+            setDesc('Alamat tidak ditemukan');
+            setIsGettingCurrentPosition(false);
+          }
+        }}
         onSuccessGetPosition={(geoPosition, refMaps, _) => {
           if (
             merchantData.longitude === null &&
@@ -170,13 +180,12 @@ const MapsView = () => {
               longitude: geoPosition.longitude,
             });
             getAddress(geoPosition);
-          } else {
+          } else if (params?.action !== 'edit') {
             getAddress({
-              latitude:
-                merchantData?.latitude || storeAddress?.latitude || -6.25511,
-              longitude:
-                merchantData?.longitude || storeAddress?.longitude || 106.808,
+              latitude: merchantData?.latitude || DEFAULT_LOCATION.latitude,
+              longitude: merchantData?.longitude || DEFAULT_LOCATION.longitude,
             });
+          } else {
           }
         }}
       />

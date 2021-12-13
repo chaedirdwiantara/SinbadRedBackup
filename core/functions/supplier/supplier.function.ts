@@ -1,6 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState, Dispatch, SetStateAction } from 'react';
-import { Alert } from 'react-native';
+import { useState } from 'react';
 /** === IMPORT TYPES === */
 export interface MerchantStatus {
   sinbadStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
@@ -18,9 +17,7 @@ export interface DataMerchant {
   onSendDataSupplier?: () => void;
 }
 
-export const useCheckDataSupplier = (
-  setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
-) => {
+export const useCheckDataSupplier = () => {
   /** => state */
   const [modalWaitingApproval, setModalWaitingApproval] = useState(false);
   const [modalRejectApproval, setModalRejectApproval] = useState(false);
@@ -76,7 +73,7 @@ export const useCheckDataSupplier = (
       showSendData();
     } else {
       //addSkuToCartAfterCheckVerified
-      setOrderModalVisible(true);
+      onFunctionActions({ type: 'close' });
     }
   };
   /** STATUS REJECTED */
@@ -91,7 +88,7 @@ export const useCheckDataSupplier = (
       showUnverified();
     } else {
       //addSkuToCartAfterCheckVerified
-      setOrderModalVisible(true);
+      onFunctionActions({ type: 'close' });
     }
   };
   /** STATUS PENDING */
@@ -131,40 +128,5 @@ export const useCheckDataSupplier = (
     modalRegisterSupplier,
     onFunctionActions,
     checkUser,
-  };
-};
-
-export const useRegisterSupplierModal = () => {
-  const [registerSupplierModalVisible, setRegisterSupplierModalVisible] =
-    useState(false);
-
-  const sendSupplierData = (
-    setOrderModalVisible: Dispatch<SetStateAction<boolean>>,
-  ) => {
-    // Hit api send-store-supplier
-    Alert.alert(
-      'Send Data to Suplier',
-      'Hit API send-store-supplier, jika sukses maka hit api add to cart, Jika gagal muncul modal error general',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => setRegisterSupplierModalVisible(false),
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            setRegisterSupplierModalVisible(false);
-            setOrderModalVisible(true);
-          },
-        },
-      ],
-    );
-  };
-
-  return {
-    visible: registerSupplierModalVisible,
-    setVisible: setRegisterSupplierModalVisible,
-    sendSupplierData,
   };
 };

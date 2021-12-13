@@ -1,39 +1,39 @@
 import * as types from '@types';
 import * as models from '@models';
-/** === BRAND LIST === */
-/** => brand list process */
+/** === LIST ACTIONS === */
+/** => Process */
 export const brandListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
+  payload: models.ListProcessProps,
 ): models.ListProcessAction => {
-  contextDispatch({ type: types, payload: data });
+  contextDispatch({ type: types.BRAND_LIST_PROCESS, payload });
   return {
     type: types.BRAND_LIST_PROCESS,
-    payload: data,
+    payload,
     contextDispatch,
   };
 };
-/** => brand list success */
+/** => Succeeded */
 export const brandListSuccess = (
-  data: models.DetailSuccessProps<models.BrandListSuccessProps>,
-): models.DetailSuccessAction<models.BrandListSuccessProps> => {
-  return { type: types.BRAND_LIST_SUCCESS, payload: data };
+  payload: models.ListSuccessProps<models.BrandListItem[]>,
+): models.ListSuccessAction<models.BrandListItem[]> => {
+  return { type: types.BRAND_LIST_SUCCESS, payload };
 };
-/** => brand list failed */
+/** => Failed */
 export const brandListFailed = (
-  data: models.ErrorProps,
+  payload: models.ErrorProps,
 ): models.DetailFailedAction => {
-  return { type: types.BRAND_LIST_FAILED, payload: data };
+  return { type: types.BRAND_LIST_FAILED, payload };
 };
-/** => brand list refresh */
+/** => Refresh */
 export const brandListRefresh = () => {
   return { type: types.BRAND_LIST_REFRESH };
 };
-/** => brand list reset */
+/** => Reset */
 export const brandListReset = () => {
   return { type: types.BRAND_LIST_RESET };
 };
-/** => brand list more */
+/** => Load More */
 export const brandListLoadMore = () => {
   return { type: types.BRAND_LIST_LOADMORE };
 };

@@ -48,6 +48,8 @@ function* checkRegister(data: models.IRegisterMerchantSuccess) {
     } catch (err) {
       if (i < 4) {
         yield delay(2000);
+      } else {
+        throw new Error('Check self registration failed');
       }
     }
   }

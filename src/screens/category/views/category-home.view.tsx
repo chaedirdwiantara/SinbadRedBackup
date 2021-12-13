@@ -1,10 +1,10 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
-import { SnbText } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import Menu from '@core/components/Menu';
 import { CategoryHomeItem } from './CategoryHomeItem';
+import { CategoryHomeItemSkeleton } from './CategoryHomeItemSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useCategoryContext } from 'src/data/contexts/category/useCategoryContext';
 import { goToCategory, useCategoryAction, goToProduct } from '../functions';
@@ -27,6 +27,15 @@ const CategoryHomeView: FC = () => {
     fetchHome(dispatchCategory);
   }, []);
   /** === VIEW === */
+  /** => All Category Button */
+  const allCategoryButton = (
+    <CategoryHomeItem
+      key="all-category"
+      name="Semua Kategori"
+      icon="https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png"
+      onPress={() => goToCategory()} // Don't change it to goToCategory only, because this function accepts argument
+    />
+  );
   /** => Category Item */
   const renderCategoryItem = ({
     item,
@@ -45,19 +54,27 @@ const CategoryHomeView: FC = () => {
         }
       />
     ) : (
-      <CategoryHomeItem
-        key={index}
-        name="Semua Kategori"
-        icon="https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/semua+kategori%403x.png"
-        onPress={() => goToCategory()} // Don't change it to goToCategory only, because this function accepts argument
-      />
+      allCategoryButton
     );
+  /** => Category Item Skeleton */
+  const renderCategoryItemSkeleton = ({
+    _,
+    index,
+  }: {
+    _: any;
+    index: number;
+  }) =>
+    index < 3 ? <CategoryHomeItemSkeleton key={index} /> : allCategoryButton;
   /** => Main */
   return (
     <View style={CategoryHomeStyle.container}>
       {categoryHomeState.loading || categoryHomeState.data.length === 0 ? (
-        <View>
-          <SnbText.B1>loading</SnbText.B1>
+        <View style={{ paddingHorizontal: 4 }}>
+          <Menu
+            data={[1, 2, 3, 4]}
+            column={4}
+            renderItem={renderCategoryItemSkeleton}
+          />
         </View>
       ) : (
         <View>

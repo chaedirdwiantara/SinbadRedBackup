@@ -1,18 +1,11 @@
-export interface ProductItem {
+export interface IProductItemUpdateCart {
   productId: string;
   qty: number;
   selected: boolean;
-}
-
-export interface VoucherItem {
-  type: string;
-  voucherId: number;
+  stock: number;
 }
 
 export interface CartUpdatePayload {
-  storeId: number;
   action: string;
-  cartId: string;
-  products: ProductItem[];
-  voucherIds: VoucherItem[];
+  products: IProductItemUpdateCart[];
 }

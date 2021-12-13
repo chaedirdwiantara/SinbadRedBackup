@@ -9,7 +9,7 @@ const goBack = () => {
 /** => go to promo payment detail */
 const goToPromoPaymentDetail = (promoPaymentId: number) => {
   NavigationAction.navigate('PromoPaymentDetailView', {
-    promoPaymentId: 1,
+    promoPaymentId,
   });
 };
 

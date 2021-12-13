@@ -2,8 +2,8 @@
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 
-const getCartView = (payload: models.DetailProcessProps) => {
-  const path = `carts/${payload.id}`;
+const getCartView = () => {
+  const path = 'carts';
   return apiMapping<models.CartSuccessProps>(
     'auth',
     path,
@@ -19,12 +19,24 @@ const addToCart = (payload: models.AddToCartPayload) => {
 };
 
 const updateCart = (payload: models.CartUpdatePayload) => {
-  const path = `carts/${payload.cartId}`;
-  return apiMapping('auth', path, 'cart', 'v1', 'PATCH', payload);
+  const path = 'carts';
+  return apiMapping('auth', path, 'cart', 'v1', 'UPDATE', payload);
+};
+
+const getCartTotalProduct = () => {
+  const path = 'carts/total-product';
+  return apiMapping<models.CartTotalProductSuccess>(
+    'auth',
+    path,
+    'cart',
+    'v1',
+    'DETAIL',
+  );
 };
 
 export const CartApi = {
   getCartView,
   addToCart,
   updateCart,
+  getCartTotalProduct,
 };

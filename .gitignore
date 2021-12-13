@@ -1,7 +1,7 @@
 # OSX
 #
 .DS_Store
-
+.vscode/
 # Xcode
 #
 build/
@@ -38,7 +38,7 @@ local.properties
 node_modules/
 npm-debug.log
 yarn-error.log
-
+.env
 # BUCK
 buck-out/
 \.buckd/
@@ -65,3 +65,12 @@ buck-out/
 # iOS
 GoogleService-Info.plist
 GoogleService*
+
+# keystore
+/android/app/mplus_sinbad.jks
+# google service
+/android/app/google-services.json
+#proguard
+/android/app/proguard-rules.pro
+# fastlane
+/android/fastlane/config/sinbad.json

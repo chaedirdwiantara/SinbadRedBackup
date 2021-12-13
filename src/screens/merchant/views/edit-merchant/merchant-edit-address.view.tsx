@@ -45,7 +45,7 @@ const MerchantEditAddressView = () => {
       goBack();
       reset(dispatchSupplier);
       resetMerchantData();
-      detail(dispatchUser, { id: '' });
+      detail(dispatchUser);
     }
   }, [stateMerchant]);
 
@@ -66,6 +66,12 @@ const MerchantEditAddressView = () => {
   const handleDisableButton = () => {
     if (address.value !== '' && noteAddress.value !== '') {
       if (
+        merchantData.latitude !== null ||
+        merchantData.longitude !== null ||
+        merchantData.urbanId !== null
+      ) {
+        return false;
+      } else if (
         noteAddress.value === storeAddress?.noteAddress &&
         address.value === storeAddress?.address
       ) {
@@ -173,6 +179,7 @@ const MerchantEditAddressView = () => {
           disabled={handleDisableButton()}
           title="Simpan"
           onPress={handleUpdate}
+          loading={stateMerchant.merchantEdit.loading}
           type="primary"
         />
       </View>

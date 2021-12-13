@@ -1,16 +1,15 @@
-import React from 'react';
+import { createContext, Dispatch } from 'react';
+
 import {
-  BrandInitialProps,
+  BrandState,
   brandInitialState,
   brandReducer,
 } from '@reducer/brand/brand.reducer';
 
-const BrandContext = React.createContext<{
-  // state: InitialStateType;
-  stateBrand: BrandInitialProps;
-  dispatchBrand: React.Dispatch<any>;
+const BrandContext = createContext<{
+  stateBrand: BrandState;
+  dispatchBrand: Dispatch<any>;
 }>({
-  // state: initialState,
   stateBrand: brandInitialState,
   dispatchBrand: () => null,
 });

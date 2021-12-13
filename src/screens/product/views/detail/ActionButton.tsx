@@ -5,13 +5,13 @@ import { SnbButton } from 'react-native-sinbad-ui';
 /** === TYPE ===  */
 interface ActionButtonProps {
   title: string;
-  disabled: boolean;
+  disabled?: boolean;
   onPress: () => void;
 }
 /** === COMPONENT ===  */
 export const ActionButton: FC<ActionButtonProps> = ({
   title,
-  disabled,
+  disabled = false,
   onPress,
 }) => (
   <View style={{ height: 80 }}>

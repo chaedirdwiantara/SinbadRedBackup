@@ -3,6 +3,7 @@
 export const STORE_DETAIL_PROCESS = 'StoreDetailProcess';
 export const STORE_DETAIL_SUCCESS = 'StoreDetailSuccess';
 export const STORE_DETAIL_FAILED = 'StoreDetailFailed';
+export const STORE_DETAIL_RESET = 'StoreDetailReset';
 /** => change password */
 export const CHANGE_PASSWORD_PROCESS = 'ChangePasswordProcess';
 export const CHANGE_PASSWORD_SUCCESS = 'ChangePasswordSuccess';

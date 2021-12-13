@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
+import { useDataVoucher } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => count all voucher action */
 const useCountAllVoucherAction = () => {
@@ -34,28 +35,6 @@ const useVoucherDetailAction = () => {
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.voucherDetailReset());
     },
-  };
-};
-/** => set voucher tnc & instruction modal */
-const useVoucherListItemModal = () => {
-  const [isTncModalOpen, setTncModalOpen] = React.useState(false);
-  const [isInstructionModalOpen, setInstructionModalOpen] =
-    React.useState(false);
-  return {
-    handleOpenTncModal: () => {
-      setTncModalOpen(true);
-    },
-    handleCloseTnCModal: () => {
-      setTncModalOpen(false);
-    },
-    handleOpenInstructionModal: () => {
-      setInstructionModalOpen(true);
-    },
-    handleCloseInstructionModal: () => {
-      setInstructionModalOpen(false);
-    },
-    isTncModalOpen,
-    isInstructionModalOpen,
   };
 };
 /** => voucher cart list action */
@@ -190,9 +169,40 @@ const useVoucherList = () => {
     sinbadVoucher,
   };
 };
+/** => */
+const useVoucherLocalData = () => {
+  const dispatch = useDispatch();
+  const voucherData = useDataVoucher();
+  return {
+    set: ({
+      sinbadVoucher,
+      sellerVouchers,
+    }: models.selectedVoucherDataProps) => {
+      dispatch(
+        Actions.saveSelectedVouchers({
+          sinbadVoucher,
+          sellerVouchers,
+        }),
+      );
+    },
+    reset: () => {
+      dispatch(Actions.saveSelectedVouchers(null));
+    },
+    selectedVoucher: voucherData.dataVouchers,
+  };
+};
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
 /** === EXPORT === */
 export {
-  useVoucherListItemModal,
   useVoucherDetailAction,
   useVoucherCartListAction,
   useSearchKeyword,
@@ -201,6 +211,8 @@ export {
   useVoucherListMore,
   useVoucherList,
   useCountAllVoucherAction,
+  useVoucherLocalData,
+  useStandardModalState,
 };
 /**
  * ================================================================
