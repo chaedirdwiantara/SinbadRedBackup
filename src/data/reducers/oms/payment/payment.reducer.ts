@@ -30,6 +30,11 @@ import {
   paymentLastChannelDetailInitialState,
   PaymentLastChannelDetailInitialProps,
 } from './payment-last-channel-detail.reducer';
+import {
+  paymentListInvoiceChannelInitialState,
+  PaymentListInvoiceChannelInitialProps,
+  paymentListInvoiceChannelReducer,
+} from './payment-list-invoice-channel.reducer';
 /** === TYPE HERE === */
 
 /** === INITIAL HERE === */
@@ -40,6 +45,7 @@ export const paymentInitialState = {
   paymentTCDetail: paymentTCDetailInitialState,
   paymentLastChannelCreate: paymentLastChannelCreateInitialState,
   paymentLastChannelDetail: paymentLastChannelDetailInitialState,
+  invoiceChannelList: paymentListInvoiceChannelInitialState,
 };
 
 export interface paymentInitialState {
@@ -49,6 +55,7 @@ export interface paymentInitialState {
   paymentTCDetail: PaymentTCDetailInitialProps;
   paymentLastChannelCreate: PaymentLastChannelCreateInitialProps;
   paymentLastChannelDetail: PaymentLastChannelDetailInitialProps;
+  invoiceChannelList: PaymentListInvoiceChannelInitialProps;
 }
 
 /** === EXPORT ALL HERE === */
@@ -60,6 +67,7 @@ export const paymentReducer = (
     paymentTCDetail,
     paymentLastChannelCreate,
     paymentLastChannelDetail,
+    invoiceChannelList,
   }: any,
   action: any,
 ) => ({
@@ -73,6 +81,10 @@ export const paymentReducer = (
   ),
   paymentLastChannelDetail: paymentLastChannelDetailReducer(
     paymentLastChannelDetail,
+    action,
+  ),
+  invoiceChannelList: paymentListInvoiceChannelReducer(
+    invoiceChannelList,
     action,
   ),
 });

@@ -152,3 +152,12 @@ export interface IUpdateTotalCartParcel {
   type: string;
   payload: number;
 }
+
+export interface IListInvoiceChannelSuccess {
+  invoices: string[];
+}
+
+export interface IListInvoiceChannelProps {
+  type: string;
+  invoiceGroupId: string;
+}
