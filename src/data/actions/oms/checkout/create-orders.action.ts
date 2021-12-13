@@ -28,3 +28,10 @@ export const createOrdersFailed = (
 ): models.CreateFailedAction => {
   return { type: types.CREATE_ORDER_FAILED, payload };
 };
+/** => Reset */
+export const createOrdersReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({
+    type: types.CREATE_ORDER_RESET,
+  });
+  return { type: types.CREATE_ORDER_RESET };
+};

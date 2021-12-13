@@ -43,23 +43,21 @@ const useCreateOrders = () => {
         const dataBrands = {
           brandId: brand.brandId,
           brandName: brand.brandName,
-          product: brand.products, // Missing warehouseId <to be updated>
+          products: brand.products,
         };
         dataInvoice.brands.push(dataBrands);
       });
-
-      createOrdersData.verification = {
-        promosSeller: invoice.promoSellers,
-        vouchersSeller: invoice.vouchers,
-      };
 
       // Push Order Brand Products
       createOrdersData.data.push(dataInvoice);
     });
 
-    console.log('Checkout Master', dataCheckout);
-    console.log('Create Orders', createOrdersData);
-    console.log('Discount Data', statePromo.reserveDiscount.detail);
+    createOrdersData.verification.promosSeller =
+      statePromo.reserveDiscount.detail.data?.discountVerification.promosSeller;
+    createOrdersData.verification.vouchersSeller =
+      statePromo.reserveDiscount.detail.data?.discountVerification.vouchersSeller;
+
+    console.log(JSON.stringify(createOrdersData));
 
     dispatch(
       Actions.createOrdersProcess(contextDispatch, { data: createOrdersData }),
@@ -67,11 +65,12 @@ const useCreateOrders = () => {
   };
 
   return {
-    create: (contextDispatch: (actions: any) => any) => {
-      transformData(contextDispatch);
-    },
+    create: (contextDispatch: (actions: any) => any) =>
+      transformData(contextDispatch),
     get: () => console.log('Get Order Id'),
     setOpen: (value: boolean) => setOpen(value),
+    reset: (contextDispatch: (action: any) => any) =>
+      dispatch(Actions.createOrdersReset(contextDispatch)),
     isOpen,
   };
 };
@@ -84,7 +83,7 @@ const useExpiredTime = () => {
     const dateReserved = new Date(reserveData.reservedAt as string);
     const dateCurrent = new Date();
 
-    const timeReserved = dateReserved.getTime() / 1000 + 120;
+    const timeReserved = dateReserved.getTime() / 1000 + 600;
     const timeNow = dateCurrent.getTime() / 1000;
 
     if (timeReserved >= timeNow) {

@@ -9,3 +9,4 @@ export const GET_CHECKOUT_RESET = 'GetCheckoutReset';
 export const CREATE_ORDER_PROCESS = 'CreateOrderProcess';
 export const CREATE_ORDER_SUCCESS = 'CreateOrderSuccess';
 export const CREATE_ORDER_FAILED = 'CreateOrderFailed';
+export const CREATE_ORDER_RESET = 'CreateOrderReset';
