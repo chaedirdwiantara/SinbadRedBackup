@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
@@ -37,6 +37,7 @@ import {
   backToCart,
   goToCheckoutSuccess,
   useExpiredTime,
+  useCreateOrders,
 } from '@screen/oms/functions';
 import {
   useCheckPromoPaymentAction,
@@ -66,6 +67,7 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const expiredTime = useExpiredTime();
+  const createOrders = useCreateOrders();
   const {
     stateCheckout: {
       checkout: {
@@ -96,6 +98,7 @@ const OmsCheckoutView: FC = () => {
     paymentTCDetail,
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { stateCheckout } = useContext(contexts.CheckoutContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -182,17 +185,25 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
   }, [checkoutMaster.invoices.length]);
-  /** => navigate to Checkout success if there is no payment TC */
+  /** => Create orders if there is no payment TC */
   useEffect(() => {
     const detailTC = statePayment?.paymentTCDetail?.data;
     if (detailTC) {
       if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
         paymentTCModal.setOpen(true);
       } else {
-        goToCheckoutSuccess();
+        createOrders.create(dispatchCheckout);
       }
     }
   }, [statePayment?.paymentTCDetail?.data]);
+  /** => navigate to Checkout Success if Create Orders Success */
+  useEffect(() => {
+    const data = stateCheckout.create.data;
+    console.log('navigate to checkout success', data);
+    if (data !== null) {
+      goToCheckoutSuccess();
+    }
+  }, [stateCheckout.create.data]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
     const dataTC = statePayment?.paymentTCCreate?.data;

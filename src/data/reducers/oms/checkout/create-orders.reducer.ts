@@ -42,4 +42,8 @@ export const createOrderReducer = simplifyReducer(createOrderInitialState, {
       loading: false,
     };
   },
+  /** => Reset */
+  [types.CREATE_ORDER_RESET]() {
+    return createOrderInitialState;
+  },
 });
