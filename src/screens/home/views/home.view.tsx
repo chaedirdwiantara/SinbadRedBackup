@@ -17,7 +17,7 @@ import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
 import { useCheckoutMaster } from '@screen/oms/functions';
 /** === COMPONENT === */
-const HomeView: React.FC = () => {
+const HomeView: React.FC = ({ navigation }: any) => {
   /** === HOOK === */
   const { action, state } = HomeHookFunc.useHeaderChange();
   const { data } = useDataTotalProductCart();
@@ -42,6 +42,18 @@ const HomeView: React.FC = () => {
       cartTotalProductActions.fetch();
     }
   }, [me.data]);
+
+  React.useEffect(() => {
+    console.log('Navigation Rerender');
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (me.data !== null) {
+        console.log('Subscribe Fetch');
+        cartTotalProductActions.fetch();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   /** => listen changes data cart id */
   React.useEffect(() => {
