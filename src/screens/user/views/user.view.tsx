@@ -179,7 +179,8 @@ const UserView: FC = () => {
     return (
       <>
         {renderHeaderInformation()}
-        {renderLoyaltiInformation()}
+        {/* HIDE SEMENTARA */
+        /* {renderLoyaltiInformation()} */}
         {renderBadgeInformation()}
         {renderUserInformation()}
       </>
