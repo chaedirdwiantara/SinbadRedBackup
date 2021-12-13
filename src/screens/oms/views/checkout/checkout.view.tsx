@@ -312,13 +312,22 @@ const OmsCheckoutView: FC = () => {
       errorFetchModal.setErrorText('Ulangi');
     }
   }, [statePromo.checkPromoPayment.list]);
+  /** => Handling session expired */
+  useEffect(() => {
+    if (expiredTime.isOpen) {
+      console.log('Open Modal', expiredTime.isOpen);
+      expiredTime.setOpen(true);
+    } else {
+      console.log('Go to TNC');
+    }
+  }, []);
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
     const invoiceGroupId = paymentChannelData?.invoiceGroupId;
     const totalCartParcel = paymentChannelData?.totalCartParcel;
     const paymentTypeId = item?.id;
-    paymentChannelsModal.setOpen(true);
     paymentTypeModal.setOpen(false);
+    paymentChannelsModal.setOpen(true);
     if (invoiceGroupId && paymentTypeId) {
       paymentAction.channelsList(
         dispatchPayment,
