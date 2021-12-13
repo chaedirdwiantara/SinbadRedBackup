@@ -4,7 +4,7 @@ import { View, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
-import { HorizontalGridLayout } from '@core/components/product/HorizontalGridLayout';
+import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
 /** === IMPORT FUNCTIONS === */
 import { useProductListActions } from '@screen/product/functions';
 import { useProductContext } from 'src/data/contexts/product';
@@ -36,7 +36,7 @@ const RecommendationHomeView: FC = () => {
           <SnbText.C2 color={color.red50}>Lihat Semua</SnbText.C2>
         </TouchableOpacity>
       </View>
-      <HorizontalGridLayout
+      <HorizontalProductGridLayout
         data={productListState.data}
         loading={productListState.loading}
       />

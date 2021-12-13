@@ -4,15 +4,15 @@ import * as models from '@models';
 /** => process */
 export const verificationOrderCreateProcess = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<{}>,
-): models.CreateProcessAction => {
+  data: models.CartSelected,
+): models.CreateProcessAction<models.CartSelected> => {
   contextDispatch({
     type: types.VERIFICATION_ORDER_CREATE_PROCESS,
     payload: data,
   });
   return {
     type: types.VERIFICATION_ORDER_CREATE_PROCESS,
-    payload: data.data,
+    payload: data,
     contextDispatch,
   };
 };
@@ -29,12 +29,7 @@ export const verificationOrderCreateFailed = (
   return { type: types.VERIFICATION_ORDER_CREATE_FAILED, payload: data };
 };
 /** => reset */
-export const verificationOrderCreateReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.VERIFICATION_ORDER_CREATE_RESET,
-  });
+export const verificationOrderCreateReset = () => {
   return { type: types.VERIFICATION_ORDER_CREATE_RESET };
 };
 /** === DETAIL === */

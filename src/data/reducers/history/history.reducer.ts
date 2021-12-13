@@ -8,32 +8,45 @@ import {
 import {
   paymentStatusListReducer,
   paymentStatusListInitialState,
+  PaymentStatusListInitialProps,
 } from './list-history/payment-status-list.reducer';
 
 import {
-  HistoryListInitialProps,
-  historyListInitialState,
-  historyListReducer,
-} from './list-history/history-list.reducer';
-
+  PaymentDetailInitialProps,
+  paymentDetailInitialState,
+  paymentDetailReducer,
+} from './detail/payment-detail.reducer';
+import {
+  paymentInvoiceInitialState,
+  PaymentInvoiceInitialProps,
+  paymentInvoiceReducer,
+} from './payment-invoice.reducer';
 export interface HistoryListState {
   orderStatus: OrderStatusInitialProps;
-  paymentStatus: any;
-  list: HistoryListInitialProps;
+  paymentStatus: PaymentStatusListInitialProps;
+  paymentDetail: PaymentDetailInitialProps;
+  paymentInvoice: PaymentInvoiceInitialProps;
 }
 
 /** === INITIAL STATE === */
 export const historyInitialState = {
   paymentStatus: paymentStatusListInitialState,
   orderStatus: orderStatusInitialState,
-  list: historyListInitialState,
+  paymentDetail: paymentDetailInitialState,
+  paymentInvoice: paymentInvoiceInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const historyReducer = (
-  { paymentStatus, orderStatus, list }: HistoryListState,
+  {
+    paymentStatus,
+    orderStatus,
+    paymentDetail,
+    paymentInvoice,
+  }: HistoryListState,
   action: any,
 ) => ({
   paymentStatus: paymentStatusListReducer(paymentStatus, action),
   orderStatus: orderStatusReducer(orderStatus, action),
-  list: historyListReducer(list, action),
+  paymentDetail: paymentDetailReducer(paymentDetail, action),
+  paymentInvoice: paymentInvoiceReducer(paymentInvoice, action),
 });

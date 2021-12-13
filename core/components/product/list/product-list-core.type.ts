@@ -34,4 +34,4 @@ export interface ITag {
   selected: boolean;
 }
 
-export type EProductDisplayState = 'loading' | 'error' | 'empty' | 'success';
+export type ListDisplayState = 'loading' | 'error' | 'empty' | 'success';

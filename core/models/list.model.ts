@@ -51,6 +51,7 @@ export interface ListItemV2Props<T> {
   loadMore: boolean;
   refresh: boolean;
   page: number;
+  perPage: number;
   data: T;
   error: ErrorProps | null;
 }

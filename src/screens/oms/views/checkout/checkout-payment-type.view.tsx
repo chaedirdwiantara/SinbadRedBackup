@@ -30,7 +30,7 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
   );
 
   const { paymentLastChannelCreate, paymentLastChannelDetail } = statePayment;
-  const loadingLastTypeChanel =
+  const loadingLastTypeChannel =
     paymentLastChannelDetail?.loading || paymentLastChannelCreate?.loading;
   const paymentChannelData = usePaymentChannelsData();
   const invoiceGroupId = data?.invoiceGroupId;
@@ -42,8 +42,10 @@ export const CheckoutPaymentTypeView: FC<CheckoutPaymentTypeViewProps> = ({
     <View style={{ marginTop: 16 }}>
       <SnbText.H4>Tipe Pembayaran</SnbText.H4>
       <SnbDivider style={{ marginVertical: 8 }} />
-      {data.isPotentialPaymentPromo && <CheckoutPaymentPromoBadge />}
-      {!loadingLastTypeChanel ? (
+      {data.isPotentialPaymentPromo && (
+        <CheckoutPaymentPromoBadge invoiceGroupId={data.invoiceGroupId} />
+      )}
+      {!loadingLastTypeChannel ? (
         <TouchableOpacity
           onPress={() => {
             paymentAction.typeslist(

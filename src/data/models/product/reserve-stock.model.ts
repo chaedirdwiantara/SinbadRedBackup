@@ -8,22 +8,22 @@ export interface ReserveStockError {
 export interface StockErrorChange {
   productId: string;
   name: string;
-  thumbnail: string | null;
-  currentQty: number;
+  thumbnail: string;
+  currentStock: number;
   qty: number;
 }
 
 export interface StockEmptyOrNotFound {
   productId: string;
   name: string;
-  thumbnail: string | null;
+  thumbnail: string;
 }
 
 export interface StockErrorOther {
   errorMessage: string;
   productId: string;
   name: string;
-  thumbnail: string | null;
+  thumbnail: string;
 }
 
 export interface ReserveStockPayload {

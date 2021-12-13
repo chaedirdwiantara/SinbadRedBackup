@@ -44,5 +44,10 @@ export const paymentTCCreateReducer = simplifyReducer(
         error: action.payload,
       };
     },
+
+    /** => reset */
+    [types.RESET_PAYMENT_TC_CREATE]() {
+      return paymentTCCreateInitialState;
+    },
   },
 );

@@ -3,6 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT INTERNAL === */
 import { PaymentStatusApi } from 'src/data/apis/history/list-history/payment-status.api';
 import { HistoryOrderApi } from 'src/data/apis/history/history-order.api';
+import { HistoryPaymentApi } from '../apis/history/history-payment.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
@@ -39,10 +40,59 @@ function* historyList(action: models.ListProcessAction) {
     yield put(ActionCreators.historyListFailed(error as models.ErrorProps));
   }
 }
+/** === FUNCTIONS === */
+/** Payment Detail */
+function* paymentDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.PaymentDetailSuccessProps> =
+      yield call(() => {
+        return HistoryPaymentApi.paymentDetail();
+      });
+    yield action.contextDispatch(
+      ActionCreators.historyPaymentDetailSuccess(response),
+    );
+    yield put(ActionCreators.historyPaymentDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.historyPaymentDetailFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.historyPaymentDetailFailed(error as models.ErrorProps),
+    );
+  }
+}
+
+/** Payment Invoice */
+function* paymentInvoice(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.PaymentInvoiceSuccessProps> =
+      yield call(() => {
+        return HistoryPaymentApi.paymentInvoiceDetail(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.historyPaymentInvoiceDetailSuccess(response),
+    );
+    yield put(ActionCreators.historyPaymentInvoiceDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.historyPaymentInvoiceDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+    yield put(
+      ActionCreators.historyPaymentInvoiceDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+  }
+}
+
 /** === LISTENER === */
 function* HistorySaga() {
   yield takeLatest(types.PAYMENT_STATUS_LIST_PROCESS, paymentStatusList);
   yield takeLatest(types.HISTORY_LIST_PROCESS, historyList);
+  yield takeLatest(types.HISTORY_PAYMENT_DETAIL_PROCESS, paymentDetail);
+  yield takeLatest(types.HISTORY_INVOICE_DETAIL_PROCESS, paymentInvoice);
 }
 
 export default HistorySaga;

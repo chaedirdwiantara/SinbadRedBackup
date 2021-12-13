@@ -69,13 +69,16 @@ const usePaymentChannelsData = () => {
     updatePromoPaymentChannel: (data: models.IPromoPaymentChannel[]) => {
       dispatch(Actions.updatePromoPaymentChannel(data));
     },
+    resetPaymentModalMasterData: () => {
+      dispatch(Actions.resetPaymentModalMasterData());
+    },
     paymentType: paymentType,
     paymentChannels: paymentChannels,
     invoiceGroupId: invoiceGroupId,
     totalCartParcel: totalCartParcel,
   };
 };
-/** => promo general action */
+/** => payment detail accordion */
 const usePaymentDetailAccorrdion = () => {
   const [active, setActive] = React.useState<number | null>(null);
   return {
@@ -200,6 +203,22 @@ const usePaymentAction = () => {
         Actions.paymentLastChannelDetailProcess(contextDispatch, { id }),
       );
     },
+    resetLastChannel: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentLastChannelCreateReset(contextDispatch));
+      dispatch(Actions.paymentLastChannelDetailReset(contextDispatch));
+    },
+    resetChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentChannelsListReset(contextDispatch));
+    },
+    resetTypesList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.resetPaymentTypesList(contextDispatch));
+    },
+    resetTCCreate: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentTCCreateReset(contextDispatch));
+    },
+    resetTCDetail: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentTCDetailReset(contextDispatch));
+    },
   };
 };
 /** => back to cart modal confirmation */
@@ -210,6 +229,38 @@ const useBackToCartModal = () => {
       setOpen(value);
     },
     isOpen,
+  };
+};
+
+/** => error fetch api */
+const useErrorModalBottom = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
+
+/** => failed fetch state */
+const useCheckoutFailedFetchState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  const [errorAction, setErrorAction] = React.useState<Function>(() => {});
+  const [errorText, setErrorText] = React.useState('');
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setErrorAction: (value: () => void) => {
+      setErrorAction(value);
+    },
+    setErrorText: (value: string) => {
+      setErrorText(value);
+    },
+    isOpen,
+    errorAction,
+    errorText,
   };
 };
 
@@ -224,6 +275,8 @@ export {
   usePaymentAction,
   usePaymentChannelsData,
   useBackToCartModal,
+  useErrorModalBottom,
+  useCheckoutFailedFetchState,
 };
 /**
  * ================================================================

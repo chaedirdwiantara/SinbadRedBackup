@@ -17,16 +17,13 @@ export interface PromoPaymentDetailSuccessProps {
   discountRebate: number;
   termAndConditions: string[];
 }
-/** === PROMO GENERAL DETAIL === */
-export interface PromoGeneralDetailSuccessProps {
+/** === PROMO SELLER DETAIL === */
+export interface PromoSellerDetailSuccessProps {
   id: number;
   name: string;
-  shortDescription: string;
-  header: string;
-  imageUrl: string;
-  startDate: string;
   endDate: string;
-  termsAndCondition: string[];
+  shortDescription: string;
+  imageUrl: string;
 }
 export interface PotentialPromoProductProps {
   flexiCombo: PotentialPromoProductFlexiCombo[];
@@ -74,6 +71,7 @@ export interface ReserveDiscountPayloadProducts {
 export interface ReserveDiscountDetail {
   promoMatch: ReserveDiscountPromoMatch[];
   promoNotMatch: ReserveDiscountPromoNotMatch;
+  discountVerification: ReserveDiscountVerification;
 }
 export interface ReserveDiscountPromoMatch {
   invoiceGroupId: string;
@@ -121,4 +119,35 @@ export interface CheckAllPromoPaymentGetData {
   promoPaymentAvailable: boolean;
   promoPaymentDescription: string;
   promoPaymentAmount: number;
+}
+export interface ReserveDiscountVerification {
+  promosSeller: ReserveDiscountVerificationPromosSeller[];
+  vouchersSeller: [];
+}
+export interface ReserveDiscountVerificationPromosSeller {
+  invoiceGroupId: string;
+  productId: string;
+  promos: ReserveDiscountVerificationPromos[];
+}
+export interface ReserveDiscountVerificationPromos {
+  promoId: number;
+  promoName: string;
+  promoFreeProduct: ReserveDiscountPromoFreeProduct | null;
+  promoRebate: number | null;
+  promoOwner: string;
+}
+export interface ReserveDiscountPromoFreeProduct {
+  productId: string;
+  qty: number;
+  uom: string;
+}
+export interface ReserveDiscountVerificationVouchersSeller {
+  voucherId: number;
+  voucherName: string;
+  invoiceGroupId: string;
+  vouchers: [];
+}
+export interface ReserveDiscountVerificationVouchers {
+  productId: string;
+  voucherRebate: number;
 }

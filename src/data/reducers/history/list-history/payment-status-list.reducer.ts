@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type PaymentStatusListInitialProps = models.ListItemProps<models.IPaymentStatusList[]>;
+export type PaymentStatusListInitialProps = models.ListItemProps<models.IPaymentStatusList[]>;
 /** === INITIAL STATE HERE === */
 export const paymentStatusListInitialState: PaymentStatusListInitialProps = {
   data: [],

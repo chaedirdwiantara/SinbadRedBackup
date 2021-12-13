@@ -12,7 +12,7 @@ export const sendDataToSupplierProcess = (
   });
   return {
     type: types.SEND_DATA_SUPPLIER_PROCESS,
-    payload: payload.data,
+    payload,
     contextDispatch,
   };
 };

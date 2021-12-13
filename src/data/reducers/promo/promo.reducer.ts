@@ -5,10 +5,10 @@ import {
   PromoPaymentInitialProps,
 } from './promo-payment/promo-payment.reducer';
 import {
-  promoGeneralInitialState,
-  promoGeneralReducer,
-  PromoGeneralInitialProps,
-} from './promo-general/promo-general.reducer';
+  promoSellerInitialState,
+  promoSellerReducer,
+  PromoSellerInitialProps,
+} from './promo-seller/promo-seller.reducer';
 import {
   potentialPromoProductInitialState,
   potentialPromoProductReducer,
@@ -32,7 +32,7 @@ import {
 /** === TYPE HERE === */
 export type PromoInitialProps = {
   promoPayment: PromoPaymentInitialProps;
-  promoGeneral: PromoGeneralInitialProps;
+  promoSeller: PromoSellerInitialProps;
   potentialPromoProduct: PotentialPromoProductInitialProps;
   reserveDiscount: ReserveDiscountInitialProps;
   checkPromoPayment: CheckPromoPaymentInitialProps;
@@ -41,7 +41,7 @@ export type PromoInitialProps = {
 /** === INITIAL HERE === */
 export const promoInitialState = {
   promoPayment: promoPaymentInitialState,
-  promoGeneral: promoGeneralInitialState,
+  promoSeller: promoSellerInitialState,
   potentialPromoProduct: potentialPromoProductInitialState,
   reserveDiscount: reserveDiscountInitialState,
   checkPromoPayment: checkPromoPaymentInitialState,
@@ -51,7 +51,7 @@ export const promoInitialState = {
 export const promoReducer = (
   {
     promoPayment,
-    promoGeneral,
+    promoSeller,
     potentialPromoProduct,
     reserveDiscount,
     checkPromoPayment,
@@ -60,7 +60,7 @@ export const promoReducer = (
   action: any,
 ) => ({
   promoPayment: promoPaymentReducer(promoPayment, action),
-  promoGeneral: promoGeneralReducer(promoGeneral, action),
+  promoSeller: promoSellerReducer(promoSeller, action),
   potentialPromoProduct: potentialPromoProductReducer(
     potentialPromoProduct,
     action,

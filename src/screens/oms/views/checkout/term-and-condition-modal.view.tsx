@@ -55,7 +55,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
   };
   const button = () => {
     return (
-      <View>
+      <View style={{ height: '20%' }}>
         <SnbButton.Single
           title={'Buat Pesanan'}
           disabled={false}
@@ -70,17 +70,19 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
   };
   const content = () => {
     return (
-      <ScrollView style={{ paddingHorizontal: 16 }}>
-        <View style={{ marginBottom: 16, alignItems: 'center' }}>
-          <SnbText.C1>
-            Dengan ini saya menyetujui Syarat & Ketentuan yang berlaku:
-          </SnbText.C1>
-        </View>
-        {paymentTypesTermsConditions()}
-        <SnbDivider style={{ marginBottom: 12 }} />
-        {paymentChannelTermsConditions()}
+      <View style={{ paddingHorizontal: 16, paddingBottom: 60 }}>
+        <ScrollView>
+          <View style={{ marginBottom: 16, alignItems: 'center' }}>
+            <SnbText.C1>
+              Dengan ini saya menyetujui Syarat & Ketentuan yang berlaku:
+            </SnbText.C1>
+          </View>
+          {paymentTypesTermsConditions()}
+          <SnbDivider style={{ marginBottom: 12 }} />
+          {paymentChannelTermsConditions()}
+        </ScrollView>
         {button()}
-      </ScrollView>
+      </View>
     );
   };
   return (
@@ -90,6 +92,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
       title={'Syarat & Ketentuan'}
       closeAction={close}
       actionIcon={'close'}
+      size={'halfscreen'}
     />
   );
 };

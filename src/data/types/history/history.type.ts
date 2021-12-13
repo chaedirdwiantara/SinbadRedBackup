@@ -11,3 +11,13 @@ export const HISTORY_LIST_FAILED = 'HistoryListFailed';
 export const HISTORY_LIST_REFRESH = 'HistoryListRefresh';
 export const HISTORY_LIST_RESET = 'HistoryListReset';
 export const HISTORY_LIST_LOADMORE = 'HistoryListLoadMore';
+/** HISTORY PAYMENT DETAIL */
+export const HISTORY_PAYMENT_DETAIL_PROCESS = 'HistoryPaymentDetailProcess';
+export const HISTORY_PAYMENT_DETAIL_SUCCESS = 'HistoryPaymentDetailSuccess';
+export const HISTORY_PAYMENT_DETAIL_FAILED = 'HistoryPaymentDetailFailed';
+
+/** HISTORY INVOICE DETAIL */
+export const HISTORY_INVOICE_DETAIL_PROCESS = 'HistoryInvoiceDetailProcess';
+export const HISTORY_INVOICE_DETAIL_SUCCESS = 'HistoryInvoiceDetailSuccess';
+export const HISTORY_INVOICE_DETAIL_FAILED = 'HistoryInvoiceDetailFailed';
+export const HISTORY_INVOICE_DETAIL_RESET = 'HistoryInvoiceDetailReset';
