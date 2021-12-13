@@ -66,7 +66,7 @@ export const ErrorStockModal: FC<ErrorStockModal> = ({
                         />
                       </View>
                       <SnbText.H4 color={color.red50}>
-                        {item.currentQty}
+                        {item.currentStock}
                       </SnbText.H4>
                     </View>
                   </View>

@@ -1,10 +1,14 @@
 /** === IMPORT EXTERNAL MODEL === */
-import { CreateSuccessProps, CreateSuccessV2Props } from './create.model';
+import {
+  CreateSuccessProps,
+  CreateSuccessV2Props,
+  CreateProcessProps,
+} from './create.model';
 import { ErrorProps } from './error.model';
 /** === PROCESS === */
 export interface CreateProcessAction<T> {
   type: string;
-  payload: T;
+  payload: CreateProcessProps<T>;
   contextDispatch: (action: any) => any;
 }
 /** === FAILED === */

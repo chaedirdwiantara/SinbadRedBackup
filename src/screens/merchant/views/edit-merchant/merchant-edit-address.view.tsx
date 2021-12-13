@@ -64,23 +64,23 @@ const MerchantEditAddressView = () => {
   }, [merchantData]);
 
   const handleDisableButton = () => {
-    if (address.value === '') {
+    if (address.value !== '' && noteAddress.value !== '') {
       if (
-        noteAddress.value === '' ||
-        noteAddress.value === storeAddress?.noteAddress
+        merchantData.latitude !== null ||
+        merchantData.longitude !== null ||
+        merchantData.urbanId !== null
+      ) {
+        return false;
+      } else if (
+        noteAddress.value === storeAddress?.noteAddress &&
+        address.value === storeAddress?.address
       ) {
         return true;
       } else {
         return false;
       }
-    } else if (address.value === storeAddress?.address) {
-      if (noteAddress.value === storeAddress?.noteAddress) {
-        return true;
-      } else {
-        return false;
-      }
     } else {
-      return false;
+      return true;
     }
   };
 
@@ -100,17 +100,11 @@ const MerchantEditAddressView = () => {
       data.noteAddress = noteAddress.value;
     }
     editMerchant(dispatchSupplier, { data });
-    console.log('data:', data);
   };
 
-  console.log('map:', storeAddress);
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3
-        type="red"
-        title="Edit Alamat Toko"
-        backAction={goBack}
-      />
+      <SnbTopNav.Type3 type="red" title="Alamat Toko" backAction={goBack} />
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ marginTop: 16, marginHorizontal: 16 }}>
@@ -121,7 +115,8 @@ const MerchantEditAddressView = () => {
                 alignItems: 'center',
               }}>
               <SnbText.H4>Koordinat Lokasi</SnbText.H4>
-              <TouchableOpacity onPress={() => navigate('MapsView')}>
+              <TouchableOpacity
+                onPress={() => navigate('MapsView', { action: 'edit' })}>
                 <SnbText.B4>Ubah</SnbText.B4>
               </TouchableOpacity>
             </View>
@@ -173,6 +168,7 @@ const MerchantEditAddressView = () => {
                 labelText="Catatan Alamat"
                 placeholder="Masukkan Catatan Alamat"
                 maxLength={200}
+                mandatory
               />
             </View>
           </View>
@@ -183,6 +179,7 @@ const MerchantEditAddressView = () => {
           disabled={handleDisableButton()}
           title="Simpan"
           onPress={handleUpdate}
+          loading={stateMerchant.merchantEdit.loading}
           type="primary"
         />
       </View>
