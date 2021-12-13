@@ -18,6 +18,7 @@ import {
   SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import RegisterProgress from '../shared/register-progress.component';
 
 const Content: React.FC = () => {
   const { saveStoreData, merchantData } = useMerchant();
@@ -59,17 +60,8 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
           </View>
-          <View style={{ margin: 16 }}>
-            <SnbText.B4>6/7 Data Toko</SnbText.B4>
-            <View style={{ marginVertical: 4 }} />
-            <View
-              style={{
-                height: 8,
-                backgroundColor: color.red60,
-                borderRadius: 8,
-              }}
-            />
-          </View>
+          <RegisterProgress step={6} title="Data Toko" />
+
           <View style={{ paddingHorizontal: 16 }}>
             <View
               style={{
@@ -84,7 +76,8 @@ const Content: React.FC = () => {
               </View>
               {renderIF(
                 merchantData.longitude !== null,
-                <TouchableOpacity onPress={() => navigate('MapsView')}>
+                <TouchableOpacity
+                  onPress={() => navigate('MapsView', { action: 'register' })}>
                   <SnbText.B4>Ubah</SnbText.B4>
                 </TouchableOpacity>,
               )}
@@ -112,7 +105,7 @@ const Content: React.FC = () => {
                 />
               </MapView>,
               <TouchableOpacity
-                onPress={() => navigate('MapsView')}
+                onPress={() => navigate('MapsView', { action: 'register' })}
                 style={styles.pinPoint}>
                 <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
               </TouchableOpacity>,
@@ -137,12 +130,13 @@ const Content: React.FC = () => {
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextFieldSelect
-              labelText="Aksesibilitas Kendaraan"
+              labelText="Akses Jalan"
+              mandatory
               value={
                 vehicleAccessibility?.name ||
                 merchantData.vehicleAccessibilityId
               }
-              placeholder="Pilih aksesibitas kendaraan"
+              placeholder="Pilih akses jalan"
               type="default"
               onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
               rightType="icon"
@@ -155,6 +149,7 @@ const Content: React.FC = () => {
               labelText="Kapasitas Jalan"
               placeholder="Masukkan kapasitas jalan"
               keyboardType="phone-pad"
+              helpText={'Jumlah kendaraan yang bisa melewati jalan menuju Toko'}
             />
           </View>
         </ScrollView>
@@ -184,7 +179,7 @@ const Content: React.FC = () => {
           disabled={
             address.value === '' ||
             noteAddress.value === '' ||
-            vehicleAccessibilityAmount.value === '' ||
+            vehicleAccessibility === null ||
             merchantData.urbanId === null
           }
         />
