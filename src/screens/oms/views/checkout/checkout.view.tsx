@@ -348,6 +348,7 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   };
+  console.log(statePayment, 'STATE PAYMENT');
 
   /** === VIEW === */
   return (
