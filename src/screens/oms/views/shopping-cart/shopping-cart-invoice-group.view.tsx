@@ -6,7 +6,7 @@ import { SnbText } from 'react-native-sinbad-ui';
 import { ShoppingCartBrand } from './shopping-cart-brand.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup } from '@models';
+import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartInvoiceGroupProps {
   invoiceGroup: CartInvoiceGroup;
@@ -17,7 +17,9 @@ interface ShoppingCartInvoiceGroupProps {
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
   totalProducts: number;
-  setProductIdRemoveSelected: Dispatch<SetStateAction<string | null>>;
+  sassionQty: number;
+  setSassionQty: Dispatch<SetStateAction<number>>;
+  onRemoveProduct: (any: IProductItemUpdateCart) => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -29,7 +31,9 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   setProductSelectedCount,
   setAllProductsSelected,
   totalProducts,
-  setProductIdRemoveSelected,
+  sassionQty,
+  setSassionQty,
+  onRemoveProduct,
 }) => (
   <View
     style={ShoppingCartStyles.cardContainer}
@@ -49,7 +53,9 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
         setProductSelectedCount={setProductSelectedCount}
         setAllProductsSelected={setAllProductsSelected}
         totalProducts={totalProducts}
-        setProductIdRemoveSelected={setProductIdRemoveSelected}
+        sassionQty={sassionQty}
+        setSassionQty={setSassionQty}
+        onRemoveProduct={onRemoveProduct}
       />
     ))}
   </View>

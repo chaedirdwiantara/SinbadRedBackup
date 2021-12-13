@@ -40,30 +40,38 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
               {toCurrency(data.totalPriceBeforeTax)}
             </SnbText.B3>
           </View>
-          <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.green50}>Total Potongan Harga</SnbText.B3>
-            <SnbText.B3 color={color.green50}>
-              {toCurrency(data.totalPromoSellerAndVoucher ?? 0)}
-            </SnbText.B3>
-          </View>
+          {data.totalPromoSellerAndVoucher ? (
+            <View style={CheckoutStyle.detailItemContainer}>
+              <SnbText.B3 color={color.green50}>
+                Total Potongan Harga
+              </SnbText.B3>
+              <SnbText.B3 color={color.green50}>
+                {toCurrency(data.totalPromoSellerAndVoucher ?? 0)}
+              </SnbText.B3>
+            </View>
+          ) : null}
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black100}>{`PPN ${data.tax}%`}</SnbText.B3>
             <SnbText.B3 color={color.black100}>
               {toCurrency(data.totalPriceAfterTax - data.totalPriceBeforeTax)}
             </SnbText.B3>
           </View>
-          <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.green50}>Promo Pembayaran</SnbText.B3>
-            <SnbText.B3 color={color.green50}>
-              {toCurrency(data.totalPromoPayment ?? 0)}
-            </SnbText.B3>
-          </View>
-          <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.black100}>Layanan Pembayaran</SnbText.B3>
-            <SnbText.B3 color={color.black100}>
-              {toCurrency(data.totalPaymentFee ?? 0)}
-            </SnbText.B3>
-          </View>
+          {data.totalPromoPayment ? (
+            <View style={CheckoutStyle.detailItemContainer}>
+              <SnbText.B3 color={color.green50}>Promo Pembayaran</SnbText.B3>
+              <SnbText.B3 color={color.green50}>
+                {toCurrency(data.totalPromoPayment ?? 0)}
+              </SnbText.B3>
+            </View>
+          ) : null}
+          {data.totalFee ? (
+            <View style={CheckoutStyle.detailItemContainer}>
+              <SnbText.B3 color={color.black100}>Layanan Pembayaran</SnbText.B3>
+              <SnbText.B3 color={color.black100}>
+                {toCurrency(data.totalFee ?? 0)}
+              </SnbText.B3>
+            </View>
+          ) : null}
         </View>
       ) : (
         <View />

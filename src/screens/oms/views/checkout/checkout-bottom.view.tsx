@@ -13,13 +13,15 @@ interface CheckoutBottomViewProps {
   openTCModal: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
-  data,
-  openTCModal,
-}) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
-  const { dispatchPayment } = React.useContext(contexts.PaymentContext);
+  const { dispatchPayment, statePayment } = React.useContext(
+    contexts.PaymentContext,
+  );
+  const loadingTCCreate = statePayment.paymentTCCreate?.loading;
+  const loadingTCDetail = statePayment.paymentTCDetail?.loading;
+  console.log(loadingTCCreate, loadingTCDetail);
 
   /** => main */
   const dataPostTC = {
@@ -35,7 +37,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   };
 
   const pressButton = () => {
-    openTCModal();
     paymentAction.tCCreate(dispatchPayment, dataPostTC);
   };
   const content = () => {
@@ -53,6 +54,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         onPress={pressButton}
         content={content()}
         title={'Buat Pesanan'}
+        loading={loadingTCCreate || loadingTCDetail}
       />
     </View>
   );

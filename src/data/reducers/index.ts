@@ -15,6 +15,7 @@ import {
   paymentChannelsModal,
   cartMaster,
   cartTotalProduct,
+  reserveData,
 } from './oms';
 
 export const rootReducer = combineReducers({
@@ -30,6 +31,7 @@ export const rootReducer = combineReducers({
   paymentChannelsModal,
   cartMaster,
   cartTotalProduct,
+  reserveData,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

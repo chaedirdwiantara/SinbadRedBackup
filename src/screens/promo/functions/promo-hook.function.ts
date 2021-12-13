@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -29,15 +30,15 @@ const usePromoPaymentAction = () => {
     },
   };
 };
-/** => promo general action */
-const usePromoGeneralAction = () => {
+/** => promo seller action */
+const usePromoSellerAction = () => {
   const dispatch = useDispatch();
   return {
     detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.promoGeneralDetailProcess(contextDispatch, { id }));
+      dispatch(Actions.promoSellerDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.promoGeneralDetailReset());
+      contextDispatch(Actions.promoSellerDetailReset());
     },
   };
 };
@@ -69,15 +70,16 @@ const useReserveDiscountAction = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
     },
-    resetCreate: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.createReserveDiscountReset(contextDispatch));
+    resetPostGet: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.createReserveDiscountReset());
+      contextDispatch(Actions.detailReserveDiscountReset());
     },
-    resetDetail: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.detailReserveDiscountReset(contextDispatch));
+    resetDelete: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.deleteReserveDiscountReset());
     },
   };
 };
-/** => check promo payment action */
+/** => check promo payment action (this for payment channel modal) */
 const useCheckPromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -85,12 +87,14 @@ const useCheckPromoPaymentAction = () => {
       contextDispatch: (action: any) => any,
       data: models.CheckPromoPaymentGetPayload,
     ) => {
-      dispatch(Actions.checkPromoPaymentReset());
       dispatch(Actions.checkPromoPaymentProcess(contextDispatch, data));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.checkPromoPaymentReset());
     },
   };
 };
-/** => check all promo payment action */
+/** => check all promo payment action (this for get last payment channel) */
 const useCheckAllPromoPaymentAction = () => {
   const dispatch = useDispatch();
   return {
@@ -99,28 +103,38 @@ const useCheckAllPromoPaymentAction = () => {
       data: models.CheckAllPromoPaymentPostPayload[],
     ) => {
       dispatch(
-        Actions.createCheckAllPromoPaymentProcess(contextDispatch, { data }),
+        Actions.createCheckAllPromoPaymentProcess(contextDispatch, data),
       );
     },
     list: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.getCheckAllPromoPaymentReset());
       dispatch(Actions.getCheckAllPromoPaymentProcess(contextDispatch, { id }));
     },
-    detail: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.detailReserveDiscountReset());
-      dispatch(Actions.detailReserveDiscountProcess(contextDispatch, { id }));
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.createCheckAllPromoPaymentReset());
+      contextDispatch(Actions.getCheckAllPromoPaymentReset());
     },
+  };
+};
+/** => standard modal state */
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
   };
 };
 
 /** === EXPORT === */
 export {
   usePromoPaymentAction,
-  usePromoGeneralAction,
+  usePromoSellerAction,
   usePotentialPromoProductAction,
   useReserveDiscountAction,
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
+  useStandardModalState,
 };
 /**
  * ================================================================

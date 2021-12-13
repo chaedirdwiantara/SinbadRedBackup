@@ -7,7 +7,6 @@ export const ModalActionStyle = StyleSheet.create({
     borderColor: color.black10,
   },
   mainContainer: {
-    flex: 1,
     backgroundColor: color.white,
   },
   boxContentItemSortType1: {

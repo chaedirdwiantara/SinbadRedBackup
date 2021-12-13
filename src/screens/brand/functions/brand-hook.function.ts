@@ -46,7 +46,7 @@ const useBrandListAction = () => {
     },
     loadMore: (
       contextDispatch: (action: any) => any,
-      list: models.ListItemProps<models.BrandListSuccessProps[]>,
+      list: models.ListItemProps<models.BrandListItem[]>,
       queryOptions?: models.BrandListQueryOptions,
     ) => {
       if (list.data.length < list.total) {

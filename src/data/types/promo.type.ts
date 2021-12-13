@@ -10,11 +10,11 @@ export const PROMO_PAYMENT_DETAIL_PROCESS = 'PromoPaymentDetailProcess';
 export const PROMO_PAYMENT_DETAIL_SUCCESS = 'PromoPaymentDetailSuccess';
 export const PROMO_PAYMENT_DETAIL_FAILED = 'PromoPaymentDetailFailed';
 export const PROMO_PAYMENT_DETAIL_RESET = 'PromoPaymentDetailReset';
-// PROMO GENERAL DETAIL
-export const PROMO_GENERAL_DETAIL_PROCESS = 'PromoGeneralDetailProcess';
-export const PROMO_GENERAL_DETAIL_SUCCESS = 'PromoGeneralDetailSuccess';
-export const PROMO_GENERAL_DETAIL_FAILED = 'PromoGeneralDetailFailed';
-export const PROMO_GENERAL_DETAIL_RESET = 'PromoGeneralDetailReset';
+// PROMO SELLER DETAIL
+export const PROMO_SELLER_DETAIL_PROCESS = 'PromoSellerDetailProcess';
+export const PROMO_SELLER_DETAIL_SUCCESS = 'PromoSellerDetailSuccess';
+export const PROMO_SELLER_DETAIL_FAILED = 'PromoSellerDetailFailed';
+export const PROMO_SELLER_DETAIL_RESET = 'PromoSellerDetailReset';
 // POTENTIAL PROMO PRODUCT
 export const POTENTIAL_PROMO_PRODUCT_PROCESS = 'PotentialPromoListProcess';
 export const POTENTIAL_PROMO_PRODUCT_SUCCESS = 'PotentialPromoListSuccess';
@@ -24,6 +24,7 @@ export const POTENTIAL_PROMO_PRODUCT_RESET = 'PotentialPromoListReset';
 export const DELETE_RESERVE_DISCOUNT_PROCESS = 'DeleteReserveDiscountProcess';
 export const DELETE_RESERVE_DISCOUNT_SUCCESS = 'DeleteReserveDiscountSuccess';
 export const DELETE_RESERVE_DISCOUNT_FAILED = 'DeleteReserveDiscountFailed';
+export const DELETE_RESERVE_DISCOUNT_RESET = 'DeleteReserveDiscountReset';
 // CREATE RESERVE DISCOUNT
 export const CREATE_RESERVE_DISCOUNT_PROCESS = 'CreateReserveDiscountProcess';
 export const CREATE_RESERVE_DISCOUNT_FAILED = 'CreateReserveDiscountFailed';
@@ -46,6 +47,7 @@ export const CREATE_CHECK_PROMO_PAYMENT_FAILED =
   'CreateCheckPromoPaymentFailed';
 export const CREATE_CHECK_PROMO_PAYMENT_SUCCESS =
   'CreateCheckPromoPaymentSuccess';
+export const CREATE_CHECK_PROMO_PAYMENT_RESET = 'CreateCheckPromoPaymentReset';
 // GET CHECK ALL PROMO PAYMENT
 export const GET_CHECK_PROMO_PAYMENT_PROCESS = 'GetCheckPromoPaymentProcess';
 export const GET_CHECK_PROMO_PAYMENT_FAILED = 'GetCheckPromoPaymentFailed';

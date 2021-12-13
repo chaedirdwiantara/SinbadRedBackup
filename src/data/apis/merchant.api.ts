@@ -16,12 +16,12 @@ const supplierList = (data: models.ListProcessProps) => {
 /** => merchant edit */
 const editMerchant = (data: object) => {
   const path = 'stores/profile';
-  return apiMapping('auth', path, 'account', 'v1', 'PATCH', data);
+  return apiMapping('auth', path, 'account', 'v1', 'UPDATE', data);
 };
 /** => profile edit */
 const editProfile = (data: object) => {
   const path = 'completed-data/profile-account-type';
-  return apiMapping('auth', path, 'account', 'v1', 'PATCH', data);
+  return apiMapping('auth', path, 'account', 'v1', 'UPDATE', data);
 };
 /** => change email */
 const changeEmail = (data: object) => {

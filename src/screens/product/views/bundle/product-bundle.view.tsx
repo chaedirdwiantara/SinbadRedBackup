@@ -4,7 +4,7 @@ import { View, ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { Accordion } from '@core/components/Accordion';
-import { HorizontalGridLayout } from '@core/components/product/HorizontalGridLayout';
+import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
 import { ActionButton } from '../detail/ActionButton';
 import { PromoSuggestion } from './PromoSuggestion';
 import { SectionTitle } from './SectionTitle';
@@ -102,7 +102,7 @@ const ProductBundleView: FC = () => {
           title="PRODUK TERKAIT"
           loading={productListState.loading} // relatedProductsState.loading
         />
-        <HorizontalGridLayout
+        <HorizontalProductGridLayout
           data={productListState.data}
           loading={productListState.loading} // relatedProductsState.loading
           withOrderButton={true}

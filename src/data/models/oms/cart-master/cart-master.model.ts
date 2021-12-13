@@ -15,6 +15,7 @@ export interface IVoucherIdCartMaster {
 export interface ICartMaster extends models.CartSuccessProps {
   dataNotFound: ICartMasterProductNotAvailable[];
   dataEmptyStock: ICartMasterProductNotAvailable[];
+  others: models.IOtherInformationStock[];
   voucherIds?: IVoucherIdCartMaster[];
 }
 

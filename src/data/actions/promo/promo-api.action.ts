@@ -69,34 +69,34 @@ export const promoPaymentDetailReset = () => {
   return { type: types.PROMO_PAYMENT_DETAIL_RESET };
 };
 
-/** === PROMO GENERAL DETAIL === */
-/** => promo general detail process */
-export const promoGeneralDetailProcess = (
+/** === PROMO SELLER DETAIL === */
+/** => process */
+export const promoSellerDetailProcess = (
   contextDispatch: (action: any) => any,
   data: models.DetailProcessProps,
 ): models.DetailProcessAction => {
-  contextDispatch({ type: types.PROMO_GENERAL_DETAIL_PROCESS, payload: data });
+  contextDispatch({ type: types.PROMO_SELLER_DETAIL_PROCESS, payload: data });
   return {
-    type: types.PROMO_GENERAL_DETAIL_PROCESS,
+    type: types.PROMO_SELLER_DETAIL_PROCESS,
     payload: data,
     contextDispatch,
   };
 };
-/** => promo general detail success */
-export const promoGeneralDetailSuccess = (
-  data: models.DetailSuccessProps<models.PromoGeneralDetailSuccessProps>,
-): models.DetailSuccessAction<models.PromoGeneralDetailSuccessProps> => {
-  return { type: types.PROMO_GENERAL_DETAIL_SUCCESS, payload: data };
+/** => success */
+export const promoSellerDetailSuccess = (
+  data: models.DetailSuccessProps<models.PromoSellerDetailSuccessProps>,
+): models.DetailSuccessAction<models.PromoSellerDetailSuccessProps> => {
+  return { type: types.PROMO_SELLER_DETAIL_SUCCESS, payload: data };
 };
-/** => promo general detail failed */
-export const promoGeneralDetailFailed = (
+/** => failed */
+export const promoSellerDetailFailed = (
   data: models.ErrorProps,
 ): models.DetailFailedAction => {
-  return { type: types.PROMO_GENERAL_DETAIL_FAILED, payload: data };
+  return { type: types.PROMO_SELLER_DETAIL_FAILED, payload: data };
 };
-/** => promo general detail reset */
-export const promoGeneralDetailReset = () => {
-  return { type: types.PROMO_GENERAL_DETAIL_RESET };
+/** => reset */
+export const promoSellerDetailReset = () => {
+  return { type: types.PROMO_SELLER_DETAIL_RESET };
 };
 
 /** === POTENTIAL PROMO PRODUCT === */
@@ -160,13 +160,17 @@ export const deleteReserveDiscountFailed = (
 ): models.DeleteFailedAction => {
   return { type: types.DELETE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
+/** => delete reserve discount reset */
+export const deleteReserveDiscountReset = () => {
+  return { type: types.DELETE_RESERVE_DISCOUNT_RESET };
+};
 
 /** === CREATE RESERVE DISCOUNT === */
 /** => create reserve discount process */
 export const createReserveDiscountProcess = (
   contextDispatch: (action: any) => any,
   data: models.ReserveDiscountPostPayload,
-): models.CreateProcessAction => {
+): models.CreateProcessAction<models.ReserveDiscountPostPayload> => {
   contextDispatch({
     type: types.CREATE_RESERVE_DISCOUNT_PROCESS,
     payload: data,
@@ -190,12 +194,7 @@ export const createReserveDiscountFailed = (
   return { type: types.CREATE_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => create reserve discount reset */
-export const createReserveDiscountReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.CREATE_RESERVE_DISCOUNT_RESET,
-  });
+export const createReserveDiscountReset = () => {
   return { type: types.CREATE_RESERVE_DISCOUNT_RESET };
 };
 
@@ -228,12 +227,7 @@ export const detailReserveDiscountFailed = (
   return { type: types.DETAIL_RESERVE_DISCOUNT_FAILED, payload: data };
 };
 /** => detail reserve discount reset */
-export const detailReserveDiscountReset = (
-  contextDispatch: (action: any) => any,
-) => {
-  contextDispatch({
-    type: types.DETAIL_RESERVE_DISCOUNT_RESET,
-  });
+export const detailReserveDiscountReset = () => {
   return { type: types.DETAIL_RESERVE_DISCOUNT_RESET };
 };
 
@@ -267,15 +261,15 @@ export const checkPromoPaymentFailed = (
 };
 /** => reset */
 export const checkPromoPaymentReset = () => {
-  return { type: types.CHECK_PROMO_PAYMENT_FAILED };
+  return { type: types.CHECK_PROMO_PAYMENT_RESET };
 };
 
 /** === CREATE CHECK ALL PROMO PAYMENT === */
 /** => process */
 export const createCheckAllPromoPaymentProcess = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<models.CheckAllPromoPaymentPostPayload[]>,
-): models.CreateProcessAction => {
+  data: models.CheckAllPromoPaymentPostPayload[],
+): models.CreateProcessAction<models.CheckAllPromoPaymentPostPayload[]> => {
   contextDispatch({
     type: types.CREATE_CHECK_PROMO_PAYMENT_PROCESS,
     payload: data,
@@ -297,6 +291,10 @@ export const createCheckAllPromoPaymentFailed = (
   data: models.ErrorProps,
 ): models.CreateFailedAction => {
   return { type: types.CREATE_CHECK_PROMO_PAYMENT_FAILED, payload: data };
+};
+/** => reset */
+export const createCheckAllPromoPaymentReset = () => {
+  return { type: types.CREATE_CHECK_PROMO_PAYMENT_RESET };
 };
 
 /** === GET CHECK ALL PROMO PAYMENT === */
@@ -329,5 +327,5 @@ export const getCheckAllPromoPaymentFailed = (
 };
 /** => reset */
 export const getCheckAllPromoPaymentReset = () => {
-  return { type: types.GET_CHECK_PROMO_PAYMENT_FAILED };
+  return { type: types.GET_CHECK_PROMO_PAYMENT_RESET };
 };

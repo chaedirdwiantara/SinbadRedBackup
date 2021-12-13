@@ -1,5 +1,5 @@
 /** === BRAND LIST === */
-export interface BrandListSuccessProps {
+export interface BrandListItem {
   id: string;
   image: string;
   name: string;

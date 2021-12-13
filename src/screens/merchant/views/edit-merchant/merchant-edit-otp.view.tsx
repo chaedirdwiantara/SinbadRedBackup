@@ -36,6 +36,8 @@ const OTPContent: React.FC<Props> = (props) => {
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [successOTP, setSuccessOTP] = useState(false);
+  const [hideIcon, setHideIcon] = useState(true);
   //FUNCTION
   const verifyOtp = () => {
     if (type === 'email') {
@@ -72,12 +74,18 @@ const OTPContent: React.FC<Props> = (props) => {
       stateMerchant.verificationBankAccount.data
     ) {
       setOpenModalSuccess(true);
-    }
-  }, [stateMerchant]);
-
-  useEffect(() => {
-    if (stateMerchant.verificationEmail.error) {
-      setErrorMessage(stateMerchant.verificationEmail.error.message);
+      setSuccessOTP(true);
+      setHideIcon(false);
+    } else if (
+      stateMerchant.verificationEmail.error ||
+      stateMerchant.verificationMobilePhone.error ||
+      stateMerchant.verificationBankAccount.error
+    ) {
+      setSuccessOTP(false);
+      setHideIcon(false);
+      setErrorMessage(
+        'Pastikan nomor atau kode verifikasi yang Anda masukkan benar',
+      );
     }
   }, [stateMerchant]);
 
@@ -110,6 +118,10 @@ const OTPContent: React.FC<Props> = (props) => {
     }
     NavigationAction.back();
   };
+
+  NavigationAction.useCustomBackHardware(() => {
+    backFunc();
+  });
 
   const resend = () => {
     if (type === 'email') {
@@ -157,16 +169,22 @@ const OTPContent: React.FC<Props> = (props) => {
           </View>
           <View style={{ margin: 4 }}>
             <SnbOTPInput
-              {...props}
               autoFocusOnLoad
               code={otp}
               onCodeChanged={setOtp}
-              otpSuccess={true}
+              otpSuccess={successOTP}
+              hideIcon={hideIcon}
             />
           </View>
-          <SnbText.B1 color={color.red70} align="center">
-            {errorMessage}
-          </SnbText.B1>
+          <View
+            style={{
+              marginBottom: errorMessage ? 28 : 0,
+              marginHorizontal: 16,
+            }}>
+            <SnbText.B4 color={color.red70} align="center">
+              {errorMessage}
+            </SnbText.B4>
+          </View>
         </View>
         <View>
           <View style={{ height: 72, marginTop: -28, marginBottom: -20 }}>
@@ -208,7 +226,7 @@ const OTPContent: React.FC<Props> = (props) => {
                   <SnbText.B2>{label} Berhasil Terverifikasi</SnbText.B2>
                 </View>
               </View>
-              <View>
+              <View style={{ height: 75 }}>
                 <SnbButton.Single
                   type={'primary'}
                   disabled={false}
