@@ -32,11 +32,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   );
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(
-    statePayment.invoiceChannelList.data,
-    checkoutMaster.invoices,
-    'checkout bottom',
-  );
 
   /** => main */
   const dataPostTC = {

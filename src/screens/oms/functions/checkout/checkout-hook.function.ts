@@ -226,6 +226,9 @@ const usePaymentAction = () => {
         }),
       );
     },
+    resetInvoicChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentInvoiceChannelListReset(contextDispatch));
+    },
   };
 };
 /** => back to cart modal confirmation */
