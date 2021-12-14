@@ -214,6 +214,17 @@ export const paymentLastChannelDetailFailed = (
 ): models.DetailFailedAction => {
   return { type: types.PAYMENT_LAST_CHANNEL_DETAIL_FAILED, payload: data };
 };
+/** reset last payment channel create  */
+export const paymentLastChannelDetailReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
+  });
+  return {
+    type: types.PAYMENT_LAST_CHANNEL_DETAIL_RESET,
+  };
+};
 
 /** payment invoice channel list */
 /** => process */
@@ -230,18 +241,6 @@ export const paymentInvoiceChannelListProcess = (
     payload: data,
     contextDispatch,
   };
-};
-/** => process */
-export const paymentInvoiceChannelListSuccess = (
-  data: models.DetailSuccessProps<models.IListInvoiceChannelProps>,
-): models.DetailSuccessAction<models.IListInvoiceChannelProps> => {
-  return { type: types.PAYMENT_LIST_INVOICE_CHANNEL_SUCCESS, payload: data };
-};
-/** => failed */
-export const paymentInvoiceChannelListFailed = (
-  data: models.ErrorProps,
-): models.DetailFailedAction => {
-  return { type: types.PAYMENT_LIST_INVOICE_CHANNEL_FAILED, payload: data };
 };
 
 /** reset last payment channel detail  */

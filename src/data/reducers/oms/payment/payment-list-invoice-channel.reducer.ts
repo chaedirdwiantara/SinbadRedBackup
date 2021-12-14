@@ -7,9 +7,7 @@ export type PaymentListInvoiceChannelInitialProps = models.DetailItemProps<{}>;
 /** === INITIAL STATE HERE === */
 export const paymentListInvoiceChannelInitialState: PaymentListInvoiceChannelInitialProps =
   {
-    data: null,
-    error: null,
-    loading: false,
+    data: {},
   };
 /** === FUNCTION HERE === */
 export const paymentListInvoiceChannelReducer = simplifyReducer(
@@ -17,19 +15,23 @@ export const paymentListInvoiceChannelReducer = simplifyReducer(
   {
     /** ===> DETAIL */
     /** => process */
-    [types.PAYMENT_LIST_INVOICE_CHANNEL_PROCESS]() {
-      return {
-        ...paymentListInvoiceChannelInitialState,
-        loading: true,
-      };
-    },
+    // [types.PAYMENT_LIST_INVOICE_CHANNEL_PROCESS]() {
+    //   console.log('ACTION');
+
+    //   return {
+    //     ...paymentListInvoiceChannelInitialState,
+    //     loading: true,
+    //   };
+    // },
     /** => success */
-    [types.PAYMENT_LIST_INVOICE_CHANNEL_SUCCESS](
+    [types.PAYMENT_LIST_INVOICE_CHANNEL_PROCESS](
       state = paymentListInvoiceChannelInitialState,
       {
         payload,
       }: models.DetailSuccessAction<models.IListInvoiceChannelSuccess>,
     ) {
+      console.log(payload, 'PAYLOAD REDUCER');
+
       return {
         ...state,
         data: payload.data,

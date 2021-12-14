@@ -43,13 +43,13 @@ export const PAYMENT_LAST_CHANNEL_DETAIL_RESET =
 
 /** => list filled invoice group Id for payment channels */
 export const PAYMENT_LIST_INVOICE_CHANNEL_PROCESS =
-  'PaymentLastChannelDetailProcess';
+  'PaymentListInvoiceChannelProcess';
 export const PAYMENT_LIST_INVOICE_CHANNEL_SUCCESS =
-  'PaymentLastChannelDetailSuccess';
+  'PaymentListInvoiceChannelSuccess';
 export const PAYMENT_LIST_INVOICE_CHANNEL_FAILED =
-  'PaymentLastChannelDetailFailed';
+  'PaymentListInvoiceChannelFailed';
 export const PAYMENT_LIST_INVOICE_CHANNEL_RESET =
-  'PaymentLastChannelDetailReset';
+  'PaymentListInvoiceChannelReset';
 /**
  * ================================================================
  * NOTES

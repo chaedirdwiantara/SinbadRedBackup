@@ -219,6 +219,13 @@ const usePaymentAction = () => {
     resetTCDetail: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.paymentTCDetailReset(contextDispatch));
     },
+    invoiceChannelList: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.paymentInvoiceChannelListProcess(contextDispatch, {
+          id,
+        }),
+      );
+    },
   };
 };
 /** => back to cart modal confirmation */
