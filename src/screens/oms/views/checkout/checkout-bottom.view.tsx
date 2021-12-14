@@ -3,7 +3,11 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import { usePaymentAction, handleTotalPrice } from '../../functions/checkout';
+import {
+  usePaymentAction,
+  handleTotalPrice,
+  useExpiredTime,
+} from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -16,12 +20,12 @@ interface CheckoutBottomViewProps {
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
+  const expiredTime = useExpiredTime();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(loadingTCCreate, loadingTCDetail);
 
   /** => main */
   const dataPostTC = {
@@ -37,7 +41,11 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   };
 
   const pressButton = () => {
-    paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    if (!expiredTime.check()) {
+      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    } else {
+      expiredTime.setOpen(true);
+    }
   };
   const content = () => {
     return (

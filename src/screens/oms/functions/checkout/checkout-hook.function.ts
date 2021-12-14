@@ -147,6 +147,14 @@ const usePaymentChannelModal = () => {
 };
 const usePaymentAction = () => {
   const dispatch = useDispatch();
+
+  const tCCreate = (
+    contextDispatch: any,
+    data: models.CreateProcessProps<{}>,
+  ) => {
+    dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
+  };
+
   return {
     typeslist: (
       contextDispatch: (action: any) => any,
@@ -186,9 +194,7 @@ const usePaymentAction = () => {
     tCCreate: (
       contextDispatch: (action: any) => any,
       data: models.CreateProcessProps<{}>,
-    ) => {
-      dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
-    },
+    ) => tCCreate(contextDispatch, data),
     tCDetail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
     },
