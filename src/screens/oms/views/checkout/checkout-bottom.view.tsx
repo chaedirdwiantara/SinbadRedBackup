@@ -7,7 +7,8 @@ import {
   usePaymentAction,
   handleTotalPrice,
   useCheckoutMaster,
-} from '../../functions/checkout';
+  useExpiredTime,
+} from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -27,6 +28,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   /** === HOOK === */
   const paymentAction = usePaymentAction();
   const { checkoutMaster } = useCheckoutMaster();
+  const expiredTime = useExpiredTime();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
@@ -56,6 +58,11 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
       setTimeout(() => {
         closeErrorWarning();
       }, 2000);
+    }
+    if (!expiredTime.check()) {
+      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    } else {
+      expiredTime.setOpen(true);
     }
   };
   const content = () => {

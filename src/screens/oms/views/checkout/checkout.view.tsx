@@ -14,6 +14,7 @@ import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
+import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION === */
 import {
@@ -32,7 +33,12 @@ import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutCo
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
-import { backToCart, goToCheckoutSuccess } from '@screen/oms/functions';
+import {
+  backToCart,
+  goToCheckoutSuccess,
+  useExpiredTime,
+  useCreateOrders,
+} from '@screen/oms/functions';
 import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
@@ -40,6 +46,8 @@ import {
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
 import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
+import BottomSheetError from '@core/components/BottomSheetError';
+import { usePrevious } from '@core/functions/hook/prev-value';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -58,8 +66,10 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelData = usePaymentChannelsData();
   const paymentTCModal = useTermsAndConditionsModal();
   const errorBottomModal = useErrorModalBottom();
+  const expiredTime = useExpiredTime();
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
+  const createOrders = useCreateOrders();
   const {
     stateCheckout: {
       checkout: {
@@ -90,6 +100,7 @@ const OmsCheckoutView: FC = () => {
     paymentTCDetail,
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
+  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -113,6 +124,19 @@ const OmsCheckoutView: FC = () => {
     };
   }, []);
 
+  /** Error Handler */
+  const [errorCreateOrders, setErrorCreateOrders] = React.useState(false);
+  const prevDataErrorCreateOrders = usePrevious(stateCheckout.create.error);
+  React.useEffect(() => {
+    /** Error Handling Create Orders */
+    if (
+      stateCheckout.create.error !== null &&
+      prevDataErrorCreateOrders === null
+    ) {
+      setErrorCreateOrders(true);
+    }
+  }, [stateCheckout.create.error]);
+  /** Payment Modal */
   useEffect(() => {
     if (
       paymentTypesList.error ||
@@ -176,17 +200,24 @@ const OmsCheckoutView: FC = () => {
       paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
     }
   }, [checkoutMaster.invoices.length]);
-  /** => navigate to Checkout success if there is no payment TC */
+  /** => Create orders if there is no payment TC */
   useEffect(() => {
     const detailTC = statePayment?.paymentTCDetail?.data;
     if (detailTC) {
       if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
         paymentTCModal.setOpen(true);
       } else {
-        goToCheckoutSuccess();
+        createOrders.create(dispatchCheckout);
       }
     }
   }, [statePayment?.paymentTCDetail?.data]);
+  /** => navigate to Checkout Success if Create Orders Success */
+  useEffect(() => {
+    const data = stateCheckout.create.data;
+    if (data !== null) {
+      goToCheckoutSuccess();
+    }
+  }, [stateCheckout.create.data]);
   /** => get payment terms and conditions detail on success post TC  */
   React.useEffect(() => {
     const dataTC = statePayment?.paymentTCCreate?.data;
@@ -320,13 +351,19 @@ const OmsCheckoutView: FC = () => {
       errorFetchModal.setErrorText('Ulangi');
     }
   }, [statePromo.checkPromoPayment.list]);
+  /** => Handling session expired */
+  useEffect(() => {
+    if (expiredTime.isOpen) {
+      expiredTime.setOpen(true);
+    }
+  }, []);
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
     const invoiceGroupId = paymentChannelData?.invoiceGroupId;
     const totalCartParcel = paymentChannelData?.totalCartParcel;
     const paymentTypeId = item?.id;
-    paymentChannelsModal.setOpen(true);
     paymentTypeModal.setOpen(false);
+    paymentChannelsModal.setOpen(true);
     if (invoiceGroupId && paymentTypeId) {
       paymentAction.channelsList(
         dispatchPayment,
@@ -353,7 +390,9 @@ const OmsCheckoutView: FC = () => {
   };
   /** handle back to cart */
   const handleBackToCart = () => {
+    createOrders.reset(dispatchCheckout);
     backToCartModal.setOpen(false);
+    expiredTime.setOpen(false);
     backToCart();
   };
   /** close modal terms and condition */
@@ -363,6 +402,16 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCDetail(dispatchPayment);
   };
   /** === VIEW === */
+  const ModalErrorCreateOrders = () => {
+    return (
+      <BottomSheetError
+        open={errorCreateOrders}
+        error={stateCheckout.create.error}
+        closeAction={() => handleBackToCart()}
+      />
+    );
+  };
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -423,6 +472,10 @@ const OmsCheckoutView: FC = () => {
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
           />
+          <ModalBottomErrorExpiredTime
+            isOpen={expiredTime.isOpen}
+            close={handleBackToCart}
+          />
           <ErrorFetchModal
             visible={errorFetchModal.isOpen}
             onPress={() => {
@@ -431,6 +484,7 @@ const OmsCheckoutView: FC = () => {
             }}
             buttonText={errorFetchModal.errorText}
           />
+          {ModalErrorCreateOrders()}
         </>
       )}
     </SnbContainer>

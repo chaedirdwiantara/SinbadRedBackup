@@ -31,7 +31,6 @@ const apiGeneral = async <T>(
   /** === IF THERE IS PARAMETER === */
   if (!isEmpty(params)) {
     Object.assign(reqBody, {
-      credentials: 'same-origin',
       body: JSON.stringify(params),
     });
   }

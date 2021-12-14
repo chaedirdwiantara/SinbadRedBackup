@@ -72,7 +72,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
                   : false
               }
               onPress={() => selectedPaymentChannel(item)}
-              badge={item.promoPaymentAvailable}
+              badge={item.promoPaymentAvailable && item.status !== 'disabled'}
               textBadge={item.promPaymentDescription}
             />
           );
