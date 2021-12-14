@@ -214,7 +214,6 @@ const OmsCheckoutView: FC = () => {
   /** => navigate to Checkout Success if Create Orders Success */
   useEffect(() => {
     const data = stateCheckout.create.data;
-    console.log('navigate to checkout success', data);
     if (data !== null) {
       goToCheckoutSuccess();
     }
@@ -355,10 +354,7 @@ const OmsCheckoutView: FC = () => {
   /** => Handling session expired */
   useEffect(() => {
     if (expiredTime.isOpen) {
-      console.log('Open Modal', expiredTime.isOpen);
       expiredTime.setOpen(true);
-    } else {
-      console.log('Go to TNC');
     }
   }, []);
   /** => function after select payment type */

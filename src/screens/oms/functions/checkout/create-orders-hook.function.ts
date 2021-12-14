@@ -57,8 +57,6 @@ const useCreateOrders = () => {
     createOrdersData.verification.vouchersSeller =
       statePromo.reserveDiscount.detail.data?.discountVerification.vouchersSeller;
 
-    console.log(JSON.stringify(createOrdersData));
-
     dispatch(
       Actions.createOrdersProcess(contextDispatch, { data: createOrdersData }),
     );
@@ -87,11 +85,9 @@ const useExpiredTime = () => {
     const timeNow = dateCurrent.getTime() / 1000;
 
     if (timeReserved >= timeNow) {
-      console.log('go to TNC');
       setOpen(false);
       return false;
     } else {
-      console.log('Open Modal Session Expired');
       setOpen(true);
       return true;
     }
