@@ -271,6 +271,17 @@ const useCheckoutFailedFetchState = () => {
   };
 };
 
+/** => error warning */
+const useErrorWarningModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+  };
+};
+
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -284,6 +295,7 @@ export {
   useBackToCartModal,
   useErrorModalBottom,
   useCheckoutFailedFetchState,
+  useErrorWarningModal,
 };
 /**
  * ================================================================

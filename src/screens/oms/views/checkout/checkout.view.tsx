@@ -26,6 +26,7 @@ import {
   useBackToCartModal,
   useErrorModalBottom,
   useCheckoutFailedFetchState,
+  useErrorWarningModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -37,6 +38,7 @@ import {
   useCheckAllPromoPaymentAction,
 } from '@screen/promo/functions';
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
+import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
@@ -57,6 +59,7 @@ const OmsCheckoutView: FC = () => {
   const paymentTCModal = useTermsAndConditionsModal();
   const errorBottomModal = useErrorModalBottom();
   const errorFetchModal = useCheckoutFailedFetchState();
+  const errorWarningModal = useErrorWarningModal();
   const {
     stateCheckout: {
       checkout: {
@@ -207,8 +210,13 @@ const OmsCheckoutView: FC = () => {
       paymentLastChannelDetail?.data?.paymentTypeChannels;
 
     if (dataLastPaymentChannel) {
+      dataLastPaymentChannel.map((item: any) =>
+        paymentAction.invoiceChannelList(dispatchPayment, item.invoiceGroupId),
+      );
+
       setPaymentChannel(dataLastPaymentChannel);
 
+      // paymentAction.invoiceChannelList(dataLastPaymentChannel)
       /** => fetch promo payment channel */
       const checkAllPromoPaymentParams = dataLastPaymentChannel.map(
         (item: any) => {
@@ -235,6 +243,7 @@ const OmsCheckoutView: FC = () => {
       );
     }
   }, [statePromo.checkAllPromoPayment.create]);
+
   /** => post promo payment that match last payment channel */
   useEffect(() => {
     if (statePromo.checkAllPromoPayment.list.data.length > 0) {
@@ -350,8 +359,13 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   };
-  console.log(statePayment, 'STATE PAYMENT');
+  console.log(errorWarningModal.isOpen, 'error warning');
+  /** close modal error warning */
+  const openModalWarning = () => {
+    console.log('tes close');
 
+    errorWarningModal.setOpen(true);
+  };
   /** === VIEW === */
   return (
     <SnbContainer color="grey">
@@ -380,6 +394,8 @@ const OmsCheckoutView: FC = () => {
           <CheckoutBottomView
             data={checkoutMaster.invoices}
             openTCModal={() => paymentTCModal.setOpen(true)}
+            openErrorWarning={() => errorWarningModal.setOpen(true)}
+            closeErrorWarning={() => errorWarningModal.setOpen(false)}
           />
           <ModalPaymentType
             isOpen={paymentTypeModal.isOpen}
@@ -395,6 +411,10 @@ const OmsCheckoutView: FC = () => {
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
             close={() => closeModalTC()}
+          />
+          <ModalErrorWarning
+            open={errorWarningModal.isOpen}
+            content={'Anda belum memilih metode pembayaran'}
           />
           <BackToCartModal
             isOpen={backToCartModal.isOpen}
