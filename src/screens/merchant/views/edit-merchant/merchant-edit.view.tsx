@@ -4,16 +4,24 @@ import { ScrollView, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** MODULE PAGE */
 import MerchantEditPartialView from './merchant-edit-partial.view';
+import { MerchantHookFunc } from '../../function';
+import { contexts } from '@contexts';
 
 interface Props {
   route: any;
 }
 
 const MerchantEditView: FC<Props> = (props) => {
+  /** === HOOK === */
+  const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
+  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
       NavigationAction.back();
+      editMerchantAction.reset(dispatchSupplier);
+      editProfileAction.reset(dispatchSupplier);
       return true;
     };
     const backHandler = BackHandler.addEventListener(
@@ -29,7 +37,11 @@ const MerchantEditView: FC<Props> = (props) => {
       <SnbTopNav.Type3
         type="red"
         title={props.route.params.title}
-        backAction={() => NavigationAction.back()}
+        backAction={() => {
+          NavigationAction.back();
+          editMerchantAction.reset(dispatchSupplier);
+          editProfileAction.reset(dispatchSupplier);
+        }}
       />
     );
   };

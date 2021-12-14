@@ -41,32 +41,32 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     useTextFieldSelect();
   const storeData = stateUser.detail.data?.storeData.storeInformation;
   // USER DATA
-  const ownerName = useInput(ownerData?.name || '');
-  const ownerEmail = useInput(ownerData?.email || '');
-  const noKtp = useInput(ownerData?.idNo || '');
-  const noNPWP = useInput(ownerData?.taxNo || '');
-  const mobilePhone = useInput(ownerData?.mobilePhone || '');
+  const ownerName = useInput(ownerData?.name || null);
+  const ownerEmail = useInput(ownerData?.email || null);
+  const noKtp = useInput(ownerData?.idNo || null);
+  const noNPWP = useInput(ownerData?.taxNo || null);
+  const mobilePhone = useInput(ownerData?.mobilePhone || null);
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorIdNumber, setErrorIdNumber] = useState(false);
   const [errorTaxNumber, setErrorTaxNumber] = useState(false);
   //MERCHANT DATA
   const merchantName = useInput(storeData?.storeAccount?.name || '');
-  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || '');
+  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || null);
   // COMPLETNESS DATA
   const numberOfEmployee = useInput(
-    storeData?.storeDetailCompleteness?.numberOfEmployee || '',
+    storeData?.storeDetailCompleteness?.numberOfEmployee || null,
   );
   const vehicleAccessibility = useInput(
-    storeData?.storeDetailCompleteness?.vehicleAccessibility || '',
+    storeData?.storeDetailCompleteness?.vehicleAccessibility || null,
   );
   const largeArea = useInput(
-    storeData?.storeDetailCompleteness?.largeArea || '',
+    storeData?.storeDetailCompleteness?.largeArea || null,
   );
   const topBrand = useInput(
-    storeData?.storeDetailCompleteness?.topSellingBrand || '',
+    storeData?.storeDetailCompleteness?.topSellingBrand || null,
   );
   const wantedBrand = useInput(
-    storeData?.storeDetailCompleteness?.mostWantedBrand || '',
+    storeData?.storeDetailCompleteness?.mostWantedBrand || null,
   );
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
@@ -203,7 +203,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           topSellingBrand: topBrand.value,
           mostWantedBrand: wantedBrand.value,
           vehicleAccessibilityId: vehicleAccessibility.value.id,
-          vehicleAccessibilityAmount: Number(vehicleAccessibilityAmount.value),
+          vehicleAccessibilityAmount: vehicleAccessibilityAmount.value
+            ? Number(vehicleAccessibilityAmount.value)
+            : null,
         };
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
@@ -245,40 +247,55 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //checkbutton
   /** === CHECK BUTTON (CHECK BUTTON SAVE DISBALE OR NOT) === */
   const checkButton = () => {
+    const dataVehicleAccessibilityAmount = vehicleAccessibilityAmount.value
+      ? Number(vehicleAccessibilityAmount.value)
+      : null;
+    const dataTopBrand = topBrand.value ? topBrand.value : null;
+    const dataWantedBrand = wantedBrand.value ? wantedBrand.value : null;
+    const dataLargeArea = largeArea.value ? largeArea.value : null;
     switch (props.type) {
       case 'merchantOwnerName':
-        return ownerName.value === ownerData?.name;
+        return ownerName.value === ownerData?.name || !ownerName.value;
       case 'merchantOwnerEmail':
         return (
           (stateUser.detail.data?.ownerData.info.isEmailVerified &&
             ownerEmail.value === ownerData?.email) ||
-          emailIsNotValid
+          emailIsNotValid ||
+          !ownerEmail.value
         );
       case 'merchantOwnerIdNo':
-        return errorIdNumber || noKtp.value === ownerData?.idNo;
+        return errorIdNumber || noKtp.value === ownerData?.idNo || !noKtp.value;
       case 'merchantOwnerTaxNo':
-        return errorTaxNumber || noNPWP.value === ownerData?.taxNo;
+        return (
+          errorTaxNumber || noNPWP.value === ownerData?.taxNo || !noNPWP.value
+        );
       case 'merchantOwnerPhoneNo':
         return (
-          stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
-          mobilePhone.value === ownerData?.mobilePhone
+          (stateUser.detail.data?.ownerData.info.isMobilePhoneVerified &&
+            mobilePhone.value === ownerData?.mobilePhone) ||
+          !mobilePhone.value
         );
       case 'merchantAccountName':
-        return merchantName.value === storeData?.storeAccount.name;
+        return (
+          merchantName.value === storeData?.storeAccount.name ||
+          !merchantName.value
+        );
       case 'merchantAccountPhoneNo':
+        return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
-          largeArea.value === storeData?.storeDetailCompleteness.largeArea &&
-          topBrand.value ===
-            storeData?.storeDetailCompleteness.topSellingBrand &&
-          wantedBrand.value ===
-            storeData?.storeDetailCompleteness.mostWantedBrand &&
-          vehicleAccessibilityAmount.value ===
-            `${storeData?.storeDetailCompleteness.vehicleAccessibilityAmount}` &&
-          vehicleAccessibility.value.id ===
-            storeData?.storeDetailCompleteness.vehicleAccessibility.id &&
-          numberOfEmployee.value ===
-            storeData?.storeDetailCompleteness.numberOfEmployee
+          (dataLargeArea === storeData?.storeDetailCompleteness.largeArea &&
+            dataTopBrand ===
+              storeData?.storeDetailCompleteness.topSellingBrand &&
+            dataWantedBrand ===
+              storeData?.storeDetailCompleteness.mostWantedBrand &&
+            dataVehicleAccessibilityAmount ===
+              storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
+            vehicleAccessibility.value.id ===
+              storeData?.storeDetailCompleteness.vehicleAccessibility?.id &&
+            numberOfEmployee.value ===
+              storeData?.storeDetailCompleteness.numberOfEmployee) ||
+          vehicleAccessibility.value.id === null
         );
       case 'merchantAddress':
       default:
@@ -326,7 +343,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukkan Nama Lengkap Pemilik'}
           type={'default'}
-          value={ownerName.value}
+          value={ownerName.value ? ownerName.value : ''}
           onChangeText={(text) => ownerName.setValue(text)}
           clearText={() => ownerName.setValue('')}
           maxLength={64}
@@ -342,7 +359,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'E-mail'}
           placeholder={'Masukkan E-mail'}
           type={emailIsNotValid ? 'error' : 'default'}
-          value={ownerEmail.value}
+          value={ownerEmail.value ? ownerEmail.value : ''}
           onChangeText={(text) => validateEmail(text)}
           clearText={() => ownerEmail.setValue('')}
           valMsgError={'Pastikan email yang Anda masukkan benar'}
@@ -358,7 +375,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone'}
           placeholder={'Masukkan nomor handphone Anda'}
           type={'default'}
-          value={mobilePhone.value}
+          value={mobilePhone.value ? mobilePhone.value : ''}
           onChangeText={(text) => mobilePhone.setValue(text)}
           clearText={() => mobilePhone.setValue('')}
           maxLength={14}
@@ -375,7 +392,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukkan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
-          value={noKtp.value}
+          value={noKtp.value ? noKtp.value : ''}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkIdNoFormat(cleanNumber);
@@ -396,7 +413,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
-          value={noNPWP.value}
+          value={noNPWP.value ? noNPWP.value : ''}
           onChangeText={(text) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkTaxNoFormat(cleanNumber);
@@ -437,9 +454,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
-          value={merchantPhoneNo.value}
-          onChangeText={(text) => merchantPhoneNo.setValue(text)}
+          value={merchantPhoneNo.value ? merchantPhoneNo.value : ''}
+          onChangeText={(text) => {
+            const cleanNumber = text.replace(/[^0-9]/g, '');
+            merchantPhoneNo.setValue(cleanNumber);
+          }}
           clearText={() => merchantPhoneNo.setValue('')}
+          maxLength={14}
+          keyboardType={'number-pad'}
         />
       </View>
     );
@@ -452,8 +474,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
-            value={numberOfEmployee.value}
-            onPress={() => gotoSelection({ type: 'listNumOfEmployee' })}
+            value={numberOfEmployee.value ? numberOfEmployee.value : ''}
+            onPress={() =>
+              gotoSelection({ type: 'listNumOfEmployee', action: 'edit' })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
@@ -464,8 +488,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             labelText={'Ukuran Toko'}
             placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
-            value={largeArea.value}
-            onChangeText={(text) => largeArea.setValue(text)}
+            value={largeArea.value ? largeArea.value : ''}
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              largeArea.setValue(cleanNumber);
+            }}
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
             rightText={'m²'}
@@ -473,20 +500,20 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Top Brand Selling'}
-            placeholder={'Masukkan Top Brand Selling'}
+            labelText={'Merk Paling Laku'}
+            placeholder={'Masukkan Merk Paling Laku'}
             type={'default'}
-            value={topBrand.value}
+            value={topBrand.value ? topBrand.value : ''}
             onChangeText={(text) => topBrand.setValue(text)}
             clearText={() => topBrand.setValue('')}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
-            labelText={'Wanted Brand'}
-            placeholder={'Masukkan Wanted Brand'}
+            labelText={'Merk Paling Diinginkan'}
+            placeholder={'Masukkan Merk Paling Diinginkan'}
             type={'default'}
-            value={wantedBrand.value}
+            value={wantedBrand.value ? wantedBrand.value : ''}
             onChangeText={(text) => wantedBrand.setValue(text)}
             clearText={() => wantedBrand.setValue('')}
           />
@@ -495,11 +522,18 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
-            value={vehicleAccessibility.value.name}
-            onPress={() => gotoSelection({ type: 'listVehicleAccess' })}
+            value={
+              vehicleAccessibility.value.name
+                ? vehicleAccessibility.value.name
+                : ''
+            }
+            onPress={() =>
+              gotoSelection({ type: 'listVehicleAccess', action: 'edit' })
+            }
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Akses Jalan'}
+            mandatory
           />
         </View>
         <View>
@@ -510,7 +544,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             value={
               vehicleAccessibilityAmount.value
                 ? `${vehicleAccessibilityAmount.value}`
-                : vehicleAccessibilityAmount.value
+                : ''
             }
             onChangeText={(text) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
@@ -535,7 +569,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
           type={'primary'}
           onPress={() => confirm()}
-          disabled={checkButton() || false}
+          disabled={
+            checkButton() || false || stateMerchant.merchantEdit.loading
+          }
+          loading={stateMerchant.merchantEdit.loading}
         />
       </View>
     ) : (

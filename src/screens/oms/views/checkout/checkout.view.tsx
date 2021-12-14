@@ -273,8 +273,10 @@ const OmsCheckoutView: FC = () => {
     ) {
       const paymentChannelId: Array<number> = [];
       paymentChannelData.paymentChannels.map(
-        (item: models.IPaymentChannels) => {
-          paymentChannelId.push(item.id);
+        (paymentChannel: models.IPaymentChannels) => {
+          paymentChannel.type.map((paymentChannelType) => {
+            paymentChannelId.push(paymentChannelType.id);
+          });
         },
       );
       const checkPromoPaymentParams = {

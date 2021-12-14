@@ -88,6 +88,7 @@ const OmsShoppingCartView: FC = () => {
     useState(false);
   const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
     useState(false);
+  const [toastFailedCheckout, setToastFailedCheckout] = useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -294,6 +295,11 @@ const OmsShoppingCartView: FC = () => {
       );
       setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
+    } else if (
+      dataCreateVerificationOrder !== null &&
+      productRemoveSelected === null
+    ) {
+      setToastFailedCheckout(true);
     }
   }, [dataCreateVerificationOrder, updateCartData]);
 
@@ -351,6 +357,9 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartData !== null) {
       //call action remove product from redux
+      if (productRemoveSelected.selected) {
+        setProductSelectedCount(productSelectedCount - 1);
+      }
       setToastSuccessRemoveProduct(true);
       deleteProduct({ productId: productRemoveSelected.productId });
       setProductRemoveSelected(null);
@@ -373,13 +382,22 @@ const OmsShoppingCartView: FC = () => {
 
   /** close toast listener */
   useEffect(() => {
-    if (toastSuccessRemoveProduct || toastFailedRemoveProduct) {
+    if (
+      toastSuccessRemoveProduct ||
+      toastFailedRemoveProduct ||
+      toastFailedCheckout
+    ) {
       setTimeout(() => {
         setToastSuccessRemoveProduct(false);
         setToastFailedRemoveProduct(false);
-      }, 1500);
+        setToastFailedCheckout(false);
+      }, 5000);
     }
-  }, [toastSuccessRemoveProduct, toastFailedRemoveProduct]);
+  }, [
+    toastSuccessRemoveProduct,
+    toastFailedRemoveProduct,
+    toastFailedCheckout,
+  ]);
 
   /** did will unmound */
   useEffect(() => {
@@ -460,7 +478,6 @@ const OmsShoppingCartView: FC = () => {
       <SnbToast
         open={toastSuccessRemoveProduct}
         message={'Produk berhasil dihapus dari keranjang'}
-        close={() => setToastSuccessRemoveProduct(false)}
         position={'top'}
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
@@ -470,7 +487,13 @@ const OmsShoppingCartView: FC = () => {
       <SnbToast
         open={toastFailedRemoveProduct}
         message={'Produk gagal dihapus dari keranjang'}
-        close={() => setToastFailedRemoveProduct(false)}
+        position={'top'}
+        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      />
+      {/* Toast failed checkout */}
+      <SnbToast
+        open={toastFailedCheckout}
+        message={'Produk gagal dicheckout dari keranjang'}
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
