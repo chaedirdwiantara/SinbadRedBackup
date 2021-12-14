@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
@@ -46,6 +46,8 @@ import {
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
 import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
+import BottomSheetError from '@core/components/BottomSheetError';
+import { usePrevious } from '@core/functions/hook/prev-value';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -98,7 +100,7 @@ const OmsCheckoutView: FC = () => {
     paymentTCDetail,
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { stateCheckout } = useContext(contexts.CheckoutContext);
+  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -122,6 +124,19 @@ const OmsCheckoutView: FC = () => {
     };
   }, []);
 
+  /** Error Handler */
+  const [errorCreateOrders, setErrorCreateOrders] = React.useState(false);
+  const prevDataErrorCreateOrders = usePrevious(stateCheckout.create.error);
+  React.useEffect(() => {
+    /** Error Handling Create Orders */
+    if (
+      stateCheckout.create.error !== null &&
+      prevDataErrorCreateOrders === null
+    ) {
+      setErrorCreateOrders(true);
+    }
+  }, [stateCheckout.create.error]);
+  /** Payment Modal */
   useEffect(() => {
     if (
       paymentTypesList.error ||
@@ -379,6 +394,7 @@ const OmsCheckoutView: FC = () => {
   };
   /** handle back to cart */
   const handleBackToCart = () => {
+    createOrders.reset(dispatchCheckout);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
@@ -390,6 +406,16 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCDetail(dispatchPayment);
   };
   /** === VIEW === */
+  const ModalErrorCreateOrders = () => {
+    return (
+      <BottomSheetError
+        open={errorCreateOrders}
+        error={stateCheckout.create.error}
+        closeAction={() => handleBackToCart()}
+      />
+    );
+  };
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -462,6 +488,7 @@ const OmsCheckoutView: FC = () => {
             isOpen={expiredTime.isOpen}
             close={handleBackToCart}
           />
+          {ModalErrorCreateOrders()}
         </>
       )}
     </SnbContainer>
