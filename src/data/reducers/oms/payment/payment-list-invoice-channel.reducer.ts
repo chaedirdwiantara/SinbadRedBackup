@@ -3,56 +3,39 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type PaymentListInvoiceChannelInitialProps = models.DetailItemProps<{}>;
+export type PaymentInvoiceChannelListInitialProps =
+  models.IListInvoiceChannelProps;
 /** === INITIAL STATE HERE === */
-export const paymentListInvoiceChannelInitialState: PaymentListInvoiceChannelInitialProps =
+export const paymentInvoiceChannelListInitialState: PaymentInvoiceChannelListInitialProps =
   {
-    data: {},
+    data: [],
   };
 /** === FUNCTION HERE === */
-export const paymentListInvoiceChannelReducer = simplifyReducer(
-  paymentListInvoiceChannelInitialState,
+export const paymentInvoiceChannelListReducer = simplifyReducer(
+  paymentInvoiceChannelListInitialState,
   {
     /** ===> DETAIL */
-    /** => process */
-    // [types.PAYMENT_LIST_INVOICE_CHANNEL_PROCESS]() {
-    //   console.log('ACTION');
-
-    //   return {
-    //     ...paymentListInvoiceChannelInitialState,
-    //     loading: true,
-    //   };
-    // },
     /** => success */
     [types.PAYMENT_LIST_INVOICE_CHANNEL_PROCESS](
-      state = paymentListInvoiceChannelInitialState,
-      {
-        payload,
-      }: models.DetailSuccessAction<models.IListInvoiceChannelSuccess>,
-    ) {
-      console.log(payload, 'PAYLOAD REDUCER');
+      state = paymentInvoiceChannelListInitialState,
 
-      return {
-        ...state,
-        data: payload.data,
-        loading: false,
-      };
-    },
-    /** => failed */
-    [types.PAYMENT_LIST_INVOICE_CHANNEL_FAILED](
-      state = paymentListInvoiceChannelInitialState,
-      { payload }: models.DetailFailedAction,
+      { payload }: models.IListInvoiceChannelSuccess,
     ) {
+      const idInvoice = payload.id;
+      let newData = state.data;
+      if (!state.data.some((item) => item === idInvoice)) {
+        newData.push(idInvoice);
+      }
       return {
         ...state,
+        data: newData,
         loading: false,
-        error: payload,
       };
     },
 
     /** => reset */
     [types.PAYMENT_LIST_INVOICE_CHANNEL_RESET]() {
-      return paymentListInvoiceChannelInitialState;
+      return paymentInvoiceChannelListInitialState;
     },
   },
 );

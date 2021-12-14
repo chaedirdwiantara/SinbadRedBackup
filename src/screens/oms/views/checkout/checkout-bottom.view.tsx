@@ -3,7 +3,11 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import { usePaymentAction, handleTotalPrice } from '../../functions/checkout';
+import {
+  usePaymentAction,
+  handleTotalPrice,
+  useCheckoutMaster,
+} from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -11,17 +15,28 @@ import * as models from '@models';
 interface CheckoutBottomViewProps {
   data: models.IInvoiceCheckout[];
   openTCModal: () => void;
+  openErrorWarning: () => void;
+  closeErrorWarning: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
+  data,
+  openErrorWarning,
+  closeErrorWarning,
+}) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
+  const { checkoutMaster } = useCheckoutMaster();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(loadingTCCreate, loadingTCDetail);
+  console.log(
+    statePayment.invoiceChannelList.data,
+    checkoutMaster.invoices,
+    'checkout bottom',
+  );
 
   /** => main */
   const dataPostTC = {
@@ -37,7 +52,16 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   };
 
   const pressButton = () => {
-    paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
+    const totalCartInvoices = checkoutMaster.invoices;
+    if (selectedInvoiceChannel.length === totalCartInvoices.length) {
+      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    } else {
+      openErrorWarning();
+      setTimeout(() => {
+        closeErrorWarning();
+      }, 2000);
+    }
   };
   const content = () => {
     return (
