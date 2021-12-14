@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useDataCheckout, useDataReserve } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -9,10 +9,10 @@ import { contexts } from '@contexts';
 /** === FUNCTION === */
 /** => Create Orders */
 const useCreateOrders = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
-  const { statePromo } = useContext(contexts.PromoContext);
+  const { statePromo } = React.useContext(contexts.PromoContext);
 
   const transformData = (contextDispatch: any) => {
     const createOrdersData: any = {
@@ -76,14 +76,14 @@ const useCreateOrders = () => {
 };
 
 const useExpiredTime = () => {
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setOpen] = React.useState(false);
   const reserveData = useDataReserve();
 
   const calculateExpiredTime = () => {
     const dateReserved = new Date(reserveData.reservedAt as string);
     const dateCurrent = new Date();
 
-    const timeReserved = dateReserved.getTime() / 1000 + 600;
+    const timeReserved = dateReserved.getTime() / 1000 + 300;
     const timeNow = dateCurrent.getTime() / 1000;
 
     if (timeReserved >= timeNow) {
