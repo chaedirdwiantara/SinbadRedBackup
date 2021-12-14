@@ -161,5 +161,5 @@ export interface IListInvoiceChannelSuccess {
   payload: IListInvoiceChannel;
 }
 export interface IListInvoiceChannelProps {
-  data: [];
+  data: Array<string>;
 }

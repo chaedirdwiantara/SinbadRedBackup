@@ -22,7 +22,7 @@ export const paymentInvoiceChannelListReducer = simplifyReducer(
       { payload }: models.IListInvoiceChannelSuccess,
     ) {
       const idInvoice = payload.id;
-      let newData = state.data;
+      let newData: Array<string> = state.data;
       if (!state.data.some((item) => item === idInvoice)) {
         newData.push(idInvoice);
       }
@@ -35,8 +35,6 @@ export const paymentInvoiceChannelListReducer = simplifyReducer(
 
     /** => reset */
     [types.PAYMENT_LIST_INVOICE_CHANNEL_RESET]() {
-      console.log('reset reducer');
-
       return {
         data: [],
       };

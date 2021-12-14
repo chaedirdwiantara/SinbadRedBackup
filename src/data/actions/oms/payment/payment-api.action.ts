@@ -250,7 +250,6 @@ export const paymentInvoiceChannelListReset = (
   contextDispatch({
     type: types.PAYMENT_LIST_INVOICE_CHANNEL_RESET,
   });
-  console.log('RESET');
 
   return {
     type: types.PAYMENT_LIST_INVOICE_CHANNEL_RESET,
