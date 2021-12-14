@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { View, KeyboardAvoidingView } from 'react-native';
 import { SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { AddToCartFooter } from './AddToCartFooter';
@@ -14,6 +14,7 @@ interface AddToCartModalProps {
   closeAction: () => void;
   onAddToCartPress: () => void;
   orderQty: number;
+  onChangeQty: (val: number) => void;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
   disabled: boolean;
@@ -25,6 +26,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   closeAction,
   onAddToCartPress,
   orderQty,
+  onChangeQty,
   increaseOrderQty,
   decreaseOrderQty,
   disabled,
@@ -32,22 +34,25 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
 }) => {
   /** => Content */
   const renderContent = () => (
-    <View>
-      <AddToCartProductData isFromProductDetail={isFromProductDetail} />
-      <PromoSection />
-      <AddToCartQuantityModifier
-        orderQty={orderQty}
-        increaseOrderQty={increaseOrderQty}
-        decreaseOrderQty={decreaseOrderQty}
-        isFromProductDetail={isFromProductDetail}
-      />
-      <AddToCartFooter
-        disabled={disabled}
-        orderQty={orderQty}
-        onAddToCartPress={onAddToCartPress}
-        isFromProductDetail={isFromProductDetail}
-      />
-    </View>
+    <KeyboardAvoidingView behavior={'padding'}>
+      <View>
+        <AddToCartProductData isFromProductDetail={isFromProductDetail} />
+        <PromoSection />
+        <AddToCartQuantityModifier
+          orderQty={orderQty}
+          onChangeQty={onChangeQty}
+          increaseOrderQty={increaseOrderQty}
+          decreaseOrderQty={decreaseOrderQty}
+          isFromProductDetail={isFromProductDetail}
+        />
+        <AddToCartFooter
+          disabled={disabled}
+          orderQty={orderQty}
+          onAddToCartPress={onAddToCartPress}
+          isFromProductDetail={isFromProductDetail}
+        />
+      </View>
+    </KeyboardAvoidingView>
   );
 
   return (

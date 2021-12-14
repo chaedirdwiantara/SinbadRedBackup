@@ -14,7 +14,7 @@ import Html from '@core/components/Html';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
-import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
+// import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
@@ -55,11 +55,11 @@ import { useDataAuth } from '@core/redux/Data';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import * as models from '@models';
 /** === DUMMY === */
-const supplierDummy = {
-  name: 'Depo Berkah Abadi',
-  urbanCity: 'Jakarta Barat',
-  logoUrl: '',
-};
+// const supplierDummy = {
+//   name: 'Depo Berkah Abadi',
+//   urbanCity: 'Jakarta Barat',
+//   logoUrl: '',
+// };
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
@@ -98,9 +98,10 @@ const ProductDetailView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: dataProduct?.minQty,
-  });
+  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
+    useOrderQuantity({
+      minQty: dataProduct?.minQty,
+    });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -163,6 +164,21 @@ const ProductDetailView: FC = () => {
     addToCartActions.reset(dispatchShopingCart);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
+  };
+
+  /** => action on change qty */
+  const onHandleChangeQty = (value: number) => {
+    if (!dataStock || !dataProduct) {
+      return;
+    }
+
+    if (value >= dataStock.stock) {
+      onChangeQty(dataStock.stock);
+    } else if (value <= dataProduct.minQty) {
+      onChangeQty(dataProduct.minQty);
+    } else {
+      onChangeQty(value);
+    }
   };
 
   const onSubmitAddToCart = () => {
@@ -327,7 +343,7 @@ const ProductDetailView: FC = () => {
         setToastFailedAddCart(false);
         setToastSuccessRegisterSupplier(false);
         setToastFailedRegisterSupplier(false);
-      }, 1500);
+      }, 3000);
     }
   }, [
     toastSuccessAddCart,
@@ -501,6 +517,7 @@ const ProductDetailView: FC = () => {
       {orderModalVisible && (
         <AddToCartModal
           orderQty={orderQty}
+          onChangeQty={onHandleChangeQty}
           increaseOrderQty={increaseOrderQty}
           decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
@@ -514,7 +531,6 @@ const ProductDetailView: FC = () => {
       <SnbToast
         open={toastSuccessAddCart}
         message={'Produk berhasil ditambahkan ke keranjang'}
-        close={() => setToastSuccessAddCart(false)}
         position={'top'}
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
@@ -524,7 +540,6 @@ const ProductDetailView: FC = () => {
       <SnbToast
         open={toastFailedAddCart}
         message={'Produk gagal ditambahkan ke keranjang'}
-        close={() => setToastFailedAddCart(false)}
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
