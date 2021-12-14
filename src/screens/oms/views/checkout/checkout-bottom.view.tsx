@@ -44,7 +44,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
     if (!expiredTime.check()) {
       paymentAction.tCCreate(dispatchPayment, dataPostTC);
     } else {
-      console.log('Session Expired', expiredTime.isOpen);
       expiredTime.setOpen(true);
     }
   };

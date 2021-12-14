@@ -44,10 +44,8 @@ const HomeView: React.FC = ({ navigation }: any) => {
   }, [me.data]);
 
   React.useEffect(() => {
-    console.log('Navigation Rerender');
     const unsubscribe = navigation.addListener('focus', () => {
       if (me.data !== null) {
-        console.log('Subscribe Fetch');
         cartTotalProductActions.fetch();
       }
     });
