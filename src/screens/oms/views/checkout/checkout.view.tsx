@@ -66,9 +66,9 @@ const OmsCheckoutView: FC = () => {
   const paymentChannelData = usePaymentChannelsData();
   const paymentTCModal = useTermsAndConditionsModal();
   const errorBottomModal = useErrorModalBottom();
+  const expiredTime = useExpiredTime();
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
-  const expiredTime = useExpiredTime();
   const createOrders = useCreateOrders();
   const {
     stateCheckout: {
@@ -471,6 +471,10 @@ const OmsCheckoutView: FC = () => {
           <ModalBottomErrorCheckout
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
+          />
+          <ModalBottomErrorExpiredTime
+            isOpen={expiredTime.isOpen}
+            close={handleBackToCart}
           />
           <ErrorFetchModal
             visible={errorFetchModal.isOpen}
