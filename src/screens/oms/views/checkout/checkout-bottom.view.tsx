@@ -52,17 +52,16 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
     const totalCartInvoices = checkoutMaster.invoices;
     if (selectedInvoiceChannel.length === totalCartInvoices.length) {
-      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      if (!expiredTime.check()) {
+        paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      } else {
+        expiredTime.setOpen(true);
+      }
     } else {
       openErrorWarning();
       setTimeout(() => {
         closeErrorWarning();
       }, 2000);
-    }
-    if (!expiredTime.check()) {
-      paymentAction.tCCreate(dispatchPayment, dataPostTC);
-    } else {
-      expiredTime.setOpen(true);
     }
   };
   const content = () => {
