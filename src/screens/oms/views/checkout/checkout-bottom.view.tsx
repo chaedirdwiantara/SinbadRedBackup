@@ -6,6 +6,7 @@ import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import {
   usePaymentAction,
   handleTotalPrice,
+  useCheckoutMaster,
   useExpiredTime,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
@@ -15,11 +16,18 @@ import * as models from '@models';
 interface CheckoutBottomViewProps {
   data: models.IInvoiceCheckout[];
   openTCModal: () => void;
+  openErrorWarning: () => void;
+  closeErrorWarning: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
+  data,
+  openErrorWarning,
+  closeErrorWarning,
+}) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
+  const { checkoutMaster } = useCheckoutMaster();
   const expiredTime = useExpiredTime();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
@@ -41,10 +49,19 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   };
 
   const pressButton = () => {
-    if (!expiredTime.check()) {
-      paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
+    const totalCartInvoices = checkoutMaster.invoices;
+    if (selectedInvoiceChannel.length === totalCartInvoices.length) {
+      if (!expiredTime.check()) {
+        paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      } else {
+        expiredTime.setOpen(true);
+      }
     } else {
-      expiredTime.setOpen(true);
+      openErrorWarning();
+      setTimeout(() => {
+        closeErrorWarning();
+      }, 2000);
     }
   };
   const content = () => {

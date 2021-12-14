@@ -27,6 +27,7 @@ import {
   useBackToCartModal,
   useErrorModalBottom,
   useCheckoutFailedFetchState,
+  useErrorWarningModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -43,6 +44,7 @@ import {
   useCheckAllPromoPaymentAction,
 } from '@screen/promo/functions';
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
+import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { usePrevious } from '@core/functions/hook/prev-value';
@@ -66,6 +68,7 @@ const OmsCheckoutView: FC = () => {
   const errorBottomModal = useErrorModalBottom();
   const expiredTime = useExpiredTime();
   const errorFetchModal = useCheckoutFailedFetchState();
+  const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
   const {
     stateCheckout: {
@@ -116,6 +119,8 @@ const OmsCheckoutView: FC = () => {
       paymentAction.resetLastChannel(dispatchPayment);
       /** => reset payment types list context data */
       paymentAction.resetTypesList(dispatchPayment);
+      /** => reset list invoice channels */
+      paymentAction.resetInvoicChannelList(dispatchPayment);
     };
   }, []);
 
@@ -239,8 +244,13 @@ const OmsCheckoutView: FC = () => {
       paymentLastChannelDetail?.data?.paymentTypeChannels;
 
     if (dataLastPaymentChannel) {
+      dataLastPaymentChannel.map((item: any) =>
+        paymentAction.invoiceChannelList(dispatchPayment, item.invoiceGroupId),
+      );
+
       setPaymentChannel(dataLastPaymentChannel);
 
+      // paymentAction.invoiceChannelList(dataLastPaymentChannel)
       /** => fetch promo payment channel */
       const checkAllPromoPaymentParams = dataLastPaymentChannel.map(
         (item: any) => {
@@ -267,6 +277,7 @@ const OmsCheckoutView: FC = () => {
       );
     }
   }, [statePromo.checkAllPromoPayment.create]);
+
   /** => post promo payment that match last payment channel */
   useEffect(() => {
     if (statePromo.checkAllPromoPayment.list.data.length > 0) {
@@ -390,7 +401,6 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   };
-
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {
     return (
@@ -429,6 +439,8 @@ const OmsCheckoutView: FC = () => {
           <CheckoutBottomView
             data={checkoutMaster.invoices}
             openTCModal={() => paymentTCModal.setOpen(true)}
+            openErrorWarning={() => errorWarningModal.setOpen(true)}
+            closeErrorWarning={() => errorWarningModal.setOpen(false)}
           />
           <ModalPaymentType
             isOpen={paymentTypeModal.isOpen}
@@ -444,6 +456,10 @@ const OmsCheckoutView: FC = () => {
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
             close={() => closeModalTC()}
+          />
+          <ModalErrorWarning
+            open={errorWarningModal.isOpen}
+            content={'Anda belum memilih metode pembayaran'}
           />
           <BackToCartModal
             isOpen={backToCartModal.isOpen}
