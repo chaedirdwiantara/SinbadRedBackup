@@ -280,54 +280,24 @@ const HistoryDetailView: FC = () => {
       )}
     </HistoryDetailCard>
   );
+  /** Activate VA Button */
+  const renderVAButton = () => {
+    return (
+      <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
+        <SnbText.B4>Transfer ke no. Virtual Account </SnbText.B4>
+        <SnbButton.Single
+          type="secondary"
+          title="AKTIFKAN VIRTUAL ACCOUNT"
+          onPress={() => console.log('Single')}
+        />
+      </View>
+    );
+  };
   /** => Payment Info */
   const renderPaymentInfo = () =>
     !paymentDetail?.loading ? (
-      <HistoryDetailPaymentInformation
-        renderCardItem={() => renderCardItem(key, value, type)}
-        dataPayment={paymentDetail.data}
-      />
+      <HistoryDetailPaymentInformation dataPayment={paymentDetail.data} />
     ) : (
-      // <HistoryDetailCard title="Informasi Pembayaran">
-      //   {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
-      //   {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Sub-total pesanan (90)',
-      //     toCurrency(historyDetailDummy.payment.subtotal),
-      //   )}
-      //   {historyDetailDummy.payment.freeProducts.map((product) =>
-      //     renderCardItem(
-      //       `${product.name} (${product.qty} ${product.uom})`,
-      //       'FREE',
-      //       'green',
-      //     ),
-      //   )}
-      //   {renderCardItem(
-      //     'Ongkos Kirim',
-      //     toCurrency(historyDetailDummy.payment.deliveryFee),
-      //   )}
-      //   {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
-      //   {renderCardItem(
-      //     'Total Pesanan',
-      //     toCurrency(historyDetailDummy.payment.orderTotal),
-      //     'bold',
-      //   )}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Promo Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.promo),
-      //   )}
-      //   {renderCardItem(
-      //     'Layanan Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.serviceFee),
-      //   )}
-      //   {renderCardItem(
-      //     'Total Pembayaran Pesanan',
-      //     toCurrency(historyDetailDummy.payment.paymentTotal),
-      //     'bold',
-      //   )}
-      // </HistoryDetailCard>
       <LoadingPage />
     );
   /** => Order Refund Info */
@@ -453,6 +423,7 @@ const HistoryDetailView: FC = () => {
       {renderStatus()}
       {renderInvoiceInfo()}
       {renderPaymentInfo()}
+      {renderVAButton()}
       {renderOrderRefundInfo()}
       {renderOrderNotes()}
       {renderProductList()}
