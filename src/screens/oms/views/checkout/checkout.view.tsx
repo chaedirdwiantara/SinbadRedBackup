@@ -108,8 +108,11 @@ const OmsCheckoutView: FC = () => {
       paymentAction.resetLastChannel(dispatchPayment);
       /** => reset payment types list context data */
       paymentAction.resetTypesList(dispatchPayment);
+      /** => reset list invoice channels */
+      paymentAction.resetInvoicChannelList(dispatchPayment);
     };
   }, []);
+
   useEffect(() => {
     if (
       paymentTypesList.error ||
@@ -358,13 +361,6 @@ const OmsCheckoutView: FC = () => {
     paymentTCModal.setOpen(false);
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
-  };
-  console.log(errorWarningModal.isOpen, 'error warning');
-  /** close modal error warning */
-  const openModalWarning = () => {
-    console.log('tes close');
-
-    errorWarningModal.setOpen(true);
   };
   /** === VIEW === */
   return (

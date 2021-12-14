@@ -35,7 +35,11 @@ export const paymentInvoiceChannelListReducer = simplifyReducer(
 
     /** => reset */
     [types.PAYMENT_LIST_INVOICE_CHANNEL_RESET]() {
-      return paymentInvoiceChannelListInitialState;
+      console.log('reset reducer');
+
+      return {
+        data: [],
+      };
     },
   },
 );
