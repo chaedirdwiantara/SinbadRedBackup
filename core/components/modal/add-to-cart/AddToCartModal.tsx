@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View } from 'react-native';
 import { SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { AddToCartFooter } from './AddToCartFooter';
@@ -34,25 +34,23 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
 }) => {
   /** => Content */
   const renderContent = () => (
-    <KeyboardAvoidingView behavior={'padding'}>
-      <View>
-        <AddToCartProductData isFromProductDetail={isFromProductDetail} />
-        <PromoSection />
-        <AddToCartQuantityModifier
-          orderQty={orderQty}
-          onChangeQty={onChangeQty}
-          increaseOrderQty={increaseOrderQty}
-          decreaseOrderQty={decreaseOrderQty}
-          isFromProductDetail={isFromProductDetail}
-        />
-        <AddToCartFooter
-          disabled={disabled}
-          orderQty={orderQty}
-          onAddToCartPress={onAddToCartPress}
-          isFromProductDetail={isFromProductDetail}
-        />
-      </View>
-    </KeyboardAvoidingView>
+    <View>
+      <AddToCartProductData isFromProductDetail={isFromProductDetail} />
+      <PromoSection />
+      <AddToCartQuantityModifier
+        orderQty={orderQty}
+        onChangeQty={onChangeQty}
+        increaseOrderQty={increaseOrderQty}
+        decreaseOrderQty={decreaseOrderQty}
+        isFromProductDetail={isFromProductDetail}
+      />
+      <AddToCartFooter
+        disabled={disabled}
+        orderQty={orderQty}
+        onAddToCartPress={onAddToCartPress}
+        isFromProductDetail={isFromProductDetail}
+      />
+    </View>
   );
 
   return (
