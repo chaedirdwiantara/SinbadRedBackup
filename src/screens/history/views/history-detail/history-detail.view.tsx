@@ -27,6 +27,7 @@ import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
+import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment' };
@@ -160,7 +161,7 @@ const HistoryDetailView: FC = () => {
 
   /** === EFFECTS === */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, 1495867);
+    getPaymentDetail.detail(dispatchHistory, 1021639);
   }, []);
 
   useEffect(() => {
@@ -280,18 +281,9 @@ const HistoryDetailView: FC = () => {
       )}
     </HistoryDetailCard>
   );
-  /** Activate VA Button */
-  const renderVAButton = () => {
-    return (
-      <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
-        <SnbText.B4>Transfer ke no. Virtual Account </SnbText.B4>
-        <SnbButton.Single
-          type="secondary"
-          title="AKTIFKAN VIRTUAL ACCOUNT"
-          onPress={() => console.log('Single')}
-        />
-      </View>
-    );
+
+  const renderVirtualAccount = () => {
+    return <HistoryPaymentVirtualAccount data={paymentDetail.data} />;
   };
   /** => Payment Info */
   const renderPaymentInfo = () =>
@@ -423,7 +415,7 @@ const HistoryDetailView: FC = () => {
       {renderStatus()}
       {renderInvoiceInfo()}
       {renderPaymentInfo()}
-      {renderVAButton()}
+      {renderVirtualAccount()}
       {renderOrderRefundInfo()}
       {renderOrderNotes()}
       {renderProductList()}

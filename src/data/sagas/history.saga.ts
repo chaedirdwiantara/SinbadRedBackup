@@ -29,7 +29,7 @@ function* paymentDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.PaymentDetailSuccessProps> =
       yield call(() => {
-        return HistoryPaymentApi.paymentDetail();
+        return HistoryPaymentApi.paymentDetail(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.historyPaymentDetailSuccess(response),
