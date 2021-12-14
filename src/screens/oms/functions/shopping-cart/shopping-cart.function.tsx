@@ -37,7 +37,7 @@ const handleProductQuantityChange = (
   invoiceGroupIndex: number,
   brandIndex: number,
   productIndex: number,
-  action: 'increase' | 'decrease',
+  action: 'increase' | 'decrease' | 'onChange',
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
     (any: CartInvoiceGroup[]) => void,
@@ -55,6 +55,14 @@ const handleProductQuantityChange = (
     currentProduct.qty = currentQty + 1;
   } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty = currentQty - 1;
+  } else if (action === 'onChange') {
+    if (currentQty >= currentProduct.stock) {
+      currentProduct.qty = currentProduct.stock;
+    } else if (currentQty <= currentProduct.minQty) {
+      currentProduct.qty = currentProduct.minQty;
+    } else {
+      currentProduct.qty = currentQty;
+    }
   }
 
   currentBrand.products[productIndex] = currentProduct;

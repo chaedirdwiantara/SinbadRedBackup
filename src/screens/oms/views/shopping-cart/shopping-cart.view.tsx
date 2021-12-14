@@ -307,6 +307,7 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     if (cartViewData !== null) {
       let totalProductsSelected = 0;
+      let initialTotalProduct = 0;
       const data: CartInvoiceGroup[] = [];
       const dataEmptyStock: ICartMasterProductNotAvailable[] = [];
       const dataNotFound: ICartMasterProductNotAvailable[] = [];
@@ -322,6 +323,7 @@ const OmsShoppingCartView: FC = () => {
               totalProductsSelected += 1;
               brandSelected = true;
             }
+            initialTotalProduct += 1;
             products.push(product);
             isEmptyProduct = false;
           });
@@ -338,7 +340,7 @@ const OmsShoppingCartView: FC = () => {
           data.push({ ...invoiceGroup, brands: brands });
         }
       });
-      if (totalProductsSelected === totalProducts) {
+      if (totalProductsSelected === initialTotalProduct) {
         setAllProductsSelected(true);
       }
 
@@ -462,7 +464,9 @@ const OmsShoppingCartView: FC = () => {
         open={modalConfirmationCheckoutVisible}
         title="Konfirmasi"
         content="Konfirmasi order dan lanjut ke Checkout?"
+        okText={'Ya'}
         ok={onSubmitCheckout}
+        cancelText={'Tidak'}
         cancel={() => setModalConfirmationCheckoutVisible(false)}
         loading={loadingCreateVerificationOrder || updateCartLoading}
       />
@@ -470,8 +474,10 @@ const OmsShoppingCartView: FC = () => {
         open={modalConfirmationRemoveProductVisible}
         title="Konfirmasi"
         content="Apakah Anda yakin untuk menghapus barang?"
-        ok={onConfirmRemoveProduct}
-        cancel={onCancelRemoveProduct}
+        okText={'Tidak'}
+        ok={onCancelRemoveProduct}
+        cancelText={'Ya'}
+        cancel={onConfirmRemoveProduct}
         loading={loadingRemoveProduct}
       />
       {/* Toast success add cart */}

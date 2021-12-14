@@ -10,6 +10,7 @@ import { AddToCartModalStyle } from '@core/styles';
 /** === TYPE ===  */
 interface AddToCartQuantityModifierProps {
   orderQty: number;
+  onChangeQty: (val: number) => void;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
   isFromProductDetail?: boolean;
@@ -17,6 +18,7 @@ interface AddToCartQuantityModifierProps {
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
+  onChangeQty,
   increaseOrderQty,
   decreaseOrderQty,
   isFromProductDetail,
@@ -45,8 +47,10 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
               {`Tersisa ${dataStock.stock} ${dataProductDetailCart.unit}`}
             </SnbText.B3>
           )}
+
           <SnbNumberCounter
             value={orderQty}
+            onChange={onChangeQty}
             onIncrease={increaseOrderQty}
             onDecrease={decreaseOrderQty}
             minusDisabled={orderQty <= dataProductDetailCart?.minQty}
@@ -61,8 +65,10 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
               {`Tersisa ${dataStockDetail.stock} ${dataProductDetail.unit}`}
             </SnbText.B3>
           )}
+
           <SnbNumberCounter
             value={orderQty}
+            onChange={onChangeQty}
             onIncrease={increaseOrderQty}
             onDecrease={decreaseOrderQty}
             minusDisabled={orderQty <= dataProductDetail?.minQty}
