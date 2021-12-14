@@ -216,6 +216,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
     }
   };
+
   /** VALIDATE EMAIL */
   const validateEmail = (email: string) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -442,6 +443,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           value={merchantName.value}
           onChangeText={(text) => merchantName.setValue(text)}
           clearText={() => merchantName.setValue('')}
+          maxLength={50}
         />
       </View>
     );
@@ -496,6 +498,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
             rightText={'m²'}
+            maxLength={4}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -570,9 +573,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'primary'}
           onPress={() => confirm()}
           disabled={
-            checkButton() || false || stateMerchant.merchantEdit.loading
+            checkButton() ||
+            false ||
+            stateMerchant.merchantEdit.loading ||
+            stateMerchant.profileEdit.loading
           }
-          loading={stateMerchant.merchantEdit.loading}
+          loading={
+            stateMerchant.merchantEdit.loading ||
+            stateMerchant.profileEdit.loading
+          }
         />
       </View>
     ) : (
