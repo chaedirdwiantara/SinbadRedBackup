@@ -105,45 +105,58 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   };
   /** => CTA */
   const buttonCallToAction = (code: number) => {
-    const digit = code.toString();
-    if (digit.length === 11) {
-      switch (digit[4] + digit[5]) {
-        case '00':
-          return buttonClose();
-        case '01':
-          return buttonBack();
-        case '02':
-          return buttonBackToHome();
-        case '03':
-          return buttonRetry();
-        case '04':
-          return buttonCloseApp();
-        case '05':
-          return buttonToLogin();
-        case '06':
-          return buttonCallSupport();
-        default:
-          return buttonClose();
+    if (code !== undefined) {
+      const digit = code.toString();
+      if (digit.length === 11) {
+        switch (digit[4] + digit[5]) {
+          case '00':
+            return buttonClose();
+          case '01':
+            return buttonBack();
+          case '02':
+            return buttonBackToHome();
+          case '03':
+            return buttonRetry();
+          case '04':
+            return buttonCloseApp();
+          case '05':
+            return buttonToLogin();
+          case '06':
+            return buttonCallSupport();
+          default:
+            return buttonClose();
+        }
+      } else if (code === 401) {
+        return buttonToLogin();
       }
-    } else if (code === 401) {
-      return buttonToLogin();
+      return buttonClose();
     }
-    return buttonClose();
+    return buttonRetry();
   };
   /** => check message */
   const message = (error: ErrorItemProps) => {
     if (error.code === 401) {
       return 'Anda sudah logout silahkan login lagi';
+    } else if (error.code === undefined) {
+      return 'Koneksi Anda terputus silahkan coba lagi';
     }
     return error.message;
   };
   /** => check service name */
   const serviceName = () => {
     if (props.error !== null) {
+      if (props.error.code === undefined) {
+        return 'Koneksi Anda';
+      }
       return errorCode(props.error.code);
     }
     return 'Sinbad';
   };
+  /**
+   * ======================================================
+   * BUTTON VARIANT
+   * ======================================================
+   */
   /** => button back to home */
   const buttonBackToHome = () => {
     return (
@@ -164,7 +177,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
         title={'Login Ulang'}
         onPress={() => {
           props.closeAction ? props.closeAction() : null;
-          NavigationAction.navigate('LoginPhoneView');
+          NavigationAction.navigate('ErrorHandlerView');
         }}
         type={'primary'}
       />
@@ -265,15 +278,33 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
       />
     );
   };
-  /** => button */
-  const button = () => {
+  /** ======================================================================= */
+  /** => content item image */
+  const contentItemImage = () => {
+    const src =
+      props.error?.code !== undefined
+        ? require('@image/sinbad/error-global.png')
+        : require('@image/sinbad/no-connection.png');
     return (
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonHeight}>
-          {props.error !== null
-            ? buttonCallToAction(props.error.code)
-            : buttonClose()}
+      <View style={styles.contentImageContainer}>
+        <Image source={src} style={styles.image} />
+        <View style={styles.contentErrorContainer}>
+          <View style={styles.errorBox}>
+            <SnbText.C2>
+              {props.error !== null ? props.error?.code : ''}
+            </SnbText.C2>
+          </View>
         </View>
+      </View>
+    );
+  };
+  /** => content item title */
+  const contentItemTitle = () => {
+    return (
+      <View style={styles.contentTitleContainer}>
+        <SnbText.H3 align={'center'}>
+          {`Terjadi Kendala di ${serviceName()}`}
+        </SnbText.H3>
       </View>
     );
   };
@@ -287,33 +318,6 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
       </View>
     );
   };
-  /** => content item title */
-  const contentItemTitle = () => {
-    return (
-      <View style={styles.contentTitleContainer}>
-        <SnbText.H3
-          align={'center'}>{`Terjadi Kendala di ${serviceName()}`}</SnbText.H3>
-      </View>
-    );
-  };
-  /** => content item image */
-  const contentItemImage = () => {
-    return (
-      <View style={styles.contentImageContainer}>
-        <Image
-          source={require('@image/sinbad/error-global.png')}
-          style={styles.image}
-        />
-        <View style={styles.contentErrorContainer}>
-          <View style={styles.errorBox}>
-            <SnbText.C2>
-              {props.error !== null ? props.error?.code : ''}
-            </SnbText.C2>
-          </View>
-        </View>
-      </View>
-    );
-  };
   /** => content item */
   const contentItem = () => {
     return (
@@ -321,6 +325,18 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
         {contentItemImage()}
         {contentItemTitle()}
         {contentItemMessage()}
+      </View>
+    );
+  };
+  /** => button */
+  const button = () => {
+    return (
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttonHeight}>
+          {props.error !== null
+            ? buttonCallToAction(props.error.code)
+            : buttonClose()}
+        </View>
       </View>
     );
   };
