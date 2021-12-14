@@ -11,6 +11,7 @@ import {
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { NavigationAction } from '@navigation';
 import { goBack } from '../function';
 import { QuestListStyles } from '../styles';
 
@@ -171,7 +172,7 @@ const QuestListView: FC = () => {
   const renderItem = ({ item }: { item: QuestCardProps }) => {
     return (
       <TouchableOpacity
-        onPress={() => null}
+        onPress={() => NavigationAction.navigate('QuestDetailView')}
         style={[QuestListStyles.shadowForBox, QuestListStyles.boxMainContent]}>
         <Image source={{ uri: item.image }} style={QuestListStyles.cardImage} />
         <View style={[QuestListStyles.cardMainContent]}>
