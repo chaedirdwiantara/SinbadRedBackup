@@ -14,7 +14,20 @@ const notificationList = (data: models.ListProcessProps) => {
   );
 };
 
+/** => notification list */
+const notificationTotal = () => {
+  const path = 'notifications/total';
+  return apiMapping<models.NotificationTotalSuccess>(
+    'auth',
+    path,
+    'common',
+    'v1',
+    'DETAIL',
+  );
+};
+
 /** === EXPORT FUNCTIONS === */
 export const NotificationApi = {
   notificationList,
+  notificationTotal,
 };

@@ -56,7 +56,7 @@ function* sendDataToSupplier(
 ) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
-      return SupplierApi.createSupplierStore(action.payload);
+      return SupplierApi.createSupplierStore(action.payload.data);
     });
     yield action.contextDispatch(
       ActionCreators.sendDataToSupplierSuccess(response),
