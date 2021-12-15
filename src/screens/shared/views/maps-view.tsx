@@ -153,6 +153,18 @@ const MapsView = () => {
             setShowModal(true);
           }
         }}
+        geoOptions={{
+          accuracy: {
+            android: 'high',
+            ios: 'best',
+          },
+          enableHighAccuracy: true,
+          timeout: 20000,
+          maximumAge: 10000,
+          distanceFilter: 0,
+          forceLocationManager: true,
+          showLocationDialog: true,
+        }}
         contentTitle="Detail Alamat"
         loading={locations.loading || isGettingCurrentPosition}
         contentDesc={desc}
