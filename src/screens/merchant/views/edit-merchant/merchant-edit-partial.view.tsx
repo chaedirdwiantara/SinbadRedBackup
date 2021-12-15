@@ -87,7 +87,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
-      storeDetailAction.detail(dispatchUser, { id: '3' });
+      storeDetailAction.detail(dispatchUser);
     } else if (
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
@@ -576,11 +576,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             checkButton() ||
             false ||
             stateMerchant.merchantEdit.loading ||
-            stateMerchant.profileEdit.loading
+            stateMerchant.profileEdit.loading ||
+            stateMerchant.changeMobilePhone.loading ||
+            stateMerchant.changeEmail.loading
           }
           loading={
             stateMerchant.merchantEdit.loading ||
-            stateMerchant.profileEdit.loading
+            stateMerchant.profileEdit.loading ||
+            stateMerchant.changeMobilePhone.loading ||
+            stateMerchant.changeEmail.loading
           }
         />
       </View>
