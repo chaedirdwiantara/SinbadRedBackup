@@ -15,6 +15,7 @@ import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
 import { useCheckoutMaster } from '@screen/oms/functions';
+import { useNotificationTotalActions } from '@screen/notification/functions';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation }: any) => {
   /** === HOOK === */
@@ -23,6 +24,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const { data } = useDataTotalProductCart();
   const { setCartId } = useCheckoutMaster();
   const cartTotalProductActions = useCartTotalProductActions();
+  const notificationTotalActions = useNotificationTotalActions();
   const { me } = useDataAuth();
   useGetTokenNotLogin();
   setFlagByDeviceId();
@@ -30,17 +32,12 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const changeHeader = (height: number) => {
     height > 100 ? actionHeaderChange(true) : actionHeaderChange(false);
   };
-  /** => for get total cart */
-  React.useEffect(() => {
-    if (me.data !== null) {
-      cartTotalProductActions.fetch();
-    }
-  }, [me.data]);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (me.data !== null) {
         cartTotalProductActions.fetch();
+        notificationTotalActions.fetch();
       }
     });
 

@@ -14,7 +14,6 @@ const getSegmentation = (payload: models.DetailProcessProps) => {
 };
 
 const createSupplierStore = (payload: models.SendDataSupplierPayload) => {
-  console.log('[payload]: ', payload);
   const path = 'supplier-stores';
   return apiMapping('auth', path, 'account', 'v1', 'CREATE', payload);
 };
