@@ -44,25 +44,27 @@ export const cartMaster = simplifyReducer(initialState, {
     state = initialState,
     { payload }: models.DeleteCartProduct,
   ) {
-    const newData = state.data.filter((invoiceGroup) => {
-      const newBrands = invoiceGroup.brands.filter((brand) => {
-        const newProducts = brand.products.filter((product) => {
-          return product.productId !== payload.productId;
-        });
+    const newData: models.CartInvoiceGroup[] = [];
+    state.data.forEach((invoiceGroup) => {
+      const newBrands: models.CartBrand[] = [];
+      invoiceGroup.brands.forEach((brand) => {
+        const newProducts = brand.products.filter(
+          (product) => product.productId !== payload.productId,
+        );
 
         if (newProducts.length > 0) {
-          return {
+          newBrands.push({
             ...brand,
             products: newProducts,
-          };
+          });
         }
       });
 
       if (newBrands.length > 0) {
-        return {
+        newData.push({
           ...invoiceGroup,
           brands: newBrands,
-        };
+        });
       }
     });
 

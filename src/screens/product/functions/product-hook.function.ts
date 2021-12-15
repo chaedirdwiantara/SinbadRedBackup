@@ -102,6 +102,23 @@ const useProductDetailAction = () => {
   };
 };
 
+const useProductDetailCartAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.productDetailCartProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.productDetailCartRefresh());
+      dispatch(Actions.productDetailCartProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.productDetailCartReset(contextDispatch));
+    },
+  };
+};
+
 const useAddToCart = () => {
   const dispatch = useDispatch();
   return {
@@ -178,6 +195,10 @@ const useReserveStockAction = () => {
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
+  const onChangeQty = (value: number) => {
+    setOrderQty(value);
+  };
+
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);
   };
@@ -192,7 +213,7 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
     });
   };
 
-  return { orderQty, increaseOrderQty, decreaseOrderQty };
+  return { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty };
 };
 
 const useStockValidationAction = () => {
@@ -268,4 +289,5 @@ export {
   useStockValidationAction,
   useStockValidationDetailAction,
   useStockInformationAction,
+  useProductDetailCartAction,
 };

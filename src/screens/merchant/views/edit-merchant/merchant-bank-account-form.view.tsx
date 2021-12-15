@@ -80,12 +80,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
     return () => backHandler.remove();
   }, []);
+
   /** function */
   const checkButton = () => {
-    if (bankId.value && bankAccountNo.value && bankAccountName.value) {
-      return false;
-    } else {
+    if (
+      bankId.value === bankData?.bankId &&
+      bankAccountNo.value === bankData?.bankAccountNo &&
+      bankAccountName.value === bankData?.bankAccountName &&
+      bankBranchName.value === bankData?.bankBranchName &&
+      stateUser.detail.data?.ownerData.info.isBankAccountVerified === true
+    ) {
       return true;
+    } else if (
+      bankId.value === null ||
+      bankAccountNo.value === '' ||
+      bankAccountName.value === ''
+    ) {
+      return true;
+    } else {
+      return false;
     }
   };
   const confirm = () => {
@@ -117,7 +130,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Pilih Nama Bank'}
             type={'default'}
             value={bankName.value}
-            onPress={() => gotoSelection({ type: 'listBank' })}
+            onPress={() => gotoSelection({ type: 'listBank', action: 'edit' })}
             rightIcon={'chevron_right'}
             rightType={'icon'}
             labelText={'Nama Bank'}

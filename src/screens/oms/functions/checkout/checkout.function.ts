@@ -15,8 +15,8 @@ const handleTotalPrice = (data: models.IInvoiceCheckout[]) => {
       subTotal += invoice.totalPriceAfterTax - invoice.totalPriceBeforeTax;
     }
 
-    if (invoice.totalPaymentFee) {
-      subTotal += invoice.totalPaymentFee;
+    if (invoice.totalFee) {
+      subTotal += invoice.totalFee;
     }
 
     if (invoice.totalPromoSellerAndVoucher) {
@@ -44,8 +44,8 @@ const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
     total += data.totalPriceAfterTax - data.totalPriceBeforeTax;
   }
 
-  if (data.totalPaymentFee) {
-    total += data.totalPaymentFee;
+  if (data.totalFee) {
+    total += data.totalFee;
   }
 
   if (data.totalPromoSellerAndVoucher) {

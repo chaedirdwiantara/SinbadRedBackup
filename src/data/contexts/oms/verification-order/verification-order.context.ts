@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  VerificationOrderInitialProps,
+  VerificationOrderState,
   verificationOrderInitialState,
   verificationOrderReducer,
 } from '@reducer/oms/verification-order/verification-order.reducer';
 
 const VerificationOrderContext = React.createContext<{
   // state: InitialStateType;
-  stateVerificationOrder: VerificationOrderInitialProps;
+  stateVerificationOrder: VerificationOrderState;
   dispatchVerificationOrder: React.Dispatch<any>;
 }>({
   // state: initialState,

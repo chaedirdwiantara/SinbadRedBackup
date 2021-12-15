@@ -62,6 +62,9 @@ function setImage(type: string) {
     case 'selfie': {
       return require('../../../../assets/images/selfie_image.png');
     }
+    case 'store': {
+      return require('../../../../assets/images/store_image.png');
+    }
     default:
       return ' ';
   }
@@ -73,6 +76,7 @@ const MerchantEditPhotoView = () => {
   const { params }: any = useRoute();
   const { editProfile } = MerchantHookFunc.useEditProfile();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
+  const editProfileAction = MerchantHookFunc.useEditProfile();
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
@@ -85,6 +89,8 @@ const MerchantEditPhotoView = () => {
   const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
 
   React.useEffect(() => {
+    editProfileAction.reset(dispatchSupplier);
+    editMerchantAction.reset(dispatchSupplier);
     switch (params.type) {
       case 'npwp': {
         setImageUrl(
@@ -111,18 +117,10 @@ const MerchantEditPhotoView = () => {
         );
         break;
       }
-      case 'store': {
-        setImageUrl(
-          stateUser.detail.data?.storeData.storeInformation.storeAccount
-            .imageUrl,
-        );
-        break;
-      }
     }
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
-      reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
     };
   }, []);
@@ -130,7 +128,7 @@ const MerchantEditPhotoView = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data !== null) {
       setImageUrl(stateGlobal.uploadImage.data.url);
-      handleUpdatePhoto();
+      handleUpdatePhoto(stateGlobal.uploadImage.data.url);
       resetCamera();
     }
 
@@ -155,9 +153,8 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
-      editMerchantAction.reset(dispatchSupplier);
-      detail(dispatchUser, { id: '' });
+      editProfileAction.reset(dispatchSupplier);
+      detail(dispatchUser);
     }
 
     if (stateMerchant.profileEdit.error !== null) {
@@ -181,9 +178,8 @@ const MerchantEditPhotoView = () => {
         240,
       );
       goBack();
-      reset(dispatchSupplier);
       editMerchantAction.reset(dispatchSupplier);
-      detail(dispatchUser, { id: '' });
+      detail(dispatchUser);
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
@@ -197,27 +193,28 @@ const MerchantEditPhotoView = () => {
     }
   }, [stateMerchant.merchantEdit]);
 
-  const handleUpdatePhoto = () => {
+  const handleUpdatePhoto = (image: string) => {
     save(dispatchGlobal, '');
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: imageUrl });
+        Object.assign(data, { taxImageUrl: image });
         editProfile(dispatchSupplier, { data });
+
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: imageUrl });
+        Object.assign(data, { idImageUrl: image });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: imageUrl });
+        Object.assign(data, { selfieImageUrl: image });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: imageUrl });
+        Object.assign(data, { image: image });
         editMerchantAction.editMerchant(dispatchSupplier, {
           data,
         });
@@ -243,50 +240,55 @@ const MerchantEditPhotoView = () => {
 
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage.data !== null;
-    let action = handleUpdatePhoto;
+    let action = () => {
+      upload(dispatchGlobal, capturedImage.data.url);
+    };
 
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
-      action = () => {
-        upload(dispatchGlobal, capturedImage.data.url);
-      };
     } else {
       uri = imageUrl;
     }
     return (
       <View style={{ flex: 1 }}>
-        <Image
-          resizeMode="contain"
-          source={{ uri }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 1,
-            margin: 16,
-          }}
-        />
-        <View style={{ flex: 0.75, justifyContent: 'space-between' }}>
-          <View style={{ height: 72 }}>
-            <SnbButton.Dynamic
-              size="small"
-              type="tertiary"
-              title="Ubah Foto"
-              onPress={() => openCamera(params?.type)}
-              disabled={false}
-            />
+        <View style={{ flex: 1 }}>
+          <Image
+            resizeMode="contain"
+            source={{ uri }}
+            style={{
+              resizeMode: 'contain',
+              height: undefined,
+              width: '100%',
+              aspectRatio:
+                params?.type === 'selfie'
+                  ? 6 / 5
+                  : params?.type === 'store'
+                  ? 8 / 7
+                  : 8 / 5,
+              marginTop: 24,
+            }}
+          />
+          <View style={{ justifyContent: 'space-between' }}>
+            <View style={{ height: 72, marginTop: 12 }}>
+              <SnbButton.Dynamic
+                size="small"
+                type="tertiary"
+                title="Ubah Foto"
+                onPress={() => openCamera(params?.type)}
+                disabled={false}
+              />
+            </View>
           </View>
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
-              type={'primary'}
-              title={'Simpan'}
-              shadow
-              onPress={action}
-              loading={stateGlobal.uploadImage.loading}
-              disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
-            />
-          </View>
+        </View>
+        <View style={{ height: 75 }}>
+          <SnbButton.Single
+            type={'primary'}
+            title={'Simpan'}
+            onPress={action}
+            loading={stateGlobal.uploadImage.loading}
+            disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+          />
         </View>
       </View>
     );
