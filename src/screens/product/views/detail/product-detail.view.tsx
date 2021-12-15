@@ -173,13 +173,7 @@ const ProductDetailView: FC = () => {
       return;
     }
 
-    if (value >= dataStock.stock) {
-      onChangeQty(dataStock.stock);
-    } else if (value <= dataProduct.minQty) {
-      onChangeQty(dataProduct.minQty);
-    } else {
-      onChangeQty(value);
-    }
+    onChangeQty(value);
   };
 
   const onSubmitAddToCart = () => {
@@ -536,7 +530,12 @@ const ProductDetailView: FC = () => {
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
-          disabled={dataStock === null}
+          disabled={
+            dataProduct === null ||
+            dataStock === null ||
+            orderQty > dataStock.stock ||
+            orderQty < dataProduct?.minQty
+          }
           isFromProductDetail={true}
         />
       )}

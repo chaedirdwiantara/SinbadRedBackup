@@ -210,14 +210,7 @@ const ProductList: FC<ProductListProps> = ({
     if (!dataStock || !productDetailState) {
       return;
     }
-
-    if (value >= dataStock.stock) {
-      onChangeQty(dataStock.stock);
-    } else if (value <= productDetailState.minQty) {
-      onChangeQty(productDetailState.minQty);
-    } else {
-      onChangeQty(value);
-    }
+    onChangeQty(value);
   };
 
   /** => action submit add to cart  */
@@ -534,7 +527,12 @@ const ProductList: FC<ProductListProps> = ({
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
-          disabled={dataStock === null}
+          disabled={
+            productDetailState === null ||
+            dataStock === null ||
+            orderQty > dataStock.stock ||
+            orderQty < productDetailState?.minQty
+          }
         />
       )}
       {/* Product not coverage modal */}
