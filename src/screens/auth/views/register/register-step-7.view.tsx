@@ -4,6 +4,7 @@ import {
   useCamera,
   useMerchant,
   useRegister,
+  useTextFieldSelect,
 } from '@screen/auth/functions';
 import React from 'react';
 import {
@@ -46,6 +47,7 @@ const Content: React.FC = () => {
     'unselect',
   );
   const [messageError, setMessageError] = React.useState('');
+  const { resetGetSelection, resetSelectedItem } = useTextFieldSelect();
 
   React.useEffect(() => {
     resetRegister();
@@ -224,6 +226,8 @@ const Content: React.FC = () => {
                 setShowModalSuccess(false);
                 setShowModalPrivacyPolicy(false);
                 setShowModalFailed(false);
+                resetGetSelection();
+                resetSelectedItem();
                 reset({
                   index: 0,
                   routes: [{ name: 'LoginPhoneView' }],
