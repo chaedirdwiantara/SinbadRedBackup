@@ -40,7 +40,7 @@ const HelpView: FC = () => {
         callCsModal.setOpen(true);
         break;
       case 'faq':
-        NavigationAction.navigate('QuestListView');
+        NavigationAction.navigate('HelpFaqView');
         break;
       case 'clear_cache':
         handleClearCache();

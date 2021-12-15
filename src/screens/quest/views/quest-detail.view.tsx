@@ -11,13 +11,14 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbText,
-  SnbTabs,
   color,
   SnbIconHint,
+  SnbButton,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import StepperStatusDetail from '../components/StepperStatusDetail';
+import { NavigationAction } from '@navigation';
 import { goBack, MoneyFormatSpace } from '../function';
 import { QuestDetailStyles } from '../styles';
 
@@ -42,7 +43,7 @@ const mockData = {
   rewardType: 'voucher',
   rewardValue: 50000,
   startDate: '2021-11-30',
-  endDate: '2021-12-02',
+  endDate: '2021-12-30',
   detailQuest:
     '<p>ifjiowjefiowe iwejfiowejfio wefioewjfw</p><p>wefjoiwejf wefwejej</p>',
   termsAndCondition:
@@ -241,17 +242,123 @@ const QuestDetailView: FC = () => {
       </View>
     );
   };
+  /** => Render Additional Info */
+  const renderAdditionalInfo = (type: string) => {
+    const { detailQuest, termsAndCondition } = mockData;
+    return (
+      <TouchableOpacity
+        style={QuestDetailStyles.containerAddInfo}
+        onPress={() =>
+          NavigationAction.navigate('GeneralQuestAdditionalInfo', {
+            type,
+            data: type === 'detail' ? detailQuest : termsAndCondition,
+          })
+        }>
+        <View style={QuestDetailStyles.containerAddTitle}>
+          {type === 'detail' ? (
+            <SnbText.H4>Deskripsi Quest</SnbText.H4>
+          ) : (
+            <SnbText.H4>Syarat dan Ketentuan</SnbText.H4>
+          )}
+        </View>
+        <View style={QuestDetailStyles.containerAddIcon}>
+          <SnbIconHint
+            iconName={'chevron_right'}
+            size={24}
+            iconColor={color.black100}
+            badgeColor={'red'}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  /** => Render Button Status */
+  const buttonStatus = () => {
+    let title = 'Lanjut';
+    const { currentTask, task } = mockData;
+    let isFirst = false;
+    let isLast = false;
+    let isDone = false;
+    const firstTitle = task[0].title;
+    const lastTitle = task[task.length - 1].title;
+    const current = task.filter((t) => t.title === currentTask)[0] || null;
+
+    if (currentTask === firstTitle || stepperStatus().activeIndex === 0) {
+      title = 'Mulai';
+      isFirst = true;
+    } else if (
+      (currentTask === lastTitle || currentTask === null) &&
+      stepperStatus().completeIndex === task.length - 1
+    ) {
+      title = 'Lanjut';
+      isLast = true;
+    } else if (
+      currentTask === null &&
+      task[task.length - 1].status === 'done'
+    ) {
+      isDone = true;
+    }
+
+    return { title, isFirst, isLast, isDone, current };
+  };
+  /** => Render Footer */
+  const renderFooter = () => {
+    const { currentTask, endDate } = mockData;
+    return (
+      <>
+        {!buttonStatus().isDone && moment(endDate) > moment() ? (
+          <View
+            style={[
+              QuestDetailStyles.footerContent,
+              QuestDetailStyles.shadowForBox10,
+            ]}>
+            <View style={QuestDetailStyles.footerLeft}>
+              <View>
+                <SnbText.B1>Quest saat ini</SnbText.B1>
+              </View>
+              <View>
+                <SnbText.H4>{currentTask}</SnbText.H4>
+              </View>
+            </View>
+            <View style={QuestDetailStyles.footerRight}>
+              <SnbButton.Single
+                type="primary"
+                title={buttonStatus().title}
+                onPress={() => null}
+                // disabled={false}
+                // title={this.buttonStatus().title}
+                // borderRadius={4}
+                // onPress={() => this.stepAction()}
+              />
+            </View>
+          </View>
+        ) : buttonStatus().isLast && !buttonStatus().isDone ? (
+          <SnbButton.Single
+            type="primary"
+            title={buttonStatus().title}
+            onPress={() => null}
+            // onPress={() => this.stepAction()}
+          />
+        ) : null}
+      </>
+    );
+  };
   /** => Content */
-  const renderContent = () => (
-    <>
-      <View>
-        <ScrollView>
-          {renderInfo()}
-          {renderStepper()}
-        </ScrollView>
-      </View>
-    </>
-  );
+  const renderContent = () => {
+    return (
+      <>
+        <View>
+          <ScrollView>
+            {renderInfo()}
+            {renderStepper()}
+            {renderAdditionalInfo('detail')}
+            {renderAdditionalInfo('tnc')}
+          </ScrollView>
+        </View>
+        {renderFooter()}
+      </>
+    );
+  };
   /** => Main */
   return (
     <SnbContainer color="white">
