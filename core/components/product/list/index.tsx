@@ -143,9 +143,10 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetailState?.minQty,
-  });
+  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
+    useOrderQuantity({
+      minQty: productDetailState?.minQty,
+    });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -202,6 +203,21 @@ const ProductList: FC<ProductListProps> = ({
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
+  };
+
+  /** => action on change qty */
+  const onHandleChangeQty = (value: number) => {
+    if (!dataStock || !productDetailState) {
+      return;
+    }
+
+    if (value >= dataStock.stock) {
+      onChangeQty(dataStock.stock);
+    } else if (value <= productDetailState.minQty) {
+      onChangeQty(productDetailState.minQty);
+    } else {
+      onChangeQty(value);
+    }
   };
 
   /** => action submit add to cart  */
@@ -281,7 +297,7 @@ const ProductList: FC<ProductListProps> = ({
         setToastFailedAddCart(false);
         setToastSuccessRegisterSupplier(false);
         setToastFailedRegisterSupplier(false);
-      }, 1500);
+      }, 3000);
     }
   }, [
     toastSuccessAddCart,
@@ -512,6 +528,7 @@ const ProductList: FC<ProductListProps> = ({
       {orderModalVisible && (
         <AddToCartModal
           orderQty={orderQty}
+          onChangeQty={onHandleChangeQty}
           increaseOrderQty={increaseOrderQty}
           decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
@@ -529,7 +546,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbToast
         open={toastSuccessAddCart}
         message={'Produk berhasil ditambahkan ke keranjang'}
-        close={() => setToastSuccessAddCart(false)}
         position={'top'}
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
@@ -539,7 +555,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbToast
         open={toastFailedAddCart}
         message={'Produk gagal ditambahkan ke keranjang'}
-        close={() => setToastFailedAddCart(false)}
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
@@ -547,7 +562,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbToast
         open={toastSuccessRegisterSupplier}
         message={'Berhasil kirim data ke supplier'}
-        close={() => setToastSuccessRegisterSupplier(false)}
         position={'top'}
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
@@ -557,7 +571,6 @@ const ProductList: FC<ProductListProps> = ({
       <SnbToast
         open={toastFailedRegisterSupplier}
         message={'Gagal kirim data ke supplier'}
-        close={() => setToastFailedRegisterSupplier(false)}
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />

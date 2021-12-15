@@ -14,6 +14,7 @@ interface AddToCartModalProps {
   closeAction: () => void;
   onAddToCartPress: () => void;
   orderQty: number;
+  onChangeQty: (val: number) => void;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
   disabled: boolean;
@@ -25,6 +26,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   closeAction,
   onAddToCartPress,
   orderQty,
+  onChangeQty,
   increaseOrderQty,
   decreaseOrderQty,
   disabled,
@@ -37,6 +39,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       <PromoSection />
       <AddToCartQuantityModifier
         orderQty={orderQty}
+        onChangeQty={onChangeQty}
         increaseOrderQty={increaseOrderQty}
         decreaseOrderQty={decreaseOrderQty}
         isFromProductDetail={isFromProductDetail}
