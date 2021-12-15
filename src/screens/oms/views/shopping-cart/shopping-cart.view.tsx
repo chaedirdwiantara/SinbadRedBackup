@@ -423,11 +423,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       setToastSuccessRemoveProduct(true);
       deleteProduct({ productId: productRemoveSelected.productId });
-      setProductRemoveSelected(null);
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
+      setProductRemoveSelected(null);
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);

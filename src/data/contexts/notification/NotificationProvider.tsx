@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { FC, useReducer, useMemo } from 'react';
 import {
   NotificationContext,
   notificationReducer,
   notificationInitialState,
 } from './notification.context';
 
-const NotificationProvider: React.FC = ({ children }) => {
-  const [stateNotification, dispatchNotification] = React.useReducer(
+const NotificationProvider: FC = ({ children }) => {
+  const [stateNotification, dispatchNotification] = useReducer(
     notificationReducer,
     notificationInitialState,
   );
-  const valueProvider = React.useMemo(
+  const contextValue = useMemo(
     () => ({
       stateNotification,
       dispatchNotification,
@@ -18,7 +18,7 @@ const NotificationProvider: React.FC = ({ children }) => {
     [stateNotification, dispatchNotification],
   );
   return (
-    <NotificationContext.Provider value={valueProvider}>
+    <NotificationContext.Provider value={contextValue}>
       {children}
     </NotificationContext.Provider>
   );
