@@ -121,6 +121,8 @@ const OmsCheckoutView: FC = () => {
       paymentAction.resetTypesList(dispatchPayment);
       /** => reset list invoice channels */
       paymentAction.resetInvoicChannelList(dispatchPayment);
+      /** => reset create orders */
+      createOrders.reset(dispatchCheckout);
     };
   }, []);
 

@@ -18,6 +18,7 @@ import {
   copyToClipboard,
   goToHome,
   useCreateOrders,
+  usePaymentAction,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPES === */
@@ -53,12 +54,16 @@ const OmsCheckoutSuccessView: FC = () => {
   const [paymentData] = useState<CheckoutSuccess>(checkoutSuccessDummy);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-  const createOrders = useCreateOrders();
+  const ordersAction = useCreateOrders();
+  const paymentAction = usePaymentAction();
   const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+  const { dispatchPayment } = useContext(contexts.PaymentContext);
 
   /** => Reset Create Orders data after fetching Create Order Detail */
   useEffect(() => {
-    createOrders.reset(dispatchCheckout);
+    ordersAction.reset(dispatchCheckout);
+    paymentAction.resetTCCreate(dispatchPayment);
+    paymentAction.resetTCDetail(dispatchPayment);
   }, []);
   /** === VIEW === */
   /** => Header */
