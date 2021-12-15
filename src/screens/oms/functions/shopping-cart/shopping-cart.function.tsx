@@ -1,6 +1,10 @@
 /** === IMPORT PACKAGE HERE === */
 import { Dispatch, SetStateAction } from 'react';
-import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
+import {
+  CartInvoiceGroup,
+  IProductItemUpdateCart,
+  ICartMasterProductNotAvailable,
+} from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
@@ -248,6 +252,18 @@ const handleProductDelete = (
   });
 };
 
+const handleProductNotAvailableDelete = (
+  product: ICartMasterProductNotAvailable,
+  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+) => {
+  onRemoveProduct({
+    productId: product.productId,
+    qty: 0,
+    selected: false,
+    stock: 0,
+  });
+};
+
 export {
   getTotalProducts,
   getTotalPrice,
@@ -256,4 +272,5 @@ export {
   handleSelectedBrandChange,
   handleAllSelectedProductsChange,
   handleProductDelete,
+  handleProductNotAvailableDelete,
 };

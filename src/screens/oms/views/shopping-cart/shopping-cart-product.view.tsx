@@ -145,6 +145,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         style={{
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          width: '20%',
         }}>
         <TouchableOpacity
           onPress={() =>
@@ -158,7 +159,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
-        {product.stock <= 50 && (
+        {product.stock <= 1000 && (
           <SnbText.B3
             color={
               color.red50
