@@ -75,6 +75,7 @@ const ProductDetailView: FC = () => {
     useState(false);
   const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
     useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -260,6 +261,7 @@ const ProductDetailView: FC = () => {
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
+    setLoadingButton(true);
     productDetailActions.fetch(dispatchProduct, productId);
   }, []);
 
@@ -280,12 +282,20 @@ const ProductDetailView: FC = () => {
     }
   }, [dataSegmentation, dataProduct]);
 
+  /** Listen success get stock */
+  useEffect(() => {
+    if (dataStock) {
+      setLoadingButton(false);
+    }
+  }, [dataStock]);
+
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
       if (errorStock.code === 400) {
         setIsAvailable(false);
       }
+      setLoadingButton(false);
     }
   }, [errorStock && dataProduct]);
 
@@ -355,6 +365,8 @@ const ProductDetailView: FC = () => {
   /** => Did Unmount */
   useEffect(() => {
     return () => {
+      productDetailActions.reset(dispatchProduct);
+      supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
     };
   }, []);
@@ -469,6 +481,7 @@ const ProductDetailView: FC = () => {
         <React.Fragment>
           {isAvailable ? (
             <ActionButton
+              loading={loadingButton}
               title={getActionButtonTitle()}
               disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
               onPress={() => {
