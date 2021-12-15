@@ -15,6 +15,7 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 import LoadingPage from '@core/components/LoadingPage';
+import { ProductEmptyStockView } from './product-empty-stock.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
@@ -59,7 +60,7 @@ import {
   useStockInformationAction,
 } from '@screen/product/functions';
 /** === COMPONENT === */
-const OmsShoppingCartView: FC = () => {
+const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** === HOOKS === */
   const { cartMaster, setCartMaster, deleteProduct, setCartMasterData } =
     useCartMasterActions();
@@ -144,7 +145,12 @@ const OmsShoppingCartView: FC = () => {
     },
     dispatchReserveStock,
   } = useReserveStockContext();
-  const { dispatchStock } = useStockContext();
+  const {
+    stateStock: {
+      information: { data: stockInformationData },
+    },
+    dispatchStock,
+  } = useStockContext();
   const reserveDiscountAction = useReserveDiscountAction();
   const reserveStockAction = useReserveStockAction();
   const stockInformationAction = useStockInformationAction();
@@ -264,15 +270,19 @@ const OmsShoppingCartView: FC = () => {
     );
   };
 
-  /** => did mounted */
+  /** => did mounted and focus */
   useEffect(() => {
-    cartViewActions.fetch(dispatchShopingCart);
-    storeDetailAction.detail(dispatchUser);
-    if (checkoutMaster.cartId) {
-      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
-      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
-    }
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      cartViewActions.fetch(dispatchShopingCart);
+      storeDetailAction.detail(dispatchUser);
+      if (checkoutMaster.cartId) {
+        reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
+        reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   /** => Listen data cancel reserve stock */
   useEffect(() => {
@@ -305,24 +315,73 @@ const OmsShoppingCartView: FC = () => {
 
   /** Listen changes cartState */
   useEffect(() => {
-    if (cartViewData !== null) {
+    /** => make sure data cart and data information stock is ready */
+    if (cartViewData !== null && stockInformationData !== null) {
       let totalProductsSelected = 0;
-      const data: CartInvoiceGroup[] = [];
-      const dataEmptyStock: ICartMasterProductNotAvailable[] = [];
-      const dataNotFound: ICartMasterProductNotAvailable[] = [];
+      let initialTotalProduct = 0;
+
+      const data: CartInvoiceGroup[] = []; //product available
+      const dataEmptyStock: ICartMasterProductNotAvailable[] = []; //prodct empty stock
+      const dataNotFound: ICartMasterProductNotAvailable[] = []; //product not available
+
+      /** Looping cart data to mapping with information stock data */
       cartViewData.data.forEach((invoiceGroup) => {
-        let isEmptyBrand = true;
+        let isEmptyBrand = true; //flag if brand of invoice group is empty array
         const brands: CartBrand[] = [];
+
+        /** Looping brand */
         invoiceGroup.brands.forEach((brand) => {
-          let isEmptyProduct = true;
+          let isEmptyProduct = true; //flag if product of brand is empty array
           let brandSelected = false;
           const products: CartProduct[] = [];
+
+          /** Looping product */
           brand.products.forEach((product) => {
-            if (product.selected) {
-              totalProductsSelected += 1;
-              brandSelected = true;
+            const indexChange = stockInformationData.change.findIndex(
+              (item) => item.productId === product.productId,
+            );
+
+            const indexEmptyStock = stockInformationData.emptyStock.findIndex(
+              (item) => item.productId === product.productId,
+            );
+
+            const indexNotFound = stockInformationData.notFound.findIndex(
+              (item) => item.productId === product.productId,
+            );
+
+            if (indexChange >= 0) {
+              if (product.selected) {
+                totalProductsSelected += 1;
+                brandSelected = true;
+              }
+              initialTotalProduct += 1;
+              products.push({
+                ...product,
+                stock: stockInformationData.change[indexChange].currentStock,
+              });
+            } else if (indexEmptyStock >= 0) {
+              dataEmptyStock.push({
+                productId: product.productId,
+                productName: product.productName,
+                displayPrice: product.displayPrice,
+                urlImages: product.urlImages,
+              });
+            } else if (indexNotFound >= 0) {
+              dataNotFound.push({
+                productId: product.productId,
+                productName: product.productName,
+                displayPrice: product.displayPrice,
+                urlImages: product.urlImages,
+              });
+            } else {
+              if (product.selected) {
+                totalProductsSelected += 1;
+                brandSelected = true;
+              }
+              initialTotalProduct += 1;
+              products.push(product);
             }
-            products.push(product);
+
             isEmptyProduct = false;
           });
           if (!isEmptyProduct) {
@@ -334,11 +393,13 @@ const OmsShoppingCartView: FC = () => {
             isEmptyBrand = false;
           }
         });
+
         if (!isEmptyBrand) {
           data.push({ ...invoiceGroup, brands: brands });
         }
       });
-      if (totalProductsSelected === totalProducts) {
+
+      if (totalProductsSelected === initialTotalProduct) {
         setAllProductsSelected(true);
       }
 
@@ -351,7 +412,7 @@ const OmsShoppingCartView: FC = () => {
       });
       setProductSelectedCount(totalProductsSelected);
     }
-  }, [cartViewData]);
+  }, [cartViewData, stockInformationData]);
 
   /** Listen product will be removed */
   useEffect(() => {
@@ -417,7 +478,11 @@ const OmsShoppingCartView: FC = () => {
         <LoadingPage />
       ) : (
         <>
-          {Array.isArray(cartMaster.data) && cartMaster.data.length > 0 ? (
+          {(Array.isArray(cartMaster.data) && cartMaster.data.length > 0) ||
+          (Array.isArray(cartMaster.dataEmptyStock) &&
+            cartMaster.dataEmptyStock.length > 0) ||
+          (Array.isArray(cartMaster.dataNotFound) &&
+            cartMaster.dataNotFound.length > 0) ? (
             <Fragment>
               <ScrollView>
                 <ShippingAddress />
@@ -439,6 +504,26 @@ const OmsShoppingCartView: FC = () => {
                       onRemoveProduct={onRemoveProduct}
                     />
                   ))}
+                </Fragment>
+                <Fragment>
+                  {Array.isArray(cartMaster.dataNotFound) &&
+                    cartMaster.dataNotFound.length > 0 && (
+                      <ProductEmptyStockView
+                        sectionName={'Product Tidak Tersedia'}
+                        data={cartMaster.dataNotFound}
+                        onRemoveProduct={onRemoveProduct}
+                      />
+                    )}
+                </Fragment>
+                <Fragment>
+                  {Array.isArray(cartMaster.dataEmptyStock) &&
+                    cartMaster.dataEmptyStock.length > 0 && (
+                      <ProductEmptyStockView
+                        sectionName={'Product Habis'}
+                        data={cartMaster.dataEmptyStock}
+                        onRemoveProduct={onRemoveProduct}
+                      />
+                    )}
                 </Fragment>
               </ScrollView>
               <ShoppingCartFooter
@@ -462,7 +547,9 @@ const OmsShoppingCartView: FC = () => {
         open={modalConfirmationCheckoutVisible}
         title="Konfirmasi"
         content="Konfirmasi order dan lanjut ke Checkout?"
+        okText={'Ya'}
         ok={onSubmitCheckout}
+        cancelText={'Tidak'}
         cancel={() => setModalConfirmationCheckoutVisible(false)}
         loading={loadingCreateVerificationOrder || updateCartLoading}
       />
@@ -470,8 +557,10 @@ const OmsShoppingCartView: FC = () => {
         open={modalConfirmationRemoveProductVisible}
         title="Konfirmasi"
         content="Apakah Anda yakin untuk menghapus barang?"
-        ok={onConfirmRemoveProduct}
-        cancel={onCancelRemoveProduct}
+        okText={'Tidak'}
+        ok={onCancelRemoveProduct}
+        cancelText={'Ya'}
+        cancel={onConfirmRemoveProduct}
         loading={loadingRemoveProduct}
       />
       {/* Toast success add cart */}

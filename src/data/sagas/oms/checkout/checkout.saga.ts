@@ -22,9 +22,27 @@ function* getCheckout(action: Omit<models.DetailProcessAction, 'payload'>) {
     yield put(ActionCreators.getCheckoutFailed(error as models.ErrorProps));
   }
 }
+
+function* createOrders(
+  action: models.CreateProcessAction<models.CreateOrders>,
+) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return CheckoutApi.createOrders(action.payload);
+    });
+    yield action.contextDispatch(ActionCreators.createOrdersSuccess(response));
+    yield put(ActionCreators.createOrdersSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.createOrdersFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.createOrdersFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CheckoutSaga() {
   yield takeLatest(types.GET_CHECKOUT_PROCESS, getCheckout);
+  yield takeLatest(types.CREATE_ORDER_PROCESS, createOrders);
 }
 
 export default CheckoutSaga;

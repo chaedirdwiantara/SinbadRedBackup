@@ -195,6 +195,10 @@ const useReserveStockAction = () => {
 const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
+  const onChangeQty = (value: number) => {
+    setOrderQty(value);
+  };
+
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);
   };
@@ -209,7 +213,7 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
     });
   };
 
-  return { orderQty, increaseOrderQty, decreaseOrderQty };
+  return { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty };
 };
 
 const useStockValidationAction = () => {

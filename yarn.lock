@@ -1261,6 +1261,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.11.tgz#2f4c6e10bee0786abff4604e39a37ded6f3980ce"
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
+"@react-native-community/netinfo@7.1.6":
+  version "7.1.6"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-7.1.6.tgz#b1c5c7e93559eb2d3d493c9aac14cd45554a9261"
+  integrity sha512-FsBpEpMaFRwWz+Z2HWcYP2wBN7wooTIuvnOvY5EBJwrJIu15UnTaSGT4ABhdMSP8I0loI75mJxuXVQ+BwR5UTg==
+
 "@react-native-firebase/app@12.7.4":
   version "12.7.4"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-12.7.4.tgz#aa41a8b68881c7ced3a9b9125306bc3935b12fb6"
@@ -1409,10 +1414,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.10":
-  version "1.0.10"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.10.tgz#c07c7e2bbc294f8d0b497d2fa704a7aca0b00d8a"
-  integrity sha512-rh5w8HUWyvqvo2rd7hy5RAQZv+vBdng8bW0vUoE95zCOcaxuG2vUGpIcbWjKrGxvMcjrbkRB9zEZ9F3CJ5i/Og==
+"@sinbad/react-native-sinbad-ui@1.0.13":
+  version "1.0.13"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.13.tgz#0f1d80c3c8f065f18896b16959b98cd1225932aa"
+  integrity sha512-aLRdRhJnueUbwaWLWeGZu6nezAdGGPkrK2WUPjsR1h7bSrEBoXxNxqBfzWSE6LncSc9TwuGz14ULuOC04zRBZQ==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
