@@ -1,6 +1,6 @@
 /** === EXPORT ALL === */
 export * from './quest.function';
-// export * from './banner-hook.function';
+export * from './quest-hook.function';
 /**
  * ================================================================
  * NOTES

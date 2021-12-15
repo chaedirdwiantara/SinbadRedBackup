@@ -33,6 +33,10 @@ const QuestStyles = StyleSheet.create({
     padding: 16,
     backgroundColor: color.white,
   },
+  boxFlatlist: {
+    paddingBottom: 30,
+    paddingTop: 16,
+  },
   floatingDateContainer: {
     position: 'absolute',
     zIndex: 2,
