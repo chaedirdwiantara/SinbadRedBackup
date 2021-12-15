@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-type NotificationListInitialProps = models.ListItemProps<
+export type NotificationListInitialProps = models.ListItemProps<
   models.NotificationListSuccessProps[]
 >;
 /** === INITIAL STATE HERE */

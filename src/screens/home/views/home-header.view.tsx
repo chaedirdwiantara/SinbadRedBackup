@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useNotificationTotalActions } from '@screen/notification/functions';
 
 /** === IMPORT STYLE HERE === */
 import HomeStyles from '../styles/home.style';
@@ -14,6 +15,7 @@ interface HeaderProps {
 /** === COMPONENT === */
 const HomeHeaderView: FC<HeaderProps> = (props) => {
   const { dataTotalProductCart } = useCartTotalProductActions();
+  const { totalNotification } = useNotificationTotalActions();
 
   /** === VIEW === */
   /** => main */
@@ -27,7 +29,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
         onChangeText={(text) => console.log(text)}
         clearText={() => console.log('clear text')}
         enter={() => console.log('enter')}
-        icon1Value={100}
+        icon1Value={totalNotification.data}
         icon1Name="notifications_none"
         icon1Action={() => NavigationAction.navigate('NotificationView')}
         icon2Value={dataTotalProductCart.totalProduct}

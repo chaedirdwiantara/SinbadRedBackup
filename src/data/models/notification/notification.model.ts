@@ -14,3 +14,7 @@ export interface NotificationListSuccessProps {
   isRead: boolean;
   createdAt: string;
 }
+
+export interface NotificationTotalSuccess {
+  data: number;
+}
