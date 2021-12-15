@@ -46,7 +46,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const bankName = useInput(bankData?.bankName || '');
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
-  const bankBranchName = useInput(bankData?.bankBranchName || '');
+  const bankBranchName = useInput(bankData?.bankBranchName || null);
   const [openModalTNC, setOpenModalTNC] = useState(false);
   useEffect(() => {
     if (selectedItem?.item) {
@@ -82,6 +82,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   }, []);
 
   /** function */
+  console.log('validation:', bankData?.bankBranchName);
+
   const checkButton = () => {
     if (
       bankId.value === bankData?.bankId &&
@@ -179,6 +181,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
   };
   /** button */
+  console.log('loading:', stateMerchant.changeBankAccount.loading);
+
   const renderButton = () => {
     return (
       <View>
@@ -187,7 +191,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             title={'Verifikasi'}
             type={'primary'}
             onPress={() => confirm()}
-            disabled={checkButton()}
+            disabled={checkButton() || stateMerchant.changeBankAccount.loading}
+            loading={stateMerchant.changeBankAccount.loading}
           />
         </View>
       </View>
