@@ -32,8 +32,10 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
+  const loadingCreateOrders = stateCheckout.create?.loading;
 
   /** => main */
   const dataPostTC = {
@@ -81,7 +83,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         onPress={pressButton}
         content={content()}
         title={'Buat Pesanan'}
-        loading={loadingTCCreate || loadingTCDetail}
+        loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
       />
     </View>
   );
