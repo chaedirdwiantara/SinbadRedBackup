@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
@@ -8,10 +8,16 @@ import {
   SnbTabs,
   color,
   SnbIconHint,
+  SnbEmptyData,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack } from '../function';
+import LoadingPage from '@core/components/LoadingPage';
+import { EmptyState } from '@core/components/EmptyState';
+/** === IMPORT FUNCTIONS === */
+import { goBack, useQuestListAction } from '../function';
+import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+import { useDataAuth } from '@core/redux/Data';
+/** === IMPORT STYLES === */
 import { QuestListStyles } from '../styles';
 
 interface QuestCardProps {
@@ -82,6 +88,24 @@ const questTabs = ['Semua', 'Berjalan', 'Selesai'];
 const QuestListView: FC = () => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
+  const [status, setStatus] = useState('all');
+  const [buyerId, setBuyerId] = useState(0);
+
+  const { me } = useDataAuth();
+  const { stateQuest: { list: questListState }, dispatchQuest } = useQuestContext();
+  const { fetch, loadMore, refresh } = useQuestListAction();
+  console.log(me, 'meeeee');
+  
+  React.useEffect(() => {
+    console.log(me.data?.user.id, 'buyerId');
+    if (me.data !== null) {
+      setBuyerId(me.data.user.id);
+      console.log(status, 'status1');
+      fetch(dispatchQuest, { status, buyerId: me.data.user.id});
+    }
+  }, [me.data, activeTab]);
+
+  console.log(questListState, 'questListState');
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -92,7 +116,16 @@ const QuestListView: FC = () => {
     <SnbTabs.Fixed
       tabs={questTabs}
       activeTabs={activeTab}
-      onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
+      onChangeActiveTabs={(tabIndex: number) => {
+        setActiveTab(tabIndex)
+        if (tabIndex === 0) {
+          setStatus('all');
+        } else if (tabIndex === 1) {
+          setStatus('on_progress');
+        } else {
+          setStatus('done');
+        }
+      }}
     />
   );
   /** => render floating date */
@@ -192,37 +225,66 @@ const QuestListView: FC = () => {
 
   /** => Quest List */
   const renderQuestList = () => {
-    // return <ScrollView style={{ padding: 8 }}>{renderCardList()}</ScrollView>;
-
     return (
-      <View style={{ paddingVertical: 8, flex: 1 }}>
+      <View style={{ paddingVertical: 8}}>
         <FlatList
-          // contentContainerStyle={NotificationStyle.boxFlatlist}
-          data={mockData.data}
+          contentContainerStyle={QuestListStyles.boxFlatlist}
+          data={questListState.data}
           renderItem={renderItem}
-          // keyExtractor={(item, index) => index.toString()}
-          // refreshing={notificationListState.refresh}
-          // onRefresh={onHandleRefresh}
-          // onEndReachedThreshold={0.1}
-          // onEndReached={onHandleLoadMore}
-          // ItemSeparatorComponent={renderSeparator}
+          keyExtractor={(item, index) => index.toString()}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => loadMore(dispatchQuest, questListState, { status, buyerId})}
+          refreshing={questListState.refresh}
+          onRefresh={() => refresh(dispatchQuest, { status, buyerId})}
           showsVerticalScrollIndicator
         />
       </View>
     );
   };
+  //** => render empty */
+  const renderEmpty = () => {
+    let title;
+    let description;
+
+    if (status === 'all') {
+      title = 'Tunggu Quest Selanjutnya';
+      description = 'Anda bisa melihat quest yang tersedia di sini'
+    } else if (status === 'on_progress') {
+      title = 'Belum Ada Quest Berjalan';
+      description = 'Belum ada quest yang sedang berjalan. Yuk segera ikutan quest, biar dapat hadiahnya!';
+    } else {
+      title = 'Belum Ada Quest Selesai';
+      description = 'Belum ada quest yang diselesaikan. Yuk segera ikutan quest, biar dapat hadiahnya!';
+    }
+    return (
+      <EmptyState
+        title={title} description={description}
+      />
+    );
+  };
   /** => Content */
-  const renderContent = () => (
-    <>
-      {renderTabs()}
-      {renderQuestList()}
-    </>
-  );
+  const renderContent = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        {!questListState.loading &&
+        questListState.data.length > 0 ? (
+          <View>{renderQuestList()}</View>
+        ) : (
+          renderEmpty()
+        )}
+      </View>
+    );
+  };
   /** => Main */
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderContent()}
+      {renderTabs()}
+      {questListState.loading ? (
+        <LoadingPage />
+      ) : (
+        renderContent()
+      )}
     </SnbContainer>
   );
 };
