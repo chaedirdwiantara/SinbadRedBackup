@@ -82,8 +82,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   }, []);
 
   /** function */
-  console.log('validation:', bankData?.bankBranchName);
-
   const checkButton = () => {
     if (
       bankId.value === bankData?.bankId &&
@@ -180,9 +178,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
-  /** button */
-  console.log('loading:', stateMerchant.changeBankAccount.loading);
 
+  /** button */
   const renderButton = () => {
     return (
       <View>
