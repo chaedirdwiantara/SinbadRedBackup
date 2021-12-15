@@ -9,7 +9,8 @@ export interface QuestListItem {
   title: string;
   image: string;
   endDate: string;
-  currentTask: number;
+  currentTaskId: number;
+  doneTask: number;
   totalTask: number;
   status: string;
 }

@@ -23,7 +23,7 @@ const callProcessAction = (
 
 const useQuestListAction = () => {
   const dispatch = useDispatch();
-  const limit = 2;
+  const limit = 10;
 
   return {
     fetch: (

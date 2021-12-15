@@ -12,17 +12,14 @@ function* questList(
     models.ListProcessProps<models.QuestListProcessProps>
   >,
 ) {
-  console.log(action.payload, 'payloadSagas');
   try {
     const response: models.ListSuccessProps<models.QuestListItem[]> =
       yield call(() => {
         return QuestApi.getList(action.payload);
       });
-    console.log(response, 'responseSagas');
     yield action.contextDispatch(ActionCreators.questListSuccess(response));
     yield put(ActionCreators.questListSuccess(response));
   } catch (error: any) {
-    console.log(error, 'errorSagas');
     yield put(ActionCreators.questListFailed(error));
   }
 }
