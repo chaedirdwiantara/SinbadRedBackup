@@ -121,6 +121,10 @@ const QuestStyles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
+  sectionContainer: {
+    marginHorizontal: 16,
+    marginBottom: 16,
+  },
 });
 
 export default QuestStyles;

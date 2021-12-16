@@ -1,4 +1,8 @@
-import { QuestListView, QuestDetailView } from '@screen/quest/views';
+import {
+  QuestListView,
+  QuestDetailView,
+  QuestAdditionalInfoView,
+} from '@screen/quest/views';
 
 const QuestNav = {
   QuestListView: {
@@ -6,6 +10,9 @@ const QuestNav = {
   },
   QuestDetailView: {
     component: QuestDetailView,
+  },
+  QuestAdditionalInfoView: {
+    component: QuestAdditionalInfoView,
   },
 };
 

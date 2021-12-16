@@ -42,6 +42,7 @@ const QuestListView: FC = () => {
   const [buyerId, setBuyerId] = useState(0);
 
   const { me } = useDataAuth();
+  console.log(me, 'DATAME');
   const {
     stateQuest: { list: questListState },
     dispatchQuest,
