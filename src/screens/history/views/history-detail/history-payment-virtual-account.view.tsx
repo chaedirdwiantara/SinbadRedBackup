@@ -6,15 +6,15 @@ import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 interface PaymentVAProps {
   data: PaymentDetailSuccessProps;
   dataOrder: {};
+  onClick: () => void;
 }
 
 /** === COMPONENT === */
 const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   data,
   dataOrder,
+  onClick,
 }) => {
-  console.log(data, 'data va');
-
   /** Bank Icon */
   const renderBankIcon = () => {
     return (
@@ -38,7 +38,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
         <SnbButton.Single
           type="secondary"
           title="AKTIFKAN VIRTUAL ACCOUNT"
-          onPress={() => console.log('Single')}
+          onPress={() => console.log('VA Button pressed')}
         />
       </View>
     );
@@ -54,6 +54,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
             bottomText={'Salin no. Rek'}
+            onPress={onClick}
           />
         </View>
       </>

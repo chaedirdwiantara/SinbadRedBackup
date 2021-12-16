@@ -11,6 +11,7 @@ import {
   SnbIcon,
   SnbButton,
   SnbDialog,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ProductCard } from '@core/components/ProductCard';
@@ -21,6 +22,7 @@ import {
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
+  useModalToast,
 } from '../../functions';
 import { HistoryDetailStyle } from '../../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
@@ -153,11 +155,11 @@ const HistoryDetailView: FC = () => {
     : historyDetailDummy.canceledProducts;
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
+  const modalToast = useModalToast();
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
   const { paymentInvoice, paymentDetail } = stateHistory;
-  console.log(paymentDetail, 'STATE hISTORY');
 
   /** === EFFECTS === */
   useEffect(() => {
@@ -170,8 +172,17 @@ const HistoryDetailView: FC = () => {
     }
   }, [paymentInvoice.data]);
   /** === FUNCTION === */
+  /** => to fetch API invoice */
   const getInvoice = (id: number) => {
     getInvoiceDetail.detail(dispatchHistory, id);
+  };
+  /** => function to coppy VA Number */
+  const onVACoppied = () => {
+    modalToast.setOpen(true);
+    modalToast.setToastText('Copied To Clipboard');
+    setTimeout(() => {
+      modalToast.setOpen(false);
+    }, 3000);
   };
   /** === VIEW === */
   /** => Header */
@@ -281,9 +292,14 @@ const HistoryDetailView: FC = () => {
       )}
     </HistoryDetailCard>
   );
-
+  /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
-    return <HistoryPaymentVirtualAccount data={paymentDetail.data} />;
+    return (
+      <HistoryPaymentVirtualAccount
+        onClick={() => onVACoppied()}
+        data={paymentDetail.data}
+      />
+    );
   };
   /** => Payment Info */
   const renderPaymentInfo = () =>
@@ -409,6 +425,17 @@ const HistoryDetailView: FC = () => {
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
   );
+  /** render Toast */
+  const renderToast = () => {
+    return (
+      <SnbToast
+        open={modalToast.isOpen}
+        message={modalToast.toastText}
+        close={() => modalToast.setOpen(false)}
+        position={'top'}
+      />
+    );
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
     <ScrollView>
@@ -504,6 +531,7 @@ const HistoryDetailView: FC = () => {
       {renderContent()}
       {renderFooter()}
       {renderOrderConfirmationDialog()}
+      {renderToast()}
     </SnbContainer>
   );
 };

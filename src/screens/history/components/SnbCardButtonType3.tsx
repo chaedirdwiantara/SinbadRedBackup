@@ -1,8 +1,7 @@
 /** === IMPORT LIB HERE === */
 import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { color, SnbText } from '@sinbad/react-native-sinbad-ui';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 /** === INTERFACE === */
 interface Props {
@@ -22,7 +21,7 @@ interface Props {
   onPress?: () => void;
 }
 /** === COMPONENT === */
-const SnbCardButtonType3: FC<Props> = (props) => {
+const SnbCardButtonType3: FC<Props> = (props: any) => {
   const renderMid = () => {
     return (
       <View
@@ -51,7 +50,7 @@ const SnbCardButtonType3: FC<Props> = (props) => {
   };
   const renderBottom = () => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onPress}>
         <SnbText.C2 color={color.red50}>
           {props.bottomText ? props.bottomText : null}
         </SnbText.C2>

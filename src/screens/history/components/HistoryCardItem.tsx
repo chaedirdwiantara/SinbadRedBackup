@@ -1,7 +1,10 @@
+/** === IMPORT PACKAGES === */
 import React from 'react';
 import { View } from 'react-native';
 import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
+/** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../styles';
+/** === COMPONENT === */
 export const HistoryCardItem = (
   key: string,
   value: string | null,
