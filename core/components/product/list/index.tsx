@@ -110,9 +110,9 @@ const ProductList: FC<ProductListProps> = ({
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
   const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
     useState(false);
-  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
-    useState(false);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
+    useState(false);
 
   const {
     sortModalVisible,
@@ -201,7 +201,9 @@ const ProductList: FC<ProductListProps> = ({
     productDetailActions.reset(dispatchProduct);
     supplierSegmentationAction.reset(dispatchSupplier);
     addToCartActions.reset(dispatchShopingCart);
+    sendDataToSupplierActions.reset(dispatchSupplier);
     setModalErrorAddCart(false);
+    setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
@@ -281,22 +283,13 @@ const ProductList: FC<ProductListProps> = ({
 
   /** close toast listener */
   useEffect(() => {
-    if (
-      toastSuccessAddCart ||
-      toastSuccessRegisterSupplier ||
-      toastFailedRegisterSupplier
-    ) {
+    if (toastSuccessAddCart || toastSuccessRegisterSupplier) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
         setToastSuccessRegisterSupplier(false);
-        setToastFailedRegisterSupplier(false);
       }, 3000);
     }
-  }, [
-    toastSuccessAddCart,
-    toastSuccessRegisterSupplier,
-    toastFailedRegisterSupplier,
-  ]);
+  }, [toastSuccessAddCart, toastSuccessRegisterSupplier]);
 
   /** => Do something when success send data to supplier */
   useEffect(() => {
@@ -310,8 +303,7 @@ const ProductList: FC<ProductListProps> = ({
   /** => Do something when error send data to supplier */
   useEffect(() => {
     if (sendToSupplierError !== null) {
-      setToastFailedRegisterSupplier(true);
-      sendDataToSupplierActions.reset(dispatchSupplier);
+      setModalErrorSendDataSupplier(true);
     }
   }, [sendToSupplierError]);
 
@@ -557,13 +549,6 @@ const ProductList: FC<ProductListProps> = ({
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
       />
-      {/* Toast failed register supplier */}
-      <SnbToast
-        open={toastFailedRegisterSupplier}
-        message={'Gagal kirim data ke supplier'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
-      />
       {/* Modal loading horizontal */}
       <SnbBottomSheet
         open={loadingPreparation}
@@ -582,6 +567,12 @@ const ProductList: FC<ProductListProps> = ({
       <BottomSheetError
         open={modalErrorAddCart}
         error={addToCartError}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalErrorSendDataSupplier}
+        error={sendToSupplierError}
         closeAction={handleCloseModal}
       />
     </SnbContainer>

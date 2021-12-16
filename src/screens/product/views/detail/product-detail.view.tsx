@@ -38,8 +38,8 @@ import { goToBundle } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
   useCheckDataSupplier,
-  useSendDataToSupplierActions,
   useSupplierSegmentationDetailAction,
+  useRegisterSupplierActions,
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
@@ -73,17 +73,17 @@ const ProductDetailView: FC = () => {
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
   const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
     useState(false);
-  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
-    useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
+    useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
-  const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const sendDataToSupplierActions = useRegisterSupplierActions();
   const cartTotalProductActions = useCartTotalProductActions();
   const { dataTotalProductCart } = useCartTotalProductActions();
   const { me } = useDataAuth();
@@ -113,7 +113,7 @@ const ProductDetailView: FC = () => {
   const {
     stateSupplier: {
       detail: { data: dataSegmentation },
-      create: { data: sendToSupplierData, error: sendToSupplierError },
+      register: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -164,8 +164,11 @@ const ProductDetailView: FC = () => {
   /** => action close modal add to cart */
   const handleCloseModal = () => {
     addToCartActions.reset(dispatchShopingCart);
+    sendDataToSupplierActions.reset(dispatchSupplier);
+    setLoadingButton(false);
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
+    setModalErrorSendDataSupplier(false);
     onFunctionActions({ type: 'close' });
   };
 
@@ -270,11 +273,25 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation && dataSegmentation.dataSuppliers && dataProduct) {
-      stockValidationActions.fetch(dispatchStock, {
-        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
-        productId: dataProduct.id,
-      });
+    if (dataSegmentation && dataProduct) {
+      if (dataSegmentation.dataSuppliers) {
+        stockValidationActions.fetch(dispatchStock, {
+          warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+          productId: dataProduct.id,
+        });
+      } else {
+        if (me.data) {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: null,
+          });
+        } else {
+          stockValidationActions.fetch(dispatchStock, {
+            warehouseId: null,
+            productId: dataProduct.id,
+          });
+        }
+      }
     }
   }, [dataSegmentation, dataProduct]);
 
@@ -313,8 +330,8 @@ const ProductDetailView: FC = () => {
   /** => Do something when error send data to supplier */
   useEffect(() => {
     if (sendToSupplierError !== null) {
-      setToastFailedRegisterSupplier(true);
-      sendDataToSupplierActions.reset(dispatchSupplier);
+      setIsAvailable(false);
+      setModalErrorSendDataSupplier(true);
     }
   }, [sendToSupplierError]);
 
@@ -337,22 +354,13 @@ const ProductDetailView: FC = () => {
 
   /** close toast listener */
   useEffect(() => {
-    if (
-      toastSuccessAddCart ||
-      toastSuccessRegisterSupplier ||
-      toastFailedRegisterSupplier
-    ) {
+    if (toastSuccessAddCart || toastSuccessRegisterSupplier) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
         setToastSuccessRegisterSupplier(false);
-        setToastFailedRegisterSupplier(false);
       }, 3000);
     }
-  }, [
-    toastSuccessAddCart,
-    toastSuccessRegisterSupplier,
-    toastFailedRegisterSupplier,
-  ]);
+  }, [toastSuccessAddCart, toastSuccessRegisterSupplier]);
 
   /** => Did Unmount */
   useEffect(() => {
@@ -551,6 +559,13 @@ const ProductDetailView: FC = () => {
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalErrorSendDataSupplier}
+        error={sendToSupplierError}
+        closeAction={handleCloseModal}
+        retryAction={onSendDataSupplier}
       />
     </SnbContainer>
   );
