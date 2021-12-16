@@ -29,6 +29,7 @@ import {
   WaitingApprovalModal,
   AddToCartModal,
 } from '@core/components/modal';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
@@ -70,12 +71,12 @@ const ProductDetailView: FC = () => {
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
-  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
   const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
     useState(false);
   const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
     useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
+  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -164,6 +165,7 @@ const ProductDetailView: FC = () => {
   const handleCloseModal = () => {
     addToCartActions.reset(dispatchShopingCart);
     setOrderModalVisible(false);
+    setModalErrorAddCart(false);
     onFunctionActions({ type: 'close' });
   };
 
@@ -329,7 +331,7 @@ const ProductDetailView: FC = () => {
   /** => Do something when error add to cart */
   useEffect(() => {
     if (addToCartError !== null) {
-      setToastFailedAddCart(true);
+      setModalErrorAddCart(true);
       addToCartActions.reset(dispatchShopingCart);
     }
   }, [addToCartError]);
@@ -338,20 +340,17 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (
       toastSuccessAddCart ||
-      toastFailedAddCart ||
       toastSuccessRegisterSupplier ||
       toastFailedRegisterSupplier
     ) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
-        setToastFailedAddCart(false);
         setToastSuccessRegisterSupplier(false);
         setToastFailedRegisterSupplier(false);
       }, 3000);
     }
   }, [
     toastSuccessAddCart,
-    toastFailedAddCart,
     toastSuccessRegisterSupplier,
     toastFailedRegisterSupplier,
   ]);
@@ -548,12 +547,11 @@ const ProductDetailView: FC = () => {
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
       />
-      {/* Toast failed add cart */}
-      <SnbToast
-        open={toastFailedAddCart}
-        message={'Produk gagal ditambahkan ke keranjang'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      {/* Modal Bottom Sheet Error Add to Cart */}
+      <BottomSheetError
+        open={modalErrorAddCart}
+        error={addToCartError}
+        closeAction={handleCloseModal}
       />
     </SnbContainer>
   );

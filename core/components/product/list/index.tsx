@@ -23,6 +23,7 @@ import {
   AddToCartModal,
 } from '@core/components/modal';
 import { LoadingHorizontal } from '@core/components/Loading';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
@@ -107,11 +108,11 @@ const ProductList: FC<ProductListProps> = ({
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
-  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
   const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
     useState(false);
   const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
     useState(false);
+  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
 
   const {
     sortModalVisible,
@@ -200,6 +201,7 @@ const ProductList: FC<ProductListProps> = ({
     productDetailActions.reset(dispatchProduct);
     supplierSegmentationAction.reset(dispatchSupplier);
     addToCartActions.reset(dispatchShopingCart);
+    setModalErrorAddCart(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
@@ -273,7 +275,7 @@ const ProductList: FC<ProductListProps> = ({
   /** => Do something when success add to cart */
   useEffect(() => {
     if (addToCartError !== null) {
-      setToastFailedAddCart(true);
+      setModalErrorAddCart(true);
     }
   }, [addToCartError]);
 
@@ -281,20 +283,17 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (
       toastSuccessAddCart ||
-      toastFailedAddCart ||
       toastSuccessRegisterSupplier ||
       toastFailedRegisterSupplier
     ) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
-        setToastFailedAddCart(false);
         setToastSuccessRegisterSupplier(false);
         setToastFailedRegisterSupplier(false);
       }, 3000);
     }
   }, [
     toastSuccessAddCart,
-    toastFailedAddCart,
     toastSuccessRegisterSupplier,
     toastFailedRegisterSupplier,
   ]);
@@ -549,13 +548,6 @@ const ProductList: FC<ProductListProps> = ({
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
       />
-      {/* Toast failed add cart */}
-      <SnbToast
-        open={toastFailedAddCart}
-        message={'Produk gagal ditambahkan ke keranjang'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
-      />
       {/* Toast success register supplier */}
       <SnbToast
         open={toastSuccessRegisterSupplier}
@@ -585,6 +577,12 @@ const ProductList: FC<ProductListProps> = ({
           </View>
         }
         isSwipeable={false}
+      />
+      {/* Modal Bottom Sheet Error Add to Cart */}
+      <BottomSheetError
+        open={modalErrorAddCart}
+        error={addToCartError}
+        closeAction={handleCloseModal}
       />
     </SnbContainer>
   );
