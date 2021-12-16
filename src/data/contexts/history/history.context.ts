@@ -1,15 +1,15 @@
-import React from 'react';
+import { createContext, Dispatch } from 'react';
+
 import {
-  HistoryListState,
+  HistoryState,
   historyInitialState,
   historyReducer,
 } from '@reducer/history/history.reducer';
-const HistoryContext = React.createContext<{
-  // state: InitialStateType;
-  stateHistory: HistoryListState;
-  dispatchHistory: React.Dispatch<any>;
+
+const HistoryContext = createContext<{
+  stateHistory: HistoryState;
+  dispatchHistory: Dispatch<any>;
 }>({
-  // state: initialState,
   stateHistory: historyInitialState,
   dispatchHistory: () => null,
 });
