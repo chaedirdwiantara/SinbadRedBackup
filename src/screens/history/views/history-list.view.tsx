@@ -47,16 +47,6 @@ const HistoryListView: FC = () => {
     },
     dispatchHistory,
   } = useHistoryContext();
-  const handleDateChange = (type: 'start' | 'end', value: string) => {
-    if (type === 'start') {
-      setDate({ ...date, start: value });
-    } else {
-      setDate({ ...date, end: value });
-    }
-  };
-  const handleDateReset = () => {
-    setDate({ start: '', end: '' });
-  };
 
   useFocusEffect(
     useCallback(() => {
@@ -74,6 +64,18 @@ const HistoryListView: FC = () => {
     getPaymentStatus.list(dispatchHistory);
     orderStatusActions.fetch(dispatchHistory);
   }, []);
+  /** === FUNCTIONS === */
+  const handleDateChange = (type: 'start' | 'end', value: string) => {
+    if (type === 'start') {
+      setDate({ ...date, start: value });
+    } else {
+      setDate({ ...date, end: value });
+    }
+  };
+
+  const handleDateReset = () => {
+    setDate({ start: '', end: '' });
+  };
   /** === DERIVED === */
   const derivedQueryOptions: models.HistoryListQueryOptions = {
     statusOrder: activeOrderStatus,
