@@ -37,25 +37,23 @@ interface StepperDataProps {
 }
 
 const mockData = {
-  id: 749,
-  title: 'store verif',
-  rewardDescription: 'iosdfji iejfies',
+  id: 761,
+  title: 'teststoreverif',
+  rewardDescription: 'welkf wioji oewj',
   rewardType: 'voucher',
-  rewardValue: 50000,
-  startDate: '2021-11-30',
-  endDate: '2021-12-30',
-  detailQuest:
-    '<p>ifjiowjefiowe iwejfiowejfio wefioewjfw</p><p>wefjoiwejf wefwejej</p>',
-  termsAndCondition:
-    '<p>ifjiowjefiowe iwejfiowejfio wefioewjfw</p><p>wefjoiwejf wefwejej</p>',
+  rewardValue: 30000,
+  startDate: '2021-12-16',
+  endDate: '2021-12-23',
+  detailQuest: '<p>wiojfwjefiwejf. wejfnwinf wefwe neiof</p>',
+  termsAndCondition: '<p>erijiosjf wefhdfj iweifj ioje</p>',
   imageUrl:
-    'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/staging/quest-images/image_1638262982539.png',
-  currentTask: 'Store Name Verification',
-  currentTaskId: 2093,
+    'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/staging/quest-images/image_1639624401099.png',
+  currentTask: 'Phone Number Verification',
+  currentTaskId: 2116,
   task: [
     {
-      id: 2092,
-      taskId: 2092,
+      id: 2116,
+      taskId: 2116,
       isHaveScreen: true,
       screenName: 'PhoneNumberVerification',
       sequence: 1,
@@ -64,8 +62,8 @@ const mockData = {
       status: null,
     },
     {
-      id: 2093,
-      taskId: 2093,
+      id: 2117,
+      taskId: 2117,
       isHaveScreen: true,
       screenName: 'StoreNameVerification',
       sequence: 2,
@@ -249,7 +247,7 @@ const QuestDetailView: FC = () => {
       <TouchableOpacity
         style={QuestDetailStyles.containerAddInfo}
         onPress={() =>
-          NavigationAction.navigate('GeneralQuestAdditionalInfo', {
+          NavigationAction.navigate('QuestAdditionalInfoView', {
             type,
             data: type === 'detail' ? detailQuest : termsAndCondition,
           })
@@ -282,7 +280,7 @@ const QuestDetailView: FC = () => {
     const firstTitle = task[0].title;
     const lastTitle = task[task.length - 1].title;
     const current = task.filter((t) => t.title === currentTask)[0] || null;
-
+    console.log(stepperStatus().activeIndex, 'activeIndex');
     if (currentTask === firstTitle || stepperStatus().activeIndex === 0) {
       title = 'Mulai';
       isFirst = true;
@@ -304,6 +302,7 @@ const QuestDetailView: FC = () => {
   /** => Render Footer */
   const renderFooter = () => {
     const { currentTask, endDate } = mockData;
+    console.log(buttonStatus().title, 'buttonTitle');
     return (
       <>
         {!buttonStatus().isDone && moment(endDate) > moment() ? (
@@ -321,22 +320,23 @@ const QuestDetailView: FC = () => {
               </View>
             </View>
             <View style={QuestDetailStyles.footerRight}>
-              <SnbButton.Single
+              <SnbButton.Dynamic
+                size="medium"
                 type="primary"
                 title={buttonStatus().title}
                 onPress={() => null}
-                // disabled={false}
-                // title={this.buttonStatus().title}
-                // borderRadius={4}
+                disabled={false}
                 // onPress={() => this.stepAction()}
               />
             </View>
           </View>
         ) : buttonStatus().isLast && !buttonStatus().isDone ? (
-          <SnbButton.Single
+          <SnbButton.Dynamic
+            size="medium"
             type="primary"
             title={buttonStatus().title}
             onPress={() => null}
+            disabled={false}
             // onPress={() => this.stepAction()}
           />
         ) : null}
