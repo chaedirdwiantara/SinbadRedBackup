@@ -5,26 +5,28 @@ import * as types from '@types';
 /** Process */
 export const orderStatusProcess = (
   contextDispatch: (action: any) => any,
-): models.DetailOrderStatusProcessAction => {
-  contextDispatch({ type: types.HISTORY_ORDER_STATUS_PROCESS });
+  payload: models.ListProcessProps,
+): models.ListProcessAction => {
+  contextDispatch({ type: types.HISTORY_ORDER_STATUS_PROCESS, payload });
   return {
     type: types.HISTORY_ORDER_STATUS_PROCESS,
+    payload,
     contextDispatch,
   };
 };
-/** Success */
+/** Succeeded */
 export const orderStatusSuccess = (
-  payload: models.DetailSuccessProps<models.OrderStatusSuccessProps>,
-): models.DetailSuccessAction<models.OrderStatusSuccessProps> => {
+  payload: models.ListSuccessProps<Array<models.OrderStatus>>,
+): models.ListSuccessAction<Array<models.OrderStatus>> => {
   return { type: types.HISTORY_ORDER_STATUS_SUCCESS, payload };
 };
 /** Failed */
 export const orderStatusFailed = (
   payload: models.ErrorProps,
-): models.DetailFailedAction => {
+): models.ListFailedAction => {
   return { type: types.HISTORY_ORDER_STATUS_FAILED, payload };
 };
-/** Reset */
+/** Refresh */
 export const orderStatusRefresh = () => {
   return { type: types.HISTORY_ORDER_STATUS_REFRESH };
 };

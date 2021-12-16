@@ -8,5 +8,6 @@ export const useHistoryContext = () => {
   if (context === undefined) {
     throw new Error('useHistoryContext was used outside of HistoryProvider');
   }
+
   return context;
 };

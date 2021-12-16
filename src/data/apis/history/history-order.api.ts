@@ -1,35 +1,41 @@
+/** === IMPORT INTERNAL === */
+import { serializeQs } from '@core/functions/global/query-string';
 import apiMapping from '@core/services/apiMapping';
-import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
-
-const orderStatus = () => {
-  const path = 'order-parcels/status';
-
-  return apiMapping<models.DetailSuccessProps<models.OrderStatusSuccessProps>>(
+/** === CONSTANT === */
+const historyBasePath = 'order-parcels';
+/** === FUNCTIONS === */
+const getOrderStatus = () => {
+  return apiMapping<models.DetailSuccessProps<Array<models.OrderStatus>>>(
     'auth',
-    path,
+    `${historyBasePath}/status`,
     'order',
     'v1',
     'DETAIL',
   );
 };
 
-const historyList = (data: any) => {
-  const path = `orders?limit=10&skip=0&status=${data.status}&startOrderDate=${data.startOrderDate}&endOrderDate=${data.endOrderDate}&keyword=${data.keyword}&paymentStatus=${data.statusPayment}`;
-  // return apiMapping<models.ListSuccessProps<any>>(
-  //   'auth',
-  //   path,
-  //   'order',
-  //   'v1',
-  //   'LIST',
-  // );
-  const mockHost = 'https://7d57c2be-7226-4fe4-87b7-d9df7cbaaa98.mock.pstmn.io';
-  return apiMappingMock<
-    models.ListSuccessProps<models.HistoryListSuccessProps>
-  >(mockHost, path, 'order', 'v1', 'LIST');
+const getHistoryList = (payload: models.HistoryListProcessProps) => {
+  const qs = serializeQs({
+    skip: payload.skip,
+    limit: payload.limit,
+    statusOrder: payload.statusOrder,
+    statusPayment: payload.statusPayment,
+    startDate: payload.startDate,
+    endDate: payload.endDate,
+    search: payload.search,
+  });
+
+  return apiMapping<Array<models.OrderParcels>>(
+    'auth',
+    `${historyBasePath}?${qs}`,
+    'order',
+    'v1',
+    'LIST',
+  );
 };
 
 export const HistoryOrderApi = {
-  orderStatus,
-  historyList,
+  getOrderStatus,
+  getHistoryList,
 };

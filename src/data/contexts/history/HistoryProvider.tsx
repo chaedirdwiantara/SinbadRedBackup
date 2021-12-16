@@ -1,23 +1,26 @@
-import React from 'react';
+import React, { FC, useReducer, useMemo } from 'react';
+
 import {
   HistoryContext,
   historyReducer,
   historyInitialState,
 } from './history.context';
-const HistoryProvider: React.FC = ({ children }) => {
-  const [stateHistory, dispatchHistory] = React.useReducer(
+
+const HistoryProvider: FC = ({ children }) => {
+  const [stateHistory, dispatchHistory] = useReducer(
     historyReducer,
     historyInitialState,
   );
-  const valueProvider = React.useMemo(
+  const contextValue = useMemo(
     () => ({
       stateHistory,
       dispatchHistory,
     }),
     [stateHistory, dispatchHistory],
   );
+
   return (
-    <HistoryContext.Provider value={valueProvider}>
+    <HistoryContext.Provider value={contextValue}>
       {children}
     </HistoryContext.Provider>
   );

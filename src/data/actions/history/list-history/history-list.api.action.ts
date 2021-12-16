@@ -1,7 +1,6 @@
 /** === IMPORT INTERNAL === */
 import * as models from '@models';
 import * as types from '@types';
-
 /** === ACTIONS === */
 /** => Process */
 export const historyListProcess = (
@@ -11,9 +10,9 @@ export const historyListProcess = (
   contextDispatch({ type: types.HISTORY_LIST_PROCESS, payload });
   return { type: types.HISTORY_LIST_PROCESS, payload, contextDispatch };
 };
-/** => Success */
+/** => Succeeded */
 export const historyListSuccess = (
-  payload: models.ListSuccessProps<Array<models.HistoryListSuccessProps>>,
+  payload: models.ListSuccessProps<Array<models.OrderParcels>>,
 ): models.ListSuccessAction<models.OrderParcels[]> => {
   return { type: types.HISTORY_LIST_SUCCESS, payload };
 };
