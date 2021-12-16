@@ -1,14 +1,16 @@
+/** === IMPORT PACKAGES === */
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
-
+/** === IMPORT FUNCTIONS === */
 import { formatTime, useTimer } from '../functions';
+/** === IMPORT STYLE === */
 import { HistoryStyle } from '../styles';
-
+/** === TYPE === */
 interface CountDownTimerProps {
   timeInSeconds: number;
 }
-
+/** === COMPONENT === */
 export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
   const { timer, start, reset } = useTimer(timeInSeconds);
   const { hours, minutes, seconds } = formatTime(timer);

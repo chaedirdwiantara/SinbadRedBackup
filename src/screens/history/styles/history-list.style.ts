@@ -9,6 +9,16 @@ export const HistoryStyle = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
+  filterDot: {
+    position: 'absolute',
+    width: 8,
+    height: 8,
+    borderRadius: 50,
+    backgroundColor: color.red50,
+    top: 4,
+    right: 0,
+    zIndex: 1,
+  },
   cardTimeBlock: {
     justifyContent: 'center',
     alignItems: 'center',
