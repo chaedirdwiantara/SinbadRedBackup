@@ -1,54 +1,47 @@
-import * as model from '@models';
-
-export interface HistoryListSuccessAction {
-  type: string;
-  payload: HistoryList;
-}
-
-export interface HistoryListProcessProps extends model.ListProcessProps {
-  status?: string;
-  paymentStatus?: string;
-  startOrderDate?: string;
-  endOrderDate?: string;
-}
-
-export interface HistoryListSuccessProps extends OrderParcels {}
-
-export interface HistoryListItemProps
-  extends model.ListItemProps<Array<OrderParcels>> {
-  canLoadMore: boolean;
-}
-
-export interface HistoryList {
-  data: Array<OrderParcels>;
-  meta: OrderPagination;
-}
+import * as models from '@models';
+import { PaymentStatusSlug, OrderStatusSlug } from '@screen/history/types';
 
 export interface OrderParcels {
   id: number;
   orderCode: string;
   createdAt: string;
-  statusPayment: string;
   parcelFinalPrice: number;
+  parcelFinalPriceBuyer: number;
   parcelQty: number;
-  status: string;
+  deliveredParcelFinalPrice: number;
+  deliveredParcelFinalPriceBuyer: number;
+  deliveredParcelQty: number;
+  deliveredParcelModified: boolean;
+  statusPayment: PaymentStatusSlug;
+  status: OrderStatusSlug;
   catalogueImages: Array<string>;
   billing: BillingParcel;
 }
 
 interface BillingParcel {
-  id: string;
-  totalPayment: number;
-  deliveredTotalPayment: number;
-  billingStatus: string;
-  paymentTypeId: number;
-  paymentChannelId: number;
-  expiredPaymentTime: string;
+  id: number | null;
+  totalPayment: number | null;
+  deliveredTotalPayment: number | null;
+  billingStatus: string | null;
+  paymentTypeId: number | null;
+  paymentChannelId: number | null;
+  expiredPaymentTime: string | null;
 }
 
-export interface OrderPagination {
-  limit: number;
-  skip: number;
-  total: number;
-  canLoadMore: boolean;
+export type OrderStatusQuery = OrderStatusSlug | '';
+
+export type PaymentStatusQuery = PaymentStatusSlug | '';
+
+export interface HistoryListQueryOptions {
+  statusOrder?: OrderStatusQuery;
+  statusPayment?: PaymentStatusQuery;
+  startDate?: string;
+  endDate?: string;
+  search?: string;
 }
+
+export type HistoryListProcessProps = Omit<
+  models.ListProcessDefaultProps,
+  'sort' | 'sortBy' | 'keyword'
+> &
+  HistoryListQueryOptions;

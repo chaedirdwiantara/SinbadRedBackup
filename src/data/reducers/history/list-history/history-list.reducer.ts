@@ -1,11 +1,12 @@
 /** === IMPORT INTERNAL === */
 import simplifyReducer from '@core/redux/simplifyReducer';
 import * as models from '@models';
-import { productInitialState } from '@reducer/product/product.reducer';
 import * as types from '@types';
 /** === TYPE === */
-export type HistoryListInitialProps = models.HistoryListItemProps;
-
+export type HistoryListInitialProps = models.ListItemProps<
+  Array<models.OrderParcels>
+>;
+/** === INITIAL STATE === */
 export const historyListInitialState: HistoryListInitialProps = {
   data: [],
   loading: false,
@@ -14,7 +15,6 @@ export const historyListInitialState: HistoryListInitialProps = {
   error: null,
   total: 0,
   skip: 0,
-  canLoadMore: false,
 };
 /** === REDUCER == */
 export const historyListReducer = simplifyReducer(historyListInitialState, {
@@ -29,9 +29,10 @@ export const historyListReducer = simplifyReducer(historyListInitialState, {
       error: null,
     };
   },
+  /** => Succeeded */
   [types.HISTORY_LIST_SUCCESS](
     state = historyListInitialState,
-    { payload }: models.HistoryListSuccessAction,
+    { payload }: models.ListSuccessAction<Array<models.OrderParcels>>,
   ) {
     return {
       ...state,
@@ -42,7 +43,6 @@ export const historyListReducer = simplifyReducer(historyListInitialState, {
       error: null,
       total: payload.meta.total,
       skip: payload.meta.skip,
-      canLoadMore: payload.meta.canLoadMore,
     };
   },
   /** => Failed */
@@ -61,7 +61,7 @@ export const historyListReducer = simplifyReducer(historyListInitialState, {
   /** => Refresh */
   [types.HISTORY_LIST_REFRESH]() {
     return {
-      ...productInitialState,
+      ...historyListInitialState,
       refresh: true,
     };
   },
