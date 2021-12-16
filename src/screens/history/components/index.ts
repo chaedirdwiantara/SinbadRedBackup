@@ -4,6 +4,7 @@ export * from './HistoryDetailCardDivider';
 export * from './HistoryDetailCard';
 export * from './HistoryCard';
 export * from './HistoryCardItem';
+export * from './SnbCardButtonType3';
 /**
  * ================================================================
  * NOTES
