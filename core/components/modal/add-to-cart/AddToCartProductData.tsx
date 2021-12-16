@@ -33,7 +33,11 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             source={{ uri: dataProductDetail?.images[0].url }}
             style={AddToCartModalStyle.image}
           />
-          <View style={{ marginLeft: 16 }}>
+          <View
+            style={{
+              marginLeft: 16,
+              maxWidth: '80%',
+            }}>
             {dataProductDetail?.isExclusive && (
               <View style={AddToCartModalStyle.exclusiveTagContainer}>
                 <SnbIcon
@@ -88,7 +92,11 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             source={{ uri: dataProductDetailCart?.images[0].url }}
             style={AddToCartModalStyle.image}
           />
-          <View style={{ marginLeft: 16 }}>
+          <View
+            style={{
+              marginLeft: 16,
+              maxWidth: '80%',
+            }}>
             {dataProductDetailCart?.isExclusive && (
               <View style={AddToCartModalStyle.exclusiveTagContainer}>
                 <SnbIcon

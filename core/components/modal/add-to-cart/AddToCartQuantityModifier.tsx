@@ -42,7 +42,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
       <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
       {dataStock && dataProductDetailCart && (
         <React.Fragment>
-          {dataStock.stock < 50 && (
+          {(dataStock.stock < 1000 || orderQty > dataStock.stock) && (
             <SnbText.B3 color={color.red50}>
               {`Tersisa ${dataStock.stock} ${dataProductDetailCart.unit}`}
             </SnbText.B3>
@@ -60,7 +60,8 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
       )}
       {isFromProductDetail && dataStockDetail && dataProductDetail && (
         <React.Fragment>
-          {dataStockDetail.stock <= 50 && (
+          {(dataStockDetail.stock <= 1000 ||
+            orderQty > dataStockDetail.stock) && (
             <SnbText.B3 color={color.red50}>
               {`Tersisa ${dataStockDetail.stock} ${dataProductDetail.unit}`}
             </SnbText.B3>
