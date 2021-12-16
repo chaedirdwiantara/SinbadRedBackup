@@ -1,18 +1,19 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { TouchableWithoutFeedback, View, Image } from 'react-native';
 import { SnbText, color, styles } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
-import { HistoryDetailStyle } from '../styles';
+/** === IMPORT COMPONENT === */
 import { HistoryDetailCardDivider } from './HistoryDetailCardDivider';
-/** === TYPES === */
+/** === IMPORT STYLE === */
+import { HistoryDetailStyle } from '../styles';
+/** === TYPE === */
 interface HistoryDetailCardProps {
   title: string;
   actionTitle?: string;
   onActionClick?: () => void;
   actionLoading?: boolean;
 }
-/** === COMPONENTS === */
+/** === COMPONENT === */
 export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
   title,
   children,
