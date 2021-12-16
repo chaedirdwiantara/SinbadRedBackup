@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { View, Dimensions } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { View, Dimensions, ScrollView } from 'react-native';
+import { SnbContainer, SnbTopNav, SnbButton } from 'react-native-sinbad-ui';
 import RenderHtml from 'react-native-render-html';
 /** === IMPORT FUNCTIONS === */
 import { goBack } from '../function';
@@ -38,10 +38,26 @@ const QuestAdditionalInfoView: FC = ({ route }: any) => {
       </View>
     );
   };
+  /** => Render Button */
+  const renderButton = () => {
+    return (
+      <View style={{ height: 75 }}>
+        <SnbButton.Single
+          type="primary"
+          title={'Kembali'}
+          onPress={() => goBack()}
+          disabled={false}
+        />
+      </View>
+    );
+  };
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderDescriptionHtml()}
+      <View style={{ flex: 1 }}>
+        <ScrollView>{renderDescriptionHtml()}</ScrollView>
+      </View>
+      {renderButton()}
     </SnbContainer>
   );
 };
