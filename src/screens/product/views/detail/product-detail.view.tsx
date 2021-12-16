@@ -332,7 +332,6 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (addToCartError !== null) {
       setModalErrorAddCart(true);
-      addToCartActions.reset(dispatchShopingCart);
     }
   }, [addToCartError]);
 

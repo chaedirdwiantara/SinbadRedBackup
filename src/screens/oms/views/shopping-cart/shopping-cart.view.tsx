@@ -305,13 +305,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       );
       setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
-    } else if (
+    }
+  }, [dataCreateVerificationOrder, updateCartData]);
+
+  useEffect(() => {
+    if (
       dataCreateVerificationOrder !== null &&
       productRemoveSelected === null
     ) {
       setToastFailedCheckout(true);
     }
-  }, [dataCreateVerificationOrder, updateCartData]);
+  }, [updateCartError]);
 
   /** Listen changes cartState */
   useEffect(() => {
