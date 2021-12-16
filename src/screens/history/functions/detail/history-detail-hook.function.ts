@@ -8,7 +8,7 @@ import { useState } from 'react';
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: number) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
     },
   };
@@ -17,7 +17,7 @@ export const usePaymentDetail = () => {
 export const usePaymentInvoice = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: number) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(
         Actions.historyPaymentInvoiceDetailProcess(contextDispatch, { id }),
       );

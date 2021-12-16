@@ -24,9 +24,15 @@ import {
   PaymentInvoiceInitialProps,
   paymentInvoiceReducer,
 } from './payment-invoice.reducer';
+import {
+  historyDetailInitialState,
+  HistoryDetailInitialProps,
+  historyDetailReducer,
+} from './detail/history-detail.reducer';
 /** === TYPE === */
 export interface HistoryState {
   list: HistoryListInitialProps;
+  detail: HistoryDetailInitialProps;
   orderStatus: OrderStatusInitialProps;
   paymentStatus: PaymentStatusListInitialProps;
   paymentDetail: PaymentDetailInitialProps;
@@ -35,6 +41,7 @@ export interface HistoryState {
 /** === INITIAL STATE === */
 export const historyInitialState = {
   list: historyListInitialState,
+  detail: historyDetailInitialState,
   orderStatus: orderStatusInitialState,
   paymentStatus: paymentStatusListInitialState,
   paymentDetail: paymentDetailInitialState,
@@ -44,6 +51,7 @@ export const historyInitialState = {
 export const historyReducer = (
   {
     list,
+    detail,
     orderStatus,
     paymentStatus,
     paymentDetail,
@@ -52,6 +60,7 @@ export const historyReducer = (
   action: any,
 ) => ({
   list: historyListReducer(list, action),
+  detail: historyDetailReducer(detail, action),
   orderStatus: orderStatusReducer(orderStatus, action),
   paymentStatus: paymentStatusListReducer(paymentStatus, action),
   paymentDetail: paymentDetailReducer(paymentDetail, action),
