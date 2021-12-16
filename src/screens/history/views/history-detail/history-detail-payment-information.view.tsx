@@ -14,8 +14,6 @@ interface PaymentInformationProps {
 }
 /** === COMPONENT === */
 const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
-  renderCardItem,
-  dataOrder,
   dataPayment,
 }) => {
   console.log(dataPayment, 'DATA PAYMENT DI INFO');

@@ -11,6 +11,7 @@ import {
   SnbIcon,
   SnbButton,
   SnbDialog,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ProductCard } from '@core/components/ProductCard';
@@ -21,12 +22,14 @@ import {
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
+  useModalToast,
 } from '../../functions';
 import { HistoryDetailStyle } from '../../styles';
 import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
+import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment' };
@@ -152,15 +155,15 @@ const HistoryDetailView: FC = () => {
     : historyDetailDummy.canceledProducts;
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
+  const modalToast = useModalToast();
   const { stateHistory, dispatchHistory } = React.useContext(
     contexts.HistoryContext,
   );
   const { paymentInvoice, paymentDetail } = stateHistory;
-  console.log(paymentDetail, 'STATE hISTORY');
 
   /** === EFFECTS === */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, 1495867);
+    getPaymentDetail.detail(dispatchHistory, 1021639);
   }, []);
 
   useEffect(() => {
@@ -169,8 +172,17 @@ const HistoryDetailView: FC = () => {
     }
   }, [paymentInvoice.data]);
   /** === FUNCTION === */
+  /** => to fetch API invoice */
   const getInvoice = (id: number) => {
     getInvoiceDetail.detail(dispatchHistory, id);
+  };
+  /** => function to coppy VA Number */
+  const onVACoppied = () => {
+    modalToast.setOpen(true);
+    modalToast.setToastText('Copied To Clipboard');
+    setTimeout(() => {
+      modalToast.setOpen(false);
+    }, 3000);
   };
   /** === VIEW === */
   /** => Header */
@@ -280,54 +292,20 @@ const HistoryDetailView: FC = () => {
       )}
     </HistoryDetailCard>
   );
+  /** => render Virtual Account Info */
+  const renderVirtualAccount = () => {
+    return (
+      <HistoryPaymentVirtualAccount
+        onClick={() => onVACoppied()}
+        data={paymentDetail.data}
+      />
+    );
+  };
   /** => Payment Info */
   const renderPaymentInfo = () =>
     !paymentDetail?.loading ? (
-      <HistoryDetailPaymentInformation
-        renderCardItem={() => renderCardItem(key, value, type)}
-        dataPayment={paymentDetail.data}
-      />
+      <HistoryDetailPaymentInformation dataPayment={paymentDetail.data} />
     ) : (
-      // <HistoryDetailCard title="Informasi Pembayaran">
-      //   {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
-      //   {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Sub-total pesanan (90)',
-      //     toCurrency(historyDetailDummy.payment.subtotal),
-      //   )}
-      //   {historyDetailDummy.payment.freeProducts.map((product) =>
-      //     renderCardItem(
-      //       `${product.name} (${product.qty} ${product.uom})`,
-      //       'FREE',
-      //       'green',
-      //     ),
-      //   )}
-      //   {renderCardItem(
-      //     'Ongkos Kirim',
-      //     toCurrency(historyDetailDummy.payment.deliveryFee),
-      //   )}
-      //   {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
-      //   {renderCardItem(
-      //     'Total Pesanan',
-      //     toCurrency(historyDetailDummy.payment.orderTotal),
-      //     'bold',
-      //   )}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Promo Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.promo),
-      //   )}
-      //   {renderCardItem(
-      //     'Layanan Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.serviceFee),
-      //   )}
-      //   {renderCardItem(
-      //     'Total Pembayaran Pesanan',
-      //     toCurrency(historyDetailDummy.payment.paymentTotal),
-      //     'bold',
-      //   )}
-      // </HistoryDetailCard>
       <LoadingPage />
     );
   /** => Order Refund Info */
@@ -447,12 +425,24 @@ const HistoryDetailView: FC = () => {
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
   );
+  /** render Toast */
+  const renderToast = () => {
+    return (
+      <SnbToast
+        open={modalToast.isOpen}
+        message={modalToast.toastText}
+        close={() => modalToast.setOpen(false)}
+        position={'top'}
+      />
+    );
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
     <ScrollView>
       {renderStatus()}
       {renderInvoiceInfo()}
       {renderPaymentInfo()}
+      {renderVirtualAccount()}
       {renderOrderRefundInfo()}
       {renderOrderNotes()}
       {renderProductList()}
@@ -541,6 +531,7 @@ const HistoryDetailView: FC = () => {
       {renderContent()}
       {renderFooter()}
       {renderOrderConfirmationDialog()}
+      {renderToast()}
     </SnbContainer>
   );
 };
