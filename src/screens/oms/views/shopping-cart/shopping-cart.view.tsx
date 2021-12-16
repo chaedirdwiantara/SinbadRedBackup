@@ -8,7 +8,7 @@ import {
   SnbIcon,
   color,
 } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
@@ -16,6 +16,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 import LoadingPage from '@core/components/LoadingPage';
 import { ProductEmptyStockView } from './product-empty-stock.view';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
@@ -89,7 +90,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     useState(false);
   const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
     useState(false);
-  const [toastFailedCheckout, setToastFailedCheckout] = useState(false);
+  const [modalFailedCheckout, setModalFailedCheckout] = useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -305,13 +306,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       );
       setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
-    } else if (
-      dataCreateVerificationOrder !== null &&
-      productRemoveSelected === null
-    ) {
-      setToastFailedCheckout(true);
     }
   }, [dataCreateVerificationOrder, updateCartData]);
+
+  useEffect(() => {
+    if (updateCartError !== null && productRemoveSelected === null) {
+      setModalConfirmationCheckoutVisible(false);
+      setModalFailedCheckout(true);
+    }
+  }, [updateCartError]);
 
   /** Listen changes cartState */
   useEffect(() => {
@@ -443,22 +446,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** close toast listener */
   useEffect(() => {
-    if (
-      toastSuccessRemoveProduct ||
-      toastFailedRemoveProduct ||
-      toastFailedCheckout
-    ) {
+    if (toastSuccessRemoveProduct || toastFailedRemoveProduct) {
       setTimeout(() => {
         setToastSuccessRemoveProduct(false);
         setToastFailedRemoveProduct(false);
-        setToastFailedCheckout(false);
       }, 5000);
     }
-  }, [
-    toastSuccessRemoveProduct,
-    toastFailedRemoveProduct,
-    toastFailedCheckout,
-  ]);
+  }, [toastSuccessRemoveProduct, toastFailedRemoveProduct]);
 
   /** did will unmound */
   useEffect(() => {
@@ -579,12 +573,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
-      {/* Toast failed checkout */}
-      <SnbToast
-        open={toastFailedCheckout}
-        message={'Produk gagal dicheckout dari keranjang'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalFailedCheckout}
+        error={updateCartError}
+        closeAction={() => setModalFailedCheckout(false)}
+        retryAction={onSubmitCheckout}
       />
     </SnbContainer>
   );
