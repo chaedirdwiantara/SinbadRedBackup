@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useState } from 'react';
-import { View, Pressable, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Pressable, ScrollView } from 'react-native';
 import {
   SnbBottomSheet,
   SnbDatepicker,
@@ -118,17 +118,16 @@ const HistoryFilterModalContent: FC<HistoryFilterModalContentProps> = ({
   return (
     <View>
       <View style={HistoryModalStyle.filterModalContentContainer}>
-        <TouchableOpacity
-          onPress={onDateReset}
-          style={[
-            HistoryModalStyle.resetButton,
-            { backgroundColor: isEmpty ? color.black10 : color.white },
-          ]}
-          disabled={isEmpty}>
-          <SnbText.B3 color={isEmpty ? color.black60 : color.red50}>
-            Reset
-          </SnbText.B3>
-        </TouchableOpacity>
+        <View style={{ marginTop: -8 }}>
+          <SnbButton.Dynamic
+            type="tertiary"
+            title="Reset"
+            size="small"
+            position="right"
+            onPress={onDateReset}
+            disabled={isEmpty}
+          />
+        </View>
         <View
           style={{
             flexDirection: 'row',

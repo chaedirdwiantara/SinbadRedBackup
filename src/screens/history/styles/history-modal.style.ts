@@ -22,14 +22,4 @@ export const HistoryModalStyle = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: color.black10,
   },
-  resetButton: {
-    alignSelf: 'flex-end',
-    marginBottom: 8,
-    borderColor: color.black10,
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingTop: 2,
-    paddingBottom: 4,
-    paddingHorizontal: 8,
-  },
 });
