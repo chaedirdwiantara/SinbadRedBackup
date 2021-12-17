@@ -4,7 +4,7 @@ import { PaymentDetailSuccessProps } from '@model/history';
 import { SnbButton } from '@sinbad/react-native-sinbad-ui';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 interface PaymentVAProps {
-  data: PaymentDetailSuccessProps;
+  data: PaymentDetailSuccessProps | null;
   onClick: () => void;
 }
 

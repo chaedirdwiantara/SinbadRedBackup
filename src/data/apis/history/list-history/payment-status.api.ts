@@ -4,7 +4,7 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => payment status list */
 const paymentStatusList = (data: models.ListProcessProps) => {
-  const path = `payment-status?perPage=8&page=1`;
+  const path = 'payment-status?perPage=8&page=1';
   return apiMapping<models.IPaymentStatusList[]>(
     'auth',
     path,
@@ -15,5 +15,5 @@ const paymentStatusList = (data: models.ListProcessProps) => {
 };
 
 export const PaymentStatusApi = {
-paymentStatusList
-}
+  paymentStatusList,
+};

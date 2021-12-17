@@ -435,7 +435,7 @@ const HistoryDetailView: FC = () => {
         open={modalToast.isOpen}
         message={modalToast.toastText}
         close={() => modalToast.setOpen(false)}
-        position={'top'}
+        position={'bottom'}
       />
     );
   };
