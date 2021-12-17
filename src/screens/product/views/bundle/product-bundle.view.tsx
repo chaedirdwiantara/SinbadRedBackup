@@ -44,9 +44,10 @@ const ProductBundleView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: productDetail?.minQty,
-  });
+  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
+    useOrderQuantity({
+      minQty: productDetail?.minQty ?? 1,
+    });
   const { fetch } = useProductDetailAction();
 
   useEffect(() => {
@@ -94,6 +95,7 @@ const ProductBundleView: FC = () => {
           title="Jumlah/pcs"
           loading={productDetailLoading}
           qty={orderQty}
+          onChangeQty={onChangeQty}
           onIncrease={increaseOrderQty}
           onDecrease={decreaseOrderQty}
           minusDisabled={orderQty === productDetail?.minQty}
