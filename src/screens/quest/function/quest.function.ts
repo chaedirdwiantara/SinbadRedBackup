@@ -6,6 +6,17 @@ const goBack = () => {
   NavigationAction.back();
 };
 
+/** => Navigation related */
+const goToQuestDetail = ({
+  questId,
+  buyerId,
+}: {
+  questId: number;
+  buyerId: number;
+}) => {
+  NavigationAction.navigate('QuestDetailView', { questId, buyerId });
+};
+
 const MoneyFormatSpace = (money: number) => {
   return `Rp ${money
     .toFixed(2)
@@ -13,4 +24,4 @@ const MoneyFormatSpace = (money: number) => {
     .slice(0, -3)}`;
 };
 
-export { goBack, MoneyFormatSpace };
+export { goBack, goToQuestDetail, MoneyFormatSpace };

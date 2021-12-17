@@ -23,9 +23,23 @@ function* questList(
     yield put(ActionCreators.questListFailed(error));
   }
 }
+/** => Detail */
+function* questDetail(action: models.QuestDetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.QuestDetailItem> =
+      yield call(() => {
+        return QuestApi.getDetail(action.payload);
+      });
+    yield action.contextDispatch(ActionCreators.questDetailSuccess(response));
+    yield put(ActionCreators.questDetailSuccess(response));
+  } catch (error: any) {
+    yield put(ActionCreators.questDetailFailed(error));
+  }
+}
 /** === LISTENER === */
 function* QuestSaga() {
   yield takeLatest(types.QUEST_LIST_PROCESS, questList);
+  yield takeLatest(types.QUEST_DETAIL_PROCESS, questDetail);
 }
 
 export default QuestSaga;

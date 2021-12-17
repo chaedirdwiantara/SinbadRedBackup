@@ -1,12 +1,12 @@
 import { createContext, Dispatch } from 'react';
 import {
-  QuestState,
+  QuestInitialProps,
   questInitialState,
   questReducer,
 } from '@reducer/quest/quest.reducer';
 
 const QuestContext = createContext<{
-  stateQuest: QuestState;
+  stateQuest: QuestInitialProps;
   dispatchQuest: Dispatch<any>;
 }>({
   stateQuest: questInitialState,

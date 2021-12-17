@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
-import {
-  View,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import React, { FC } from 'react';
+import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -18,8 +12,10 @@ import {
 import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import StepperStatusDetail from '../components/StepperStatusDetail';
+import LoadingPage from '@core/components/LoadingPage';
 import { NavigationAction } from '@navigation';
-import { goBack, MoneyFormatSpace } from '../function';
+import { goBack, MoneyFormatSpace, useQuestDetailAction } from '../function';
+import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
 
 interface StepperDataProps {
@@ -36,51 +32,23 @@ interface StepperDataProps {
   iconType: string;
 }
 
-const mockData = {
-  id: 761,
-  title: 'teststoreverif',
-  rewardDescription: 'welkf wioji oewj',
-  rewardType: 'voucher',
-  rewardValue: 30000,
-  startDate: '2021-12-16',
-  endDate: '2021-12-23',
-  detailQuest: '<p>wiojfwjefiwejf. wejfnwinf wefwe neiof</p>',
-  termsAndCondition: '<p>erijiosjf wefhdfj iweifj ioje</p>',
-  imageUrl:
-    'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/staging/quest-images/image_1639624401099.png',
-  currentTask: 'Phone Number Verification',
-  currentTaskId: 2116,
-  task: [
-    {
-      id: 2116,
-      taskId: 2116,
-      isHaveScreen: true,
-      screenName: 'PhoneNumberVerification',
-      sequence: 1,
-      title: 'Phone Number Verification',
-      description: 'Lengkapi nomor handphone Anda untuk diverifikasi',
-      status: null,
-    },
-    {
-      id: 2117,
-      taskId: 2117,
-      isHaveScreen: true,
-      screenName: 'StoreNameVerification',
-      sequence: 2,
-      title: 'Store Name Verification',
-      description: 'Isi nama Anda untuk melengkapi data Anda',
-      status: null,
-    },
-  ],
-};
-
 /** === CONSTANTS AND DUMMIES === */
-const questTabs = ['Semua', 'Berjalan', 'Selesai'];
 
 /** === COMPONENT === */
-const QuestDetailView: FC = () => {
+const QuestDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
-  const [activeTab, setActiveTab] = useState(0);
+  const { stateQuest, dispatchQuest } = useQuestContext();
+  const questDetailState = stateQuest.questGeneral.detail;
+  const { detail, reset } = useQuestDetailAction();
+  React.useEffect(() => {
+    detail(dispatchQuest, {
+      id: route.params.questId,
+      buyerId: route.params.buyerId,
+    });
+    return () => {
+      reset(dispatchQuest);
+    };
+  }, []);
   /** === VIEW === */
 
   /** => Render Header */
@@ -101,9 +69,9 @@ const QuestDetailView: FC = () => {
     return (
       <View>
         <Image
-          // defaultSource={require('../../assets/images/sinbad_image/sinbadopacity.png')}
+          defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
           source={{
-            uri: mockData.imageUrl,
+            uri: questDetailState.data?.imageUrl,
           }}
           style={{
             aspectRatio: 5 / 2,
@@ -114,7 +82,7 @@ const QuestDetailView: FC = () => {
   };
   /** => render Reward */
   const renderReward = () => {
-    const { detailQuest } = mockData;
+    const { detailQuest } = questDetailState.data;
     const cleanText = detailQuest.replace(/<\/?[^>]+(>|$)/g, '');
     const limitChar = cleanText.substring(0, 160);
 
@@ -137,7 +105,7 @@ const QuestDetailView: FC = () => {
         <View
           style={[QuestDetailStyles.shadowForBox5, QuestDetailStyles.mainInfo]}>
           <View style={{ marginBottom: 8 }}>
-            <SnbText.H4>{mockData.title}</SnbText.H4>
+            <SnbText.H4>{questDetailState.data.title}</SnbText.H4>
           </View>
           <View style={QuestDetailStyles.boxInfoSeparator} />
           {renderReward()}
@@ -146,7 +114,7 @@ const QuestDetailView: FC = () => {
             style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
             <SnbText.B3>Berlaku Sampai</SnbText.B3>
             <SnbText.B4>
-              {moment(mockData.endDate).format('DD MMMM YYYY')}
+              {moment(questDetailState.data.endDate).format('DD MMMM YYYY')}
             </SnbText.B4>
           </View>
         </View>
@@ -157,17 +125,17 @@ const QuestDetailView: FC = () => {
   const stepperStatus = () => {
     let activeIndex = 0;
     let completeIndex = 0;
-    const { task } = mockData;
+    const { task } = questDetailState.data;
     const isInitial = task[0].status === null;
     const isOnProgressExist =
-      task.filter((item) => item.status === 'on_progress').length > 0;
+      task.filter((item: any) => item.status === 'on_progress').length > 0;
 
     if (isOnProgressExist) {
-      activeIndex = task.filter((item) => item.status === 'on_progress')[0]
+      activeIndex = task.filter((item: any) => item.status === 'on_progress')[0]
         .sequence;
       completeIndex = activeIndex - 1;
     } else if (!isOnProgressExist && !isInitial) {
-      const doneTasks = task.filter((item) => item.status === 'done');
+      const doneTasks = task.filter((item: any) => item.status === 'done');
       activeIndex = doneTasks[doneTasks.length - 1].sequence;
       completeIndex = activeIndex;
     }
@@ -179,7 +147,7 @@ const QuestDetailView: FC = () => {
   };
   /** => Stepper Data */
   const stepperData = () => {
-    const { task, rewardValue } = mockData;
+    const { task, rewardValue } = questDetailState.data;
     let addTask;
     // add voucher stepper
     if (rewardValue) {
@@ -193,7 +161,7 @@ const QuestDetailView: FC = () => {
       addTask = task;
     }
 
-    const data = addTask.map((t, idx) => {
+    const data = addTask.map((t: any, idx: any) => {
       let newTask = {
         iconName: 'assignment_complete',
         // iconType: 'MaterialIcon',
@@ -242,7 +210,7 @@ const QuestDetailView: FC = () => {
   };
   /** => Render Additional Info */
   const renderAdditionalInfo = (type: string) => {
-    const { detailQuest, termsAndCondition } = mockData;
+    const { detailQuest, termsAndCondition } = questDetailState.data;
     return (
       <TouchableOpacity
         style={QuestDetailStyles.containerAddInfo}
@@ -273,14 +241,13 @@ const QuestDetailView: FC = () => {
   /** => Render Button Status */
   const buttonStatus = () => {
     let title = 'Lanjut';
-    const { currentTask, task } = mockData;
+    const { currentTask, task } = questDetailState.data;
     let isFirst = false;
     let isLast = false;
     let isDone = false;
     const firstTitle = task[0].title;
     const lastTitle = task[task.length - 1].title;
-    const current = task.filter((t) => t.title === currentTask)[0] || null;
-    console.log(stepperStatus().activeIndex, 'activeIndex');
+    const current = task.filter((t: any) => t.title === currentTask)[0] || null;
     if (currentTask === firstTitle || stepperStatus().activeIndex === 0) {
       title = 'Mulai';
       isFirst = true;
@@ -301,8 +268,7 @@ const QuestDetailView: FC = () => {
   };
   /** => Render Footer */
   const renderFooter = () => {
-    const { currentTask, endDate } = mockData;
-    console.log(buttonStatus().title, 'buttonTitle');
+    const { currentTask, endDate } = questDetailState.data;
     return (
       <>
         {!buttonStatus().isDone && moment(endDate) > moment() ? (
@@ -326,7 +292,6 @@ const QuestDetailView: FC = () => {
                 title={buttonStatus().title}
                 onPress={() => null}
                 disabled={false}
-                // onPress={() => this.stepAction()}
               />
             </View>
           </View>
@@ -337,7 +302,6 @@ const QuestDetailView: FC = () => {
             title={buttonStatus().title}
             onPress={() => null}
             disabled={false}
-            // onPress={() => this.stepAction()}
           />
         ) : null}
       </>
@@ -347,7 +311,17 @@ const QuestDetailView: FC = () => {
   const renderContent = () => {
     return (
       <>
-        <View>
+        <View
+          style={[
+            { flex: 1 },
+            {
+              marginBottom: buttonStatus().isDone
+                ? 0
+                : buttonStatus().isLast
+                ? 0
+                : 75,
+            },
+          ]}>
           <ScrollView>
             {renderInfo()}
             {renderStepper()}
@@ -363,7 +337,11 @@ const QuestDetailView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderContent()}
+      {!questDetailState.loading && questDetailState.data !== null ? (
+        renderContent()
+      ) : (
+        <LoadingPage />
+      )}
     </SnbContainer>
   );
 };
