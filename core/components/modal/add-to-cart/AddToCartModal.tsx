@@ -15,8 +15,6 @@ interface AddToCartModalProps {
   onAddToCartPress: () => void;
   orderQty: number;
   onChangeQty: (val: number) => void;
-  increaseOrderQty: () => void;
-  decreaseOrderQty: () => void;
   disabled: boolean;
   isFromProductDetail?: boolean;
 }
@@ -27,12 +25,11 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   onAddToCartPress,
   orderQty,
   onChangeQty,
-  increaseOrderQty,
-  decreaseOrderQty,
   disabled,
   isFromProductDetail,
 }) => {
   /** => Content */
+
   const renderContent = () => (
     <View>
       <AddToCartProductData isFromProductDetail={isFromProductDetail} />
@@ -40,8 +37,6 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       <AddToCartQuantityModifier
         orderQty={orderQty}
         onChangeQty={onChangeQty}
-        increaseOrderQty={increaseOrderQty}
-        decreaseOrderQty={decreaseOrderQty}
         isFromProductDetail={isFromProductDetail}
       />
       <AddToCartFooter
