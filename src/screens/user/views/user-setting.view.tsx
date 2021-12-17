@@ -44,7 +44,6 @@ const UserSettingView: FC = () => {
             logout();
             reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
           }}
-          shadow={true}
         />
       </ScrollView>
     );

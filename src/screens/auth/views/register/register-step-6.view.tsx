@@ -115,7 +115,7 @@ const Content: React.FC = () => {
             <SnbTextField.Text
               {...address}
               mandatory
-              maxLength={250}
+              maxLength={200}
               labelText="Detail Alamat"
               placeholder="Masukkan detail alamat"
             />
@@ -126,6 +126,7 @@ const Content: React.FC = () => {
               mandatory
               labelText="Catatan Alamat"
               placeholder="Masukkan catatan alamat"
+              maxLength={200}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -174,7 +175,6 @@ const Content: React.FC = () => {
             navigate(REGISTER_STEP_7_VIEW);
           }}
           type="primary"
-          shadow
           loading={false}
           disabled={
             address.value === '' ||
