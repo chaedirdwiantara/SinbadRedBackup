@@ -113,6 +113,8 @@ const ProductList: FC<ProductListProps> = ({
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
+  const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
+  const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
 
   const {
     sortModalVisible,
@@ -140,7 +142,7 @@ const ProductList: FC<ProductListProps> = ({
   const {
     stateProduct: {
       list: { loading: productLoading, error: productError },
-      cart: { data: productDetailState },
+      cart: { data: productDetailState, error: productDetailError },
     },
     dispatchProduct,
   } = useProductContext();
@@ -163,7 +165,7 @@ const ProductList: FC<ProductListProps> = ({
   const { me } = useDataAuth();
   const {
     stateSupplier: {
-      segmentation: { data: dataSegmentation },
+      segmentation: { data: dataSegmentation, error: errorSegmentation },
       create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
@@ -320,6 +322,19 @@ const ProductList: FC<ProductListProps> = ({
       });
     }
   }, [dataSegmentation, productDetailState]);
+
+  /** => Listen error segmentation and error product detail */
+  useEffect(() => {
+    if (!modalErrorProductDetail && !modalErrorSegmentation) {
+      if (errorSegmentation !== null) {
+        setLoadingPreparation(false);
+        setModalErrorSegmentation(true);
+      } else if (productDetailError !== null) {
+        setLoadingPreparation(false);
+        setModalErrorProductDetail(true);
+      }
+    }
+  }, [errorSegmentation, productDetailError]);
 
   /** Listen Data Stock */
   useEffect(() => {
@@ -571,6 +586,18 @@ const ProductList: FC<ProductListProps> = ({
       <BottomSheetError
         open={modalErrorSendDataSupplier}
         error={sendToSupplierError}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet segmentation */}
+      <BottomSheetError
+        open={modalErrorSegmentation}
+        error={errorSegmentation}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet product detail */}
+      <BottomSheetError
+        open={modalErrorProductDetail}
+        error={productDetailError}
         closeAction={handleCloseModal}
       />
     </SnbContainer>
