@@ -144,10 +144,9 @@ const ProductList: FC<ProductListProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
-    useOrderQuantity({
-      minQty: productDetailState?.minQty,
-    });
+  const { orderQty, onChangeQty } = useOrderQuantity({
+    minQty: productDetailState?.minQty ?? 1,
+  });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -253,6 +252,7 @@ const ProductList: FC<ProductListProps> = ({
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      multipleQty: productDetailState.multipleQty,
     };
 
     addToCartActions.fetch(dispatchShopingCart, params);
@@ -513,8 +513,6 @@ const ProductList: FC<ProductListProps> = ({
         <AddToCartModal
           orderQty={orderQty}
           onChangeQty={onHandleChangeQty}
-          increaseOrderQty={increaseOrderQty}
-          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}

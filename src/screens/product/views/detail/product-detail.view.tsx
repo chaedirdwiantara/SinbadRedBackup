@@ -100,10 +100,9 @@ const ProductDetailView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
-    useOrderQuantity({
-      minQty: dataProduct?.minQty,
-    });
+  const { orderQty, onChangeQty } = useOrderQuantity({
+    minQty: dataProduct?.minQty ?? 1,
+  });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -214,6 +213,7 @@ const ProductDetailView: FC = () => {
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      multipleQty: dataProduct.multipleQty,
     };
 
     addToCartActions.fetch(dispatchShopingCart, params);
@@ -229,15 +229,6 @@ const ProductDetailView: FC = () => {
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
-
-  /** => potential promo product effect */
-  React.useEffect(() => {
-    if (dataProduct !== null && me.data !== null) {
-      const { id } = dataProduct;
-      potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(dispatchPromo, id);
-    }
-  }, [dataProduct]);
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -266,8 +257,14 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data product success */
   useEffect(() => {
-    if (dataProduct && me.data !== null) {
+    if (dataProduct !== null && me.data !== null) {
+      /** => supplier segmentation effect */
       supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
+      /** => potential promo product effect */
+      potentialPromoProductAction.reset(dispatchPromo);
+      potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
+      /** => on change initial order qty with min qty */
+      onChangeQty(dataProduct.minQty);
     }
   }, [dataProduct]);
 
@@ -531,8 +528,6 @@ const ProductDetailView: FC = () => {
         <AddToCartModal
           orderQty={orderQty}
           onChangeQty={onHandleChangeQty}
-          increaseOrderQty={increaseOrderQty}
-          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}

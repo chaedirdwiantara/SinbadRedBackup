@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
@@ -15,8 +15,6 @@ interface AddToCartModalProps {
   onAddToCartPress: () => void;
   orderQty: number;
   onChangeQty: (val: number) => void;
-  increaseOrderQty: () => void;
-  decreaseOrderQty: () => void;
   disabled: boolean;
   isFromProductDetail?: boolean;
 }
@@ -27,12 +25,10 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   onAddToCartPress,
   orderQty,
   onChangeQty,
-  increaseOrderQty,
-  decreaseOrderQty,
   disabled,
   isFromProductDetail,
 }) => {
-  /** => Content */
+  const [isFocus, setIsFocus] = useState(false);
   const renderContent = () => (
     <View>
       <AddToCartProductData isFromProductDetail={isFromProductDetail} />
@@ -40,12 +36,11 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       <AddToCartQuantityModifier
         orderQty={orderQty}
         onChangeQty={onChangeQty}
-        increaseOrderQty={increaseOrderQty}
-        decreaseOrderQty={decreaseOrderQty}
         isFromProductDetail={isFromProductDetail}
+        setIsFocus={setIsFocus}
       />
       <AddToCartFooter
-        disabled={disabled}
+        disabled={disabled || isFocus}
         orderQty={orderQty}
         onAddToCartPress={onAddToCartPress}
         isFromProductDetail={isFromProductDetail}

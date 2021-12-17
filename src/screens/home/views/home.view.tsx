@@ -60,7 +60,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
       <>
         <BannerHomeView />
         <CategoryHomeView />
-        <RecommendationHomeView />
+        <RecommendationHomeView navigationParent={navigation} />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
       </>

@@ -1,7 +1,6 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useCallback } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
 import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
@@ -12,19 +11,28 @@ import { goToProduct } from '../functions';
 /** === IMPORT STYLE === */
 import { RecommendationHomeStyle } from '../styles';
 /** === COMPONENT === */
-const RecommendationHomeView: FC = () => {
+interface RecommendationHomeViewProps {
+  navigationParent: any;
+}
+const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
+  navigationParent,
+}) => {
   /** === HOOKS === */
   const {
-    stateProduct: { list: productListState },
+    stateProduct: {
+      list: { data: productListData, loading: productListLoading },
+    },
     dispatchProduct,
   } = useProductContext();
   const { fetch } = useProductListActions('recommendations');
 
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
+    const unsubscribe = navigationParent.addListener('focus', () => {
       fetch(dispatchProduct);
-    }, []),
-  );
+    });
+
+    return unsubscribe;
+  }, [navigationParent]);
   /** === VIEW === */
   return (
     <View style={RecommendationHomeStyle.container}>
@@ -37,8 +45,8 @@ const RecommendationHomeView: FC = () => {
         </TouchableOpacity>
       </View>
       <HorizontalProductGridLayout
-        data={productListState.data}
-        loading={productListState.loading}
+        data={productListData}
+        loading={productListLoading}
       />
     </View>
   );

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbNumberCounter } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
@@ -11,17 +11,15 @@ import { AddToCartModalStyle } from '@core/styles';
 interface AddToCartQuantityModifierProps {
   orderQty: number;
   onChangeQty: (val: number) => void;
-  increaseOrderQty: () => void;
-  decreaseOrderQty: () => void;
   isFromProductDetail?: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
   onChangeQty,
-  increaseOrderQty,
-  decreaseOrderQty,
   isFromProductDetail,
+  setIsFocus,
 }) => {
   /** === HOOKS ===  */
   const {
@@ -36,6 +34,15 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
       detail: { data: dataStockDetail },
     },
   } = useStockContext();
+
+  const onPlusPres = (multipleQty: number) => {
+    onChangeQty(orderQty + multipleQty);
+  };
+
+  const onMinusPres = (multipleQty: number) => {
+    onChangeQty(orderQty - multipleQty);
+  };
+
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
@@ -51,10 +58,19 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
-            onIncrease={increaseOrderQty}
-            onDecrease={decreaseOrderQty}
-            minusDisabled={orderQty <= dataProductDetailCart?.minQty}
-            plusDisabled={orderQty >= dataStock?.stock}
+            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocus(true)}
+            onIncrease={() => onPlusPres(dataProductDetailCart.multipleQty)}
+            onDecrease={() => onMinusPres(dataProductDetailCart.multipleQty)}
+            minusDisabled={
+              orderQty <= dataProductDetailCart.minQty ||
+              orderQty - dataProductDetailCart.multipleQty <
+                dataProductDetailCart.minQty
+            }
+            plusDisabled={
+              orderQty >= dataStock.stock ||
+              orderQty + dataProductDetailCart.multipleQty > dataStock.stock
+            }
           />
         </React.Fragment>
       )}
@@ -70,10 +86,19 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
-            onIncrease={increaseOrderQty}
-            onDecrease={decreaseOrderQty}
-            minusDisabled={orderQty <= dataProductDetail?.minQty}
-            plusDisabled={orderQty >= dataStockDetail?.stock}
+            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocus(true)}
+            onIncrease={() => onPlusPres(dataProductDetail.multipleQty)}
+            onDecrease={() => onMinusPres(dataProductDetail.multipleQty)}
+            minusDisabled={
+              orderQty <= dataProductDetail.minQty ||
+              orderQty - dataProductDetail.multipleQty <
+                dataProductDetail.minQty
+            }
+            plusDisabled={
+              orderQty >= dataStockDetail?.stock ||
+              orderQty + dataProductDetail.multipleQty > dataStockDetail.stock
+            }
           />
         </React.Fragment>
       )}

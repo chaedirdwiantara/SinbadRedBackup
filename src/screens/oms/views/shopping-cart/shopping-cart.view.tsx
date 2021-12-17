@@ -83,6 +83,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setModalConfirmationRemoveProductVisible,
   ] = useState(false);
   const [loadingRemoveProduct, setLoadingRemoveProduct] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
   const [sassionQty, setSassionQty] = useState<number>(
     Math.random() * 10000000,
   );
@@ -100,7 +101,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartTotalProductActions = useCartTotalProductActions();
   const {
     stateShopingCart: {
-      cart: { data: cartViewData, loading: cartViewLoading },
+      cart: { data: cartViewData },
       update: {
         data: updateCartData,
         loading: updateCartLoading,
@@ -274,6 +275,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mounted and focus */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setLoadingPage(true);
       cartViewActions.fetch(dispatchShopingCart);
       storeDetailAction.detail(dispatchUser);
       if (checkoutMaster.cartId) {
@@ -304,6 +306,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         dispatchVerificationOrder,
         dataCreateVerificationOrder.id,
       );
+      cartUpdateActions.reset(dispatchShopingCart);
       setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
     }
@@ -414,6 +417,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         others: [],
       });
       setProductSelectedCount(totalProductsSelected);
+      setLoadingPage(false);
     }
   }, [cartViewData, stockInformationData]);
 
@@ -457,9 +461,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** did will unmound */
   useEffect(() => {
     return () => {
+      voucherLocalData.reset();
       verificationReset(dispatchVerificationOrder);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
+      cartUpdateActions.reset(dispatchShopingCart);
     };
   }, []);
 
@@ -468,7 +474,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader />
-      {cartViewLoading ? (
+      {loadingPage ? (
         <LoadingPage />
       ) : (
         <>
@@ -532,7 +538,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               />
             </Fragment>
           ) : (
-            <ShoppingCartEmpty />
+            <ShoppingCartEmpty navigationParent={navigation} />
           )}
         </>
       )}
