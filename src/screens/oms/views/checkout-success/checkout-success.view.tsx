@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
@@ -13,7 +13,13 @@ import {
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { CheckoutSuccessStyles } from '@screen/oms/styles';
-import { goBack, copyToClipboard, goToHome } from '@screen/oms/functions';
+import {
+  goBack,
+  copyToClipboard,
+  goToHome,
+  useCreateOrders,
+} from '@screen/oms/functions';
+import { contexts } from '@contexts';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -47,6 +53,13 @@ const OmsCheckoutSuccessView: FC = () => {
   const [paymentData] = useState<CheckoutSuccess>(checkoutSuccessDummy);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const createOrders = useCreateOrders();
+  const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+
+  /** => Reset Create Orders data after fetching Create Order Detail */
+  useEffect(() => {
+    createOrders.reset(dispatchCheckout);
+  }, []);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {

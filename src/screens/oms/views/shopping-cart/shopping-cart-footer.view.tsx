@@ -38,7 +38,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
     <View style={ShoppingCartStyles.footerContainer}>
       <ShoppingCartVoucherTag />
       <View style={ShoppingCartStyles.footerBody}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <SnbCheckbox
             status={allProductsSelected ? 'selected' : 'unselect'}
             onPress={() =>
@@ -55,7 +55,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
             <SnbText.B3>Pilih Semua</SnbText.B3>
           </View>
         </View>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', minWidth: '50%' }}>
           <View style={{ marginRight: 10, alignItems: 'flex-end' }}>
             <View
               style={{
@@ -67,12 +67,15 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
                 <SnbText.B3>Total:</SnbText.B3>
               </View>
               <SnbText.B2 color={color.red50}>
-                {toCurrency(getTotalPrice(invoiceGroups))}
+                {toCurrency(getTotalPrice(invoiceGroups), {
+                  withFraction: false,
+                })}
               </SnbText.B2>
             </View>
             <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
           </View>
           <SnbButton.Dynamic
+            disabled={productSelectedCount <= 0}
             type="primary"
             title="Checkout"
             size="small"

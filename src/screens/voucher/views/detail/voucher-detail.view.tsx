@@ -9,28 +9,42 @@ import { VoucherDetailCardInfo } from './voucher-detail-card-info.view';
 import { VoucherDetailDescription } from './voucher-detail-description.view';
 import { VoucherDetailTnC } from './voucher-detail-tnc.view';
 import { VoucherDetailInstruction } from './voucher-detail-instruction.view';
+import BottomModalError from '@core/components/BottomModalError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { useVoucherDetailAction } from '../../functions';
+import {
+  useVoucherDetailAction,
+  useStandardModalState,
+  goBack,
+} from '../../functions';
 import { contexts } from '@contexts';
+import { NavigationAction } from '@core/functions/navigation';
+/** === INTERFACE === */
+interface NavigationParams {
+  type: string;
+}
 /** === COMPONENT === */
-const VoucherDetailView: FC = ({ route }: any) => {
+const VoucherDetailView: FC = () => {
   /** === HOOK === */
   const { stateVoucher, dispatchVoucher } = React.useContext(
     contexts.VoucherContext,
   );
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
+  const { id, type } =
+    NavigationAction.useGetNavParams<NavigationParams>().params;
+  const voucherDetailError = useStandardModalState();
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(
-      dispatchVoucher,
-      route.params.voucherId,
-      route.params.type,
-    );
+    voucherDetailAction.detail(dispatchVoucher, id, type);
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
   }, []);
+  React.useEffect(() => {
+    if (stateVoucher.voucherGeneral.detail.error !== null) {
+      voucherDetailError.setOpen(true);
+    }
+  }, [stateVoucher.voucherGeneral.detail.error]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -44,7 +58,8 @@ const VoucherDetailView: FC = ({ route }: any) => {
           uri: voucherDetailState.data?.imageUrl,
         }}
         style={{
-          height: 180,
+          aspectRatio: 4 / 2,
+          height: undefined,
           width: '100%',
         }}
       />
@@ -96,6 +111,22 @@ const VoucherDetailView: FC = ({ route }: any) => {
       />
     );
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={voucherDetailError.isOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          voucherDetailError.setOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -111,6 +142,8 @@ const VoucherDetailView: FC = ({ route }: any) => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

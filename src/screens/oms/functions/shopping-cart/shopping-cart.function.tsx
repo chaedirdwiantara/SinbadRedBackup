@@ -1,6 +1,10 @@
 /** === IMPORT PACKAGE HERE === */
 import { Dispatch, SetStateAction } from 'react';
-import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
+import {
+  CartInvoiceGroup,
+  IProductItemUpdateCart,
+  ICartMasterProductNotAvailable,
+} from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
 const getTotalProducts = (invoiceGroups: Array<CartInvoiceGroup>) => {
@@ -37,7 +41,7 @@ const handleProductQuantityChange = (
   invoiceGroupIndex: number,
   brandIndex: number,
   productIndex: number,
-  action: 'increase' | 'decrease',
+  action: 'increase' | 'decrease' | 'onChange',
   invoiceGroupsState: [
     Array<CartInvoiceGroup>,
     (any: CartInvoiceGroup[]) => void,
@@ -55,6 +59,14 @@ const handleProductQuantityChange = (
     currentProduct.qty = currentQty + 1;
   } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty = currentQty - 1;
+  } else if (action === 'onChange') {
+    if (currentQty >= currentProduct.stock) {
+      currentProduct.qty = currentProduct.stock;
+    } else if (currentQty <= currentProduct.minQty) {
+      currentProduct.qty = currentProduct.minQty;
+    } else {
+      currentProduct.qty = currentQty;
+    }
   }
 
   currentBrand.products[productIndex] = currentProduct;
@@ -235,8 +247,20 @@ const handleProductDelete = (
   onRemoveProduct({
     productId: deletedProduct.productId,
     qty: 0,
-    selected: false,
+    selected: deletedProduct.selected,
     stock: deletedProduct.stock,
+  });
+};
+
+const handleProductNotAvailableDelete = (
+  product: ICartMasterProductNotAvailable,
+  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+) => {
+  onRemoveProduct({
+    productId: product.productId,
+    qty: 0,
+    selected: false,
+    stock: 0,
   });
 };
 
@@ -248,4 +272,5 @@ export {
   handleSelectedBrandChange,
   handleAllSelectedProductsChange,
   handleProductDelete,
+  handleProductNotAvailableDelete,
 };

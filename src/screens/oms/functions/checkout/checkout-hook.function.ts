@@ -147,6 +147,14 @@ const usePaymentChannelModal = () => {
 };
 const usePaymentAction = () => {
   const dispatch = useDispatch();
+
+  const tCCreate = (
+    contextDispatch: any,
+    data: models.CreateProcessProps<{}>,
+  ) => {
+    dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
+  };
+
   return {
     typeslist: (
       contextDispatch: (action: any) => any,
@@ -186,9 +194,7 @@ const usePaymentAction = () => {
     tCCreate: (
       contextDispatch: (action: any) => any,
       data: models.CreateProcessProps<{}>,
-    ) => {
-      dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
-    },
+    ) => tCCreate(contextDispatch, data),
     tCDetail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
     },
@@ -219,6 +225,16 @@ const usePaymentAction = () => {
     resetTCDetail: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.paymentTCDetailReset(contextDispatch));
     },
+    invoiceChannelList: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.paymentInvoiceChannelListProcess(contextDispatch, {
+          id,
+        }),
+      );
+    },
+    resetInvoicChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentInvoiceChannelListReset(contextDispatch));
+    },
   };
 };
 /** => back to cart modal confirmation */
@@ -243,6 +259,38 @@ const useErrorModalBottom = () => {
   };
 };
 
+/** => failed fetch state */
+const useCheckoutFailedFetchState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  const [errorAction, setErrorAction] = React.useState<Function>(() => {});
+  const [errorText, setErrorText] = React.useState('');
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setErrorAction: (value: () => void) => {
+      setErrorAction(value);
+    },
+    setErrorText: (value: string) => {
+      setErrorText(value);
+    },
+    isOpen,
+    errorAction,
+    errorText,
+  };
+};
+
+/** => error warning */
+const useErrorWarningModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+  };
+};
+
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -255,6 +303,8 @@ export {
   usePaymentChannelsData,
   useBackToCartModal,
   useErrorModalBottom,
+  useCheckoutFailedFetchState,
+  useErrorWarningModal,
 };
 /**
  * ================================================================
