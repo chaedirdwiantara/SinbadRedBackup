@@ -102,6 +102,22 @@ function* paymentInvoice(action: models.DetailProcessAction) {
     );
   }
 }
+/** => History Detail */
+function* historyDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.HistoryDetail> =
+      yield call(() => {
+        return HistoryOrderApi.getDetail(action.payload);
+      });
+    yield action.contextDispatch(ActionCreators.historyDetailSuccess(response));
+    yield put(ActionCreators.historyDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.historyDetailFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.historyDetailFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* HistorySaga() {
   yield takeLatest(types.PAYMENT_STATUS_LIST_PROCESS, paymentStatusList);
@@ -109,6 +125,7 @@ function* HistorySaga() {
   yield takeLatest(types.HISTORY_LIST_PROCESS, historyList);
   yield takeLatest(types.HISTORY_PAYMENT_DETAIL_PROCESS, paymentDetail);
   yield takeLatest(types.HISTORY_INVOICE_DETAIL_PROCESS, paymentInvoice);
+  yield takeLatest(types.HISTORY_DETAIL_PROCESS, historyDetail);
 }
 
 export default HistorySaga;

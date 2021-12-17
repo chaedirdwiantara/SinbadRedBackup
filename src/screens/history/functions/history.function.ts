@@ -5,8 +5,8 @@ export const goBack = () => {
   NavigationAction.back();
 };
 
-export const goToHistoryDetail = (section: string) => {
-  NavigationAction.navigate('HistoryDetailView', { section });
+export const goToHistoryDetail = (section: string, id: number) => {
+  NavigationAction.navigate('HistoryDetailView', { section, id });
 };
 
 export const goToHistoryInvoice = () => {

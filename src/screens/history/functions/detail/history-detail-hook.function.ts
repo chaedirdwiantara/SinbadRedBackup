@@ -1,14 +1,13 @@
 /** === IMPORT PACKAGES === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
-import { useState } from 'react';
-
 /** === FUNCTIONS === */
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: number) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
     },
   };
@@ -17,7 +16,7 @@ export const usePaymentDetail = () => {
 export const usePaymentInvoice = () => {
   const dispatch = useDispatch();
   return {
-    detail: (contextDispatch: (action: any) => any, id: number) => {
+    detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(
         Actions.historyPaymentInvoiceDetailProcess(contextDispatch, { id }),
       );
@@ -41,6 +40,23 @@ export const useModalToast = () => {
     toastText,
     setToastText: (value: string) => {
       setToastText(value);
+    },
+  };
+};
+
+export const useHistoryDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.historyDetailRefresh());
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.historyDetailReset(contextDispatch));
     },
   };
 };
