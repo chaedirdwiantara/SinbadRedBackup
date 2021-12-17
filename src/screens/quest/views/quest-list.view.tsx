@@ -13,7 +13,7 @@ import moment from 'moment';
 import LoadingPage from '@core/components/LoadingPage';
 import { EmptyState } from '@core/components/EmptyState';
 /** === IMPORT FUNCTIONS === */
-import { goBack, useQuestListAction } from '../function';
+import { goBack, goToQuestDetail, useQuestListAction } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT STYLES === */
@@ -43,10 +43,8 @@ const QuestListView: FC = () => {
 
   const { me } = useDataAuth();
   console.log(me, 'DATAME');
-  const {
-    stateQuest: { list: questListState },
-    dispatchQuest,
-  } = useQuestContext();
+  const { stateQuest, dispatchQuest } = useQuestContext();
+  const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
   React.useEffect(() => {
@@ -154,7 +152,7 @@ const QuestListView: FC = () => {
   const renderItem = ({ item }: { item: QuestCardProps }) => {
     return (
       <TouchableOpacity
-        onPress={() => NavigationAction.navigate('QuestDetailView')}
+        onPress={() => goToQuestDetail({ questId: item.id, buyerId: buyerId })}
         style={[QuestListStyles.shadowForBox, QuestListStyles.boxMainContent]}>
         <Image source={{ uri: item.image }} style={QuestListStyles.cardImage} />
         <View style={[QuestListStyles.cardMainContent]}>

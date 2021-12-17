@@ -15,6 +15,18 @@ const getList = (
   );
 };
 
+const getDetail = (payload: models.QuestDetailProcessProps) => {
+  const path = `quests/${payload.id}?buyerId=${payload.buyerId}`;
+  return apiMapping<models.QuestDetailItem>(
+    'auth',
+    path,
+    'quests',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const QuestApi = {
   getList,
+  getDetail,
 };
