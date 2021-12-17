@@ -1,7 +1,5 @@
-/** === IMPORT ALL MODULE'S FUNCTION HERE === */
-import { HomeHookFunc } from './home-hook.function';
 /** === EXPORT ALL === */
-export { HomeHookFunc };
+export * from './home-hook.function';
 /**
  * ================================================================
  * NOTES

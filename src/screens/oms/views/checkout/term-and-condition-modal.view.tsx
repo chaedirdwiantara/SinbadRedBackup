@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import Html from '@core/components/Html';
 import {
@@ -8,7 +8,7 @@ import {
   SnbButton,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { goToCheckoutSuccess } from '../../functions';
+import { goToCheckoutSuccess, useCreateOrders } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { IPaymentChannel, IPaymentType } from '@model/oms';
@@ -24,6 +24,8 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
 }) => {
   /** === HOOK === */
   const { statePayment } = React.useContext(contexts.PaymentContext);
+  const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+  const createOrders = useCreateOrders();
 
   const paymentTypesTermsConditions = () => {
     return statePayment?.paymentTCDetail?.data?.paymentTypes?.map(
@@ -55,14 +57,15 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
   };
   const button = () => {
     return (
-      <View>
+      <View style={{ height: '20%' }}>
         <SnbButton.Single
           title={'Buat Pesanan'}
           disabled={false}
           type={'primary'}
           onPress={() => {
             close();
-            goToCheckoutSuccess();
+            createOrders.create(dispatchCheckout);
+            // goToCheckoutSuccess();
           }}
         />
       </View>
@@ -70,17 +73,19 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
   };
   const content = () => {
     return (
-      <ScrollView style={{ paddingHorizontal: 16 }}>
-        <View style={{ marginBottom: 16, alignItems: 'center' }}>
-          <SnbText.C1>
-            Dengan ini saya menyetujui Syarat & Ketentuan yang berlaku:
-          </SnbText.C1>
-        </View>
-        {paymentTypesTermsConditions()}
-        <SnbDivider style={{ marginBottom: 12 }} />
-        {paymentChannelTermsConditions()}
+      <View style={{ paddingHorizontal: 16, paddingBottom: 60 }}>
+        <ScrollView>
+          <View style={{ marginBottom: 16, alignItems: 'center' }}>
+            <SnbText.C1>
+              Dengan ini saya menyetujui Syarat & Ketentuan yang berlaku:
+            </SnbText.C1>
+          </View>
+          {paymentTypesTermsConditions()}
+          <SnbDivider style={{ marginBottom: 12 }} />
+          {paymentChannelTermsConditions()}
+        </ScrollView>
         {button()}
-      </ScrollView>
+      </View>
     );
   };
   return (
@@ -90,6 +95,7 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
       title={'Syarat & Ketentuan'}
       closeAction={close}
       actionIcon={'close'}
+      size={'halfscreen'}
     />
   );
 };

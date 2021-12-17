@@ -50,7 +50,7 @@ const TakeProfilePictureView: FC = () => {
   useEffect(() => {
     if (stateUser.profileEdit.data !== null) {
       editMerchantAction.reset(dispatchSupplier);
-      storeDetailAction.detail(dispatchUser, { id: '3' });
+      storeDetailAction.detail(dispatchUser);
       editProfileAction.reset(dispatchUser);
       NavigationAction.back();
       save(dispatchGlobal, '');

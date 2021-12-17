@@ -64,11 +64,11 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
               </SnbText.B3>
             </View>
           ) : null}
-          {data.totalPaymentFee ? (
+          {data.totalFee ? (
             <View style={CheckoutStyle.detailItemContainer}>
               <SnbText.B3 color={color.black100}>Layanan Pembayaran</SnbText.B3>
               <SnbText.B3 color={color.black100}>
-                {toCurrency(data.totalPaymentFee ?? 0)}
+                {toCurrency(data.totalFee ?? 0)}
               </SnbText.B3>
             </View>
           ) : null}

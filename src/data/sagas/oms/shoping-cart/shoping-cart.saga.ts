@@ -28,7 +28,7 @@ function* addToCart(
 ) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
-      return CartApi.addToCart(action.payload);
+      return CartApi.addToCart(action.payload.data);
     });
     yield action.contextDispatch(ActionCreators.addToCartSuccess(response));
     yield put(ActionCreators.addToCartSuccess(response));
@@ -45,7 +45,7 @@ function* updateCart(
 ) {
   try {
     const response: models.UpdateSuccessProps = yield call(() => {
-      return CartApi.updateCart(action.payload);
+      return CartApi.updateCart(action.payload.data);
     });
     yield action.contextDispatch(ActionCreators.cartUpdateSuccess(response));
     yield put(ActionCreators.cartUpdateSuccess(response));
@@ -56,7 +56,7 @@ function* updateCart(
     yield put(ActionCreators.cartUpdateFailed(error as models.ErrorProps));
   }
 }
-/** => Cart view */
+/** => Cart total product */
 function* cartTotalProduct() {
   try {
     const response: models.DetailSuccessProps<models.CartTotalProductSuccess> =

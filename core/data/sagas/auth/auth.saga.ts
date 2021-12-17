@@ -13,6 +13,7 @@ function* loginUserName(action: models.LoginUserNameProcessAction) {
       return AuthApi.loginUserName(action.payload);
     });
     yield put(ActionCreators.loginUserNameSuccess(response));
+    yield put(ActionCreators.meProcess());
   } catch (error: any) {
     yield put(ActionCreators.loginUserNameFailed(error));
   }
@@ -35,6 +36,7 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
       return AuthApi.verificationOTP(action.payload);
     });
     yield put(ActionCreators.verificationOTPSuccess(response));
+    yield put(ActionCreators.meProcess());
   } catch (error: any) {
     yield put(ActionCreators.verificationOTPFailed(error));
   }
