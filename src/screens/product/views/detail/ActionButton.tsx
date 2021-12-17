@@ -7,7 +7,7 @@ interface ActionButtonProps {
   title: string;
   disabled?: boolean;
   onPress: () => void;
-  loading: boolean;
+  loading?: boolean;
 }
 /** === COMPONENT ===  */
 export const ActionButton: FC<ActionButtonProps> = ({

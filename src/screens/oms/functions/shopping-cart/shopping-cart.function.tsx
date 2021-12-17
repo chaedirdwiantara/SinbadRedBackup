@@ -56,9 +56,9 @@ const handleProductQuantityChange = (
   const currentProduct = currentBrand.products[productIndex];
 
   if (action === 'increase' && currentProduct.qty < currentProduct.stock) {
-    currentProduct.qty = currentQty + 1;
+    currentProduct.qty = currentQty + currentProduct.multipleQty;
   } else if (action === 'decrease' && currentProduct.qty > 0) {
-    currentProduct.qty = currentQty - 1;
+    currentProduct.qty = currentQty - currentProduct.multipleQty;
   } else if (action === 'onChange') {
     if (currentQty >= currentProduct.stock) {
       currentProduct.qty = currentProduct.stock;
