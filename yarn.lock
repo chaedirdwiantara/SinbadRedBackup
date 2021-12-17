@@ -1409,7 +1409,7 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@^1.0.12":
+"@sinbad/react-native-sinbad-ui@1.0.12":
   version "1.0.12"
   resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.12.tgz#ab56424e259548675e3c8e8ade4b0890b47792bf"
   integrity sha512-rzRiJ4cetnPw37hkBrg9H78VfzflsxrjFpycS8RDU3bEmQv/XloKhm8iMULrWJZIRGh+1o+86hSLmFxg9W0JWQ==
