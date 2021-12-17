@@ -9,7 +9,7 @@ import {
 import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
