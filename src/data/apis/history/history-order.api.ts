@@ -37,9 +37,9 @@ const getHistoryList = (payload: models.HistoryListProcessProps) => {
 
 const getDetail = (payload: models.DetailProcessProps) => {
   return apiMapping<models.HistoryDetail>(
-    'public',
+    'auth',
     `${historyBasePath}/${payload.id}`,
-    'product',
+    'order',
     'v1',
     'DETAIL',
   );

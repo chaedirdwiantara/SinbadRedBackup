@@ -1,9 +1,8 @@
 /** === IMPORT PACKAGES === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
-import { useState } from 'react';
-
 /** === FUNCTIONS === */
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
@@ -41,6 +40,23 @@ export const useModalToast = () => {
     toastText,
     setToastText: (value: string) => {
       setToastText(value);
+    },
+  };
+};
+
+export const useHistoryDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.historyDetailRefresh());
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.historyDetailReset(contextDispatch));
     },
   };
 };
