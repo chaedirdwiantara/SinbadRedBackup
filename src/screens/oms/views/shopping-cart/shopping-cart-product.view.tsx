@@ -98,44 +98,54 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice)}
+              {toCurrency(product.displayPrice, { withFraction: false })}
             </SnbText.B4>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <SnbNumberCounter
-              value={product.qty}
-              onIncrease={() =>
-                handleProductQuantityChange(
-                  invoiceGroupIndex,
-                  brandIndex,
-                  productIndex,
-                  'increase',
-                  [invoiceGroups, setInvoiceGroups],
-                  product.qty,
-                  setSassionQty,
-                )
-              }
-              onDecrease={() =>
-                handleProductQuantityChange(
-                  invoiceGroupIndex,
-                  brandIndex,
-                  productIndex,
-                  'decrease',
-                  [invoiceGroups, setInvoiceGroups],
-                  product.qty,
-                  setSassionQty,
-                )
-              }
-              minusDisabled={product.qty <= product.minQty}
-              plusDisabled={product.qty >= product.stock}
-            />
-          </View>
+          <SnbNumberCounter
+            value={product.qty}
+            onIncrease={() =>
+              handleProductQuantityChange(
+                invoiceGroupIndex,
+                brandIndex,
+                productIndex,
+                'increase',
+                [invoiceGroups, setInvoiceGroups],
+                product.qty,
+                setSassionQty,
+              )
+            }
+            onDecrease={() =>
+              handleProductQuantityChange(
+                invoiceGroupIndex,
+                brandIndex,
+                productIndex,
+                'decrease',
+                [invoiceGroups, setInvoiceGroups],
+                product.qty,
+                setSassionQty,
+              )
+            }
+            onChange={(qty: number) =>
+              handleProductQuantityChange(
+                invoiceGroupIndex,
+                brandIndex,
+                productIndex,
+                'onChange',
+                [invoiceGroups, setInvoiceGroups],
+                qty,
+                setSassionQty,
+              )
+            }
+            minusDisabled={product.qty <= product.minQty}
+            plusDisabled={product.qty >= product.stock}
+          />
         </View>
       </View>
       <View
         style={{
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          width: '20%',
         }}>
         <TouchableOpacity
           onPress={() =>
@@ -149,7 +159,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
-        {product.stock <= 50 && (
+        {product.stock <= 1000 && (
           <SnbText.B3
             color={
               color.red50

@@ -3,7 +3,12 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import { usePaymentAction, handleTotalPrice } from '../../functions/checkout';
+import {
+  usePaymentAction,
+  handleTotalPrice,
+  useCheckoutMaster,
+  useExpiredTime,
+} from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
@@ -11,17 +16,26 @@ import * as models from '@models';
 interface CheckoutBottomViewProps {
   data: models.IInvoiceCheckout[];
   openTCModal: () => void;
+  openErrorWarning: () => void;
+  closeErrorWarning: () => void;
 }
 /** === COMPONENT === */
-export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
+export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
+  data,
+  openErrorWarning,
+  closeErrorWarning,
+}) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
+  const { checkoutMaster } = useCheckoutMaster();
+  const expiredTime = useExpiredTime();
   const { dispatchPayment, statePayment } = React.useContext(
     contexts.PaymentContext,
   );
+  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
   const loadingTCCreate = statePayment.paymentTCCreate?.loading;
   const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  console.log(loadingTCCreate, loadingTCDetail);
+  const loadingCreateOrders = stateCheckout.create?.loading;
 
   /** => main */
   const dataPostTC = {
@@ -37,8 +51,22 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
   };
 
   const pressButton = () => {
-    paymentAction.tCCreate(dispatchPayment, dataPostTC);
+    const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
+    const totalCartInvoices = checkoutMaster.invoices;
+    if (selectedInvoiceChannel.length === totalCartInvoices.length) {
+      if (!expiredTime.check()) {
+        paymentAction.tCCreate(dispatchPayment, dataPostTC);
+      } else {
+        expiredTime.setOpen(true);
+      }
+    } else {
+      openErrorWarning();
+      setTimeout(() => {
+        closeErrorWarning();
+      }, 2000);
+    }
   };
+
   const content = () => {
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
@@ -47,6 +75,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
       </View>
     );
   };
+
   return (
     <View style={{ height: 75 }}>
       <SnbButton.Content
@@ -54,7 +83,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({ data }) => {
         onPress={pressButton}
         content={content()}
         title={'Buat Pesanan'}
-        loading={loadingTCCreate || loadingTCDetail}
+        loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
       />
     </View>
   );

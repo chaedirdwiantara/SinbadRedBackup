@@ -60,6 +60,7 @@ export const verificationOTPProcess = (
 export const verificationOTPSuccess = (
   data: models.LoginSuccess,
 ): models.VerificationOTPSuccessAction => {
+  setUserFCM(data.data.user.id);
   return { type: types.VERIFICATION_OTP_SUCCESS, payload: data };
 };
 /** => failed */

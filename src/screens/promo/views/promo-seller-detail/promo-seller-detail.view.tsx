@@ -12,8 +12,13 @@ import moment from 'moment';
 /** === IMPORT COMPONENT HERE === */
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomModalError from '@core/components/BottomModalError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { goBack, usePromoSellerAction } from '../../functions';
+import {
+  goBack,
+  usePromoSellerAction,
+  useStandardModalState,
+} from '../../functions';
 import { PromoPaymentDetailStyles } from '../../styles';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@core/functions/navigation';
@@ -24,6 +29,7 @@ const PromoDetail: FC = () => {
   const promoGeneralAction = usePromoSellerAction();
   const promoSellerDetailState = statePromo.promoSeller.detail;
   const { id } = NavigationAction.useGetNavParams().params;
+  const promoSellerDetailError = useStandardModalState();
   /** === HOOK === */
   /** => effect */
   React.useEffect(() => {
@@ -32,6 +38,11 @@ const PromoDetail: FC = () => {
       promoGeneralAction.reset(dispatchPromo);
     };
   }, []);
+  React.useEffect(() => {
+    if (statePromo.promoSeller.detail.error !== null) {
+      promoSellerDetailError.setOpen(true);
+    }
+  }, [statePromo.promoSeller.detail.error]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -116,6 +127,22 @@ const PromoDetail: FC = () => {
       </View>
     );
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomModalError
+        isOpen={promoSellerDetailError.isOpen}
+        errorTitle={'Terjadi kesalahan'}
+        errorSubtitle={'Silahkan mencoba kembali'}
+        errorImage={require('../../../../assets/images/cry_sinbad.png')}
+        buttonTitle={'Ok'}
+        buttonOnPress={() => {
+          promoSellerDetailError.setOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="grey">
@@ -130,6 +157,8 @@ const PromoDetail: FC = () => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

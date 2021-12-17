@@ -36,7 +36,7 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="Home"
         component={TabNavigator}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, stackAnimation: 'none' }}
       />
     );
   };

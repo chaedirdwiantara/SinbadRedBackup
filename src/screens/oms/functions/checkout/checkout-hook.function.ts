@@ -147,6 +147,14 @@ const usePaymentChannelModal = () => {
 };
 const usePaymentAction = () => {
   const dispatch = useDispatch();
+
+  const tCCreate = (
+    contextDispatch: any,
+    data: models.CreateProcessProps<{}>,
+  ) => {
+    dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
+  };
+
   return {
     typeslist: (
       contextDispatch: (action: any) => any,
@@ -186,9 +194,7 @@ const usePaymentAction = () => {
     tCCreate: (
       contextDispatch: (action: any) => any,
       data: models.CreateProcessProps<{}>,
-    ) => {
-      dispatch(Actions.paymentTCCreateProcess(contextDispatch, data));
-    },
+    ) => tCCreate(contextDispatch, data),
     tCDetail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.paymentTCDetailProcess(contextDispatch, { id }));
     },
@@ -218,6 +224,16 @@ const usePaymentAction = () => {
     },
     resetTCDetail: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.paymentTCDetailReset(contextDispatch));
+    },
+    invoiceChannelList: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(
+        Actions.paymentInvoiceChannelListProcess(contextDispatch, {
+          id,
+        }),
+      );
+    },
+    resetInvoicChannelList: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentInvoiceChannelListReset(contextDispatch));
     },
   };
 };
@@ -264,6 +280,17 @@ const useCheckoutFailedFetchState = () => {
   };
 };
 
+/** => error warning */
+const useErrorWarningModal = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+  };
+};
+
 /** === EXPORT === */
 export {
   useCheckoutMaster,
@@ -277,6 +304,7 @@ export {
   useBackToCartModal,
   useErrorModalBottom,
   useCheckoutFailedFetchState,
+  useErrorWarningModal,
 };
 /**
  * ================================================================

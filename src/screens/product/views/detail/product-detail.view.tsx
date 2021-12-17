@@ -2,7 +2,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 import {
-  SnbText,
   SnbContainer,
   SnbStatusBar,
   SnbToast,
@@ -11,10 +10,11 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
+import Html from '@core/components/Html';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
-import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
+// import { ProductDetailSupplierInfo } from './ProductDetailSupplierInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
@@ -29,6 +29,7 @@ import {
   WaitingApprovalModal,
   AddToCartModal,
 } from '@core/components/modal';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
@@ -37,8 +38,8 @@ import { goToBundle } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
   useCheckDataSupplier,
-  useSendDataToSupplierActions,
   useSupplierSegmentationDetailAction,
+  useRegisterSupplierActions,
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
@@ -54,47 +55,12 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 import { useDataAuth } from '@core/redux/Data';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import * as models from '@models';
-
 /** === DUMMY === */
-const productDetailDummy = {
-  id: '1',
-  name: 'LAKME CC CREAM ALMOND',
-  images: [
-    {
-      url: 'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-    },
-    {
-      url: 'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
-    },
-  ],
-  currentPrice: 77891,
-  originalPrice: 85680,
-  packagedQty: 5,
-  minQty: 1,
-  unit: 'Pcs',
-  isExclusive: true,
-  detail: 'It is what it is.',
-  description: 'Good for skin obviously, experience the difference!',
-  productWeight: 100,
-  promoList: [
-    {
-      promoSellerId: '6149f9c2a5868baca3e6f8eb',
-      shortDescription:
-        'Setiap pembelian produk Lakme sebesar 2jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 1%.\nSetiap pembelian di atas 5jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 2%',
-    },
-    {
-      promoSellerId: '6149f9c2a5868baca3e6f8eb',
-      shortDescription:
-        'Setiap pembelian produk Lakme sebesar 10jt atau lebih, customer berhak mendapatkan potongan diskon sebesar 3%.',
-    },
-  ],
-  supplier: {
-    name: 'Depo Berkah Abadi',
-    urbanCity: 'Jakarta Barat',
-    logoUrl: '',
-  },
-  discount: '10%',
-};
+// const supplierDummy = {
+//   name: 'Depo Berkah Abadi',
+//   urbanCity: 'Jakarta Barat',
+//   logoUrl: '',
+// };
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
@@ -105,14 +71,19 @@ const ProductDetailView: FC = () => {
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
-  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
+  const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
+    useState(false);
+  const [loadingButton, setLoadingButton] = useState(false);
+  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
+    useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
-  const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const sendDataToSupplierActions = useRegisterSupplierActions();
   const cartTotalProductActions = useCartTotalProductActions();
   const { dataTotalProductCart } = useCartTotalProductActions();
   const { me } = useDataAuth();
@@ -129,9 +100,10 @@ const ProductDetailView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, increaseOrderQty, decreaseOrderQty } = useOrderQuantity({
-    minQty: dataProduct?.minQty,
-  });
+  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
+    useOrderQuantity({
+      minQty: dataProduct?.minQty,
+    });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -141,7 +113,7 @@ const ProductDetailView: FC = () => {
   const {
     stateSupplier: {
       detail: { data: dataSegmentation },
-      create: { data: sendToSupplierData },
+      register: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
   } = useSupplierContext();
@@ -192,8 +164,21 @@ const ProductDetailView: FC = () => {
   /** => action close modal add to cart */
   const handleCloseModal = () => {
     addToCartActions.reset(dispatchShopingCart);
+    sendDataToSupplierActions.reset(dispatchSupplier);
+    setLoadingButton(false);
     setOrderModalVisible(false);
+    setModalErrorAddCart(false);
+    setModalErrorSendDataSupplier(false);
     onFunctionActions({ type: 'close' });
+  };
+
+  /** => action on change qty */
+  const onHandleChangeQty = (value: number) => {
+    if (!dataStock || !dataProduct) {
+      return;
+    }
+
+    onChangeQty(value);
   };
 
   const onSubmitAddToCart = () => {
@@ -275,6 +260,7 @@ const ProductDetailView: FC = () => {
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
+    setLoadingButton(true);
     productDetailActions.fetch(dispatchProduct, productId);
   }, []);
 
@@ -287,13 +273,34 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation && dataSegmentation.dataSuppliers && dataProduct) {
-      stockValidationActions.fetch(dispatchStock, {
-        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
-        productId: dataProduct.id,
-      });
+    if (dataSegmentation && dataProduct) {
+      if (dataSegmentation.dataSuppliers) {
+        stockValidationActions.fetch(dispatchStock, {
+          warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+          productId: dataProduct.id,
+        });
+      } else {
+        if (me.data) {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: null,
+          });
+        } else {
+          stockValidationActions.fetch(dispatchStock, {
+            warehouseId: null,
+            productId: dataProduct.id,
+          });
+        }
+      }
     }
   }, [dataSegmentation, dataProduct]);
+
+  /** Listen success get stock */
+  useEffect(() => {
+    if (dataStock) {
+      setLoadingButton(false);
+    }
+  }, [dataStock]);
 
   /** Listen Error Stock */
   useEffect(() => {
@@ -301,6 +308,7 @@ const ProductDetailView: FC = () => {
       if (errorStock.code === 400) {
         setIsAvailable(false);
       }
+      setLoadingButton(false);
     }
   }, [errorStock && dataProduct]);
 
@@ -314,8 +322,18 @@ const ProductDetailView: FC = () => {
         );
       }
       onFunctionActions({ type: 'close' });
+      setToastSuccessRegisterSupplier(true);
+      sendDataToSupplierActions.reset(dispatchSupplier);
     }
   }, [sendToSupplierData]);
+
+  /** => Do something when error send data to supplier */
+  useEffect(() => {
+    if (sendToSupplierError !== null) {
+      setIsAvailable(false);
+      setModalErrorSendDataSupplier(true);
+    }
+  }, [sendToSupplierError]);
 
   /** => Do something when success add to cart */
   useEffect(() => {
@@ -330,24 +348,25 @@ const ProductDetailView: FC = () => {
   /** => Do something when error add to cart */
   useEffect(() => {
     if (addToCartError !== null) {
-      setToastFailedAddCart(true);
-      addToCartActions.reset(dispatchShopingCart);
+      setModalErrorAddCart(true);
     }
   }, [addToCartError]);
 
   /** close toast listener */
   useEffect(() => {
-    if (toastSuccessAddCart || toastFailedAddCart) {
+    if (toastSuccessAddCart || toastSuccessRegisterSupplier) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
-        setToastFailedAddCart(false);
-      }, 2000);
+        setToastSuccessRegisterSupplier(false);
+      }, 3000);
     }
-  }, [toastSuccessAddCart, toastFailedAddCart]);
+  }, [toastSuccessAddCart, toastSuccessRegisterSupplier]);
 
   /** => Did Unmount */
   useEffect(() => {
     return () => {
+      productDetailActions.reset(dispatchProduct);
+      supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
     };
   }, []);
@@ -415,9 +434,9 @@ const ProductDetailView: FC = () => {
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
           {/* <ProductDetailSupplierInfo // Hide temporarily
-            logo={productDetailDummy.supplier.logoUrl}
-            name={productDetailDummy.supplier.name}
-            urbanCity={productDetailDummy.supplier.urbanCity}
+            logo={supplierDummy.logoUrl}
+            name={supplierDummy.name}
+            urbanCity={supplierDummy.urbanCity}
           /> */}
           {potentialPromoProductList.data !== null &&
             potentialPromoProductList.data.flexiCombo.length > 0 && (
@@ -450,28 +469,33 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText.B3>{dataProduct?.detail}</SnbText.B3>
+            <Html value={dataProduct?.detail ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <ProductDetailSection title="Deskripsi Produk">
-            <SnbText.B3>{dataProduct?.description}</SnbText.B3>
+            <Html value={dataProduct?.description ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {isAvailable ? (
-        <ActionButton
-          title={getActionButtonTitle()}
-          disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
-          onPress={() => {
-            if (defaultProperties.isBundle) {
-              goToBundle(productId);
-            } else {
-              handleOrderPress();
-            }
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
+      {(dataProduct !== null || errorProduct !== null) && (
+        <React.Fragment>
+          {isAvailable ? (
+            <ActionButton
+              loading={loadingButton}
+              title={getActionButtonTitle()}
+              disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
+              onPress={() => {
+                if (defaultProperties.isBundle) {
+                  goToBundle(productId);
+                } else {
+                  handleOrderPress();
+                }
+              }}
+            />
+          ) : (
+            <UnavailableSkuFlag />
+          )}
+        </React.Fragment>
       )}
       <PromoModal
         visible={promoModalVisible}
@@ -506,12 +530,18 @@ const ProductDetailView: FC = () => {
       {orderModalVisible && (
         <AddToCartModal
           orderQty={orderQty}
+          onChangeQty={onHandleChangeQty}
           increaseOrderQty={increaseOrderQty}
           decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
-          disabled={dataStock === null}
+          disabled={
+            dataProduct === null ||
+            dataStock === null ||
+            orderQty > dataStock.stock ||
+            orderQty < dataProduct?.minQty
+          }
           isFromProductDetail={true}
         />
       )}
@@ -519,19 +549,23 @@ const ProductDetailView: FC = () => {
       <SnbToast
         open={toastSuccessAddCart}
         message={'Produk berhasil ditambahkan ke keranjang'}
-        close={() => setToastSuccessAddCart(false)}
         position={'top'}
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
       />
-      {/* Toast failed add cart */}
-      <SnbToast
-        open={toastFailedAddCart}
-        message={'Produk gagal ditambahkan ke keranjang'}
-        close={() => setToastFailedAddCart(false)}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      {/* Modal Bottom Sheet Error Add to Cart */}
+      <BottomSheetError
+        open={modalErrorAddCart}
+        error={addToCartError}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalErrorSendDataSupplier}
+        error={sendToSupplierError}
+        closeAction={handleCloseModal}
+        retryAction={onSendDataSupplier}
       />
     </SnbContainer>
   );

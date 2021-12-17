@@ -10,6 +10,7 @@ import { AddToCartModalStyle } from '@core/styles';
 /** === TYPE ===  */
 interface AddToCartQuantityModifierProps {
   orderQty: number;
+  onChangeQty: (val: number) => void;
   increaseOrderQty: () => void;
   decreaseOrderQty: () => void;
   isFromProductDetail?: boolean;
@@ -17,6 +18,7 @@ interface AddToCartQuantityModifierProps {
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
+  onChangeQty,
   increaseOrderQty,
   decreaseOrderQty,
   isFromProductDetail,
@@ -39,22 +41,41 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
     <View style={AddToCartModalStyle.quantityModifierContainer}>
       <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
       {dataStock && dataProductDetailCart && (
-        <SnbNumberCounter
-          value={orderQty}
-          onIncrease={increaseOrderQty}
-          onDecrease={decreaseOrderQty}
-          minusDisabled={orderQty <= dataProductDetailCart?.minQty}
-          plusDisabled={orderQty >= dataStock?.stock}
-        />
+        <React.Fragment>
+          {(dataStock.stock < 1000 || orderQty > dataStock.stock) && (
+            <SnbText.B3 color={color.red50}>
+              {`Tersisa ${dataStock.stock} ${dataProductDetailCart.unit}`}
+            </SnbText.B3>
+          )}
+
+          <SnbNumberCounter
+            value={orderQty}
+            onChange={onChangeQty}
+            onIncrease={increaseOrderQty}
+            onDecrease={decreaseOrderQty}
+            minusDisabled={orderQty <= dataProductDetailCart?.minQty}
+            plusDisabled={orderQty >= dataStock?.stock}
+          />
+        </React.Fragment>
       )}
       {isFromProductDetail && dataStockDetail && dataProductDetail && (
-        <SnbNumberCounter
-          value={orderQty}
-          onIncrease={increaseOrderQty}
-          onDecrease={decreaseOrderQty}
-          minusDisabled={orderQty <= dataProductDetail?.minQty}
-          plusDisabled={orderQty >= dataStockDetail?.stock}
-        />
+        <React.Fragment>
+          {(dataStockDetail.stock <= 1000 ||
+            orderQty > dataStockDetail.stock) && (
+            <SnbText.B3 color={color.red50}>
+              {`Tersisa ${dataStockDetail.stock} ${dataProductDetail.unit}`}
+            </SnbText.B3>
+          )}
+
+          <SnbNumberCounter
+            value={orderQty}
+            onChange={onChangeQty}
+            onIncrease={increaseOrderQty}
+            onDecrease={decreaseOrderQty}
+            minusDisabled={orderQty <= dataProductDetail?.minQty}
+            plusDisabled={orderQty >= dataStockDetail?.stock}
+          />
+        </React.Fragment>
       )}
     </View>
   );

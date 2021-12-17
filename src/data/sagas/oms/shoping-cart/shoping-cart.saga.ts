@@ -56,7 +56,7 @@ function* updateCart(
     yield put(ActionCreators.cartUpdateFailed(error as models.ErrorProps));
   }
 }
-/** => Cart view */
+/** => Cart total product */
 function* cartTotalProduct() {
   try {
     const response: models.DetailSuccessProps<models.CartTotalProductSuccess> =
