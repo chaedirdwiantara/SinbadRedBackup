@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbNumberCounter } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
@@ -12,12 +12,14 @@ interface AddToCartQuantityModifierProps {
   orderQty: number;
   onChangeQty: (val: number) => void;
   isFromProductDetail?: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   orderQty,
   onChangeQty,
   isFromProductDetail,
+  setIsFocus,
 }) => {
   /** === HOOKS ===  */
   const {
@@ -56,6 +58,8 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
+            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetailCart.multipleQty)}
             onDecrease={() => onMinusPres(dataProductDetailCart.multipleQty)}
             minusDisabled={
@@ -82,6 +86,8 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
+            onBlur={() => setIsFocus(false)}
+            onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetail.multipleQty)}
             onDecrease={() => onMinusPres(dataProductDetail.multipleQty)}
             minusDisabled={

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbBottomSheet } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
@@ -28,8 +28,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   disabled,
   isFromProductDetail,
 }) => {
-  /** => Content */
-
+  const [isFocus, setIsFocus] = useState(false);
   const renderContent = () => (
     <View>
       <AddToCartProductData isFromProductDetail={isFromProductDetail} />
@@ -38,9 +37,10 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         orderQty={orderQty}
         onChangeQty={onChangeQty}
         isFromProductDetail={isFromProductDetail}
+        setIsFocus={setIsFocus}
       />
       <AddToCartFooter
-        disabled={disabled}
+        disabled={disabled || isFocus}
         orderQty={orderQty}
         onAddToCartPress={onAddToCartPress}
         isFromProductDetail={isFromProductDetail}
