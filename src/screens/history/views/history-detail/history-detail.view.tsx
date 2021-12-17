@@ -13,6 +13,7 @@ import {
   SnbDialog,
   SnbToast,
 } from 'react-native-sinbad-ui';
+import Clipboard from '@react-native-clipboard/clipboard';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ProductCard } from '@core/components/ProductCard';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -178,6 +179,8 @@ const HistoryDetailView: FC = () => {
   };
   /** => function to coppy VA Number */
   const onVACoppied = () => {
+    const accountVa = paymentDetail.data?.accountVaNo || '';
+    Clipboard.setString(accountVa.toString());
     modalToast.setOpen(true);
     modalToast.setToastText('Copied To Clipboard');
     setTimeout(() => {
