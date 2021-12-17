@@ -18,13 +18,14 @@ import LoadingPage from '@core/components/LoadingPage';
 import { ProductEmptyStockView } from './product-empty-stock.view';
 import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import {
   getSelectedVouchers,
   useVoucherLocalData,
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
+import { goBack } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -92,6 +93,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
     useState(false);
   const [modalFailedCheckout, setModalFailedCheckout] = useState(false);
+  const [modalFailedGetCart, setModalFailedGetCart] = useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -101,7 +103,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartTotalProductActions = useCartTotalProductActions();
   const {
     stateShopingCart: {
-      cart: { data: cartViewData },
+      cart: { data: cartViewData, error: cartViewError },
       update: {
         data: updateCartData,
         loading: updateCartLoading,
@@ -183,6 +185,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setProductRemoveSelected(null);
     setLoadingRemoveProduct(false);
     setModalConfirmationRemoveProductVisible(false);
+  };
+
+  /** => handle go back */
+  const handleGoBack = () => {
+    setModalFailedGetCart(true);
+    goBack();
   };
 
   /** Confirmation checkout submit */
@@ -421,6 +429,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [cartViewData, stockInformationData]);
 
+  /** Listen error get cart */
+  useEffect(() => {
+    if (cartViewError !== null) {
+      setLoadingPage(false);
+      setModalFailedGetCart(true);
+    }
+  }, [cartViewError]);
+
   /** Listen product will be removed */
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartData !== null) {
@@ -466,6 +482,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
       cartUpdateActions.reset(dispatchShopingCart);
+      cartViewActions.reset(dispatchShopingCart);
     };
   }, []);
 
@@ -585,6 +602,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         error={updateCartError}
         closeAction={() => setModalFailedCheckout(false)}
         retryAction={onSubmitCheckout}
+      />
+      {/* Modal Bottom Sheet Error get cart */}
+      <BottomSheetError
+        open={modalFailedGetCart}
+        error={cartViewError}
+        closeAction={handleGoBack}
       />
     </SnbContainer>
   );
