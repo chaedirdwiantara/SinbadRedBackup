@@ -86,7 +86,6 @@ const MapsView = () => {
   }, [locations]);
 
   const getAddress = async (coords?: LatLng) => {
-    setIsGettingCurrentPosition(false);
     setLoadingDesc(true);
     try {
       const { results, error_message } = await apiMaps(
@@ -118,6 +117,12 @@ const MapsView = () => {
     <SnbContainer color="white">
       <SnbMaps.Type1
         initialRegion={region}
+        autoLocateOnLoad={params?.action === 'register' ? true : false}
+        contentTitle="Detail Alamat"
+        loading={locations.loading || isGettingCurrentPosition}
+        contentDesc={desc}
+        leftButtonAction={goBack}
+        descLoading={loadingDesc || desc === ''}
         onDragEnd={(
           coords: LatLng,
           mapRef: React.MutableRefObject<MapView | null>,
@@ -153,40 +158,25 @@ const MapsView = () => {
             setShowModal(true);
           }
         }}
-        contentTitle="Detail Alamat"
-        loading={locations.loading || isGettingCurrentPosition}
-        contentDesc={desc}
-        leftButtonAction={goBack}
-        descLoading={loadingDesc || desc === ''}
         onFailedGetPosition={() => {
-          if (params?.action === 'register' && isGettingCurrentPosition) {
+          if (params?.action === 'register') {
             setDesc('Alamat tidak ditemukan');
             setIsGettingCurrentPosition(false);
           }
         }}
-        onSuccessGetPosition={(geoPosition, refMaps, _) => {
-          if (
-            merchantData.longitude === null &&
-            params?.action === 'register'
-          ) {
-            refMaps.current?.animateToRegion({
-              ...geoPosition,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.02,
-            });
-            setRegion({ ...region, ...geoPosition });
-            setPosition({
-              latitude: geoPosition.latitude,
-              longitude: geoPosition.longitude,
-            });
-            getAddress(geoPosition);
-          } else if (params?.action !== 'edit') {
-            getAddress({
-              latitude: merchantData?.latitude || DEFAULT_LOCATION.latitude,
-              longitude: merchantData?.longitude || DEFAULT_LOCATION.longitude,
-            });
-          } else {
-          }
+        onSuccessGetPosition={(geoPosition, refMaps) => {
+          setIsGettingCurrentPosition(false);
+          refMaps.current?.animateToRegion({
+            ...geoPosition,
+            latitudeDelta: 0.02,
+            longitudeDelta: 0.02,
+          });
+          setRegion({ ...region, ...geoPosition });
+          setPosition({
+            latitude: geoPosition.latitude,
+            longitude: geoPosition.longitude,
+          });
+          getAddress(geoPosition);
         }}
       />
       <SnbBottomSheet

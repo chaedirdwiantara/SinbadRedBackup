@@ -179,7 +179,6 @@ const Content: React.FC = () => {
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selesai'}
-              shadow
               onPress={action}
               disabled={
                 stateGlobal.uploadImage.loading || registerState?.loading
@@ -258,12 +257,16 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 75 }}>
             <SnbButton.Single
-              title="Tutup"
+              title="Kembali Ke Beranda"
               type="primary"
               disabled={false}
               onPress={() => {
                 setShowModalPrivacyPolicy(false);
                 setShowModalFailed(false);
+                reset({
+                  index: 0,
+                  routes: [{ name: 'Home' }],
+                });
               }}
             />
           </View>
@@ -356,7 +359,18 @@ const Content: React.FC = () => {
         renderUploadPhotoRules(),
       )}
       <SnbBottomSheet
-        open={showModalFailed || showModalPrivacyPolicy || showModalSuccess}
+        open={showModalSuccess}
+        title={''}
+        content={renderSheetContent()}
+        size={'normal'}
+      />
+      <SnbBottomSheet
+        closeAction={() => {
+          setShowModalPrivacyPolicy(false);
+          setShowModalFailed(false);
+        }}
+        actionIcon="close"
+        open={showModalPrivacyPolicy || showModalFailed}
         title={showModalPrivacyPolicy ? 'Kebijakan Privasi' : ''}
         content={renderSheetContent()}
         size={showModalPrivacyPolicy ? 'halfscreen' : 'normal'}

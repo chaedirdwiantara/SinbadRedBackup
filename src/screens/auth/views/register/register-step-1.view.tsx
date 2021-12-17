@@ -142,7 +142,6 @@ const Content: React.FC = () => {
             }
           }}
           type="primary"
-          shadow
           loading={checkEmailAvailability.loading}
           disabled={
             name.value === '' ||
