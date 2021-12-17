@@ -46,7 +46,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const bankName = useInput(bankData?.bankName || '');
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
-  const bankBranchName = useInput(bankData?.bankBranchName || null);
+  const bankBranchName = useInput(bankData?.bankBranchName || '');
   const [openModalTNC, setOpenModalTNC] = useState(false);
   useEffect(() => {
     if (selectedItem?.item) {
@@ -143,7 +143,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Masukkan Nomor Rekening'}
             type={'default'}
             value={bankAccountNo.value}
-            onChangeText={(text) => bankAccountNo.setValue(text)}
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              bankAccountNo.setValue(cleanNumber);
+            }}
             clearText={() => bankAccountNo.setValue('')}
             mandatory
             helpText={'Pastikan nomor rekening benar'}
