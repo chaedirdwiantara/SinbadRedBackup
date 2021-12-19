@@ -29,6 +29,7 @@ export interface PaymentDetailSuccessProps {
   expiredPaymentTime: string;
   refundedTime: string;
   accountVaNo: string | null;
+  billingStatus: string;
 }
 
 export interface PaymentInvoiceSuccessProps {

@@ -10,14 +10,12 @@ import { PaymentDetailSuccessProps } from '@model/history';
 interface PaymentInformationProps {
   renderCardItem: () => void;
   dataOrder: {};
-  dataPayment: PaymentDetailSuccessProps;
+  dataPayment: PaymentDetailSuccessProps | null;
 }
 /** === COMPONENT === */
 const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
   dataPayment,
 }) => {
-  console.log(dataPayment, 'DATA PAYMENT DI INFO');
-
   return (
     <>
       <HistoryDetailCard title="Informasi Pembayaran">

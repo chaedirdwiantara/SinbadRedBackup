@@ -18,7 +18,12 @@ export const HistoryDetailStyle = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: color.yellow10,
   },
-  statusDisplay: {
+  statusContainer: {
+    marginBottom: 8,
+    marginTop: 10,
+    marginHorizontal: 16,
+  },
+  statusContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,

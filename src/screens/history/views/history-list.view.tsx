@@ -121,7 +121,7 @@ const HistoryListView: FC = () => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('payment')}
+        onCardPress={() => goToHistoryDetail('payment', item.id)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
@@ -163,7 +163,7 @@ const HistoryListView: FC = () => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('order')}
+        onCardPress={() => goToHistoryDetail('order', item.id)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }

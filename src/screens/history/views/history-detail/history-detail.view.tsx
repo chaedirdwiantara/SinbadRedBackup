@@ -1,5 +1,5 @@
-/** === IMPORT PACKAGE HERE === */
-import React, { FC, useEffect, useState } from 'react';
+/** === IMPORT PACKAGES === */
+import React, { FC, useEffect, useState, useMemo } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -15,25 +15,41 @@ import {
 } from 'react-native-sinbad-ui';
 import Clipboard from '@react-native-clipboard/clipboard';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT COMPONENTS === */
+import LoadingPage from '@core/components/LoadingPage';
 import { ProductCard } from '@core/components/ProductCard';
+import {
+  HistoryDetailCardDivider,
+  HistoryDetailCard,
+  HistoryDetailStatus,
+} from '../../components';
+import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
+import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
+/** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
+import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import {
   goBack,
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
   useModalToast,
+  useHistoryDetailAction,
 } from '../../functions';
+/** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
-import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
-import { contexts } from '@contexts';
-import LoadingPage from '@core/components/LoadingPage';
-import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
-import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
+import {
+  CANCEL,
+  PAID,
+  PAY_NOW,
+  REFUNDED,
+  WAITING_FOR_REFUND,
+} from '@screen/history/constant/history.constant';
+
 /** === TYPES === */
 type HistoryStackParamList = {
-  Detail: { section: 'order' | 'payment' };
+  Detail: { section: 'order' | 'payment'; id: string };
 };
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
 /** === DUMMIES === */
@@ -103,29 +119,6 @@ const historyDetailDummy = {
       uom: 'pcs',
     },
   ],
-  payment: {
-    type: 'Bayar Sekarang',
-    method: 'Bank BCA Virtual Account',
-    subtotal: 2750000,
-    deliveryFee: 0,
-    tax: 275000,
-    orderTotal: 3025000,
-    promo: 20000,
-    serviceFee: 4400,
-    paymentTotal: 3009400,
-    freeProducts: [
-      {
-        name: 'Quaker Instant Oatmeal 1200gr',
-        qty: 5,
-        uom: 'pcs',
-      },
-      {
-        name: 'Quaker Instant Oatmeal 400gr',
-        qty: 3,
-        uom: 'pcs',
-      },
-    ],
-  },
   orderRefund: {
     orderPaidAmount: 3009400,
     deliveryFee: 0,
@@ -156,15 +149,29 @@ const HistoryDetailView: FC = () => {
     : historyDetailDummy.canceledProducts;
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
+  const historyDetailAction = useHistoryDetailAction();
   const modalToast = useModalToast();
-  const { stateHistory, dispatchHistory } = React.useContext(
-    contexts.HistoryContext,
+  const { stateHistory, dispatchHistory } = useHistoryContext();
+  const { paymentInvoice, paymentDetail, detail, orderStatus, paymentStatus } =
+    stateHistory;
+  const historyOrderStatus = useMemo(
+    () =>
+      orderStatus.data.filter(
+        (statusItem) => statusItem.status === detail.data?.status,
+      )[0],
+    [],
   );
-  const { paymentInvoice, paymentDetail } = stateHistory;
+  const historyPaymentStatus = useMemo(
+    () =>
+      paymentStatus.data.filter(
+        (statusItem) => statusItem.status === detail.data?.statusPayment,
+      )[0],
+    [],
+  );
 
-  /** === EFFECTS === */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, 1021639);
+    getPaymentDetail.detail(dispatchHistory, '1021639');
+    historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
 
   useEffect(() => {
@@ -172,9 +179,9 @@ const HistoryDetailView: FC = () => {
       goToHistoryInvoice();
     }
   }, [paymentInvoice.data]);
-  /** === FUNCTION === */
+  /** === FUNCTIONS === */
   /** => to fetch API invoice */
-  const getInvoice = (id: number) => {
+  const getInvoice = (id: string) => {
     getInvoiceDetail.detail(dispatchHistory, id);
   };
   /** => function to coppy VA Number */
@@ -188,38 +195,21 @@ const HistoryDetailView: FC = () => {
     }, 3000);
   };
   /** === VIEW === */
-  /** => Header */
-  const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={`Detail ${title}`}
-        backAction={() => goBack()}
-      />
-    );
-  };
-  /** => Header Extension */
-  const renderHeaderExtension = () => (
-    <View style={HistoryDetailStyle.headerExtension} />
-  );
   /** => Order/Payment Status */
   const renderStatus = () => (
-    <View style={{ marginBottom: 8, marginTop: 10, marginHorizontal: 16 }}>
-      <TouchableWithoutFeedback
-        onPress={() => console.log('Go to detail status pressed')}>
-        <View style={[HistoryDetailStyle.statusDisplay, styles.shadowForBox10]}>
-          <View>
-            <SnbText.B4>Status: {historyDetailDummy.status.title}</SnbText.B4>
-            <View style={{ marginTop: 8 }}>
-              <SnbText.B3>{historyDetailDummy.status.desc}</SnbText.B3>
-            </View>
-          </View>
-          <View style={{ justifyContent: 'center' }}>
-            <SnbIcon name="chevron_right" color={color.black100} size={24} />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
+    <HistoryDetailStatus
+      status={
+        params.section === 'order'
+          ? historyOrderStatus?.title ?? ''
+          : historyPaymentStatus?.title ?? ''
+      }
+      description={
+        params.section === 'order'
+          ? historyOrderStatus?.detail ?? ''
+          : historyPaymentStatus?.detail ?? ''
+      }
+      onPress={() => console.log('Go to status detail pressed')}
+    />
   );
   /** => Card Item */
   const renderCardItem = (
@@ -263,12 +253,9 @@ const HistoryDetailView: FC = () => {
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
-      onActionClick={() => getInvoice(1495865)}>
-      {renderCardItem('Nomor Pesanan', historyDetailDummy.invoice.orderId)}
-      {renderCardItem(
-        'Nomor Referensi',
-        historyDetailDummy.invoice.referenceId ?? '-',
-      )}
+      onActionClick={() => getInvoice('1495865')}>
+      {renderCardItem('Nomor Pesanan', detail.data?.orderCode ?? '')}
+      {renderCardItem('Nomor Referensi', detail.data?.orderRef ?? '')}
     </HistoryDetailCard>
   );
   /** => Order Notes */
@@ -277,65 +264,80 @@ const HistoryDetailView: FC = () => {
       {renderCardItem('Order Via', historyDetailDummy.orderNotes.via)}
       {renderCardItem(
         'Tanggal Pembelian',
-        historyDetailDummy.orderNotes.purchaseDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.purchaseDate)
-          : '-',
+        detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-',
       )}
       {renderCardItem(
         'Tanggal Pembatalan',
-        historyDetailDummy.orderNotes.cancelDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.cancelDate)
+        detail.data?.cancelTime
+          ? toLocalDateTime(detail.data?.cancelTime)
           : '-',
       )}
       {renderCardItem(
         'Tanggal Pengembalian',
-        historyDetailDummy.orderNotes.refundDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.refundDate)
+        detail.data?.refundedTime
+          ? toLocalDateTime(detail.data?.refundedTime)
           : '-',
       )}
     </HistoryDetailCard>
   );
   /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
-    return (
+    const dataPayment = paymentDetail.data;
+    return dataPayment?.billingStatus !== CANCEL ? (
       <HistoryPaymentVirtualAccount
         onClick={() => onVACoppied()}
-        data={paymentDetail.data}
+        data={dataPayment}
       />
+    ) : (
+      <View />
     );
   };
   /** => Payment Info */
   const renderPaymentInfo = () =>
-    !paymentDetail?.loading ? (
-      <HistoryDetailPaymentInformation dataPayment={paymentDetail.data} />
+    !paymentDetail?.loading && paymentDetail.data ? (
+      <HistoryDetailPaymentInformation dataPayment={paymentDetail?.data} />
     ) : (
-      <LoadingPage />
+      <View style={{ height: '20%' }}>
+        <LoadingPage />
+      </View>
     );
   /** => Order Refund Info */
-  const renderOrderRefundInfo = () => (
-    <HistoryDetailCard title="Informasi Pengembalian">
-      {renderCardItem(
-        'Total Pembayaran Pesanan',
-        historyDetailDummy.orderRefund.orderPaidAmount
-          ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pembayaran Pengiriman',
-        historyDetailDummy.orderRefund.deliveryFee
-          ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pengembalian',
-        toCurrency(
-          historyDetailDummy.orderRefund.orderPaidAmount +
-            historyDetailDummy.orderRefund.deliveryFee,
-        ),
-        'bold',
-      )}
-    </HistoryDetailCard>
-  );
+  const renderOrderRefundInfo = () => {
+    const orderData = detail?.data;
+    const paymentData = paymentDetail?.data;
+    const billingStatus = paymentData?.billingStatus;
+    return paymentData?.paymentType?.id === PAY_NOW &&
+      (orderData!.deliveredParcelModified ||
+        (orderData!.status === CANCEL &&
+          (billingStatus === PAID ||
+            billingStatus === WAITING_FOR_REFUND ||
+            billingStatus === REFUNDED))) ? (
+      <HistoryDetailCard title="Informasi Pengembalian">
+        {renderCardItem(
+          'Total Pembayaran Pesanan',
+          historyDetailDummy.orderRefund.orderPaidAmount
+            ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
+            : toCurrency(0),
+        )}
+        {renderCardItem(
+          'Total Pembayaran Pengiriman',
+          historyDetailDummy.orderRefund.deliveryFee
+            ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
+            : toCurrency(0),
+        )}
+        {renderCardItem(
+          'Total Pengembalian',
+          toCurrency(
+            historyDetailDummy.orderRefund.orderPaidAmount +
+              historyDetailDummy.orderRefund.deliveryFee,
+          ),
+          'bold',
+        )}
+      </HistoryDetailCard>
+    ) : (
+      <View />
+    );
+  };
   /** => Delivery Detail */
   const renderDeliveryDetail = () => (
     <HistoryDetailCard title="Detail Pengiriman">
@@ -467,7 +469,7 @@ const HistoryDetailView: FC = () => {
   /** => Content */
   const renderContent = () => (
     <View style={{ backgroundColor: color.white, flex: 1 }}>
-      {renderHeaderExtension()}
+      <View style={HistoryDetailStyle.headerExtension} />
       {params.section === 'order'
         ? renderOrderDetailContent()
         : renderPaymentDetailContent()}
@@ -530,7 +532,11 @@ const HistoryDetailView: FC = () => {
   /** => main */
   return (
     <SnbContainer color="white">
-      {renderHeader()}
+      <SnbTopNav.Type3
+        type="red"
+        title={`Detail ${title}`}
+        backAction={goBack}
+      />
       {renderContent()}
       {renderFooter()}
       {renderOrderConfirmationDialog()}

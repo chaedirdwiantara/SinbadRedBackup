@@ -35,7 +35,18 @@ const getHistoryList = (payload: models.HistoryListProcessProps) => {
   );
 };
 
+const getDetail = (payload: models.DetailProcessProps) => {
+  return apiMapping<models.HistoryDetail>(
+    'auth',
+    `${historyBasePath}/${payload.id}`,
+    'order',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const HistoryOrderApi = {
   getOrderStatus,
   getHistoryList,
+  getDetail,
 };
