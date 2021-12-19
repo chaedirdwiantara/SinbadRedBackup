@@ -316,6 +316,7 @@ const ProductList: FC<ProductListProps> = ({
       dataSegmentation.dataSuppliers &&
       productDetailState
     ) {
+      onChangeQty(productDetailState.minQty);
       stockValidationActions.fetch(dispatchStock, {
         warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
         productId: productDetailState.id,

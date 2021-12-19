@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC, Dispatch, SetStateAction, useState } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbText,
@@ -56,6 +56,33 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setSassionQty,
   onRemoveProduct,
 }) => {
+  const [isFocus, setIsFocus] = useState(false);
+
+  const handleBlur = () => {
+    if (product.qty < product.minQty) {
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        product.minQty,
+        setSassionQty,
+      );
+    } else if (product.qty > product.stock) {
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        product.stock,
+        setSassionQty,
+      );
+    }
+    setIsFocus(false);
+  };
+
   return (
     <View
       style={{
@@ -103,6 +130,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           </View>
           <SnbNumberCounter
             value={product.qty}
+            onBlur={handleBlur}
+            onFocus={() => setIsFocus(true)}
             onIncrease={() =>
               handleProductQuantityChange(
                 invoiceGroupIndex,
@@ -137,10 +166,12 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
               )
             }
             minusDisabled={
+              isFocus ||
               product.qty <= product.minQty ||
               product.qty - product.multipleQty < product.minQty
             }
             plusDisabled={
+              isFocus ||
               product.qty >= product.stock ||
               product.qty + product.multipleQty > product.stock
             }
@@ -154,6 +185,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           width: '20%',
         }}>
         <TouchableOpacity
+          disabled={isFocus}
           onPress={() =>
             handleProductDelete(
               invoiceGroupIndex,

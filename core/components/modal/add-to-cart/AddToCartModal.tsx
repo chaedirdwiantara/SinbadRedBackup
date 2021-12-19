@@ -38,6 +38,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         onChangeQty={onChangeQty}
         isFromProductDetail={isFromProductDetail}
         setIsFocus={setIsFocus}
+        isFocus={isFocus}
       />
       <AddToCartFooter
         disabled={disabled || isFocus}
