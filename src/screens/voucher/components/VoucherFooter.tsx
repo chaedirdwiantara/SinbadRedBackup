@@ -32,6 +32,7 @@ export const VoucherFooter: FC<VoucherFooterProps> = ({
           {`Potensi Potongan: ${toCurrency(
             countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
               .totalDiscount,
+            { withFraction: false },
           )}`}
         </SnbText.C1>
       </View>

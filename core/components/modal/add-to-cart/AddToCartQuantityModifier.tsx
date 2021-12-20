@@ -13,6 +13,7 @@ interface AddToCartQuantityModifierProps {
   onChangeQty: (val: number) => void;
   isFromProductDetail?: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
+  isFocus: boolean;
 }
 /** === COMPONENT ===  */
 export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
@@ -20,6 +21,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   onChangeQty,
   isFromProductDetail,
   setIsFocus,
+  isFocus,
 }) => {
   /** === HOOKS ===  */
   const {
@@ -43,6 +45,23 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
     onChangeQty(orderQty - multipleQty);
   };
 
+  const handleBlur = (minQty: number, stock: number, multipleQty: number) => {
+    const valueAfterMinimum = orderQty - minQty;
+    let qty =
+      Math.floor(valueAfterMinimum / multipleQty) * multipleQty + minQty;
+
+    if (orderQty < minQty) {
+      onChangeQty(minQty);
+    } else if (orderQty > stock) {
+      const maxQtyAfterMinimum = stock - minQty;
+      qty = Math.floor(maxQtyAfterMinimum / multipleQty) * multipleQty + minQty;
+      onChangeQty(qty);
+    } else {
+      onChangeQty(qty);
+    }
+    setIsFocus(false);
+  };
+
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
@@ -58,16 +77,24 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
-            onBlur={() => setIsFocus(false)}
+            onBlur={() =>
+              handleBlur(
+                dataProductDetailCart.minQty,
+                dataStock.stock,
+                dataProductDetailCart.multipleQty,
+              )
+            }
             onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetailCart.multipleQty)}
             onDecrease={() => onMinusPres(dataProductDetailCart.multipleQty)}
             minusDisabled={
+              isFocus ||
               orderQty <= dataProductDetailCart.minQty ||
               orderQty - dataProductDetailCart.multipleQty <
                 dataProductDetailCart.minQty
             }
             plusDisabled={
+              isFocus ||
               orderQty >= dataStock.stock ||
               orderQty + dataProductDetailCart.multipleQty > dataStock.stock
             }
@@ -86,18 +113,27 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
           <SnbNumberCounter
             value={orderQty}
             onChange={onChangeQty}
-            onBlur={() => setIsFocus(false)}
+            onBlur={() =>
+              handleBlur(
+                dataProductDetail.minQty,
+                dataStockDetail.stock,
+                dataProductDetail.multipleQty,
+              )
+            }
             onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetail.multipleQty)}
             onDecrease={() => onMinusPres(dataProductDetail.multipleQty)}
             minusDisabled={
               orderQty <= dataProductDetail.minQty ||
               orderQty - dataProductDetail.multipleQty <
-                dataProductDetail.minQty
+                dataProductDetail.minQty ||
+              isFocus
             }
             plusDisabled={
-              orderQty >= dataStockDetail?.stock ||
-              orderQty + dataProductDetail.multipleQty > dataStockDetail.stock
+              orderQty >= dataStockDetail.stock ||
+              orderQty + dataProductDetail.multipleQty >
+                dataStockDetail.stock ||
+              isFocus
             }
           />
         </React.Fragment>
