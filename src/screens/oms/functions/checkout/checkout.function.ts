@@ -59,4 +59,12 @@ const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
   return toCurrency(total);
 };
 
-export { handleTotalPrice, handleSubTotalPrice };
+const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
+  let products: models.ProductCheckout[] = [];
+  data.map((brands: any) => {
+    products = [...products, ...brands.products];
+  });
+  return products;
+};
+
+export { handleTotalPrice, handleSubTotalPrice, handleTransformProductBrands };

@@ -3,7 +3,10 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
-import { useParcelDetailModal } from '../../functions/checkout';
+import {
+  useParcelDetailModal,
+  handleTransformProductBrands,
+} from '@screen/oms/functions';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
@@ -28,20 +31,18 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
 
   return (
     <View style={CheckoutStyle.invoiceGroupListContainer}>
-      {Array.isArray(data.brands) &&
-        data.brands.length > 0 &&
-        data.brands.map((brand) => (
-          <View key={brand.brandId}>
-            <View style={CheckoutStyle.headerSection}>
-              <SnbText.H4>{brand.brandName}</SnbText.H4>
-              <TouchableOpacity
-                onPress={() => parcelDetailModal.setModalOpen(true)}>
-                <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
-              </TouchableOpacity>
-            </View>
-            <CheckoutSKUListView products={brand.products} />
-          </View>
-        ))}
+      <View>
+        <View style={CheckoutStyle.headerSection}>
+          <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
+          <TouchableOpacity
+            onPress={() => parcelDetailModal.setModalOpen(true)}>
+            <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
+          </TouchableOpacity>
+        </View>
+        <CheckoutSKUListView
+          products={handleTransformProductBrands(data.brands)}
+        />
+      </View>
       <CheckoutShipmentDetailView />
       <CheckoutPaymentTypeView
         data={data}
