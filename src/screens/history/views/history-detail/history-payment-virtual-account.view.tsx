@@ -4,13 +4,12 @@ import { PaymentDetailSuccessProps } from '@model/history';
 import { SnbButton } from '@sinbad/react-native-sinbad-ui';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 import {
-  CANCEL,
   CASH,
   OVERDUE,
   PAID,
   PAY_LATER,
   PAY_NOW,
-  WAITING_FOR_PAYMENT,
+  PENDING,
 } from '@screen/history/constant/history.constant';
 interface PaymentVAProps {
   data: PaymentDetailSuccessProps | null;
@@ -82,14 +81,12 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             (paymentType?.id === PAY_LATER &&
               paymentChannel?.id !== CASH &&
               dataPayment?.expiredPaymentTime)) &&
-          (billingStatus === WAITING_FOR_PAYMENT ||
-            billingStatus === OVERDUE) ? (
+          (billingStatus === PENDING || billingStatus === OVERDUE) ? (
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
             dataPayment?.expiredPaymentTime === null &&
-            billingStatus !== 'paid' &&
-            (billingStatus === 'waiting_for_payment' ||
-              billingStatus === 'overdue') ? (
+            billingStatus !== PAID &&
+            (billingStatus === PENDING || billingStatus === OVERDUE) ? (
             renderVAButton()
           ) : (
             <View />

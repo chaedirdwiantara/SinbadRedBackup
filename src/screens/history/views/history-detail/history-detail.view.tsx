@@ -307,8 +307,8 @@ const HistoryDetailView: FC = () => {
     const paymentData = paymentDetail?.data;
     const billingStatus = paymentData?.billingStatus;
     return paymentData?.paymentType?.id === PAY_NOW &&
-      (orderData!.deliveredParcelModified ||
-        (orderData!.status === CANCEL &&
+      (orderData?.deliveredParcelModified ||
+        (orderData?.status === CANCEL &&
           (billingStatus === PAID ||
             billingStatus === WAITING_FOR_REFUND ||
             billingStatus === REFUNDED))) ? (
