@@ -34,7 +34,7 @@ import BottomSheetError from '@core/components/BottomSheetError';
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
 import { usePotentialPromoProductAction } from '@screen/promo/functions';
-import { goToBundle } from '../../functions';
+import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
   useCheckDataSupplier,
@@ -77,6 +77,7 @@ const ProductDetailView: FC = () => {
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
+  const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
 
   /** => actions */
   const addToCartActions = useAddToCart();
@@ -100,10 +101,9 @@ const ProductDetailView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
-    useOrderQuantity({
-      minQty: dataProduct?.minQty,
-    });
+  const { orderQty, onChangeQty } = useOrderQuantity({
+    minQty: dataProduct?.minQty ?? 1,
+  });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -169,6 +169,7 @@ const ProductDetailView: FC = () => {
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
+    setModalErrorProductDetail(true);
     onFunctionActions({ type: 'close' });
   };
 
@@ -214,6 +215,7 @@ const ProductDetailView: FC = () => {
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      multipleQty: dataProduct.multipleQty,
     };
 
     addToCartActions.fetch(dispatchShopingCart, params);
@@ -229,15 +231,6 @@ const ProductDetailView: FC = () => {
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
   const potentialPromoProductAction = usePotentialPromoProductAction();
-
-  /** => potential promo product effect */
-  React.useEffect(() => {
-    if (dataProduct !== null && me.data !== null) {
-      const { id } = dataProduct;
-      potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(dispatchPromo, id);
-    }
-  }, [dataProduct]);
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -257,6 +250,11 @@ const ProductDetailView: FC = () => {
 
     return 'Stock Habis';
   };
+
+  const handleRetryGetProduct = () => {
+    setLoadingButton(true);
+    productDetailActions.fetch(dispatchProduct, productId);
+  };
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
@@ -266,10 +264,25 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data product success */
   useEffect(() => {
-    if (dataProduct && me.data !== null) {
+    if (dataProduct !== null && me.data !== null) {
+      /** => supplier segmentation effect */
       supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
+      /** => potential promo product effect */
+      potentialPromoProductAction.reset(dispatchPromo);
+      potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
+      /** => on change initial order qty with min qty */
+      onChangeQty(dataProduct.minQty);
     }
   }, [dataProduct]);
+
+  /** => Listen error product */
+  useEffect(() => {
+    if (errorProduct !== null) {
+      setLoadingButton(false);
+      setIsAvailable(false);
+      setModalErrorProductDetail(true);
+    }
+  }, [errorProduct]);
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
@@ -365,6 +378,7 @@ const ProductDetailView: FC = () => {
   /** => Did Unmount */
   useEffect(() => {
     return () => {
+      setModalErrorProductDetail(false);
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
@@ -531,8 +545,6 @@ const ProductDetailView: FC = () => {
         <AddToCartModal
           orderQty={orderQty}
           onChangeQty={onHandleChangeQty}
-          increaseOrderQty={increaseOrderQty}
-          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
@@ -566,6 +578,14 @@ const ProductDetailView: FC = () => {
         error={sendToSupplierError}
         closeAction={handleCloseModal}
         retryAction={onSendDataSupplier}
+      />
+      {/* Modal Bottom Sheet Error product detail */}
+      <BottomSheetError
+        open={modalErrorProductDetail}
+        error={errorProduct}
+        closeAction={goBack}
+        retryAction={handleRetryGetProduct}
+        backAction={goBack}
       />
     </SnbContainer>
   );

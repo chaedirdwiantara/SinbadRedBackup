@@ -192,7 +192,7 @@ const useReserveStockAction = () => {
   };
 };
 
-const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
+const useOrderQuantity = ({ minQty }: { minQty: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
   const onChangeQty = (value: number) => {

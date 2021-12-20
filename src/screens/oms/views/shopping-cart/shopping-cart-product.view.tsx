@@ -136,8 +136,14 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 setSassionQty,
               )
             }
-            minusDisabled={product.qty <= product.minQty}
-            plusDisabled={product.qty >= product.stock}
+            minusDisabled={
+              product.qty <= product.minQty ||
+              product.qty - product.multipleQty < product.minQty
+            }
+            plusDisabled={
+              product.qty >= product.stock ||
+              product.qty + product.multipleQty > product.stock
+            }
           />
         </View>
       </View>
@@ -159,7 +165,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
-        {product.stock <= 1000 && (
+        {(product.stock <= 1000 || product.qty > product.stock) && (
           <SnbText.B3
             color={
               color.red50
