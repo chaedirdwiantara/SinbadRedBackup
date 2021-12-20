@@ -15,6 +15,7 @@ interface QuantityModifierProps {
   title: string;
   loading: boolean;
   qty: number;
+  onChangeQty: (val: number) => void;
   onIncrease: () => void;
   onDecrease: () => void;
   minusDisabled?: boolean;
@@ -24,6 +25,7 @@ export const QuantityModifier: FC<QuantityModifierProps> = ({
   title,
   loading,
   qty,
+  onChangeQty,
   onIncrease,
   onDecrease,
   minusDisabled = false,
@@ -44,6 +46,7 @@ export const QuantityModifier: FC<QuantityModifierProps> = ({
       <SnbText.C1 color={color.black60}>{title}</SnbText.C1>
       <SnbNumberCounter
         value={qty}
+        onChange={onChangeQty}
         onIncrease={onIncrease}
         onDecrease={onDecrease}
         minusDisabled={minusDisabled}

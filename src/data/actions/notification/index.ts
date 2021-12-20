@@ -4,3 +4,4 @@
  * ============================================================
  */
 export * from './notification-api.action';
+export * from './notification-total-api.action';

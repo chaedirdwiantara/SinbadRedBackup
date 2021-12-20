@@ -3,27 +3,27 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type SendDataToSupplierInitialProps = models.CreateItemProps;
+export type RegisterSupplierInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
-export const sendDataToSupplierInitialState: SendDataToSupplierInitialProps = {
+export const registerSupplierInitialState: RegisterSupplierInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === REDUCER === */
-export const sendDataToSupplierReducer = simplifyReducer(
-  sendDataToSupplierInitialState,
+export const registerSupplierReducer = simplifyReducer(
+  registerSupplierInitialState,
   {
     /** => Process */
-    [types.SEND_DATA_SUPPLIER_PROCESS]() {
+    [types.REGISTER_SUPPLIER_PROCESS]() {
       return {
-        ...sendDataToSupplierInitialState,
+        ...registerSupplierInitialState,
         loading: true,
       };
     },
     /** => Succeeded */
-    [types.SEND_DATA_SUPPLIER_SUCCESS](
-      state = sendDataToSupplierInitialState,
+    [types.REGISTER_SUPPLIER_SUCCESS](
+      state = registerSupplierInitialState,
       action: models.CreateSuccessAction,
     ) {
       return {
@@ -34,8 +34,8 @@ export const sendDataToSupplierReducer = simplifyReducer(
       };
     },
     /** => Failed */
-    [types.SEND_DATA_SUPPLIER_FAILED](
-      state = sendDataToSupplierInitialState,
+    [types.REGISTER_SUPPLIER_FAILED](
+      state = registerSupplierInitialState,
       action: models.CreateFailedAction,
     ) {
       return {
@@ -45,15 +45,15 @@ export const sendDataToSupplierReducer = simplifyReducer(
       };
     },
     /** Refresh */
-    [types.SEND_DATA_SUPPLIER_REFRESH]() {
+    [types.REGISTER_SUPPLIER_REFRESH]() {
       return {
-        ...sendDataToSupplierInitialState,
+        ...registerSupplierInitialState,
         loading: true,
       };
     },
     /** => Reset */
-    [types.SEND_DATA_SUPPLIER_RESET]() {
-      return sendDataToSupplierInitialState;
+    [types.REGISTER_SUPPLIER_RESET]() {
+      return registerSupplierInitialState;
     },
   },
 );

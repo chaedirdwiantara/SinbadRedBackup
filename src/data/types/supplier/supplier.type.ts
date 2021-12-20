@@ -25,3 +25,9 @@ export const SUPPLIER_SEGMENTATION2_FAILED = 'SupplierSegmentationDetailFailed';
 export const SUPPLIER_SEGMENTATION2_REFRESH =
   'SupplierSegmentationDetailRefresh';
 export const SUPPLIER_SEGMENTATION2_RESET = 'SupplierSegmentationDetailReset';
+/** => Send Data */
+export const REGISTER_SUPPLIER_PROCESS = 'RegisterSupplierProcess';
+export const REGISTER_SUPPLIER_SUCCESS = 'RegisterSupplierSuccess';
+export const REGISTER_SUPPLIER_FAILED = 'RegisterSupplierFailed';
+export const REGISTER_SUPPLIER_REFRESH = 'RegisterSupplierRefresh';
+export const REGISTER_SUPPLIER_RESET = 'RegisterSupplierReset';

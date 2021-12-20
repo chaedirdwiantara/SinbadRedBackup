@@ -22,9 +22,26 @@ function* notificationList(action: models.ListProcessAction) {
     yield put(ActionCreators.notificationListSuccess(error));
   }
 }
+
+/** => notification total */
+function* notificationTotal() {
+  try {
+    const response: models.DetailSuccessProps<models.NotificationTotalSuccess> =
+      yield call(() => {
+        return NotificationApi.notificationTotal();
+      });
+
+    yield put(ActionCreators.notificationTotalSuccess(response));
+  } catch (error) {
+    yield put(
+      ActionCreators.notificationTotalFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTEN FUNCTION === */
-function* BrandSaga() {
+function* NotificationSaga() {
   yield takeLatest(types.NOTIFICATION_LIST_PROCESS, notificationList);
+  yield takeLatest(types.NOTIFICATION_TOTAL_PROCESS, notificationTotal);
 }
 
-export default BrandSaga;
+export default NotificationSaga;
