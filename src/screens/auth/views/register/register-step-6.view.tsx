@@ -147,10 +147,11 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...vehicleAccessibilityAmount}
-              labelText="Kapasitas Jalan"
-              placeholder="Masukkan kapasitas jalan"
+              labelText="Jumlah Akses Jalan"
+              placeholder="Masukkan Jumlah Akses Jalan"
               keyboardType="phone-pad"
               helpText={'Jumlah kendaraan yang bisa melewati jalan menuju Toko'}
+              maxLength={1}
             />
           </View>
         </ScrollView>
