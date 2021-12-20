@@ -111,7 +111,9 @@ export const VerificationOrderDiscountDetail: FC<
           />
           <SnbText.B4>Total Potongan</SnbText.B4>
         </View>
-        <SnbText.B4>{toCurrency(totalDiscount)}</SnbText.B4>
+        <SnbText.B4>
+          {toCurrency(totalDiscount, { withFraction: false })}
+        </SnbText.B4>
       </TouchableOpacity>
     </View>
   );
