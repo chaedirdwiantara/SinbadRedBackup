@@ -28,13 +28,17 @@ export const VerificationOrderBottom: FC<VerificationOrderBottomProps> = ({
           <View style={VerificationOrderStyle.bottomTextRow}>
             <SnbText.B3>Total Transaksi</SnbText.B3>
             <SnbText.B3>
-              {toCurrency(data.grandTotal.grandTotalPrice)}
+              {toCurrency(data.grandTotal.grandTotalPrice, {
+                withFraction: false,
+              })}
             </SnbText.B3>
           </View>
           <View style={VerificationOrderStyle.bottomTextRow}>
             <SnbText.B3>Total Potongan</SnbText.B3>
             <SnbText.B3 color={color.green50}>
-              {toCurrency(data.grandTotal.grandTotalDiscount)}
+              {toCurrency(data.grandTotal.grandTotalDiscount, {
+                withFraction: false,
+              })}
             </SnbText.B3>
           </View>
         </View>
