@@ -61,7 +61,7 @@ const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
 
 const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
   let products: models.ProductCheckout[] = [];
-  data.map((brands: any) => {
+  data.map((brands: models.BrandCheckout) => {
     products = [...products, ...brands.products];
   });
   return products;
