@@ -19,8 +19,12 @@ import {
   goToHome,
   useCreateOrders,
   usePaymentAction,
+  useOrdersDetail,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
+import LoadingPage from '@core/components/LoadingPage';
+import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
+import { useDataFlagRTDB } from '@core/redux/Data';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -51,30 +55,50 @@ const checkoutSuccessDummy: CheckoutSuccess = {
 /** === COMPONENT === */
 const OmsCheckoutSuccessView: FC = () => {
   /** === HOOKS === */
+  useCheckFlagByTask('confirmOrderLoading');
   const [paymentData] = useState<CheckoutSuccess>(checkoutSuccessDummy);
   const [showToast, setShowToast] = useState(false);
+  const [isPageLoading, setPageLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const ordersAction = useCreateOrders();
   const paymentAction = usePaymentAction();
-  const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+  const ordersDetail = useOrdersDetail();
+  const { stateCheckout, dispatchCheckout } = useContext(
+    contexts.CheckoutContext,
+  );
   const { dispatchPayment } = useContext(contexts.PaymentContext);
+  const { stateCheckoutDone, dispatchCheckoutDone } = useContext(
+    contexts.CheckoutDoneContext,
+  );
+  const flagRTDB = useDataFlagRTDB();
 
   /** => Reset Create Orders data after fetching Create Order Detail */
   useEffect(() => {
-    ordersAction.reset(dispatchCheckout);
+    console.log('Create Orders Data', stateCheckout.create.data);
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   }, []);
+
+  /** => Listern to RTDB change */
+  useEffect(() => {
+    console.log('RTDB Status Change', flagRTDB.confirmOrderLoading);
+    if (!flagRTDB.confirmOrderLoading) {
+      console.log('Get Order Detail');
+      ordersDetail.get(dispatchCheckoutDone, 2);
+    }
+  }, [flagRTDB.confirmOrderLoading]);
+
+  /** => Reset confirm order status & set loading page false */
+  useEffect(() => {
+    if (stateCheckoutDone.detail.data !== null) {
+      ordersAction.reset(dispatchCheckout);
+      setPageLoading(false);
+    }
+  }, [stateCheckoutDone.detail.data]);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Transaksi Selesai'}
-        backAction={() => goBack()}
-      />
-    );
+    return <SnbTopNav.Type1 type="red" title={'Transaksi Selesai'} />;
   };
   /** => Success Image */
   const renderSuccessImage = () => (
@@ -228,9 +252,15 @@ const OmsCheckoutSuccessView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderContent()}
-      {renderToast()}
-      {renderFooter()}
+      {isPageLoading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          {renderContent()}
+          {renderToast()}
+          {renderFooter()}
+        </>
+      )}
     </SnbContainer>
   );
 };
