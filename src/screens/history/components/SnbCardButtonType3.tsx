@@ -12,7 +12,7 @@ interface Props {
   textRight?: string;
   color?: string;
   left?: any;
-  title: string;
+  title?: string;
   disabled?: boolean;
   type?: 'check' | 'goTo' | 'waiting';
   bgColor?: string;

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
 import { PaymentDetailSuccessProps } from '@model/history';
-import { SnbButton } from '@sinbad/react-native-sinbad-ui';
+import { SnbButton, SnbText } from '@sinbad/react-native-sinbad-ui';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 import {
   CASH,
@@ -55,7 +55,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
       <>
         <View>
           <SnbCardButtonType3
-            title={'Transfer ke no. Virtual Account'}
             subTitle1={data?.accountVaNo || ''}
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
@@ -74,6 +73,9 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     return (
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
+          <View>
+            <SnbText.C1>Transfer ke no. Virtual Account</SnbText.C1>
+          </View>
           <View style={{ marginBottom: 8 }} />
           {((paymentType?.id === PAY_NOW &&
             paymentChannel?.id !== CASH &&

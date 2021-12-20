@@ -44,6 +44,7 @@ import {
   PAID,
   PAY_NOW,
   REFUNDED,
+  REFUND_REQUESTED,
   WAITING_FOR_REFUND,
 } from '@screen/history/constant/history.constant';
 
@@ -310,7 +311,7 @@ const HistoryDetailView: FC = () => {
       (orderData?.deliveredParcelModified ||
         (orderData?.status === CANCEL &&
           (billingStatus === PAID ||
-            billingStatus === WAITING_FOR_REFUND ||
+            billingStatus === REFUND_REQUESTED ||
             billingStatus === REFUNDED))) ? (
       <HistoryDetailCard title="Informasi Pengembalian">
         {renderCardItem(
