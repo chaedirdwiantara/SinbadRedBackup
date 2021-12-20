@@ -8,3 +8,4 @@ export * from './HistoryFilterModal';
 export * from './HistoryListFilters';
 export * from './HistoryListStatusTags';
 export * from './HistoryDetailStatus';
+export * from './HistoryDetailProductList';

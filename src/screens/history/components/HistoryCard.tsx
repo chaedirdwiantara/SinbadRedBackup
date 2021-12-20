@@ -92,7 +92,7 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         style,
       ]}>
       <View style={HistoryStyle.cardHeader}>
-        <View>
+        <View style={{ flex: 1, marginRight: 12 }}>
           <SnbText.C2 color={color.black100}>{orderCode ?? '-'}</SnbText.C2>
           <View style={{ marginTop: 6 }}>
             <SnbText.C1 color={color.black60}>
