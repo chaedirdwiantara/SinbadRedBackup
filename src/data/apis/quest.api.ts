@@ -5,7 +5,7 @@ import * as models from '@models';
 const getList = (
   payload: models.ListProcessProps<models.QuestListProcessProps>,
 ) => {
-  const path = `quests?limit=${payload.limit}&skip=${payload.skip}&status=${payload.status}&buyerId=${payload.buyerId}`;
+  const path = `quests?buyerId=${payload.buyerId}&status=${payload.status}&$limit=${payload.limit}&$skip=${payload.skip}`;
   return apiMapping<models.QuestListItem[]>(
     'auth',
     path,
