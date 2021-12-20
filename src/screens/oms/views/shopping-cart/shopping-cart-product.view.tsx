@@ -56,10 +56,26 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setSassionQty,
   onRemoveProduct,
 }) => {
-  const [isFocus, setIsFocus] = useState(false);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const minusDisabled =
+    isFocus ||
+    product.qty <= product.minQty ||
+    product.qty - product.multipleQty < product.minQty;
+
+  const plusDisabled =
+    isFocus ||
+    product.qty >= product.stock ||
+    product.qty + product.multipleQty > product.stock;
 
   const handleBlur = () => {
-    if (product.qty < product.minQty) {
+    console.log('[disabled]: ', { minusDisabled, plusDisabled });
+    const valueAfterMinimum = product.qty - product.minQty;
+    let qty =
+      Math.floor(valueAfterMinimum / product.multipleQty) *
+        product.multipleQty +
+      product.minQty;
+
+    if (qty < product.minQty) {
       handleProductQuantityChange(
         invoiceGroupIndex,
         brandIndex,
@@ -69,14 +85,30 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         product.minQty,
         setSassionQty,
       );
-    } else if (product.qty > product.stock) {
+    } else if (qty > product.stock) {
+      const maxQtyAfterMinimum = product.stock - product.minQty;
+      qty =
+        Math.floor(maxQtyAfterMinimum / product.multipleQty) *
+          product.multipleQty +
+        product.minQty;
+
       handleProductQuantityChange(
         invoiceGroupIndex,
         brandIndex,
         productIndex,
         'onChange',
         [invoiceGroups, setInvoiceGroups],
-        product.stock,
+        qty,
+        setSassionQty,
+      );
+    } else {
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        qty,
         setSassionQty,
       );
     }
@@ -131,7 +163,10 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           <SnbNumberCounter
             value={product.qty}
             onBlur={handleBlur}
-            onFocus={() => setIsFocus(true)}
+            onFocus={() => {
+              console.log('okeyyyy');
+              setIsFocus(true);
+            }}
             onIncrease={() =>
               handleProductQuantityChange(
                 invoiceGroupIndex,
@@ -165,16 +200,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 setSassionQty,
               )
             }
-            minusDisabled={
-              isFocus ||
-              product.qty <= product.minQty ||
-              product.qty - product.multipleQty < product.minQty
-            }
-            plusDisabled={
-              isFocus ||
-              product.qty >= product.stock ||
-              product.qty + product.multipleQty > product.stock
-            }
+            minusDisabled={minusDisabled}
+            plusDisabled={plusDisabled}
           />
         </View>
       </View>
