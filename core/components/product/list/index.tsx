@@ -326,7 +326,7 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => Listen error segmentation and error product detail */
   useEffect(() => {
-    if (!modalErrorProductDetail && !modalErrorSegmentation) {
+    if (modalErrorProductDetail !== null && modalErrorSegmentation !== null) {
       if (errorSegmentation !== null) {
         setLoadingPreparation(false);
         setModalErrorSegmentation(true);

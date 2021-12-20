@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { meReset } from '@core/data/actions';
 /** === FUNCTION === */
 /** => call auth action */
 const useAuthAction = () => {
@@ -11,20 +12,22 @@ const useAuthAction = () => {
     (state: any) => state.auth,
   );
   return {
-    loginUserName: (data: models.LoginUserNameProps) => {
+    loginUserName: (data: models.LoginUserName) => {
       dispatch(Actions.loginUserNameProcess(data));
     },
     resetLoginUsername: () => {
       dispatch(Actions.resetLoginUsername());
     },
-    requestOTP: (data: models.OtpRequestProps) => {
+    requestOTP: (data: models.OtpRequest) => {
       dispatch(Actions.requestOTPProcess(data));
     },
-    verificationOTP: (data: models.LoginPhoneNumberProps) => {
+    verificationOTP: (data: models.LoginPhoneNumber) => {
       dispatch(Actions.verificationOTPProcess(data));
     },
     logout: () => {
       dispatch(Actions.logoutProcess());
+      dispatch(meReset());
+      dispatch(Actions.cartTotalProductReset());
     },
     resetRequestOTP: () => {
       dispatch(Actions.resetRequestOTP());
