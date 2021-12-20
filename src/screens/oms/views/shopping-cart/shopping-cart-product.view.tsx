@@ -68,7 +68,6 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
     product.qty + product.multipleQty > product.stock;
 
   const handleBlur = () => {
-    console.log('[disabled]: ', { minusDisabled, plusDisabled });
     const valueAfterMinimum = product.qty - product.minQty;
     let qty =
       Math.floor(valueAfterMinimum / product.multipleQty) *
@@ -163,10 +162,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           <SnbNumberCounter
             value={product.qty}
             onBlur={handleBlur}
-            onFocus={() => {
-              console.log('okeyyyy');
-              setIsFocus(true);
-            }}
+            onFocus={() => setIsFocus(true)}
             onIncrease={() =>
               handleProductQuantityChange(
                 invoiceGroupIndex,
@@ -222,7 +218,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
               onRemoveProduct,
             )
           }>
-          <SnbIcon name="delete_outline" color={color.black60} size={32} />
+          <SnbIcon
+            name="delete_outline"
+            color={isFocus ? color.black10 : color.black60}
+            size={32}
+          />
         </TouchableOpacity>
         {(product.stock <= 1000 || product.qty > product.stock) && (
           <SnbText.B3
