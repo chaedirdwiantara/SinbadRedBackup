@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { SnbContainer, color } from 'react-native-sinbad-ui';
+import { SnbContainer, color, SnbProgress } from 'react-native-sinbad-ui';
 import { RNCamera } from 'react-native-camera';
 import {
   View,
@@ -30,6 +30,8 @@ const TakeProfilePictureView: FC = () => {
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const { save, upload } = useUploadImageAction();
+  const [loading, setLoading] = React.useState(false);
+
   useEffect(() => {
     if (stateGlobal.uploadImage.image) {
       upload(dispatchGlobal, stateGlobal.uploadImage.image);
@@ -71,68 +73,70 @@ const TakeProfilePictureView: FC = () => {
   });
   //FUNCTION
   const takePicture = async () => {
-    if (camera) {
-      const options = {
-        quality: 0.2,
-        pauseAfterCapture: true,
-        fixOrientation: true,
-        orientation: 'portrait',
-      };
+    try {
+      if (camera) {
+        setLoading(true);
+        const options = {
+          quality: 0.2,
+          pauseAfterCapture: true,
+          fixOrientation: true,
+          orientation: 'portrait',
+        };
 
-      camera
-        .takePictureAsync(options)
-        .then((data: { uri: any }) => {
-          save(dispatchGlobal, data.uri);
-        })
-        .catch(() => {});
+        camera
+          .takePictureAsync(options)
+          .then((data: { uri: any }) => {
+            save(dispatchGlobal, data.uri);
+          })
+          .catch(() => {});
+      }
+    } catch (error) {
+      setLoading(false);
     }
   };
   const cameraOpen = () => {
     return (
-      <RNCamera
-        ref={(ref) => {
-          camera = ref;
-        }}
-        style={styles.preview}
-        type={RNCamera.Constants.Type.front}
-        captureAudio={false}
-        flashMode={RNCamera.Constants.FlashMode.on}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}>
-        <View style={styles.overlayCamera} />
-        <View style={{ position: 'absolute' }}>
-          {/* {this.state.loading ? (
+      <>
+        <RNCamera
+          ref={(ref) => {
+            camera = ref;
+          }}
+          style={styles.preview}
+          type={RNCamera.Constants.Type.front}
+          captureAudio={false}
+          flashMode={RNCamera.Constants.FlashMode.on}
+          androidCameraPermissionOptions={{
+            title: 'Permission to use camera',
+            message: 'We need your permission to use your camera',
+            buttonPositive: 'Ok',
+            buttonNegative: 'Cancel',
+          }}>
+          <View style={styles.overlayCamera} />
+          <View>
             <Image
-              source={require('../../assets/gif/loading/load_triagle.gif')}
-              style={{ height: 80, width: 80 }}
+              source={require('../../../../assets/background/take_profile_marker.png')}
+              style={{
+                width: '100%',
+                resizeMode: 'cover',
+                height: undefined,
+                aspectRatio: 1 / 1,
+              }}
             />
-          ) : (
-            <View />
-          )} */}
-        </View>
-        <View>
-          <Image
-            source={require('../../../../assets/background/take_profile_marker.png')}
-            style={{
-              width: '100%',
-              resizeMode: 'cover',
-              height: undefined,
-              aspectRatio: 1 / 1,
-            }}
-          />
-        </View>
-        <View style={styles.overlayCamera}>
-          <TouchableOpacity
-            style={styles.boxCircleCamera}
-            onPress={() => takePicture()}>
-            <View style={styles.cirleButton} />
-          </TouchableOpacity>
-        </View>
-      </RNCamera>
+          </View>
+          <View style={styles.overlayCamera}>
+            <TouchableOpacity
+              style={styles.boxCircleCamera}
+              onPress={() => takePicture()}>
+              <View style={styles.cirleButton} />
+            </TouchableOpacity>
+          </View>
+        </RNCamera>
+        {loading && (
+          <View style={{ position: 'absolute', bottom: 38, right: 0, left: 0 }}>
+            <SnbProgress size={60} />
+          </View>
+        )}
+      </>
     );
   };
   return (
