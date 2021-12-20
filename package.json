@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "clear": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache",
-    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:assembleRelease"
+    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:bundleRelease"
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "2.2.2",
@@ -25,7 +25,7 @@
     "@react-navigation/native": "5.9.4",
     "@react-navigation/stack": "5.14.4",
     "@sinbad/image-editor": "2.3.1",
-    "@sinbad/react-native-sinbad-ui": "1.0.18",
+    "@sinbad/react-native-sinbad-ui": "1.0.20",
     "fbjs": "0.8.18",
     "moment": "2.29.1",
     "react": "16.13.1",
