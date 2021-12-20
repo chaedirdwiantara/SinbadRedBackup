@@ -169,7 +169,7 @@ const ProductDetailView: FC = () => {
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
-    setModalErrorProductDetail(true);
+    setModalErrorProductDetail(false);
     onFunctionActions({ type: 'close' });
   };
 
