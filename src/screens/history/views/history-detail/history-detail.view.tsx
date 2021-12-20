@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useEffect, useState, useMemo } from 'react';
+import React, { FC, useEffect, useState, useReducer } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -8,18 +8,18 @@ import {
   SnbText,
   color,
   styles,
-  SnbIcon,
   SnbButton,
   SnbDialog,
   SnbToast,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import LoadingPage from '@core/components/LoadingPage';
-import { ProductCard } from '@core/components/ProductCard';
 import {
   HistoryDetailCardDivider,
   HistoryDetailCard,
   HistoryDetailStatus,
+  HistoryCardItem,
+  HistoryDetailProductList,
 } from '../../components';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
@@ -34,7 +34,10 @@ import {
   usePaymentInvoice,
   useModalToast,
   useHistoryDetailAction,
+  goToHistoryDetailStatus,
 } from '../../functions';
+/** === IMPORT TYPE === */
+import { StatusLog } from '../../types';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
 /** === TYPES === */
@@ -119,24 +122,32 @@ const historyDetailDummy = {
       'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730',
   },
 };
+const orderLogsDummy: Array<StatusLog> = [
+  { status: 'done', createdAt: '2021-12-20T06:52:52.375Z' },
+  { status: 'delivered', createdAt: '2021-12-19T04:52:52.375Z' },
+  { status: 'shipping', createdAt: '2021-12-19T02:52:52.375Z' },
+  { status: 'packing', createdAt: '2021-12-19T00:52:52.375Z' },
+  { status: 'confirmed', createdAt: '2021-12-18T12:52:52.375Z' },
+  { status: 'waiting_for_payment', createdAt: '2021-12-18T06:52:52.375Z' },
+];
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
   const { params } = useRoute<HistoryDetailRouteProp>();
   const title = params.section === 'order' ? 'Pesanan' : 'Tagihan';
-  const [seeMoreProducts, setSeeMoreProducts] = useState(true);
-  const [seeMoreCanceledProducts, setSeeMoreCanceledProducts] = useState(true);
+  const [seeMoreProducts, toggleSeeMoreProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
+  const [seeMoreCanceledProducts, toggleSeeMoreCanceledProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
   const [isConfirmOrderDialogOpen, setIsConfirmOrderDialogOpen] =
     useState(false);
   const [confirmDialogType, setConfirmDialogType] = useState<
     'accept' | 'refuse'
   >('accept');
-  const products = seeMoreProducts
-    ? historyDetailDummy.products.slice(0, 2)
-    : historyDetailDummy.products;
-  const canceledProducts = seeMoreCanceledProducts
-    ? historyDetailDummy.canceledProducts.slice(0, 2)
-    : historyDetailDummy.canceledProducts;
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
   const historyDetailAction = useHistoryDetailAction();
@@ -144,20 +155,6 @@ const HistoryDetailView: FC = () => {
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const { paymentInvoice, paymentDetail, detail, orderStatus, paymentStatus } =
     stateHistory;
-  const historyOrderStatus = useMemo(
-    () =>
-      orderStatus.data.filter(
-        (statusItem) => statusItem.status === detail.data?.status,
-      )[0],
-    [],
-  );
-  const historyPaymentStatus = useMemo(
-    () =>
-      paymentStatus.data.filter(
-        (statusItem) => statusItem.status === detail.data?.statusPayment,
-      )[0],
-    [],
-  );
 
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, '1021639');
@@ -184,55 +181,36 @@ const HistoryDetailView: FC = () => {
   };
   /** === VIEW === */
   /** => Order/Payment Status */
-  const renderStatus = () => (
-    <HistoryDetailStatus
-      status={
-        params.section === 'order'
-          ? historyOrderStatus.title ?? ''
-          : historyPaymentStatus.title ?? ''
-      }
-      description={
-        params.section === 'order'
-          ? historyOrderStatus.detail ?? ''
-          : historyPaymentStatus.detail ?? ''
-      }
-      onPress={() => console.log('Go to status detail pressed')}
-    />
-  );
-  /** => Card Item */
-  const renderCardItem = (
-    key: string,
-    value: string | null,
-    type: 'normal' | 'bold' | 'green' = 'normal',
-  ) => {
-    const notBoldColor = type === 'normal' ? color.black60 : color.green50;
+  const renderStatus = () => {
+    const historyOrderStatus = orderStatus.data.find(
+      (statusItem) => statusItem.status === detail.data?.status,
+    );
+    const historyPaymentStatus = paymentStatus.data.find(
+      (statusItem) => statusItem.status === detail.data?.statusPayment,
+    );
 
     return (
-      <View key={`${key}-${value}`} style={HistoryDetailStyle.cardItem}>
-        {type !== 'bold' ? (
-          <>
-            <View style={{ marginRight: 16 }}>
-              <SnbText.B3 color={notBoldColor}>{key}</SnbText.B3>
-            </View>
-            <View style={{ maxWidth: '60%' }}>
-              <SnbText.B3 color={notBoldColor} align="right">
-                {value}
-              </SnbText.B3>
-            </View>
-          </>
-        ) : (
-          <>
-            <View style={{ marginRight: 16 }}>
-              <SnbText.B4 color={color.black100}>{key}</SnbText.B4>
-            </View>
-            <View style={{ maxWidth: '60%' }}>
-              <SnbText.B4 color={color.black100} align="right">
-                {value}
-              </SnbText.B4>
-            </View>
-          </>
-        )}
-      </View>
+      <HistoryDetailStatus
+        status={
+          params.section === 'order'
+            ? historyOrderStatus?.title ?? ''
+            : historyPaymentStatus?.title ?? ''
+        }
+        description={
+          params.section === 'order'
+            ? historyOrderStatus?.detail ?? ''
+            : historyPaymentStatus?.detail ?? ''
+        }
+        onPress={() =>
+          goToHistoryDetailStatus({
+            orderCode: detail.data?.orderCode ?? '-',
+            createdAt: detail.data?.createdAt!,
+            trackingId: '10292019201',
+            cancelReason: null,
+            logs: orderLogsDummy,
+          })
+        }
+      />
     );
   };
   /** => Invoice Info */
@@ -242,30 +220,45 @@ const HistoryDetailView: FC = () => {
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
       onActionClick={() => getInvoice('1495865')}>
-      {renderCardItem('Nomor Pesanan', detail.data?.orderCode ?? '')}
-      {renderCardItem('Nomor Referensi', detail.data?.orderRef ?? '')}
+      <HistoryCardItem
+        title="Nomor Pesanan"
+        value={detail.data?.orderCode ?? '-'}
+      />
+      <HistoryCardItem
+        title="Nomor Referensi"
+        value={detail.data?.orderRef ?? '-'}
+      />
     </HistoryDetailCard>
   );
   /** => Order Notes */
   const renderOrderNotes = () => (
     <HistoryDetailCard title="Catatan Pesanan">
-      {renderCardItem('Order Via', historyDetailDummy.orderNotes.via)}
-      {renderCardItem(
-        'Tanggal Pembelian',
-        detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-',
-      )}
-      {renderCardItem(
-        'Tanggal Pembatalan',
-        detail.data?.cancelTime
-          ? toLocalDateTime(detail.data?.cancelTime)
-          : '-',
-      )}
-      {renderCardItem(
-        'Tanggal Pengembalian',
-        detail.data?.refundedTime
-          ? toLocalDateTime(detail.data?.refundedTime)
-          : '-',
-      )}
+      <HistoryCardItem
+        title="Order Via"
+        value={historyDetailDummy.orderNotes.via}
+      />
+      <HistoryCardItem
+        title="Tanggal Pembelian"
+        value={
+          detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-'
+        }
+      />
+      <HistoryCardItem
+        title="Tanggal Pembatalan"
+        value={
+          detail.data?.cancelTime
+            ? toLocalDateTime(detail.data?.cancelTime)
+            : '-'
+        }
+      />
+      <HistoryCardItem
+        title="Tanggal Pengembalian"
+        value={
+          detail.data?.refundedTime
+            ? toLocalDateTime(detail.data?.refundedTime)
+            : '-'
+        }
+      />
     </HistoryDetailCard>
   );
   /** => render Virtual Account Info */
@@ -287,116 +280,62 @@ const HistoryDetailView: FC = () => {
   /** => Order Refund Info */
   const renderOrderRefundInfo = () => (
     <HistoryDetailCard title="Informasi Pengembalian">
-      {renderCardItem(
-        'Total Pembayaran Pesanan',
-        historyDetailDummy.orderRefund.orderPaidAmount
-          ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pembayaran Pengiriman',
-        historyDetailDummy.orderRefund.deliveryFee
-          ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pengembalian',
-        toCurrency(
+      <HistoryCardItem
+        title="Total Pembayaran Pesanan"
+        value={
+          historyDetailDummy.orderRefund.orderPaidAmount
+            ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
+            : toCurrency(0)
+        }
+      />
+      <HistoryCardItem
+        title="Total Pembayaran Pengiriman"
+        value={
+          historyDetailDummy.orderRefund.deliveryFee
+            ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
+            : toCurrency(0)
+        }
+      />
+      <HistoryCardItem
+        title="Total Pengembalian"
+        value={toCurrency(
           historyDetailDummy.orderRefund.orderPaidAmount +
             historyDetailDummy.orderRefund.deliveryFee,
-        ),
-        'bold',
-      )}
+        )}
+        type="bold"
+      />
     </HistoryDetailCard>
   );
   /** => Delivery Detail */
   const renderDeliveryDetail = () => (
     <HistoryDetailCard title="Detail Pengiriman">
-      {renderCardItem(
-        'Kurir Pengiriman',
-        historyDetailDummy.deliveryDetail.courier,
-      )}
-      {renderCardItem(
-        'Alamat Pengiriman',
-        historyDetailDummy.deliveryDetail.address,
-      )}
+      <HistoryCardItem
+        title="Kurir Pengiriman"
+        value={historyDetailDummy.deliveryDetail.courier}
+      />
+      <HistoryCardItem
+        title="Alamat Pengiriman"
+        value={historyDetailDummy.deliveryDetail.address}
+      />
     </HistoryDetailCard>
   );
   /** => Product List */
   const renderProductList = () => (
     <View>
       <View style={styles.shadowForBox10}>
-        <View style={HistoryDetailStyle.productListCardHeader}>
-          <SnbText.B4>Daftar Produk</SnbText.B4>
-        </View>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-          {products.map((product, productIndex) => (
-            <ProductCard.Type1
-              key={`${product.name}-${productIndex}`}
-              name={product.name}
-              imageSource={product.images}
-              price={toCurrency(product.price)}
-              qty={product.qty}
-              originalQty={product.originalQty}
-              uom={product.uom}
-              total={toCurrency(product.total)}
-              originalTotal={
-                product.originalTotal
-                  ? toCurrency(product.originalTotal)
-                  : undefined
-              }
-            />
-          ))}
-          {historyDetailDummy.products.length > 2 && (
-            <TouchableWithoutFeedback
-              onPress={() => setSeeMoreProducts((prev) => !prev)}>
-              <View style={HistoryDetailStyle.seeMoreButton}>
-                <SnbIcon
-                  name={seeMoreProducts ? 'expand_more' : 'expand_less'}
-                  color={color.red50}
-                  size={20}
-                  style={{ marginRight: 8 }}
-                />
-                <SnbText.B3 color={color.red50}>
-                  {seeMoreProducts ? 'Lihat Lebih' : 'Lihat Ringkas'}
-                </SnbText.B3>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        </View>
+        <HistoryDetailProductList
+          title="Daftar Produk"
+          products={historyDetailDummy.products}
+          seeMore={seeMoreProducts}
+          toggleSeeMore={toggleSeeMoreProducts}
+        />
         <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
-        <View style={HistoryDetailStyle.canceledProductListCardHeader}>
-          <SnbText.B4>Produk Dibatalkan</SnbText.B4>
-        </View>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-          {canceledProducts.map((product, productIndex) => (
-            <ProductCard.Type1
-              key={`${product.name}-${productIndex}`}
-              name={product.name}
-              imageSource={product.images}
-              price={toCurrency(product.price)}
-              qty={product.qty}
-              uom={product.uom}
-              total={toCurrency(product.total)}
-            />
-          ))}
-          {historyDetailDummy.canceledProducts.length > 2 && (
-            <TouchableWithoutFeedback
-              onPress={() => setSeeMoreCanceledProducts((prev) => !prev)}>
-              <View style={HistoryDetailStyle.seeMoreButton}>
-                <SnbIcon
-                  name={seeMoreCanceledProducts ? 'expand_more' : 'expand_less'}
-                  color={color.red50}
-                  size={20}
-                  style={{ marginRight: 8 }}
-                />
-                <SnbText.B3 color={color.red50}>
-                  {seeMoreCanceledProducts ? 'Lihat Lebih' : 'Lihat Ringkas'}
-                </SnbText.B3>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        </View>
+        <HistoryDetailProductList
+          title="Produk Dibatalkan"
+          products={historyDetailDummy.canceledProducts}
+          seeMore={seeMoreCanceledProducts}
+          toggleSeeMore={toggleSeeMoreCanceledProducts}
+        />
       </View>
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>

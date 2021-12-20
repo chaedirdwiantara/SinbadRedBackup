@@ -19,33 +19,41 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
   console.log(dataPayment, 'DATA PAYMENT DI INFO');
 
   return (
-    <>
-      <HistoryDetailCard title="Informasi Pembayaran">
-        {HistoryCardItem('Tipe Pembayaran', dataPayment?.paymentType.name)}
-        {HistoryCardItem('Metode Pembayaran', dataPayment?.paymentChannel.name)}
-        {HistoryCardItem('Sub-total pesanan (90)', toCurrency(1000000))}
-        {
-          // historyDetailDummy.payment.freeProducts.map((product) =>
-          HistoryCardItem(`${'tes'} (${20} ${4000})`, 'FREE', 'green')
-        }
-        {HistoryCardItem('Ongkos Kirim', toCurrency(0))}
-        {HistoryCardItem('PPN 10%', toCurrency(100000))}
-        {HistoryCardItem('Total Pesanan', toCurrency(1100000), 'bold')}
-        <HistoryDetailCardDivider />
-        {HistoryCardItem('Promo Pembayaran', toCurrency(10000))}
-        {dataPayment?.paymentFee
-          ? HistoryCardItem(
-              'Layanan Pembayaran',
-              toCurrency(dataPayment?.paymentFee || 0),
-            )
-          : null}
-        {HistoryCardItem(
-          'Total Pembayaran Pesanan',
-          toCurrency(1233000),
-          'bold',
-        )}
-      </HistoryDetailCard>
-    </>
+    <HistoryDetailCard title="Informasi Pembayaran">
+      <HistoryCardItem
+        title="Tipe Pembayaran"
+        value={dataPayment?.paymentType.name}
+      />
+      <HistoryCardItem
+        title="Metode Pembayaran"
+        value={dataPayment?.paymentChannel.name}
+      />
+      <HistoryCardItem
+        title="Sub-total pesanan (90)"
+        value={toCurrency(1000000)}
+      />
+      <HistoryCardItem title="tes 20 400" value="FREE" type="green" />
+      <HistoryCardItem title="Ongkos Kirim" value={toCurrency(0)} />
+      <HistoryCardItem title="PPN 10%" value={toCurrency(100000)} />
+      <HistoryCardItem
+        title="Total Pesanan"
+        value={toCurrency(1100000)}
+        type="bold"
+      />
+      <HistoryDetailCardDivider />
+      <HistoryCardItem title="Promo Pembayaran" value={toCurrency(10000)} />
+      {dataPayment?.paymentFee ? (
+        <HistoryCardItem
+          title="Layanan Pembayaran"
+          value={toCurrency(dataPayment?.paymentFee ?? 0)}
+        />
+      ) : null}
+      <HistoryCardItem
+        title="Total Pembayaran Pesanan"
+        value={toCurrency(1233000)}
+        type="bold"
+      />
+    </HistoryDetailCard>
   );
 };
 

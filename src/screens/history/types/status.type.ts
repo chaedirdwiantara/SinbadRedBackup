@@ -70,3 +70,8 @@ export const orderStatusColor: Record<
   cancel: 'red',
   pending_partial: 'yellow',
 };
+
+export interface StatusLog {
+  status: OrderStatusSlug | PaymentStatusSlug;
+  createdAt: string;
+}
