@@ -45,12 +45,19 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
     onChangeQty(orderQty - multipleQty);
   };
 
-  const handleBlur = (minQty: number, stock: number) => {
-    console.log('[lblur]: ', minQty, stock, isFocus);
+  const handleBlur = (minQty: number, stock: number, multipleQty: number) => {
+    const valueAfterMinimum = orderQty - minQty;
+    let qty =
+      Math.floor(valueAfterMinimum / multipleQty) * multipleQty + minQty;
+
     if (orderQty < minQty) {
       onChangeQty(minQty);
     } else if (orderQty > stock) {
-      onChangeQty(stock);
+      const maxQtyAfterMinimum = stock - minQty;
+      qty = Math.floor(maxQtyAfterMinimum / multipleQty) * multipleQty + minQty;
+      onChangeQty(qty);
+    } else {
+      onChangeQty(qty);
     }
     setIsFocus(false);
   };
@@ -71,7 +78,11 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
             value={orderQty}
             onChange={onChangeQty}
             onBlur={() =>
-              handleBlur(dataProductDetailCart.minQty, dataStock.stock)
+              handleBlur(
+                dataProductDetailCart.minQty,
+                dataStock.stock,
+                dataProductDetailCart.multipleQty,
+              )
             }
             onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetailCart.multipleQty)}
@@ -103,7 +114,11 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
             value={orderQty}
             onChange={onChangeQty}
             onBlur={() =>
-              handleBlur(dataProductDetail.minQty, dataStockDetail.stock)
+              handleBlur(
+                dataProductDetail.minQty,
+                dataStockDetail.stock,
+                dataProductDetail.multipleQty,
+              )
             }
             onFocus={() => setIsFocus(true)}
             onIncrease={() => onPlusPres(dataProductDetail.multipleQty)}
@@ -115,7 +130,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
               isFocus
             }
             plusDisabled={
-              orderQty >= dataStockDetail?.stock ||
+              orderQty >= dataStockDetail.stock ||
               orderQty + dataProductDetail.multipleQty >
                 dataStockDetail.stock ||
               isFocus
