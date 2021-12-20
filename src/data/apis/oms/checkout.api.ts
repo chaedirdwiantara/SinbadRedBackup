@@ -26,10 +26,9 @@ const createOrders = (data: models.CreateOrders) => {
   );
 };
 
-const getOrdersDetail = (id: models.DetailProcessProps) => {
-  const mockPath =
-    'https://7d57c2be-7226-4fe4-87b7-d9df7cbaaa98.mock.pstmn.io/api/v1/sinbad-app/orders/2246200';
-  const path = `orders/${id}`;
+const getOrdersDetail = (data: models.CheckoutDoneProcessProps) => {
+  const mockPath = 'https://7d57c2be-7226-4fe4-87b7-d9df7cbaaa98.mock.pstmn.io';
+  const path = `orders/${data.id}`;
   return apiMappingMock<models.DetailSuccessProps<models.CheckoutDoneOrders>>(
     mockPath,
     path,

@@ -1,3 +1,12 @@
+export interface CheckoutDoneProcessAction {
+  type: string;
+  payload: CheckoutDoneProcessProps;
+  contextDispatch: (action: any) => any;
+}
+
+export interface CheckoutDoneProcessProps {
+  id: number;
+}
 export interface CheckoutDoneOrders {
   totalAmount: number;
   orderDate: string;

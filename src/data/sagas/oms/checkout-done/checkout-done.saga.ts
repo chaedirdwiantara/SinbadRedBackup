@@ -6,7 +6,7 @@ import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
-function* getOrdersDetail(action: models.DetailProcessAction) {
+function* getOrdersDetail(action: models.CheckoutDoneProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.CheckoutDoneOrders> =
       yield call(() => {

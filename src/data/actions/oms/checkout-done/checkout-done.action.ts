@@ -5,8 +5,8 @@ import { GET_ORDER_DETAIL_PROCESS } from '@types';
 /** => Process */
 export const getOrdersDetailProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.DetailProcessProps,
-): models.DetailProcessAction => {
+  payload: models.CheckoutDoneProcessProps,
+): models.CheckoutDoneProcessAction => {
   contextDispatch({
     type: GET_ORDER_DETAIL_PROCESS,
     payload,
