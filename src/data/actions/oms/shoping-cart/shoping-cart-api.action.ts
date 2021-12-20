@@ -25,6 +25,7 @@ export const cartViewFailed = (
   return { type: types.CART_VIEW_FAILED, payload };
 };
 /** => Reset */
-export const cartViewReset = () => {
+export const cartViewReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({ type: types.CART_VIEW_RESET });
   return { type: types.CART_VIEW_RESET };
 };
