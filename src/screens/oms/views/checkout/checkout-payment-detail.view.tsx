@@ -34,7 +34,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
         <View style={{ marginLeft: 32 }}>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black100}>
-              {`Total Barang ${data.totalProduct}`}
+              {`Total Barang (${data.totalProduct})`}
             </SnbText.B3>
             <SnbText.B3 color={color.black100}>
               {toCurrency(data.totalPriceBeforeTax)}

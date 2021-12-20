@@ -64,6 +64,9 @@ function* cartTotalProduct() {
         return CartApi.getCartTotalProduct();
       });
     yield put(ActionCreators.cartTotalProductSuccess(response));
+    yield put(
+      ActionCreators.updateCartIdCheckout({ cartId: response.data.cartId }),
+    );
   } catch (error) {
     yield put(
       ActionCreators.cartTotalProductFailed(error as models.ErrorProps),
