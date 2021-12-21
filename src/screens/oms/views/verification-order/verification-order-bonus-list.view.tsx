@@ -10,25 +10,26 @@ interface VerificationOrderDiscountListProps {
   bonusProducts: VerificationOrderDetailBonusProduct[];
 }
 /** === COMPONENT ===  */
-export const VerificationOrderBonusList: FC<VerificationOrderDiscountListProps> =
-  ({ bonusProducts }) => {
-    if (bonusProducts.length === 0) {
-      return null;
-    }
+export const VerificationOrderBonusList: FC<
+  VerificationOrderDiscountListProps
+> = ({ bonusProducts }) => {
+  if (bonusProducts.length === 0) {
+    return null;
+  }
 
-    return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
-        </View>
-        {bonusProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <VerificationOrderBonusItem data={item} />
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-            </React.Fragment>
-          );
-        })}
+  return (
+    <View>
+      <View style={VerificationOrderStyle.listHeader}>
+        <SnbText.B4>{'Bonus SKU'}</SnbText.B4>
       </View>
-    );
-  };
+      {bonusProducts.map((item, index) => {
+        return (
+          <React.Fragment key={index}>
+            <VerificationOrderBonusItem data={item} />
+            <SnbDivider style={VerificationOrderStyle.listDivider} />
+          </React.Fragment>
+        );
+      })}
+    </View>
+  );
+};

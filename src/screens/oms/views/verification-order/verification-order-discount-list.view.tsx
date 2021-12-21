@@ -12,35 +12,36 @@ interface VerificationOrderDiscountListProps {
   promoProducts: VerificationOrderDetailPromoProduct[];
 }
 /** === COMPONENT ===  */
-export const VerificationOrderDiscountList: FC<VerificationOrderDiscountListProps> =
-  ({ promoProducts }) => {
-    const promoAccordion = usePromoAccordion();
+export const VerificationOrderDiscountList: FC<
+  VerificationOrderDiscountListProps
+> = ({ promoProducts }) => {
+  const promoAccordion = usePromoAccordion();
 
-    if (promoProducts.length === 0) {
-      return null;
-    }
+  if (promoProducts.length === 0) {
+    return null;
+  }
 
-    return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${promoProducts.length} SKU)`}</SnbText.B4>
-        </View>
-        {promoProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <VerificationOrderDiscountItem data={item} />
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-              <VerificationOrderDiscountDetail
-                promoList={item.promos}
-                voucherList={item.vouchers}
-                totalDiscount={item.promoPrice + item.voucherPrice}
-                accordionIndex={promoAccordion.activeIndex}
-                accordionSetter={promoAccordion.setIndex}
-                itemIndex={index}
-              />
-            </React.Fragment>
-          );
-        })}
+  return (
+    <View>
+      <View style={VerificationOrderStyle.listHeader}>
+        <SnbText.B4>{`Produk Mendapatkan Potongan Harga (${promoProducts.length} SKU)`}</SnbText.B4>
       </View>
-    );
-  };
+      {promoProducts.map((item, index) => {
+        return (
+          <React.Fragment key={index}>
+            <VerificationOrderDiscountItem data={item} />
+            <SnbDivider style={VerificationOrderStyle.listDivider} />
+            <VerificationOrderDiscountDetail
+              promoList={item.promos}
+              voucherList={item.vouchers}
+              totalDiscount={item.promoPrice + item.voucherPrice}
+              accordionIndex={promoAccordion.activeIndex}
+              accordionSetter={promoAccordion.setIndex}
+              itemIndex={index}
+            />
+          </React.Fragment>
+        );
+      })}
+    </View>
+  );
+};

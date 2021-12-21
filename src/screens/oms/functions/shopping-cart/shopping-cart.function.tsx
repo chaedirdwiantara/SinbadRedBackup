@@ -60,13 +60,7 @@ const handleProductQuantityChange = (
   } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty = currentQty - currentProduct.multipleQty;
   } else if (action === 'onChange') {
-    if (currentQty >= currentProduct.stock) {
-      currentProduct.qty = currentProduct.stock;
-    } else if (currentQty <= currentProduct.minQty) {
-      currentProduct.qty = currentProduct.minQty;
-    } else {
-      currentProduct.qty = currentQty;
-    }
+    currentProduct.qty = currentQty;
   }
 
   currentBrand.products[productIndex] = currentProduct;

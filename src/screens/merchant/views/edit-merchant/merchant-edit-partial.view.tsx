@@ -555,6 +555,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             }}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
+            maxLength={1}
           />
         </View>
       </View>

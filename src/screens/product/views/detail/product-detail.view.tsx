@@ -169,7 +169,7 @@ const ProductDetailView: FC = () => {
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
-    setModalErrorProductDetail(true);
+    setModalErrorProductDetail(false);
     onFunctionActions({ type: 'close' });
   };
 
@@ -243,9 +243,13 @@ const ProductDetailView: FC = () => {
     if (defaultProperties.stock > (dataProduct?.minQty ?? 1)) {
       if (defaultProperties.isBundle) {
         return 'Check Promo Bundle';
+      } else if (me.data === null) {
+        return 'Tambah ke Keranjang';
       } else {
         return 'Tambah ke Keranjang';
       }
+    } else if (me.data === null) {
+      return 'Tambah ke Keranjang';
     }
 
     return 'Stock Habis';
@@ -272,6 +276,8 @@ const ProductDetailView: FC = () => {
       potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
       /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
+    } else if (me.data === null) {
+      setLoadingButton(false);
     }
   }, [dataProduct]);
 
@@ -497,7 +503,10 @@ const ProductDetailView: FC = () => {
             <ActionButton
               loading={loadingButton}
               title={getActionButtonTitle()}
-              disabled={defaultProperties.stock < (dataProduct?.minQty ?? 1)}
+              disabled={
+                me.data !== null &&
+                defaultProperties.stock < (dataProduct?.minQty ?? 1)
+              }
               onPress={() => {
                 if (defaultProperties.isBundle) {
                   goToBundle(productId);
