@@ -23,6 +23,7 @@ import {
   AddToCartModal,
 } from '@core/components/modal';
 import { LoadingHorizontal } from '@core/components/Loading';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
@@ -107,11 +108,13 @@ const ProductList: FC<ProductListProps> = ({
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
   const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
-  const [toastFailedAddCart, setToastFailedAddCart] = useState(false);
   const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
     useState(false);
-  const [toastFailedRegisterSupplier, setToastFailedRegisterSupplier] =
+  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
+  const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
+  const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
 
   const {
     sortModalVisible,
@@ -139,14 +142,13 @@ const ProductList: FC<ProductListProps> = ({
   const {
     stateProduct: {
       list: { loading: productLoading, error: productError },
-      cart: { data: productDetailState },
+      cart: { data: productDetailState, error: productDetailError },
     },
     dispatchProduct,
   } = useProductContext();
-  const { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty } =
-    useOrderQuantity({
-      minQty: productDetailState?.minQty,
-    });
+  const { orderQty, onChangeQty } = useOrderQuantity({
+    minQty: productDetailState?.minQty ?? 1,
+  });
   const {
     stateShopingCart: {
       create: { data: addToCartData, error: addToCartError },
@@ -163,7 +165,7 @@ const ProductList: FC<ProductListProps> = ({
   const { me } = useDataAuth();
   const {
     stateSupplier: {
-      segmentation: { data: dataSegmentation },
+      segmentation: { data: dataSegmentation, error: errorSegmentation },
       create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
@@ -200,6 +202,9 @@ const ProductList: FC<ProductListProps> = ({
     productDetailActions.reset(dispatchProduct);
     supplierSegmentationAction.reset(dispatchSupplier);
     addToCartActions.reset(dispatchShopingCart);
+    sendDataToSupplierActions.reset(dispatchSupplier);
+    setModalErrorAddCart(false);
+    setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
@@ -210,14 +215,7 @@ const ProductList: FC<ProductListProps> = ({
     if (!dataStock || !productDetailState) {
       return;
     }
-
-    if (value >= dataStock.stock) {
-      onChangeQty(dataStock.stock);
-    } else if (value <= productDetailState.minQty) {
-      onChangeQty(productDetailState.minQty);
-    } else {
-      onChangeQty(value);
-    }
+    onChangeQty(value);
   };
 
   /** => action submit add to cart  */
@@ -256,6 +254,7 @@ const ProductList: FC<ProductListProps> = ({
       groupId: dataSegmentation.dataSuppliers.groupId,
       typeId: dataSegmentation.dataSuppliers.typeId,
       clusterId: dataSegmentation.dataSuppliers.clusterId,
+      multipleQty: productDetailState.multipleQty,
     };
 
     addToCartActions.fetch(dispatchShopingCart, params);
@@ -280,31 +279,19 @@ const ProductList: FC<ProductListProps> = ({
   /** => Do something when success add to cart */
   useEffect(() => {
     if (addToCartError !== null) {
-      setToastFailedAddCart(true);
+      setModalErrorAddCart(true);
     }
   }, [addToCartError]);
 
   /** close toast listener */
   useEffect(() => {
-    if (
-      toastSuccessAddCart ||
-      toastFailedAddCart ||
-      toastSuccessRegisterSupplier ||
-      toastFailedRegisterSupplier
-    ) {
+    if (toastSuccessAddCart || toastSuccessRegisterSupplier) {
       setTimeout(() => {
         setToastSuccessAddCart(false);
-        setToastFailedAddCart(false);
         setToastSuccessRegisterSupplier(false);
-        setToastFailedRegisterSupplier(false);
       }, 3000);
     }
-  }, [
-    toastSuccessAddCart,
-    toastFailedAddCart,
-    toastSuccessRegisterSupplier,
-    toastFailedRegisterSupplier,
-  ]);
+  }, [toastSuccessAddCart, toastSuccessRegisterSupplier]);
 
   /** => Do something when success send data to supplier */
   useEffect(() => {
@@ -318,8 +305,7 @@ const ProductList: FC<ProductListProps> = ({
   /** => Do something when error send data to supplier */
   useEffect(() => {
     if (sendToSupplierError !== null) {
-      setToastFailedRegisterSupplier(true);
-      sendDataToSupplierActions.reset(dispatchSupplier);
+      setModalErrorSendDataSupplier(true);
     }
   }, [sendToSupplierError]);
 
@@ -330,12 +316,26 @@ const ProductList: FC<ProductListProps> = ({
       dataSegmentation.dataSuppliers &&
       productDetailState
     ) {
+      onChangeQty(productDetailState.minQty);
       stockValidationActions.fetch(dispatchStock, {
         warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
         productId: productDetailState.id,
       });
     }
   }, [dataSegmentation, productDetailState]);
+
+  /** => Listen error segmentation and error product detail */
+  useEffect(() => {
+    if (modalErrorProductDetail !== null && modalErrorSegmentation !== null) {
+      if (errorSegmentation !== null) {
+        setLoadingPreparation(false);
+        setModalErrorSegmentation(true);
+      } else if (productDetailError !== null) {
+        setLoadingPreparation(false);
+        setModalErrorProductDetail(true);
+      }
+    }
+  }, [errorSegmentation, productDetailError]);
 
   /** Listen Data Stock */
   useEffect(() => {
@@ -529,12 +529,15 @@ const ProductList: FC<ProductListProps> = ({
         <AddToCartModal
           orderQty={orderQty}
           onChangeQty={onHandleChangeQty}
-          increaseOrderQty={increaseOrderQty}
-          decreaseOrderQty={decreaseOrderQty}
           open={orderModalVisible}
           closeAction={handleCloseModal}
           onAddToCartPress={onSubmitAddToCart}
-          disabled={dataStock === null}
+          disabled={
+            productDetailState === null ||
+            dataStock === null ||
+            orderQty > dataStock.stock ||
+            orderQty < productDetailState?.minQty
+          }
         />
       )}
       {/* Product not coverage modal */}
@@ -551,13 +554,6 @@ const ProductList: FC<ProductListProps> = ({
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
       />
-      {/* Toast failed add cart */}
-      <SnbToast
-        open={toastFailedAddCart}
-        message={'Produk gagal ditambahkan ke keranjang'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
-      />
       {/* Toast success register supplier */}
       <SnbToast
         open={toastSuccessRegisterSupplier}
@@ -566,13 +562,6 @@ const ProductList: FC<ProductListProps> = ({
         leftItem={
           <SnbIcon name={'check_circle'} color={color.green50} size={20} />
         }
-      />
-      {/* Toast failed register supplier */}
-      <SnbToast
-        open={toastFailedRegisterSupplier}
-        message={'Gagal kirim data ke supplier'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
       {/* Modal loading horizontal */}
       <SnbBottomSheet
@@ -587,6 +576,30 @@ const ProductList: FC<ProductListProps> = ({
           </View>
         }
         isSwipeable={false}
+      />
+      {/* Modal Bottom Sheet Error Add to Cart */}
+      <BottomSheetError
+        open={modalErrorAddCart}
+        error={addToCartError}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalErrorSendDataSupplier}
+        error={sendToSupplierError}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet segmentation */}
+      <BottomSheetError
+        open={modalErrorSegmentation}
+        error={errorSegmentation}
+        closeAction={handleCloseModal}
+      />
+      {/* Modal Bottom Sheet product detail */}
+      <BottomSheetError
+        open={modalErrorProductDetail}
+        error={productDetailError}
+        closeAction={handleCloseModal}
       />
     </SnbContainer>
   );

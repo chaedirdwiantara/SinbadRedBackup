@@ -9,23 +9,24 @@ interface VerificationOrderBonusItemProps {
   data: VerificationOrderDetailBonusProduct;
 }
 /** === COMPONENT ===  */
-export const VerificationOrderBonusItem: FC<VerificationOrderBonusItemProps> =
-  ({ data }) => {
-    return (
-      <View style={VerificationOrderStyle.listItemContainer}>
-        <Image
-          source={{
-            uri: data.bonusProductImageUrl,
-          }}
-          style={VerificationOrderStyle.listItemProductImage}
-        />
-        <View style={VerificationOrderStyle.listItemProductDetailContainer}>
-          <View style={VerificationOrderStyle.listItemProductNameContainer}>
-            <SnbText.B4>{data.bonusProductName}</SnbText.B4>
-          </View>
-          <SnbText.C3>{data.promoSellerName}</SnbText.C3>
-          <SnbText.C2>{`x${data.bonusQty} Pcs`}</SnbText.C2>
+export const VerificationOrderBonusItem: FC<
+  VerificationOrderBonusItemProps
+> = ({ data }) => {
+  return (
+    <View style={VerificationOrderStyle.listItemContainer}>
+      <Image
+        source={{
+          uri: data.bonusProductImageUrl,
+        }}
+        style={VerificationOrderStyle.listItemProductImage}
+      />
+      <View style={VerificationOrderStyle.listItemProductDetailContainer}>
+        <View style={VerificationOrderStyle.listItemProductNameContainer}>
+          <SnbText.B4>{data.bonusProductName}</SnbText.B4>
         </View>
+        <SnbText.C3>{data.promoSellerName}</SnbText.C3>
+        <SnbText.C2>{`x${data.bonusQty} Pcs`}</SnbText.C2>
       </View>
-    );
-  };
+    </View>
+  );
+};

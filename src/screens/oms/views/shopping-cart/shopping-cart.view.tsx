@@ -8,7 +8,7 @@ import {
   SnbIcon,
   color,
 } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
@@ -16,14 +16,16 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShippingAddress } from './shipping-address.view';
 import LoadingPage from '@core/components/LoadingPage';
 import { ProductEmptyStockView } from './product-empty-stock.view';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useVerficationOrderAction } from '../../functions/verification-order/verification-order-hook.function';
+import { useVerficationOrderAction } from '@screen/oms/functions/verification-order/verification-order-hook.function';
 import { UserHookFunc } from '@screen/user/functions';
 import {
   getSelectedVouchers,
   useVoucherLocalData,
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
+import { goBack } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -82,14 +84,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setModalConfirmationRemoveProductVisible,
   ] = useState(false);
   const [loadingRemoveProduct, setLoadingRemoveProduct] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
   const [sassionQty, setSassionQty] = useState<number>(
     Math.random() * 10000000,
   );
+  const [isFocus, setIsFocus] = useState(false);
+
   const [toastSuccessRemoveProduct, setToastSuccessRemoveProduct] =
     useState(false);
   const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
     useState(false);
-  const [toastFailedCheckout, setToastFailedCheckout] = useState(false);
+  const [modalFailedCheckout, setModalFailedCheckout] = useState(false);
+  const [modalFailedGetCart, setModalFailedGetCart] = useState(false);
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -99,7 +105,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartTotalProductActions = useCartTotalProductActions();
   const {
     stateShopingCart: {
-      cart: { data: cartViewData, loading: cartViewLoading },
+      cart: { data: cartViewData, error: cartViewError },
       update: {
         data: updateCartData,
         loading: updateCartLoading,
@@ -181,6 +187,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setProductRemoveSelected(null);
     setLoadingRemoveProduct(false);
     setModalConfirmationRemoveProductVisible(false);
+  };
+
+  /** => handle go back */
+  const handleGoBack = () => {
+    setModalFailedGetCart(true);
+    goBack();
   };
 
   /** Confirmation checkout submit */
@@ -273,11 +285,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mounted and focus */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      setLoadingPage(true);
       cartViewActions.fetch(dispatchShopingCart);
       storeDetailAction.detail(dispatchUser);
       if (checkoutMaster.cartId) {
         reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
         reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+      } else {
+        setLoadingPage(false);
       }
     });
 
@@ -303,15 +318,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         dispatchVerificationOrder,
         dataCreateVerificationOrder.id,
       );
+      cartUpdateActions.reset(dispatchShopingCart);
       setModalConfirmationCheckoutVisible(false);
       goToVerificationOrder();
-    } else if (
-      dataCreateVerificationOrder !== null &&
-      productRemoveSelected === null
-    ) {
-      setToastFailedCheckout(true);
     }
   }, [dataCreateVerificationOrder, updateCartData]);
+
+  useEffect(() => {
+    if (updateCartError !== null && productRemoveSelected === null) {
+      setModalConfirmationCheckoutVisible(false);
+      setModalFailedCheckout(true);
+    }
+  }, [updateCartError]);
 
   /** Listen changes cartState */
   useEffect(() => {
@@ -411,8 +429,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         others: [],
       });
       setProductSelectedCount(totalProductsSelected);
+      setLoadingPage(false);
     }
   }, [cartViewData, stockInformationData]);
+
+  /** Listen error get cart */
+  useEffect(() => {
+    if (cartViewError !== null) {
+      setLoadingPage(false);
+      setModalFailedGetCart(true);
+    }
+  }, [cartViewError]);
 
   /** Listen product will be removed */
   useEffect(() => {
@@ -423,11 +450,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       setToastSuccessRemoveProduct(true);
       deleteProduct({ productId: productRemoveSelected.productId });
-      setProductRemoveSelected(null);
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
+      setProductRemoveSelected(null);
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
@@ -443,29 +470,23 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** close toast listener */
   useEffect(() => {
-    if (
-      toastSuccessRemoveProduct ||
-      toastFailedRemoveProduct ||
-      toastFailedCheckout
-    ) {
+    if (toastSuccessRemoveProduct || toastFailedRemoveProduct) {
       setTimeout(() => {
         setToastSuccessRemoveProduct(false);
         setToastFailedRemoveProduct(false);
-        setToastFailedCheckout(false);
       }, 5000);
     }
-  }, [
-    toastSuccessRemoveProduct,
-    toastFailedRemoveProduct,
-    toastFailedCheckout,
-  ]);
+  }, [toastSuccessRemoveProduct, toastFailedRemoveProduct]);
 
   /** did will unmound */
   useEffect(() => {
     return () => {
+      voucherLocalData.reset();
       verificationReset(dispatchVerificationOrder);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
+      cartUpdateActions.reset(dispatchShopingCart);
+      cartViewActions.reset(dispatchShopingCart);
     };
   }, []);
 
@@ -474,7 +495,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader />
-      {cartViewLoading ? (
+      {loadingPage ? (
         <LoadingPage />
       ) : (
         <>
@@ -502,6 +523,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                       sassionQty={sassionQty}
                       setSassionQty={setSassionQty}
                       onRemoveProduct={onRemoveProduct}
+                      isFocus={isFocus}
+                      setIsFocus={setIsFocus}
                     />
                   ))}
                 </Fragment>
@@ -538,7 +561,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               />
             </Fragment>
           ) : (
-            <ShoppingCartEmpty />
+            <ShoppingCartEmpty navigationParent={navigation} />
           )}
         </>
       )}
@@ -579,12 +602,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         position={'top'}
         leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
       />
-      {/* Toast failed checkout */}
-      <SnbToast
-        open={toastFailedCheckout}
-        message={'Produk gagal dicheckout dari keranjang'}
-        position={'top'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
+      {/* Modal Bottom Sheet Error Send data to supplier */}
+      <BottomSheetError
+        open={modalFailedCheckout}
+        error={updateCartError}
+        closeAction={() => setModalFailedCheckout(false)}
+        retryAction={onSubmitCheckout}
+      />
+      {/* Modal Bottom Sheet Error get cart */}
+      <BottomSheetError
+        open={modalFailedGetCart}
+        error={cartViewError}
+        closeAction={handleGoBack}
       />
     </SnbContainer>
   );

@@ -56,7 +56,7 @@ function* sendDataToSupplier(
 ) {
   try {
     const response: models.CreateSuccessProps = yield call(() => {
-      return SupplierApi.createSupplierStore(action.payload);
+      return SupplierApi.createSupplierStore(action.payload.data);
     });
     yield action.contextDispatch(
       ActionCreators.sendDataToSupplierSuccess(response),
@@ -71,6 +71,27 @@ function* sendDataToSupplier(
     );
   }
 }
+/** => register supplier */
+function* registerSupplier(
+  action: models.CreateProcessAction<models.SendDataSupplierPayload>,
+) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return SupplierApi.createSupplierStore(action.payload.data);
+    });
+    yield action.contextDispatch(
+      ActionCreators.registerSupplierSuccess(response),
+    );
+    yield put(ActionCreators.registerSupplierSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.registerSupplierFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.registerSupplierFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER ===*/
 function* SupplierSaga() {
   yield takeLatest(types.SUPPLIER_SEGMENTATION_PROCESS, supplierSegmentation);
@@ -79,6 +100,7 @@ function* SupplierSaga() {
     types.SUPPLIER_SEGMENTATION2_PROCESS,
     supplierSegmentationDetail,
   );
+  yield takeLatest(types.REGISTER_SUPPLIER_PROCESS, registerSupplier);
 }
 
 export default SupplierSaga;

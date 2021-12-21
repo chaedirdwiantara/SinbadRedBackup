@@ -42,9 +42,9 @@ const apiGeneral = async <T>(
   const handleErrors = (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
-        if (response.status === 401) {
-          NavigationAction.navigate('LoginPhoneView');
-        }
+        // if (response.status === 401) {
+        //   NavigationAction.navigate('LoginPhoneView');
+        // }
         throwError(response);
       }
       return response

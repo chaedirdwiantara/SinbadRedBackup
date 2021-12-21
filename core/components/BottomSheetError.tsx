@@ -120,7 +120,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
           case '04':
             return buttonCloseApp();
           case '05':
-            return buttonToLogin();
+            return buttonToReLogin();
           case '06':
             return buttonCallSupport();
           default:
@@ -136,7 +136,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   /** => check message */
   const message = (error: ErrorItemProps) => {
     if (error.code === 401) {
-      return 'Anda sudah logout silahkan login lagi';
+      return 'Anda belum login, silahkan login dulu';
     } else if (error.code === undefined) {
       return 'Koneksi Anda terputus silahkan coba lagi';
     }
@@ -171,13 +171,26 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
     );
   };
   /** => button relogin */
-  const buttonToLogin = () => {
+  const buttonToReLogin = () => {
     return (
       <SnbButton.Single
         title={'Login Ulang'}
         onPress={() => {
           props.closeAction ? props.closeAction() : null;
-          NavigationAction.navigate('ErrorHandlerView');
+          NavigationAction.navigate('LoginPhoneView');
+        }}
+        type={'primary'}
+      />
+    );
+  };
+  /** => button login */
+  const buttonToLogin = () => {
+    return (
+      <SnbButton.Single
+        title={'Login'}
+        onPress={() => {
+          props.closeAction ? props.closeAction() : null;
+          NavigationAction.navigate('LoginPhoneView');
         }}
         type={'primary'}
       />
@@ -300,13 +313,15 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   };
   /** => content item title */
   const contentItemTitle = () => {
-    return (
+    return props.error !== null ? (
       <View style={styles.contentTitleContainer}>
         <SnbText.H3 align={'center'}>
-          {`Terjadi Kendala di ${serviceName()}`}
+          {props.error.code !== 401
+            ? `Terjadi Kendala di ${serviceName()}`
+            : 'Belum login nih'}
         </SnbText.H3>
       </View>
-    );
+    ) : null;
   };
   /** => content item message */
   const contentItemMessage = () => {
