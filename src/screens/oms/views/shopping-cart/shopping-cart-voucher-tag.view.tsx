@@ -73,7 +73,11 @@ export const ShoppingCartVoucherTag: FC = () => {
                 </View>
               </View>
               <View style={ShoppingCartStyles.voucherTagRightContainer}>
-                <SnbText.B2 color={color.red50}>Lihat Semua</SnbText.B2>
+                <SnbText.B2 color={color.red50}>
+                  {voucherData.dataVouchers !== null
+                    ? 'Ganti Voucher'
+                    : 'Lihat Semua'}
+                </SnbText.B2>
                 <SnbIcon name={'chevron_right'} size={24} color={color.red50} />
               </View>
             </TouchableOpacity>

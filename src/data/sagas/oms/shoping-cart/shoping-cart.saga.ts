@@ -56,7 +56,7 @@ function* updateCart(
     yield put(ActionCreators.cartUpdateFailed(error as models.ErrorProps));
   }
 }
-/** => Cart view */
+/** => Cart total product */
 function* cartTotalProduct() {
   try {
     const response: models.DetailSuccessProps<models.CartTotalProductSuccess> =
@@ -64,6 +64,9 @@ function* cartTotalProduct() {
         return CartApi.getCartTotalProduct();
       });
     yield put(ActionCreators.cartTotalProductSuccess(response));
+    yield put(
+      ActionCreators.updateCartIdCheckout({ cartId: response.data.cartId }),
+    );
   } catch (error) {
     yield put(
       ActionCreators.cartTotalProductFailed(error as models.ErrorProps),

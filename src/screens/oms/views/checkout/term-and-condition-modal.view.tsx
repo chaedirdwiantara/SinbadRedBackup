@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, ScrollView } from 'react-native';
 import Html from '@core/components/Html';
 import {
@@ -8,7 +8,7 @@ import {
   SnbButton,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { goToCheckoutSuccess } from '../../functions';
+import { goToCheckoutSuccess, useCreateOrders } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { IPaymentChannel, IPaymentType } from '@model/oms';
@@ -24,6 +24,8 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
 }) => {
   /** === HOOK === */
   const { statePayment } = React.useContext(contexts.PaymentContext);
+  const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+  const createOrders = useCreateOrders();
 
   const paymentTypesTermsConditions = () => {
     return statePayment?.paymentTCDetail?.data?.paymentTypes?.map(
@@ -62,7 +64,8 @@ export const ModalTermAndCondition: FC<ModalTermAndCondition> = ({
           type={'primary'}
           onPress={() => {
             close();
-            goToCheckoutSuccess();
+            createOrders.create(dispatchCheckout);
+            // goToCheckoutSuccess();
           }}
         />
       </View>

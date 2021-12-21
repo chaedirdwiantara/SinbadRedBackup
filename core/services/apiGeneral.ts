@@ -31,7 +31,6 @@ const apiGeneral = async <T>(
   /** === IF THERE IS PARAMETER === */
   if (!isEmpty(params)) {
     Object.assign(reqBody, {
-      credentials: 'same-origin',
       body: JSON.stringify(params),
     });
   }
@@ -43,39 +42,43 @@ const apiGeneral = async <T>(
   const handleErrors = (response: any) => {
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
-        if (response.status === 401) {
-          NavigationAction.navigate('LoginPhoneView');
-        }
+        // if (response.status === 401) {
+        //   NavigationAction.navigate('LoginPhoneView');
+        // }
         throwError(response);
       }
-      return response.json().then((error: ErrorProps) => {
-        throwFinalError(error);
-      });
+      return response
+        .json()
+        .then((error: ErrorProps & { error: string; statusCode: number }) => {
+          throwFinalError(error);
+        });
     }
     return response;
   };
   /** === HANDLE MAIN ERROR RESPONSE === */
-  const handleMainErrors = (error: ErrorProps) => {
+  const handleMainErrors = (
+    error: ErrorProps & { error: string; statusCode: number },
+  ) => {
     throwFinalError(error);
   };
-  /** === THROW ERROR === */
+  /** === THROW ERROR FOR CONTENT TYPE TEXT/HTML === */
   const throwError = (response: any) => {
     throw {
-      status: response.status,
       message: response.statusText,
-      errorMessage: 'Data Error From Header',
+      errorMessage: response.statusText,
       type: response.type,
-      code: 0,
+      code: response.status,
     };
   };
   /** === THROW FINAL ERROR === */
-  const throwFinalError = (error: ErrorProps) => {
+  const throwFinalError = (
+    error: ErrorProps & { error: string; statusCode: number },
+  ) => {
     throw {
-      status: error.status,
       message: error.message,
-      errorMessage: error.errorMessage,
-      type: error.type,
-      code: error.code,
+      errorMessage: error.errorMessage ? error.errorMessage : error.message,
+      type: error.type ? error.type : error.error,
+      code: error.code ? error.code : error.statusCode,
     };
   };
   /** === MAIN FUNCTION === */

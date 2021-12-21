@@ -1,14 +1,15 @@
-import React from 'react';
+import { createContext, Dispatch } from 'react';
+
 import {
-  NotificationInitialProps,
+  NotificationState,
   notificationInitialState,
   notificationReducer,
 } from '@reducer/notification/notification.reducer';
 
-const NotificationContext = React.createContext<{
+const NotificationContext = createContext<{
   // state: InitialStateType;
-  stateNotification: NotificationInitialProps;
-  dispatchNotification: React.Dispatch<any>;
+  stateNotification: NotificationState;
+  dispatchNotification: Dispatch<any>;
 }>({
   // state: initialState,
   stateNotification: notificationInitialState,
