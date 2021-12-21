@@ -9,22 +9,24 @@ import {
   SnbIcon,
   color,
   SnbToast,
+  SnbHtml,
 } from 'react-native-sinbad-ui';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { CheckoutSuccessStyles } from '@screen/oms/styles';
 import {
-  goBack,
   copyToClipboard,
   goToHome,
   useCreateOrders,
   usePaymentAction,
   useOrdersDetail,
+  useDataConstant,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataFlagRTDB } from '@core/redux/Data';
+import * as models from '@models';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -59,6 +61,7 @@ const OmsCheckoutSuccessView: FC = () => {
   const [paymentData] = useState<CheckoutSuccess>(checkoutSuccessDummy);
   const [showToast, setShowToast] = useState(false);
   const [isPageLoading, setPageLoading] = useState(true);
+  const [isMultiple, setMultiple] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
   const ordersAction = useCreateOrders();
   const paymentAction = usePaymentAction();
@@ -81,9 +84,7 @@ const OmsCheckoutSuccessView: FC = () => {
 
   /** => Listern to RTDB change */
   useEffect(() => {
-    console.log('RTDB Status Change', flagRTDB.confirmOrderLoading);
     if (!flagRTDB.confirmOrderLoading) {
-      console.log('Get Order Detail');
       ordersDetail.get(dispatchCheckoutDone, 2);
     }
   }, [flagRTDB.confirmOrderLoading]);
@@ -92,6 +93,9 @@ const OmsCheckoutSuccessView: FC = () => {
   useEffect(() => {
     if (stateCheckoutDone.detail.data !== null) {
       ordersAction.reset(dispatchCheckout);
+      if (stateCheckoutDone.detail.data.orderParcels.length === 1) {
+        setMultiple(false);
+      }
       setPageLoading(false);
     }
   }, [stateCheckoutDone.detail.data]);
@@ -116,27 +120,69 @@ const OmsCheckoutSuccessView: FC = () => {
     </View>
   );
   /** => Payment Detail */
-  const renderPaymentDetail = () => (
-    <View
-      style={{
-        ...CheckoutSuccessStyles.cardContainer,
-        ...CheckoutSuccessStyles.containerBottomBorder,
-      }}>
-      <View style={CheckoutSuccessStyles.topCardSlot}>
-        <SnbText.B4>Detail Pembayaran</SnbText.B4>
+  const renderPaymentDetail = () => {
+    const data = stateCheckoutDone.detail.data;
+    return (
+      <View
+        style={{
+          ...CheckoutSuccessStyles.cardContainer,
+          ...CheckoutSuccessStyles.containerBottomBorder,
+        }}>
+        <View style={CheckoutSuccessStyles.topCardSlot}>
+          <SnbText.B4>Detail Pembayaran</SnbText.B4>
+        </View>
+        {isMultiple
+          ? renderMultipleOrderParcels(data as models.CheckoutDoneOrders)
+          : renderSingleOrderParcels(data as models.CheckoutDoneOrders)}
       </View>
+    );
+  };
+  /** => Single Order Parcels */
+  const renderSingleOrderParcels = (data: models.CheckoutDoneOrders) => (
+    <View style={CheckoutSuccessStyles.paymentDetailContent}>
+      <View>
+        <SnbText.C2>Total:</SnbText.C2>
+        <View style={{ marginVertical: 8 }}>
+          <SnbText.H4 color={color.yellow50}>
+            {toCurrency(data?.totalAmount as number)}
+          </SnbText.H4>
+        </View>
+        <TouchableOpacity
+          onPress={() =>
+            copyToClipboard(
+              data?.totalAmount as number,
+              'Jumlah Tersalin',
+              setShowToast,
+              setToastMessage,
+            )
+          }>
+          <SnbText.C1 color={color.red50}>Salin Jumlah</SnbText.C1>
+        </TouchableOpacity>
+      </View>
+      {!isMultiple ? (
+        <TouchableOpacity onPress={() => console.log('Detail pressed')}>
+          <SnbText.B4 color={color.red50}>DETAIL</SnbText.B4>
+        </TouchableOpacity>
+      ) : (
+        <View />
+      )}
+    </View>
+  );
+  /** => Multiple Order Parcels */
+  const renderMultipleOrderParcels = (data: models.CheckoutDoneOrders) => {
+    return data.orderParcels.map((parcel) => (
       <View style={CheckoutSuccessStyles.paymentDetailContent}>
         <View>
           <SnbText.C2>Total:</SnbText.C2>
           <View style={{ marginVertical: 8 }}>
             <SnbText.H4 color={color.yellow50}>
-              {toCurrency(paymentData.total)}
+              {toCurrency(parcel.amount as number)}
             </SnbText.H4>
           </View>
           <TouchableOpacity
             onPress={() =>
               copyToClipboard(
-                paymentData.total,
+                parcel.amount as number,
                 'Jumlah Tersalin',
                 setShowToast,
                 setToastMessage,
@@ -149,26 +195,31 @@ const OmsCheckoutSuccessView: FC = () => {
           <SnbText.B4 color={color.red50}>DETAIL</SnbText.B4>
         </TouchableOpacity>
       </View>
-    </View>
-  );
+    ));
+  };
   /** => Payment Guidance */
-  const renderPaymentGuidance = () => (
-    <View
-      style={{
-        paddingHorizontal: 16,
-        ...CheckoutSuccessStyles.containerBottomBorder,
-      }}>
-      <View style={CheckoutSuccessStyles.topCardSlot}>
-        <SnbText.B4>Panduan Pembayaran</SnbText.B4>
+  const renderPaymentGuidance = () => {
+    const data = stateCheckoutDone.detail.data;
+    return (
+      <View
+        style={{
+          paddingHorizontal: 16,
+          ...CheckoutSuccessStyles.containerBottomBorder,
+        }}>
+        <View style={CheckoutSuccessStyles.topCardSlot}>
+          <SnbText.B4>Panduan Pembayaran</SnbText.B4>
+        </View>
+        {isMultiple ? (
+          <SnbHtml value={useDataConstant.paymentDescription} fontSize={12} />
+        ) : (
+          <SnbHtml
+            value={data.orderParcels[0].paymentChannel.description as string}
+            fontSize={12}
+          />
+        )}
       </View>
-      <TouchableOpacity
-        onPress={() => console.log('Payment guidance pressed')}
-        style={CheckoutSuccessStyles.paymentGuidanceSelect}>
-        <SnbText.B3>{paymentData.paymentUsed.name}</SnbText.B3>
-        <SnbIcon name="expand_more" color={color.black40} size={24} />
-      </TouchableOpacity>
-    </View>
-  );
+    );
+  };
   /** => Order Review */
   const renderOrderReview = () => (
     <View
@@ -187,7 +238,7 @@ const OmsCheckoutSuccessView: FC = () => {
             alignItems: 'center',
           }}>
           <SnbText.B3>Order Via</SnbText.B3>
-          <SnbText.B3>{paymentData.orderedVia}</SnbText.B3>
+          <SnbText.B3>{'Toko'}</SnbText.B3>
         </View>
         <View
           style={{
