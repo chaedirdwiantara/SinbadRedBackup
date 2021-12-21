@@ -59,8 +59,11 @@ const handleProductQuantityChange = (
     currentProduct.qty = currentQty + currentProduct.multipleQty;
   } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty = currentQty - currentProduct.multipleQty;
-  } else if (action === 'onChange') {
-    currentProduct.qty = currentQty;
+  } else if (action === 'onChange' && Number.isInteger(currentQty)) {
+    const qtyString = currentQty.toString();
+    if (qtyString.length <= 6) {
+      currentProduct.qty = currentQty;
+    }
   }
 
   currentBrand.products[productIndex] = currentProduct;
