@@ -1,16 +1,17 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
 
-import { formatTime, useTimer } from '../functions';
+import { formatTime, useTimer, calculateTime } from '../functions';
 import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
-  timeInSeconds: number;
+  expiredTime: string;
 }
 
-export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
-  const { timer, start, reset } = useTimer(timeInSeconds);
+export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
+  const [timeDiff, setTimeDiff] = useState(0);
+  const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
 
   const renderTimeBlock = (value: string) => (
@@ -20,10 +21,17 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
   );
 
   useEffect(() => {
-    start();
+    const expiredTimeData = calculateTime(expiredTime);
+    setTimeDiff(expiredTimeData + 60);
+  }, []);
+
+  useEffect(() => {
+    if (timeDiff > 0) {
+      start(timeDiff);
+    }
 
     return () => reset();
-  }, []);
+  }, [timeDiff]);
 
   useEffect(() => {
     if (timer <= 0) {
