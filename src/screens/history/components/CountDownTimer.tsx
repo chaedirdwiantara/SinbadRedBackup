@@ -7,20 +7,18 @@ import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
   expiredTime: string;
+  type: string;
 }
 
-export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
+export const CountDownTimer: FC<CountDownTimerProps> = ({
+  expiredTime,
+  type,
+}) => {
   const appState = useRef(AppState.currentState);
   const [, setAppStateVisible] = useState(appState.current);
   const [timeDiff, setTimeDiff] = useState(0);
   const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
-
-  const renderTimeBlock = (value: string) => (
-    <View style={HistoryStyle.cardTimeBlock}>
-      <SnbText.C1 color={color.white}>{value}</SnbText.C1>
-    </View>
-  );
 
   useEffect(() => {
     const expiredTimeData = calculateTime(expiredTime);
@@ -64,7 +62,13 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
     };
   }, []);
 
-  return (
+  const renderTimeBlock = (value: string) => (
+    <View style={HistoryStyle.cardTimeBlock}>
+      <SnbText.C1 color={color.white}>{value}</SnbText.C1>
+    </View>
+  );
+
+  const timerHistoryCard = () => (
     <View
       style={{
         flexDirection: 'row',
@@ -81,4 +85,33 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
       </View>
     </View>
   );
+
+  const timerCheckoutDone = () => (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 6,
+      }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <SnbText.C1 color={color.black60}>
+          {hours} : {minutes} : {seconds}
+        </SnbText.C1>
+      </View>
+    </View>
+  );
+
+  const renderContent = () => {
+    switch (type) {
+      case 'historyCard':
+        return timerHistoryCard();
+      case 'checkoutDone':
+        return timerCheckoutDone();
+
+      default:
+        break;
+    }
+  };
+
+  return renderContent();
 };
