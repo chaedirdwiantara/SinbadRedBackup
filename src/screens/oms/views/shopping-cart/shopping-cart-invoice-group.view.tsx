@@ -20,6 +20,8 @@ interface ShoppingCartInvoiceGroupProps {
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  isFocus: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -34,29 +36,35 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   sassionQty,
   setSassionQty,
   onRemoveProduct,
-}) => (
-  <View
-    style={ShoppingCartStyles.cardContainer}
-    key={invoiceGroup.invoiceGroupName}>
-    <View style={ShoppingCartStyles.topCardSlot}>
-      <SnbText.B4>{invoiceGroup.invoiceGroupName}</SnbText.B4>
+  isFocus,
+  setIsFocus,
+}) => {
+  return (
+    <View
+      style={ShoppingCartStyles.cardContainer}
+      key={invoiceGroup.invoiceGroupName}>
+      <View style={ShoppingCartStyles.topCardSlot}>
+        <SnbText.B4>{invoiceGroup.invoiceGroupName}</SnbText.B4>
+      </View>
+      {invoiceGroup.brands.map((brand, brandIndex) => (
+        <ShoppingCartBrand
+          key={brandIndex.toString()}
+          brand={brand}
+          brandIndex={brandIndex}
+          invoiceGroupIndex={invoiceGroupIndex}
+          invoiceGroups={invoiceGroups}
+          setInvoiceGroups={setInvoiceGroups}
+          productSelectedCount={productSelectedCount}
+          setProductSelectedCount={setProductSelectedCount}
+          setAllProductsSelected={setAllProductsSelected}
+          totalProducts={totalProducts}
+          sassionQty={sassionQty}
+          setSassionQty={setSassionQty}
+          onRemoveProduct={onRemoveProduct}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+        />
+      ))}
     </View>
-    {invoiceGroup.brands.map((brand, brandIndex) => (
-      <ShoppingCartBrand
-        key={brandIndex.toString()}
-        brand={brand}
-        brandIndex={brandIndex}
-        invoiceGroupIndex={invoiceGroupIndex}
-        invoiceGroups={invoiceGroups}
-        setInvoiceGroups={setInvoiceGroups}
-        productSelectedCount={productSelectedCount}
-        setProductSelectedCount={setProductSelectedCount}
-        setAllProductsSelected={setAllProductsSelected}
-        totalProducts={totalProducts}
-        sassionQty={sassionQty}
-        setSassionQty={setSassionQty}
-        onRemoveProduct={onRemoveProduct}
-      />
-    ))}
-  </View>
-);
+  );
+};

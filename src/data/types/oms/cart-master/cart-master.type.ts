@@ -6,3 +6,5 @@ export const UPDATE_CART_MASTER = 'UpdateCartMaster';
 export const DELETE_CART_PRODUCT = 'DeleteCartProduct';
 /** Update Cart Master */
 export const UPDATE_CART_MASTER_DATA = 'UpdateCartMasterData';
+/** Reset Cart Master */
+export const RESET_CART_MASTER_DATA = 'ResetCartMasterData';
