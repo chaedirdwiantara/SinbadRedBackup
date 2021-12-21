@@ -172,6 +172,9 @@ const CategoryView: React.FC = () => {
 
     if (total >= totalAtRow) {
       flexStyle.flex = 1;
+      flexStyle.minWidth = '25%';
+    } else {
+      flexStyle.width = '32%';
     }
 
     return (
