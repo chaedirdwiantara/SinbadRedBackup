@@ -37,12 +37,7 @@ export const HistoryDetailStyle = StyleSheet.create({
   },
   productListCardHeader: {
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  canceledProductListCardHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: 12,
     paddingBottom: 8,
   },
   cardItem: {

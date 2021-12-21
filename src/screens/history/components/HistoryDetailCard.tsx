@@ -12,6 +12,8 @@ interface HistoryDetailCardProps {
   actionTitle?: string;
   onActionClick?: () => void;
   actionLoading?: boolean;
+  gutter?: boolean;
+  contentTopSpaces?: number;
 }
 /** === COMPONENT === */
 export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
@@ -20,9 +22,11 @@ export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
   actionTitle,
   onActionClick,
   actionLoading,
+  gutter = true,
+  contentTopSpaces,
 }) => (
   <View>
-    <View style={styles.shadowForBox10}>
+    <View style={gutter ? styles.shadowForBox10 : {}}>
       <View style={HistoryDetailStyle.cardHeader}>
         <SnbText.B4>{title}</SnbText.B4>
         {actionTitle && (
@@ -43,10 +47,15 @@ export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
       <View style={{ paddingHorizontal: 16 }}>
         <HistoryDetailCardDivider />
       </View>
-      <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingBottom: 16,
+          paddingTop: contentTopSpaces,
+        }}>
         {children}
       </View>
     </View>
-    <View style={{ height: 10, backgroundColor: color.black5 }} />
+    {gutter && <View style={{ height: 10, backgroundColor: color.black5 }} />}
   </View>
 );

@@ -1,4 +1,8 @@
-import { HistoryDetailView, HistoryInvoiceView } from '@screen/history/views';
+import {
+  HistoryDetailView,
+  HistoryInvoiceView,
+  HistoryDetailStatusView,
+} from '@screen/history/views';
 
 const HistoryNav = {
   HistoryDetailView: {
@@ -6,6 +10,9 @@ const HistoryNav = {
   },
   HistoryInvoiceView: {
     component: HistoryInvoiceView,
+  },
+  HistoryDetailStatusView: {
+    component: HistoryDetailStatusView,
   },
 };
 
