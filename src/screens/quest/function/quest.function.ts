@@ -6,4 +6,22 @@ const goBack = () => {
   NavigationAction.back();
 };
 
-export { goBack };
+/** => Navigation related */
+const goToQuestDetail = ({
+  questId,
+  buyerId,
+}: {
+  questId: number;
+  buyerId: number;
+}) => {
+  NavigationAction.navigate('QuestDetailView', { questId, buyerId });
+};
+
+const MoneyFormatSpace = (money: number) => {
+  return `Rp ${money
+    .toFixed(2)
+    .replace(/\d(?=(\d{3})+\.)/g, '$&.')
+    .slice(0, -3)}`;
+};
+
+export { goBack, goToQuestDetail, MoneyFormatSpace };

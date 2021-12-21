@@ -1,8 +1,9 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import QuestListView from './quest-list.view';
-// import QuestDetailView from '.quest-detail.view';
+import QuestDetailView from './quest-detail.view';
+import QuestAdditionalInfoView from './quest-additionalInfo.view';
 /** === EXPORT ALL === */
-export { QuestListView };
+export { QuestListView, QuestDetailView, QuestAdditionalInfoView };
 /**
  * ================================================================
  * NOTES

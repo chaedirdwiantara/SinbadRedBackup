@@ -37,3 +37,33 @@ export const questListReset = () => {
 export const questListLoadMore = () => {
   return { type: types.QUEST_LIST_LOADMORE };
 };
+
+/** === DETAIL ACTIONS === */
+/** => Process */
+export const questDetailProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.QuestDetailProcessProps,
+): models.QuestDetailProcessAction => {
+  contextDispatch({ type: types.QUEST_DETAIL_PROCESS, payload });
+  return {
+    type: types.QUEST_DETAIL_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const questDetailSuccess = (
+  payload: models.DetailSuccessProps<models.QuestDetailItem>,
+): models.DetailSuccessAction<models.QuestDetailItem> => {
+  return { type: types.QUEST_DETAIL_SUCCESS, payload };
+};
+/** => Failed */
+export const questDetailFailed = (
+  payload: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.QUEST_DETAIL_FAILED, payload };
+};
+/** => Reset */
+export const questDetailReset = () => {
+  return { type: types.QUEST_DETAIL_RESET };
+};

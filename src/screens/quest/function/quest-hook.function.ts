@@ -6,7 +6,7 @@ import * as Actions from '@actions';
 import * as models from '@models';
 /** === FUNCTIONS === */
 /** === Fetch Quest Related === */
-const callProcessAction = (
+const callListProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
   skip: number,
@@ -26,13 +26,14 @@ const useQuestListAction = () => {
   const limit = 10;
 
   return {
+    /** => LIST */
     fetch: (
       contextDispatch: (action: any) => any,
       queryOptions: models.QuestListQueryOptions,
     ) => {
       contextDispatch(Actions.questListReset());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callListProcessAction(contextDispatch, true, 0, limit, queryOptions),
       );
     },
     refresh: (
@@ -41,7 +42,7 @@ const useQuestListAction = () => {
     ) => {
       contextDispatch(Actions.questListRefresh());
       dispatch(
-        callProcessAction(contextDispatch, true, 0, limit, queryOptions),
+        callListProcessAction(contextDispatch, true, 0, limit, queryOptions),
       );
     },
     loadMore: (
@@ -52,7 +53,7 @@ const useQuestListAction = () => {
       if (list.data.length < list.total) {
         contextDispatch(Actions.questListLoadMore());
         dispatch(
-          callProcessAction(
+          callListProcessAction(
             contextDispatch,
             false,
             list.skip + limit,
@@ -68,4 +69,30 @@ const useQuestListAction = () => {
   };
 };
 
-export { useQuestListAction };
+const callDetailProcessAction = (
+  contextDispatch: (action: any) => any,
+  queryOptions: models.QuestDetailProcessProps,
+) => {
+  return Actions.questDetailProcess(contextDispatch, {
+    ...queryOptions,
+  });
+};
+
+const useQuestDetailAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    /** => DETAIL */
+    detail: (
+      contextDispatch: (action: any) => any,
+      queryOptions: models.QuestDetailProcessProps,
+    ) => {
+      dispatch(callDetailProcessAction(contextDispatch, queryOptions));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questDetailReset());
+    },
+  };
+};
+
+export { useQuestListAction, useQuestDetailAction };
