@@ -24,6 +24,7 @@ const CategoryStyle = StyleSheet.create({
   level3layout: {
     ...styles.shadowForBox10,
     flexDirection: 'row',
+    alignItems: 'center',
     flexWrap: 'wrap',
     padding: 8,
     borderBottomLeftRadius: 8,
@@ -32,7 +33,6 @@ const CategoryStyle = StyleSheet.create({
   level3layoutItem: {
     alignItems: 'center',
     marginBottom: 16,
-    minWidth: '25%',
   },
   level1SkeletonContainer: {
     width: 96,
