@@ -1,8 +1,9 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { View, Image } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { View } from 'react-native';
+import { SnbText, SnbImageCompressor, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { Images } from 'src/assets';
 import { ProductCardStyle } from '../styles';
 /** === TYPE === */
 interface ProductCardType1Props {
@@ -29,9 +30,10 @@ const Type1: FC<ProductCardType1Props> = ({
   <View style={ProductCardStyle.Type1.container}>
     <View style={ProductCardStyle.Type1.body}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <Image
-          source={{ uri: imageSource }}
+        <SnbImageCompressor
+          uri={imageSource}
           style={{ marginRight: 8, width: 60, height: 60 }}
+          defaultSource={Images.opacityPlaceholder}
         />
         <View style={{ maxWidth: '75%' }}>
           <SnbText.B3>{name}</SnbText.B3>

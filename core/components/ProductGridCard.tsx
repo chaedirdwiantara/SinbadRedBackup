@@ -1,10 +1,16 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
+import { View, TouchableOpacity } from 'react-native';
+import {
+  SnbText,
+  SnbIcon,
+  SnbImageCompressor,
+  color,
+} from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { Images } from 'src/assets';
 /** === IMPORT STYLE === */
 import { ProductGridCardStyle } from '../styles';
 /** === TYPES === */
@@ -106,9 +112,10 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
         }}>
         <View>
           {(props.isPromo || props.isBundle) && <PromoTag />}
-          <Image
-            source={{ uri: props.imageUrl }}
+          <SnbImageCompressor
+            uri={props.imageUrl}
             style={ProductGridCardStyle.image}
+            defaultSource={Images.opacityPlaceholder}
           />
         </View>
         {props.isExclusive && <ExclusiveTag />}
