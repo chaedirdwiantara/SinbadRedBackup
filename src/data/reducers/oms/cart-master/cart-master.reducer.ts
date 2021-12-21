@@ -70,4 +70,8 @@ export const cartMaster = simplifyReducer(initialState, {
 
     return { ...state, data: newData };
   },
+  /** => Reset cart master */
+  [types.RESET_CART_MASTER_DATA]() {
+    return initialState;
+  },
 });

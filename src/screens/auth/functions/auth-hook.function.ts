@@ -28,6 +28,8 @@ const useAuthAction = () => {
       dispatch(Actions.logoutProcess());
       dispatch(meReset());
       dispatch(Actions.cartTotalProductReset());
+      dispatch(Actions.resetCheckoutMasterData());
+      dispatch(Actions.resetCartMasterData());
     },
     resetRequestOTP: () => {
       dispatch(Actions.resetRequestOTP());

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, Dispatch, SetStateAction, useState } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbText,
@@ -39,6 +39,8 @@ interface ShoppingCartProductProps {
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  isFocus: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -55,8 +57,9 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   totalProducts,
   setSassionQty,
   onRemoveProduct,
+  isFocus,
+  setIsFocus,
 }) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false);
   const minusDisabled =
     isFocus ||
     product.qty <= product.minQty ||
