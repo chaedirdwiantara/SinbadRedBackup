@@ -393,6 +393,8 @@ const OmsCheckoutView: FC = () => {
   /** handle back to cart */
   const handleBackToCart = () => {
     createOrders.reset(dispatchCheckout);
+    paymentAction.resetTCCreate(dispatchPayment);
+    paymentAction.resetTCDetail(dispatchPayment);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
