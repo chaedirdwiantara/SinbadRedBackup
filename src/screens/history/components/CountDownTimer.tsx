@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { View } from 'react-native';
+import React, { FC, useEffect, useState, useRef } from 'react';
+import { View, AppState } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
 
 import { formatTime, useTimer, calculateTime } from '../functions';
@@ -10,6 +10,8 @@ interface CountDownTimerProps {
 }
 
 export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
+  const appState = useRef(AppState.currentState);
+  const [, setAppStateVisible] = useState(appState.current);
   const [timeDiff, setTimeDiff] = useState(0);
   const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
@@ -38,6 +40,29 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ expiredTime }) => {
       reset();
     }
   }, [timer]);
+
+  /** App State Listener */
+  const subscription = (nextAppState: any) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      reset();
+      const expiredTimeData = calculateTime(expiredTime);
+      setTimeDiff(expiredTimeData + 30);
+    }
+
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', subscription);
+
+    return () => {
+      AppState.removeEventListener('change', subscription);
+    };
+  }, []);
 
   return (
     <View
