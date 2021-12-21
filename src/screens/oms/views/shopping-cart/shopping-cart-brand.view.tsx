@@ -22,6 +22,8 @@ interface ShoppingCartBrandProps {
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  isFocus: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
@@ -37,6 +39,8 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   sassionQty,
   setSassionQty,
   onRemoveProduct,
+  isFocus,
+  setIsFocus,
 }) => (
   <Fragment key={brand.brandName}>
     <View
@@ -81,6 +85,8 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
         sassionQty={sassionQty}
         setSassionQty={setSassionQty}
         onRemoveProduct={onRemoveProduct}
+        isFocus={isFocus}
+        setIsFocus={setIsFocus}
       />
     ))}
   </Fragment>
