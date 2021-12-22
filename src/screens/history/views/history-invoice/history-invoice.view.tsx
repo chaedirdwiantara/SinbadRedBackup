@@ -6,24 +6,29 @@ import {
   SnbTopNav,
   SnbPdf,
 } from '@sinbad/react-native-sinbad-ui';
-import { usePaymentInvoice } from '../../functions';
+import { usePaymentInvoice, useRequestWritePermission } from '../../functions';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
 type HistoryInvoiceParam = {
-  Invoice: {};
+  Invoice: { fileName: string; id: number; url: string };
 };
 
 type HistoryInvoiceRouteProp = RouteProp<HistoryInvoiceParam, 'Invoice'>;
 /** === COMPONENT === */
 const HistoryInvoiceView: FC = () => {
+  const { params } = useRoute<HistoryInvoiceRouteProp>();
   const { reset } = usePaymentInvoice();
-  const { stateHistory, dispatchHistory } = React.useContext(
-    contexts.HistoryContext,
-  );
+  const { accessGranted } = useRequestWritePermission();
+  const { dispatchHistory } = React.useContext(contexts.HistoryContext);
   const goBackFunction = () => {
     goBack();
     reset(dispatchHistory);
+  };
+
+  const downloadFuction = () => {
+    console.log('download');
+    console.log(accessGranted);
   };
   /** === VIEW === */
   /** => Header */
@@ -34,19 +39,14 @@ const HistoryInvoiceView: FC = () => {
         title="Detail Faktur"
         backAction={() => goBackFunction()}
         iconName="download"
-        iconAction={() => console.log('this example for icon action')}
+        iconAction={() => downloadFuction()}
       />
     );
   };
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      <SnbPdf
-        uri={
-          'https://sinbad-payment.s3-ap-southeast-1.amazonaws.com/staging/payment/invoice/Sinbad_Invoice_110_20211130-120427.pdf'
-        }
-        cache={true}
-      />
+      <SnbPdf uri={params.url} cache={true} />
     </SnbContainer>
   );
 };

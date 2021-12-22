@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { NavigationAction } from '@navigation';
 import { IHistoryDetailStatus } from '../views/history-detail/history-detail-status.view';
+import { PermissionsAndroid } from 'react-native';
 
 export const goBack = () => {
   NavigationAction.back();
@@ -10,8 +11,8 @@ export const goToHistoryDetail = (section: string, id: number) => {
   NavigationAction.navigate('HistoryDetailView', { section, id });
 };
 
-export const goToHistoryInvoice = () => {
-  NavigationAction.navigate('HistoryInvoiceView');
+export const goToHistoryInvoice = (data: object) => {
+  NavigationAction.navigate('HistoryInvoiceView', data);
 };
 
 export const goToHistoryDetailStatus = (data: IHistoryDetailStatus) => {
@@ -52,4 +53,34 @@ export const useTimer = (
   };
 
   return { timer, start, reset };
+};
+
+export const useRequestWritePermission = async () => {
+  const [downloadProgress, setDownloadProgress] = useState(true);
+  const [accessGranted, setAccess] = useState(false);
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'Sinbad App Permission',
+        message:
+          'Sinbad App needs access to your file ' +
+          'so you can download the invoice file.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      setAccess(true);
+    } else {
+      // alert("Storage permission denied")
+      setDownloadProgress(false);
+    }
+  } catch (err) {
+    // console.warn(err);
+    setDownloadProgress(false);
+  }
+
+  return { downloadProgress, accessGranted };
 };

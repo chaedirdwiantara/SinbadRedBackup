@@ -161,13 +161,15 @@ const HistoryDetailView: FC = () => {
     stateHistory;
 
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, '1021639');
+    getPaymentDetail.detail(dispatchHistory, '1427331');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
 
   useEffect(() => {
     if (paymentInvoice.data) {
-      goToHistoryInvoice();
+      console.log(paymentInvoice.data, 'data');
+
+      goToHistoryInvoice(paymentInvoice.data);
     }
   }, [paymentInvoice.data]);
   /** === FUNCTIONS === */
