@@ -64,7 +64,7 @@ const MerchantEditAddressView = () => {
   }, [merchantData]);
 
   const handleDisableButton = () => {
-    if (address.value !== '' && noteAddress.value !== '') {
+    if (address.value && noteAddress.value) {
       if (
         merchantData.latitude !== null ||
         merchantData.longitude !== null ||
