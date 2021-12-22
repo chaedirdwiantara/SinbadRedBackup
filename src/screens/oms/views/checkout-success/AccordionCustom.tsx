@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useState } from 'react';
 import { View, TouchableWithoutFeedback, LayoutAnimation } from 'react-native';
-import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
+import { SnbText, SnbIcon, color, SnbHtml } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 /** === IMPORT STYLE ===  */
@@ -65,7 +65,7 @@ export const AccordioCustom: FC<AccordionProps> = ({ data, loading }) => {
           </TouchableWithoutFeedback>
           {itemIndex === activeIndex && (
             <View style={AccordionStyle.contentContainer}>
-              <SnbText.B3>{item.instruction}</SnbText.B3>
+              <SnbHtml value={item.instruction} fontSize={12} />
             </View>
           )}
         </View>
