@@ -195,7 +195,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 setSassionQty,
               )
             }
-            onChange={(qty: number) =>
+            onChange={(qty: number) => {
               handleProductQuantityChange(
                 invoiceGroupIndex,
                 brandIndex,
@@ -204,8 +204,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [invoiceGroups, setInvoiceGroups],
                 qty,
                 setSassionQty,
-              )
-            }
+              );
+            }}
             minusDisabled={minusDisabled}
             plusDisabled={plusDisabled}
           />

@@ -341,7 +341,13 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (dataStock && productDetailState) {
       setLoadingPreparation(false);
-      setOrderModalVisible(true);
+      if (
+        modalRejectApproval === false &&
+        modalWaitingApproval === false &&
+        modalRegisterSupplier === false
+      ) {
+        setOrderModalVisible(true);
+      }
     }
   }, [dataStock, productDetailState]);
 

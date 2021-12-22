@@ -335,6 +335,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   useEffect(() => {
     /** => make sure data cart and data information stock is ready */
     if (cartViewData !== null && stockInformationData !== null) {
+      console.log('[BOOOOOOOMM]');
       let totalProductsSelected = 0;
       let initialTotalProduct = 0;
 

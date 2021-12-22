@@ -134,6 +134,21 @@ const useAddToCart = () => {
   };
 };
 
+const useAddToCartDetailActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.AddToCartPayload,
+    ) => {
+      dispatch(Actions.addToCartDetailProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.addToCartDetailReset(contextDispatch));
+    },
+  };
+};
+
 /** === Fetch Product Tag List Related === */
 const useTagListActions = () => {
   const dispatch = useDispatch();
@@ -290,4 +305,5 @@ export {
   useStockValidationDetailAction,
   useStockInformationAction,
   useProductDetailCartAction,
+  useAddToCartDetailActions,
 };

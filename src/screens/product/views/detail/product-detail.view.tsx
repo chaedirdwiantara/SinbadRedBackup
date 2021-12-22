@@ -43,7 +43,7 @@ import {
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
-  useAddToCart,
+  useAddToCartDetailActions,
   useStockValidationDetailAction,
   useOrderQuantity,
 } from '@screen/product/functions';
@@ -80,7 +80,7 @@ const ProductDetailView: FC = () => {
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
 
   /** => actions */
-  const addToCartActions = useAddToCart();
+  const addToCartActions = useAddToCartDetailActions();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
@@ -106,7 +106,7 @@ const ProductDetailView: FC = () => {
   });
   const {
     stateShopingCart: {
-      create: { data: addToCartData, error: addToCartError },
+      add: { data: addToCartData, error: addToCartError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
