@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
@@ -28,6 +28,7 @@ import {
   useErrorModalBottom,
   useCheckoutFailedFetchState,
   useErrorWarningModal,
+  useParcelDetailModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -70,6 +71,7 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
+  const parcelDetail = useParcelDetailModal();
   const {
     stateCheckout: {
       checkout: {
@@ -101,6 +103,7 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
+  const [isModalOpen, setModalOpen] = useState(true);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -359,6 +362,16 @@ const OmsCheckoutView: FC = () => {
       expiredTime.setOpen(true);
     }
   }, []);
+
+  /** => Handling Modal Parcel Detail */
+  const parcelData = usePrevious(parcelDetail.getParcelData);
+  useEffect(() => {
+    if (parcelDetail.getParcelData !== null) {
+      parcelDetail.setModalOpen(true);
+    }
+    console.log('Parcel Data', parcelDetail.getParcelData);
+  }, [parcelData]);
+
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
     const invoiceGroupId = paymentChannelData?.invoiceGroupId;
@@ -416,6 +429,12 @@ const OmsCheckoutView: FC = () => {
     );
   };
 
+  const handleParcelDetail = (data: any) => {
+    parcelDetail.setParcel(data);
+    parcelDetail.setModalOpen(true);
+    return;
+  };
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -436,6 +455,7 @@ const OmsCheckoutView: FC = () => {
                   key={invoiceGroup.invoiceGroupId}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
+                  openModalParcelDetail={handleParcelDetail.bind(invoiceGroup)}
                   index={index}
                 />
               ))}
@@ -456,7 +476,10 @@ const OmsCheckoutView: FC = () => {
             back={backModalPaymentChannel}
             close={closePaymentChannel}
           />
-          <ModalParcelDetail />
+          <ModalParcelDetail
+            isOpen={parcelDetail.isModalOpen}
+            close={() => parcelDetail.setModalOpen(false)}
+          />
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
             close={() => closeModalTC()}
@@ -475,10 +498,6 @@ const OmsCheckoutView: FC = () => {
           <ModalBottomErrorCheckout
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
-          />
-          <ModalBottomErrorExpiredTime
-            isOpen={expiredTime.isOpen}
-            close={handleBackToCart}
           />
           <ErrorFetchModal
             visible={errorFetchModal.isOpen}

@@ -18,24 +18,24 @@ import * as models from '@models';
 interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
+  openModalParcelDetail: (value: boolean) => void;
   index: number;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
   openModalPaymentType,
+  openModalParcelDetail,
   index,
 }) => {
   /** === HOOK === */
-  const parcelDetailModal = useParcelDetailModal();
 
   return (
     <View style={CheckoutStyle.invoiceGroupListContainer}>
       <View>
         <View style={CheckoutStyle.headerSection}>
           <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
-          <TouchableOpacity
-            onPress={() => parcelDetailModal.setModalOpen(true)}>
+          <TouchableOpacity onPress={() => openModalParcelDetail}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity>
         </View>
