@@ -2,7 +2,7 @@ import * as models from '@models';
 import { PaymentStatusSlug, OrderStatusSlug } from '@screen/history/types';
 
 export interface OrderParcels {
-  id: number;
+  orderParcelId: number;
   orderCode: string;
   createdAt: string;
   parcelFinalPrice: number;

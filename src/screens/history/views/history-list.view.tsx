@@ -115,7 +115,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
     return (
       <HistoryCard
-        key={item.id}
+        key={item.orderParcelId}
         type="payment"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -133,7 +133,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('payment', item.id)}
+        onCardPress={() => goToHistoryDetail('payment', item.orderParcelId)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
@@ -157,7 +157,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
     return (
       <HistoryCard
-        key={item.id}
+        key={item.orderParcelId}
         type="order"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -175,7 +175,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('order', item.id)}
+        onCardPress={() => goToHistoryDetail('order', item.orderParcelId)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
