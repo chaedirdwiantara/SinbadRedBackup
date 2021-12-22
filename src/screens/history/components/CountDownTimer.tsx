@@ -94,9 +94,9 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
         marginTop: 6,
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <SnbText.C1 color={color.black60}>
+        <SnbText.H4 color={color.black60}>
           {hours} : {minutes} : {seconds}
-        </SnbText.C1>
+        </SnbText.H4>
       </View>
     </View>
   );
