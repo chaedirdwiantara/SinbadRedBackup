@@ -19,7 +19,7 @@ const paymentInvoiceDetail = (data: models.DetailProcessProps) => {
 /** update billing : activate VA */
 const activateVA = (id: string) => {
   const path = `billing/${id}`;
-  return apiMapping('auth', path, 'payment', 'v1', 'UPDATE', {});
+  return apiMapping('auth', path, 'payment', 'v1', 'PATCH', {});
 };
 export const HistoryPaymentApi = {
   paymentDetail,

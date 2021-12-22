@@ -1,16 +1,16 @@
 import * as types from '@types';
 import * as models from '@models';
-import { PaymentActivateVASuccess } from '@models';
 /** === HISTORY ACTIVATE VA === */
 /** => process */
 export const historyActivateVAProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.UpdateProcessProps<PaymentActivateVASuccess>,
-): models.UpdateProcessAction<PaymentActivateVASuccess> => {
+  payload: models.UpdateProcessProps<{}>,
+): models.UpdateProcessAction<{}> => {
   contextDispatch({
     type: types.HISTORY_ACTIVATE_VA_PROCESS,
     payload,
   });
+
   return {
     type: types.HISTORY_ACTIVATE_VA_PROCESS,
     payload,
@@ -18,13 +18,15 @@ export const historyActivateVAProcess = (
   };
 };
 /** => success */
-export const merchantEditSuccess = (
+export const historyActivateVASuccess = (
   data: models.UpdateSuccessProps,
 ): models.UpdateSuccessAction => {
+  console.log(data, 'data');
+
   return { type: types.HISTORY_ACTIVATE_VA_SUCCESS, payload: data };
 };
 /** => failed */
-export const merchantEditFailed = (
+export const historyActivateVAFailed = (
   data: models.ErrorProps,
 ): models.UpdateFailedAction => {
   return { type: types.HISTORY_ACTIVATE_VA_FAILED, payload: data };

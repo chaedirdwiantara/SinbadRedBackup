@@ -118,6 +118,21 @@ function* historyDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.historyDetailFailed(error as models.ErrorProps));
   }
 }
+/**=> ACTIVATE VA */
+function* activateVa(action: models.UpdateProcessAction<{ id: number }>) {
+  try {
+    const response: models.UpdateSuccessProps = yield call(() => {
+      return HistoryPaymentApi.activateVA(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.historyActivateVASuccess(response),
+    );
+    yield put(ActionCreators.historyActivateVASuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.historyActivateVAFailed(error));
+    yield put(ActionCreators.historyActivateVAFailed(error));
+  }
+}
 /** === LISTENER === */
 function* HistorySaga() {
   yield takeLatest(types.PAYMENT_STATUS_LIST_PROCESS, paymentStatusList);
@@ -126,6 +141,7 @@ function* HistorySaga() {
   yield takeLatest(types.HISTORY_PAYMENT_DETAIL_PROCESS, paymentDetail);
   yield takeLatest(types.HISTORY_INVOICE_DETAIL_PROCESS, paymentInvoice);
   yield takeLatest(types.HISTORY_DETAIL_PROCESS, historyDetail);
+  yield takeLatest(types.HISTORY_ACTIVATE_VA_PROCESS, activateVa);
 }
 
 export default HistorySaga;

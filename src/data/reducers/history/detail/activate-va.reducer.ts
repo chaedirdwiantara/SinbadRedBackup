@@ -29,7 +29,7 @@ export const paymentActivateVAReducer = simplifyReducer(
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
       };
     },

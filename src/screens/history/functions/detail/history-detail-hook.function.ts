@@ -60,3 +60,12 @@ export const useHistoryDetailAction = () => {
     },
   };
 };
+
+export const useActivateVa = () => {
+  const dispatch = useDispatch();
+  return {
+    update: (contextDispatch: (action: any) => any, id: number) => {
+      dispatch(Actions.historyActivateVAProcess(contextDispatch, id));
+    },
+  };
+};

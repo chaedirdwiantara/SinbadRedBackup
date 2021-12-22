@@ -11,6 +11,8 @@ import {
   PAY_NOW,
   PENDING,
 } from '@screen/history/constant/history.constant';
+import { useActivateVa } from '../../functions';
+import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 interface PaymentVAProps {
   data: PaymentDetailSuccessProps | null;
   onClick: () => void;
@@ -21,6 +23,15 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   data,
   onClick,
 }) => {
+  const { stateHistory, dispatchHistory } = useHistoryContext();
+  const activateVa = useActivateVa();
+  /** === FUNCTIONS ===*/
+  const onClickButton = () => {
+    console.log('click');
+
+    activateVa.update(dispatchHistory, 1412817);
+  };
+  /** === VIEW === */
   /** Bank Icon */
   const renderBankIcon = () => {
     return (
@@ -44,7 +55,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
         <SnbButton.Single
           type="secondary"
           title="AKTIFKAN VIRTUAL ACCOUNT"
-          onPress={() => console.log('VA Button pressed')}
+          onPress={() => onClickButton()}
         />
       </View>
     );
