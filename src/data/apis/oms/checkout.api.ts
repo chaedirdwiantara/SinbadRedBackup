@@ -1,6 +1,5 @@
 /** === IMPORT INTERNAL === */
 import apiMapping from '@core/services/apiMapping';
-import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 
 const getCheckout = () => {
@@ -27,10 +26,9 @@ const createOrders = (data: models.CreateOrders) => {
 };
 
 const getOrdersDetail = (data: models.CheckoutDoneProcessProps) => {
-  const mockPath = 'https://7d57c2be-7226-4fe4-87b7-d9df7cbaaa98.mock.pstmn.io';
   const path = `orders/${data.id}`;
-  return apiMappingMock<models.DetailSuccessProps<models.CheckoutDoneOrders>>(
-    mockPath,
+  return apiMapping<models.DetailSuccessProps<models.CheckoutDoneOrders>>(
+    'auth',
     path,
     'order',
     'v1',

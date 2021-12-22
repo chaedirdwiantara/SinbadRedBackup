@@ -17,6 +17,7 @@ import { CheckoutSuccessStyles } from '@screen/oms/styles';
 import {
   copyToClipboard,
   goToHome,
+  goToHistoryList,
   useCreateOrders,
   usePaymentAction,
   useOrdersDetail,
@@ -85,7 +86,10 @@ const OmsCheckoutSuccessView: FC = () => {
   /** => Listern to RTDB change */
   useEffect(() => {
     if (!flagRTDB.confirmOrderLoading) {
-      ordersDetail.get(dispatchCheckoutDone, 2);
+      ordersDetail.get(
+        dispatchCheckoutDone,
+        stateCheckout.create.data?.orderId as number,
+      );
     }
   }, [flagRTDB.confirmOrderLoading]);
 
@@ -173,23 +177,13 @@ const OmsCheckoutSuccessView: FC = () => {
     return data.orderParcels.map((parcel) => (
       <View style={CheckoutSuccessStyles.paymentDetailContent}>
         <View>
-          <SnbText.C2>Total:</SnbText.C2>
-          <View style={{ marginVertical: 8 }}>
+          <SnbText.C2>{parcel.orderCode}</SnbText.C2>
+          <View style={{ marginVertical: 8, flexDirection: 'row' }}>
+            <SnbText.H4 color={color.black80}>Sub Total : </SnbText.H4>
             <SnbText.H4 color={color.yellow50}>
               {toCurrency(parcel.amount as number)}
             </SnbText.H4>
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              copyToClipboard(
-                parcel.amount as number,
-                'Jumlah Tersalin',
-                setShowToast,
-                setToastMessage,
-              )
-            }>
-            <SnbText.C1 color={color.red50}>Salin Jumlah</SnbText.C1>
-          </TouchableOpacity>
         </View>
         <TouchableOpacity onPress={() => console.log('Detail pressed')}>
           <SnbText.B4 color={color.red50}>DETAIL</SnbText.B4>
@@ -213,7 +207,10 @@ const OmsCheckoutSuccessView: FC = () => {
           <SnbHtml value={useDataConstant.paymentDescription} fontSize={12} />
         ) : (
           <SnbHtml
-            value={data.orderParcels[0].paymentChannel.description as string}
+            value={
+              data?.orderParcels[0].paymentChannel.description[0]
+                .instruction as string
+            }
             fontSize={12}
           />
         )}
@@ -248,7 +245,11 @@ const OmsCheckoutSuccessView: FC = () => {
             marginVertical: 8,
           }}>
           <SnbText.B3>Tanggal Pembelian</SnbText.B3>
-          <SnbText.B3>{toLocalDateTime(paymentData.orderedAt)}</SnbText.B3>
+          <SnbText.B3>
+            {toLocalDateTime(
+              stateCheckoutDone.detail.data?.orderDate as string,
+            )}
+          </SnbText.B3>
         </View>
         <View
           style={{
@@ -256,8 +257,12 @@ const OmsCheckoutSuccessView: FC = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}>
-          <SnbText.B3>Jatuh Tempo</SnbText.B3>
-          <SnbText.B3>{toLocalDateTime(paymentData.paymentDueDate)}</SnbText.B3>
+          <SnbText.B3>Estimasi Tanggal Pengiriman</SnbText.B3>
+          <SnbText.B3>
+            {toLocalDateTime(
+              stateCheckoutDone.detail.data?.estDeliveredDate as string,
+            )}
+          </SnbText.B3>
         </View>
       </View>
     </View>
@@ -269,7 +274,7 @@ const OmsCheckoutSuccessView: FC = () => {
         type="primary"
         title="Cek Status Pembayaran"
         disabled={false}
-        onPress={() => console.log('Check payment status pressed')}
+        onPress={goToHistoryList}
       />
       <SnbButton.Single
         type="secondary"
