@@ -1,63 +1,118 @@
-// * => Not sure number or string
-// Price, Value, and Taxes from api are still string => needs to be changed to number
+import { OrderStatusSlug, PaymentStatusSlug } from '@screen/history/types';
+
+export interface HistoryBilling {
+  id: number;
+  status: OrderStatusSlug;
+  paidTime: string | null;
+  refundTotal: number;
+  totalPayment: number;
+  accountVaType: string | null;
+  totalFeeDeduct: number;
+  accountVaNumber: string | null;
+  refundedDateTime: string | null;
+  totalFeeNonDeduct: number;
+  expiredPaymentTime: string | null;
+  deliveredTotalPayment: number;
+}
+
+export interface HistoryBuyer {
+  storeName: string;
+  storeAddres: string | null;
+  urban: string | null;
+  ownerName: string;
+}
+
+export interface ParcelProduct {
+  productId: string;
+  productName: string;
+  urlImages: string;
+  qty: number;
+  actualQty: number;
+  uom: string;
+  priceAfterTax: number;
+  totalPriceAfterTax: number;
+}
+
+export interface ParcelLog {
+  status: OrderStatusSlug;
+  detail: string;
+  happenedAt: string;
+  reason: string | null;
+  userName: string | null;
+}
 
 export interface HistoryDetail {
-  id: number;
+  platform: string;
+  orderParcelId: number;
   orderId: number;
   sellerId: number;
   invoiceGroupId: string;
   invoiceGroupName: string;
-  portfolioId: number | null; // *
-  orderCancelReasonId: string | null;
+  portfolioId: number | null;
+  cartParcelId: number | null;
+  orderCancelReasonId: number | null;
+  orderCancelReason: string | null;
   paymentTypeId: number;
+  paymentTypeName: string;
   paymentChannelId: number;
-  paylaterTypeId: number | null; // *
-  estDeliveredDate: string;
-  deliveredDate: string;
+  paylaterTypeId: number | null;
+  paylaterTypeName: string | null;
+  estDeliveredDate: string | null;
+  deliveredDate: string | null;
   orderNotes: string | null;
   orderCode: string | null;
-  orderRef: string;
+  orderRef: string | null;
   paidTime: string | null;
   expiredPaymentTime: string | null;
+  status: OrderStatusSlug;
   cancelBy: string | null;
-  statusPayment: string;
-  dueDate: string;
-  estDueDate: string;
+  statusPayment: PaymentStatusSlug;
+  dueDate: string | null;
+  estDueDate: string | null;
   parcelNettPrice: number;
   parcelGrossPrice: number;
   promoSellerValue: number;
-  voucherSellerValue: number;
-  parcelTaxes: number;
-  parcelFinalPrice: number;
   parcelQty: number;
-  status: string;
   statusUpdate: string;
-  orderIsSent: boolean;
   invoicedParcelGrossPrice: number;
   invoicedParcelNettPrice: number;
-  invoicedPromoSellerValue: number;
-  invoicedVoucherSellerValue: number;
-  invoicedParcelTaxes: number;
-  invoicedParcelFinalPrice: number;
   invoicedParcelQty: number;
-  invoicedParcelModified: boolean;
-  deliveredParcelNettPrice: number;
   deliveredParcelGrossPrice: number;
+  invoicedPromoSellerValue: number;
   deliveredPromoSellerValue: number;
+  voucherSellerValue: number;
+  invoicedSellerValue: number;
   deliveredVoucherSellerValue: number;
-  deliveredParcelTaxes: number;
-  deliveredParcelFinalPrice: number;
+  deliveredParcelNettPrice: number;
   deliveredParcelQty: number;
+  parcelTaxes: number;
+  invoicedParcelTaxes: number;
+  deliveredParcelTaxes: number;
+  parcelFinalPrice: number;
+  invoicedParcelFinalPrice: number;
+  deliveredParcelFinalPrice: number;
+  invoicedParcelModified: boolean;
   deliveredParcelModified: boolean;
+  createdAt: string;
   cancelTime: string | null;
   refundedTime: string | null;
-  promoPaymentId: number | null; // *
-  promoPaymentName: string | null;
   parcelPromoPaymentValue: number;
+  promoPaymentName: string | null;
   parcelFinalPriceBuyer: number;
   invoicedParcelFinalPriceBuyer: number;
   deliveredParcelFinalPriceBuyer: number;
-  createdAt: string;
-  updatedAt: string | null;
-  deletedAt: string | null;
+  billing: HistoryBilling;
+  deliveryCourier: string;
+  orderVia: string | null;
+  buyer: HistoryBuyer;
+  orderParcelProducts: Array<ParcelProduct>;
+  orderParcelBonus: Array<ParcelProduct>;
+  orderParcelRemovedProducts: Array<ParcelProduct>;
+  orderParcelLogs: Array<ParcelLog>;
+  parcelPromo: number;
+  parcelVoucher: number;
+  invoicedParcelPromo: number;
+  deliveredParcelPromo: number;
+  deliveredParcelVoucher: number;
+  parcelPromoPaymentAmount: number;
 }

@@ -25,7 +25,7 @@ import { OrderStatusQuery, PaymentStatusQuery } from '@models';
 /** === CONSTANT === */
 const historyTabs = ['Tagihan', 'Order'];
 /** === COMPONENT === */
-const HistoryListView: FC = () => {
+const HistoryListView: FC = ({ navigation }: any) => {
   /** === HOOKS === */
   const [activeTab, setActiveTab] = useState(0);
   const [keyword, setKeyword] = useState('');
@@ -64,6 +64,18 @@ const HistoryListView: FC = () => {
     getPaymentStatus.list(dispatchHistory);
     orderStatusActions.fetch(dispatchHistory);
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setKeyword('');
+      setActiveOrderStatus('');
+      setActivePaymentStatus('');
+      setDate({ start: '', end: '' });
+      setIsFiltered(false);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   /** === FUNCTIONS === */
   const handleDateChange = (type: 'start' | 'end', value: string) => {
     if (type === 'start') {
@@ -103,7 +115,7 @@ const HistoryListView: FC = () => {
 
     return (
       <HistoryCard
-        key={item.id}
+        key={item.orderParcelId}
         type="payment"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -121,7 +133,7 @@ const HistoryListView: FC = () => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('payment', item.id)}
+        onCardPress={() => goToHistoryDetail('payment', item.orderParcelId)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
@@ -145,7 +157,7 @@ const HistoryListView: FC = () => {
 
     return (
       <HistoryCard
-        key={item.id}
+        key={item.orderParcelId}
         type="order"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -163,7 +175,7 @@ const HistoryListView: FC = () => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('order', item.id)}
+        onCardPress={() => goToHistoryDetail('order', item.orderParcelId)}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
