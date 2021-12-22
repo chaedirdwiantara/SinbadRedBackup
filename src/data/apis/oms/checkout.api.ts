@@ -25,7 +25,19 @@ const createOrders = (data: models.CreateOrders) => {
   );
 };
 
+const getOrdersDetail = (data: models.CheckoutDoneProcessProps) => {
+  const path = `orders/${data.id}`;
+  return apiMapping<models.DetailSuccessProps<models.CheckoutDoneOrders>>(
+    'auth',
+    path,
+    'order',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const CheckoutApi = {
   getCheckout,
   createOrders,
+  getOrdersDetail,
 };

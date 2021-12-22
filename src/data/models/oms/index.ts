@@ -10,3 +10,4 @@ export * from './shopping-cart/cart-total-product.model';
 export * from './cart-master';
 export * from './reserve-data';
 export * from './checkout/create-orders.model';
+export * from './checkout-done';

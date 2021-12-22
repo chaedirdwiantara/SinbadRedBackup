@@ -2,6 +2,7 @@
 export interface FlagRTDB {
   isCheckoutLoading: boolean;
   isInitiateCheckoutLoading: boolean;
+  confirmOrderLoading: boolean;
 }
 /** => for changa data flag */
 export interface FlagRTDBData {

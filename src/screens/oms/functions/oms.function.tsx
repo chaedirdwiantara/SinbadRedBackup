@@ -50,6 +50,10 @@ const goToPaymentPromoList = (invoiceGroupId: string) => {
 const goToCategory = () => {
   NavigationAction.navigate('CategoryView');
 };
+/** => Go to History List */
+const goToHistoryList = () => {
+  NavigationAction.navigate('HistoryListView');
+};
 
 export {
   goBack,
@@ -64,4 +68,5 @@ export {
   goToPaymentPromoList,
   goToVoucherCartList,
   goToCategory,
+  goToHistoryList,
 };
