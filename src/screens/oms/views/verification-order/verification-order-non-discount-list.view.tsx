@@ -10,25 +10,26 @@ interface VerificationOrderNonDiscountListProps {
   nonPromoProducts: VerificationOrderDetailNonPromoList[];
 }
 /** === COMPONENT ===  */
-export const VerificationOrderNonDiscountList: FC<VerificationOrderNonDiscountListProps> =
-  ({ nonPromoProducts }) => {
-    if (nonPromoProducts.length === 0) {
-      return null;
-    }
+export const VerificationOrderNonDiscountList: FC<
+  VerificationOrderNonDiscountListProps
+> = ({ nonPromoProducts }) => {
+  if (nonPromoProducts.length === 0) {
+    return null;
+  }
 
-    return (
-      <View>
-        <View style={VerificationOrderStyle.listHeader}>
-          <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
-        </View>
-        {nonPromoProducts.map((item, index) => {
-          return (
-            <React.Fragment key={index}>
-              <VerificationOrderNonDiscountItem data={item} />
-              <SnbDivider style={VerificationOrderStyle.listDivider} />
-            </React.Fragment>
-          );
-        })}
+  return (
+    <View>
+      <View style={VerificationOrderStyle.listHeader}>
+        <SnbText.B4>{'Produk Tidak Mendapatkan Potongan Harga'}</SnbText.B4>
       </View>
-    );
-  };
+      {nonPromoProducts.map((item, index) => {
+        return (
+          <React.Fragment key={index}>
+            <VerificationOrderNonDiscountItem data={item} />
+            <SnbDivider style={VerificationOrderStyle.listDivider} />
+          </React.Fragment>
+        );
+      })}
+    </View>
+  );
+};

@@ -32,21 +32,41 @@ function* checkEmailAvailability(
   }
 }
 
+function* checkRegister(data: models.IRegisterMerchantSuccess) {
+  for (let i = 0; i < 5; i++) {
+    try {
+      const response: models.IRegisterMerchantDetail = yield call(() =>
+        registerApi.registermerchantDetail(data),
+      );
+      if (
+        response.data.status === 'done' ||
+        response.data.status === 'failed'
+      ) {
+        return response;
+      }
+      throw new Error();
+    } catch (err) {
+      if (i < 4) {
+        yield delay(2000);
+      } else {
+        throw new Error('Check self registration failed');
+      }
+    }
+  }
+}
+
 /** register merchant */
 function* registerMerchant(
   action: models.IRegisterAction<models.IMerchantData>,
 ) {
   try {
-    const registerReponse: models.IRegisterMerchantSuccess = yield call(() =>
+    const response: models.IRegisterMerchantSuccess = yield call(() =>
       registerApi.registerMerchant(action.payload),
     );
-    if (registerReponse) {
-      yield delay(2000);
-      const response: models.IRegisterMerchantDetail = yield call(() =>
-        registerApi.registermerchantDetail(registerReponse),
-      );
-      yield put(ActionCreators.merchantRegisterSuccess(response));
-    }
+    const registerResult: models.IRegisterMerchantDetail = yield call(() =>
+      checkRegister(response),
+    );
+    yield put(ActionCreators.merchantRegisterSuccess(registerResult));
   } catch (error) {
     yield put(ActionCreators.merchantRegisterFailed(error));
   }

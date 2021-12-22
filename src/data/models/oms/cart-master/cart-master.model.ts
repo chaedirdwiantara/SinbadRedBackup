@@ -2,8 +2,8 @@ import * as models from '@models';
 
 export interface ICartMasterProductNotAvailable {
   productId: string;
+  productName: string;
   displayPrice: number;
-  warehouseId: number;
   urlImages: string;
 }
 

@@ -11,6 +11,7 @@ export interface CartProduct {
   priceAfterTax: number;
   warehouseId: number;
   uom: string;
+  multipleQty: number;
 }
 
 export interface CartBrand {

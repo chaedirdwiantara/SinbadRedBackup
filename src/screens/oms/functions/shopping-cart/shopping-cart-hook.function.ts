@@ -17,7 +17,7 @@ export const useCartViewActions = () => {
       dispatch(Actions.cartViewProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.cartViewReset);
+      dispatch(Actions.cartViewReset(contextDispatch));
     },
   };
 };

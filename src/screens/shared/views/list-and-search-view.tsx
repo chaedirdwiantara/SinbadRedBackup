@@ -1,7 +1,13 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
-import React from 'react';
-import { FlatList, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Image,
+} from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -15,9 +21,15 @@ const ListAndSearchView = () => {
   const { params }: any = useRoute();
   const { getSelection, listSelection, selectedItem, onSelectedItem } =
     useTextFieldSelect();
+  const [search, setSearch] = useState('');
+  const [clearSearch, setClearSearch] = useState(false);
 
   React.useEffect(() => {
-    getSelection(params);
+    const data = {
+      ...params,
+      meta: { ...params.meta, keyword: search },
+    };
+    getSelection(data);
   }, []);
 
   React.useEffect(() => {
@@ -26,34 +38,91 @@ const ListAndSearchView = () => {
     }
   }, [selectedItem]);
 
+  const searchData = () => {
+    const data = {
+      type: params.type,
+      params: params.params,
+      meta: { keyword: search, limit: 100 },
+    };
+    getSelection(data);
+  };
+
+  useEffect(() => {
+    if (search === '' && clearSearch) {
+      searchData();
+      setClearSearch(false);
+    }
+  }, [clearSearch]);
+
+  const renderEmpty = () => {
+    return (
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Image
+          style={{ height: 180, width: undefined, aspectRatio: 1 / 1 }}
+          source={require('../../../assets/images/sinbad_image/cry_sinbad.png')}
+        />
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginHorizontal: 16,
+          }}>
+          <SnbText.B2>Data tidak ditemukan</SnbText.B2>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SnbContainer color="white">
       <SafeAreaView style={{ flex: 1 }}>
-        <SnbTopNav.Type7
-          type="red"
-          placeholder="Pilih jumlah karyawan"
-          enter={() => {}}
-          backAction={goBack}
-          clearText={() => {}}
-          onChangeText={() => {}}
-        />
+        {params.type === 'listNumOfEmployee' ? (
+          <SnbTopNav.Type3
+            type="red"
+            backAction={goBack}
+            title={'Jumlah Karyawan'}
+          />
+        ) : (
+          <SnbTopNav.Type7
+            type="red"
+            placeholder="Pilih jumlah karyawan"
+            enter={() => searchData()}
+            backAction={goBack}
+            clearText={() => {
+              setSearch('');
+              setClearSearch(true);
+            }}
+            onChangeText={(text) => setSearch(text)}
+            value={search}
+          />
+        )}
+
         <FlatList
           data={listSelection.data}
           keyExtractor={(el, index) => index.toString()}
+          contentContainerStyle={{
+            flexGrow: 1,
+            justifyContent:
+              listSelection.data?.length === 0 || listSelection.error
+                ? 'center'
+                : 'flex-start',
+          }}
           ListEmptyComponent={() => {
             const { data, error } = listSelection;
             if (data?.length === 0 || error) {
+              return renderEmpty();
+            } else {
               return (
-                <SnbText.B3 color={color.red70}>Tidak Ada Data</SnbText.B3>
+                <View style={{ marginVertical: 48 }}>
+                  <SnbProgress size={40} />
+                  <View style={{ marginVertical: 8 }} />
+                </View>
               );
             }
-            return (
-              <View style={{ marginVertical: 48 }}>
-                <SnbProgress />
-                <View style={{ marginVertical: 8 }} />
-                <SnbText.B3 align="center">Memuat Data...</SnbText.B3>
-              </View>
-            );
           }}
           renderItem={({ item, index }) => {
             const backgroundColor =

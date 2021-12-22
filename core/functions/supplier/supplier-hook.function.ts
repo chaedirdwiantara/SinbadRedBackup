@@ -46,3 +46,18 @@ export const useSupplierSegmentationDetailAction = () => {
     },
   };
 };
+
+export const useRegisterSupplierActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.SendDataSupplierPayload,
+    ) => {
+      dispatch(Actions.registerSupplierProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.registerSupplierReset(contextDispatch));
+    },
+  };
+};

@@ -121,7 +121,10 @@ export const HistoryCard: FC<HistoryCardProps> = ({
             )}
           </View>
           {expiredPaymentTime && (
-            <CountDownTimer timeInSeconds={countDownInSeconds} />
+            <CountDownTimer
+              type={'historyCard'}
+              expiredTime={expiredPaymentTime}
+            />
           )}
         </View>
       </View>

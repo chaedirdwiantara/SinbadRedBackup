@@ -16,7 +16,7 @@ const storeDetail = () => {
 /** => verfication order create */
 const changePassword = (data: object) => {
   const path = 'change-password';
-  return apiMapping('auth', path, 'auth', 'v1', 'PATCH', data);
+  return apiMapping('auth', path, 'auth', 'v1', 'UPDATE', data);
 };
 /** === EXPORT FUNCTIONS === */
 export const UserApi = {
