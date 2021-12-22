@@ -129,13 +129,13 @@ const TakeProfilePictureView: FC = () => {
               onPress={() => takePicture()}>
               <View style={styles.cirleButton} />
             </TouchableOpacity>
+            {loading && (
+              <View style={styles.loadingCamera}>
+                <SnbProgress size={60} />
+              </View>
+            )}
           </View>
         </RNCamera>
-        {loading && (
-          <View style={{ position: 'absolute', bottom: 38, right: 0, left: 0 }}>
-            <SnbProgress size={60} />
-          </View>
-        )}
       </>
     );
   };
@@ -174,6 +174,12 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 40,
     height: 40,
+  },
+  loadingCamera: {
+    position: 'absolute',
+    width,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 export default TakeProfilePictureView;
