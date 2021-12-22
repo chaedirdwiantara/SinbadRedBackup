@@ -69,3 +69,13 @@ export const useActivateVa = () => {
     },
   };
 };
+
+export const useDownloadProgress = () => {
+  const [downloadProgress, setProgress] = useState(false);
+  return {
+    downloadProgress,
+    setProgress: (value: boolean) => {
+      setProgress(value);
+    },
+  };
+};

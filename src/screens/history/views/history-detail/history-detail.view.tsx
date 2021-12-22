@@ -11,6 +11,7 @@ import {
   SnbButton,
   SnbDialog,
   SnbToast,
+  SnbIcon,
 } from 'react-native-sinbad-ui';
 import Clipboard from '@react-native-clipboard/clipboard';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -361,6 +362,9 @@ const HistoryDetailView: FC = () => {
         message={modalToast.toastText}
         close={() => modalToast.setOpen(false)}
         position={'bottom'}
+        leftItem={
+          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
+        }
       />
     );
   };
