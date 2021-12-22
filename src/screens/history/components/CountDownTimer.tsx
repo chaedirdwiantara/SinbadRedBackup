@@ -7,7 +7,7 @@ import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
   expiredTime: string;
-  type: string;
+  type: 'historyCard' | 'checkoutDone';
 }
 
 export const CountDownTimer: FC<CountDownTimerProps> = ({

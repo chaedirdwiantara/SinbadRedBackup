@@ -28,6 +28,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataFlagRTDB } from '@core/redux/Data';
 import * as models from '@models';
+import { CountDownTimer } from '@screen/history/components';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -121,6 +122,19 @@ const OmsCheckoutSuccessView: FC = () => {
         style={{ marginBottom: 24, marginTop: 8 }}
       />
       <SnbText.H4>Terima Kasih!</SnbText.H4>
+      {!isMultiple &&
+      stateCheckoutDone.detail.data?.orderParcels[0].paymentType.id === 1 &&
+      stateCheckoutDone.detail.data.orderParcels[0].billing.expiredTime !==
+        null ? (
+        <CountDownTimer
+          expiredTime={
+            stateCheckoutDone.detail.data?.orderParcels[0].billing.expiredTime
+          }
+          type="checkoutDone"
+        />
+      ) : (
+        <View />
+      )}
     </View>
   );
   /** => Payment Detail */
