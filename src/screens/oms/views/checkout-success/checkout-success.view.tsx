@@ -333,7 +333,7 @@ const OmsCheckoutSuccessView: FC = () => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {isPageLoading ? (
+      {isPageLoading || flagRTDB.confirmOrderLoading ? (
         <LoadingPage />
       ) : (
         <>
