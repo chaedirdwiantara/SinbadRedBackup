@@ -29,7 +29,7 @@ const UserView: FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   useFocusEffect(
     React.useCallback(() => {
-      storeDetailAction.detail(dispatchUser, { id: '' });
+      storeDetailAction.detail(dispatchUser);
     }, []),
   );
   /** === FUNCTION FOR HOOK === */
@@ -179,7 +179,8 @@ const UserView: FC = () => {
     return (
       <>
         {renderHeaderInformation()}
-        {renderLoyaltiInformation()}
+        {/* HIDE SEMENTARA */
+        /* {renderLoyaltiInformation()} */}
         {renderBadgeInformation()}
         {renderUserInformation()}
       </>

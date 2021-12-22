@@ -7,6 +7,7 @@ import {
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
+import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const LoginOTPView: React.FC = () => {
@@ -34,23 +35,25 @@ const LoginOTPView: React.FC = () => {
         type="white"
         title="Kode Verifikasi"
       />
-      <OTPContent
-        onVerifyOTP={(otp) => {
-          setHide(true);
-          resetVerifyOTP();
-          verificationOTP({ mobilePhone, otp });
-        }}
-        resend={() => {
-          requestOTP({ mobilePhone });
-        }}
-        errorMessage={
-          verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
-        }
-        hideIcon={hide}
-        otpSuccess={verifyOTP.data !== null}
-        loading={verifyOTP.loading}
-        phoneNo={maskPhone(mobilePhone)}
-      />
+      <ScrollView>
+        <OTPContent
+          onVerifyOTP={(otp) => {
+            setHide(true);
+            resetVerifyOTP();
+            verificationOTP({ mobilePhone, otp });
+          }}
+          resend={() => {
+            requestOTP({ mobilePhone });
+          }}
+          errorMessage={
+            verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
+          }
+          hideIcon={hide}
+          otpSuccess={verifyOTP.data !== null}
+          loading={verifyOTP.loading}
+          phoneNo={maskPhone(mobilePhone)}
+        />
+      </ScrollView>
     </SnbContainer>
   );
 };

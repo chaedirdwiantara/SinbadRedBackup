@@ -102,7 +102,7 @@ const OTPContent: React.FC<Props> = (props) => {
     }
     setOpenModalSuccess(false);
     NavigationAction.backToPage('MerchantDetailProfileView');
-    storeDetailAction.detail(dispatchUser, { id: '3' });
+    storeDetailAction.detail(dispatchUser);
   };
 
   const backFunc = () => {
@@ -191,7 +191,12 @@ const OTPContent: React.FC<Props> = (props) => {
             <SnbButton.Single
               title="Verifikasi"
               onPress={() => verifyOtp()}
-              loading={loading}
+              loading={
+                loading ||
+                stateMerchant.verificationBankAccount.loading ||
+                stateMerchant.verificationEmail.loading ||
+                stateMerchant.verificationMobilePhone.loading
+              }
               type="primary"
               disabled={otp.length < 5}
             />
