@@ -16,14 +16,14 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
 }) => {
   const appState = useRef(AppState.currentState);
   const [, setAppStateVisible] = useState(appState.current);
-  const [timeDiff, setTimeDiff] = useState(0);
+  const [timeDiff, setTimeDiff] = useState(() => calculateTime(expiredTime));
   const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
 
-  useEffect(() => {
-    const expiredTimeData = calculateTime(expiredTime);
-    setTimeDiff(expiredTimeData + 60);
-  }, []);
+  // useEffect(() => {
+  //   const expiredTimeData = calculateTime(expiredTime);
+  //   setTimeDiff(expiredTimeData);
+  // }, []);
 
   useEffect(() => {
     if (timeDiff > 0) {
@@ -47,7 +47,7 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
     ) {
       reset();
       const expiredTimeData = calculateTime(expiredTime);
-      setTimeDiff(expiredTimeData + 30);
+      setTimeDiff(expiredTimeData);
     }
 
     appState.current = nextAppState;

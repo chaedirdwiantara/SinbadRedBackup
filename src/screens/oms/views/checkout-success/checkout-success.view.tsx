@@ -29,6 +29,7 @@ import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function'
 import { useDataFlagRTDB } from '@core/redux/Data';
 import * as models from '@models';
 import { CountDownTimer } from '@screen/history/components';
+import moment from 'moment';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -79,14 +80,13 @@ const OmsCheckoutSuccessView: FC = () => {
 
   /** => Reset Create Orders data after fetching Create Order Detail */
   useEffect(() => {
-    console.log('Create Orders Data', stateCheckout.create.data);
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   }, []);
 
   /** => Listern to RTDB change */
   useEffect(() => {
-    if (!flagRTDB.confirmOrderLoading) {
+    if (flagRTDB.confirmOrderLoading === false) {
       ordersDetail.get(
         dispatchCheckoutDone,
         stateCheckout.create.data?.orderId as number,
@@ -121,19 +121,30 @@ const OmsCheckoutSuccessView: FC = () => {
         width={200}
         style={{ marginBottom: 24, marginTop: 8 }}
       />
-      <SnbText.H4>Terima Kasih!</SnbText.H4>
+
       {!isMultiple &&
       stateCheckoutDone.detail.data?.orderParcels[0].paymentType.id === 1 &&
       stateCheckoutDone.detail.data.orderParcels[0].billing.expiredTime !==
         null ? (
-        <CountDownTimer
-          expiredTime={
-            stateCheckoutDone.detail.data?.orderParcels[0].billing.expiredTime
-          }
-          type="checkoutDone"
-        />
+        <>
+          <SnbText.H4>SEGERA LAKUKAN PEMBAYARAN DALAM WAKTU</SnbText.H4>
+          <CountDownTimer
+            expiredTime={
+              stateCheckoutDone.detail.data?.orderParcels[0].billing.expiredTime
+            }
+            type="checkoutDone"
+          />
+          <SnbText.C2>
+            (Sebelum{' '}
+            {moment(
+              stateCheckoutDone.detail.data?.orderParcels[0].billing
+                .expiredTime,
+            ).format('LLLL')}
+            )
+          </SnbText.C2>
+        </>
       ) : (
-        <View />
+        <SnbText.H4>Terima Kasih!</SnbText.H4>
       )}
     </View>
   );
