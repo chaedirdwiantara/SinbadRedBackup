@@ -143,7 +143,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             placeholder={'Masukkan Nomor Rekening'}
             type={'default'}
             value={bankAccountNo.value}
-            onChangeText={(text) => bankAccountNo.setValue(text)}
+            onChangeText={(text) => {
+              const cleanNumber = text.replace(/[^0-9]/g, '');
+              bankAccountNo.setValue(cleanNumber);
+            }}
             clearText={() => bankAccountNo.setValue('')}
             mandatory
             helpText={'Pastikan nomor rekening benar'}
@@ -178,6 +181,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
+
   /** button */
   const renderButton = () => {
     return (
@@ -187,7 +191,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             title={'Verifikasi'}
             type={'primary'}
             onPress={() => confirm()}
-            disabled={checkButton()}
+            disabled={checkButton() || stateMerchant.changeBankAccount.loading}
+            loading={stateMerchant.changeBankAccount.loading}
           />
         </View>
       </View>

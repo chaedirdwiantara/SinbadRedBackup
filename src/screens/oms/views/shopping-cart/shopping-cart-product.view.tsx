@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, Dispatch, SetStateAction, useState } from 'react';
+import React, { FC, Dispatch, SetStateAction } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbText,
@@ -39,6 +39,8 @@ interface ShoppingCartProductProps {
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  isFocus: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -55,8 +57,9 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   totalProducts,
   setSassionQty,
   onRemoveProduct,
+  isFocus,
+  setIsFocus,
 }) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false);
   const minusDisabled =
     isFocus ||
     product.qty <= product.minQty ||
@@ -124,7 +127,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         borderBottomColor: color.black10,
       }}
       key={product.productName}>
-      <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '50%',
+        }}>
         <View style={{ marginRight: 20, marginLeft: 4 }}>
           <SnbCheckbox
             status={product.selected ? 'selected' : 'unselect'}
@@ -145,13 +152,16 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
           <Image
             source={{ uri: product.urlImages }}
-            style={{ marginRight: 8, width: 77, height: 77 }}
+            style={{ width: 77, height: 77 }}
           />
         </TouchableOpacity>
         <View>
           <TouchableOpacity
             onPress={() => goToProductDetail(product.productId)}
-            style={{ marginBottom: 12, maxWidth: 160 }}>
+            style={{
+              marginBottom: 12,
+              width: '100%',
+            }}>
             <SnbText.B4>{product.productName}</SnbText.B4>
           </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>

@@ -115,7 +115,7 @@ const Content: React.FC = () => {
             <SnbTextField.Text
               {...address}
               mandatory
-              maxLength={250}
+              maxLength={200}
               labelText="Detail Alamat"
               placeholder="Masukkan detail alamat"
             />
@@ -126,6 +126,7 @@ const Content: React.FC = () => {
               mandatory
               labelText="Catatan Alamat"
               placeholder="Masukkan catatan alamat"
+              maxLength={200}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -146,10 +147,11 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...vehicleAccessibilityAmount}
-              labelText="Kapasitas Jalan"
-              placeholder="Masukkan kapasitas jalan"
+              labelText="Jumlah Akses Jalan"
+              placeholder="Masukkan Jumlah Akses Jalan"
               keyboardType="phone-pad"
               helpText={'Jumlah kendaraan yang bisa melewati jalan menuju Toko'}
+              maxLength={1}
             />
           </View>
         </ScrollView>
@@ -174,7 +176,6 @@ const Content: React.FC = () => {
             navigate(REGISTER_STEP_7_VIEW);
           }}
           type="primary"
-          shadow
           loading={false}
           disabled={
             address.value === '' ||

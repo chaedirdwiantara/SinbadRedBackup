@@ -88,6 +88,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [sassionQty, setSassionQty] = useState<number>(
     Math.random() * 10000000,
   );
+  const [isFocus, setIsFocus] = useState(false);
+
   const [toastSuccessRemoveProduct, setToastSuccessRemoveProduct] =
     useState(false);
   const [toastFailedRemoveProduct, setToastFailedRemoveProduct] =
@@ -289,6 +291,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (checkoutMaster.cartId) {
         reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
         reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+      } else {
+        setLoadingPage(false);
       }
     });
 
@@ -519,6 +523,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                       sassionQty={sassionQty}
                       setSassionQty={setSassionQty}
                       onRemoveProduct={onRemoveProduct}
+                      isFocus={isFocus}
+                      setIsFocus={setIsFocus}
                     />
                   ))}
                 </Fragment>

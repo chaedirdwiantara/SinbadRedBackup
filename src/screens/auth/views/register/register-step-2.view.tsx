@@ -123,7 +123,6 @@ const Content: React.FC = () => {
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
-              shadow
               loading={stateGlobal.uploadImage.loading}
               onPress={action}
               disabled={stateGlobal.uploadImage.loading}
