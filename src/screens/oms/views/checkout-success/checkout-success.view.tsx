@@ -30,6 +30,7 @@ import { useDataFlagRTDB } from '@core/redux/Data';
 import * as models from '@models';
 import { CountDownTimer } from '@screen/history/components';
 import moment from 'moment';
+import { AccordioCustom } from './AccordionCustom';
 /** === TYPES === */
 interface PaymentMethod {
   name: string;
@@ -86,7 +87,7 @@ const OmsCheckoutSuccessView: FC = () => {
 
   /** => Listern to RTDB change */
   useEffect(() => {
-    if (flagRTDB.confirmOrderLoading === false) {
+    if (flagRTDB.confirmOrderLoading === 'false') {
       ordersDetail.get(
         dispatchCheckoutDone,
         stateCheckout.create.data?.orderId as number,
@@ -231,12 +232,11 @@ const OmsCheckoutSuccessView: FC = () => {
         {isMultiple ? (
           <SnbHtml value={useDataConstant.paymentDescription} fontSize={12} />
         ) : (
-          <SnbHtml
-            value={
-              data?.orderParcels[0].paymentChannel.description[0]
-                .instruction as string
+          <AccordioCustom
+            data={
+              data?.orderParcels[0].paymentChannel
+                .description as Array<models.CheckoutDonePaymentChannelDescription>
             }
-            fontSize={12}
           />
         )}
       </View>

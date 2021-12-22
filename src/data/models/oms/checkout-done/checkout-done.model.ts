@@ -21,7 +21,6 @@ export interface CheckoutDoneOrderParccels {
   orderId: number;
   orderCode: string;
   amount: number;
-  paymentChannelTypeId: number;
   paymentChannel: CheckoutDonePaymentChannel;
   paymentType: CheckoutDonePaymentType;
   billing: CheckoutDoneBilling;
