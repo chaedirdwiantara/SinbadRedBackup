@@ -100,6 +100,7 @@ const OmsCheckoutSuccessView: FC = () => {
 
   /** => Listern to RTDB change */
   useEffect(() => {
+    console.log('Status COnfirm Loading', flagRTDB.confirmOrderLoading);
     if (flagRTDB.confirmOrderLoading === 'false') {
       ordersDetail.get(
         dispatchCheckoutDone,
@@ -136,27 +137,31 @@ const OmsCheckoutSuccessView: FC = () => {
         style={{ marginBottom: 24, marginTop: 8 }}
       />
 
-      {!isMultiple &&
-      stateCheckoutDone.detail.data?.orderParcels[0].paymentType.id === 1 &&
-      stateCheckoutDone.detail.data.orderParcels[0].billing.expiredTime !==
-        null ? (
-        <>
-          <SnbText.H4>SEGERA LAKUKAN PEMBAYARAN DALAM WAKTU</SnbText.H4>
-          <CountDownTimer
-            expiredTime={
-              stateCheckoutDone.detail.data?.orderParcels[0].billing.expiredTime
-            }
-            type="checkoutDone"
-          />
-          <SnbText.C2>
-            (Sebelum{' '}
-            {moment(
-              stateCheckoutDone.detail.data?.orderParcels[0].billing
-                .expiredTime,
-            ).format('LLLL')}
-            )
-          </SnbText.C2>
-        </>
+      {!isMultiple ? (
+        stateCheckoutDone.detail.data?.orderParcels[0].paymentType.id === 1 &&
+        stateCheckoutDone.detail.data.orderParcels[0].billing.expiredTime !==
+          null ? (
+          <>
+            <SnbText.H4>SEGERA LAKUKAN PEMBAYARAN DALAM WAKTU</SnbText.H4>
+            <CountDownTimer
+              expiredTime={
+                stateCheckoutDone.detail.data?.orderParcels[0].billing
+                  .expiredTime
+              }
+              type="checkoutDone"
+            />
+            <SnbText.C2>
+              (Sebelum{' '}
+              {moment(
+                stateCheckoutDone.detail.data?.orderParcels[0].billing
+                  .expiredTime,
+              ).format('LLLL')}
+              )
+            </SnbText.C2>
+          </>
+        ) : (
+          <SnbText.H4>Terima Kasih!</SnbText.H4>
+        )
       ) : (
         <SnbText.H4>Terima Kasih!</SnbText.H4>
       )}
