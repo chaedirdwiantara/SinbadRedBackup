@@ -54,16 +54,17 @@ const handleProductQuantityChange = (
   const currentInvoiceGroup = invoiceGroupsCopy[invoiceGroupIndex];
   const currentBrand = currentInvoiceGroup.brands[brandIndex];
   const currentProduct = currentBrand.products[productIndex];
-
+  const qtyString = currentQty.toString();
   if (action === 'increase' && currentProduct.qty < currentProduct.stock) {
     currentProduct.qty = currentQty + currentProduct.multipleQty;
   } else if (action === 'decrease' && currentProduct.qty > 0) {
     currentProduct.qty = currentQty - currentProduct.multipleQty;
-  } else if (action === 'onChange' && Number.isInteger(currentQty)) {
-    const qtyString = currentQty.toString();
-    if (qtyString.length <= 6) {
-      currentProduct.qty = currentQty;
-    }
+  } else if (
+    action === 'onChange' &&
+    Number.isInteger(currentQty) &&
+    qtyString.length <= 6
+  ) {
+    currentProduct.qty = currentQty;
   }
 
   currentBrand.products[productIndex] = currentProduct;

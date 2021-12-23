@@ -1,13 +1,7 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useState } from 'react';
-import { View, ScrollView, RefreshControl } from 'react-native';
-import {
-  SnbContainer,
-  SnbStatusBar,
-  SnbToast,
-  SnbIcon,
-  color,
-} from 'react-native-sinbad-ui';
+import React, { FC, useEffect, useState, useRef } from 'react';
+import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
+import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
@@ -43,7 +37,7 @@ import {
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
-  useAddToCart,
+  useAddToCartDetailActions,
   useStockValidationDetailAction,
   useOrderQuantity,
 } from '@screen/product/functions';
@@ -70,17 +64,18 @@ const ProductDetailView: FC = () => {
   const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const [toastSuccessAddCart, setToastSuccessAddCart] = useState(false);
-  const [toastSuccessRegisterSupplier, setToastSuccessRegisterSupplier] =
-    useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
 
+  /** === REF === */
+  const toastSuccessAddCart = useRef<any>();
+  const toastSuccessRegisterSupplier = useRef<any>();
+
   /** => actions */
-  const addToCartActions = useAddToCart();
+  const addToCartActions = useAddToCartDetailActions();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
@@ -106,7 +101,7 @@ const ProductDetailView: FC = () => {
   });
   const {
     stateShopingCart: {
-      create: { data: addToCartData, error: addToCartError },
+      add: { data: addToCartData, error: addToCartError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
@@ -341,8 +336,10 @@ const ProductDetailView: FC = () => {
         );
       }
       onFunctionActions({ type: 'close' });
-      setToastSuccessRegisterSupplier(true);
       sendDataToSupplierActions.reset(dispatchSupplier);
+      if (toastSuccessRegisterSupplier.current) {
+        toastSuccessRegisterSupplier.current.show();
+      }
     }
   }, [sendToSupplierData]);
 
@@ -360,7 +357,9 @@ const ProductDetailView: FC = () => {
       handleCloseModal();
       cartTotalProductActions.fetch();
       supplierSegmentationAction.reset(dispatchSupplier);
-      setToastSuccessAddCart(true);
+      if (toastSuccessAddCart.current) {
+        toastSuccessAddCart.current.show();
+      }
     }
   }, [addToCartData]);
 
@@ -370,16 +369,6 @@ const ProductDetailView: FC = () => {
       setModalErrorAddCart(true);
     }
   }, [addToCartError]);
-
-  /** close toast listener */
-  useEffect(() => {
-    if (toastSuccessAddCart || toastSuccessRegisterSupplier) {
-      setTimeout(() => {
-        setToastSuccessAddCart(false);
-        setToastSuccessRegisterSupplier(false);
-      }, 3000);
-    }
-  }, [toastSuccessAddCart, toastSuccessRegisterSupplier]);
 
   /** => Did Unmount */
   useEffect(() => {
@@ -568,12 +557,19 @@ const ProductDetailView: FC = () => {
       )}
       {/* Toast success add cart */}
       <SnbToast
-        open={toastSuccessAddCart}
+        ref={toastSuccessAddCart}
         message={'Produk berhasil ditambahkan ke keranjang'}
         position={'top'}
-        leftItem={
-          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
-        }
+        duration={2000}
+        positionValue={StatusBar.currentHeight || 0}
+      />
+      {/* Toast success register supplier */}
+      <SnbToast
+        ref={toastSuccessRegisterSupplier}
+        message={'Berhasil kirim data ke supplier'}
+        position={'top'}
+        duration={2000}
+        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
