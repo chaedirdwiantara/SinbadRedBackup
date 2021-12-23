@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
 import { PaymentDetailSuccessProps } from '@model/history';
-import { SnbButton, SnbText } from '@sinbad/react-native-sinbad-ui';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
 import {
@@ -24,11 +23,11 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   data,
   onClick,
 }) => {
-  const { stateHistory, dispatchHistory } = useHistoryContext();
+  const { dispatchHistory } = useHistoryContext();
   const activateVa = useActivateVa();
   /** === FUNCTIONS ===*/
   const onClickButton = () => {
-    activateVa.update(dispatchHistory, '1405033');
+    activateVa.update(dispatchHistory, '1406522');
   };
   /** === VIEW === */
   /** Bank Icon */

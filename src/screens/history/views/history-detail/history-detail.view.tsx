@@ -43,7 +43,13 @@ import {
 import { StatusLog } from '../../types';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
-import { CANCEL } from '@screen/history/constant/history.constant';
+import {
+  CANCEL,
+  PAID,
+  PAY_NOW,
+  REFUNDED,
+  REFUND_REQUESTED,
+} from '@screen/history/constant/history.constant';
 
 /** === TYPES === */
 type HistoryStackParamList = {
@@ -162,14 +168,12 @@ const HistoryDetailView: FC = () => {
     stateHistory;
 
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, '1021639');
+    getPaymentDetail.detail(dispatchHistory, '1406522');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
 
   useEffect(() => {
     if (paymentInvoice.data) {
-      console.log(paymentInvoice.data, 'data');
-
       goToHistoryInvoice(paymentInvoice.data);
     }
   }, [paymentInvoice.data]);
@@ -292,34 +296,46 @@ const HistoryDetailView: FC = () => {
       </View>
     );
   /** => Order Refund Info */
-  const renderOrderRefundInfo = () => (
-    <HistoryDetailCard title="Informasi Pengembalian">
-      <HistoryCardItem
-        title="Total Pembayaran Pesanan"
-        value={
-          historyDetailDummy.orderRefund.orderPaidAmount
-            ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
-            : toCurrency(0)
-        }
-      />
-      <HistoryCardItem
-        title="Total Pembayaran Pengiriman"
-        value={
-          historyDetailDummy.orderRefund.deliveryFee
-            ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
-            : toCurrency(0)
-        }
-      />
-      <HistoryCardItem
-        title="Total Pengembalian"
-        value={toCurrency(
-          historyDetailDummy.orderRefund.orderPaidAmount +
-            historyDetailDummy.orderRefund.deliveryFee,
-        )}
-        type="bold"
-      />
-    </HistoryDetailCard>
-  );
+  const renderOrderRefundInfo = () => {
+    const dataOrder = detail.data;
+    const dataPayment = paymentDetail.data;
+    return dataPayment?.paymentType.id === PAY_NOW &&
+      (dataOrder?.deliveredParcelModified ||
+        (dataOrder?.status === CANCEL &&
+          (dataPayment.billingStatus === PAID ||
+            dataPayment.billingStatus === REFUND_REQUESTED ||
+            dataPayment.billingStatus === REFUNDED))) ? (
+      <HistoryDetailCard title="Informasi Pengembalian">
+        <HistoryCardItem
+          title="Total Pembayaran Pesanan"
+          value={
+            historyDetailDummy.orderRefund.orderPaidAmount
+              ? toCurrency(dataPayment.totalPayment)
+              : toCurrency(0)
+          }
+        />
+        <HistoryCardItem
+          title="Total Pembayaran Pengiriman"
+          value={
+            historyDetailDummy.orderRefund.deliveryFee
+              ? toCurrency(dataPayment.deliveredTotalPayment)
+              : toCurrency(0)
+          }
+        />
+        <HistoryCardItem
+          title="Total Pengembalian"
+          value={
+            dataPayment.refundTotal
+              ? toCurrency(dataPayment.refundTotal)
+              : toCurrency(0)
+          }
+          type="bold"
+        />
+      </HistoryDetailCard>
+    ) : (
+      <View />
+    );
+  };
   /** => Delivery Detail */
   const renderDeliveryDetail = () => (
     <HistoryDetailCard title="Detail Pengiriman">
@@ -374,8 +390,8 @@ const HistoryDetailView: FC = () => {
       {renderStatus()}
       {renderInvoiceInfo()}
       {renderPaymentInfo()}
-      {renderVirtualAccount()}
       {renderOrderRefundInfo()}
+      {renderVirtualAccount()}
       {renderOrderNotes()}
       {renderProductList()}
       {renderDeliveryDetail()}
