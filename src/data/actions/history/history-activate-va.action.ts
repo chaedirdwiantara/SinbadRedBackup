@@ -21,8 +21,6 @@ export const historyActivateVAProcess = (
 export const historyActivateVASuccess = (
   data: models.UpdateSuccessProps,
 ): models.UpdateSuccessAction => {
-  console.log(data, 'data');
-
   return { type: types.HISTORY_ACTIVATE_VA_SUCCESS, payload: data };
 };
 /** => failed */

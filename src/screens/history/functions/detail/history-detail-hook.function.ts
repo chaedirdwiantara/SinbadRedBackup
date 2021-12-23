@@ -64,7 +64,7 @@ export const useHistoryDetailAction = () => {
 export const useActivateVa = () => {
   const dispatch = useDispatch();
   return {
-    update: (contextDispatch: (action: any) => any, id: number) => {
+    update: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.historyActivateVAProcess(contextDispatch, id));
     },
   };

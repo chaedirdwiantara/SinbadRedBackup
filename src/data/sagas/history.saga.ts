@@ -119,7 +119,7 @@ function* historyDetail(action: models.DetailProcessAction) {
   }
 }
 /**=> ACTIVATE VA */
-function* activateVa(action: models.UpdateProcessAction<{ id: number }>) {
+function* activateVa(action: models.UpdateProcessAction) {
   try {
     const response: models.UpdateSuccessProps = yield call(() => {
       return HistoryPaymentApi.activateVA(action.payload);
@@ -128,9 +128,13 @@ function* activateVa(action: models.UpdateProcessAction<{ id: number }>) {
       ActionCreators.historyActivateVASuccess(response),
     );
     yield put(ActionCreators.historyActivateVASuccess(response));
-  } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.historyActivateVAFailed(error));
-    yield put(ActionCreators.historyActivateVAFailed(error));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.historyActivateVAFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.historyActivateVAFailed(error as models.ErrorProps),
+    );
   }
 }
 /** === LISTENER === */

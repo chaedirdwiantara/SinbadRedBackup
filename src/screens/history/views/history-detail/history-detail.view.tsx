@@ -162,7 +162,7 @@ const HistoryDetailView: FC = () => {
     stateHistory;
 
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, '1427331');
+    getPaymentDetail.detail(dispatchHistory, '1021639');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
 

@@ -3,8 +3,7 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
-export type PaymentActivateVAInitialProps =
-  models.DetailItemProps<models.PaymentActivateVASuccessProps>;
+export type PaymentActivateVAInitialProps = models.UpdateItemProps;
 /** === INITIAL STATE === */
 export const paymentActivateVAInitialState: PaymentActivateVAInitialProps = {
   data: null,

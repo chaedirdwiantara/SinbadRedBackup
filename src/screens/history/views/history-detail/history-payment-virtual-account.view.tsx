@@ -3,6 +3,7 @@ import { View, Image } from 'react-native';
 import { PaymentDetailSuccessProps } from '@model/history';
 import { SnbButton, SnbText } from '@sinbad/react-native-sinbad-ui';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
+import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
 import {
   CASH,
   OVERDUE,
@@ -27,9 +28,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   const activateVa = useActivateVa();
   /** === FUNCTIONS ===*/
   const onClickButton = () => {
-    console.log('click');
-
-    activateVa.update(dispatchHistory, 1412817);
+    activateVa.update(dispatchHistory, '1405033');
   };
   /** === VIEW === */
   /** Bank Icon */
@@ -52,9 +51,10 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   const renderVAButton = () => {
     return (
       <View>
-        <SnbButton.Single
-          type="secondary"
-          title="AKTIFKAN VIRTUAL ACCOUNT"
+        <SnbCardButtonType4
+          title="Transfer ke no. Virtual Account :"
+          titleAlign="left"
+          buttonText="AKTIFKAN VIRTUAL ACCOUNT"
           onPress={() => onClickButton()}
         />
       </View>
@@ -70,6 +70,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
             bottomText={'Salin no. Rek'}
+            title="Transfer ke no. Virtual Account :"
             onPress={onClick}
           />
         </View>
@@ -84,9 +85,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     return (
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
-          <View>
-            <SnbText.C1>Transfer ke no. Virtual Account</SnbText.C1>
-          </View>
           <View style={{ marginBottom: 8 }} />
           {((paymentType?.id === PAY_NOW &&
             paymentChannel?.id !== CASH &&
