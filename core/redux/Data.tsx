@@ -43,6 +43,9 @@ const useDataTotalProductCart = () => {
 const useDataReserve = (): models.ReserveData => {
   return useSelector((state: RootState) => state.reserveData);
 };
+const useDataTotalNotification = () => {
+  return useSelector((state: RootState) => state.notificaitonTotalReducer);
+};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -56,6 +59,7 @@ export {
   useDataCartMaster,
   useDataTotalProductCart,
   useDataReserve,
+  useDataTotalNotification,
 };
 /**
  * ================================================================

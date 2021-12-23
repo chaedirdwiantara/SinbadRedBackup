@@ -33,8 +33,13 @@ const dummyPaymentDetail = [
     type: 'normal',
   },
 ];
+
+interface ModalParcelDetail {
+  isOpen: boolean;
+  close: () => void;
+}
 /** === COMPONENT === */
-export const ModalParcelDetail: FC = () => {
+export const ModalParcelDetail: FC<ModalParcelDetail> = ({ isOpen, close }) => {
   /** === HOOK === */
   const parcelDetailModal = useParcelDetailModal();
 
@@ -145,7 +150,7 @@ export const ModalParcelDetail: FC = () => {
       open={parcelDetailModal.isModalOpen}
       content={content()}
       title={'Detail Pesanan'}
-      closeAction={() => parcelDetailModal.setModalOpen(false)}
+      closeAction={close}
       actionIcon={'close'}
     />
   );

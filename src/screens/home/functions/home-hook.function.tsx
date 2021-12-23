@@ -1,19 +1,34 @@
 /** === IMPORT PACKAGE HERE === */
-import { useState } from 'react';
+import React from 'react';
+import { NavigationAction } from '@navigation';
 /** === FUNCTION === */
+/** => header */
 const useHeaderChange = () => {
-  const [headerChange, setheaderChange] = useState<boolean>(false);
+  const [headerChange, setheaderChange] = React.useState<boolean>(false);
   return {
-    state: headerChange,
-    action: (data: boolean) => {
+    stateHeaderChange: headerChange,
+    actionHeaderChange: (data: boolean) => {
       if (data !== headerChange) {
         setheaderChange(data);
       }
     },
   };
 };
+/** => refresh */
+const useRefresh = () => {
+  const [refresh, setRefresh] = React.useState<boolean>(false);
+  return {
+    stateRefresh: refresh,
+    actionRefresh: (data: boolean) => {
+      if (data !== refresh) {
+        setRefresh(data);
+      }
+      NavigationAction.resetToHome();
+    },
+  };
+};
 /** === EXPORT === */
-export const HomeHookFunc = { useHeaderChange };
+export { useHeaderChange, useRefresh };
 /**
  * ================================================================
  * NOTES

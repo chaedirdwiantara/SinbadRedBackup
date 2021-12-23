@@ -1,10 +1,16 @@
 /** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
+import { View, TouchableOpacity } from 'react-native';
+import {
+  SnbText,
+  SnbIcon,
+  SnbImageCompressor,
+  color,
+} from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { Images } from 'src/assets';
 /** === IMPORT STYLE === */
 import { ProductListCardStyle } from '../styles';
 /** === TYPE === */
@@ -58,9 +64,10 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
         }
       }}>
       {(props.isPromo || props.isBundle) && <PromoTag />}
-      <Image
-        source={{ uri: props.imageUrl }}
+      <SnbImageCompressor
+        uri={props.imageUrl}
         style={ProductListCardStyle.image}
+        defaultSource={Images.opacityPlaceholder}
       />
       <View style={{ justifyContent: 'space-between', flex: 1 }}>
         <View>

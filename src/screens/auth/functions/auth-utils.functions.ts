@@ -24,17 +24,6 @@ export const formatter = (string = '', gaps: number[], spacer: string) => {
   return temp.join(spacer);
 };
 
-export const handleMessageError = (code: number) => {
-  switch (code) {
-    case 10401: {
-      return 'Unauthorized';
-    }
-    default: {
-      return 'Terjadi kesalahan pada jaringan';
-    }
-  }
-};
-
 export const maskPhone = (phoneNo: string | undefined) => {
   if (!phoneNo) {
     return '';

@@ -6,12 +6,14 @@ import { SnbText, SnbIcon, color } from '@sinbad/react-native-sinbad-ui';
 import { ProductCard } from '@core/components/ProductCard';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
+/** === IMPORT TYPE === */
+import * as models from '@models';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../styles';
 /** === TYPE === */
 interface HistoryDetailProductListProps {
   title: string;
-  products: Array<any>; // To be updated
+  products: Array<models.ParcelProduct>;
   seeMore: boolean;
   toggleSeeMore: () => void;
 }
@@ -30,23 +32,19 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
         <SnbText.B4>{title}</SnbText.B4>
       </View>
       <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-        {displayedProducts.map((product, productIndex) => (
-          <ProductCard.Type1
-            key={`${product.name}-${productIndex}`}
-            name={product.name}
-            imageSource={product.images}
-            price={toCurrency(product.price)}
-            qty={product.qty}
-            originalQty={product.originalQty}
-            uom={product.uom}
-            total={toCurrency(product.total)}
-            originalTotal={
-              product.originalTotal
-                ? toCurrency(product.originalTotal)
-                : undefined
-            }
-          />
-        ))}
+        {displayedProducts.map(
+          (product: models.ParcelProduct, productIndex) => (
+            <ProductCard.Type1
+              key={`${product.productName}-${productIndex}`}
+              name={product.productName}
+              imageSource={product.urlImages}
+              price={toCurrency(product.priceAfterTax)}
+              qty={product.qty}
+              uom={product.uom}
+              total={toCurrency(product.totalPriceAfterTax)}
+            />
+          ),
+        )}
         {products.length > 2 && (
           <TouchableWithoutFeedback onPress={toggleSeeMore}>
             <View style={HistoryDetailStyle.seeMoreButton}>

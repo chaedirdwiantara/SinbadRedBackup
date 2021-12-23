@@ -32,7 +32,7 @@ export const bannerSliderListReducer = simplifyReducer(
     ) {
       return {
         ...state,
-        data: [...state.data, ...action.payload.data],
+        data: [...action.payload.data],
         loading: false,
       };
     },

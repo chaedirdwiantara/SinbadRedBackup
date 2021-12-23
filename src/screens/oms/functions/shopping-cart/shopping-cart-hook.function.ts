@@ -17,7 +17,7 @@ export const useCartViewActions = () => {
       dispatch(Actions.cartViewProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.cartViewReset);
+      dispatch(Actions.cartViewReset(contextDispatch));
     },
   };
 };
@@ -91,6 +91,9 @@ export const useCartMasterActions = () => {
     },
     deleteProduct: (data: models.ICartDeleteProductPayload) => {
       dispatch(Actions.deleteCartProduct(data));
+    },
+    updateRouteName: (data: models.IUpdateRouteNamePayload) => {
+      dispatch(Actions.updatePreviouseRouteCart(data));
     },
   };
 };

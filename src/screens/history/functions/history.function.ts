@@ -35,7 +35,8 @@ export const useTimer = (
   const [timer, setTimer] = useState(() => initialTime);
   const countRef = useRef<ReturnType<typeof setInterval>>();
 
-  const start = () => {
+  const start = (timeDiff: number) => {
+    setTimer(timeDiff);
     countRef.current = setInterval(() => {
       setTimer((prevTimer) => {
         if (type === 'backward') {
