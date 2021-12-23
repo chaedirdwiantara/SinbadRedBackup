@@ -63,9 +63,11 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   };
 
   const handleChange = (qty: number) => {
-    const qtyString = qty.toString();
-    if (qtyString.length <= 6) {
-      onChangeQty(qty);
+    if (Number.isInteger(qty)) {
+      const qtyString = qty.toString();
+      if (qtyString.length <= 6) {
+        onChangeQty(qty);
+      }
     }
   };
 
@@ -83,6 +85,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
 
           <SnbNumberCounter
             value={orderQty}
+            maxLength={6}
             onChange={handleChange}
             onBlur={() =>
               handleBlur(

@@ -18,6 +18,12 @@ export const updateCartMasterData = (
 ): models.UpdateCartMasterData => {
   return { type: types.UPDATE_CART_MASTER_DATA, payload };
 };
+/** => Delete Cart Selected  */
+export const updatePreviouseRouteCart = (
+  payload: models.IUpdateRouteNamePayload,
+): models.UpdateRouteNameMasterCart => {
+  return { type: types.UPDATE_ROUTE_MASTER_DATA, payload };
+};
 /** => reset checkout master data */
 export const resetCartMasterData = () => {
   return { type: types.RESET_CART_MASTER_DATA };
