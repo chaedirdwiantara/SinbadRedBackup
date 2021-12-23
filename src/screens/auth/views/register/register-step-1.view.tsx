@@ -151,6 +151,7 @@ const Content: React.FC = () => {
           type="primary"
           loading={checkEmailAvailability.loading}
           disabled={
+            true ||
             name.value === '' ||
             idNumber.value === '' ||
             idNumber.valMsgError !== '' ||

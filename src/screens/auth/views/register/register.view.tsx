@@ -68,6 +68,7 @@ const Content: React.FC = () => {
           type="primary"
           loading={checkPhoneNoAvailability.loading}
           disabled={
+            true ||
             phone.value === '' ||
             phone.valMsgError !== '' ||
             checkPhoneNoAvailability.loading
