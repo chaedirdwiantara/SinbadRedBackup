@@ -5,6 +5,7 @@ import {
   SnbText,
   SnbIcon,
   color,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import {
   Image,
@@ -22,8 +23,11 @@ import { useNavigation } from '@react-navigation/core';
 
 const MerchantDetailProfileView: FC = () => {
   /** === HOOK === */
+  const { stateGlobal } = React.useContext(contexts.GlobalContext);
   const { stateUser } = React.useContext(contexts.UserContext);
   const { navigate } = useNavigation();
+  const { stateMerchant } = React.useContext(contexts.MerchantContext);
+  const toast = React.useRef<any>();
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -36,6 +40,21 @@ const MerchantDetailProfileView: FC = () => {
     );
     return () => backHandler.remove();
   }, []);
+
+  useEffect(() => {
+    if (
+      stateMerchant.profileEdit.data !== null ||
+      stateMerchant.merchantEdit.data !== null
+    ) {
+      toast.current.show('Data Berhasil Diperbaharui');
+    }
+  }, [stateMerchant]);
+
+  useEffect(() => {
+    if (stateGlobal.uploadImage.error !== null) {
+      toast.current.show(stateGlobal.uploadImage.error.message);
+    }
+  }, [stateGlobal.uploadImage.error]);
   /** FUNCTION */
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
@@ -195,14 +214,14 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: ownerData?.profile.bankAccount.bankAccountNo
+          value: ownerData?.profile.bankAccount?.bankAccountNo
             ? ownerData?.profile.bankAccount.bankAccountNo
             : '-',
-          action: ownerData?.profile.bankAccount.bankAccountNo
+          action: ownerData?.profile.bankAccount?.bankAccountNo
             ? 'ubah'
             : 'tambah',
           type: 'merchantOwnerBankAccountNo',
-          title: ownerData?.profile.bankAccount.bankAccountNo
+          title: ownerData?.profile.bankAccount?.bankAccountNo
             ? 'Ubah Rekening Bank'
             : 'Tambah Rekening Bank',
           label: ownerData?.info.isBankAccountVerified,
@@ -262,6 +281,13 @@ const MerchantDetailProfileView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {renderMainContent()}
+      <SnbToast
+        ref={toast}
+        fadeInDuration={1000}
+        fadeOutDuration={500}
+        duration={2500}
+        position="bottom"
+      />
     </SnbContainer>
   );
 };

@@ -1,12 +1,13 @@
 import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image, ToastAndroid, Dimensions } from 'react-native';
+import { View, Image } from 'react-native';
 import {
   SnbContainer,
   SnbText,
   SnbTopNav,
   SnbUploadPhotoRules,
   SnbButton,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { REGISTER_STEP_4_VIEW } from '@screen/auth/functions/screens_name';
@@ -14,9 +15,10 @@ import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import RegisterProgress from '../shared/register-progress.component';
 
-const { height } = Dimensions.get('screen');
-
-const Content: React.FC = () => {
+const Content: React.FC<{
+  successUpload: () => void;
+  failedUpload: () => void;
+}> = ({ successUpload, failedUpload }) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
@@ -37,27 +39,13 @@ const Content: React.FC = () => {
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'selfie'
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Berhasil Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
-      saveUserData({
-        selfieImageUrl: stateGlobal.uploadImage.data.url,
-      });
+      successUpload();
+      saveUserData({ selfieImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Gagal Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      failedUpload();
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
@@ -157,10 +145,21 @@ const Content: React.FC = () => {
 
 const RegisterStep3View: React.FC = () => {
   const { goBack } = useNavigation();
+  const toast = React.useRef<any>();
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
-      <Content />
+      <Content
+        successUpload={() => toast.current.show('Foto Berhasil Diupload')}
+        failedUpload={() => toast.current.show('Foto Gagal Diupload')}
+      />
+      <SnbToast
+        ref={toast}
+        duration={3000}
+        position="bottom"
+        positionValue={40}
+      />
     </SnbContainer>
   );
 };
