@@ -16,6 +16,7 @@ const initialState: models.ICartMaster = {
   userId: 0,
   isActiveStore: false,
   voucherIds: [],
+  previouseRouteName: '',
 };
 
 /** === FUNCTION === */
@@ -37,6 +38,7 @@ export const cartMaster = simplifyReducer(initialState, {
       platform: payload.platform,
       userId: payload.userId,
       isActiveStore: payload.isActiveStore,
+      previouseRouteName: '',
     };
   },
   /** =>  DELETE CART PRODUCT FLAG */
@@ -68,6 +70,17 @@ export const cartMaster = simplifyReducer(initialState, {
       }
     });
 
-    return { ...state, data: newData };
+    return { ...state, data: newData, previouseRouteName: '' };
+  },
+  /** => Reset cart master */
+  [types.UPDATE_ROUTE_MASTER_DATA](
+    state = initialState,
+    { payload }: models.UpdateRouteNameMasterCart,
+  ) {
+    return { ...state, previouseRouteName: payload.previouseRouteName };
+  },
+  /** => Reset cart master */
+  [types.RESET_CART_MASTER_DATA]() {
+    return initialState;
   },
 });

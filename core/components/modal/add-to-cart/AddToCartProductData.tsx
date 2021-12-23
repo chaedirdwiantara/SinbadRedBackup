@@ -33,7 +33,11 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             source={{ uri: dataProductDetail?.images[0].url }}
             style={AddToCartModalStyle.image}
           />
-          <View style={{ marginLeft: 16 }}>
+          <View
+            style={{
+              marginLeft: 16,
+              maxWidth: '80%',
+            }}>
             {dataProductDetail?.isExclusive && (
               <View style={AddToCartModalStyle.exclusiveTagContainer}>
                 <SnbIcon
@@ -45,7 +49,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
                 <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
               </View>
             )}
-            <SnbText.C1>{dataProductDetail?.name}</SnbText.C1>
+            <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>
@@ -88,7 +92,11 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             source={{ uri: dataProductDetailCart?.images[0].url }}
             style={AddToCartModalStyle.image}
           />
-          <View style={{ marginLeft: 16 }}>
+          <View
+            style={{
+              marginLeft: 16,
+              maxWidth: '80%',
+            }}>
             {dataProductDetailCart?.isExclusive && (
               <View style={AddToCartModalStyle.exclusiveTagContainer}>
                 <SnbIcon
@@ -100,7 +108,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
                 <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
               </View>
             )}
-            <SnbText.C1>{dataProductDetailCart?.name}</SnbText.C1>
+            <SnbText.B4>{dataProductDetailCart?.name}</SnbText.B4>
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>

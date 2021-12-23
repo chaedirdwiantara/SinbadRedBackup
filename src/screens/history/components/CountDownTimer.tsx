@@ -1,31 +1,37 @@
-/** === IMPORT PACKAGES === */
-import React, { FC, useEffect } from 'react';
-import { View } from 'react-native';
+import React, { FC, useEffect, useState, useRef } from 'react';
+import { View, AppState } from 'react-native';
 import { color, SnbText } from 'react-native-sinbad-ui';
-/** === IMPORT FUNCTIONS === */
-import { formatTime, useTimer } from '../functions';
-/** === IMPORT STYLE === */
+
+import { formatTime, useTimer, calculateTime } from '../functions';
 import { HistoryStyle } from '../styles';
 /** === TYPE === */
 interface CountDownTimerProps {
-  timeInSeconds: number;
+  expiredTime: string;
+  type: 'historyCard' | 'checkoutDone';
 }
-/** === COMPONENT === */
-export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
-  const { timer, start, reset } = useTimer(timeInSeconds);
+
+export const CountDownTimer: FC<CountDownTimerProps> = ({
+  expiredTime,
+  type,
+}) => {
+  const appState = useRef(AppState.currentState);
+  const [, setAppStateVisible] = useState(appState.current);
+  const [timeDiff, setTimeDiff] = useState(() => calculateTime(expiredTime));
+  const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
 
-  const renderTimeBlock = (value: string) => (
-    <View style={HistoryStyle.cardTimeBlock}>
-      <SnbText.C1 color={color.white}>{value}</SnbText.C1>
-    </View>
-  );
+  // useEffect(() => {
+  //   const expiredTimeData = calculateTime(expiredTime);
+  //   setTimeDiff(expiredTimeData);
+  // }, []);
 
   useEffect(() => {
-    start();
+    if (timeDiff > 0) {
+      start(timeDiff);
+    }
 
     return () => reset();
-  }, []);
+  }, [timeDiff]);
 
   useEffect(() => {
     if (timer <= 0) {
@@ -33,7 +39,36 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
     }
   }, [timer]);
 
-  return (
+  /** App State Listener */
+  const subscription = (nextAppState: any) => {
+    if (
+      appState.current.match(/inactive|background/) &&
+      nextAppState === 'active'
+    ) {
+      reset();
+      const expiredTimeData = calculateTime(expiredTime);
+      setTimeDiff(expiredTimeData);
+    }
+
+    appState.current = nextAppState;
+    setAppStateVisible(appState.current);
+  };
+
+  useEffect(() => {
+    AppState.addEventListener('change', subscription);
+
+    return () => {
+      AppState.removeEventListener('change', subscription);
+    };
+  }, []);
+
+  const renderTimeBlock = (value: string) => (
+    <View style={HistoryStyle.cardTimeBlock}>
+      <SnbText.C1 color={color.white}>{value}</SnbText.C1>
+    </View>
+  );
+
+  const timerHistoryCard = () => (
     <View
       style={{
         flexDirection: 'row',
@@ -50,4 +85,33 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({ timeInSeconds }) => {
       </View>
     </View>
   );
+
+  const timerCheckoutDone = () => (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 6,
+      }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <SnbText.H4 color={color.black60}>
+          {hours} : {minutes} : {seconds}
+        </SnbText.H4>
+      </View>
+    </View>
+  );
+
+  const renderContent = () => {
+    switch (type) {
+      case 'historyCard':
+        return timerHistoryCard();
+      case 'checkoutDone':
+        return timerCheckoutDone();
+
+      default:
+        break;
+    }
+  };
+
+  return renderContent();
 };

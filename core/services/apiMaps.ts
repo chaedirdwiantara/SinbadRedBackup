@@ -57,7 +57,6 @@ const apiMaps = async <T>(
   /** === THROW FINAL ERROR === */
   const throwFinalError = (error: ErrorProps) => {
     throw {
-      status: error.status,
       message: error.message,
       errorMessage: error.errorMessage,
       type: error.type,
@@ -65,7 +64,7 @@ const apiMaps = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
-  return fetch(`${apiHost.maps}${path}`, reqBody)
+  return fetch(`${apiHost.map}${path}`, reqBody)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);

@@ -7,12 +7,12 @@ import {
   SnbContainer,
   SnbText,
   SnbTopNav,
-  color,
   SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
+import RegisterProgress from '../shared/register-progress.component';
 
 const { height } = Dimensions.get('screen');
 
@@ -134,7 +134,6 @@ const Content: React.FC = () => {
           <View style={{ height: 72 }}>
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
-              shadow
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
@@ -154,14 +153,8 @@ const Content: React.FC = () => {
     <View style={{ flex: 1 }}>
       <View style={{ paddingHorizontal: 16 }}>
         <SnbText.H1>DAFTAR</SnbText.H1>
-        <View style={{ marginTop: 16 }}>
-          <SnbText.B4>4/7 Profil Pemilik</SnbText.B4>
-          <View style={{ marginVertical: 4 }} />
-          <View
-            style={{ height: 8, backgroundColor: color.red60, borderRadius: 8 }}
-          />
-        </View>
       </View>
+      <RegisterProgress step={4} title="Profil Pemilik" />
       {renderIF(
         isImageAvailable,
         renderImagePreview(),

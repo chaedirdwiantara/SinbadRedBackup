@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, RefreshControl, View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import HomeHeaderView from './home-header.view';
@@ -9,39 +9,40 @@ import { BrandHomeView } from '../../brand/views';
 import { RecommendationHomeView } from '../../recommendation/views';
 import { CategoryHomeView } from '../../category/views';
 /** === IMPORT FUNCTION HERE === */
-import { HomeHookFunc } from '../functions';
-import { useAuthCoreAction } from '@core/functions/auth';
+import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
 import { useCheckoutMaster } from '@screen/oms/functions';
+import { useNotificationTotalActions } from '@screen/notification/functions';
 /** === COMPONENT === */
-const HomeView: React.FC = () => {
+const HomeView: React.FC = ({ navigation }: any) => {
   /** === HOOK === */
-  const { action, state } = HomeHookFunc.useHeaderChange();
+  const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
+  const { stateRefresh, actionRefresh } = useRefresh();
   const { data } = useDataTotalProductCart();
   const { setCartId } = useCheckoutMaster();
   const cartTotalProductActions = useCartTotalProductActions();
+  const notificationTotalActions = useNotificationTotalActions();
+  const { me } = useDataAuth();
   useGetTokenNotLogin();
   setFlagByDeviceId();
-  const authCoreAction = useAuthCoreAction();
-  const { me } = useDataAuth();
   /** === FUNCTION FOR HOOK === */
   const changeHeader = (height: number) => {
-    height > 100 ? action(true) : action(false);
+    height > 100 ? actionHeaderChange(true) : actionHeaderChange(false);
   };
 
-  /** => initial */
   React.useEffect(() => {
-    authCoreAction.me();
-  }, []);
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (me.data !== null) {
+        cartTotalProductActions.fetch();
+        notificationTotalActions.fetch();
+      }
+    });
 
-  React.useEffect(() => {
-    if (me.data !== null) {
-      cartTotalProductActions.fetch();
-    }
-  }, [me.data]);
+    return unsubscribe;
+  }, [navigation]);
 
   /** => listen changes data cart id */
   React.useEffect(() => {
@@ -49,17 +50,17 @@ const HomeView: React.FC = () => {
       setCartId({ cartId: data.cartId });
     }
   }, [data.cartId]);
-
   /** => header */
   const header = () => {
-    return <HomeHeaderView headerChange={state} />;
+    return <HomeHeaderView headerChange={stateHeaderChange} />;
   };
+  /** => content item */
   const contentItem = () => {
     return (
       <>
         <BannerHomeView />
         <CategoryHomeView />
-        <RecommendationHomeView />
+        <RecommendationHomeView navigationParent={navigation} />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
       </>
@@ -69,6 +70,12 @@ const HomeView: React.FC = () => {
   const content = () => {
     return (
       <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={stateRefresh}
+            onRefresh={() => actionRefresh(true)}
+          />
+        }
         scrollEventThrottle={16}
         onScroll={(event) => changeHeader(event.nativeEvent.contentOffset.y)}
         showsVerticalScrollIndicator={false}>

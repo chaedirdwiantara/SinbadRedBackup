@@ -6,3 +6,4 @@ export * from './cart-selected';
 export * from './payment';
 export * from './cart-master';
 export * from './reserve-data';
+export * from './checkout-done';

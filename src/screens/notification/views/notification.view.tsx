@@ -10,6 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import { goBack, useNotificationAction } from '../functions';
+import { useNotificationContext } from 'src/data/contexts/notification/useNotificationContext';
 import { contexts } from '@contexts';
 import * as models from '@models';
 import NotificationEmptyView from './notification-empty.view';
@@ -84,6 +85,11 @@ const NotificationView: React.FC = () => {
   const { stateNotification, dispatchNotification } = React.useContext(
     contexts.NotificationContext,
   );
+  const {
+    stateNotification: {
+      list: { data: listNotificationData, total: listNotificationTotal },
+    },
+  } = useNotificationContext();
   const notificationAction = useNotificationAction();
   const notificationListState = stateNotification.list;
   /** => effect */
@@ -92,8 +98,8 @@ const NotificationView: React.FC = () => {
   }, []);
 
   const onHandleLoadMore = () => {
-    if (stateNotification.list.data) {
-      if (stateNotification.list.data.length < stateNotification.list.total) {
+    if (listNotificationData) {
+      if (listNotificationData.length < listNotificationTotal) {
         notificationAction.loadMore(
           dispatchNotification,
           stateNotification.list,
@@ -205,7 +211,6 @@ const NotificationView: React.FC = () => {
         closeAction={() => setShowModal(false)}
         content={renderModalContent()}
         title={' '}
-        action={true}
         actionIcon={'close'}
       />
     );

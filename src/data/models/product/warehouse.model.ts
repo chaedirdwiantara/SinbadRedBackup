@@ -18,7 +18,7 @@ export interface IChangeStock {
   productId: string;
   name: string;
   thumbnail: string;
-  current_qty: number;
+  currentStock: number;
   qty: number;
 }
 

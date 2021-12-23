@@ -11,9 +11,7 @@ const goBack = () => {
 const goToVoucherDetail = (id: number, type: string) => {
   NavigationAction.navigate('VoucherDetailView', {
     id,
-    other: {
-      type,
-    },
+    type,
   });
 };
 /** => go to voucher cart list more */
