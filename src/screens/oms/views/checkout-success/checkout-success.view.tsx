@@ -1,12 +1,17 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { FC, useContext, useEffect, useState, useRef } from 'react';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
   SnbText,
   SnbButton,
-  SnbIcon,
   color,
   SnbToast,
   SnbHtml,
@@ -63,10 +68,14 @@ const OmsCheckoutSuccessView: FC = () => {
   /** === HOOKS === */
   useCheckFlagByTask('confirmOrderLoading');
   const [paymentData] = useState<CheckoutSuccess>(checkoutSuccessDummy);
-  const [showToast, setShowToast] = useState(false);
+  // const [showToast, setShowToast] = useState(false);
   const [isPageLoading, setPageLoading] = useState(true);
   const [isMultiple, setMultiple] = useState(true);
   const [toastMessage, setToastMessage] = useState('');
+
+  /** === REF === */
+  const showToast = useRef<any>();
+
   const ordersAction = useCreateOrders();
   const paymentAction = usePaymentAction();
   const ordersDetail = useOrdersDetail();
@@ -78,6 +87,10 @@ const OmsCheckoutSuccessView: FC = () => {
     contexts.CheckoutDoneContext,
   );
   const flagRTDB = useDataFlagRTDB();
+
+  const setShowToast = () => {
+    showToast.current.show();
+  };
 
   /** => Reset Create Orders data after fetching Create Order Detail */
   useEffect(() => {
@@ -313,11 +326,11 @@ const OmsCheckoutSuccessView: FC = () => {
   const renderToast = () =>
     showToast && (
       <SnbToast
+        ref={showToast}
         message={toastMessage}
-        buttonText="TUTUP"
-        buttonAction={() => setShowToast(false)}
-        open={showToast}
-        close={() => setShowToast(false)}
+        position={'top'}
+        duration={3000}
+        positionValue={StatusBar.currentHeight || 0}
       />
     );
   /** => Content */
