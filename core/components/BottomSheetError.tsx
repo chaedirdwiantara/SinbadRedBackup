@@ -303,9 +303,9 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
         <Image source={src} style={styles.image} />
         <View style={styles.contentErrorContainer}>
           <View style={styles.errorBox}>
-            <SnbText.C2>
+            <SnbText.C3>
               {props.error !== null ? props.error?.code : ''}
-            </SnbText.C2>
+            </SnbText.C3>
           </View>
         </View>
       </View>
@@ -315,11 +315,11 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   const contentItemTitle = () => {
     return props.error !== null ? (
       <View style={styles.contentTitleContainer}>
-        <SnbText.H3 align={'center'}>
+        <SnbText.H4 align={'center'}>
           {props.error.code !== 401
             ? `Terjadi Kendala di ${serviceName()}`
             : 'Belum login nih'}
-        </SnbText.H3>
+        </SnbText.H4>
       </View>
     ) : null;
   };
@@ -327,9 +327,9 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   const contentItemMessage = () => {
     return (
       <View style={styles.contentMessageContainer}>
-        <SnbText.B1 align={'center'}>
+        <SnbText.B3 align={'center'}>
           {props.error !== null ? message(props.error) : ''}
-        </SnbText.B1>
+        </SnbText.B3>
       </View>
     );
   };
@@ -393,13 +393,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentTitleContainer: {
-    paddingHorizontal: '15%',
+    paddingHorizontal: '10%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   contentMessageContainer: {
-    flex: 1,
-    paddingHorizontal: '15%',
+    marginTop: 10,
+    paddingHorizontal: '10%',
     alignItems: 'center',
     justifyContent: 'center',
   },
