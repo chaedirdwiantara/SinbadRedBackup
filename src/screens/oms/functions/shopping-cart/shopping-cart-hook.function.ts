@@ -92,5 +92,8 @@ export const useCartMasterActions = () => {
     deleteProduct: (data: models.ICartDeleteProductPayload) => {
       dispatch(Actions.deleteCartProduct(data));
     },
+    updateRouteName: (data: models.IUpdateRouteNamePayload) => {
+      dispatch(Actions.updatePreviouseRouteCart(data));
+    },
   };
 };

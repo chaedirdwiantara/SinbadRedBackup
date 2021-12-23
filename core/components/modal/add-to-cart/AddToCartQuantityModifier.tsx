@@ -85,6 +85,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
 
           <SnbNumberCounter
             value={orderQty}
+            maxLength={6}
             onChange={handleChange}
             onBlur={() =>
               handleBlur(

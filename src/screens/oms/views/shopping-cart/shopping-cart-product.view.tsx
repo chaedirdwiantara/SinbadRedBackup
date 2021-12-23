@@ -171,6 +171,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           </View>
           <SnbNumberCounter
             value={product.qty}
+            maxLength={6}
             onBlur={handleBlur}
             onFocus={() => setIsFocus(true)}
             onIncrease={() =>
@@ -196,15 +197,17 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
               )
             }
             onChange={(qty: number) => {
-              handleProductQuantityChange(
-                invoiceGroupIndex,
-                brandIndex,
-                productIndex,
-                'onChange',
-                [invoiceGroups, setInvoiceGroups],
-                qty,
-                setSassionQty,
-              );
+              if (Number.isInteger(qty)) {
+                handleProductQuantityChange(
+                  invoiceGroupIndex,
+                  brandIndex,
+                  productIndex,
+                  'onChange',
+                  [invoiceGroups, setInvoiceGroups],
+                  qty,
+                  setSassionQty,
+                );
+              }
             }}
             minusDisabled={minusDisabled}
             plusDisabled={plusDisabled}
