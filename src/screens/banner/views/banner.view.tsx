@@ -14,14 +14,15 @@ import {
   color,
   SnbIcon,
   SnbTextField,
+  SnbHtml,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import RenderHtml from 'react-native-render-html';
 import { goBack, goToBannerDetail, useBannerAction } from '../functions';
 import { contexts } from '@contexts';
 import * as models from '@models';
 import LoadingPage from '@core/components/LoadingPage';
 import { BannerStyles } from '../styles';
+import { styles } from 'react-native-sinbad-ui';
 
 const { width } = Dimensions.get('window');
 
@@ -95,9 +96,6 @@ const BannerListView: React.FC = () => {
     item: models.BannerListSuccessProps;
     index: number;
   }) => {
-    const sourceHtml = {
-      html: item.description,
-    };
     return (
       <View style={BannerStyles.bannerCardContainer}>
         {/* Image */}
@@ -114,7 +112,7 @@ const BannerListView: React.FC = () => {
         <View style={{ padding: 16, backgroundColor: 'white' }}>
           <SnbText.B2>{item.header}</SnbText.B2>
           <View style={{ marginTop: 8 }}>
-            <RenderHtml contentWidth={width} source={sourceHtml} />
+            <SnbHtml value={item.description} fontSize={12} />
           </View>
         </View>
         {/* Foter */}
