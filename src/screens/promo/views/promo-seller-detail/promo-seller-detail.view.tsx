@@ -12,7 +12,7 @@ import moment from 'moment';
 /** === IMPORT COMPONENT HERE === */
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import LoadingPage from '@core/components/LoadingPage';
-import BottomModalError from '@core/components/BottomModalError';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   goBack,
@@ -130,13 +130,10 @@ const PromoDetail: FC = () => {
   /** => error modal */
   const renderErrorModal = () => {
     return (
-      <BottomModalError
-        isOpen={promoSellerDetailError.isOpen}
-        errorTitle={'Terjadi kesalahan'}
-        errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../../assets/images/cry_sinbad.png')}
-        buttonTitle={'Ok'}
-        buttonOnPress={() => {
+      <BottomSheetError
+        open={promoSellerDetailError.isOpen}
+        error={statePromo.promoSeller.detail.error}
+        closeAction={() => {
           promoSellerDetailError.setOpen(false);
           goBack();
         }}

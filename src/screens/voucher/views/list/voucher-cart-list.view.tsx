@@ -6,12 +6,12 @@ import { VoucherCartListStyles } from '../../styles';
 import { contexts } from '@contexts';
 /** === IMPORT COMPONENT HERE === */
 import LoadingPage from '@core/components/LoadingPage';
-import BottomModalError from '@core/components/BottomModalError';
 import { VoucherCartListHeader } from './voucher-cart-list-header.view';
 import { VoucherSearch } from '../../components/VoucherSearch';
 import { SinbadVoucherList } from './sinbad-voucher-list.view';
 import { SellerVoucherList } from './seller-voucher-list.view';
 import { VoucherFooter } from '../../components/VoucherFooter';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   goBack,
@@ -207,13 +207,10 @@ const VoucherCartListView: FC = () => {
   /** => error modal */
   const renderErrorModal = () => {
     return (
-      <BottomModalError
-        isOpen={errorModal.isOpen}
-        errorTitle={'Terjadi kesalahan'}
-        errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../../assets/images/cry_sinbad.png')}
-        buttonTitle={'Ok'}
-        buttonOnPress={() => {
+      <BottomSheetError
+        open={errorModal.isOpen}
+        error={voucherCartListState.error}
+        closeAction={() => {
           errorModal.setOpen(false);
           goBack();
         }}
