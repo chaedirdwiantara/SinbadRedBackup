@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useEffect, useState, useReducer } from 'react';
+import React, { FC, useEffect, useReducer } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -8,8 +8,6 @@ import {
   SnbText,
   color,
   styles,
-  SnbButton,
-  SnbDialog,
   SnbToast,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -36,8 +34,6 @@ import {
   useHistoryDetailAction,
   goToHistoryDetailStatus,
 } from '../../functions';
-/** === IMPORT TYPE === */
-import { StatusLog } from '../../types';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
 /** === TYPES === */
@@ -47,89 +43,11 @@ type HistoryStackParamList = {
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
 /** === DUMMIES === */
 const historyDetailDummy = {
-  status: {
-    title: 'Menunggu Persetujuan',
-    desc: 'Supplier mengajukan perubahan',
-  },
-  invoice: {
-    orderId: 'SNB19050014818',
-    referenceId: null,
-  },
-  orderNotes: {
-    via: 'Toko',
-    purchaseDate: new Date(2021, 8, 15, 16, 46).toISOString(),
-    cancelDate: null,
-    refundDate: new Date(2021, 8, 18, 12, 46).toISOString(),
-  },
-  products: [
-    {
-      name: 'LAKME CC CREAM ALMOND',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      price: 78000,
-      qty: 10,
-      originalQty: 5,
-      total: 780000,
-      originalTotal: 390000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME BLUR PERFECT CREAMER',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      price: 150000,
-      qty: 20,
-      total: 3000000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      price: 100000,
-      qty: 12,
-      total: 1200000,
-      uom: 'pcs',
-    },
-  ],
-  canceledProducts: [
-    {
-      name: 'LAKME CLASSIC EYEBROW PENCIL BLACK',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67126183.png',
-      price: 30000,
-      qty: 5,
-      total: 150000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME BIPHASED MAKEUP REMOVER',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-      price: 70000,
-      qty: 3,
-      total: 210000,
-      uom: 'pcs',
-    },
-  ],
   orderRefund: {
     orderPaidAmount: 3009400,
     deliveryFee: 0,
   },
-  deliveryDetail: {
-    courier: 'Self Delivery',
-    address:
-      'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730',
-  },
 };
-const orderLogsDummy: Array<StatusLog> = [
-  { status: 'done', createdAt: '2021-12-20T06:52:52.375Z' },
-  { status: 'delivered', createdAt: '2021-12-19T04:52:52.375Z' },
-  { status: 'shipping', createdAt: '2021-12-19T02:52:52.375Z' },
-  { status: 'packing', createdAt: '2021-12-19T00:52:52.375Z' },
-  { status: 'confirmed', createdAt: '2021-12-18T12:52:52.375Z' },
-  { status: 'waiting_for_payment', createdAt: '2021-12-18T06:52:52.375Z' },
-];
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
@@ -139,15 +57,14 @@ const HistoryDetailView: FC = () => {
     (prevVisible) => !prevVisible,
     true,
   );
+  const [seeMoreBonusProducts, toggleSeeMoreBonusProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
   const [seeMoreCanceledProducts, toggleSeeMoreCanceledProducts] = useReducer(
     (prevVisible) => !prevVisible,
     true,
   );
-  const [isConfirmOrderDialogOpen, setIsConfirmOrderDialogOpen] =
-    useState(false);
-  const [confirmDialogType, setConfirmDialogType] = useState<
-    'accept' | 'refuse'
-  >('accept');
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
   const historyDetailAction = useHistoryDetailAction();
@@ -204,10 +121,10 @@ const HistoryDetailView: FC = () => {
         onPress={() =>
           goToHistoryDetailStatus({
             orderCode: detail.data?.orderCode ?? '-',
-            createdAt: detail.data?.createdAt!,
-            trackingId: '10292019201',
-            cancelReason: null,
-            logs: orderLogsDummy,
+            createdAt: detail.data?.createdAt ?? '-',
+            trackingId: '-',
+            cancelReason: detail.data?.orderCancelReason ?? '-',
+            logs: detail.data?.orderParcelLogs ?? [],
           })
         }
       />
@@ -233,10 +150,7 @@ const HistoryDetailView: FC = () => {
   /** => Order Notes */
   const renderOrderNotes = () => (
     <HistoryDetailCard title="Catatan Pesanan">
-      <HistoryCardItem
-        title="Order Via"
-        value={historyDetailDummy.orderNotes.via}
-      />
+      <HistoryCardItem title="Order Via" value={detail.data?.orderVia ?? '-'} />
       <HistoryCardItem
         title="Tanggal Pembelian"
         value={
@@ -311,11 +225,17 @@ const HistoryDetailView: FC = () => {
     <HistoryDetailCard title="Detail Pengiriman">
       <HistoryCardItem
         title="Kurir Pengiriman"
-        value={historyDetailDummy.deliveryDetail.courier}
+        value={detail.data?.deliveryCourier ?? '-'}
       />
       <HistoryCardItem
         title="Alamat Pengiriman"
-        value={historyDetailDummy.deliveryDetail.address}
+        value={
+          detail.data?.buyer?.storeAddress
+            ? `${detail.data.buyer.storeAddress}${
+                detail.data.buyer.urban ? ', ' + detail.data.buyer.urban : ''
+              }`
+            : '-'
+        }
       />
     </HistoryDetailCard>
   );
@@ -325,17 +245,32 @@ const HistoryDetailView: FC = () => {
       <View style={styles.shadowForBox10}>
         <HistoryDetailProductList
           title="Daftar Produk"
-          products={historyDetailDummy.products}
+          products={detail.data?.orderParcelProducts ?? []}
           seeMore={seeMoreProducts}
           toggleSeeMore={toggleSeeMoreProducts}
         />
-        <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
-        <HistoryDetailProductList
-          title="Produk Dibatalkan"
-          products={historyDetailDummy.canceledProducts}
-          seeMore={seeMoreCanceledProducts}
-          toggleSeeMore={toggleSeeMoreCanceledProducts}
-        />
+        {(detail.data?.orderParcelBonus.length ?? []) > 0 && (
+          <>
+            <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
+            <HistoryDetailProductList
+              title="Bonus"
+              products={detail.data?.orderParcelBonus ?? []}
+              seeMore={seeMoreBonusProducts}
+              toggleSeeMore={toggleSeeMoreBonusProducts}
+            />
+          </>
+        )}
+        {(detail.data?.orderParcelRemovedProducts.length ?? []) > 0 && (
+          <>
+            <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
+            <HistoryDetailProductList
+              title="Produk Dibatalkan"
+              products={detail.data?.orderParcelRemovedProducts ?? []}
+              seeMore={seeMoreCanceledProducts}
+              toggleSeeMore={toggleSeeMoreCanceledProducts}
+            />
+          </>
+        )}
       </View>
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
@@ -398,48 +333,9 @@ const HistoryDetailView: FC = () => {
           <SnbText.B3 color={color.red50}>Butuh Bantuan?</SnbText.B3>
         </View>
       </TouchableWithoutFeedback>
-      {params.section === 'order' &&
-        historyDetailDummy.status.title.includes('Menunggu') && (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbButton.Dynamic
-              title="Tolak"
-              type="secondary"
-              size="medium"
-              onPress={() => {
-                setConfirmDialogType('refuse');
-                setIsConfirmOrderDialogOpen(true);
-              }}
-            />
-            <View style={{ marginLeft: 12 }}>
-              <SnbButton.Dynamic
-                title="Terima"
-                type="primary"
-                size="medium"
-                onPress={() => {
-                  setConfirmDialogType('accept');
-                  setIsConfirmOrderDialogOpen(true);
-                }}
-              />
-            </View>
-          </View>
-        )}
     </View>
   );
-  /** => Order Confirmation Dialog */
-  const renderOrderConfirmationDialog = () => (
-    <SnbDialog
-      open={isConfirmOrderDialogOpen}
-      title={confirmDialogType === 'accept' ? 'Terima' : 'Tolak'}
-      content={
-        confirmDialogType === 'accept'
-          ? 'Apakah Anda ingin menerima perubahan jumlah barang?'
-          : 'Apakah Anda ingin membatalkan order?'
-      }
-      ok={() => console.log('Confirm yes pressed')}
-      cancel={() => setIsConfirmOrderDialogOpen(false)}
-    />
-  );
-  /** => main */
+  /** => Main */
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
@@ -449,7 +345,6 @@ const HistoryDetailView: FC = () => {
       />
       {renderContent()}
       {renderFooter()}
-      {renderOrderConfirmationDialog()}
       {renderToast()}
     </SnbContainer>
   );

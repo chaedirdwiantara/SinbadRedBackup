@@ -17,7 +17,7 @@ export interface HistoryBilling {
 
 export interface HistoryBuyer {
   storeName: string;
-  storeAddres: string | null;
+  storeAddress: string | null;
   urban: string | null;
   ownerName: string;
 }

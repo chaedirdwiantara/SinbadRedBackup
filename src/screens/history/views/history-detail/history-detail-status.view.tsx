@@ -10,14 +10,14 @@ import { toDateWithTime } from '@core/functions/global/date-format';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import { goBack } from '../../functions';
 /** === IMPORT TYPES === */
-import { StatusLog } from '../../types';
+import * as models from '@models';
 /** === TYPES === */
 export interface IHistoryDetailStatus {
   orderCode: string | null;
   createdAt: string;
   trackingId: string | null;
   cancelReason: string | null;
-  logs: Array<StatusLog>;
+  logs: Array<models.ParcelLog>;
 }
 
 type HistoryDetailStatusParam = {
@@ -41,7 +41,7 @@ const HistoryDetailStatusView: FC = () => {
     const data = statusData.find((status) => status.status === log.status);
     return {
       title: data?.detail ?? '-',
-      subtitle: toDateWithTime(log.createdAt),
+      subtitle: toDateWithTime(log.happenedAt),
     };
   });
 
