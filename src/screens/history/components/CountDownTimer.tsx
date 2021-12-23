@@ -4,7 +4,7 @@ import { color, SnbText } from 'react-native-sinbad-ui';
 
 import { formatTime, useTimer, calculateTime } from '../functions';
 import { HistoryStyle } from '../styles';
-
+/** === TYPE === */
 interface CountDownTimerProps {
   expiredTime: string;
   type: 'historyCard' | 'checkoutDone';

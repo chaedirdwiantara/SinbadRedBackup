@@ -1,16 +1,21 @@
-import { NavigationAction } from '@navigation';
 import { useState, useRef } from 'react';
+import { NavigationAction } from '@navigation';
+import { IHistoryDetailStatus } from '../views/history-detail/history-detail-status.view';
 
 export const goBack = () => {
   NavigationAction.back();
 };
 
-export const goToHistoryDetail = (section: string) => {
-  NavigationAction.navigate('HistoryDetailView', { section });
+export const goToHistoryDetail = (section: string, id: number) => {
+  NavigationAction.navigate('HistoryDetailView', { section, id });
 };
 
 export const goToHistoryInvoice = () => {
   NavigationAction.navigate('HistoryInvoiceView');
+};
+
+export const goToHistoryDetailStatus = (data: IHistoryDetailStatus) => {
+  NavigationAction.navigate('HistoryDetailStatusView', data);
 };
 
 export const formatTime = (timer: number) => {
