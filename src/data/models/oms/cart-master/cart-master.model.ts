@@ -17,8 +17,13 @@ export interface ICartMaster extends models.CartSuccessProps {
   dataEmptyStock: ICartMasterProductNotAvailable[];
   others: models.IOtherInformationStock[];
   voucherIds?: IVoucherIdCartMaster[];
+  previouseRouteName?: string;
 }
 
 export interface ICartDeleteProductPayload {
   productId: string;
+}
+
+export interface IUpdateRouteNamePayload {
+  previouseRouteName: string;
 }
