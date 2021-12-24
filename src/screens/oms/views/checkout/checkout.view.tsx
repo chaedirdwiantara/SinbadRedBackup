@@ -411,6 +411,8 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     if (modalParcelData !== null) {
       setModalParcelDetail(true);
+    } else {
+      setModalParcelDetail(false);
     }
   }, [modalParcelData]);
 
@@ -429,7 +431,9 @@ const OmsCheckoutView: FC = () => {
     return (
       <ModalParcelDetail
         isOpen={isModalParcelDetail}
-        close={() => setModalParcelDetail(false)}
+        close={() => {
+          setModalParcelData(null);
+        }}
         data={modalParcelData}
       />
     );

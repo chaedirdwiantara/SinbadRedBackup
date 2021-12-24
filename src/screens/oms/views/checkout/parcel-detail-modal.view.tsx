@@ -11,6 +11,7 @@ import {
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import {
+  handleDiscountInvoiceGroups,
   handleTransformProductBrands,
   useParcelDetailModal,
 } from '../../functions/checkout';
@@ -41,7 +42,13 @@ const dummyPaymentDetail = [
 interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
-  data: any;
+  data: models.IInvoiceCheckout;
+}
+
+interface ContentListData {
+  name: string;
+  price: number;
+  type: 'normal' | 'green';
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
@@ -54,7 +61,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const productDetail = () => {
     console.log('Modal Data', data);
-    return data !== null ? (
+    return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Produk</SnbText.H4>
         <SnbDivider style={{ marginVertical: 8 }} />
@@ -70,8 +77,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           </SnbText.B2>
         </View>
       </View>
-    ) : (
-      <View />
     );
   };
 
@@ -93,27 +98,30 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     ));
   };
   const discountDetail = () => {
+    const discounts = handleDiscountInvoiceGroups(data.invoiceGroupId);
+    console.log(discounts);
     return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Potongan Harga</SnbText.H4>
         <SnbDivider style={{ marginVertical: 8 }} />
-        <View style={CheckoutStyle.modalDetailItemContainer}>
-          <View style={{ width: '50%' }}>
-            <SnbText.B1 color={color.green50}>
-              Voucher 'Berkah Ramadhan'
-            </SnbText.B1>
-          </View>
-          <SnbText.B1 color={color.green50}>
-            {toCurrency(626, {
-              withFraction: false,
-            })}
-          </SnbText.B1>
+        <View style={{ marginBottom: 8 }}>
+          {discounts.vouchersSeller !== null ? (
+            discountVoucherList(discounts.vouchersSeller)
+          ) : (
+            <View />
+          )}
+          {discounts.promosSeller !== null ? (
+            discountPromoList(discounts.promosSeller)
+          ) : (
+            <View />
+          )}
         </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
             <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
           </View>
           <SnbText.B2 color={color.black80}>
+            -
             {toCurrency(626, {
               withFraction: false,
             })}
@@ -122,31 +130,102 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       </View>
     );
   };
+
+  const discountVoucherList = (
+    voucherData: models.ReserveDiscountVerificationVouchersSeller,
+  ) => {
+    return (
+      <View style={CheckoutStyle.modalDetailItemContainer}>
+        <View style={{ width: '50%' }}>
+          <SnbText.B1 color={color.green50}>
+            Voucher '{voucherData.voucherName}'
+          </SnbText.B1>
+        </View>
+        <SnbText.B1 color={color.green50}>
+          {toCurrency(voucherData.vouchers[0].voucherRebate, {
+            withFraction: false,
+          })}
+        </SnbText.B1>
+      </View>
+    );
+  };
+
+  const discountPromoList = (
+    promoData: models.ReserveDiscountVerificationPromosSeller,
+  ) => {
+    return promoData.promos.map(
+      (detailPromo: models.ReserveDiscountVerificationPromos) => {
+        return detailPromo.promoFreeProduct === null
+          ? contentListData(
+              detailPromo.promoName,
+              detailPromo.promoRebate as number,
+              'benefit',
+            )
+          : contentListData(
+              `${detailPromo.promoFreeProduct.productId} x${detailPromo.promoFreeProduct.qty}`,
+              0,
+              'benefit',
+            );
+      },
+    );
+  };
+
+  const contentListData = (
+    name: string,
+    price: number,
+    type: 'normal' | 'benefit',
+  ) => {
+    return (
+      <View style={CheckoutStyle.detailItemContainer}>
+        <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
+          {name}
+        </SnbText.B3>
+        <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
+          {type === 'benefit' ? '-' : ''}
+          {price !== 0
+            ? toCurrency(price, {
+                withFraction: false,
+              })
+            : 'Free'}
+        </SnbText.B3>
+      </View>
+    );
+  };
   const total = () => {
+    const products = handleTransformProductBrands(data.brands);
     return (
       <View>
         {parcelDetailModal.isDetailOpen ? (
           <View style={{ marginLeft: 32 }}>
-            {dummyPaymentDetail.map((item, index) => {
-              return (
-                <View key={index} style={CheckoutStyle.detailItemContainer}>
-                  <SnbText.B3
-                    color={
-                      item.type === 'normal' ? color.black100 : color.green50
-                    }>
-                    {item.name}
-                  </SnbText.B3>
-                  <SnbText.B3
-                    color={
-                      item.type === 'normal' ? color.black100 : color.green50
-                    }>
-                    {toCurrency(item.value, {
-                      withFraction: false,
-                    })}
-                  </SnbText.B3>
-                </View>
-              );
-            })}
+            {contentListData(
+              `Total Produk (${products.length})`,
+              data.totalPriceBeforeTax,
+              'normal',
+            )}
+            {data.totalPromoSellerAndVoucher !== 0
+              ? contentListData(
+                  'Total Potongan Harga',
+                  data.totalPromoSellerAndVoucher as number,
+                  'benefit',
+                )
+              : null}
+            {contentListData(
+              `PPN ${data.tax}%`,
+              data.totalPriceAfterTax - data.totalPriceBeforeTax,
+              'normal',
+            )}
+            {data.totalPromoPayment !== 0
+              ? contentListData(
+                  'Promo Pembayaran',
+                  data.totalPromoPayment as number,
+                  'benefit',
+                )
+              : null}
+            {contentListData(
+              'Layanan Pembayaran',
+              data.totalFee as number,
+              'normal',
+            )}
           </View>
         ) : (
           <View />
@@ -168,7 +247,15 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <SnbText.H4>Total</SnbText.H4>
             </View>
           </View>
-          <SnbText.H4>Rp367.367,00</SnbText.H4>
+          <SnbText.H4>
+            {toCurrency(
+              (data.totalPriceAfterTax -
+                data.totalPromoSellerAndVoucher) as number,
+              {
+                withFraction: false,
+              },
+            )}
+          </SnbText.H4>
         </TouchableOpacity>
       </View>
     );
@@ -184,7 +271,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       </View>
     );
   };
-  return (
+  return data !== null ? (
     <SnbBottomSheet
       open={isOpen}
       content={content()}
@@ -192,6 +279,8 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       closeAction={close}
       actionIcon={'close'}
     />
+  ) : (
+    <View />
   );
 };
 
