@@ -1,4 +1,5 @@
 import { color } from 'react-native-sinbad-ui';
+import * as models from '@models';
 
 const paymentStatusList = [
   { status: 'waiting_for_payment', title: 'Menunggu Pembayaran' },
@@ -19,6 +20,8 @@ const orderStatusList = [
   { status: 'done', title: 'Selesai' },
   { status: 'cancel', title: 'Batal' },
   { status: 'pending_partial', title: 'Partial Pending' },
+  { status: 'created', title: 'Sedang diproses' },
+  { status: 'failed', title: 'Gagal diproses' },
 ] as const;
 
 export type PaymentStatusSlug = typeof paymentStatusList[number]['status'];
@@ -69,4 +72,11 @@ export const orderStatusColor: Record<
   done: 'green',
   cancel: 'red',
   pending_partial: 'yellow',
+  created: 'white',
+  failed: 'red',
 };
+
+export const additionalOrderStatusList: Array<models.OrderStatus> = [
+  { status: 'created', title: 'Sedang Diproses', detail: '' },
+  { status: 'failed', title: 'Gagal Diproses', detail: '' },
+];

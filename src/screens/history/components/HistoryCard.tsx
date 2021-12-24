@@ -69,15 +69,13 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   additionalInfo,
   style,
 }) => {
+  const cardDisabled = statusSlug === 'created' || statusSlug === 'failed';
   const statusColor =
     type === 'payment'
       ? paymentStatusColor[statusSlug as PaymentStatusSlug]
       : orderStatusColor[statusSlug as OrderStatusSlug];
   const statusBgColor = historyStatusBgColor[statusColor];
   const statusTextColor = historyStatusTextColor[statusColor];
-  const countDownInSeconds = Math.floor(
-    (new Date(expiredPaymentTime!).getTime() - new Date().getTime()) / 1000,
-  );
   const formattedImages: Array<HistoryCardImage> = catalogueImages.map(
     (image) => ({ url: image }),
   );
@@ -93,7 +91,9 @@ export const HistoryCard: FC<HistoryCardProps> = ({
       ]}>
       <View style={HistoryStyle.cardHeader}>
         <View style={{ flex: 1, marginRight: 12 }}>
-          <SnbText.C2 color={color.black100}>{orderCode ?? '-'}</SnbText.C2>
+          <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+            {orderCode ?? '-'}
+          </SnbText.C2>
           <View style={{ marginTop: 6 }}>
             <SnbText.C1 color={color.black60}>
               {toDateWithTime(createdAt)}
@@ -150,10 +150,10 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         <View />
       )}
       <View style={HistoryStyle.cardFooterRow}>
-        <SnbText.C2 color={color.black100}>
+        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
           {toCurrency(finalPrice ?? price)}
         </SnbText.C2>
-        <SnbText.C2 color={color.black100}>
+        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
           {`QTY: ${finalQty ?? qty}`}
         </SnbText.C2>
       </View>

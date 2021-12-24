@@ -20,11 +20,6 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
   const { timer, start, reset } = useTimer(timeDiff);
   const { hours, minutes, seconds } = formatTime(timer);
 
-  // useEffect(() => {
-  //   const expiredTimeData = calculateTime(expiredTime);
-  //   setTimeDiff(expiredTimeData);
-  // }, []);
-
   useEffect(() => {
     if (timeDiff > 0) {
       start(timeDiff);
@@ -110,9 +105,8 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
         return timerHistoryCard();
       case 'big':
         return timerCheckoutDone();
-
       default:
-        break;
+        return timerHistoryCard();
     }
   };
 
