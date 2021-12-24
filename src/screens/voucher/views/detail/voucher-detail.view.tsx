@@ -73,7 +73,7 @@ const VoucherDetailView: FC = () => {
     return (
       <VoucherDetailCardInfo
         voucherName={voucherDetailState.data.voucherName}
-        voucherCode={voucherDetailState.data.voucherCode}
+        voucherCode={voucherDetailState.data.uniqueCode}
         expiredAt={voucherDetailState.data.expiredAt}
       />
     );
