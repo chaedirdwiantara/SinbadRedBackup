@@ -41,7 +41,7 @@ const dummyPaymentDetail = [
 interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
-  data: models.InvoiceCheckout;
+  data: any;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
@@ -54,7 +54,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const productDetail = () => {
     console.log('Modal Data', data);
-    return (
+    return data !== null ? (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Produk</SnbText.H4>
         <SnbDivider style={{ marginVertical: 8 }} />
@@ -63,9 +63,15 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           <View style={{ width: '50%' }}>
             <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
           </View>
-          <SnbText.B2 color={color.black80}>{toCurrency(330000)}</SnbText.B2>
+          <SnbText.B2 color={color.black80}>
+            {toCurrency(data.totalPriceBeforeTax, {
+              withFraction: false,
+            })}
+          </SnbText.B2>
         </View>
       </View>
+    ) : (
+      <View />
     );
   };
 
@@ -77,7 +83,11 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           <View style={{ width: '50%' }}>
             <SnbText.B1>{product.productName}</SnbText.B1>
           </View>
-          <SnbText.B1>{toCurrency(product.displayPrice)}</SnbText.B1>
+          <SnbText.B1>
+            {toCurrency(product.displayPrice * product.qty, {
+              withFraction: false,
+            })}
+          </SnbText.B1>
         </View>
       </>
     ));
@@ -93,13 +103,21 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               Voucher 'Berkah Ramadhan'
             </SnbText.B1>
           </View>
-          <SnbText.B1 color={color.green50}>{toCurrency(626)}</SnbText.B1>
+          <SnbText.B1 color={color.green50}>
+            {toCurrency(626, {
+              withFraction: false,
+            })}
+          </SnbText.B1>
         </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
             <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
           </View>
-          <SnbText.B2 color={color.black80}>{toCurrency(626)}</SnbText.B2>
+          <SnbText.B2 color={color.black80}>
+            {toCurrency(626, {
+              withFraction: false,
+            })}
+          </SnbText.B2>
         </View>
       </View>
     );
@@ -122,7 +140,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
                     color={
                       item.type === 'normal' ? color.black100 : color.green50
                     }>
-                    {toCurrency(item.value)}
+                    {toCurrency(item.value, {
+                      withFraction: false,
+                    })}
                   </SnbText.B3>
                 </View>
               );

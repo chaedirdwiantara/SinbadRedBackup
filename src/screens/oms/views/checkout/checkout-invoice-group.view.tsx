@@ -18,7 +18,7 @@ import * as models from '@models';
 interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
-  openModalParcelDetail: (value: boolean) => void;
+  openModalParcelDetail: any;
   index: number;
 }
 /** === COMPONENT === */
