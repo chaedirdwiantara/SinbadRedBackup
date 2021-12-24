@@ -71,7 +71,6 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
-  const parcelDetail = useParcelDetailModal();
   const {
     stateCheckout: {
       checkout: {
@@ -103,7 +102,7 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [isModalOpen, setModalOpen] = useState(true);
+  const [modalParcelData, setModalParcelData] = useState(null);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -356,21 +355,6 @@ const OmsCheckoutView: FC = () => {
       errorFetchModal.setErrorText('Ulangi');
     }
   }, [statePromo.checkPromoPayment.list]);
-  /** => Handling session expired */
-  useEffect(() => {
-    if (expiredTime.isOpen) {
-      expiredTime.setOpen(true);
-    }
-  }, []);
-
-  /** => Handling Modal Parcel Detail */
-  const parcelData = usePrevious(parcelDetail.getParcelData);
-  useEffect(() => {
-    if (parcelDetail.getParcelData !== null) {
-      parcelDetail.setModalOpen(true);
-    }
-    console.log('Parcel Data', parcelDetail.getParcelData);
-  }, [parcelData]);
 
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
@@ -430,8 +414,8 @@ const OmsCheckoutView: FC = () => {
   };
 
   const handleParcelDetail = (data: any) => {
-    parcelDetail.setParcel(data);
-    parcelDetail.setModalOpen(true);
+    console.log('Modal Parcel Data', data);
+    setModalParcelData(data);
     return;
   };
 
@@ -455,7 +439,7 @@ const OmsCheckoutView: FC = () => {
                   key={invoiceGroup.invoiceGroupId}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
-                  openModalParcelDetail={handleParcelDetail.bind(invoiceGroup)}
+                  openModalParcelDetail={() => handleParcelDetail(invoiceGroup)}
                   index={index}
                 />
               ))}
@@ -477,8 +461,9 @@ const OmsCheckoutView: FC = () => {
             close={closePaymentChannel}
           />
           <ModalParcelDetail
-            isOpen={parcelDetail.isModalOpen}
-            close={() => parcelDetail.setModalOpen(false)}
+            isOpen={modalParcelData !== null}
+            close={() => setModalParcelData(null)}
+            data={modalParcelData}
           />
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}

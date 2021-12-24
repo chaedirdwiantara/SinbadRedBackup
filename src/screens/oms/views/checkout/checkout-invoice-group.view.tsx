@@ -35,7 +35,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       <View>
         <View style={CheckoutStyle.headerSection}>
           <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
-          <TouchableOpacity onPress={() => openModalParcelDetail}>
+          <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity>
         </View>
