@@ -10,3 +10,7 @@ export const QUEST_DETAIL_PROCESS = 'QuestDetailProcess';
 export const QUEST_DETAIL_SUCCESS = 'QuestDetailSuccess';
 export const QUEST_DETAIL_FAILED = 'QuestDetailFailed';
 export const QUEST_DETAIL_RESET = 'QuestDetailReset';
+// QUEST TASK
+export const QUEST_TASK_PROCESS = 'QuestTaskProcess';
+export const QUEST_TASK_SUCCESS = 'QuestTaskSuccess';
+export const QUEST_TASK_FAILED = 'QuestTaskFailed';
