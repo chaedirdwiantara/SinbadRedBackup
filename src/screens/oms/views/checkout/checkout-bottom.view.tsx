@@ -71,7 +71,11 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
         <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>{handleTotalPrice(data)}</SnbText.H4>
+        <SnbText.H4 color={color.red50}>
+          {handleTotalPrice(data, {
+            withFraction: false,
+          })}
+        </SnbText.H4>
       </View>
     );
   };
