@@ -12,7 +12,7 @@ export const HistoryListSkeleton: FC = () => (
         paddingVertical: 12,
         paddingHorizontal: 8,
       }}>
-      {Array(8)
+      {Array(5)
         .fill(0)
         .map((_, index) => (
           <HistoryCardSkeleton key={index} />

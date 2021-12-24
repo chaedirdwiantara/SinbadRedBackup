@@ -76,9 +76,6 @@ export const HistoryCard: FC<HistoryCardProps> = ({
       : orderStatusColor[statusSlug as OrderStatusSlug];
   const statusBgColor = historyStatusBgColor[statusColor];
   const statusTextColor = historyStatusTextColor[statusColor];
-  const countDownInSeconds = Math.floor(
-    (new Date(expiredPaymentTime!).getTime() - new Date().getTime()) / 1000,
-  );
   const formattedImages: Array<HistoryCardImage> = catalogueImages.map(
     (image) => ({ url: image }),
   );
