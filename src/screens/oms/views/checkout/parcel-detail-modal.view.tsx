@@ -220,11 +220,13 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
                   'benefit',
                 )
               : null}
-            {contentListData(
-              'Layanan Pembayaran',
-              data.totalFee as number,
-              'normal',
-            )}
+            {data.totalFee !== 0
+              ? contentListData(
+                  'Layanan Pembayaran',
+                  data.totalFee as number,
+                  'normal',
+                )
+              : null}
           </View>
         ) : (
           <View />
