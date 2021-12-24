@@ -3,8 +3,16 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import React, { useContext } from 'react';
 import { contexts } from '@contexts';
 
+interface ToCurrencyOptions {
+  withPrefix?: boolean;
+  withFraction?: boolean;
+}
+
 /** => calculate total price */
-const handleTotalPrice = (data: models.IInvoiceCheckout[]) => {
+const handleTotalPrice = (
+  data: models.IInvoiceCheckout[],
+  options?: ToCurrencyOptions,
+) => {
   let total = 0;
 
   data.forEach((invoice) => {
@@ -32,11 +40,14 @@ const handleTotalPrice = (data: models.IInvoiceCheckout[]) => {
     total += subTotal;
   });
 
-  return toCurrency(total);
+  return toCurrency(total, options);
 };
 
 /** => calculate sub total price */
-const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
+const handleSubTotalPrice = (
+  data: models.IInvoiceCheckout,
+  options?: ToCurrencyOptions,
+) => {
   let total = 0;
   if (data.totalPriceBeforeTax) {
     total += data.totalPriceBeforeTax;
@@ -58,7 +69,7 @@ const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
     total -= data.totalPromoPayment;
   }
 
-  return toCurrency(total);
+  return toCurrency(total, options);
 };
 
 const handleTransformProductBrands = (data: models.BrandCheckout[]) => {

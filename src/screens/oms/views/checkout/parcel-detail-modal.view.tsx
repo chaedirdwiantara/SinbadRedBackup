@@ -121,7 +121,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           </View>
           <SnbText.B2 color={color.black80}>
             -
-            {toCurrency(626, {
+            {toCurrency(data.totalPromoSellerAndVoucher as number, {
               withFraction: false,
             })}
           </SnbText.B2>
@@ -248,7 +248,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <SnbText.H4>Total</SnbText.H4>
             </View>
           </View>
-          <SnbText.H4>{handleSubTotalPrice(data)}</SnbText.H4>
+          <SnbText.H4>
+            {handleSubTotalPrice(data, { withFraction: false })}
+          </SnbText.H4>
         </TouchableOpacity>
       </View>
     );
