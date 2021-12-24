@@ -15,9 +15,14 @@ import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
 
+import { useQuestTaskAction } from '../../../quest/function';
+import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+
 interface Props {
   type: any;
   showButton: boolean;
+  source: string;
+  sourceData: any;
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
@@ -67,6 +72,30 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
+  // realated quest hook
+  const ownerDataInfo = stateUser.detail.data?.ownerData.info;
+  const { dispatchQuest } = useQuestContext();
+  const { update } = useQuestTaskAction();
+
+  // if source Quest & phone verified, update quest task status
+  useEffect(() => {
+    if (
+      ownerDataInfo &&
+      ownerDataInfo.isMobilePhoneVerified &&
+      props.source === 'Quest'
+    ) {
+      const data = {
+        buyerId: props.sourceData?.buyerId,
+        questId: props.sourceData?.questId,
+        taskId: props.sourceData?.taskId,
+        status: 'done',
+      };
+      update(dispatchQuest, { data });
+      setTimeout(() => {
+        NavigationAction.back();
+      }, 1000);
+    }
+  }, [ownerDataInfo]);
 
   useEffect(() => {
     if (
@@ -95,6 +124,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.navigate('MerchantOtpView', {
         type: 'mobilePhone',
         data: mobilePhone.value,
+        source: props.source,
+        sourceData: props.sourceData,
       });
     }
   }, [stateMerchant]);
