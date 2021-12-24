@@ -36,7 +36,7 @@ export interface CheckoutDonePaymentChannel {
 
 export interface CheckoutDonePaymentChannelDescription {
   name: string;
-  instruction: string;
+  description: string;
 }
 
 export interface CheckoutDonePaymentType {

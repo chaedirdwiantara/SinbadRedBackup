@@ -6,7 +6,7 @@ import { toCurrency } from '../../../../../core/functions/global/currency-format
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import { useCountAllVoucherAction } from '@screen/voucher/functions/voucher-hook.function';
-import { goToVoucherCartList } from '../../functions';
+import { goToVoucherCartList, useCartMasterActions } from '../../functions';
 import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
 import { useDataVoucher } from '@core/redux/Data';
@@ -17,6 +17,7 @@ export const ShoppingCartVoucherTag: FC = () => {
   const {
     stateShopingCart: { cart: cartState },
   } = useShopingCartContext();
+  const { cartMaster } = useCartMasterActions();
   /** Voucher Cart */
   const { count } = useCountAllVoucherAction();
   const { stateVoucher, dispatchVoucher } = React.useContext(
@@ -24,7 +25,10 @@ export const ShoppingCartVoucherTag: FC = () => {
   );
   const voucherData = useDataVoucher();
   React.useEffect(() => {
-    if (cartState.data !== null) {
+    if (
+      cartState.data !== null &&
+      cartMaster.previouseRouteName !== 'voucherCartList'
+    ) {
       count(dispatchVoucher);
     }
   }, [cartState]);

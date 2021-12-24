@@ -344,7 +344,13 @@ const ProductList: FC<ProductListProps> = ({
     if (errorStock && productDetailState) {
       if (errorStock.code === 11004) {
         setLoadingPreparation(false);
-        setOrderModalVisible(true);
+        if (
+          modalRejectApproval === false &&
+          modalWaitingApproval === false &&
+          modalRegisterSupplier === false
+        ) {
+          setOrderModalVisible(true);
+        }
       } else {
         setLoadingPreparation(false);
         setModalNotCoverage(true);
@@ -514,7 +520,6 @@ const ProductList: FC<ProductListProps> = ({
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={handleCloseModal}
         onClose={handleCloseModal}
         isCallCS={true}
       />

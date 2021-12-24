@@ -65,8 +65,13 @@ import {
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** === HOOKS === */
-  const { cartMaster, setCartMaster, deleteProduct, setCartMasterData } =
-    useCartMasterActions();
+  const {
+    cartMaster,
+    setCartMaster,
+    deleteProduct,
+    setCartMasterData,
+    updateRouteName,
+  } = useCartMasterActions();
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
@@ -189,7 +194,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle go back */
   const handleGoBack = () => {
-    setModalFailedGetCart(true);
+    setModalFailedGetCart(false);
     goBack();
   };
 
@@ -334,7 +339,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** Listen changes cartState */
   useEffect(() => {
     /** => make sure data cart and data information stock is ready */
-    console.log('[NAVIAGET]: ', cartMaster.previouseRouteName);
     if (
       cartViewData !== null &&
       stockInformationData !== null &&
@@ -435,7 +439,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       });
       setProductSelectedCount(totalProductsSelected);
       setLoadingPage(false);
-    } else {
+    }
+
+    if (
+      cartViewData !== null &&
+      stockInformationData !== null &&
+      cartMaster.previouseRouteName === 'voucherCartList'
+    ) {
       setLoadingPage(false);
     }
   }, [cartViewData, stockInformationData]);
@@ -484,6 +494,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       reserveStockAction.resetDelete(dispatchReserveStock);
       cartUpdateActions.reset(dispatchShopingCart);
       cartViewActions.reset(dispatchShopingCart);
+      updateRouteName({
+        previouseRouteName: '',
+      });
     };
   }, []);
 
