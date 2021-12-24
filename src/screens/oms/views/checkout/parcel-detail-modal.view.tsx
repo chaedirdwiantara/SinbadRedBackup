@@ -61,7 +61,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   const parcelDetailModal = useParcelDetailModal();
 
   const productDetail = () => {
-    console.log('Modal Data', data);
     return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Produk</SnbText.H4>
@@ -100,7 +99,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   };
   const discountDetail = () => {
     const discounts = handleDiscountInvoiceGroups(data.invoiceGroupId);
-    console.log(discounts);
     return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Potongan Harga</SnbText.H4>
