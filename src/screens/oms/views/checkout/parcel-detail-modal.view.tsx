@@ -12,6 +12,7 @@ import {
 } from 'react-native-sinbad-ui';
 import {
   handleDiscountInvoiceGroups,
+  handleSubTotalPrice,
   handleTransformProductBrands,
   useParcelDetailModal,
 } from '../../functions/checkout';
@@ -247,15 +248,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <SnbText.H4>Total</SnbText.H4>
             </View>
           </View>
-          <SnbText.H4>
-            {toCurrency(
-              (data.totalPriceAfterTax -
-                data.totalPromoSellerAndVoucher) as number,
-              {
-                withFraction: false,
-              },
-            )}
-          </SnbText.H4>
+          <SnbText.H4>{handleSubTotalPrice(data)}</SnbText.H4>
         </TouchableOpacity>
       </View>
     );
