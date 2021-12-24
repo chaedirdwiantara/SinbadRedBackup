@@ -9,3 +9,4 @@ export * from './HistoryListFilters';
 export * from './HistoryListStatusTags';
 export * from './HistoryDetailStatus';
 export * from './HistoryDetailProductList';
+export * from './skeletons';

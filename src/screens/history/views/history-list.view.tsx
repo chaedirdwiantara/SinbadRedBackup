@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useEffect, useState, useCallback } from 'react';
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { FlatList } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
@@ -9,6 +9,8 @@ import {
   HistoryFilterModal,
   HistoryListFilters,
   HistoryListStatusTags,
+  HistoryListSkeleton,
+  HistoryStatusSkeleton,
 } from '../components';
 /** === IMPORT FUNCTIONS === */
 import {
@@ -21,13 +23,13 @@ import {
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 /** === IMPORT TYPE === */
 import * as models from '@models';
-import { OrderStatusQuery, PaymentStatusQuery } from '@models';
+import { additionalOrderStatusList } from '../types';
 /** === CONSTANT === */
 const historyTabs = ['Tagihan', 'Order'];
 /** === COMPONENT === */
 const HistoryListView: FC = ({ navigation }: any) => {
   /** === HOOKS === */
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [activePaymentStatus, setActivePaymentStatus] =
     useState<models.PaymentStatusQuery>('');
@@ -47,6 +49,16 @@ const HistoryListView: FC = ({ navigation }: any) => {
     },
     dispatchHistory,
   } = useHistoryContext();
+  const historyPaymentList = useMemo(
+    () =>
+      historyListState.data.filter(
+        (payment) =>
+          payment.status !== 'created' && payment.status !== 'failed',
+      ),
+    [historyListState.data],
+  );
+  const statusListLoading =
+    paymentStatusState.loading || orderStatusState.loading;
 
   useFocusEffect(
     useCallback(() => {
@@ -56,7 +68,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
         setActivePaymentStatus('');
       }
 
-      historyListActions.fetch(dispatchHistory);
+      historyListActions.fetch(dispatchHistory, derivedQueryOptions);
     }, [activeTab]),
   );
 
@@ -115,7 +127,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
     return (
       <HistoryCard
-        key={item.orderParcelId}
         type="payment"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -133,7 +144,11 @@ const HistoryListView: FC = ({ navigation }: any) => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('payment', item.orderParcelId)}
+        onCardPress={() => {
+          if (item.status !== 'created' && item.status !== 'failed') {
+            goToHistoryDetail('payment', item.orderParcelId);
+          }
+        }}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
@@ -148,16 +163,16 @@ const HistoryListView: FC = ({ navigation }: any) => {
     item: models.OrderParcels;
     index: number;
   }) => {
-    const statusTitle = orderStatusState.data.filter(
-      (statusItem) => statusItem.status === item.status,
-    )[0]?.title;
+    const statusTitle = [
+      ...orderStatusState.data,
+      ...additionalOrderStatusList,
+    ].filter((statusItem) => statusItem.status === item.status)[0]?.title;
     const beenDelivered = item.status === 'delivered' || item.status === 'done';
     const price = item.parcelFinalPriceBuyer;
     const finalPrice = item.deliveredParcelFinalPriceBuyer;
 
     return (
       <HistoryCard
-        key={item.orderParcelId}
         type="order"
         orderCode={item.orderCode}
         createdAt={item.createdAt}
@@ -175,13 +190,48 @@ const HistoryListView: FC = ({ navigation }: any) => {
             ? item.deliveredParcelQty
             : undefined
         }
-        onCardPress={() => goToHistoryDetail('order', item.orderParcelId)}
+        onCardPress={() => {
+          if (item.status !== 'created' && item.status !== 'failed') {
+            goToHistoryDetail('order', item.orderParcelId);
+          }
+        }}
         style={
           index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
         }
       />
     );
   };
+  /** => Status Tags */
+  const displayedStatusList =
+    activeTab === 0 ? (
+      <HistoryListStatusTags
+        visible={
+          !paymentStatusState.loading && paymentStatusState.data !== null
+        }
+        data={paymentStatusState.data}
+        activeStatus={activePaymentStatus}
+        onTagPress={(tag) => {
+          setActivePaymentStatus(tag.status as models.PaymentStatusQuery);
+          historyListActions.fetch(dispatchHistory, {
+            ...derivedQueryOptions,
+            statusPayment: tag.status as models.PaymentStatusQuery,
+          });
+        }}
+      />
+    ) : (
+      <HistoryListStatusTags
+        visible={!orderStatusState.loading && orderStatusState.data !== null}
+        data={orderStatusState.data}
+        activeStatus={activeOrderStatus}
+        onTagPress={(tag) => {
+          setActiveOrderStatus(tag.status as models.OrderStatusQuery);
+          historyListActions.fetch(dispatchHistory, {
+            ...derivedQueryOptions,
+            statusOrder: tag.status as models.OrderStatusQuery,
+          });
+        }}
+      />
+    );
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -207,52 +257,30 @@ const HistoryListView: FC = ({ navigation }: any) => {
         onFilterPress={() => setFilterModalVisible(true)}
         isFiltered={isFiltered}
       />
-      {activeTab === 0 ? (
-        <HistoryListStatusTags
-          visible={
-            !paymentStatusState.loading && paymentStatusState.data !== null
+      {statusListLoading ? <HistoryStatusSkeleton /> : displayedStatusList}
+      {!historyListState.loading ? (
+        <FlatList
+          style={{ padding: 8 }}
+          contentContainerStyle={{ paddingBottom: 12 }}
+          data={activeTab === 0 ? historyPaymentList : historyListState.data}
+          renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
+          refreshing={historyListState.refresh}
+          onRefresh={() =>
+            historyListActions.refresh(dispatchHistory, derivedQueryOptions)
           }
-          data={paymentStatusState.data}
-          activeStatus={activePaymentStatus}
-          onTagPress={(tag) => {
-            setActivePaymentStatus(tag.status as PaymentStatusQuery);
-            historyListActions.fetch(dispatchHistory, {
-              ...derivedQueryOptions,
-              statusPayment: tag.status as PaymentStatusQuery,
-            });
-          }}
+          keyExtractor={(item) => item.orderCode}
+          onEndReachedThreshold={0.1}
+          onEndReached={() =>
+            historyListActions.loadMore(
+              dispatchHistory,
+              historyListState,
+              derivedQueryOptions,
+            )
+          }
         />
       ) : (
-        <HistoryListStatusTags
-          visible={!orderStatusState.loading && orderStatusState.data !== null}
-          data={orderStatusState.data}
-          activeStatus={activeOrderStatus}
-          onTagPress={(tag) => {
-            setActiveOrderStatus(tag.status as OrderStatusQuery);
-            historyListActions.fetch(dispatchHistory, {
-              ...derivedQueryOptions,
-              statusOrder: tag.status as OrderStatusQuery,
-            });
-          }}
-        />
+        <HistoryListSkeleton />
       )}
-      <FlatList
-        style={{ padding: 8 }}
-        data={historyListState.data}
-        renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
-        refreshing={historyListState.refresh}
-        onRefresh={() =>
-          historyListActions.refresh(dispatchHistory, derivedQueryOptions)
-        }
-        onEndReachedThreshold={0.1}
-        onEndReached={() =>
-          historyListActions.loadMore(
-            dispatchHistory,
-            historyListState,
-            derivedQueryOptions,
-          )
-        }
-      />
       <HistoryFilterModal
         visible={filterModalVisible}
         startDate={date.start}
