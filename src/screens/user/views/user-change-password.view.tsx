@@ -238,6 +238,7 @@ const UserChangePasswordView: FC = () => {
           onPress={() => setOpenConfirm(true)}
           type={'primary'}
           disabled={
+            true ||
             !dataOldPassword ||
             !dataNewPassword ||
             !dataConfirmNewPassword ||
