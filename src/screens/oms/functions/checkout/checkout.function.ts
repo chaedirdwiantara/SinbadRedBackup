@@ -1,8 +1,18 @@
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
+import React, { useContext } from 'react';
+import { contexts } from '@contexts';
+
+interface ToCurrencyOptions {
+  withPrefix?: boolean;
+  withFraction?: boolean;
+}
 
 /** => calculate total price */
-const handleTotalPrice = (data: models.IInvoiceCheckout[]) => {
+const handleTotalPrice = (
+  data: models.IInvoiceCheckout[],
+  options?: ToCurrencyOptions,
+) => {
   let total = 0;
 
   data.forEach((invoice) => {
@@ -30,11 +40,14 @@ const handleTotalPrice = (data: models.IInvoiceCheckout[]) => {
     total += subTotal;
   });
 
-  return toCurrency(total);
+  return toCurrency(total, options);
 };
 
 /** => calculate sub total price */
-const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
+const handleSubTotalPrice = (
+  data: models.IInvoiceCheckout,
+  options?: ToCurrencyOptions,
+) => {
   let total = 0;
   if (data.totalPriceBeforeTax) {
     total += data.totalPriceBeforeTax;
@@ -56,7 +69,7 @@ const handleSubTotalPrice = (data: models.IInvoiceCheckout) => {
     total -= data.totalPromoPayment;
   }
 
-  return toCurrency(total);
+  return toCurrency(total, options);
 };
 
 const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
@@ -67,4 +80,36 @@ const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
   return products;
 };
 
-export { handleTotalPrice, handleSubTotalPrice, handleTransformProductBrands };
+const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
+  const { statePromo } = useContext(contexts.PromoContext);
+
+  const reservePromo =
+    statePromo.reserveDiscount.detail.data?.discountVerification.promosSeller;
+  const reserveVoucher =
+    statePromo.reserveDiscount.detail.data?.discountVerification.vouchersSeller;
+
+  const findVoucherInvoiceGroup = reserveVoucher?.find(
+    (data: models.ReserveDiscountVerificationVouchersSeller) =>
+      data.invoiceGroupId === invoiceGroupId,
+  );
+
+  const findPromoInvoiceGroup = reservePromo?.find(
+    (data: models.ReserveDiscountVerificationPromosSeller) =>
+      data.invoiceGroupId === invoiceGroupId,
+  );
+
+  const vouchersSeller =
+    findVoucherInvoiceGroup !== undefined ? findVoucherInvoiceGroup : null;
+
+  const promosSeller =
+    findPromoInvoiceGroup !== undefined ? findPromoInvoiceGroup : null;
+
+  return { vouchersSeller, promosSeller };
+};
+
+export {
+  handleTotalPrice,
+  handleSubTotalPrice,
+  handleTransformProductBrands,
+  handleDiscountInvoiceGroups,
+};
