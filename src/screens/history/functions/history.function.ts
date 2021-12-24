@@ -7,8 +7,12 @@ export const goBack = () => {
   NavigationAction.back();
 };
 
-export const goToHistoryDetail = (section: string, id: number) => {
-  NavigationAction.navigate('HistoryDetailView', { section, id });
+export const goToHistoryDetail = (
+  section: string,
+  id: number,
+  billingId: number,
+) => {
+  NavigationAction.navigate('HistoryDetailView', { section, id, billingId });
 };
 
 export const goToHistoryInvoice = (data: object) => {
@@ -63,33 +67,4 @@ export const calculateTime = (expiredTime: string) => {
     transformExpiredTime >= 1 ? transformExpiredTime : 0;
 
   return formatExpiredTime;
-};
-export const useRequestWritePermission = async () => {
-  const [downloadProgress, setDownloadProgress] = useState(true);
-  const [accessGranted, setAccess] = useState(false);
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-      {
-        title: 'Sinbad App Permission',
-        message:
-          'Sinbad App needs access to your file ' +
-          'so you can download the invoice file.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      setAccess(true);
-    } else {
-      // alert("Storage permission denied")
-      setDownloadProgress(false);
-    }
-  } catch (err) {
-    // console.warn(err);
-    setDownloadProgress(false);
-  }
-
-  return { downloadProgress, accessGranted };
 };

@@ -56,7 +56,7 @@ import {
 
 /** === TYPES === */
 type HistoryStackParamList = {
-  Detail: { section: 'order' | 'payment'; id: string };
+  Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
 /** === DUMMIES === */
@@ -92,7 +92,7 @@ const HistoryDetailView: FC = () => {
     stateHistory;
 
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, '1406522');
+    getPaymentDetail.detail(dispatchHistory, params.billingId);
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
 
