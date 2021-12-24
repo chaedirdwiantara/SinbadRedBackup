@@ -1,29 +1,25 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Platform, Linking } from 'react-native';
 import {
   SnbBottomSheet,
   color,
   SnbText,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import { NavigationAction } from '@navigation';
 /** === TYPE === */
 interface RejectApprovalModalProps {
   visible: boolean;
-  onSubmit: () => void;
   onClose: () => void;
   isCallCS?: boolean;
 }
 /** === COMPONENT === */
 const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
   visible,
-  onSubmit,
   onClose,
   isCallCS,
 }) => {
-  const onHanldeCallCS = () => {
-    //Call CS
-  };
   return (
     <SnbBottomSheet
       open={visible}
@@ -58,7 +54,11 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
             <SnbButton.Single
               type="primary"
               title="Lengkapi Data Diri"
-              onPress={onSubmit}
+              onPress={() => {
+                // goToMenu('UserView');
+                NavigationAction.navigate('UserView');
+                onClose();
+              }}
               disabled={false}
             />
           </View>
@@ -67,7 +67,12 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
               <SnbButton.Single
                 type="primary"
                 title="Hubungi CS"
-                onPress={onHanldeCallCS}
+                onPress={() => {
+                  Platform.OS === 'android'
+                    ? Linking.openURL('tel:+6282260106010')
+                    : Linking.openURL('telprompt:+6282260106010');
+                  onClose();
+                }}
                 disabled={false}
               />
             </View>

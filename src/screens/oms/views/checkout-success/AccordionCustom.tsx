@@ -9,7 +9,7 @@ import { AccordionStyle } from '@core/styles';
 /** === TYPE === */
 export interface IAccordionData {
   name: string;
-  instruction: string;
+  description: string;
 }
 
 interface AccordionProps {
@@ -65,7 +65,7 @@ export const AccordioCustom: FC<AccordionProps> = ({ data, loading }) => {
           </TouchableWithoutFeedback>
           {itemIndex === activeIndex && (
             <View style={AccordionStyle.contentContainer}>
-              <SnbHtml value={item.instruction} fontSize={12} />
+              <SnbHtml value={item.description} fontSize={12} />
             </View>
           )}
         </View>
