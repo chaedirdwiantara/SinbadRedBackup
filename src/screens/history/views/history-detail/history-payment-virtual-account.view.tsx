@@ -13,6 +13,7 @@ import {
 } from '@screen/history/constant/history.constant';
 import { useActivateVa } from '../../functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
+import moment from 'moment';
 interface PaymentVAProps {
   data: PaymentDetailSuccessProps | null;
   onClick: () => void;
@@ -81,7 +82,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     const billingStatus = dataPayment?.billingStatus;
     const paymentType = dataPayment?.paymentType;
     const paymentChannel = dataPayment?.paymentChannel;
-    return (
+    return billingStatus === PENDING ? (
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
           <View style={{ marginBottom: 8 }} />
@@ -95,7 +96,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
             dataPayment?.expiredPaymentTime === null &&
-            billingStatus !== PAID &&
             (billingStatus === PENDING || billingStatus === OVERDUE) ? (
             renderVAButton()
           ) : (
@@ -103,6 +103,8 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
           )}
         </View>
       </>
+    ) : (
+      <View />
     );
   };
   return <View>{renderContent()}</View>;
