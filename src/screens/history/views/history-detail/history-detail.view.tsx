@@ -333,7 +333,7 @@ const HistoryDetailView: FC = () => {
     const paymentType = dataPayment?.paymentType.id;
     const paymentChannel = dataPayment?.paymentChannel.id;
     const billingStatus = dataPayment?.billingStatus;
-    return paymentType === PAY_LATER &&
+    return paymentType !== PAY_COD &&
       paymentChannel !== CASH &&
       expiredPaymentTime !== null &&
       dataPayment?.accountVaNo !== null &&
