@@ -210,7 +210,10 @@ const HistoryDetailView: FC = () => {
   /** => Payment Info */
   const renderPaymentInfo = () =>
     !paymentDetail?.loading && paymentDetail.data ? (
-      <HistoryDetailPaymentInformation dataPayment={paymentDetail?.data} />
+      <HistoryDetailPaymentInformation
+        dataPayment={paymentDetail?.data}
+        dataOrder={detail.data}
+      />
     ) : (
       <View style={{ height: '20%' }}>
         <LoadingPage />

@@ -13,6 +13,7 @@ export const REFUNDED = 'refunded';
 
 /** ORDER STATUS */
 export const DELIVERED = 'delivered';
+export const DONE = 'done';
 
 /** PAYMENT CHANNEL TYPE */
 export const CASH = 1;
