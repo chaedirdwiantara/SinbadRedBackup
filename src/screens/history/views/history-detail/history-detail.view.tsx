@@ -105,8 +105,7 @@ const HistoryDetailView: FC = () => {
   } = stateHistory;
   /** => get Payment and Order Detail */
   useEffect(() => {
-    // getPaymentDetail.detail(dispatchHistory, params.billingId);
-    getPaymentDetail.detail(dispatchHistory, '1436326');
+    getPaymentDetail.detail(dispatchHistory, params.billingId);
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
   /** => on success get Invoice */
@@ -196,7 +195,7 @@ const HistoryDetailView: FC = () => {
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
-      onActionClick={() => getInvoice('14065211')}>
+      onActionClick={() => getInvoice(params.billingId)}>
       <HistoryCardItem
         title="Nomor Pesanan"
         value={detail.data?.orderCode ?? '-'}
