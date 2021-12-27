@@ -18,12 +18,14 @@ interface CheckoutBottomViewProps {
   openTCModal: () => void;
   openErrorWarning: () => void;
   closeErrorWarning: () => void;
+  checkExpiredTime: any;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
   openErrorWarning,
   closeErrorWarning,
+  checkExpiredTime,
 }) => {
   /** === HOOK === */
   const paymentAction = usePaymentAction();
@@ -54,7 +56,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
     const totalCartInvoices = checkoutMaster.invoices;
     if (selectedInvoiceChannel.length === totalCartInvoices.length) {
-      if (!expiredTime.check()) {
+      if (!checkExpiredTime()) {
         paymentAction.tCCreate(dispatchPayment, dataPostTC);
       } else {
         expiredTime.setOpen(true);
