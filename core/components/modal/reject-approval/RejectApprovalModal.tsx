@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, Image, Platform, Linking } from 'react-native';
+import { View, Image } from 'react-native';
 import {
   SnbBottomSheet,
   color,
@@ -18,7 +18,7 @@ interface RejectApprovalModalProps {
 const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
   visible,
   onClose,
-  isCallCS,
+  // isCallCS,
 }) => {
   return (
     <SnbBottomSheet
@@ -41,12 +41,12 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
               }}
             />
             <SnbText.B2 color={color.black100}>
-              Akun kamu gagal verifikasi nih
+              Akun kamu gagal terverifikasi
             </SnbText.B2>
             <View style={{ marginTop: 8 }}>
               <SnbText.C1 color={color.black100} align="center">
-                Maaf ya, akun kamu gagal diverifikasi oleh kami. Kirim data
-                ulang atau jika ada pertanyaan telfon CS kami ya !
+                Data pada akun kamu gagal terverifikasi nih. Yuk, periksa
+                halaman profile dan lengkapi data Anda!
               </SnbText.C1>
             </View>
           </View>
@@ -62,7 +62,7 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
               disabled={false}
             />
           </View>
-          {isCallCS && (
+          {/* {isCallCS && (
             <View style={{ height: 72 }}>
               <SnbButton.Single
                 type="primary"
@@ -76,7 +76,7 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
                 disabled={false}
               />
             </View>
-          )}
+          )} */}
         </View>
       }
       closeAction={onClose}
