@@ -4,10 +4,10 @@ import { color, SnbText } from 'react-native-sinbad-ui';
 
 import { formatTime, useTimer, calculateTime } from '../functions';
 import { HistoryStyle } from '../styles';
-/** === TYPE === */
+
 interface CountDownTimerProps {
   expiredTime: string;
-  type: 'historyCard' | 'checkoutDone';
+  type: 'small' | 'big';
 }
 
 export const CountDownTimer: FC<CountDownTimerProps> = ({
@@ -89,18 +89,21 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
         marginTop: 6,
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <SnbText.H4 color={color.black60}>
-          {hours} : {minutes} : {seconds}
-        </SnbText.H4>
+        <SnbText.H4>{hours} </SnbText.H4>
+        <SnbText.B1> jam</SnbText.B1>
+        <SnbText.H4> {minutes} </SnbText.H4>
+        <SnbText.B1> menit</SnbText.B1>
+        <SnbText.H4> {seconds} </SnbText.H4>
+        <SnbText.B1>detik</SnbText.B1>
       </View>
     </View>
   );
 
   const renderContent = () => {
     switch (type) {
-      case 'historyCard':
+      case 'small':
         return timerHistoryCard();
-      case 'checkoutDone':
+      case 'big':
         return timerCheckoutDone();
       default:
         return timerHistoryCard();

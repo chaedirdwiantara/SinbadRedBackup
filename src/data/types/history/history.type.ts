@@ -29,3 +29,9 @@ export const HISTORY_DETAIL_SUCCESS = 'HistoryDetailSuccess';
 export const HISTORY_DETAIL_REFRESH = 'HistoryDetailRefresh';
 export const HISTORY_DETAIL_FAILED = 'HistoryDetailFailed';
 export const HISTORY_DETAIL_RESET = 'HistoryDetailReset';
+
+/** => activate VA */
+export const HISTORY_ACTIVATE_VA_PROCESS = 'HistoryActivateVAProcess';
+export const HISTORY_ACTIVATE_VA_SUCCESS = 'HistoryActivateVASuccess';
+export const HISTORY_ACTIVATE_VA_FAILED = 'HistoryActivateVAFailed';
+export const HISTORY_ACTIVATE_VA_RESET = 'HistoryActivateVAReset';

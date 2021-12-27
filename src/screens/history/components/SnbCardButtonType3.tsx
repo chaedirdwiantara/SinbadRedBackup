@@ -12,7 +12,7 @@ interface Props {
   textRight?: string;
   color?: string;
   left?: any;
-  title: string;
+  title?: string;
   disabled?: boolean;
   type?: 'check' | 'goTo' | 'waiting';
   bgColor?: string;
@@ -70,8 +70,8 @@ const SnbCardButtonType3: FC<Props> = (props: any) => {
       ]}
       testID={props.testID}>
       <View style={styles.cardBody}>
-        <View style={{ marginBottom: 8 }}>
-          <SnbText.B4>{props.title ? props.title : null} :</SnbText.B4>
+        <View style={{ marginBottom: 16 }}>
+          <SnbText.B4>{props.title ? props.title : null} </SnbText.B4>
         </View>
         <View style={styles.subCardBody}>
           {props.left ? props.left() : null}

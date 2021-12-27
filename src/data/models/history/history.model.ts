@@ -28,10 +28,21 @@ export interface PaymentDetailSuccessProps {
   refundTotal: number;
   expiredPaymentTime: string;
   refundedTime: string;
-  accountVaNo: string;
+  accountVaNo: string | null;
+  billingStatus: string;
 }
 
 export interface PaymentInvoiceSuccessProps {
   fileName: string;
   url: string;
+}
+
+export interface PaymentActivateVASuccess {
+  type: string;
+  payload: any;
+}
+
+export interface PaymentActivateVASuccessProps {
+  id: number;
+  message: string;
 }

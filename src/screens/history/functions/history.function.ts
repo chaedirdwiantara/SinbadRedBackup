@@ -6,12 +6,16 @@ export const goBack = () => {
   NavigationAction.back();
 };
 
-export const goToHistoryDetail = (section: string, id: number) => {
-  NavigationAction.navigate('HistoryDetailView', { section, id });
+export const goToHistoryDetail = (
+  section: string,
+  id: number,
+  billingId: number,
+) => {
+  NavigationAction.navigate('HistoryDetailView', { section, id, billingId });
 };
 
-export const goToHistoryInvoice = () => {
-  NavigationAction.navigate('HistoryInvoiceView');
+export const goToHistoryInvoice = (data: object) => {
+  NavigationAction.navigate('HistoryInvoiceView', data);
 };
 
 export const goToHistoryDetailStatus = (data: IHistoryDetailStatus) => {
@@ -54,7 +58,6 @@ export const useTimer = (
 
   return { timer, start, reset };
 };
-
 export const calculateTime = (expiredTime: string) => {
   const transformExpiredTime = Math.floor(
     (new Date(expiredTime).getTime() - new Date().getTime()) / 1000,

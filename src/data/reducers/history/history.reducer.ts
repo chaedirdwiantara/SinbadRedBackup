@@ -29,6 +29,11 @@ import {
   HistoryDetailInitialProps,
   historyDetailReducer,
 } from './detail/history-detail.reducer';
+import {
+  paymentActivateVAInitialState,
+  PaymentActivateVAInitialProps,
+  paymentActivateVAReducer,
+} from './detail/activate-va.reducer';
 /** === TYPE === */
 export interface HistoryState {
   list: HistoryListInitialProps;
@@ -37,6 +42,7 @@ export interface HistoryState {
   paymentStatus: PaymentStatusListInitialProps;
   paymentDetail: PaymentDetailInitialProps;
   paymentInvoice: PaymentInvoiceInitialProps;
+  activateVa: PaymentActivateVAInitialProps;
 }
 /** === INITIAL STATE === */
 export const historyInitialState = {
@@ -46,6 +52,7 @@ export const historyInitialState = {
   paymentStatus: paymentStatusListInitialState,
   paymentDetail: paymentDetailInitialState,
   paymentInvoice: paymentInvoiceInitialState,
+  activateVa: paymentActivateVAInitialState,
 };
 /** === REDUCER === */
 export const historyReducer = (
@@ -56,6 +63,7 @@ export const historyReducer = (
     paymentStatus,
     paymentDetail,
     paymentInvoice,
+    activateVa,
   }: HistoryState,
   action: any,
 ) => ({
@@ -65,4 +73,5 @@ export const historyReducer = (
   paymentStatus: paymentStatusListReducer(paymentStatus, action),
   paymentDetail: paymentDetailReducer(paymentDetail, action),
   paymentInvoice: paymentInvoiceReducer(paymentInvoice, action),
+  activateVa: paymentActivateVAReducer(activateVa, action),
 });
