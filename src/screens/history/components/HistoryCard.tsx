@@ -80,7 +80,8 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   const formattedImages: Array<HistoryCardImage> = catalogueImages.map(
     (image) => ({ url: image }),
   );
-
+  const isPaymentTimeExpired =
+    moment.utc(new Date()).local() > moment.utc(expiredPaymentTime);
   return (
     <Pressable
       onPress={onCardPress}
@@ -117,9 +118,9 @@ export const HistoryCard: FC<HistoryCardProps> = ({
               />
             )}
           </View>
-          {expiredPaymentTime && (
+          {expiredPaymentTime && !isPaymentTimeExpired ? (
             <CountDownTimer type={'small'} expiredTime={expiredPaymentTime} />
-          )}
+          ) : null}
         </View>
       </View>
       <View style={HistoryStyle.cardBody}>
