@@ -411,9 +411,10 @@ const OmsCheckoutView: FC = () => {
 
   const handleCheckExpiredSession = () => {
     if (!expiredTime.check()) {
-      return expiredTime.check();
+      return false;
     } else {
       setExpiredSession(true);
+      return true;
     }
   };
 
