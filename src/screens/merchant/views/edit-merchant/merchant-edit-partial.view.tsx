@@ -82,7 +82,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     if (
       ownerDataInfo &&
       ownerDataInfo.isMobilePhoneVerified &&
-      props.source === 'Quest'
+      props.source === 'Quest' &&
+      props.type === 'merchantOwnerPhoneNo'
     ) {
       const data = {
         buyerId: props.sourceData?.buyerId,
@@ -190,6 +191,16 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         editProfileAction.editProfile(dispatchSupplier, {
           data,
         });
+        // if source Quest & owner name, update quest task status
+        if (props.source === 'Quest') {
+          const data = {
+            buyerId: props.sourceData?.buyerId,
+            questId: props.sourceData?.questId,
+            taskId: props.sourceData?.taskId,
+            status: 'done',
+          };
+          update(dispatchQuest, { data });
+        }
         break;
       }
       case 'merchantAccountName': {
