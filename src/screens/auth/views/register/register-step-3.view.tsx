@@ -128,7 +128,7 @@ const Content: React.FC = () => {
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               onPress={action}
-              disabled={stateGlobal.uploadImage.loading}
+              disabled={true || stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
             />
           </View>

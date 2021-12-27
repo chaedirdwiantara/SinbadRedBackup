@@ -17,8 +17,8 @@ import {
   color,
   SnbDivider,
   SnbBottomSheet,
+  SnbHtml,
 } from 'react-native-sinbad-ui';
-import RenderHtml from 'react-native-render-html';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
@@ -171,12 +171,12 @@ const BannerDetailView: React.FC = ({ route }: any) => {
 
   /** => voucher description */
   const renderPromoDescriptionHtml = () => {
-    const sourceHtml = {
-      html: bannerDetailState.data?.description,
-    };
+    const description = bannerDetailState.data
+      ? bannerDetailState.data.description
+      : '-';
     return (
       <View style={BannerDetailStyles.sectionContainer}>
-        <RenderHtml contentWidth={width} source={sourceHtml} />
+        <SnbHtml value={description} fontSize={12} />
       </View>
     );
   };

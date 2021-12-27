@@ -40,19 +40,6 @@ const Content: React.FC = () => {
     }
   }, [checkEmailAvailability]);
 
-  React.useEffect(() => {
-    if (idNumber.value.length === 16 || idNumber.value === '') {
-      idNumber.setMessageError('');
-    } else {
-      idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
-    }
-    if (taxNumber.value.length === 15 || taxNumber.value === '') {
-      taxNumber.setMessageError('');
-    } else {
-      taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
-    }
-  }, [idNumber.value, taxNumber.value]);
-
   /** VALIDATE EMAIL */
   const validateEmail = (data: string) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -94,6 +81,16 @@ const Content: React.FC = () => {
               labelText="Nomor KTP"
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                idNumber.setType('default');
+                idNumber.setValue(text);
+                if (text.length === 16 || text === '') {
+                  idNumber.setMessageError('');
+                } else {
+                  idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
+                }
+              }}
             />
           </View>
           <View
@@ -108,6 +105,16 @@ const Content: React.FC = () => {
               maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                taxNumber.setType('default');
+                taxNumber.setValue(text);
+                if (text.length === 16 || text === '') {
+                  taxNumber.setMessageError('');
+                } else {
+                  taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
+                }
+              }}
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
@@ -144,6 +151,7 @@ const Content: React.FC = () => {
           type="primary"
           loading={checkEmailAvailability.loading}
           disabled={
+            true ||
             name.value === '' ||
             idNumber.value === '' ||
             idNumber.valMsgError !== '' ||

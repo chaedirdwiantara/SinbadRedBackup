@@ -534,7 +534,6 @@ const ProductDetailView: FC = () => {
       {/* Reject Approval Modal */}
       <RejectApprovalModal
         visible={modalRejectApproval}
-        onSubmit={handleCloseModal}
         onClose={handleCloseModal}
         isCallCS={true}
       />

@@ -89,7 +89,7 @@ const Content: React.FC = () => {
           size="small"
           onPress={() => navigate(REGISTER_VIEW)}
           type="tertiary"
-          disabled={false}
+          disabled={true || false}
         />
       </View>
     </ScrollView>
