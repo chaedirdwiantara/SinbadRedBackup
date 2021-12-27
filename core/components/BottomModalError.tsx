@@ -26,7 +26,7 @@ const BottomModalError: FC<Props> = (props) => {
             marginBottom: 16,
           }}
         />
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', marginHorizontal: 16 }}>
           <SnbText.H4>{props.errorTitle}</SnbText.H4>
           <SnbText.B1>{props.errorSubtitle}</SnbText.B1>
         </View>

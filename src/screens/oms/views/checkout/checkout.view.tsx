@@ -104,6 +104,7 @@ const OmsCheckoutView: FC = () => {
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
   const [modalParcelData, setModalParcelData] = useState(null);
   const [isModalParcelDetail, setModalParcelDetail] = useState(false);
+  const [isExpiredSession, setExpiredSession] = useState(false);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -408,6 +409,14 @@ const OmsCheckoutView: FC = () => {
     setModalParcelData(data);
   };
 
+  const handleCheckExpiredSession = () => {
+    if (!expiredTime.check()) {
+      return expiredTime.check();
+    } else {
+      setExpiredSession(true);
+    }
+  };
+
   useEffect(() => {
     if (modalParcelData !== null) {
       setModalParcelDetail(true);
@@ -469,6 +478,7 @@ const OmsCheckoutView: FC = () => {
             openTCModal={() => paymentTCModal.setOpen(true)}
             openErrorWarning={() => errorWarningModal.setOpen(true)}
             closeErrorWarning={() => errorWarningModal.setOpen(false)}
+            checkExpiredTime={handleCheckExpiredSession}
           />
           <ModalPaymentType
             isOpen={paymentTypeModal.isOpen}
@@ -509,7 +519,7 @@ const OmsCheckoutView: FC = () => {
             buttonText={errorFetchModal.errorText}
           />
           <ModalBottomErrorExpiredTime
-            isOpen={expiredTime.isOpen}
+            isOpen={isExpiredSession}
             close={handleBackToCart}
           />
           {ModalErrorCreateOrders()}

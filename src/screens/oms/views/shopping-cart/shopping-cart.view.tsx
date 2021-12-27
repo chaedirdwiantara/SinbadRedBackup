@@ -129,6 +129,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       create: {
         data: dataCreateVerificationOrder,
         loading: loadingCreateVerificationOrder,
+        error: errorCreateVerificationOrder,
       },
     },
     dispatchVerificationOrder,
@@ -328,6 +329,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       goToVerificationOrder();
     }
   }, [dataCreateVerificationOrder, updateCartData]);
+
+  useEffect(() => {
+    if (errorCreateVerificationOrder !== null) {
+      setModalConfirmationCheckoutVisible(false);
+      setModalFailedCheckout(true);
+    }
+  }, [errorCreateVerificationOrder]);
 
   useEffect(() => {
     if (updateCartError !== null && productRemoveSelected === null) {
@@ -615,7 +623,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalFailedCheckout}
-        error={updateCartError}
+        error={updateCartError || errorCreateVerificationOrder}
         closeAction={() => setModalFailedCheckout(false)}
         retryAction={onSubmitCheckout}
       />
