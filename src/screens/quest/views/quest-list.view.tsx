@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC, useState } from 'react';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -42,17 +43,18 @@ const QuestListView: FC = () => {
   const [buyerId, setBuyerId] = useState(0);
 
   const { me } = useDataAuth();
-  console.log(me, 'DATAME');
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
-  React.useEffect(() => {
-    if (me.data !== null) {
-      setBuyerId(me.data.user.id);
-      fetch(dispatchQuest, { status, buyerId: me.data.user.id });
-    }
-  }, [me.data, activeTab]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (me.data !== null) {
+        setBuyerId(me.data.user.id);
+        fetch(dispatchQuest, { status, buyerId: me.data.user.id });
+      }
+    }, [me.data, activeTab]),
+  );
 
   /** === VIEW === */
   /** => Header */
