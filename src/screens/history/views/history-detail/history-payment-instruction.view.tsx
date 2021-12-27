@@ -3,14 +3,10 @@ import { View } from 'react-native';
 import { SnbText, styles, color } from '@sinbad/react-native-sinbad-ui';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import CustomAccordion from '../../components/CustomAccordion';
-interface PaymentInstructionProps {
-  data?: object;
-}
 
 /** === COMPONENT === */
-const HistoryPaymentInstruction: FC<PaymentInstructionProps> = ({ data }) => {
+const HistoryPaymentInstruction = () => {
   const { stateHistory } = useHistoryContext();
-  console.log(stateHistory.paymentDetail.data?.paymentChannel);
   const description =
     stateHistory.paymentDetail.data?.paymentChannel.description;
   /**RENDER PANDUAN PEMBAYARAN ACCORDION */

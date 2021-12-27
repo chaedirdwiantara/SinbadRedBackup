@@ -39,6 +39,7 @@ import {
   useModalToast,
   useHistoryDetailAction,
   goToHistoryDetailStatus,
+  useModalErrorInvoice,
 } from '../../functions';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
@@ -89,6 +90,7 @@ const HistoryDetailView: FC = () => {
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
   const historyDetailAction = useHistoryDetailAction();
+  const modalErrorInvoice = useModalErrorInvoice();
   const modalToast = useModalToast();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
@@ -172,7 +174,7 @@ const HistoryDetailView: FC = () => {
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
-      onActionClick={() => getInvoice('1406522')}>
+      onActionClick={() => getInvoice('14065211')}>
       <HistoryCardItem
         title="Nomor Pesanan"
         value={detail.data?.orderCode ?? '-'}

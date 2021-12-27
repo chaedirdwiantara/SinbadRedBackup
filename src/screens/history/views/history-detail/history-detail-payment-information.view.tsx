@@ -22,8 +22,6 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
   dataPayment,
   dataOrder,
 }) => {
-  console.log(dataPayment, dataOrder);
-
   const paymentInformation = () => {
     if (
       dataPayment?.paymentType.id !== PAY_NOW &&

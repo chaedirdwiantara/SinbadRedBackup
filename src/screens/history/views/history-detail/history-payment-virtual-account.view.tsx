@@ -88,12 +88,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     const isNotExpired =
       moment.utc(new Date()).local() <
       moment.utc(dataPayment?.expiredPaymentTime);
-    console.log(isNotExpired, 'is not expired');
-    console.log(moment.utc(new Date()).local().format('DDMMYY hh:mm:ss'));
-    console.log(
-      moment.utc(dataPayment?.expiredPaymentTime).format('DDMMYY hh:mm:ss'),
-    );
-
     return (
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>

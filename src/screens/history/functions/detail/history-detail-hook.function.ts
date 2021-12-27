@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTIONS === */
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
@@ -76,6 +77,16 @@ export const useDownloadProgress = () => {
     downloadProgress,
     setProgress: (value: boolean) => {
       setProgress(value);
+    },
+  };
+};
+
+export const useModalErrorInvoice = () => {
+  const [isOpen, setOpen] = useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
     },
   };
 };

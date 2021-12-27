@@ -247,7 +247,6 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     const dataLastPaymentChannel =
       paymentLastChannelDetail?.data?.paymentTypeChannels;
-    console.log(dataLastPaymentChannel, 'DATA LAST');
 
     if (dataLastPaymentChannel) {
       dataLastPaymentChannel.map((item: any) =>
