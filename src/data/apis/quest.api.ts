@@ -26,7 +26,13 @@ const getDetail = (payload: models.QuestDetailProcessProps) => {
   );
 };
 
+const updateTask = (payload: object) => {
+  const path = 'task-buyer-progress';
+  return apiMapping('auth', path, 'quests', 'v1', 'UPDATE', payload);
+};
+
 export const QuestApi = {
   getList,
   getDetail,
+  updateTask,
 };

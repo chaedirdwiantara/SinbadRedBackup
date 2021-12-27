@@ -95,4 +95,18 @@ const useQuestDetailAction = () => {
   };
 };
 
-export { useQuestListAction, useQuestDetailAction };
+const useQuestTaskAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    /** TASK */
+    update: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.questTaskProcess(contextDispatch, data));
+    },
+  };
+};
+
+export { useQuestListAction, useQuestDetailAction, useQuestTaskAction };

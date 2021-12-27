@@ -67,3 +67,29 @@ export const questDetailFailed = (
 export const questDetailReset = () => {
   return { type: types.QUEST_DETAIL_RESET };
 };
+
+/** === TASK ACTIONS === */
+/** => Process */
+export const questTaskProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.UpdateProcessProps<{}>,
+): models.UpdateProcessAction => {
+  contextDispatch({ type: types.QUEST_TASK_PROCESS, payload: data });
+  return {
+    type: types.QUEST_TASK_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const questTaskSuccess = (
+  payload: models.UpdateSuccessProps,
+): models.UpdateSuccessAction => {
+  return { type: types.QUEST_TASK_SUCCESS, payload };
+};
+/** => Failed */
+export const questTaskFailed = (
+  payload: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return { type: types.QUEST_TASK_FAILED, payload };
+};

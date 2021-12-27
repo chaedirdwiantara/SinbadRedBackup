@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -14,7 +15,12 @@ import moment from 'moment';
 import StepperStatusDetail from '../components/StepperStatusDetail';
 import LoadingPage from '@core/components/LoadingPage';
 import { NavigationAction } from '@navigation';
-import { goBack, MoneyFormatSpace, useQuestDetailAction } from '../function';
+import {
+  goBack,
+  MoneyFormatSpace,
+  useQuestDetailAction,
+  useQuestTaskAction,
+} from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
 
@@ -39,18 +45,59 @@ const QuestDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questDetailState = stateQuest.questGeneral.detail;
-  const { detail, reset } = useQuestDetailAction();
-  React.useEffect(() => {
-    detail(dispatchQuest, {
-      id: route.params.questId,
-      buyerId: route.params.buyerId,
-    });
-    return () => {
-      reset(dispatchQuest);
-    };
-  }, []);
-  /** === VIEW === */
+  const { detail } = useQuestDetailAction();
+  const { update } = useQuestTaskAction();
 
+  useFocusEffect(
+    React.useCallback(() => {
+      detail(dispatchQuest, {
+        id: route.params.questId,
+        buyerId: route.params.buyerId,
+      });
+    }, []),
+  );
+
+  const stepAction = async () => {
+    const { id, currentTaskId } = questDetailState.data;
+    // Hit update quest API => from null to on_progress
+    const data = {
+      buyerId: route.params.buyerId,
+      questId: id,
+      taskId: currentTaskId,
+      status: 'on_progress',
+    };
+    await update(dispatchQuest, { data });
+    // Navigate to specific task's page
+    checkNavigationScreen(buttonStatus().current.screenName, data);
+  };
+
+  /** => check navigation screen */
+  const checkNavigationScreen = (screenName: string, data: object) => {
+    // const { id, currentTaskId, currentTask } = questDetailState.data;
+    switch (screenName) {
+      case 'PhoneNumberVerification':
+        NavigationAction.navigate('MerchantEditView', {
+          title: 'Verifikasi Toko',
+          type: 'merchantOwnerPhoneNo',
+          source: 'Quest',
+          sourceData: data,
+        });
+        break;
+      case 'StoreNameVerification':
+        NavigationAction.navigate('MerchantEditView', {
+          title: 'Verifikasi Toko',
+          type: 'merchantOwnerName',
+          source: 'Quest',
+          sourceData: data,
+        });
+        break;
+      default: {
+        break;
+      }
+    }
+  };
+
+  /** === VIEW === */
   /** => Render Header */
   const renderHeader = () => {
     return (
@@ -290,7 +337,7 @@ const QuestDetailView: FC = ({ route }: any) => {
                 size="medium"
                 type="primary"
                 title={buttonStatus().title}
-                onPress={() => null}
+                onPress={() => stepAction()}
                 disabled={false}
               />
             </View>
@@ -300,7 +347,7 @@ const QuestDetailView: FC = ({ route }: any) => {
             size="medium"
             type="primary"
             title={buttonStatus().title}
-            onPress={() => null}
+            onPress={() => stepAction()}
             disabled={false}
           />
         ) : null}

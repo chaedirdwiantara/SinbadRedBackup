@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC, useState } from 'react';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -42,17 +43,18 @@ const QuestListView: FC = () => {
   const [buyerId, setBuyerId] = useState(0);
 
   const { me } = useDataAuth();
-  console.log(me, 'DATAME');
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
-  React.useEffect(() => {
-    if (me.data !== null) {
-      setBuyerId(me.data.user.id);
-      fetch(dispatchQuest, { status, buyerId: me.data.user.id });
-    }
-  }, [me.data, activeTab]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (me.data !== null) {
+        setBuyerId(me.data.user.id);
+        fetch(dispatchQuest, { status, buyerId: me.data.user.id });
+      }
+    }, [me.data, activeTab]),
+  );
 
   /** === VIEW === */
   /** => Header */
@@ -119,7 +121,7 @@ const QuestListView: FC = () => {
   };
 
   /** => render button */
-  const renderButton = (doneTask: number, totalTask: number) => {
+  const renderButton = (id: number, doneTask: number, totalTask: number) => {
     let buttonText;
 
     if (doneTask === 0) {
@@ -142,7 +144,7 @@ const QuestListView: FC = () => {
       return (
         <TouchableOpacity
           style={QuestListStyles.cardButton}
-          onPress={() => null}>
+          onPress={() => goToQuestDetail({ questId: id, buyerId: buyerId })}>
           <SnbText.B4 color={color.white}>{buttonText}</SnbText.B4>
         </TouchableOpacity>
       );
@@ -164,7 +166,7 @@ const QuestListView: FC = () => {
             <View style={QuestListStyles.progressBarContainer}>
               {renderProgressBar(item.doneTask, item.totalTask)}
             </View>
-            {renderButton(item.doneTask, item.totalTask)}
+            {renderButton(item.id, item.doneTask, item.totalTask)}
           </View>
         </View>
       </TouchableOpacity>
