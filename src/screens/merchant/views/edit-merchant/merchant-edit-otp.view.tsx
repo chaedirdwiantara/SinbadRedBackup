@@ -15,6 +15,9 @@ import { MerchantHookFunc } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@navigation';
+
+import { useQuestTaskAction } from '../../../quest/function';
+import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 interface Props {
   loading: boolean;
   otpSuccess: boolean;
@@ -24,7 +27,7 @@ interface Props {
 
 const OTPContent: React.FC<Props> = (props) => {
   /** === HOOK === */
-  const { loading, data, type } = props.route.params;
+  const { loading, data, type, source, sourceData } = props.route.params;
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const changeMobilePhoneAction = MerchantHookFunc.useChangeMobilePhone();
@@ -38,6 +41,9 @@ const OTPContent: React.FC<Props> = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successOTP, setSuccessOTP] = useState(false);
   const [hideIcon, setHideIcon] = useState(true);
+  // related Quest hook
+  const { dispatchQuest } = useQuestContext();
+  const { update } = useQuestTaskAction();
   //FUNCTION
   const verifyOtp = () => {
     if (type === 'email') {
@@ -76,6 +82,16 @@ const OTPContent: React.FC<Props> = (props) => {
       setOpenModalSuccess(true);
       setSuccessOTP(true);
       setHideIcon(false);
+      // if source Quest, update quest task status
+      if (source === 'Quest') {
+        const data = {
+          buyerId: sourceData?.buyerId,
+          questId: sourceData?.questId,
+          taskId: sourceData?.taskId,
+          status: 'done',
+        };
+        update(dispatchQuest, { data });
+      }
     } else if (
       stateMerchant.verificationEmail.error ||
       stateMerchant.verificationMobilePhone.error ||
@@ -103,6 +119,16 @@ const OTPContent: React.FC<Props> = (props) => {
     setOpenModalSuccess(false);
     NavigationAction.backToPage('MerchantDetailProfileView');
     storeDetailAction.detail(dispatchUser);
+    // if source Quest, navigate to quest detail view
+    if (source === 'Quest') {
+      NavigationAction.navigate('QuestDetailView', {
+        questId: sourceData.questId,
+        buyerId: sourceData.buyerId,
+      });
+    } else {
+      NavigationAction.backToPage('MerchantDetailProfileView');
+      storeDetailAction.detail(dispatchUser, { id: '3' });
+    }
   };
 
   const backFunc = () => {
