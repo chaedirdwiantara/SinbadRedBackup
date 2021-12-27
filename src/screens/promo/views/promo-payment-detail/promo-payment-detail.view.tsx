@@ -11,7 +11,7 @@ import {
 import moment from 'moment';
 /** === IMPORT COMPONENT HERE === */
 import LoadingPage from '@core/components/LoadingPage';
-import BottomModalError from '@core/components/BottomModalError';
+import BottomSheetError from '@core/components/BottomSheetError';
 import { PromoPaymentDetailHeader } from './promo-payment-detail-header.view';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
@@ -112,13 +112,10 @@ const PromoPaymentDetail: FC = () => {
   /** => error modal */
   const renderErrorModal = () => {
     return (
-      <BottomModalError
-        isOpen={promoPaymentDetailError.isOpen}
-        errorTitle={'Terjadi kesalahan'}
-        errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../../assets/images/cry_sinbad.png')}
-        buttonTitle={'Ok'}
-        buttonOnPress={() => {
+      <BottomSheetError
+        open={promoPaymentDetailError.isOpen}
+        error={promoPaymentDetailState.error}
+        closeAction={() => {
           promoPaymentDetailError.setOpen(false);
           goBack();
         }}

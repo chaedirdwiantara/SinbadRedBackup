@@ -1,6 +1,5 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMapping';
-import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => promo payment list */
@@ -27,10 +26,9 @@ const promoPaymentDetail = (data: models.DetailProcessProps) => {
 };
 /** => promo seller detail */
 const promoSellerDetail = (data: models.DetailProcessProps) => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
   const path = `promo-seller-detail/${data.id}`;
-  return apiMappingMock<models.PromoSellerDetailSuccessProps>(
-    mockHost,
+  return apiMapping<models.PromoSellerDetailSuccessProps>(
+    'auth',
     path,
     'discount',
     'v1',
