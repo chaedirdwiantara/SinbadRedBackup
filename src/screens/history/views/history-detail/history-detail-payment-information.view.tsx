@@ -72,7 +72,11 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         title={`Sub-total pesanan ${paymentInformation().qty}`}
         value={toCurrency(paymentInformation().grossPrice! ?? 0)}
       />
-      <HistoryCardItem title="tes 20 400" value="FREE" type="green" />
+
+      {
+        // will be updated when BE done with VoucherList and PromoList
+        /* <HistoryCardItem title="tes 20 400" value="FREE" type="green" /> */
+      }
       <HistoryCardItem title="Ongkos Kirim" value={toCurrency(0)} />
       <HistoryCardItem
         title="PPN 10%"
