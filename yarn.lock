@@ -1414,10 +1414,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.21":
-  version "1.0.21"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.21.tgz#d48178f8fcc824267c97043823c9de2955e81b7e"
-  integrity sha512-5tIc+p0gOF0zc+5gWEWbsQ0fYLVvZ3T2upQy9kMuYjFXMYce5c2zio1JWj/n6Blw1ESFrQhsjrYC65cpSX1nOw==
+"@sinbad/react-native-sinbad-ui@1.0.24":
+  version "1.0.24"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.24.tgz#049ef63551096bc94eb78621365860494dd7be40"
+  integrity sha512-j4MQc352cXC3rUD62iHw6UmU2MHORdVOaTWYUrWTcxE+X2rC4i84qsgyMiNfHFPYos3g7ZGUNoUkz/IB0sBzzw==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
