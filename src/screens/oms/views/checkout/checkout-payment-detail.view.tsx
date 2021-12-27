@@ -46,6 +46,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
                 Total Potongan Harga
               </SnbText.B3>
               <SnbText.B3 color={color.green50}>
+                -{' '}
                 {toCurrency(data.totalPromoSellerAndVoucher ?? 0, {
                   withFraction: false,
                 })}
@@ -64,6 +65,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <View style={CheckoutStyle.detailItemContainer}>
               <SnbText.B3 color={color.green50}>Promo Pembayaran</SnbText.B3>
               <SnbText.B3 color={color.green50}>
+                -{' '}
                 {toCurrency(data.totalPromoPayment ?? 0, {
                   withFraction: false,
                 })}

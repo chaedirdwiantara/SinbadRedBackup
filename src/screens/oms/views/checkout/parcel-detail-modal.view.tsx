@@ -17,28 +17,6 @@ import {
   useParcelDetailModal,
 } from '../../functions/checkout';
 import * as models from '@models';
-const dummyPaymentDetail = [
-  {
-    name: 'Total Barang (2)',
-    value: 330596,
-    type: 'normal',
-  },
-  {
-    name: 'Total Potongan Harga',
-    value: 626,
-    type: 'price_cut',
-  },
-  {
-    name: 'PPN 10%',
-    value: 32997,
-    type: 'normal',
-  },
-  {
-    name: 'Layanan Pembayaran',
-    value: 4400,
-    type: 'normal',
-  },
-];
 
 interface ModalParcelDetail {
   isOpen: boolean;
@@ -141,6 +119,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           </SnbText.B1>
         </View>
         <SnbText.B1 color={color.green50}>
+          -{' '}
           {toCurrency(voucherData.vouchers[0].voucherRebate, {
             withFraction: false,
           })}
@@ -180,7 +159,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           {name}
         </SnbText.B3>
         <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
-          {type === 'benefit' ? '-' : ''}
+          {type === 'benefit' ? '- ' : ''}
           {price !== 0
             ? toCurrency(price, {
                 withFraction: false,
