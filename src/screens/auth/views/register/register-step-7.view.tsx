@@ -4,6 +4,7 @@ import {
   useCamera,
   useMerchant,
   useRegister,
+  useTextFieldSelect,
 } from '@screen/auth/functions';
 import React from 'react';
 import {
@@ -46,6 +47,7 @@ const Content: React.FC = () => {
     'unselect',
   );
   const [messageError, setMessageError] = React.useState('');
+  const { resetGetSelection, resetSelectedItem } = useTextFieldSelect();
 
   React.useEffect(() => {
     resetRegister();
@@ -122,7 +124,7 @@ const Content: React.FC = () => {
               setChecked('unselect');
               setShowModalPrivacyPolicy(true);
             }}
-            disabled={registerState?.loading}
+            disabled={true || registerState?.loading}
             loading={registerState?.loading}
           />
         </View>
@@ -170,17 +172,18 @@ const Content: React.FC = () => {
               type="tertiary"
               title="Ubah Foto"
               onPress={() => openCamera('store')}
-              disabled={false}
+              disabled={true || false}
             />
           </View>
           <View style={{ height: 72 }}>
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selesai'}
-              shadow
               onPress={action}
               disabled={
-                stateGlobal.uploadImage.loading || registerState?.loading
+                true ||
+                stateGlobal.uploadImage.loading ||
+                registerState?.loading
               }
               loading={
                 stateGlobal.uploadImage.loading || registerState?.loading
@@ -224,6 +227,8 @@ const Content: React.FC = () => {
                 setShowModalSuccess(false);
                 setShowModalPrivacyPolicy(false);
                 setShowModalFailed(false);
+                resetGetSelection();
+                resetSelectedItem();
                 reset({
                   index: 0,
                   routes: [{ name: 'LoginPhoneView' }],
@@ -254,12 +259,16 @@ const Content: React.FC = () => {
           </View>
           <View style={{ height: 75 }}>
             <SnbButton.Single
-              title="Tutup"
+              title="Kembali Ke Beranda"
               type="primary"
               disabled={false}
               onPress={() => {
                 setShowModalPrivacyPolicy(false);
                 setShowModalFailed(false);
+                reset({
+                  index: 0,
+                  routes: [{ name: 'Home' }],
+                });
               }}
             />
           </View>
@@ -352,7 +361,18 @@ const Content: React.FC = () => {
         renderUploadPhotoRules(),
       )}
       <SnbBottomSheet
-        open={showModalFailed || showModalPrivacyPolicy || showModalSuccess}
+        open={showModalSuccess}
+        title={''}
+        content={renderSheetContent()}
+        size={'normal'}
+      />
+      <SnbBottomSheet
+        closeAction={() => {
+          setShowModalPrivacyPolicy(false);
+          setShowModalFailed(false);
+        }}
+        actionIcon="close"
+        open={showModalPrivacyPolicy || showModalFailed}
         title={showModalPrivacyPolicy ? 'Kebijakan Privasi' : ''}
         content={renderSheetContent()}
         size={showModalPrivacyPolicy ? 'halfscreen' : 'normal'}

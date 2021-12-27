@@ -134,8 +134,7 @@ const Content: React.FC = () => {
           <View style={{ height: 72 }}>
             <SnbButton.Single
               type={isImageCaptured ? 'secondary' : 'primary'}
-              shadow
-              disabled={stateGlobal.uploadImage.loading}
+              disabled={true || stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               onPress={action}

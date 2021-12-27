@@ -47,6 +47,7 @@ const Content: React.FC = () => {
               mandatory
               labelText="Nama Toko"
               placeholder="Masukkan nama toko"
+              maxLength={50}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -69,6 +70,7 @@ const Content: React.FC = () => {
               placeholder="Masukkan ukuran toko Anda"
               keyboardType="number-pad"
               rightText="m²"
+              maxLength={4}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -106,9 +108,8 @@ const Content: React.FC = () => {
             navigate(REGISTER_STEP_6_VIEW);
           }}
           type="primary"
-          shadow
           loading={false}
-          disabled={storeName.value === ''}
+          disabled={true || storeName.value === ''}
         />
       </View>
     </View>

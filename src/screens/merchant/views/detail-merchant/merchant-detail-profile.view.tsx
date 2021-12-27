@@ -86,7 +86,8 @@ const MerchantDetailProfileView: FC = () => {
         <Image source={source} style={MerchantStyles.imageProfile} />
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          onPress={() => goTo({ type: 'merchantOwnerImage' })}>
+          // onPress={() => goTo({ type: 'merchantOwnerImage' })}
+        >
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
       </View>
@@ -144,12 +145,16 @@ const MerchantDetailProfileView: FC = () => {
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity onPress={() => goTo(data)}>
+            <TouchableOpacity
+              // onPress={() => goTo(data)}
+              style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
             </TouchableOpacity>
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity onPress={() => goTo(data)}>
+            <TouchableOpacity
+              // onPress={() => goTo(data)}
+              style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
             </TouchableOpacity>
           )}

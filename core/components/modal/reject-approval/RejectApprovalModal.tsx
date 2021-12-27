@@ -7,23 +7,19 @@ import {
   SnbText,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import { NavigationAction } from '@navigation';
 /** === TYPE === */
 interface RejectApprovalModalProps {
   visible: boolean;
-  onSubmit: () => void;
   onClose: () => void;
   isCallCS?: boolean;
 }
 /** === COMPONENT === */
 const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
   visible,
-  onSubmit,
   onClose,
-  isCallCS,
+  // isCallCS,
 }) => {
-  const onHanldeCallCS = () => {
-    //Call CS
-  };
   return (
     <SnbBottomSheet
       open={visible}
@@ -45,12 +41,12 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
               }}
             />
             <SnbText.B2 color={color.black100}>
-              Akun kamu gagal verifikasi nih
+              Akun kamu gagal terverifikasi
             </SnbText.B2>
             <View style={{ marginTop: 8 }}>
               <SnbText.C1 color={color.black100} align="center">
-                Maaf ya, akun kamu gagal diverifikasi oleh kami. Kirim data
-                ulang atau jika ada pertanyaan telfon CS kami ya !
+                Data pada akun kamu gagal terverifikasi nih. Yuk, periksa
+                halaman profile dan lengkapi data Anda!
               </SnbText.C1>
             </View>
           </View>
@@ -58,20 +54,29 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
             <SnbButton.Single
               type="primary"
               title="Lengkapi Data Diri"
-              onPress={onSubmit}
+              onPress={() => {
+                // goToMenu('UserView');
+                NavigationAction.navigate('UserView');
+                onClose();
+              }}
               disabled={false}
             />
           </View>
-          {isCallCS && (
+          {/* {isCallCS && (
             <View style={{ height: 72 }}>
               <SnbButton.Single
                 type="primary"
                 title="Hubungi CS"
-                onPress={onHanldeCallCS}
+                onPress={() => {
+                  Platform.OS === 'android'
+                    ? Linking.openURL('tel:+6282260106010')
+                    : Linking.openURL('telprompt:+6282260106010');
+                  onClose();
+                }}
                 disabled={false}
               />
             </View>
-          )}
+          )} */}
         </View>
       }
       closeAction={onClose}

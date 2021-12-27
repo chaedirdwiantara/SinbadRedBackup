@@ -117,7 +117,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
-      storeDetailAction.detail(dispatchUser, { id: '3' });
+      storeDetailAction.detail(dispatchUser);
     } else if (
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
@@ -258,6 +258,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         break;
     }
   };
+
   /** VALIDATE EMAIL */
   const validateEmail = (email: string) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -484,6 +485,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           value={merchantName.value}
           onChangeText={(text) => merchantName.setValue(text)}
           clearText={() => merchantName.setValue('')}
+          maxLength={50}
         />
       </View>
     );
@@ -538,6 +540,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             clearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
             rightText={'m²'}
+            maxLength={4}
           />
         </View>
         <View style={{ marginBottom: 16 }}>
@@ -594,6 +597,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             }}
             clearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
+            maxLength={1}
           />
         </View>
       </View>
@@ -612,9 +616,20 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'primary'}
           onPress={() => confirm()}
           disabled={
-            checkButton() || false || stateMerchant.merchantEdit.loading
+            true ||
+            checkButton() ||
+            false ||
+            stateMerchant.merchantEdit.loading ||
+            stateMerchant.profileEdit.loading ||
+            stateMerchant.changeMobilePhone.loading ||
+            stateMerchant.changeEmail.loading
           }
-          loading={stateMerchant.merchantEdit.loading}
+          loading={
+            stateMerchant.merchantEdit.loading ||
+            stateMerchant.profileEdit.loading ||
+            stateMerchant.changeMobilePhone.loading ||
+            stateMerchant.changeEmail.loading
+          }
         />
       </View>
     ) : (

@@ -9,7 +9,7 @@ import { VoucherDetailCardInfo } from './voucher-detail-card-info.view';
 import { VoucherDetailDescription } from './voucher-detail-description.view';
 import { VoucherDetailTnC } from './voucher-detail-tnc.view';
 import { VoucherDetailInstruction } from './voucher-detail-instruction.view';
-import BottomModalError from '@core/components/BottomModalError';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   useVoucherDetailAction,
@@ -73,7 +73,7 @@ const VoucherDetailView: FC = () => {
     return (
       <VoucherDetailCardInfo
         voucherName={voucherDetailState.data.voucherName}
-        voucherCode={voucherDetailState.data.voucherCode}
+        voucherCode={voucherDetailState.data.uniqueCode}
         expiredAt={voucherDetailState.data.expiredAt}
       />
     );
@@ -114,13 +114,10 @@ const VoucherDetailView: FC = () => {
   /** => error modal */
   const renderErrorModal = () => {
     return (
-      <BottomModalError
-        isOpen={voucherDetailError.isOpen}
-        errorTitle={'Terjadi kesalahan'}
-        errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../../assets/images/cry_sinbad.png')}
-        buttonTitle={'Ok'}
-        buttonOnPress={() => {
+      <BottomSheetError
+        open={voucherDetailError.isOpen}
+        error={stateVoucher.voucherGeneral.detail.error}
+        closeAction={() => {
           voucherDetailError.setOpen(false);
           goBack();
         }}

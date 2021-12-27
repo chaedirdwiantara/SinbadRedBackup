@@ -6,6 +6,7 @@ import simplifyReducer from '../../../../redux/simplifyReducer';
 const initialState: models.FlagRTDB = {
   isCheckoutLoading: false,
   isInitiateCheckoutLoading: false,
+  confirmOrderLoading: 'true',
 };
 /** === FUNCTION HERE === */
 export const flagRTDB = simplifyReducer(initialState, {
