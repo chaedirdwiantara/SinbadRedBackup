@@ -2,7 +2,7 @@
 import { toCurrency } from '@core/functions/global/currency-format';
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Dimensions } from 'react-native';
 import {
   SnbText,
   SnbDivider,
@@ -17,6 +17,9 @@ import {
   useParcelDetailModal,
 } from '../../functions/checkout';
 import * as models from '@models';
+import { ScrollView } from 'react-native-gesture-handler';
+
+const { height } = Dimensions.get('window');
 
 interface ModalParcelDetail {
   isOpen: boolean;
@@ -64,7 +67,10 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       <>
         <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText.B1>{product.productName}</SnbText.B1>
+            <SnbText.B1>
+              {product.productName} ({product.qty}
+              {product.uom})
+            </SnbText.B1>
           </View>
           <SnbText.B1>
             {toCurrency(product.displayPrice * product.qty, {
@@ -236,12 +242,14 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   };
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16 }}>
-        <View style={{ paddingVertical: 16 }}>
+      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+        <ScrollView
+          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          showsVerticalScrollIndicator={false}>
           {productDetail()}
           {discountDetail()}
           {total()}
-        </View>
+        </ScrollView>
       </View>
     );
   };
