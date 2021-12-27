@@ -83,6 +83,14 @@ const QuestDetailView: FC = ({ route }: any) => {
           sourceData: data,
         });
         break;
+      case 'StoreNameVerification':
+        NavigationAction.navigate('MerchantEditView', {
+          title: 'Verifikasi Toko',
+          type: 'merchantOwnerName',
+          source: 'Quest',
+          sourceData: data,
+        });
+        break;
       default: {
         break;
       }

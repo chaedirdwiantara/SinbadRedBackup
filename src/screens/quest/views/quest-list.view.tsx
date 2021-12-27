@@ -121,7 +121,7 @@ const QuestListView: FC = () => {
   };
 
   /** => render button */
-  const renderButton = (doneTask: number, totalTask: number) => {
+  const renderButton = (id: number, doneTask: number, totalTask: number) => {
     let buttonText;
 
     if (doneTask === 0) {
@@ -144,7 +144,7 @@ const QuestListView: FC = () => {
       return (
         <TouchableOpacity
           style={QuestListStyles.cardButton}
-          onPress={() => null}>
+          onPress={() => goToQuestDetail({ questId: id, buyerId: buyerId })}>
           <SnbText.B4 color={color.white}>{buttonText}</SnbText.B4>
         </TouchableOpacity>
       );
@@ -166,7 +166,7 @@ const QuestListView: FC = () => {
             <View style={QuestListStyles.progressBarContainer}>
               {renderProgressBar(item.doneTask, item.totalTask)}
             </View>
-            {renderButton(item.doneTask, item.totalTask)}
+            {renderButton(item.id, item.doneTask, item.totalTask)}
           </View>
         </View>
       </TouchableOpacity>
