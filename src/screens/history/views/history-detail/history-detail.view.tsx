@@ -26,6 +26,7 @@ import {
 } from '../../components';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
+import HistoryPaymentInstruction from './history-payment-instruction.view';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
@@ -44,6 +45,8 @@ import { HistoryDetailStyle } from '../../styles';
 import {
   CANCEL,
   CASH,
+  DONE,
+  EXPIRED,
   OVERDUE,
   PAID,
   PAY_COD,
@@ -98,8 +101,8 @@ const HistoryDetailView: FC = () => {
   } = stateHistory;
   /** => get Payment and Order Detail */
   useEffect(() => {
-    // getPaymentDetail.detail(dispatchHistory, params.billingId);
-    getPaymentDetail.detail(dispatchHistory, '1427331');
+    getPaymentDetail.detail(dispatchHistory, params.billingId);
+    getPaymentDetail.detail(dispatchHistory, '1479544');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
   /** => on success get Invoice */
@@ -111,7 +114,7 @@ const HistoryDetailView: FC = () => {
   /** => on success activate VA*/
   useEffect(() => {
     if (activateVa.data) {
-      getPaymentDetail.detail(dispatchHistory, '1427331');
+      getPaymentDetail.detail(dispatchHistory, params.billingId);
     }
   }, [activateVa.data]);
   /** === FUNCTIONS === */
@@ -328,6 +331,21 @@ const HistoryDetailView: FC = () => {
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
   );
+  /** => render Payment Instruction */
+  const renderPaymentInstruction = () => {
+    const billingStatus = paymentDetail.data?.billingStatus;
+    const orderParcelStatus = detail.data?.status;
+    return billingStatus !== PAID &&
+      billingStatus !== EXPIRED &&
+      billingStatus !== CANCEL &&
+      billingStatus !== REFUNDED &&
+      billingStatus !== REFUND_REQUESTED &&
+      orderParcelStatus !== DONE ? (
+      <HistoryPaymentInstruction />
+    ) : (
+      <View />
+    );
+  };
   /** render Toast */
   const renderToast = () => {
     return (
@@ -389,6 +407,7 @@ const HistoryDetailView: FC = () => {
       {renderPaymentInfo()}
       {renderOrderRefundInfo()}
       {renderVirtualAccount()}
+      {renderPaymentInstruction()}
       {renderOrderNotes()}
       {renderProductList()}
       {renderDeliveryDetail()}

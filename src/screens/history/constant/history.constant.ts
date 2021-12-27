@@ -10,6 +10,7 @@ export const PAID = 'paid';
 export const CANCEL = 'cancel'; //payment_failed
 export const REFUND_REQUESTED = 'refund_requested'; //waiting_for_refund
 export const REFUNDED = 'refunded';
+export const EXPIRED = 'expired';
 
 /** ORDER STATUS */
 export const DELIVERED = 'delivered';

@@ -10,6 +10,7 @@ import {
   PAY_NOW,
   PENDING,
 } from '@screen/history/constant/history.constant';
+import { color, styles } from '@sinbad/react-native-sinbad-ui';
 import { useActivateVa } from '../../functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import moment from 'moment';
@@ -28,7 +29,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
 
   /** === FUNCTIONS ===*/
   const onClickButton = () => {
-    activateVa.update(dispatchHistory, '1427331');
+    activateVa.update(dispatchHistory, data?.id);
   };
   /** === VIEW === */
   /** Bank Icon */
@@ -114,10 +115,11 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             <View />
           )}
         </View>
+        <View style={{ height: 10, backgroundColor: color.black10 }} />
       </>
     );
   };
-  return <View>{renderContent()}</View>;
+  return <View style={styles.shadowForBox10}>{renderContent()}</View>;
 };
 
 export default HistoryPaymentVirtualAccount;
