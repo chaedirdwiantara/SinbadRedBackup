@@ -43,5 +43,10 @@ export const paymentActivateVAReducer = simplifyReducer(
         loading: false,
       };
     },
+    [types.HISTORY_ACTIVATE_VA_RESET](state = paymentActivateVAInitialState) {
+      return {
+        state,
+      };
+    },
   },
 );

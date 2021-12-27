@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { NavigationAction } from '@navigation';
 import { IHistoryDetailStatus } from '../views/history-detail/history-detail-status.view';
-import { PermissionsAndroid } from 'react-native';
 
 export const goBack = () => {
   NavigationAction.back();

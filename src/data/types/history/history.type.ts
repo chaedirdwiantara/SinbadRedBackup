@@ -34,3 +34,4 @@ export const HISTORY_DETAIL_RESET = 'HistoryDetailReset';
 export const HISTORY_ACTIVATE_VA_PROCESS = 'HistoryActivateVAProcess';
 export const HISTORY_ACTIVATE_VA_SUCCESS = 'HistoryActivateVASuccess';
 export const HISTORY_ACTIVATE_VA_FAILED = 'HistoryActivateVAFailed';
+export const HISTORY_ACTIVATE_VA_RESET = 'HistoryActivateVAReset';

@@ -29,3 +29,12 @@ export const historyActivateVAFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.HISTORY_ACTIVATE_VA_FAILED, payload: data };
 };
+/** => reset */
+export const historyActivateVAReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.HISTORY_ACTIVATE_VA_RESET });
+  return {
+    type: types.HISTORY_ACTIVATE_VA_RESET,
+  };
+};

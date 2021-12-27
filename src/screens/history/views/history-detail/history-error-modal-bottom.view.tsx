@@ -4,18 +4,20 @@ import * as models from '@models';
 interface ModalBottomErrorInvoiceProps {
   data?: models.ErrorProps;
   isOpen: boolean;
+  title?: string;
   close: () => void;
 }
 /** === COMPONENT === */
-export const ModalBottomErrorInvoice: FC<ModalBottomErrorInvoiceProps> = ({
+export const ModalBottomError: FC<ModalBottomErrorInvoiceProps> = ({
   isOpen,
   close,
   data,
+  title,
 }) => {
   return (
     <BottomModalError
       isOpen={isOpen}
-      errorTitle={'Terjadi kesalahan'}
+      errorTitle={title ?? 'Terjadi Kesalahan'}
       errorSubtitle={data?.errorMessage || 'Silahkan mencoba kembali'}
       errorImage={require('../../../../assets/images/cry_sinbad.png')}
       buttonTitle={'Ok'}
@@ -26,4 +28,4 @@ export const ModalBottomErrorInvoice: FC<ModalBottomErrorInvoiceProps> = ({
   );
 };
 
-export default ModalBottomErrorInvoice;
+export default ModalBottomError;

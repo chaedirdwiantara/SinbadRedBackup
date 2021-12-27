@@ -27,6 +27,7 @@ import {
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
 import HistoryPaymentInstruction from './history-payment-instruction.view';
+import ModalBottomError from './history-error-modal-bottom.view';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
@@ -39,7 +40,8 @@ import {
   useModalToast,
   useHistoryDetailAction,
   goToHistoryDetailStatus,
-  useModalErrorInvoice,
+  useModaBottomError,
+  useActivateVa,
 } from '../../functions';
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
@@ -51,7 +53,6 @@ import {
   OVERDUE,
   PAID,
   PAY_COD,
-  PAY_LATER,
   PAY_NOW,
   PENDING,
   REFUNDED,
@@ -90,7 +91,8 @@ const HistoryDetailView: FC = () => {
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
   const historyDetailAction = useHistoryDetailAction();
-  const modalErrorInvoice = useModalErrorInvoice();
+  const activateVA = useActivateVa();
+  const modalError = useModaBottomError();
   const modalToast = useModalToast();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
@@ -103,8 +105,8 @@ const HistoryDetailView: FC = () => {
   } = stateHistory;
   /** => get Payment and Order Detail */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, params.billingId);
-    getPaymentDetail.detail(dispatchHistory, '1479544');
+    // getPaymentDetail.detail(dispatchHistory, params.billingId);
+    getPaymentDetail.detail(dispatchHistory, '1436326');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
   /** => on success get Invoice */
@@ -119,6 +121,20 @@ const HistoryDetailView: FC = () => {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
     }
   }, [activateVa.data]);
+  /** => on Error get Invoice */
+  useEffect(() => {
+    if (paymentInvoice.error) {
+      modalError.setOpen(true);
+      modalError.setDataError(paymentInvoice.error);
+    }
+  }, [paymentInvoice.error]);
+  /** => on error activate VA */
+  useEffect(() => {
+    if (activateVa.error) {
+      modalError.setOpen(true);
+      modalError.setDataError(activateVa.error);
+    }
+  }, [activateVa.error]);
   /** === FUNCTIONS === */
   /** => to fetch API invoice */
   const getInvoice = (id: string) => {
@@ -133,6 +149,12 @@ const HistoryDetailView: FC = () => {
     setTimeout(() => {
       modalToast.setOpen(false);
     }, 3000);
+  };
+  /** => function to goBack */
+  const goBackAction = () => {
+    goBack();
+    activateVA.reset(dispatchHistory);
+    getInvoiceDetail.reset(dispatchHistory);
   };
   /** === VIEW === */
   /** => Order/Payment Status */
@@ -230,7 +252,7 @@ const HistoryDetailView: FC = () => {
     !paymentDetail?.loading && paymentDetail.data ? (
       <HistoryDetailPaymentInformation
         dataPayment={paymentDetail?.data}
-        dataOrder={detail.data}
+        dataOrder={detail?.data}
       />
     ) : (
       <View style={{ height: '20%' }}>
@@ -400,6 +422,18 @@ const HistoryDetailView: FC = () => {
       <View />
     );
   };
+  /** => render Modal Bottom Error */
+  const renderModalError = () => {
+    return modalError.isOpen && modalError.dataError ? (
+      <ModalBottomError
+        isOpen={modalError.isOpen}
+        close={() => modalError.setOpen(false)}
+        data={modalError.dataError}
+      />
+    ) : (
+      <View />
+    );
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
     <ScrollView>
@@ -413,6 +447,7 @@ const HistoryDetailView: FC = () => {
       {renderOrderNotes()}
       {renderProductList()}
       {renderDeliveryDetail()}
+      {renderModalError()}
     </ScrollView>
   );
   /** => Detail Order Content */
@@ -457,7 +492,7 @@ const HistoryDetailView: FC = () => {
       <SnbTopNav.Type3
         type="red"
         title={`Detail ${title}`}
-        backAction={goBack}
+        backAction={() => goBackAction()}
       />
       {renderContent()}
       {renderFooter()}

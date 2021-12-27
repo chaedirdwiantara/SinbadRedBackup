@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
-import * as models from '@models';
+
 /** === FUNCTIONS === */
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
@@ -65,8 +65,11 @@ export const useHistoryDetailAction = () => {
 export const useActivateVa = () => {
   const dispatch = useDispatch();
   return {
-    update: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.historyActivateVAProcess(contextDispatch, id));
+    update: (contextDispatch: (action: any) => any, id: number) => {
+      dispatch(Actions.historyActivateVAProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.historyActivateVAReset(contextDispatch));
     },
   };
 };
@@ -81,12 +84,17 @@ export const useDownloadProgress = () => {
   };
 };
 
-export const useModalErrorInvoice = () => {
+export const useModaBottomError = () => {
   const [isOpen, setOpen] = useState(false);
+  const [dataError, setDataError] = useState({});
   return {
     isOpen,
     setOpen: (value: boolean) => {
       setOpen(value);
+    },
+    dataError,
+    setDataError: (value: object) => {
+      setDataError(value);
     },
   };
 };
