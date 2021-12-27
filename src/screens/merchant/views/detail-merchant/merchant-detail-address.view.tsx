@@ -52,10 +52,10 @@ const MerchantDetailAddressView: FC = () => {
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
-        buttonAction={() => {
-          resetMerchantData();
-          NavigationAction.navigate('MerchantEditAddressView');
-        }}
+        // buttonAction={() => {
+        //   resetMerchantData();
+        //   NavigationAction.navigate('MerchantEditAddressView');
+        // }}
       />
     );
   };

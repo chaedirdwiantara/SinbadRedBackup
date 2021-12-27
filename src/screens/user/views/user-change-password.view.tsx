@@ -38,7 +38,8 @@ const UserChangePasswordView: FC = () => {
     setDataOldPassword(oldPassword);
   };
   const textNewPassword = (newPassword: string) => {
-    let reg = /^(?=.*[A-Z])(?=.*[!@#$&*.])(?=.*[0-9])(?=.*[a-z]).{6,}$/;
+    let reg =
+      /^(?=.*[A-Z])(?=.*[!"#$%&'()*+,-./:;<=>?@^_`{}~])(?=.*[0-9])(?=.*[a-z]).{6,}$/;
     if (reg.test(newPassword) || !newPassword) {
       setErrorNewPassword(false);
       setErrorNewPasswordMessage('');
@@ -238,6 +239,7 @@ const UserChangePasswordView: FC = () => {
           onPress={() => setOpenConfirm(true)}
           type={'primary'}
           disabled={
+            true ||
             !dataOldPassword ||
             !dataNewPassword ||
             !dataConfirmNewPassword ||
