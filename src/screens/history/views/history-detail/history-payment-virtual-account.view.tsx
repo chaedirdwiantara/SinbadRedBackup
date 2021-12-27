@@ -4,12 +4,10 @@ import { PaymentDetailSuccessProps } from '@model/history';
 import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
 import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
 import {
-  CASH,
-  OVERDUE,
-  PAY_LATER,
-  PAY_NOW,
-  PENDING,
-} from '@screen/history/constant/history.constant';
+  BillingStatus,
+  PaymentType,
+  ChannelType,
+} from '@screen/history/functions/data';
 import { color, styles } from '@sinbad/react-native-sinbad-ui';
 import { useActivateVa } from '../../functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
@@ -92,18 +90,20 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
           <View style={{ marginBottom: 8 }} />
-          {((paymentType?.id === PAY_NOW &&
-            paymentChannel?.id !== CASH &&
+          {((paymentType?.id === PaymentType.PAY_NOW &&
+            paymentChannel?.id !== ChannelType.CASH &&
             dataPayment?.accountVaNo) ||
-            (paymentType?.id === PAY_LATER &&
-              paymentChannel?.id !== CASH &&
+            (paymentType?.id === PaymentType.PAY_LATER &&
+              paymentChannel?.id !== ChannelType.CASH &&
               dataPayment?.expiredPaymentTime)) &&
-          (billingStatus === PENDING || billingStatus === OVERDUE) &&
+          (billingStatus === BillingStatus.PENDING ||
+            billingStatus === BillingStatus.OVERDUE) &&
           isNotExpired ? (
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
             !isNotExpired &&
-            (billingStatus === PENDING || billingStatus === OVERDUE) ? (
+            (billingStatus === BillingStatus.PENDING ||
+              billingStatus === BillingStatus.OVERDUE) ? (
             renderVAButton()
           ) : (
             <View />

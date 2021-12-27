@@ -6,11 +6,7 @@ import {
 } from '@screen/history/components';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { HistoryDetail, PaymentDetailSuccessProps } from '@model/history';
-import {
-  DELIVERED,
-  DONE,
-  PAY_NOW,
-} from '@screen/history/constant/history.constant';
+import { PaymentType, OrderStatus } from '@screen/history/functions/data';
 /** === INTERFACE === */
 interface PaymentInformationProps {
   renderCardItem: () => void;
@@ -24,10 +20,10 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
 }) => {
   const paymentInformation = () => {
     if (
-      dataPayment?.paymentType.id !== PAY_NOW &&
+      dataPayment?.paymentType.id !== PaymentType.PAY_NOW &&
       (dataOrder?.deliveredParcelModified ||
-        dataOrder?.status === DONE ||
-        dataOrder?.status === DELIVERED)
+        dataOrder?.status === OrderStatus.DONE ||
+        dataOrder?.status === OrderStatus.DELIVERED)
     ) {
       return {
         qty: dataOrder.deliveredParcelQty,

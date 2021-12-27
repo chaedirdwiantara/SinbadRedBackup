@@ -46,18 +46,11 @@ import {
 /** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
 import {
-  CANCEL,
-  CASH,
-  DONE,
-  EXPIRED,
-  OVERDUE,
-  PAID,
-  PAY_COD,
-  PAY_NOW,
-  PENDING,
-  REFUNDED,
-  REFUND_REQUESTED,
-} from '@screen/history/constant/history.constant';
+  BillingStatus,
+  PaymentType,
+  ChannelType,
+  OrderStatus,
+} from '../../functions/data';
 
 /** === TYPES === */
 type HistoryStackParamList = {
@@ -237,7 +230,7 @@ const HistoryDetailView: FC = () => {
   /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
     const dataPayment = paymentDetail.data;
-    return dataPayment?.billingStatus !== CANCEL ? (
+    return dataPayment?.billingStatus !== BillingStatus.CANCEL ? (
       <HistoryPaymentVirtualAccount
         onClick={() => onVACoppied()}
         data={dataPayment}
@@ -262,12 +255,12 @@ const HistoryDetailView: FC = () => {
   const renderOrderRefundInfo = () => {
     const dataOrder = detail.data;
     const dataPayment = paymentDetail.data;
-    return dataPayment?.paymentType.id === PAY_NOW &&
+    return dataPayment?.paymentType.id === PaymentType.PAY_NOW &&
       (dataOrder?.deliveredParcelModified ||
-        (dataOrder?.status === CANCEL &&
-          (dataPayment.billingStatus === PAID ||
-            dataPayment.billingStatus === REFUND_REQUESTED ||
-            dataPayment.billingStatus === REFUNDED))) ? (
+        (dataOrder?.status === BillingStatus.CANCEL &&
+          (dataPayment.billingStatus === BillingStatus.PAID ||
+            dataPayment.billingStatus === BillingStatus.REFUND_REQUESTED ||
+            dataPayment.billingStatus === BillingStatus.REFUNDED))) ? (
       <HistoryDetailCard title="Informasi Pengembalian">
         <HistoryCardItem
           title="Total Pembayaran Pesanan"
@@ -358,12 +351,12 @@ const HistoryDetailView: FC = () => {
   const renderPaymentInstruction = () => {
     const billingStatus = paymentDetail.data?.billingStatus;
     const orderParcelStatus = detail.data?.status;
-    return billingStatus !== PAID &&
-      billingStatus !== EXPIRED &&
-      billingStatus !== CANCEL &&
-      billingStatus !== REFUNDED &&
-      billingStatus !== REFUND_REQUESTED &&
-      orderParcelStatus !== DONE ? (
+    return billingStatus !== BillingStatus.PAID &&
+      billingStatus !== BillingStatus.EXPIRED &&
+      billingStatus !== BillingStatus.CANCEL &&
+      billingStatus !== BillingStatus.REFUNDED &&
+      billingStatus !== BillingStatus.REFUND_REQUESTED &&
+      orderParcelStatus !== OrderStatus.DONE ? (
       <HistoryPaymentInstruction />
     ) : (
       <View />
@@ -393,13 +386,14 @@ const HistoryDetailView: FC = () => {
 
     return moment.utc(new Date()).local() <
       moment.utc(expiredPaymentTime).local() &&
-      paymentType !== PAY_COD &&
-      paymentChannel !== CASH &&
+      paymentType !== PaymentType.PAY_COD &&
+      paymentChannel !== ChannelType.CASH &&
       expiredPaymentTime !== null &&
       dataPayment?.accountVaNo !== null &&
-      billingStatus !== PAID &&
-      (billingStatus === PENDING ||
-        (billingStatus === OVERDUE && expiredPaymentTime !== null)) ? (
+      billingStatus !== BillingStatus.PAID &&
+      (billingStatus === BillingStatus.PENDING ||
+        (billingStatus === BillingStatus.OVERDUE &&
+          expiredPaymentTime !== null)) ? (
       <View style={styles.shadowForBox10}>
         <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
           <SnbText.H4 align="center">
