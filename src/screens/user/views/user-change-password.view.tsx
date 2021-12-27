@@ -5,8 +5,9 @@ import {
   SnbTextField,
   SnbButton,
   SnbDialog,
+  SnbToast,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, ToastAndroid, Image } from 'react-native';
+import { ScrollView, View, Image } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
@@ -33,12 +34,15 @@ const UserChangePasswordView: FC = () => {
   const [errorNewPasswordMessage, setErrorNewPasswordMessage] = useState('');
   const [errorConfirmPasswordMessage, setErrorConfirmPasswordMessage] =
     useState('');
+  const toast = React.useRef<any>();
+
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
     setDataOldPassword(oldPassword);
   };
   const textNewPassword = (newPassword: string) => {
-    let reg = /^(?=.*[A-Z])(?=.*[!@#$&*.])(?=.*[0-9])(?=.*[a-z]).{6,}$/;
+    let reg =
+      /^(?=.*[A-Z])(?=.*[!"#$%&'()*+,-./:;<=>?@^_`{}~])(?=.*[0-9])(?=.*[a-z]).{6,}$/;
     if (reg.test(newPassword) || !newPassword) {
       setErrorNewPassword(false);
       setErrorNewPasswordMessage('');
@@ -67,25 +71,12 @@ const UserChangePasswordView: FC = () => {
   useEffect(() => {
     if (stateUser.update.data !== null) {
       setOpenConfirm(false);
-      ToastAndroid.showWithGravityAndOffset(
-        'Kata Sandi berhasil diperbaharui',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       NavigationAction.back();
       changePasswordAction.resetChangePassword(dispatchUser);
     } else if (stateUser.update.error !== null) {
       if (stateUser.update.error.code === 10000) {
         setOpenConfirm(false);
-        ToastAndroid.showWithGravityAndOffset(
-          'Terjadi Kesalahan',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-          0,
-          240,
-        );
+        toast.current?.show('Terjadi Kesalahan');
         changePasswordAction.resetChangePassword(dispatchUser);
       } else if (stateUser.update.error.code === 10011) {
         setOpenConfirm(false);
@@ -282,6 +273,12 @@ const UserChangePasswordView: FC = () => {
       {header()}
       {content()}
       {renderConfirm()}
+      <SnbToast
+        ref={toast}
+        duration={3000}
+        position="bottom"
+        positionValue={72}
+      />
     </SnbContainer>
   );
 };

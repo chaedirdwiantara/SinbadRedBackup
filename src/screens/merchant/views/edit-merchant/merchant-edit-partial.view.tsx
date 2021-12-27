@@ -3,13 +3,9 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
+  SnbToast,
 } from 'react-native-sinbad-ui';
-import {
-  ScrollView,
-  View,
-  ToastAndroid,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { ScrollView, View, KeyboardAvoidingView } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -71,19 +67,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
+  const toast = React.useRef<any>();
 
   useEffect(() => {
     if (
       stateMerchant.profileEdit.data !== null ||
       stateMerchant.merchantEdit.data !== null
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Data Berhasil Diperbaharui',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
@@ -92,13 +82,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Failed',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
+      toast.current?.show('Data Gagal Diperbaharui');
     }
   }, [stateMerchant]);
 
@@ -602,6 +586,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </ScrollView>
         {renderButton()}
       </KeyboardAvoidingView>
+      <SnbToast
+        ref={toast}
+        duration={3000}
+        position="bottom"
+        positionValue={72}
+      />
     </View>
   );
 };
