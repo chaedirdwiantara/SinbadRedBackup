@@ -88,19 +88,32 @@ const HistoryDetailView: FC = () => {
   const historyDetailAction = useHistoryDetailAction();
   const modalToast = useModalToast();
   const { stateHistory, dispatchHistory } = useHistoryContext();
-  const { paymentInvoice, paymentDetail, detail, orderStatus, paymentStatus } =
-    stateHistory;
-
+  const {
+    paymentInvoice,
+    paymentDetail,
+    detail,
+    orderStatus,
+    paymentStatus,
+    activateVa,
+  } = stateHistory;
+  /** => get Payment and Order Detail */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, params.billingId);
+    // getPaymentDetail.detail(dispatchHistory, params.billingId);
+    getPaymentDetail.detail(dispatchHistory, '1427331');
     historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
-
+  /** => on success get Invoice */
   useEffect(() => {
     if (paymentInvoice.data) {
       goToHistoryInvoice(paymentInvoice.data);
     }
   }, [paymentInvoice.data]);
+  /** => on success activate VA*/
+  useEffect(() => {
+    if (activateVa.data) {
+      getPaymentDetail.detail(dispatchHistory, '1427331');
+    }
+  }, [activateVa.data]);
   /** === FUNCTIONS === */
   /** => to fetch API invoice */
   const getInvoice = (id: string) => {
@@ -337,7 +350,7 @@ const HistoryDetailView: FC = () => {
     const paymentChannel = dataPayment?.paymentChannel.id;
     const billingStatus = dataPayment?.billingStatus;
 
-    return moment.utc(new Date()).local() >
+    return moment.utc(new Date()).local() <
       moment.utc(expiredPaymentTime).local() &&
       paymentType !== PAY_COD &&
       paymentChannel !== CASH &&

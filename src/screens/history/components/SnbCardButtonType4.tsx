@@ -13,6 +13,7 @@ interface Props {
   buttonType?: string;
   bgColor?: string;
   onPress?: () => void;
+  loading?: boolean;
 }
 /** === COMPONENT === */
 const SnbCardButtonType4: FC<Props> = (props: any) => {
@@ -24,6 +25,7 @@ const SnbCardButtonType4: FC<Props> = (props: any) => {
           title={props.buttonText}
           disabled={props.disabled}
           onPress={props.onPress}
+          loading={props.loading}
         />
       </View>
     );

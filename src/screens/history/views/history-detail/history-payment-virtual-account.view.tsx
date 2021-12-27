@@ -6,7 +6,6 @@ import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
 import {
   CASH,
   OVERDUE,
-  PAID,
   PAY_LATER,
   PAY_NOW,
   PENDING,
@@ -24,11 +23,12 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   data,
   onClick,
 }) => {
-  const { dispatchHistory } = useHistoryContext();
+  const { dispatchHistory, stateHistory } = useHistoryContext();
   const activateVa = useActivateVa();
+
   /** === FUNCTIONS ===*/
   const onClickButton = () => {
-    activateVa.update(dispatchHistory, '1406522');
+    activateVa.update(dispatchHistory, '1427331');
   };
   /** === VIEW === */
   /** Bank Icon */
@@ -56,6 +56,8 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
           titleAlign="left"
           buttonText="AKTIFKAN VIRTUAL ACCOUNT"
           onPress={() => onClickButton()}
+          loading={stateHistory.activateVa.loading}
+          disabled={stateHistory.activateVa.loading}
         />
       </View>
     );
@@ -82,7 +84,16 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     const billingStatus = dataPayment?.billingStatus;
     const paymentType = dataPayment?.paymentType;
     const paymentChannel = dataPayment?.paymentChannel;
-    return billingStatus === PENDING ? (
+    const isNotExpired =
+      moment.utc(new Date()).local() <
+      moment.utc(dataPayment?.expiredPaymentTime);
+    console.log(isNotExpired, 'is not expired');
+    console.log(moment.utc(new Date()).local().format('DDMMYY hh:mm:ss'));
+    console.log(
+      moment.utc(dataPayment?.expiredPaymentTime).format('DDMMYY hh:mm:ss'),
+    );
+
+    return (
       <>
         <View style={{ paddingHorizontal: 16, paddingVertical: 10 }}>
           <View style={{ marginBottom: 8 }} />
@@ -92,10 +103,11 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             (paymentType?.id === PAY_LATER &&
               paymentChannel?.id !== CASH &&
               dataPayment?.expiredPaymentTime)) &&
-          (billingStatus === PENDING || billingStatus === OVERDUE) ? (
+          (billingStatus === PENDING || billingStatus === OVERDUE) &&
+          isNotExpired ? (
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
-            dataPayment?.expiredPaymentTime === null &&
+            !isNotExpired &&
             (billingStatus === PENDING || billingStatus === OVERDUE) ? (
             renderVAButton()
           ) : (
@@ -103,8 +115,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
           )}
         </View>
       </>
-    ) : (
-      <View />
     );
   };
   return <View>{renderContent()}</View>;

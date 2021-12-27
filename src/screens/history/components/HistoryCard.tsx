@@ -9,6 +9,7 @@ import {
   SnbText,
   styles,
 } from 'react-native-sinbad-ui';
+import moment from 'moment';
 /** === IMPORT COMPONENT === */
 import { CountDownTimer } from './CountDownTimer';
 /** === IMPORT FUNCTIONS === */
