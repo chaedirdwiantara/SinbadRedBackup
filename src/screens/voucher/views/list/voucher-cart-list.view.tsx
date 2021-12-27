@@ -23,6 +23,7 @@ import {
   useVoucherLocalData,
   useStandardModalState,
 } from '../../functions';
+import { useCartMasterActions } from '@screen/oms/functions';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -50,10 +51,14 @@ const VoucherCartListView: FC = () => {
   const errorModal = useStandardModalState();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
+  const cartMasterActions = useCartMasterActions();
   const voucherCartListState = stateVoucher.voucherCart.detail;
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.list(dispatchVoucher);
+    cartMasterActions.updateRouteName({
+      previouseRouteName: 'voucherCartList',
+    });
     if (voucherLocalDataAction.selectedVoucher !== null) {
       setSelectedSinbadVoucher(
         voucherLocalDataAction.selectedVoucher.sinbadVoucher,

@@ -8,3 +8,5 @@ export const DELETE_CART_PRODUCT = 'DeleteCartProduct';
 export const UPDATE_CART_MASTER_DATA = 'UpdateCartMasterData';
 /** Reset Cart Master */
 export const RESET_CART_MASTER_DATA = 'ResetCartMasterData';
+/** Reset Cart Master */
+export const UPDATE_ROUTE_MASTER_DATA = 'UpdateRouteCartMasterData';

@@ -14,3 +14,8 @@ export interface UpdateCartMasterData {
   type: string;
   payload: models.CartInvoiceGroup[];
 }
+/** => update previous route name */
+export interface UpdateRouteNameMasterCart {
+  type: string;
+  payload: models.IUpdateRouteNamePayload;
+}
