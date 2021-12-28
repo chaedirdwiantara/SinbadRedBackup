@@ -146,7 +146,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
         }
         onCardPress={() => {
           if (item.status !== 'created' && item.status !== 'failed') {
-            goToHistoryDetail('payment', item.orderParcelId, item.billing.id);
+            goToHistoryDetail('payment', item.orderParcelId, item.billing.id!);
           }
         }}
         style={
@@ -192,7 +192,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
         }
         onCardPress={() => {
           if (item.status !== 'created' && item.status !== 'failed') {
-            goToHistoryDetail('order', item.orderParcelId, item?.billing.id);
+            goToHistoryDetail('order', item.orderParcelId, item?.billing.id!);
           }
         }}
         style={

@@ -22,6 +22,7 @@ import {
   HistoryCardItem,
   HistoryDetailProductList,
   CountDownTimer,
+  HistoryDetailSkeleton,
 } from '../../components';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
@@ -95,6 +96,7 @@ const HistoryDetailView: FC = () => {
     paymentStatus,
     activateVa,
   } = stateHistory;
+  const pageLoading = paymentDetail.loading || detail.loading;
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
@@ -425,30 +427,42 @@ const HistoryDetailView: FC = () => {
   };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
-    <ScrollView>
-      {renderStatus()}
-      {renderCountDown()}
-      {renderInvoiceInfo()}
-      {renderPaymentInfo()}
-      {renderOrderRefundInfo()}
-      {renderVirtualAccount()}
-      {renderPaymentInstruction()}
-      {renderOrderNotes()}
-      {renderProductList()}
-      {renderDeliveryDetail()}
-      {renderModalError()}
+    <ScrollView scrollEnabled={!pageLoading}>
+      {!pageLoading ? (
+        <>
+          {renderStatus()}
+          {renderCountDown()}
+          {renderInvoiceInfo()}
+          {renderPaymentInfo()}
+          {renderOrderRefundInfo()}
+          {renderVirtualAccount()}
+          {renderPaymentInstruction()}
+          {renderOrderNotes()}
+          {renderProductList()}
+          {renderDeliveryDetail()}
+          {renderModalError()}
+        </>
+      ) : (
+        <HistoryDetailSkeleton />
+      )}
     </ScrollView>
   );
   /** => Detail Order Content */
   const renderOrderDetailContent = () => (
-    <ScrollView>
-      {renderStatus()}
-      {renderInvoiceInfo()}
-      {renderOrderNotes()}
-      {renderProductList()}
-      {renderPaymentInfo()}
-      {renderOrderRefundInfo()}
-      {renderDeliveryDetail()}
+    <ScrollView scrollEnabled={!pageLoading}>
+      {!pageLoading ? (
+        <>
+          {renderStatus()}
+          {renderInvoiceInfo()}
+          {renderOrderNotes()}
+          {renderProductList()}
+          {renderPaymentInfo()}
+          {renderOrderRefundInfo()}
+          {renderDeliveryDetail()}
+        </>
+      ) : (
+        <HistoryDetailSkeleton />
+      )}
     </ScrollView>
   );
   /** => Content */

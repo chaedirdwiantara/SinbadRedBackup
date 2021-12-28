@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
-
+import * as models from '@models';
 /** === FUNCTIONS === */
 export const usePaymentDetail = () => {
   const dispatch = useDispatch();
@@ -88,14 +88,14 @@ export const useDownloadProgress = () => {
 
 export const useModaBottomError = () => {
   const [isOpen, setOpen] = useState(false);
-  const [dataError, setDataError] = useState({});
+  const [dataError, setDataError] = useState<models.ErrorProps | null>(null);
   return {
     isOpen,
     setOpen: (value: boolean) => {
       setOpen(value);
     },
     dataError,
-    setDataError: (value: object) => {
+    setDataError: (value: models.ErrorProps) => {
       setDataError(value);
     },
   };

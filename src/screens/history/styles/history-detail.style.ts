@@ -26,6 +26,7 @@ export const HistoryDetailStyle = StyleSheet.create({
   statusContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderRadius: 6,
   },
