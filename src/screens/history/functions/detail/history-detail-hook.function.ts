@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
@@ -33,6 +33,7 @@ export const usePaymentInvoice = () => {
 export const useModalToast = () => {
   const [isOpen, setOpen] = useState(false);
   const [toastText, setToastText] = useState('');
+  const toast = useRef<any>();
   return {
     isOpen,
     setOpen: (value: boolean) => {

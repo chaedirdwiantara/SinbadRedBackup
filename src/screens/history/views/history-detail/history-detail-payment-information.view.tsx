@@ -9,7 +9,6 @@ import { HistoryDetail, PaymentDetailSuccessProps } from '@model/history';
 import { PaymentType, OrderStatus } from '@screen/history/functions/data';
 /** === INTERFACE === */
 interface PaymentInformationProps {
-  renderCardItem: () => void;
   dataOrder: HistoryDetail | null;
   dataPayment: PaymentDetailSuccessProps | null;
 }

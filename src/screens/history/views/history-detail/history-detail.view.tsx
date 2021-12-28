@@ -111,6 +111,7 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     if (activateVa.data) {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
+      historyDetailAction.fetch(dispatchHistory, params.id);
     }
   }, [activateVa.data]);
   /** => on Error get Invoice */
