@@ -117,8 +117,6 @@ const OTPContent: React.FC<Props> = (props) => {
       changeBankAccountAction.resetVerificationBankAccount(dispatchSupplier);
     }
     setOpenModalSuccess(false);
-    NavigationAction.backToPage('MerchantDetailProfileView');
-    storeDetailAction.detail(dispatchUser);
     // if source Quest, navigate to quest detail view
     if (source === 'Quest') {
       NavigationAction.navigate('QuestDetailView', {
@@ -129,6 +127,8 @@ const OTPContent: React.FC<Props> = (props) => {
       NavigationAction.backToPage('MerchantDetailProfileView');
       storeDetailAction.detail(dispatchUser, { id: '3' });
     }
+    NavigationAction.backToPage('MerchantDetailProfileView');
+    storeDetailAction.detail(dispatchUser);
   };
 
   const backFunc = () => {
