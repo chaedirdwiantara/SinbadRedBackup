@@ -3,6 +3,7 @@ import {
   QuestDetailView,
   QuestAdditionalInfoView,
   QuestTaskConsentLetterView,
+  QuestTaskCompleteStoreView,
 } from '@screen/quest/views';
 
 const QuestNav = {
@@ -17,6 +18,9 @@ const QuestNav = {
   },
   QuestTaskConsentLetterView: {
     component: QuestTaskConsentLetterView,
+  },
+  QuestTaskCompleteStoreView: {
+    component: QuestTaskCompleteStoreView,
   },
 };
 

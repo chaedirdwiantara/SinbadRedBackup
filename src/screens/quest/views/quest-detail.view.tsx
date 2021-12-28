@@ -99,6 +99,14 @@ const QuestDetailView: FC = ({ route }: any) => {
           buyerId: data.buyerId,
         });
         break;
+      case 'CompleteStore':
+        NavigationAction.navigate('QuestTaskCompleteStoreView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+          buyerId: data.buyerId,
+        });
+        break;
       default: {
         break;
       }
