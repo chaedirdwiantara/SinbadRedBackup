@@ -620,6 +620,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         duration={2000}
         positionValue={StatusBar.currentHeight || 0}
       />
+      <SnbDialog
+        open={modalConfirmationRemoveProductVisible}
+        title="Hapus Product"
+        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
+        ok={onRemoveProduct}
+        cancel={() => setModalConfirmationRemoveProductVisible(false)}
+        loading={loadingRemoveProduct}
+      />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalFailedCheckout}

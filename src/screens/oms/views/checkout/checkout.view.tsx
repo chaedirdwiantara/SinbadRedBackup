@@ -324,7 +324,6 @@ const OmsCheckoutView: FC = () => {
   }, [paymentChannelData.paymentChannels]);
   /** => insert data promo payment to channel modal master */
   useEffect(() => {
-    // if success
     if (statePromo.checkPromoPayment.list.data.length > 0) {
       const payload = statePromo.checkPromoPayment.list.data.map((item) => {
         return {
