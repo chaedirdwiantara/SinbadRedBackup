@@ -1,16 +1,9 @@
-import { UrlTile } from 'react-native-maps';
+import * as models from '@models';
 
 export interface OrderStatus {
-  status: string;
+  status: models.OrderStatusQuery;
   title: string;
   detail: string;
-}
-
-export interface OrderStatusSuccessProps extends Array<OrderStatus> {}
-
-export interface DetailOrderStatusProcessAction {
-  type: string;
-  contextDispatch: (action: any) => any;
 }
 
 export interface PaymentType {
@@ -24,6 +17,7 @@ export interface PaymentChannel {
   icon: string;
   description: string;
 }
+
 export interface PaymentDetailSuccessProps {
   id: number;
   paymentType: PaymentType;
@@ -34,9 +28,21 @@ export interface PaymentDetailSuccessProps {
   refundTotal: number;
   expiredPaymentTime: string;
   refundedTime: string;
+  accountVaNo: string | null;
+  billingStatus: string;
 }
 
 export interface PaymentInvoiceSuccessProps {
   fileName: string;
   url: string;
+}
+
+export interface PaymentActivateVASuccess {
+  type: string;
+  payload: any;
+}
+
+export interface PaymentActivateVASuccessProps {
+  id: number;
+  message: string;
 }

@@ -1,5 +1,5 @@
-/** === IMPORT PACKAGE HERE === */
-import React, { FC, useEffect, useState } from 'react';
+/** === IMPORT PACKAGES === */
+import React, { FC, useEffect, useReducer } from 'react';
 import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
@@ -8,238 +8,170 @@ import {
   SnbText,
   color,
   styles,
-  SnbIcon,
-  SnbButton,
-  SnbDialog,
+  SnbToast,
 } from 'react-native-sinbad-ui';
+import moment from 'moment';
+import Clipboard from '@react-native-clipboard/clipboard';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { ProductCard } from '@core/components/ProductCard';
+/** === IMPORT COMPONENTS === */
+import LoadingPage from '@core/components/LoadingPage';
+import {
+  HistoryDetailCardDivider,
+  HistoryDetailCard,
+  HistoryDetailStatus,
+  HistoryCardItem,
+  HistoryDetailProductList,
+  CountDownTimer,
+  HistoryDetailSkeleton,
+} from '../../components';
+import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
+import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
+import HistoryPaymentInstruction from './history-payment-instruction.view';
+import ModalBottomError from './history-error-modal-bottom.view';
+/** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
+import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import {
   goBack,
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
+  useModalToast,
+  useHistoryDetailAction,
+  goToHistoryDetailStatus,
+  useModaBottomError,
+  useActivateVa,
 } from '../../functions';
+/** === IMPORT STYLE === */
 import { HistoryDetailStyle } from '../../styles';
-import { HistoryDetailCardDivider, HistoryDetailCard } from '../../components';
-import { contexts } from '@contexts';
-import LoadingPage from '@core/components/LoadingPage';
-import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
+import {
+  BillingStatus,
+  PaymentType,
+  ChannelType,
+  OrderStatus,
+} from '../../functions/data';
+
 /** === TYPES === */
 type HistoryStackParamList = {
-  Detail: { section: 'order' | 'payment' };
+  Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
-/** === DUMMIES === */
-const historyDetailDummy = {
-  status: {
-    title: 'Menunggu Persetujuan',
-    desc: 'Supplier mengajukan perubahan',
-  },
-  invoice: {
-    orderId: 'SNB19050014818',
-    referenceId: null,
-  },
-  orderNotes: {
-    via: 'Toko',
-    purchaseDate: new Date(2021, 8, 15, 16, 46).toISOString(),
-    cancelDate: null,
-    refundDate: new Date(2021, 8, 18, 12, 46).toISOString(),
-  },
-  products: [
-    {
-      name: 'LAKME CC CREAM ALMOND',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      price: 78000,
-      qty: 10,
-      originalQty: 5,
-      total: 780000,
-      originalTotal: 390000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME BLUR PERFECT CREAMER',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      price: 150000,
-      qty: 20,
-      total: 3000000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME ABSOLUTE LIQUID CONCEALER IVORY FAIR',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      price: 100000,
-      qty: 12,
-      total: 1200000,
-      uom: 'pcs',
-    },
-  ],
-  canceledProducts: [
-    {
-      name: 'LAKME CLASSIC EYEBROW PENCIL BLACK',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67126183.png',
-      price: 30000,
-      qty: 5,
-      total: 150000,
-      uom: 'pcs',
-    },
-    {
-      name: 'LAKME BIPHASED MAKEUP REMOVER',
-      images:
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-      price: 70000,
-      qty: 3,
-      total: 210000,
-      uom: 'pcs',
-    },
-  ],
-  payment: {
-    type: 'Bayar Sekarang',
-    method: 'Bank BCA Virtual Account',
-    subtotal: 2750000,
-    deliveryFee: 0,
-    tax: 275000,
-    orderTotal: 3025000,
-    promo: 20000,
-    serviceFee: 4400,
-    paymentTotal: 3009400,
-    freeProducts: [
-      {
-        name: 'Quaker Instant Oatmeal 1200gr',
-        qty: 5,
-        uom: 'pcs',
-      },
-      {
-        name: 'Quaker Instant Oatmeal 400gr',
-        qty: 3,
-        uom: 'pcs',
-      },
-    ],
-  },
-  orderRefund: {
-    orderPaidAmount: 3009400,
-    deliveryFee: 0,
-  },
-  deliveryDetail: {
-    courier: 'Self Delivery',
-    address:
-      'Jl. Kemang III No.18, RT.12/RW.2, Bangka, Kec. Mampang Prpt., Kota Jakarta Selatan, Daerah Khusus Ibukota Jakarta 12730',
-  },
-};
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
   const { params } = useRoute<HistoryDetailRouteProp>();
   const title = params.section === 'order' ? 'Pesanan' : 'Tagihan';
-  const [seeMoreProducts, setSeeMoreProducts] = useState(true);
-  const [seeMoreCanceledProducts, setSeeMoreCanceledProducts] = useState(true);
-  const [isConfirmOrderDialogOpen, setIsConfirmOrderDialogOpen] =
-    useState(false);
-  const [confirmDialogType, setConfirmDialogType] = useState<
-    'accept' | 'refuse'
-  >('accept');
-  const products = seeMoreProducts
-    ? historyDetailDummy.products.slice(0, 2)
-    : historyDetailDummy.products;
-  const canceledProducts = seeMoreCanceledProducts
-    ? historyDetailDummy.canceledProducts.slice(0, 2)
-    : historyDetailDummy.canceledProducts;
+  const [seeMoreProducts, toggleSeeMoreProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
+  const [seeMoreBonusProducts, toggleSeeMoreBonusProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
+  const [seeMoreCanceledProducts, toggleSeeMoreCanceledProducts] = useReducer(
+    (prevVisible) => !prevVisible,
+    true,
+  );
   const getPaymentDetail = usePaymentDetail();
   const getInvoiceDetail = usePaymentInvoice();
-  const { stateHistory, dispatchHistory } = React.useContext(
-    contexts.HistoryContext,
-  );
-  const { paymentInvoice, paymentDetail } = stateHistory;
-  console.log(paymentDetail, 'STATE hISTORY');
-
-  /** === EFFECTS === */
+  const historyDetailAction = useHistoryDetailAction();
+  const activateVA = useActivateVa();
+  const modalError = useModaBottomError();
+  const modalToast = useModalToast();
+  const { stateHistory, dispatchHistory } = useHistoryContext();
+  const {
+    paymentInvoice,
+    paymentDetail,
+    detail,
+    orderStatus,
+    paymentStatus,
+    activateVa,
+  } = stateHistory;
+  const pageLoading = paymentDetail.loading || detail.loading;
+  /** => get Payment and Order Detail */
   useEffect(() => {
-    getPaymentDetail.detail(dispatchHistory, 1495867);
+    getPaymentDetail.detail(dispatchHistory, params.billingId);
+    historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
-
+  /** => on success get Invoice */
   useEffect(() => {
     if (paymentInvoice.data) {
-      goToHistoryInvoice();
+      goToHistoryInvoice(paymentInvoice.data);
     }
   }, [paymentInvoice.data]);
-  /** === FUNCTION === */
-  const getInvoice = (id: number) => {
+  /** => on success activate VA*/
+  useEffect(() => {
+    if (activateVa.data) {
+      getPaymentDetail.detail(dispatchHistory, params.billingId);
+      historyDetailAction.fetch(dispatchHistory, params.id);
+    }
+  }, [activateVa.data]);
+  /** => on Error get Invoice */
+  useEffect(() => {
+    if (paymentInvoice.error) {
+      modalError.setOpen(true);
+      modalError.setDataError(paymentInvoice.error);
+    }
+  }, [paymentInvoice.error]);
+  /** => on error activate VA */
+  useEffect(() => {
+    if (activateVa.error) {
+      modalError.setOpen(true);
+      modalError.setDataError(activateVa.error);
+    }
+  }, [activateVa.error]);
+  /** === FUNCTIONS === */
+  /** => to fetch API invoice */
+  const getInvoice = (id: string) => {
     getInvoiceDetail.detail(dispatchHistory, id);
   };
-  /** === VIEW === */
-  /** => Header */
-  const renderHeader = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={`Detail ${title}`}
-        backAction={() => goBack()}
-      />
-    );
+  /** => function to coppy VA Number */
+  const onVACoppied = () => {
+    const accountVa = paymentDetail.data?.accountVaNo || '';
+    Clipboard.setString(accountVa.toString());
+    modalToast.setOpen(true);
+    modalToast.toast.current.show();
   };
-  /** => Header Extension */
-  const renderHeaderExtension = () => (
-    <View style={HistoryDetailStyle.headerExtension} />
-  );
+  /** => function to goBack */
+  const goBackAction = () => {
+    goBack();
+    activateVA.reset(dispatchHistory);
+    getInvoiceDetail.reset(dispatchHistory);
+  };
+  /** === VIEW === */
   /** => Order/Payment Status */
-  const renderStatus = () => (
-    <View style={{ marginBottom: 8, marginTop: 10, marginHorizontal: 16 }}>
-      <TouchableWithoutFeedback
-        onPress={() => console.log('Go to detail status pressed')}>
-        <View style={[HistoryDetailStyle.statusDisplay, styles.shadowForBox10]}>
-          <View>
-            <SnbText.B4>Status: {historyDetailDummy.status.title}</SnbText.B4>
-            <View style={{ marginTop: 8 }}>
-              <SnbText.B3>{historyDetailDummy.status.desc}</SnbText.B3>
-            </View>
-          </View>
-          <View style={{ justifyContent: 'center' }}>
-            <SnbIcon name="chevron_right" color={color.black100} size={24} />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
-  );
-  /** => Card Item */
-  const renderCardItem = (
-    key: string,
-    value: string | null,
-    type: 'normal' | 'bold' | 'green' = 'normal',
-  ) => {
-    const notBoldColor = type === 'normal' ? color.black60 : color.green50;
+  const renderStatus = () => {
+    const historyOrderStatus = orderStatus.data.find(
+      (statusItem) => statusItem.status === detail.data?.status,
+    );
+    const historyPaymentStatus = paymentStatus.data.find(
+      (statusItem) => statusItem.status === detail.data?.statusPayment,
+    );
 
     return (
-      <View key={`${key}-${value}`} style={HistoryDetailStyle.cardItem}>
-        {type !== 'bold' ? (
-          <>
-            <View style={{ marginRight: 16 }}>
-              <SnbText.B3 color={notBoldColor}>{key}</SnbText.B3>
-            </View>
-            <View style={{ maxWidth: '60%' }}>
-              <SnbText.B3 color={notBoldColor} align="right">
-                {value}
-              </SnbText.B3>
-            </View>
-          </>
-        ) : (
-          <>
-            <View style={{ marginRight: 16 }}>
-              <SnbText.B4 color={color.black100}>{key}</SnbText.B4>
-            </View>
-            <View style={{ maxWidth: '60%' }}>
-              <SnbText.B4 color={color.black100} align="right">
-                {value}
-              </SnbText.B4>
-            </View>
-          </>
-        )}
-      </View>
+      <HistoryDetailStatus
+        status={
+          params.section === 'order'
+            ? historyOrderStatus?.title ?? ''
+            : historyPaymentStatus?.title ?? ''
+        }
+        description={
+          params.section === 'order'
+            ? historyOrderStatus?.detail ?? ''
+            : historyPaymentStatus?.detail ?? ''
+        }
+        onPress={() =>
+          goToHistoryDetailStatus({
+            orderCode: detail.data?.orderCode ?? '-',
+            createdAt: detail.data?.createdAt ?? '-',
+            trackingId: '-',
+            cancelReason: detail.data?.orderCancelReason ?? '-',
+            logs: detail.data?.orderParcelLogs ?? [],
+          })
+        }
+      />
     );
   };
   /** => Invoice Info */
@@ -248,233 +180,288 @@ const HistoryDetailView: FC = () => {
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
-      onActionClick={() => getInvoice(1495865)}>
-      {renderCardItem('Nomor Pesanan', historyDetailDummy.invoice.orderId)}
-      {renderCardItem(
-        'Nomor Referensi',
-        historyDetailDummy.invoice.referenceId ?? '-',
-      )}
+      onActionClick={() => getInvoice(params.billingId)}>
+      <HistoryCardItem
+        title="Nomor Pesanan"
+        value={detail.data?.orderCode ?? '-'}
+      />
+      <HistoryCardItem
+        title="Nomor Referensi"
+        value={detail.data?.orderRef ?? '-'}
+      />
     </HistoryDetailCard>
   );
   /** => Order Notes */
   const renderOrderNotes = () => (
     <HistoryDetailCard title="Catatan Pesanan">
-      {renderCardItem('Order Via', historyDetailDummy.orderNotes.via)}
-      {renderCardItem(
-        'Tanggal Pembelian',
-        historyDetailDummy.orderNotes.purchaseDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.purchaseDate)
-          : '-',
-      )}
-      {renderCardItem(
-        'Tanggal Pembatalan',
-        historyDetailDummy.orderNotes.cancelDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.cancelDate)
-          : '-',
-      )}
-      {renderCardItem(
-        'Tanggal Pengembalian',
-        historyDetailDummy.orderNotes.refundDate
-          ? toLocalDateTime(historyDetailDummy.orderNotes.refundDate)
-          : '-',
-      )}
+      <HistoryCardItem title="Order Via" value={detail.data?.orderVia ?? '-'} />
+      <HistoryCardItem
+        title="Tanggal Pembelian"
+        value={
+          detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-'
+        }
+      />
+      <HistoryCardItem
+        title="Tanggal Pembatalan"
+        value={
+          detail.data?.cancelTime
+            ? toLocalDateTime(detail.data?.cancelTime)
+            : '-'
+        }
+      />
+      <HistoryCardItem
+        title="Tanggal Pengembalian"
+        value={
+          detail.data?.refundedTime
+            ? toLocalDateTime(detail.data?.refundedTime)
+            : '-'
+        }
+      />
     </HistoryDetailCard>
   );
-  /** => Payment Info */
-  const renderPaymentInfo = () =>
-    !paymentDetail?.loading ? (
-      <HistoryDetailPaymentInformation
-        renderCardItem={() => renderCardItem(key, value, type)}
-        dataPayment={paymentDetail.data}
+  /** => render Virtual Account Info */
+  const renderVirtualAccount = () => {
+    const dataPayment = paymentDetail.data;
+    const statusOrder = detail.data?.status;
+    return dataPayment?.billingStatus !== BillingStatus.CANCEL ? (
+      <HistoryPaymentVirtualAccount
+        onClick={() => onVACoppied()}
+        data={dataPayment}
+        statusOrder={statusOrder!}
       />
     ) : (
-      // <HistoryDetailCard title="Informasi Pembayaran">
-      //   {renderCardItem('Tipe Pembayaran', historyDetailDummy.payment.type)}
-      //   {renderCardItem('Metode Pembayaran', historyDetailDummy.payment.method)}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Sub-total pesanan (90)',
-      //     toCurrency(historyDetailDummy.payment.subtotal),
-      //   )}
-      //   {historyDetailDummy.payment.freeProducts.map((product) =>
-      //     renderCardItem(
-      //       `${product.name} (${product.qty} ${product.uom})`,
-      //       'FREE',
-      //       'green',
-      //     ),
-      //   )}
-      //   {renderCardItem(
-      //     'Ongkos Kirim',
-      //     toCurrency(historyDetailDummy.payment.deliveryFee),
-      //   )}
-      //   {renderCardItem('PPN 10%', toCurrency(historyDetailDummy.payment.tax))}
-      //   {renderCardItem(
-      //     'Total Pesanan',
-      //     toCurrency(historyDetailDummy.payment.orderTotal),
-      //     'bold',
-      //   )}
-      //   <HistoryDetailCardDivider />
-      //   {renderCardItem(
-      //     'Promo Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.promo),
-      //   )}
-      //   {renderCardItem(
-      //     'Layanan Pembayaran',
-      //     toCurrency(historyDetailDummy.payment.serviceFee),
-      //   )}
-      //   {renderCardItem(
-      //     'Total Pembayaran Pesanan',
-      //     toCurrency(historyDetailDummy.payment.paymentTotal),
-      //     'bold',
-      //   )}
-      // </HistoryDetailCard>
-      <LoadingPage />
+      <View />
+    );
+  };
+  /** => Payment Info */
+  const renderPaymentInfo = () =>
+    !paymentDetail?.loading && paymentDetail.data ? (
+      <HistoryDetailPaymentInformation
+        dataPayment={paymentDetail?.data}
+        dataOrder={detail?.data}
+      />
+    ) : (
+      <View style={{ height: '20%' }}>
+        <LoadingPage />
+      </View>
     );
   /** => Order Refund Info */
-  const renderOrderRefundInfo = () => (
-    <HistoryDetailCard title="Informasi Pengembalian">
-      {renderCardItem(
-        'Total Pembayaran Pesanan',
-        historyDetailDummy.orderRefund.orderPaidAmount
-          ? toCurrency(historyDetailDummy.orderRefund.orderPaidAmount)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pembayaran Pengiriman',
-        historyDetailDummy.orderRefund.deliveryFee
-          ? toCurrency(historyDetailDummy.orderRefund.deliveryFee)
-          : toCurrency(0),
-      )}
-      {renderCardItem(
-        'Total Pengembalian',
-        toCurrency(
-          historyDetailDummy.orderRefund.orderPaidAmount +
-            historyDetailDummy.orderRefund.deliveryFee,
-        ),
-        'bold',
-      )}
-    </HistoryDetailCard>
-  );
+  const renderOrderRefundInfo = () => {
+    const dataOrder = detail.data;
+    const dataPayment = paymentDetail.data;
+    return dataPayment?.paymentType.id === PaymentType.PAY_NOW &&
+      (dataOrder?.deliveredParcelModified ||
+        (dataOrder?.status === BillingStatus.CANCEL &&
+          (dataPayment.billingStatus === BillingStatus.PAID ||
+            dataPayment.billingStatus === BillingStatus.REFUND_REQUESTED ||
+            dataPayment.billingStatus === BillingStatus.REFUNDED))) ? (
+      <HistoryDetailCard title="Informasi Pengembalian">
+        <HistoryCardItem
+          title="Total Pembayaran Pesanan"
+          value={
+            dataPayment.totalPayment
+              ? toCurrency(dataPayment.totalPayment)
+              : toCurrency(0)
+          }
+        />
+        <HistoryCardItem
+          title="Total Pembayaran Pengiriman"
+          value={
+            dataPayment.deliveredTotalPayment
+              ? toCurrency(dataPayment.deliveredTotalPayment)
+              : toCurrency(0)
+          }
+        />
+        <HistoryCardItem
+          title="Total Pengembalian"
+          value={
+            dataPayment.refundTotal
+              ? toCurrency(dataPayment.refundTotal)
+              : toCurrency(0)
+          }
+          type="bold"
+        />
+      </HistoryDetailCard>
+    ) : (
+      <View />
+    );
+  };
   /** => Delivery Detail */
   const renderDeliveryDetail = () => (
     <HistoryDetailCard title="Detail Pengiriman">
-      {renderCardItem(
-        'Kurir Pengiriman',
-        historyDetailDummy.deliveryDetail.courier,
-      )}
-      {renderCardItem(
-        'Alamat Pengiriman',
-        historyDetailDummy.deliveryDetail.address,
-      )}
+      <HistoryCardItem
+        title="Kurir Pengiriman"
+        value={detail.data?.deliveryCourier ?? '-'}
+      />
+      <HistoryCardItem
+        title="Alamat Pengiriman"
+        value={
+          detail.data?.buyer?.storeAddress
+            ? `${detail.data.buyer.storeAddress}${
+                detail.data.buyer.urban ? ', ' + detail.data.buyer.urban : ''
+              }`
+            : '-'
+        }
+      />
     </HistoryDetailCard>
   );
   /** => Product List */
   const renderProductList = () => (
     <View>
       <View style={styles.shadowForBox10}>
-        <View style={HistoryDetailStyle.productListCardHeader}>
-          <SnbText.B4>Daftar Produk</SnbText.B4>
-        </View>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-          {products.map((product, productIndex) => (
-            <ProductCard.Type1
-              key={`${product.name}-${productIndex}`}
-              name={product.name}
-              imageSource={product.images}
-              price={toCurrency(product.price)}
-              qty={product.qty}
-              originalQty={product.originalQty}
-              uom={product.uom}
-              total={toCurrency(product.total)}
-              originalTotal={
-                product.originalTotal
-                  ? toCurrency(product.originalTotal)
-                  : undefined
-              }
+        <HistoryDetailProductList
+          title="Daftar Produk"
+          products={detail.data?.orderParcelProducts ?? []}
+          seeMore={seeMoreProducts}
+          toggleSeeMore={toggleSeeMoreProducts}
+        />
+        {(detail.data?.orderParcelBonus.length ?? []) > 0 && (
+          <>
+            <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
+            <HistoryDetailProductList
+              title="Bonus"
+              products={detail.data?.orderParcelBonus ?? []}
+              seeMore={seeMoreBonusProducts}
+              toggleSeeMore={toggleSeeMoreBonusProducts}
             />
-          ))}
-          {historyDetailDummy.products.length > 2 && (
-            <TouchableWithoutFeedback
-              onPress={() => setSeeMoreProducts((prev) => !prev)}>
-              <View style={HistoryDetailStyle.seeMoreButton}>
-                <SnbIcon
-                  name={seeMoreProducts ? 'expand_more' : 'expand_less'}
-                  color={color.red50}
-                  size={20}
-                  style={{ marginRight: 8 }}
-                />
-                <SnbText.B3 color={color.red50}>
-                  {seeMoreProducts ? 'Lihat Lebih' : 'Lihat Ringkas'}
-                </SnbText.B3>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        </View>
-        <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
-        <View style={HistoryDetailStyle.canceledProductListCardHeader}>
-          <SnbText.B4>Produk Dibatalkan</SnbText.B4>
-        </View>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 16 }}>
-          {canceledProducts.map((product, productIndex) => (
-            <ProductCard.Type1
-              key={`${product.name}-${productIndex}`}
-              name={product.name}
-              imageSource={product.images}
-              price={toCurrency(product.price)}
-              qty={product.qty}
-              uom={product.uom}
-              total={toCurrency(product.total)}
+          </>
+        )}
+        {(detail.data?.orderParcelRemovedProducts.length ?? []) > 0 && (
+          <>
+            <HistoryDetailCardDivider horizontalSpaces={16} topSpaces={0} />
+            <HistoryDetailProductList
+              title="Produk Dibatalkan"
+              products={detail.data?.orderParcelRemovedProducts ?? []}
+              seeMore={seeMoreCanceledProducts}
+              toggleSeeMore={toggleSeeMoreCanceledProducts}
             />
-          ))}
-          {historyDetailDummy.canceledProducts.length > 2 && (
-            <TouchableWithoutFeedback
-              onPress={() => setSeeMoreCanceledProducts((prev) => !prev)}>
-              <View style={HistoryDetailStyle.seeMoreButton}>
-                <SnbIcon
-                  name={seeMoreCanceledProducts ? 'expand_more' : 'expand_less'}
-                  color={color.red50}
-                  size={20}
-                  style={{ marginRight: 8 }}
-                />
-                <SnbText.B3 color={color.red50}>
-                  {seeMoreCanceledProducts ? 'Lihat Lebih' : 'Lihat Ringkas'}
-                </SnbText.B3>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
-        </View>
+          </>
+        )}
       </View>
       <View style={{ height: 10, backgroundColor: color.black5 }} />
     </View>
   );
+  /** => render Payment Instruction */
+  const renderPaymentInstruction = () => {
+    const billingStatus = paymentDetail.data?.billingStatus;
+    const orderParcelStatus = detail.data?.status;
+    return billingStatus !== BillingStatus.PAID &&
+      billingStatus !== BillingStatus.EXPIRED &&
+      billingStatus !== BillingStatus.CANCEL &&
+      billingStatus !== BillingStatus.REFUNDED &&
+      billingStatus !== BillingStatus.REFUND_REQUESTED &&
+      orderParcelStatus !== OrderStatus.DONE ? (
+      <HistoryPaymentInstruction />
+    ) : (
+      <View />
+    );
+  };
+  /** render Toast */
+  const renderToast = () => {
+    return (
+      <SnbToast
+        ref={modalToast.toast}
+        duration={1500}
+        position={'center'}
+        message="Copied To Clipboard"
+      />
+    );
+  };
+  /** => render countdown */
+  const renderCountDown = () => {
+    const expiredPaymentTime = paymentDetail.data?.expiredPaymentTime;
+    const dataPayment = paymentDetail.data;
+    const paymentType = dataPayment?.paymentType.id;
+    const paymentChannel = dataPayment?.paymentChannel.id;
+    const billingStatus = dataPayment?.billingStatus;
+
+    return moment.utc(new Date()).local() <
+      moment.utc(expiredPaymentTime).local() &&
+      paymentType !== PaymentType.PAY_COD &&
+      paymentChannel !== ChannelType.CASH &&
+      expiredPaymentTime !== null &&
+      dataPayment?.accountVaNo !== null &&
+      billingStatus !== BillingStatus.PAID &&
+      (billingStatus === BillingStatus.PENDING ||
+        (billingStatus === BillingStatus.OVERDUE &&
+          expiredPaymentTime !== null)) ? (
+      <View style={styles.shadowForBox10}>
+        <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+          <SnbText.H4 align="center">
+            SEGERA LAKUKAN PEMBAYARAN DALAM WAKTU
+          </SnbText.H4>
+          <View style={{ alignItems: 'center', marginVertical: 8 }}>
+            <CountDownTimer
+              type={'big'}
+              expiredTime={paymentDetail.data!.expiredPaymentTime}
+            />
+          </View>
+          <SnbText.B3 color={color.black60} align="center">
+            {`(Sebelum ${moment(expiredPaymentTime).format('LLLL')} WIB)`}
+          </SnbText.B3>
+        </View>
+        <View style={{ height: 10, backgroundColor: color.black10 }} />
+      </View>
+    ) : (
+      <View />
+    );
+  };
+  /** => render Modal Bottom Error */
+  const renderModalError = () => {
+    return modalError.isOpen && modalError.dataError ? (
+      <ModalBottomError
+        isOpen={modalError.isOpen}
+        close={() => modalError.setOpen(false)}
+        data={modalError.dataError}
+      />
+    ) : (
+      <View />
+    );
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
-    <ScrollView>
-      {renderStatus()}
-      {renderInvoiceInfo()}
-      {renderPaymentInfo()}
-      {renderOrderRefundInfo()}
-      {renderOrderNotes()}
-      {renderProductList()}
-      {renderDeliveryDetail()}
+    <ScrollView scrollEnabled={!pageLoading}>
+      {!pageLoading ? (
+        <>
+          {renderStatus()}
+          {renderCountDown()}
+          {renderInvoiceInfo()}
+          {renderPaymentInfo()}
+          {renderOrderRefundInfo()}
+          {renderVirtualAccount()}
+          {renderPaymentInstruction()}
+          {renderOrderNotes()}
+          {renderProductList()}
+          {renderDeliveryDetail()}
+          {renderModalError()}
+        </>
+      ) : (
+        <HistoryDetailSkeleton />
+      )}
     </ScrollView>
   );
   /** => Detail Order Content */
   const renderOrderDetailContent = () => (
-    <ScrollView>
-      {renderStatus()}
-      {renderInvoiceInfo()}
-      {renderOrderNotes()}
-      {renderProductList()}
-      {renderPaymentInfo()}
-      {renderOrderRefundInfo()}
-      {renderDeliveryDetail()}
+    <ScrollView scrollEnabled={!pageLoading}>
+      {!pageLoading ? (
+        <>
+          {renderStatus()}
+          {renderInvoiceInfo()}
+          {renderOrderNotes()}
+          {renderProductList()}
+          {renderPaymentInfo()}
+          {renderOrderRefundInfo()}
+          {renderDeliveryDetail()}
+        </>
+      ) : (
+        <HistoryDetailSkeleton />
+      )}
     </ScrollView>
   );
   /** => Content */
   const renderContent = () => (
     <View style={{ backgroundColor: color.white, flex: 1 }}>
-      {renderHeaderExtension()}
+      <View style={HistoryDetailStyle.headerExtension} />
       {params.section === 'order'
         ? renderOrderDetailContent()
         : renderPaymentDetailContent()}
@@ -493,54 +480,19 @@ const HistoryDetailView: FC = () => {
           <SnbText.B3 color={color.red50}>Butuh Bantuan?</SnbText.B3>
         </View>
       </TouchableWithoutFeedback>
-      {params.section === 'order' &&
-        historyDetailDummy.status.title.includes('Menunggu') && (
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbButton.Dynamic
-              title="Tolak"
-              type="secondary"
-              size="medium"
-              onPress={() => {
-                setConfirmDialogType('refuse');
-                setIsConfirmOrderDialogOpen(true);
-              }}
-            />
-            <View style={{ marginLeft: 12 }}>
-              <SnbButton.Dynamic
-                title="Terima"
-                type="primary"
-                size="medium"
-                onPress={() => {
-                  setConfirmDialogType('accept');
-                  setIsConfirmOrderDialogOpen(true);
-                }}
-              />
-            </View>
-          </View>
-        )}
     </View>
   );
-  /** => Order Confirmation Dialog */
-  const renderOrderConfirmationDialog = () => (
-    <SnbDialog
-      open={isConfirmOrderDialogOpen}
-      title={confirmDialogType === 'accept' ? 'Terima' : 'Tolak'}
-      content={
-        confirmDialogType === 'accept'
-          ? 'Apakah Anda ingin menerima perubahan jumlah barang?'
-          : 'Apakah Anda ingin membatalkan order?'
-      }
-      ok={() => console.log('Confirm yes pressed')}
-      cancel={() => setIsConfirmOrderDialogOpen(false)}
-    />
-  );
-  /** => main */
+  /** => Main */
   return (
     <SnbContainer color="white">
-      {renderHeader()}
+      <SnbTopNav.Type3
+        type="red"
+        title={`Detail ${title}`}
+        backAction={() => goBackAction()}
+      />
       {renderContent()}
       {renderFooter()}
-      {renderOrderConfirmationDialog()}
+      {renderToast()}
     </SnbContainer>
   );
 };

@@ -1,16 +1,19 @@
 /** === IMPORT INTERNAL === */
 import {
+  historyListInitialState,
+  HistoryListInitialProps,
+  historyListReducer,
+} from './list-history/history-list.reducer';
+import {
   OrderStatusInitialProps,
   orderStatusInitialState,
   orderStatusReducer,
 } from './list-history/order-status.reducer';
-
 import {
   paymentStatusListReducer,
   paymentStatusListInitialState,
   PaymentStatusListInitialProps,
 } from './list-history/payment-status-list.reducer';
-
 import {
   PaymentDetailInitialProps,
   paymentDetailInitialState,
@@ -21,32 +24,54 @@ import {
   PaymentInvoiceInitialProps,
   paymentInvoiceReducer,
 } from './payment-invoice.reducer';
-export interface HistoryListState {
+import {
+  historyDetailInitialState,
+  HistoryDetailInitialProps,
+  historyDetailReducer,
+} from './detail/history-detail.reducer';
+import {
+  paymentActivateVAInitialState,
+  PaymentActivateVAInitialProps,
+  paymentActivateVAReducer,
+} from './detail/activate-va.reducer';
+/** === TYPE === */
+export interface HistoryState {
+  list: HistoryListInitialProps;
+  detail: HistoryDetailInitialProps;
   orderStatus: OrderStatusInitialProps;
   paymentStatus: PaymentStatusListInitialProps;
   paymentDetail: PaymentDetailInitialProps;
   paymentInvoice: PaymentInvoiceInitialProps;
+  activateVa: PaymentActivateVAInitialProps;
 }
-
 /** === INITIAL STATE === */
 export const historyInitialState = {
-  paymentStatus: paymentStatusListInitialState,
+  list: historyListInitialState,
+  detail: historyDetailInitialState,
   orderStatus: orderStatusInitialState,
+  paymentStatus: paymentStatusListInitialState,
   paymentDetail: paymentDetailInitialState,
   paymentInvoice: paymentInvoiceInitialState,
+  activateVa: paymentActivateVAInitialState,
 };
-/** === EXPORT ALL HERE === */
+/** === REDUCER === */
 export const historyReducer = (
   {
-    paymentStatus,
+    list,
+    detail,
     orderStatus,
+    paymentStatus,
     paymentDetail,
     paymentInvoice,
-  }: HistoryListState,
+    activateVa,
+  }: HistoryState,
   action: any,
 ) => ({
-  paymentStatus: paymentStatusListReducer(paymentStatus, action),
+  list: historyListReducer(list, action),
+  detail: historyDetailReducer(detail, action),
   orderStatus: orderStatusReducer(orderStatus, action),
+  paymentStatus: paymentStatusListReducer(paymentStatus, action),
   paymentDetail: paymentDetailReducer(paymentDetail, action),
   paymentInvoice: paymentInvoiceReducer(paymentInvoice, action),
+  activateVa: paymentActivateVAReducer(activateVa, action),
 });

@@ -1,6 +1,7 @@
-/** PAYMENT STATUS LIST */
+import * as models from '@models';
+
 export interface IPaymentStatusList {
-  status: string;
+  status: models.PaymentStatusQuery;
   title: string;
   detail: string;
 }
