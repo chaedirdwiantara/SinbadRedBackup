@@ -9,7 +9,6 @@ import {
   color,
   styles,
   SnbToast,
-  SnbIcon,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -58,13 +57,6 @@ type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
-/** === DUMMIES === */
-const historyDetailDummy = {
-  orderRefund: {
-    orderPaidAmount: 3009400,
-    deliveryFee: 0,
-  },
-};
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
@@ -113,6 +105,7 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     if (activateVa.data) {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
+      historyDetailAction.fetch(dispatchHistory, params.id);
     }
   }, [activateVa.data]);
   /** => on Error get Invoice */
@@ -139,10 +132,7 @@ const HistoryDetailView: FC = () => {
     const accountVa = paymentDetail.data?.accountVaNo || '';
     Clipboard.setString(accountVa.toString());
     modalToast.setOpen(true);
-    modalToast.setToastText('Copied To Clipboard');
-    setTimeout(() => {
-      modalToast.setOpen(false);
-    }, 3000);
+    modalToast.toast.current.show();
   };
   /** => function to goBack */
   const goBackAction = () => {
@@ -232,10 +222,12 @@ const HistoryDetailView: FC = () => {
   /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
     const dataPayment = paymentDetail.data;
+    const statusOrder = detail.data?.status;
     return dataPayment?.billingStatus !== BillingStatus.CANCEL ? (
       <HistoryPaymentVirtualAccount
         onClick={() => onVACoppied()}
         data={dataPayment}
+        statusOrder={statusOrder!}
       />
     ) : (
       <View />
@@ -267,7 +259,7 @@ const HistoryDetailView: FC = () => {
         <HistoryCardItem
           title="Total Pembayaran Pesanan"
           value={
-            historyDetailDummy.orderRefund.orderPaidAmount
+            dataPayment.totalPayment
               ? toCurrency(dataPayment.totalPayment)
               : toCurrency(0)
           }
@@ -275,7 +267,7 @@ const HistoryDetailView: FC = () => {
         <HistoryCardItem
           title="Total Pembayaran Pengiriman"
           value={
-            historyDetailDummy.orderRefund.deliveryFee
+            dataPayment.deliveredTotalPayment
               ? toCurrency(dataPayment.deliveredTotalPayment)
               : toCurrency(0)
           }
@@ -368,13 +360,10 @@ const HistoryDetailView: FC = () => {
   const renderToast = () => {
     return (
       <SnbToast
-        open={modalToast.isOpen}
-        message={modalToast.toastText}
-        close={() => modalToast.setOpen(false)}
-        position={'bottom'}
-        leftItem={
-          <SnbIcon name={'check_circle'} color={color.green50} size={20} />
-        }
+        ref={modalToast.toast}
+        duration={1500}
+        position={'center'}
+        message="Copied To Clipboard"
       />
     );
   };
