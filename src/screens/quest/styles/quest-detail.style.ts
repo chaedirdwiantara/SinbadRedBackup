@@ -123,7 +123,15 @@ const QuestStyles = StyleSheet.create({
   },
   sectionContainer: {
     marginHorizontal: 16,
+    marginVertical: 16,
     marginBottom: 16,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    padding: 16,
+  },
+  checkboxLabel: {
+    margin: 8,
   },
 });
 

@@ -93,3 +93,37 @@ export const questTaskFailed = (
 ): models.UpdateFailedAction => {
   return { type: types.QUEST_TASK_FAILED, payload };
 };
+/** => Reset */
+export const questTaskReset = () => {
+  return { type: types.QUEST_DETAIL_RESET };
+};
+
+/** === DETAIL TASK ACTIONS === */
+/** => Process */
+export const questTaskDetailProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.QuestDetailProcessProps,
+): models.QuestDetailProcessAction => {
+  contextDispatch({ type: types.QUEST_TASK_DETAIL_PROCESS, payload });
+  return {
+    type: types.QUEST_TASK_DETAIL_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const questTaskDetailSuccess = (
+  payload: models.DetailSuccessProps<models.QuestTaskDetailItem>,
+): models.DetailSuccessAction<models.QuestTaskDetailItem> => {
+  return { type: types.QUEST_TASK_DETAIL_SUCCESS, payload };
+};
+/** => Failed */
+export const questTaskDetailFailed = (
+  payload: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.QUEST_TASK_DETAIL_FAILED, payload };
+};
+/** => Reset */
+export const questTaskDetailReset = () => {
+  return { type: types.QUEST_TASK_DETAIL_RESET };
+};

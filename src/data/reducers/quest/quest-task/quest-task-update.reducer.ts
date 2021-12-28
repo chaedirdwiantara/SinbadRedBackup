@@ -45,5 +45,9 @@ export const questTaskUpdateReducer = simplifyReducer(
         error: action.payload,
       };
     },
+    /** => task reset */
+    [types.QUEST_TASK_RESET]() {
+      return questTaskUpdateInitialState;
+    },
   },
 );
