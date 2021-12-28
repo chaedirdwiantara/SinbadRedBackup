@@ -31,8 +31,20 @@ const updateTask = (payload: object) => {
   return apiMapping('auth', path, 'quests', 'v1', 'UPDATE', payload);
 };
 
+const getDetailTask = (payload: models.QuestDetailProcessProps) => {
+  const path = `quest-tasks/${payload.id}?buyerId=${payload.buyerId}`;
+  return apiMapping<models.QuestTaskDetailItem>(
+    'auth',
+    path,
+    'quests',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const QuestApi = {
   getList,
   getDetail,
   updateTask,
+  getDetailTask,
 };

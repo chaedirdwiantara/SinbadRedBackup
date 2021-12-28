@@ -39,3 +39,24 @@ export interface QuestDetailItem {
   startDate: string;
   task: QuestDetailTask[];
 }
+
+export interface QuestTaskProducts {
+  catalogueImages: string;
+  maxRewardVoucherPerCustomer: number | null;
+  productId: number | null;
+  productName: string;
+  regularSellingPrice: number | null;
+  suggestedSellingPrice: number | null;
+}
+
+export interface QuestTaskDetailItem {
+  id: number;
+  headerTitle: string;
+  createdAt: string;
+  screenName: string;
+  buyerId: string;
+  updatedAt: string;
+  description: string;
+  products: QuestTaskProducts;
+  title: string;
+}

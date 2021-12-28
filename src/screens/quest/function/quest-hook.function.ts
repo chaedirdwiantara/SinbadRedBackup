@@ -95,6 +95,15 @@ const useQuestDetailAction = () => {
   };
 };
 
+const callTaskDetailProcessAction = (
+  contextDispatch: (action: any) => any,
+  queryOptions: models.QuestDetailProcessProps,
+) => {
+  return Actions.questTaskDetailProcess(contextDispatch, {
+    ...queryOptions,
+  });
+};
+
 const useQuestTaskAction = () => {
   const dispatch = useDispatch();
 
@@ -105,6 +114,15 @@ const useQuestTaskAction = () => {
       data: models.UpdateProcessProps<{}>,
     ) => {
       dispatch(Actions.questTaskProcess(contextDispatch, data));
+    },
+    resetTask: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questTaskReset());
+    },
+    detailTask: (
+      contextDispatch: (action: any) => any,
+      queryOptions: models.QuestDetailProcessProps,
+    ) => {
+      dispatch(callTaskDetailProcessAction(contextDispatch, queryOptions));
     },
   };
 };
