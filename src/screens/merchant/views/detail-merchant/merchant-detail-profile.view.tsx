@@ -86,7 +86,8 @@ const MerchantDetailProfileView: FC = () => {
         <Image source={source} style={MerchantStyles.imageProfile} />
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          onPress={() => goTo({ type: 'merchantOwnerImage' })}>
+          // onPress={() => goTo({ type: 'merchantOwnerImage' })}
+        >
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
       </View>
@@ -144,12 +145,16 @@ const MerchantDetailProfileView: FC = () => {
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity onPress={() => goTo(data)}>
+            <TouchableOpacity
+              // onPress={() => goTo(data)}
+              style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
             </TouchableOpacity>
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity onPress={() => goTo(data)}>
+            <TouchableOpacity
+              // onPress={() => goTo(data)}
+              style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
             </TouchableOpacity>
           )}
@@ -173,7 +178,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Email',
-          value: ownerData?.profile.email,
+          value: ownerData?.profile.email ? ownerData?.profile.email : '-',
           action: ownerData?.profile.email ? 'ubah' : 'tambah',
           type: 'merchantOwnerEmail',
           title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
@@ -191,7 +196,9 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Rekening Bank',
-          value: ownerData?.profile.bankAccount.bankAccountNo,
+          value: ownerData?.profile.bankAccount.bankAccountNo
+            ? ownerData?.profile.bankAccount.bankAccountNo
+            : '-',
           action: ownerData?.profile.bankAccount.bankAccountNo
             ? 'ubah'
             : 'tambah',
@@ -210,14 +217,14 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxNo,
+          value: ownerData?.profile.taxNo ? ownerData?.profile.taxNo : '-',
           action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
           type: 'merchantOwnerTaxNo',
           title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
         })}
         {renderContentSection({
           key: 'Foto Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.taxImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.taxImageUrl ? true : false,
           type: 'npwp',
@@ -225,7 +232,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Foto KTP',
-          value: ownerData?.profile.idImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.idImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.idImageUrl ? true : false,
           type: 'ktp',
@@ -233,7 +240,7 @@ const MerchantDetailProfileView: FC = () => {
         })}
         {renderContentSection({
           key: 'Foto Selfie + KTP',
-          value: ownerData?.profile.selfieImageUrl ? 'Sudah diupload' : '-',
+          value: ownerData?.profile.selfieImageUrl ? 'Berhasil Di Upload' : '-',
           action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
           success: ownerData?.profile.selfieImageUrl ? true : false,
           type: 'selfie',

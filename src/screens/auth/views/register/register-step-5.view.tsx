@@ -8,7 +8,6 @@ import { REGISTER_STEP_6_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { ScrollView, View } from 'react-native';
 import {
-  color,
   SnbButton,
   SnbContainer,
   SnbText,
@@ -16,6 +15,7 @@ import {
   SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import RegisterProgress from '../shared/register-progress.component';
 
 const Content: React.FC = () => {
   const { saveStoreData, merchantData } = useMerchant();
@@ -40,23 +40,14 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
           </View>
-          <View style={{ margin: 16 }}>
-            <SnbText.B4>5/7 Data Toko</SnbText.B4>
-            <View style={{ marginVertical: 4 }} />
-            <View
-              style={{
-                height: 8,
-                backgroundColor: color.red60,
-                borderRadius: 8,
-              }}
-            />
-          </View>
+          <RegisterProgress step={5} title="Data Toko" />
           <View style={{ padding: 16 }}>
             <SnbTextField.Text
               {...storeName}
               mandatory
               labelText="Nama Toko"
               placeholder="Masukkan nama toko"
+              maxLength={50}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -79,6 +70,7 @@ const Content: React.FC = () => {
               placeholder="Masukkan ukuran toko Anda"
               keyboardType="number-pad"
               rightText="m²"
+              maxLength={4}
             />
           </View>
           <View style={{ padding: 16 }}>
@@ -116,9 +108,8 @@ const Content: React.FC = () => {
             navigate(REGISTER_STEP_6_VIEW);
           }}
           type="primary"
-          shadow
           loading={false}
-          disabled={storeName.value === ''}
+          disabled={true || storeName.value === ''}
         />
       </View>
     </View>

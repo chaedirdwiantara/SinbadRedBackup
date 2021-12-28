@@ -18,6 +18,7 @@ const Content: React.FC = () => {
   const storeID = useInput();
   const password = useInput();
   const { loginUserName, loginIDState, resetLoginUsername } = useAuthAction();
+  const [secureTextEntry, setsecureTextEntry] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     if (loginIDState.data) {
@@ -27,11 +28,7 @@ const Content: React.FC = () => {
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
     if (loginIDState.error !== null) {
-      if (loginIDState.error.status === 401) {
-        password.setMessageError('ID Toko/Kata Sandi yang Anda masukkan salah');
-      } else {
-        password.setMessageError(setErrorMessage(loginIDState.error.code));
-      }
+      password.setMessageError(setErrorMessage(loginIDState.error.code));
     }
   }, [loginIDState]);
 
@@ -57,6 +54,9 @@ const Content: React.FC = () => {
           labelText="Kata Sandi"
           placeholder="Masukkan kata sandi Anda"
           type={password.valMsgError ? 'error' : 'default'}
+          suffixAction={() => setsecureTextEntry(!secureTextEntry)}
+          suffixIconName={secureTextEntry ? 'visibility_off' : 'visibility'}
+          secureTextEntry={secureTextEntry}
         />
       </View>
       <View style={{ marginTop: 32, height: 72 }}>
@@ -89,7 +89,7 @@ const Content: React.FC = () => {
           size="small"
           onPress={() => navigate(REGISTER_VIEW)}
           type="tertiary"
-          disabled={false}
+          disabled={true || false}
         />
       </View>
     </ScrollView>

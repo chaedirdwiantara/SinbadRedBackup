@@ -30,6 +30,7 @@ export const sendDataToSupplierReducer = simplifyReducer(
         ...state,
         data: action.payload.data,
         loading: false,
+        error: null,
       };
     },
     /** => Failed */

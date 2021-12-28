@@ -136,9 +136,15 @@ const useVoucherList = () => {
         stateVoucher.voucherCart.detail.data.sellerVouchers.map((item) => {
           const filteredSubSellerVoucher = item.voucherList.filter(
             (element) => {
-              return element.voucherName
-                .toLowerCase()
-                .includes(keyword.toLowerCase());
+              return (
+                element.voucherName
+                  .toLowerCase()
+                  .includes(keyword.toLowerCase()) ||
+                element.uniqueCode
+                  .toLowerCase()
+                  .includes(keyword.toLowerCase()) ||
+                element.externalId.toLowerCase().includes(keyword.toLowerCase())
+              );
             },
           );
           if (filteredSubSellerVoucher.length > 0) {

@@ -5,13 +5,13 @@ import { REGISTER_STEP_2_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import {
-  color,
   SnbButton,
   SnbContainer,
   SnbText,
   SnbTextField,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import RegisterProgress from '../shared/register-progress.component';
 
 const Content: React.FC = () => {
   const { checkEmail, checkEmailAvailability, resetCheckEmail } =
@@ -40,19 +40,6 @@ const Content: React.FC = () => {
     }
   }, [checkEmailAvailability]);
 
-  React.useEffect(() => {
-    if (idNumber.value.length === 16 || idNumber.value === '') {
-      idNumber.setMessageError('');
-    } else {
-      idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
-    }
-    if (taxNumber.value.length === 15 || taxNumber.value === '') {
-      taxNumber.setMessageError('');
-    } else {
-      taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
-    }
-  }, [idNumber.value, taxNumber.value]);
-
   /** VALIDATE EMAIL */
   const validateEmail = (data: string) => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -71,17 +58,7 @@ const Content: React.FC = () => {
           <View style={{ padding: 16 }}>
             <SnbText.H1>DAFTAR</SnbText.H1>
           </View>
-          <View style={{ margin: 16 }}>
-            <SnbText.B4>1/7 Profil Pemilik</SnbText.B4>
-            <View style={{ marginVertical: 4 }} />
-            <View
-              style={{
-                height: 8,
-                backgroundColor: color.red60,
-                borderRadius: 8,
-              }}
-            />
-          </View>
+          <RegisterProgress step={1} title="Profil Pemilik" />
           <View style={{ height: 92, padding: 16 }}>
             <SnbTextField.Text
               {...name}
@@ -104,6 +81,16 @@ const Content: React.FC = () => {
               labelText="Nomor KTP"
               placeholder="Masukkan nomor KTP anda"
               keyboardType="number-pad"
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                idNumber.setType('default');
+                idNumber.setValue(text);
+                if (text.length === 16 || text === '') {
+                  idNumber.setMessageError('');
+                } else {
+                  idNumber.setMessageError('Pastikan Nomor KTP 16 Digit');
+                }
+              }}
             />
           </View>
           <View
@@ -118,6 +105,16 @@ const Content: React.FC = () => {
               maxLength={15}
               placeholder="Masukkan nomor NPWP anda"
               keyboardType="number-pad"
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                taxNumber.setType('default');
+                taxNumber.setValue(text);
+                if (text.length === 16 || text === '') {
+                  taxNumber.setMessageError('');
+                } else {
+                  taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');
+                }
+              }}
             />
           </View>
           <View style={{ height: 92, padding: 16, marginBottom: 24 }}>
@@ -152,9 +149,9 @@ const Content: React.FC = () => {
             }
           }}
           type="primary"
-          shadow
           loading={checkEmailAvailability.loading}
           disabled={
+            true ||
             name.value === '' ||
             idNumber.value === '' ||
             idNumber.valMsgError !== '' ||

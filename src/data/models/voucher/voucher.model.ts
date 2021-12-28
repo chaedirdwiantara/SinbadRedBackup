@@ -8,8 +8,8 @@ export interface VoucherDetailProps {
   termsAndCondition: string[];
   instructions: string[];
   voucherName: string;
-  voucherHeaeder: string;
-  voucherCode: string;
+  voucherHeader: string;
+  uniqueCode: string;
 }
 export interface VoucherDataProps {
   dataVouchers: selectedVoucherDataProps | null;
@@ -41,6 +41,8 @@ export interface SellerVoucherListProps {
   id: number;
   voucherId: number;
   voucherName: string;
+  uniqueCode: string;
+  externalId: string;
   shortDescription: string;
   remainingDay: number;
   expiredAt: string;

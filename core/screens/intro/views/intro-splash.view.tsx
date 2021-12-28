@@ -4,13 +4,19 @@ import { View } from 'react-native';
 import { SnbContainer, SnbSvgIcon } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { usePageAfterIntro } from '../functions';
+import { useAuthCoreAction } from '@core/functions/auth';
 /** === IMPORT STYLE HERE === */
 import IntroStyle from '../styles/intro.style';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   /** === HOOK === */
   usePageAfterIntro();
+  const authCoreAction = useAuthCoreAction();
   /** === EFFECT === */
+  /** => get auth me */
+  React.useEffect(() => {
+    authCoreAction.me();
+  }, []);
   /** === VIEW === */
   /** => main */
   return (

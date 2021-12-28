@@ -134,6 +134,21 @@ const useAddToCart = () => {
   };
 };
 
+const useAddToCartDetailActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.AddToCartPayload,
+    ) => {
+      dispatch(Actions.addToCartDetailProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.addToCartDetailReset(contextDispatch));
+    },
+  };
+};
+
 /** === Fetch Product Tag List Related === */
 const useTagListActions = () => {
   const dispatch = useDispatch();
@@ -192,8 +207,12 @@ const useReserveStockAction = () => {
   };
 };
 
-const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
+const useOrderQuantity = ({ minQty }: { minQty: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
+
+  const onChangeQty = (value: number) => {
+    setOrderQty(value);
+  };
 
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);
@@ -209,7 +228,7 @@ const useOrderQuantity = ({ minQty = 1 }: { minQty?: number }) => {
     });
   };
 
-  return { orderQty, increaseOrderQty, decreaseOrderQty };
+  return { orderQty, onChangeQty, increaseOrderQty, decreaseOrderQty };
 };
 
 const useStockValidationAction = () => {
@@ -286,4 +305,5 @@ export {
   useStockValidationDetailAction,
   useStockInformationAction,
   useProductDetailCartAction,
+  useAddToCartDetailActions,
 };

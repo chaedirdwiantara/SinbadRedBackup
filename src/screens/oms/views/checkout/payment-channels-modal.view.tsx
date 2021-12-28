@@ -12,6 +12,7 @@ import {
 import {
   usePaymentChannelsData,
   useCheckoutMaster,
+  usePaymentAction,
 } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -30,7 +31,10 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
   /** === HOOK === */
   const checkoutMaster = useCheckoutMaster();
   const paymentChannelData = usePaymentChannelsData();
-  const { statePayment } = React.useContext(contexts.PaymentContext);
+  const { invoiceChannelList } = usePaymentAction();
+  const { statePayment, dispatchPayment } = React.useContext(
+    contexts.PaymentContext,
+  );
   const selectedPaymentChannel = (item: any) => {
     const dataUpdatePaymentChannels = [
       {
@@ -43,6 +47,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
       },
     ];
     checkoutMaster.setPaymentChannel(dataUpdatePaymentChannels);
+    invoiceChannelList(dispatchPayment, paymentChannelData.invoiceGroupId);
     close();
   };
   const contentChannelTypes = (paymentTypes: any) => {
@@ -67,7 +72,7 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
                   : false
               }
               onPress={() => selectedPaymentChannel(item)}
-              badge={item.promoPaymentAvailable}
+              badge={item.promoPaymentAvailable && item.status !== 'disabled'}
               textBadge={item.promPaymentDescription}
             />
           );

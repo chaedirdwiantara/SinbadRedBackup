@@ -5,13 +5,13 @@ import { setUserFCM } from '@core/functions/firebase/fcm-firestore.function';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
-  data: models.LoginUserNameProps,
+  data: models.LoginUserName,
 ): models.LoginUserNameProcessAction => {
   return { type: types.LOGIN_USERNAME_PROCESS, payload: data };
 };
 /** => success */
 export const loginUserNameSuccess = (
-  data: models.LoginSuccessProps,
+  data: models.LoginSuccess,
 ): models.LoginUserNameSuccessAction => {
   setUserFCM(data.data.user.id);
   return { type: types.LOGIN_USERNAME_SUCCESS, payload: data };
@@ -25,13 +25,13 @@ export const loginUserNameFailed = (
 /** === REQUEST OTP === */
 /** => process */
 export const requestOTPProcess = (
-  data: models.OtpRequestProps,
+  data: models.OtpRequest,
 ): models.RequestOTPProcessAction => {
   return { type: types.REQUEST_OTP_PROCESS, payload: data };
 };
 /** => success */
 export const requestOTPSuccess = (
-  data: models.OtpGetSuccessProps,
+  data: models.OtpGetSuccess,
 ): models.RequestOTPSuccessAction => {
   return { type: types.REQUEST_OTP_SUCCESS, payload: data };
 };
@@ -44,13 +44,13 @@ export const requestOTPFailed = (
 /** === VERIFICATION OTP === */
 /** => process */
 export const verificationOTPProcess = (
-  data: models.LoginPhoneNumberProps,
+  data: models.LoginPhoneNumber,
 ): models.VerificationOTPProcessAction => {
   return { type: types.VERIFICATION_OTP_PROCESS, payload: data };
 };
 /** => success */
 export const verificationOTPSuccess = (
-  data: models.LoginSuccessProps,
+  data: models.LoginSuccess,
 ): models.VerificationOTPSuccessAction => {
   return { type: types.VERIFICATION_OTP_SUCCESS, payload: data };
 };
@@ -67,7 +67,7 @@ export const logoutProcess = (): models.LogoutProcessAction => {
 };
 /** => success */
 export const logoutSuccess = (
-  data: models.LogoutSuccesProps,
+  data: models.LogoutSuccess,
 ): models.LogoutSuccessAction => {
   setUserFCM(null);
   return { type: types.LOGOUT_SUCCESS, payload: data };

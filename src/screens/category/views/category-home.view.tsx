@@ -49,9 +49,7 @@ const CategoryHomeView: FC = () => {
         key={index}
         name={item.name}
         icon={item.icon}
-        onPress={() =>
-          item.hasChild ? goToCategory(item.id) : goToProduct(item)
-        }
+        onPress={() => goToProduct(item)}
       />
     ) : (
       allCategoryButton

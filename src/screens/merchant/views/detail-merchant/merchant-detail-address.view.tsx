@@ -4,6 +4,7 @@ import {
   SnbContainer,
   SnbTextField,
   SnbTopNav,
+  SnbText,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
@@ -51,10 +52,10 @@ const MerchantDetailAddressView: FC = () => {
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
-        buttonAction={() => {
-          resetMerchantData();
-          NavigationAction.navigate('MerchantEditAddressView');
-        }}
+        // buttonAction={() => {
+        //   resetMerchantData();
+        //   NavigationAction.navigate('MerchantEditAddressView');
+        // }}
       />
     );
   };
@@ -62,6 +63,9 @@ const MerchantDetailAddressView: FC = () => {
   const renderMap = () => {
     return (
       <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+        <View style={{ marginBottom: 8 }}>
+          <SnbText.H4>Koordinat Lokasi</SnbText.H4>
+        </View>
         <MapView
           ref={mapRef}
           initialRegion={{

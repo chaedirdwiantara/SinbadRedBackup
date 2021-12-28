@@ -6,12 +6,12 @@ import { VoucherCartListStyles } from '../../styles';
 import { contexts } from '@contexts';
 /** === IMPORT COMPONENT HERE === */
 import LoadingPage from '@core/components/LoadingPage';
-import BottomModalError from '@core/components/BottomModalError';
 import { VoucherCartListHeader } from './voucher-cart-list-header.view';
 import { VoucherSearch } from '../../components/VoucherSearch';
 import { SinbadVoucherList } from './sinbad-voucher-list.view';
 import { SellerVoucherList } from './seller-voucher-list.view';
 import { VoucherFooter } from '../../components/VoucherFooter';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   goBack,
@@ -21,7 +21,9 @@ import {
   useSelectedSellerVoucher,
   useSelectedSinbadVoucher,
   useVoucherLocalData,
+  useStandardModalState,
 } from '../../functions';
+import { useCartMasterActions } from '@screen/oms/functions';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
@@ -46,13 +48,17 @@ const VoucherCartListView: FC = () => {
     resetVoucherData,
   } = useVoucherList();
   const voucherLocalDataAction = useVoucherLocalData();
-  const [isErrorModalOpen, setErrorModalOpen] = React.useState(false);
+  const errorModal = useStandardModalState();
   const { keyword, changeKeyword } = useSearchKeyword();
   const voucherCartListAction = useVoucherCartListAction();
+  const cartMasterActions = useCartMasterActions();
   const voucherCartListState = stateVoucher.voucherCart.detail;
   /** => effect */
   React.useEffect(() => {
     voucherCartListAction.list(dispatchVoucher);
+    cartMasterActions.updateRouteName({
+      previouseRouteName: 'voucherCartList',
+    });
     if (voucherLocalDataAction.selectedVoucher !== null) {
       setSelectedSinbadVoucher(
         voucherLocalDataAction.selectedVoucher.sinbadVoucher,
@@ -88,7 +94,7 @@ const VoucherCartListView: FC = () => {
     }
     // if fetching error
     if (voucherCartListState.error !== null) {
-      setErrorModalOpen(true);
+      errorModal.setOpen(true);
     }
   }, [voucherCartListState]);
   /** === VIEW === */
@@ -206,14 +212,11 @@ const VoucherCartListView: FC = () => {
   /** => error modal */
   const renderErrorModal = () => {
     return (
-      <BottomModalError
-        isOpen={isErrorModalOpen}
-        errorTitle={'Terjadi kesalahan'}
-        errorSubtitle={'Silahkan mencoba kembali'}
-        errorImage={require('../../../../assets/images/cry_sinbad.png')}
-        buttonTitle={'Ok'}
-        buttonOnPress={() => {
-          setErrorModalOpen(false);
+      <BottomSheetError
+        open={errorModal.isOpen}
+        error={voucherCartListState.error}
+        closeAction={() => {
+          errorModal.setOpen(false);
           goBack();
         }}
       />

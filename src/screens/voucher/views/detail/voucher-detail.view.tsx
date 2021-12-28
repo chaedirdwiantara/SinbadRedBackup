@@ -9,10 +9,19 @@ import { VoucherDetailCardInfo } from './voucher-detail-card-info.view';
 import { VoucherDetailDescription } from './voucher-detail-description.view';
 import { VoucherDetailTnC } from './voucher-detail-tnc.view';
 import { VoucherDetailInstruction } from './voucher-detail-instruction.view';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { useVoucherDetailAction } from '../../functions';
+import {
+  useVoucherDetailAction,
+  useStandardModalState,
+  goBack,
+} from '../../functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
+/** === INTERFACE === */
+interface NavigationParams {
+  type: string;
+}
 /** === COMPONENT === */
 const VoucherDetailView: FC = () => {
   /** === HOOK === */
@@ -21,14 +30,21 @@ const VoucherDetailView: FC = () => {
   );
   const voucherDetailState = stateVoucher.voucherGeneral.detail;
   const voucherDetailAction = useVoucherDetailAction();
-  const { id, other } = NavigationAction.useGetNavParams().params;
+  const { id, type } =
+    NavigationAction.useGetNavParams<NavigationParams>().params;
+  const voucherDetailError = useStandardModalState();
   /** => effect */
   React.useEffect(() => {
-    voucherDetailAction.detail(dispatchVoucher, id, other.type);
+    voucherDetailAction.detail(dispatchVoucher, id, type);
     return () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
   }, []);
+  React.useEffect(() => {
+    if (stateVoucher.voucherGeneral.detail.error !== null) {
+      voucherDetailError.setOpen(true);
+    }
+  }, [stateVoucher.voucherGeneral.detail.error]);
   /** === VIEW === */
   /** => header */
   const renderHeader = () => {
@@ -57,7 +73,7 @@ const VoucherDetailView: FC = () => {
     return (
       <VoucherDetailCardInfo
         voucherName={voucherDetailState.data.voucherName}
-        voucherCode={voucherDetailState.data.voucherCode}
+        voucherCode={voucherDetailState.data.uniqueCode}
         expiredAt={voucherDetailState.data.expiredAt}
       />
     );
@@ -95,6 +111,19 @@ const VoucherDetailView: FC = () => {
       />
     );
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={voucherDetailError.isOpen}
+        error={stateVoucher.voucherGeneral.detail.error}
+        closeAction={() => {
+          voucherDetailError.setOpen(false);
+          goBack();
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
@@ -110,6 +139,8 @@ const VoucherDetailView: FC = () => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

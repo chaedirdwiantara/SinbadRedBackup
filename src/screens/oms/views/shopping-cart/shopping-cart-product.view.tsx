@@ -39,6 +39,8 @@ interface ShoppingCartProductProps {
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  isFocus: boolean;
+  setIsFocus: Dispatch<SetStateAction<boolean>>;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -55,7 +57,66 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   totalProducts,
   setSassionQty,
   onRemoveProduct,
+  isFocus,
+  setIsFocus,
 }) => {
+  const minusDisabled =
+    isFocus ||
+    product.qty <= product.minQty ||
+    product.qty - product.multipleQty < product.minQty;
+
+  const plusDisabled =
+    isFocus ||
+    product.qty >= product.stock ||
+    product.qty + product.multipleQty > product.stock;
+
+  const handleBlur = () => {
+    const valueAfterMinimum = product.qty - product.minQty;
+    let qty =
+      Math.floor(valueAfterMinimum / product.multipleQty) *
+        product.multipleQty +
+      product.minQty;
+
+    if (qty < product.minQty) {
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        product.minQty,
+        setSassionQty,
+      );
+    } else if (qty > product.stock) {
+      const maxQtyAfterMinimum = product.stock - product.minQty;
+      qty =
+        Math.floor(maxQtyAfterMinimum / product.multipleQty) *
+          product.multipleQty +
+        product.minQty;
+
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        qty,
+        setSassionQty,
+      );
+    } else {
+      handleProductQuantityChange(
+        invoiceGroupIndex,
+        brandIndex,
+        productIndex,
+        'onChange',
+        [invoiceGroups, setInvoiceGroups],
+        qty,
+        setSassionQty,
+      );
+    }
+    setIsFocus(false);
+  };
+
   return (
     <View
       style={{
@@ -66,7 +127,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         borderBottomColor: color.black10,
       }}
       key={product.productName}>
-      <View style={{ flexDirection: 'row' }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          width: '50%',
+        }}>
         <View style={{ marginRight: 20, marginLeft: 4 }}>
           <SnbCheckbox
             status={product.selected ? 'selected' : 'unselect'}
@@ -87,57 +152,76 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
           <Image
             source={{ uri: product.urlImages }}
-            style={{ marginRight: 8, width: 77, height: 77 }}
+            style={{ width: 77, height: 77 }}
           />
         </TouchableOpacity>
         <View>
           <TouchableOpacity
             onPress={() => goToProductDetail(product.productId)}
-            style={{ marginBottom: 12, maxWidth: 160 }}>
+            style={{
+              marginBottom: 12,
+              width: '100%',
+            }}>
             <SnbText.B4>{product.productName}</SnbText.B4>
           </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice)}
+              {toCurrency(product.displayPrice, { withFraction: false })}
             </SnbText.B4>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <SnbNumberCounter
-              value={product.qty}
-              onIncrease={() =>
+          <SnbNumberCounter
+            value={product.qty}
+            maxLength={6}
+            onBlur={handleBlur}
+            onFocus={() => setIsFocus(true)}
+            onIncrease={() =>
+              handleProductQuantityChange(
+                invoiceGroupIndex,
+                brandIndex,
+                productIndex,
+                'increase',
+                [invoiceGroups, setInvoiceGroups],
+                product.qty,
+                setSassionQty,
+              )
+            }
+            onDecrease={() =>
+              handleProductQuantityChange(
+                invoiceGroupIndex,
+                brandIndex,
+                productIndex,
+                'decrease',
+                [invoiceGroups, setInvoiceGroups],
+                product.qty,
+                setSassionQty,
+              )
+            }
+            onChange={(qty: number) => {
+              if (Number.isInteger(qty)) {
                 handleProductQuantityChange(
                   invoiceGroupIndex,
                   brandIndex,
                   productIndex,
-                  'increase',
+                  'onChange',
                   [invoiceGroups, setInvoiceGroups],
-                  product.qty,
+                  qty,
                   setSassionQty,
-                )
+                );
               }
-              onDecrease={() =>
-                handleProductQuantityChange(
-                  invoiceGroupIndex,
-                  brandIndex,
-                  productIndex,
-                  'decrease',
-                  [invoiceGroups, setInvoiceGroups],
-                  product.qty,
-                  setSassionQty,
-                )
-              }
-              minusDisabled={product.qty <= product.minQty}
-              plusDisabled={product.qty >= product.stock}
-            />
-          </View>
+            }}
+            minusDisabled={minusDisabled}
+            plusDisabled={plusDisabled}
+          />
         </View>
       </View>
       <View
         style={{
           justifyContent: 'space-between',
           alignItems: 'flex-end',
+          width: '20%',
         }}>
         <TouchableOpacity
+          disabled={isFocus}
           onPress={() =>
             handleProductDelete(
               invoiceGroupIndex,
@@ -147,9 +231,13 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
               onRemoveProduct,
             )
           }>
-          <SnbIcon name="delete_outline" color={color.black60} size={32} />
+          <SnbIcon
+            name="delete_outline"
+            color={isFocus ? color.black10 : color.black60}
+            size={32}
+          />
         </TouchableOpacity>
-        {product.stock <= 50 && (
+        {(product.stock <= 1000 || product.qty > product.stock) && (
           <SnbText.B3
             color={
               color.red50
