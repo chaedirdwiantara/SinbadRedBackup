@@ -63,8 +63,6 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             stateHistory.activateVa.loading &&
             data?.paymentType.id === PaymentType.PAY_LATER &&
             statusOrder !== OrderStatus.DELIVERED
-              ? true
-              : false
           }
         />
       </View>
