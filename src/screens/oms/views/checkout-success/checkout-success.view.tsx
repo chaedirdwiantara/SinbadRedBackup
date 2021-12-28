@@ -26,11 +26,7 @@ const OmsCheckoutSuccessView: FC = () => {
   const { dispatchCheckout } = useContext(contexts.CheckoutContext);
   const paymentAction = usePaymentAction();
   const checkoutAction = useCreateOrders();
-  useCustomBackHardware(() => {
-    // goToHome();
-    NavigationAction.resetToHome();
-    return true;
-  });
+  useCustomBackHardware(() => NavigationAction.resetToHome());
   useEffect(() => {
     /** Reset Data to prevent automaticaly create orders on checkout */
     paymentAction.resetTCCreate(dispatchPayment);

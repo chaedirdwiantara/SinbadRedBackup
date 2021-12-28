@@ -45,8 +45,10 @@ const RejectApprovalModal: FC<RejectApprovalModalProps> = ({
             </SnbText.B2>
             <View style={{ marginTop: 8 }}>
               <SnbText.C1 color={color.black100} align="center">
-                Data pada akun kamu gagal terverifikasi nih. Yuk, periksa
-                halaman profile dan lengkapi data Anda!
+                Data pada akun kamu gagal terverifikasi nih.
+              </SnbText.C1>
+              <SnbText.C1 color={color.black100} align="center">
+                Yuk, periksa halaman profile dan lengkapi data Anda.
               </SnbText.C1>
             </View>
           </View>
