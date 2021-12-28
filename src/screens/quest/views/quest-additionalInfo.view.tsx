@@ -1,17 +1,18 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { View, Dimensions, ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav, SnbButton } from 'react-native-sinbad-ui';
-import RenderHtml from 'react-native-render-html';
+import { View, ScrollView } from 'react-native';
+import {
+  SnbContainer,
+  SnbTopNav,
+  SnbButton,
+  SnbHtml,
+} from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import { goBack } from '../function';
 import { QuestDetailStyles } from '../styles';
 
-const { width } = Dimensions.get('window');
-
 /** === COMPONENT === */
 const QuestAdditionalInfoView: FC = ({ route }: any) => {
-  console.log(route, 'ROUTEEE');
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -29,12 +30,10 @@ const QuestAdditionalInfoView: FC = ({ route }: any) => {
   };
   /** => Render HTML */
   const renderDescriptionHtml = () => {
-    const sourceHtml = {
-      html: route.params.data,
-    };
+    const description = route.params.data;
     return (
       <View style={QuestDetailStyles.sectionContainer}>
-        <RenderHtml contentWidth={width} source={sourceHtml} />
+        <SnbHtml value={description} fontSize={16} />
       </View>
     );
   };

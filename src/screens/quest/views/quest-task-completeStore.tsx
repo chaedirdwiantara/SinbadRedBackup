@@ -29,7 +29,6 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
   const { stateUser } = React.useContext(contexts.UserContext);
   const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   let mapRef = React.useRef<MapView>(null);
-  console.log('storeAddress', storeAddress);
 
   const [timeOpen, setTimeOpen] = useState('09:00');
   const [timeClosed, setTimeClosed] = useState('21:00');
