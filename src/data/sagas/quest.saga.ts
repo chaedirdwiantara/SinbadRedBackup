@@ -48,11 +48,27 @@ function* questTask(action: models.QuestTaskProcessAction) {
     yield put(ActionCreators.questTaskFailed(error));
   }
 }
+/** => Detail Task */
+function* questTaskDetail(action: models.QuestDetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.QuestTaskDetailItem> =
+      yield call(() => {
+        return QuestApi.getDetailTask(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.questTaskDetailSuccess(response),
+    );
+    yield put(ActionCreators.questTaskDetailSuccess(response));
+  } catch (error: any) {
+    yield put(ActionCreators.questTaskDetailFailed(error));
+  }
+}
 /** === LISTENER === */
 function* QuestSaga() {
   yield takeLatest(types.QUEST_LIST_PROCESS, questList);
   yield takeLatest(types.QUEST_DETAIL_PROCESS, questDetail);
   yield takeLatest(types.QUEST_TASK_PROCESS, questTask);
+  yield takeLatest(types.QUEST_TASK_DETAIL_PROCESS, questTaskDetail);
 }
 
 export default QuestSaga;

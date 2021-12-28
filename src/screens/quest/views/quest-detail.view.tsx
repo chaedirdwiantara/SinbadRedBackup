@@ -72,8 +72,8 @@ const QuestDetailView: FC = ({ route }: any) => {
   };
 
   /** => check navigation screen */
-  const checkNavigationScreen = (screenName: string, data: object) => {
-    // const { id, currentTaskId, currentTask } = questDetailState.data;
+  const checkNavigationScreen = (screenName: string, data: any) => {
+    const { id, currentTaskId, currentTask } = questDetailState.data;
     switch (screenName) {
       case 'PhoneNumberVerification':
         NavigationAction.navigate('MerchantEditView', {
@@ -89,6 +89,14 @@ const QuestDetailView: FC = ({ route }: any) => {
           type: 'merchantOwnerName',
           source: 'Quest',
           sourceData: data,
+        });
+        break;
+      case 'ConsentLetter':
+        NavigationAction.navigate('QuestTaskConsentLetterView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+          buyerId: data.buyerId,
         });
         break;
       default: {

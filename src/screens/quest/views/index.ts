@@ -2,8 +2,14 @@
 import QuestListView from './quest-list.view';
 import QuestDetailView from './quest-detail.view';
 import QuestAdditionalInfoView from './quest-additionalInfo.view';
+import QuestTaskConsentLetterView from './quest-task-consentLetter';
 /** === EXPORT ALL === */
-export { QuestListView, QuestDetailView, QuestAdditionalInfoView };
+export {
+  QuestListView,
+  QuestDetailView,
+  QuestAdditionalInfoView,
+  QuestTaskConsentLetterView,
+};
 /**
  * ================================================================
  * NOTES
