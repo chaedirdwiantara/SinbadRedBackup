@@ -7,6 +7,7 @@ import {
   BillingStatus,
   PaymentType,
   ChannelType,
+  OrderStatus,
 } from '@screen/history/functions/data';
 import { color, styles } from '@sinbad/react-native-sinbad-ui';
 import { useActivateVa } from '../../functions';
@@ -14,6 +15,7 @@ import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import moment from 'moment';
 interface PaymentVAProps {
   data: PaymentDetailSuccessProps | null;
+  statusOrder: string;
   onClick: () => void;
 }
 
@@ -21,13 +23,14 @@ interface PaymentVAProps {
 const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   data,
   onClick,
+  statusOrder,
 }) => {
   const { dispatchHistory, stateHistory } = useHistoryContext();
   const activateVa = useActivateVa();
 
   /** === FUNCTIONS ===*/
   const onClickButton = () => {
-    activateVa.update(dispatchHistory, data?.id);
+    activateVa.update(dispatchHistory, data?.id!);
   };
   /** === VIEW === */
   /** Bank Icon */
@@ -56,7 +59,13 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
           buttonText="AKTIFKAN VIRTUAL ACCOUNT"
           onPress={() => onClickButton()}
           loading={stateHistory.activateVa.loading}
-          disabled={stateHistory.activateVa.loading}
+          disabled={
+            stateHistory.activateVa.loading &&
+            data?.paymentType.id === PaymentType.PAY_LATER &&
+            statusOrder !== OrderStatus.DELIVERED
+              ? true
+              : false
+          }
         />
       </View>
     );

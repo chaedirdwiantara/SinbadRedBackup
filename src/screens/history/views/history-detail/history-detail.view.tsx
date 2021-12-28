@@ -227,10 +227,12 @@ const HistoryDetailView: FC = () => {
   /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
     const dataPayment = paymentDetail.data;
+    const statusOrder = detail.data?.status;
     return dataPayment?.billingStatus !== BillingStatus.CANCEL ? (
       <HistoryPaymentVirtualAccount
         onClick={() => onVACoppied()}
         data={dataPayment}
+        statusOrder={statusOrder!}
       />
     ) : (
       <View />
