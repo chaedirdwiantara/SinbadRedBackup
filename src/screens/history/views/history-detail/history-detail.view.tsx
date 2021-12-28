@@ -57,13 +57,6 @@ type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
-/** === DUMMIES === */
-const historyDetailDummy = {
-  orderRefund: {
-    orderPaidAmount: 3009400,
-    deliveryFee: 0,
-  },
-};
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
   /** === HOOKS & DERIVED VALUES === */
@@ -266,7 +259,7 @@ const HistoryDetailView: FC = () => {
         <HistoryCardItem
           title="Total Pembayaran Pesanan"
           value={
-            historyDetailDummy.orderRefund.orderPaidAmount
+            dataPayment.totalPayment
               ? toCurrency(dataPayment.totalPayment)
               : toCurrency(0)
           }
@@ -274,7 +267,7 @@ const HistoryDetailView: FC = () => {
         <HistoryCardItem
           title="Total Pembayaran Pengiriman"
           value={
-            historyDetailDummy.orderRefund.deliveryFee
+            dataPayment.deliveredTotalPayment
               ? toCurrency(dataPayment.deliveredTotalPayment)
               : toCurrency(0)
           }
