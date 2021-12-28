@@ -28,7 +28,6 @@ import {
   useErrorModalBottom,
   useCheckoutFailedFetchState,
   useErrorWarningModal,
-  useParcelDetailModal,
 } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -49,12 +48,14 @@ import ModalErrorWarning from '@screen/oms/components/modal-error-warning.compon
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { usePrevious } from '@core/functions/hook/prev-value';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   /** => used for reset voucher */
   const dispatch = useDispatch();
+  useCustomBackHardware(() => backToCartModal.setOpen(true));
 
   /** => this for payment channel modal */
   const checkPromoPaymentAction = useCheckPromoPaymentAction();
@@ -323,7 +324,6 @@ const OmsCheckoutView: FC = () => {
   }, [paymentChannelData.paymentChannels]);
   /** => insert data promo payment to channel modal master */
   useEffect(() => {
-    // if success
     if (statePromo.checkPromoPayment.list.data.length > 0) {
       const payload = statePromo.checkPromoPayment.list.data.map((item) => {
         return {
@@ -411,9 +411,10 @@ const OmsCheckoutView: FC = () => {
 
   const handleCheckExpiredSession = () => {
     if (!expiredTime.check()) {
-      return expiredTime.check();
+      return false;
     } else {
       setExpiredSession(true);
+      return true;
     }
   };
 

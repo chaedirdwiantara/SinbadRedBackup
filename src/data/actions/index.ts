@@ -18,6 +18,7 @@ export * from './notification';
 export * from './banner';
 export * from './supplier';
 export * from './quest';
+export * from './history';
 /**
  * ================================================================
  * NOTES

@@ -21,6 +21,7 @@ import {
   ShopingCartProvider,
   ShopingCartContext,
 } from './oms/shoping-cart/ShopingCartProvider';
+import { HistoryProvider, HistoryContext } from './history/HistoryProvider';
 import { PaymentProvider, PaymentContext } from './oms/payment/PaymentProvider';
 import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
 import {
@@ -54,6 +55,7 @@ export const providers = [
   TagProvider,
   BannerProvider,
   ShopingCartProvider,
+  HistoryProvider,
   PaymentProvider,
   SupplierProvider,
   ReserveStockProvider,
@@ -77,6 +79,7 @@ export const contexts = {
   TagContext,
   BannerContext,
   ShopingCartContext,
+  HistoryContext,
   PaymentContext,
   SupplierContext,
   ReserveStockContext,

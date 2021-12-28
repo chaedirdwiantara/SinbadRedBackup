@@ -20,6 +20,7 @@ export * from './banner.type';
 export * from './oms';
 export * from './supplier';
 export * from './quest.type';
+export * from './history';
 /**
  * ================================================================
  * NOTES

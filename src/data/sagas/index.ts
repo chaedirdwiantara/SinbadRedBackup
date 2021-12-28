@@ -19,6 +19,7 @@ import SupplierSaga from './supplier/supplier.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
 import PaymentSaga from './oms/payment/payment.saga';
 import ProductReserveStockSaga from './product/reserve-stock.saga';
+import HistorySaga from './history.saga';
 import StockSaga from './product/stock.saga';
 import QuestSaga from './quest.saga';
 import CheckoutDoneSaga from './oms/checkout-done/checkout-done.saga';
@@ -41,6 +42,7 @@ function* rootSaga() {
   yield all([fork(BannerSaga)]);
   yield all([fork(CartSaga)]);
   yield all([fork(SupplierSaga)]);
+  yield all([fork(HistorySaga)]);
   yield all([fork(CheckoutSaga)]);
   yield all([fork(PaymentSaga)]);
   yield all([fork(ProductReserveStockSaga)]);
