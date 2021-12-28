@@ -43,6 +43,7 @@ export const useModalToast = () => {
     setToastText: (value: string) => {
       setToastText(value);
     },
+    toast,
   };
 };
 
