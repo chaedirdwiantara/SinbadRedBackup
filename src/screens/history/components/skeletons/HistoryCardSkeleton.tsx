@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { styles } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+/** === IMPORT STYLE === */
 import { HistoryStyle } from '@screen/history/styles';
 /** === COMPONENT === */
 export const HistoryCardSkeleton: FC = () => (
