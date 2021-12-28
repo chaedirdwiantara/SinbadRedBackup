@@ -10,7 +10,6 @@ interface Props {
 }
 
 const ButtonClock: FC<Props> = (props) => {
-  console.log('props button', props);
   /** === FUNCTION === */
   const { type, time, onPress } = props;
   /** === VIEW === */
