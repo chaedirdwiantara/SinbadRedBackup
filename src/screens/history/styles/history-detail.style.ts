@@ -18,9 +18,15 @@ export const HistoryDetailStyle = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: color.yellow10,
   },
-  statusDisplay: {
+  statusContainer: {
+    marginBottom: 8,
+    marginTop: 10,
+    marginHorizontal: 16,
+  },
+  statusContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderRadius: 6,
   },
@@ -32,12 +38,7 @@ export const HistoryDetailStyle = StyleSheet.create({
   },
   productListCardHeader: {
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 8,
-  },
-  canceledProductListCardHeader: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
+    paddingTop: 12,
     paddingBottom: 8,
   },
   cardItem: {

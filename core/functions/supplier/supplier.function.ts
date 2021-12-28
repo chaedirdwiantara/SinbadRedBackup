@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 /** === IMPORT TYPES === */
 export interface MerchantStatus {
   sinbadStatus: 'verified' | 'rejected' | 'updating' | 'pending' | 'guest';
