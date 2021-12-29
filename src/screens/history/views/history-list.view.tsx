@@ -28,7 +28,7 @@ import { additionalOrderStatusList } from '../types';
 /** === CONSTANT === */
 const historyTabs = ['Tagihan', 'Order'];
 /** === COMPONENT === */
-const HistoryListView: FC = ({ navigation }: any) => {
+const HistoryListView: FC = () => {
   /** === HOOKS === */
   const [activeTab, setActiveTab] = useState(1);
   const [keyword, setKeyword] = useState('');
@@ -75,18 +75,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
     getPaymentStatus.list(dispatchHistory);
     orderStatusActions.fetch(dispatchHistory);
   }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('blur', () => {
-      setKeyword('');
-      setActiveOrderStatus('');
-      setActivePaymentStatus('');
-      setDate({ start: '', end: '' });
-      setIsFiltered(false);
-    });
-
-    return unsubscribe;
-  }, [navigation]);
   /** === FUNCTIONS === */
   const handleDateChange = (type: 'start' | 'end', value: string) => {
     if (type === 'start') {

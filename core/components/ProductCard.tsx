@@ -1,8 +1,8 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { SnbText, SnbImageCompressor, color } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT STYLE & ASSET === */
 import { Images } from 'src/assets';
 import { ProductCardStyle } from '../styles';
 /** === TYPE === */
@@ -15,6 +15,7 @@ interface ProductCardType1Props {
   uom: string;
   total: string;
   originalTotal?: string;
+  onPress: () => void;
 }
 /** === COMPONENT === */
 const Type1: FC<ProductCardType1Props> = ({
@@ -26,8 +27,9 @@ const Type1: FC<ProductCardType1Props> = ({
   uom,
   total,
   originalTotal,
+  onPress,
 }) => (
-  <View style={ProductCardStyle.Type1.container}>
+  <Pressable style={ProductCardStyle.Type1.container} onPress={onPress}>
     <View style={ProductCardStyle.Type1.body}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <SnbImageCompressor
@@ -66,7 +68,7 @@ const Type1: FC<ProductCardType1Props> = ({
         <SnbText.C2>{total}</SnbText.C2>
       </View>
     </View>
-  </View>
+  </Pressable>
 );
 
 export const ProductCard = { Type1 };
