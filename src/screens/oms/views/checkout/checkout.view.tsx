@@ -38,7 +38,9 @@ import {
   goToCheckoutSuccess,
   useExpiredTime,
   useCreateOrders,
+  useCartCheckedoutActions,
 } from '@screen/oms/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
@@ -72,6 +74,7 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
+  const cartCheckedoutActions = useCartCheckedoutActions();
   const {
     stateCheckout: {
       checkout: {
@@ -82,6 +85,7 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
+  const { dispatchShopingCart } = useShopingCartContext();
   const {
     setInvoiceBrand,
     checkoutMaster,
@@ -103,7 +107,8 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [modalParcelData, setModalParcelData] = useState(null);
+  const [modalParcelData, setModalParcelData] =
+    useState<models.IInvoiceCheckout | null>(null);
   const [isModalParcelDetail, setModalParcelDetail] = useState(false);
   const [isExpiredSession, setExpiredSession] = useState(false);
 
@@ -214,6 +219,7 @@ const OmsCheckoutView: FC = () => {
       if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
         paymentTCModal.setOpen(true);
       } else {
+        cartCheckedoutActions.fetch(dispatchShopingCart);
         createOrders.create(dispatchCheckout);
       }
     }
