@@ -201,22 +201,56 @@ const HistoryDetailView: FC = () => {
           detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-'
         }
       />
-      <HistoryCardItem
-        title="Tanggal Pembatalan"
-        value={
-          detail.data?.cancelTime
-            ? toLocalDateTime(detail.data?.cancelTime)
-            : '-'
-        }
-      />
-      <HistoryCardItem
-        title="Tanggal Pengembalian"
-        value={
-          detail.data?.refundedTime
-            ? toLocalDateTime(detail.data?.refundedTime)
-            : '-'
-        }
-      />
+      {detail.data?.status !== 'cancel' &&
+        detail.data?.statusPayment !== 'refunded' &&
+        (detail.data?.deliveredDate !== null ? (
+          <HistoryCardItem
+            title="Tanggal Pengiriman"
+            value={toLocalDateTime(detail.data?.deliveredDate!)}
+          />
+        ) : (
+          <HistoryCardItem
+            title="Estimasi Tanggal Pengiriman"
+            value={toLocalDateTime(detail.data?.estDeliveredDate!)}
+          />
+        ))}
+      {detail.data?.status !== 'cancel' &&
+        detail.data?.status !== 'delivered' &&
+        detail.data?.status !== 'done' &&
+        detail.data?.statusPayment !== 'refunded' &&
+        (detail.data?.dueDate !== null ? (
+          <HistoryCardItem
+            title="Jatuh Tempo"
+            value={toLocalDateTime(detail.data?.dueDate!)}
+          />
+        ) : (
+          <HistoryCardItem
+            title="Estimasi Jatuh Tempo"
+            value={toLocalDateTime(detail.data?.estDueDate!)}
+          />
+        ))}
+      {detail.data?.status === 'cancel' &&
+        detail.data?.statusPayment !== 'refunded' && (
+          <HistoryCardItem
+            title="Tanggal Pembatalan"
+            value={
+              detail.data?.cancelTime
+                ? toLocalDateTime(detail.data?.cancelTime)
+                : '-'
+            }
+          />
+        )}
+      {detail.data?.statusPayment === 'refunded' ||
+        (detail.data?.statusPayment === 'waiting_for_refund' && (
+          <HistoryCardItem
+            title="Tanggal Pengembalian"
+            value={
+              detail.data?.refundedTime
+                ? toLocalDateTime(detail.data?.refundedTime)
+                : '-'
+            }
+          />
+        ))}
     </HistoryDetailCard>
   );
   /** => render Virtual Account Info */

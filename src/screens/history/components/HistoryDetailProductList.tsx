@@ -4,8 +4,9 @@ import { View, TouchableWithoutFeedback } from 'react-native';
 import { SnbText, SnbIcon, color } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { ProductCard } from '@core/components/ProductCard';
-/** === IMPORT FUNCTION === */
+/** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { goToProductDetail } from '@core/functions/product';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 /** === IMPORT STYLE === */
@@ -42,6 +43,7 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
               qty={product.qty}
               uom={product.uom}
               total={toCurrency(product.totalPriceAfterTax)}
+              onPress={() => goToProductDetail(product.productId)}
             />
           ),
         )}
