@@ -39,6 +39,7 @@ export const useAddToCartActions = () => {
 
 export const useCartUpdateActions = () => {
   const dispatch = useDispatch();
+  const dataCart: models.ICartMaster = useDataCartMaster();
   return {
     fetch: (
       contextDispatch: (actions: any) => any,
@@ -48,6 +49,30 @@ export const useCartUpdateActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.cartUpdateReset(contextDispatch));
+    },
+    reFetch: (contextDispatch: (actions: any) => any) => {
+      const params: models.CartUpdatePayload = {
+        action: 'submit',
+        products: [],
+      };
+
+      console.log('[dataCart]: ', dataCart);
+      dataCart.data.forEach((invoiceGroup) => {
+        /** => initial brand selected */
+        invoiceGroup.brands.forEach((brand) => {
+          /** => initial product selected */
+          brand.products.forEach((product) => {
+            params.products.push({
+              productId: product.productId,
+              qty: product.qty,
+              selected: product.selected,
+              stock: product.stock,
+            });
+          });
+        });
+      });
+
+      dispatch(Actions.cartUpdateProcess(contextDispatch, { data: params }));
     },
   };
 };
@@ -94,6 +119,18 @@ export const useCartMasterActions = () => {
     },
     updateRouteName: (data: models.IUpdateRouteNamePayload) => {
       dispatch(Actions.updatePreviouseRouteCart(data));
+    },
+  };
+};
+
+export const useCartCheckedoutActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (actions: any) => any) => {
+      dispatch(Actions.cartCheckedoutProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartCheckedoutReset(contextDispatch));
     },
   };
 };

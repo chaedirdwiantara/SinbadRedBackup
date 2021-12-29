@@ -193,6 +193,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setModalConfirmationRemoveProductVisible(false);
   };
 
+  const onCloseModalErrorCheckout = () => {
+    cartUpdateActions.reset(dispatchShopingCart);
+    setModalFailedCheckout(false);
+  };
+
   /** => handle go back */
   const handleGoBack = () => {
     setModalFailedGetCart(false);
@@ -620,19 +625,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         duration={2000}
         positionValue={StatusBar.currentHeight || 0}
       />
-      <SnbDialog
-        open={modalConfirmationRemoveProductVisible}
-        title="Hapus Product"
-        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
-        ok={onConfirmRemoveProduct}
-        cancel={() => setModalConfirmationRemoveProductVisible(false)}
-        loading={loadingRemoveProduct}
-      />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalFailedCheckout}
         error={updateCartError || errorCreateVerificationOrder}
-        closeAction={() => setModalFailedCheckout(false)}
+        closeAction={onCloseModalErrorCheckout}
         retryAction={onSubmitCheckout}
       />
       {/* Modal Bottom Sheet Error get cart */}
