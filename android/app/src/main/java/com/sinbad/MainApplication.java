@@ -1,4 +1,4 @@
-package com.app.sinbaddev;
+package sinbad.app.development;
 
 import android.app.Application;
 import android.content.Context;
