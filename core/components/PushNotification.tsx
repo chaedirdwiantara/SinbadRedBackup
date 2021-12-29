@@ -3,6 +3,7 @@ import React from 'react';
 import messaging from '@react-native-firebase/messaging';
 import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
+import { SnbToast } from 'react-native-sinbad-ui';
 /** === INTERFACE === */
 interface RemoteMessage {
   payload: string;
@@ -10,8 +11,19 @@ interface RemoteMessage {
 }
 /** === COMPONENT === */
 const PushNotification = () => {
+  /** === REF === */
+  const notif = React.useRef<any>();
+  /** === STATE === */
+  const [title, setTitle] = React.useState<string | undefined>('');
+  const [body, setBody] = React.useState<string | undefined>('');
   /** === EFFECT === */
   React.useEffect(() => {
+    /** === FOR FOREGROUND === */
+    const unSubForeground = messaging().onMessage(async (remoteMessage) => {
+      setTitle(remoteMessage.notification?.title);
+      setBody(remoteMessage.notification?.body);
+      notif.current.show();
+    });
     /** === FOR BACKGROUND === */
     const unSubBackground = messaging().setBackgroundMessageHandler(
       async (remoteMessage) => {
@@ -44,10 +56,20 @@ const PushNotification = () => {
       },
     );
     return () => {
+      unSubForeground;
       unSubBackground;
     };
   }, []);
-  return null;
+
+  return (
+    <SnbToast
+      ref={notif}
+      position="top"
+      duration={5000}
+      positionValue={20}
+      message={`${title}\n${body}`}
+    />
+  );
 };
 /** === EXPORT COMPONENT === */
 export default PushNotification;
