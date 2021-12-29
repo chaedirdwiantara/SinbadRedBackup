@@ -50,7 +50,12 @@ const OmsCheckoutSuccessView: FC = () => {
         style={{ marginBottom: 24, marginTop: 8 }}
       />
 
-      <SnbText.H4>Order anda berhasil dibuat</SnbText.H4>
+      <SnbText.H4 align="center">
+        Pesanan anda berhasil di buat dan akan segera kami proses.
+      </SnbText.H4>
+      <SnbText.B1 align="center">
+        Untuk melihat status pesanan anda, silahkan pergi ke daftar pesanan.
+      </SnbText.B1>
     </View>
   );
 
