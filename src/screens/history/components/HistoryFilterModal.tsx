@@ -172,8 +172,14 @@ const HistoryFilterModalContent: FC<HistoryFilterModalContentProps> = ({
         onClose={() => setDateModalVisible(false)}
         onChange={(data) => {
           if (activeInput.type === 'start') {
+            data.date.setHours(0);
+            data.date.setMinutes(0);
+            data.date.setSeconds(0);
             onDateChange('start', data.date.toISOString());
           } else {
+            const currentTime = new Date();
+            data.date.setHours(currentTime.getHours());
+            data.date.setMinutes(currentTime.getMinutes());
             onDateChange('end', data.date.toISOString());
           }
 

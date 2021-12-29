@@ -4,17 +4,27 @@ import {
   SnbTopNav,
   SnbListButtonType2,
   SnbButton,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 import { useNavigation } from '@react-navigation/core';
+import { contexts } from '@contexts';
 
 const UserSettingView: FC = () => {
   /** === HOOK === */
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
+  const { stateUser } = React.useContext(contexts.UserContext);
+  const toast = React.useRef<any>();
+
+  React.useEffect(() => {
+    if (stateUser.update.data !== null) {
+      toast.current?.show('Kata Sandi berhasil diperbaharui');
+    }
+  }, [stateUser.update]);
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -53,6 +63,13 @@ const UserSettingView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
+      <SnbToast
+        ref={toast}
+        fadeInDuration={1000}
+        fadeOutDuration={500}
+        duration={2500}
+        position="bottom"
+      />
     </SnbContainer>
   );
 };
