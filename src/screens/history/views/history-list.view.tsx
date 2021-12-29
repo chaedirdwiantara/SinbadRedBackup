@@ -1,9 +1,10 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
+import { EmptyState } from '@core/components/EmptyState';
 import {
   HistoryCard,
   HistoryFilterModal,
@@ -57,8 +58,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
       ),
     [historyListState.data],
   );
-  const statusListLoading =
-    paymentStatusState.loading || orderStatusState.loading;
 
   useFocusEffect(
     useCallback(() => {
@@ -100,7 +99,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const handleDateReset = () => {
     setDate({ start: '', end: '' });
   };
-  /** === DERIVED === */
+  /** === DERIVEDS === */
   const derivedQueryOptions: models.HistoryListQueryOptions = {
     statusOrder: activeOrderStatus,
     statusPayment: activePaymentStatus,
@@ -108,6 +107,16 @@ const HistoryListView: FC = ({ navigation }: any) => {
     endDate: date.end,
     search: keyword,
   };
+  const statusListLoading =
+    paymentStatusState.loading || orderStatusState.loading;
+  const successStateForPayments =
+    !historyListState.loading && historyPaymentList.length > 0;
+  const successStateForOrders =
+    !historyListState.loading && historyListState.data.length > 0;
+  const emptyStateForPayments =
+    !historyListState.loading && historyPaymentList.length === 0;
+  const emptyStateForOrders =
+    !historyListState.loading && historyListState.data.length === 0;
   /** === VIEW === */
   /** => Payment Item */
   const renderPaymentItem = ({
@@ -232,6 +241,28 @@ const HistoryListView: FC = ({ navigation }: any) => {
         }}
       />
     );
+  /** => History List */
+  const historyList = (
+    <FlatList
+      style={{ padding: 8 }}
+      contentContainerStyle={{ paddingBottom: 12 }}
+      data={activeTab === 0 ? historyPaymentList : historyListState.data}
+      renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
+      refreshing={historyListState.refresh}
+      onRefresh={() =>
+        historyListActions.refresh(dispatchHistory, derivedQueryOptions)
+      }
+      keyExtractor={(item) => item.orderCode}
+      onEndReachedThreshold={0.1}
+      onEndReached={() =>
+        historyListActions.loadMore(
+          dispatchHistory,
+          historyListState,
+          derivedQueryOptions,
+        )
+      }
+    />
+  );
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -258,29 +289,21 @@ const HistoryListView: FC = ({ navigation }: any) => {
         isFiltered={isFiltered}
       />
       {statusListLoading ? <HistoryStatusSkeleton /> : displayedStatusList}
-      {!historyListState.loading ? (
-        <FlatList
-          style={{ padding: 8 }}
-          contentContainerStyle={{ paddingBottom: 12 }}
-          data={activeTab === 0 ? historyPaymentList : historyListState.data}
-          renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
-          refreshing={historyListState.refresh}
-          onRefresh={() =>
-            historyListActions.refresh(dispatchHistory, derivedQueryOptions)
-          }
-          keyExtractor={(item) => item.orderCode}
-          onEndReachedThreshold={0.1}
-          onEndReached={() =>
-            historyListActions.loadMore(
-              dispatchHistory,
-              historyListState,
-              derivedQueryOptions,
-            )
-          }
-        />
-      ) : (
-        <HistoryListSkeleton />
-      )}
+      {historyListState.loading && <HistoryListSkeleton />}
+      {activeTab === 0
+        ? successStateForPayments && historyList
+        : successStateForOrders && historyList}
+      {activeTab === 0
+        ? emptyStateForPayments && (
+            <View style={{ flex: 1, paddingBottom: 32 }}>
+              <EmptyState title="Data Kosong" description="Belum Ada Tagihan" />
+            </View>
+          )
+        : emptyStateForOrders && (
+            <View style={{ flex: 1, paddingBottom: 32 }}>
+              <EmptyState title="Data Kosong" description="Belum Ada Pesanan" />
+            </View>
+          )}
       <HistoryFilterModal
         visible={filterModalVisible}
         startDate={date.start}
