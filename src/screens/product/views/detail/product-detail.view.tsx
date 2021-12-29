@@ -356,7 +356,6 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      supplierSegmentationAction.reset(dispatchSupplier);
       if (toastSuccessAddCart.current) {
         toastSuccessAddCart.current.show();
       }
