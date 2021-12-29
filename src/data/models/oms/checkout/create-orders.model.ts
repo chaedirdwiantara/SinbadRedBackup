@@ -1,5 +1,5 @@
 export interface CreateOrderSuccess {
-  id: number;
+  orderId: number;
   message: string;
   createdAt: string;
   updatedAt: string;

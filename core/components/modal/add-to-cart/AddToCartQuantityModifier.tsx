@@ -62,6 +62,15 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
     setIsFocus(false);
   };
 
+  const handleChange = (qty: number) => {
+    if (Number.isInteger(qty)) {
+      const qtyString = qty.toString();
+      if (qtyString.length <= 6) {
+        onChangeQty(qty);
+      }
+    }
+  };
+
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
@@ -76,7 +85,8 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
 
           <SnbNumberCounter
             value={orderQty}
-            onChange={onChangeQty}
+            maxLength={6}
+            onChange={handleChange}
             onBlur={() =>
               handleBlur(
                 dataProductDetailCart.minQty,
@@ -112,7 +122,7 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
 
           <SnbNumberCounter
             value={orderQty}
-            onChange={onChangeQty}
+            onChange={handleChange}
             onBlur={() =>
               handleBlur(
                 dataProductDetail.minQty,

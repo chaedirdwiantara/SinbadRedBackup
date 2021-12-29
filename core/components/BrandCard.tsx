@@ -1,7 +1,9 @@
 /** === EXTERNAL === */
 import React, { FC } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { SnbImageCompressor } from 'react-native-sinbad-ui';
 /** === STYLE === */
+import { Images } from 'src/assets';
 import { BrandCardStyle } from '../styles';
 /** === TYPE === */
 interface BrandCardProps {
@@ -24,6 +26,10 @@ export const BrandCard: FC<BrandCardProps> = ({
       { height, width },
     ]}
     onPress={props.onCardPress}>
-    <Image source={{ uri: props.imageUrl }} style={BrandCardStyle.image} />
+    <SnbImageCompressor
+      uri={props.imageUrl}
+      style={BrandCardStyle.image}
+      defaultSource={Images.opacityPlaceholder}
+    />
   </TouchableOpacity>
 );
