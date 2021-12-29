@@ -17,6 +17,7 @@ export * from './shoping-cart/cart-master.napi.action';
 export * from './reserve-data/reserve-data-napi.action';
 export * from './checkout/create-orders.action';
 export * from './checkout-done';
+export * from './shoping-cart/cart-checkedout-api.action';
 /**
  * ================================================================
  * NOTES

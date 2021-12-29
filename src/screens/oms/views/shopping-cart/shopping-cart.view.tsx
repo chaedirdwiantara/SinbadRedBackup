@@ -193,6 +193,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setModalConfirmationRemoveProductVisible(false);
   };
 
+  const onCloseModalErrorCheckout = () => {
+    cartUpdateActions.reset(dispatchShopingCart);
+    setModalFailedCheckout(false);
+  };
+
   /** => handle go back */
   const handleGoBack = () => {
     setModalFailedGetCart(false);
@@ -624,7 +629,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       <BottomSheetError
         open={modalFailedCheckout}
         error={updateCartError || errorCreateVerificationOrder}
-        closeAction={() => setModalFailedCheckout(false)}
+        closeAction={onCloseModalErrorCheckout}
         retryAction={onSubmitCheckout}
       />
       {/* Modal Bottom Sheet Error get cart */}
