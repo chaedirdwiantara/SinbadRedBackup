@@ -624,7 +624,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalConfirmationRemoveProductVisible}
         title="Hapus Product"
         content="Yakin kamu mau mengahapus product ini dari Keranjang?"
-        ok={onRemoveProduct}
+        ok={onConfirmRemoveProduct}
         cancel={() => setModalConfirmationRemoveProductVisible(false)}
         loading={loadingRemoveProduct}
       />
