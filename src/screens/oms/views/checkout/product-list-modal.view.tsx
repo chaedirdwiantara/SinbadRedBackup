@@ -47,8 +47,10 @@ export const ModalProductList: FC<ModalProductList> = ({
                 style={CheckoutStyle.skuImage}
               />
             </View>
-            <View>
-              <SnbText.B4>{product.productName}</SnbText.B4>
+            <View style={{ flexWrap: 'wrap', flex: 1, paddingRight: 8 }}>
+              <View>
+                <SnbText.B4>{product.productName}</SnbText.B4>
+              </View>
               <SnbText.C2 color={color.red50}>
                 {toCurrency(product.displayPrice, { withFraction: false })}
               </SnbText.C2>
