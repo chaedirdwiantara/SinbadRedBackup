@@ -7,6 +7,7 @@ import {
   useDataCartSelected,
   useDataCartMaster,
   useDataTotalProductCart,
+  useDataProductMasterCart,
 } from '@core/redux/Data';
 /** === FUNCTIONS === */
 
@@ -91,6 +92,7 @@ export const useCartMasterActions = () => {
     },
     deleteProduct: (data: models.ICartDeleteProductPayload) => {
       dispatch(Actions.deleteCartProduct(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
     },
     updateRouteName: (data: models.IUpdateRouteNamePayload) => {
       dispatch(Actions.updatePreviouseRouteCart(data));
@@ -124,6 +126,20 @@ export const useInitialCartUpdateActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.initialCartUpdateReset(contextDispatch));
+    },
+  };
+};
+
+export const useProductMasterCartActions = () => {
+  const dataCart: models.IProductMaster = useDataProductMasterCart();
+  const dispatch = useDispatch();
+  return {
+    dataProductMasterCart: dataCart.data,
+    setDataProductMasterCart: (data: Array<models.IProductItemUpdateCart>) => {
+      dispatch(Actions.updateDataProductMasterCart(data));
+    },
+    setItemProductMasterCart: (data: models.IProductItemUpdateCart) => {
+      dispatch(Actions.updateItemProductMasterCart(data));
     },
   };
 };

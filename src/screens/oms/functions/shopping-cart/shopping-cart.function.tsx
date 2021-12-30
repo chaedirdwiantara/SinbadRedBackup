@@ -48,6 +48,7 @@ const handleProductQuantityChange = (
   ],
   currentQty: number,
   setSassionQty: Dispatch<SetStateAction<number>>,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -71,6 +72,12 @@ const handleProductQuantityChange = (
   currentInvoiceGroup.brands[brandIndex] = currentBrand;
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
+  setItemProductMasterCart({
+    productId: currentProduct.productId,
+    qty: currentProduct.qty,
+    stock: currentProduct.stock,
+    selected: currentProduct.selected,
+  });
   setInvoiceGroups(invoiceGroupsCopy);
   setSassionQty(Math.random() * 10000000);
 };
@@ -87,6 +94,8 @@ const handleSelectedProductChange = (
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
+  setSassionQty: Dispatch<SetStateAction<number>>,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const [productSelectedCount, setProductSelectedCount] =
@@ -131,8 +140,15 @@ const handleSelectedProductChange = (
     setAllProductsSelected(false);
   }
 
+  setItemProductMasterCart({
+    productId: currentProduct.productId,
+    qty: currentProduct.qty,
+    stock: currentProduct.stock,
+    selected: selected,
+  });
   setInvoiceGroups(invoiceGroupsCopy);
   setProductSelectedCount(totalSelectedCount);
+  setSassionQty(Math.random() * 10000000);
 };
 /** => handle when brand is selected or unselected */
 const handleSelectedBrandChange = (

@@ -22,6 +22,7 @@ interface ShoppingCartFooterProps {
   totalProducts: any;
   productSelectedCount: number;
   openModalCheckout: (any: any) => void;
+  onUpdateCart: () => void;
 }
 /** === COMPONENT === */
 export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
@@ -33,10 +34,11 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
   totalProducts,
   productSelectedCount,
   openModalCheckout,
+  onUpdateCart,
 }) => {
   return (
     <View style={ShoppingCartStyles.footerContainer}>
-      <ShoppingCartVoucherTag />
+      <ShoppingCartVoucherTag onUpdateCart={onUpdateCart} />
       <View style={ShoppingCartStyles.footerBody}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <SnbCheckbox
