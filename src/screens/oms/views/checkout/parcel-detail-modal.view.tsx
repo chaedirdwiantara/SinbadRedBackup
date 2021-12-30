@@ -207,7 +207,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               data.totalPriceAfterTax - data.totalPriceBeforeTax,
               'normal',
             )}
-            {data.totalPromoPayment !== 0
+            {data.totalPromoPayment !== 0 && data.totalPromoPayment !== null
               ? contentListData(
                   'Promo Pembayaran',
                   data.totalPromoPayment as number,
