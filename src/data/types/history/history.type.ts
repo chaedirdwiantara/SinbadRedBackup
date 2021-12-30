@@ -16,6 +16,8 @@ export const HISTORY_LIST_LOADMORE = 'HistoryListLoadMore';
 export const HISTORY_PAYMENT_DETAIL_PROCESS = 'HistoryPaymentDetailProcess';
 export const HISTORY_PAYMENT_DETAIL_SUCCESS = 'HistoryPaymentDetailSuccess';
 export const HISTORY_PAYMENT_DETAIL_FAILED = 'HistoryPaymentDetailFailed';
+export const HISTORY_PAYMENT_DETAIL_REFRESH = 'HistoryPaymentDetailRefresh';
+export const HISTORY_PAYMENT_DETAIL_RESET = 'HistoryPaymentDetailReset';
 
 /** HISTORY INVOICE DETAIL */
 export const HISTORY_INVOICE_DETAIL_PROCESS = 'HistoryInvoiceDetailProcess';
