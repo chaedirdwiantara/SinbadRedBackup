@@ -10,6 +10,7 @@ export const paymentDetailInitialState: PaymentDetailInitialProps = {
   data: null,
   error: null,
   loading: false,
+  refresh: false,
 };
 /** === REDUCER === */
 export const paymentDetailReducer = simplifyReducer(paymentDetailInitialState, {
@@ -29,6 +30,8 @@ export const paymentDetailReducer = simplifyReducer(paymentDetailInitialState, {
       ...state,
       data: action.payload.data,
       loading: false,
+      error: null,
+      refresh: false,
     };
   },
   /** Failed */
@@ -41,5 +44,16 @@ export const paymentDetailReducer = simplifyReducer(paymentDetailInitialState, {
       error: action.payload,
       loading: false,
     };
+  },
+  /** => Refresh */
+  [types.HISTORY_PAYMENT_DETAIL_REFRESH]() {
+    return {
+      ...paymentDetailInitialState,
+      refresh: true,
+    };
+  },
+  /** => Reset */
+  [types.HISTORY_PAYMENT_DETAIL_RESET]() {
+    return paymentDetailInitialState;
   },
 });

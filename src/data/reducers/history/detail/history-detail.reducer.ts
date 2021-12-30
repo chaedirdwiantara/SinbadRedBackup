@@ -31,6 +31,7 @@ export const historyDetailReducer = simplifyReducer(historyDetailInitialState, {
       data: payload.data,
       loading: false,
       error: null,
+      refresh: false,
     };
   },
   /** => Failed */
