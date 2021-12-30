@@ -115,4 +115,6 @@ export interface HistoryDetail {
   deliveredParcelPromo: number;
   deliveredParcelVoucher: number;
   parcelPromoPaymentAmount: number;
+  voucherList: Array<any>;
+  promoList: Array<any>;
 }

@@ -11,8 +11,13 @@ import { countPotentialDiscount } from '@screen/voucher/functions';
 import { ShoppingCartStyles } from '../../styles';
 import { useDataVoucher } from '@core/redux/Data';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+interface ShoppingCartVoucherTagProps {
+  onUpdateCart: () => void;
+}
 /** === COMPONENT === */
-export const ShoppingCartVoucherTag: FC = () => {
+export const ShoppingCartVoucherTag: FC<ShoppingCartVoucherTagProps> = ({
+  onUpdateCart,
+}) => {
   /** Cart Data */
   const {
     stateShopingCart: { cart: cartState },
@@ -35,13 +40,18 @@ export const ShoppingCartVoucherTag: FC = () => {
 
   const { countVoucher } = stateVoucher;
 
+  const handleNavigateToVoucherCartList = () => {
+    onUpdateCart();
+    goToVoucherCartList();
+  };
+
   return (
     <React.Fragment>
       {countVoucher.detail.data?.total !== 0 &&
         countVoucher.detail.loading !== true && (
           <View>
             <TouchableOpacity
-              onPress={() => goToVoucherCartList()}
+              onPress={handleNavigateToVoucherCartList}
               style={ShoppingCartStyles.voucherTagContainer}>
               <View style={ShoppingCartStyles.voucherTagLeftContainer}>
                 <View style={ShoppingCartStyles.voucherTagIconContainer}>

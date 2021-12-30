@@ -137,10 +137,11 @@ const ProductDetailView: FC = () => {
           supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
         });
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setIsAvailable(false);
       }
     } else {
       NavigationAction.navigate('LoginPhoneView');
@@ -295,10 +296,11 @@ const ProductDetailView: FC = () => {
         });
       } else {
         if (me.data) {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: null,
-          });
+          // checkUser({
+          //   sinbadStatus: me.data.approvalStatus,
+          //   supplierStatus: null,
+          // });
+          setIsAvailable(false);
         } else {
           stockValidationActions.fetch(dispatchStock, {
             warehouseId: null,
