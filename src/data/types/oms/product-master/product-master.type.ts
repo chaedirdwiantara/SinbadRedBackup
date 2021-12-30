@@ -6,3 +6,5 @@ export const UPDATE_PRODUCT_MASTER_CART = 'UpdateProductMasterCart';
 export const UPDATE_ITEM_PRODUCT_MASTER_CART = 'UpdateItemProductMasterCart';
 /** => Delete Item Product Master Cart */
 export const DELETE_ITEM_PRODUCT_MASTER_CART = 'DeleteItemProductMasterCart';
+/** => Update Item Product Master Cart */
+export const UPDATE_SELECTED_ITEM_PRODUCT = 'UpdateSelectedItemProduct';

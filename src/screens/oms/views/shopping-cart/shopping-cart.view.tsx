@@ -80,9 +80,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductItemUpdateCart | null>(null);
+  // const totalProducts = getTotalProducts(cartMaster.data);
+
   const totalProducts = useMemo(
     () => getTotalProducts(cartMaster.data),
-    [cartMaster.data.length],
+    [cartMaster.data.length, allProductsSelected],
   );
   const [
     modalConfirmationCheckoutVisible,

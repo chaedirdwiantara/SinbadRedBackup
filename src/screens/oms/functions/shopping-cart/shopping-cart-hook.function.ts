@@ -141,5 +141,10 @@ export const useProductMasterCartActions = () => {
     setItemProductMasterCart: (data: models.IProductItemUpdateCart) => {
       dispatch(Actions.updateItemProductMasterCart(data));
     },
+    setItemSelectedProductMasterCart: (
+      data: models.IUpdateSelectedProductPayload,
+    ) => {
+      dispatch(Actions.updateItemSelectedProductMasterCart(data));
+    },
   };
 };

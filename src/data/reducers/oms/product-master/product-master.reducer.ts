@@ -46,11 +46,34 @@ export const productMasterCart = simplifyReducer(initialState, {
   [types.DELETE_CART_PRODUCT](
     state = initialState,
     { payload }: models.DeleteItemProductMasterCart,
-  ) {
+  ): models.IProductMaster {
     const newProducts = state.data.filter(
       (product) => product.productId !== payload.productId,
     );
 
     return { ...state, data: newProducts };
+  },
+  /** => FOR SAVE ITEM SELECTED PRODUCT MASTER CART */
+  [types.UPDATE_SELECTED_ITEM_PRODUCT](
+    state = initialState,
+    { payload }: models.UpdateItemSelectedProductMasterCart,
+  ): models.IProductMaster {
+    let result: Array<models.IProductItemUpdateCart> = [];
+    const _data = [...state.data];
+    const index = _data.findIndex(
+      (item) => item.productId === payload.productId,
+    );
+
+    if (index >= 0) {
+      _data[index] = { ..._data[index], selected: payload.selected };
+      result = _data;
+    } else {
+      result = state.data;
+    }
+
+    return {
+      ...state,
+      data: result,
+    };
   },
 });

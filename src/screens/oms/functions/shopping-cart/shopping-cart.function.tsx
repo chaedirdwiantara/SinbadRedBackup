@@ -162,6 +162,7 @@ const handleSelectedBrandChange = (
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const [productSelectedCount, setProductSelectedCount] =
@@ -190,6 +191,12 @@ const handleSelectedBrandChange = (
     selectedCount = currentBrand.products.length;
     currentBrand.products.forEach((product) => {
       product.selected = true;
+      setItemProductMasterCart({
+        productId: product.productId,
+        qty: product.qty,
+        stock: product.stock,
+        selected: true,
+      });
     });
   } else {
     if (selectedCount === currentBrand.products.length) {
@@ -202,6 +209,12 @@ const handleSelectedBrandChange = (
     selectedCount = 0;
     currentBrand.products.forEach((product) => {
       product.selected = false;
+      setItemProductMasterCart({
+        productId: product.productId,
+        qty: product.qty,
+        stock: product.stock,
+        selected: false,
+      });
     });
   }
 

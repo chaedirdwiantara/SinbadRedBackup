@@ -18,3 +18,9 @@ export const deleteItemProductMasterCart = (
 ): models.DeleteItemProductMasterCart => {
   return { type: types.DELETE_ITEM_PRODUCT_MASTER_CART, payload };
 };
+/** => update item selected product master cart  */
+export const updateItemSelectedProductMasterCart = (
+  payload: models.IUpdateSelectedProductPayload,
+): models.UpdateItemSelectedProductMasterCart => {
+  return { type: types.UPDATE_SELECTED_ITEM_PRODUCT, payload };
+};

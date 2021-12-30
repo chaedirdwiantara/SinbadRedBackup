@@ -5,7 +5,10 @@ import { SnbText, SnbCheckbox, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartProduct } from './shopping-cart-product.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { handleSelectedBrandChange } from '../../functions';
+import {
+  handleSelectedBrandChange,
+  useProductMasterCartActions,
+} from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
 import { CartInvoiceGroup, CartBrand, IProductItemUpdateCart } from '@models';
 /** === TYPE ===  */
@@ -43,54 +46,58 @@ export const ShoppingCartBrand: FC<ShoppingCartBrandProps> = ({
   isFocus,
   setIsFocus,
   onUpdateCart,
-}) => (
-  <Fragment key={brand.brandName}>
-    <View
-      style={{
-        ...ShoppingCartStyles.topCardSlot,
-        borderStyle: 'solid',
-        borderTopWidth: brandIndex === 0 ? 0 : 1,
-        borderTopColor: color.black10,
-      }}>
-      <View style={{ marginRight: 20, marginLeft: 4 }}>
-        <SnbCheckbox
-          status={brand.selected ? 'selected' : 'unselect'}
-          onPress={() =>
-            handleSelectedBrandChange(
-              invoiceGroupIndex,
-              brandIndex,
-              brand.selected === false ? true : false,
-              [invoiceGroups, setInvoiceGroups],
-              [productSelectedCount, setProductSelectedCount],
-              setAllProductsSelected,
-              totalProducts,
-            )
-          }
-        />
+}) => {
+  const { setItemProductMasterCart } = useProductMasterCartActions();
+  return (
+    <Fragment key={brand.brandName}>
+      <View
+        style={{
+          ...ShoppingCartStyles.topCardSlot,
+          borderStyle: 'solid',
+          borderTopWidth: brandIndex === 0 ? 0 : 1,
+          borderTopColor: color.black10,
+        }}>
+        <View style={{ marginRight: 20, marginLeft: 4 }}>
+          <SnbCheckbox
+            status={brand.selected ? 'selected' : 'unselect'}
+            onPress={() =>
+              handleSelectedBrandChange(
+                invoiceGroupIndex,
+                brandIndex,
+                brand.selected === false ? true : false,
+                [invoiceGroups, setInvoiceGroups],
+                [productSelectedCount, setProductSelectedCount],
+                setAllProductsSelected,
+                totalProducts,
+                setItemProductMasterCart,
+              )
+            }
+          />
+        </View>
+        <SnbText.B4>{brand.brandName}</SnbText.B4>
       </View>
-      <SnbText.B4>{brand.brandName}</SnbText.B4>
-    </View>
-    {brand.products.map((product, productIndex) => (
-      <ShoppingCartProduct
-        key={productIndex.toString()}
-        product={product}
-        productIndex={productIndex}
-        brand={brand}
-        brandIndex={brandIndex}
-        invoiceGroupIndex={invoiceGroupIndex}
-        invoiceGroups={invoiceGroups}
-        setInvoiceGroups={setInvoiceGroups}
-        productSelectedCount={productSelectedCount}
-        setProductSelectedCount={setProductSelectedCount}
-        setAllProductsSelected={setAllProductsSelected}
-        totalProducts={totalProducts}
-        sassionQty={sassionQty}
-        setSassionQty={setSassionQty}
-        onRemoveProduct={onRemoveProduct}
-        isFocus={isFocus}
-        setIsFocus={setIsFocus}
-        onUpdateCart={onUpdateCart}
-      />
-    ))}
-  </Fragment>
-);
+      {brand.products.map((product, productIndex) => (
+        <ShoppingCartProduct
+          key={productIndex.toString()}
+          product={product}
+          productIndex={productIndex}
+          brand={brand}
+          brandIndex={brandIndex}
+          invoiceGroupIndex={invoiceGroupIndex}
+          invoiceGroups={invoiceGroups}
+          setInvoiceGroups={setInvoiceGroups}
+          productSelectedCount={productSelectedCount}
+          setProductSelectedCount={setProductSelectedCount}
+          setAllProductsSelected={setAllProductsSelected}
+          totalProducts={totalProducts}
+          sassionQty={sassionQty}
+          setSassionQty={setSassionQty}
+          onRemoveProduct={onRemoveProduct}
+          isFocus={isFocus}
+          setIsFocus={setIsFocus}
+          onUpdateCart={onUpdateCart}
+        />
+      ))}
+    </Fragment>
+  );
+};

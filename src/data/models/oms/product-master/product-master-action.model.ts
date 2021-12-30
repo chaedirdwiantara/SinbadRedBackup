@@ -14,3 +14,8 @@ export interface DeleteItemProductMasterCart {
   type: string;
   payload: models.ICartDeleteProductPayload;
 }
+/** => update item selected product master cart */
+export interface UpdateItemSelectedProductMasterCart {
+  type: string;
+  payload: models.IUpdateSelectedProductPayload;
+}
