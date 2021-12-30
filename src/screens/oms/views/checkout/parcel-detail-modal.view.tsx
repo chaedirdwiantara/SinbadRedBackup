@@ -86,10 +86,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     ));
   };
   const discountDetail = () => {
-    if (data === null) {
-      return null;
-    }
-
     const discounts = handleDiscountInvoiceGroups(data.invoiceGroupId);
     return (
       <View style={{ paddingBottom: 16 }}>

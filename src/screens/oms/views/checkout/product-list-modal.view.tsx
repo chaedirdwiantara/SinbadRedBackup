@@ -29,10 +29,6 @@ export const ModalProductList: FC<ModalProductList> = ({
   /** === HOOK === */
 
   const productDetail = () => {
-    if (data === null) {
-      return null;
-    }
-
     return <View style={{ paddingBottom: 16 }}>{productList()}</View>;
   };
 
