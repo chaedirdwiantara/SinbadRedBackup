@@ -7,14 +7,8 @@ const goBack = () => {
 };
 
 /** => Navigation related */
-const goToQuestDetail = ({
-  questId,
-  buyerId,
-}: {
-  questId: number;
-  buyerId: number;
-}) => {
-  NavigationAction.navigate('QuestDetailView', { questId, buyerId });
+const goToQuestDetail = ({ questId }: { questId: number }) => {
+  NavigationAction.navigate('QuestDetailView', { questId });
 };
 
 const MoneyFormatSpace = (money: number) => {

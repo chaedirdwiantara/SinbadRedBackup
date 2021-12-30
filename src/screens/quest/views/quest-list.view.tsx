@@ -16,7 +16,6 @@ import { EmptyState } from '@core/components/EmptyState';
 /** === IMPORT FUNCTIONS === */
 import { goBack, goToQuestDetail, useQuestListAction } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
-import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT STYLES === */
 import { QuestListStyles } from '../styles';
 
@@ -40,20 +39,15 @@ const QuestListView: FC = () => {
   /** === HOOK === */
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState('all');
-  const [buyerId, setBuyerId] = useState(0);
 
-  const { me } = useDataAuth();
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
   useFocusEffect(
     React.useCallback(() => {
-      if (me.data !== null) {
-        setBuyerId(me.data.user.id);
-        fetch(dispatchQuest, { status, buyerId: me.data.user.id });
-      }
-    }, [me.data, activeTab]),
+      fetch(dispatchQuest, { status });
+    }, [activeTab]),
   );
 
   /** === VIEW === */
@@ -144,7 +138,7 @@ const QuestListView: FC = () => {
       return (
         <TouchableOpacity
           style={QuestListStyles.cardButton}
-          onPress={() => goToQuestDetail({ questId: id, buyerId: buyerId })}>
+          onPress={() => goToQuestDetail({ questId: id })}>
           <SnbText.B4 color={color.white}>{buttonText}</SnbText.B4>
         </TouchableOpacity>
       );
@@ -154,7 +148,7 @@ const QuestListView: FC = () => {
   const renderItem = ({ item }: { item: QuestCardProps }) => {
     return (
       <TouchableOpacity
-        onPress={() => goToQuestDetail({ questId: item.id, buyerId: buyerId })}
+        onPress={() => goToQuestDetail({ questId: item.id })}
         style={[QuestListStyles.shadowForBox, QuestListStyles.boxMainContent]}>
         <Image source={{ uri: item.image }} style={QuestListStyles.cardImage} />
         <View style={[QuestListStyles.cardMainContent]}>
@@ -184,10 +178,10 @@ const QuestListView: FC = () => {
           keyExtractor={(item, index) => index.toString()}
           onEndReachedThreshold={0.1}
           onEndReached={() =>
-            loadMore(dispatchQuest, questListState, { status, buyerId })
+            loadMore(dispatchQuest, questListState, { status })
           }
           refreshing={questListState.refresh}
-          onRefresh={() => refresh(dispatchQuest, { status, buyerId })}
+          onRefresh={() => refresh(dispatchQuest, { status })}
           showsVerticalScrollIndicator
         />
       </View>

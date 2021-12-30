@@ -1,16 +1,13 @@
 export interface QuestListProcessProps {
   status: string;
-  buyerId: number;
 }
 
 export interface QuestListQueryOptions {
   status: string;
-  buyerId: number;
 }
 
 export interface QuestDetailProcessProps {
   id: number;
-  buyerId: number;
 }
 
 export interface QuestDetailProcessAction {
@@ -20,7 +17,6 @@ export interface QuestDetailProcessAction {
 }
 
 export interface QuestTaskProcessProps {
-  buyerId: number;
   questId: number;
   taskId: number;
   status: string;
