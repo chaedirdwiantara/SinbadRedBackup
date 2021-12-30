@@ -46,11 +46,11 @@ export const initialCartUpdateProcess = (
   payload: models.UpdateProcessProps<models.CartUpdatePayload>,
 ): models.UpdateProcessAction<models.CartUpdatePayload> => {
   contextDispatch({
-    type: types.CART_UPDATE_PROCESS,
+    type: types.INITIAL_CART_UPDATE_PROCESS,
     payload,
   });
   return {
-    type: types.CART_UPDATE_PROCESS,
+    type: types.INITIAL_CART_UPDATE_PROCESS,
     payload,
     contextDispatch,
   };

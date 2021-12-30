@@ -109,6 +109,27 @@ function* updateCartCheckedout(action: models.UpdateProcessAction<{}>) {
     yield put(ActionCreators.cartCheckedoutFailed(error as models.ErrorProps));
   }
 }
+/** => Initial Update */
+function* initialUpdateCart(
+  action: models.UpdateProcessAction<models.CartUpdatePayload>,
+) {
+  try {
+    const response: models.UpdateSuccessProps = yield call(() => {
+      return CartApi.updateCart(action.payload.data);
+    });
+    yield action.contextDispatch(
+      ActionCreators.initialCartUpdateSuccess(response),
+    );
+    yield put(ActionCreators.initialCartUpdateSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.initialCartUpdateFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.initialCartUpdateFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_VIEW_PROCESS, cartView);
@@ -117,6 +138,7 @@ function* CartSaga() {
   yield takeLatest(types.CART_TOTAL_PRODUCT_PROCESS, cartTotalProduct);
   yield takeLatest(types.ADD_TO_CART_DETAIL_PROCESS, addToCartDetail);
   yield takeLatest(types.CART_CHECKEDOUT_PROCESS, updateCartCheckedout);
+  yield takeLatest(types.INITIAL_CART_UPDATE_PROCESS, initialUpdateCart);
 }
 
 export default CartSaga;
