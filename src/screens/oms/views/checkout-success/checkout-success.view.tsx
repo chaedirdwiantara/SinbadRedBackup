@@ -13,6 +13,8 @@ import {
   goToHistoryList,
   usePaymentAction,
   useCreateOrders,
+  useCartTotalProductActions,
+  useCartMasterActions,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
@@ -26,12 +28,16 @@ const OmsCheckoutSuccessView: FC = () => {
   const { dispatchCheckout } = useContext(contexts.CheckoutContext);
   const paymentAction = usePaymentAction();
   const checkoutAction = useCreateOrders();
+  const cartTotalProductActions = useCartTotalProductActions();
+  const cartMasterActions = useCartMasterActions();
   useCustomBackHardware(() => NavigationAction.resetToHome());
   useEffect(() => {
     /** Reset Data to prevent automaticaly create orders on checkout */
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
     checkoutAction.reset(dispatchCheckout);
+    cartTotalProductActions.fetch();
+    cartMasterActions.reset();
   }, []);
   /** === VIEW === */
   /** => Header */

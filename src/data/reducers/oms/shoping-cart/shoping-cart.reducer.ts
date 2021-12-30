@@ -24,12 +24,18 @@ import {
   cartCheckedoutInitialState,
   cartCheckedoutReducer,
 } from './cart-checkedout.reducer';
+import {
+  initialCartUpdateInitialState,
+  initialCartUpdateReducer,
+  InitialCartUpdateInitialProps,
+} from './initial-shopping-cart-update.reducer';
 export interface ShopingCartState {
   cart: CartViewInitialProps;
   create: AddToCartInitialProps;
   update: CartUpdateInitialProps;
   add: AddToCartDetailInitialProps;
   checkedout: CartCheckedoutInitialProps;
+  initialUpdate: InitialCartUpdateInitialProps;
 }
 /** === INITIAL STATE === */
 export const shopingCartInitialState = {
@@ -38,10 +44,11 @@ export const shopingCartInitialState = {
   update: cartUpdateInitialState,
   add: addToCartDetailInitialState,
   checkedout: cartCheckedoutInitialState,
+  initialUpdate: initialCartUpdateInitialState,
 };
 /** === REDUCER === */
 export const shopingCartReducer = (
-  { cart, create, update, add, checkedout }: ShopingCartState,
+  { cart, create, update, add, checkedout, initialUpdate }: ShopingCartState,
   action: any,
 ) => ({
   cart: cartViewReducer(cart, action),
@@ -49,4 +56,5 @@ export const shopingCartReducer = (
   update: cartUpdateReducer(update, action),
   add: addToCartDetailReducer(add, action),
   checkedout: cartCheckedoutReducer(checkedout, action),
+  initialUpdate: initialCartUpdateReducer(initialUpdate, action),
 });
