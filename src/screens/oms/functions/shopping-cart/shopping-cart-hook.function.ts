@@ -95,5 +95,35 @@ export const useCartMasterActions = () => {
     updateRouteName: (data: models.IUpdateRouteNamePayload) => {
       dispatch(Actions.updatePreviouseRouteCart(data));
     },
+    reset: () => {
+      dispatch(Actions.resetCartMasterData());
+    },
+  };
+};
+
+export const useCartCheckedoutActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (actions: any) => any) => {
+      dispatch(Actions.cartCheckedoutProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartCheckedoutReset(contextDispatch));
+    },
+  };
+};
+
+export const useInitialCartUpdateActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (actions: any) => any,
+      data: models.CartUpdatePayload,
+    ) => {
+      dispatch(Actions.initialCartUpdateProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.initialCartUpdateReset(contextDispatch));
+    },
   };
 };

@@ -59,8 +59,8 @@ pipeline {
         // Andorid Lib
         SDK_URL = "https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip"
         ANDROID_HOME = "${WORKSPACE}/android-sdk"
-        ANDROID_VERSION = "29"
-        ANDROID_BUILD_TOOLS_VERSION = "29.0.2"
+        ANDROID_VERSION = "30"
+        ANDROID_BUILD_TOOLS_VERSION = "30.0.2"
         GRADLE_HOME = "${WORKSPACE}/android-gradle"
         GRADLE_VERSION = "6.6.1"
         MAVEN_HOME = "${WORKSPACE}/android-maven"
@@ -170,7 +170,7 @@ pipeline {
                                         find android/ -type f |
                                         while read file
                                         do
-                                            sed -i 's/sinbaddev/sinbad/g' $file
+                                            sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                             sed -i 's/ic_launcher_pink/ic_launcher/g' $file
                                             sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
                                             sed -i 's/Sinbad Development/Sinbad/g' $file
@@ -181,7 +181,7 @@ pipeline {
                                         find android/ -type f |
                                         while read file
                                         do
-                                            sed -i 's/sinbaddev/sinbad/g' $file
+                                            sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                             sed -i 's/ic_launcher_pink/ic_launcher_pink/g' $file
                                             sed -i 's/ic_launcher_round_pink/ic_launcher_round_pink/g' $file
                                             sed -i 's/Sinbad Development/Sinbad Testing/g' $file
@@ -195,7 +195,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbadstaging/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.staging/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Staging/g' $file
@@ -206,7 +206,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbadsandbox/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.sandbox/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Sandbox/g' $file
@@ -217,7 +217,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbaddemo/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.demo/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Demo/g' $file
@@ -228,7 +228,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbad/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad/g' $file

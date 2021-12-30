@@ -26,7 +26,6 @@ import {
   useVoucherLocalData,
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
-import { goBack } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -46,6 +45,7 @@ import {
   getTotalProducts,
   useCartMasterActions,
   useCheckoutMaster,
+  goBack,
 } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { usePromoContext } from 'src/data/contexts/promo/usePromoContext';
@@ -57,6 +57,7 @@ import {
   useCartUpdateActions,
   useCartSelected,
   useCartTotalProductActions,
+  useInitialCartUpdateActions,
 } from '@screen/oms/functions';
 import {
   useReserveStockAction,
@@ -106,6 +107,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const cartTotalProductActions = useCartTotalProductActions();
+  const initialCartUpdateActions = useInitialCartUpdateActions();
   const {
     stateShopingCart: {
       cart: { data: cartViewData, error: cartViewError },
@@ -114,6 +116,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         loading: updateCartLoading,
         error: updateCartError,
       },
+      initialUpdate: { data: initialUpdateData, error: initialUpdateError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
@@ -193,10 +196,39 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setModalConfirmationRemoveProductVisible(false);
   };
 
+  const onCloseModalErrorCheckout = () => {
+    cartUpdateActions.reset(dispatchShopingCart);
+    setModalFailedCheckout(false);
+  };
+
   /** => handle go back */
   const handleGoBack = () => {
     setModalFailedGetCart(false);
     goBack();
+  };
+
+  const onUpdateCart = () => {
+    const params: CartUpdatePayload = {
+      action: 'submit',
+      products: [],
+    };
+
+    cartMaster.data.forEach((invoiceGroup) => {
+      /** => initial brand selected */
+      invoiceGroup.brands.forEach((brand) => {
+        /** => initial product selected */
+        brand.products.forEach((product) => {
+          params.products.push({
+            productId: product.productId,
+            qty: product.qty,
+            selected: product.selected,
+            stock: product.stock,
+          });
+        });
+      });
+    });
+
+    initialCartUpdateActions.fetch(dispatchShopingCart, params);
   };
 
   /** Confirmation checkout submit */
@@ -289,21 +321,33 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mounted and focus */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (cartMaster.previouseRouteName !== 'voucherCartList') {
-        setLoadingPage(true);
-        cartViewActions.fetch(dispatchShopingCart);
-        storeDetailAction.detail(dispatchUser);
-        if (checkoutMaster.cartId) {
-          reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
-          reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
-        } else {
-          setLoadingPage(false);
-        }
+      setLoadingPage(true);
+      onUpdateCart();
+      storeDetailAction.detail(dispatchUser);
+      if (checkoutMaster.cartId) {
+        reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
+        reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+      } else {
+        setLoadingPage(false);
       }
     });
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    if (initialUpdateData !== null) {
+      cartViewActions.fetch(dispatchShopingCart);
+      initialCartUpdateActions.reset(dispatchShopingCart);
+    }
+  }, [initialUpdateData]);
+
+  useEffect(() => {
+    if (initialUpdateError !== null) {
+      cartViewActions.fetch(dispatchShopingCart);
+      initialCartUpdateActions.reset(dispatchShopingCart);
+    }
+  }, [initialUpdateError]);
 
   /** => Listen data cancel reserve stock */
   useEffect(() => {
@@ -347,11 +391,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** Listen changes cartState */
   useEffect(() => {
     /** => make sure data cart and data information stock is ready */
-    if (
-      cartViewData !== null &&
-      stockInformationData !== null &&
-      cartMaster.previouseRouteName !== 'voucherCartList'
-    ) {
+    if (cartViewData !== null && stockInformationData !== null) {
       let totalProductsSelected = 0;
       let initialTotalProduct = 0;
 
@@ -385,15 +425,28 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             );
 
             if (indexChange >= 0) {
-              if (product.selected) {
-                totalProductsSelected += 1;
-                brandSelected = true;
+              if (
+                stockInformationData.change[indexChange].currentStock <
+                product.minQty
+              ) {
+                dataEmptyStock.push({
+                  productId: product.productId,
+                  productName: product.productName,
+                  displayPrice: product.displayPrice,
+                  urlImages: product.urlImages,
+                });
+              } else {
+                if (product.selected) {
+                  totalProductsSelected += 1;
+                  brandSelected = true;
+                }
+                initialTotalProduct += 1;
+                products.push({
+                  ...product,
+                  stock: stockInformationData.change[indexChange].currentStock,
+                });
+                isEmptyProduct = false;
               }
-              initialTotalProduct += 1;
-              products.push({
-                ...product,
-                stock: stockInformationData.change[indexChange].currentStock,
-              });
             } else if (indexEmptyStock >= 0) {
               dataEmptyStock.push({
                 productId: product.productId,
@@ -408,6 +461,24 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 displayPrice: product.displayPrice,
                 urlImages: product.urlImages,
               });
+            } else if (product.qty >= product.stock) {
+              if (product.selected) {
+                totalProductsSelected += 1;
+                brandSelected = true;
+              }
+              initialTotalProduct += 1;
+
+              const maxQtyAfterMinimum = product.stock - product.minQty;
+              const qty =
+                Math.floor(maxQtyAfterMinimum / product.multipleQty) *
+                  product.multipleQty +
+                product.minQty;
+
+              products.push({
+                ...product,
+                qty: qty,
+              });
+              isEmptyProduct = false;
             } else {
               if (product.selected) {
                 totalProductsSelected += 1;
@@ -415,10 +486,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               }
               initialTotalProduct += 1;
               products.push(product);
+              isEmptyProduct = false;
             }
-
-            isEmptyProduct = false;
           });
+
           if (!isEmptyProduct) {
             brands.push({
               ...brand,
@@ -434,7 +505,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         }
       });
 
-      if (totalProductsSelected === initialTotalProduct) {
+      if (
+        totalProductsSelected === initialTotalProduct &&
+        totalProductsSelected > 0
+      ) {
         setAllProductsSelected(true);
       }
 
@@ -446,14 +520,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         others: [],
       });
       setProductSelectedCount(totalProductsSelected);
-      setLoadingPage(false);
-    }
-
-    if (
-      cartViewData !== null &&
-      stockInformationData !== null &&
-      cartMaster.previouseRouteName === 'voucherCartList'
-    ) {
       setLoadingPage(false);
     }
   }, [cartViewData, stockInformationData]);
@@ -498,10 +564,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     return () => {
       voucherLocalData.reset();
       verificationReset(dispatchVerificationOrder);
+      cartViewActions.reset(dispatchShopingCart);
+      stockInformationAction.reset(dispatchStock);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
-      cartUpdateActions.reset(dispatchShopingCart);
-      cartViewActions.reset(dispatchShopingCart);
       updateRouteName({
         previouseRouteName: '',
       });
@@ -543,6 +609,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                       onRemoveProduct={onRemoveProduct}
                       isFocus={isFocus}
                       setIsFocus={setIsFocus}
+                      onUpdateCart={onUpdateCart}
                     />
                   ))}
                 </Fragment>
@@ -620,19 +687,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         duration={2000}
         positionValue={StatusBar.currentHeight || 0}
       />
-      <SnbDialog
-        open={modalConfirmationRemoveProductVisible}
-        title="Hapus Product"
-        content="Yakin kamu mau mengahapus product ini dari Keranjang?"
-        ok={onRemoveProduct}
-        cancel={() => setModalConfirmationRemoveProductVisible(false)}
-        loading={loadingRemoveProduct}
-      />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalFailedCheckout}
         error={updateCartError || errorCreateVerificationOrder}
-        closeAction={() => setModalFailedCheckout(false)}
+        closeAction={onCloseModalErrorCheckout}
         retryAction={onSubmitCheckout}
       />
       {/* Modal Bottom Sheet Error get cart */}
