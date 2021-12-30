@@ -52,7 +52,7 @@ const OmsCheckoutSuccessView: FC = () => {
 
       <SnbText.H4 align="center">Pesanan anda akan kami proses.</SnbText.H4>
       <SnbText.B1 align="center">Untuk melihat status pesanan anda,</SnbText.B1>
-      <SnbText.B1 align="center">silahkan pergi ke daftar pesanan.</SnbText.B1>
+      <SnbText.B1 align="center">silahkan ke daftar pesanan.</SnbText.B1>
     </View>
   );
 
