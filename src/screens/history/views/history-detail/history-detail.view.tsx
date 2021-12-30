@@ -1,6 +1,11 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useEffect, useReducer } from 'react';
-import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
+import {
+  ScrollView,
+  View,
+  TouchableWithoutFeedback,
+  RefreshControl,
+} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -12,7 +17,6 @@ import {
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import Clipboard from '@react-native-clipboard/clipboard';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT COMPONENTS === */
 import LoadingPage from '@core/components/LoadingPage';
 import {
@@ -43,19 +47,19 @@ import {
   useModaBottomError,
   useActivateVa,
 } from '../../functions';
-/** === IMPORT STYLE === */
-import { HistoryDetailStyle } from '../../styles';
 import {
   BillingStatus,
   PaymentType,
   ChannelType,
   OrderStatus,
 } from '../../functions/data';
-
+/** === IMPORT STYLE === */
+import { HistoryDetailStyle } from '../../styles';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
+
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
@@ -90,6 +94,12 @@ const HistoryDetailView: FC = () => {
     activateVa,
   } = stateHistory;
   const pageLoading = paymentDetail.loading || detail.loading;
+  const pageRefreshing = paymentDetail.refresh || detail.refresh;
+  const refreshFetch = () => {
+    getPaymentDetail.refresh(dispatchHistory, params.billingId);
+    historyDetailAction.refresh(dispatchHistory, params.id);
+  };
+
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
@@ -454,7 +464,11 @@ const HistoryDetailView: FC = () => {
   };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
-    <ScrollView scrollEnabled={!pageLoading}>
+    <ScrollView
+      scrollEnabled={!pageLoading}
+      refreshControl={
+        <RefreshControl refreshing={pageRefreshing!} onRefresh={refreshFetch} />
+      }>
       {!pageLoading ? (
         <>
           {renderStatus()}
@@ -476,7 +490,11 @@ const HistoryDetailView: FC = () => {
   );
   /** => Detail Order Content */
   const renderOrderDetailContent = () => (
-    <ScrollView scrollEnabled={!pageLoading}>
+    <ScrollView
+      scrollEnabled={!pageLoading}
+      refreshControl={
+        <RefreshControl refreshing={pageRefreshing!} onRefresh={refreshFetch} />
+      }>
       {!pageLoading ? (
         <>
           {renderStatus()}

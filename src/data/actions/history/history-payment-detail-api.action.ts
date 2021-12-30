@@ -26,3 +26,7 @@ export const historyPaymentDetailFailed = (
 ): models.DetailFailedAction => {
   return { type: types.HISTORY_PAYMENT_DETAIL_FAILED, payload };
 };
+/** => payment detail refresh */
+export const historyPaymentDetailRefresh = () => {
+  return { type: types.HISTORY_PAYMENT_DETAIL_REFRESH };
+};
