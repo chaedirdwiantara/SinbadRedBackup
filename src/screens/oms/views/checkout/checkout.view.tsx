@@ -420,8 +420,7 @@ const OmsCheckoutView: FC = () => {
     setModalParcelData(data);
   };
 
-  const handleProductList = (data: any) => {
-    console.log('Product List', data);
+  const handleProductList = (data: models.ProductCheckout[]) => {
     setProductList(data);
   };
 

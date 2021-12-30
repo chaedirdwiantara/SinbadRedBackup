@@ -19,7 +19,7 @@ interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
   openModalParcelDetail: any;
-  openModalProductList: any;
+  openModalProductList: (data: models.ProductCheckout[]) => void;
   index: number;
 }
 /** === COMPONENT === */
