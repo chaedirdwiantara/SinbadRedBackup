@@ -53,9 +53,8 @@ const OmsCheckoutSuccessView: FC = () => {
       <SnbText.H4 align="center">
         Pesanan anda berhasil dibuat dan akan segera kami proses.
       </SnbText.H4>
-      <SnbText.B1 align="center">
-        Untuk melihat status pesanan anda, silahkan pergi ke daftar pesanan.
-      </SnbText.B1>
+      <SnbText.B1 align="center">Untuk melihat status pesanan anda,</SnbText.B1>
+      <SnbText.B1 align="center">silahkan pergi ke daftar pesanan.</SnbText.B1>
     </View>
   );
 
