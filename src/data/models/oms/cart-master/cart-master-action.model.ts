@@ -19,3 +19,13 @@ export interface UpdateRouteNameMasterCart {
   type: string;
   payload: models.IUpdateRouteNamePayload;
 }
+/** => delete cart product empty stock */
+export interface DeleteCartProductEmptyStock {
+  type: string;
+  payload: models.ICartDeleteProductPayload;
+}
+/** => delete cart product not found */
+export interface DeleteCartProductNotFound {
+  type: string;
+  payload: models.ICartDeleteProductPayload;
+}

@@ -132,16 +132,25 @@ const ProductDetailView: FC = () => {
   const handleOrderPress = () => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setIsAvailable(false);
+          setLoadingButton(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
         // checkUser({
         //   sinbadStatus: me.data.approvalStatus,
         //   supplierStatus: null,
         // });
         setIsAvailable(false);
+        setLoadingButton(false);
       }
     } else {
       NavigationAction.navigate('LoginPhoneView');
@@ -260,7 +269,7 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     setLoadingButton(true);
     productDetailActions.fetch(dispatchProduct, productId);
-  }, []);
+  }, [productId]);
 
   /** => Listen data product success */
   useEffect(() => {
