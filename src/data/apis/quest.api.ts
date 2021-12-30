@@ -5,7 +5,7 @@ import * as models from '@models';
 const getList = (
   payload: models.ListProcessProps<models.QuestListProcessProps>,
 ) => {
-  const path = `quests?buyerId=${payload.buyerId}&status=${payload.status}&$limit=${payload.limit}&$skip=${payload.skip}`;
+  const path = `quests?status=${payload.status}&$limit=${payload.limit}&$skip=${payload.skip}`;
   return apiMapping<models.QuestListItem[]>(
     'auth',
     path,
@@ -16,7 +16,7 @@ const getList = (
 };
 
 const getDetail = (payload: models.QuestDetailProcessProps) => {
-  const path = `quests/${payload.id}?buyerId=${payload.buyerId}`;
+  const path = `quests/${payload.id}`;
   return apiMapping<models.QuestDetailItem>(
     'auth',
     path,
@@ -32,7 +32,7 @@ const updateTask = (payload: object) => {
 };
 
 const getDetailTask = (payload: models.QuestDetailProcessProps) => {
-  const path = `quest-tasks/${payload.id}?buyerId=${payload.buyerId}`;
+  const path = `quest-tasks/${payload.id}`;
   return apiMapping<models.QuestTaskDetailItem>(
     'auth',
     path,

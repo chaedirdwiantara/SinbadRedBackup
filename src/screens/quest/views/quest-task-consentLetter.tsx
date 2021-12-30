@@ -27,14 +27,12 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
     React.useCallback(() => {
       detailTask(dispatchQuest, {
         id: route.params.taskId,
-        buyerId: route.params.buyerId,
       });
     }, []),
   );
   /** FUNCTION */
   const confirm = () => {
     const data = {
-      buyerId: route.params.buyerId,
       questId: route.params.questId,
       taskId: route.params.taskId,
       status: 'done',

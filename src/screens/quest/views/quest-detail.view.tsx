@@ -52,7 +52,6 @@ const QuestDetailView: FC = ({ route }: any) => {
     React.useCallback(() => {
       detail(dispatchQuest, {
         id: route.params.questId,
-        buyerId: route.params.buyerId,
       });
     }, []),
   );
@@ -61,7 +60,6 @@ const QuestDetailView: FC = ({ route }: any) => {
     const { id, currentTaskId } = questDetailState.data;
     // Hit update quest API => from null to on_progress
     const data = {
-      buyerId: route.params.buyerId,
       questId: id,
       taskId: currentTaskId,
       status: 'on_progress',
@@ -96,7 +94,6 @@ const QuestDetailView: FC = ({ route }: any) => {
           title: currentTask,
           questId: id,
           taskId: currentTaskId,
-          buyerId: data.buyerId,
         });
         break;
       case 'CompleteStore':
@@ -104,7 +101,6 @@ const QuestDetailView: FC = ({ route }: any) => {
           title: currentTask,
           questId: id,
           taskId: currentTaskId,
-          buyerId: data.buyerId,
         });
         break;
       default: {

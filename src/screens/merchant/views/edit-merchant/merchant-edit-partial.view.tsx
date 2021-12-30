@@ -90,7 +90,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       props.type === 'merchantOwnerPhoneNo'
     ) {
       const data = {
-        buyerId: props.sourceData?.buyerId,
         questId: props.sourceData?.questId,
         taskId: props.sourceData?.taskId,
         status: 'done',
@@ -211,7 +210,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         // if source Quest & owner name, update quest task status
         if (props.source === 'Quest') {
           const data = {
-            buyerId: props.sourceData?.buyerId,
             questId: props.sourceData?.questId,
             taskId: props.sourceData?.taskId,
             status: 'done',
