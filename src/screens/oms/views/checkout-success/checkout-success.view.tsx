@@ -51,7 +51,7 @@ const OmsCheckoutSuccessView: FC = () => {
       />
 
       <SnbText.H4 align="center">
-        Pesanan anda berhasil di buat dan akan segera kami proses.
+        Pesanan anda berhasil dibuat dan akan segera kami proses.
       </SnbText.H4>
       <SnbText.B1 align="center">
         Untuk melihat status pesanan anda, silahkan pergi ke daftar pesanan.
