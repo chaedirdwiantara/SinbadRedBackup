@@ -376,10 +376,11 @@ const ProductList: FC<ProductListProps> = ({
           supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
         });
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setModalNotCoverage(true);
       }
     }
   }, [dataSegmentation]);

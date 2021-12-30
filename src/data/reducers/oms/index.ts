@@ -7,3 +7,4 @@ export * from './shoping-cart/cart-total-product.reducer';
 export * from './reserve-data';
 export * from './checkout/checkout.reducer';
 export * from './checkout-done/checkout-done.reducer';
+export * from './product-master';
