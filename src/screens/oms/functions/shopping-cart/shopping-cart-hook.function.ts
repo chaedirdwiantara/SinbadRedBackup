@@ -39,7 +39,6 @@ export const useAddToCartActions = () => {
 
 export const useCartUpdateActions = () => {
   const dispatch = useDispatch();
-  const dataCart: models.ICartMaster = useDataCartMaster();
   return {
     fetch: (
       contextDispatch: (actions: any) => any,
@@ -49,30 +48,6 @@ export const useCartUpdateActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.cartUpdateReset(contextDispatch));
-    },
-    reFetch: (contextDispatch: (actions: any) => any) => {
-      const params: models.CartUpdatePayload = {
-        action: 'submit',
-        products: [],
-      };
-
-      console.log('[dataCart]: ', dataCart);
-      dataCart.data.forEach((invoiceGroup) => {
-        /** => initial brand selected */
-        invoiceGroup.brands.forEach((brand) => {
-          /** => initial product selected */
-          brand.products.forEach((product) => {
-            params.products.push({
-              productId: product.productId,
-              qty: product.qty,
-              selected: product.selected,
-              stock: product.stock,
-            });
-          });
-        });
-      });
-
-      dispatch(Actions.cartUpdateProcess(contextDispatch, { data: params }));
     },
   };
 };
@@ -120,6 +95,9 @@ export const useCartMasterActions = () => {
     updateRouteName: (data: models.IUpdateRouteNamePayload) => {
       dispatch(Actions.updatePreviouseRouteCart(data));
     },
+    reset: () => {
+      dispatch(Actions.resetCartMasterData());
+    },
   };
 };
 
@@ -131,6 +109,21 @@ export const useCartCheckedoutActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.cartCheckedoutReset(contextDispatch));
+    },
+  };
+};
+
+export const useInitialCartUpdateActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (actions: any) => any,
+      data: models.CartUpdatePayload,
+    ) => {
+      dispatch(Actions.initialCartUpdateProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.initialCartUpdateReset(contextDispatch));
     },
   };
 };
