@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
-import { ScrollView, StatusBar } from 'react-native';
+import { ScrollView, StatusBar, BackHandler } from 'react-native';
 import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
@@ -26,7 +26,6 @@ import {
   useVoucherLocalData,
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
-import { goBack } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -46,6 +45,7 @@ import {
   getTotalProducts,
   useCartMasterActions,
   useCheckoutMaster,
+  goBack,
 } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { usePromoContext } from 'src/data/contexts/promo/usePromoContext';
@@ -57,6 +57,7 @@ import {
   useCartUpdateActions,
   useCartSelected,
   useCartTotalProductActions,
+  useInitialCartUpdateActions,
 } from '@screen/oms/functions';
 import {
   useReserveStockAction,
@@ -106,6 +107,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartViewActions = useCartViewActions();
   const cartUpdateActions = useCartUpdateActions();
   const cartTotalProductActions = useCartTotalProductActions();
+  const initialCartUpdateActions = useInitialCartUpdateActions();
   const {
     stateShopingCart: {
       cart: { data: cartViewData, error: cartViewError },
@@ -114,6 +116,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         loading: updateCartLoading,
         error: updateCartError,
       },
+      initialUpdate: { data: initialUpdateData, error: initialUpdateError },
     },
     dispatchShopingCart,
   } = useShopingCartContext();
@@ -201,6 +204,32 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => handle go back */
   const handleGoBack = () => {
     setModalFailedGetCart(false);
+    goBack();
+  };
+
+  const onUpdateCart = () => {
+    const params: CartUpdatePayload = {
+      action: 'submit',
+      products: [],
+    };
+
+    console.log('[dataCart onUpdateCart]: ', cartMaster);
+    cartMaster.data.forEach((invoiceGroup) => {
+      /** => initial brand selected */
+      invoiceGroup.brands.forEach((brand) => {
+        /** => initial product selected */
+        brand.products.forEach((product) => {
+          params.products.push({
+            productId: product.productId,
+            qty: product.qty,
+            selected: product.selected,
+            stock: product.stock,
+          });
+        });
+      });
+    });
+
+    cartUpdateActions.fetch(dispatchShopingCart, params);
     goBack();
   };
 
@@ -413,6 +442,23 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 displayPrice: product.displayPrice,
                 urlImages: product.urlImages,
               });
+            } else if (product.qty >= product.stock) {
+              if (product.selected) {
+                totalProductsSelected += 1;
+                brandSelected = true;
+              }
+              initialTotalProduct += 1;
+
+              const maxQtyAfterMinimum = product.stock - product.minQty;
+              const qty =
+                Math.floor(maxQtyAfterMinimum / product.multipleQty) *
+                  product.multipleQty +
+                product.minQty;
+
+              products.push({
+                ...product,
+                qty: qty,
+              });
             } else {
               if (product.selected) {
                 totalProductsSelected += 1;
@@ -498,15 +544,30 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [productRemoveSelected, updateCartError]);
 
+  /** hardware Back Press */
+  useEffect(() => {
+    const backAction = () => {
+      onUpdateCart();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   /** did will unmound */
   useEffect(() => {
     return () => {
       voucherLocalData.reset();
       verificationReset(dispatchVerificationOrder);
+      cartViewActions.reset(dispatchShopingCart);
+      stockInformationAction.reset(dispatchStock);
       reserveDiscountAction.resetDelete(dispatchPromo);
       reserveStockAction.resetDelete(dispatchReserveStock);
-      cartUpdateActions.reset(dispatchShopingCart);
-      cartViewActions.reset(dispatchShopingCart);
       updateRouteName({
         previouseRouteName: '',
       });
@@ -517,7 +578,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => Main */
   return (
     <SnbContainer color="white">
-      <ShoppingCartHeader />
+      <ShoppingCartHeader goBack={onUpdateCart} />
       {loadingPage ? (
         <LoadingPage />
       ) : (
@@ -548,6 +609,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                       onRemoveProduct={onRemoveProduct}
                       isFocus={isFocus}
                       setIsFocus={setIsFocus}
+                      onUpdateCart={onUpdateCart}
                     />
                   ))}
                 </Fragment>

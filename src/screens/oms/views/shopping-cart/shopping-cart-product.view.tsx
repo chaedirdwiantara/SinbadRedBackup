@@ -41,6 +41,7 @@ interface ShoppingCartProductProps {
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
+  onUpdateCart: () => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -59,6 +60,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   onRemoveProduct,
   isFocus,
   setIsFocus,
+  onUpdateCart,
 }) => {
   const minusDisabled =
     isFocus ||
@@ -117,6 +119,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
     setIsFocus(false);
   };
 
+  const navigateProductDetail = () => {
+    onUpdateCart();
+    goToProductDetail(product.productId);
+  };
+
   return (
     <View
       style={{
@@ -149,7 +156,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
             }
           />
         </View>
-        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
+        <TouchableOpacity onPress={navigateProductDetail}>
           <Image
             source={{ uri: product.urlImages }}
             style={{ width: 77, height: 77 }}
@@ -157,7 +164,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         </TouchableOpacity>
         <View>
           <TouchableOpacity
-            onPress={() => goToProductDetail(product.productId)}
+            onPress={navigateProductDetail}
             style={{
               marginBottom: 12,
               width: '100%',

@@ -22,6 +22,7 @@ interface ShoppingCartInvoiceGroupProps {
   onRemoveProduct: (any: IProductItemUpdateCart) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
+  onUpdateCart: () => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -38,6 +39,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   onRemoveProduct,
   isFocus,
   setIsFocus,
+  onUpdateCart,
 }) => {
   return (
     <View
@@ -63,6 +65,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
           onRemoveProduct={onRemoveProduct}
           isFocus={isFocus}
           setIsFocus={setIsFocus}
+          onUpdateCart={onUpdateCart}
         />
       ))}
     </View>

@@ -39,3 +39,44 @@ export const cartUpdateReset = (contextDispatch: (action: any) => any) => {
   });
   return { type: types.CART_UPDATE_RESET };
 };
+
+/** => Process */
+export const initialCartUpdateProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.UpdateProcessProps<models.CartUpdatePayload>,
+): models.UpdateProcessAction<models.CartUpdatePayload> => {
+  contextDispatch({
+    type: types.CART_UPDATE_PROCESS,
+    payload,
+  });
+  return {
+    type: types.CART_UPDATE_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const initialCartUpdateSuccess = (
+  payload: models.UpdateSuccessProps,
+): models.UpdateSuccessAction => {
+  return { type: types.INITIAL_CART_UPDATE_SUCCESS, payload };
+};
+/** => Failed */
+export const initialCartUpdateFailed = (
+  payload: models.ErrorProps,
+): models.CreateFailedAction => {
+  return { type: types.INITIAL_CART_UPDATE_FAILED, payload };
+};
+/** => Refresh */
+export const initailCartUpdateRefresh = () => {
+  return { type: types.INITIAL_CART_UPDATE_REFRESH };
+};
+/** => Reset */
+export const initialCartUpdateReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({
+    type: types.INITIAL_CART_UPDATE_RESET,
+  });
+  return { type: types.INITIAL_CART_UPDATE_RESET };
+};
