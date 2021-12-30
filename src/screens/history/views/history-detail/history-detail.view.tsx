@@ -103,9 +103,7 @@ const HistoryDetailView: FC = () => {
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
-
-    historyDetailAction.fetch(dispatchHistory, '2224492');
-    // historyDetailAction.fetch(dispatchHistory, params.id);
+    historyDetailAction.fetch(dispatchHistory, params.id);
   }, []);
   /** => on success get Invoice */
   useEffect(() => {
