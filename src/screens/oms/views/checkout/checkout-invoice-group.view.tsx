@@ -19,6 +19,7 @@ interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
   openModalParcelDetail: any;
+  openModalProductList: any;
   index: number;
 }
 /** === COMPONENT === */
@@ -26,6 +27,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
   openModalPaymentType,
   openModalParcelDetail,
+  openModalProductList,
   index,
 }) => {
   /** === HOOK === */
@@ -41,6 +43,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
         </View>
         <CheckoutSKUListView
           products={handleTransformProductBrands(data.brands)}
+          openModalProduct={openModalProductList}
         />
       </View>
       <CheckoutShipmentDetailView />
