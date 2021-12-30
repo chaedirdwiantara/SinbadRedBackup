@@ -9,6 +9,7 @@ import { ShoppingCartVoucherTag } from './shopping-cart-voucher-tag.view';
 import {
   handleAllSelectedProductsChange,
   getTotalPrice,
+  useProductMasterCartActions,
 } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
 import { CartInvoiceGroup } from '@models';
@@ -36,6 +37,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
   openModalCheckout,
   onUpdateCart,
 }) => {
+  const { setItemProductMasterCart } = useProductMasterCartActions();
   return (
     <View style={ShoppingCartStyles.footerContainer}>
       <ShoppingCartVoucherTag onUpdateCart={onUpdateCart} />
@@ -50,6 +52,7 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
                 setProductSelectedCount,
                 setAllProductsSelected,
                 totalProducts,
+                setItemProductMasterCart,
               )
             }
           />

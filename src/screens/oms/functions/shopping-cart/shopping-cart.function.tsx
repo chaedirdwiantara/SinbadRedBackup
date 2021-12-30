@@ -242,6 +242,7 @@ const handleAllSelectedProductsChange = (
   setProductSelectedCount: Dispatch<SetStateAction<number>>,
   setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
   totalProducts: number,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -252,6 +253,12 @@ const handleAllSelectedProductsChange = (
       brand.selected = selected;
       brand.selectedCount = selected === true ? brand.products.length : 0;
       brand.products.forEach((product) => {
+        setItemProductMasterCart({
+          productId: product.productId,
+          qty: product.qty,
+          stock: product.stock,
+          selected: selected,
+        });
         product.selected = selected;
       });
     });
