@@ -11,6 +11,10 @@ export const usePaymentDetail = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
     },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.historyPaymentDetailRefresh());
+      dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
+    },
   };
 };
 

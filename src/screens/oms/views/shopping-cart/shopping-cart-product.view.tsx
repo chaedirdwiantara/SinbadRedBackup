@@ -8,12 +8,13 @@ import {
   color,
   SnbNumberCounter,
 } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import {
   handleSelectedProductChange,
   handleProductDelete,
   handleProductQuantityChange,
+  useProductMasterCartActions,
 } from '../../functions';
 import { goToProductDetail } from '@core/functions/product';
 import { ShoppingCartStyles } from '../../styles';
@@ -62,6 +63,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   setIsFocus,
   onUpdateCart,
 }) => {
+  const { setItemProductMasterCart } = useProductMasterCartActions();
+
   const minusDisabled =
     isFocus ||
     product.qty <= product.minQty ||
@@ -88,6 +91,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         product.minQty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     } else if (qty > product.stock) {
       const maxQtyAfterMinimum = product.stock - product.minQty;
@@ -104,6 +108,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         qty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     } else {
       handleProductQuantityChange(
@@ -114,6 +119,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         qty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     }
     setIsFocus(false);
@@ -152,6 +158,8 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [productSelectedCount, setProductSelectedCount],
                 setAllProductsSelected,
                 totalProducts,
+                setSassionQty,
+                setItemProductMasterCart,
               )
             }
           />
@@ -190,6 +198,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [invoiceGroups, setInvoiceGroups],
                 product.qty,
                 setSassionQty,
+                setItemProductMasterCart,
               )
             }
             onDecrease={() =>
@@ -201,6 +210,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [invoiceGroups, setInvoiceGroups],
                 product.qty,
                 setSassionQty,
+                setItemProductMasterCart,
               )
             }
             onChange={(qty: number) => {
@@ -213,6 +223,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   [invoiceGroups, setInvoiceGroups],
                   qty,
                   setSassionQty,
+                  setItemProductMasterCart,
                 );
               }
             }}
