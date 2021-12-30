@@ -1,12 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, {
-  FC,
-  useState,
-  useMemo,
-  Fragment,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { FC, useState, Fragment, useEffect, useRef } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -80,12 +73,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductItemUpdateCart | null>(null);
-  // const totalProducts = getTotalProducts(cartMaster.data);
-
-  const totalProducts = useMemo(
-    () => getTotalProducts(cartMaster.data),
-    [cartMaster.data.length, allProductsSelected],
-  );
+  const totalProducts = getTotalProducts(cartMaster.data);
+  // const totalProducts = useMemo(
+  //   () => getTotalProducts(cartMaster.data),
+  //   [cartMaster.data.length, allProductsSelected],
+  // );
   const [
     modalConfirmationCheckoutVisible,
     setModalConfirmationCheckoutVisible,
@@ -611,6 +603,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
       setProductRemoveSelected(null);
+      console.log({ productSelectedCount, totalProducts });
+      if (productSelectedCount === totalProducts - 1) {
+        setAllProductsSelected(true);
+      }
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
