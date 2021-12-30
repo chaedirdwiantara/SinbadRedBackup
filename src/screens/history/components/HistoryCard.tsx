@@ -26,6 +26,7 @@ import {
 } from '../types';
 /** === IMPORT STYLE === */
 import { HistoryStyle } from '../styles';
+import { BillingStatus, OrderStatus, StatusPayment } from '../functions/data';
 /** === TYPE === */
 interface HistoryCardProps {
   orderCode: string;
@@ -118,7 +119,10 @@ export const HistoryCard: FC<HistoryCardProps> = ({
               />
             )}
           </View>
-          {expiredPaymentTime && !isPaymentTimeExpired ? (
+          {expiredPaymentTime &&
+          !isPaymentTimeExpired &&
+          (statusSlug === StatusPayment.WAITING_FOR_PAYMENT ||
+            statusSlug === OrderStatus.PENDING_PAYMENT) ? (
             <CountDownTimer type={'small'} expiredTime={expiredPaymentTime} />
           ) : null}
         </View>
