@@ -4,6 +4,7 @@ import {
   HistoryDetailCardDivider,
   HistoryCardItem,
 } from '@screen/history/components';
+import { View } from 'react-native';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { HistoryDetail, PaymentDetailSuccessProps } from '@model/history';
 import { PaymentType, OrderStatus } from '@screen/history/functions/data';
@@ -53,6 +54,41 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
       };
     }
   };
+
+  const renderVoucherList = (data: any) => {
+    return dataOrder!.voucherList.length > 0 ? (
+      data.map((item: any, index: number) => {
+        return (
+          <View key={index}>
+            <HistoryCardItem
+              title={item.catalogueName}
+              value={item.voucherValue}
+              type="green"
+            />
+          </View>
+        );
+      })
+    ) : (
+      <View />
+    );
+  };
+  const renderPromoList = (data: any) => {
+    return dataOrder!.promoList.length > 0 ? (
+      data.map((item: any, index: number) => {
+        return (
+          <View key={index}>
+            <HistoryCardItem
+              title={item?.catalogueName ?? ''}
+              value={item?.promoValue ?? ''}
+              type="green"
+            />
+          </View>
+        );
+      })
+    ) : (
+      <View />
+    );
+  };
   return (
     <HistoryDetailCard title="Informasi Pembayaran">
       <HistoryCardItem
@@ -67,11 +103,8 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         title={`Sub-total pesanan ${paymentInformation().qty}`}
         value={toCurrency(paymentInformation().grossPrice! ?? 0)}
       />
-
-      {
-        // will be updated when BE done with VoucherList and PromoList
-        /* <HistoryCardItem title="tes 20 400" value="FREE" type="green" /> */
-      }
+      {renderVoucherList(dataOrder?.voucherList)}
+      {renderPromoList(dataOrder?.promoList)}
       <HistoryCardItem title="Ongkos Kirim" value={toCurrency(0)} />
       <HistoryCardItem
         title="PPN 10%"
