@@ -28,3 +28,15 @@ export const updatePreviouseRouteCart = (
 export const resetCartMasterData = () => {
   return { type: types.RESET_CART_MASTER_DATA };
 };
+/** => Delete Cart Product empty stock */
+export const deleteCartProductEmptyStock = (
+  payload: models.ICartDeleteProductPayload,
+): models.DeleteCartProduct => {
+  return { type: types.DELETE_CART_PRODUCT_EMPTY_STOCK, payload };
+};
+/** => Delete Cart product not found */
+export const deleteCartProductNotFound = (
+  payload: models.ICartDeleteProductPayload,
+): models.DeleteCartProduct => {
+  return { type: types.DELETE_CART_PRODUCT_NOT_FOUND, payload };
+};
