@@ -83,4 +83,26 @@ export const cartMaster = simplifyReducer(initialState, {
   [types.RESET_CART_MASTER_DATA]() {
     return initialState;
   },
+  /** =>  DELETE CART PRODUCT EMPTY STOCK FLAG */
+  [types.DELETE_CART_PRODUCT_EMPTY_STOCK](
+    state = initialState,
+    { payload }: models.DeleteCartProductEmptyStock,
+  ) {
+    const newData = state.dataEmptyStock.filter(
+      (product) => product.productId !== payload.productId,
+    );
+
+    return { ...state, dataEmptyStock: newData };
+  },
+  /** =>  DELETE CART PRODUCT NOT FOUND FLAG */
+  [types.DELETE_CART_PRODUCT_NOT_FOUND](
+    state = initialState,
+    { payload }: models.DeleteCartProductNotFound,
+  ) {
+    const newData = state.dataNotFound.filter(
+      (product) => product.productId !== payload.productId,
+    );
+
+    return { ...state, dataNotFound: newData };
+  },
 });

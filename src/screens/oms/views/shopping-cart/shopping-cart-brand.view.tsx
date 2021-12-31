@@ -10,7 +10,7 @@ import {
   useProductMasterCartActions,
 } from '../../functions';
 import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup, CartBrand, IProductItemUpdateCart } from '@models';
+import { CartInvoiceGroup, CartBrand, IProductRemoveSelected } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartBrandProps {
   brand: CartBrand;
@@ -24,7 +24,7 @@ interface ShoppingCartBrandProps {
   totalProducts: number;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
   onUpdateCart: () => void;

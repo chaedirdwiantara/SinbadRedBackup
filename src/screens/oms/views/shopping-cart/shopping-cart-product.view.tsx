@@ -22,7 +22,7 @@ import {
   CartBrand,
   CartProduct,
   CartInvoiceGroup,
-  IProductItemUpdateCart,
+  IProductRemoveSelected,
 } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartProductProps {
@@ -39,7 +39,7 @@ interface ShoppingCartProductProps {
   totalProducts: number;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
   onUpdateCart: () => void;
