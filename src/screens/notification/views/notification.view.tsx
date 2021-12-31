@@ -154,7 +154,7 @@ const NotificationView: React.FC = () => {
     index: number;
   }) => {
     let title = dataIcon[item.type]?.title;
-    let message = item.description;
+    let message = item.body;
     switch (item?.type) {
       case 'registration': {
         title = 'Hai user_sinbad!';
@@ -162,7 +162,7 @@ const NotificationView: React.FC = () => {
       }
       case 'verification': {
         title = setApprovalStatusTitle(item?.data?.approvalStatus);
-        message = item.data ? item.description : SINBAD_REJECT_MESSAGE;
+        message = item.data ? item.body : SINBAD_REJECT_MESSAGE;
         break;
       }
       default:
