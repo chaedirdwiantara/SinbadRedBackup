@@ -8,7 +8,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { color, SnbText } from 'react-native-sinbad-ui';
+import { color, SnbText, SnbImageCompressor } from 'react-native-sinbad-ui';
 const { width } = Dimensions.get('window');
 import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -211,12 +211,19 @@ const BannerSlider: React.FC<PropsData> = (props) => {
     return (
       <View key={index} style={{ width }}>
         <TouchableWithoutFeedback onPress={() => props.goToDetail(data)}>
-          <Image
+          <SnbImageCompressor
+            defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
+            uri={data?.imageUrl}
+            style={styles.imageBanner}
+            res={200}
+            resizeMode={'stretch'}
+          />
+          {/* <Image
             defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
             source={{ uri: data?.imageUrl }}
             style={styles.imageBanner}
             resizeMode={'stretch'}
-          />
+          /> */}
         </TouchableWithoutFeedback>
       </View>
     );
