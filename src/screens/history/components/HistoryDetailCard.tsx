@@ -14,6 +14,7 @@ interface HistoryDetailCardProps {
   actionLoading?: boolean;
   gutter?: boolean;
   contentTopSpaces?: number;
+  disabledAction?: boolean;
 }
 /** === COMPONENT === */
 export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
@@ -24,16 +25,22 @@ export const HistoryDetailCard: FC<HistoryDetailCardProps> = ({
   actionLoading,
   gutter = true,
   contentTopSpaces,
+  disabledAction,
 }) => (
   <View>
     <View style={gutter ? styles.shadowForBox10 : {}}>
       <View style={HistoryDetailStyle.cardHeader}>
         <SnbText.B4>{title}</SnbText.B4>
         {actionTitle && (
-          <TouchableWithoutFeedback onPress={onActionClick}>
+          <TouchableWithoutFeedback
+            disabled={disabledAction}
+            onPress={onActionClick}>
             <View>
               {!actionLoading ? (
-                <SnbText.B4 color={color.red50}>{actionTitle}</SnbText.B4>
+                <SnbText.B4
+                  color={disabledAction ? color.black60 : color.red50}>
+                  {actionTitle}
+                </SnbText.B4>
               ) : (
                 <Image
                   source={require('../../../assets/gif/loading/load_more.gif')}
