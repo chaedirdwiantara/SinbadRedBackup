@@ -342,7 +342,7 @@ const ProductDetailView: FC = () => {
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
-      if (errorStock.code === 400) {
+      if (errorStock.code === 400 || errorStock.code === 10001) {
         setIsAvailable(false);
       }
       setLoadingButton(false);
@@ -560,22 +560,20 @@ const ProductDetailView: FC = () => {
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
-      {orderModalVisible && (
-        <AddToCartModal
-          orderQty={orderQty}
-          onChangeQty={onHandleChangeQty}
-          open={orderModalVisible}
-          closeAction={handleCloseModal}
-          onAddToCartPress={onSubmitAddToCart}
-          disabled={
-            dataProduct === null ||
-            dataStock === null ||
-            orderQty > dataStock.stock ||
-            orderQty < dataProduct?.minQty
-          }
-          isFromProductDetail={true}
-        />
-      )}
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={orderModalVisible}
+        closeAction={handleCloseModal}
+        onAddToCartPress={onSubmitAddToCart}
+        disabled={
+          dataProduct === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < dataProduct?.minQty
+        }
+        isFromProductDetail={true}
+      />
       {/* Toast success add cart */}
       <SnbToast
         ref={toastSuccessAddCart}
