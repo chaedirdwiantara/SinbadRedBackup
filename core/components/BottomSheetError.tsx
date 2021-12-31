@@ -84,6 +84,7 @@ interface ErrorProps {
   closeAction?: () => void;
   retryAction?: () => void;
   backAction?: () => void;
+  isCloseable?: boolean;
 }
 /** === COMPONENT === */
 const BottomSheetError: React.FC<ErrorProps> = (props) => {
@@ -366,7 +367,16 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   };
   /** => main */
   return (
-    <SnbBottomSheet open={props.open} content={content()} size={'halfscreen'} />
+    <SnbBottomSheet
+      open={props.open}
+      content={content()}
+      size={'halfscreen'}
+      closeAction={() =>
+        props.closeAction && props.isCloseable ? props.closeAction() : null
+      }
+      actionIcon={props.isCloseable ? 'close' : undefined}
+      title={props.isCloseable ? ' ' : undefined}
+    />
   );
 };
 /** === STYLE === */
