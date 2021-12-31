@@ -323,7 +323,19 @@ const ProductDetailView: FC = () => {
   /** Listen success get stock */
   useEffect(() => {
     if (dataStock) {
-      setLoadingButton(false);
+      if (
+        me &&
+        me.data &&
+        me.data.approvalStatus === 'verified' &&
+        dataSegmentation &&
+        dataSegmentation.dataSuppliers &&
+        dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+      ) {
+        setIsAvailable(false);
+        setLoadingButton(false);
+      } else {
+        setLoadingButton(false);
+      }
     }
   }, [dataStock]);
 

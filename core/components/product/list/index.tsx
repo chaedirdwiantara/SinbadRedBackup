@@ -332,7 +332,8 @@ const ProductList: FC<ProductListProps> = ({
       if (
         modalRejectApproval === false &&
         modalWaitingApproval === false &&
-        modalRegisterSupplier === false
+        modalRegisterSupplier === false &&
+        modalNotCoverage === false
       ) {
         setOrderModalVisible(true);
       }
@@ -347,7 +348,8 @@ const ProductList: FC<ProductListProps> = ({
         if (
           modalRejectApproval === false &&
           modalWaitingApproval === false &&
-          modalRegisterSupplier === false
+          modalRegisterSupplier === false &&
+          modalNotCoverage === false
         ) {
           setOrderModalVisible(true);
         }
