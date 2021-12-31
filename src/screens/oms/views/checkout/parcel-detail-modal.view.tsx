@@ -86,10 +86,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     ));
   };
   const discountDetail = () => {
-    if (data === null) {
-      return null;
-    }
-
     const discounts = handleDiscountInvoiceGroups(data.invoiceGroupId);
     return (
       <View style={{ paddingBottom: 16 }}>
@@ -211,7 +207,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               data.totalPriceAfterTax - data.totalPriceBeforeTax,
               'normal',
             )}
-            {data.totalPromoPayment !== 0
+            {data.totalPromoPayment !== 0 && data.totalPromoPayment !== null
               ? contentListData(
                   'Promo Pembayaran',
                   data.totalPromoPayment as number,

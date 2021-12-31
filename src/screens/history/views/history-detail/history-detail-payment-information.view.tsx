@@ -100,7 +100,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         value={dataPayment?.paymentChannel.name || null}
       />
       <HistoryCardItem
-        title={`Sub-total pesanan ${paymentInformation().qty}`}
+        title={`Sub-total pesanan (${paymentInformation().qty})`}
         value={toCurrency(paymentInformation().grossPrice! ?? 0)}
       />
       {renderVoucherList(dataOrder?.voucherList)}

@@ -1,12 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, {
-  FC,
-  useState,
-  useMemo,
-  Fragment,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { FC, useState, Fragment, useEffect, useRef } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -80,12 +73,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductItemUpdateCart | null>(null);
-  // const totalProducts = getTotalProducts(cartMaster.data);
-
-  const totalProducts = useMemo(
-    () => getTotalProducts(cartMaster.data),
-    [cartMaster.data.length, allProductsSelected],
-  );
+  const totalProducts = getTotalProducts(cartMaster.data);
+  // const totalProducts = useMemo(
+  //   () => getTotalProducts(cartMaster.data),
+  //   [cartMaster.data.length, allProductsSelected],
+  // );
   const [
     modalConfirmationCheckoutVisible,
     setModalConfirmationCheckoutVisible,
@@ -435,12 +427,19 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 stockInformationData.change[indexChange].currentStock <
                 product.minQty
               ) {
-                /** => add to data empty stock */
-                dataEmptyStock.push({
+                /** => add to products of brand */
+                products.push({
+                  ...product,
+                  selected: false,
+                  stock: stockInformationData.change[indexChange].currentStock,
+                });
+
+                /** => add to data product for update cart */
+                productMasterCart.push({
                   productId: product.productId,
-                  productName: product.productName,
-                  displayPrice: product.displayPrice,
-                  urlImages: product.urlImages,
+                  selected: false,
+                  qty: product.qty,
+                  stock: product.stock,
                 });
 
                 /** => add to data product for update cart */
@@ -476,12 +475,19 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 isEmptyProduct = false;
               }
             } else if (indexEmptyStock >= 0) {
-              /** => add to data empty stock */
-              dataEmptyStock.push({
+              /** => add to products of brand */
+              products.push({
+                ...product,
+                selected: false,
+                stock: 0,
+              });
+
+              /** => add to data product for update cart */
+              productMasterCart.push({
                 productId: product.productId,
-                productName: product.productName,
-                displayPrice: product.displayPrice,
-                urlImages: product.urlImages,
+                selected: false,
+                qty: product.qty,
+                stock: 0,
               });
 
               /** => add to data product for update cart */
@@ -492,12 +498,19 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 stock: product.stock,
               });
             } else if (indexNotFound >= 0) {
-              /** => add to data not found */
-              dataNotFound.push({
+              /** => add to products of brand */
+              products.push({
+                ...product,
+                selected: false,
+                stock: 0,
+              });
+
+              /** => add to data product for update cart */
+              productMasterCart.push({
                 productId: product.productId,
-                productName: product.productName,
-                displayPrice: product.displayPrice,
-                urlImages: product.urlImages,
+                selected: false,
+                qty: product.qty,
+                stock: 0,
               });
 
               /** => add to data product for update cart */
@@ -552,6 +565,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
               isEmptyProduct = false;
             }
+
+            isEmptyProduct = false;
           });
 
           if (!isEmptyProduct) {
@@ -611,6 +626,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
       setProductRemoveSelected(null);
+      console.log({ productSelectedCount, totalProducts });
+      if (productSelectedCount === totalProducts - 1) {
+        setAllProductsSelected(true);
+      }
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);

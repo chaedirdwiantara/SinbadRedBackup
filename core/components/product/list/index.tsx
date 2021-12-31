@@ -371,16 +371,25 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setModalNotCoverage(true);
+          setLoadingPreparation(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
         // checkUser({
         //   sinbadStatus: me.data.approvalStatus,
         //   supplierStatus: null,
         // });
         setModalNotCoverage(true);
+        setLoadingPreparation(false);
       }
     }
   }, [dataSegmentation]);
