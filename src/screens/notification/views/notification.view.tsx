@@ -153,8 +153,13 @@ const NotificationView: React.FC = () => {
     item: models.NotificationListSuccessProps;
     index: number;
   }) => {
-    let title = dataIcon[item.type]?.title;
-    let message = item.description;
+    let title = '-';
+    let image = dataIcon.special_offer.image;
+    if (item.type) {
+      title = dataIcon[item.type]?.title;
+      image = dataIcon[item.type]?.image;
+    }
+    let message = item.body;
     switch (item?.type) {
       case 'registration': {
         title = 'Hai user_sinbad!';
@@ -162,7 +167,7 @@ const NotificationView: React.FC = () => {
       }
       case 'verification': {
         title = setApprovalStatusTitle(item?.data?.approvalStatus);
-        message = item.data ? item.description : SINBAD_REJECT_MESSAGE;
+        message = item.data ? item.body : SINBAD_REJECT_MESSAGE;
         break;
       }
       default:
@@ -181,10 +186,7 @@ const NotificationView: React.FC = () => {
         }}>
         <View style={NotificationStyle.boxNotification} key={index}>
           <View>
-            <Image
-              source={dataIcon[item.type]?.image}
-              style={NotificationStyle.image44Contain}
-            />
+            <Image source={image} style={NotificationStyle.image44Contain} />
           </View>
           <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
             <View style={NotificationStyle.boxNotificationItemHeader}>
