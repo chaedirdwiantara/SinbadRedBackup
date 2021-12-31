@@ -427,12 +427,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 stockInformationData.change[indexChange].currentStock <
                 product.minQty
               ) {
-                /** => add to data empty stock */
-                dataEmptyStock.push({
-                  productId: product.productId,
-                  productName: product.productName,
-                  displayPrice: product.displayPrice,
-                  urlImages: product.urlImages,
+                /** => add to products of brand */
+                products.push({
+                  ...product,
+                  selected: false,
+                  stock: stockInformationData.change[indexChange].currentStock,
                 });
 
                 /** => add to data product for update cart */
@@ -468,12 +467,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 isEmptyProduct = false;
               }
             } else if (indexEmptyStock >= 0) {
-              /** => add to data empty stock */
-              dataEmptyStock.push({
-                productId: product.productId,
-                productName: product.productName,
-                displayPrice: product.displayPrice,
-                urlImages: product.urlImages,
+              /** => add to products of brand */
+              products.push({
+                ...product,
+                selected: false,
+                stock: 0,
               });
 
               /** => add to data product for update cart */
@@ -481,15 +479,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 productId: product.productId,
                 selected: false,
                 qty: product.qty,
-                stock: product.stock,
+                stock: 0,
               });
             } else if (indexNotFound >= 0) {
-              /** => add to data not found */
-              dataNotFound.push({
-                productId: product.productId,
-                productName: product.productName,
-                displayPrice: product.displayPrice,
-                urlImages: product.urlImages,
+              /** => add to products of brand */
+              products.push({
+                ...product,
+                selected: false,
+                stock: 0,
               });
 
               /** => add to data product for update cart */
@@ -497,7 +494,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 productId: product.productId,
                 selected: false,
                 qty: product.qty,
-                stock: product.stock,
+                stock: 0,
               });
             } else if (product.qty >= product.stock) {
               if (product.selected) {
@@ -544,6 +541,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
               isEmptyProduct = false;
             }
+
+            isEmptyProduct = false;
           });
 
           if (!isEmptyProduct) {
