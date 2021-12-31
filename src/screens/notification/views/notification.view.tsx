@@ -153,7 +153,12 @@ const NotificationView: React.FC = () => {
     item: models.NotificationListSuccessProps;
     index: number;
   }) => {
-    let title = dataIcon[item.type]?.title;
+    let title = '-';
+    let image = dataIcon.special_offer.image;
+    if (item.type) {
+      title = dataIcon[item.type]?.title;
+      image = dataIcon[item.type]?.image;
+    }
     let message = item.body;
     switch (item?.type) {
       case 'registration': {
@@ -181,10 +186,7 @@ const NotificationView: React.FC = () => {
         }}>
         <View style={NotificationStyle.boxNotification} key={index}>
           <View>
-            <Image
-              source={dataIcon[item.type]?.image}
-              style={NotificationStyle.image44Contain}
-            />
+            <Image source={image} style={NotificationStyle.image44Contain} />
           </View>
           <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
             <View style={NotificationStyle.boxNotificationItemHeader}>
