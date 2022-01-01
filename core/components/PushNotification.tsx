@@ -24,26 +24,44 @@ const PushNotification = () => {
   React.useEffect(() => {
     /** === FOR FOREGROUND === */
     const unSubForeground = messaging().onMessage(async (remoteMessage) => {
-      PushNotifications.localNotification({
-        message: remoteMessage.notification?.body!,
-        title: remoteMessage.notification?.title!,
-        largeIcon: '',
-        smallIcon: 'ic_stat_notif',
-        userInfo: remoteMessage,
-      });
+      localNotification(remoteMessage);
     });
-    /** === FOR BACKGROUND === */
+    /** === FOR BACKGROUND AND QUIT === */
     const unSubBackground = messaging().setBackgroundMessageHandler(
+      async () => {},
+    );
+    /** === FOR BACKGROUND OPEN === */
+    const unSubBackgroundOpen = messaging().onNotificationOpenedApp(
       async (remoteMessage) => {
         deepLink(remoteMessage.data);
       },
     );
+    /** === FOR BACKGROUND QUIT OPEN === */
+    const unSubBackgroundQuitOpen = messaging()
+      .getInitialNotification()
+      .then(async (remoteMessage) => {
+        deepLink(remoteMessage?.data);
+      });
+
     return () => {
       unSubForeground;
       unSubBackground;
+      unSubBackgroundOpen;
+      unSubBackgroundQuitOpen;
     };
   }, []);
 
+  /** === LOCAL NOTIFICATION === */
+  const localNotification = (remoteMessage: any) => {
+    PushNotifications.localNotification({
+      message: remoteMessage.notification?.body!,
+      title: remoteMessage.notification?.title!,
+      largeIcon: '',
+      smallIcon: 'ic_stat_notif',
+      userInfo: remoteMessage,
+    });
+  };
+  /** === DEEP LINK === */
   const deepLink = (data: any) => {
     if (!isEmpty(data)) {
       if (data?.screen !== undefined) {
