@@ -571,7 +571,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
       if (
         totalProductsSelected === initialTotalProduct &&
-        totalProductsSelected > 0
+        totalProductsSelected > 0 &&
+        initialTotalProduct > 0
       ) {
         setAllProductsSelected(true);
       }
@@ -695,7 +696,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                         sectionName={'Product Tidak Tersedia'}
                         data={cartMaster.dataNotFound}
                         onRemoveProduct={onRemoveProduct}
-                        type={'dataEmptyStock'}
+                        type={'dataNotFound'}
                       />
                     )}
                 </Fragment>
@@ -706,7 +707,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                         sectionName={'Product Habis'}
                         data={cartMaster.dataEmptyStock}
                         onRemoveProduct={onRemoveProduct}
-                        type={'dataNotFound'}
+                        type={'dataEmptyStock'}
                       />
                     )}
                 </Fragment>
