@@ -3,7 +3,7 @@ import React from 'react';
 import messaging from '@react-native-firebase/messaging';
 import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
-import PushNotifications from 'react-native-push-notification';
+import PushNotifications, { Importance } from 'react-native-push-notification';
 /** === INTERFACE === */
 interface RemoteMessage {
   payload: string;
@@ -20,6 +20,18 @@ const PushNotification = () => {
     },
     popInitialNotification: true,
   });
+  /** === CREATE CHANNEL === */
+  PushNotifications.createChannel(
+    {
+      channelId: 'sinbad_red',
+      channelName: 'Sinbad Red',
+      playSound: true,
+      soundName: 'default',
+      importance: Importance.HIGH,
+      vibrate: true,
+    },
+    () => {},
+  );
   /** === EFFECT === */
   React.useEffect(() => {
     /** === FOR FOREGROUND === */
@@ -40,7 +52,9 @@ const PushNotification = () => {
     const unSubBackgroundQuitOpen = messaging()
       .getInitialNotification()
       .then(async (remoteMessage) => {
-        deepLink(remoteMessage?.data);
+        if (remoteMessage !== null) {
+          deepLink(remoteMessage?.data);
+        }
       });
 
     return () => {
@@ -54,6 +68,7 @@ const PushNotification = () => {
   /** === LOCAL NOTIFICATION === */
   const localNotification = (remoteMessage: any) => {
     PushNotifications.localNotification({
+      channelId: 'sinbad_red',
       message: remoteMessage.notification?.body!,
       title: remoteMessage.notification?.title!,
       largeIcon: '',
