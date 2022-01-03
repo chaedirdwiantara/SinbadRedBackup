@@ -179,19 +179,21 @@ const NotificationView: React.FC = () => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          // if (item.type === 'registration' || item.type === 'verification') {
-          //   setModalTitle(title);
-          //   setModalMessage(message);
-          //   setApprovalStatus(item?.data?.approvalStatus);
-          //   setShowModal(true);
-          // }
-
-          if (item.screen === 'HistoryDetailView') {
-            goToHistoryDetail(
-              item.data.section,
-              item.data.id,
-              item.data.billingId,
-            );
+          switch (item?.screen) {
+            case 'registration':
+              setModalTitle(title);
+              setModalMessage(message);
+              setApprovalStatus(item?.data?.approvalStatus);
+              setShowModal(true);
+              break;
+            case 'verification':
+              setModalTitle(title);
+              setModalMessage(message);
+              setApprovalStatus(item?.data?.approvalStatus);
+              setShowModal(true);
+              break;
+            case 'HistoryDetailView':
+              NavigationAction.navigate(item?.screen, item.data);
           }
         }}>
         <View style={NotificationStyle.boxNotification} key={index}>
