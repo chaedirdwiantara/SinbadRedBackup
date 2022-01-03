@@ -85,7 +85,6 @@ const OTPContent: React.FC<Props> = (props) => {
       // if source Quest, update quest task status
       if (source === 'Quest') {
         const data = {
-          buyerId: sourceData?.buyerId,
           questId: sourceData?.questId,
           taskId: sourceData?.taskId,
           status: 'done',
@@ -121,7 +120,6 @@ const OTPContent: React.FC<Props> = (props) => {
     if (source === 'Quest') {
       NavigationAction.navigate('QuestDetailView', {
         questId: sourceData.questId,
-        buyerId: sourceData.buyerId,
       });
     } else {
       NavigationAction.backToPage('MerchantDetailProfileView');
