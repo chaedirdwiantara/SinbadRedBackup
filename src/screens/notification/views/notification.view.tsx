@@ -157,7 +157,6 @@ const NotificationView: React.FC = () => {
     let title = item.title;
     let image = dataIcon.special_offer.image;
     if (item.type) {
-      title = dataIcon[item.type]?.title;
       image = dataIcon[item.type]?.image;
     }
     let message = item.body;
@@ -180,11 +179,6 @@ const NotificationView: React.FC = () => {
         onPress={() => {
           switch (item?.screen) {
             case 'registration':
-              setModalTitle(title);
-              setModalMessage(message);
-              setApprovalStatus(item?.data?.approvalStatus);
-              setShowModal(true);
-              break;
             case 'verification':
               setModalTitle(title);
               setModalMessage(message);
