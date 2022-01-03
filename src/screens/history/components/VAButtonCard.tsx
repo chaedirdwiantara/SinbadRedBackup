@@ -24,7 +24,7 @@ interface Props {
   toolTipText?: string;
 }
 /** === COMPONENT === */
-const SnbCardButtonType4: FC<Props> = (props: any) => {
+const VAButtonCard: FC<Props> = (props: any) => {
   const [tooltipVisible, toggleTooltipVisible] = useReducer(
     (prevVisible) => !prevVisible,
     false,
@@ -129,8 +129,8 @@ const styles = StyleSheet.create({
   },
 });
 /** === DEFAULT PROPS === */
-SnbCardButtonType4.defaultProps = {
+VAButtonCard.defaultProps = {
   testID: '',
 };
 /** === EXPORT COMPONENT === */
-export default SnbCardButtonType4;
+export default VAButtonCard;

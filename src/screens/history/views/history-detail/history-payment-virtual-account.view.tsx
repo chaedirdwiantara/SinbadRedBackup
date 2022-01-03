@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
 import { PaymentDetailSuccessProps } from '@model/history';
-import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
-import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
+import VANumberCard from '../../components/VANumberCard';
+import VAButtonCard from '../../components/VAButtonCard';
 import {
   BillingStatus,
   PaymentType,
@@ -53,7 +53,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   const renderVAButton = () => {
     return (
       <View>
-        <SnbCardButtonType4
+        <VAButtonCard
           title="Transfer ke no. Virtual Account :"
           titleAlign="left"
           buttonText="AKTIFKAN VIRTUAL ACCOUNT"
@@ -74,7 +74,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     return (
       <>
         <View>
-          <SnbCardButtonType3
+          <VANumberCard
             subTitle1={data?.accountVaNo || ''}
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
