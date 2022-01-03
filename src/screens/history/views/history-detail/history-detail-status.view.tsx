@@ -7,9 +7,8 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { HistoryDetailCard, HistoryCardItem } from '../../components';
 /** === IMPORT FUNCTIONS === */
 import { toDateWithTime } from '@core/functions/global/date-format';
-import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 import { goBack } from '../../functions';
-/** === IMPORT TYPES === */
+/** === IMPORT TYPE === */
 import * as models from '@models';
 /** === TYPES === */
 export interface IHistoryDetailStatus {
@@ -30,20 +29,13 @@ type HistoryDetailStatusRouteProp = RouteProp<
 >;
 /** === COMPONENT === */
 const HistoryDetailStatusView: FC = () => {
-  /** === HOOKS === */
+  /** === HOOK === */
   const { params } = useRoute<HistoryDetailStatusRouteProp>();
-  const {
-    stateHistory: { paymentStatus, orderStatus },
-  } = useHistoryContext();
-  /** === DERIVEDS === */
-  const statusData = [...orderStatus.data, ...paymentStatus.data];
-  const orderLogs = params.logs.map((log) => {
-    const data = statusData.find((status) => status.status === log.status);
-    return {
-      title: data?.detail ?? '-',
-      subtitle: toDateWithTime(log.happenedAt),
-    };
-  });
+  /** === DERIVED === */
+  const orderLogs = params.logs.map((log) => ({
+    title: log?.detail ?? '-',
+    subtitle: toDateWithTime(log.happenedAt),
+  }));
 
   return (
     <SnbContainer color="white">
