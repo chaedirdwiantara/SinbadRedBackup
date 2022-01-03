@@ -78,7 +78,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             subTitle1={data?.accountVaNo || ''}
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
-            bottomText={'Salin no. Rek'}
+            bottomText={'Salin No. Rek'}
             title="Transfer ke no. Virtual Account :"
             onPress={onClick}
           />
