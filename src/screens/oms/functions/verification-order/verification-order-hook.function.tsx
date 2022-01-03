@@ -77,7 +77,9 @@ const useStandardLoadingState = () => {
 const useVerificationFailedFetchState = () => {
   const [isOpen, setOpen] = React.useState(false);
   const [errorAction, setErrorAction] = React.useState<Function>(() => {});
-  const [errorText, setErrorText] = React.useState('');
+  const [errorData, setErrorData] = React.useState<models.ErrorProps | null>(
+    null,
+  );
   return {
     setOpen: (value: boolean) => {
       setOpen(value);
@@ -85,12 +87,12 @@ const useVerificationFailedFetchState = () => {
     setErrorAction: (value: () => void) => {
       setErrorAction(value);
     },
-    setErrorText: (value: string) => {
-      setErrorText(value);
+    setErrorData: (value: models.ErrorProps) => {
+      setErrorData(value);
     },
     isOpen,
     errorAction,
-    errorText,
+    errorData,
   };
 };
 /** === EXPORT === */

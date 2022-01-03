@@ -6,7 +6,7 @@ import { SnbText } from 'react-native-sinbad-ui';
 import { ShoppingCartBrand } from './shopping-cart-brand.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup, IProductItemUpdateCart } from '@models';
+import { CartInvoiceGroup, IProductRemoveSelected } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartInvoiceGroupProps {
   invoiceGroup: CartInvoiceGroup;
@@ -19,9 +19,10 @@ interface ShoppingCartInvoiceGroupProps {
   totalProducts: number;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
+  onUpdateCart: () => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
@@ -38,6 +39,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
   onRemoveProduct,
   isFocus,
   setIsFocus,
+  onUpdateCart,
 }) => {
   return (
     <View
@@ -63,6 +65,7 @@ export const ShoppingCartInvoiceGroup: FC<ShoppingCartInvoiceGroupProps> = ({
           onRemoveProduct={onRemoveProduct}
           isFocus={isFocus}
           setIsFocus={setIsFocus}
+          onUpdateCart={onUpdateCart}
         />
       ))}
     </View>

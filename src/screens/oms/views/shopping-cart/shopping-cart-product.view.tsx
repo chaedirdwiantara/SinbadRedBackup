@@ -8,12 +8,13 @@ import {
   color,
   SnbNumberCounter,
 } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import {
   handleSelectedProductChange,
   handleProductDelete,
   handleProductQuantityChange,
+  useProductMasterCartActions,
 } from '../../functions';
 import { goToProductDetail } from '@core/functions/product';
 import { ShoppingCartStyles } from '../../styles';
@@ -21,7 +22,7 @@ import {
   CartBrand,
   CartProduct,
   CartInvoiceGroup,
-  IProductItemUpdateCart,
+  IProductRemoveSelected,
 } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartProductProps {
@@ -38,9 +39,10 @@ interface ShoppingCartProductProps {
   totalProducts: number;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
   isFocus: boolean;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
+  onUpdateCart: () => void;
 }
 /** == COMPONENT === */
 export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
@@ -59,7 +61,10 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
   onRemoveProduct,
   isFocus,
   setIsFocus,
+  onUpdateCart,
 }) => {
+  const { setItemProductMasterCart } = useProductMasterCartActions();
+
   const minusDisabled =
     isFocus ||
     product.qty <= product.minQty ||
@@ -86,6 +91,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         product.minQty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     } else if (qty > product.stock) {
       const maxQtyAfterMinimum = product.stock - product.minQty;
@@ -102,6 +108,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         qty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     } else {
       handleProductQuantityChange(
@@ -112,9 +119,15 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         [invoiceGroups, setInvoiceGroups],
         qty,
         setSassionQty,
+        setItemProductMasterCart,
       );
     }
     setIsFocus(false);
+  };
+
+  const navigateProductDetail = () => {
+    onUpdateCart();
+    goToProductDetail(product.productId);
   };
 
   return (
@@ -145,11 +158,13 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [productSelectedCount, setProductSelectedCount],
                 setAllProductsSelected,
                 totalProducts,
+                setSassionQty,
+                setItemProductMasterCart,
               )
             }
           />
         </View>
-        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
+        <TouchableOpacity onPress={navigateProductDetail}>
           <Image
             source={{ uri: product.urlImages }}
             style={{ width: 77, height: 77 }}
@@ -157,7 +172,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         </TouchableOpacity>
         <View>
           <TouchableOpacity
-            onPress={() => goToProductDetail(product.productId)}
+            onPress={navigateProductDetail}
             style={{
               marginBottom: 12,
               width: '100%',
@@ -183,6 +198,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [invoiceGroups, setInvoiceGroups],
                 product.qty,
                 setSassionQty,
+                setItemProductMasterCart,
               )
             }
             onDecrease={() =>
@@ -194,6 +210,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                 [invoiceGroups, setInvoiceGroups],
                 product.qty,
                 setSassionQty,
+                setItemProductMasterCart,
               )
             }
             onChange={(qty: number) => {
@@ -206,6 +223,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
                   [invoiceGroups, setInvoiceGroups],
                   qty,
                   setSassionQty,
+                  setItemProductMasterCart,
                 );
               }
             }}
@@ -238,10 +256,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           />
         </TouchableOpacity>
         {(product.stock <= 1000 || product.qty > product.stock) && (
-          <SnbText.B3
-            color={
-              color.red50
-            }>{`Tersisa ${product.stock} ${product.uom}`}</SnbText.B3>
+          <SnbText.B3 color={color.red50}>
+            {product.stock === 0
+              ? 'Produk Habis'
+              : `Tersisa ${product.stock} ${product.uom}`}
+          </SnbText.B3>
         )}
       </View>
     </View>

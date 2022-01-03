@@ -10,6 +10,7 @@ import { CheckoutHeader } from './checkout-header.view';
 import { ModalPaymentType } from './payment-type-modal.view';
 import { ModalPaymentChannels } from './payment-channels-modal.view';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
+import { ModalProductList } from './product-list-modal.view';
 import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
@@ -38,7 +39,9 @@ import {
   goToCheckoutSuccess,
   useExpiredTime,
   useCreateOrders,
+  useCartCheckedoutActions,
 } from '@screen/oms/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
@@ -72,6 +75,7 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
+  const cartCheckedoutActions = useCartCheckedoutActions();
   const {
     stateCheckout: {
       checkout: {
@@ -82,6 +86,7 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
+  const { dispatchShopingCart } = useShopingCartContext();
   const {
     setInvoiceBrand,
     checkoutMaster,
@@ -103,9 +108,14 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [modalParcelData, setModalParcelData] = useState(null);
+  const [modalParcelData, setModalParcelData] =
+    useState<models.IInvoiceCheckout | null>(null);
   const [isModalParcelDetail, setModalParcelDetail] = useState(false);
   const [isExpiredSession, setExpiredSession] = useState(false);
+  const [productList, setProductList] = useState<
+    models.ProductCheckout[] | null
+  >(null);
+  const [isModalProductList, setModalProductList] = useState(false);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -214,6 +224,7 @@ const OmsCheckoutView: FC = () => {
       if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
         paymentTCModal.setOpen(true);
       } else {
+        cartCheckedoutActions.fetch(dispatchShopingCart);
         createOrders.create(dispatchCheckout);
       }
     }
@@ -409,6 +420,10 @@ const OmsCheckoutView: FC = () => {
     setModalParcelData(data);
   };
 
+  const handleProductList = (data: models.ProductCheckout[]) => {
+    setProductList(data);
+  };
+
   const handleCheckExpiredSession = () => {
     if (!expiredTime.check()) {
       return false;
@@ -425,6 +440,14 @@ const OmsCheckoutView: FC = () => {
       setModalParcelDetail(false);
     }
   }, [modalParcelData]);
+
+  useEffect(() => {
+    if (productList !== null) {
+      setModalProductList(true);
+    } else {
+      setModalProductList(false);
+    }
+  }, [productList]);
 
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {
@@ -445,6 +468,18 @@ const OmsCheckoutView: FC = () => {
           setModalParcelData(null);
         }}
         data={modalParcelData}
+      />
+    );
+  };
+
+  const renderModalProductList = () => {
+    return (
+      <ModalProductList
+        isOpen={isModalProductList}
+        close={() => {
+          setProductList(null);
+        }}
+        data={productList}
       />
     );
   };
@@ -470,6 +505,7 @@ const OmsCheckoutView: FC = () => {
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
                   openModalParcelDetail={handleParcelDetail}
+                  openModalProductList={handleProductList}
                   index={index}
                 />
               ))}
@@ -525,6 +561,7 @@ const OmsCheckoutView: FC = () => {
           />
           {ModalErrorCreateOrders()}
           {ModalInvoiceParcelDetail()}
+          {renderModalProductList()}
         </>
       )}
     </SnbContainer>

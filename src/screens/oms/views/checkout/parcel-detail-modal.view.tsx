@@ -24,7 +24,7 @@ const { height } = Dimensions.get('window');
 interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
-  data: models.IInvoiceCheckout;
+  data: models.IInvoiceCheckout | null;
 }
 
 interface ContentListData {
@@ -42,6 +42,10 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   const parcelDetailModal = useParcelDetailModal();
 
   const productDetail = () => {
+    if (data === null) {
+      return null;
+    }
+
     return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText.H4>Produk</SnbText.H4>
@@ -124,12 +128,14 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             Voucher '{voucherData.voucherName}'
           </SnbText.B1>
         </View>
-        <SnbText.B1 color={color.green50}>
-          -{' '}
-          {toCurrency(voucherData.vouchers[0].voucherRebate, {
-            withFraction: false,
-          })}
-        </SnbText.B1>
+        {voucherData.vouchers.length > 0 && (
+          <SnbText.B1 color={color.green50}>
+            -{' '}
+            {toCurrency(voucherData.vouchers[0].voucherRebate, {
+              withFraction: false,
+            })}
+          </SnbText.B1>
+        )}
       </View>
     );
   };
@@ -176,6 +182,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     );
   };
   const total = () => {
+    if (data === null) {
+      return null;
+    }
     const products = handleTransformProductBrands(data.brands);
     return (
       <View>
@@ -198,7 +207,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               data.totalPriceAfterTax - data.totalPriceBeforeTax,
               'normal',
             )}
-            {data.totalPromoPayment !== 0
+            {data.totalPromoPayment !== 0 && data.totalPromoPayment !== null
               ? contentListData(
                   'Promo Pembayaran',
                   data.totalPromoPayment as number,

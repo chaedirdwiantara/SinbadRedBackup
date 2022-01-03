@@ -332,7 +332,8 @@ const ProductList: FC<ProductListProps> = ({
       if (
         modalRejectApproval === false &&
         modalWaitingApproval === false &&
-        modalRegisterSupplier === false
+        modalRegisterSupplier === false &&
+        modalNotCoverage === false
       ) {
         setOrderModalVisible(true);
       }
@@ -343,18 +344,22 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (errorStock && productDetailState) {
       if (errorStock.code === 11004) {
-        setLoadingPreparation(false);
         if (
           modalRejectApproval === false &&
           modalWaitingApproval === false &&
-          modalRegisterSupplier === false
+          modalRegisterSupplier === false &&
+          modalNotCoverage === false
         ) {
           setOrderModalVisible(true);
         }
-      } else {
-        setLoadingPreparation(false);
+      } else if (
+        modalRejectApproval === false &&
+        modalWaitingApproval === false &&
+        modalRegisterSupplier === false
+      ) {
         setModalNotCoverage(true);
       }
+      setLoadingPreparation(false);
     }
   }, [errorStock && productDetailState]);
 
@@ -371,15 +376,25 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setModalNotCoverage(true);
+          setLoadingPreparation(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setModalNotCoverage(true);
+        setLoadingPreparation(false);
       }
     }
   }, [dataSegmentation]);
@@ -524,21 +539,21 @@ const ProductList: FC<ProductListProps> = ({
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
-      {orderModalVisible && (
-        <AddToCartModal
-          orderQty={orderQty}
-          onChangeQty={onHandleChangeQty}
-          open={orderModalVisible}
-          closeAction={handleCloseModal}
-          onAddToCartPress={onSubmitAddToCart}
-          disabled={
-            productDetailState === null ||
-            dataStock === null ||
-            orderQty > dataStock.stock ||
-            orderQty < productDetailState?.minQty
-          }
-        />
-      )}
+
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={orderModalVisible}
+        closeAction={handleCloseModal}
+        onAddToCartPress={onSubmitAddToCart}
+        disabled={
+          productDetailState === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < productDetailState?.minQty
+        }
+      />
+
       {/* Product not coverage modal */}
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}

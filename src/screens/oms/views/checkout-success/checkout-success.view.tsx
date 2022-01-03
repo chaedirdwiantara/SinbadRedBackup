@@ -13,6 +13,8 @@ import {
   goToHistoryList,
   usePaymentAction,
   useCreateOrders,
+  useCartTotalProductActions,
+  useCartMasterActions,
 } from '@screen/oms/functions';
 import { contexts } from '@contexts';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
@@ -26,17 +28,21 @@ const OmsCheckoutSuccessView: FC = () => {
   const { dispatchCheckout } = useContext(contexts.CheckoutContext);
   const paymentAction = usePaymentAction();
   const checkoutAction = useCreateOrders();
+  const cartTotalProductActions = useCartTotalProductActions();
+  const cartMasterActions = useCartMasterActions();
   useCustomBackHardware(() => NavigationAction.resetToHome());
   useEffect(() => {
     /** Reset Data to prevent automaticaly create orders on checkout */
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
     checkoutAction.reset(dispatchCheckout);
+    cartTotalProductActions.fetch();
+    cartMasterActions.reset();
   }, []);
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
-    return <SnbTopNav.Type1 type="red" title={'Transaksi Selesai'} />;
+    return <SnbTopNav.Type1 type="red" title={'Pesanan Diproses'} />;
   };
   /** => Success Image */
   const renderSuccessImage = () => (
@@ -50,7 +56,9 @@ const OmsCheckoutSuccessView: FC = () => {
         style={{ marginBottom: 24, marginTop: 8 }}
       />
 
-      <SnbText.H4>Order anda berhasil dibuat</SnbText.H4>
+      <SnbText.H4 align="center">Pesanan anda akan kami proses.</SnbText.H4>
+      <SnbText.B1 align="center">Untuk melihat status pesanan anda,</SnbText.B1>
+      <SnbText.B1 align="center">silahkan ke daftar pesanan.</SnbText.B1>
     </View>
   );
 

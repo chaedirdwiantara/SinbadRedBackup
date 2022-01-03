@@ -132,15 +132,25 @@ const ProductDetailView: FC = () => {
   const handleOrderPress = () => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setIsAvailable(false);
+          setLoadingButton(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setIsAvailable(false);
+        setLoadingButton(false);
       }
     } else {
       NavigationAction.navigate('LoginPhoneView');
@@ -259,7 +269,7 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     setLoadingButton(true);
     productDetailActions.fetch(dispatchProduct, productId);
-  }, []);
+  }, [productId]);
 
   /** => Listen data product success */
   useEffect(() => {
@@ -295,10 +305,11 @@ const ProductDetailView: FC = () => {
         });
       } else {
         if (me.data) {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: null,
-          });
+          // checkUser({
+          //   sinbadStatus: me.data.approvalStatus,
+          //   supplierStatus: null,
+          // });
+          setIsAvailable(false);
         } else {
           stockValidationActions.fetch(dispatchStock, {
             warehouseId: null,
@@ -312,14 +323,26 @@ const ProductDetailView: FC = () => {
   /** Listen success get stock */
   useEffect(() => {
     if (dataStock) {
-      setLoadingButton(false);
+      if (
+        me &&
+        me.data &&
+        me.data.approvalStatus === 'verified' &&
+        dataSegmentation &&
+        dataSegmentation.dataSuppliers &&
+        dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+      ) {
+        setIsAvailable(false);
+        setLoadingButton(false);
+      } else {
+        setLoadingButton(false);
+      }
     }
   }, [dataStock]);
 
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
-      if (errorStock.code === 400) {
+      if (errorStock.code === 400 || errorStock.code === 10001) {
         setIsAvailable(false);
       }
       setLoadingButton(false);
@@ -356,7 +379,6 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      supplierSegmentationAction.reset(dispatchSupplier);
       if (toastSuccessAddCart.current) {
         toastSuccessAddCart.current.show();
       }
@@ -538,22 +560,20 @@ const ProductDetailView: FC = () => {
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
-      {orderModalVisible && (
-        <AddToCartModal
-          orderQty={orderQty}
-          onChangeQty={onHandleChangeQty}
-          open={orderModalVisible}
-          closeAction={handleCloseModal}
-          onAddToCartPress={onSubmitAddToCart}
-          disabled={
-            dataProduct === null ||
-            dataStock === null ||
-            orderQty > dataStock.stock ||
-            orderQty < dataProduct?.minQty
-          }
-          isFromProductDetail={true}
-        />
-      )}
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={orderModalVisible}
+        closeAction={handleCloseModal}
+        onAddToCartPress={onSubmitAddToCart}
+        disabled={
+          dataProduct === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < dataProduct?.minQty
+        }
+        isFromProductDetail={true}
+      />
       {/* Toast success add cart */}
       <SnbToast
         ref={toastSuccessAddCart}

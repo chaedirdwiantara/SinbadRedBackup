@@ -8,15 +8,16 @@ import { handleProductNotAvailableDelete } from '../../functions';
 import { goToProductDetail } from '@core/functions/product';
 import { ShoppingCartStyles } from '../../styles';
 import {
-  IProductItemUpdateCart,
   ICartMasterProductNotAvailable,
+  IProductRemoveSelected,
 } from '@models';
 /** === TYPE ===  */
 interface ProductNotAvailableViewProps {
   product: ICartMasterProductNotAvailable;
   productIndex: number;
   productLength: number;
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
+  type: 'dataEmptyStock' | 'dataNotFound';
 }
 /** == COMPONENT === */
 export const ProductNotAvailableView: FC<ProductNotAvailableViewProps> = ({
@@ -24,6 +25,7 @@ export const ProductNotAvailableView: FC<ProductNotAvailableViewProps> = ({
   productIndex,
   productLength,
   onRemoveProduct,
+  type,
 }) => {
   return (
     <View
@@ -62,7 +64,7 @@ export const ProductNotAvailableView: FC<ProductNotAvailableViewProps> = ({
         }}>
         <TouchableOpacity
           onPress={() =>
-            handleProductNotAvailableDelete(product, onRemoveProduct)
+            handleProductNotAvailableDelete(product, onRemoveProduct, type)
           }>
           <SnbIcon name="delete_outline" color={color.black60} size={32} />
         </TouchableOpacity>
