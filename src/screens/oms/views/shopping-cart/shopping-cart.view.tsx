@@ -221,22 +221,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       products: dataProductMasterCart,
     };
 
-    // cartMaster.data.map((invoiceGroup) => {
-    //   /** => initial brand selected */
-    //   invoiceGroup.brands.map((brand) => {
-    //     /** => initial product selected */
-    //     brand.products.map((product) => {
-    //       console.log('[product.qty]: ', product.qty);
-    //       params.products.push({
-    //         productId: product.productId,
-    //         qty: product.qty,
-    //         selected: product.selected,
-    //         stock: product.stock,
-    //       });
-    //     });
-    //   });
-    // });
-
     initialCartUpdateActions.fetch(dispatchShopingCart, params);
   };
 
@@ -249,7 +233,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
     const params: CartUpdatePayload = {
       action: 'submit',
-      products: [],
+      products: dataProductMasterCart,
     };
 
     const dataSelected: CartSelectedData[] = [];
