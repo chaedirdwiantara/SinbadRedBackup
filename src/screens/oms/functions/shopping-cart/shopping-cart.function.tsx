@@ -4,6 +4,7 @@ import {
   CartInvoiceGroup,
   IProductItemUpdateCart,
   ICartMasterProductNotAvailable,
+  IProductRemoveSelected,
 } from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
@@ -274,7 +275,7 @@ const handleProductDelete = (
   brandIndex: number,
   productIndex: number,
   invoiceGroups: Array<CartInvoiceGroup>,
-  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+  onRemoveProduct: (any: IProductRemoveSelected) => void,
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
@@ -283,18 +284,21 @@ const handleProductDelete = (
     qty: 0,
     selected: deletedProduct.selected,
     stock: deletedProduct.stock,
+    type: 'data',
   });
 };
 
 const handleProductNotAvailableDelete = (
   product: ICartMasterProductNotAvailable,
-  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+  onRemoveProduct: (any: IProductRemoveSelected) => void,
+  type: 'dataEmptyStock' | 'dataNotFound',
 ) => {
   onRemoveProduct({
     productId: product.productId,
     qty: 0,
     selected: false,
     stock: 0,
+    type,
   });
 };
 

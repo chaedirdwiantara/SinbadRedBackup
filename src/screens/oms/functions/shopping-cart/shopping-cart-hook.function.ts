@@ -100,6 +100,14 @@ export const useCartMasterActions = () => {
     reset: () => {
       dispatch(Actions.resetCartMasterData());
     },
+    deleteProductEmptyStock: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProductEmptyStock(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
+    },
+    deleteProductNotFound: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProductNotFound(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
+    },
   };
 };
 
