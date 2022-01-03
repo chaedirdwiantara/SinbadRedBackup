@@ -31,12 +31,12 @@ export const resetCartMasterData = () => {
 /** => Delete Cart Product empty stock */
 export const deleteCartProductEmptyStock = (
   payload: models.ICartDeleteProductPayload,
-): models.DeleteCartProduct => {
+): models.DeleteCartProductEmptyStock => {
   return { type: types.DELETE_CART_PRODUCT_EMPTY_STOCK, payload };
 };
 /** => Delete Cart product not found */
 export const deleteCartProductNotFound = (
   payload: models.ICartDeleteProductPayload,
-): models.DeleteCartProduct => {
+): models.DeleteCartProductNotFound => {
   return { type: types.DELETE_CART_PRODUCT_NOT_FOUND, payload };
 };
