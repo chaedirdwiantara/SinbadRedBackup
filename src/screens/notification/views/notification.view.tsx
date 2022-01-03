@@ -16,6 +16,8 @@ import * as models from '@models';
 import NotificationEmptyView from './notification-empty.view';
 import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
+import { NavigationAction } from '@navigation';
+import { goToHistoryDetail } from '@screen/history/functions';
 
 const dataIcon = {
   order: {
@@ -153,7 +155,7 @@ const NotificationView: React.FC = () => {
     item: models.NotificationListSuccessProps;
     index: number;
   }) => {
-    let title = '-';
+    let title = item.title;
     let image = dataIcon.special_offer.image;
     if (item.type) {
       title = dataIcon[item.type]?.title;
@@ -177,11 +179,19 @@ const NotificationView: React.FC = () => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if (item.type === 'registration' || item.type === 'verification') {
-            setModalTitle(title);
-            setModalMessage(message);
-            setApprovalStatus(item?.data?.approvalStatus);
-            setShowModal(true);
+          // if (item.type === 'registration' || item.type === 'verification') {
+          //   setModalTitle(title);
+          //   setModalMessage(message);
+          //   setApprovalStatus(item?.data?.approvalStatus);
+          //   setShowModal(true);
+          // }
+
+          if (item.screen === 'HistoryDetailView') {
+            goToHistoryDetail(
+              item.data.section,
+              item.data.id,
+              item.data.billingId,
+            );
           }
         }}>
         <View style={NotificationStyle.boxNotification} key={index}>
