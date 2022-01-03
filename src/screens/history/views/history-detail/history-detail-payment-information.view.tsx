@@ -114,6 +114,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         title="Metode Pembayaran"
         value={dataPayment?.paymentChannel.name || null}
       />
+      <HistoryDetailCardDivider />
       <HistoryCardItem
         title={`Sub-total pesanan (${paymentInformation().qty})`}
         value={toCurrency(paymentInformation().grossPrice! ?? 0)}
