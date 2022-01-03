@@ -211,19 +211,15 @@ const BannerSlider: React.FC<PropsData> = (props) => {
     return (
       <View key={index} style={{ width }}>
         <TouchableWithoutFeedback onPress={() => props.goToDetail(data)}>
-          <SnbImageCompressor
-            defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
-            uri={data?.imageUrl}
-            style={styles.imageBanner}
-            res={200}
-            resizeMode={'stretch'}
-          />
-          {/* <Image
-            defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
-            source={{ uri: data?.imageUrl }}
-            style={styles.imageBanner}
-            resizeMode={'stretch'}
-          /> */}
+          <View>
+            <SnbImageCompressor
+              defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
+              uri={data?.imageUrl}
+              style={styles.imageBanner}
+              res={200}
+              resizeMode={'stretch'}
+            />
+          </View>
         </TouchableWithoutFeedback>
       </View>
     );
