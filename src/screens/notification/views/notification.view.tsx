@@ -17,7 +17,6 @@ import NotificationEmptyView from './notification-empty.view';
 import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
 import { NavigationAction } from '@navigation';
-import { goToHistoryDetail } from '@screen/history/functions';
 
 const dataIcon = {
   order: {
