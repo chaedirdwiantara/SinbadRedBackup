@@ -64,6 +64,7 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
             (data?.paymentType.id === PaymentType.PAY_LATER &&
               statusOrder !== OrderStatus.DELIVERED)
           }
+          tooltipShown={true}
         />
       </View>
     );

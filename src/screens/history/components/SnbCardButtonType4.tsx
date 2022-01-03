@@ -1,7 +1,13 @@
 /** === IMPORT LIB HERE === */
-import React, { FC } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { color, SnbText, SnbButton } from '@sinbad/react-native-sinbad-ui';
+import React, { FC, useReducer } from 'react';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import {
+  color,
+  SnbText,
+  SnbButton,
+  SnbToolTips,
+  SnbIcon,
+} from '@sinbad/react-native-sinbad-ui';
 
 /** === INTERFACE === */
 interface Props {
@@ -14,9 +20,15 @@ interface Props {
   bgColor?: string;
   onPress?: () => void;
   loading?: boolean;
+  tooltipShown?: boolean;
+  toolTipText?: string;
 }
 /** === COMPONENT === */
 const SnbCardButtonType4: FC<Props> = (props: any) => {
+  const [tooltipVisible, toggleTooltipVisible] = useReducer(
+    (prevVisible) => !prevVisible,
+    false,
+  );
   const renderButton = () => {
     return (
       <View>
@@ -44,11 +56,40 @@ const SnbCardButtonType4: FC<Props> = (props: any) => {
       testID={props.testID}>
       <View style={styles.cardBody}>
         <View style={{ marginBottom: 8, marginLeft: 10 }}>
-          <SnbText.B4 align={props?.titleAlign || 'center'}>
-            {props?.title || null}
-          </SnbText.B4>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <SnbText.B4 align={props?.titleAlign || 'center'}>
+              {props?.title || null}
+            </SnbText.B4>
+            {props.tooltipShown ? (
+              <TouchableOpacity
+                style={{ marginLeft: 8 }}
+                onPress={toggleTooltipVisible}>
+                <SnbIcon name="help" color={color.black40} size={16} />
+              </TouchableOpacity>
+            ) : null}
+          </View>
         </View>
+
         <View>{renderButton()}</View>
+        <View
+          style={{
+            position: 'absolute',
+            top: 20,
+            alignSelf: 'flex-end',
+          }}>
+          {props.tooltipShown ? (
+            <SnbToolTips
+              show={tooltipVisible}
+              tips="default"
+              content={
+                <SnbText.C1 align={'center'} color={color.white}>
+                  Virtual account hanya {'\n'} dapat diaktifkan setelah{'\n'}{' '}
+                  pesanan diterima
+                </SnbText.C1>
+              }
+            />
+          ) : null}
+        </View>
       </View>
     </View>
   );
