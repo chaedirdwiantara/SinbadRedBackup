@@ -5,6 +5,10 @@ export interface IProductItemUpdateCart {
   stock: number;
 }
 
+export interface IProductRemoveSelected extends IProductItemUpdateCart {
+  type: 'data' | 'dataEmptyStock' | 'dataNotFound';
+}
+
 export interface CartUpdatePayload {
   action: string;
   products: IProductItemUpdateCart[];

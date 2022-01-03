@@ -49,7 +49,7 @@ const TabNavigator = () => {
                   iconName="beranda"
                   size={24}
                   iconColor={color}
-                  dotShow={true}
+                  dotShow={false}
                 />
               </View>
             </View>
@@ -72,7 +72,7 @@ const TabNavigator = () => {
                 iconName="pesanan"
                 size={24}
                 iconColor={color}
-                dotShow={true}
+                dotShow={false}
               />
             </View>
           ),
@@ -117,7 +117,7 @@ const TabNavigator = () => {
                 iconName="bantuan"
                 size={24}
                 iconColor={color}
-                dotShow={true}
+                dotShow={false}
               />
             </View>
           ),
@@ -139,7 +139,7 @@ const TabNavigator = () => {
                 iconName="profil"
                 size={24}
                 iconColor={color}
-                dotShow={true}
+                dotShow={false}
               />
             </View>
           ),

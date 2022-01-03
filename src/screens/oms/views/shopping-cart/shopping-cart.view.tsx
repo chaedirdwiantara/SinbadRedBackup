@@ -33,6 +33,7 @@ import {
   CartProduct,
   IProductItemUpdateCart,
   ICartMasterProductNotAvailable,
+  IProductRemoveSelected,
 } from '@models';
 import {
   goToVerificationOrder,
@@ -67,12 +68,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     deleteProduct,
     setCartMasterData,
     updateRouteName,
+    deleteProductEmptyStock,
+    deleteProductNotFound,
   } = useCartMasterActions();
   const [allProductsSelected, setAllProductsSelected] =
     useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
-    useState<IProductItemUpdateCart | null>(null);
+    useState<IProductRemoveSelected | null>(null);
   const totalProducts = getTotalProducts(cartMaster.data);
   // const totalProducts = useMemo(
   //   () => getTotalProducts(cartMaster.data),
@@ -166,7 +169,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const stockInformationAction = useStockInformationAction();
 
   /** => action remove product and show comfirmation dialog */
-  const onRemoveProduct = (productRemove: IProductItemUpdateCart) => {
+  const onRemoveProduct = (productRemove: IProductRemoveSelected) => {
     setProductRemoveSelected(productRemove);
     setModalConfirmationRemoveProductVisible(true);
   };
@@ -218,7 +221,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       products: dataProductMasterCart,
     };
 
-    console.log('[dataProductMasterCart]: ', dataProductMasterCart);
     // cartMaster.data.map((invoiceGroup) => {
     //   /** => initial brand selected */
     //   invoiceGroup.brands.map((brand) => {
@@ -427,11 +429,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 stockInformationData.change[indexChange].currentStock <
                 product.minQty
               ) {
-                /** => add to products of brand */
-                products.push({
-                  ...product,
-                  selected: false,
-                  stock: stockInformationData.change[indexChange].currentStock,
+                /** => add to products to array empty stock */
+                dataEmptyStock.push({
+                  productId: product.productId,
+                  productName: product.productName,
+                  displayPrice: product.displayPrice,
+                  urlImages: product.urlImages,
+                  qty: product.qty,
+                  stock: product.stock,
                 });
 
                 /** => add to data product for update cart */
@@ -475,11 +480,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 isEmptyProduct = false;
               }
             } else if (indexEmptyStock >= 0) {
-              /** => add to products of brand */
-              products.push({
-                ...product,
-                selected: false,
-                stock: 0,
+              /** => add to products to array empty stock */
+              dataEmptyStock.push({
+                productId: product.productId,
+                productName: product.productName,
+                displayPrice: product.displayPrice,
+                urlImages: product.urlImages,
+                qty: product.qty,
+                stock: product.stock,
               });
 
               /** => add to data product for update cart */
@@ -487,7 +495,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 productId: product.productId,
                 selected: false,
                 qty: product.qty,
-                stock: 0,
+                stock: product.stock,
               });
 
               /** => add to data product for update cart */
@@ -499,10 +507,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               });
             } else if (indexNotFound >= 0) {
               /** => add to products of brand */
-              products.push({
-                ...product,
-                selected: false,
-                stock: 0,
+              dataNotFound.push({
+                productId: product.productId,
+                productName: product.productName,
+                displayPrice: product.displayPrice,
+                urlImages: product.urlImages,
+                qty: product.qty,
+                stock: product.stock,
               });
 
               /** => add to data product for update cart */
@@ -510,7 +521,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 productId: product.productId,
                 selected: false,
                 qty: product.qty,
-                stock: 0,
+                stock: product.stock,
               });
 
               /** => add to data product for update cart */
@@ -542,7 +553,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               productMasterCart.push({
                 productId: product.productId,
                 selected: product.selected,
-                qty: product.qty,
+                qty: qty,
                 stock: product.stock,
               });
 
@@ -565,8 +576,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
               isEmptyProduct = false;
             }
-
-            isEmptyProduct = false;
           });
 
           if (!isEmptyProduct) {
@@ -586,7 +595,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
       if (
         totalProductsSelected === initialTotalProduct &&
-        totalProductsSelected > 0
+        totalProductsSelected > 0 &&
+        initialTotalProduct > 0
       ) {
         setAllProductsSelected(true);
       }
@@ -620,7 +630,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         setProductSelectedCount(productSelectedCount - 1);
       }
       toastSuccessRemoveProduct.current.show();
-      deleteProduct({ productId: productRemoveSelected.productId });
+      if (productRemoveSelected.type === 'data') {
+        deleteProduct({ productId: productRemoveSelected.productId });
+      } else if (productRemoveSelected.type === 'dataEmptyStock') {
+        deleteProductEmptyStock({ productId: productRemoveSelected.productId });
+      } else if (productRemoveSelected.type === 'dataNotFound') {
+        deleteProductNotFound({ productId: productRemoveSelected.productId });
+      }
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
       setModalConfirmationRemoveProductVisible(false);
@@ -704,6 +720,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                         sectionName={'Product Tidak Tersedia'}
                         data={cartMaster.dataNotFound}
                         onRemoveProduct={onRemoveProduct}
+                        type={'dataNotFound'}
                       />
                     )}
                 </Fragment>
@@ -714,6 +731,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                         sectionName={'Product Habis'}
                         data={cartMaster.dataEmptyStock}
                         onRemoveProduct={onRemoveProduct}
+                        type={'dataEmptyStock'}
                       />
                     )}
                 </Fragment>
