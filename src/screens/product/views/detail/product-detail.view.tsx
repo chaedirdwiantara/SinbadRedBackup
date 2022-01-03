@@ -245,7 +245,7 @@ const ProductDetailView: FC = () => {
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
-    if (defaultProperties.stock > (dataProduct?.minQty ?? 1)) {
+    if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
       if (defaultProperties.isBundle) {
         return 'Check Promo Bundle';
       } else if (me.data === null) {
