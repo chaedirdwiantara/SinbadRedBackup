@@ -6,7 +6,12 @@ import {
 } from '@screen/history/components';
 import { View } from 'react-native';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { HistoryDetail, PaymentDetailSuccessProps } from '@model/history';
+import {
+  HistoryDetail,
+  PaymentDetailSuccessProps,
+  HistoryPromo,
+  HistoryVoucher,
+} from '@model/history';
 import { PaymentType, OrderStatus } from '@screen/history/functions/data';
 /** === INTERFACE === */
 interface PaymentInformationProps {
@@ -55,14 +60,14 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
     }
   };
 
-  const renderVoucherList = (data: any) => {
+  const renderVoucherList = (data?: HistoryVoucher[]) => {
     return dataOrder!.voucherList.length > 0 ? (
-      data.map((item: any, index: number) => {
+      data?.map((item: HistoryVoucher, index: number) => {
         return (
           <View key={index}>
             <HistoryCardItem
-              title={item.catalogueName}
-              value={item.voucherValue}
+              title={item.catalogueName ?? ''}
+              value={toCurrency(item.voucherValue!)}
               type="green"
             />
           </View>
@@ -72,14 +77,22 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
       <View />
     );
   };
-  const renderPromoList = (data: any) => {
+
+  const renderPromoList = (data?: HistoryPromo[]) => {
     return dataOrder!.promoList.length > 0 ? (
-      data.map((item: any, index: number) => {
+      data?.map((item: HistoryPromo, index: number) => {
+        const qty =
+          dataOrder?.status === 'delivered' || dataOrder?.status === 'done'
+            ? item.deliveredPromoQty
+            : item.promoQty;
+        const qtyInTitle = qty ? ` (${qty} pcs)` : '';
+        const title = `${item.catalogueName ?? ''}${qtyInTitle}`;
+
         return (
           <View key={index}>
             <HistoryCardItem
-              title={item?.catalogueName ?? ''}
-              value={item?.promoValue ?? ''}
+              title={title}
+              value={item?.promoValue ? toCurrency(item?.promoValue) : 'FREE'}
               type="green"
             />
           </View>
@@ -89,6 +102,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
       <View />
     );
   };
+
   return (
     <HistoryDetailCard title="Informasi Pembayaran">
       <HistoryCardItem
