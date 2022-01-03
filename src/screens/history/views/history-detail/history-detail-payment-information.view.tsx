@@ -82,7 +82,8 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
     return dataOrder!.promoList.length > 0 ? (
       data?.map((item: HistoryPromo, index: number) => {
         const qty =
-          dataOrder?.status === 'delivered' || dataOrder?.status === 'done'
+          dataOrder?.status === OrderStatus.DELIVERED ||
+          dataOrder?.status === OrderStatus.DONE
             ? item.deliveredPromoQty
             : item.promoQty;
         const qtyInTitle = qty ? ` (${qty} pcs)` : '';
