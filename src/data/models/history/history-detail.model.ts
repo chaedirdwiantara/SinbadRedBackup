@@ -41,6 +41,33 @@ export interface ParcelLog {
   userName: string | null;
 }
 
+export interface HistoryPromo {
+  promoName: string;
+  promoId: string;
+  promoValue: number | null;
+  promoQty: number | null;
+  catalogueName: string | null;
+  catalogueImagesUrl: string | null;
+  invoicedPromoQty: number | null;
+  deliveredPromoQty: number | null;
+  invoicedCatalogueQty: number | null;
+  deliveredCatalogueQty: number | null;
+  invoicedParcelModified: boolean;
+  orderBrandCatalogueId: number;
+  retailBuyingPrice: number | null;
+}
+
+export interface HistoryVoucher {
+  orderBrandCatalaguesId: string;
+  voucherName: string;
+  voucherId: string;
+  voucherValue: number | null;
+  catalogueName: string | null;
+  catalogueExternalId: string | number | null;
+  cataloguePrice: number | null;
+  catalogueImagesUrl: string | null;
+}
+
 export interface HistoryDetail {
   platform: string;
   orderParcelId: number;
@@ -115,6 +142,6 @@ export interface HistoryDetail {
   deliveredParcelPromo: number;
   deliveredParcelVoucher: number;
   parcelPromoPaymentAmount: number;
-  voucherList: Array<any>;
-  promoList: Array<any>;
+  voucherList: Array<HistoryVoucher>;
+  promoList: Array<HistoryPromo>;
 }
