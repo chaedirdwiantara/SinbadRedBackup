@@ -60,9 +60,9 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
           onPress={() => onClickButton()}
           loading={stateHistory.activateVa.loading}
           disabled={
-            stateHistory.activateVa.loading &&
-            data?.paymentType.id === PaymentType.PAY_LATER &&
-            statusOrder !== OrderStatus.DELIVERED
+            stateHistory.activateVa.loading ||
+            (data?.paymentType.id === PaymentType.PAY_LATER &&
+              statusOrder !== OrderStatus.DELIVERED)
           }
         />
       </View>
