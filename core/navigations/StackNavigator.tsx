@@ -16,7 +16,7 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="Splash"
         component={IntroSplashView}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
       />
     );
   };
@@ -26,7 +26,7 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="IntroSinbad"
         component={IntroSinbadView}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
       />
     );
   };
@@ -36,7 +36,11 @@ const StackNavigator: React.FC = () => {
       <Screen
         name="Home"
         component={TabNavigator}
-        options={{ headerShown: false, stackAnimation: 'none' }}
+        options={{
+          headerShown: false,
+          stackAnimation: 'none',
+          screenOrientation: 'portrait',
+        }}
       />
     );
   };
@@ -49,7 +53,11 @@ const StackNavigator: React.FC = () => {
         key={name}
         name={name}
         component={props.component}
-        options={{ headerShown: false, stackAnimation: 'slide_from_right' }}
+        options={{
+          headerShown: false,
+          stackAnimation: 'slide_from_right',
+          screenOrientation: 'portrait',
+        }}
       />
     ));
   };
