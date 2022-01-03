@@ -90,11 +90,11 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <SnbText.H4>{hours} </SnbText.H4>
-        <SnbText.B1> jam</SnbText.B1>
+        <SnbText.B1> Jam</SnbText.B1>
         <SnbText.H4> {minutes} </SnbText.H4>
-        <SnbText.B1> menit</SnbText.B1>
+        <SnbText.B1> Menit</SnbText.B1>
         <SnbText.H4> {seconds} </SnbText.H4>
-        <SnbText.B1>detik</SnbText.B1>
+        <SnbText.B1>Detik</SnbText.B1>
       </View>
     </View>
   );
