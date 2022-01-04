@@ -178,9 +178,6 @@ const HistoryFilterModalContent: FC<HistoryFilterModalContentProps> = ({
             data.date.setSeconds(0);
             onDateChange('start', data.date.toISOString());
           } else {
-            const currentTime = new Date();
-            data.date.setHours(currentTime.getHours());
-            data.date.setMinutes(currentTime.getMinutes());
             onDateChange('end', data.date.toISOString());
           }
 

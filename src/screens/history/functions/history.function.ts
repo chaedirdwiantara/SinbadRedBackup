@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { NavigationAction } from '@navigation';
-import { IHistoryDetailStatus } from '../views/history-detail/history-detail-status.view';
+import { IHistoryDetailStatus } from '@screen/history/views/history-detail/history-detail-status.view';
 
 export const goBack = () => {
   NavigationAction.back();
@@ -58,12 +58,20 @@ export const useTimer = (
 
   return { timer, start, reset };
 };
+
 export const calculateTime = (expiredTime: string) => {
   const transformExpiredTime = Math.floor(
     (new Date(expiredTime).getTime() - new Date().getTime()) / 1000,
   );
-  const formatExpiredTime =
-    transformExpiredTime >= 1 ? transformExpiredTime : 0;
 
-  return formatExpiredTime;
+  return transformExpiredTime >= 1 ? transformExpiredTime : 0;
+};
+
+export const resetDateTime = (date: Date) => {
+  date.setHours(0);
+  date.setMinutes(0);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+
+  return date;
 };
