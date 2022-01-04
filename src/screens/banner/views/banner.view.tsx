@@ -82,7 +82,7 @@ const BannerListView: React.FC = () => {
           returnKeyType="search"
           enter={() => onHandleSearch()}
           prefixIconName="search"
-          suffixIconName={searchText !== '' ? 'cancel' : undefined}
+          // suffixIconName={searchText !== '' ? 'cancel' : undefined}
           // suffixIconName="cancel"
         />
       </View>
