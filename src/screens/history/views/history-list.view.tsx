@@ -4,6 +4,7 @@ import { FlatList, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
+import BottomSheetError from '@core/components/BottomSheetError';
 import { EmptyState } from '@core/components/EmptyState';
 import {
   HistoryCard,
@@ -20,6 +21,7 @@ import {
   useHistoryListActions,
   goBack,
   goToHistoryDetail,
+  resetDateTime,
 } from '@screen/history/functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 /** === IMPORT TYPE === */
@@ -37,9 +39,10 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const [activeOrderStatus, setActiveOrderStatus] =
     useState<models.OrderStatusQuery>('');
   const [date, setDate] = useState({ start: '', end: '' });
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [isSearched, setIsSearched] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(0);
+  const [isSearched, setIsSearched] = useState(0);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const getPaymentStatus = usePaymentStatus();
   const orderStatusActions = useOrderStatusActions();
   const historyListActions = useHistoryListActions();
@@ -71,6 +74,12 @@ const HistoryListView: FC = ({ navigation }: any) => {
       historyListActions.fetch(dispatchHistory, derivedQueryOptions);
     }, [activeTab, isFiltered, isSearched]),
   );
+
+  useEffect(() => {
+    if (historyListState.error && !errorModalVisible) {
+      setErrorModalVisible(true);
+    }
+  }, [historyListState.error]);
 
   useEffect(() => {
     getPaymentStatus.list(dispatchHistory);
@@ -129,8 +138,11 @@ const HistoryListView: FC = ({ navigation }: any) => {
         (statusItem) => statusItem.status === item.statusPayment,
       )[0]?.title ?? 'Menunggu Pembayaran';
     const beenDelivered = item.status === 'delivered' || item.status === 'done';
-    const price = item.parcelFinalPriceBuyer;
-    const finalPrice = item.deliveredParcelFinalPriceBuyer;
+    const initialized = item.status === 'created' || item.status === 'failed';
+    const price = initialized
+      ? item.parcelFinalPriceBuyer
+      : item.billing.totalPayment!;
+    const finalPrice = item.billing.deliveredTotalPayment!;
 
     return (
       <HistoryCard
@@ -273,22 +285,19 @@ const HistoryListView: FC = ({ navigation }: any) => {
       <HistoryListFilters
         onSearch={() => {
           if (keyword === '') {
-            setIsSearched(false);
+            setIsSearched(0);
           } else {
-            setIsSearched(true);
+            setIsSearched((prev) => prev + 1);
           }
         }}
         keyword={keyword}
         onKeywordChange={(text: string) => setKeyword(text)}
         onSearchClear={() => {
           setKeyword('');
-          historyListActions.fetch(dispatchHistory, {
-            ...derivedQueryOptions,
-            search: '',
-          });
+          setIsSearched(0);
         }}
         onFilterPress={() => setFilterModalVisible(true)}
-        isFiltered={isFiltered}
+        isFiltered={isFiltered > 0}
       />
       {statusListLoading ? <HistoryStatusSkeleton /> : displayedStatusList}
       {historyListState.loading && <HistoryListSkeleton />}
@@ -315,12 +324,38 @@ const HistoryListView: FC = ({ navigation }: any) => {
         onClose={() => setFilterModalVisible(false)}
         onSubmit={() => {
           if (!date.start && !date.end) {
-            setIsFiltered(false);
+            setIsFiltered(0);
           } else {
-            setIsFiltered(true);
+            const newEndDate = resetDateTime(new Date(date.end));
+            const today = resetDateTime(new Date());
+
+            if (newEndDate.getTime() === today.getTime()) {
+              // endDate is today (same date / tanggal)
+              const currentTime = new Date();
+              newEndDate.setHours(currentTime.getHours());
+              newEndDate.setMinutes(currentTime.getMinutes());
+              setDate({ ...date, end: newEndDate.toISOString() });
+            } else {
+              // endDate is yesterday or beyond
+              newEndDate.setHours(23);
+              newEndDate.setMinutes(59);
+              newEndDate.setSeconds(59);
+              setDate({ ...date, end: newEndDate.toISOString() });
+            }
+
+            setIsFiltered((prev) => prev + 1);
           }
 
           setFilterModalVisible(false);
+        }}
+      />
+      <BottomSheetError
+        open={errorModalVisible}
+        error={historyListState.error}
+        closeAction={() => {
+          setDate({ start: '', end: '' });
+          setIsFiltered(0);
+          setErrorModalVisible(false);
         }}
       />
     </SnbContainer>
