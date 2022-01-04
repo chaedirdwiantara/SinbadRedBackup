@@ -11,7 +11,6 @@ import {
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import {
-  handleDiscountInvoiceGroups,
   handleSubTotalPrice,
   handleTransformProductBrands,
   useParcelDetailModal,
@@ -86,77 +85,90 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     ));
   };
   const discountDetail = () => {
-    const discounts = handleDiscountInvoiceGroups(data.invoiceGroupId);
-    return (
-      <View style={{ paddingBottom: 16 }}>
-        <SnbText.H4>Potongan Harga</SnbText.H4>
-        <SnbDivider style={{ marginVertical: 8 }} />
-        <View style={{ marginBottom: 8 }}>
-          {discounts.vouchersSeller !== null ? (
-            discountVoucherList(discounts.vouchersSeller)
-          ) : (
-            <View />
-          )}
-          {discounts.promosSeller !== null ? (
-            discountPromoList(discounts.promosSeller)
-          ) : (
-            <View />
-          )}
-        </View>
-        <View style={CheckoutStyle.modalDetailTotalContainer}>
-          <View style={{ width: '50%' }}>
-            <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
+    if (
+      (data && data.voucherSeller !== null) ||
+      (data && data.promoSellers && data.promoSellers.length > 0)
+    ) {
+      return (
+        <View style={{ paddingBottom: 16 }}>
+          <SnbText.H4>Potongan Harga</SnbText.H4>
+          <SnbDivider style={{ marginVertical: 8 }} />
+          <View style={{ marginBottom: 8 }}>
+            {data.voucherSeller ? (
+              discountVoucherList(data.voucherSeller)
+            ) : (
+              <View />
+            )}
+            {data.promoSellers && data.promoSellers.length > 0 ? (
+              discountPromoList(data.promoSellers)
+            ) : (
+              <View />
+            )}
           </View>
-          <SnbText.B2 color={color.black80}>
-            -
-            {toCurrency(data.totalPromoSellerAndVoucher as number, {
-              withFraction: false,
-            })}
-          </SnbText.B2>
+          <View style={CheckoutStyle.modalDetailTotalContainer}>
+            <View style={{ width: '50%' }}>
+              <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
+            </View>
+            <SnbText.B2 color={color.black80}>
+              -{' '}
+              {toCurrency(data?.totalPromoSellerAndVoucher as number, {
+                withFraction: false,
+              })}
+            </SnbText.B2>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   };
 
-  const discountVoucherList = (
-    voucherData: models.ReserveDiscountVerificationVouchersSeller,
-  ) => {
+  const discountVoucherList = (voucherData: models.ReserveDiscountVouchers) => {
     return (
       <View style={CheckoutStyle.modalDetailItemContainer}>
         <View style={{ width: '50%' }}>
-          <SnbText.B1 color={color.green50}>
-            Voucher '{voucherData.voucherName}'
-          </SnbText.B1>
+          <SnbText.B3 color={color.green50}>
+            Voucher '{voucherData.name}'
+          </SnbText.B3>
         </View>
-        {voucherData.vouchers.length > 0 && (
-          <SnbText.B1 color={color.green50}>
-            -{' '}
-            {toCurrency(voucherData.vouchers[0].voucherRebate, {
-              withFraction: false,
-            })}
-          </SnbText.B1>
-        )}
+        <SnbText.B3 color={color.green50}>
+          -{' '}
+          {toCurrency(voucherData.amount, {
+            withFraction: false,
+          })}
+        </SnbText.B3>
       </View>
     );
   };
 
   const discountPromoList = (
-    promoData: models.ReserveDiscountVerificationPromosSeller,
+    promoData: models.ReserveDiscountPromoSellers[],
   ) => {
-    return promoData.promos.map(
-      (detailPromo: models.ReserveDiscountVerificationPromos) => {
-        return detailPromo.promoFreeProduct === null
-          ? contentListData(
-              detailPromo.promoName,
-              detailPromo.promoRebate as number,
-              'benefit',
-            )
-          : contentListData(
-              `${detailPromo.promoFreeProduct.productId} x${detailPromo.promoFreeProduct.qty}`,
-              0,
-              'benefit',
-            );
-      },
+    return promoData.map((detailPromo) => {
+      return detailPromo.benefitType === 'amount' ||
+        detailPromo.benefitType === 'percent'
+        ? contentListData(
+            detailPromo.name,
+            detailPromo.amount as number,
+            'benefit',
+          )
+        : contentListData(
+            `${detailPromo.productName} x${detailPromo.bonusQty}`,
+            0,
+            'benefit',
+          );
+    });
+  };
+
+  const totalDiscountList = (price: number) => {
+    return (
+      <View style={CheckoutStyle.detailItemContainer}>
+        <SnbText.B3 color={color.green50}>{'Total Potongan Harga'}</SnbText.B3>
+        <SnbText.B3 color={color.green50}>
+          {'- '}
+          {toCurrency(price, {
+            withFraction: false,
+          })}
+        </SnbText.B3>
+      </View>
     );
   };
 
@@ -195,13 +207,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               data.totalPriceBeforeTax,
               'normal',
             )}
-            {data.totalPromoSellerAndVoucher !== 0
-              ? contentListData(
-                  'Total Potongan Harga',
-                  data.totalPromoSellerAndVoucher as number,
-                  'benefit',
-                )
-              : null}
+            {totalDiscountList(data.totalPromoSellerAndVoucher as number)}
             {contentListData(
               `PPN ${data.tax}%`,
               data.totalPriceAfterTax - data.totalPriceBeforeTax,
