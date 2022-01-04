@@ -103,7 +103,7 @@ function* paymentInvoice(action: models.DetailProcessAction) {
   }
 }
 /** => History Detail */
-function* historyDetail(action: models.DetailProcessAction) {
+function* historyDetail(action: models.HistoryDetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.HistoryDetail> =
       yield call(() => {

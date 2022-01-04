@@ -32,6 +32,7 @@ import HistoryDetailPaymentInformation from './history-detail-payment-informatio
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
 import HistoryPaymentInstruction from './history-payment-instruction.view';
 import ModalBottomError from './history-error-modal-bottom.view';
+import ModalCallCs from '@screen/help/components/ModalCallCs';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
@@ -46,6 +47,7 @@ import {
   goToHistoryDetailStatus,
   useModaBottomError,
   useActivateVa,
+  useModalNeedHelp,
 } from '../../functions';
 import {
   BillingStatus,
@@ -84,6 +86,7 @@ const HistoryDetailView: FC = () => {
   const activateVA = useActivateVa();
   const modalError = useModaBottomError();
   const modalToast = useModalToast();
+  const modalNeedHelp = useModalNeedHelp();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
     paymentInvoice,
@@ -97,12 +100,12 @@ const HistoryDetailView: FC = () => {
   const pageRefreshing = paymentDetail.refresh || detail.refresh;
   const refreshFetch = () => {
     getPaymentDetail.refresh(dispatchHistory, params.billingId);
-    historyDetailAction.refresh(dispatchHistory, params.id);
+    historyDetailAction.refresh(dispatchHistory, params.id, params.section);
   };
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
-    historyDetailAction.fetch(dispatchHistory, params.id);
+    historyDetailAction.fetch(dispatchHistory, params.id, params.section);
   }, []);
   /** => on success get Invoice */
   useEffect(() => {
@@ -114,7 +117,7 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     if (activateVa.data) {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
-      historyDetailAction.fetch(dispatchHistory, params.id);
+      historyDetailAction.fetch(dispatchHistory, params.id, params.section);
     }
   }, [activateVa.data]);
   /** => on Error get Invoice */
@@ -464,6 +467,16 @@ const HistoryDetailView: FC = () => {
       <View />
     );
   };
+  /** === RENDER MODAL CALL CS === */
+  const renderCallCsModal = () => {
+    return modalNeedHelp.isOpen ? (
+      <ModalCallCs
+        open={modalNeedHelp.isOpen}
+        close={() => modalNeedHelp.setOpen(false)}
+        closeModal={() => modalNeedHelp.setOpen(false)}
+      />
+    ) : null;
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
     <ScrollView
@@ -519,6 +532,7 @@ const HistoryDetailView: FC = () => {
       {params.section === 'order'
         ? renderOrderDetailContent()
         : renderPaymentDetailContent()}
+      {renderCallCsModal()}
     </View>
   );
   /** => Footer */
@@ -528,8 +542,7 @@ const HistoryDetailView: FC = () => {
         ...HistoryDetailStyle.footer,
         paddingVertical: params.section === 'order' ? 16 : 24,
       }}>
-      <TouchableWithoutFeedback
-        onPress={() => console.log('Need help pressed')}>
+      <TouchableWithoutFeedback onPress={() => modalNeedHelp.setOpen(true)}>
         <View>
           <SnbText.B3 color={color.red50}>Butuh Bantuan?</SnbText.B3>
         </View>
