@@ -100,12 +100,12 @@ const HistoryDetailView: FC = () => {
   const pageRefreshing = paymentDetail.refresh || detail.refresh;
   const refreshFetch = () => {
     getPaymentDetail.refresh(dispatchHistory, params.billingId);
-    historyDetailAction.refresh(dispatchHistory, params.id);
+    historyDetailAction.refresh(dispatchHistory, params.id, params.section);
   };
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
-    historyDetailAction.fetch(dispatchHistory, params.id);
+    historyDetailAction.fetch(dispatchHistory, params.id, params.section);
   }, []);
   /** => on success get Invoice */
   useEffect(() => {
@@ -117,7 +117,7 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     if (activateVa.data) {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
-      historyDetailAction.fetch(dispatchHistory, params.id);
+      historyDetailAction.fetch(dispatchHistory, params.id, params.section);
     }
   }, [activateVa.data]);
   /** => on Error get Invoice */
