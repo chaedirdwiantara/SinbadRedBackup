@@ -77,10 +77,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductRemoveSelected | null>(null);
   const totalProducts = getTotalProducts(cartMaster.data);
-  // const totalProducts = useMemo(
-  //   () => getTotalProducts(cartMaster.data),
-  //   [cartMaster.data.length, allProductsSelected],
-  // );
   const [
     modalConfirmationCheckoutVisible,
     setModalConfirmationCheckoutVisible,
@@ -733,7 +729,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       <SnbDialog
         open={modalConfirmationBackVisible}
         title="Konfirmasi"
-        content="Apakah Anda yakin untuk keluar dari keranjang?"
+        content="Apakah Anda yakin untuk keluar dari halaman keranjang?"
         okText={'Ya'}
         ok={handleGoBackHeader}
         cancelText={'Tidak'}
