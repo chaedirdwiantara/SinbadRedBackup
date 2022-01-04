@@ -269,6 +269,8 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
+      statePromo.reserveDiscount.detail.error.code = 40030300032;
+      loadingVerificationToCheckout.setLoading(false);
       errorFetchModal.setErrorData(statePromo.reserveDiscount.detail.error);
     }
   }, [statePromo.reserveDiscount.detail.error]);
