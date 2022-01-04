@@ -22,6 +22,7 @@ type SearchProductRouteProps = RouteProp<
 /** === COMPONENT === */
 const SearchProductView: FC = () => {
   /** === HOOKS === */
+
   const {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();
@@ -45,12 +46,12 @@ const SearchProductView: FC = () => {
           headerType="search"
           activeKeyword={keyword}
           isRefreshing={productListState.refresh}
-          onFetch={(queryOptions) =>
+          onFetch={(queryOptions) => {
             fetch(dispatchProduct, {
               keyword,
               ...queryOptions,
-            })
-          }
+            });
+          }}
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
               keyword,
