@@ -327,8 +327,7 @@ const NotificationView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
-      {!notificationListState.loading &&
-      notificationListState.data.length !== 0 ? (
+      {!notificationListState.loading ? (
         content()
       ) : (
         <LoadingPage />

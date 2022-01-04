@@ -1,3 +1,4 @@
+import * as models from '@models';
 import { OrderStatusSlug, PaymentStatusSlug } from '@screen/history/types';
 
 export interface HistoryBilling {
@@ -144,4 +145,14 @@ export interface HistoryDetail {
   parcelPromoPaymentAmount: number;
   voucherList: Array<HistoryVoucher>;
   promoList: Array<HistoryPromo>;
+}
+
+export interface HistoryDetailProcessProps extends models.DetailProcessProps {
+  logType: 'payment' | 'order';
+}
+
+export interface HistoryDetailProcessAction {
+  type: string;
+  payload: HistoryDetailProcessProps;
+  contextDispatch: (action: any) => any;
 }

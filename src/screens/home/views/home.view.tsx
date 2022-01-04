@@ -42,7 +42,14 @@ const HomeView: React.FC = ({ navigation }: any) => {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, me.data]);
+
+  React.useEffect(() => {
+    if (me.data !== null) {
+      cartTotalProductActions.fetch();
+      notificationTotalActions.fetch();
+    }
+  }, [me.data]);
 
   /** => listen changes data cart id */
   React.useEffect(() => {
