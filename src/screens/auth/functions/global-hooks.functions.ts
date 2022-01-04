@@ -50,7 +50,7 @@ export const useInputPhone = () => {
     onChangeText,
     valMsgError,
     clearText,
-    maxLength: 16,
+    maxLength: 14,
     labelText: 'Nomor Handphone',
     placeholder: 'Masukkan nomor handphone anda',
     setMessageError,
