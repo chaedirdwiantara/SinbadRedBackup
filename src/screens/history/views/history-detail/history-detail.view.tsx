@@ -551,18 +551,16 @@ const HistoryDetailView: FC = () => {
   );
   /** => Main */
   return (
-    <>
-      <SnbContainer color="white">
-        <SnbTopNav.Type3
-          type="red"
-          title={`Detail ${title}`}
-          backAction={() => goBackAction()}
-        />
-        {renderContent()}
-        {renderFooter()}
-        {renderToast()}
-      </SnbContainer>
-    </>
+    <SnbContainer color="white">
+      <SnbTopNav.Type3
+        type="red"
+        title={`Detail ${title}`}
+        backAction={() => goBackAction()}
+      />
+      {renderContent()}
+      {renderFooter()}
+      {renderToast()}
+    </SnbContainer>
   );
 };
 
