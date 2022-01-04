@@ -407,6 +407,7 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
     checkoutViewActions.reset(dispatchCheckout);
+    setModalErrorCheckout(false);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
