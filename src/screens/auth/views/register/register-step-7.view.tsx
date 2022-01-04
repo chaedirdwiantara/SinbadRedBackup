@@ -108,7 +108,7 @@ const Content: React.FC<{
               setChecked('unselect');
               setShowModalPrivacyPolicy(true);
             }}
-            disabled={registerState?.loading}
+            disabled={true || registerState?.loading}
             loading={registerState?.loading}
           />
         </View>
@@ -156,7 +156,7 @@ const Content: React.FC<{
               type="tertiary"
               title="Ubah Foto"
               onPress={() => openCamera('store')}
-              disabled={false}
+              disabled={true || false}
             />
           </View>
           <View style={{ height: 72 }}>
@@ -165,7 +165,9 @@ const Content: React.FC<{
               title={isImageCaptured ? 'Upload' : 'Selesai'}
               onPress={action}
               disabled={
-                stateGlobal.uploadImage.loading || registerState?.loading
+                true ||
+                stateGlobal.uploadImage.loading ||
+                registerState?.loading
               }
               loading={
                 stateGlobal.uploadImage.loading || registerState?.loading

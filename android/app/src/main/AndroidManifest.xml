@@ -32,7 +32,7 @@
       <!-- maps -->
       <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDFMdAZxE_n7KoDxroBb61MAuxki4mTI4Q"/>
+        android:value="@string/GOOGLE_MAPS_API_KEY"/>
 
       <!-- push notification -->
       <meta-data
@@ -43,9 +43,7 @@
         android:name="com.google.firebase.messaging.default_notification_color"
         android:resource="@color/white" />
 
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDFMdAZxE_n7KoDxroBb61MAuxki4mTI4Q"/>
+      
 
       <activity
         android:name=".MainActivity"

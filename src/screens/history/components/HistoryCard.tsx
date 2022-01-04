@@ -1,4 +1,4 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { Image, View, StyleProp, ViewStyle, Pressable } from 'react-native';
 import {
@@ -9,95 +9,93 @@ import {
   SnbText,
   styles,
 } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+import moment from 'moment';
+/** === IMPORT COMPONENT === */
+import { CountDownTimer } from './CountDownTimer';
+/** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
+/** === IMPORT TYPES === */
+import {
+  historyStatusBgColor,
+  historyStatusTextColor,
+  paymentStatusColor,
+  orderStatusColor,
+  PaymentStatusSlug,
+  OrderStatusSlug,
+} from '../types';
+/** === IMPORT STYLE === */
 import { HistoryStyle } from '../styles';
-import { CountDownTimer } from './CountDownTimer';
-/** === TYPES === */
-export interface HistoryStatusColor {
-  white: string;
-  yellow: string;
-  green: string;
-  red: string;
-}
+/** === TYPE === */
 interface HistoryCardProps {
-  id: string;
+  orderCode: string;
   createdAt: string;
-  statusColor: keyof HistoryStatusColor;
-  status: string;
-  statusIconName?: string;
-  expiredPaymentTime?: string;
-  productImages: Array<string>;
-  totalPrice: number;
-  originalTotalPrice?: number;
-  totalQty: number;
-  originalTotalQty?: number;
+  statusSlug: PaymentStatusSlug | OrderStatusSlug;
+  statusTitle: string;
+  type: 'payment' | 'order';
+  expiredPaymentTime?: string | null;
+  catalogueImages: Array<string>;
+  price: number;
+  finalPrice?: number;
+  qty: number;
+  finalQty?: number;
+  onCardPress?: () => void;
   actionButtonType?: 'primary' | 'secondary';
   actionButtonTitle?: string;
   onActionButtonPress?: () => void;
-  additionalInfo?: string;
+  additionalInfo?: string; // For partial order or other notable informations
   style?: StyleProp<ViewStyle>;
-  onCardPress?: () => void;
 }
-/** === CONSTANTS === */
-const historyStatusBgColor: HistoryStatusColor = {
-  white: color.black5,
-  yellow: color.yellow10,
-  green: color.green10,
-  red: color.red10,
-};
-const historyStatusTextColor: HistoryStatusColor = {
-  white: color.black60,
-  yellow: color.yellow50,
-  green: color.green50,
-  red: color.red50,
-};
+
+interface HistoryCardImage {
+  url: string;
+}
 /** === COMPONENT === */
 export const HistoryCard: FC<HistoryCardProps> = ({
-  id,
+  orderCode,
   createdAt,
-  statusColor,
-  status,
-  statusIconName,
+  statusSlug,
+  statusTitle,
+  type,
   expiredPaymentTime,
-  productImages,
-  totalPrice,
-  originalTotalPrice,
-  totalQty,
-  originalTotalQty,
+  catalogueImages,
+  price,
+  finalPrice,
+  qty,
+  finalQty,
+  onCardPress,
   actionButtonType,
   actionButtonTitle,
   onActionButtonPress,
   additionalInfo,
   style,
-  onCardPress,
 }) => {
+  const cardDisabled = statusSlug === 'created' || statusSlug === 'failed';
+  const statusColor =
+    type === 'payment'
+      ? paymentStatusColor[statusSlug as PaymentStatusSlug]
+      : orderStatusColor[statusSlug as OrderStatusSlug];
   const statusBgColor = historyStatusBgColor[statusColor];
   const statusTextColor = historyStatusTextColor[statusColor];
-  const countDownInSeconds = Math.floor(
-    (new Date(expiredPaymentTime!).getTime() - new Date().getTime()) / 1000,
+  const formattedImages: Array<HistoryCardImage> = catalogueImages.map(
+    (image) => ({ url: image }),
   );
-
-  const arrProductImages: Array<object> = [];
-  productImages.map((item) => {
-    arrProductImages.push({ imgUrl: item });
-  });
-
+  const isPaymentTimeExpired =
+    moment.utc(new Date()).local() > moment.utc(expiredPaymentTime);
   return (
     <Pressable
       onPress={onCardPress}
       style={[
-        {
-          ...HistoryStyle.cardContainer,
-          paddingBottom: additionalInfo ? 0 : 16,
-        },
+        HistoryStyle.cardContainer,
+        { paddingBottom: additionalInfo ? 0 : 16 },
         styles.shadowForBox10,
         style,
       ]}>
       <View style={HistoryStyle.cardHeader}>
-        <View>
-          <SnbText.C2 color={color.black100}>{id}</SnbText.C2>
+        <View style={{ flex: 1, marginRight: 12 }}>
+          <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+            {orderCode ?? '-'}
+          </SnbText.C2>
           <View style={{ marginTop: 6 }}>
             <SnbText.C1 color={color.black60}>
               {toDateWithTime(createdAt)}
@@ -106,59 +104,60 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         </View>
         <View style={{ alignItems: 'flex-end' }}>
           <View
-            style={{
-              ...HistoryStyle.cardStatus,
-              backgroundColor: statusBgColor,
-            }}>
-            <SnbText.C2 color={statusTextColor}>{status}</SnbText.C2>
-            {statusIconName && (
+            style={[
+              HistoryStyle.cardStatus,
+              { backgroundColor: statusBgColor },
+            ]}>
+            <SnbText.C2 color={statusTextColor}>{statusTitle}</SnbText.C2>
+            {statusSlug === 'overdue' && (
               <SnbIcon
-                name={statusIconName}
+                name="error"
                 color={statusTextColor}
                 size={16}
                 style={{ marginLeft: 8 }}
               />
             )}
           </View>
-          {expiredPaymentTime && (
-            <CountDownTimer timeInSeconds={countDownInSeconds} />
-          )}
+          {expiredPaymentTime && !isPaymentTimeExpired ? (
+            <CountDownTimer type={'small'} expiredTime={expiredPaymentTime} />
+          ) : null}
         </View>
       </View>
       <View style={HistoryStyle.cardBody}>
         <SnbSKUList
-          data={arrProductImages}
-          renderItem={({ item }: any) => {
-            return (
-              <Image
-                source={{ uri: item.imgUrl }}
-                style={{ height: 60, width: 60 }}
-              />
-            );
-          }}
-          expandable
+          data={formattedImages}
+          renderItem={({ item }: any) => (
+            <Image
+              source={{ uri: item.url }}
+              style={{ height: 60, width: 60 }}
+            />
+          )}
+          expandable={true}
         />
       </View>
-      {originalTotalPrice && originalTotalQty ? (
-        <View
-          style={{
-            ...HistoryStyle.cardFooterRow,
-            marginBottom: 8,
-          }}>
+      {finalPrice || finalQty ? (
+        <View style={[HistoryStyle.cardFooterRow, { marginBottom: 8 }]}>
           {/* Should be styled with strikethrough */}
-          <SnbText.C2 color={color.black40}>
-            {toCurrency(originalTotalPrice)}
-          </SnbText.C2>
+          {finalPrice && (
+            <SnbText.C2 color={color.black40}>{toCurrency(price)}</SnbText.C2>
+          )}
           {/* Should be styled with strikethrough */}
-          <SnbText.C2
-            color={color.black40}>{`QTY: ${originalTotalQty}`}</SnbText.C2>
+          {finalQty && (
+            <SnbText.C2 align="right" color={color.black40}>
+              {`QTY: ${qty}`}
+            </SnbText.C2>
+          )}
         </View>
       ) : (
         <View />
       )}
       <View style={HistoryStyle.cardFooterRow}>
-        <SnbText.C2 color={color.black100}>{toCurrency(totalPrice)}</SnbText.C2>
-        <SnbText.C2 color={color.black100}>{`QTY: ${totalQty}`}</SnbText.C2>
+        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+          {toCurrency(finalPrice ?? price)}
+        </SnbText.C2>
+        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+          {`QTY: ${finalQty ?? qty}`}
+        </SnbText.C2>
       </View>
       {actionButtonTitle && (
         <View style={HistoryStyle.cardActionContainer}>

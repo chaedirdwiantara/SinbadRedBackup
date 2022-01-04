@@ -106,7 +106,7 @@ const Content: React.FC = () => {
             navigate(REGISTER_VIEW);
           }}
           type="tertiary"
-          disabled={false}
+          disabled={true || false}
         />
       </View>
     </ScrollView>

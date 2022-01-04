@@ -1,361 +1,304 @@
-/** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
-import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
+/** === IMPORT PACKAGES === */
+import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
+import { FlatList } from 'react-native';
+import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
+import { useFocusEffect } from '@react-navigation/native';
+/** === IMPORT COMPONENTS === */
 import {
-  SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbTabs,
-  SnbTextField,
-  SnbIcon,
-  color,
-  SnbChips,
-} from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack, goToHistoryDetail } from '../functions';
-import { HistoryStyle } from '../styles';
-import { HistoryCard, HistoryStatusColor } from '../components';
-/** === TYPES === */
-type PaymentStatusKey = typeof paymentStatus[number]['key'];
-type OrderStatusKey = typeof orderStatus[number]['key'];
-interface HistoryItem {
-  id: string;
-  createdAt: string;
-  status: { key: PaymentStatusKey | OrderStatusKey; value: string };
-  expiredPaymentTime?: string;
-  products: Array<string>;
-  totalPrice: number;
-  originalTotalPrice?: number;
-  totalQty: number;
-  originalTotalQty?: number;
-  partial?: boolean;
-}
-/** === CONSTANTS AND DUMMIES === */
+  HistoryCard,
+  HistoryFilterModal,
+  HistoryListFilters,
+  HistoryListStatusTags,
+  HistoryListSkeleton,
+  HistoryStatusSkeleton,
+} from '../components';
+/** === IMPORT FUNCTIONS === */
+import {
+  useOrderStatusActions,
+  usePaymentStatus,
+  useHistoryListActions,
+  goBack,
+  goToHistoryDetail,
+} from '@screen/history/functions';
+import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
+/** === IMPORT TYPE === */
+import * as models from '@models';
+import { additionalOrderStatusList } from '../types';
+/** === CONSTANT === */
 const historyTabs = ['Tagihan', 'Order'];
-const paymentStatus = [
-  { key: 'waiting_for_payment', value: 'Menunggu Pembayaran' },
-  { key: 'unpaid', value: 'Tidak Dibayar' },
-  { key: 'overdue', value: 'Overdue' },
-  { key: 'paid', value: 'Dibayar' },
-  { key: 'waiting_for_refund', value: 'Menunggu Pengembalian' },
-  { key: 'refunded', value: 'Dikembalikan' },
-] as const;
-const orderStatus = [
-  { key: 'confirmation', value: 'Menunggu Konfirmasi' },
-  { key: 'verified', value: 'Verifikasi' },
-  { key: 'on_packing', value: 'Dikemas' },
-  { key: 'on_delivery', value: 'Dikirim' },
-  { key: 'delivered', value: 'Diterima' },
-  { key: 'done', value: 'Selesai' },
-  { key: 'partial_pending', value: 'Pending Partial' },
-  { key: 'supplier_pending', value: 'Pending Supplier' },
-  { key: 'canceled', value: 'Batal' },
-] as const;
-const paymentStatusColor: Record<PaymentStatusKey, keyof HistoryStatusColor> = {
-  waiting_for_payment: 'yellow',
-  unpaid: 'white',
-  overdue: 'red',
-  paid: 'green',
-  waiting_for_refund: 'yellow',
-  refunded: 'green',
-};
-const orderStatusColor: Record<OrderStatusKey, keyof HistoryStatusColor> = {
-  confirmation: 'yellow',
-  verified: 'white',
-  on_packing: 'white',
-  on_delivery: 'white',
-  delivered: 'green',
-  done: 'green',
-  partial_pending: 'yellow',
-  supplier_pending: 'yellow',
-  canceled: 'red',
-};
-const payments = {
-  meta: {
-    total: 100,
-    skip: 0,
-    limit: 10,
-  },
-  data: [
-    {
-      id: 1,
-      orderCode: 'S010001000105508',
-      createdAt: '2021-08-18T02:36:12.812Z',
-      parcelFinalPrice: 0,
-      parcelFinalPriceBuyer: null,
-      parcelQty: 10,
-      deliveredParcelFinalPrice: 10,
-      deliveredParcelFinalPriceBuyer: null,
-      deliveredParcelQty: 0,
-      deliveredParcelModified: false,
-      statusPayment: 'paid',
-      status: 'delivered',
-      billing: {
-        id: 2,
-        totalPayment: 10000,
-        deliveredTotalPayment: 10000,
-        billingStatus: 'paid',
-        paymentTypeId: 1,
-        paymentChannelId: 1,
-        expiredPaymentTime: '2021-07-30T15:14:02Z',
-        paymentChannelTypeId: 1,
-      },
-      products: [
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-        'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-      ],
-    },
-  ],
-};
-const orders: Array<HistoryItem> = [
-  {
-    id: 'SNB18120000722',
-    status: { key: 'verified', value: 'Verifikasi' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    expiredPaymentTime: new Date(2021, 9, 1, 16, 46).toISOString(),
-    totalPrice: 300000,
-    originalTotalPrice: 600000,
-    totalQty: 10,
-    originalTotalQty: 20,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
-  },
-  {
-    id: 'SNB18120000721',
-    status: { key: 'done', value: 'Selesai' },
-    createdAt: new Date(2021, 8, 27, 12, 46).toISOString(),
-    totalPrice: 200000,
-    totalQty: 3,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
-    ],
-  },
-  {
-    id: 'SNB18120000720',
-    status: { key: 'canceled', value: 'Batal' },
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    totalPrice: 450000,
-    totalQty: 3,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
-  },
-  {
-    id: 'SNB18120000729',
-    status: { key: 'on_delivery', value: 'Dikirim' },
-    partial: true,
-    createdAt: new Date(2021, 8, 27, 16, 46).toISOString(),
-    totalPrice: 450000,
-    totalQty: 3,
-    products: [
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-      'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
-    ],
-  },
-];
 /** === COMPONENT === */
-const HistoryListView: FC = () => {
-  /** === HOOK === */
-  const [activeTab, setActiveTab] = useState(0);
+const HistoryListView: FC = ({ navigation }: any) => {
+  /** === HOOKS === */
+  const [activeTab, setActiveTab] = useState(1);
   const [keyword, setKeyword] = useState('');
-  const [activePaymentStatus, setActivePaymentStatus] = useState<
-    typeof paymentStatus[number]['key'] | ''
-  >('');
-  const [activeOrderStatus, setActiveOrderStatus] = useState<
-    typeof orderStatus[number]['key'] | ''
-  >('');
+  const [activePaymentStatus, setActivePaymentStatus] =
+    useState<models.PaymentStatusQuery>('');
+  const [activeOrderStatus, setActiveOrderStatus] =
+    useState<models.OrderStatusQuery>('');
+  const [date, setDate] = useState({ start: '', end: '' });
+  const [isFiltered, setIsFiltered] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const getPaymentStatus = usePaymentStatus();
+  const orderStatusActions = useOrderStatusActions();
+  const historyListActions = useHistoryListActions();
+  const {
+    stateHistory: {
+      list: historyListState,
+      paymentStatus: paymentStatusState,
+      orderStatus: orderStatusState,
+    },
+    dispatchHistory,
+  } = useHistoryContext();
+  const historyPaymentList = useMemo(
+    () =>
+      historyListState.data.filter(
+        (payment) =>
+          payment.status !== 'created' && payment.status !== 'failed',
+      ),
+    [historyListState.data],
+  );
+  const statusListLoading =
+    paymentStatusState.loading || orderStatusState.loading;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (activeTab === 0) {
+        setActiveOrderStatus('');
+      } else {
+        setActivePaymentStatus('');
+      }
+
+      historyListActions.fetch(dispatchHistory, derivedQueryOptions);
+    }, [activeTab]),
+  );
+
+  useEffect(() => {
+    getPaymentStatus.list(dispatchHistory);
+    orderStatusActions.fetch(dispatchHistory);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('blur', () => {
+      setKeyword('');
+      setActiveOrderStatus('');
+      setActivePaymentStatus('');
+      setDate({ start: '', end: '' });
+      setIsFiltered(false);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+  /** === FUNCTIONS === */
+  const handleDateChange = (type: 'start' | 'end', value: string) => {
+    if (type === 'start') {
+      setDate({ ...date, start: value });
+    } else {
+      setDate({ ...date, end: value });
+    }
+  };
+
+  const handleDateReset = () => {
+    setDate({ start: '', end: '' });
+  };
+  /** === DERIVED === */
+  const derivedQueryOptions: models.HistoryListQueryOptions = {
+    statusOrder: activeOrderStatus,
+    statusPayment: activePaymentStatus,
+    startDate: date.start,
+    endDate: date.end,
+    search: keyword,
+  };
   /** === VIEW === */
-  /** => Header */
-  const renderHeader = () => {
-    return <SnbTopNav.Type3 type="red" title="Pesanan" backAction={goBack} />;
-  };
-  /** => Tabs */
-  const renderTabs = () => (
-    <SnbTabs.Fixed
-      tabs={historyTabs}
-      activeTabs={activeTab}
-      onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
-    />
-  );
-  /** => Filters */
-  const renderFilters = () => (
-    <View style={HistoryStyle.filterContainer}>
-      <View style={{ flex: 7 }}>
-        <SnbTextField.Text
-          boxIndicator={true}
-          enter={() => console.log('Search pressed')}
-          placeholder="Cari produk, nomor pesanan"
-          type="default"
-          value={keyword}
-          onChangeText={(text: string) => setKeyword(text)}
-          clearText={() => setKeyword('')}
-          returnKeyType="search"
-          keyboardType="default"
-          prefixIconName="search"
-        />
-      </View>
-      <TouchableWithoutFeedback
-        style={{ flex: 1 }}
-        onPress={() => console.log('Filter pressed')}>
-        <View style={{ alignItems: 'center', paddingLeft: 12 }}>
-          <SnbIcon name="filter_list" color={color.black60} size={32} />
-          <SnbText.C3 color={color.black60}>Filter</SnbText.C3>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
-  );
-  /** => Status List */
-  const renderStatusList = () => {
-    // ini nanti diganti
-    const statusList = activeTab === 0 ? paymentStatus : orderStatus;
-    const activeStatus =
-      activeTab === 0 ? activePaymentStatus : activeOrderStatus;
-    const setActiveStatus =
-      activeTab === 0 ? setActivePaymentStatus : setActiveOrderStatus;
+  /** => Payment Item */
+  const renderPaymentItem = ({
+    item,
+    index,
+  }: {
+    item: models.OrderParcels;
+    index: number;
+  }) => {
+    const statusTitle =
+      paymentStatusState.data.filter(
+        (statusItem) => statusItem.status === item.statusPayment,
+      )[0]?.title ?? 'Menunggu Pembayaran';
+    const beenDelivered = item.status === 'delivered' || item.status === 'done';
+    const price = item.parcelFinalPriceBuyer;
+    const finalPrice = item.deliveredParcelFinalPriceBuyer;
 
     return (
-      <View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-          }}>
-          <View style={{ marginRight: 16 }}>
-            <SnbChips.Choice
-              text="Semua"
-              status={activeStatus === '' ? 'active' : 'inactive'}
-              onPress={() => setActiveStatus('')}
-            />
-          </View>
-          {statusList.map((status) => (
-            <View key={status.key} style={{ marginRight: 16 }}>
-              <SnbChips.Choice
-                text={status.value}
-                status={status.key === activeStatus ? 'active' : 'inactive'}
-                onPress={() => setActiveStatus(status.key as any)}
-              />
-            </View>
-          ))}
-          <View style={{ width: 16 }} />
-        </ScrollView>
-      </View>
-    );
-  };
-  /** => Payment List */
-  const renderPaymentList = () => (
-    <>
-      {payments.data.map((payment, paymentIndex) => {
-        const statusColor =
-          paymentStatusColor[payment.statusPayment as PaymentStatusKey];
-
-        return (
-          <HistoryCard
-            key={payment.id}
-            id={payment.orderCode}
-            createdAt={payment.createdAt}
-            status={payment.statusPayment}
-            statusColor={statusColor}
-            statusIconName={
-              payment.statusPayment === 'overdue' ? 'error' : undefined
-            }
-            expiredPaymentTime={payment.billing.expiredPaymentTime}
-            productImages={payment.products}
-            totalPrice={payment.billing.deliveredTotalPayment}
-            originalTotalPrice={payment.billing.totalPayment}
-            totalQty={payment.parcelQty}
-            originalTotalQty={payment.deliveredParcelQty}
-            style={
-              paymentIndex === payments.data.length - 1
-                ? { marginBottom: 24 }
-                : {}
-            }
-            onCardPress={() => goToHistoryDetail('payment')}
-          />
-        );
-      })}
-    </>
-  );
-  /** => Order List */
-  const renderOrderList = () => (
-    <>
-      {orders.map((order, orderIndex) => {
-        const statusColor =
-          orderStatusColor[order.status.key as OrderStatusKey];
-        let action: {
-          title?: string;
-          type?: 'primary' | 'secondary';
-          onClick?: () => void;
-        } = {};
-
-        if (order.status.key === 'verified') {
-          action.title = 'Batal';
-          action.type = 'secondary';
-          action.onClick = () => console.log('Cancel pressed');
-        } else if (order.status.key === 'done') {
-          action.title = 'Beli Lagi';
-          action.type = 'primary';
-          action.onClick = () => console.log('Buy again pressed');
+      <HistoryCard
+        type="payment"
+        orderCode={item.orderCode}
+        createdAt={item.createdAt}
+        statusSlug={item.statusPayment ?? 'waiting_for_payment'}
+        statusTitle={statusTitle}
+        expiredPaymentTime={item.billing.expiredPaymentTime}
+        catalogueImages={item.catalogueImages}
+        price={price}
+        finalPrice={
+          beenDelivered && price !== finalPrice ? finalPrice : undefined
         }
-
-        return (
-          <HistoryCard
-            key={order.id}
-            id={order.id}
-            createdAt={order.createdAt}
-            status={order.status.value}
-            statusColor={statusColor}
-            statusIconName={
-              order.status.key === 'overdue' ? 'error' : undefined
-            }
-            expiredPaymentTime={order.expiredPaymentTime}
-            productImages={order.products}
-            totalPrice={order.totalPrice}
-            originalTotalPrice={order.originalTotalPrice}
-            totalQty={order.totalQty}
-            originalTotalQty={order.originalTotalQty}
-            style={orderIndex === orders.length - 1 ? { marginBottom: 24 } : {}}
-            actionButtonTitle={action.title}
-            actionButtonType={action.type}
-            onActionButtonPress={action.onClick}
-            additionalInfo={
-              order.partial ? 'Terjadi Pengiriman Sebagian' : undefined
-            }
-            onCardPress={() => goToHistoryDetail('order')}
-          />
-        );
-      })}
-    </>
-  );
-  /** => History List */
-  const renderHistoryList = () => {
-    return (
-      <ScrollView style={{ padding: 8 }}>
-        {activeTab === 0 ? renderPaymentList() : renderOrderList()}
-      </ScrollView>
+        qty={item.parcelQty}
+        finalQty={
+          beenDelivered && item.parcelQty !== item.deliveredParcelQty
+            ? item.deliveredParcelQty
+            : undefined
+        }
+        onCardPress={() => {
+          if (item.status !== 'created' && item.status !== 'failed') {
+            goToHistoryDetail('payment', item.orderParcelId, item.billing.id!);
+          }
+        }}
+        style={
+          index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
+        }
+      />
     );
   };
-  /** => Content */
-  const renderContent = () => (
-    <>
-      {renderTabs()}
-      {renderFilters()}
-      {renderStatusList()}
-      {renderHistoryList()}
-    </>
-  );
+  /** => Order Item */
+  const renderOrderItem = ({
+    item,
+    index,
+  }: {
+    item: models.OrderParcels;
+    index: number;
+  }) => {
+    const statusTitle = [
+      ...orderStatusState.data,
+      ...additionalOrderStatusList,
+    ].filter((statusItem) => statusItem.status === item.status)[0]?.title;
+    const beenDelivered = item.status === 'delivered' || item.status === 'done';
+    const price = item.parcelFinalPriceBuyer;
+    const finalPrice = item.deliveredParcelFinalPriceBuyer;
+
+    return (
+      <HistoryCard
+        type="order"
+        orderCode={item.orderCode}
+        createdAt={item.createdAt}
+        statusSlug={item.status}
+        statusTitle={statusTitle}
+        expiredPaymentTime={item.billing.expiredPaymentTime}
+        catalogueImages={item.catalogueImages}
+        price={price}
+        finalPrice={
+          beenDelivered && price !== finalPrice ? finalPrice : undefined
+        }
+        qty={item.parcelQty}
+        finalQty={
+          beenDelivered && item.parcelQty !== item.deliveredParcelQty
+            ? item.deliveredParcelQty
+            : undefined
+        }
+        onCardPress={() => {
+          if (item.status !== 'created' && item.status !== 'failed') {
+            goToHistoryDetail('order', item.orderParcelId, item?.billing.id!);
+          }
+        }}
+        style={
+          index === historyListState.data.length - 1 ? { marginBottom: 24 } : {}
+        }
+      />
+    );
+  };
+  /** => Status Tags */
+  const displayedStatusList =
+    activeTab === 0 ? (
+      <HistoryListStatusTags
+        visible={
+          !paymentStatusState.loading && paymentStatusState.data !== null
+        }
+        data={paymentStatusState.data}
+        activeStatus={activePaymentStatus}
+        onTagPress={(tag) => {
+          setActivePaymentStatus(tag.status as models.PaymentStatusQuery);
+          historyListActions.fetch(dispatchHistory, {
+            ...derivedQueryOptions,
+            statusPayment: tag.status as models.PaymentStatusQuery,
+          });
+        }}
+      />
+    ) : (
+      <HistoryListStatusTags
+        visible={!orderStatusState.loading && orderStatusState.data !== null}
+        data={orderStatusState.data}
+        activeStatus={activeOrderStatus}
+        onTagPress={(tag) => {
+          setActiveOrderStatus(tag.status as models.OrderStatusQuery);
+          historyListActions.fetch(dispatchHistory, {
+            ...derivedQueryOptions,
+            statusOrder: tag.status as models.OrderStatusQuery,
+          });
+        }}
+      />
+    );
   /** => Main */
   return (
     <SnbContainer color="white">
-      {renderHeader()}
-      {renderContent()}
+      <SnbTopNav.Type3 type="red" title="Pesanan" backAction={goBack} />
+      <SnbTabs.Fixed
+        tabs={historyTabs}
+        activeTabs={activeTab}
+        onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
+      />
+      <HistoryListFilters
+        onSearch={() =>
+          historyListActions.fetch(dispatchHistory, derivedQueryOptions)
+        }
+        keyword={keyword}
+        onKeywordChange={(text: string) => setKeyword(text)}
+        onSearchClear={() => {
+          setKeyword('');
+          historyListActions.fetch(dispatchHistory, {
+            ...derivedQueryOptions,
+            search: '',
+          });
+        }}
+        onFilterPress={() => setFilterModalVisible(true)}
+        isFiltered={isFiltered}
+      />
+      {statusListLoading ? <HistoryStatusSkeleton /> : displayedStatusList}
+      {!historyListState.loading ? (
+        <FlatList
+          style={{ padding: 8 }}
+          contentContainerStyle={{ paddingBottom: 12 }}
+          data={activeTab === 0 ? historyPaymentList : historyListState.data}
+          renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
+          refreshing={historyListState.refresh}
+          onRefresh={() =>
+            historyListActions.refresh(dispatchHistory, derivedQueryOptions)
+          }
+          keyExtractor={(item) => item.orderCode}
+          onEndReachedThreshold={0.1}
+          onEndReached={() =>
+            historyListActions.loadMore(
+              dispatchHistory,
+              historyListState,
+              derivedQueryOptions,
+            )
+          }
+        />
+      ) : (
+        <HistoryListSkeleton />
+      )}
+      <HistoryFilterModal
+        visible={filterModalVisible}
+        startDate={date.start}
+        endDate={date.end}
+        onDateChange={handleDateChange}
+        onDateReset={handleDateReset}
+        onClose={() => setFilterModalVisible(false)}
+        onSubmit={() => {
+          if (!date.start && !date.end) {
+            setIsFiltered(false);
+          } else {
+            setIsFiltered(true);
+          }
+
+          setFilterModalVisible(false);
+          historyListActions.fetch(dispatchHistory, derivedQueryOptions);
+        }}
+      />
     </SnbContainer>
   );
 };

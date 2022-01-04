@@ -109,7 +109,7 @@ const Content: React.FC = () => {
           }}
           type="primary"
           loading={false}
-          disabled={storeName.value === ''}
+          disabled={true || storeName.value === ''}
         />
       </View>
     </View>

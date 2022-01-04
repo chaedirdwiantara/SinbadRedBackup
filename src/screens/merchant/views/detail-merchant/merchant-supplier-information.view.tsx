@@ -120,7 +120,7 @@ const MerchantSupplierInformationView: FC = () => {
           <SnbText.H4>{item.name}</SnbText.H4>
           <View style={{ marginTop: 8 }}>
             <SnbText.B3>
-              {moment(new Date(item.createdAt)).format('DD MMM YYYY hh:mm')}
+              {moment.utc(new Date(item.createdAt)).format('DD MMM YYYY hh:mm')}
             </SnbText.B3>
           </View>
         </View>

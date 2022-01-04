@@ -1,12 +1,25 @@
-import { NavigationAction } from '@navigation';
 import { useState, useRef } from 'react';
+import { NavigationAction } from '@navigation';
+import { IHistoryDetailStatus } from '../views/history-detail/history-detail-status.view';
 
 export const goBack = () => {
   NavigationAction.back();
 };
 
-export const goToHistoryDetail = (section: string) => {
-  NavigationAction.navigate('HistoryDetailView', { section });
+export const goToHistoryDetail = (
+  section: string,
+  id: number,
+  billingId: number,
+) => {
+  NavigationAction.navigate('HistoryDetailView', { section, id, billingId });
+};
+
+export const goToHistoryInvoice = (data: object) => {
+  NavigationAction.navigate('HistoryInvoiceView', data);
+};
+
+export const goToHistoryDetailStatus = (data: IHistoryDetailStatus) => {
+  NavigationAction.navigate('HistoryDetailStatusView', data);
 };
 
 export const formatTime = (timer: number) => {
@@ -25,7 +38,8 @@ export const useTimer = (
   const [timer, setTimer] = useState(() => initialTime);
   const countRef = useRef<ReturnType<typeof setInterval>>();
 
-  const start = () => {
+  const start = (timeDiff: number) => {
+    setTimer(timeDiff);
     countRef.current = setInterval(() => {
       setTimer((prevTimer) => {
         if (type === 'backward') {
@@ -43,4 +57,13 @@ export const useTimer = (
   };
 
   return { timer, start, reset };
+};
+export const calculateTime = (expiredTime: string) => {
+  const transformExpiredTime = Math.floor(
+    (new Date(expiredTime).getTime() - new Date().getTime()) / 1000,
+  );
+  const formatExpiredTime =
+    transformExpiredTime >= 1 ? transformExpiredTime : 0;
+
+  return formatExpiredTime;
 };

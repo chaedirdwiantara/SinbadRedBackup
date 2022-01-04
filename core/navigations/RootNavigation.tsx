@@ -22,7 +22,7 @@ export const backToFirst = () => {
 };
 /** => go to specific tab */
 export const goToMenu = (
-  name: 'HomeView' | 'OmsHistoryView' | 'HelpView' | 'UserView',
+  name: 'HomeView' | 'HistoryListView' | 'HelpView' | 'UserView',
   params?: object,
 ) => {
   navigationRef.current?.navigate('Home');

@@ -18,8 +18,10 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
       open={isOpen}
       title="Konfirmasi"
       content="Apakah anda ingin membatalkan pesanan?"
-      ok={handleOkAction}
-      cancel={handleNoAction}
+      ok={handleNoAction}
+      cancel={handleOkAction}
+      okText="Tidak"
+      cancelText="Ya"
     />
   );
 };

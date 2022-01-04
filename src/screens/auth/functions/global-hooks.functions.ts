@@ -17,7 +17,8 @@ export const useInputPhone = () => {
     setValue(text);
     const numberCountIsValid = /^[0-9]{10,14}$/.test(text);
     const numberFormatIsValid = /^08[0-9]$/.test(text) && text.length > 1;
-    if (text && !numberFormatIsValid && text[1] !== '8') {
+
+    if (text && !numberFormatIsValid && text.slice(0, 2) !== '08') {
       setType('error');
       setValMsgError('No. HP harus diawali dengan 08');
     } else if (text && !numberCountIsValid) {
@@ -46,7 +47,7 @@ export const useInputPhone = () => {
     onChangeText,
     valMsgError,
     clearText,
-    maxLength: 16,
+    maxLength: 14,
     labelText: 'Nomor Handphone',
     placeholder: 'Masukkan nomor handphone anda',
     setMessageError,
