@@ -591,7 +591,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
       setProductRemoveSelected(null);
-      console.log({ productSelectedCount, totalProducts });
       if (productSelectedCount === totalProducts - 1) {
         setAllProductsSelected(true);
       }

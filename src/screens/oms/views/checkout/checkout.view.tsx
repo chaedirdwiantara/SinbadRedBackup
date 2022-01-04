@@ -116,6 +116,7 @@ const OmsCheckoutView: FC = () => {
     models.ProductCheckout[] | null
   >(null);
   const [isModalProductList, setModalProductList] = useState(false);
+  const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -190,8 +191,8 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutMaster.invoices.length]);
 
   useEffect(() => {
-    if (!checkoutError) {
-      console.log('ERROR CHECKOUT: ', checkoutError);
+    if (checkoutError !== null) {
+      setModalErrorCheckout(true);
     }
   }, [checkoutError]);
   /** for post last payment channel */
@@ -405,6 +406,7 @@ const OmsCheckoutView: FC = () => {
     createOrders.reset(dispatchCheckout);
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
+    checkoutViewActions.reset(dispatchCheckout);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
@@ -558,6 +560,11 @@ const OmsCheckoutView: FC = () => {
           <ModalBottomErrorExpiredTime
             isOpen={isExpiredSession}
             close={handleBackToCart}
+          />
+          <BottomSheetError
+            open={modalErrorCheckout}
+            error={checkoutError}
+            closeAction={handleBackToCart}
           />
           {ModalErrorCreateOrders()}
           {ModalInvoiceParcelDetail()}
