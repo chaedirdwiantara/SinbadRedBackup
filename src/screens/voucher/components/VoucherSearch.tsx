@@ -20,7 +20,7 @@ export const VoucherSearch: FC<VoucherSearchProps> = ({
   <View style={[VoucherCartListStyles.searchSection, styles.shadowStyle]}>
     <View style={VoucherCartListStyles.searchSectionTextField}>
       <SnbTextField.Text
-        placeholder={'Cari kode voucher disini...'}
+        placeholder={'Cari kode voucher disini'}
         type={'default'}
         onChangeText={(value) => handleChangeKeyword(value)}
         clearText={() => {
