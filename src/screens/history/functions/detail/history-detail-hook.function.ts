@@ -104,3 +104,13 @@ export const useModaBottomError = () => {
     },
   };
 };
+
+export const useModalNeedHelp = () => {
+  const [isOpen, setOpen] = useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+  };
+};
