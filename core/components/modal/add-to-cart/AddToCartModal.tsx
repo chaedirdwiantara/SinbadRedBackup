@@ -6,8 +6,6 @@ import { SnbBottomSheet } from 'react-native-sinbad-ui';
 import { AddToCartFooter } from './AddToCartFooter';
 import { AddToCartQuantityModifier } from './AddToCartQuantityModifier';
 import { AddToCartProductData } from './AddToCartProductData';
-/** === IMPORT FUNCTION === */
-import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE ===  */
 import { PromoSection } from '@core/components/product/list/PromoSection';
 /** === TYPE ===  */
@@ -31,10 +29,6 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   isFromProductDetail,
 }) => {
   const [isFocus, setIsFocus] = useState(false);
-
-  NavigationAction.useCustomBackHardware(() => {
-    setIsFocus(false);
-  });
 
   const renderContent = () => (
     <View>
