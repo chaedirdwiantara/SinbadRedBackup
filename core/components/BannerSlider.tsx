@@ -216,7 +216,7 @@ const BannerSlider: React.FC<PropsData> = (props) => {
               defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
               uri={data?.imageUrl}
               style={styles.imageBanner}
-              res={200}
+              res={500}
               resizeMode={'stretch'}
             />
           </View>

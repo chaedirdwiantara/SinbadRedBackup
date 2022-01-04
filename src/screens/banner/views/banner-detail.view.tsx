@@ -17,6 +17,7 @@ import {
   SnbDivider,
   SnbBottomSheet,
   SnbHtml,
+  SnbImageCompressor,
 } from 'react-native-sinbad-ui';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
@@ -141,15 +142,14 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   /** => banner */
   const renderBanner = () => {
     return (
-      <Image
+      <SnbImageCompressor
         defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
-        source={{
-          uri: bannerDetailState.data?.imageUrl,
-        }}
+        uri={bannerDetailState.data?.imageUrl!}
         style={{
           height: 180,
           width: '100%',
         }}
+        res={500}
       />
     );
   };
