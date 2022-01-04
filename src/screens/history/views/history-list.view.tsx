@@ -38,6 +38,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
     useState<models.OrderStatusQuery>('');
   const [date, setDate] = useState({ start: '', end: '' });
   const [isFiltered, setIsFiltered] = useState(false);
+  const [isSearched, setIsSearched] = useState(false);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const getPaymentStatus = usePaymentStatus();
   const orderStatusActions = useOrderStatusActions();
@@ -68,7 +69,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
       }
 
       historyListActions.fetch(dispatchHistory, derivedQueryOptions);
-    }, [activeTab]),
+    }, [activeTab, isFiltered, isSearched]),
   );
 
   useEffect(() => {
@@ -270,9 +271,13 @@ const HistoryListView: FC = ({ navigation }: any) => {
         onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
       />
       <HistoryListFilters
-        onSearch={() =>
-          historyListActions.fetch(dispatchHistory, derivedQueryOptions)
-        }
+        onSearch={() => {
+          if (keyword === '') {
+            setIsSearched(false);
+          } else {
+            setIsSearched(true);
+          }
+        }}
         keyword={keyword}
         onKeywordChange={(text: string) => setKeyword(text)}
         onSearchClear={() => {
@@ -316,7 +321,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
           }
 
           setFilterModalVisible(false);
-          historyListActions.fetch(dispatchHistory, derivedQueryOptions);
         }}
       />
     </SnbContainer>

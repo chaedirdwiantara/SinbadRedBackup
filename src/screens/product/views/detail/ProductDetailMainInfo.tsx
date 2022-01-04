@@ -36,7 +36,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {toCurrency(currentPrice ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
-    {stock > minQty && (
+    {stock >= minQty && (
       <View
         style={{
           flexDirection: 'row',

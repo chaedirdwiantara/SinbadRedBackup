@@ -73,6 +73,7 @@ const DatePickerModal: FC<DatePickerModalProps> = ({
         <SnbDatepicker
           onSelectedDate={(date) => onChange(date)}
           buttonLabel="Terapkan Tanggal"
+          maxDate={new Date()}
         />
       </ScrollView>
     }
