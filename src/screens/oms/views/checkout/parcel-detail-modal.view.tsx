@@ -183,7 +183,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           {name}
         </SnbText.B3>
         <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
-          {type === 'benefit' ? '- ' : ''}
+          {type === 'benefit' && price !== 0 ? '- ' : ''}
           {price !== 0
             ? toCurrency(price, {
                 withFraction: false,
