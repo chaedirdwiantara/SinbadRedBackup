@@ -167,7 +167,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         <TouchableOpacity onPress={navigateProductDetail}>
           <Image
             source={{ uri: product.urlImages }}
-            style={{ width: 77, height: 77 }}
+            style={{ width: 65, height: 65, marginRight: 5 }}
           />
         </TouchableOpacity>
         <View>
