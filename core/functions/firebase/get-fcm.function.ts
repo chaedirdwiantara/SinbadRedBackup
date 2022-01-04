@@ -2,7 +2,7 @@
 import messaging from '@react-native-firebase/messaging';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useDataGlobal } from '@core/redux/Data';
+import { useDataPermanent } from '@core/redux/Data';
 import {
   saveFCMNotLogin,
   deleteFcmByDeviceId,
@@ -11,7 +11,7 @@ import * as Actions from '@actions';
 /** === FUNCTION === */
 /** => get FCM token from firebase */
 const useGetTokenNotLogin = async () => {
-  const data = useDataGlobal();
+  const data = useDataPermanent();
   const dispatch = useDispatch();
   if (!data.isFCM) {
     deleteFcmByDeviceId().then(async (d) => {
