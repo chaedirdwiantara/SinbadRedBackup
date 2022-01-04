@@ -32,7 +32,7 @@ export const checkout = simplifyReducer(initialState, {
         paymentType: null,
         paymentChannel: null,
         promoSellers: [],
-        vouchers: [],
+        voucherSeller: null,
         brands: item.brands,
         sellerId: item.sellerId,
         channelId: item.channelId,
