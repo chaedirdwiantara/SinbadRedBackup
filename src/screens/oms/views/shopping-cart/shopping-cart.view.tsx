@@ -85,6 +85,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     modalConfirmationCheckoutVisible,
     setModalConfirmationCheckoutVisible,
   ] = useState(false);
+  const [modalConfirmationBackVisible, setModalConfirmationBackVisible] =
+    useState(false);
   const [
     modalConfirmationRemoveProductVisible,
     setModalConfirmationRemoveProductVisible,
@@ -210,9 +212,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => handle go back */
   const handleGoBackHeader = () => {
     onUpdateCart();
-    setTimeout(() => {
-      goBack();
-    }, 500);
+    goBack();
   };
 
   const onUpdateCart = () => {
@@ -245,13 +245,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         /** => initial product selected */
         const productsSelected: CartSelectedProduct[] = [];
         brand.products.forEach((product) => {
-          params.products.push({
-            productId: product.productId,
-            qty: product.qty,
-            selected: product.selected,
-            stock: product.stock,
-          });
-
           if (product.selected) {
             /** => insert product selected */
             productsSelected.push({
@@ -329,7 +322,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   }, [navigation]);
 
   NavigationAction.useCustomBackHardware(() => {
-    handleGoBackHeader();
+    setModalConfirmationBackVisible(true);
   });
 
   /** => Listen data cancel reserve stock */
@@ -638,7 +631,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => Main */
   return (
     <SnbContainer color="white">
-      <ShoppingCartHeader goBack={handleGoBackHeader} />
+      <ShoppingCartHeader
+        goBack={() => setModalConfirmationBackVisible(true)}
+      />
       {loadingPage ? (
         <LoadingPage />
       ) : (
@@ -733,6 +728,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         cancelText={'Ya'}
         cancel={onConfirmRemoveProduct}
         loading={loadingRemoveProduct}
+      />
+      {/* Confirmation Modal Back */}
+      <SnbDialog
+        open={modalConfirmationBackVisible}
+        title="Konfirmasi"
+        content="Apakah Anda yakin untuk keluar dari keranjang?"
+        okText={'Ya'}
+        ok={handleGoBackHeader}
+        cancelText={'Tidak'}
+        cancel={() => setModalConfirmationBackVisible(false)}
+        loading={loadingCreateVerificationOrder || updateCartLoading}
       />
       {/* Toast success add cart */}
       <SnbToast
