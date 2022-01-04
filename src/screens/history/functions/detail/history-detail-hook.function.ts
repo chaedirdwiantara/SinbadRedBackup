@@ -55,12 +55,20 @@ export const useHistoryDetailAction = () => {
   const dispatch = useDispatch();
 
   return {
-    fetch: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    fetch: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      logType: 'payment' | 'order',
+    ) => {
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id, logType }));
     },
-    refresh: (contextDispatch: (action: any) => any, id: string) => {
+    refresh: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      logType: 'payment' | 'order',
+    ) => {
       contextDispatch(Actions.historyDetailRefresh());
-      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id, logType }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.historyDetailReset(contextDispatch));
