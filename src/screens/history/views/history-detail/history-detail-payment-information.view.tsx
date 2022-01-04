@@ -132,10 +132,10 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         type="bold"
       />
       <HistoryDetailCardDivider />
-      {dataOrder?.parcelPromoPaymentAmount ? (
+      {dataOrder?.parcelPromoPaymentValue ? (
         <HistoryCardItem
           title="Promo Pembayaran"
-          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentAmount)}`}
+          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentValue)}`}
         />
       ) : null}
 
