@@ -66,7 +66,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         return (
           <View key={index}>
             <HistoryCardItem
-              title={item.catalogueName ?? ''}
+              title={item.voucherName ?? ''}
               value={toCurrency(item.voucherValue!, { withFraction: false })}
               type="green"
             />
@@ -86,7 +86,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
             title={item.promoName}
             value={
               item?.promoValue
-                ? toCurrency(item?.promoValue, { withFraction: false })
+                ? `- ${toCurrency(item?.promoValue, { withFraction: false })}`
                 : 'FREE'
             }
             type="green"
