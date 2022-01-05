@@ -237,13 +237,15 @@ const HelpFaqView: FC = () => {
   };
 
   useEffect(() => {
+    const search = textSearch.toLowerCase();
     const res = carouselItems
       .map((el) => {
         const { title, ...restData } = el;
         const content = restData.content.filter(
           (elContent) =>
-            elContent.answer.toLowerCase().indexOf(textSearch.toLowerCase()) >
-            -1,
+            elContent.answer.toLowerCase().indexOf(search) > -1 ||
+            elContent.question.toLowerCase().indexOf(search) > -1 ||
+            title.toLowerCase().indexOf(search) > -1,
         );
         return {
           title,
