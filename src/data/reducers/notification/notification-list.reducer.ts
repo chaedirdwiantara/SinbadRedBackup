@@ -10,7 +10,7 @@ export type NotificationListInitialProps = models.ListItemProps<
 export const notificationlistInitialState: NotificationListInitialProps = {
   data: [],
   error: null,
-  loading: false,
+  loading: true,
   loadMore: false,
   refresh: false,
   total: 0,
