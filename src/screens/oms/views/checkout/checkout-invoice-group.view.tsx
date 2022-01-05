@@ -3,10 +3,7 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
-import {
-  useParcelDetailModal,
-  handleTransformProductBrands,
-} from '@screen/oms/functions';
+import { handleTransformProductBrands } from '@screen/oms/functions';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';

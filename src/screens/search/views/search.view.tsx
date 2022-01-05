@@ -17,6 +17,7 @@ const SearchView: FC = () => {
   const { inputText, handleTextChange, clearText } = useInputText();
   const { searchedKeywords, addKeyword, deleteKeyword, deleteAllKeywords } =
     useRecentSearch();
+
   /** === VIEW === */
   return (
     <SnbContainer color="white">

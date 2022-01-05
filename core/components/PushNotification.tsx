@@ -4,6 +4,8 @@ import messaging from '@react-native-firebase/messaging';
 import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
 import PushNotifications, { Importance } from 'react-native-push-notification';
+import { useDataAuth } from '@core/redux/Data';
+import { useNotificationTotalActions } from '@screen/notification/functions';
 /** === INTERFACE === */
 interface RemoteMessage {
   payload: string;
@@ -11,6 +13,9 @@ interface RemoteMessage {
 }
 /** === COMPONENT === */
 const PushNotification = () => {
+  /** === HOOK === */
+  const { me } = useDataAuth();
+  const notificationTotalActions = useNotificationTotalActions();
   /** === ACTION FOR FOREGROUND === */
   PushNotifications.configure({
     onNotification: function (notification) {
@@ -36,11 +41,14 @@ const PushNotification = () => {
   React.useEffect(() => {
     /** === FOR FOREGROUND === */
     const unSubForeground = messaging().onMessage(async (remoteMessage) => {
+      getTotalNotifBE();
       localNotification(remoteMessage);
     });
     /** === FOR BACKGROUND AND QUIT === */
     const unSubBackground = messaging().setBackgroundMessageHandler(
-      async () => {},
+      async () => {
+        getTotalNotifBE();
+      },
     );
     /** === FOR BACKGROUND OPEN === */
     const unSubBackgroundOpen = messaging().onNotificationOpenedApp(
@@ -98,7 +106,12 @@ const PushNotification = () => {
       NavigationAction.resetToHome();
     }
   };
-
+  /** === GET TOTAL NOTIF FROM BE === */
+  const getTotalNotifBE = () => {
+    if (me.data !== null) {
+      notificationTotalActions.fetch();
+    }
+  };
   return null;
 };
 /** === EXPORT COMPONENT === */

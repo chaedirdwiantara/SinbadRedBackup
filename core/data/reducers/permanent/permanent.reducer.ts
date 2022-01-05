@@ -6,24 +6,35 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 const initialState: models.Permanent = {
   isFCM: false,
   isIntroSinbad: false,
+  searchedKeywords: [],
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
   /** => FOR FCM FLAG */
-  [types.IS_FCM](state = initialState, action: models.IsFCMAction) {
+  [types.IS_FCM](state = initialState, { payload }: models.IsFCMAction) {
     return {
       ...state,
-      isFCM: action.payload,
+      isFCM: payload,
     };
   },
   /** => FOR INTRO SINBAD FLAG */
   [types.IS_INTRO_SINBAD](
     state = initialState,
-    action: models.IsIntroSinbadAction,
+    { payload }: models.IsIntroSinbadAction,
   ) {
     return {
       ...state,
-      isIntroSinbad: action.payload,
+      isIntroSinbad: payload,
+    };
+  },
+  /** => FOR SET SEARCH KEYWORDS FLAG */
+  [types.SEARCH_KEYWORDS_PRODUCT](
+    state = initialState,
+    { payload }: models.SetSearchKeywordActions,
+  ) {
+    return {
+      ...state,
+      searchedKeywords: payload,
     };
   },
 });

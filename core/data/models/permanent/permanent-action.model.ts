@@ -8,3 +8,8 @@ export interface IsIntroSinbadAction {
   type: string;
   payload: boolean;
 }
+/** === SET SEARCH KEYWORDS FLAG === */
+export interface SetSearchKeywordActions {
+  type: string;
+  payload: Array<string>;
+}
