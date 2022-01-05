@@ -17,6 +17,7 @@ interface HistoryDetailProductListProps {
   products: Array<models.ParcelProduct>;
   seeMore: boolean;
   toggleSeeMore: () => void;
+  type?: 'purchased' | 'bonus';
 }
 /** === COMPONENT === */
 export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
@@ -24,6 +25,7 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
   products,
   seeMore,
   toggleSeeMore,
+  type = 'purchased',
 }) => {
   const displayedProducts = seeMore ? products.slice(0, 2) : products;
 
@@ -45,7 +47,12 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
               total={toCurrency(product.totalPriceAfterTax, {
                 withFraction: false,
               })}
-              onPress={() => goToProductDetail(product.productId)}
+              onPress={() => {
+                if (type !== 'bonus') {
+                  goToProductDetail(product.productId);
+                }
+              }}
+              type={type}
             />
           ),
         )}
