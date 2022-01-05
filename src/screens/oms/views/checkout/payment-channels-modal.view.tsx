@@ -56,7 +56,9 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
         {paymentTypes.map((item: any, index: number) => {
           const description =
             item.status === 'enabled'
-              ? `Total Biaya ${toCurrency(item.totalPayment)}`
+              ? `Total Biaya ${toCurrency(item.totalPayment, {
+                  withFraction: false,
+                })}`
               : item.message;
           return (
             <SnbListButtonType1
