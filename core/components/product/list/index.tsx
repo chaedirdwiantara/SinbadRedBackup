@@ -38,6 +38,7 @@ import {
   useStockValidationAction,
   useOrderQuantity,
 } from '@screen/product/functions';
+import { useRecentSearch } from '@screen/search/functions';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
@@ -125,6 +126,7 @@ const ProductList: FC<ProductListProps> = ({
     categoryId: selectedCategory?.id,
     tags: selectedTags,
   });
+  const { addKeyword } = useRecentSearch();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
@@ -425,6 +427,7 @@ const ProductList: FC<ProductListProps> = ({
         keyword={searchKeyword}
         onSearch={() => {
           setKeywordSearched(true);
+          addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
         onSearchClear={() => {
