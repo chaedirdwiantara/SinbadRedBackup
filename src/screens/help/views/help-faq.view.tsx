@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, useEffect } from 'react';
 import {
   View,
   Image,
@@ -25,6 +25,7 @@ interface Iref {
 
 const HelpFaqView: FC = () => {
   /** === HOOK === */
+  const [textSearch, setTextSearch] = useState('');
   const carouselRef = useRef<Iref>(null);
   const [, setActiveIndex] = useState(0);
   const [tag] = useState([
@@ -34,7 +35,7 @@ const HelpFaqView: FC = () => {
     'Pengajuan Retur',
     'Akun',
   ]);
-  const [carouselItems] = useState([
+  const carouselItems = [
     {
       title: 'Pertanyaan Umum',
       content: [
@@ -128,9 +129,12 @@ const HelpFaqView: FC = () => {
         },
       ],
     },
-  ]);
+  ];
+  const [renderedCarouselItems, setRenderedCarouselItems] =
+    useState(carouselItems);
   /** === FUNCTIONAL === */
   const submitSearch = (text: string) => {
+    setTextSearch(text);
     let keyFound = 0;
     let i = 0;
     let found = false;
@@ -170,10 +174,10 @@ const HelpFaqView: FC = () => {
           <SnbTextField.Text
             placeholder={'Cari pertanyaan Anda disini'}
             type={'default'}
-            value={''}
+            value={textSearch}
             prefixIconName="search"
             onChangeText={(text) => submitSearch(text)}
-            clearText={() => console.log('clear')}
+            clearText={() => setTextSearch('')}
           />
         </View>
       </View>
@@ -231,19 +235,54 @@ const HelpFaqView: FC = () => {
       </View>
     );
   };
+
+  useEffect(() => {
+    const search = textSearch.toLowerCase();
+    const res = carouselItems
+      .map((el) => {
+        const { title, ...restData } = el;
+        const content = restData.content.filter(
+          (elContent) =>
+            elContent.answer.toLowerCase().indexOf(search) > -1 ||
+            elContent.question.toLowerCase().indexOf(search) > -1 ||
+            title.toLowerCase().indexOf(search) > -1,
+        );
+        return {
+          title,
+          content,
+        };
+      })
+      .filter((el) => el.content.length);
+    setRenderedCarouselItems(res);
+  }, [textSearch]);
+
   /** === RENDER MENU CONTENT === */
   const renderContentItem = () => {
     return (
       <View style={{ flex: 1 }}>
-        <SnbCarousel
-          carouselRef={carouselRef}
-          data={carouselItems}
-          sliderWidth={width}
-          itemWidth={0.82 * width}
-          renderItem={renderItem}
-          setCurrentActive={(index) => setActiveIndex(index)}
-          loop={false}
-        />
+        {renderedCarouselItems.length ? (
+          <SnbCarousel
+            carouselRef={carouselRef}
+            data={renderedCarouselItems}
+            sliderWidth={width}
+            itemWidth={0.82 * width}
+            renderItem={renderItem}
+            setCurrentActive={(index) => setActiveIndex(index)}
+            loop={false}
+          />
+        ) : (
+          <View
+            style={{
+              padding: 16,
+              alignItems: 'center',
+              marginTop: 50,
+            }}>
+            <View style={{ marginBottom: 4 }}>
+              <SnbText.H4>Hasil pencarian anda tidak ada.</SnbText.H4>
+            </View>
+            <SnbText.B3 align={'center'}>Coba kata kunci lainnya</SnbText.B3>
+          </View>
+        )}
       </View>
     );
   };

@@ -763,10 +763,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalConfirmationBackVisible}
         title="Konfirmasi"
         content="Apakah Anda yakin untuk keluar dari halaman keranjang?"
-        okText={'Ya'}
-        ok={handleGoBackHeader}
-        cancelText={'Tidak'}
-        cancel={() => setModalConfirmationBackVisible(false)}
+        okText={'Tidak'}
+        ok={() => setModalConfirmationBackVisible(false)}
+        cancelText={'Ya'}
+        cancel={handleGoBackHeader}
         loading={loadingCreateVerificationOrder || updateCartLoading}
       />
       {/* Toast success add cart */}

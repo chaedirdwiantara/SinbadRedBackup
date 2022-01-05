@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
   SnbListButtonType2,
   SnbButton,
+  SnbDialog,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View } from 'react-native';
@@ -17,6 +18,7 @@ const UserSettingView: FC = () => {
   /** === HOOK === */
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const { stateUser } = React.useContext(contexts.UserContext);
   const toast = React.useRef<any>();
 
@@ -36,6 +38,26 @@ const UserSettingView: FC = () => {
       />
     );
   };
+  //modal confirmation
+  const modalConfirmation = () => {
+    return (
+      <SnbDialog
+        title="Yakin keluar Sinbad ?"
+        open={showConfirmation}
+        okText="Ya"
+        cancelText="Tidak"
+        cancel={() => {
+          setShowConfirmation(false);
+        }}
+        ok={() => {
+          setShowConfirmation(false);
+          logout();
+          reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
+        }}
+        content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
+      />
+    );
+  };
   /** => content */
   const content = () => {
     return (
@@ -50,10 +72,7 @@ const UserSettingView: FC = () => {
           type="secondary"
           title="Log Out"
           disabled={false}
-          onPress={() => {
-            logout();
-            reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
-          }}
+          onPress={() => setShowConfirmation(true)}
         />
       </ScrollView>
     );
@@ -63,6 +82,7 @@ const UserSettingView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
+      {modalConfirmation()}
       <SnbToast
         ref={toast}
         fadeInDuration={1000}

@@ -9,8 +9,8 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import {
   HistoryDetail,
   PaymentDetailSuccessProps,
-  HistoryPromo,
   HistoryVoucher,
+  HistoryPromoApplied,
 } from '@model/history';
 import { PaymentType, OrderStatus } from '@screen/history/functions/data';
 /** === INTERFACE === */
@@ -78,31 +78,21 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
     );
   };
 
-  const renderPromoList = (data?: HistoryPromo[]) => {
-    return dataOrder!.promoList.length > 0 ? (
-      data?.map((item: HistoryPromo, index: number) => {
-        const qty =
-          dataOrder?.status === OrderStatus.DELIVERED ||
-          dataOrder?.status === OrderStatus.DONE
-            ? item.deliveredPromoQty
-            : item.promoQty;
-        const qtyInTitle = qty ? ` (${qty} pcs)` : '';
-        const title = `${item.catalogueName ?? ''}${qtyInTitle}`;
-
-        return (
-          <View key={index}>
-            <HistoryCardItem
-              title={title}
-              value={
-                item?.promoValue
-                  ? toCurrency(item?.promoValue, { withFraction: false })
-                  : 'FREE'
-              }
-              type="green"
-            />
-          </View>
-        );
-      })
+  const renderPromoList = (data?: HistoryPromoApplied[]) => {
+    return dataOrder!.promoApplied.length > 0 ? (
+      data?.map((item: HistoryPromoApplied, index: number) => (
+        <View key={index}>
+          <HistoryCardItem
+            title={item.promoName}
+            value={
+              item?.promoValue
+                ? toCurrency(item?.promoValue, { withFraction: false })
+                : 'FREE'
+            }
+            type="green"
+          />
+        </View>
+      ))
     ) : (
       <View />
     );
@@ -126,7 +116,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         })}
       />
       {renderVoucherList(dataOrder?.voucherList)}
-      {renderPromoList(dataOrder?.promoList)}
+      {renderPromoList(dataOrder?.promoApplied)}
       <HistoryCardItem
         title="Ongkos Kirim"
         value={toCurrency(0, { withFraction: false })}
