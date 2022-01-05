@@ -39,10 +39,12 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
               key={`${product.productName}-${productIndex}`}
               name={product.productName}
               imageSource={product.urlImages}
-              price={toCurrency(product.priceAfterTax)}
+              price={toCurrency(product.priceAfterTax, { withFraction: false })}
               qty={product.qty}
               uom={product.uom}
-              total={toCurrency(product.totalPriceAfterTax)}
+              total={toCurrency(product.totalPriceAfterTax, {
+                withFraction: false,
+              })}
               onPress={() => goToProductDetail(product.productId)}
             />
           ),

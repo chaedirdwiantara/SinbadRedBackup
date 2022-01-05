@@ -67,7 +67,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
           <View key={index}>
             <HistoryCardItem
               title={item.catalogueName ?? ''}
-              value={toCurrency(item.voucherValue!)}
+              value={toCurrency(item.voucherValue!, { withFraction: false })}
               type="green"
             />
           </View>
@@ -93,7 +93,11 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
           <View key={index}>
             <HistoryCardItem
               title={title}
-              value={item?.promoValue ? toCurrency(item?.promoValue) : 'FREE'}
+              value={
+                item?.promoValue
+                  ? toCurrency(item?.promoValue, { withFraction: false })
+                  : 'FREE'
+              }
               type="green"
             />
           </View>
@@ -117,37 +121,52 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
       <HistoryDetailCardDivider />
       <HistoryCardItem
         title={`Sub-total pesanan (${paymentInformation().qty})`}
-        value={toCurrency(paymentInformation().grossPrice! ?? 0)}
+        value={toCurrency(paymentInformation().grossPrice! ?? 0, {
+          withFraction: false,
+        })}
       />
       {renderVoucherList(dataOrder?.voucherList)}
       {renderPromoList(dataOrder?.promoList)}
-      <HistoryCardItem title="Ongkos Kirim" value={toCurrency(0)} />
+      <HistoryCardItem
+        title="Ongkos Kirim"
+        value={toCurrency(0, { withFraction: false })}
+      />
       <HistoryCardItem
         title="PPN 10%"
-        value={toCurrency(paymentInformation().taxes! ?? 0)}
+        value={toCurrency(paymentInformation().taxes! ?? 0, {
+          withFraction: false,
+        })}
       />
       <HistoryCardItem
         title="Total Pesanan"
-        value={toCurrency(paymentInformation().parcelFinal! ?? 0)}
+        value={toCurrency(paymentInformation().parcelFinal! ?? 0, {
+          withFraction: false,
+        })}
         type="bold"
       />
       <HistoryDetailCardDivider />
       {dataOrder?.parcelPromoPaymentValue ? (
         <HistoryCardItem
           title="Promo Pembayaran"
-          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentValue)}`}
+          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentValue, {
+            withFraction: false,
+          })}`}
         />
       ) : null}
 
       {dataPayment?.paymentFee ? (
         <HistoryCardItem
           title="Layanan Pembayaran"
-          value={toCurrency(dataPayment?.paymentFee ?? 0)}
+          value={toCurrency(dataPayment?.paymentFee ?? 0, {
+            withFraction: false,
+          })}
         />
       ) : null}
       <HistoryCardItem
         title="Total Pembayaran Pesanan"
-        value={toCurrency(paymentInformation().finalPrice! ?? 0)}
+        value={toCurrency(paymentInformation().finalPrice! ?? 0, {
+          withFraction: false,
+        })}
         type="bold"
       />
     </HistoryDetailCard>
