@@ -76,7 +76,7 @@ export interface ReserveDiscountDetail {
 export interface ReserveDiscountPromoMatch {
   invoiceGroupId: string;
   promoSellers: ReserveDiscountPromoSellers[];
-  vouchers: ReserveDiscountVouchers[];
+  voucherSeller: ReserveDiscountVouchers | null;
   totalPromoSellerAndVoucher: number;
 }
 export interface ReserveDiscountPromoNotMatch {

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
+// import React from 'react';
 import { BackHandler } from 'react-native';
 import { useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -16,7 +16,7 @@ type ParamList<T> = {
 /** === FUNCTION === */
 /** => custom back for hardware */
 const useCustomBackHardware = (BackAction: () => void) => {
-  React.useEffect(() => {
+  useFocusEffect(() => {
     const backAction = () => {
       BackAction();
       return true;
@@ -27,7 +27,7 @@ const useCustomBackHardware = (BackAction: () => void) => {
     );
 
     return () => backHandler.remove();
-  }, []);
+  });
 };
 /** => get data from navigation's params */
 const useGetNavParams = <T = object>() => {

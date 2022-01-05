@@ -69,6 +69,12 @@ export interface HistoryVoucher {
   catalogueImagesUrl: string | null;
 }
 
+export interface HistoryPromoApplied {
+  id: number;
+  promoName: string;
+  promoValue: number | null;
+}
+
 export interface HistoryDetail {
   platform: string;
   orderParcelId: number;
@@ -145,6 +151,7 @@ export interface HistoryDetail {
   parcelPromoPaymentAmount: number;
   voucherList: Array<HistoryVoucher>;
   promoList: Array<HistoryPromo>;
+  promoApplied: Array<HistoryPromoApplied>;
 }
 
 export interface HistoryDetailProcessProps extends models.DetailProcessProps {

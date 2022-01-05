@@ -57,6 +57,7 @@ export const ModalPaymentType: FC<PaymentTypeModalProps> = ({
                 badge={item.promoPaymentAvailable ? true : false}
                 textBadge={item.promoPaymentAvailable ? 'Promo' : undefined}
                 onPress={() => selectPaymentType(item)}
+                disabled={!item.availableStatus}
               />
             );
           },

@@ -318,7 +318,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   }, [navigation]);
 
   NavigationAction.useCustomBackHardware(() => {
-    setModalConfirmationBackVisible(true);
+    if (dataProductMasterCart.length > 0) {
+      setModalConfirmationBackVisible(true);
+    } else {
+      goBack();
+    }
   });
 
   /** => Listen data cancel reserve stock */
@@ -591,7 +595,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
       setProductRemoveSelected(null);
-      console.log({ productSelectedCount, totalProducts });
       if (productSelectedCount === totalProducts - 1) {
         setAllProductsSelected(true);
       }
@@ -628,7 +631,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader
-        goBack={() => setModalConfirmationBackVisible(true)}
+        goBack={() => {
+          if (dataProductMasterCart.length > 0) {
+            setModalConfirmationBackVisible(true);
+          } else {
+            goBack();
+          }
+        }}
       />
       {loadingPage ? (
         <LoadingPage />

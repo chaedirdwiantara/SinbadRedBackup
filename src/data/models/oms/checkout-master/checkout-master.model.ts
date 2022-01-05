@@ -34,7 +34,7 @@ export interface IInvoiceCheckout extends models.InvoiceCheckout {
   paymentType?: IPaymentTypeCheckout | null;
   paymentChannel?: IPaymentChannelCheckout | null;
   promoSellers?: IPromoSeller[];
-  vouchers?: IVoucherCheckout[];
+  voucherSeller?: IVoucherCheckout | null;
 }
 
 export interface CheckoutDataMaster {
@@ -45,7 +45,7 @@ export interface CheckoutDataMaster {
 export interface ReserveDiscount {
   invoiceGroupId: string;
   promoSellers: IPromoSeller[];
-  vouchers: IVoucherCheckout[];
+  voucherSeller: IVoucherCheckout | null;
   totalPromoSellerAndVoucher: number;
 }
 
