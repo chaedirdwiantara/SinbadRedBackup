@@ -309,24 +309,26 @@ const HistoryDetailView: FC = () => {
           title="Total Pembayaran Pesanan"
           value={
             dataPayment.totalPayment
-              ? toCurrency(dataPayment.totalPayment)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.totalPayment, { withFraction: false })
+              : toCurrency(0, { withFraction: false })
           }
         />
         <HistoryCardItem
           title="Total Pembayaran Pengiriman"
           value={
             dataPayment.deliveredTotalPayment
-              ? toCurrency(dataPayment.deliveredTotalPayment)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.deliveredTotalPayment, {
+                  withFraction: false,
+                })
+              : toCurrency(0, { withFraction: false })
           }
         />
         <HistoryCardItem
           title="Total Pengembalian"
           value={
             dataPayment.refundTotal
-              ? toCurrency(dataPayment.refundTotal)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.refundTotal, { withFraction: false })
+              : toCurrency(0, { withFraction: false })
           }
           type="bold"
         />
