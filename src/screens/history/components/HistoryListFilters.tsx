@@ -32,7 +32,7 @@ export const HistoryListFilters: FC<HistoryListFiltersProps> = ({
       <SnbTextField.Text
         boxIndicator={true}
         enter={onSearch}
-        placeholder="Cari produk, nomor pesanan"
+        placeholder="Cari nomor pesanan"
         type="default"
         value={keyword}
         onChangeText={(text: string) => onKeywordChange(text)}
