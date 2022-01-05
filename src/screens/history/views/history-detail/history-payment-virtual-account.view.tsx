@@ -105,11 +105,10 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
               paymentChannel?.id !== ChannelType.CASH &&
               dataPayment?.expiredPaymentTime)) &&
           (billingStatus === BillingStatus.PENDING ||
-            billingStatus === BillingStatus.OVERDUE) &&
-          isNotExpired ? (
+            billingStatus === BillingStatus.OVERDUE) ? (
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
-            !isNotExpired &&
+            !dataPayment?.expiredPaymentTime &&
             (billingStatus === BillingStatus.PENDING ||
               billingStatus === BillingStatus.OVERDUE) ? (
             renderVAButton()
