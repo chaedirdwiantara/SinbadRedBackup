@@ -67,7 +67,9 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
           <View key={index}>
             <HistoryCardItem
               title={item.voucherName ?? ''}
-              value={toCurrency(item.voucherValue!, { withFraction: false })}
+              value={`- ${toCurrency(item.voucherValue!, {
+                withFraction: false,
+              })}`}
               type="green"
             />
           </View>
