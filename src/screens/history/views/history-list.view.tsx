@@ -6,6 +6,7 @@ import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import { EmptyState } from '@core/components/EmptyState';
+import { LoadingLoadMore } from '@core/components/Loading';
 import {
   HistoryCard,
   HistoryFilterModal,
@@ -315,6 +316,11 @@ const HistoryListView: FC = ({ navigation }: any) => {
               <EmptyState title="Data Kosong" description="Belum Ada Pesanan" />
             </View>
           )}
+      {historyListState.loadMore && (
+        <View style={{ marginBottom: 16 }}>
+          <LoadingLoadMore />
+        </View>
+      )}
       <HistoryFilterModal
         visible={filterModalVisible}
         startDate={date.start}
