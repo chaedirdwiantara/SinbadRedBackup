@@ -195,12 +195,16 @@ const NotificationView: React.FC = () => {
           </View>
           <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
             <View style={NotificationStyle.boxNotificationItemHeader}>
-              <SnbText.H4>{title}</SnbText.H4>
-              <SnbText.C1>
-                {item?.createdAt
-                  ? moment(new Date(item.createdAt)).format('DD-MM-YYYY HH:mm')
-                  : '-'}
-              </SnbText.C1>
+              <View style={{flex: 3}}>
+                <SnbText.H4>{title}</SnbText.H4>
+              </View>
+              <View style={{flex: 1.5}}>
+                <SnbText.C1>
+                  {item?.createdAt
+                    ? moment(new Date(item.createdAt)).format('DD-MM-YYYY HH:mm')
+                    : '-'}
+                </SnbText.C1>
+              </View>
             </View>
             <View style={{ flex: 1 }}>
               <SnbText.B3>{message}</SnbText.B3>

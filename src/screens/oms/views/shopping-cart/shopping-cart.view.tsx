@@ -631,7 +631,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader
-        goBack={() => setModalConfirmationBackVisible(true)}
+        goBack={() => {
+          if (dataProductMasterCart.length > 0) {
+            setModalConfirmationBackVisible(true);
+          } else {
+            goBack();
+          }
+        }}
       />
       {loadingPage ? (
         <LoadingPage />
@@ -733,10 +739,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalConfirmationBackVisible}
         title="Konfirmasi"
         content="Apakah Anda yakin untuk keluar dari halaman keranjang?"
-        okText={'Ya'}
-        ok={handleGoBackHeader}
-        cancelText={'Tidak'}
-        cancel={() => setModalConfirmationBackVisible(false)}
+        okText={'Tidak'}
+        ok={() => setModalConfirmationBackVisible(false)}
+        cancelText={'Ya'}
+        cancel={handleGoBackHeader}
         loading={loadingCreateVerificationOrder || updateCartLoading}
       />
       {/* Toast success add cart */}

@@ -105,17 +105,19 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <View />
             )}
           </View>
-          <View style={CheckoutStyle.modalDetailTotalContainer}>
-            <View style={{ width: '50%' }}>
-              <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
+          {data.totalPromoSellerAndVoucher && (
+            <View style={CheckoutStyle.modalDetailTotalContainer}>
+              <View style={{ width: '50%' }}>
+                <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
+              </View>
+              <SnbText.B2 color={color.black80}>
+                -{' '}
+                {toCurrency(data?.totalPromoSellerAndVoucher as number, {
+                  withFraction: false,
+                })}
+              </SnbText.B2>
             </View>
-            <SnbText.B2 color={color.black80}>
-              -{' '}
-              {toCurrency(data?.totalPromoSellerAndVoucher as number, {
-                withFraction: false,
-              })}
-            </SnbText.B2>
-          </View>
+          )}
         </View>
       );
     }
@@ -207,7 +209,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               data.totalPriceBeforeTax,
               'normal',
             )}
-            {totalDiscountList(data.totalPromoSellerAndVoucher as number)}
+            {data.totalPromoSellerAndVoucher !== 0
+              ? totalDiscountList(data.totalPromoSellerAndVoucher as number)
+              : null}
             {contentListData(
               `PPN ${data.tax}%`,
               data.totalPriceAfterTax - data.totalPriceBeforeTax,

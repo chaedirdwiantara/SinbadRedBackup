@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  TouchableOpacity,
-  View,
-  Image,
-  FlatList,
-  Dimensions,
-} from 'react-native';
+import { TouchableOpacity, View, FlatList, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -15,6 +9,7 @@ import {
   SnbIcon,
   SnbTextField,
   SnbHtml,
+  SnbImageCompressor,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import { goBack, goToBannerDetail, useBannerAction } from '../functions';
@@ -22,7 +17,6 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import LoadingPage from '@core/components/LoadingPage';
 import { BannerStyles } from '../styles';
-import { styles } from 'react-native-sinbad-ui';
 
 const { width } = Dimensions.get('window');
 
@@ -100,12 +94,11 @@ const BannerListView: React.FC = () => {
       <View style={BannerStyles.bannerCardContainer}>
         {/* Image */}
         <View>
-          <Image
+          <SnbImageCompressor
             defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
+            uri={item.imageUrl}
             style={BannerStyles.imageCard}
-            source={{
-              uri: item.imageUrl,
-            }}
+            res={500}
           />
         </View>
         {/* Info */}

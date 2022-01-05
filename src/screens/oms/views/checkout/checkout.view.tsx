@@ -40,6 +40,8 @@ import {
   useExpiredTime,
   useCreateOrders,
   useCartCheckedoutActions,
+  useModalParcelDetail,
+  useModalProductList,
 } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
@@ -76,6 +78,8 @@ const OmsCheckoutView: FC = () => {
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
   const cartCheckedoutActions = useCartCheckedoutActions();
+  const modalParcelDetail = useModalParcelDetail();
+  const modalProductList = useModalProductList();
   const {
     stateCheckout: {
       checkout: {
@@ -108,14 +112,7 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [modalParcelData, setModalParcelData] =
-    useState<models.IInvoiceCheckout | null>(null);
-  const [isModalParcelDetail, setModalParcelDetail] = useState(false);
   const [isExpiredSession, setExpiredSession] = useState(false);
-  const [productList, setProductList] = useState<
-    models.ProductCheckout[] | null
-  >(null);
-  const [isModalProductList, setModalProductList] = useState(false);
   const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
 
   /** Set Loading Page */
@@ -419,12 +416,12 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCDetail(dispatchPayment);
   };
 
-  const handleParcelDetail = (data: any) => {
-    setModalParcelData(data);
+  const handleParcelDetail = (data: models.IInvoiceCheckout | null) => {
+    modalParcelDetail.setData(data);
   };
 
-  const handleProductList = (data: models.ProductCheckout[]) => {
-    setProductList(data);
+  const handleProductList = (data: models.ProductCheckout[] | null) => {
+    modalProductList.setData(data);
   };
 
   const handleCheckExpiredSession = () => {
@@ -435,22 +432,6 @@ const OmsCheckoutView: FC = () => {
       return true;
     }
   };
-
-  useEffect(() => {
-    if (modalParcelData !== null) {
-      setModalParcelDetail(true);
-    } else {
-      setModalParcelDetail(false);
-    }
-  }, [modalParcelData]);
-
-  useEffect(() => {
-    if (productList !== null) {
-      setModalProductList(true);
-    } else {
-      setModalProductList(false);
-    }
-  }, [productList]);
 
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {
@@ -466,11 +447,11 @@ const OmsCheckoutView: FC = () => {
   const ModalInvoiceParcelDetail = () => {
     return (
       <ModalParcelDetail
-        isOpen={isModalParcelDetail}
+        isOpen={modalParcelDetail.isOpen}
         close={() => {
-          setModalParcelData(null);
+          modalParcelDetail.setData(null);
         }}
-        data={modalParcelData}
+        data={modalParcelDetail.data}
       />
     );
   };
@@ -478,11 +459,11 @@ const OmsCheckoutView: FC = () => {
   const renderModalProductList = () => {
     return (
       <ModalProductList
-        isOpen={isModalProductList}
+        isOpen={modalProductList.isOpen}
         close={() => {
-          setProductList(null);
+          modalProductList.setData(null);
         }}
-        data={productList}
+        data={modalProductList.data}
       />
     );
   };

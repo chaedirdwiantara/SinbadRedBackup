@@ -143,7 +143,9 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         <View style={[HistoryStyle.cardFooterRow, { marginBottom: 8 }]}>
           {/* Should be styled with strikethrough */}
           {finalPrice && (
-            <SnbText.C2 color={color.black40}>{toCurrency(price)}</SnbText.C2>
+            <SnbText.C2 color={color.black40}>
+              {toCurrency(price, { withFraction: false })}
+            </SnbText.C2>
           )}
           {/* Should be styled with strikethrough */}
           {finalQty && (
@@ -157,7 +159,7 @@ export const HistoryCard: FC<HistoryCardProps> = ({
       )}
       <View style={HistoryStyle.cardFooterRow}>
         <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
-          {toCurrency(finalPrice ?? price)}
+          {toCurrency(finalPrice ?? price, { withFraction: false })}
         </SnbText.C2>
         <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
           {`QTY: ${finalQty ?? qty}`}
