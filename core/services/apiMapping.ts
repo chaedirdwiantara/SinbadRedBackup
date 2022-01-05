@@ -19,6 +19,7 @@ const apiMapping = <T>(
     | 'auth'
     | 'common'
     | 'banner'
+    | 'order'
     | 'payment'
     | 'warehouse'
     | 'order',

@@ -1,13 +1,13 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
-/** === TYPES === */
+/** === TYPE === */
 interface HistoryDetailCardDividerProps {
   horizontalSpaces?: number;
   topSpaces?: number;
 }
-/** === COMPONENTS === */
+/** === COMPONENT === */
 export const HistoryDetailCardDivider: FC<HistoryDetailCardDividerProps> = ({
   horizontalSpaces = 0,
   topSpaces = 8,

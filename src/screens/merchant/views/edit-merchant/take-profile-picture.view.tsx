@@ -7,7 +7,6 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  ToastAndroid,
 } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -61,13 +60,6 @@ const TakeProfilePictureView: FC = () => {
 
   useEffect(() => {
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `${stateGlobal.uploadImage.error.message}`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       NavigationAction.back();
     }
   });

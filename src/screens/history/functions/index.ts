@@ -1,5 +1,7 @@
 /** === EXPORT ALL === */
 export * from './history.function';
+export * from './history-list/history-list.hook.function';
+export * from './detail/history-detail-hook.function';
 /**
  * ================================================================
  * NOTES

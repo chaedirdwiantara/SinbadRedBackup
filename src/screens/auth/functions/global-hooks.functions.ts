@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatter } from './auth-utils.functions';
 import * as Actions from '@actions';
@@ -11,26 +11,23 @@ export const useInputPhone = () => {
   const [valMsgError, setValMsgError] = useState('');
   const [type, setType] = useState('default');
 
-  useEffect(() => {
-    const numberCountIsValid = /^[0-9]{10,14}$/.test(value);
-    const numberFormatIsValid = /^08[0-9]$/.test(value) && value.length > 1;
+  const onChangeText = (text: string) => {
+    setType('default');
+    text = text.replace(/[^0-9]/g, '');
+    setValue(text);
+    const numberCountIsValid = /^[0-9]{10,14}$/.test(text);
+    const numberFormatIsValid = /^08[0-9]$/.test(text) && text.length > 1;
 
-    if (value && !numberFormatIsValid && value[1] !== '8') {
+    if (text && !numberFormatIsValid && text.slice(0, 2) !== '08') {
       setType('error');
       setValMsgError('No. HP harus diawali dengan 08');
-    } else if (value && !numberCountIsValid) {
+    } else if (text && !numberCountIsValid) {
       setType('error');
       setValMsgError('No. HP harus 10-14 digit');
     } else {
       setType('default');
       setValMsgError('');
     }
-  }, [value]);
-
-  const onChangeText = (text: string) => {
-    setType('default');
-    text = text.replace(/[^0-9]/g, '');
-    setValue(text);
   };
 
   const setMessageError = (message: string) => {
@@ -92,6 +89,7 @@ export const useInput = (initialState: string = '') => {
     maxLength: 32,
     setMessageError,
     setValue,
+    setType,
   };
 };
 

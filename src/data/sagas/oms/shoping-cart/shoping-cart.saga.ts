@@ -73,12 +73,32 @@ function* cartTotalProduct() {
     );
   }
 }
+/** => Add to cart */
+function* addToCartDetail(
+  action: models.CreateProcessAction<models.AddToCartPayload>,
+) {
+  try {
+    const response: models.CreateSuccessProps = yield call(() => {
+      return CartApi.addToCart(action.payload.data);
+    });
+    yield action.contextDispatch(
+      ActionCreators.addToCartDetailSuccess(response),
+    );
+    yield put(ActionCreators.addToCartDetailSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.addToCartDetailFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.addToCartDetailFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_VIEW_PROCESS, cartView);
   yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
   yield takeLatest(types.CART_UPDATE_PROCESS, updateCart);
   yield takeLatest(types.CART_TOTAL_PRODUCT_PROCESS, cartTotalProduct);
+  yield takeLatest(types.ADD_TO_CART_DETAIL_PROCESS, addToCartDetail);
 }
 
 export default CartSaga;

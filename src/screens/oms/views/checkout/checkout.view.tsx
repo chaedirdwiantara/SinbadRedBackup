@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
@@ -48,12 +48,14 @@ import ModalErrorWarning from '@screen/oms/components/modal-error-warning.compon
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { usePrevious } from '@core/functions/hook/prev-value';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   /** => used for reset voucher */
   const dispatch = useDispatch();
+  useCustomBackHardware(() => backToCartModal.setOpen(true));
 
   /** => this for payment channel modal */
   const checkPromoPaymentAction = useCheckPromoPaymentAction();
@@ -101,6 +103,9 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
+  const [modalParcelData, setModalParcelData] = useState(null);
+  const [isModalParcelDetail, setModalParcelDetail] = useState(false);
+  const [isExpiredSession, setExpiredSession] = useState(false);
 
   /** Set Loading Page */
   useEffect(() => {
@@ -121,6 +126,8 @@ const OmsCheckoutView: FC = () => {
       paymentAction.resetTypesList(dispatchPayment);
       /** => reset list invoice channels */
       paymentAction.resetInvoicChannelList(dispatchPayment);
+      /** => reset create orders */
+      createOrders.reset(dispatchCheckout);
     };
   }, []);
 
@@ -317,7 +324,6 @@ const OmsCheckoutView: FC = () => {
   }, [paymentChannelData.paymentChannels]);
   /** => insert data promo payment to channel modal master */
   useEffect(() => {
-    // if success
     if (statePromo.checkPromoPayment.list.data.length > 0) {
       const payload = statePromo.checkPromoPayment.list.data.map((item) => {
         return {
@@ -351,12 +357,7 @@ const OmsCheckoutView: FC = () => {
       errorFetchModal.setErrorText('Ulangi');
     }
   }, [statePromo.checkPromoPayment.list]);
-  /** => Handling session expired */
-  useEffect(() => {
-    if (expiredTime.isOpen) {
-      expiredTime.setOpen(true);
-    }
-  }, []);
+
   /** => function after select payment type */
   const selectedPaymentType = (item: any) => {
     const invoiceGroupId = paymentChannelData?.invoiceGroupId;
@@ -391,6 +392,8 @@ const OmsCheckoutView: FC = () => {
   /** handle back to cart */
   const handleBackToCart = () => {
     createOrders.reset(dispatchCheckout);
+    paymentAction.resetTCCreate(dispatchPayment);
+    paymentAction.resetTCDetail(dispatchPayment);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
@@ -401,6 +404,28 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
   };
+
+  const handleParcelDetail = (data: any) => {
+    setModalParcelData(data);
+  };
+
+  const handleCheckExpiredSession = () => {
+    if (!expiredTime.check()) {
+      return false;
+    } else {
+      setExpiredSession(true);
+      return true;
+    }
+  };
+
+  useEffect(() => {
+    if (modalParcelData !== null) {
+      setModalParcelDetail(true);
+    } else {
+      setModalParcelDetail(false);
+    }
+  }, [modalParcelData]);
+
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {
     return (
@@ -408,6 +433,18 @@ const OmsCheckoutView: FC = () => {
         open={errorCreateOrders}
         error={stateCheckout.create.error}
         closeAction={() => handleBackToCart()}
+      />
+    );
+  };
+
+  const ModalInvoiceParcelDetail = () => {
+    return (
+      <ModalParcelDetail
+        isOpen={isModalParcelDetail}
+        close={() => {
+          setModalParcelData(null);
+        }}
+        data={modalParcelData}
       />
     );
   };
@@ -432,6 +469,7 @@ const OmsCheckoutView: FC = () => {
                   key={invoiceGroup.invoiceGroupId}
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
+                  openModalParcelDetail={handleParcelDetail}
                   index={index}
                 />
               ))}
@@ -441,6 +479,7 @@ const OmsCheckoutView: FC = () => {
             openTCModal={() => paymentTCModal.setOpen(true)}
             openErrorWarning={() => errorWarningModal.setOpen(true)}
             closeErrorWarning={() => errorWarningModal.setOpen(false)}
+            checkExpiredTime={handleCheckExpiredSession}
           />
           <ModalPaymentType
             isOpen={paymentTypeModal.isOpen}
@@ -452,7 +491,7 @@ const OmsCheckoutView: FC = () => {
             back={backModalPaymentChannel}
             close={closePaymentChannel}
           />
-          <ModalParcelDetail />
+
           <ModalTermAndCondition
             isOpen={paymentTCModal.isOpen}
             close={() => closeModalTC()}
@@ -472,10 +511,6 @@ const OmsCheckoutView: FC = () => {
             isOpen={errorBottomModal.isOpen}
             close={() => errorBottomModal.setOpen(false)}
           />
-          <ModalBottomErrorExpiredTime
-            isOpen={expiredTime.isOpen}
-            close={handleBackToCart}
-          />
           <ErrorFetchModal
             visible={errorFetchModal.isOpen}
             onPress={() => {
@@ -485,10 +520,11 @@ const OmsCheckoutView: FC = () => {
             buttonText={errorFetchModal.errorText}
           />
           <ModalBottomErrorExpiredTime
-            isOpen={expiredTime.isOpen}
+            isOpen={isExpiredSession}
             close={handleBackToCart}
           />
           {ModalErrorCreateOrders()}
+          {ModalInvoiceParcelDetail()}
         </>
       )}
     </SnbContainer>

@@ -7,13 +7,7 @@ import {
   useTextFieldSelect,
 } from '@screen/auth/functions';
 import React from 'react';
-import {
-  View,
-  Image,
-  ToastAndroid,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
+import { View, Image, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -23,14 +17,16 @@ import {
   SnbButton,
   SnbBottomSheet,
   SnbCheckbox,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import RegisterProgress from '../shared/register-progress.component';
 
-const { height } = Dimensions.get('screen');
-
-const Content: React.FC = () => {
+const Content: React.FC<{
+  successUpload: () => void;
+  failedUpload: () => void;
+}> = ({ successUpload, failedUpload }) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -63,25 +59,13 @@ const Content: React.FC = () => {
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'store'
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Berhasil Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      successUpload();
       saveStoreData({ imageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Gagal Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      failedUpload();
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
@@ -124,7 +108,7 @@ const Content: React.FC = () => {
               setChecked('unselect');
               setShowModalPrivacyPolicy(true);
             }}
-            disabled={registerState?.loading}
+            disabled={true || registerState?.loading}
             loading={registerState?.loading}
           />
         </View>
@@ -172,7 +156,7 @@ const Content: React.FC = () => {
               type="tertiary"
               title="Ubah Foto"
               onPress={() => openCamera('store')}
-              disabled={false}
+              disabled={true || false}
             />
           </View>
           <View style={{ height: 72 }}>
@@ -181,7 +165,9 @@ const Content: React.FC = () => {
               title={isImageCaptured ? 'Upload' : 'Selesai'}
               onPress={action}
               disabled={
-                stateGlobal.uploadImage.loading || registerState?.loading
+                true ||
+                stateGlobal.uploadImage.loading ||
+                registerState?.loading
               }
               loading={
                 stateGlobal.uploadImage.loading || registerState?.loading
@@ -381,10 +367,21 @@ const Content: React.FC = () => {
 
 const RegisterStep7View: React.FC = () => {
   const { goBack } = useNavigation();
+  const toast = React.useRef<any>();
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
-      <Content />
+      <Content
+        successUpload={() => toast.current.show('Foto Berhasil Diupload')}
+        failedUpload={() => toast.current.show('Foto Gagal Diupload')}
+      />
+      <SnbToast
+        ref={toast}
+        duration={3000}
+        position="bottom"
+        positionValue={40}
+      />
     </SnbContainer>
   );
 };

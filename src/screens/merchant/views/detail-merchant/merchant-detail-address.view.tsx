@@ -5,6 +5,7 @@ import {
   SnbTextField,
   SnbTopNav,
   SnbText,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
@@ -19,6 +20,8 @@ const MerchantDetailAddressView: FC = () => {
   const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   let mapRef = React.useRef<MapView>(null);
   const { resetMerchantData } = useMerchant();
+  const { stateMerchant } = React.useContext(contexts.MerchantContext);
+  const toast = React.useRef<any>();
 
   React.useEffect(() => {
     if (storeAddress?.longitude !== null && storeAddress?.latitude !== null) {
@@ -43,6 +46,12 @@ const MerchantDetailAddressView: FC = () => {
     return () => backHandler.remove();
   }, []);
 
+  useEffect(() => {
+    if (stateMerchant.merchantEdit.data !== null) {
+      toast.current.show('Data Berhasil Diperbaharui');
+    }
+  }, [stateMerchant]);
+
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -52,10 +61,10 @@ const MerchantDetailAddressView: FC = () => {
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
-        buttonAction={() => {
-          resetMerchantData();
-          NavigationAction.navigate('MerchantEditAddressView');
-        }}
+        // buttonAction={() => {
+        //   resetMerchantData();
+        //   NavigationAction.navigate('MerchantEditAddressView');
+        // }}
       />
     );
   };
@@ -189,6 +198,13 @@ const MerchantDetailAddressView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
+      <SnbToast
+        ref={toast}
+        fadeInDuration={1000}
+        fadeOutDuration={500}
+        duration={2500}
+        position="bottom"
+      />
     </SnbContainer>
   );
 };
