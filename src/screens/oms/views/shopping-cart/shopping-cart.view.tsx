@@ -655,7 +655,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   return (
     <SnbContainer color="white">
       <ShoppingCartHeader
-        goBack={() => setModalConfirmationBackVisible(true)}
+        goBack={() => {
+          if (dataProductMasterCart.length > 0) {
+            setModalConfirmationBackVisible(true);
+          } else {
+            goBack();
+          }
+        }}
       />
       {loadingPage ? (
         <LoadingPage />
