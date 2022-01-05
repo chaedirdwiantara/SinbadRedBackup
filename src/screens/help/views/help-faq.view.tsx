@@ -237,7 +237,6 @@ const HelpFaqView: FC = () => {
   };
 
   useEffect(() => {
-    console.log(textSearch);
     const res = carouselItems
       .map((el) => {
         const { title, ...restData } = el;
