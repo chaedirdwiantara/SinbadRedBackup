@@ -1,6 +1,6 @@
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import React, { useContext } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { contexts } from '@contexts';
 
 interface ToCurrencyOptions {
@@ -107,9 +107,47 @@ const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
   return { vouchersSeller, promosSeller };
 };
 
+const useModalParcelDetail = () => {
+  const [isOpen, setOpen] = useState(false);
+  const [data, setData] = useState<models.IInvoiceCheckout | null>(null);
+
+  return {
+    isOpen,
+    data,
+    setData: (value: models.IInvoiceCheckout | null) => {
+      setData(value);
+      if (value !== null) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    },
+  };
+};
+
+const useModalProductList = () => {
+  const [isOpen, setOpen] = useState(false);
+  const [data, setData] = useState<models.ProductCheckout[] | null>(null);
+
+  return {
+    isOpen,
+    data,
+    setData: (value: models.ProductCheckout[] | null) => {
+      setData(value);
+      if (value !== null) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+    },
+  };
+};
+
 export {
   handleTotalPrice,
   handleSubTotalPrice,
   handleTransformProductBrands,
   handleDiscountInvoiceGroups,
+  useModalParcelDetail,
+  useModalProductList,
 };
