@@ -1,6 +1,6 @@
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import React, { FC, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { contexts } from '@contexts';
 
 interface ToCurrencyOptions {
