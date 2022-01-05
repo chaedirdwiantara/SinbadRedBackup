@@ -37,7 +37,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
               {`Total Barang (${data.totalProduct})`}
             </SnbText.B3>
             <SnbText.B3 color={color.black100}>
-              {toCurrency(data.totalPriceBeforeTax)}
+              {toCurrency(data.totalPriceBeforeTax, { withFraction: false })}
             </SnbText.B3>
           </View>
           {data.totalPromoSellerAndVoucher ? (
