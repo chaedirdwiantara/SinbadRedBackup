@@ -1,7 +1,8 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useCallback } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
+import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
 /** === IMPORT FUNCTIONS === */
@@ -12,11 +13,9 @@ import { goToProduct } from '../functions';
 import { RecommendationHomeStyle } from '../styles';
 /** === COMPONENT === */
 interface RecommendationHomeViewProps {
-  navigationParent: any;
+  navigationParent?: any;
 }
-const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
-  navigationParent,
-}) => {
+const RecommendationHomeView: FC<RecommendationHomeViewProps> = () => {
   /** === HOOKS === */
   const {
     stateProduct: {
@@ -24,15 +23,15 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
     },
     dispatchProduct,
   } = useProductContext();
-  const { fetch } = useProductListActions('recommendations');
+  const { fetch, clearContents } = useProductListActions('recommendations');
 
-  useEffect(() => {
-    const unsubscribe = navigationParent.addListener('focus', () => {
+  useFocusEffect(
+    useCallback(() => {
       fetch(dispatchProduct);
-    });
 
-    return unsubscribe;
-  }, [navigationParent]);
+      return () => clearContents(dispatchProduct);
+    }, []),
+  );
   /** === VIEW === */
   return (
     <View style={RecommendationHomeStyle.container}>
