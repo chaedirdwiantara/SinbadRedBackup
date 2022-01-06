@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC } from 'react';
-import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -9,6 +9,7 @@ import {
   color,
   SnbIconHint,
   SnbButton,
+  SnbImageCompressor,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -127,14 +128,11 @@ const QuestDetailView: FC = ({ route }: any) => {
   const renderImage = () => {
     return (
       <View>
-        <Image
+        <SnbImageCompressor
           defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
-          source={{
-            uri: questDetailState.data?.imageUrl,
-          }}
-          style={{
-            aspectRatio: 5 / 2,
-          }}
+          uri={questDetailState.data?.imageUrl}
+          style={{ aspectRatio: 5 / 2 }}
+          res={500}
         />
       </View>
     );
