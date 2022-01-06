@@ -33,20 +33,20 @@ const Type1: FC<ProductCardType1Props> = ({
 }) => (
   <Pressable style={ProductCardStyle.Type1.container} onPress={onPress}>
     <View style={ProductCardStyle.Type1.body}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={ProductCardStyle.Type1.mainInfo}>
         <SnbImageCompressor
           uri={imageSource}
-          style={{ marginRight: 8, width: 60, height: 60 }}
+          style={ProductCardStyle.Type1.image}
           defaultSource={Images.opacityPlaceholder}
         />
-        <View style={{ maxWidth: '75%' }}>
+        <View style={{ flex: 1 }}>
           <SnbText.B3>{name}</SnbText.B3>
           <View style={{ marginTop: 4 }}>
             {type === 'purchased' && <SnbText.C2>{price}</SnbText.C2>}
           </View>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={ProductCardStyle.Type1.qtyInfo}>
         {originalQty && (
           <View style={{ marginRight: 8 }}>
             {/* Should be styled with strikethrough */}
