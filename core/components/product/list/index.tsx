@@ -597,6 +597,14 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorAddCart(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
       />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
@@ -606,15 +614,35 @@ const ProductList: FC<ProductListProps> = ({
       />
       {/* Modal Bottom Sheet segmentation */}
       <BottomSheetError
-        open={modalErrorSegmentation}
+        open={
+          modalErrorSegmentation &&
+          errorSegmentation !== null &&
+          errorSegmentation.code !== 401
+        }
         error={errorSegmentation}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorSegmentation(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
       />
       {/* Modal Bottom Sheet product detail */}
       <BottomSheetError
         open={modalErrorProductDetail}
         error={productDetailError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorProductDetail(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
       />
     </SnbContainer>
   );

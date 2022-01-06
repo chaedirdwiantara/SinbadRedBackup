@@ -1,6 +1,5 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useSelector } from 'react-redux';
 import { enableScreens } from 'react-native-screens';
 import { View, Platform } from 'react-native';
 import { HomeView } from '@screen/home/views';
@@ -14,15 +13,15 @@ import {
   SnbIconHint,
   SnbSvgIcon,
 } from 'react-native-sinbad-ui';
-import { RootState } from '@reducer/index';
 import { NavigationAction } from '../functions/navigation';
+import { useDataAuth } from '@core/redux/Data';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 enableScreens();
 
 const TabNavigator = () => {
   // const data = useSelector((state: RootState) => state.oms);
-
+  const { me } = useDataAuth();
   return (
     <Navigator
       detachInactiveScreens
@@ -59,6 +58,16 @@ const TabNavigator = () => {
       <Screen
         name="HistoryListView"
         component={HistoryListView}
+        listeners={() => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            if (me.data === null) {
+              NavigationAction.navigate('LoginPhoneView');
+            } else {
+              NavigationAction.navigate('HistoryListView');
+            }
+          },
+        })}
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
@@ -84,7 +93,11 @@ const TabNavigator = () => {
         listeners={() => ({
           tabPress: (e) => {
             e.preventDefault();
-            NavigationAction.navigate('OmsShoppingCartView');
+            if (me.data === null) {
+              NavigationAction.navigate('LoginPhoneView');
+            } else {
+              NavigationAction.navigate('OmsShoppingCartView');
+            }
           },
         })}
         options={{
@@ -126,6 +139,16 @@ const TabNavigator = () => {
       <Screen
         name="UserView"
         component={UserView}
+        listeners={() => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            if (me.data === null) {
+              NavigationAction.navigate('LoginPhoneView');
+            } else {
+              NavigationAction.navigate('UserView');
+            }
+          },
+        })}
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
