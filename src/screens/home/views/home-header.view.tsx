@@ -5,6 +5,7 @@ import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
+import { useDataAuth } from '@core/redux/Data';
 
 /** === IMPORT STYLE HERE === */
 import HomeStyles from '../styles/home.style';
@@ -16,9 +17,13 @@ interface HeaderProps {
 const HomeHeaderView: FC<HeaderProps> = (props) => {
   const { dataTotalProductCart } = useCartTotalProductActions();
   const { totalNotification } = useNotificationTotalActions();
-
+  const { me } = useDataAuth();
   /** === VIEW === */
   /** => main */
+
+  const handleOnChangeKeyword = () => {};
+  const handleClearText = () => {};
+  const handleEnter = () => {};
   return (
     <View style={HomeStyles.topNavContainer}>
       <SnbTopNav.Type8
@@ -26,15 +31,27 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
         goToSearch={() => NavigationAction.navigate('SearchView')}
         type={props.headerChange ? 'red' : 'transparent1'}
         placeholder="Cari di Sinbad"
-        onChangeText={(text) => console.log(text)}
-        clearText={() => console.log('clear text')}
-        enter={() => console.log('enter')}
+        onChangeText={handleOnChangeKeyword}
+        clearText={handleClearText}
+        enter={handleEnter}
         icon1Value={totalNotification.data}
         icon1Name="notifications_none"
-        icon1Action={() => NavigationAction.navigate('NotificationView')}
+        icon1Action={() => {
+          if (me.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('NotificationView');
+          }
+        }}
         icon2Value={dataTotalProductCart.totalProduct}
         icon2Name="cart"
-        icon2Action={() => NavigationAction.navigate('OmsShoppingCartView')}
+        icon2Action={() => {
+          if (me.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('OmsShoppingCartView');
+          }
+        }}
       />
     </View>
   );

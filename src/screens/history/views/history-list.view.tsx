@@ -335,6 +335,9 @@ const HistoryListView: FC = ({ navigation }: any) => {
           // Will trigger fetch
           setIsFiltered(0);
         }}
+        retryAction={() =>
+          historyListActions.fetch(dispatchHistory, derivedQueryOptions)
+        }
       />
     </SnbContainer>
   );

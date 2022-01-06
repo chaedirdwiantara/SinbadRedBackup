@@ -24,6 +24,7 @@ import {
   AddToCartModal,
 } from '@core/components/modal';
 import BottomSheetError from '@core/components/BottomSheetError';
+import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
@@ -69,6 +70,7 @@ const ProductDetailView: FC = () => {
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
+  const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -107,7 +109,7 @@ const ProductDetailView: FC = () => {
   } = useShopingCartContext();
   const {
     stateSupplier: {
-      detail: { data: dataSegmentation },
+      detail: { data: dataSegmentation, error: errorSegmentation },
       register: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
@@ -151,7 +153,7 @@ const ProductDetailView: FC = () => {
         setIsAvailable(false);
       }
     } else {
-      NavigationAction.navigate('LoginPhoneView');
+      setModalNeedToLogin(true);
     }
   };
 
@@ -262,6 +264,7 @@ const ProductDetailView: FC = () => {
     setLoadingButton(true);
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
+    supplierSegmentationAction.reset(dispatchSupplier);
     productDetailActions.fetch(dispatchProduct, productId);
   };
   /** === EFFECT LISTENER === */
@@ -282,14 +285,18 @@ const ProductDetailView: FC = () => {
       /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
     } else if (me.data === null) {
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 2500);
     }
   }, [dataProduct]);
 
   /** => Listen error product */
   useEffect(() => {
     if (errorProduct !== null) {
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 2500);
       setIsAvailable(false);
       setModalErrorProductDetail(true);
     }
@@ -297,7 +304,7 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation && dataProduct) {
+    if (dataSegmentation !== null && dataProduct !== null) {
       if (dataSegmentation.dataSuppliers) {
         stockValidationActions.fetch(dispatchStock, {
           warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
@@ -320,6 +327,20 @@ const ProductDetailView: FC = () => {
     }
   }, [dataSegmentation, dataProduct]);
 
+  /** => Listen error segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (errorSegmentation !== null && dataProduct !== null) {
+      if (me.data) {
+        setIsAvailable(false);
+      } else {
+        stockValidationActions.fetch(dispatchStock, {
+          warehouseId: null,
+          productId: dataProduct.id,
+        });
+      }
+    }
+  }, [errorSegmentation, dataProduct]);
+
   /** Listen success get stock */
   useEffect(() => {
     if (dataStock) {
@@ -332,9 +353,13 @@ const ProductDetailView: FC = () => {
         dataSegmentation.dataSuppliers.approvalStatus === 'guest'
       ) {
         setIsAvailable(false);
-        setLoadingButton(false);
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 2500);
       } else {
-        setLoadingButton(false);
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 2500);
       }
     }
   }, [dataStock]);
@@ -345,7 +370,9 @@ const ProductDetailView: FC = () => {
       if (errorStock.code === 400 || errorStock.code === 10001) {
         setIsAvailable(false);
       }
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 2500);
     }
   }, [errorStock && dataProduct]);
 
@@ -399,6 +426,7 @@ const ProductDetailView: FC = () => {
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
+      addToCartActions.reset(dispatchShopingCart);
     };
   }, []);
 
@@ -529,10 +557,12 @@ const ProductDetailView: FC = () => {
         </React.Fragment>
       ) : (
         <ActionButton
-          loading={true}
-          title={''}
-          disabled={true}
-          onPress={() => {}}
+          loading={loadingButton}
+          title={'Tambah ke Keranjang'}
+          disabled={loadingButton}
+          onPress={() => {
+            handleOrderPress();
+          }}
         />
       )}
       <PromoModal
@@ -599,6 +629,10 @@ const ProductDetailView: FC = () => {
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          setModalErrorAddCart(false);
+          onSubmitAddToCart();
+        }}
       />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
@@ -614,6 +648,11 @@ const ProductDetailView: FC = () => {
         closeAction={goBack}
         retryAction={handleRetryGetProduct}
         backAction={goBack}
+      />
+      {/* Modal Bottom Sheet Need to Login */}
+      <NeedLoginModal
+        visible={modalNeedToLogin}
+        onClose={() => setModalNeedToLogin(false)}
       />
     </SnbContainer>
   );
