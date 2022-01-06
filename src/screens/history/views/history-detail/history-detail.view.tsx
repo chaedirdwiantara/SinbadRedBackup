@@ -374,6 +374,7 @@ const HistoryDetailView: FC = () => {
               products={detail.data?.orderParcelBonus ?? []}
               seeMore={seeMoreBonusProducts}
               toggleSeeMore={toggleSeeMoreBonusProducts}
+              type="bonus"
             />
           </>
         )}
