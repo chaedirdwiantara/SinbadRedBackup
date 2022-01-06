@@ -22,7 +22,6 @@ import {
   useHistoryListActions,
   goBack,
   goToHistoryDetail,
-  resetDateTime,
 } from '@screen/history/functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
 /** === IMPORT TYPE === */
@@ -43,7 +42,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const [isFiltered, setIsFiltered] = useState(0);
   const [isSearched, setIsSearched] = useState(0);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const getPaymentStatus = usePaymentStatus();
   const orderStatusActions = useOrderStatusActions();
   const historyListActions = useHistoryListActions();
@@ -75,12 +73,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
       historyListActions.fetch(dispatchHistory, derivedQueryOptions);
     }, [activeTab, isFiltered, isSearched]),
   );
-
-  useEffect(() => {
-    if (historyListState.error && !errorModalVisible) {
-      setErrorModalVisible(true);
-    }
-  }, [historyListState.error]);
 
   useEffect(() => {
     getPaymentStatus.list(dispatchHistory);
@@ -139,10 +131,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
         (statusItem) => statusItem.status === item.statusPayment,
       )[0]?.title ?? 'Menunggu Pembayaran';
     const beenDelivered = item.status === 'delivered' || item.status === 'done';
-    const initialized = item.status === 'created' || item.status === 'failed';
-    const price = initialized
-      ? item.parcelFinalPriceBuyer
-      : item.billing.totalPayment!;
+    const price = item.billing.totalPayment ?? item.parcelFinalPriceBuyer ?? 0;
     const finalPrice = item.billing.deliveredTotalPayment!;
 
     return (
@@ -332,23 +321,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
           if (!date.start && !date.end) {
             setIsFiltered(0);
           } else {
-            const newEndDate = resetDateTime(new Date(date.end));
-            const today = resetDateTime(new Date());
-
-            if (newEndDate.getTime() === today.getTime()) {
-              // endDate is today (same date / tanggal)
-              const currentTime = new Date();
-              newEndDate.setHours(currentTime.getHours());
-              newEndDate.setMinutes(currentTime.getMinutes());
-              setDate({ ...date, end: newEndDate.toISOString() });
-            } else {
-              // endDate is yesterday or beyond
-              newEndDate.setHours(23);
-              newEndDate.setMinutes(59);
-              newEndDate.setSeconds(59);
-              setDate({ ...date, end: newEndDate.toISOString() });
-            }
-
             setIsFiltered((prev) => prev + 1);
           }
 
@@ -356,12 +328,12 @@ const HistoryListView: FC = ({ navigation }: any) => {
         }}
       />
       <BottomSheetError
-        open={errorModalVisible}
+        open={Boolean(historyListState.error)}
         error={historyListState.error}
         closeAction={() => {
           setDate({ start: '', end: '' });
+          // Will trigger fetch
           setIsFiltered(0);
-          setErrorModalVisible(false);
         }}
       />
     </SnbContainer>

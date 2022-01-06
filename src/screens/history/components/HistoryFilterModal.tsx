@@ -178,6 +178,9 @@ const HistoryFilterModalContent: FC<HistoryFilterModalContentProps> = ({
             data.date.setSeconds(0);
             onDateChange('start', data.date.toISOString());
           } else {
+            data.date.setHours(23);
+            data.date.setMinutes(59);
+            data.date.setSeconds(59);
             onDateChange('end', data.date.toISOString());
           }
 
