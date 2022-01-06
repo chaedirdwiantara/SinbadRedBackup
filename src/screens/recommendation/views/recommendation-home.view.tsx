@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
@@ -15,7 +15,9 @@ import { RecommendationHomeStyle } from '../styles';
 interface RecommendationHomeViewProps {
   navigationParent?: any;
 }
-const RecommendationHomeView: FC<RecommendationHomeViewProps> = () => {
+const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
+  navigationParent,
+}) => {
   /** === HOOKS === */
   const {
     stateProduct: {
@@ -28,10 +30,16 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = () => {
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct);
-
-      return () => clearContents(dispatchProduct);
     }, []),
   );
+
+  useEffect(() => {
+    const unsubscribe = navigationParent.addListener('blur', () => {
+      clearContents(dispatchProduct);
+    });
+
+    return unsubscribe;
+  }, [navigationParent]);
   /** === VIEW === */
   return (
     <View style={RecommendationHomeStyle.container}>
