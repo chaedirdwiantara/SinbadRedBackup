@@ -245,7 +245,11 @@ const HelpFaqView: FC = () => {
           (elContent) =>
             elContent.answer.toLowerCase().indexOf(search) > -1 ||
             elContent.question.toLowerCase().indexOf(search) > -1 ||
-            title.toLowerCase().indexOf(search) > -1,
+            title.toLowerCase().indexOf(search) > -1 ||
+            (elContent?.list &&
+              elContent?.list.filter(
+                (elList) => elList.toLowerCase().indexOf(search) > -1,
+              ).length),
         );
         return {
           title,
@@ -287,32 +291,32 @@ const HelpFaqView: FC = () => {
     );
   };
   /** === RENDER TAG CONTENT === */
-  const renderContentTag = () => {
-    return (
-      <View
-        style={{
-          padding: 20,
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-        }}>
-        {tag.map((item, index) => {
-          return (
-            <TouchableOpacity
-              key={index}
-              style={HelpFaqStyle.tag}
-              onPress={() => {
-                if (carouselRef.current) {
-                  carouselRef.current._snapToItem(index + 1);
-                }
-              }}>
-              <SnbText.B3>{item}</SnbText.B3>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    );
-  };
+  // const renderContentTag = () => {
+  //   return (
+  //     <View
+  //       style={{
+  //         padding: 20,
+  //         flexDirection: 'row',
+  //         flexWrap: 'wrap',
+  //         justifyContent: 'center',
+  //       }}>
+  //       {tag.map((item, index) => {
+  //         return (
+  //           <TouchableOpacity
+  //             key={index}
+  //             style={HelpFaqStyle.tag}
+  //             onPress={() => {
+  //               if (carouselRef.current) {
+  //                 carouselRef.current._snapToItem(index + 1);
+  //               }
+  //             }}>
+  //             <SnbText.B3>{item}</SnbText.B3>
+  //           </TouchableOpacity>
+  //         );
+  //       })}
+  //     </View>
+  //   );
+  // };
   /** === RENDER CONTENT === */
   const renderContent = () => {
     return (
@@ -320,7 +324,7 @@ const HelpFaqView: FC = () => {
         {renderBackgroundImage()}
         {renderContentHeader()}
         {renderContentItem()}
-        {renderContentTag()}
+        {/* {renderContentTag()} */}
       </ScrollView>
     );
   };
