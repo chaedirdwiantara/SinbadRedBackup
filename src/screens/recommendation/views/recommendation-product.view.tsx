@@ -11,7 +11,8 @@ import { useProductContext } from 'src/data/contexts/product/useProductContext';
 /** === COMPONENT === */
 const RecommendationProductView: FC = () => {
   /** === HOOKS === */
-  const { fetch, refresh, loadMore } = useProductListActions('recommendations');
+  const { fetch, refresh, loadMore, clearContents } =
+    useProductListActions('recommendations');
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
@@ -20,6 +21,8 @@ const RecommendationProductView: FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct);
+
+      return () => clearContents(dispatchProduct);
     }, []),
   );
   /** === VIEW === */

@@ -20,6 +20,7 @@ import {
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
 import { NavigationAction } from '@navigation';
+import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -99,6 +100,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const toastSuccessRemoveProduct = useRef<any>();
   const toastFailedRemoveProduct = useRef<any>();
 
+  const { me } = useDataAuth();
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
@@ -198,6 +200,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const onCloseModalErrorCheckout = () => {
     cartUpdateActions.reset(dispatchShopingCart);
     setModalFailedCheckout(false);
+  };
+
+  /** => handle go back */
+  const handleRetyrErrorGetCart = () => {
+    setLoadingPage(true);
+    cartViewActions.fetch(dispatchShopingCart);
+    storeDetailAction.detail(dispatchUser);
+    if (checkoutMaster.cartId) {
+      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
+      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
+    }
   };
 
   /** => handle go back */
@@ -304,6 +317,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mounted and focus */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
+      if (me.data === null) {
+        NavigationAction.navigate('LoginPhoneView');
+      }
       setLoadingPage(true);
       cartViewActions.fetch(dispatchShopingCart);
       storeDetailAction.detail(dispatchUser);
@@ -369,6 +385,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   useEffect(() => {
     /** => make sure data cart and data information stock is ready */
     if (cartViewData !== null && stockInformationData !== null) {
+      setModalFailedGetCart(false);
       let totalProductsSelected = 0;
       let initialTotalProduct = 0;
 
@@ -814,6 +831,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalFailedGetCart}
         error={cartViewError}
         closeAction={handleGoBackErrorGetCart}
+        retryAction={handleRetyrErrorGetCart}
       />
     </SnbContainer>
   );

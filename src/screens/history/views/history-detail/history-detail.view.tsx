@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import Clipboard from '@react-native-clipboard/clipboard';
 /** === IMPORT COMPONENTS === */
+import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
 import {
   HistoryDetailCardDivider,
@@ -563,6 +564,12 @@ const HistoryDetailView: FC = () => {
       {renderContent()}
       {renderFooter()}
       {renderToast()}
+      <BottomSheetError
+        open={Boolean(detail.error || paymentDetail.error)}
+        error={detail.error ?? paymentDetail.error}
+        closeAction={refreshFetch}
+        retryAction={refreshFetch}
+      />
     </SnbContainer>
   );
 };
