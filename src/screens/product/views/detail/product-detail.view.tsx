@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -69,10 +69,6 @@ const ProductDetailView: FC = () => {
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
-
-  /** === REF === */
-  const toastSuccessAddCart = useRef<any>();
-  const toastSuccessRegisterSupplier = useRef<any>();
 
   /** => actions */
   const addToCartActions = useAddToCartDetailActions();
@@ -360,9 +356,10 @@ const ProductDetailView: FC = () => {
       }
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      if (toastSuccessRegisterSupplier.current) {
-        toastSuccessRegisterSupplier.current.show();
-      }
+      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
+        position: 'center',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [sendToSupplierData]);
 
@@ -379,9 +376,10 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      if (toastSuccessAddCart.current) {
-        toastSuccessAddCart.current.show();
-      }
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [addToCartData]);
 
@@ -573,22 +571,6 @@ const ProductDetailView: FC = () => {
           orderQty < dataProduct?.minQty
         }
         isFromProductDetail={true}
-      />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessAddCart}
-        message={'Produk berhasil ditambahkan ke keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast success register supplier */}
-      <SnbToast
-        ref={toastSuccessRegisterSupplier}
-        message={'Berhasil kirim data ke supplier'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError

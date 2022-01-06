@@ -27,7 +27,6 @@ const MerchantDetailProfileView: FC = () => {
   const { stateUser } = React.useContext(contexts.UserContext);
   const { navigate } = useNavigation();
   const { stateMerchant } = React.useContext(contexts.MerchantContext);
-  const toast = React.useRef<any>();
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -46,13 +45,15 @@ const MerchantDetailProfileView: FC = () => {
       stateMerchant.profileEdit.data !== null ||
       stateMerchant.merchantEdit.data !== null
     ) {
-      toast.current.show('Data Berhasil Diperbaharui');
+      SnbToast.show('Data Berhasil Diperbaharui', 3000, { positionValue: 72 });
     }
   }, [stateMerchant]);
 
   useEffect(() => {
     if (stateGlobal.uploadImage.error !== null) {
-      toast.current.show(stateGlobal.uploadImage.error.message);
+      SnbToast.show(stateGlobal.uploadImage.error.message, 3000, {
+        positionValue: 72,
+      });
     }
   }, [stateGlobal.uploadImage.error]);
   /** FUNCTION */
@@ -282,13 +283,6 @@ const MerchantDetailProfileView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {renderMainContent()}
-      <SnbToast
-        ref={toast}
-        fadeInDuration={1000}
-        fadeOutDuration={500}
-        duration={2500}
-        position="bottom"
-      />
     </SnbContainer>
   );
 };

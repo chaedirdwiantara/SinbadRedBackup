@@ -15,10 +15,7 @@ import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import RegisterProgress from '../shared/register-progress.component';
 
-const Content: React.FC<{
-  successUpload: () => void;
-  failedUpload: () => void;
-}> = ({ successUpload, failedUpload }) => {
+const Content: React.FC<any> = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { merchantData, saveUserData } = useMerchant();
   const { navigate } = useNavigation();
@@ -39,13 +36,19 @@ const Content: React.FC<{
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'selfie'
     ) {
-      successUpload();
+      SnbToast.show('Foto Berhasil Diupload', 2000, {
+        position: 'top',
+        positionValue: 56,
+      });
       saveUserData({ selfieImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      failedUpload();
+      SnbToast.show('Foto Gagal Diupload', 2000, {
+        position: 'top',
+        positionValue: 56,
+      });
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
@@ -116,7 +119,7 @@ const Content: React.FC<{
               type={isImageCaptured ? 'secondary' : 'primary'}
               title={isImageCaptured ? 'Upload' : 'Selanjutnya'}
               onPress={action}
-              disabled={true || stateGlobal.uploadImage.loading}
+              disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
             />
           </View>
@@ -145,21 +148,11 @@ const Content: React.FC<{
 
 const RegisterStep3View: React.FC = () => {
   const { goBack } = useNavigation();
-  const toast = React.useRef<any>();
 
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
-      <Content
-        successUpload={() => toast.current.show('Foto Berhasil Diupload')}
-        failedUpload={() => toast.current.show('Foto Gagal Diupload')}
-      />
-      <SnbToast
-        ref={toast}
-        duration={3000}
-        position="bottom"
-        positionValue={40}
-      />
+      <Content />
     </SnbContainer>
   );
 };
