@@ -1,6 +1,5 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiAuth from '@core/services/apiAuth';
-import apiGeneral from '@core/services/apiGeneral';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => login with username and password */
@@ -21,7 +20,7 @@ const verificationOTP = (data: models.LoginPhoneNumber) => {
 /** => logout */
 const logout = () => {
   const path = 'logout';
-  return apiGeneral<models.LogoutSuccess>('auth', path, 'auth', 'v1', 'POST');
+  return apiAuth<models.LogoutSuccess>(path, 'v1', 'POST');
 };
 /** => auth me */
 const getAuthMe = () => {
