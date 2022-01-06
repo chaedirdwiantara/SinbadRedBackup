@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useDataTotalNotification } from '@core/redux/Data';
+import React from 'react';
 /** === FUNCTION === */
 /** === call fetch === */
 const callList = (
@@ -59,5 +60,15 @@ export const useNotificationTotalActions = () => {
     reset: () => {
       dispatch(Actions.notificationTotalReset());
     },
+  };
+};
+
+export const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
   };
 };
