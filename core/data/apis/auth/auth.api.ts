@@ -1,5 +1,6 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiAuth from '../../../services/apiAuth';
+import apiGeneral from '../../../services/apiGeneral';
 import * as models from '@models';
 /** === FUNCTION === */
 /** => login with username and password */
@@ -25,7 +26,7 @@ const me = () => {
 /** => logout */
 const logout = () => {
   const path = 'logout';
-  return apiAuth<models.LogoutSuccess>(path, 'v1', 'POST');
+  return apiGeneral<models.LogoutSuccess>('auth', path, 'auth', 'v1', 'POST');
 };
 
 /** === EXPORT FUNCTIONS === */
