@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC, useState } from 'react';
-import { View, Image, FlatList, TouchableOpacity } from 'react-native';
+import { View, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -9,6 +9,7 @@ import {
   SnbTabs,
   color,
   SnbIconHint,
+  SnbImageCompressor,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import LoadingPage from '@core/components/LoadingPage';
@@ -150,7 +151,11 @@ const QuestListView: FC = () => {
       <TouchableOpacity
         onPress={() => goToQuestDetail({ questId: item.id })}
         style={[QuestListStyles.shadowForBox, QuestListStyles.boxMainContent]}>
-        <Image source={{ uri: item.image }} style={QuestListStyles.cardImage} />
+        <SnbImageCompressor
+          uri={item.image}
+          style={QuestListStyles.cardImage}
+          res={500}
+        />
         <View style={[QuestListStyles.cardMainContent]}>
           <View style={QuestListStyles.floatingDateContainer}>
             {renderFloatingDate(item.endDate)}
