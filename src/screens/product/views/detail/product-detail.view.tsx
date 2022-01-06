@@ -137,7 +137,6 @@ const ProductDetailView: FC = () => {
           dataSegmentation.dataSuppliers.approvalStatus === 'guest'
         ) {
           setIsAvailable(false);
-          setLoadingButton(false);
         } else {
           checkUser({
             sinbadStatus: me.data.approvalStatus,
@@ -150,7 +149,6 @@ const ProductDetailView: FC = () => {
         //   supplierStatus: null,
         // });
         setIsAvailable(false);
-        setLoadingButton(false);
       }
     } else {
       NavigationAction.navigate('LoginPhoneView');
@@ -262,6 +260,8 @@ const ProductDetailView: FC = () => {
 
   const handleRetryGetProduct = () => {
     setLoadingButton(true);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
     productDetailActions.fetch(dispatchProduct, productId);
   };
   /** === EFFECT LISTENER === */
@@ -424,9 +424,7 @@ const ProductDetailView: FC = () => {
           refreshControl={
             <RefreshControl
               refreshing={refreshProduct!}
-              onRefresh={() =>
-                productDetailActions.refresh(dispatchProduct, productId)
-              }
+              onRefresh={() => handleRetryGetProduct()}
             />
           }>
           <EmptyState
@@ -448,9 +446,7 @@ const ProductDetailView: FC = () => {
           refreshControl={
             <RefreshControl
               refreshing={refreshProduct!}
-              onRefresh={() =>
-                productDetailActions.refresh(dispatchProduct, productId)
-              }
+              onRefresh={() => handleRetryGetProduct()}
             />
           }>
           <ProductDetailCarousel images={dataProduct?.images!} />
@@ -508,7 +504,8 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {(dataProduct !== null || errorProduct !== null) && (
+      {(dataProduct !== null || errorProduct !== null) &&
+      (dataStock !== null || errorStock !== null) ? (
         <React.Fragment>
           {isAvailable ? (
             <ActionButton
@@ -530,6 +527,13 @@ const ProductDetailView: FC = () => {
             <UnavailableSkuFlag />
           )}
         </React.Fragment>
+      ) : (
+        <ActionButton
+          loading={true}
+          title={''}
+          disabled={true}
+          onPress={() => {}}
+        />
       )}
       <PromoModal
         visible={promoModalVisible}
