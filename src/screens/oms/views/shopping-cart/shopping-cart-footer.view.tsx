@@ -15,7 +15,7 @@ import { ShoppingCartStyles } from '../../styles';
 import { CartInvoiceGroup } from '@models';
 /** === TYPE ===  */
 interface ShoppingCartFooterProps {
-  allProductsSelected: boolean;
+  allProductsSelected: boolean | 'indeterminate';
   invoiceGroups: CartInvoiceGroup[];
   setInvoiceGroups: (any: any) => void;
   setProductSelectedCount: (any: any) => void;
@@ -44,10 +44,19 @@ export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
       <View style={ShoppingCartStyles.footerBody}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
           <SnbCheckbox
-            status={allProductsSelected ? 'selected' : 'unselect'}
+            status={
+              allProductsSelected === 'indeterminate'
+                ? 'indeterminate'
+                : allProductsSelected === true
+                ? 'selected'
+                : 'unselect'
+            }
             onPress={() =>
               handleAllSelectedProductsChange(
-                allProductsSelected === false ? true : false,
+                allProductsSelected === 'indeterminate' ||
+                  allProductsSelected === false
+                  ? true
+                  : false,
                 [invoiceGroups, setInvoiceGroups],
                 setProductSelectedCount,
                 setAllProductsSelected,
