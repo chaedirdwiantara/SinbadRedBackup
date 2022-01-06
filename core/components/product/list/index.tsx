@@ -18,6 +18,7 @@ import {
 } from '@core/components/modal';
 import { LoadingHorizontal } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
+import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
@@ -106,6 +107,7 @@ const ProductList: FC<ProductListProps> = ({
     useState(false);
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
+  const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -186,10 +188,14 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
-    setLoadingPreparation(true);
-    setProductSelected(product);
-    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-    productDetailActions.fetch(dispatchProduct, product.id);
+    if (me.data === null) {
+      setModalNeedToLogin(true);
+    } else {
+      setLoadingPreparation(true);
+      setProductSelected(product);
+      supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+      productDetailActions.fetch(dispatchProduct, product.id);
+    }
   };
 
   /** => action close modal add to cart */
@@ -643,6 +649,11 @@ const ProductList: FC<ProductListProps> = ({
             handleCloseModal();
           }
         }}
+      />
+      {/* Modal Bottom Sheet Need to Login */}
+      <NeedLoginModal
+        visible={modalNeedToLogin}
+        onClose={() => setModalNeedToLogin(false)}
       />
     </SnbContainer>
   );
