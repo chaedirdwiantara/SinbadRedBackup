@@ -76,4 +76,11 @@ export const productListReducer = simplifyReducer(productListInitialState, {
   [types.PRODUCT_LIST_RESET]() {
     return productListInitialState;
   },
+  /** => Clear Contents */
+  [types.PRODUCT_LIST_CLEAR_CONTENTS]() {
+    return {
+      ...productListInitialState,
+      loading: true,
+    };
+  },
 });
