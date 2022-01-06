@@ -93,7 +93,7 @@ const handleSelectedProductChange = (
     (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
   setSassionQty: Dispatch<SetStateAction<number>>,
   setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
@@ -108,6 +108,7 @@ const handleSelectedProductChange = (
   let totalSelectedCount = productSelectedCount;
 
   let selectedCount = 0;
+  const totalProductBrand = currentBrand.products.length;
   currentBrand.products.forEach((product) => {
     if (product.selected) {
       selectedCount++;
@@ -125,6 +126,8 @@ const handleSelectedProductChange = (
 
   if (selectedCount === 0) {
     currentBrand.selected = false;
+  } else if (selectedCount !== totalProductBrand) {
+    currentBrand.selected = 'indeterminate';
   } else {
     currentBrand.selected = true;
   }
@@ -137,6 +140,8 @@ const handleSelectedProductChange = (
     setAllProductsSelected(false);
   } else if (totalSelectedCount === totalProducts) {
     setAllProductsSelected(true);
+  } else if (totalSelectedCount !== totalProducts) {
+    setAllProductsSelected('indeterminate');
   } else {
     setAllProductsSelected(false);
   }
@@ -161,7 +166,7 @@ const handleSelectedBrandChange = (
     (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
   setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
@@ -227,7 +232,7 @@ const handleSelectedBrandChange = (
   } else if (totalSelectedCount === totalProducts) {
     setAllProductsSelected(true);
   } else {
-    setAllProductsSelected(false);
+    setAllProductsSelected('indeterminate');
   }
 
   setInvoiceGroups(invoiceGroupsCopy);
@@ -241,7 +246,7 @@ const handleAllSelectedProductsChange = (
     Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   setProductSelectedCount: Dispatch<SetStateAction<number>>,
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
   setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {

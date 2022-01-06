@@ -30,6 +30,7 @@ const useAuthAction = () => {
       dispatch(Actions.cartTotalProductReset());
       dispatch(Actions.resetCheckoutMasterData());
       dispatch(Actions.resetCartMasterData());
+      dispatch(Actions.notificationTotalReset());
     },
     resetRequestOTP: () => {
       dispatch(Actions.resetRequestOTP());

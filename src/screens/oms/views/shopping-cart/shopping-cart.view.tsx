@@ -71,8 +71,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     deleteProductEmptyStock,
     deleteProductNotFound,
   } = useCartMasterActions();
-  const [allProductsSelected, setAllProductsSelected] =
-    useState<boolean>(false);
+  const [allProductsSelected, setAllProductsSelected] = useState<
+    boolean | 'indeterminate'
+  >(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductRemoveSelected | null>(null);
@@ -384,7 +385,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         /** Looping brand */
         invoiceGroup.brands.forEach((brand) => {
           let isEmptyProduct = true; //flag if product of brand is empty array
-          let brandSelected = false;
+          let brandSelected: boolean | 'indeterminate' = false;
+          let initialTotalProductBrand = 0;
+          let totalProductsSelectedBrand = 0;
           const products: CartProduct[] = [];
 
           /** Looping product */
@@ -427,9 +430,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 /** => if status selected is true */
                 if (product.selected) {
                   totalProductsSelected += 1;
-                  brandSelected = true;
+                  totalProductsSelectedBrand += 1;
                 }
                 initialTotalProduct += 1;
+                initialTotalProductBrand += 1;
 
                 /** => add to products of brand */
                 products.push({
@@ -487,9 +491,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             } else if (product.qty >= product.stock) {
               if (product.selected) {
                 totalProductsSelected += 1;
-                brandSelected = true;
+                totalProductsSelectedBrand += 1;
               }
               initialTotalProduct += 1;
+              initialTotalProductBrand += 1;
 
               const maxQtyAfterMinimum = product.stock - product.minQty;
               const qty =
@@ -514,9 +519,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             } else {
               if (product.selected) {
                 totalProductsSelected += 1;
-                brandSelected = true;
+                totalProductsSelectedBrand += 1;
               }
               initialTotalProduct += 1;
+              initialTotalProductBrand += 1;
               products.push(product);
 
               /** => add to data product for update cart */
@@ -530,6 +536,20 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               isEmptyProduct = false;
             }
           });
+
+          if (
+            totalProductsSelectedBrand !== initialTotalProductBrand &&
+            totalProductsSelectedBrand > 0 &&
+            initialTotalProductBrand > 0
+          ) {
+            brandSelected = 'indeterminate';
+          } else if (
+            totalProductsSelectedBrand === initialTotalProductBrand &&
+            totalProductsSelectedBrand > 0 &&
+            initialTotalProductBrand > 0
+          ) {
+            brandSelected = true;
+          }
 
           if (!isEmptyProduct) {
             brands.push({
@@ -547,6 +567,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       });
 
       if (
+        totalProductsSelected !== initialTotalProduct &&
+        totalProductsSelected > 0 &&
+        initialTotalProduct > 0
+      ) {
+        setAllProductsSelected('indeterminate');
+      } else if (
         totalProductsSelected === initialTotalProduct &&
         totalProductsSelected > 0 &&
         initialTotalProduct > 0
@@ -592,12 +618,27 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
-      setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
-      setProductRemoveSelected(null);
-      if (productSelectedCount === totalProducts - 1) {
-        setAllProductsSelected(true);
+
+      if (productRemoveSelected.selected) {
+        if (productSelectedCount - 1 === totalProducts - 1) {
+          setAllProductsSelected(true);
+        } else if (productSelectedCount <= 1) {
+          setAllProductsSelected(false);
+        } else {
+          setAllProductsSelected('indeterminate');
+        }
+      } else {
+        if (productSelectedCount === totalProducts - 1) {
+          setAllProductsSelected(true);
+        } else if (productSelectedCount <= 1) {
+          setAllProductsSelected(false);
+        } else {
+          setAllProductsSelected('indeterminate');
+        }
       }
+      setProductRemoveSelected(null);
+      setModalConfirmationRemoveProductVisible(false);
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
