@@ -24,6 +24,7 @@ import {
   AddToCartModal,
 } from '@core/components/modal';
 import BottomSheetError from '@core/components/BottomSheetError';
+import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
@@ -69,6 +70,7 @@ const ProductDetailView: FC = () => {
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
+  const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -151,7 +153,7 @@ const ProductDetailView: FC = () => {
         setIsAvailable(false);
       }
     } else {
-      NavigationAction.navigate('LoginPhoneView');
+      setModalNeedToLogin(true);
     }
   };
 
@@ -646,6 +648,11 @@ const ProductDetailView: FC = () => {
         closeAction={goBack}
         retryAction={handleRetryGetProduct}
         backAction={goBack}
+      />
+      {/* Modal Bottom Sheet Need to Login */}
+      <NeedLoginModal
+        visible={modalNeedToLogin}
+        onClose={() => setModalNeedToLogin(false)}
       />
     </SnbContainer>
   );
