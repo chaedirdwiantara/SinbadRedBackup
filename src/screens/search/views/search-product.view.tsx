@@ -22,11 +22,10 @@ type SearchProductRouteProps = RouteProp<
 /** === COMPONENT === */
 const SearchProductView: FC = () => {
   /** === HOOKS === */
-
   const {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();
-  const { fetch, refresh, loadMore } = useProductListActions();
+  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
@@ -35,6 +34,8 @@ const SearchProductView: FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct, { keyword });
+
+      return () => clearContents(dispatchProduct);
     }, []),
   );
   /** === VIEW === */

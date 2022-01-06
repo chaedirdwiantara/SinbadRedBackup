@@ -38,7 +38,7 @@ const CategoryProductView: FC = () => {
       categoryThirdLevelIndex,
     },
   } = useRoute<CategoryProductRouteProps>();
-  const { fetch, refresh, loadMore } = useProductListActions();
+  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
@@ -47,6 +47,8 @@ const CategoryProductView: FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct, { categoryId: category.id });
+
+      return () => clearContents(dispatchProduct);
     }, []),
   );
   /** === VIEW === */
