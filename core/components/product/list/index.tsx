@@ -108,6 +108,7 @@ const ProductList: FC<ProductListProps> = ({
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
+  const [modalErrorStock, setModalErrorStock] = useState(false);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -351,21 +352,23 @@ const ProductList: FC<ProductListProps> = ({
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && productDetailState) {
-      if (errorStock.code === 11004) {
-        if (
-          modalRejectApproval === false &&
-          modalWaitingApproval === false &&
-          modalRegisterSupplier === false &&
-          modalNotCoverage === false
-        ) {
-          setOrderModalVisible(true);
-        }
+      if (
+        errorStock.code === 50080000026 &&
+        modalRejectApproval === false &&
+        modalWaitingApproval === false &&
+        modalRegisterSupplier === false &&
+        modalNotCoverage === false
+      ) {
+        setOrderModalVisible(true);
       } else if (
+        (errorStock.code === 50080000025 || errorStock.code === 50080000036) &&
         modalRejectApproval === false &&
         modalWaitingApproval === false &&
         modalRegisterSupplier === false
       ) {
         setModalNotCoverage(true);
+      } else {
+        setModalErrorStock(true);
       }
       setLoadingPreparation(false);
     }
@@ -412,6 +415,16 @@ const ProductList: FC<ProductListProps> = ({
       setLoadingPreparation(false);
     }
   }, [modalRegisterSupplier]);
+
+  useEffect(() => {
+    return () => {
+      stockValidationActions.reset(dispatchStock);
+      productDetailActions.reset(dispatchProduct);
+      supplierSegmentationAction.reset(dispatchSupplier);
+      addToCartActions.reset(dispatchShopingCart);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    };
+  }, []);
 
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -648,6 +661,19 @@ const ProductList: FC<ProductListProps> = ({
           } else {
             handleCloseModal();
           }
+        }}
+      />
+      {/* Modal Bottom Sheet error stock */}
+      <BottomSheetError
+        open={modalErrorStock}
+        error={errorStock}
+        closeAction={() => {
+          handleCloseModal();
+          setModalErrorStock(false);
+        }}
+        retryAction={() => {
+          handleCloseModal();
+          setModalErrorStock(false);
         }}
       />
       {/* Modal Bottom Sheet Need to Login */}
