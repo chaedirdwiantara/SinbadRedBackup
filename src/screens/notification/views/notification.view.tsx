@@ -22,6 +22,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
 import { NavigationAction } from '@navigation';
 import BottomSheetError from '@core/components/BottomSheetError';
+import { LoadingLoadMore } from '@core/components/Loading';
 
 const dataIcon = {
   order: {
@@ -253,6 +254,15 @@ const NotificationView: React.FC = () => {
       />
     );
   };
+  const renderLoadMore = () => {
+    if (notificationListState.loadMore) {
+      return (
+        <View style={{ marginBottom: 16 }}>
+          <LoadingLoadMore />
+        </View>
+      );
+    }
+  };
   /** => render message with supplier name */
   const renderMessageWithSupplierName = () => {
     return (
@@ -361,6 +371,7 @@ const NotificationView: React.FC = () => {
       {!notificationListState.loading ? content() : <LoadingPage />}
       {renderModal()}
       {renderErrorModal()}
+      {renderLoadMore()}
     </SnbContainer>
   );
 };
