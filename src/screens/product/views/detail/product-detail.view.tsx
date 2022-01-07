@@ -316,6 +316,9 @@ const ProductDetailView: FC = () => {
           //   sinbadStatus: me.data.approvalStatus,
           //   supplierStatus: null,
           // });
+          setTimeout(() => {
+            setLoadingButton(false);
+          }, 1500);
           setIsAvailable(false);
         } else {
           stockValidationActions.fetch(dispatchStock, {
@@ -557,7 +560,7 @@ const ProductDetailView: FC = () => {
             <UnavailableSkuFlag />
           )}
         </React.Fragment>
-      ) : (
+      ) : isAvailable ? (
         <ActionButton
           loading={loadingButton}
           title={'Tambah ke Keranjang'}
@@ -566,6 +569,8 @@ const ProductDetailView: FC = () => {
             handleOrderPress();
           }}
         />
+      ) : (
+        <UnavailableSkuFlag />
       )}
       <PromoModal
         visible={promoModalVisible}
