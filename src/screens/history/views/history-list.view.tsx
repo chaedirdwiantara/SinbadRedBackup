@@ -70,7 +70,11 @@ const HistoryListView: FC = ({ navigation }: any) => {
         setActivePaymentStatus('');
       }
 
-      historyListActions.fetch(dispatchHistory, derivedQueryOptions);
+      historyListActions.fetch(dispatchHistory, {
+        startDate: date.start,
+        endDate: date.end,
+        search: keyword,
+      });
     }, [activeTab, isFiltered, isSearched]),
   );
 
