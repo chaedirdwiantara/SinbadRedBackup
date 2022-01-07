@@ -40,7 +40,7 @@ const NeedLoginModal: FC<NeedLoginModalProps> = ({ visible, onClose }) => (
             Silahkan masuk dengan akun Anda
           </SnbText.B2>
         </View>
-        <View style={{ marginTop: 32, height: 72 }}>
+        <View style={{ marginTop: 32, height: 80 }}>
           <SnbButton.Single
             type="primary"
             title="Masuk dengan akun Anda"

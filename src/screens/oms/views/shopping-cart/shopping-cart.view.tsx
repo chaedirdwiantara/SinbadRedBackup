@@ -101,7 +101,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const toastFailedRemoveProduct = useRef<any>();
 
   const { me } = useDataAuth();
-  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const {
+    stateUser: {
+      detail: { error: errorStoreDetail },
+    },
+    dispatchUser,
+  } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const cartViewActions = useCartViewActions();
@@ -612,11 +617,23 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** Listen error get cart */
   useEffect(() => {
-    if (cartViewError !== null) {
+    if (cartViewError !== null && modalFailedGetCart === false) {
       setLoadingPage(false);
       setModalFailedGetCart(true);
     }
   }, [cartViewError]);
+
+  /** Listen error get store detail */
+  useEffect(() => {
+    if (
+      errorStoreDetail !== null &&
+      modalFailedGetCart === false &&
+      errorStoreDetail.code === undefined
+    ) {
+      setLoadingPage(false);
+      setModalFailedGetCart(true);
+    }
+  }, [errorStoreDetail]);
 
   /** Listen product will be removed */
   useEffect(() => {
@@ -824,14 +841,34 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalFailedCheckout}
         error={updateCartError || errorCreateVerificationOrder}
         closeAction={onCloseModalErrorCheckout}
-        retryAction={onSubmitCheckout}
+        retryAction={() => {
+          setModalFailedCheckout(false);
+          onSubmitCheckout();
+        }}
       />
       {/* Modal Bottom Sheet Error get cart */}
       <BottomSheetError
         open={modalFailedGetCart}
         error={cartViewError}
         closeAction={handleGoBackErrorGetCart}
-        retryAction={handleRetyrErrorGetCart}
+        retryAction={() => {
+          setModalFailedGetCart(false);
+          handleRetyrErrorGetCart();
+        }}
+      />
+      {/* Modal Bottom Sheet Error get store detail */}
+      <BottomSheetError
+        open={
+          modalFailedGetCart &&
+          errorStoreDetail !== null &&
+          errorStoreDetail.code === undefined
+        }
+        error={errorStoreDetail}
+        closeAction={handleGoBackErrorGetCart}
+        retryAction={() => {
+          setModalFailedGetCart(false);
+          handleRetyrErrorGetCart();
+        }}
       />
     </SnbContainer>
   );
