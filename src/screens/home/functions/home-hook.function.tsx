@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { NavigationAction } from '@navigation';
+import { useAuthCoreAction } from '@core/functions/auth';
 /** === FUNCTION === */
 /** => header */
 const useHeaderChange = () => {
@@ -17,10 +18,12 @@ const useHeaderChange = () => {
 /** => refresh */
 const useRefresh = () => {
   const [refresh, setRefresh] = React.useState<boolean>(false);
+  const authCoreAction = useAuthCoreAction();
   return {
     stateRefresh: refresh,
     actionRefresh: (data: boolean) => {
       if (data !== refresh) {
+        authCoreAction.me();
         setRefresh(data);
       }
       NavigationAction.resetToHome();

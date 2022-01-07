@@ -16,7 +16,7 @@ function* brandList(action: models.ListProcessAction) {
     yield action.contextDispatch(ActionCreators.brandListSuccess(response));
     yield put(ActionCreators.brandListSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.brandListFailed(error));
+    yield action.contextDispatch(ActionCreators.brandListFailed(error));
     yield put(ActionCreators.brandListFailed(error));
   }
 }

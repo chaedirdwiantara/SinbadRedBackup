@@ -64,6 +64,7 @@ interface ProductListProps {
   onFetch: (queryOptions: models.ProductListQueryOptions) => void;
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
+  onActiveKeywordChange?: (keyword: string) => void;
   activeCategory?: CategoryType;
   activeBrandId?: string;
   withBottomAction?: boolean;
@@ -81,6 +82,7 @@ const ProductList: FC<ProductListProps> = ({
   onFetch,
   onLoadMore,
   activeKeyword = '',
+  onActiveKeywordChange,
   activeCategory,
   activeBrandId,
   withBottomAction = true,
@@ -109,6 +111,7 @@ const ProductList: FC<ProductListProps> = ({
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
   const [modalErrorStock, setModalErrorStock] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -266,6 +269,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (!productLoading) {
       setKeywordSearched(false);
+      setInitialLoading(false);
     }
   }, [productLoading]);
 
@@ -436,13 +440,17 @@ const ProductList: FC<ProductListProps> = ({
     maxPrice: filterQuery?.maxPrice,
     tags: selectedTags,
   };
+  const pageLoading = initialLoading ? initialLoading : productLoading;
   /** === VIEW === */
   return (
     <SnbContainer color="white">
       <NavigationHeader
         title={selectedCategory ? selectedCategory.name : headerTitle}
         type={headerType}
-        setSearchKeyword={setSearchKeyword}
+        onKeywordChange={(text: string) => {
+          setSearchKeyword(text);
+          onActiveKeywordChange?.(text);
+        }}
         keyword={searchKeyword}
         onSearch={() => {
           setKeywordSearched(true);
@@ -480,7 +488,7 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
-            loading={productLoading}
+            loading={pageLoading}
             error={productError}
           />
         ) : (
@@ -493,7 +501,7 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
-            loading={productLoading}
+            loading={pageLoading}
             error={productError}
           />
         )}
