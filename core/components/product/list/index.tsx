@@ -413,6 +413,16 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [modalRegisterSupplier]);
 
+  useEffect(() => {
+    return () => {
+      stockValidationActions.reset(dispatchStock);
+      productDetailActions.reset(dispatchProduct);
+      supplierSegmentationAction.reset(dispatchSupplier);
+      addToCartActions.reset(dispatchShopingCart);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    };
+  }, []);
+
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
     keyword: searchKeyword,

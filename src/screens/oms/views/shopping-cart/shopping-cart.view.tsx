@@ -824,14 +824,20 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalFailedCheckout}
         error={updateCartError || errorCreateVerificationOrder}
         closeAction={onCloseModalErrorCheckout}
-        retryAction={onSubmitCheckout}
+        retryAction={() => {
+          setModalFailedCheckout(false);
+          onSubmitCheckout();
+        }}
       />
       {/* Modal Bottom Sheet Error get cart */}
       <BottomSheetError
         open={modalFailedGetCart}
         error={cartViewError}
         closeAction={handleGoBackErrorGetCart}
-        retryAction={handleRetyrErrorGetCart}
+        retryAction={() => {
+          setModalFailedGetCart(false);
+          handleRetyrErrorGetCart();
+        }}
       />
     </SnbContainer>
   );
