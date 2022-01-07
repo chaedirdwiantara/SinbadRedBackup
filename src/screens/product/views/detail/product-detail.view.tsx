@@ -287,7 +287,7 @@ const ProductDetailView: FC = () => {
     } else if (me.data === null) {
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
     }
   }, [dataProduct]);
 
@@ -296,7 +296,7 @@ const ProductDetailView: FC = () => {
     if (errorProduct !== null) {
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
       setIsAvailable(false);
       setModalErrorProductDetail(true);
     }
@@ -343,7 +343,7 @@ const ProductDetailView: FC = () => {
 
   /** Listen success get stock */
   useEffect(() => {
-    if (dataStock) {
+    if (dataStock !== null) {
       if (
         me &&
         me.data &&
@@ -355,11 +355,11 @@ const ProductDetailView: FC = () => {
         setIsAvailable(false);
         setTimeout(() => {
           setLoadingButton(false);
-        }, 2500);
+        }, 1500);
       } else {
         setTimeout(() => {
           setLoadingButton(false);
-        }, 2500);
+        }, 1500);
       }
     }
   }, [dataStock]);
@@ -367,12 +367,14 @@ const ProductDetailView: FC = () => {
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
-      if (errorStock.code === 400 || errorStock.code === 10001) {
+      if (errorStock.code === 50080000025 || errorStock.code === 50080000036) {
         setIsAvailable(false);
+      } else if (errorStock.code === 50080000026) {
+        defaultProperties.stock = 0;
       }
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
     }
   }, [errorStock && dataProduct]);
 
