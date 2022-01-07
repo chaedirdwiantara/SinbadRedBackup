@@ -8,7 +8,6 @@ import { BannerHomeView } from '../../banner/views';
 import { BrandHomeView } from '../../brand/views';
 import { RecommendationHomeView } from '../../recommendation/views';
 import { CategoryHomeView } from '../../category/views';
-import { contexts } from '@contexts';
 /** === IMPORT FUNCTION HERE === */
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
@@ -24,7 +23,6 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const [modalError, setModalError] = React.useState(false);
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
-  const { stateBrand } = React.useContext(contexts.BrandContext);
   const { stateRefresh, actionRefresh } = useRefresh();
   const { data } = useDataTotalProductCart();
   const { setCartId } = useCheckoutMaster();
@@ -64,10 +62,10 @@ const HomeView: React.FC = ({ navigation }: any) => {
   }, [data.cartId]);
 
   React.useEffect(() => {
-    if (stateBrand.list.error !== null) {
+    if (me.error !== null && me.error.code === undefined) {
       setModalError(true);
     }
-  }, [stateBrand.list.error]);
+  }, [me.error]);
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={stateHeaderChange} />;
@@ -106,7 +104,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
     return (
       <BottomSheetError
         open={modalError}
-        error={stateBrand.list.error}
+        error={me.error}
         retryAction={() => {
           actionRefresh(true);
           setModalError(false);
