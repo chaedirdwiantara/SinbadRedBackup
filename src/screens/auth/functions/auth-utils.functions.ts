@@ -71,7 +71,7 @@ export const extractAddress = (data: any) => {
   return dataAddress;
 };
 
-export const setErrorMessage = (code: number) => {
+export const setErrorMessage = (code: number, message?: string) => {
   switch (code) {
     case 10002: {
       return 'Email yang Anda masukkan telah terdaftar';
@@ -100,8 +100,11 @@ export const setErrorMessage = (code: number) => {
     case 10010: {
       return 'ID Toko/Password yang Anda masukkan salah';
     }
+    case 12049: {
+      return 'Toko tidak ditemukan';
+    }
     default: {
-      return 'Terjadi kesalahan';
+      return message || 'Terjadi kesalahan';
     }
   }
 };
