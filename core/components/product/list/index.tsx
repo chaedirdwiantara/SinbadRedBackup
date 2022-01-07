@@ -16,7 +16,7 @@ import {
   ProductNotCoverageModal,
   AddToCartModal,
 } from '@core/components/modal';
-import { LoadingHorizontal } from '@core/components/Loading';
+import { LoadingHorizontal, LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
@@ -143,7 +143,11 @@ const ProductList: FC<ProductListProps> = ({
   const stockValidationActions = useStockValidationAction();
   const {
     stateProduct: {
-      list: { loading: productLoading, error: productError },
+      list: {
+        loading: productLoading,
+        error: productError,
+        loadMore: productLoadMore,
+      },
       cart: { data: productDetailState, error: productDetailError },
     },
     dispatchProduct,
@@ -506,6 +510,7 @@ const ProductList: FC<ProductListProps> = ({
           />
         )}
       </View>
+      {productLoadMore && <LoadingLoadMore />}
       {withBottomAction && (
         <BottomAction
           sort={true}
