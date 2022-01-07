@@ -226,6 +226,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusPayment: tag.status as models.PaymentStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     ) : (
       <HistoryListStatusTags
@@ -239,6 +240,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusOrder: tag.status as models.OrderStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     );
   /** => History List */
