@@ -510,7 +510,11 @@ const ProductList: FC<ProductListProps> = ({
           />
         )}
       </View>
-      {productLoadMore && <LoadingLoadMore />}
+      {productLoadMore && (
+        <View>
+          <LoadingLoadMore />
+        </View>
+      )}
       {withBottomAction && (
         <BottomAction
           sort={true}
