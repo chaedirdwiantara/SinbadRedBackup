@@ -217,7 +217,7 @@ const BannerSlider: React.FC<PropsData> = (props) => {
               uri={data?.imageUrl}
               style={styles.imageBanner}
               res={500}
-              resizeMode={'stretch'}
+              resizeMode={'contain'}
             />
           </View>
         </TouchableWithoutFeedback>
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   imageBanner: {
     height: undefined,
     width: '100%',
-    aspectRatio: 8 / 5,
+    aspectRatio: 8 / 6,
   },
 });
 
