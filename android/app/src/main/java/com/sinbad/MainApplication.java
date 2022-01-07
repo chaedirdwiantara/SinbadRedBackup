@@ -1,4 +1,4 @@
-package com.app.sinbaddev;
+package sinbad.app.development;
 
 import android.app.Application;
 import android.content.Context;
@@ -11,6 +11,7 @@ import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
+import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -46,5 +47,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   @Override
   public void onCreate() {
     super.onCreate();
+    SoLoader.init(this, /* native exopackage */ false);
   }
 }

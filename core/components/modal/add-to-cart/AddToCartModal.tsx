@@ -29,6 +29,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   isFromProductDetail,
 }) => {
   const [isFocus, setIsFocus] = useState(false);
+
   const renderContent = () => (
     <View>
       <AddToCartProductData isFromProductDetail={isFromProductDetail} />

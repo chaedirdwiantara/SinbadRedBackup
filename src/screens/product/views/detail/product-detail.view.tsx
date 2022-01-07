@@ -24,6 +24,7 @@ import {
   AddToCartModal,
 } from '@core/components/modal';
 import BottomSheetError from '@core/components/BottomSheetError';
+import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
@@ -69,6 +70,7 @@ const ProductDetailView: FC = () => {
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
+  const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** === REF === */
   const toastSuccessAddCart = useRef<any>();
@@ -107,7 +109,7 @@ const ProductDetailView: FC = () => {
   } = useShopingCartContext();
   const {
     stateSupplier: {
-      detail: { data: dataSegmentation },
+      detail: { data: dataSegmentation, error: errorSegmentation },
       register: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
@@ -132,18 +134,26 @@ const ProductDetailView: FC = () => {
   const handleOrderPress = () => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setIsAvailable(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setIsAvailable(false);
       }
     } else {
-      NavigationAction.navigate('LoginPhoneView');
+      setModalNeedToLogin(true);
     }
   };
 
@@ -235,7 +245,7 @@ const ProductDetailView: FC = () => {
   };
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
-    if (defaultProperties.stock > (dataProduct?.minQty ?? 1)) {
+    if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
       if (defaultProperties.isBundle) {
         return 'Check Promo Bundle';
       } else if (me.data === null) {
@@ -252,6 +262,9 @@ const ProductDetailView: FC = () => {
 
   const handleRetryGetProduct = () => {
     setLoadingButton(true);
+    productDetailActions.reset(dispatchProduct);
+    stockValidationActions.reset(dispatchStock);
+    supplierSegmentationAction.reset(dispatchSupplier);
     productDetailActions.fetch(dispatchProduct, productId);
   };
   /** === EFFECT LISTENER === */
@@ -259,7 +272,7 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     setLoadingButton(true);
     productDetailActions.fetch(dispatchProduct, productId);
-  }, []);
+  }, [productId]);
 
   /** => Listen data product success */
   useEffect(() => {
@@ -272,14 +285,18 @@ const ProductDetailView: FC = () => {
       /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
     } else if (me.data === null) {
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 1500);
     }
   }, [dataProduct]);
 
   /** => Listen error product */
   useEffect(() => {
     if (errorProduct !== null) {
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 1500);
       setIsAvailable(false);
       setModalErrorProductDetail(true);
     }
@@ -287,7 +304,7 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation && dataProduct) {
+    if (dataSegmentation !== null && dataProduct !== null) {
       if (dataSegmentation.dataSuppliers) {
         stockValidationActions.fetch(dispatchStock, {
           warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
@@ -295,10 +312,14 @@ const ProductDetailView: FC = () => {
         });
       } else {
         if (me.data) {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: null,
-          });
+          // checkUser({
+          //   sinbadStatus: me.data.approvalStatus,
+          //   supplierStatus: null,
+          // });
+          setTimeout(() => {
+            setLoadingButton(false);
+          }, 1500);
+          setIsAvailable(false);
         } else {
           stockValidationActions.fetch(dispatchStock, {
             warehouseId: null,
@@ -309,20 +330,54 @@ const ProductDetailView: FC = () => {
     }
   }, [dataSegmentation, dataProduct]);
 
+  /** => Listen error segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (errorSegmentation !== null && dataProduct !== null) {
+      if (me.data) {
+        setIsAvailable(false);
+      } else {
+        stockValidationActions.fetch(dispatchStock, {
+          warehouseId: null,
+          productId: dataProduct.id,
+        });
+      }
+    }
+  }, [errorSegmentation, dataProduct]);
+
   /** Listen success get stock */
   useEffect(() => {
-    if (dataStock) {
-      setLoadingButton(false);
+    if (dataStock !== null) {
+      if (
+        me &&
+        me.data &&
+        me.data.approvalStatus === 'verified' &&
+        dataSegmentation &&
+        dataSegmentation.dataSuppliers &&
+        dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+      ) {
+        setIsAvailable(false);
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 1500);
+      } else {
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 1500);
+      }
     }
   }, [dataStock]);
 
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
-      if (errorStock.code === 400) {
+      if (errorStock.code === 50080000025 || errorStock.code === 50080000036) {
         setIsAvailable(false);
+      } else if (errorStock.code === 50080000026) {
+        defaultProperties.stock = 0;
       }
-      setLoadingButton(false);
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 1500);
     }
   }, [errorStock && dataProduct]);
 
@@ -356,7 +411,6 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      supplierSegmentationAction.reset(dispatchSupplier);
       if (toastSuccessAddCart.current) {
         toastSuccessAddCart.current.show();
       }
@@ -377,6 +431,7 @@ const ProductDetailView: FC = () => {
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
+      addToCartActions.reset(dispatchShopingCart);
     };
   }, []);
 
@@ -402,9 +457,7 @@ const ProductDetailView: FC = () => {
           refreshControl={
             <RefreshControl
               refreshing={refreshProduct!}
-              onRefresh={() =>
-                productDetailActions.refresh(dispatchProduct, productId)
-              }
+              onRefresh={() => handleRetryGetProduct()}
             />
           }>
           <EmptyState
@@ -426,9 +479,7 @@ const ProductDetailView: FC = () => {
           refreshControl={
             <RefreshControl
               refreshing={refreshProduct!}
-              onRefresh={() =>
-                productDetailActions.refresh(dispatchProduct, productId)
-              }
+              onRefresh={() => handleRetryGetProduct()}
             />
           }>
           <ProductDetailCarousel images={dataProduct?.images!} />
@@ -486,7 +537,8 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {(dataProduct !== null || errorProduct !== null) && (
+      {(dataProduct !== null || errorProduct !== null) &&
+      (dataStock !== null || errorStock !== null) ? (
         <React.Fragment>
           {isAvailable ? (
             <ActionButton
@@ -508,6 +560,17 @@ const ProductDetailView: FC = () => {
             <UnavailableSkuFlag />
           )}
         </React.Fragment>
+      ) : isAvailable ? (
+        <ActionButton
+          loading={loadingButton}
+          title={'Tambah ke Keranjang'}
+          disabled={loadingButton}
+          onPress={() => {
+            handleOrderPress();
+          }}
+        />
+      ) : (
+        <UnavailableSkuFlag />
       )}
       <PromoModal
         visible={promoModalVisible}
@@ -538,22 +601,20 @@ const ProductDetailView: FC = () => {
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
-      {orderModalVisible && (
-        <AddToCartModal
-          orderQty={orderQty}
-          onChangeQty={onHandleChangeQty}
-          open={orderModalVisible}
-          closeAction={handleCloseModal}
-          onAddToCartPress={onSubmitAddToCart}
-          disabled={
-            dataProduct === null ||
-            dataStock === null ||
-            orderQty > dataStock.stock ||
-            orderQty < dataProduct?.minQty
-          }
-          isFromProductDetail={true}
-        />
-      )}
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={orderModalVisible}
+        closeAction={handleCloseModal}
+        onAddToCartPress={onSubmitAddToCart}
+        disabled={
+          dataProduct === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < dataProduct?.minQty
+        }
+        isFromProductDetail={true}
+      />
       {/* Toast success add cart */}
       <SnbToast
         ref={toastSuccessAddCart}
@@ -575,6 +636,10 @@ const ProductDetailView: FC = () => {
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          setModalErrorAddCart(false);
+          onSubmitAddToCart();
+        }}
       />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
@@ -590,6 +655,11 @@ const ProductDetailView: FC = () => {
         closeAction={goBack}
         retryAction={handleRetryGetProduct}
         backAction={goBack}
+      />
+      {/* Modal Bottom Sheet Need to Login */}
+      <NeedLoginModal
+        visible={modalNeedToLogin}
+        onClose={() => setModalNeedToLogin(false)}
       />
     </SnbContainer>
   );

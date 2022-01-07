@@ -29,6 +29,7 @@ export const checkoutViewReducer = simplifyReducer(checkoutViewInitialState, {
     return {
       ...state,
       data: action.payload.data,
+      error: null,
       loading: false,
     };
   },

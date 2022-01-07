@@ -26,6 +26,7 @@ import {
 } from '../types';
 /** === IMPORT STYLE === */
 import { HistoryStyle } from '../styles';
+import { OrderStatus, StatusPayment } from '../functions/data';
 /** === TYPE === */
 interface HistoryCardProps {
   orderCode: string;
@@ -82,16 +83,16 @@ export const HistoryCard: FC<HistoryCardProps> = ({
   );
   const isPaymentTimeExpired =
     moment.utc(new Date()).local() > moment.utc(expiredPaymentTime);
+
   return (
-    <Pressable
-      onPress={onCardPress}
+    <View
       style={[
         HistoryStyle.cardContainer,
         { paddingBottom: additionalInfo ? 0 : 16 },
         styles.shadowForBox10,
         style,
       ]}>
-      <View style={HistoryStyle.cardHeader}>
+      <Pressable onPress={onCardPress} style={HistoryStyle.cardHeader}>
         <View style={{ flex: 1, marginRight: 12 }}>
           <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
             {orderCode ?? '-'}
@@ -118,11 +119,14 @@ export const HistoryCard: FC<HistoryCardProps> = ({
               />
             )}
           </View>
-          {expiredPaymentTime && !isPaymentTimeExpired ? (
+          {expiredPaymentTime &&
+          !isPaymentTimeExpired &&
+          (statusSlug === StatusPayment.WAITING_FOR_PAYMENT ||
+            statusSlug === OrderStatus.PENDING_PAYMENT) ? (
             <CountDownTimer type={'small'} expiredTime={expiredPaymentTime} />
           ) : null}
         </View>
-      </View>
+      </Pressable>
       <View style={HistoryStyle.cardBody}>
         <SnbSKUList
           data={formattedImages}
@@ -135,30 +139,34 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           expandable={true}
         />
       </View>
-      {finalPrice || finalQty ? (
-        <View style={[HistoryStyle.cardFooterRow, { marginBottom: 8 }]}>
-          {/* Should be styled with strikethrough */}
-          {finalPrice && (
-            <SnbText.C2 color={color.black40}>{toCurrency(price)}</SnbText.C2>
-          )}
-          {/* Should be styled with strikethrough */}
-          {finalQty && (
-            <SnbText.C2 align="right" color={color.black40}>
-              {`QTY: ${qty}`}
-            </SnbText.C2>
-          )}
+      <Pressable onPress={onCardPress}>
+        {finalPrice || finalQty ? (
+          <View style={[HistoryStyle.cardFooterRow, { marginBottom: 8 }]}>
+            {/* Should be styled with strikethrough */}
+            {finalPrice && (
+              <SnbText.C2 color={color.black40}>
+                {toCurrency(price, { withFraction: false })}
+              </SnbText.C2>
+            )}
+            {/* Should be styled with strikethrough */}
+            {finalQty && (
+              <SnbText.C2 align="right" color={color.black40}>
+                {`QTY: ${qty}`}
+              </SnbText.C2>
+            )}
+          </View>
+        ) : (
+          <View />
+        )}
+        <View style={HistoryStyle.cardFooterRow}>
+          <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+            {toCurrency(finalPrice ?? price, { withFraction: false })}
+          </SnbText.C2>
+          <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
+            {`QTY: ${finalQty ?? qty}`}
+          </SnbText.C2>
         </View>
-      ) : (
-        <View />
-      )}
-      <View style={HistoryStyle.cardFooterRow}>
-        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
-          {toCurrency(finalPrice ?? price)}
-        </SnbText.C2>
-        <SnbText.C2 color={cardDisabled ? color.black60 : color.black100}>
-          {`QTY: ${finalQty ?? qty}`}
-        </SnbText.C2>
-      </View>
+      </Pressable>
       {actionButtonTitle && (
         <View style={HistoryStyle.cardActionContainer}>
           <SnbButton.Dynamic
@@ -180,6 +188,6 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           <SnbText.C2 color={color.yellow50}>{additionalInfo}</SnbText.C2>
         </View>
       )}
-    </Pressable>
+    </View>
   );
 };

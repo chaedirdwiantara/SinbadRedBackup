@@ -6,7 +6,6 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import moment from 'moment';
 import {
@@ -18,15 +17,17 @@ import {
   SnbDivider,
   SnbBottomSheet,
   SnbHtml,
+  SnbImageCompressor,
 } from 'react-native-sinbad-ui';
+import { useCartTotalProductActions } from '@screen/oms/functions';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
 import { contexts } from '@contexts';
+import { NavigationAction } from '@navigation';
 import LoadingPage from '@core/components/LoadingPage';
 import { BannerDetailStyles } from '../styles';
 
-const { width } = Dimensions.get('window');
 interface RecommendedProduct {
   id: string;
   name: string;
@@ -113,6 +114,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const bannerAction = useBannerAction();
   const bannerDetailState = stateBanner.bannerGeneral.detail;
   /** === HOOK === */
+  const { dataTotalProductCart } = useCartTotalProductActions();
   React.useEffect(() => {
     bannerAction.detail(dispatchBanner, route.params.bannerId);
     return () => {
@@ -129,9 +131,9 @@ const BannerDetailView: React.FC = ({ route }: any) => {
           type={'transparent1'}
           backAction={() => goBack()}
           title={''}
-          iconAction={() => {}}
+          iconAction={() => NavigationAction.navigate('OmsShoppingCartView')}
           iconName={'cart'}
-          iconValue={10}
+          iconValue={dataTotalProductCart.totalProduct}
         />
       </View>
     );
@@ -140,15 +142,14 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   /** => banner */
   const renderBanner = () => {
     return (
-      <Image
+      <SnbImageCompressor
         defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
-        source={{
-          uri: bannerDetailState.data?.imageUrl,
-        }}
+        uri={bannerDetailState.data?.imageUrl!}
         style={{
           height: 180,
           width: '100%',
         }}
+        res={500}
       />
     );
   };
@@ -157,7 +158,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const renderPromoCardInformation = () => {
     return (
       <View style={{ marginTop: -65 }}>
-        <SnbCardInfoType2.Header title={bannerDetailState.data?.header}>
+        <SnbCardInfoType2.Header title={bannerDetailState.data?.header ?? ''}>
           <SnbCardInfoType2.Row
             label={'Berlaku Sampai'}
             text={moment(bannerDetailState.data?.activeTo).format(
@@ -297,7 +298,6 @@ const BannerDetailView: React.FC = ({ route }: any) => {
       <SnbBottomSheet
         open={modalTnCVisible}
         title={'Syarat dan Ketentuan'}
-        action={true}
         actionIcon={'close'}
         closeAction={() => setModalTnCVisible(false)}
         content={

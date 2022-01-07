@@ -7,20 +7,22 @@ import { ProductNotAvailableView } from './product-not-available.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '../../styles';
 import {
-  IProductItemUpdateCart,
+  IProductRemoveSelected,
   ICartMasterProductNotAvailable,
 } from '@models';
 /** === TYPE ===  */
 interface ProductEmptyStockProps {
   data: ICartMasterProductNotAvailable[];
-  onRemoveProduct: (any: IProductItemUpdateCart) => void;
+  onRemoveProduct: (any: IProductRemoveSelected) => void;
   sectionName: string;
+  type: 'dataEmptyStock' | 'dataNotFound';
 }
 /** == COMPONENT === */
 export const ProductEmptyStockView: FC<ProductEmptyStockProps> = ({
   data,
   onRemoveProduct,
   sectionName,
+  type,
 }) => (
   <View style={ShoppingCartStyles.cardContainer} key={sectionName}>
     <View style={ShoppingCartStyles.topCardSlot}>
@@ -33,6 +35,7 @@ export const ProductEmptyStockView: FC<ProductEmptyStockProps> = ({
         productLength={data.length}
         productIndex={productIndex}
         onRemoveProduct={onRemoveProduct}
+        type={type}
       />
     ))}
   </View>

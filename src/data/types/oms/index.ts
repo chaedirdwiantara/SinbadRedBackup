@@ -7,3 +7,4 @@ export * from './payment';
 export * from './cart-master';
 export * from './reserve-data';
 export * from './checkout-done';
+export * from './product-master';

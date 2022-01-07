@@ -1,3 +1,4 @@
+import * as models from '@models';
 import { OrderStatusSlug, PaymentStatusSlug } from '@screen/history/types';
 
 export interface HistoryBilling {
@@ -39,6 +40,39 @@ export interface ParcelLog {
   happenedAt: string;
   reason: string | null;
   userName: string | null;
+}
+
+export interface HistoryPromo {
+  promoName: string;
+  promoId: string;
+  promoValue: number | null;
+  promoQty: number | null;
+  catalogueName: string | null;
+  catalogueImagesUrl: string | null;
+  invoicedPromoQty: number | null;
+  deliveredPromoQty: number | null;
+  invoicedCatalogueQty: number | null;
+  deliveredCatalogueQty: number | null;
+  invoicedParcelModified: boolean;
+  orderBrandCatalogueId: number;
+  retailBuyingPrice: number | null;
+}
+
+export interface HistoryVoucher {
+  orderBrandCatalaguesId: string;
+  voucherName: string;
+  voucherId: string;
+  voucherValue: number | null;
+  catalogueName: string | null;
+  catalogueExternalId: string | number | null;
+  cataloguePrice: number | null;
+  catalogueImagesUrl: string | null;
+}
+
+export interface HistoryPromoApplied {
+  id: number;
+  promoName: string;
+  promoValue: number | null;
 }
 
 export interface HistoryDetail {
@@ -115,4 +149,17 @@ export interface HistoryDetail {
   deliveredParcelPromo: number;
   deliveredParcelVoucher: number;
   parcelPromoPaymentAmount: number;
+  voucherList: Array<HistoryVoucher>;
+  promoList: Array<HistoryPromo>;
+  promoApplied: Array<HistoryPromoApplied>;
+}
+
+export interface HistoryDetailProcessProps extends models.DetailProcessProps {
+  logType: 'payment' | 'order';
+}
+
+export interface HistoryDetailProcessAction {
+  type: string;
+  payload: HistoryDetailProcessProps;
+  contextDispatch: (action: any) => any;
 }

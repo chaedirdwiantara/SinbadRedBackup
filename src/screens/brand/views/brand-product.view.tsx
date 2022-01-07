@@ -27,7 +27,7 @@ const BrandProductView: FC = () => {
   const {
     params: { brand },
   } = useRoute<BrandProductRouteProps>();
-  const { fetch, refresh, loadMore } = useProductListActions();
+  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
@@ -36,6 +36,8 @@ const BrandProductView: FC = () => {
   useFocusEffect(
     useCallback(() => {
       fetch(dispatchProduct, { brandId: brand.id });
+
+      return () => clearContents(dispatchProduct);
     }, []),
   );
   /** === VIEW === */

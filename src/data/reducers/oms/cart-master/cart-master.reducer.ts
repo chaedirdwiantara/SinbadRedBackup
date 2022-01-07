@@ -50,14 +50,40 @@ export const cartMaster = simplifyReducer(initialState, {
     state.data.forEach((invoiceGroup) => {
       const newBrands: models.CartBrand[] = [];
       invoiceGroup.brands.forEach((brand) => {
-        const newProducts = brand.products.filter(
-          (product) => product.productId !== payload.productId,
-        );
+        let initialTotalProductBrand = 0;
+        let totalProductsSelectedBrand = 0;
+        const newProducts = brand.products.filter((product) => {
+          if (product.productId !== payload.productId) {
+            if (product.selected === true) {
+              totalProductsSelectedBrand += 1;
+            }
+            initialTotalProductBrand += 1;
+            return product;
+          } else {
+            return product.productId !== payload.productId;
+          }
+        });
+
+        let brandSelected: boolean | 'indeterminate' = false;
+        if (
+          totalProductsSelectedBrand !== initialTotalProductBrand &&
+          totalProductsSelectedBrand > 0 &&
+          initialTotalProductBrand > 0
+        ) {
+          brandSelected = 'indeterminate';
+        } else if (
+          totalProductsSelectedBrand === initialTotalProductBrand &&
+          totalProductsSelectedBrand > 0 &&
+          initialTotalProductBrand > 0
+        ) {
+          brandSelected = true;
+        }
 
         if (newProducts.length > 0) {
           newBrands.push({
             ...brand,
             products: newProducts,
+            selected: brandSelected,
           });
         }
       });
@@ -82,5 +108,27 @@ export const cartMaster = simplifyReducer(initialState, {
   /** => Reset cart master */
   [types.RESET_CART_MASTER_DATA]() {
     return initialState;
+  },
+  /** =>  DELETE CART PRODUCT EMPTY STOCK FLAG */
+  [types.DELETE_CART_PRODUCT_EMPTY_STOCK](
+    state = initialState,
+    { payload }: models.DeleteCartProductEmptyStock,
+  ) {
+    const newData = state.dataEmptyStock.filter(
+      (product) => product.productId !== payload.productId,
+    );
+
+    return { ...state, dataEmptyStock: newData };
+  },
+  /** =>  DELETE CART PRODUCT NOT FOUND FLAG */
+  [types.DELETE_CART_PRODUCT_NOT_FOUND](
+    state = initialState,
+    { payload }: models.DeleteCartProductNotFound,
+  ) {
+    const newData = state.dataNotFound.filter(
+      (product) => product.productId !== payload.productId,
+    );
+
+    return { ...state, dataNotFound: newData };
   },
 });

@@ -84,6 +84,7 @@ interface ErrorProps {
   closeAction?: () => void;
   retryAction?: () => void;
   backAction?: () => void;
+  isCloseable?: boolean;
 }
 /** === COMPONENT === */
 const BottomSheetError: React.FC<ErrorProps> = (props) => {
@@ -126,8 +127,6 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
           default:
             return buttonClose();
         }
-      } else if (code === 401) {
-        return buttonToLogin();
       }
       return buttonClose();
     }
@@ -135,9 +134,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   };
   /** => check message */
   const message = (error: ErrorItemProps) => {
-    if (error.code === 401) {
-      return 'Anda belum login, silahkan login dulu';
-    } else if (error.code === undefined) {
+    if (error.code === undefined) {
       return 'Koneksi Anda terputus silahkan coba lagi';
     }
     return error.message;
@@ -184,18 +181,18 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
     );
   };
   /** => button login */
-  const buttonToLogin = () => {
-    return (
-      <SnbButton.Single
-        title={'Login'}
-        onPress={() => {
-          props.closeAction ? props.closeAction() : null;
-          NavigationAction.navigate('LoginPhoneView');
-        }}
-        type={'primary'}
-      />
-    );
-  };
+  // const buttonToLogin = () => {
+  //   return (
+  //     <SnbButton.Single
+  //       title={'Login'}
+  //       onPress={() => {
+  //         props.closeAction ? props.closeAction() : null;
+  //         NavigationAction.navigate('LoginPhoneView');
+  //       }}
+  //       type={'primary'}
+  //     />
+  //   );
+  // };
   /** => button call support */
   const buttonCallSupport = () => {
     return (
@@ -316,9 +313,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
     return props.error !== null ? (
       <View style={styles.contentTitleContainer}>
         <SnbText.H4 align={'center'}>
-          {props.error.code !== 401
-            ? `Terjadi Kendala di ${serviceName()}`
-            : 'Belum login nih'}
+          {`Terjadi Kendala di ${serviceName()}`}
         </SnbText.H4>
       </View>
     ) : null;
@@ -366,7 +361,16 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   };
   /** => main */
   return (
-    <SnbBottomSheet open={props.open} content={content()} size={'halfscreen'} />
+    <SnbBottomSheet
+      open={props.open && props.error?.code !== 401 && props.error !== null}
+      content={content()}
+      size={'halfscreen'}
+      closeAction={() =>
+        props.closeAction && props.isCloseable ? props.closeAction() : null
+      }
+      actionIcon={props.isCloseable ? 'close' : undefined}
+      title={props.isCloseable ? ' ' : undefined}
+    />
   );
 };
 /** === STYLE === */

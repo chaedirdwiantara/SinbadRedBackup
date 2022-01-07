@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -15,7 +15,7 @@ import {
   useDownloadProgress,
 } from '../../functions';
 import { contexts } from '@contexts';
-import { PermissionsAndroid, ActivityIndicator } from 'react-native';
+import { PermissionsAndroid, BackHandler } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
@@ -33,6 +33,18 @@ const HistoryInvoiceView: FC = () => {
     goBack();
     reset(dispatchHistory);
   };
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      goBackFunction();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   const modalToast = useModalToast();
   const dowloadProgress = useDownloadProgress();
   /** => function on click button download */

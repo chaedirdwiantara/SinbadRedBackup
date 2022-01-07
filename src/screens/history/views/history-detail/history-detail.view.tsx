@@ -1,6 +1,11 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useEffect, useReducer } from 'react';
-import { ScrollView, View, TouchableWithoutFeedback } from 'react-native';
+import {
+  ScrollView,
+  View,
+  TouchableWithoutFeedback,
+  RefreshControl,
+} from 'react-native';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -12,8 +17,8 @@ import {
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import Clipboard from '@react-native-clipboard/clipboard';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT COMPONENTS === */
+import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
 import {
   HistoryDetailCardDivider,
@@ -28,6 +33,7 @@ import HistoryDetailPaymentInformation from './history-detail-payment-informatio
 import HistoryPaymentVirtualAccount from './history-payment-virtual-account.view';
 import HistoryPaymentInstruction from './history-payment-instruction.view';
 import ModalBottomError from './history-error-modal-bottom.view';
+import ModalCallCs from '@screen/help/components/ModalCallCs';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toLocalDateTime } from '@core/functions/global/date-format';
@@ -42,20 +48,21 @@ import {
   goToHistoryDetailStatus,
   useModaBottomError,
   useActivateVa,
+  useModalNeedHelp,
 } from '../../functions';
-/** === IMPORT STYLE === */
-import { HistoryDetailStyle } from '../../styles';
 import {
   BillingStatus,
   PaymentType,
   ChannelType,
   OrderStatus,
 } from '../../functions/data';
-
+/** === IMPORT STYLE === */
+import { HistoryDetailStyle } from '../../styles';
 /** === TYPES === */
 type HistoryStackParamList = {
   Detail: { section: 'order' | 'payment'; id: string; billingId: string };
 };
+
 type HistoryDetailRouteProp = RouteProp<HistoryStackParamList, 'Detail'>;
 /** === COMPONENT === */
 const HistoryDetailView: FC = () => {
@@ -80,6 +87,7 @@ const HistoryDetailView: FC = () => {
   const activateVA = useActivateVa();
   const modalError = useModaBottomError();
   const modalToast = useModalToast();
+  const modalNeedHelp = useModalNeedHelp();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
     paymentInvoice,
@@ -90,10 +98,15 @@ const HistoryDetailView: FC = () => {
     activateVa,
   } = stateHistory;
   const pageLoading = paymentDetail.loading || detail.loading;
+  const pageRefreshing = paymentDetail.refresh || detail.refresh;
+  const refreshFetch = () => {
+    getPaymentDetail.refresh(dispatchHistory, params.billingId);
+    historyDetailAction.refresh(dispatchHistory, params.id, params.section);
+  };
   /** => get Payment and Order Detail */
   useEffect(() => {
     getPaymentDetail.detail(dispatchHistory, params.billingId);
-    historyDetailAction.fetch(dispatchHistory, params.id);
+    historyDetailAction.fetch(dispatchHistory, params.id, params.section);
   }, []);
   /** => on success get Invoice */
   useEffect(() => {
@@ -105,7 +118,7 @@ const HistoryDetailView: FC = () => {
   useEffect(() => {
     if (activateVa.data) {
       getPaymentDetail.detail(dispatchHistory, params.billingId);
-      historyDetailAction.fetch(dispatchHistory, params.id);
+      historyDetailAction.fetch(dispatchHistory, params.id, params.section);
     }
   }, [activateVa.data]);
   /** => on Error get Invoice */
@@ -174,12 +187,14 @@ const HistoryDetailView: FC = () => {
       />
     );
   };
+
   /** => Invoice Info */
   const renderInvoiceInfo = () => (
     <HistoryDetailCard
       title="Informasi Faktur"
       actionTitle="Lihat Faktur"
       actionLoading={paymentInvoice.loading}
+      disabledAction={params.billingId ? false : true}
       onActionClick={() => getInvoice(params.billingId)}>
       <HistoryCardItem
         title="Nomor Pesanan"
@@ -201,29 +216,64 @@ const HistoryDetailView: FC = () => {
           detail.data?.createdAt ? toLocalDateTime(detail.data?.createdAt) : '-'
         }
       />
-      <HistoryCardItem
-        title="Tanggal Pembatalan"
-        value={
-          detail.data?.cancelTime
-            ? toLocalDateTime(detail.data?.cancelTime)
-            : '-'
-        }
-      />
-      <HistoryCardItem
-        title="Tanggal Pengembalian"
-        value={
-          detail.data?.refundedTime
-            ? toLocalDateTime(detail.data?.refundedTime)
-            : '-'
-        }
-      />
+      {detail.data?.status !== 'cancel' &&
+        detail.data?.statusPayment !== 'refunded' &&
+        (detail.data?.deliveredDate !== null ? (
+          <HistoryCardItem
+            title="Tanggal Pengiriman"
+            value={toLocalDateTime(detail.data?.deliveredDate!)}
+          />
+        ) : (
+          <HistoryCardItem
+            title="Estimasi Tanggal Pengiriman"
+            value={toLocalDateTime(detail.data?.estDeliveredDate!)}
+          />
+        ))}
+      {detail.data?.status !== 'cancel' &&
+        detail.data?.status !== 'delivered' &&
+        detail.data?.status !== 'done' &&
+        detail.data?.statusPayment !== 'refunded' &&
+        (detail.data?.dueDate !== null ? (
+          <HistoryCardItem
+            title="Jatuh Tempo"
+            value={toLocalDateTime(detail.data?.dueDate!)}
+          />
+        ) : (
+          <HistoryCardItem
+            title="Estimasi Jatuh Tempo"
+            value={toLocalDateTime(detail.data?.estDueDate!)}
+          />
+        ))}
+      {detail.data?.status === 'cancel' &&
+        detail.data?.statusPayment !== 'refunded' && (
+          <HistoryCardItem
+            title="Tanggal Pembatalan"
+            value={
+              detail.data?.cancelTime
+                ? toLocalDateTime(detail.data?.cancelTime)
+                : '-'
+            }
+          />
+        )}
+      {detail.data?.statusPayment === 'refunded' ||
+        (detail.data?.statusPayment === 'waiting_for_refund' && (
+          <HistoryCardItem
+            title="Tanggal Pengembalian"
+            value={
+              detail.data?.refundedTime
+                ? toLocalDateTime(detail.data?.refundedTime)
+                : '-'
+            }
+          />
+        ))}
     </HistoryDetailCard>
   );
   /** => render Virtual Account Info */
   const renderVirtualAccount = () => {
     const dataPayment = paymentDetail.data;
     const statusOrder = detail.data?.status;
-    return dataPayment?.billingStatus !== BillingStatus.CANCEL ? (
+    return dataPayment?.billingStatus !== BillingStatus.CANCEL &&
+      dataPayment?.paymentChannel.id !== ChannelType.CASH ? (
       <HistoryPaymentVirtualAccount
         onClick={() => onVACoppied()}
         data={dataPayment}
@@ -260,24 +310,26 @@ const HistoryDetailView: FC = () => {
           title="Total Pembayaran Pesanan"
           value={
             dataPayment.totalPayment
-              ? toCurrency(dataPayment.totalPayment)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.totalPayment, { withFraction: false })
+              : toCurrency(0, { withFraction: false })
           }
         />
         <HistoryCardItem
           title="Total Pembayaran Pengiriman"
           value={
             dataPayment.deliveredTotalPayment
-              ? toCurrency(dataPayment.deliveredTotalPayment)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.deliveredTotalPayment, {
+                  withFraction: false,
+                })
+              : toCurrency(0, { withFraction: false })
           }
         />
         <HistoryCardItem
           title="Total Pengembalian"
           value={
             dataPayment.refundTotal
-              ? toCurrency(dataPayment.refundTotal)
-              : toCurrency(0)
+              ? toCurrency(dataPayment.refundTotal, { withFraction: false })
+              : toCurrency(0, { withFraction: false })
           }
           type="bold"
         />
@@ -323,6 +375,7 @@ const HistoryDetailView: FC = () => {
               products={detail.data?.orderParcelBonus ?? []}
               seeMore={seeMoreBonusProducts}
               toggleSeeMore={toggleSeeMoreBonusProducts}
+              type="bonus"
             />
           </>
         )}
@@ -418,9 +471,23 @@ const HistoryDetailView: FC = () => {
       <View />
     );
   };
+  /** === RENDER MODAL CALL CS === */
+  const renderCallCsModal = () => {
+    return modalNeedHelp.isOpen ? (
+      <ModalCallCs
+        open={modalNeedHelp.isOpen}
+        close={() => modalNeedHelp.setOpen(false)}
+        closeModal={() => modalNeedHelp.setOpen(false)}
+      />
+    ) : null;
+  };
   /** => Detail Payment Content */
   const renderPaymentDetailContent = () => (
-    <ScrollView scrollEnabled={!pageLoading}>
+    <ScrollView
+      scrollEnabled={!pageLoading}
+      refreshControl={
+        <RefreshControl refreshing={pageRefreshing!} onRefresh={refreshFetch} />
+      }>
       {!pageLoading ? (
         <>
           {renderStatus()}
@@ -442,7 +509,11 @@ const HistoryDetailView: FC = () => {
   );
   /** => Detail Order Content */
   const renderOrderDetailContent = () => (
-    <ScrollView scrollEnabled={!pageLoading}>
+    <ScrollView
+      scrollEnabled={!pageLoading}
+      refreshControl={
+        <RefreshControl refreshing={pageRefreshing!} onRefresh={refreshFetch} />
+      }>
       {!pageLoading ? (
         <>
           {renderStatus()}
@@ -465,6 +536,7 @@ const HistoryDetailView: FC = () => {
       {params.section === 'order'
         ? renderOrderDetailContent()
         : renderPaymentDetailContent()}
+      {renderCallCsModal()}
     </View>
   );
   /** => Footer */
@@ -474,8 +546,7 @@ const HistoryDetailView: FC = () => {
         ...HistoryDetailStyle.footer,
         paddingVertical: params.section === 'order' ? 16 : 24,
       }}>
-      <TouchableWithoutFeedback
-        onPress={() => console.log('Need help pressed')}>
+      <TouchableWithoutFeedback onPress={() => modalNeedHelp.setOpen(true)}>
         <View>
           <SnbText.B3 color={color.red50}>Butuh Bantuan?</SnbText.B3>
         </View>
@@ -493,6 +564,12 @@ const HistoryDetailView: FC = () => {
       {renderContent()}
       {renderFooter()}
       {renderToast()}
+      <BottomSheetError
+        open={Boolean(detail.error || paymentDetail.error)}
+        error={detail.error ?? paymentDetail.error}
+        closeAction={refreshFetch}
+        retryAction={refreshFetch}
+      />
     </SnbContainer>
   );
 };

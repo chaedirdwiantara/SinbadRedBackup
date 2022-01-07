@@ -21,7 +21,7 @@ interface Props {
   onPress?: () => void;
 }
 /** === COMPONENT === */
-const SnbCardButtonType3: FC<Props> = (props: any) => {
+const VANumberCard: FC<Props> = (props: any) => {
   const renderMid = () => {
     return (
       <View
@@ -117,8 +117,8 @@ const styles = StyleSheet.create({
   },
 });
 /** === DEFAULT PROPS === */
-SnbCardButtonType3.defaultProps = {
+VANumberCard.defaultProps = {
   testID: '',
 };
 /** === EXPORT COMPONENT === */
-export default SnbCardButtonType3;
+export default VANumberCard;

@@ -73,6 +73,7 @@ const DatePickerModal: FC<DatePickerModalProps> = ({
         <SnbDatepicker
           onSelectedDate={(date) => onChange(date)}
           buttonLabel="Terapkan Tanggal"
+          maxDate={new Date()}
         />
       </ScrollView>
     }
@@ -172,8 +173,14 @@ const HistoryFilterModalContent: FC<HistoryFilterModalContentProps> = ({
         onClose={() => setDateModalVisible(false)}
         onChange={(data) => {
           if (activeInput.type === 'start') {
+            data.date.setHours(0);
+            data.date.setMinutes(0);
+            data.date.setSeconds(0);
             onDateChange('start', data.date.toISOString());
           } else {
+            data.date.setHours(23);
+            data.date.setMinutes(59);
+            data.date.setSeconds(59);
             onDateChange('end', data.date.toISOString());
           }
 

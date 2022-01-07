@@ -109,7 +109,7 @@ const Content: React.FC = () => {
                 text = text.replace(/[^0-9]/g, '');
                 taxNumber.setType('default');
                 taxNumber.setValue(text);
-                if (text.length === 16 || text === '') {
+                if (text.length === 15 || text === '') {
                   taxNumber.setMessageError('');
                 } else {
                   taxNumber.setMessageError('Pastikan Nomor NPWP 15 Digit');

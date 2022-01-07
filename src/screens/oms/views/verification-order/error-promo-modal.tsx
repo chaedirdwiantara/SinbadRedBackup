@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Dimensions } from 'react-native';
 import {
   SnbBottomSheet,
   SnbText,
@@ -11,6 +11,7 @@ import {
 /** === IMPORT TYPE ===  */
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
+const { height } = Dimensions.get('window');
 /** === TYPE ===  */
 interface ErrorPromoModal {
   visible: boolean;
@@ -37,7 +38,7 @@ export const ErrorPromoModal: FC<ErrorPromoModal> = ({
         <View style={{ marginBottom: 8 }}>
           <SnbText.H4>Potongan Harga</SnbText.H4>
         </View>
-        <ScrollView style={{ maxHeight: 300 }}>
+        <ScrollView style={{ maxHeight: height * 0.2 }}>
           {amountPromoList.map((item, index) => {
             return (
               <React.Fragment>
@@ -86,7 +87,7 @@ export const ErrorPromoModal: FC<ErrorPromoModal> = ({
         <View style={{ marginBottom: 8 }}>
           <SnbText.H4>Bonus SKU</SnbText.H4>
         </View>
-        <ScrollView style={{ maxHeight: 300 }}>
+        <ScrollView style={{ maxHeight: height * 0.2 }}>
           {bonusPromoList.map((item, index) => {
             return (
               <React.Fragment>

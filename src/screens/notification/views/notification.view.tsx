@@ -9,13 +9,19 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack, useNotificationAction } from '../functions';
+import {
+  goBack,
+  useNotificationAction,
+  useStandardModalState,
+} from '../functions';
 import { useNotificationContext } from 'src/data/contexts/notification/useNotificationContext';
 import { contexts } from '@contexts';
 import * as models from '@models';
 import NotificationEmptyView from './notification-empty.view';
 import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
+import { NavigationAction } from '@navigation';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 const dataIcon = {
   order: {
@@ -78,6 +84,7 @@ const SINBAD_REJECT_MESSAGE =
 /** === COMPONENT === */
 const NotificationView: React.FC = () => {
   /** === HOOK === */
+  const notificationListError = useStandardModalState();
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [approvalStatus, setApprovalStatus] = useState('');
@@ -96,6 +103,16 @@ const NotificationView: React.FC = () => {
   React.useEffect(() => {
     notificationAction.list(dispatchNotification);
   }, []);
+  React.useEffect(() => {
+    if (notificationListState.error !== null) {
+      notificationListError.setOpen(true);
+    }
+  }, [notificationListState]);
+
+  const handleRetryGetNotification = () => {
+    notificationAction.refresh(dispatchNotification);
+    notificationListError.setOpen(false);
+  };
 
   const onHandleLoadMore = () => {
     if (listNotificationData) {
@@ -153,8 +170,12 @@ const NotificationView: React.FC = () => {
     item: models.NotificationListSuccessProps;
     index: number;
   }) => {
-    let title = dataIcon[item.type]?.title;
-    let message = item.description;
+    let title = item.title;
+    let image = dataIcon.special_offer.image;
+    if (item.type) {
+      image = dataIcon[item.type]?.image;
+    }
+    let message = item.body;
     switch (item?.type) {
       case 'registration': {
         title = 'Hai user_sinbad!';
@@ -162,7 +183,7 @@ const NotificationView: React.FC = () => {
       }
       case 'verification': {
         title = setApprovalStatusTitle(item?.data?.approvalStatus);
-        message = item.data ? item.description : SINBAD_REJECT_MESSAGE;
+        message = item.data ? item.body : SINBAD_REJECT_MESSAGE;
         break;
       }
       default:
@@ -172,28 +193,36 @@ const NotificationView: React.FC = () => {
     return (
       <TouchableWithoutFeedback
         onPress={() => {
-          if (item.type === 'registration' || item.type === 'verification') {
-            setModalTitle(title);
-            setModalMessage(message);
-            setApprovalStatus(item?.data?.approvalStatus);
-            setShowModal(true);
+          switch (item?.screen) {
+            case 'registration':
+            case 'verification':
+              setModalTitle(title);
+              setModalMessage(message);
+              setApprovalStatus(item?.data?.approvalStatus);
+              setShowModal(true);
+              break;
+            case 'HistoryDetailView':
+              NavigationAction.navigate(item?.screen, item.data);
           }
         }}>
         <View style={NotificationStyle.boxNotification} key={index}>
           <View>
-            <Image
-              source={dataIcon[item.type]?.image}
-              style={NotificationStyle.image44Contain}
-            />
+            <Image source={image} style={NotificationStyle.image44Contain} />
           </View>
           <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
             <View style={NotificationStyle.boxNotificationItemHeader}>
-              <SnbText.H4>{title}</SnbText.H4>
-              <SnbText.C1>
-                {item?.createdAt
-                  ? moment(new Date(item.createdAt)).format('DD-MM-YYYY HH:mm')
-                  : '-'}
-              </SnbText.C1>
+              <View style={{ flex: 3 }}>
+                <SnbText.H4>{title}</SnbText.H4>
+              </View>
+              <View style={{ flex: 1.5 }}>
+                <SnbText.C1>
+                  {item?.createdAt
+                    ? moment(new Date(item.createdAt)).format(
+                        'DD-MM-YYYY HH:mm',
+                      )
+                    : '-'}
+                </SnbText.C1>
+              </View>
             </View>
             <View style={{ flex: 1 }}>
               <SnbText.B3>{message}</SnbText.B3>
@@ -212,6 +241,15 @@ const NotificationView: React.FC = () => {
         content={renderModalContent()}
         title={' '}
         actionIcon={'close'}
+      />
+    );
+  };
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={notificationListError.isOpen}
+        error={notificationListState.error}
+        retryAction={handleRetryGetNotification}
       />
     );
   };
@@ -320,13 +358,9 @@ const NotificationView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
-      {!notificationListState.loading &&
-      notificationListState.data.length !== 0 ? (
-        content()
-      ) : (
-        <LoadingPage />
-      )}
+      {!notificationListState.loading ? content() : <LoadingPage />}
       {renderModal()}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };
