@@ -104,6 +104,13 @@ const QuestDetailView: FC = ({ route }: any) => {
           taskId: currentTaskId,
         });
         break;
+      case 'RecordStock':
+        NavigationAction.navigate('QuestTaskRecordStockView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
       default: {
         break;
       }
