@@ -15,10 +15,7 @@ import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import RegisterProgress from '../shared/register-progress.component';
 
-const Content: React.FC<{
-  successUpload: () => void;
-  failedUpload: () => void;
-}> = ({ successUpload, failedUpload }) => {
+const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
   const { merchantData, saveUserData } = useMerchant();
@@ -39,13 +36,13 @@ const Content: React.FC<{
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'ktp'
     ) {
-      successUpload();
+      SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
       saveUserData({ idImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      failedUpload();
+      SnbToast.show('Foto Gagal Diupload', 2500, { positionValue: 40 });
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
@@ -143,20 +140,10 @@ const Content: React.FC<{
 
 const RegisterStep2View: React.FC = () => {
   const { goBack } = useNavigation();
-  const toast = React.useRef<any>();
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
-      <Content
-        successUpload={() => toast.current.show('Foto Berhasil Diupload')}
-        failedUpload={() => toast.current.show('Foto Gagal Diupload')}
-      />
-      <SnbToast
-        ref={toast}
-        duration={3000}
-        position="bottom"
-        positionValue={40}
-      />
+      <Content />
     </SnbContainer>
   );
 };
