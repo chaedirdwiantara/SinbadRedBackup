@@ -15,7 +15,7 @@ interface ShoppingCartInvoiceGroupProps {
   setInvoiceGroups: (any: CartInvoiceGroup[]) => void;
   productSelectedCount: number;
   setProductSelectedCount: Dispatch<SetStateAction<number>>;
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>;
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>;
   totalProducts: number;
   sassionQty: number;
   setSassionQty: Dispatch<SetStateAction<number>>;

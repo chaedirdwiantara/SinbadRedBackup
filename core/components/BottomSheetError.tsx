@@ -362,7 +362,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   /** => main */
   return (
     <SnbBottomSheet
-      open={props.open && props.error?.code !== 401}
+      open={props.open && props.error?.code !== 401 && props.error !== null}
       content={content()}
       size={'halfscreen'}
       closeAction={() =>

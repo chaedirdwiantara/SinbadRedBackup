@@ -45,15 +45,15 @@ const UserSettingView: FC = () => {
       <SnbDialog
         title="Yakin keluar Sinbad ?"
         open={showConfirmation}
-        okText="Ya"
-        cancelText="Tidak"
+        okText="Tidak"
+        cancelText="Ya"
         cancel={() => {
-          setShowConfirmation(false);
-        }}
-        ok={() => {
           setShowConfirmation(false);
           logout();
           reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
+        }}
+        ok={() => {
+          setShowConfirmation(false);
         }}
         content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
       />

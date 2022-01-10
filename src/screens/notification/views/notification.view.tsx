@@ -9,7 +9,11 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-import { goBack, useNotificationAction } from '../functions';
+import {
+  goBack,
+  useNotificationAction,
+  useStandardModalState,
+} from '../functions';
 import { useNotificationContext } from 'src/data/contexts/notification/useNotificationContext';
 import { contexts } from '@contexts';
 import * as models from '@models';
@@ -17,6 +21,8 @@ import NotificationEmptyView from './notification-empty.view';
 import LoadingPage from '@core/components/LoadingPage';
 import NotificationStyle from '../styles/notification.style';
 import { NavigationAction } from '@navigation';
+import BottomSheetError from '@core/components/BottomSheetError';
+import { LoadingLoadMore } from '@core/components/Loading';
 
 const dataIcon = {
   order: {
@@ -79,6 +85,7 @@ const SINBAD_REJECT_MESSAGE =
 /** === COMPONENT === */
 const NotificationView: React.FC = () => {
   /** === HOOK === */
+  const notificationListError = useStandardModalState();
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [approvalStatus, setApprovalStatus] = useState('');
@@ -97,6 +104,16 @@ const NotificationView: React.FC = () => {
   React.useEffect(() => {
     notificationAction.list(dispatchNotification);
   }, []);
+  React.useEffect(() => {
+    if (notificationListState.error !== null) {
+      notificationListError.setOpen(true);
+    }
+  }, [notificationListState]);
+
+  const handleRetryGetNotification = () => {
+    notificationAction.refresh(dispatchNotification);
+    notificationListError.setOpen(false);
+  };
 
   const onHandleLoadMore = () => {
     if (listNotificationData) {
@@ -195,13 +212,15 @@ const NotificationView: React.FC = () => {
           </View>
           <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
             <View style={NotificationStyle.boxNotificationItemHeader}>
-              <View style={{flex: 3}}>
+              <View style={{ flex: 3 }}>
                 <SnbText.H4>{title}</SnbText.H4>
               </View>
-              <View style={{flex: 1.5}}>
+              <View style={{ flex: 1.5 }}>
                 <SnbText.C1>
                   {item?.createdAt
-                    ? moment(new Date(item.createdAt)).format('DD-MM-YYYY HH:mm')
+                    ? moment(new Date(item.createdAt)).format(
+                        'DD-MM-YYYY HH:mm',
+                      )
                     : '-'}
                 </SnbText.C1>
               </View>
@@ -225,6 +244,24 @@ const NotificationView: React.FC = () => {
         actionIcon={'close'}
       />
     );
+  };
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={notificationListError.isOpen}
+        error={notificationListState.error}
+        retryAction={handleRetryGetNotification}
+      />
+    );
+  };
+  const renderLoadMore = () => {
+    if (notificationListState.loadMore) {
+      return (
+        <View style={{ marginBottom: 16 }}>
+          <LoadingLoadMore />
+        </View>
+      );
+    }
   };
   /** => render message with supplier name */
   const renderMessageWithSupplierName = () => {
@@ -331,12 +368,10 @@ const NotificationView: React.FC = () => {
   return (
     <SnbContainer color="white">
       {header()}
-      {!notificationListState.loading ? (
-        content()
-      ) : (
-        <LoadingPage />
-      )}
+      {!notificationListState.loading ? content() : <LoadingPage />}
       {renderModal()}
+      {renderErrorModal()}
+      {renderLoadMore()}
     </SnbContainer>
   );
 };

@@ -1,8 +1,10 @@
 /** === IMPORT PACKAGE === */
 import { set, isEmpty } from 'lodash';
+import AsyncStorage from '@react-native-community/async-storage';
 import apiHost from './apiHost';
 import { NavigationAction } from '@navigation';
 import { uniqueId } from '@core/functions/global/device-data';
+import { sentryServiceGeneralError } from '@core/report/sentry/sentry-send';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
 /** === FUNCTION === */
@@ -14,12 +16,15 @@ const apiGeneral = async <T>(
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   params?: object,
 ): Promise<T> => {
+  /** === GET COOKIE FROM ASYNCSTORAGE === */
+  const cookieFromAsyncStorage = await AsyncStorage.getItem('@cookie');
   /** === SET HEADER === */
   const headers = {};
   set(headers, 'Accept', 'application/json');
   set(headers, 'Content-Type', 'application/json');
   set(headers, 'x-platform', 'sinbad-app');
   set(headers, 'x-device-id', uniqueId);
+  set(headers, 'set-cookie', 'testset');
   /** === SET BODY === */
   const reqBody = {
     method,
@@ -34,6 +39,13 @@ const apiGeneral = async <T>(
       body: JSON.stringify(params),
     });
   }
+  /** === DELETE COOKIE FROM ASYNCSTORAGE WHEN USER LOGOUT === */
+  const deleteCookie = async (response: any) => {
+    if (path === 'logout') {
+      await AsyncStorage.removeItem('@cookie');
+    }
+    return response;
+  };
   /** === HANDLE SUCCESS RESPONS === */
   const handleSuccess = (response: any) => {
     return response.json().then((data: T) => data);
@@ -74,6 +86,16 @@ const apiGeneral = async <T>(
   const throwFinalError = (
     error: ErrorProps & { error: string; statusCode: number },
   ) => {
+    sentryServiceGeneralError({
+      access,
+      path,
+      module,
+      version,
+      method,
+      params,
+      error,
+      cookie: cookieFromAsyncStorage,
+    });
     throw {
       message: error.message,
       errorMessage: error.errorMessage ? error.errorMessage : error.message,
@@ -88,6 +110,7 @@ const apiGeneral = async <T>(
     }${path}`,
     reqBody,
   )
+    .then(deleteCookie)
     .then(handleErrors)
     .then(handleSuccess)
     .catch(handleMainErrors);

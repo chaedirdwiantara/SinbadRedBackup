@@ -16,8 +16,11 @@ import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
 import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation }: any) => {
+  /** === STATE === */
+  const [modalError, setModalError] = React.useState(false);
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
@@ -57,6 +60,12 @@ const HomeView: React.FC = ({ navigation }: any) => {
       setCartId({ cartId: data.cartId });
     }
   }, [data.cartId]);
+
+  React.useEffect(() => {
+    if (me.error !== null && me.error.code === undefined) {
+      setModalError(true);
+    }
+  }, [me.error]);
   /** => header */
   const header = () => {
     return <HomeHeaderView headerChange={stateHeaderChange} />;
@@ -90,11 +99,25 @@ const HomeView: React.FC = ({ navigation }: any) => {
       </ScrollView>
     );
   };
+  /** => modal error connection */
+  const bottomSheetError = () => {
+    return (
+      <BottomSheetError
+        open={modalError}
+        error={me.error}
+        retryAction={() => {
+          actionRefresh(true);
+          setModalError(false);
+        }}
+      />
+    );
+  };
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
+      {bottomSheetError()}
     </SnbContainer>
   );
 };

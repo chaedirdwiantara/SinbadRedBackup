@@ -17,7 +17,7 @@ export interface CartProduct {
 export interface CartBrand {
   brandId: string;
   brandName: string;
-  selected: boolean;
+  selected: boolean | 'indeterminate';
   products: CartProduct[];
   selectedCount: number;
 }

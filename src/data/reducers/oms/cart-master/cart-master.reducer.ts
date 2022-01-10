@@ -50,14 +50,40 @@ export const cartMaster = simplifyReducer(initialState, {
     state.data.forEach((invoiceGroup) => {
       const newBrands: models.CartBrand[] = [];
       invoiceGroup.brands.forEach((brand) => {
-        const newProducts = brand.products.filter(
-          (product) => product.productId !== payload.productId,
-        );
+        let initialTotalProductBrand = 0;
+        let totalProductsSelectedBrand = 0;
+        const newProducts = brand.products.filter((product) => {
+          if (product.productId !== payload.productId) {
+            if (product.selected === true) {
+              totalProductsSelectedBrand += 1;
+            }
+            initialTotalProductBrand += 1;
+            return product;
+          } else {
+            return product.productId !== payload.productId;
+          }
+        });
+
+        let brandSelected: boolean | 'indeterminate' = false;
+        if (
+          totalProductsSelectedBrand !== initialTotalProductBrand &&
+          totalProductsSelectedBrand > 0 &&
+          initialTotalProductBrand > 0
+        ) {
+          brandSelected = 'indeterminate';
+        } else if (
+          totalProductsSelectedBrand === initialTotalProductBrand &&
+          totalProductsSelectedBrand > 0 &&
+          initialTotalProductBrand > 0
+        ) {
+          brandSelected = true;
+        }
 
         if (newProducts.length > 0) {
           newBrands.push({
             ...brand,
             products: newProducts,
+            selected: brandSelected,
           });
         }
       });
