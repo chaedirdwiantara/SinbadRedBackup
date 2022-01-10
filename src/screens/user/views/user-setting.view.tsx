@@ -20,11 +20,12 @@ const UserSettingView: FC = () => {
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { stateUser } = React.useContext(contexts.UserContext);
-  const toast = React.useRef<any>();
 
   React.useEffect(() => {
     if (stateUser.update.data !== null) {
-      toast.current?.show('Kata Sandi berhasil diperbaharui');
+      SnbToast.show('Kata Sandi berhasil diperbaharui', 2500, {
+        positionValue: 72,
+      });
     }
   }, [stateUser.update]);
   /** === VIEW === */
@@ -83,13 +84,6 @@ const UserSettingView: FC = () => {
       {header()}
       {content()}
       {modalConfirmation()}
-      <SnbToast
-        ref={toast}
-        fadeInDuration={1000}
-        fadeOutDuration={500}
-        duration={2500}
-        position="bottom"
-      />
     </SnbContainer>
   );
 };

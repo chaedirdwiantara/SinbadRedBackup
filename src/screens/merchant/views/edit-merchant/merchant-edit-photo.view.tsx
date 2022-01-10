@@ -88,7 +88,6 @@ const MerchantEditPhotoView = () => {
     contexts.GlobalContext,
   );
   const [imageUrl, setImageUrl] = React.useState<string | undefined>(' ');
-  const toast = React.useRef<any>();
 
   React.useEffect(() => {
     editProfileAction.reset(dispatchSupplier);
@@ -135,7 +134,10 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      toast.current?.show(`Upload Foto ${setType()} Gagal`);
+      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateGlobal.uploadImage]);
 
@@ -147,7 +149,10 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateMerchant.profileEdit.error !== null) {
-      toast.current?.show(`Update Foto ${setType()} Gagal`);
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateMerchant.profileEdit]);
 
@@ -159,7 +164,10 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
-      toast.current?.show(`Update Foto ${setType()} Gagal`);
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateMerchant.merchantEdit]);
 
@@ -281,12 +289,6 @@ const MerchantEditPhotoView = () => {
           />,
         )}
       </View>
-      <SnbToast
-        ref={toast}
-        duration={3000}
-        position="bottom"
-        positionValue={72}
-      />
     </SnbContainer>
   );
 };

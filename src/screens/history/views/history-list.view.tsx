@@ -70,7 +70,11 @@ const HistoryListView: FC = ({ navigation }: any) => {
         setActivePaymentStatus('');
       }
 
-      historyListActions.fetch(dispatchHistory, derivedQueryOptions);
+      historyListActions.fetch(dispatchHistory, {
+        startDate: date.start,
+        endDate: date.end,
+        search: keyword,
+      });
     }, [activeTab, isFiltered, isSearched]),
   );
 
@@ -226,6 +230,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusPayment: tag.status as models.PaymentStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     ) : (
       <HistoryListStatusTags
@@ -239,6 +244,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusOrder: tag.status as models.OrderStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     );
   /** => History List */

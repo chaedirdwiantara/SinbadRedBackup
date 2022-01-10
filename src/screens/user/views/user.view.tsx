@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { View, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
@@ -12,6 +12,8 @@ import {
   SnbCardButtonType2,
   SnbSvgIcon,
   SnbTextSeeMoreType1,
+  SnbButton,
+  SnbDialog,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -21,17 +23,23 @@ import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
+import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
 
 const UserView: FC = () => {
   /** === HOOK === */
   const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  const { logout } = useAuthAction();
+  const { reset } = useNavigation();
+  const [showConfirmation, setShowConfirmation] = React.useState(false);
+
   useFocusEffect(
     React.useCallback(() => {
       storeDetailAction.detail(dispatchUser);
     }, []),
   );
+
   /** === FUNCTION FOR HOOK === */
   const showBadge = (show: boolean) => {
     action(show);
@@ -188,9 +196,45 @@ const UserView: FC = () => {
   };
   /** => content */
   const content = () => {
-    if (stateUser.detail.loading || !stateUser.detail.data) {
-      return <LoadingPage />;
+    if (stateUser.detail.error && stateUser.detail.error.code !== 401) {
+      return (
+        <View style={{ flex: 1 }}>
+          <SnbTopNav.Type2
+            type="red"
+            title="Profil"
+            iconName={'exit_to_app'}
+            iconAction={() => setShowConfirmation(true)}
+          />
+          <View
+            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Image
+              source={require('@image/sinbad_image/cry_sinbad.png')}
+              style={{ height: 192, aspectRatio: 1 }}
+            />
+            <View style={{ alignItems: 'center', marginBottom: 10 }}>
+              <SnbText.H4>Terjadi Kesalahan</SnbText.H4>
+            </View>
+            <SnbText.B3 align="center">
+              {setErrorMessage(
+                stateUser.detail.error.code,
+                stateUser.detail.error.errorMessage,
+              )}
+            </SnbText.B3>
+            <View style={{ marginVertical: 8 }} />
+            <SnbButton.Dynamic
+              iconName="refresh"
+              type="tertiary"
+              size="small"
+              title="Coba Lagi"
+              disabled={false}
+              loading={false}
+              onPress={() => storeDetailAction.detail(dispatchUser)}
+            />
+          </View>
+        </View>
+      );
     }
+
     if (stateUser.detail.data) {
       return (
         <View>
@@ -203,11 +247,28 @@ const UserView: FC = () => {
         </View>
       );
     }
+    return <LoadingPage />;
   };
+
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
+      <SnbDialog
+        title="Yakin keluar Sinbad ?"
+        open={showConfirmation}
+        okText="Ya"
+        cancelText="Tidak"
+        cancel={() => {
+          setShowConfirmation(false);
+        }}
+        ok={() => {
+          setShowConfirmation(false);
+          logout();
+          reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
+        }}
+        content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
+      />
     </View>
   );
 };

@@ -21,7 +21,6 @@ const MerchantDetailAddressView: FC = () => {
   let mapRef = React.useRef<MapView>(null);
   const { resetMerchantData } = useMerchant();
   const { stateMerchant } = React.useContext(contexts.MerchantContext);
-  const toast = React.useRef<any>();
 
   React.useEffect(() => {
     if (storeAddress?.longitude !== null && storeAddress?.latitude !== null) {
@@ -48,7 +47,7 @@ const MerchantDetailAddressView: FC = () => {
 
   useEffect(() => {
     if (stateMerchant.merchantEdit.data !== null) {
-      toast.current.show('Data Berhasil Diperbaharui');
+      SnbToast.show('Data Berhasil Diperbaharui', 2500, { positionValue: 56 });
     }
   }, [stateMerchant]);
 
@@ -198,13 +197,6 @@ const MerchantDetailAddressView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
-      <SnbToast
-        ref={toast}
-        fadeInDuration={1000}
-        fadeOutDuration={500}
-        duration={2500}
-        position="bottom"
-      />
     </SnbContainer>
   );
 };

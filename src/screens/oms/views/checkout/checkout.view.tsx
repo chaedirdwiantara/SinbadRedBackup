@@ -115,6 +115,11 @@ const OmsCheckoutView: FC = () => {
   const [isExpiredSession, setExpiredSession] = useState(false);
   const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
 
+  const handleRetryCreateOrder = () => {
+    cartCheckedoutActions.fetch(dispatchShopingCart);
+    createOrders.create(dispatchCheckout);
+  };
+
   /** Set Loading Page */
   useEffect(() => {
     checkoutViewActions.fetch(dispatchCheckout);
@@ -440,6 +445,10 @@ const OmsCheckoutView: FC = () => {
         open={errorCreateOrders}
         error={stateCheckout.create.error}
         closeAction={() => handleBackToCart()}
+        retryAction={() => {
+          setErrorCreateOrders(false);
+          handleRetryCreateOrder();
+        }}
       />
     );
   };

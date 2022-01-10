@@ -135,7 +135,6 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
-        stateReserveStock.create.error.code = 40080300032;
         loadingVerificationToCheckout.setLoading(false);
         errorFetchModal.setErrorData(stateReserveStock.create.error);
       }
@@ -177,7 +176,6 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
-      stateReserveStock.detail.error.code = 40080300032;
       loadingVerificationToCheckout.setLoading(false);
       errorFetchModal.setErrorData(stateReserveStock.detail.error);
     }
@@ -216,7 +214,6 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
-        statePromo.reserveDiscount.create.error.code = 40030300032;
         loadingVerificationToCheckout.setLoading(false);
         errorFetchModal.setErrorData(statePromo.reserveDiscount.create.error);
       }
@@ -269,7 +266,6 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
-      statePromo.reserveDiscount.detail.error.code = 40030300032;
       loadingVerificationToCheckout.setLoading(false);
       errorFetchModal.setErrorData(statePromo.reserveDiscount.detail.error);
     }

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -71,10 +71,6 @@ const ProductDetailView: FC = () => {
     useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
-
-  /** === REF === */
-  const toastSuccessAddCart = useRef<any>();
-  const toastSuccessRegisterSupplier = useRef<any>();
 
   /** => actions */
   const addToCartActions = useAddToCartDetailActions();
@@ -287,7 +283,7 @@ const ProductDetailView: FC = () => {
     } else if (me.data === null) {
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
     }
   }, [dataProduct]);
 
@@ -296,7 +292,7 @@ const ProductDetailView: FC = () => {
     if (errorProduct !== null) {
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
       setIsAvailable(false);
       setModalErrorProductDetail(true);
     }
@@ -316,6 +312,9 @@ const ProductDetailView: FC = () => {
           //   sinbadStatus: me.data.approvalStatus,
           //   supplierStatus: null,
           // });
+          setTimeout(() => {
+            setLoadingButton(false);
+          }, 1500);
           setIsAvailable(false);
         } else {
           stockValidationActions.fetch(dispatchStock, {
@@ -343,7 +342,7 @@ const ProductDetailView: FC = () => {
 
   /** Listen success get stock */
   useEffect(() => {
-    if (dataStock) {
+    if (dataStock !== null) {
       if (
         me &&
         me.data &&
@@ -355,11 +354,11 @@ const ProductDetailView: FC = () => {
         setIsAvailable(false);
         setTimeout(() => {
           setLoadingButton(false);
-        }, 2500);
+        }, 1500);
       } else {
         setTimeout(() => {
           setLoadingButton(false);
-        }, 2500);
+        }, 1500);
       }
     }
   }, [dataStock]);
@@ -367,12 +366,14 @@ const ProductDetailView: FC = () => {
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && dataProduct) {
-      if (errorStock.code === 400 || errorStock.code === 10001) {
+      if (errorStock.code === 50080000025 || errorStock.code === 50080000036) {
         setIsAvailable(false);
+      } else if (errorStock.code === 50080000026) {
+        defaultProperties.stock = 0;
       }
       setTimeout(() => {
         setLoadingButton(false);
-      }, 2500);
+      }, 1500);
     }
   }, [errorStock && dataProduct]);
 
@@ -387,9 +388,10 @@ const ProductDetailView: FC = () => {
       }
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      if (toastSuccessRegisterSupplier.current) {
-        toastSuccessRegisterSupplier.current.show();
-      }
+      SnbToast.show('Berhasil kirim data ke supplier', 2500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [sendToSupplierData]);
 
@@ -406,9 +408,10 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      if (toastSuccessAddCart.current) {
-        toastSuccessAddCart.current.show();
-      }
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 12500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [addToCartData]);
 
@@ -555,7 +558,7 @@ const ProductDetailView: FC = () => {
             <UnavailableSkuFlag />
           )}
         </React.Fragment>
-      ) : (
+      ) : isAvailable ? (
         <ActionButton
           loading={loadingButton}
           title={'Tambah ke Keranjang'}
@@ -564,6 +567,8 @@ const ProductDetailView: FC = () => {
             handleOrderPress();
           }}
         />
+      ) : (
+        <UnavailableSkuFlag />
       )}
       <PromoModal
         visible={promoModalVisible}
@@ -607,22 +612,6 @@ const ProductDetailView: FC = () => {
           orderQty < dataProduct?.minQty
         }
         isFromProductDetail={true}
-      />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessAddCart}
-        message={'Produk berhasil ditambahkan ke keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast success register supplier */}
-      <SnbToast
-        ref={toastSuccessRegisterSupplier}
-        message={'Berhasil kirim data ke supplier'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError

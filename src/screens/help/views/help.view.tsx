@@ -24,10 +24,10 @@ const HelpView: FC = () => {
       name: 'FAQ',
       goTo: 'faq',
     },
-    {
-      name: 'Clear Cache',
-      goTo: 'clear_cache',
-    },
+    // {
+    //   name: 'Clear Cache',
+    //   goTo: 'clear_cache',
+    // },
   ]);
   /** === HOOK === */
   const callCsModal = useCallCsModal();

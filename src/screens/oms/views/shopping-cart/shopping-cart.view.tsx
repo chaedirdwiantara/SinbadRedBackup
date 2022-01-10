@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState, Fragment, useEffect, useRef } from 'react';
+import React, { FC, useState, Fragment, useEffect } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -20,7 +20,6 @@ import {
 } from '@screen/voucher/functions';
 import { useReserveDiscountAction } from '@screen/promo/functions';
 import { NavigationAction } from '@navigation';
-import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 import { contexts } from '@contexts';
 import {
@@ -72,9 +71,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     deleteProductEmptyStock,
     deleteProductNotFound,
   } = useCartMasterActions();
-  const [allProductsSelected, setAllProductsSelected] = useState<
-    boolean | 'indeterminate'
-  >(false);
+  const [allProductsSelected, setAllProductsSelected] =
+    useState<boolean>(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductRemoveSelected | null>(null);
@@ -96,11 +94,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [modalFailedCheckout, setModalFailedCheckout] = useState(false);
   const [modalFailedGetCart, setModalFailedGetCart] = useState(false);
 
-  /** === REF === */
-  const toastSuccessRemoveProduct = useRef<any>();
-  const toastFailedRemoveProduct = useRef<any>();
-
-  const { me } = useDataAuth();
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
@@ -200,17 +193,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const onCloseModalErrorCheckout = () => {
     cartUpdateActions.reset(dispatchShopingCart);
     setModalFailedCheckout(false);
-  };
-
-  /** => handle go back */
-  const handleRetyrErrorGetCart = () => {
-    setLoadingPage(true);
-    cartViewActions.fetch(dispatchShopingCart);
-    storeDetailAction.detail(dispatchUser);
-    if (checkoutMaster.cartId) {
-      reserveDiscountAction.del(dispatchPromo, checkoutMaster.cartId);
-      reserveStockAction.del(dispatchReserveStock, checkoutMaster.cartId);
-    }
   };
 
   /** => handle go back */
@@ -317,9 +299,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mounted and focus */
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (me.data === null) {
-        NavigationAction.navigate('LoginPhoneView');
-      }
       setLoadingPage(true);
       cartViewActions.fetch(dispatchShopingCart);
       storeDetailAction.detail(dispatchUser);
@@ -385,7 +364,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   useEffect(() => {
     /** => make sure data cart and data information stock is ready */
     if (cartViewData !== null && stockInformationData !== null) {
-      setModalFailedGetCart(false);
       let totalProductsSelected = 0;
       let initialTotalProduct = 0;
 
@@ -402,9 +380,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         /** Looping brand */
         invoiceGroup.brands.forEach((brand) => {
           let isEmptyProduct = true; //flag if product of brand is empty array
-          let brandSelected: boolean | 'indeterminate' = false;
-          let initialTotalProductBrand = 0;
-          let totalProductsSelectedBrand = 0;
+          let brandSelected = false;
           const products: CartProduct[] = [];
 
           /** Looping product */
@@ -455,10 +431,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 /** => if status selected is true */
                 if (product.selected) {
                   totalProductsSelected += 1;
-                  totalProductsSelectedBrand += 1;
+                  brandSelected = true;
                 }
                 initialTotalProduct += 1;
-                initialTotalProductBrand += 1;
 
                 /** => add to products of brand */
                 products.push({
@@ -532,10 +507,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             } else if (product.qty >= product.stock) {
               if (product.selected) {
                 totalProductsSelected += 1;
-                totalProductsSelectedBrand += 1;
+                brandSelected = true;
               }
               initialTotalProduct += 1;
-              initialTotalProductBrand += 1;
 
               const maxQtyAfterMinimum = product.stock - product.minQty;
               const qty =
@@ -560,10 +534,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             } else {
               if (product.selected) {
                 totalProductsSelected += 1;
-                totalProductsSelectedBrand += 1;
+                brandSelected = true;
               }
               initialTotalProduct += 1;
-              initialTotalProductBrand += 1;
               products.push(product);
 
               /** => add to data product for update cart */
@@ -577,20 +550,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               isEmptyProduct = false;
             }
           });
-
-          if (
-            totalProductsSelectedBrand !== initialTotalProductBrand &&
-            totalProductsSelectedBrand > 0 &&
-            initialTotalProductBrand > 0
-          ) {
-            brandSelected = 'indeterminate';
-          } else if (
-            totalProductsSelectedBrand === initialTotalProductBrand &&
-            totalProductsSelectedBrand > 0 &&
-            initialTotalProductBrand > 0
-          ) {
-            brandSelected = true;
-          }
 
           if (!isEmptyProduct) {
             brands.push({
@@ -608,12 +567,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       });
 
       if (
-        totalProductsSelected !== initialTotalProduct &&
-        totalProductsSelected > 0 &&
-        initialTotalProduct > 0
-      ) {
-        setAllProductsSelected('indeterminate');
-      } else if (
         totalProductsSelected === initialTotalProduct &&
         totalProductsSelected > 0 &&
         initialTotalProduct > 0
@@ -649,7 +602,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (productRemoveSelected.selected) {
         setProductSelectedCount(productSelectedCount - 1);
       }
-      toastSuccessRemoveProduct.current.show();
+      SnbToast.show('Produk berhasil dihapus dari keranjang', 2500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
       if (productRemoveSelected.type === 'data') {
         deleteProduct({ productId: productRemoveSelected.productId });
       } else if (productRemoveSelected.type === 'dataEmptyStock') {
@@ -659,27 +615,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
-      cartTotalProductActions.fetch();
-
-      if (productRemoveSelected.selected) {
-        if (productSelectedCount - 1 === totalProducts - 1) {
-          setAllProductsSelected(true);
-        } else if (productSelectedCount <= 1) {
-          setAllProductsSelected(false);
-        } else {
-          setAllProductsSelected('indeterminate');
-        }
-      } else {
-        if (productSelectedCount === totalProducts - 1) {
-          setAllProductsSelected(true);
-        } else if (productSelectedCount <= 1) {
-          setAllProductsSelected(false);
-        } else {
-          setAllProductsSelected('indeterminate');
-        }
-      }
-      setProductRemoveSelected(null);
       setModalConfirmationRemoveProductVisible(false);
+      cartTotalProductActions.fetch();
+      setProductRemoveSelected(null);
+      if (productSelectedCount === totalProducts - 1) {
+        setAllProductsSelected(true);
+      }
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
@@ -687,7 +628,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** Listen error remove */
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartError !== null) {
-      toastFailedRemoveProduct.current.show();
+      SnbToast.show('Produk gagal dihapus dari keranjang', 2500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
       setLoadingRemoveProduct(false);
       cartUpdateActions.reset(dispatchShopingCart);
     }
@@ -827,22 +771,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         cancel={handleGoBackHeader}
         loading={loadingCreateVerificationOrder || updateCartLoading}
       />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessRemoveProduct}
-        message={'Produk berhasil dihapus dari keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast failed add cart */}
-      <SnbToast
-        ref={toastFailedRemoveProduct}
-        message={'Produk gagal dihapus dari keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalFailedCheckout}
@@ -855,7 +783,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={modalFailedGetCart}
         error={cartViewError}
         closeAction={handleGoBackErrorGetCart}
-        retryAction={handleRetyrErrorGetCart}
       />
     </SnbContainer>
   );

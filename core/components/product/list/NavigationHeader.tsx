@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, Dispatch, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
@@ -17,7 +17,7 @@ interface NavigationHeaderProps {
   type?: ProductHeaderType;
   title?: string;
   keyword: string;
-  setSearchKeyword: Dispatch<SetStateAction<string>>;
+  onKeywordChange: (keyword: string) => void;
   onSearch: () => void;
   onSearchClear: () => void;
 }
@@ -26,7 +26,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   type = 'default',
   title = 'Product',
   keyword,
-  setSearchKeyword,
+  onKeywordChange,
   onSearch,
   onSearchClear,
 }) => {
@@ -52,7 +52,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           value={keyword}
           clearText={onSearchClear}
           enter={onSearch}
-          onChangeText={(text) => setSearchKeyword(text)}
+          onChangeText={(text) => onKeywordChange(text)}
           icon1Name="home"
           icon1Action={goToHome}
           icon2Value={dataTotalProductCart.totalProduct}
