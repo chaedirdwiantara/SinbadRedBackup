@@ -43,7 +43,6 @@ import {
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
-  useModalToast,
   useHistoryDetailAction,
   goToHistoryDetailStatus,
   useModaBottomError,
@@ -86,7 +85,6 @@ const HistoryDetailView: FC = () => {
   const historyDetailAction = useHistoryDetailAction();
   const activateVA = useActivateVa();
   const modalError = useModaBottomError();
-  const modalToast = useModalToast();
   const modalNeedHelp = useModalNeedHelp();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
@@ -145,8 +143,6 @@ const HistoryDetailView: FC = () => {
     const accountVa = paymentDetail.data?.accountVaNo || '';
     Clipboard.setString(accountVa.toString());
     SnbToast.show('Copied To Clipboard', 2000);
-    modalToast.setOpen(true);
-    modalToast.toast.current.show();
   };
   /** => function to goBack */
   const goBackAction = () => {
