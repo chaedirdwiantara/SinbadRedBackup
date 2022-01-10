@@ -11,6 +11,8 @@ import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import moment from 'moment';
+import { LoadingLoadMore, LoadingPage } from '@core/components/Loading';
+
 /** === IMPORT FUNCTION HERE === */
 import { MerchantHookFunc } from '../../function';
 /** === IMPORT STYLE HERE === */
@@ -131,13 +133,15 @@ const MerchantSupplierInformationView: FC = () => {
             marginTop: 16,
           }}
         />
-        {stateMerchant.list.loadMore ? (
-          <View style={{ alignItems: 'center' }}>
-            <SnbText.B1>Loading ...</SnbText.B1>
-          </View>
-        ) : null}
       </View>
     );
+  };
+  const loadingLoadMore = () => {
+    return stateMerchant.list.loadMore ? (
+      <View style={{ alignItems: 'center' }}>
+        <LoadingLoadMore />
+      </View>
+    ) : null;
   };
   const loadingPage = () => {
     return (
@@ -147,7 +151,7 @@ const MerchantSupplierInformationView: FC = () => {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <SnbText.B1>Loading ...</SnbText.B1>
+        <LoadingPage />
       </View>
     );
   };
@@ -156,6 +160,7 @@ const MerchantSupplierInformationView: FC = () => {
     <SnbContainer color={'white'}>
       {header()}
       {!stateMerchant.list.loading ? content() : loadingPage()}
+      {loadingLoadMore()}
     </SnbContainer>
   );
 };
