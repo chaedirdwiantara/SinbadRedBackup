@@ -111,7 +111,7 @@ pipeline {
                 script{
                     withAWS(credentials: "${AWS_CREDENTIAL}") {
                         s3Download(file: 'android/app/google-services.json', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/google-services.json", force: true)
-                        s3Download(file: 'android/app/mplus_sinbad.jks', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/mplus_sinbad.jks", force: true)
+                        s3Download(file: 'android/app/sinbad-app.jks', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/sinbad-app.jks", force: true)
                         s3Download(file: '.env', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/.env", force: true)
                         s3Download(file: 'proguard-rules.pro', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/android/app/proguard-rules.pro", force: true)
                     }
