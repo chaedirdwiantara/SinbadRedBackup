@@ -1,6 +1,0 @@
-Sinbad Red versi 4.31.4
-
-Thank you for using Sinbad!
-
-What's  new in this version:
-- Bug Fix and Performance
