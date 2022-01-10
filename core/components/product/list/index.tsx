@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
 import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -106,10 +106,6 @@ const ProductList: FC<ProductListProps> = ({
     useState(false);
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
-
-  /** === REF === */
-  const toastSuccessAddCart = useRef<any>();
-  const toastSuccessRegisterSupplier = useRef<any>();
 
   const {
     sortModalVisible,
@@ -268,9 +264,10 @@ const ProductList: FC<ProductListProps> = ({
       setProductSelected(null);
       handleCloseModal();
       cartTotalProductActions.fetch();
-      if (toastSuccessAddCart.current) {
-        toastSuccessAddCart.current.show();
-      }
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [addToCartData]);
 
@@ -286,9 +283,10 @@ const ProductList: FC<ProductListProps> = ({
     if (sendToSupplierData !== null) {
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      if (toastSuccessRegisterSupplier.current) {
-        toastSuccessRegisterSupplier.current.show();
-      }
+      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [sendToSupplierData]);
 
@@ -561,22 +559,6 @@ const ProductList: FC<ProductListProps> = ({
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}
         close={handleCloseModal}
-      />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessAddCart}
-        message={'Produk berhasil ditambahkan ke keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast success register supplier */}
-      <SnbToast
-        ref={toastSuccessRegisterSupplier}
-        message={'Berhasil kirim data ke supplier'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal loading horizontal */}
       <SnbBottomSheet

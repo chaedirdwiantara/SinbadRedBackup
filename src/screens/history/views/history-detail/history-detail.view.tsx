@@ -143,6 +143,7 @@ const HistoryDetailView: FC = () => {
   const onVACoppied = () => {
     const accountVa = paymentDetail.data?.accountVaNo || '';
     Clipboard.setString(accountVa.toString());
+    SnbToast.show('Copied To Clipboard', 2000);
     modalToast.setOpen(true);
     modalToast.toast.current.show();
   };
@@ -408,17 +409,6 @@ const HistoryDetailView: FC = () => {
       <View />
     );
   };
-  /** render Toast */
-  const renderToast = () => {
-    return (
-      <SnbToast
-        ref={modalToast.toast}
-        duration={1500}
-        position={'center'}
-        message="Copied To Clipboard"
-      />
-    );
-  };
   /** => render countdown */
   const renderCountDown = () => {
     const expiredPaymentTime = paymentDetail.data?.expiredPaymentTime;
@@ -562,7 +552,6 @@ const HistoryDetailView: FC = () => {
       />
       {renderContent()}
       {renderFooter()}
-      {renderToast()}
     </SnbContainer>
   );
 };

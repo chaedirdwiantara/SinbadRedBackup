@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState, Fragment, useEffect, useRef } from 'react';
+import React, { FC, useState, Fragment, useEffect } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -93,10 +93,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const [isFocus, setIsFocus] = useState(false);
   const [modalFailedCheckout, setModalFailedCheckout] = useState(false);
   const [modalFailedGetCart, setModalFailedGetCart] = useState(false);
-
-  /** === REF === */
-  const toastSuccessRemoveProduct = useRef<any>();
-  const toastFailedRemoveProduct = useRef<any>();
 
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { checkoutMaster } = useCheckoutMaster();
@@ -582,7 +578,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (productRemoveSelected.selected) {
         setProductSelectedCount(productSelectedCount - 1);
       }
-      toastSuccessRemoveProduct.current.show();
+      SnbToast.show('Produk berhasil dihapus dari keranjang', 2500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
       if (productRemoveSelected.type === 'data') {
         deleteProduct({ productId: productRemoveSelected.productId });
       } else if (productRemoveSelected.type === 'dataEmptyStock') {
@@ -605,7 +604,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** Listen error remove */
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartError !== null) {
-      toastFailedRemoveProduct.current.show();
+      SnbToast.show('Produk gagal dihapus dari keranjang', 2500, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
       setLoadingRemoveProduct(false);
       cartUpdateActions.reset(dispatchShopingCart);
     }
@@ -744,22 +746,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         cancelText={'Ya'}
         cancel={handleGoBackHeader}
         loading={loadingCreateVerificationOrder || updateCartLoading}
-      />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessRemoveProduct}
-        message={'Produk berhasil dihapus dari keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast failed add cart */}
-      <SnbToast
-        ref={toastFailedRemoveProduct}
-        message={'Produk gagal dihapus dari keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
