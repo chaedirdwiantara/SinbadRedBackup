@@ -6,6 +6,7 @@ import StatusBarGlobal from './core/components/StatusBarGlobal';
 import MainNavigator from './core/navigations/MainNavigator';
 import PushNotification from './core/components/PushNotification';
 import SentryCore from './core/report/sentry/SentryCore';
+import Toast from './core/components/Toast';
 
 const Main = () => {
   return (
@@ -15,6 +16,7 @@ const Main = () => {
           <StatusBarGlobal />
           <PushNotification />
           <MainNavigator />
+          <Toast />
         </PersistGate>
       </Provider>
     </SentryCore>

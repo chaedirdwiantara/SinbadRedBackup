@@ -67,7 +67,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
-  const toast = React.useRef<any>();
 
   useEffect(() => {
     if (
@@ -82,7 +81,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      toast.current?.show('Data Gagal Diperbaharui');
+      SnbToast.show('Data Gagal Diperbaharui', 2500, { positionValue: 56 });
     }
   }, [stateMerchant]);
 
@@ -587,12 +586,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </ScrollView>
         {renderButton()}
       </KeyboardAvoidingView>
-      <SnbToast
-        ref={toast}
-        duration={3000}
-        position="bottom"
-        positionValue={72}
-      />
     </View>
   );
 };
