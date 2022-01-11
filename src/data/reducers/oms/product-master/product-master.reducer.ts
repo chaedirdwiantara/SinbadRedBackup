@@ -76,4 +76,8 @@ export const productMasterCart = simplifyReducer(initialState, {
       data: result,
     };
   },
+  /** => Reset cart master */
+  [types.RESET_CART_MASTER_DATA]() {
+    return initialState;
+  },
 });
