@@ -156,7 +156,7 @@ pipeline {
                 stage('Install Yarn & React') {
                     steps {
                         sshagent(credentials : ['ssh-sinbad']) {
-                            sh "yarn global add react-native-cli create-react-native-app expo-cli"
+                            sh "yarn global add react-native-cli create-react-native-app"
                             sh "yarn install --frozen-lockfile"
                         }
                     }
