@@ -408,7 +408,7 @@ const ProductDetailView: FC = () => {
     if (addToCartData !== null) {
       handleCloseModal();
       cartTotalProductActions.fetch();
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 12500, {
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
