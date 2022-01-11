@@ -143,13 +143,13 @@ export const HistoryCard: FC<HistoryCardProps> = ({
         {finalPrice || finalQty ? (
           <View style={[HistoryStyle.cardFooterRow, { marginBottom: 8 }]}>
             {/* Should be styled with strikethrough */}
-            {finalPrice && (
+            {typeof finalPrice !== 'undefined' && (
               <SnbText.C2 color={color.black40}>
                 {toCurrency(price, { withFraction: false })}
               </SnbText.C2>
             )}
             {/* Should be styled with strikethrough */}
-            {finalQty && (
+            {typeof finalQty !== 'undefined' && (
               <SnbText.C2 align="right" color={color.black40}>
                 {`QTY: ${qty}`}
               </SnbText.C2>
