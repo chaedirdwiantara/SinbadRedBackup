@@ -71,8 +71,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     deleteProductEmptyStock,
     deleteProductNotFound,
   } = useCartMasterActions();
-  const [allProductsSelected, setAllProductsSelected] =
-    useState<boolean>(false);
+  const [allProductsSelected, setAllProductsSelected] = useState<
+    boolean | 'indeterminate'
+  >(false);
   const [productSelectedCount, setProductSelectedCount] = useState(0);
   const [productRemoveSelected, setProductRemoveSelected] =
     useState<IProductRemoveSelected | null>(null);
@@ -602,7 +603,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (productRemoveSelected.selected) {
         setProductSelectedCount(productSelectedCount - 1);
       }
-      SnbToast.show('Produk berhasil dihapus dari keranjang', 2500, {
+      SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -628,7 +629,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** Listen error remove */
   useEffect(() => {
     if (productRemoveSelected !== null && updateCartError !== null) {
-      SnbToast.show('Produk gagal dihapus dari keranjang', 2500, {
+      SnbToast.show('Produk gagal dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });

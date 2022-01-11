@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { useContext } from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native';
+import { View, ScrollView, FlatList, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import {
   SnbContainer,
@@ -27,6 +21,7 @@ import { contexts } from '@contexts';
 import { NavigationAction } from '@navigation';
 import LoadingPage from '@core/components/LoadingPage';
 import { BannerDetailStyles } from '../styles';
+import { useDataAuth } from '@core/redux/Data';
 
 interface RecommendedProduct {
   id: string;
@@ -112,6 +107,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
   const bannerAction = useBannerAction();
+  const { me } = useDataAuth();
   const bannerDetailState = stateBanner.bannerGeneral.detail;
   /** === HOOK === */
   const { dataTotalProductCart } = useCartTotalProductActions();
@@ -131,7 +127,13 @@ const BannerDetailView: React.FC = ({ route }: any) => {
           type={'transparent1'}
           backAction={() => goBack()}
           title={''}
-          iconAction={() => NavigationAction.navigate('OmsShoppingCartView')}
+          iconAction={() => {
+            if (me.data === null) {
+              NavigationAction.navigate('LoginPhoneView');
+            } else {
+              NavigationAction.navigate('NotificationView');
+            }
+          }}
           iconName={'cart'}
           iconValue={dataTotalProductCart.totalProduct}
         />
