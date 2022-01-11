@@ -8,7 +8,9 @@ import {
   goToHome,
   goToSearch,
   goToShoppingCart,
+  backToLogin,
 } from '@core/functions/product';
+import { useDataAuth } from '@core/redux/Data';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
@@ -31,6 +33,16 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   onSearchClear,
 }) => {
   const { dataTotalProductCart } = useCartTotalProductActions();
+  const { me } = useDataAuth();
+
+  const validateCartVisit = () => {
+    if (me.data === null) {
+      backToLogin();
+    } else {
+      goToShoppingCart();
+    }
+  };
+
   return (
     <View>
       {type === 'default' ? (
@@ -42,7 +54,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           icon1Action={goToSearch}
           icon2Value={dataTotalProductCart.totalProduct}
           icon2Name="cart"
-          icon2Action={goToShoppingCart}
+          icon2Action={validateCartVisit}
         />
       ) : (
         <SnbTopNav.Type10
@@ -57,7 +69,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           icon1Action={goToHome}
           icon2Value={dataTotalProductCart.totalProduct}
           icon2Name="cart"
-          icon2Action={goToShoppingCart}
+          icon2Action={validateCartVisit}
         />
       )}
     </View>

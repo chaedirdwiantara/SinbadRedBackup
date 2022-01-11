@@ -101,3 +101,7 @@ export const goToShoppingCart = () => {
 export const goToProductDetail = (id: string) => {
   NavigationAction.navigate('ProductDetailView', { id });
 };
+
+export const backToLogin = () => {
+  NavigationAction.navigate('LoginPhoneView');
+};
