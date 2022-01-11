@@ -312,7 +312,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, checkoutMaster.cartId]);
 
   NavigationAction.useCustomBackHardware(() => {
     if (dataProductMasterCart.length > 0) {
@@ -592,12 +592,27 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       setLoadingRemoveProduct(false);
       setSassionQty(Math.random() * 10000000);
-      setModalConfirmationRemoveProductVisible(false);
       cartTotalProductActions.fetch();
-      setProductRemoveSelected(null);
-      if (productSelectedCount === totalProducts - 1) {
-        setAllProductsSelected(true);
+
+      if (productRemoveSelected.selected) {
+        if (productSelectedCount - 1 === totalProducts - 1) {
+          setAllProductsSelected(true);
+        } else if (productSelectedCount <= 1) {
+          setAllProductsSelected(false);
+        } else {
+          setAllProductsSelected('indeterminate');
+        }
+      } else {
+        if (productSelectedCount === totalProducts - 1) {
+          setAllProductsSelected(true);
+        } else if (productSelectedCount <= 1) {
+          setAllProductsSelected(false);
+        } else {
+          setAllProductsSelected('indeterminate');
+        }
       }
+      setProductRemoveSelected(null);
+      setModalConfirmationRemoveProductVisible(false);
       cartUpdateActions.reset(dispatchShopingCart);
     }
   }, [productRemoveSelected, updateCartData]);
