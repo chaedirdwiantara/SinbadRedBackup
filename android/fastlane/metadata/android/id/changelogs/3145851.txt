@@ -1,5 +1,0 @@
-Hai, Pemilik Toko! Kami baru saja merilis fitur Verifikasi Nomor Telepon dan Nomor Rekening Bank. Dengan melakukan Verifikasi Nomor Telepon, akun Anda menjadi lebih aman dan dengan melakukan Verifikasi Nomor Rekening Bank, Anda dapat menikmati keuntungan yang ada di Sinbad.
-
-Di versi ini, tampilan pemilihan produk diperbarui untuk memudahkan anda dalam bertansaksi. Disamping itu, toko bisa mengetahui alasan order dibatalkan oleh supplier!
-
-Semakin banyak belanja, semakin untung!
