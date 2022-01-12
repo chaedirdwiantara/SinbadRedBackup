@@ -21,9 +21,13 @@ const UserSettingView: FC = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { stateUser } = React.useContext(contexts.UserContext);
   const toast = React.useRef<any>();
+  const [isMounted, setIsmounted] = useState(true);
 
   React.useEffect(() => {
-    return () => setShowConfirmation(false);
+    return () => {
+      setIsmounted(false);
+      setShowConfirmation(false);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -79,7 +83,11 @@ const UserSettingView: FC = () => {
           type="secondary"
           title="Log Out"
           disabled={false}
-          onPress={() => setShowConfirmation(true)}
+          onPress={() => {
+            setTimeout(() => {
+              isMounted && setShowConfirmation(true);
+            }, 50);
+          }}
         />
       </ScrollView>
     );
