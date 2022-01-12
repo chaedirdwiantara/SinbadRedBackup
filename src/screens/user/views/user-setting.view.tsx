@@ -23,6 +23,10 @@ const UserSettingView: FC = () => {
   const toast = React.useRef<any>();
 
   React.useEffect(() => {
+    return () => setShowConfirmation(false);
+  }, []);
+
+  React.useEffect(() => {
     if (stateUser.update.data !== null) {
       toast.current?.show('Kata Sandi berhasil diperbaharui');
     }
@@ -65,7 +69,10 @@ const UserSettingView: FC = () => {
         <View>
           <SnbListButtonType2
             title={'Ganti Kata Sandi'}
-            onPress={() => NavigationAction.navigate('UserChangePasswordView')}
+            onPress={() => {
+              setShowConfirmation(false);
+              NavigationAction.navigate('UserChangePasswordView');
+            }}
           />
         </View>
         <SnbButton.Single
