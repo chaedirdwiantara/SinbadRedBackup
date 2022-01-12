@@ -59,27 +59,26 @@ const Content: React.FC = () => {
           secureTextEntry={secureTextEntry}
         />
       </View>
-      <View style={{ marginTop: 32, height: 72 }}>
-        <SnbButton.Single
-          title="Masuk"
-          onPress={() => {
-            password.setMessageError('');
-            const data = {
-              username: storeID.value,
-              password: password.value,
-            };
-            loginUserName(data);
-          }}
-          type="primary"
-          loading={loginIDState.loading}
-          disabled={
-            storeID.value === '' ||
-            password.value === '' ||
-            loginIDState.loading ||
-            loginIDState.errorID
-          }
-        />
-      </View>
+      <View style={{ marginTop: 32 }} />
+      <SnbButton.Single
+        title="Masuk"
+        onPress={() => {
+          password.setMessageError('');
+          const data = {
+            username: storeID.value,
+            password: password.value,
+          };
+          loginUserName(data);
+        }}
+        type="primary"
+        loading={loginIDState.loading}
+        disabled={
+          storeID.value === '' ||
+          password.value === '' ||
+          loginIDState.loading ||
+          loginIDState.errorID
+        }
+      />
       <View style={loginPhoneStyles.registerLink}>
         <View>
           <SnbText.B3>Belum punya akun Sinbad?</SnbText.B3>
