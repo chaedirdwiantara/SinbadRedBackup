@@ -24,7 +24,6 @@ const apiGeneral = async <T>(
   set(headers, 'Content-Type', 'application/json');
   set(headers, 'x-platform', 'sinbad-app');
   set(headers, 'x-device-id', uniqueId);
-  set(headers, 'set-cookie', 'testset');
   /** === SET BODY === */
   const reqBody = {
     method,

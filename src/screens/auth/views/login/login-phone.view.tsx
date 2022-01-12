@@ -60,22 +60,21 @@ const Content: React.FC = () => {
       <View style={{ height: 84, padding: 16 }}>
         <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
-      <View style={{ marginTop: 32, height: 72 }}>
-        <SnbButton.Single
-          title="Selanjutnya"
-          onPress={() => {
-            resetRequestOTP();
-            requestOTP({ mobilePhone: phone.value });
-          }}
-          type="primary"
-          loading={requestOTPState.loading}
-          disabled={
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            requestOTPState.loading
-          }
-        />
-      </View>
+      <View style={{ marginTop: 32 }} />
+      <SnbButton.Single
+        title="Selanjutnya"
+        onPress={() => {
+          resetRequestOTP();
+          requestOTP({ mobilePhone: phone.value });
+        }}
+        type="primary"
+        loading={requestOTPState.loading}
+        disabled={
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          requestOTPState.loading
+        }
+      />
       <View style={loginPhoneStyles.choosenText}>
         <View style={loginPhoneStyles.line} />
         <View style={{ marginHorizontal: 8 }}>
@@ -83,17 +82,15 @@ const Content: React.FC = () => {
         </View>
         <View style={loginPhoneStyles.line} />
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
-          title="ID Toko"
-          onPress={() => {
-            phone.clearText();
-            navigate(LOGIN_ID_VIEW);
-          }}
-          type="secondary"
-          disabled={false}
-        />
-      </View>
+      <SnbButton.Single
+        title="ID Toko"
+        onPress={() => {
+          phone.clearText();
+          navigate(LOGIN_ID_VIEW);
+        }}
+        type="secondary"
+        disabled={false}
+      />
       <View style={loginPhoneStyles.registerLink}>
         <View>
           <SnbText.B3>Belum punya akun Sinbad?</SnbText.B3>
