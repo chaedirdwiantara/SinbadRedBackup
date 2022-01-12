@@ -8,10 +8,9 @@ import {
   SnbSKUList,
   SnbText,
   styles,
+  SnbCountdown,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
-/** === IMPORT COMPONENT === */
-import { CountDownTimer } from './CountDownTimer';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { toDateWithTime } from '@core/functions/global/date-format';
@@ -123,7 +122,10 @@ export const HistoryCard: FC<HistoryCardProps> = ({
           !isPaymentTimeExpired &&
           (statusSlug === StatusPayment.WAITING_FOR_PAYMENT ||
             statusSlug === OrderStatus.PENDING_PAYMENT) ? (
-            <CountDownTimer type={'small'} expiredTime={expiredPaymentTime} />
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <SnbText.C1 color={color.black60}>Waktu Bayar : </SnbText.C1>
+              <SnbCountdown expiredTime={expiredPaymentTime} type={'small'} />
+            </View>
           ) : null}
         </View>
       </Pressable>
