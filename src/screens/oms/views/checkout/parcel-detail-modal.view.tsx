@@ -144,7 +144,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   const discountPromoList = (
     promoData: models.ReserveDiscountPromoSellers[],
   ) => {
-    console.log('Promo Data', promoData);
     return promoData.map((detailPromo) => {
       return detailPromo.benefitType === 'amount' ||
         detailPromo.benefitType === 'percent'
