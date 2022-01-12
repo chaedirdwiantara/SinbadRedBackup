@@ -49,15 +49,13 @@ const OTPContent: React.FC<Props> = (props) => {
         </SnbText.B1>
       </View>
       <View>
-        <View style={{ height: 72 }}>
-          <SnbButton.Single
-            title="Verifikasi"
-            onPress={() => onVerifyOTP(otp)}
-            loading={loading}
-            type="primary"
-            disabled={otp.length < 5}
-          />
-        </View>
+        <SnbButton.Single
+          title="Verifikasi"
+          onPress={() => onVerifyOTP(otp)}
+          loading={loading}
+          type="primary"
+          disabled={otp.length < 5}
+        />
         <SnbOTPTimer action={resend} />
       </View>
     </View>
