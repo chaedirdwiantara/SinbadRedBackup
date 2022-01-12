@@ -105,7 +105,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <View />
             )}
           </View>
-          {data.totalPromoSellerAndVoucher && (
+          {data.totalPromoSellerAndVoucher !== 0 && (
             <View style={CheckoutStyle.modalDetailTotalContainer}>
               <View style={{ width: '50%' }}>
                 <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>

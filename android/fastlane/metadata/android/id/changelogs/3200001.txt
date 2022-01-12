@@ -1,7 +1,0 @@
-Sinbad Red versi 4.3.0
-
-Thank you for using Sinbad!
-
-What's  new in this version:
-- Payment Methods Bank BNI, Bank BRI, Bank Mandiri, and Outlet Alfamart
-- Enhancement in Checkout and Transaction history

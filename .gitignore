@@ -67,7 +67,7 @@ GoogleService-Info.plist
 GoogleService*
 
 # keystore
-/android/app/mplus_sinbad.jks
+/android/app/sinbad-app.jks
 # google service
 /android/app/google-services.json
 #proguard

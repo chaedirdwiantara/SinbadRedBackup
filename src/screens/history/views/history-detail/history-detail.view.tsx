@@ -43,7 +43,6 @@ import {
   usePaymentDetail,
   goToHistoryInvoice,
   usePaymentInvoice,
-  useModalToast,
   useHistoryDetailAction,
   goToHistoryDetailStatus,
   useModaBottomError,
@@ -86,7 +85,6 @@ const HistoryDetailView: FC = () => {
   const historyDetailAction = useHistoryDetailAction();
   const activateVA = useActivateVa();
   const modalError = useModaBottomError();
-  const modalToast = useModalToast();
   const modalNeedHelp = useModalNeedHelp();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
@@ -144,8 +142,7 @@ const HistoryDetailView: FC = () => {
   const onVACoppied = () => {
     const accountVa = paymentDetail.data?.accountVaNo || '';
     Clipboard.setString(accountVa.toString());
-    modalToast.setOpen(true);
-    modalToast.toast.current.show();
+    SnbToast.show('Copied To Clipboard', 2000);
   };
   /** => function to goBack */
   const goBackAction = () => {
@@ -409,17 +406,6 @@ const HistoryDetailView: FC = () => {
       <View />
     );
   };
-  /** render Toast */
-  const renderToast = () => {
-    return (
-      <SnbToast
-        ref={modalToast.toast}
-        duration={1500}
-        position={'center'}
-        message="Copied To Clipboard"
-      />
-    );
-  };
   /** => render countdown */
   const renderCountDown = () => {
     const expiredPaymentTime = paymentDetail.data?.expiredPaymentTime;
@@ -563,7 +549,6 @@ const HistoryDetailView: FC = () => {
       />
       {renderContent()}
       {renderFooter()}
-      {renderToast()}
       <BottomSheetError
         open={Boolean(detail.error || paymentDetail.error)}
         error={detail.error ?? paymentDetail.error}

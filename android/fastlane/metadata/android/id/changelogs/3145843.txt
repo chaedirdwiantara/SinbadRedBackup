@@ -1,5 +1,0 @@
-Sinbad Red versi 4.9.0
-
-Apa yang baru?
-Informasi Supplier pada halaman Profile
-Fix bugs and Improvement
