@@ -105,7 +105,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               <View />
             )}
           </View>
-          {data.totalPromoSellerAndVoucher && (
+          {data.totalPromoSellerAndVoucher !== 0 && (
             <View style={CheckoutStyle.modalDetailTotalContainer}>
               <View style={{ width: '50%' }}>
                 <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
@@ -144,6 +144,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   const discountPromoList = (
     promoData: models.ReserveDiscountPromoSellers[],
   ) => {
+    console.log('Promo Data', promoData);
     return promoData.map((detailPromo) => {
       return detailPromo.benefitType === 'amount' ||
         detailPromo.benefitType === 'percent'
