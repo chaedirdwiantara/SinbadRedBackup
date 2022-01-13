@@ -10,7 +10,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { ErrorPromoModal } from './error-promo-modal';
 import { ErrorVoucherModal } from './error-voucher-modal';
 import { ErrorStockModal } from './error-stock-modal';
-import { ErrorFetchModal } from './error-fetch-modal';
+import BottomSheetError from '@core/components/BottomSheetError';
 import { VerificationOrderHeader } from './verification-order-header.view';
 import { VerificationOrderDiscountList } from './verification-order-discount-list.view';
 import { VerificationOrderBonusList } from './verification-order-bonus-list.view';
@@ -135,7 +135,8 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
-        errorFetchModal.setErrorText('Ulangi');
+        loadingVerificationToCheckout.setLoading(false);
+        errorFetchModal.setErrorData(stateReserveStock.create.error);
       }
     }
   }, [stateReserveStock.create.error]);
@@ -175,7 +176,8 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
-      errorFetchModal.setErrorText('Ulangi');
+      loadingVerificationToCheckout.setLoading(false);
+      errorFetchModal.setErrorData(stateReserveStock.detail.error);
     }
   }, [stateReserveStock.detail.error]);
 
@@ -194,7 +196,7 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
-        errorFetchModal.setErrorText('Kembali Ke Keranjang');
+        errorFetchModal.setErrorData(statePromo.reserveDiscount.create.error);
       } else {
         const action = () => {
           const createReserveDiscountParams = {
@@ -212,7 +214,8 @@ const OmsVerificationOrderView: FC = () => {
         };
         errorFetchModal.setOpen(true);
         errorFetchModal.setErrorAction(() => action);
-        errorFetchModal.setErrorText('Ulangi');
+        loadingVerificationToCheckout.setLoading(false);
+        errorFetchModal.setErrorData(statePromo.reserveDiscount.create.error);
       }
     }
   }, [statePromo.reserveDiscount.create.error]);
@@ -263,7 +266,8 @@ const OmsVerificationOrderView: FC = () => {
       };
       errorFetchModal.setOpen(true);
       errorFetchModal.setErrorAction(() => action);
-      errorFetchModal.setErrorText('Ulangi');
+      loadingVerificationToCheckout.setLoading(false);
+      errorFetchModal.setErrorData(statePromo.reserveDiscount.detail.error);
     }
   }, [statePromo.reserveDiscount.detail.error]);
 
@@ -436,13 +440,15 @@ const OmsVerificationOrderView: FC = () => {
   /** => error fetch modal */
   const renderFetchStockModal = () => {
     return (
-      <ErrorFetchModal
-        visible={errorFetchModal.isOpen}
-        onPress={() => {
-          errorFetchModal.setOpen(false);
+      <BottomSheetError
+        open={errorFetchModal.isOpen}
+        error={errorFetchModal.errorData}
+        closeAction={() => errorFetchModal.setOpen(false)}
+        retryAction={() => {
           errorFetchModal.errorAction();
+          errorFetchModal.setOpen(false);
         }}
-        buttonText={errorFetchModal.errorText}
+        isCloseable={true}
       />
     );
   };

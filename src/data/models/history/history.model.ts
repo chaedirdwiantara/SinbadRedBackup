@@ -46,3 +46,7 @@ export interface PaymentActivateVASuccessProps {
   id: number;
   message: string;
 }
+
+export interface PaymentActivateVAProcessProps {
+  id: string;
+}

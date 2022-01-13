@@ -11,6 +11,10 @@ export const usePaymentDetail = () => {
     detail: (contextDispatch: (action: any) => any, id: string) => {
       dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
     },
+    refresh: (contextDispatch: (action: any) => any, id: string) => {
+      contextDispatch(Actions.historyPaymentDetailRefresh());
+      dispatch(Actions.historyPaymentDetailProcess(contextDispatch, { id }));
+    },
   };
 };
 
@@ -51,12 +55,20 @@ export const useHistoryDetailAction = () => {
   const dispatch = useDispatch();
 
   return {
-    fetch: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+    fetch: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      logType: 'payment' | 'order',
+    ) => {
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id, logType }));
     },
-    refresh: (contextDispatch: (action: any) => any, id: string) => {
+    refresh: (
+      contextDispatch: (action: any) => any,
+      id: string,
+      logType: 'payment' | 'order',
+    ) => {
       contextDispatch(Actions.historyDetailRefresh());
-      dispatch(Actions.historyDetailProcess(contextDispatch, { id }));
+      dispatch(Actions.historyDetailProcess(contextDispatch, { id, logType }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.historyDetailReset(contextDispatch));
@@ -97,6 +109,16 @@ export const useModaBottomError = () => {
     dataError,
     setDataError: (value: models.ErrorProps) => {
       setDataError(value);
+    },
+  };
+};
+
+export const useModalNeedHelp = () => {
+  const [isOpen, setOpen] = useState(false);
+  return {
+    isOpen,
+    setOpen: (value: boolean) => {
+      setOpen(value);
     },
   };
 };

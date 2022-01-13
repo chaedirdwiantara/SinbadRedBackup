@@ -1,9 +1,12 @@
 /** === IMPORT PACKAGES === */
 import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
+import BottomSheetError from '@core/components/BottomSheetError';
+import { EmptyState } from '@core/components/EmptyState';
+import { LoadingLoadMore } from '@core/components/Loading';
 import {
   HistoryCard,
   HistoryFilterModal,
@@ -36,7 +39,8 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const [activeOrderStatus, setActiveOrderStatus] =
     useState<models.OrderStatusQuery>('');
   const [date, setDate] = useState({ start: '', end: '' });
-  const [isFiltered, setIsFiltered] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(0);
+  const [isSearched, setIsSearched] = useState(0);
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const getPaymentStatus = usePaymentStatus();
   const orderStatusActions = useOrderStatusActions();
@@ -57,8 +61,6 @@ const HistoryListView: FC = ({ navigation }: any) => {
       ),
     [historyListState.data],
   );
-  const statusListLoading =
-    paymentStatusState.loading || orderStatusState.loading;
 
   useFocusEffect(
     useCallback(() => {
@@ -68,8 +70,12 @@ const HistoryListView: FC = ({ navigation }: any) => {
         setActivePaymentStatus('');
       }
 
-      historyListActions.fetch(dispatchHistory, derivedQueryOptions);
-    }, [activeTab]),
+      historyListActions.fetch(dispatchHistory, {
+        startDate: date.start,
+        endDate: date.end,
+        search: keyword,
+      });
+    }, [activeTab, isFiltered, isSearched]),
   );
 
   useEffect(() => {
@@ -79,11 +85,8 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('blur', () => {
-      setKeyword('');
       setActiveOrderStatus('');
       setActivePaymentStatus('');
-      setDate({ start: '', end: '' });
-      setIsFiltered(false);
     });
 
     return unsubscribe;
@@ -100,7 +103,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
   const handleDateReset = () => {
     setDate({ start: '', end: '' });
   };
-  /** === DERIVED === */
+  /** === DERIVEDS === */
   const derivedQueryOptions: models.HistoryListQueryOptions = {
     statusOrder: activeOrderStatus,
     statusPayment: activePaymentStatus,
@@ -108,6 +111,16 @@ const HistoryListView: FC = ({ navigation }: any) => {
     endDate: date.end,
     search: keyword,
   };
+  const statusListLoading =
+    paymentStatusState.loading || orderStatusState.loading;
+  const successStateForPayments =
+    !historyListState.loading && historyPaymentList.length > 0;
+  const successStateForOrders =
+    !historyListState.loading && historyListState.data.length > 0;
+  const emptyStateForPayments =
+    !historyListState.loading && historyPaymentList.length === 0;
+  const emptyStateForOrders =
+    !historyListState.loading && historyListState.data.length === 0;
   /** === VIEW === */
   /** => Payment Item */
   const renderPaymentItem = ({
@@ -122,8 +135,8 @@ const HistoryListView: FC = ({ navigation }: any) => {
         (statusItem) => statusItem.status === item.statusPayment,
       )[0]?.title ?? 'Menunggu Pembayaran';
     const beenDelivered = item.status === 'delivered' || item.status === 'done';
-    const price = item.parcelFinalPriceBuyer;
-    const finalPrice = item.deliveredParcelFinalPriceBuyer;
+    const price = item.billing.totalPayment ?? item.parcelFinalPriceBuyer ?? 0;
+    const finalPrice = item.billing.deliveredTotalPayment!;
 
     return (
       <HistoryCard
@@ -217,6 +230,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusPayment: tag.status as models.PaymentStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     ) : (
       <HistoryListStatusTags
@@ -230,8 +244,31 @@ const HistoryListView: FC = ({ navigation }: any) => {
             statusOrder: tag.status as models.OrderStatusQuery,
           });
         }}
+        activeTab={activeTab}
       />
     );
+  /** => History List */
+  const historyList = (
+    <FlatList
+      style={{ padding: 8 }}
+      contentContainerStyle={{ paddingBottom: 12 }}
+      data={activeTab === 0 ? historyPaymentList : historyListState.data}
+      renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
+      refreshing={historyListState.refresh}
+      onRefresh={() =>
+        historyListActions.refresh(dispatchHistory, derivedQueryOptions)
+      }
+      keyExtractor={(item) => item.orderCode}
+      onEndReachedThreshold={0.1}
+      onEndReached={() =>
+        historyListActions.loadMore(
+          dispatchHistory,
+          historyListState,
+          derivedQueryOptions,
+        )
+      }
+    />
+  );
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -242,44 +279,42 @@ const HistoryListView: FC = ({ navigation }: any) => {
         onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
       />
       <HistoryListFilters
-        onSearch={() =>
-          historyListActions.fetch(dispatchHistory, derivedQueryOptions)
-        }
+        onSearch={() => {
+          if (keyword === '') {
+            setIsSearched(0);
+          } else {
+            setIsSearched((prev) => prev + 1);
+          }
+        }}
         keyword={keyword}
         onKeywordChange={(text: string) => setKeyword(text)}
         onSearchClear={() => {
           setKeyword('');
-          historyListActions.fetch(dispatchHistory, {
-            ...derivedQueryOptions,
-            search: '',
-          });
+          setIsSearched(0);
         }}
         onFilterPress={() => setFilterModalVisible(true)}
-        isFiltered={isFiltered}
+        isFiltered={isFiltered > 0}
       />
       {statusListLoading ? <HistoryStatusSkeleton /> : displayedStatusList}
-      {!historyListState.loading ? (
-        <FlatList
-          style={{ padding: 8 }}
-          contentContainerStyle={{ paddingBottom: 12 }}
-          data={activeTab === 0 ? historyPaymentList : historyListState.data}
-          renderItem={activeTab === 0 ? renderPaymentItem : renderOrderItem}
-          refreshing={historyListState.refresh}
-          onRefresh={() =>
-            historyListActions.refresh(dispatchHistory, derivedQueryOptions)
-          }
-          keyExtractor={(item) => item.orderCode}
-          onEndReachedThreshold={0.1}
-          onEndReached={() =>
-            historyListActions.loadMore(
-              dispatchHistory,
-              historyListState,
-              derivedQueryOptions,
-            )
-          }
-        />
-      ) : (
-        <HistoryListSkeleton />
+      {historyListState.loading && <HistoryListSkeleton />}
+      {activeTab === 0
+        ? successStateForPayments && historyList
+        : successStateForOrders && historyList}
+      {activeTab === 0
+        ? emptyStateForPayments && (
+            <View style={{ flex: 1, paddingBottom: 32 }}>
+              <EmptyState title="Data Kosong" description="Belum Ada Tagihan" />
+            </View>
+          )
+        : emptyStateForOrders && (
+            <View style={{ flex: 1, paddingBottom: 32 }}>
+              <EmptyState title="Data Kosong" description="Belum Ada Pesanan" />
+            </View>
+          )}
+      {historyListState.loadMore && (
+        <View style={{ marginBottom: 16 }}>
+          <LoadingLoadMore />
+        </View>
       )}
       <HistoryFilterModal
         visible={filterModalVisible}
@@ -290,14 +325,25 @@ const HistoryListView: FC = ({ navigation }: any) => {
         onClose={() => setFilterModalVisible(false)}
         onSubmit={() => {
           if (!date.start && !date.end) {
-            setIsFiltered(false);
+            setIsFiltered(0);
           } else {
-            setIsFiltered(true);
+            setIsFiltered((prev) => prev + 1);
           }
 
           setFilterModalVisible(false);
-          historyListActions.fetch(dispatchHistory, derivedQueryOptions);
         }}
+      />
+      <BottomSheetError
+        open={Boolean(historyListState.error)}
+        error={historyListState.error}
+        closeAction={() => {
+          setDate({ start: '', end: '' });
+          // Will trigger fetch
+          setIsFiltered(0);
+        }}
+        retryAction={() =>
+          historyListActions.fetch(dispatchHistory, derivedQueryOptions)
+        }
       />
     </SnbContainer>
   );

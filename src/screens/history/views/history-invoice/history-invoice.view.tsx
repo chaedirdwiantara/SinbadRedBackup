@@ -1,21 +1,15 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import {
   SnbContainer,
   SnbTopNav,
   SnbPdf,
   SnbToast,
-  SnbIcon,
-  color,
 } from '@sinbad/react-native-sinbad-ui';
-import {
-  usePaymentInvoice,
-  useModalToast,
-  useDownloadProgress,
-} from '../../functions';
+import { usePaymentInvoice, useDownloadProgress } from '../../functions';
 import { contexts } from '@contexts';
-import { PermissionsAndroid, ActivityIndicator } from 'react-native';
+import { PermissionsAndroid, BackHandler } from 'react-native';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
@@ -33,7 +27,18 @@ const HistoryInvoiceView: FC = () => {
     goBack();
     reset(dispatchHistory);
   };
-  const modalToast = useModalToast();
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      goBackFunction();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
   const dowloadProgress = useDownloadProgress();
   /** => function on click button download */
   const onClickButtonDownload = () => {
@@ -106,11 +111,7 @@ const HistoryInvoiceView: FC = () => {
       .catch((err) => {
         console.log(err, 'error');
         dowloadProgress.setProgress(false);
-        modalToast.setToastText('Invoice gagal didownload');
-        modalToast.setOpen(true);
-        setTimeout(() => {
-          modalToast.setOpen(false);
-        }, 2000);
+        SnbToast.show('Invoice gagal didownload', 2000, { positionValue: 56 });
       });
   };
   /** === VIEW === */
@@ -126,23 +127,10 @@ const HistoryInvoiceView: FC = () => {
       />
     );
   };
-  /** render Toast */
-  const renderToast = () => {
-    return (
-      <SnbToast
-        open={modalToast.isOpen}
-        message={modalToast.toastText}
-        close={() => modalToast.setOpen(false)}
-        position={'bottom'}
-        leftItem={<SnbIcon name={'x_circle'} color={color.red50} size={20} />}
-      />
-    );
-  };
   return (
     <SnbContainer color="white">
       {renderHeader()}
       <SnbPdf uri={params.url} cache={true} />
-      {renderToast()}
     </SnbContainer>
   );
 };

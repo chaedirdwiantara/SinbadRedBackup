@@ -12,7 +12,7 @@ const NotificationStyles = StyleSheet.create({
   boxNotificationItemHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingBottom: 4,
   },
   image44Contain: {

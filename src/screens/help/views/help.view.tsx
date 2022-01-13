@@ -24,13 +24,15 @@ const HelpView: FC = () => {
       name: 'FAQ',
       goTo: 'faq',
     },
-    {
-      name: 'Clear Cache',
-      goTo: 'clear_cache',
-    },
+    // {
+    //   name: 'Clear Cache',
+    //   goTo: 'clear_cache',
+    // },
   ]);
   /** === HOOK === */
   const callCsModal = useCallCsModal();
+
+  const handleClearCache = () => {};
 
   const goTo = (page: string) => {
     switch (page) {
@@ -41,7 +43,7 @@ const HelpView: FC = () => {
         NavigationAction.navigate('HelpFaqView');
         break;
       case 'clear_cache':
-        console.log('PRESSED CLEAR CACHE');
+        handleClearCache();
         break;
       default:
         break;

@@ -4,8 +4,9 @@ import { View, TouchableWithoutFeedback } from 'react-native';
 import { SnbText, SnbIcon, color } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENT === */
 import { ProductCard } from '@core/components/ProductCard';
-/** === IMPORT FUNCTION === */
+/** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
+import { goToProductDetail } from '@core/functions/product';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 /** === IMPORT STYLE === */
@@ -16,6 +17,7 @@ interface HistoryDetailProductListProps {
   products: Array<models.ParcelProduct>;
   seeMore: boolean;
   toggleSeeMore: () => void;
+  type?: 'purchased' | 'bonus';
 }
 /** === COMPONENT === */
 export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
@@ -23,6 +25,7 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
   products,
   seeMore,
   toggleSeeMore,
+  type = 'purchased',
 }) => {
   const displayedProducts = seeMore ? products.slice(0, 2) : products;
 
@@ -38,10 +41,18 @@ export const HistoryDetailProductList: FC<HistoryDetailProductListProps> = ({
               key={`${product.productName}-${productIndex}`}
               name={product.productName}
               imageSource={product.urlImages}
-              price={toCurrency(product.priceAfterTax)}
+              price={toCurrency(product.priceAfterTax, { withFraction: false })}
               qty={product.qty}
               uom={product.uom}
-              total={toCurrency(product.totalPriceAfterTax)}
+              total={toCurrency(product.totalPriceAfterTax, {
+                withFraction: false,
+              })}
+              onPress={() => {
+                if (type !== 'bonus') {
+                  goToProductDetail(product.productId);
+                }
+              }}
+              type={type}
             />
           ),
         )}

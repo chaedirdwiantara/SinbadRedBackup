@@ -4,6 +4,7 @@ import {
   CartInvoiceGroup,
   IProductItemUpdateCart,
   ICartMasterProductNotAvailable,
+  IProductRemoveSelected,
 } from '@models';
 /** === FUNCTION === */
 /** => get total products from invoice group list */
@@ -48,6 +49,7 @@ const handleProductQuantityChange = (
   ],
   currentQty: number,
   setSassionQty: Dispatch<SetStateAction<number>>,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -71,6 +73,12 @@ const handleProductQuantityChange = (
   currentInvoiceGroup.brands[brandIndex] = currentBrand;
   invoiceGroupsCopy[invoiceGroupIndex] = currentInvoiceGroup;
 
+  setItemProductMasterCart({
+    productId: currentProduct.productId,
+    qty: currentProduct.qty,
+    stock: currentProduct.stock,
+    selected: currentProduct.selected,
+  });
   setInvoiceGroups(invoiceGroupsCopy);
   setSassionQty(Math.random() * 10000000);
 };
@@ -85,8 +93,10 @@ const handleSelectedProductChange = (
     (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
+  setSassionQty: Dispatch<SetStateAction<number>>,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const [productSelectedCount, setProductSelectedCount] =
@@ -98,6 +108,7 @@ const handleSelectedProductChange = (
   let totalSelectedCount = productSelectedCount;
 
   let selectedCount = 0;
+  const totalProductBrand = currentBrand.products.length;
   currentBrand.products.forEach((product) => {
     if (product.selected) {
       selectedCount++;
@@ -115,6 +126,8 @@ const handleSelectedProductChange = (
 
   if (selectedCount === 0) {
     currentBrand.selected = false;
+  } else if (selectedCount !== totalProductBrand) {
+    currentBrand.selected = 'indeterminate';
   } else {
     currentBrand.selected = true;
   }
@@ -127,12 +140,21 @@ const handleSelectedProductChange = (
     setAllProductsSelected(false);
   } else if (totalSelectedCount === totalProducts) {
     setAllProductsSelected(true);
+  } else if (totalSelectedCount !== totalProducts) {
+    setAllProductsSelected('indeterminate');
   } else {
     setAllProductsSelected(false);
   }
 
+  setItemProductMasterCart({
+    productId: currentProduct.productId,
+    qty: currentProduct.qty,
+    stock: currentProduct.stock,
+    selected: selected,
+  });
   setInvoiceGroups(invoiceGroupsCopy);
   setProductSelectedCount(totalSelectedCount);
+  setSassionQty(Math.random() * 10000000);
 };
 /** => handle when brand is selected or unselected */
 const handleSelectedBrandChange = (
@@ -144,8 +166,9 @@ const handleSelectedBrandChange = (
     (any: CartInvoiceGroup[]) => void,
   ],
   productSelectedCountState: [number, Dispatch<SetStateAction<number>>],
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const [productSelectedCount, setProductSelectedCount] =
@@ -174,6 +197,12 @@ const handleSelectedBrandChange = (
     selectedCount = currentBrand.products.length;
     currentBrand.products.forEach((product) => {
       product.selected = true;
+      setItemProductMasterCart({
+        productId: product.productId,
+        qty: product.qty,
+        stock: product.stock,
+        selected: true,
+      });
     });
   } else {
     if (selectedCount === currentBrand.products.length) {
@@ -186,6 +215,12 @@ const handleSelectedBrandChange = (
     selectedCount = 0;
     currentBrand.products.forEach((product) => {
       product.selected = false;
+      setItemProductMasterCart({
+        productId: product.productId,
+        qty: product.qty,
+        stock: product.stock,
+        selected: false,
+      });
     });
   }
 
@@ -197,7 +232,7 @@ const handleSelectedBrandChange = (
   } else if (totalSelectedCount === totalProducts) {
     setAllProductsSelected(true);
   } else {
-    setAllProductsSelected(false);
+    setAllProductsSelected('indeterminate');
   }
 
   setInvoiceGroups(invoiceGroupsCopy);
@@ -211,8 +246,9 @@ const handleAllSelectedProductsChange = (
     Dispatch<SetStateAction<Array<CartInvoiceGroup>>>,
   ],
   setProductSelectedCount: Dispatch<SetStateAction<number>>,
-  setAllProductsSelected: Dispatch<SetStateAction<boolean>>,
+  setAllProductsSelected: Dispatch<SetStateAction<boolean | 'indeterminate'>>,
   totalProducts: number,
+  setItemProductMasterCart: (item: IProductItemUpdateCart) => void,
 ) => {
   const [invoiceGroups, setInvoiceGroups] = invoiceGroupsState;
   const invoiceGroupsCopy = [...invoiceGroups];
@@ -223,6 +259,12 @@ const handleAllSelectedProductsChange = (
       brand.selected = selected;
       brand.selectedCount = selected === true ? brand.products.length : 0;
       brand.products.forEach((product) => {
+        setItemProductMasterCart({
+          productId: product.productId,
+          qty: product.qty,
+          stock: product.stock,
+          selected: selected,
+        });
         product.selected = selected;
       });
     });
@@ -238,7 +280,7 @@ const handleProductDelete = (
   brandIndex: number,
   productIndex: number,
   invoiceGroups: Array<CartInvoiceGroup>,
-  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+  onRemoveProduct: (any: IProductRemoveSelected) => void,
 ) => {
   const deletedProduct =
     invoiceGroups[invoiceGroupIndex].brands[brandIndex].products[productIndex];
@@ -247,18 +289,21 @@ const handleProductDelete = (
     qty: 0,
     selected: deletedProduct.selected,
     stock: deletedProduct.stock,
+    type: 'data',
   });
 };
 
 const handleProductNotAvailableDelete = (
   product: ICartMasterProductNotAvailable,
-  onRemoveProduct: (any: IProductItemUpdateCart) => void,
+  onRemoveProduct: (any: IProductRemoveSelected) => void,
+  type: 'dataEmptyStock' | 'dataNotFound',
 ) => {
   onRemoveProduct({
     productId: product.productId,
     qty: 0,
     selected: false,
     stock: 0,
+    type,
   });
 };
 

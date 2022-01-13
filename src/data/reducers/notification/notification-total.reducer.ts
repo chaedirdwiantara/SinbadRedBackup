@@ -32,7 +32,7 @@ export const notificaitonTotalReducer = simplifyReducer(
     ) {
       return {
         ...state,
-        data: payload.data,
+        data: payload,
         loading: false,
         error: null,
       };

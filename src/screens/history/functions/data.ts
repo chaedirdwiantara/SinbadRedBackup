@@ -20,6 +20,12 @@ export const BillingStatus = {
 export const OrderStatus = {
   DELIVERED: 'delivered',
   DONE: 'done',
+  PENDING_PAYMENT: 'pending_payment',
+};
+
+/** STATUS PAYMENT */
+export const StatusPayment = {
+  WAITING_FOR_PAYMENT: 'waiting_for_payment',
 };
 
 export const ChannelType = {

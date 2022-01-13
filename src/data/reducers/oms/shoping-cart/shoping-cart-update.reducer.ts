@@ -27,6 +27,7 @@ export const cartUpdateReducer = simplifyReducer(cartUpdateInitialState, {
     return {
       ...state,
       data: action.payload.data,
+      error: null,
       loading: false,
     };
   },

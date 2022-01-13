@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
 import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -16,8 +16,9 @@ import {
   ProductNotCoverageModal,
   AddToCartModal,
 } from '@core/components/modal';
-import { LoadingHorizontal } from '@core/components/Loading';
+import { LoadingHorizontal, LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
+import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import {
   useBottomAction,
@@ -38,6 +39,7 @@ import {
   useStockValidationAction,
   useOrderQuantity,
 } from '@screen/product/functions';
+import { useRecentSearch } from '@screen/search/functions';
 import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
@@ -62,6 +64,7 @@ interface ProductListProps {
   onFetch: (queryOptions: models.ProductListQueryOptions) => void;
   onLoadMore: (queryOptions: models.ProductListQueryOptions) => void;
   activeKeyword?: string;
+  onActiveKeywordChange?: (keyword: string) => void;
   activeCategory?: CategoryType;
   activeBrandId?: string;
   withBottomAction?: boolean;
@@ -79,6 +82,7 @@ const ProductList: FC<ProductListProps> = ({
   onFetch,
   onLoadMore,
   activeKeyword = '',
+  onActiveKeywordChange,
   activeCategory,
   activeBrandId,
   withBottomAction = true,
@@ -105,10 +109,9 @@ const ProductList: FC<ProductListProps> = ({
     useState(false);
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
-
-  /** === REF === */
-  const toastSuccessAddCart = useRef<any>();
-  const toastSuccessRegisterSupplier = useRef<any>();
+  const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
+  const [modalErrorStock, setModalErrorStock] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const {
     sortModalVisible,
@@ -125,6 +128,7 @@ const ProductList: FC<ProductListProps> = ({
     categoryId: selectedCategory?.id,
     tags: selectedTags,
   });
+  const { addKeyword } = useRecentSearch();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
   const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
@@ -135,7 +139,11 @@ const ProductList: FC<ProductListProps> = ({
   const stockValidationActions = useStockValidationAction();
   const {
     stateProduct: {
-      list: { loading: productLoading, error: productError },
+      list: {
+        loading: productLoading,
+        error: productError,
+        loadMore: productLoadMore,
+      },
       cart: { data: productDetailState, error: productDetailError },
     },
     dispatchProduct,
@@ -184,10 +192,14 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
-    setLoadingPreparation(true);
-    setProductSelected(product);
-    supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-    productDetailActions.fetch(dispatchProduct, product.id);
+    if (me.data === null) {
+      setModalNeedToLogin(true);
+    } else {
+      setLoadingPreparation(true);
+      setProductSelected(product);
+      supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+      productDetailActions.fetch(dispatchProduct, product.id);
+    }
   };
 
   /** => action close modal add to cart */
@@ -257,6 +269,7 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (!productLoading) {
       setKeywordSearched(false);
+      setInitialLoading(false);
     }
   }, [productLoading]);
 
@@ -266,9 +279,10 @@ const ProductList: FC<ProductListProps> = ({
       setProductSelected(null);
       handleCloseModal();
       cartTotalProductActions.fetch();
-      if (toastSuccessAddCart.current) {
-        toastSuccessAddCart.current.show();
-      }
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [addToCartData]);
 
@@ -284,9 +298,10 @@ const ProductList: FC<ProductListProps> = ({
     if (sendToSupplierData !== null) {
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      if (toastSuccessRegisterSupplier.current) {
-        toastSuccessRegisterSupplier.current.show();
-      }
+      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
     }
   }, [sendToSupplierData]);
 
@@ -332,7 +347,8 @@ const ProductList: FC<ProductListProps> = ({
       if (
         modalRejectApproval === false &&
         modalWaitingApproval === false &&
-        modalRegisterSupplier === false
+        modalRegisterSupplier === false &&
+        modalNotCoverage === false
       ) {
         setOrderModalVisible(true);
       }
@@ -342,19 +358,25 @@ const ProductList: FC<ProductListProps> = ({
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && productDetailState) {
-      if (errorStock.code === 11004) {
-        setLoadingPreparation(false);
-        if (
-          modalRejectApproval === false &&
-          modalWaitingApproval === false &&
-          modalRegisterSupplier === false
-        ) {
-          setOrderModalVisible(true);
-        }
-      } else {
-        setLoadingPreparation(false);
+      if (
+        errorStock.code === 50080000026 &&
+        modalRejectApproval === false &&
+        modalWaitingApproval === false &&
+        modalRegisterSupplier === false &&
+        modalNotCoverage === false
+      ) {
+        setOrderModalVisible(true);
+      } else if (
+        (errorStock.code === 50080000025 || errorStock.code === 50080000036) &&
+        modalRejectApproval === false &&
+        modalWaitingApproval === false &&
+        modalRegisterSupplier === false
+      ) {
         setModalNotCoverage(true);
+      } else {
+        setModalErrorStock(true);
       }
+      setLoadingPreparation(false);
     }
   }, [errorStock && productDetailState]);
 
@@ -371,15 +393,25 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (me.data !== null && dataSegmentation !== null) {
       if (dataSegmentation.dataSuppliers !== null) {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-        });
+        if (
+          me.data.approvalStatus === 'verified' &&
+          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
+        ) {
+          setModalNotCoverage(true);
+          setLoadingPreparation(false);
+        } else {
+          checkUser({
+            sinbadStatus: me.data.approvalStatus,
+            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
+          });
+        }
       } else {
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: null,
-        });
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
+        setModalNotCoverage(true);
+        setLoadingPreparation(false);
       }
     }
   }, [dataSegmentation]);
@@ -389,6 +421,16 @@ const ProductList: FC<ProductListProps> = ({
       setLoadingPreparation(false);
     }
   }, [modalRegisterSupplier]);
+
+  useEffect(() => {
+    return () => {
+      stockValidationActions.reset(dispatchStock);
+      productDetailActions.reset(dispatchProduct);
+      supplierSegmentationAction.reset(dispatchSupplier);
+      addToCartActions.reset(dispatchShopingCart);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    };
+  }, []);
 
   /** === DERIVED === */
   const derivedQueryOptions: models.ProductListQueryOptions = {
@@ -400,16 +442,21 @@ const ProductList: FC<ProductListProps> = ({
     maxPrice: filterQuery?.maxPrice,
     tags: selectedTags,
   };
+  const pageLoading = initialLoading ? initialLoading : productLoading;
   /** === VIEW === */
   return (
     <SnbContainer color="white">
       <NavigationHeader
         title={selectedCategory ? selectedCategory.name : headerTitle}
         type={headerType}
-        setSearchKeyword={setSearchKeyword}
+        onKeywordChange={(text: string) => {
+          setSearchKeyword(text);
+          onActiveKeywordChange?.(text);
+        }}
         keyword={searchKeyword}
         onSearch={() => {
           setKeywordSearched(true);
+          addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
         onSearchClear={() => {
@@ -443,7 +490,7 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
-            loading={productLoading}
+            loading={pageLoading}
             error={productError}
           />
         ) : (
@@ -456,11 +503,16 @@ const ProductList: FC<ProductListProps> = ({
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
-            loading={productLoading}
+            loading={pageLoading}
             error={productError}
           />
         )}
       </View>
+      {productLoadMore && (
+        <View>
+          <LoadingLoadMore />
+        </View>
+      )}
       {withBottomAction && (
         <BottomAction
           sort={true}
@@ -524,41 +576,25 @@ const ProductList: FC<ProductListProps> = ({
         isCallCS={true}
       />
       {/* Add to Cart Modal */}
-      {orderModalVisible && (
-        <AddToCartModal
-          orderQty={orderQty}
-          onChangeQty={onHandleChangeQty}
-          open={orderModalVisible}
-          closeAction={handleCloseModal}
-          onAddToCartPress={onSubmitAddToCart}
-          disabled={
-            productDetailState === null ||
-            dataStock === null ||
-            orderQty > dataStock.stock ||
-            orderQty < productDetailState?.minQty
-          }
-        />
-      )}
+
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={orderModalVisible}
+        closeAction={handleCloseModal}
+        onAddToCartPress={onSubmitAddToCart}
+        disabled={
+          productDetailState === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < productDetailState?.minQty
+        }
+      />
+
       {/* Product not coverage modal */}
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}
         close={handleCloseModal}
-      />
-      {/* Toast success add cart */}
-      <SnbToast
-        ref={toastSuccessAddCart}
-        message={'Produk berhasil ditambahkan ke keranjang'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
-      />
-      {/* Toast success register supplier */}
-      <SnbToast
-        ref={toastSuccessRegisterSupplier}
-        message={'Berhasil kirim data ke supplier'}
-        position={'top'}
-        duration={2000}
-        positionValue={StatusBar.currentHeight || 0}
       />
       {/* Modal loading horizontal */}
       <SnbBottomSheet
@@ -579,6 +615,14 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorAddCart(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
       />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
@@ -588,15 +632,53 @@ const ProductList: FC<ProductListProps> = ({
       />
       {/* Modal Bottom Sheet segmentation */}
       <BottomSheetError
-        open={modalErrorSegmentation}
+        open={
+          modalErrorSegmentation &&
+          errorSegmentation !== null &&
+          errorSegmentation.code !== 401
+        }
         error={errorSegmentation}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorSegmentation(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
       />
       {/* Modal Bottom Sheet product detail */}
       <BottomSheetError
         open={modalErrorProductDetail}
         error={productDetailError}
         closeAction={handleCloseModal}
+        retryAction={() => {
+          if (productSelected) {
+            setModalErrorProductDetail(false);
+            handleOrderPress(productSelected);
+          } else {
+            handleCloseModal();
+          }
+        }}
+      />
+      {/* Modal Bottom Sheet error stock */}
+      <BottomSheetError
+        open={modalErrorStock}
+        error={errorStock}
+        closeAction={() => {
+          handleCloseModal();
+          setModalErrorStock(false);
+        }}
+        retryAction={() => {
+          handleCloseModal();
+          setModalErrorStock(false);
+        }}
+      />
+      {/* Modal Bottom Sheet Need to Login */}
+      <NeedLoginModal
+        visible={modalNeedToLogin}
+        onClose={() => setModalNeedToLogin(false)}
       />
     </SnbContainer>
   );

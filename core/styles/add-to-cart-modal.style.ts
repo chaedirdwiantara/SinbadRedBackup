@@ -36,9 +36,11 @@ export const AddToCartModalStyle = StyleSheet.create({
     marginVertical: 8,
   },
   tooltipContainer: {
+    maxWidth: 200,
+    height: 50,
     position: 'absolute',
-    bottom: 22,
-    right: -23,
+    bottom: 20,
+    left: -23,
   },
   lineSeparator: {
     marginHorizontal: 10,

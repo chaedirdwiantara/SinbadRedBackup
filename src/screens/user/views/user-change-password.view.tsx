@@ -34,7 +34,6 @@ const UserChangePasswordView: FC = () => {
   const [errorNewPasswordMessage, setErrorNewPasswordMessage] = useState('');
   const [errorConfirmPasswordMessage, setErrorConfirmPasswordMessage] =
     useState('');
-  const toast = React.useRef<any>();
 
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
@@ -76,7 +75,7 @@ const UserChangePasswordView: FC = () => {
     } else if (stateUser.update.error !== null) {
       if (stateUser.update.error.code === 10000) {
         setOpenConfirm(false);
-        toast.current?.show('Terjadi Kesalahan');
+        SnbToast.show('Terjadi Kesalahan', 2500, { positionValue: 72 });
         changePasswordAction.resetChangePassword(dispatchUser);
       } else if (stateUser.update.error.code === 10011) {
         setOpenConfirm(false);
@@ -274,12 +273,6 @@ const UserChangePasswordView: FC = () => {
       {header()}
       {content()}
       {renderConfirm()}
-      <SnbToast
-        ref={toast}
-        duration={3000}
-        position="bottom"
-        positionValue={72}
-      />
     </SnbContainer>
   );
 };

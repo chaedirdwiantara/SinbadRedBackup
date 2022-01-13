@@ -10,6 +10,7 @@ import { CheckoutHeader } from './checkout-header.view';
 import { ModalPaymentType } from './payment-type-modal.view';
 import { ModalPaymentChannels } from './payment-channels-modal.view';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
+import { ModalProductList } from './product-list-modal.view';
 import { ModalTermAndCondition } from './term-and-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
@@ -38,7 +39,11 @@ import {
   goToCheckoutSuccess,
   useExpiredTime,
   useCreateOrders,
+  useCartCheckedoutActions,
+  useModalParcelDetail,
+  useModalProductList,
 } from '@screen/oms/functions';
+import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
   useCheckPromoPaymentAction,
   useCheckAllPromoPaymentAction,
@@ -72,6 +77,9 @@ const OmsCheckoutView: FC = () => {
   const errorFetchModal = useCheckoutFailedFetchState();
   const errorWarningModal = useErrorWarningModal();
   const createOrders = useCreateOrders();
+  const cartCheckedoutActions = useCartCheckedoutActions();
+  const modalParcelDetail = useModalParcelDetail();
+  const modalProductList = useModalProductList();
   const {
     stateCheckout: {
       checkout: {
@@ -82,6 +90,7 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
+  const { dispatchShopingCart } = useShopingCartContext();
   const {
     setInvoiceBrand,
     checkoutMaster,
@@ -103,9 +112,13 @@ const OmsCheckoutView: FC = () => {
   } = statePayment;
   const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [modalParcelData, setModalParcelData] = useState(null);
-  const [isModalParcelDetail, setModalParcelDetail] = useState(false);
   const [isExpiredSession, setExpiredSession] = useState(false);
+  const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
+
+  const handleRetryCreateOrder = () => {
+    cartCheckedoutActions.fetch(dispatchShopingCart);
+    createOrders.create(dispatchCheckout);
+  };
 
   /** Set Loading Page */
   useEffect(() => {
@@ -180,8 +193,8 @@ const OmsCheckoutView: FC = () => {
   }, [checkoutMaster.invoices.length]);
 
   useEffect(() => {
-    if (!checkoutError) {
-      console.log('ERROR CHECKOUT: ', checkoutError);
+    if (checkoutError !== null) {
+      setModalErrorCheckout(true);
     }
   }, [checkoutError]);
   /** for post last payment channel */
@@ -214,6 +227,7 @@ const OmsCheckoutView: FC = () => {
       if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
         paymentTCModal.setOpen(true);
       } else {
+        cartCheckedoutActions.fetch(dispatchShopingCart);
         createOrders.create(dispatchCheckout);
       }
     }
@@ -394,6 +408,8 @@ const OmsCheckoutView: FC = () => {
     createOrders.reset(dispatchCheckout);
     paymentAction.resetTCCreate(dispatchPayment);
     paymentAction.resetTCDetail(dispatchPayment);
+    checkoutViewActions.reset(dispatchCheckout);
+    setModalErrorCheckout(false);
     backToCartModal.setOpen(false);
     expiredTime.setOpen(false);
     backToCart();
@@ -405,8 +421,12 @@ const OmsCheckoutView: FC = () => {
     paymentAction.resetTCDetail(dispatchPayment);
   };
 
-  const handleParcelDetail = (data: any) => {
-    setModalParcelData(data);
+  const handleParcelDetail = (data: models.IInvoiceCheckout | null) => {
+    modalParcelDetail.setData(data);
+  };
+
+  const handleProductList = (data: models.ProductCheckout[] | null) => {
+    modalProductList.setData(data);
   };
 
   const handleCheckExpiredSession = () => {
@@ -418,14 +438,6 @@ const OmsCheckoutView: FC = () => {
     }
   };
 
-  useEffect(() => {
-    if (modalParcelData !== null) {
-      setModalParcelDetail(true);
-    } else {
-      setModalParcelDetail(false);
-    }
-  }, [modalParcelData]);
-
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {
     return (
@@ -433,6 +445,10 @@ const OmsCheckoutView: FC = () => {
         open={errorCreateOrders}
         error={stateCheckout.create.error}
         closeAction={() => handleBackToCart()}
+        retryAction={() => {
+          setErrorCreateOrders(false);
+          handleRetryCreateOrder();
+        }}
       />
     );
   };
@@ -440,11 +456,23 @@ const OmsCheckoutView: FC = () => {
   const ModalInvoiceParcelDetail = () => {
     return (
       <ModalParcelDetail
-        isOpen={isModalParcelDetail}
+        isOpen={modalParcelDetail.isOpen}
         close={() => {
-          setModalParcelData(null);
+          modalParcelDetail.setData(null);
         }}
-        data={modalParcelData}
+        data={modalParcelDetail.data}
+      />
+    );
+  };
+
+  const renderModalProductList = () => {
+    return (
+      <ModalProductList
+        isOpen={modalProductList.isOpen}
+        close={() => {
+          modalProductList.setData(null);
+        }}
+        data={modalProductList.data}
       />
     );
   };
@@ -470,6 +498,7 @@ const OmsCheckoutView: FC = () => {
                   data={invoiceGroup}
                   openModalPaymentType={() => paymentTypeModal.setOpen(true)}
                   openModalParcelDetail={handleParcelDetail}
+                  openModalProductList={handleProductList}
                   index={index}
                 />
               ))}
@@ -523,8 +552,14 @@ const OmsCheckoutView: FC = () => {
             isOpen={isExpiredSession}
             close={handleBackToCart}
           />
+          <BottomSheetError
+            open={modalErrorCheckout}
+            error={checkoutError}
+            closeAction={handleBackToCart}
+          />
           {ModalErrorCreateOrders()}
           {ModalInvoiceParcelDetail()}
+          {renderModalProductList()}
         </>
       )}
     </SnbContainer>

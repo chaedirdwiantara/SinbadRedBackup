@@ -82,6 +82,9 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         );
       }
     },
+    clearContents: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.productListClearContents());
+    },
   };
 };
 

@@ -1,8 +1,8 @@
-/** === IMPORT PACKAGE HERE === */
+/** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { SnbText, SnbImageCompressor, color } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
+/** === IMPORT STYLE & ASSET === */
 import { Images } from 'src/assets';
 import { ProductCardStyle } from '../styles';
 /** === TYPE === */
@@ -15,6 +15,8 @@ interface ProductCardType1Props {
   uom: string;
   total: string;
   originalTotal?: string;
+  onPress: () => void;
+  type?: 'purchased' | 'bonus';
 }
 /** === COMPONENT === */
 const Type1: FC<ProductCardType1Props> = ({
@@ -26,23 +28,25 @@ const Type1: FC<ProductCardType1Props> = ({
   uom,
   total,
   originalTotal,
+  onPress,
+  type = 'purchased',
 }) => (
-  <View style={ProductCardStyle.Type1.container}>
+  <Pressable style={ProductCardStyle.Type1.container} onPress={onPress}>
     <View style={ProductCardStyle.Type1.body}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={ProductCardStyle.Type1.mainInfo}>
         <SnbImageCompressor
           uri={imageSource}
-          style={{ marginRight: 8, width: 60, height: 60 }}
+          style={ProductCardStyle.Type1.image}
           defaultSource={Images.opacityPlaceholder}
         />
-        <View style={{ maxWidth: '75%' }}>
+        <View style={{ flex: 1 }}>
           <SnbText.B3>{name}</SnbText.B3>
           <View style={{ marginTop: 4 }}>
-            <SnbText.C2>{price}</SnbText.C2>
+            {type === 'purchased' && <SnbText.C2>{price}</SnbText.C2>}
           </View>
         </View>
       </View>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={ProductCardStyle.Type1.qtyInfo}>
         {originalQty && (
           <View style={{ marginRight: 8 }}>
             {/* Should be styled with strikethrough */}
@@ -55,18 +59,26 @@ const Type1: FC<ProductCardType1Props> = ({
     </View>
     <View style={ProductCardStyle.Type1.divider} />
     <View style={ProductCardStyle.Type1.footer}>
-      <SnbText.C1>Total Harga</SnbText.C1>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {type === 'purchased' && <SnbText.C1>Total Harga</SnbText.C1>}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          flex: 1,
+        }}>
         {originalQty && (
           <View style={{ marginRight: 8 }}>
             {/* Should be styled with strikethrough */}
             <SnbText.C2 color={color.black60}>{originalTotal}</SnbText.C2>
           </View>
         )}
-        <SnbText.C2>{total}</SnbText.C2>
+        <SnbText.C2 color={type === 'bonus' ? color.green50 : color.black100}>
+          {type === 'purchased' ? total : 'FREE'}
+        </SnbText.C2>
       </View>
     </View>
-  </View>
+  </Pressable>
 );
 
 export const ProductCard = { Type1 };

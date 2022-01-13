@@ -45,6 +45,7 @@ export const HistoryDetailStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 8,
+    width: '100%',
   },
   seeMoreButton: {
     flexDirection: 'row',
