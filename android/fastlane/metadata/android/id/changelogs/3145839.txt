@@ -1,3 +1,0 @@
-Sinbad Red versi 4.7.1
-
-Fixing bugs pada format Nomor KTP dan NPWP
