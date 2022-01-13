@@ -3,12 +3,15 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
+  SnbBottomSheet,
+  SnbText,
 } from 'react-native-sinbad-ui';
 import {
   ScrollView,
   View,
   ToastAndroid,
   KeyboardAvoidingView,
+  Image,
 } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
@@ -80,6 +83,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const ownerDataInfo = stateUser.detail.data?.ownerData.info;
   const { dispatchQuest } = useQuestContext();
   const { update } = useQuestTaskAction();
+  const [showModalPhoneVerification, setShowModalPhoneVerification] =
+    useState(false);
 
   // if source Quest & phone verified, update quest task status
   useEffect(() => {
@@ -89,15 +94,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       props.source === 'Quest' &&
       props.type === 'merchantOwnerPhoneNo'
     ) {
-      const data = {
-        questId: props.sourceData?.questId,
-        taskId: props.sourceData?.taskId,
-        status: 'done',
-      };
-      update(dispatchQuest, { data });
-      setTimeout(() => {
-        NavigationAction.back();
-      }, 1000);
+      setShowModalPhoneVerification(true);
     }
   }, [ownerDataInfo]);
 
@@ -255,6 +252,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       default:
         break;
     }
+  };
+
+  const updateQuestTaskDone = () => {
+    const data = {
+      questId: props.sourceData?.questId,
+      taskId: props.sourceData?.taskId,
+      status: 'done',
+    };
+    update(dispatchQuest, { data });
   };
 
   /** VALIDATE EMAIL */
@@ -634,6 +640,60 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
+
+  /** => render modal for quest phone number verification content */
+  const renderQuestPhoneNumberVerificationModalContent = () => {
+    let image = require('src/assets/images/sinbad_image/smile_sinbad.png');
+    let title = 'Verifikasi Toko';
+
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={image}
+            style={{ width: 240, height: 160 }}
+            resizeMode="contain"
+          />
+          <SnbText.H4>{title}</SnbText.H4>
+          <View style={{ paddingHorizontal: 16 }}>
+            <SnbText.B3 align="center">
+              {'Nomor Handphone anda sudah terverifikasi'}
+            </SnbText.B3>
+          </View>
+        </View>
+        <View style={{ marginVertical: 16 }} />
+        <View style={{ height: 75 }}>
+          <SnbButton.Single
+            title="Kembali"
+            type="primary"
+            disabled={false}
+            onPress={() => {
+              updateQuestTaskDone();
+              setShowModalPhoneVerification(false);
+              NavigationAction.back();
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
+  /** => render modal for quest phone number verification */
+  const renderQuestPhoneNumberVerifiedModal = () => {
+    return (
+      <SnbBottomSheet
+        open={showModalPhoneVerification}
+        closeAction={() => {
+          updateQuestTaskDone();
+          setShowModalPhoneVerification(false);
+          NavigationAction.back();
+        }}
+        content={renderQuestPhoneNumberVerificationModalContent()}
+        title={'Informasi'}
+        actionIcon={'close'}
+      />
+    );
+  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -642,6 +702,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           {switchView()}
         </ScrollView>
         {renderButton()}
+        {renderQuestPhoneNumberVerifiedModal()}
       </KeyboardAvoidingView>
     </View>
   );
