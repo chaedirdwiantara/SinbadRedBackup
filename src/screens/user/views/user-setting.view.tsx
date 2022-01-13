@@ -20,6 +20,14 @@ const UserSettingView: FC = () => {
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { stateUser } = React.useContext(contexts.UserContext);
+  const [isMounted, setIsmounted] = useState(true);
+
+  React.useEffect(() => {
+    return () => {
+      setIsmounted(false);
+      setShowConfirmation(false);
+    };
+  }, []);
 
   React.useEffect(() => {
     if (stateUser.update.data !== null) {
@@ -66,14 +74,21 @@ const UserSettingView: FC = () => {
         <View>
           <SnbListButtonType2
             title={'Ganti Kata Sandi'}
-            onPress={() => NavigationAction.navigate('UserChangePasswordView')}
+            onPress={() => {
+              setShowConfirmation(false);
+              NavigationAction.navigate('UserChangePasswordView');
+            }}
           />
         </View>
         <SnbButton.Single
           type="secondary"
           title="Log Out"
           disabled={false}
-          onPress={() => setShowConfirmation(true)}
+          onPress={() => {
+            setTimeout(() => {
+              isMounted && setShowConfirmation(true);
+            }, 50);
+          }}
         />
       </ScrollView>
     );

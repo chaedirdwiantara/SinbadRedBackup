@@ -113,7 +113,7 @@ pipeline {
                         s3Download(file: 'android/app/google-services.json', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/google-services.json", force: true)
                         s3Download(file: 'android/app/sinbad-app.jks', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/sinbad-app.jks", force: true)
                         s3Download(file: '.env', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/.env", force: true)
-                        s3Download(file: 'proguard-rules.pro', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/android/app/proguard-rules.pro", force: true)
+                        s3Download(file: 'android/app/proguard-rules.pro', bucket: 'sinbad-env', path: "${SINBAD_ENV}/${SINBAD_REPO}/proguard-rules.pro", force: true)
                     }
                 }
             }
@@ -170,7 +170,7 @@ pipeline {
                                         find android/ -type f |
                                         while read file
                                         do
-                                            sed -i 's/sinbaddev/sinbad/g' $file
+                                            sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                             sed -i 's/ic_launcher_pink/ic_launcher/g' $file
                                             sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
                                             sed -i 's/Sinbad Development/Sinbad/g' $file
@@ -181,7 +181,7 @@ pipeline {
                                         find android/ -type f |
                                         while read file
                                         do
-                                            sed -i 's/sinbaddev/sinbad/g' $file
+                                            sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                             sed -i 's/ic_launcher_pink/ic_launcher_pink/g' $file
                                             sed -i 's/ic_launcher_round_pink/ic_launcher_round_pink/g' $file
                                             sed -i 's/Sinbad Development/Sinbad Testing/g' $file
@@ -195,7 +195,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbadstaging/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.staging/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Staging/g' $file
@@ -206,7 +206,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbadsandbox/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.sandbox/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Sandbox/g' $file
@@ -217,7 +217,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbaddemo/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app.demo/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad Demo/g' $file
@@ -228,7 +228,7 @@ pipeline {
                                             find android/ -type f |
                                             while read file
                                             do
-                                                sed -i 's/sinbaddev/sinbad/g' $file
+                                                sed -i 's/sinbad.app.development/sinbad.app/g' $file
                                                 sed -i 's/ic_launcher_pink/ic_launcher/g' $file
                                                 sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
                                                 sed -i 's/Sinbad Development/Sinbad/g' $file
@@ -285,7 +285,7 @@ pipeline {
                     sh "node_modules/hermes-engine/linux64-bin/hermesc -emit-binary -out source_maps/index.android.bundle.compiler.hbc source_maps/index.android.bundle -output-source-map"
                     sh "node_modules/react-native/scripts/compose-source-maps.js source_maps/index.android.bundle.packager.map source_maps/index.android.bundle.compiler.hbc.map -o source_maps/index.android.bundle.map"
                     withCredentials([string(credentialsId: 'sentry-sinbad', variable: 'SENTRYTOKEN')]) {
-                        sh "node_modules/@sentry/cli/sentry-cli --auth-token ${SENTRYTOKEN} releases --org sinbad-id --project sinbad-red-${SINBAD_ENV} files ${env.APP_ID}@${env.APP_VERSION_NAME}+${env.APP_VERSION_CODE} upload-sourcemaps --dist ${env.APP_VERSION_CODE} --strip-prefix . --rewrite source_maps/index.android.bundle source_maps/index.android.bundle.map"
+                        sh "node_modules/@sentry/cli/sentry-cli --auth-token ${SENTRYTOKEN} releases --org sinbad-id --project sinbad-red-ng-${SINBAD_ENV} files ${env.APP_ID}@${env.APP_VERSION_NAME}+${env.APP_VERSION_CODE} upload-sourcemaps --dist ${env.APP_VERSION_CODE} --strip-prefix . --rewrite source_maps/index.android.bundle source_maps/index.android.bundle.map"
                     }
                 }
             }
@@ -307,15 +307,12 @@ pipeline {
                         slackSend color: '#ff0000', channel: "${SLACK_CHANNEL}", message: """
 Hi Sailors
 We have new APK Version
-
 Application: ${SINBAD_REPO}
 Environment: ${SINBAD_ENV}
 Commit ID: ${env.GIT_COMMIT}
 Changes Message: ${env.GIT_MESSAGE}
-
 You can download this application in here
 ${SINBAD_URI_DOWNLOAD}/${SINBAD_ENV}/${SINBAD_REPO}-${env.GIT_TAG}-${env.GIT_COMMIT_SHORT}-${currentBuild.number}.tar.gz
-
 Or latest application for environment ${SINBAD_ENV} in here
 ${SINBAD_URI_DOWNLOAD}/${SINBAD_ENV}/${SINBAD_REPO}-latest.tar.gz
             """
