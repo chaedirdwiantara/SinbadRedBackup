@@ -61,20 +61,19 @@ const Content: React.FC = () => {
       <View style={{ height: 84, padding: 16 }}>
         <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
-      <View style={{ marginTop: 32, height: 72 }}>
-        <SnbButton.Single
-          title="Selanjutnya"
-          onPress={() => checkPhone({ mobilePhoneNo: phone.value })}
-          type="primary"
-          loading={checkPhoneNoAvailability.loading}
-          disabled={
-            true ||
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            checkPhoneNoAvailability.loading
-          }
-        />
-      </View>
+      <View style={{ marginTop: 32 }} />
+      <SnbButton.Single
+        title="Selanjutnya"
+        onPress={() => checkPhone({ mobilePhoneNo: phone.value })}
+        type="primary"
+        loading={checkPhoneNoAvailability.loading}
+        disabled={
+          true ||
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          checkPhoneNoAvailability.loading
+        }
+      />
     </ScrollView>
   );
 };
