@@ -33,6 +33,7 @@ import {
   CheckoutContext,
 } from './oms/checkout/CheckoutProvider';
 import { StockProvider, StockContext } from './product/stock/StockProvider';
+import { QuestProvider, QuestContext } from './quest/QuestProvider';
 import {
   CheckoutDoneContext,
   CheckoutDoneProvider,
@@ -61,6 +62,7 @@ export const providers = [
   ReserveStockProvider,
   CheckoutProvider,
   StockProvider,
+  QuestProvider,
   CheckoutDoneProvider,
   QuestProvider,
 ];
@@ -85,6 +87,7 @@ export const contexts = {
   ReserveStockContext,
   CheckoutContext,
   StockContext,
+  QuestContext,
   CheckoutDoneContext,
   QuestContext,
 };
