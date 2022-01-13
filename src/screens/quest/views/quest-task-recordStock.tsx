@@ -6,8 +6,6 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbButton,
-  SnbHtml,
-  SnbCheckbox,
   SnbText,
   color,
   SnbImageCompressor,
@@ -25,6 +23,75 @@ import { QuestTaskRecordStockStyles } from '../styles';
 /** === COMPONENT === */
 const QuestTaskRecordStockView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const [stockQty, setStockQty] = useState('');
+  const [regularPrice, setRegularPrice] = useState('');
+  const [typeStatus, setTypeStatus] = useState('default');
+  const [discountPrice, setDiscountPrice] = useState(0);
+  const [voucherPrice, setVoucherPrice] = useState(0);
+
+  const { stateQuest, dispatchQuest } = useQuestContext();
+  const questTaskDetailState = stateQuest.questTask.detail;
+  const { update, detailTask } = useQuestTaskAction();
+  useFocusEffect(
+    React.useCallback(() => {
+      detailTask(dispatchQuest, {
+        id: route.params.taskId,
+      });
+    }, []),
+  );
+
+  /** FUNCTION */
+  const confirm = () => {
+    const data = {
+      questId: route.params.questId,
+      taskId: route.params.taskId,
+      status: 'done',
+      progress: {
+        totalStock: parseFloat(stockQty),
+        regularSellingPrice: parseFloat(regularPrice),
+      },
+    };
+    update(dispatchQuest, { data });
+    setTimeout(() => {
+      goBack();
+    }, 500);
+  };
+
+  const checkValidationPrice = (price: any) => {
+    const { suggestedSellingPrice, maxRewardVoucherPerCustomer } =
+      questTaskDetailState.data?.products;
+
+    setRegularPrice(price);
+    if (price === suggestedSellingPrice || price < suggestedSellingPrice) {
+      setTypeStatus('error');
+    } else {
+      setTypeStatus('success');
+      let maxDiscountPrice = price - suggestedSellingPrice;
+      const maxVoucherPrice =
+        maxDiscountPrice < maxRewardVoucherPerCustomer
+          ? maxDiscountPrice
+          : maxRewardVoucherPerCustomer;
+      setVoucherPrice(maxVoucherPrice);
+      setDiscountPrice(maxDiscountPrice);
+    }
+  };
+
+  const handleClearPriceInput = () => {
+    setRegularPrice('');
+    setTypeStatus('default');
+  };
+
+  const handleDisabledButton = () => {
+    let disabled = false;
+    if (stockQty === '' || stockQty === '0') {
+      disabled = true;
+    } else if (regularPrice === '' || regularPrice === '0') {
+      disabled = true;
+    } else if (typeStatus === 'error') {
+      disabled = true;
+    }
+    return disabled;
+  };
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -52,8 +119,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
   };
   /** => Render Disclaimer */
   const renderDisclaimer = () => {
-    //TODO: update with task detail
-    const maxRewardVoucherPerCustomer = 20000;
+    const { maxRewardVoucherPerCustomer } = questTaskDetailState.data?.products;
 
     const text1 = 'Perhitungan:';
     const text2 =
@@ -104,7 +170,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
         <View style={QuestTaskRecordStockStyles.textCalculation}>
           <SnbText.B3 align={'left'}>Voucher per Pelanggan</SnbText.B3>
           <SnbText.B3 align={'right'} color={color.green50}>
-            {toCurrency(20000, { withFraction: false })}
+            {toCurrency(voucherPrice, { withFraction: false })}
           </SnbText.B3>
         </View>
         <View style={{ paddingVertical: 8 }}>
@@ -113,7 +179,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
         <View style={QuestTaskRecordStockStyles.textCalculation}>
           <SnbText.B3 align={'left'}>Potongan Harga</SnbText.B3>
           <SnbText.B3 align={'right'} color={color.green50}>
-            {toCurrency(5000, { withFraction: false })}
+            {toCurrency(discountPrice, { withFraction: false })}
           </SnbText.B3>
         </View>
       </View>
@@ -121,6 +187,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
   };
   /** => Render Item */
   const renderItem = () => {
+    const { suggestedSellingPrice } = questTaskDetailState.data?.products;
     return (
       <View style={QuestTaskRecordStockStyles.boxContentList}>
         <View
@@ -147,24 +214,23 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
                   <SnbText.H4>SGM EKSPLOR 3+ MADU 600 GR GA (KP)</SnbText.H4>
                   <SnbText.B3>Harga Jual yang Disetujui:</SnbText.B3>
                   <SnbText.B4 color={color.red50}>
-                    {toCurrency(20000, { withFraction: false })}
+                    {toCurrency(suggestedSellingPrice, { withFraction: false })}
                   </SnbText.B4>
                 </View>
               </View>
             </View>
           </View>
           <View style={QuestTaskRecordStockStyles.boxInput}>
-            {/* <SnbText.H4>Jumlah Stok:</SnbText.H4> */}
             <SnbTextField.Text
               labelText={'Jumlah Stok:'}
               placeholder={'Qty.'}
               type={'default'}
-              value={''}
+              value={stockQty}
               keyboardType={'number-pad'}
-              onChangeText={(text) => console.log(text)}
-              clearText={() => console.log('clear')}
+              onChangeText={(text) => setStockQty(text)}
+              clearText={() => setStockQty('')}
             />
-            <View style={{ paddingTop: 16 }}>
+            <View style={{ paddingVertical: 16 }}>
               <SnbText.H4>Harga Jual Reguler:</SnbText.H4>
               <SnbText.B3>
                 Harga SKU reguler yang dijual dari toko ke pelanggan (diluar
@@ -172,13 +238,12 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
               </SnbText.B3>
               <View style={{ paddingTop: 8 }}>
                 <SnbTextField.Text
-                  // labelText={'Harga Jual Reguler:'}
                   placeholder={'Rp.'}
-                  type={'default'}
-                  value={''}
+                  type={typeStatus}
+                  value={regularPrice}
                   keyboardType={'number-pad'}
-                  onChangeText={(text) => console.log(text)}
-                  clearText={() => console.log('clear')}
+                  onChangeText={(text) => checkValidationPrice(text)}
+                  clearText={() => handleClearPriceInput()}
                   valMsgSuccess={'Berhasil!'}
                   valMsgError={
                     'Masukkan harga yang lebih tinggi dari harga jual yang disetujui'
@@ -187,7 +252,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
               </View>
             </View>
           </View>
-          {renderCalculation()}
+          {typeStatus === 'success' ? renderCalculation() : <View />}
         </View>
       </View>
     );
@@ -199,7 +264,8 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
         <SnbButton.Single
           type="primary"
           title={'Selanjutnya'}
-          onPress={() => null}
+          disabled={handleDisabledButton()}
+          onPress={() => confirm()}
         />
       </View>
     );
@@ -211,14 +277,18 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
         {renderInformation()}
         {renderDisclaimer()}
         {renderItem()}
-        {renderButton()}
       </ScrollView>
     );
   };
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderContent()}
+      {!questTaskDetailState.loading && questTaskDetailState.data !== null ? (
+        renderContent()
+      ) : (
+        <LoadingPage />
+      )}
+      {renderButton()}
     </SnbContainer>
   );
 };
