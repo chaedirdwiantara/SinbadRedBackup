@@ -5,14 +5,9 @@ import {
   SnbButton,
   SnbBottomSheet,
   SnbText,
+  SnbToast,
 } from 'react-native-sinbad-ui';
-import {
-  ScrollView,
-  View,
-  ToastAndroid,
-  KeyboardAvoidingView,
-  Image,
-} from 'react-native';
+import { ScrollView, View, KeyboardAvoidingView, Image } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
