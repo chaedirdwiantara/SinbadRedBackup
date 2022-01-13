@@ -4,7 +4,7 @@ import { useInput, useMerchant } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
-import { ToastAndroid, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import MapView, { Marker } from 'react-native-maps';
 import {
@@ -35,13 +35,6 @@ const MerchantEditAddressView = () => {
 
   React.useEffect(() => {
     if (stateMerchant.merchantEdit.data) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Berhasil Ubah Alamat Toko',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       goBack();
       reset(dispatchSupplier);
       resetMerchantData();

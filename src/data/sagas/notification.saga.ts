@@ -18,8 +18,12 @@ function* notificationList(action: models.ListProcessAction) {
     );
     yield put(ActionCreators.notificationListSuccess(response));
   } catch (error: any) {
-    // yield action.contextDispatch(ActionCreators.brandListFailed(error));
-    yield put(ActionCreators.notificationListSuccess(error));
+    yield action.contextDispatch(
+      ActionCreators.notificationListFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.notificationListFailed(error as models.ErrorProps),
+    );
   }
 }
 

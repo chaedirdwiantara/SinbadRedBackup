@@ -5,6 +5,7 @@ import {
   SnbTextField,
   SnbTopNav,
   SnbText,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
@@ -19,6 +20,7 @@ const MerchantDetailAddressView: FC = () => {
   const { storeAddress }: any = stateUser.detail.data?.storeData || {};
   let mapRef = React.useRef<MapView>(null);
   const { resetMerchantData } = useMerchant();
+  const { stateMerchant } = React.useContext(contexts.MerchantContext);
 
   React.useEffect(() => {
     if (storeAddress?.longitude !== null && storeAddress?.latitude !== null) {
@@ -42,6 +44,12 @@ const MerchantDetailAddressView: FC = () => {
     );
     return () => backHandler.remove();
   }, []);
+
+  useEffect(() => {
+    if (stateMerchant.merchantEdit.data !== null) {
+      SnbToast.show('Data Berhasil Diperbaharui', 2500, { positionValue: 56 });
+    }
+  }, [stateMerchant]);
 
   /** === VIEW === */
   /** => header */

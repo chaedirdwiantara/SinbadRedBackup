@@ -5,6 +5,7 @@ export const PRODUCT_LIST_FAILED = 'ProductListFailed';
 export const PRODUCT_LIST_REFRESH = 'ProductListRefresh';
 export const PRODUCT_LIST_RESET = 'ProductListReset';
 export const PRODUCT_LIST_LOADMORE = 'ProductListLoadMore';
+export const PRODUCT_LIST_CLEAR_CONTENTS = 'ProductListClearContents';
 
 /** => Detail */
 export const PRODUCT_DETAIL_PROCESS = 'ProductDetailProcess';

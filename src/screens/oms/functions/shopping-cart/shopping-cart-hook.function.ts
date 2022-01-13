@@ -7,6 +7,7 @@ import {
   useDataCartSelected,
   useDataCartMaster,
   useDataTotalProductCart,
+  useDataProductMasterCart,
 } from '@core/redux/Data';
 /** === FUNCTIONS === */
 
@@ -91,9 +92,67 @@ export const useCartMasterActions = () => {
     },
     deleteProduct: (data: models.ICartDeleteProductPayload) => {
       dispatch(Actions.deleteCartProduct(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
     },
     updateRouteName: (data: models.IUpdateRouteNamePayload) => {
       dispatch(Actions.updatePreviouseRouteCart(data));
+    },
+    reset: () => {
+      dispatch(Actions.resetCartMasterData());
+    },
+    deleteProductEmptyStock: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProductEmptyStock(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
+    },
+    deleteProductNotFound: (data: models.ICartDeleteProductPayload) => {
+      dispatch(Actions.deleteCartProductNotFound(data));
+      dispatch(Actions.deleteItemProductMasterCart(data));
+    },
+  };
+};
+
+export const useCartCheckedoutActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (actions: any) => any) => {
+      dispatch(Actions.cartCheckedoutProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartCheckedoutReset(contextDispatch));
+    },
+  };
+};
+
+export const useInitialCartUpdateActions = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (actions: any) => any,
+      data: models.CartUpdatePayload,
+    ) => {
+      dispatch(Actions.initialCartUpdateProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.initialCartUpdateReset(contextDispatch));
+    },
+  };
+};
+
+export const useProductMasterCartActions = () => {
+  const dataCart: models.IProductMaster = useDataProductMasterCart();
+  const dispatch = useDispatch();
+  return {
+    dataProductMasterCart: dataCart.data,
+    setDataProductMasterCart: (data: Array<models.IProductItemUpdateCart>) => {
+      dispatch(Actions.updateDataProductMasterCart(data));
+    },
+    setItemProductMasterCart: (data: models.IProductItemUpdateCart) => {
+      dispatch(Actions.updateItemProductMasterCart(data));
+    },
+    setItemSelectedProductMasterCart: (
+      data: models.IUpdateSelectedProductPayload,
+    ) => {
+      dispatch(Actions.updateItemSelectedProductMasterCart(data));
     },
   };
 };

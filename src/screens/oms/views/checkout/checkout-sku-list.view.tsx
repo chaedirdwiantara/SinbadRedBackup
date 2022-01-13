@@ -1,18 +1,21 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { Image } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { SnbSKUList } from 'react-native-sinbad-ui';
+import * as models from '@models';
 /** === TYPE === */
 export interface IProductCheckout {
   urlImages: string;
 }
 export interface CheckoutSKUListViewProps {
   products: IProductCheckout[];
+  openModalProduct: (data: models.ProductCheckout[]) => void;
 }
 /** === COMPONENT === */
 export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
   products,
+  openModalProduct,
 }) => {
   /** === HOOK === */
   return (
@@ -20,10 +23,15 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
       data={products}
       renderItem={({ item }: any) => {
         return (
-          <Image
-            source={{ uri: item.urlImages }}
-            style={CheckoutStyle.skuImage}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              openModalProduct(products as models.ProductCheckout[])
+            }>
+            <Image
+              source={{ uri: item.urlImages }}
+              style={CheckoutStyle.skuImage}
+            />
+          </TouchableOpacity>
         );
       }}
       expandable

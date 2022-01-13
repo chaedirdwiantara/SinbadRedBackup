@@ -3,10 +3,7 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
-import {
-  useParcelDetailModal,
-  handleTransformProductBrands,
-} from '@screen/oms/functions';
+import { handleTransformProductBrands } from '@screen/oms/functions';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
@@ -19,6 +16,7 @@ interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
   openModalPaymentType: (value: boolean) => void;
   openModalParcelDetail: any;
+  openModalProductList: (data: models.ProductCheckout[]) => void;
   index: number;
 }
 /** === COMPONENT === */
@@ -26,6 +24,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
   openModalPaymentType,
   openModalParcelDetail,
+  openModalProductList,
   index,
 }) => {
   /** === HOOK === */
@@ -41,6 +40,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
         </View>
         <CheckoutSKUListView
           products={handleTransformProductBrands(data.brands)}
+          openModalProduct={openModalProductList}
         />
       </View>
       <CheckoutShipmentDetailView />

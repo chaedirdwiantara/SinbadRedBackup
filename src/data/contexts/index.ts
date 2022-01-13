@@ -33,11 +33,11 @@ import {
   CheckoutContext,
 } from './oms/checkout/CheckoutProvider';
 import { StockProvider, StockContext } from './product/stock/StockProvider';
-import { QuestProvider, QuestContext } from './quest/QuestProvider';
 import {
   CheckoutDoneContext,
   CheckoutDoneProvider,
 } from './oms/checkout-done/CheckoutDoneProvider';
+import { QuestProvider, QuestContext } from './quest/QuestProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,

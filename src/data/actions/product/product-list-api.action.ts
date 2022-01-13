@@ -40,3 +40,7 @@ export const productListLoadMore = () => {
 export const productListReset = () => {
   return { type: types.PRODUCT_LIST_RESET };
 };
+/** => Clear Contents */
+export const productListClearContents = () => {
+  return { type: types.PRODUCT_LIST_CLEAR_CONTENTS };
+};

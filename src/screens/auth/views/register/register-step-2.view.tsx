@@ -1,20 +1,19 @@
 import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image, ToastAndroid, Dimensions } from 'react-native';
+import { View, Image } from 'react-native';
 import {
   SnbContainer,
   SnbText,
   SnbTopNav,
   SnbUploadPhotoRules,
   SnbButton,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { REGISTER_STEP_3_VIEW } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import RegisterProgress from '../shared/register-progress.component';
-
-const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -37,25 +36,13 @@ const Content: React.FC = () => {
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'ktp'
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Berhasil Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
       saveUserData({ idImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Gagal Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      SnbToast.show('Foto Gagal Diupload', 2500, { positionValue: 40 });
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 

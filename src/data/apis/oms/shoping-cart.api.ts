@@ -34,9 +34,15 @@ const getCartTotalProduct = () => {
   );
 };
 
+const updateCartCheckedout = () => {
+  const path = 'carts/checkedout';
+  return apiMapping('auth', path, 'cart', 'v1', 'UPDATE', {});
+};
+
 export const CartApi = {
   getCartView,
   addToCart,
   updateCart,
   getCartTotalProduct,
+  updateCartCheckedout,
 };

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
@@ -25,7 +25,9 @@ const SearchProductView: FC = () => {
   const {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();
-  const { fetch, refresh, loadMore } = useProductListActions();
+  const [localKeyword, setLocalKeyword] = useState(keyword);
+  const [isSearched, setIsSearched] = useState(0);
+  const { fetch, refresh, loadMore, clearContents } = useProductListActions();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
@@ -33,8 +35,10 @@ const SearchProductView: FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      fetch(dispatchProduct, { keyword });
-    }, []),
+      fetch(dispatchProduct, { keyword: localKeyword });
+
+      return () => clearContents(dispatchProduct);
+    }, [isSearched]),
   );
   /** === VIEW === */
   return (
@@ -43,17 +47,24 @@ const SearchProductView: FC = () => {
         <ProductList
           products={productListState.data}
           headerType="search"
-          activeKeyword={keyword}
+          activeKeyword={localKeyword}
+          onActiveKeywordChange={(text: string) => setLocalKeyword(text)}
           isRefreshing={productListState.refresh}
-          onFetch={(queryOptions) =>
+          onFetch={(queryOptions) => {
             fetch(dispatchProduct, {
-              keyword,
+              keyword: localKeyword,
               ...queryOptions,
-            })
-          }
+            });
+
+            if (localKeyword === '') {
+              setIsSearched(0);
+            } else {
+              setIsSearched((prev) => prev + 1);
+            }
+          }}
           onRefresh={(queryOptions) =>
             refresh(dispatchProduct, {
-              keyword,
+              keyword: localKeyword,
               ...queryOptions,
             })
           }
@@ -64,7 +75,7 @@ const SearchProductView: FC = () => {
                 skip: productListState.skip,
                 canLoadMore: productListState.canLoadMore,
               },
-              { keyword, ...queryOptions },
+              { keyword: localKeyword, ...queryOptions },
             )
           }
         />

@@ -4,8 +4,14 @@ import {
   HistoryDetailCardDivider,
   HistoryCardItem,
 } from '@screen/history/components';
+import { View } from 'react-native';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { HistoryDetail, PaymentDetailSuccessProps } from '@model/history';
+import {
+  HistoryDetail,
+  PaymentDetailSuccessProps,
+  HistoryVoucher,
+  HistoryPromoApplied,
+} from '@model/history';
 import { PaymentType, OrderStatus } from '@screen/history/functions/data';
 /** === INTERFACE === */
 interface PaymentInformationProps {
@@ -53,6 +59,47 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
       };
     }
   };
+
+  const renderVoucherList = (data?: HistoryVoucher[]) => {
+    return dataOrder!.voucherList.length > 0 ? (
+      data?.map((item: HistoryVoucher, index: number) => {
+        return (
+          <View key={index}>
+            <HistoryCardItem
+              title={item.voucherName ?? ''}
+              value={`- ${toCurrency(item.voucherValue!, {
+                withFraction: false,
+              })}`}
+              type="green"
+            />
+          </View>
+        );
+      })
+    ) : (
+      <View />
+    );
+  };
+
+  const renderPromoList = (data?: HistoryPromoApplied[]) => {
+    return dataOrder!.promoApplied.length > 0 ? (
+      data?.map((item: HistoryPromoApplied, index: number) => (
+        <View key={index}>
+          <HistoryCardItem
+            title={item.promoName}
+            value={
+              item?.promoValue
+                ? `- ${toCurrency(item?.promoValue, { withFraction: false })}`
+                : 'FREE'
+            }
+            type="green"
+          />
+        </View>
+      ))
+    ) : (
+      <View />
+    );
+  };
+
   return (
     <HistoryDetailCard title="Informasi Pembayaran">
       <HistoryCardItem
@@ -63,42 +110,55 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         title="Metode Pembayaran"
         value={dataPayment?.paymentChannel.name || null}
       />
+      <HistoryDetailCardDivider />
       <HistoryCardItem
-        title={`Sub-total pesanan ${paymentInformation().qty}`}
-        value={toCurrency(paymentInformation().grossPrice! ?? 0)}
+        title={`Sub-total pesanan (${paymentInformation().qty})`}
+        value={toCurrency(paymentInformation().grossPrice! ?? 0, {
+          withFraction: false,
+        })}
       />
-
-      {
-        // will be updated when BE done with VoucherList and PromoList
-        /* <HistoryCardItem title="tes 20 400" value="FREE" type="green" /> */
-      }
-      <HistoryCardItem title="Ongkos Kirim" value={toCurrency(0)} />
+      {renderVoucherList(dataOrder?.voucherList)}
+      {renderPromoList(dataOrder?.promoApplied)}
+      <HistoryCardItem
+        title="Ongkos Kirim"
+        value={toCurrency(0, { withFraction: false })}
+      />
       <HistoryCardItem
         title="PPN 10%"
-        value={toCurrency(paymentInformation().taxes! ?? 0)}
+        value={toCurrency(paymentInformation().taxes! ?? 0, {
+          withFraction: false,
+        })}
       />
       <HistoryCardItem
         title="Total Pesanan"
-        value={toCurrency(paymentInformation().parcelFinal! ?? 0)}
+        value={toCurrency(paymentInformation().parcelFinal! ?? 0, {
+          withFraction: false,
+        })}
         type="bold"
       />
       <HistoryDetailCardDivider />
-      {dataOrder?.parcelPromoPaymentAmount ? (
+      {dataOrder?.parcelPromoPaymentValue ? (
         <HistoryCardItem
           title="Promo Pembayaran"
-          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentAmount)}`}
+          value={`- ${toCurrency(dataOrder?.parcelPromoPaymentValue, {
+            withFraction: false,
+          })}`}
         />
       ) : null}
 
       {dataPayment?.paymentFee ? (
         <HistoryCardItem
           title="Layanan Pembayaran"
-          value={toCurrency(dataPayment?.paymentFee ?? 0)}
+          value={toCurrency(dataPayment?.paymentFee ?? 0, {
+            withFraction: false,
+          })}
         />
       ) : null}
       <HistoryCardItem
         title="Total Pembayaran Pesanan"
-        value={toCurrency(paymentInformation().finalPrice! ?? 0)}
+        value={toCurrency(paymentInformation().finalPrice! ?? 0, {
+          withFraction: false,
+        })}
         type="bold"
       />
     </HistoryDetailCard>

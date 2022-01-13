@@ -5,12 +5,13 @@ import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
-import { Image, ToastAndroid, View } from 'react-native';
+import { Image, View } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
   SnbTopNav,
   SnbUploadPhotoRules,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 
 function setRules(type: string) {
@@ -133,63 +134,40 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `Upload Foto ${setType()} Gagal`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
+      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateGlobal.uploadImage]);
 
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `Berhasil Update Foto ${setType()}`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       goBack();
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser);
     }
 
     if (stateMerchant.profileEdit.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `Update Foto ${setType()} Gagal`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateMerchant.profileEdit]);
 
   React.useEffect(() => {
     if (stateMerchant.merchantEdit.data !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `Berhasil Update Foto ${setType()}`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       goBack();
       editMerchantAction.reset(dispatchSupplier);
       detail(dispatchUser);
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        `Update Foto ${setType()} Gagal`,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
+        position: 'bottom',
+        positionValue: 72,
+      });
     }
   }, [stateMerchant.merchantEdit]);
 

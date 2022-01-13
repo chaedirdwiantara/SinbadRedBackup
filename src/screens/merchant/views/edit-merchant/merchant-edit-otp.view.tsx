@@ -127,6 +127,15 @@ const OTPContent: React.FC<Props> = (props) => {
     }
     NavigationAction.backToPage('MerchantDetailProfileView');
     storeDetailAction.detail(dispatchUser);
+    // if source Quest, navigate to quest detail view
+    if (source === 'Quest') {
+      NavigationAction.navigate('QuestDetailView', {
+        questId: sourceData.questId,
+      });
+    } else {
+      NavigationAction.backToPage('MerchantDetailProfileView');
+      storeDetailAction.detail(dispatchUser, { id: '3' });
+    }
   };
 
   const backFunc = () => {

@@ -5,8 +5,9 @@ import {
   SnbTextField,
   SnbButton,
   SnbDialog,
+  SnbToast,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, ToastAndroid, Image } from 'react-native';
+import { ScrollView, View, Image } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { UserHookFunc } from '../functions';
@@ -33,6 +34,7 @@ const UserChangePasswordView: FC = () => {
   const [errorNewPasswordMessage, setErrorNewPasswordMessage] = useState('');
   const [errorConfirmPasswordMessage, setErrorConfirmPasswordMessage] =
     useState('');
+
   /** === FUNCTION FOR HOOK === */
   const textOldPassword = (oldPassword: string) => {
     setDataOldPassword(oldPassword);
@@ -68,25 +70,12 @@ const UserChangePasswordView: FC = () => {
   useEffect(() => {
     if (stateUser.update.data !== null) {
       setOpenConfirm(false);
-      ToastAndroid.showWithGravityAndOffset(
-        'Kata Sandi berhasil diperbaharui',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        240,
-      );
       NavigationAction.back();
       changePasswordAction.resetChangePassword(dispatchUser);
     } else if (stateUser.update.error !== null) {
       if (stateUser.update.error.code === 10000) {
         setOpenConfirm(false);
-        ToastAndroid.showWithGravityAndOffset(
-          'Terjadi Kesalahan',
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-          0,
-          240,
-        );
+        SnbToast.show('Terjadi Kesalahan', 2500, { positionValue: 72 });
         changePasswordAction.resetChangePassword(dispatchUser);
       } else if (stateUser.update.error.code === 10011) {
         setOpenConfirm(false);

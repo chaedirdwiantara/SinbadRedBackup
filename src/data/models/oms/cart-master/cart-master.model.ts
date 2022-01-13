@@ -5,6 +5,8 @@ export interface ICartMasterProductNotAvailable {
   productName: string;
   displayPrice: number;
   urlImages: string;
+  qty: number;
+  stock: number;
 }
 
 export interface IVoucherIdCartMaster {

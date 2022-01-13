@@ -23,10 +23,10 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.app.sinbaddev'
+        applicationId 'sinbad.app.development'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode 4
         versionName '1.0'
         missingDimensionStrategy 'react-native-camera', 'general', 'mlkit'
         multiDexEnabled true
@@ -61,7 +61,6 @@ android {
             debuggable false
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -91,6 +90,7 @@ dependencies {
     implementation project(':@react-native-firebase_messaging')
     implementation project(':@react-native-firebase_firestore')
     implementation project(':@react-native-firebase_database')
+    implementation project(':react-native-push-notification')
     // CHECK FOR HERMES
     if (enableHermes) {
         def hermesPath = '../../node_modules/hermes-engine/android/';

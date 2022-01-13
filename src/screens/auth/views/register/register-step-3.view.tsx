@@ -1,20 +1,19 @@
 import { renderIF, useCamera, useMerchant } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image, ToastAndroid, Dimensions } from 'react-native';
+import { View, Image } from 'react-native';
 import {
   SnbContainer,
   SnbText,
   SnbTopNav,
   SnbUploadPhotoRules,
   SnbButton,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { REGISTER_STEP_4_VIEW } from '@screen/auth/functions/screens_name';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import RegisterProgress from '../shared/register-progress.component';
-
-const { height } = Dimensions.get('screen');
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -37,27 +36,13 @@ const Content: React.FC = () => {
       stateGlobal.uploadImage.data !== null &&
       capturedImage.data?.type === 'selfie'
     ) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Berhasil Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
-      saveUserData({
-        selfieImageUrl: stateGlobal.uploadImage.data.url,
-      });
+      SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
+      saveUserData({ selfieImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      ToastAndroid.showWithGravityAndOffset(
-        'Foto Gagal Diupload',
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        0,
-        height * 0.25,
-      );
+      SnbToast.show('Foto Gagal Diupload', 2500, { positionValue: 40 });
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
@@ -157,6 +142,7 @@ const Content: React.FC = () => {
 
 const RegisterStep3View: React.FC = () => {
   const { goBack } = useNavigation();
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={goBack} type="white" title="" />

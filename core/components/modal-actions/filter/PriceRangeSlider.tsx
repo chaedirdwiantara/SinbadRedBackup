@@ -43,8 +43,8 @@ const PriceRangeSlider: FC<PriceSliderProps> = ({
         width: '100%',
         marginTop: -10,
       }}>
-      <SnbText.C1>{toCurrency(minPrice)}</SnbText.C1>
-      <SnbText.C1>{toCurrency(maxPrice)}</SnbText.C1>
+      <SnbText.C1>{toCurrency(minPrice, { withFraction: false })}</SnbText.C1>
+      <SnbText.C1>{toCurrency(maxPrice, { withFraction: false })}</SnbText.C1>
     </View>
   </View>
 );

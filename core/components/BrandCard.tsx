@@ -30,6 +30,7 @@ export const BrandCard: FC<BrandCardProps> = ({
       uri={props.imageUrl}
       style={BrandCardStyle.image}
       defaultSource={Images.opacityPlaceholder}
+      resizeMode="contain"
     />
   </TouchableOpacity>
 );

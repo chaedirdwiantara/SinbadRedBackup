@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
 import { PaymentDetailSuccessProps } from '@model/history';
-import SnbCardButtonType3 from '../../components/SnbCardButtonType3';
-import SnbCardButtonType4 from '@screen/history/components/SnbCardButtonType4';
+import VANumberCard from '../../components/VANumberCard';
+import VAButtonCard from '../../components/VAButtonCard';
 import {
   BillingStatus,
   PaymentType,
@@ -53,17 +53,18 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
   const renderVAButton = () => {
     return (
       <View>
-        <SnbCardButtonType4
+        <VAButtonCard
           title="Transfer ke no. Virtual Account :"
           titleAlign="left"
           buttonText="AKTIFKAN VIRTUAL ACCOUNT"
           onPress={() => onClickButton()}
           loading={stateHistory.activateVa.loading}
           disabled={
-            stateHistory.activateVa.loading &&
-            data?.paymentType.id === PaymentType.PAY_LATER &&
-            statusOrder !== OrderStatus.DELIVERED
+            stateHistory.activateVa.loading ||
+            (data?.paymentType.id === PaymentType.PAY_LATER &&
+              statusOrder !== OrderStatus.DELIVERED)
           }
+          tooltipShown={true}
         />
       </View>
     );
@@ -73,11 +74,11 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
     return (
       <>
         <View>
-          <SnbCardButtonType3
+          <VANumberCard
             subTitle1={data?.accountVaNo || ''}
             subTitle2={'a/n Sinbad Karya Perdagangan'}
             left={renderBankIcon}
-            bottomText={'Salin no. Rek'}
+            bottomText={'Salin No. Rek'}
             title="Transfer ke no. Virtual Account :"
             onPress={onClick}
           />
@@ -104,11 +105,10 @@ const HistoryPaymentVirtualAccount: FC<PaymentVAProps> = ({
               paymentChannel?.id !== ChannelType.CASH &&
               dataPayment?.expiredPaymentTime)) &&
           (billingStatus === BillingStatus.PENDING ||
-            billingStatus === BillingStatus.OVERDUE) &&
-          isNotExpired ? (
+            billingStatus === BillingStatus.OVERDUE) ? (
             renderVANumber()
           ) : paymentChannel?.id !== 1 &&
-            !isNotExpired &&
+            !dataPayment?.expiredPaymentTime &&
             (billingStatus === BillingStatus.PENDING ||
               billingStatus === BillingStatus.OVERDUE) ? (
             renderVAButton()

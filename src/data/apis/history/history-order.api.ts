@@ -35,10 +35,10 @@ const getHistoryList = (payload: models.HistoryListProcessProps) => {
   );
 };
 
-const getDetail = (payload: models.DetailProcessProps) => {
+const getDetail = (payload: models.HistoryDetailProcessProps) => {
   return apiMapping<models.HistoryDetail>(
     'auth',
-    `${historyBasePath}/${payload.id}`,
+    `${historyBasePath}/${payload.id}/${payload.logType}`,
     'order',
     'v1',
     'DETAIL',
