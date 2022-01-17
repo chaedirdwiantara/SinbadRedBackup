@@ -420,6 +420,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                   qty: product.qty,
                   stock: product.stock,
                 });
+
+                /** => add to data product for update cart */
+                productMasterCart.push({
+                  productId: product.productId,
+                  selected: false,
+                  qty: product.qty,
+                  stock: product.stock,
+                });
               } else {
                 /** => if status selected is true */
                 if (product.selected) {
@@ -463,6 +471,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 qty: product.qty,
                 stock: product.stock,
               });
+
+              /** => add to data product for update cart */
+              productMasterCart.push({
+                productId: product.productId,
+                selected: false,
+                qty: product.qty,
+                stock: product.stock,
+              });
             } else if (indexNotFound >= 0) {
               /** => add to products of brand */
               dataNotFound.push({
@@ -470,6 +486,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 productName: product.productName,
                 displayPrice: product.displayPrice,
                 urlImages: product.urlImages,
+                qty: product.qty,
+                stock: product.stock,
+              });
+
+              /** => add to data product for update cart */
+              productMasterCart.push({
+                productId: product.productId,
+                selected: false,
                 qty: product.qty,
                 stock: product.stock,
               });
