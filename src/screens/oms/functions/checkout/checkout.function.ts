@@ -73,7 +73,6 @@ const handleSubTotalPrice = (
 };
 
 const calculateTax = (data: models.IInvoiceCheckout) => {
-  console.log(data);
   let total = 0;
   if (data.totalPriceBeforeTax) {
     total += data.totalPriceBeforeTax;
