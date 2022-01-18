@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -9,6 +9,7 @@ import {
   color,
   SnbIconHint,
   SnbButton,
+  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -23,6 +24,7 @@ import {
 } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
+import { contexts } from '@contexts';
 
 interface StepperDataProps {
   id: number;
@@ -43,6 +45,12 @@ interface StepperDataProps {
 /** === COMPONENT === */
 const QuestDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const { stateUser } = React.useContext(contexts.UserContext);
+  const ownerDataInfo = stateUser.detail.data?.ownerData.info;
+  const ownerMobilePhone = stateUser.detail.data?.ownerData.profile.mobilePhone;
+  const [showModalPhoneVerification, setShowModalPhoneVerification] =
+    useState(false);
+
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questDetailState = stateQuest.questGeneral.detail;
   const { detail } = useQuestDetailAction();
@@ -55,6 +63,20 @@ const QuestDetailView: FC = ({ route }: any) => {
       });
     }, []),
   );
+
+  const updateTaskDone = () => {
+    const { id, currentTaskId } = questDetailState.data;
+    const data = {
+      questId: id,
+      taskId: currentTaskId,
+      status: 'done',
+    };
+    update(dispatchQuest, { data });
+    detail(dispatchQuest, {
+      id: route.params.questId,
+    });
+    setShowModalPhoneVerification(false);
+  };
 
   const stepAction = async () => {
     const { id, currentTaskId } = questDetailState.data;
@@ -74,12 +96,16 @@ const QuestDetailView: FC = ({ route }: any) => {
     const { id, currentTaskId, currentTask } = questDetailState.data;
     switch (screenName) {
       case 'PhoneNumberVerification':
-        NavigationAction.navigate('MerchantEditView', {
-          title: 'Verifikasi Toko',
-          type: 'merchantOwnerPhoneNo',
-          source: 'Quest',
-          sourceData: data,
-        });
+        if (ownerDataInfo && ownerDataInfo.isMobilePhoneVerified) {
+          setShowModalPhoneVerification(true);
+        } else {
+          NavigationAction.navigate('MerchantEditView', {
+            title: 'Verifikasi Toko',
+            type: 'merchantOwnerPhoneNo',
+            source: 'Quest',
+            sourceData: data,
+          });
+        }
         break;
       case 'StoreNameVerification':
         NavigationAction.navigate('MerchantEditView', {
@@ -325,6 +351,57 @@ const QuestDetailView: FC = ({ route }: any) => {
 
     return { title, isFirst, isLast, isDone, current };
   };
+
+  /** => render modal for quest phone number verification */
+  const renderQuestPhoneNumberVerifiedModal = () => {
+    return (
+      <SnbBottomSheet
+        open={showModalPhoneVerification}
+        closeAction={() => {
+          updateTaskDone();
+        }}
+        content={renderQuestPhoneNumberVerificationModalContent()}
+        title={'Informasi'}
+        actionIcon={'close'}
+      />
+    );
+  };
+
+  /** => render modal for quest phone number verification content */
+  const renderQuestPhoneNumberVerificationModalContent = () => {
+    let image = require('src/assets/images/sinbad_image/smile_sinbad.png');
+    let title = 'Verifikasi Nomor Handphone';
+
+    return (
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={image}
+            style={{ width: 240, height: 160 }}
+            resizeMode="contain"
+          />
+          <SnbText.H4>{title}</SnbText.H4>
+          <View style={{ paddingHorizontal: 16 }}>
+            <SnbText.B3 align="center">
+              {`Nomor Handphone ${ownerMobilePhone} sudah terverifikasi`}
+            </SnbText.B3>
+          </View>
+        </View>
+        <View style={{ marginVertical: 16 }} />
+        <View style={{ height: 75 }}>
+          <SnbButton.Single
+            title="Kembali"
+            type="primary"
+            disabled={false}
+            onPress={() => {
+              updateTaskDone();
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
   /** => Render Footer */
   const renderFooter = () => {
     const { currentTask, endDate } = questDetailState.data;
@@ -389,6 +466,7 @@ const QuestDetailView: FC = ({ route }: any) => {
           </ScrollView>
         </View>
         {renderFooter()}
+        {renderQuestPhoneNumberVerifiedModal()}
       </>
     );
   };
