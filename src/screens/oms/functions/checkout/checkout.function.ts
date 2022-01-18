@@ -22,7 +22,7 @@ const handleTotalPrice = (
     }
 
     if (invoice.totalPriceAfterTax && invoice.totalPriceBeforeTax) {
-      subTotal += invoice.totalPriceAfterTax - invoice.totalPriceBeforeTax;
+      subTotal += calculateTax(invoice);
     }
 
     if (invoice.totalFee) {
@@ -54,7 +54,7 @@ const handleSubTotalPrice = (
   }
 
   if (data.totalPriceAfterTax && data.totalPriceBeforeTax) {
-    total += data.totalPriceAfterTax - data.totalPriceBeforeTax;
+    total += calculateTax(data);
   }
 
   if (data.totalFee) {
@@ -70,6 +70,22 @@ const handleSubTotalPrice = (
   }
 
   return toCurrency(total, options);
+};
+
+const calculateTax = (data: models.IInvoiceCheckout) => {
+  console.log(data);
+  let total = 0;
+  if (data.totalPriceBeforeTax) {
+    total += data.totalPriceBeforeTax;
+  }
+
+  if (data.totalPromoSellerAndVoucher) {
+    total -= data.totalPromoSellerAndVoucher;
+  }
+
+  const taxPrice = (total * data.tax) / 100;
+
+  return taxPrice;
 };
 
 const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
@@ -150,4 +166,5 @@ export {
   handleDiscountInvoiceGroups,
   useModalParcelDetail,
   useModalProductList,
+  calculateTax,
 };
