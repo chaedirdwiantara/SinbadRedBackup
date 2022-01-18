@@ -45,6 +45,37 @@ export const ShoppingCartVoucherTag: FC<ShoppingCartVoucherTagProps> = ({
     goToVoucherCartList();
   };
 
+  let voucherTagTitle, voucherTagSubtitle;
+  if (voucherData.dataVouchers !== null) {
+    const isHaveBenefitValue = countPotentialDiscount(
+      voucherData.dataVouchers.sinbadVoucher,
+      voucherData.dataVouchers.sellerVouchers,
+    ).isHaveBenefitValue;
+
+    // check if selected voucher have benefit and not only percent
+    if (isHaveBenefitValue) {
+      voucherTagTitle = `Potensi potongan ${toCurrency(
+        countPotentialDiscount(
+          voucherData.dataVouchers.sinbadVoucher,
+          voucherData.dataVouchers.sellerVouchers,
+        ).totalDiscount,
+        {
+          withPrefix: false,
+          withFraction: false,
+        },
+      )}`;
+    } else {
+      voucherTagTitle = 'Potensi potongan';
+    }
+
+    voucherTagSubtitle = `${
+      countPotentialDiscount(
+        voucherData.dataVouchers.sinbadVoucher,
+        voucherData.dataVouchers.sellerVouchers,
+      ).totalSelectedVoucher
+    } Voucher terpilih`;
+  }
+
   return (
     <React.Fragment>
       {countVoucher.detail.data?.total !== 0 &&
@@ -60,23 +91,12 @@ export const ShoppingCartVoucherTag: FC<ShoppingCartVoucherTagProps> = ({
                 <View style={{ justifyContent: 'center' }}>
                   {voucherData.dataVouchers !== null ? (
                     <>
-                      <SnbText.C1
-                        color={color.green50}>{`Potensi potongan ${toCurrency(
-                        countPotentialDiscount(
-                          voucherData.dataVouchers.sinbadVoucher,
-                          voucherData.dataVouchers.sellerVouchers,
-                        ).totalDiscount,
-                        {
-                          withPrefix: false,
-                          withFraction: false,
-                        },
-                      )}`}</SnbText.C1>
-                      <SnbText.C2 color={color.green50}>{`${
-                        countPotentialDiscount(
-                          voucherData.dataVouchers.sinbadVoucher,
-                          voucherData.dataVouchers.sellerVouchers,
-                        ).totalSelectedVoucher
-                      } Voucher terpilih`}</SnbText.C2>
+                      <SnbText.C1 color={color.green50}>
+                        {voucherTagTitle}
+                      </SnbText.C1>
+                      <SnbText.C2 color={color.green50}>
+                        {voucherTagSubtitle}
+                      </SnbText.C2>
                     </>
                   ) : (
                     <SnbText.B3
