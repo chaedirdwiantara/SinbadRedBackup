@@ -7,6 +7,7 @@ import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import {
   usePaymentDetailAccorrdion,
   handleSubTotalPrice,
+  calculateTax,
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
@@ -56,7 +57,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black100}>{`PPN ${data.tax}%`}</SnbText.B3>
             <SnbText.B3 color={color.black100}>
-              {toCurrency(data.totalPriceAfterTax - data.totalPriceBeforeTax, {
+              {toCurrency(calculateTax(data), {
                 withFraction: false,
               })}
             </SnbText.B3>
