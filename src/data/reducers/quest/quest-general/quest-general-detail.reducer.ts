@@ -8,7 +8,7 @@ type QuestDetailInitialProps = models.DetailItemProps<models.QuestDetailItem>;
 export const questGeneralDetailInitialState: QuestDetailInitialProps = {
   data: null,
   error: null,
-  loading: false,
+  loading: true,
 };
 /** === FUNCTION HERE === */
 export const questGeneralDetailReducer = simplifyReducer(

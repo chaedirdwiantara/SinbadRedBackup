@@ -9,7 +9,7 @@ export type QuestListInitialProps = models.ListItemProps<
 /** === INITIAL STATE === */
 export const questGeneralListInitialState: QuestListInitialProps = {
   data: [],
-  loading: false,
+  loading: true,
   error: null,
   loadMore: false,
   refresh: false,
@@ -44,6 +44,19 @@ export const questGeneralListReducer = simplifyReducer(
         refresh: false,
         total: payload.meta.total,
         skip: payload.meta.skip,
+      };
+    },
+    /** => list failed */
+    [types.QUEST_LIST_FAILED](
+      state = questGeneralListInitialState,
+      action: models.ListFailedAction,
+    ) {
+      return {
+        ...state,
+        loading: false,
+        loadMore: false,
+        refresh: false,
+        error: action.payload,
       };
     },
     /** => Reset */
