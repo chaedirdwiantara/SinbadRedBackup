@@ -174,6 +174,7 @@ const QuestListView: FC = () => {
 
   /** => Quest List */
   const renderQuestList = () => {
+    console.log('questListState', questListState);
     return (
       <View style={{ paddingVertical: 8 }}>
         <FlatList

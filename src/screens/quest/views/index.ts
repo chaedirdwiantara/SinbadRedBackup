@@ -5,6 +5,7 @@ import QuestAdditionalInfoView from './quest-additionalInfo.view';
 import QuestTaskConsentLetterView from './quest-task-consentLetter';
 import QuestTaskCompleteStoreView from './quest-task-completeStore';
 import QuestTaskRecordStock from './quest-task-recordStock';
+import QuestTaskEndCustomerPromoView from './quest-task-endCustomerPromo';
 /** === EXPORT ALL === */
 export {
   QuestListView,
@@ -13,6 +14,7 @@ export {
   QuestTaskConsentLetterView,
   QuestTaskCompleteStoreView,
   QuestTaskRecordStock,
+  QuestTaskEndCustomerPromoView,
 };
 /**
  * ================================================================

@@ -40,7 +40,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
           if (me.data === null) {
             NavigationAction.navigate('LoginPhoneView');
           } else {
-            NavigationAction.navigate('NotificationView');
+            NavigationAction.navigate('QuestListView');
           }
         }}
         icon2Value={dataTotalProductCart.totalProduct}

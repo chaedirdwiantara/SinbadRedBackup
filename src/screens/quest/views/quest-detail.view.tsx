@@ -111,6 +111,13 @@ const QuestDetailView: FC = ({ route }: any) => {
           taskId: currentTaskId,
         });
         break;
+      case 'EndCustomerPromotion':
+        NavigationAction.navigate('QuestTaskEndCustomerPromoView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
       default: {
         break;
       }

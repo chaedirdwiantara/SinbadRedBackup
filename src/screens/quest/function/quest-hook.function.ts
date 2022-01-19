@@ -23,7 +23,7 @@ const callListProcessAction = (
 
 const useQuestListAction = () => {
   const dispatch = useDispatch();
-  const limit = 10;
+  const limit = 20;
 
   return {
     /** => LIST */
