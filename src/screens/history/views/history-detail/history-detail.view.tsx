@@ -14,7 +14,6 @@ import {
   color,
   styles,
   SnbToast,
-  SnbCountdown,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -27,6 +26,7 @@ import {
   HistoryDetailStatus,
   HistoryCardItem,
   HistoryDetailProductList,
+  CountDownTimer,
   HistoryDetailSkeleton,
 } from '../../components';
 import HistoryDetailPaymentInformation from './history-detail-payment-information.view';
@@ -430,7 +430,7 @@ const HistoryDetailView: FC = () => {
             SEGERA LAKUKAN PEMBAYARAN DALAM WAKTU
           </SnbText.H4>
           <View style={{ alignItems: 'center', marginVertical: 8 }}>
-            <SnbCountdown
+            <CountDownTimer
               type={'big'}
               expiredTime={paymentDetail.data!.expiredPaymentTime}
             />
