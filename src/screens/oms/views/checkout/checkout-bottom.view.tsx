@@ -17,12 +17,14 @@ interface CheckoutBottomViewProps {
   data: models.IInvoiceCheckout[];
   openTCModal: () => void;
   openErrorWarning: () => void;
+  closeErrorWarning: () => void;
   checkExpiredTime: any;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
   openErrorWarning,
+  closeErrorWarning,
   checkExpiredTime,
 }) => {
   /** === HOOK === */
@@ -61,6 +63,9 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
       }
     } else {
       openErrorWarning();
+      setTimeout(() => {
+        closeErrorWarning();
+      }, 2000);
     }
   };
 

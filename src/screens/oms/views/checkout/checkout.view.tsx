@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer, SnbModalWarning } from 'react-native-sinbad-ui';
+import { SnbContainer } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -49,6 +49,7 @@ import {
   useCheckAllPromoPaymentAction,
 } from '@screen/promo/functions';
 import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
+import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
 import { ErrorFetchModal } from './checkout-error-fetch-modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { usePrevious } from '@core/functions/hook/prev-value';
@@ -506,6 +507,7 @@ const OmsCheckoutView: FC = () => {
             data={checkoutMaster.invoices}
             openTCModal={() => paymentTCModal.setOpen(true)}
             openErrorWarning={() => errorWarningModal.setOpen(true)}
+            closeErrorWarning={() => errorWarningModal.setOpen(false)}
             checkExpiredTime={handleCheckExpiredSession}
           />
           <ModalPaymentType
@@ -523,11 +525,9 @@ const OmsCheckoutView: FC = () => {
             isOpen={paymentTCModal.isOpen}
             close={() => closeModalTC()}
           />
-          <SnbModalWarning
+          <ModalErrorWarning
             open={errorWarningModal.isOpen}
-            text={'Anda belum memilih metode pembayaran'}
-            onClose={() => errorWarningModal.setOpen(false)}
-            duration={2000}
+            content={'Anda belum memilih metode pembayaran'}
           />
           <BackToCartModal
             isOpen={backToCartModal.isOpen}
