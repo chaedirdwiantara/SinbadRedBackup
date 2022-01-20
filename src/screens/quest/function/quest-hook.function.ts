@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
+import React from 'react';
 /** === FUNCTIONS === */
 /** === Fetch Quest Related === */
 const callListProcessAction = (
@@ -124,6 +125,16 @@ const useQuestTaskAction = () => {
     ) => {
       dispatch(callTaskDetailProcessAction(contextDispatch, queryOptions));
     },
+  };
+};
+
+export const useErrorModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
   };
 };
 

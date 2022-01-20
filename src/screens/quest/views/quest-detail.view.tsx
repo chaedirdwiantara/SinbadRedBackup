@@ -19,12 +19,14 @@ import { NavigationAction } from '@navigation';
 import {
   goBack,
   MoneyFormatSpace,
+  useErrorModalState,
   useQuestDetailAction,
   useQuestTaskAction,
 } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
 import { contexts } from '@contexts';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 interface StepperDataProps {
   id: number;
@@ -45,6 +47,7 @@ interface StepperDataProps {
 /** === COMPONENT === */
 const QuestDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const questDetailErrorModal = useErrorModalState();
   const { stateUser } = React.useContext(contexts.UserContext);
   const ownerDataInfo = stateUser.detail.data?.ownerData.info;
   const ownerMobilePhone = stateUser.detail.data?.ownerData.profile.mobilePhone;
@@ -64,74 +67,87 @@ const QuestDetailView: FC = ({ route }: any) => {
     }, []),
   );
 
-  const updateTaskDone = () => {
-    const { id, currentTaskId } = questDetailState.data;
-    const data = {
-      questId: id,
-      taskId: currentTaskId,
-      status: 'done',
-    };
-    update(dispatchQuest, { data });
+  useFocusEffect(
+    React.useCallback(() => {
+      if (
+        questDetailState.error !== null ||
+        stateQuest.questTask.update.error !== null
+      ) {
+        questDetailErrorModal.setOpen(true);
+      }
+    }, [questDetailState, stateQuest.questTask.update.error]),
+  );
+
+  const retryGetQuestDetail = () => {
+    questDetailErrorModal.setOpen(false);
+    setShowModalPhoneVerification(false);
+
     detail(dispatchQuest, {
       id: route.params.questId,
     });
-    setShowModalPhoneVerification(false);
+  };
+
+  const stepToPhoneNumberVerification = (data: any) => {
+    if (ownerDataInfo && ownerDataInfo.isMobilePhoneVerified) {
+      data.status = 'done';
+      update(dispatchQuest, { data });
+
+      setShowModalPhoneVerification(true);
+    } else {
+      NavigationAction.navigate('MerchantEditView', {
+        title: 'Verifikasi Toko',
+        type: 'merchantOwnerPhoneNo',
+        source: 'Quest',
+        sourceData: data,
+      });
+    }
+  };
+
+  const stepToStoreNameVerification = (data: any) => {
+    NavigationAction.navigate('MerchantEditView', {
+      title: 'Verifikasi Toko',
+      type: 'merchantOwnerName',
+      source: 'Quest',
+      sourceData: data,
+    });
+  };
+
+  const stepToConsentLetterAndCompleteStore = (screenName: string) => {
+    const id = questDetailState.data?.id;
+    const currentTaskId = questDetailState.data?.currentTaskId;
+    const currentTask = questDetailState.data?.currentTask;
+
+    if (screenName === 'ConsentLetter') {
+      NavigationAction.navigate('QuestTaskConsentLetterView', {
+        title: currentTask,
+        questId: id,
+        taskId: currentTaskId,
+      });
+    } else {
+      NavigationAction.navigate('QuestTaskCompleteStoreView', {
+        title: currentTask,
+        questId: id,
+        taskId: currentTaskId,
+      });
+    }
   };
 
   const stepAction = async () => {
     const { id, currentTaskId } = questDetailState.data;
-    // Hit update quest API => from null to on_progress
+    // prepare update quest task API => from null to on_progress
     const data = {
       questId: id,
       taskId: currentTaskId,
       status: 'on_progress',
     };
-    await update(dispatchQuest, { data });
-    // Navigate to specific task's page
-    checkNavigationScreen(buttonStatus().current.screenName, data);
-  };
-
-  /** => check navigation screen */
-  const checkNavigationScreen = (screenName: string, data: any) => {
-    const { id, currentTaskId, currentTask } = questDetailState.data;
-    switch (screenName) {
-      case 'PhoneNumberVerification':
-        if (ownerDataInfo && ownerDataInfo.isMobilePhoneVerified) {
-          setShowModalPhoneVerification(true);
-        } else {
-          NavigationAction.navigate('MerchantEditView', {
-            title: 'Verifikasi Toko',
-            type: 'merchantOwnerPhoneNo',
-            source: 'Quest',
-            sourceData: data,
-          });
-        }
-        break;
-      case 'StoreNameVerification':
-        NavigationAction.navigate('MerchantEditView', {
-          title: 'Verifikasi Toko',
-          type: 'merchantOwnerName',
-          source: 'Quest',
-          sourceData: data,
-        });
-        break;
-      case 'ConsentLetter':
-        NavigationAction.navigate('QuestTaskConsentLetterView', {
-          title: currentTask,
-          questId: id,
-          taskId: currentTaskId,
-        });
-        break;
-      case 'CompleteStore':
-        NavigationAction.navigate('QuestTaskCompleteStoreView', {
-          title: currentTask,
-          questId: id,
-          taskId: currentTaskId,
-        });
-        break;
-      default: {
-        break;
-      }
+    if (buttonStatus().current.screenName === 'PhoneNumberVerification') {
+      stepToPhoneNumberVerification(data);
+    } else if (buttonStatus().current.screenName === 'StoreNameVerification') {
+      stepToStoreNameVerification(data);
+    } else if (buttonStatus().current.screenName === 'ConsentLetter') {
+      stepToConsentLetterAndCompleteStore(buttonStatus().current.screenName);
+    } else if (buttonStatus().current.screenName === 'CompleteStore') {
+      stepToConsentLetterAndCompleteStore(buttonStatus().current.screenName);
     }
   };
 
@@ -357,12 +373,8 @@ const QuestDetailView: FC = ({ route }: any) => {
     return (
       <SnbBottomSheet
         open={showModalPhoneVerification}
-        closeAction={() => {
-          updateTaskDone();
-        }}
         content={renderQuestPhoneNumberVerificationModalContent()}
         title={'Informasi'}
-        actionIcon={'close'}
       />
     );
   };
@@ -390,11 +402,11 @@ const QuestDetailView: FC = ({ route }: any) => {
         <View style={{ marginVertical: 16 }} />
         <View style={{ height: 75 }}>
           <SnbButton.Single
-            title="Kembali"
+            title="Lanjutkan"
             type="primary"
             disabled={false}
             onPress={() => {
-              updateTaskDone();
+              retryGetQuestDetail();
             }}
           />
         </View>
@@ -443,6 +455,32 @@ const QuestDetailView: FC = ({ route }: any) => {
       </>
     );
   };
+
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={questDetailErrorModal.isOpen}
+        error={
+          questDetailState.error
+            ? questDetailState.error
+            : stateQuest.questTask.update.error
+        }
+        retryAction={() => {
+          if (questDetailState.error !== null) {
+            stateQuest.questTask.update.error = null;
+            retryGetQuestDetail();
+          } else {
+            questDetailErrorModal.setOpen(false);
+            stepAction();
+          }
+        }}
+        closeAction={() => {
+          questDetailErrorModal.setOpen(false);
+        }}
+      />
+    );
+  };
+
   /** => Content */
   const renderContent = () => {
     return (
@@ -466,7 +504,6 @@ const QuestDetailView: FC = ({ route }: any) => {
           </ScrollView>
         </View>
         {renderFooter()}
-        {renderQuestPhoneNumberVerifiedModal()}
       </>
     );
   };
@@ -479,6 +516,8 @@ const QuestDetailView: FC = ({ route }: any) => {
       ) : (
         <LoadingPage />
       )}
+      {renderErrorModal()}
+      {renderQuestPhoneNumberVerifiedModal()}
     </SnbContainer>
   );
 };
