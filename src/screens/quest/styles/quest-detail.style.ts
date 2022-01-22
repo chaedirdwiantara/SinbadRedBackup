@@ -133,6 +133,47 @@ const QuestStyles = StyleSheet.create({
   checkboxLabel: {
     margin: 8,
   },
+  confirm: {
+    alignItems: 'center',
+    paddingVertical: 16,
+  },
+  imageConfirm: {
+    marginTop: 16,
+    width: 222,
+    height: 264,
+    resizeMode: 'cover',
+  },
+  achievementContainer: {
+    paddingTop: 32,
+    marginHorizontal: 16,
+  },
+  boxAchievement: {
+    marginTop: 16,
+    borderRadius: 8,
+    backgroundColor: color.white,
+  },
+  achievementInfo: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  achievementImageBox: {
+    width: 44,
+    height: 44,
+    borderRadius: 15,
+    borderColor: '#E0E0E0',
+    backgroundColor: color.black5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+  },
+  boxAchievementSeparator: {
+    borderColor: color.black40,
+    borderWidth: 1,
+    borderRadius: 1,
+    borderStyle: 'solid',
+    marginHorizontal: 16,
+  },
 });
 
 export default QuestStyles;

@@ -42,9 +42,29 @@ const getDetailTask = (payload: models.QuestDetailProcessProps) => {
   );
 };
 
+const getValidateVoucherCode = (
+  payload: models.QuestValidateVoucherProcessProps,
+) => {
+  const path = `/task-codes/verification?code=${payload.code}`;
+  return apiMapping<models.QuestValidateVoucherItem>(
+    'auth',
+    path,
+    'quests',
+    'v1',
+    'DETAIL',
+  );
+};
+
+const submitVoucher = (payload: object) => {
+  const path = 'task-codes/verification';
+  return apiMapping('auth', path, 'quests', 'v1', 'CREATE', payload);
+};
+
 export const QuestApi = {
   getList,
   getDetail,
   updateTask,
   getDetailTask,
+  getValidateVoucherCode,
+  submitVoucher,
 };

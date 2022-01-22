@@ -1,3 +1,4 @@
+import React from 'react';
 /** === IMPORT PACKAGES === */
 import { useDispatch } from 'react-redux';
 /** === IMPORT FUNCTION === */
@@ -127,4 +128,48 @@ const useQuestTaskAction = () => {
   };
 };
 
-export { useQuestListAction, useQuestDetailAction, useQuestTaskAction };
+const useQuestVoucherAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    /** VOUCHER */
+    validateVoucher: (
+      contextDispatch: (action: any) => any,
+      queryOptions: models.QuestValidateVoucherProcessProps,
+    ) => {
+      dispatch(
+        Actions.questTaskValidateVoucherProcess(contextDispatch, queryOptions),
+      );
+    },
+    resetVoucher: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questTaskValidateVoucherReset());
+    },
+    submitVoucher: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.questTaskSubmitVoucherProcess(contextDispatch, data));
+    },
+    resetSubmitVoucher: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questTaskSubmitVoucherReset());
+    },
+  };
+};
+
+const useStandardModalState = () => {
+  const [isOpen, setOpen] = React.useState(false);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    isOpen,
+  };
+};
+
+export {
+  useQuestListAction,
+  useQuestDetailAction,
+  useQuestTaskAction,
+  useQuestVoucherAction,
+  useStandardModalState,
+};

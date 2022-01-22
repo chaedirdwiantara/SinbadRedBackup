@@ -46,6 +46,19 @@ export const questGeneralListReducer = simplifyReducer(
         skip: payload.meta.skip,
       };
     },
+    /** => list failed */
+    [types.QUEST_LIST_FAILED](
+      state = questGeneralListInitialState,
+      { payload }: models.ListFailedAction,
+    ) {
+      return {
+        ...state,
+        loading: false,
+        loadMore: false,
+        refresh: false,
+        error: payload,
+      };
+    },
     /** => Reset */
     [types.QUEST_LIST_RESET]() {
       return questGeneralListInitialState;

@@ -20,6 +20,7 @@ function* questList(
     yield action.contextDispatch(ActionCreators.questListSuccess(response));
     yield put(ActionCreators.questListSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.questListFailed(error));
     yield put(ActionCreators.questListFailed(error));
   }
 }
@@ -33,6 +34,7 @@ function* questDetail(action: models.QuestDetailProcessAction) {
     yield action.contextDispatch(ActionCreators.questDetailSuccess(response));
     yield put(ActionCreators.questDetailSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.questDetailFailed(error));
     yield put(ActionCreators.questDetailFailed(error));
   }
 }
@@ -63,12 +65,54 @@ function* questTaskDetail(action: models.QuestDetailProcessAction) {
     yield put(ActionCreators.questTaskDetailFailed(error));
   }
 }
+/** => Validate Voucher */
+function* questTaskValidateVoucher(
+  action: models.QuestValidateVoucherProcessAction,
+) {
+  try {
+    const response: models.DetailSuccessProps<models.QuestValidateVoucherItem> =
+      yield call(() => {
+        return QuestApi.getValidateVoucherCode(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.questTaskValidateVoucherSuccess(response),
+    );
+    yield put(ActionCreators.questTaskValidateVoucherSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questTaskValidateVoucherFailed(error),
+    );
+    yield put(ActionCreators.questTaskValidateVoucherFailed(error));
+  }
+}
+/** => Submit Voucher */
+function* questTaskSubmitVoucher(action: models.QuestTaskProcessAction) {
+  try {
+    const response: models.UpdateSuccessProps = yield call(() => {
+      return QuestApi.submitVoucher(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.questTaskSubmitVoucherSuccess(response),
+    );
+    yield put(ActionCreators.questTaskSubmitVoucherSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questTaskSubmitVoucherFailed(error),
+    );
+    yield put(ActionCreators.questTaskSubmitVoucherFailed(error));
+  }
+}
 /** === LISTENER === */
 function* QuestSaga() {
   yield takeLatest(types.QUEST_LIST_PROCESS, questList);
   yield takeLatest(types.QUEST_DETAIL_PROCESS, questDetail);
   yield takeLatest(types.QUEST_TASK_PROCESS, questTask);
   yield takeLatest(types.QUEST_TASK_DETAIL_PROCESS, questTaskDetail);
+  yield takeLatest(
+    types.QUEST_VALIDATE_VOUCHER_PROCESS,
+    questTaskValidateVoucher,
+  );
+  yield takeLatest(types.QUEST_SUBMIT_VOUCHER_PROCESS, questTaskSubmitVoucher);
 }
 
 export default QuestSaga;

@@ -326,6 +326,7 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
     <SnbContainer color="grey">
       {renderHeader()}
       {renderContent()}
+      {/* modal */}
       {renderModalTimePicker()}
       {renderModalConfirm()}
       <ModalWarning open={modalWarning} content={warningMessage} />

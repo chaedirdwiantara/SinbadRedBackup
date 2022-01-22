@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -14,8 +14,14 @@ import {
 import moment from 'moment';
 import LoadingPage from '@core/components/LoadingPage';
 import { EmptyState } from '@core/components/EmptyState';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
-import { goBack, goToQuestDetail, useQuestListAction } from '../function';
+import {
+  goBack,
+  goToQuestDetail,
+  useQuestListAction,
+  useStandardModalState,
+} from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 /** === IMPORT STYLES === */
 import { QuestListStyles } from '../styles';
@@ -45,11 +51,19 @@ const QuestListView: FC = () => {
   const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
+  const questListError = useStandardModalState();
+
   useFocusEffect(
     React.useCallback(() => {
       fetch(dispatchQuest, { status });
     }, [activeTab]),
   );
+
+  useEffect(() => {
+    if (questListState && questListState.error !== null) {
+      questListError.setOpen(true);
+    }
+  }, [questListState]);
 
   /** === VIEW === */
   /** => Header */
@@ -174,7 +188,6 @@ const QuestListView: FC = () => {
 
   /** => Quest List */
   const renderQuestList = () => {
-    console.log('questListState', questListState);
     return (
       <View style={{ paddingVertical: 8 }}>
         <FlatList
@@ -212,6 +225,23 @@ const QuestListView: FC = () => {
     }
     return <EmptyState title={title} description={description} />;
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={questListError.isOpen}
+        error={questListState.error}
+        closeAction={() => {
+          questListError.setOpen(false);
+          goBack();
+        }}
+        retryAction={() => {
+          questListError.setOpen(false);
+          fetch(dispatchQuest, { status });
+        }}
+      />
+    );
+  };
   /** => Content */
   const renderContent = () => {
     return (
@@ -230,6 +260,8 @@ const QuestListView: FC = () => {
       {renderHeader()}
       {renderTabs()}
       {questListState.loading ? <LoadingPage /> : renderContent()}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

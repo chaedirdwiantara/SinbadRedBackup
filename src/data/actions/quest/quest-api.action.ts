@@ -127,3 +127,63 @@ export const questTaskDetailFailed = (
 export const questTaskDetailReset = () => {
   return { type: types.QUEST_TASK_DETAIL_RESET };
 };
+
+/** === VALIDATE VOUCHER ACTIONS === */
+/** => Process */
+export const questTaskValidateVoucherProcess = (
+  contextDispatch: (action: any) => any,
+  payload: models.QuestValidateVoucherProcessProps,
+): models.QuestValidateVoucherProcessAction => {
+  contextDispatch({ type: types.QUEST_VALIDATE_VOUCHER_PROCESS, payload });
+  return {
+    type: types.QUEST_VALIDATE_VOUCHER_PROCESS,
+    payload,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const questTaskValidateVoucherSuccess = (
+  payload: models.DetailSuccessProps<models.QuestValidateVoucherItem>,
+): models.DetailSuccessAction<models.QuestValidateVoucherItem> => {
+  return { type: types.QUEST_VALIDATE_VOUCHER_SUCCESS, payload };
+};
+/** => Failed */
+export const questTaskValidateVoucherFailed = (
+  payload: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.QUEST_VALIDATE_VOUCHER_FAILED, payload };
+};
+/** => Reset */
+export const questTaskValidateVoucherReset = () => {
+  return { type: types.QUEST_VALIDATE_VOUCHER_RESET };
+};
+
+/** === SUBMIT VOUCHER ACTIONS === */
+/** => Process */
+export const questTaskSubmitVoucherProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.UpdateProcessProps<{}>,
+): models.SubmitVoucherProcessAction => {
+  contextDispatch({ type: types.QUEST_SUBMIT_VOUCHER_PROCESS, payload: data });
+  return {
+    type: types.QUEST_SUBMIT_VOUCHER_PROCESS,
+    payload: data.data,
+    contextDispatch,
+  };
+};
+/** => Succeeded */
+export const questTaskSubmitVoucherSuccess = (
+  payload: models.UpdateSuccessProps,
+): models.UpdateSuccessAction => {
+  return { type: types.QUEST_SUBMIT_VOUCHER_SUCCESS, payload };
+};
+/** => Failed */
+export const questTaskSubmitVoucherFailed = (
+  payload: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return { type: types.QUEST_SUBMIT_VOUCHER_FAILED, payload };
+};
+/** => Reset */
+export const questTaskSubmitVoucherReset = () => {
+  return { type: types.QUEST_SUBMIT_VOUCHER_RESET };
+};

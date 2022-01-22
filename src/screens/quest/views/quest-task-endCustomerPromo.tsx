@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -14,10 +14,17 @@ import {
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import { Images } from 'src/assets';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { goBack, useQuestTaskAction } from '../function';
+import {
+  goBack,
+  goToQuestDetail,
+  useQuestTaskAction,
+  useQuestVoucherAction,
+  useStandardModalState,
+} from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestTaskEndCustomerPromoStyle } from '../styles';
 
@@ -27,6 +34,8 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
   const [viewType, setViewType] = useState('inputCodeView');
   const [inputCode, setInputCode] = useState('');
   const [inputCodeStatus, setInputCodeStatus] = useState('default');
+  const [codeValMsgError, setCodeValMsgError] = useState('');
+  const [codeValMsgSuccess, setCodeValMsgSuccess] = useState('');
   const [inputPhone, setInputPhone] = useState('');
   const [inputPhoneStatus, setInputPhoneStatus] = useState('default');
   const [phoneValMsgError, setPhoneValMsgError] = useState('');
@@ -35,7 +44,14 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
 
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questTaskDetailState = stateQuest.questTask.detail;
-  const { update, detailTask } = useQuestTaskAction();
+  const questValidateVoucherState = stateQuest.questVoucher.validate;
+  const questSubmitVoucherState = stateQuest.questVoucher.submit;
+  const { detailTask } = useQuestTaskAction();
+  const { validateVoucher, resetVoucher, submitVoucher, resetSubmitVoucher } =
+    useQuestVoucherAction();
+
+  const questTaskEndCustomerPromoError = useStandardModalState();
+
   useFocusEffect(
     React.useCallback(() => {
       detailTask(dispatchQuest, {
@@ -44,7 +60,59 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
     }, []),
   );
 
+  useEffect(() => {
+    if (questSubmitVoucherState && questSubmitVoucherState.error !== null) {
+      questTaskEndCustomerPromoError.setOpen(true);
+    }
+  }, [questSubmitVoucherState]);
+
+  useEffect(() => {
+    if (questValidateVoucherState && questValidateVoucherState.data !== null) {
+      setInputCodeStatus('success');
+      setCodeValMsgSuccess(questValidateVoucherState.data.message);
+      setTimeout(() => {
+        setViewType('inputPhoneNoView');
+      }, 2000);
+    } else if (
+      questValidateVoucherState &&
+      questValidateVoucherState.error !== null
+    ) {
+      setInputCodeStatus('error');
+      setCodeValMsgError(questValidateVoucherState.error.errorMessage);
+    }
+    return () => {
+      resetVoucher(dispatchQuest);
+    };
+  }, [questValidateVoucherState]);
+
+  useEffect(() => {
+    if (checked === 'selected') {
+      confirm();
+    }
+  }, [checked]);
+
+  useEffect(() => {
+    if (questSubmitVoucherState && questSubmitVoucherState.data !== null) {
+      goToQuestDetail({ questId: route.params.questId });
+    }
+  }, [questSubmitVoucherState]);
+
   /** FUNCTION */
+  const confirm = () => {
+    const { buyerId, products } = questTaskDetailState.data;
+    const data = {
+      code: inputCode,
+      buyerId: buyerId,
+      productId: products.productId,
+      phoneNumber: inputPhone,
+    };
+    submitVoucher(dispatchQuest, { data });
+  };
+
+  const handleChecklist = () => {
+    setChecked(checked === 'selected' ? 'unselect' : 'selected');
+  };
+
   const onChangePhoneNo = (text: string) => {
     setInputPhoneStatus('default');
     text = text.replace(/[^0-9]/g, '');
@@ -74,6 +142,37 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
     return disabled;
   };
 
+  const checkValidateVoucher = async (code: string) => {
+    if (code === '') {
+      setInputCode('');
+      setInputCodeStatus('default');
+      setCodeValMsgError('');
+    } else {
+      setInputCode(code);
+      validateVoucher(dispatchQuest, { code });
+    }
+  };
+
+  const clearInputCode = () => {
+    setInputCode('');
+    setInputCodeStatus('default');
+  };
+
+  const handleBack = () => {
+    if (viewType === 'inputCodeView') {
+      goBack();
+    } else if (viewType === 'inputPhoneNoView') {
+      setViewType('inputCodeView');
+    } else if (viewType === 'selectSkuView') {
+      setViewType('inputPhoneNoView');
+    }
+  };
+
+  const clearInputPhone = () => {
+    setInputPhone('');
+    setInputPhoneStatus('default');
+  };
+
   /** === VIEW === */
   /** => Header */
   const renderHeader = () => {
@@ -81,7 +180,7 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
       <SnbTopNav.Type3
         type="red"
         title={route.params.title}
-        backAction={goBack}
+        backAction={() => handleBack()}
       />
     );
   };
@@ -110,8 +209,11 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
             placeholder={'Masukkan Kode'}
             type={inputCodeStatus}
             value={inputCode}
-            onChangeText={(text) => setInputCode(text)}
-            clearText={() => setInputCode('')}
+            onChangeText={(text) => checkValidateVoucher(text)}
+            clearText={() => clearInputCode()}
+            valMsgError={codeValMsgError}
+            valMsgSuccess={codeValMsgSuccess}
+            autoCapitalize={'characters'}
           />
         </View>
         {renderImage()}
@@ -134,7 +236,7 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
             value={inputPhone}
             keyboardType={'phone-pad'}
             onChangeText={(text) => onChangePhoneNo(text)}
-            clearText={() => setInputPhone('')}
+            clearText={() => clearInputPhone()}
             valMsgError={phoneValMsgError}
             valMsgSuccess={phoneValMsgSuccess}
           />
@@ -158,6 +260,8 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
   );
   /** => Render Select SKU */
   const renderSelectSkuView = () => {
+    const { catalogueImages, regularSellingPrice, suggestedSellingPrice } =
+      questTaskDetailState.data?.products;
     return (
       <>
         <View
@@ -178,9 +282,7 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
             <PromoTag />
             <View style={QuestTaskEndCustomerPromoStyle.boxContentImage}>
               <SnbImageCompressor
-                uri={
-                  'https://images.sinbad.co.id/prod/catalogue-images/17671/image_1591176704340.png'
-                }
+                uri={catalogueImages}
                 style={
                   QuestTaskEndCustomerPromoStyle.fullWidthRatioContainRadius5Image
                 }
@@ -195,24 +297,23 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
               </View>
               <View style={QuestTaskEndCustomerPromoStyle.boxOrderedAndButton}>
                 <View style={QuestTaskEndCustomerPromoStyle.boxPrice}>
-                  <SnbText.C1 color={color.black80}>
-                    {toCurrency(13500, { withFraction: false })}
+                  <SnbText.C1
+                    color={color.black80}
+                    textDecorationLine={'line-through'}>
+                    {toCurrency(regularSellingPrice, { withFraction: false })}
                   </SnbText.C1>
                   <View style={{ marginTop: 8 }}>
                     <SnbText.B4 color={color.red50}>
-                      {toCurrency(10000, { withFraction: false })}
+                      {toCurrency(suggestedSellingPrice, {
+                        withFraction: false,
+                      })}
                     </SnbText.B4>
                   </View>
                 </View>
               </View>
             </View>
             <View style={QuestTaskEndCustomerPromoStyle.checkboxContainer}>
-              <SnbCheckbox
-                status={checked}
-                onPress={() =>
-                  setChecked(checked === 'selected' ? 'unselect' : 'selected')
-                }
-              />
+              <SnbCheckbox status={checked} onPress={() => handleChecklist()} />
             </View>
           </View>
         </View>
@@ -250,12 +351,37 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
   const renderContent = () => {
     return <ScrollView>{switchView()}</ScrollView>;
   };
+  /** => error modal */
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={questTaskEndCustomerPromoError.isOpen}
+        error={questSubmitVoucherState.error}
+        closeAction={() => {
+          questTaskEndCustomerPromoError.setOpen(false);
+          resetSubmitVoucher(dispatchQuest);
+          handleChecklist();
+        }}
+        retryAction={() => {
+          questTaskEndCustomerPromoError.setOpen(false);
+          resetSubmitVoucher(dispatchQuest);
+          handleChecklist();
+        }}
+      />
+    );
+  };
 
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      {renderContent()}
+      {!questTaskDetailState.loading && questTaskDetailState.data !== null ? (
+        renderContent()
+      ) : (
+        <LoadingPage />
+      )}
       {viewType === 'inputPhoneNoView' ? renderButton() : <View />}
+      {/* modal */}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };
