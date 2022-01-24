@@ -20,7 +20,7 @@ import {
   goBack,
   goToQuestDetail,
   useQuestListAction,
-  useStandardModalState,
+  useErrorModalState,
 } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 /** === IMPORT STYLES === */
@@ -44,6 +44,7 @@ const questTabs = ['Semua', 'Berjalan', 'Selesai'];
 /** === COMPONENT === */
 const QuestListView: FC = () => {
   /** === HOOK === */
+  const questListErrorModal = useErrorModalState();
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState('all');
 
@@ -51,19 +52,21 @@ const QuestListView: FC = () => {
   const questListState = stateQuest.questGeneral.list;
   const { fetch, loadMore, refresh } = useQuestListAction();
 
-  const questListError = useStandardModalState();
-
   useFocusEffect(
     React.useCallback(() => {
       fetch(dispatchQuest, { status });
     }, [activeTab]),
   );
-
-  useEffect(() => {
-    if (questListState && questListState.error !== null) {
-      questListError.setOpen(true);
+  React.useEffect(() => {
+    if (questListState.error !== null) {
+      questListErrorModal.setOpen(true);
     }
   }, [questListState]);
+
+  const retryGetQuestList = () => {
+    fetch(dispatchQuest, { status });
+    questListErrorModal.setOpen(false);
+  };
 
   /** === VIEW === */
   /** => Header */
@@ -225,20 +228,13 @@ const QuestListView: FC = () => {
     }
     return <EmptyState title={title} description={description} />;
   };
-  /** => error modal */
+
   const renderErrorModal = () => {
     return (
       <BottomSheetError
-        open={questListError.isOpen}
+        open={questListErrorModal.isOpen}
         error={questListState.error}
-        closeAction={() => {
-          questListError.setOpen(false);
-          goBack();
-        }}
-        retryAction={() => {
-          questListError.setOpen(false);
-          fetch(dispatchQuest, { status });
-        }}
+        retryAction={retryGetQuestList}
       />
     );
   };
@@ -249,7 +245,7 @@ const QuestListView: FC = () => {
         {!questListState.loading && questListState.data.length > 0 ? (
           <View>{renderQuestList()}</View>
         ) : (
-          renderEmpty()
+          <View style={{ flex: 1, margin: 15 }}>{renderEmpty()}</View>
         )}
       </View>
     );

@@ -187,7 +187,8 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
   };
   /** => Render Item */
   const renderItem = () => {
-    const { suggestedSellingPrice } = questTaskDetailState.data?.products;
+    const { suggestedSellingPrice, catalogueImages } =
+      questTaskDetailState.data?.products;
     return (
       <View style={QuestTaskRecordStockStyles.boxContentList}>
         <View
@@ -199,9 +200,7 @@ const QuestTaskRecordStockView: FC = ({ route }: any) => {
             <PromoTag />
             <View style={QuestTaskRecordStockStyles.boxContentImage}>
               <SnbImageCompressor
-                uri={
-                  'https://images.sinbad.co.id/prod/catalogue-images/17671/image_1591176704340.png'
-                }
+                uri={catalogueImages}
                 style={
                   QuestTaskRecordStockStyles.fullWidthRatioContainRadius5Image
                 }

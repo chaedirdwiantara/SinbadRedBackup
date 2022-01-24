@@ -3,11 +3,9 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
   SnbButton,
-  SnbBottomSheet,
-  SnbText,
   SnbToast,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, KeyboardAvoidingView, Image } from 'react-native';
+import { ScrollView, View, KeyboardAvoidingView } from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -75,23 +73,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
   // realated quest hook
-  const ownerDataInfo = stateUser.detail.data?.ownerData.info;
   const { dispatchQuest } = useQuestContext();
   const { update } = useQuestTaskAction();
-  const [showModalPhoneVerification, setShowModalPhoneVerification] =
-    useState(false);
-
-  // if source Quest & phone verified, update quest task status
-  useEffect(() => {
-    if (
-      ownerDataInfo &&
-      ownerDataInfo.isMobilePhoneVerified &&
-      props.source === 'Quest' &&
-      props.type === 'merchantOwnerPhoneNo'
-    ) {
-      setShowModalPhoneVerification(true);
-    }
-  }, [ownerDataInfo]);
 
   useEffect(() => {
     if (
@@ -159,6 +142,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           mobilePhone: mobilePhone.value,
         };
         changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
+        // if source Quest & phone verification, update quest task status
+        if (props.source === 'Quest') {
+          const data = {
+            questId: props.sourceData?.questId,
+            taskId: props.sourceData?.taskId,
+            status: 'done',
+          };
+          update(dispatchQuest, { data });
+        }
         break;
       }
       case 'merchantOwnerIdNo': {
@@ -234,15 +226,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       default:
         break;
     }
-  };
-
-  const updateQuestTaskDone = () => {
-    const data = {
-      questId: props.sourceData?.questId,
-      taskId: props.sourceData?.taskId,
-      status: 'done',
-    };
-    update(dispatchQuest, { data });
   };
 
   /** VALIDATE EMAIL */
@@ -623,59 +606,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     );
   };
 
-  /** => render modal for quest phone number verification content */
-  const renderQuestPhoneNumberVerificationModalContent = () => {
-    let image = require('src/assets/images/sinbad_image/smile_sinbad.png');
-    let title = 'Verifikasi Toko';
-
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <Image
-            source={image}
-            style={{ width: 240, height: 160 }}
-            resizeMode="contain"
-          />
-          <SnbText.H4>{title}</SnbText.H4>
-          <View style={{ paddingHorizontal: 16 }}>
-            <SnbText.B3 align="center">
-              {'Nomor Handphone anda sudah terverifikasi'}
-            </SnbText.B3>
-          </View>
-        </View>
-        <View style={{ marginVertical: 16 }} />
-        <View style={{ height: 75 }}>
-          <SnbButton.Single
-            title="Kembali"
-            type="primary"
-            disabled={false}
-            onPress={() => {
-              updateQuestTaskDone();
-              setShowModalPhoneVerification(false);
-              NavigationAction.back();
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  /** => render modal for quest phone number verification */
-  const renderQuestPhoneNumberVerifiedModal = () => {
-    return (
-      <SnbBottomSheet
-        open={showModalPhoneVerification}
-        closeAction={() => {
-          updateQuestTaskDone();
-          setShowModalPhoneVerification(false);
-          NavigationAction.back();
-        }}
-        content={renderQuestPhoneNumberVerificationModalContent()}
-        title={'Informasi'}
-        actionIcon={'close'}
-      />
-    );
-  };
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>
@@ -684,7 +614,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           {switchView()}
         </ScrollView>
         {renderButton()}
-        {renderQuestPhoneNumberVerifiedModal()}
       </KeyboardAvoidingView>
     </View>
   );

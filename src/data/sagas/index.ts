@@ -49,7 +49,6 @@ function* rootSaga() {
   yield all([fork(StockSaga)]);
   yield all([fork(QuestSaga)]);
   yield all([fork(CheckoutDoneSaga)]);
-  yield all([fork(QuestSaga)]);
 }
 
 export default rootSaga;

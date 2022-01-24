@@ -156,7 +156,7 @@ const useQuestVoucherAction = () => {
   };
 };
 
-const useStandardModalState = () => {
+export const useErrorModalState = () => {
   const [isOpen, setOpen] = React.useState(false);
   return {
     setOpen: (value: boolean) => {
@@ -166,10 +166,4 @@ const useStandardModalState = () => {
   };
 };
 
-export {
-  useQuestListAction,
-  useQuestDetailAction,
-  useQuestTaskAction,
-  useQuestVoucherAction,
-  useStandardModalState,
-};
+export { useQuestListAction, useQuestDetailAction, useQuestTaskAction };
