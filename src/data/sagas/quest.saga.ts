@@ -20,6 +20,9 @@ function* questList(
     yield action.contextDispatch(ActionCreators.questListSuccess(response));
     yield put(ActionCreators.questListSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questListFailed(error as models.ErrorProps),
+    );
     yield put(ActionCreators.questListFailed(error));
   }
 }
@@ -33,6 +36,9 @@ function* questDetail(action: models.QuestDetailProcessAction) {
     yield action.contextDispatch(ActionCreators.questDetailSuccess(response));
     yield put(ActionCreators.questDetailSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questDetailFailed(error as models.ErrorProps),
+    );
     yield put(ActionCreators.questDetailFailed(error));
   }
 }
@@ -45,6 +51,9 @@ function* questTask(action: models.QuestTaskProcessAction) {
     yield action.contextDispatch(ActionCreators.questTaskSuccess(response));
     yield put(ActionCreators.questTaskSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questTaskFailed(error as models.ErrorProps),
+    );
     yield put(ActionCreators.questTaskFailed(error));
   }
 }
@@ -60,6 +69,9 @@ function* questTaskDetail(action: models.QuestDetailProcessAction) {
     );
     yield put(ActionCreators.questTaskDetailSuccess(response));
   } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.questTaskDetailFailed(error as models.ErrorProps),
+    );
     yield put(ActionCreators.questTaskDetailFailed(error));
   }
 }

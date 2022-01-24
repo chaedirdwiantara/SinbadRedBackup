@@ -15,10 +15,16 @@ import moment from 'moment';
 import LoadingPage from '@core/components/LoadingPage';
 import { EmptyState } from '@core/components/EmptyState';
 /** === IMPORT FUNCTIONS === */
-import { goBack, goToQuestDetail, useQuestListAction } from '../function';
+import {
+  goBack,
+  goToQuestDetail,
+  useErrorModalState,
+  useQuestListAction,
+} from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 /** === IMPORT STYLES === */
 import { QuestListStyles } from '../styles';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 interface QuestCardProps {
   id: number;
@@ -38,6 +44,7 @@ const questTabs = ['Semua', 'Berjalan', 'Selesai'];
 /** === COMPONENT === */
 const QuestListView: FC = () => {
   /** === HOOK === */
+  const questListErrorModal = useErrorModalState();
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState('all');
 
@@ -50,6 +57,16 @@ const QuestListView: FC = () => {
       fetch(dispatchQuest, { status });
     }, [activeTab]),
   );
+  React.useEffect(() => {
+    if (questListState.error !== null) {
+      questListErrorModal.setOpen(true);
+    }
+  }, [questListState]);
+
+  const retryGetQuestList = () => {
+    fetch(dispatchQuest, { status });
+    questListErrorModal.setOpen(false);
+  };
 
   /** === VIEW === */
   /** => Header */
@@ -211,6 +228,16 @@ const QuestListView: FC = () => {
     }
     return <EmptyState title={title} description={description} />;
   };
+
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={questListErrorModal.isOpen}
+        error={questListState.error}
+        retryAction={retryGetQuestList}
+      />
+    );
+  };
   /** => Content */
   const renderContent = () => {
     return (
@@ -218,7 +245,7 @@ const QuestListView: FC = () => {
         {!questListState.loading && questListState.data.length > 0 ? (
           <View>{renderQuestList()}</View>
         ) : (
-          renderEmpty()
+          <View style={{ flex: 1, margin: 15 }}>{renderEmpty()}</View>
         )}
       </View>
     );
@@ -229,6 +256,7 @@ const QuestListView: FC = () => {
       {renderHeader()}
       {renderTabs()}
       {questListState.loading ? <LoadingPage /> : renderContent()}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };
