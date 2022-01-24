@@ -21,9 +21,9 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import {
   goBack,
   goToQuestDetail,
+  useErrorModalState,
   useQuestTaskAction,
   useQuestVoucherAction,
-  useStandardModalState,
 } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestTaskEndCustomerPromoStyle } from '../styles';
@@ -50,7 +50,7 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
   const { validateVoucher, resetVoucher, submitVoucher, resetSubmitVoucher } =
     useQuestVoucherAction();
 
-  const questTaskEndCustomerPromoError = useStandardModalState();
+  const questTaskEndCustomerPromoError = useErrorModalState();
 
   useFocusEffect(
     React.useCallback(() => {
