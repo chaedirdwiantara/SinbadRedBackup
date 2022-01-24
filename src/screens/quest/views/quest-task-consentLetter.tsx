@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -12,13 +12,15 @@ import {
 } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT FUNCTIONS === */
-import { goBack, useQuestTaskAction } from '../function';
+import { goBack, useErrorModalState, useQuestTaskAction } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 /** === COMPONENT === */
 const QuestTaskConsentLetterView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const questTaskErrorModal = useErrorModalState();
   const [checked, setChecked] = useState<'unselect' | 'selected'>('unselect');
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questTaskDetailState = stateQuest.questTask.detail;
@@ -30,7 +32,23 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
       });
     }, []),
   );
+
+  useEffect(() => {
+    if (stateQuest.questTask.detail.error !== null) {
+      questTaskErrorModal.setOpen(true);
+    }
+  }, [questTaskErrorModal]);
+
   /** FUNCTION */
+
+  const retryGetQuestTask = () => {
+    questTaskErrorModal.setOpen(false);
+
+    detailTask(dispatchQuest, {
+      id: route.params.taskId,
+    });
+  };
+
   const confirm = () => {
     const data = {
       questId: route.params.questId,
@@ -92,6 +110,21 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
       </View>
     );
   };
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={questTaskErrorModal.isOpen}
+        error={stateQuest.questTask.detail.error}
+        retryAction={() => {
+          retryGetQuestTask();
+        }}
+        backAction={() => {
+          goBack();
+        }}
+      />
+    );
+  };
+
   return (
     <SnbContainer color="white">
       {renderHeader()}
@@ -106,6 +139,7 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
       ) : (
         <LoadingPage />
       )}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

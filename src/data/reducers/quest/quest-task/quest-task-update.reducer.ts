@@ -28,6 +28,7 @@ export const questTaskUpdateReducer = simplifyReducer(
       state = questTaskUpdateInitialState,
       action: models.UpdateSuccessAction,
     ) {
+      state.error = null;
       return {
         ...state,
         data: action.payload.data,

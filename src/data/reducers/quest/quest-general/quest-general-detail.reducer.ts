@@ -28,6 +28,7 @@ export const questGeneralDetailReducer = simplifyReducer(
       state = questGeneralDetailInitialState,
       action: models.DetailSuccessAction<models.QuestDetailItem>,
     ) {
+      state.error = null;
       return {
         ...state,
         data: action.payload.data,

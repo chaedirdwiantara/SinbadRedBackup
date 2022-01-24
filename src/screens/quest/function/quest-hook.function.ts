@@ -166,4 +166,9 @@ export const useErrorModalState = () => {
   };
 };
 
-export { useQuestListAction, useQuestDetailAction, useQuestTaskAction };
+export {
+  useQuestListAction,
+  useQuestDetailAction,
+  useQuestTaskAction,
+  useQuestVoucherAction,
+};

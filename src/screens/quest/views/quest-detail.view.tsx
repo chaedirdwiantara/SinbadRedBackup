@@ -25,7 +25,6 @@ import {
   useQuestDetailAction,
   useQuestTaskAction,
   useQuestVoucherAction,
-  useStandardModalState,
 } from '../function';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
@@ -66,8 +65,6 @@ const QuestDetailView: FC = ({ route }: any) => {
   const { update } = useQuestTaskAction();
   const { resetSubmitVoucher } = useQuestVoucherAction();
 
-  const questDetailError = useStandardModalState();
-
   useFocusEffect(
     React.useCallback(() => {
       detail(dispatchQuest, {
@@ -78,7 +75,7 @@ const QuestDetailView: FC = ({ route }: any) => {
 
   useEffect(() => {
     if (questDetailState && questDetailState.error !== null) {
-      questDetailError.setOpen(true);
+      questDetailErrorModal.setOpen(true);
     }
   }, [questDetailState]);
 
@@ -138,59 +135,19 @@ const QuestDetailView: FC = ({ route }: any) => {
     });
   };
 
-  const stepToConsentLetterAndCompleteStore = (screenName: string) => {
+  const stepToTaskPage = (screenName: string) => {
     const id = questDetailState.data?.id;
     const currentTaskId = questDetailState.data?.currentTaskId;
     const currentTask = questDetailState.data?.currentTask;
 
-    if (screenName === 'ConsentLetter') {
-      NavigationAction.navigate('QuestTaskConsentLetterView', {
-        title: currentTask,
-        questId: id,
-        taskId: currentTaskId,
-      });
-    } else {
-      NavigationAction.navigate('QuestTaskCompleteStoreView', {
-        title: currentTask,
-        questId: id,
-        taskId: currentTaskId,
-      });
-    }
-  };
-
-  const stepAction = async () => {
-    const { id, currentTaskId } = questDetailState.data;
-    // prepare update quest task API => from null to on_progress
     const data = {
       questId: id,
       taskId: currentTaskId,
       status: 'on_progress',
     };
-    await update(dispatchQuest, { data });
-    // Navigate to specific task's page
-    checkNavigationScreen(buttonStatus().current.screenName, data);
-  };
+    update(dispatchQuest, { data });
 
-  /** => check navigation screen */
-  const checkNavigationScreen = (screenName: string, data: any) => {
-    const { id, currentTaskId, currentTask } = questDetailState.data;
     switch (screenName) {
-      case 'PhoneNumberVerification':
-        NavigationAction.navigate('MerchantEditView', {
-          title: 'Verifikasi Toko',
-          type: 'merchantOwnerPhoneNo',
-          source: 'Quest',
-          sourceData: data,
-        });
-        break;
-      case 'StoreNameVerification':
-        NavigationAction.navigate('MerchantEditView', {
-          title: 'Verifikasi Toko',
-          type: 'merchantOwnerName',
-          source: 'Quest',
-          sourceData: data,
-        });
-        break;
       case 'ConsentLetter':
         NavigationAction.navigate('QuestTaskConsentLetterView', {
           title: currentTask,
@@ -223,14 +180,23 @@ const QuestDetailView: FC = ({ route }: any) => {
         break;
       }
     }
+  };
+
+  const stepAction = async () => {
+    const { id, currentTaskId, currentTask } = questDetailState.data;
+    // prepare update quest task API => from null to on_progress
+    const data = {
+      questId: id,
+      taskId: currentTaskId,
+      status: 'on_progress',
+    };
+
     if (buttonStatus().current.screenName === 'PhoneNumberVerification') {
       stepToPhoneNumberVerification(data);
     } else if (buttonStatus().current.screenName === 'StoreNameVerification') {
       stepToStoreNameVerification(data);
-    } else if (buttonStatus().current.screenName === 'ConsentLetter') {
-      stepToConsentLetterAndCompleteStore(buttonStatus().current.screenName);
-    } else if (buttonStatus().current.screenName === 'CompleteStore') {
-      stepToConsentLetterAndCompleteStore(buttonStatus().current.screenName);
+    } else {
+      stepToTaskPage(buttonStatus().current.screenName);
     }
   };
 
