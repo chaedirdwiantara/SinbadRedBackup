@@ -60,3 +60,7 @@ export interface QuestTaskDetailItem {
   products: QuestTaskProducts;
   title: string;
 }
+
+export interface QuestValidateVoucherItem {
+  message: string;
+}

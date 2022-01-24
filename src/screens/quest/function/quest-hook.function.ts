@@ -1,10 +1,10 @@
+import React from 'react';
 /** === IMPORT PACKAGES === */
 import { useDispatch } from 'react-redux';
 /** === IMPORT FUNCTION === */
 import * as Actions from '@actions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
-import React from 'react';
 /** === FUNCTIONS === */
 /** === Fetch Quest Related === */
 const callListProcessAction = (
@@ -24,7 +24,7 @@ const callListProcessAction = (
 
 const useQuestListAction = () => {
   const dispatch = useDispatch();
-  const limit = 10;
+  const limit = 20;
 
   return {
     /** => LIST */
@@ -124,6 +124,34 @@ const useQuestTaskAction = () => {
       queryOptions: models.QuestDetailProcessProps,
     ) => {
       dispatch(callTaskDetailProcessAction(contextDispatch, queryOptions));
+    },
+  };
+};
+
+const useQuestVoucherAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    /** VOUCHER */
+    validateVoucher: (
+      contextDispatch: (action: any) => any,
+      queryOptions: models.QuestValidateVoucherProcessProps,
+    ) => {
+      dispatch(
+        Actions.questTaskValidateVoucherProcess(contextDispatch, queryOptions),
+      );
+    },
+    resetVoucher: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questTaskValidateVoucherReset());
+    },
+    submitVoucher: (
+      contextDispatch: (action: any) => any,
+      data: models.UpdateProcessProps<{}>,
+    ) => {
+      dispatch(Actions.questTaskSubmitVoucherProcess(contextDispatch, data));
+    },
+    resetSubmitVoucher: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.questTaskSubmitVoucherReset());
     },
   };
 };

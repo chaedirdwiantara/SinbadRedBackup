@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -14,17 +14,17 @@ import {
 import moment from 'moment';
 import LoadingPage from '@core/components/LoadingPage';
 import { EmptyState } from '@core/components/EmptyState';
+import BottomSheetError from '@core/components/BottomSheetError';
 /** === IMPORT FUNCTIONS === */
 import {
   goBack,
   goToQuestDetail,
-  useErrorModalState,
   useQuestListAction,
+  useErrorModalState,
 } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 /** === IMPORT STYLES === */
 import { QuestListStyles } from '../styles';
-import BottomSheetError from '@core/components/BottomSheetError';
 
 interface QuestCardProps {
   id: number;
@@ -256,6 +256,7 @@ const QuestListView: FC = () => {
       {renderHeader()}
       {renderTabs()}
       {questListState.loading ? <LoadingPage /> : renderContent()}
+      {/* modal */}
       {renderErrorModal()}
     </SnbContainer>
   );

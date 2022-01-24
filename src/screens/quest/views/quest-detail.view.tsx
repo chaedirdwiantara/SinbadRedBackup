@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useState } from 'react';
-import { View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import React, { FC, useState, useEffect } from 'react';
+import { View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -16,6 +16,7 @@ import moment from 'moment';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import StepperStatusDetail from '../components/StepperStatusDetail';
 import LoadingPage from '@core/components/LoadingPage';
+import BottomSheetError from '@core/components/BottomSheetError';
 import { NavigationAction } from '@navigation';
 import {
   goBack,
@@ -23,11 +24,13 @@ import {
   useErrorModalState,
   useQuestDetailAction,
   useQuestTaskAction,
+  useQuestVoucherAction,
+  useStandardModalState,
 } from '../function';
+import { toCurrency } from '@core/functions/global/currency-format';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { QuestDetailStyles } from '../styles';
 import { contexts } from '@contexts';
-import BottomSheetError from '@core/components/BottomSheetError';
 
 interface StepperDataProps {
   id: number;
@@ -48,6 +51,7 @@ interface StepperDataProps {
 /** === COMPONENT === */
 const QuestDetailView: FC = ({ route }: any) => {
   /** === HOOK === */
+  const [modalCompleted, setModalCompleted] = useState(false);
   const questDetailErrorModal = useErrorModalState();
   const { stateUser } = React.useContext(contexts.UserContext);
   const ownerDataInfo = stateUser.detail.data?.ownerData.info;
@@ -57,8 +61,12 @@ const QuestDetailView: FC = ({ route }: any) => {
 
   const { stateQuest, dispatchQuest } = useQuestContext();
   const questDetailState = stateQuest.questGeneral.detail;
+  const questSubmitVoucherState = stateQuest.questVoucher.submit;
   const { detail } = useQuestDetailAction();
   const { update } = useQuestTaskAction();
+  const { resetSubmitVoucher } = useQuestVoucherAction();
+
+  const questDetailError = useStandardModalState();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -67,6 +75,23 @@ const QuestDetailView: FC = ({ route }: any) => {
       });
     }, []),
   );
+
+  useEffect(() => {
+    if (questDetailState && questDetailState.error !== null) {
+      questDetailError.setOpen(true);
+    }
+  }, [questDetailState]);
+
+  useEffect(() => {
+    if (questSubmitVoucherState && questSubmitVoucherState.data !== null) {
+      setModalCompleted(true);
+    }
+  }, [questSubmitVoucherState]);
+
+  const handleModalClosed = () => {
+    setModalCompleted(false);
+    resetSubmitVoucher(dispatchQuest);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -187,6 +212,13 @@ const QuestDetailView: FC = ({ route }: any) => {
           taskId: currentTaskId,
         });
         break;
+      case 'EndCustomerPromotion':
+        NavigationAction.navigate('QuestTaskEndCustomerPromoView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
       default: {
         break;
       }
@@ -269,6 +301,79 @@ const QuestDetailView: FC = ({ route }: any) => {
         </View>
       </View>
     );
+  };
+  /** => Render Achievement */
+  const renderAchievement = () => {
+    const { achievement, task } = questDetailState.data;
+
+    if (
+      task &&
+      task.find(
+        (item: any) =>
+          item.screenName === 'RecordStock' && item.status === 'done',
+      )
+    ) {
+      return (
+        <View style={QuestDetailStyles.achievementContainer}>
+          <View style={{ paddingHorizontal: 16 }}>
+            <SnbText.H4>Pencapaian Anda</SnbText.H4>
+          </View>
+          <View
+            style={[
+              QuestDetailStyles.shadowForBox5,
+              QuestDetailStyles.boxAchievement,
+            ]}>
+            <View style={QuestDetailStyles.achievementInfo}>
+              <View style={{ flexDirection: 'column' }}>
+                <SnbText.B4>Total Pelanggan:</SnbText.B4>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={QuestDetailStyles.achievementImageBox}>
+                    <Image
+                      source={require('../../../assets/icons/quest/achievement_user.png')}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 8,
+                      marginTop: 16,
+                    }}>
+                    <SnbText.H2>
+                      {achievement ? achievement.totalCustomer : '-'}
+                    </SnbText.H2>
+                  </View>
+                </View>
+              </View>
+              <View style={QuestDetailStyles.boxAchievementSeparator} />
+              <View style={{ flexDirection: 'column' }}>
+                <SnbText.B4>Voucher Cashback:</SnbText.B4>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={QuestDetailStyles.achievementImageBox}>
+                    <Image
+                      source={require('../../../assets/icons/quest/achievement_money.png')}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      marginLeft: 8,
+                      marginTop: 16,
+                    }}>
+                    <SnbText.H2>
+                      {achievement
+                        ? toCurrency(achievement.totalVoucher, {
+                            withFraction: false,
+                          })
+                        : 'Rp -'}
+                    </SnbText.H2>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      );
+    } else {
+      <View />;
+    }
   };
   /** => Steper Status */
   const stepperStatus = () => {
@@ -540,12 +645,13 @@ const QuestDetailView: FC = ({ route }: any) => {
               marginBottom: buttonStatus().isDone
                 ? 0
                 : buttonStatus().isLast
-                ? 0
+                ? 75
                 : 75,
             },
           ]}>
           <ScrollView>
             {renderInfo()}
+            {renderAchievement()}
             {renderStepper()}
             {renderAdditionalInfo('detail')}
             {renderAdditionalInfo('tnc')}
@@ -553,6 +659,43 @@ const QuestDetailView: FC = ({ route }: any) => {
         </View>
         {renderFooter()}
       </>
+    );
+  };
+  /** => Render Modal Completed */
+  const renderModalCompleted = () => {
+    return (
+      <SnbBottomSheet
+        open={modalCompleted}
+        closeAction={() => setModalCompleted(false)}
+        content={
+          <>
+            <View style={QuestDetailStyles.confirm}>
+              <SnbText.H1>Selamat!</SnbText.H1>
+              <Image
+                style={QuestDetailStyles.imageConfirm}
+                source={require('../../../assets/images/promo_completed.png')}
+              />
+              <View style={{ marginTop: 16 }}>
+                <SnbText.B2>Anda sudah memasukkan 1 Pelanggan</SnbText.B2>
+              </View>
+              <View style={{ marginTop: 16 }}>
+                <SnbText.B1 align={'center'} color={color.black80}>
+                  {`Tambah pelanggan lagi dengan tekan tombol lanjut. Program akan berakhir secara otomatis pada ${moment(
+                    questDetailState.data?.endDate,
+                  ).format('DD MMMM YYYY')}.`}
+                </SnbText.B1>
+              </View>
+            </View>
+            <View style={{ height: 75 }}>
+              <SnbButton.Single
+                type="primary"
+                title="OK"
+                onPress={() => handleModalClosed()}
+              />
+            </View>
+          </>
+        }
+      />
     );
   };
   /** => Main */
@@ -564,6 +707,8 @@ const QuestDetailView: FC = ({ route }: any) => {
       ) : (
         <LoadingPage />
       )}
+      {/* modal */}
+      {renderModalCompleted()}
       {renderErrorModal()}
       {renderQuestPhoneNumberVerifiedModal()}
     </SnbContainer>
