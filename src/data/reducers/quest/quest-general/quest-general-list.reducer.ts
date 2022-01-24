@@ -36,6 +36,7 @@ export const questGeneralListReducer = simplifyReducer(
       state = questGeneralListInitialState,
       { payload }: models.ListSuccessAction<models.QuestListItem[]>,
     ) {
+      state.error = null;
       return {
         ...state,
         data: [...state.data, ...payload.data],
