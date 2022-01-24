@@ -9,6 +9,7 @@ import {
   color,
   SnbIconHint,
   SnbButton,
+  SnbImageCompressor,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import moment from 'moment';
@@ -140,6 +141,56 @@ const QuestDetailView: FC = ({ route }: any) => {
       taskId: currentTaskId,
       status: 'on_progress',
     };
+    await update(dispatchQuest, { data });
+    // Navigate to specific task's page
+    checkNavigationScreen(buttonStatus().current.screenName, data);
+  };
+
+  /** => check navigation screen */
+  const checkNavigationScreen = (screenName: string, data: any) => {
+    const { id, currentTaskId, currentTask } = questDetailState.data;
+    switch (screenName) {
+      case 'PhoneNumberVerification':
+        NavigationAction.navigate('MerchantEditView', {
+          title: 'Verifikasi Toko',
+          type: 'merchantOwnerPhoneNo',
+          source: 'Quest',
+          sourceData: data,
+        });
+        break;
+      case 'StoreNameVerification':
+        NavigationAction.navigate('MerchantEditView', {
+          title: 'Verifikasi Toko',
+          type: 'merchantOwnerName',
+          source: 'Quest',
+          sourceData: data,
+        });
+        break;
+      case 'ConsentLetter':
+        NavigationAction.navigate('QuestTaskConsentLetterView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
+      case 'CompleteStore':
+        NavigationAction.navigate('QuestTaskCompleteStoreView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
+      case 'RecordStock':
+        NavigationAction.navigate('QuestTaskRecordStockView', {
+          title: currentTask,
+          questId: id,
+          taskId: currentTaskId,
+        });
+        break;
+      default: {
+        break;
+      }
+    }
     if (buttonStatus().current.screenName === 'PhoneNumberVerification') {
       stepToPhoneNumberVerification(data);
     } else if (buttonStatus().current.screenName === 'StoreNameVerification') {
@@ -169,14 +220,11 @@ const QuestDetailView: FC = ({ route }: any) => {
   const renderImage = () => {
     return (
       <View>
-        <Image
+        <SnbImageCompressor
           defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
-          source={{
-            uri: questDetailState.data?.imageUrl,
-          }}
-          style={{
-            aspectRatio: 5 / 2,
-          }}
+          uri={questDetailState.data?.imageUrl}
+          style={{ aspectRatio: 5 / 2 }}
+          res={500}
         />
       </View>
     );

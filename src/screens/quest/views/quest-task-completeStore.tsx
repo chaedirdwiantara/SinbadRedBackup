@@ -1,6 +1,13 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { FC, useState } from 'react';
-import { View, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+  Image,
+  Modal,
+} from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   SnbContainer,
@@ -14,6 +21,7 @@ import MapView, { Marker } from 'react-native-maps';
 import moment from 'moment';
 import { TimePicker } from 'react-native-wheel-picker-android';
 import ButtonClock from '../components/ButtonClock';
+import ModalWarning from '../components/ModalWarning';
 /** === IMPORT FUNCTIONS === */
 import { goBack, useQuestTaskAction } from '../function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
@@ -37,6 +45,11 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
   const [typeTimePicker, setTypeTimePicker] = useState('');
   const [tempTimePicker, setTempTimePicker] = useState('');
   const [onChangeTimePicker, setOnChangeTimePicker] = useState<any>('');
+  const [modalConfirm, setModalConfirm] = useState(false);
+  const [warningMessage, setWarningMessage] = useState('');
+  const [timer, setTimer] = useState(0);
+  const [modalWarning, setModalWarning] = useState(false);
+  const [counter, setCounter] = useState(null);
 
   const { dispatchQuest } = useQuestContext();
   const { update, detailTask } = useQuestTaskAction();
@@ -92,6 +105,30 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
     setTempTimePicker('');
     setModalTimePicker(false);
     setTypeTimePicker('');
+  };
+
+  const onSelanjutnya = () => {
+    if (moment(timeClosed, 'HH:mm').isBefore(moment(timeOpen, 'HH:mm'))) {
+      return showWarning('Jam tutup tidak boleh kurang dari jam buka');
+    }
+    if (timeOpen === timeClosed) {
+      return showWarning('Jam tutup tidak boleh sama dengan jam buka');
+    }
+    setModalConfirm(true);
+  };
+
+  const showWarning = (warningMessage: string) => {
+    setWarningMessage(warningMessage);
+    setTimer(3);
+    setModalWarning(true);
+    const counterData = setInterval(() => {
+      setTimer(timer - 1);
+      if (timer === 0) {
+        setModalWarning(false);
+        clearInterval(counter);
+      }
+    }, 1000);
+    setCounter(counterData);
   };
 
   /** === VIEW === */
@@ -190,7 +227,7 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
         <SnbButton.Single
           type="primary"
           title={'Selanjutnya'}
-          onPress={() => confirm()}
+          onPress={() => onSelanjutnya()}
         />
       </View>
     );
@@ -227,6 +264,52 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
       />
     );
   };
+  /** => Render Modal Confirm */
+  const renderModalConfirm = () => {
+    return (
+      <SnbBottomSheet
+        open={modalConfirm}
+        closeAction={() => setModalConfirm(false)}
+        content={
+          <>
+            <View style={QuestTaskCompleteStoreStyles.confirm}>
+              <Image
+                style={QuestTaskCompleteStoreStyles.imageConfirm}
+                source={require('../../../assets/icons/quest/storeConfirm.png')}
+              />
+              <SnbText.H3>Cek Kembali Data Anda</SnbText.H3>
+              <SnbText.B1 color={color.black80}>
+                Apakah data alamat toko anda sudah benar?
+              </SnbText.B1>
+            </View>
+            <View style={{ paddingBottom: 30 }}>
+              <View style={{ height: 75 }}>
+                <SnbButton.Single
+                  type="primary"
+                  title={'Ya, sudah benar'}
+                  radius={5}
+                  onPress={() => confirm()}
+                />
+              </View>
+              <View style={{ height: 75 }}>
+                <SnbButton.Single
+                  type="secondary"
+                  title={'Tidak, Saya ingin mengubah alamat'}
+                  radius={5}
+                  onPress={() => {
+                    setModalConfirm(false);
+                    NavigationAction.navigate('MerchantDetailAddressView', {
+                      source: 'Quest',
+                    });
+                  }}
+                />
+              </View>
+            </View>
+          </>
+        }
+      />
+    );
+  };
   /** => Render Content */
   const renderContent = () => {
     return (
@@ -244,6 +327,8 @@ const QuestTaskCompleteStoreView: FC = ({ route }: any) => {
       {renderHeader()}
       {renderContent()}
       {renderModalTimePicker()}
+      {renderModalConfirm()}
+      <ModalWarning open={modalWarning} content={warningMessage} />
     </SnbContainer>
   );
 };
