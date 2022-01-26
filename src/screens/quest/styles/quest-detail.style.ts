@@ -130,6 +130,11 @@ const QuestStyles = StyleSheet.create({
     flexDirection: 'row',
     padding: 16,
   },
+  titleWrapper: {
+    marginTop: 24,
+    marginHorizontal: 24,
+    alignItems: 'center',
+  },
   checkboxLabel: {
     margin: 8,
   },
