@@ -73,17 +73,14 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
   };
   /** => Render HTML */
   const renderDescriptionHtml = () => {
-    console.log(questTaskDetailState.data, 'ini apa');
-
     const title = questTaskDetailState.data?.title;
     const description = questTaskDetailState.data?.description;
 
     return (
       <View style={QuestDetailStyles.sectionContainer}>
-        <View style={QuestDetailStyles.titleWrapper}>
-          <SnbText.H3 align={'center'}>{title}</SnbText.H3>
+        <View style={QuestDetailStyles.questTitle}>
+          <SnbText.H3>{title}</SnbText.H3>
         </View>
-
         <SnbHtml value={description} fontSize={16} />
       </View>
     );
