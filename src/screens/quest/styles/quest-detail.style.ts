@@ -126,9 +126,17 @@ const QuestStyles = StyleSheet.create({
     marginVertical: 16,
     marginBottom: 16,
   },
+  questTitle: {
+    marginBottom: 16,
+  },
   checkboxContainer: {
     flexDirection: 'row',
     padding: 16,
+  },
+  titleWrapper: {
+    marginTop: 24,
+    marginHorizontal: 24,
+    alignItems: 'center',
   },
   checkboxLabel: {
     margin: 8,
