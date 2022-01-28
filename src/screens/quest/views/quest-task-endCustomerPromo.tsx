@@ -62,9 +62,20 @@ const QuestTaskEndCustomerPromoView: FC = ({ route }: any) => {
 
   useEffect(() => {
     if (questSubmitVoucherState && questSubmitVoucherState.error !== null) {
+      const err = questSubmitVoucherState.error.errorMessage;
+      const errMessage = questSubmitVoucherState.error.message;
+      questSubmitVoucherState.error.message = err;
+      questSubmitVoucherState.error.errorMessage = errMessage;
+
       questTaskEndCustomerPromoError.setOpen(true);
     }
   }, [questSubmitVoucherState]);
+
+  useEffect(() => {
+    if (questTaskDetailState && questTaskDetailState.error !== null) {
+      questTaskEndCustomerPromoError.setOpen(true);
+    }
+  }, [questTaskDetailState]);
 
   useEffect(() => {
     if (questValidateVoucherState && questValidateVoucherState.data !== null) {

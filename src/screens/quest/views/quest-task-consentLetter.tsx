@@ -81,7 +81,7 @@ const QuestTaskConsentLetterView: FC = ({ route }: any) => {
         <View style={QuestDetailStyles.questTitle}>
           <SnbText.H3>{title}</SnbText.H3>
         </View>
-        <SnbHtml value={description} fontSize={16} />
+        <SnbHtml value={description ? description : ''} fontSize={16} />
       </View>
     );
   };
