@@ -12,9 +12,13 @@ import {
   RegisterStep7View,
   RegisterView,
   InputManualLocationView,
+  OnBoardingView,
 } from '@screen/auth/views';
 
 const AuthNav = {
+  OnBoardingView: {
+    component: OnBoardingView,
+  },
   LoginPhoneView: {
     component: LoginPhoneView,
   },
