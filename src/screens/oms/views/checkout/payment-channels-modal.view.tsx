@@ -54,9 +54,10 @@ export const ModalPaymentChannels: FC<PaymentChannelsModalProps> = ({
     return (
       <>
         {paymentTypes.map((item: any, index: number) => {
+          const totalAmount = parseInt(item.totalPayment,10) - parseInt(item.promoPaymentAmount,10)
           const description =
             item.status === 'enabled'
-              ? `Total Biaya ${toCurrency(item.totalPayment, {
+              ? `Total Biaya ${toCurrency(totalAmount, {
                   withFraction: false,
                 })}`
               : item.message;
