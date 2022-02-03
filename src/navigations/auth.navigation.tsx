@@ -13,6 +13,7 @@ import {
   RegisterView,
   InputManualLocationView,
   OnBoardingView,
+  SelfRegisterView,
 } from '@screen/auth/views';
 
 const AuthNav = {
@@ -57,6 +58,9 @@ const AuthNav = {
   },
   InputManualLocationView: {
     component: InputManualLocationView,
+  },
+  SelfRegisterView: {
+    component: SelfRegisterView,
   },
 };
 

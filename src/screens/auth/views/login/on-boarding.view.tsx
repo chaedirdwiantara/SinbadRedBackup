@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   SnbButton,
   SnbContainer,
@@ -7,13 +7,18 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
-// import { useNavigation } from '@react-navigation/core';
+import {
+  SELF_REGISTRATION_VIEW,
+  LOGIN_PHONE_VIEW,
+} from '@screen/auth/functions/screens_name';
+import { useNavigation } from '@react-navigation/core';
 
 interface Props {
   testID?: string;
 }
 
 const OnBoardingView: React.FC<Props> = () => {
+  const { navigate, reset } = useNavigation();
   const [data] = useState([
     {
       id: 1,
@@ -60,14 +65,14 @@ const OnBoardingView: React.FC<Props> = () => {
           <View style={styles.button}>
             <SnbButton.Single
               title={'Masuk'}
-              onPress={() => {}}
+              onPress={() => navigate(LOGIN_PHONE_VIEW)}
               type={'secondary'}
             />
           </View>
           <View style={styles.button}>
             <SnbButton.Single
               title={'Daftar'}
-              onPress={() => {}}
+              onPress={() => navigate(SELF_REGISTRATION_VIEW)}
               type={'primary'}
             />
           </View>
@@ -81,7 +86,10 @@ const OnBoardingView: React.FC<Props> = () => {
       <View>
         <View style={styles.textSkipLogin}>
           <SnbText.B1>Biarkan saya masuk </SnbText.B1>
-          <SnbText.B2 color={color.red50}>Lewati</SnbText.B2>
+          <TouchableOpacity
+            onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
+            <SnbText.B2 color={color.red50}>Lewati</SnbText.B2>
+          </TouchableOpacity>
         </View>
       </View>
     );

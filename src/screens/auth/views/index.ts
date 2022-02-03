@@ -12,6 +12,7 @@ import RegisterStep6View from './register/register-step-6.view';
 import RegisterStep7View from './register/register-step-7.view';
 import InputManualLocationView from './register/input-manual-location.view';
 import OnBoardingView from './login/on-boarding.view';
+import SelfRegisterView from './register/self-register.view';
 export {
   LoginPhoneView,
   LoginIDView,
@@ -27,4 +28,5 @@ export {
   RegisterStep7View,
   InputManualLocationView,
   OnBoardingView,
+  SelfRegisterView,
 };
