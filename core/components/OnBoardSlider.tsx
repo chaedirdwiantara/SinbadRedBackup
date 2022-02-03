@@ -18,7 +18,6 @@ const OnBoardingView: React.FC<Props> = (props) => {
         <Pagination
           dotsLength={props.data.length}
           activeDotIndex={activeIndex}
-          //   containerStyle={width}
           dotContainerStyle={{ marginHorizontal: 2 }}
           dotStyle={styles.activeDot}
           inactiveDotStyle={styles.inactiveDot}
@@ -102,7 +101,6 @@ const styles = StyleSheet.create({
   },
   description: {
     alignItems: 'center',
-    // marginHorizontal: 16,
   },
 });
 
