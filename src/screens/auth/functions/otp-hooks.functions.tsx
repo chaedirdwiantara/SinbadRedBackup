@@ -14,7 +14,7 @@ const useOTP = () => {
   const [otp, setOtp] = React.useState('');
 
   React.useEffect(() => {
-    RNOtpVerify.getHash().then(startListeningForOtp).catch(console.log);
+    RNOtpVerify.getHash().then(startListeningForOtp);
     return RNOtpVerify.removeListener;
   }, []);
 
