@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
@@ -9,9 +9,11 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
+import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
+  const [phoneNo, setPhoneNo] = useState('');
 
   const header = () => {
     return (
@@ -35,10 +37,10 @@ const SelfRegisterView: React.FC = () => {
             keyboardType="phone-pad"
             labelText="Masukkan Nomor Handphone"
             placeholder="Masukkan nomor handphone anda"
-            onChangeText={() => {}}
-            clearText={() => console.log('clear')}
-            type={'read'}
-            value={''}
+            onChangeText={(text) => setPhoneNo(text)}
+            clearText={() => setPhoneNo('')}
+            type={'default'}
+            value={phoneNo}
           />
         </View>
       </View>
@@ -51,7 +53,7 @@ const SelfRegisterView: React.FC = () => {
         <View style={styles.button}>
           <SnbButton.Single
             title={'Lanjut'}
-            onPress={() => {}}
+            onPress={() => navigate(REGISTER_OTP_VIEW, { phoneNo: phoneNo })}
             type={'primary'}
           />
         </View>
