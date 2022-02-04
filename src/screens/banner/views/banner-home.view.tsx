@@ -22,8 +22,6 @@ const BannerHomeView: React.FC<Props> = () => {
   useEffect(() => {
     bannerAction.slider(dispatchBanner);
   }, []);
-  console.log('data:', stateBanner);
-  
   /** => main */
   /** => content */
   const content = () => {
