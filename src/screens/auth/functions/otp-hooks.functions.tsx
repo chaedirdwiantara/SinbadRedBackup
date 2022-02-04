@@ -2,6 +2,7 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { useRoute } from '@react-navigation/core';
 import React from 'react';
+import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,6 +11,23 @@ const useOTP = () => {
   const { params }: any = useRoute();
   const { verifyOTP } = useSelector((state: any) => state.auth);
   const [mobilePhone, setMobilePhone] = React.useState('');
+  const [otp, setOtp] = React.useState('');
+
+  React.useEffect(() => {
+    RNOtpVerify.getHash().then(startListeningForOtp).catch(console.log);
+    return RNOtpVerify.removeListener;
+  }, []);
+
+  const startListeningForOtp = () => {
+    RNOtpVerify.getOtp()
+      .then(() => {
+        RNOtpVerify.addListener((message: string) => {
+          const result = /(\d{5})/g.exec(message);
+          result && result?.length > 0 && setOtp(result[0]);
+        });
+      })
+      .catch(console.log);
+  };
 
   const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
     dispatch(Actions.verifyOTPRegisterProcess(data));
@@ -29,6 +47,8 @@ const useOTP = () => {
     verifyOTP,
     resetVerifyOTP,
     mobilePhone,
+    otp,
+    setOtp,
   };
 };
 
