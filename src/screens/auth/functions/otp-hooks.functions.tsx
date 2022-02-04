@@ -19,14 +19,12 @@ const useOTP = () => {
   }, []);
 
   const startListeningForOtp = () => {
-    RNOtpVerify.getOtp()
-      .then(() => {
-        RNOtpVerify.addListener((message: string) => {
-          const result = /(\d{5})/g.exec(message);
-          result && result?.length > 0 && setOtp(result[0]);
-        });
-      })
-      .catch(console.log);
+    RNOtpVerify.getOtp().then(() => {
+      RNOtpVerify.addListener((message: string) => {
+        const result = /(\d{5})/g.exec(message);
+        result && result?.length > 0 && setOtp(result[0]);
+      });
+    });
   };
 
   const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
