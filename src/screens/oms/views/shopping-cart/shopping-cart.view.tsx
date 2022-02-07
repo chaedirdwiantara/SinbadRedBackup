@@ -722,7 +722,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 setAllProductsSelected={setAllProductsSelected}
                 totalProducts={totalProducts}
                 productSelectedCount={productSelectedCount}
-                openModalCheckout={setModalConfirmationCheckoutVisible}
+                openModalCheckout={() =>
+                  NavigationAction.navigate('Omsv2ShoppingCartView')
+                }
                 onUpdateCart={onUpdateCart}
               />
             </Fragment>
