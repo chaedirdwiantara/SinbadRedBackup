@@ -36,6 +36,7 @@
     "react-native-camera": "3.44.1",
     "react-native-color-matrix-image-filters": "5.2.10",
     "react-native-config": "1.4.5",
+    "react-native-copilot": "2.5.1",
     "react-native-device-info": "8.1.2",
     "react-native-exception-handler": "2.10.10",
     "react-native-fs": "2.18.0",
