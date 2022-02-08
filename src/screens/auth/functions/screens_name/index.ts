@@ -12,3 +12,5 @@ export const REGISTER_STEP_6_VIEW = 'RegisterStep6View';
 export const REGISTER_STEP_7_VIEW = 'RegisterStep7View';
 export const INPUT_MANUAL_LOCATION_VIEW = 'InputManualLocationView';
 export const SELF_REGISTRATION_VIEW = 'SelfRegisterView';
+export const LIST_LOCATION_VIEW = 'ListLocationView';
+export const BUYER_CATEGORY_VIEW = 'BuyerCategoryView';

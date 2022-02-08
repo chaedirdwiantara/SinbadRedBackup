@@ -14,7 +14,8 @@ import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
   const { checkPhone } = useCheckPhoneNoAvailability();
-  const { verifyOTPRegister, verifyOTP, mobilePhone } = useOTP();
+  const { verifyOTPRegister, verifyOTP, mobilePhone, getLocationPermissions } =
+    useOTP();
   const { goBack, replace }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
   const { saveUserData, resetMerchantData } = useMerchant();
@@ -29,6 +30,7 @@ const RegisterOTPView: React.FC = () => {
       }, 250);
     }
     if (verifyOTP.error !== null) {
+      getLocationPermissions();
       setHide(false);
     }
   }, [verifyOTP]);

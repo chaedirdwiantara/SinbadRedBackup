@@ -20,6 +20,7 @@ export * from './supplier';
 export * from './quest';
 export * from './history';
 export * from './quest';
+export * from './easy-registration';
 /**
  * ================================================================
  * NOTES

@@ -18,6 +18,14 @@ export interface IRegisterAction<T> {
 export interface ICheckPhoneNoAvailabilityProcess {
   mobilePhoneNo: string | undefined;
 }
+export interface ISearchLocationsData {
+  id: string;
+  province: string;
+  city: string;
+  district: string;
+  urban: string;
+  zipCode: number;
+}
 export interface ICheckEmailAvailabilityProcess {
   email: string | undefined;
 }
