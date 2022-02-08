@@ -15,7 +15,7 @@ import NotificationNav from './notification.navigations';
 import SupplierNav from './supplier.navigation';
 import RecommendationNav from './recommendation.navigation';
 import QuestNav from './quest.navigation';
-import Omsv2Nav from './omsv2.navigation';
+import OmsNav from './oms.navigation';
 
 const index = {
   ...AuthNav,
@@ -35,7 +35,7 @@ const index = {
   ...SupplierNav,
   ...RecommendationNav,
   ...QuestNav,
-  ...Omsv2Nav,
+  ...OmsNav,
 };
 
 export default index;
