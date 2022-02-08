@@ -40,7 +40,7 @@ import {
   useOrderQuantity,
 } from '@screen/product/functions';
 import { useRecentSearch } from '@screen/search/functions';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
@@ -130,7 +130,7 @@ const ProductList: FC<ProductListProps> = ({
   });
   const { addKeyword } = useRecentSearch();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const cartTotalProductActions = useCartTotalProductActions();
+  // const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
   const addToCartActions = useAddToCart();
@@ -278,7 +278,7 @@ const ProductList: FC<ProductListProps> = ({
     if (addToCartData !== null) {
       setProductSelected(null);
       handleCloseModal();
-      cartTotalProductActions.fetch();
+      // cartTotalProductActions.fetch();
       SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,

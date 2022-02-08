@@ -1,4 +1,3 @@
-import OmsNav from './oms.navigation';
 import AuthNav from './auth.navigation';
 import SharedNav from './shared.navigation';
 import UserNav from './user.navigation';
@@ -19,7 +18,6 @@ import QuestNav from './quest.navigation';
 import Omsv2Nav from './omsv2.navigation';
 
 const index = {
-  ...OmsNav,
   ...AuthNav,
   ...SharedNav,
   ...UserNav,

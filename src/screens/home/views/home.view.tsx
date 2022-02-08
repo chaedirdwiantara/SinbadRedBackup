@@ -12,9 +12,9 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
-import { useCheckoutMaster } from '@screen/oms/functions';
+// import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
 import PushNotification from '@core/components/PushNotification';
@@ -26,8 +26,8 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
   const { data } = useDataTotalProductCart();
-  const { setCartId } = useCheckoutMaster();
-  const cartTotalProductActions = useCartTotalProductActions();
+  // const { setCartId } = useCheckoutMaster();
+  // const cartTotalProductActions = useCartTotalProductActions();
   const notificationTotalActions = useNotificationTotalActions();
   const { me } = useDataAuth();
   useGetTokenNotLogin();
@@ -40,7 +40,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (me.data !== null) {
-        cartTotalProductActions.fetch();
+        // cartTotalProductActions.fetch();
         notificationTotalActions.fetch();
       }
     });
@@ -50,7 +50,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
 
   React.useEffect(() => {
     if (me.data !== null) {
-      cartTotalProductActions.fetch();
+      // cartTotalProductActions.fetch();
       notificationTotalActions.fetch();
     }
   }, [me.data]);
@@ -58,7 +58,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   /** => listen changes data cart id */
   React.useEffect(() => {
     if (data && data.cartId) {
-      setCartId({ cartId: data.cartId });
+      // setCartId({ cartId: data.cartId });
     }
   }, [data.cartId]);
 

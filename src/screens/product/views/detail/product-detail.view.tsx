@@ -48,7 +48,7 @@ import { useProductContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useDataAuth } from '@core/redux/Data';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 import * as models from '@models';
 /** === DUMMY === */
 // const supplierDummy = {
@@ -78,8 +78,8 @@ const ProductDetailView: FC = () => {
   const productDetailActions = useProductDetailAction();
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
   const sendDataToSupplierActions = useRegisterSupplierActions();
-  const cartTotalProductActions = useCartTotalProductActions();
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  // const cartTotalProductActions = useCartTotalProductActions();
+  // const { dataTotalProductCart } = useCartTotalProductActions();
   const { me } = useDataAuth();
 
   /** => context */
@@ -407,7 +407,7 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (addToCartData !== null) {
       handleCloseModal();
-      cartTotalProductActions.fetch();
+      // cartTotalProductActions.fetch();
       SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
@@ -439,7 +439,10 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+        <ProductDetailHeader
+          // cartBadge={dataTotalProductCart.totalProduct}
+          cartBadge={0}
+        />
         <ProductDetailSkeleton />
       </SnbContainer>
     );
@@ -449,7 +452,10 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+        <ProductDetailHeader
+          // cartBadge={dataTotalProductCart.totalProduct}
+          cartBadge={0}
+        />
         <ScrollView
           contentContainerStyle={{ flex: 1 }}
           refreshControl={
@@ -470,7 +476,10 @@ const ProductDetailView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbStatusBar type="transparent1" />
-      <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+      <ProductDetailHeader
+        // cartBadge={dataTotalProductCart.totalProduct}
+        cartBadge={0}
+      />
       {/* Content */}
       <View style={{ flex: 1 }}>
         <ScrollView
