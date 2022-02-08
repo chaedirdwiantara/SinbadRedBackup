@@ -14,6 +14,7 @@ import {
   handleSubTotalPrice,
   handleTransformProductBrands,
   useParcelDetailModal,
+  calculateTax,
 } from '../../functions/checkout';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -212,11 +213,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             {data.totalPromoSellerAndVoucher !== 0
               ? totalDiscountList(data.totalPromoSellerAndVoucher as number)
               : null}
-            {contentListData(
-              `PPN ${data.tax}%`,
-              data.totalPriceAfterTax - data.totalPriceBeforeTax,
-              'normal',
-            )}
+            {contentListData(`PPN ${data.tax}%`, calculateTax(data), 'normal')}
             {data.totalPromoPayment !== 0 && data.totalPromoPayment !== null
               ? contentListData(
                   'Promo Pembayaran',

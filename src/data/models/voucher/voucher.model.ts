@@ -49,6 +49,8 @@ export interface SellerVoucherListProps {
   invoiceGroupId: number;
   invoiceGroupName: string;
   benefitRebate: number;
+  benefitDiscout: number;
+  benefitType: 'amount' | 'percent';
 }
 export interface CountAllVoucherProps {
   total: number;

@@ -21,20 +21,36 @@ export const VoucherFooter: FC<VoucherFooterProps> = ({
   selectedSinbadVoucher,
 }) => {
   const voucherLocalDataAction = useVoucherLocalData();
+
+  let voucherTagTitle, voucherTagSubtitle;
+  const isHaveBenefitValue = countPotentialDiscount(
+    selectedSinbadVoucher,
+    selectedSellerVoucher,
+  ).isHaveBenefitValue;
+
+  // check if selected voucher have benefit and not only percent
+  if (isHaveBenefitValue) {
+    voucherTagTitle = `Potensi potongan: ${toCurrency(
+      countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
+        .totalDiscount,
+      {
+        withFraction: false,
+      },
+    )}`;
+  } else {
+    voucherTagTitle = 'Potensi potongan';
+  }
+
+  voucherTagSubtitle = `${
+    countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
+      .totalSelectedVoucher
+  } Voucher Terpilih`;
+
   return (
     <View style={[VoucherCartListStyles.footerSection, styles.shadowStyle]}>
       <View>
-        <SnbText.B3 color={color.black60}>{`${
-          countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
-            .totalSelectedVoucher
-        } Voucher Terpilih`}</SnbText.B3>
-        <SnbText.C1 color={color.yellow50}>
-          {`Potensi Potongan: ${toCurrency(
-            countPotentialDiscount(selectedSinbadVoucher, selectedSellerVoucher)
-              .totalDiscount,
-            { withFraction: false },
-          )}`}
-        </SnbText.C1>
+        <SnbText.B3 color={color.black60}>{voucherTagSubtitle}</SnbText.B3>
+        <SnbText.C1 color={color.yellow50}>{voucherTagTitle}</SnbText.C1>
       </View>
       <View>
         <SnbButton.Dynamic

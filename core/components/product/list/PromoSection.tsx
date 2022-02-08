@@ -8,10 +8,14 @@ import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 /** === CONSTANT ===  */
 const { height } = Dimensions.get('window');
+/** === TYPES === */
+interface Props {
+  isFromProductDetail?: boolean;
+}
 /** === COMPONENT ===  */
-export const PromoSection: FC = () => {
+export const PromoSection: FC<Props> = ({ isFromProductDetail }) => {
   const {
-    stateProduct: { detail: productDetailState },
+    stateProduct: { detail: productDetailState, cart: productCartState },
   } = useProductContext();
   /**
    * Potential Promo Product
@@ -25,12 +29,20 @@ export const PromoSection: FC = () => {
   const potentialPromoProductAction = usePotentialPromoProductAction();
   /** => potential promo product effect */
   React.useEffect(() => {
-    if (productDetailState.data !== null) {
-      const { id } = productDetailState.data;
-      potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(dispatchPromo, id);
+    if (isFromProductDetail) {
+      if (productDetailState.data !== null) {
+        const { id } = productDetailState.data;
+        potentialPromoProductAction.reset(dispatchPromo);
+        potentialPromoProductAction.detail(dispatchPromo, id);
+      }
+    } else {
+      if (productCartState.data !== null) {
+        const { id } = productCartState.data;
+        potentialPromoProductAction.reset(dispatchPromo);
+        potentialPromoProductAction.detail(dispatchPromo, id);
+      }
     }
-  }, [productDetailState.data]);
+  }, [productDetailState.data, productCartState.data]);
 
   if (
     potentialPromoProductList.data !== null &&
