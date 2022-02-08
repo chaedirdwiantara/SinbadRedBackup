@@ -13,7 +13,7 @@ import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 // import { useCartTotalProductActions } from '@screen/oms/functions';
-import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
+import { useDataAuth } from '@core/redux/Data';
 // import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
@@ -25,7 +25,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
-  const { data } = useDataTotalProductCart();
+  // const { data } = useDataTotalProductCart();
   // const { setCartId } = useCheckoutMaster();
   // const cartTotalProductActions = useCartTotalProductActions();
   const notificationTotalActions = useNotificationTotalActions();
@@ -56,11 +56,11 @@ const HomeView: React.FC = ({ navigation }: any) => {
   }, [me.data]);
 
   /** => listen changes data cart id */
-  React.useEffect(() => {
-    if (data && data.cartId) {
-      // setCartId({ cartId: data.cartId });
-    }
-  }, [data.cartId]);
+  // React.useEffect(() => {
+  //   if (data && data.cartId) {
+  //     // setCartId({ cartId: data.cartId });
+  //   }
+  // }, [data.cartId]);
 
   React.useEffect(() => {
     if (me.error !== null && me.error.code === undefined) {

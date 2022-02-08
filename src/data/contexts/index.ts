@@ -2,10 +2,6 @@
 import { GlobalProvider, GlobalContext } from './global/GlobalProvider';
 import { ProductProvider, ProductContext } from './product/ProductProvider';
 import { TagProvider, TagContext } from './product/tag/TagProvider';
-import {
-  VerificationOrderProvider,
-  VerificationOrderContext,
-} from './oms/verification-order/VerificationOrderProvider';
 import { CategoryProvider, CategoryContext } from './category/CategoryProvider';
 import { UserProvider, UserContext } from './users/UserProvider';
 import { MerchantProvider, MerchantContext } from './merchant/MerchantProvider';
@@ -17,26 +13,14 @@ import {
   NotificationContext,
 } from './notification/NotificationProvider';
 import { BannerProvider, BannerContext } from './banner/BannerProvider';
-import {
-  ShopingCartProvider,
-  ShopingCartContext,
-} from './oms/shoping-cart/ShopingCartProvider';
+
 import { HistoryProvider, HistoryContext } from './history/HistoryProvider';
-import { PaymentProvider, PaymentContext } from './oms/payment/PaymentProvider';
 import { SupplierProvider, SupplierContext } from './supplier/SupplierProvider';
 import {
   ReserveStockProvider,
   ReserveStockContext,
 } from './product/reserve-stock/ReserveStockProvider';
-import {
-  CheckoutProvider,
-  CheckoutContext,
-} from './oms/checkout/CheckoutProvider';
 import { StockProvider, StockContext } from './product/stock/StockProvider';
-import {
-  CheckoutDoneContext,
-  CheckoutDoneProvider,
-} from './oms/checkout-done/CheckoutDoneProvider';
 import { QuestProvider, QuestContext } from './quest/QuestProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
@@ -44,7 +28,6 @@ export const providers = [
   ProductProvider,
   UserProvider,
   MerchantProvider,
-  VerificationOrderProvider,
   CategoryProvider,
   VoucherProvider,
   PromoProvider,
@@ -54,21 +37,16 @@ export const providers = [
   NotificationProvider,
   TagProvider,
   BannerProvider,
-  ShopingCartProvider,
   HistoryProvider,
-  PaymentProvider,
   SupplierProvider,
   ReserveStockProvider,
-  CheckoutProvider,
   StockProvider,
   QuestProvider,
-  CheckoutDoneProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
   GlobalContext,
   ProductContext,
-  VerificationOrderContext,
   CategoryContext,
   UserContext,
   MerchantContext,
@@ -78,13 +56,9 @@ export const contexts = {
   NotificationContext,
   TagContext,
   BannerContext,
-  ShopingCartContext,
   HistoryContext,
-  PaymentContext,
   SupplierContext,
   ReserveStockContext,
-  CheckoutContext,
   StockContext,
   QuestContext,
-  CheckoutDoneContext,
 };
