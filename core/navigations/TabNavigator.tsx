@@ -143,7 +143,7 @@ const TabNavigator = () => {
           tabPress: (e) => {
             e.preventDefault();
             if (me.data === null) {
-              NavigationAction.navigate('LoginPhoneView');
+              NavigationAction.navigate('OnBoardingView');
             } else {
               NavigationAction.navigate('UserView');
             }
