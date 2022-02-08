@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -10,10 +10,12 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
+import Svg from '@svg';
+import { useInputPhone } from '@screen/auth/functions';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
-  const [phoneNo, setPhoneNo] = useState('');
+  const phone = useInputPhone();
 
   const header = () => {
     return (
@@ -28,20 +30,11 @@ const SelfRegisterView: React.FC = () => {
   const content = () => {
     return (
       <View style={{ flex: 1 }}>
-        <Image
-          source={require('../../../../assets/images/self_regist/Registration.png')}
-          style={styles.image}
-        />
+        <View style={styles.image}>
+          <Svg name="registration" size={220} />
+        </View>
         <View style={{ height: 84, padding: 16 }}>
-          <SnbTextField.Text
-            keyboardType="phone-pad"
-            labelText="Masukkan Nomor Handphone"
-            placeholder="Masukkan nomor handphone anda"
-            onChangeText={(text) => setPhoneNo(text)}
-            clearText={() => setPhoneNo('')}
-            type={'default'}
-            value={phoneNo}
-          />
+          <SnbTextField.Text {...phone} keyboardType="phone-pad" />
         </View>
       </View>
     );
@@ -53,8 +46,11 @@ const SelfRegisterView: React.FC = () => {
         <View style={styles.button}>
           <SnbButton.Single
             title={'Lanjut'}
-            onPress={() => navigate(REGISTER_OTP_VIEW, { phoneNo: phoneNo })}
+            onPress={() =>
+              navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value })
+            }
             type={'primary'}
+            disabled={phone.value === '' || phone.valMsgError !== ''}
           />
         </View>
         <View
@@ -74,9 +70,11 @@ const SelfRegisterView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      {header()}
-      {content()}
-      {buttonRegister()}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {header()}
+        {content()}
+        {buttonRegister()}
+      </ScrollView>
     </SnbContainer>
   );
 };
@@ -86,9 +84,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 160,
-    height: 160,
-    resizeMode: 'contain',
     alignSelf: 'center',
     marginVertical: 32,
   },
