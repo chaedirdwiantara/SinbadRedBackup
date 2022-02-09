@@ -53,18 +53,14 @@ const useOTP = () => {
   const getAndroidLocationPermissions = () => {
     PermissionsAndroid.check(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    )
-      .then(handleCheckPermissionResult)
-      .catch(console.log);
+    ).then(handleCheckPermissionResult);
   };
 
   const handleCheckPermissionResult = (result: boolean) => {
     if (!result) {
       PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      )
-        .then(handleRequestPermissionResult)
-        .catch(console.log);
+      ).then(handleRequestPermissionResult);
     } else {
       reset({ index: 0, routes: [{ name: BUYER_CATEGORY_VIEW }] });
     }
