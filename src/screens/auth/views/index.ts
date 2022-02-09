@@ -15,6 +15,7 @@ import OnBoardingView from './login/on-boarding.view';
 import SelfRegisterView from './register/self-register.view';
 import ListLocationView from './easy-registration/list-location.view';
 import BuyerCategoryView from './easy-registration/buyer-category.view';
+import ProductCategoryView from './easy-registration/product-category.view';
 export {
   LoginPhoneView,
   LoginIDView,
@@ -33,4 +34,5 @@ export {
   SelfRegisterView,
   ListLocationView,
   BuyerCategoryView,
+  ProductCategoryView,
 };

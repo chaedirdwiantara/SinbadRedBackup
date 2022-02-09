@@ -18,14 +18,6 @@ export interface IRegisterAction<T> {
 export interface ICheckPhoneNoAvailabilityProcess {
   mobilePhoneNo: string | undefined;
 }
-export interface ISearchLocationsData {
-  id: string;
-  province: string;
-  city: string;
-  district: string;
-  urban: string;
-  zipCode: number;
-}
 export interface ICheckEmailAvailabilityProcess {
   email: string | undefined;
 }
@@ -98,3 +90,56 @@ export interface IVerifyOTPSuccess {
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}
 export interface ICheckEmailAvailabilityFailed {}
+
+export interface ISearchLocationsData {
+  id: string;
+  province: string;
+  city: string;
+  district: string;
+  urban: string;
+  zipCode: number;
+}
+
+export interface IBuyerCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface IMeta {
+  total: number;
+  limit: number;
+  skip: number;
+}
+export interface IBuyerCategoryData {
+  data: IBuyerCategory[];
+  meta: IMeta;
+}
+
+export interface IProductCategory {
+  id: string;
+  name: string;
+  icon: string;
+  isSelected: boolean;
+}
+export interface IProductCategoryData {
+  data: IProductCategory[];
+}
+
+export interface ICreateBasicAccount {
+  locationId: string;
+  buyerCategoryId: number;
+  productCategoryIds: string[];
+}
+
+export interface ICreateBasicAccountData {
+  data: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}

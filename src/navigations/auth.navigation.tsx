@@ -16,6 +16,7 @@ import {
   SelfRegisterView,
   ListLocationView,
   BuyerCategoryView,
+  ProductCategoryView,
 } from '@screen/auth/views';
 
 const AuthNav = {
@@ -69,6 +70,9 @@ const AuthNav = {
   },
   BuyerCategoryView: {
     component: BuyerCategoryView,
+  },
+  ProductCategoryView: {
+    component: ProductCategoryView,
   },
 };
 
