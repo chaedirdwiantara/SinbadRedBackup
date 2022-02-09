@@ -10,6 +10,7 @@ export const ShoppingCartFooter: FC = () => {
         padding: 16,
         backgroundColor: color.white,
         justifyContent: 'flex-end',
+        elevation: 10,
       }}>
       <View
         style={{
