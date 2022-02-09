@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   /** Pagination */
   activeDot: {
-    width: 32,
+    width: 8,
     height: 8,
     borderRadius: 8,
     backgroundColor: color.red50,

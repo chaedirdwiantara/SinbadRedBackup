@@ -1,5 +1,6 @@
 import apiAuth from '@core/services/apiAuth';
 import * as models from '@models';
+import apiMock from '@core/services/apiMock';
 
 const checkPhoneNoAvailability = (
   data: models.ICheckPhoneNoAvailabilityProcess,
@@ -30,10 +31,17 @@ const registermerchantDetail = (data: models.IRegisterMerchantSuccess) => {
   return apiAuth(path, 'v1', 'GET');
 };
 
+const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
+  const path = 'check-phone';
+  const mockHost = 'https://7a55376b-ace5-4ee5-a6be-590d732e725d.mock.pstmn.io';
+  return apiMock(mockHost, path, '', 'v2', 'POST', data);
+};
+
 export const registerApi = {
   checkPhoneNoAvailability,
   registerMerchant,
   checkEmailAvailability,
   verifyOTPRegister,
   registermerchantDetail,
+  checkPhoneV2,
 };

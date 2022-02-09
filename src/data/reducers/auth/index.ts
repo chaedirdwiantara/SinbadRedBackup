@@ -7,6 +7,7 @@ import { verifyOTP } from './verify-otp.reducer';
 import { requestOTP } from './request-otp.reducer';
 import { register } from './register';
 import { AuthMeReducer } from './auth-me.reducer';
+import { checkPhoneV2 } from './check-phone-v2.reducer';
 
 export const auth = combineReducers({
   checkPhoneNoAvailability,
@@ -17,4 +18,5 @@ export const auth = combineReducers({
   requestOTP,
   register,
   AuthMeReducer,
+  checkPhoneV2,
 });
