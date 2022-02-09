@@ -85,6 +85,21 @@ export interface IVerifyOTPSuccess {
     };
   };
 }
+export interface ICheckPhoneV2Process {
+  mobilePhone: string | undefined;
+  otpHash: string;
+}
+export interface ICheckPhoneV2Success {
+  data: {
+    data: {
+      id: number | null;
+      isAvailable: boolean;
+      createdAt: string;
+      updatedAt: string;
+    };
+    message: string;
+  };
+}
 
 // FAILED MODEL
 export interface ICheckPhoneNoAvailabilityFailed {}

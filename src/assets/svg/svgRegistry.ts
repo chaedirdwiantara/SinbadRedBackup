@@ -7,6 +7,9 @@ import otp_icon from './otp.svg';
 import call from './call.svg';
 import whatsapp from './whatsapp.svg';
 import mail from './mail.svg';
+import sinbad_otp from './sinbad_OTP.svg';
+import registration from './registration.svg';
+import onboarding from './onboarding.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -18,4 +21,7 @@ export const SvgRegistery = {
   call,
   whatsapp,
   mail,
+  sinbad_otp,
+  registration,
+  onboarding,
 };

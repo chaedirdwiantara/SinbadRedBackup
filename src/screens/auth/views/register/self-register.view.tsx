@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -10,10 +10,36 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
+import Svg from '@svg';
+import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
+import RNOtpVerify from 'react-native-otp-verify';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
-  const [phoneNo, setPhoneNo] = useState('');
+  const phone = useInputPhone();
+  const { checkPhone, resetCheckPhone, checkPhoneV2 } = useCheckPhoneV2();
+  const [hashOtp, setHashOtp] = useState('');
+
+  React.useEffect(() => {
+    if (checkPhoneV2.data !== null) {
+      phone.clearText();
+      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
+    }
+    if (checkPhoneV2.error !== null) {
+      phone.setMessageError(checkPhoneV2.error.code);
+    }
+  }, [checkPhoneV2]);
+
+  React.useEffect(() => {
+    return () => {
+      resetCheckPhone();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
+    return RNOtpVerify.removeListener;
+  }, []);
 
   const header = () => {
     return (
@@ -28,20 +54,11 @@ const SelfRegisterView: React.FC = () => {
   const content = () => {
     return (
       <View style={{ flex: 1 }}>
-        <Image
-          source={require('../../../../assets/images/self_regist/Registration.png')}
-          style={styles.image}
-        />
+        <View style={styles.image}>
+          <Svg name="registration" size={220} />
+        </View>
         <View style={{ height: 84, padding: 16 }}>
-          <SnbTextField.Text
-            keyboardType="phone-pad"
-            labelText="Masukkan Nomor Handphone"
-            placeholder="Masukkan nomor handphone anda"
-            onChangeText={(text) => setPhoneNo(text)}
-            clearText={() => setPhoneNo('')}
-            type={'default'}
-            value={phoneNo}
-          />
+          <SnbTextField.Text {...phone} keyboardType="phone-pad" />
         </View>
       </View>
     );
@@ -53,8 +70,16 @@ const SelfRegisterView: React.FC = () => {
         <View style={styles.button}>
           <SnbButton.Single
             title={'Lanjut'}
-            onPress={() => navigate(REGISTER_OTP_VIEW, { phoneNo: phoneNo })}
+            onPress={() =>
+              checkPhone({ mobilePhone: phone.value, otpHash: hashOtp })
+            }
             type={'primary'}
+            disabled={
+              phone.value === '' ||
+              phone.valMsgError !== '' ||
+              checkPhoneV2.loading
+            }
+            loading={checkPhoneV2.loading}
           />
         </View>
         <View
@@ -74,9 +99,11 @@ const SelfRegisterView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      {header()}
-      {content()}
-      {buttonRegister()}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {header()}
+        {content()}
+        {buttonRegister()}
+      </ScrollView>
     </SnbContainer>
   );
 };
@@ -86,9 +113,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: 160,
-    height: 160,
-    resizeMode: 'contain',
     alignSelf: 'center',
     marginVertical: 32,
   },
