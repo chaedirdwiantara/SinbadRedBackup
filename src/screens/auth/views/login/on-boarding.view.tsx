@@ -53,6 +53,8 @@ const OnBoardingView: React.FC<Props> = () => {
           <Svg name="onboarding" size={240} />
         </View>
         <OnBoardSlider data={data} />
+        {button()}
+        {skipLogin()}
       </View>
     );
   };
@@ -88,7 +90,7 @@ const OnBoardingView: React.FC<Props> = () => {
           <SnbText.B1>Biarkan saya masuk </SnbText.B1>
           <TouchableOpacity
             onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
-            <SnbText.B2 color={color.red50}>Lewati</SnbText.B2>
+            <SnbText.B2 color={color.blue50}>Lewati</SnbText.B2>
           </TouchableOpacity>
         </View>
       </View>
@@ -112,8 +114,6 @@ const OnBoardingView: React.FC<Props> = () => {
     return (
       <View style={styles.container}>
         {slideOnBoard()}
-        {button()}
-        {skipLogin()}
         {termsNotice()}
       </View>
     );
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     marginVertical: 32,
+    aspectRatio: 1,
   },
   textSlider: {
     flex: 1,
