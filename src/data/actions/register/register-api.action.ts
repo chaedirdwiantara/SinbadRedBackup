@@ -111,3 +111,31 @@ export const verifyOTPRegisterFailed = (
     payload: data,
   };
 };
+
+// CHECK PHONE NO AVAILABILITY V@
+export const checkPhoneV2Process = (
+  data: models.ICheckPhoneV2Process,
+): models.IRegisterAction<models.ICheckPhoneV2Process> => {
+  return {
+    type: types.CHECK_PHONE_V2_PROCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneV2Success = (
+  data: models.ICheckPhoneV2Success,
+): models.IRegisterAction<models.ICheckPhoneV2Success> => {
+  return {
+    type: types.CHECK_PHONE_V2_SUCCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneV2Failed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.ICheckPhoneNoAvailabilityFailed | unknown> => {
+  return {
+    type: types.CHECK_PHONE_V2_FAILED,
+    payload: data,
+  };
+};

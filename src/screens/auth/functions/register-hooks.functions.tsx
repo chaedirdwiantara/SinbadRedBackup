@@ -30,6 +30,20 @@ export const useCheckEmailAvailability = () => {
   };
 };
 
+export const useCheckPhoneV2 = () => {
+  const dispatch = useDispatch();
+  const { checkPhoneV2 } = useSelector((state: any) => state.auth);
+  return {
+    checkPhone: (data: models.ICheckPhoneV2Process) => {
+      dispatch(Actions.checkPhoneV2Process(data));
+    },
+    resetCheckPhone: () => {
+      dispatch(Actions.resetCheckPhoneNoAvailability());
+    },
+    checkPhoneV2,
+  };
+};
+
 export const useRegister = () => {
   const state = useSelector((state: any) => state.auth);
   const registerState = state.register;

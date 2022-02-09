@@ -85,6 +85,20 @@ function* verifyOTPRegister(
   }
 }
 
+/** check phone no */
+function* checkPhoneV2(
+  action: models.IRegisterAction<models.ICheckPhoneV2Process>,
+) {
+  try {
+    const response: models.ICheckPhoneV2Success = yield call(() =>
+      registerApi.checkPhoneV2(action.payload),
+    );
+    yield put(ActionCreators.checkPhoneV2Success(response));
+  } catch (error) {
+    yield put(ActionCreators.checkPhoneV2Failed(error));
+  }
+}
+
 function* RegisterSaga() {
   yield takeLatest(types.REGISTER_MERCHANT_PROCESS, registerMerchant);
   yield takeLatest(types.VERIFY_OTP_REGISTER_PROCESS, verifyOTPRegister);
@@ -96,6 +110,7 @@ function* RegisterSaga() {
     types.CHECK_EMAIL_AVAILABILITY_PROCESS,
     checkEmailAvailability,
   );
+  yield takeLatest(types.CHECK_PHONE_V2_PROCESS, checkPhoneV2);
 }
 
 export default RegisterSaga;
