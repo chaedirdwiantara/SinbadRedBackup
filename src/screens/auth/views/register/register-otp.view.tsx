@@ -3,10 +3,8 @@ import {
   maskPhone,
   useCheckPhoneNoAvailability,
   useOTP,
-  useMerchant,
   setErrorMessage,
 } from '@screen/auth/functions';
-import { REGISTER_STEP_1_VIEW } from '@screen/auth/functions/screens_name';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { ScrollView } from 'react-native';
@@ -16,21 +14,15 @@ const RegisterOTPView: React.FC = () => {
   const { checkPhone } = useCheckPhoneNoAvailability();
   const { verifyOTPRegister, verifyOTP, mobilePhone, getLocationPermissions } =
     useOTP();
-  const { goBack, replace }: any = useNavigation();
+  const { goBack }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
-  const { saveUserData, resetMerchantData } = useMerchant();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      resetMerchantData();
-      saveUserData({ mobilePhone });
-      setTimeout(() => {
-        replace(REGISTER_STEP_1_VIEW);
-      }, 250);
+      getLocationPermissions();
     }
     if (verifyOTP.error !== null) {
-      getLocationPermissions();
       setHide(false);
     }
   }, [verifyOTP]);

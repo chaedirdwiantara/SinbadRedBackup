@@ -45,7 +45,7 @@ const BuyerLocation: React.FC = () => {
       <View style={{ flex: 1 }}>
         <SnbText.B3>Lokasi Toko</SnbText.B3>
         <View style={{ marginVertical: 4 }} />
-        <SnbText.B2 ellipsizeMode="tail" numOfLines={1}>
+        <SnbText.B2>
           {location
             ? `${location.city}, ${location.district}, ${location.urban}`
             : 'Lokasi tidak ditemukan'}
@@ -89,11 +89,12 @@ const BuyerCategory: React.FC = () => {
   React.useEffect(() => {
     if (createBasicAccountState.data) {
       if (actionFrom === 'mulai') {
-        // reset({ index: 0, routes: [{ name: 'Home' }] });
         Alert.alert('Info', 'Action will be direct to Home Page');
       } else if (actionFrom === 'lengkapi') {
-        // Navigate to VIP data completeness
-        Alert.alert('Info', 'Action will be direct to VIP Data Completeness');
+        Alert.alert(
+          'Info',
+          'Action will be direct to Premium Account Data Completeness',
+        );
       }
     }
   }, [createBasicAccountState]);

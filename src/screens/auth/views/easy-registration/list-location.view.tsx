@@ -46,9 +46,7 @@ const Content: React.FC = () => {
           justifyContent: 'space-between',
         }}>
         <View style={{ flex: 1 }}>
-          <SnbText.B1 ellipsizeMode="tail" numOfLines={1}>
-            {locationName}
-          </SnbText.B1>
+          <SnbText.B1>{locationName}</SnbText.B1>
         </View>
         <View style={{ marginHorizontal: 4 }} />
         <SnbRadioButton
@@ -68,10 +66,10 @@ const Content: React.FC = () => {
       </View>
       <View style={{ flex: 1 }}>
         {renderIF(
-          searchLocationState.loading,
+          searchLocationState?.loading,
           <SnbProgress />,
           <FlatList
-            data={searchLocationState.data}
+            data={searchLocationState?.data}
             contentContainerStyle={{ paddingHorizontal: 16 }}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={renderLocation}

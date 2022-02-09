@@ -38,7 +38,7 @@ export const useEasyRegistration = () => {
 
   return {
     searchLocation,
-    searchLocationState: global.searchLocation,
+    searchLocationState: global.searchLocations,
     buyerCategories: easyRegistration.buyerCategories,
     productCategories: easyRegistration.productCategories,
     createBasicAccountState: easyRegistration.createBasicAccount,
