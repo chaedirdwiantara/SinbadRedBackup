@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
@@ -12,11 +12,13 @@ import { useNavigation } from '@react-navigation/core';
 import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 import Svg from '@svg';
 import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
+import RNOtpVerify from 'react-native-otp-verify';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
   const phone = useInputPhone();
   const { checkPhone, resetCheckPhone, checkPhoneV2 } = useCheckPhoneV2();
+  const [hashOtp, setHashOtp] = useState('');
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
@@ -28,12 +30,15 @@ const SelfRegisterView: React.FC = () => {
     }
   }, [checkPhoneV2]);
 
-  console.log('loading:', checkPhoneV2);
-
   React.useEffect(() => {
     return () => {
       resetCheckPhone();
     };
+  }, []);
+
+  React.useEffect(() => {
+    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
+    return RNOtpVerify.removeListener;
   }, []);
 
   const header = () => {
@@ -66,7 +71,7 @@ const SelfRegisterView: React.FC = () => {
           <SnbButton.Single
             title={'Lanjut'}
             onPress={() =>
-              checkPhone({ mobilePhone: phone.value, otpHash: '1ac0d931' })
+              checkPhone({ mobilePhone: phone.value, otpHash: hashOtp })
             }
             type={'primary'}
             disabled={
