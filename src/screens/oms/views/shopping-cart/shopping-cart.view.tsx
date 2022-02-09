@@ -1,9 +1,11 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
+import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
+import { ShoppingCartFooter } from './shopping-cart-footer.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
@@ -16,7 +18,10 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={goBack} />
-      <ShoppingCartAddress />
+      <View style={{ flex: 1 }}>
+        <ShoppingCartAddress />
+      </View>
+      <ShoppingCartFooter />
     </SnbContainer>
   );
 };
