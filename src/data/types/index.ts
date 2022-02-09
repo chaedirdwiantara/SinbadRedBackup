@@ -6,7 +6,6 @@
 export * from '@core/data/types';
 export * from './global.type';
 export * from './register.type';
-export * from './auth.type';
 export * from './product';
 export * from './merchant.type';
 export * from './user.type';
@@ -22,6 +21,7 @@ export * from './supplier';
 export * from './quest.type';
 export * from './history';
 export * from './quest.type';
+export * from './easy-registration.type';
 /**
  * ================================================================
  * NOTES

@@ -9,6 +9,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 import Svg from '@svg';
+import { useOTP } from '@screen/auth/functions';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
@@ -21,7 +22,7 @@ interface Props {
 
 const OTPContent: React.FC<Props> = (props) => {
   const { onVerifyOTP, loading, phoneNo, resend, errorMessage } = props;
-  const [otp, setOtp] = React.useState('');
+  const { otp, setOtp } = useOTP();
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>

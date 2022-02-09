@@ -1,13 +1,16 @@
 import * as Actions from '@actions';
 import * as models from '@models';
-import { useRoute } from '@react-navigation/core';
+import { useRoute, useNavigation } from '@react-navigation/core';
 import React from 'react';
+import { PermissionsAndroid, PermissionStatus, Platform } from 'react-native';
 import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { BUYER_CATEGORY_VIEW, LIST_LOCATION_VIEW } from './screens_name';
 
 const useOTP = () => {
   const dispatch = useDispatch();
+  const { reset } = useNavigation();
   const { params }: any = useRoute();
   const { verifyOTP } = useSelector((state: any) => state.auth);
   const [mobilePhone, setMobilePhone] = React.useState('');
@@ -35,6 +38,45 @@ const useOTP = () => {
     dispatch(Actions.resetVerifyOTP());
   };
 
+  const getLocationPermissions = () => {
+    switch (Platform.OS) {
+      case 'android': {
+        getAndroidLocationPermissions();
+        break;
+      }
+      case 'ios': {
+        break;
+      }
+    }
+  };
+
+  const getAndroidLocationPermissions = () => {
+    PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    ).then(handleCheckPermissionResult);
+  };
+
+  const handleCheckPermissionResult = (result: boolean) => {
+    if (!result) {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      ).then(handleRequestPermissionResult);
+    } else {
+      reset({ index: 0, routes: [{ name: BUYER_CATEGORY_VIEW }] });
+    }
+  };
+
+  const handleRequestPermissionResult = (result: PermissionStatus) => {
+    if (
+      result === PermissionsAndroid.RESULTS.DENIED ||
+      result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
+    ) {
+      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    } else {
+      reset({ index: 0, routes: [{ name: BUYER_CATEGORY_VIEW }] });
+    }
+  };
+
   React.useEffect(() => {
     setMobilePhone(params?.phoneNo);
     return resetVerifyOTP;
@@ -47,6 +89,7 @@ const useOTP = () => {
     mobilePhone,
     otp,
     setOtp,
+    getLocationPermissions,
   };
 };
 
