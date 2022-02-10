@@ -151,7 +151,9 @@ const BuyerCategory: React.FC = () => {
             <SnbText.H3>{item.name}</SnbText.H3>
             <View style={{ marginTop: 4 }}>
               {item.description.map((el: string, idx: number) => (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View
+                  key={idx}
+                  style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <View
                     style={{
                       height: 4,
@@ -161,7 +163,7 @@ const BuyerCategory: React.FC = () => {
                     }}
                   />
                   <View style={{ marginHorizontal: 2 }} />
-                  <SnbText.B3 key={idx}>{el}</SnbText.B3>
+                  <SnbText.B3>{el}</SnbText.B3>
                 </View>
               ))}
             </View>
