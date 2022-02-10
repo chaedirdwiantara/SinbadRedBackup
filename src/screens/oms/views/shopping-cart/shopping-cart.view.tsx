@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -7,12 +7,19 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack } from '../../functions';
+import { goBack, useCartExampleAction } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
+/** === IMPORT OTHER FUNCTION HERE === */
+import { contexts } from '@contexts';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const cartExampleAction = useCartExampleAction();
   /** === HOOKS === */
-
+  useEffect(() => {
+    cartExampleAction.fetch(dispatchCart);
+  }, []);
+  console.log(stateCart);
   /** === VIEW === */
   /** => Main */
   return (
