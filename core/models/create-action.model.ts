@@ -2,6 +2,7 @@
 import {
   CreateSuccessProps,
   CreateSuccessV2Props,
+  CreateSuccessV3Props,
   CreateProcessProps,
 } from './create.model';
 import { ErrorProps } from './error.model';
@@ -25,4 +26,9 @@ export interface CreateSuccessAction {
 export interface CreateSuccessV2Action {
   type: string;
   payload: CreateSuccessV2Props;
+}
+/** === SUCCESS VERSION 3 === */
+export interface CreateSuccessV3Action<T> {
+  type: string;
+  payload: CreateSuccessV3Props<T>;
 }

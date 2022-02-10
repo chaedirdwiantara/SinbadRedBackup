@@ -54,3 +54,22 @@ export interface UpdateItemV2Props {
 export interface UpdateV2Props {
   update: UpdateItemV2Props;
 }
+/**
+ * ================================
+ * VERSION 3
+ * ================================
+ */
+/** === THIS FOR SUCCESS UPDATE DATA === */
+export interface UpdateSuccessV3Props<T> {
+  data: T;
+  message: string;
+}
+/** === THIS FOR CREATE PROCESS === */
+export interface UpdateItemV3Props<T> {
+  loading: boolean;
+  data: T | null;
+  error: ErrorProps | null;
+}
+export interface UpdateV3Props<T> {
+  update: UpdateItemV3Props<T>;
+}
