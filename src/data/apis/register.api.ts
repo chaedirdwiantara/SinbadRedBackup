@@ -21,11 +21,6 @@ const registerMerchant = (data: models.IMerchantData) => {
   return apiAuth(path, 'v1', 'POST', data);
 };
 
-// const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
-//   const path = 'otp/verification/self-registration';
-//   return apiAuth(path, 'v1', 'POST', data);
-// };
-
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
   const path = 'verified-otp';
   const mockHost = 'https://7a55376b-ace5-4ee5-a6be-590d732e725d.mock.pstmn.io';
