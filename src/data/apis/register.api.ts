@@ -42,7 +42,7 @@ const checkAutoLogin = (data: models.ICheckAutoLoginProcess) => {
   console.log('data send:', data);
   const path = `check-registration?id=${data.data.requestId}`;
   const mockHost = 'https://7a55376b-ace5-4ee5-a6be-590d732e725d.mock.pstmn.io';
-  return apiMock(mockHost, path, '', 'v2', 'GET');
+  return apiMock(mockHost, path, '', 'v2', 'GET', data);
 };
 
 export const registerApi = {
