@@ -1,5 +1,6 @@
 /** === EXPORT ALL === */
 export * from './oms.function';
+export * from './cart/cart-hook.function';
 /**
  * ================================================================
  * NOTES
