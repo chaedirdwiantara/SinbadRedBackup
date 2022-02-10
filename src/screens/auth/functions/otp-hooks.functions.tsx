@@ -15,6 +15,7 @@ const useOTP = () => {
   const { verifyOTP } = useSelector((state: any) => state.auth);
   const [mobilePhone, setMobilePhone] = React.useState('');
   const [otp, setOtp] = React.useState('');
+  const [hashOtp, setHashOtp] = React.useState('');
 
   React.useEffect(() => {
     startListeningForOtp();
@@ -79,6 +80,7 @@ const useOTP = () => {
 
   React.useEffect(() => {
     setMobilePhone(params?.phoneNo);
+    setHashOtp(params?.hashOtp);
     return resetVerifyOTP;
   }, []);
 
@@ -90,6 +92,7 @@ const useOTP = () => {
     otp,
     setOtp,
     getLocationPermissions,
+    hashOtp,
   };
 };
 

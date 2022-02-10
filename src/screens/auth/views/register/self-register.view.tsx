@@ -23,7 +23,8 @@ const SelfRegisterView: React.FC = () => {
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
       phone.clearText();
-      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
+      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+      resetCheckPhone();
     }
     if (checkPhoneV2.error !== null) {
       phone.setMessageError(checkPhoneV2.error.code);

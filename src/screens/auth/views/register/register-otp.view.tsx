@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import {
   maskPhone,
-  useCheckPhoneNoAvailability,
   useOTP,
   setErrorMessage,
+  useCheckPhoneV2,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
@@ -12,17 +12,27 @@ import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 import { useCheckAutoLogin } from '@screen/auth/functions';
 
 const RegisterOTPView: React.FC = () => {
-  const { checkPhone } = useCheckPhoneNoAvailability();
-  const { verifyOTPRegister, verifyOTP, mobilePhone, getLocationPermissions } =
-    useOTP();
+  const {
+    verifyOTPRegister,
+    verifyOTP,
+    mobilePhone,
+    getLocationPermissions,
+    hashOtp,
+  } = useOTP();
   const { goBack }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
   const { checkAutoLogin, checkAutoLoginData } = useCheckAutoLogin();
+  const { checkPhone } = useCheckPhoneV2();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      checkAutoLogin(verifyOTP.data);
+      var times = 3;
+      for (var i = 0; i < times; i++) {
+        setTimeout(() => {
+          checkAutoLogin(verifyOTP.data);
+        }, 1500);
+      }
     }
     if (verifyOTP.error !== null) {
       setHide(false);
@@ -52,7 +62,7 @@ const RegisterOTPView: React.FC = () => {
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhoneNo: mobilePhone });
+            checkPhone({ mobilePhone: mobilePhone, otpHash: hashOtp });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
