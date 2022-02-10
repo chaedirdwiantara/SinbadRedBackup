@@ -8,6 +8,9 @@ import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack } from '../../functions';
+import { ProductView } from './product.view';
+import { ProductUnavailableView } from './product-not-available.view';
+import { ShoppingCartStyles } from '@screen/oms/styles';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -20,6 +23,12 @@ const OmsShoppingCartView: FC = () => {
       <ShoppingCartHeader goBack={goBack} />
       <View style={{ flex: 1 }}>
         <ShoppingCartAddress />
+        <View style={ShoppingCartStyles.cardContainer}>
+          <ProductView />
+        </View>
+        <View style={ShoppingCartStyles.cardContainer}>
+          <ProductUnavailableView />
+        </View>
       </View>
       <ShoppingCartFooter />
     </SnbContainer>
