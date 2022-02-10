@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -23,8 +23,8 @@ const SelfRegisterView: React.FC = () => {
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
       phone.clearText();
-      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
       resetCheckPhone();
+      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
     }
     if (checkPhoneV2.error !== null) {
       phone.setMessageError(checkPhoneV2.error.code);
@@ -32,9 +32,7 @@ const SelfRegisterView: React.FC = () => {
   }, [checkPhoneV2]);
 
   React.useEffect(() => {
-    return () => {
-      resetCheckPhone();
-    };
+    resetCheckPhone();
   }, []);
 
   React.useEffect(() => {
@@ -100,10 +98,8 @@ const SelfRegisterView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {header()}
-        {content()}
-      </ScrollView>
+      {header()}
+      {content()}
       {buttonRegister()}
     </SnbContainer>
   );

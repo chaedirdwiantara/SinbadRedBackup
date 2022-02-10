@@ -22,7 +22,8 @@ const RegisterOTPView: React.FC = () => {
   } = useOTP();
   const { goBack }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
-  const { checkAutoLogin, checkAutoLoginData } = useCheckAutoLogin();
+  const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
+    useCheckAutoLogin();
   const { checkPhone } = useCheckPhoneV2();
   const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
   const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
@@ -44,6 +45,7 @@ const RegisterOTPView: React.FC = () => {
   React.useEffect(() => {
     if (checkAutoLoginData.data !== null) {
       getLocationPermissions();
+      resetCheckAutoLogin();
     }
   }, [checkAutoLoginData]);
 
@@ -58,6 +60,7 @@ const RegisterOTPView: React.FC = () => {
     if (reCheckAutoLogin === 3) {
       setLoadingCheckAutoLogin(false);
       setModalError(true);
+      resetCheckAutoLogin();
     }
   }, [reCheckAutoLogin, checkAutoLoginData]);
 
