@@ -6,10 +6,13 @@ import { SnbContainer } from 'react-native-sinbad-ui';
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
+import { ProductView } from './product.view';
+import { ProductUnavailableView } from './product-not-available.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack, useCartExampleAction } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
-/** === IMPORT OTHER FUNCTION HERE === */
+/** === IMPORT OTHER HERE === */
+import { ShoppingCartStyles } from '@screen/oms/styles';
 import { contexts } from '@contexts';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -27,6 +30,12 @@ const OmsShoppingCartView: FC = () => {
       <ShoppingCartHeader goBack={goBack} />
       <View style={{ flex: 1 }}>
         <ShoppingCartAddress />
+        <View style={ShoppingCartStyles.cardContainer}>
+          <ProductView />
+        </View>
+        <View style={ShoppingCartStyles.cardContainer}>
+          <ProductUnavailableView />
+        </View>
       </View>
       <ShoppingCartFooter />
     </SnbContainer>
