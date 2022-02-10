@@ -61,8 +61,6 @@ const RegisterOTPView: React.FC = () => {
     }
   }, [reCheckAutoLogin, checkAutoLoginData]);
 
-  console.log('error:', reCheckAutoLogin);
-
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
