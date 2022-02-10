@@ -22,6 +22,7 @@ import {
 } from './product/reserve-stock/ReserveStockProvider';
 import { StockProvider, StockContext } from './product/stock/StockProvider';
 import { QuestProvider, QuestContext } from './quest/QuestProvider';
+import { CartProvider, CartContext } from './oms/cart/CartProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -42,6 +43,7 @@ export const providers = [
   ReserveStockProvider,
   StockProvider,
   QuestProvider,
+  CartProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -61,4 +63,5 @@ export const contexts = {
   ReserveStockContext,
   StockContext,
   QuestContext,
+  CartContext,
 };
