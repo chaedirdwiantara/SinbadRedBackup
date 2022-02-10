@@ -50,13 +50,14 @@ const Content: React.FC = () => {
         </View>
         <View style={{ marginHorizontal: 4 }} />
         <SnbRadioButton
+          onPress={() => setSelectedLocation(item)}
           status={selectedLocation?.id === item.id ? 'selected' : 'unselect'}
         />
       </TouchableOpacity>
     );
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
       <View style={{ padding: 16 }}>
         <SnbTextField.Text
           {...search}

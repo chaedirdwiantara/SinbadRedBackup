@@ -1,12 +1,15 @@
+// import apiGeneral from '@core/services/apiGeneral';
+import apiGeneral from '@core/services/apiGeneral';
 import apiMapping from '@core/services/apiMapping';
+import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 
 const searchLocation = () => {
   const path = 'locations';
-  return apiMapping<models.ListSuccessProps<models.ISearchLocationsData>>(
-    'public',
+  return apiMappingMock<models.ListSuccessProps<models.ISearchLocationsData>>(
+    'https://1574b265-8c26-4f34-90ea-4b1ae296bf46.mock.pstmn.io',
     path,
-    'location',
+    'account',
     'v1',
     'LIST',
   );
@@ -14,8 +17,8 @@ const searchLocation = () => {
 
 const getBuyerCategory = () => {
   const path = 'buyer-category';
-  return apiMapping<models.ListSuccessProps<models.IBuyerCategoryData>>(
-    'auth',
+  return apiMappingMock<models.ListSuccessProps<models.IBuyerCategoryData>>(
+    'https://aea8524f-cf86-4a9d-bf5d-2ed0340e6de8.mock.pstmn.io',
     path,
     'account',
     'v1',
@@ -25,10 +28,10 @@ const getBuyerCategory = () => {
 
 const getProductCategory = () => {
   const path = 'product-categories?allParent=true';
-  return apiMapping<models.ListSuccessProps<models.IProductCategoryData>>(
-    'auth',
+  return apiMappingMock<models.ListSuccessProps<models.IProductCategoryData>>(
+    'https://ad534493-7558-4d8f-a1b5-47288a49b84f.mock.pstmn.io',
     path,
-    'product',
+    'account',
     'v1',
     'LIST',
   );
@@ -36,7 +39,14 @@ const getProductCategory = () => {
 
 const createBasicAccount = (data: models.ICreateBasicAccount) => {
   const path = 'profile/complete-data';
-  return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
+  return apiMappingMock<any>(
+    'https://aea8524f-cf86-4a9d-bf5d-2ed0340e6de8.mock.pstmn.io',
+    path,
+    'account',
+    'v2',
+    'UPDATE',
+    data,
+  );
 };
 
 export const easyRegistrationApi = {

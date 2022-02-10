@@ -23,6 +23,7 @@ const RegisterOTPView: React.FC = () => {
       getLocationPermissions();
     }
     if (verifyOTP.error !== null) {
+      getLocationPermissions();
       setHide(false);
     }
   }, [verifyOTP]);
