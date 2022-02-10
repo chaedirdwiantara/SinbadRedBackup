@@ -54,7 +54,7 @@ const SelfRegisterView: React.FC = () => {
 
   const content = () => {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, marginBottom: 10 }}>
         <View style={styles.image}>
           <Svg name="registration" size={220} />
         </View>
@@ -103,8 +103,8 @@ const SelfRegisterView: React.FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {header()}
         {content()}
-        {buttonRegister()}
       </ScrollView>
+      {buttonRegister()}
     </SnbContainer>
   );
 };
