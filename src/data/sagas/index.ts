@@ -2,7 +2,6 @@ import { all, fork } from 'redux-saga/effects';
 import AuthCoreSaga from '@core/data/sagas/auth/auth.saga';
 import ProductSaga from './product/product.saga';
 import ProductTagSaga from './product/tag.saga';
-// import AuthSaga from './auth.saga';
 import UserSaga from './user.saga';
 import MerchantSaga from './merchant.saga';
 import RegisterSaga from './register.saga';
@@ -18,11 +17,11 @@ import ProductReserveStockSaga from './product/reserve-stock.saga';
 import HistorySaga from './history.saga';
 import StockSaga from './product/stock.saga';
 import QuestSaga from './quest.saga';
+import CartSaga from './oms/cart/cart.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
   yield all([fork(ProductSaga)]);
-  // yield all([fork(AuthSaga)]);
   yield all([fork(UserSaga)]);
   yield all([fork(MerchantSaga)]);
   yield all([fork(RegisterSaga)]);
@@ -39,6 +38,7 @@ function* rootSaga() {
   yield all([fork(ProductReserveStockSaga)]);
   yield all([fork(StockSaga)]);
   yield all([fork(QuestSaga)]);
+  yield all([fork(CartSaga)]);
 }
 
 export default rootSaga;
