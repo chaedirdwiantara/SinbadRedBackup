@@ -8,7 +8,7 @@ export interface CreateProcessProps<T> {
  * VERSION 1
  * ================================
  */
-/** === THIS FOR SUCCESS GET DATA === */
+/** === THIS FOR SUCCESS POST DATA === */
 export interface CreateSuccessProps {
   data: CreateItemSuccessProps;
 }
@@ -32,7 +32,7 @@ export interface CreateItemSuccessProps {
  * VERSION 2
  * ================================
  */
-/** === THIS FOR SUCCESS GET DATA === */
+/** === THIS FOR SUCCESS POST DATA === */
 export interface CreateSuccessV2Props {
   data: CreateItemSuccessV2Props;
   message: string;
@@ -51,4 +51,23 @@ export interface CreateItemSuccessV2Props {
   id: string;
   createdAt: string;
   updatedAt: string;
+}
+/**
+ * ================================
+ * VERSION 3
+ * ================================
+ */
+/** === THIS FOR SUCCESS POST DATA === */
+export interface CreateSuccessV3Props<T> {
+  data: T;
+  message: string;
+}
+/** === THIS FOR CREATE PROCESS === */
+export interface CreateItemV3Props<T> {
+  loading: boolean;
+  data: T | null;
+  error: ErrorProps | null;
+}
+export interface CreateV3Props<T> {
+  create: CreateItemV3Props<T>;
 }

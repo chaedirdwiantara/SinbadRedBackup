@@ -1,6 +1,6 @@
 export interface ErrorProps {
   message: string;
-  errorMessage: string;
+  data: string;
   type: string;
   code: number;
 }

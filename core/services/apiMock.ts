@@ -45,11 +45,8 @@ const apiMock = async <T>(
   /** === THROW ERROR === */
   const throwError = (error: ErrorProps) => {
     throw {
-      status: error.status ? error.status : 'error',
       message: error.message ? error.message : 'Network request failed',
-      errorMessage: error.errorMessage
-        ? error.errorMessage
-        : 'Network request failed',
+      data: error.data ? error.data : 'Network request failed',
       type: error.type ? error.type : 'NaN',
       code: error.code ? error.code : 500,
     };

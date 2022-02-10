@@ -17,3 +17,22 @@ export interface DeleteProps {
 export interface DeleteProcessProps {
   id: string;
 }
+/**
+ * ================================
+ * VERSION 3
+ * ================================
+ */
+/** === THIS FOR SUCCESS DELETE DATA === */
+export interface DeleteSuccessV3Props {
+  message: string;
+}
+/** === THIS FOR DELETE ITEM === */
+export interface DeleteItemV3Props {
+  loading: boolean;
+  data: DeleteSuccessV3Props | null;
+  error: ErrorProps | null;
+}
+
+export interface DeleteV3Props {
+  delete: DeleteItemV3Props;
+}

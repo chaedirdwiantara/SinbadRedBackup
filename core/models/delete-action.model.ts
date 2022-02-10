@@ -1,5 +1,9 @@
 /** === IMPORT EXTERNAL MODEL === */
-import { DeleteSuccessProps, DeleteProcessProps } from './delete.model';
+import {
+  DeleteSuccessProps,
+  DeleteSuccessV3Props,
+  DeleteProcessProps,
+} from './delete.model';
 import { ErrorProps } from './error.model';
 /** === PROCESS === */
 export interface DeleteProcessAction {
@@ -7,10 +11,15 @@ export interface DeleteProcessAction {
   payload: DeleteProcessProps;
   contextDispatch: (action: any) => any;
 }
-/** === SUCCESS === */
+/** === SUCCESS VERSION 1 === */
 export interface DeleteSuccessAction {
   type: string;
   payload: DeleteSuccessProps;
+}
+/** === SUCCESS VERSION 3 === */
+export interface DeleteSuccessV3Action {
+  type: string;
+  payload: DeleteSuccessV3Props;
 }
 /** === FAILED === */
 export interface DeleteFailedAction {
