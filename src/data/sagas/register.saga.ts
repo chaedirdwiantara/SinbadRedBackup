@@ -99,6 +99,20 @@ function* checkPhoneV2(
   }
 }
 
+/** check autologin after register */
+function* checkAutoLogin(
+  action: models.IRegisterAction<models.ICheckAutoLoginProcess>,
+) {
+  try {
+    const response: models.ICheckAutoLoginSuccess = yield call(() =>
+      registerApi.checkAutoLogin(action.payload),
+    );
+    yield put(ActionCreators.checkAutoLoginSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.checkAutoLoginFailed(error));
+  }
+}
+
 function* RegisterSaga() {
   yield takeLatest(types.REGISTER_MERCHANT_PROCESS, registerMerchant);
   yield takeLatest(types.VERIFY_OTP_REGISTER_PROCESS, verifyOTPRegister);
@@ -111,6 +125,7 @@ function* RegisterSaga() {
     checkEmailAvailability,
   );
   yield takeLatest(types.CHECK_PHONE_V2_PROCESS, checkPhoneV2);
+  yield takeLatest(types.CHECK_AUTO_LOGIN_PROCESS, checkAutoLogin);
 }
 
 export default RegisterSaga;

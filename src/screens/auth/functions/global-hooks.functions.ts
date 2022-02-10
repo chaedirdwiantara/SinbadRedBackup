@@ -48,7 +48,7 @@ export const useInputPhone = () => {
     valMsgError,
     clearText,
     maxLength: 14,
-    labelText: 'Nomor Handphone',
+    labelText: 'Masukkan Nomor Handphone',
     placeholder: 'Masukkan nomor handphone anda',
     setMessageError,
   };
