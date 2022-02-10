@@ -62,20 +62,12 @@ const useOTP = () => {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       ).then(handleRequestPermissionResult);
     } else {
-      reset({ index: 0, routes: [{ name: BUYER_CATEGORY_VIEW }] });
+      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
     }
   };
 
-  const handleRequestPermissionResult = (result: PermissionStatus) => {
-    // Sementara di comment, menunggu keputusan dari atasan :D
-    // if (
-    //   result === PermissionsAndroid.RESULTS.DENIED ||
-    //   result === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
-    // ) {
+  const handleRequestPermissionResult = () => {
     reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
-    // } else {
-    //   reset({ index: 0, routes: [{ name: BUYER_CATEGORY_VIEW }] });
-    // }
   };
 
   React.useEffect(() => {

@@ -25,6 +25,19 @@ import * as models from '@models';
 import { LogBox } from 'react-native';
 import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
 
+const setIcon = (slug: string) => {
+  switch (slug) {
+    case 'toko-grosir':
+      return require('@image/grosir.png');
+    case 'toko-semi-grosir':
+      return require('@image/semi-grosir.png');
+    case 'toko-ritel':
+      return require('@image/retail.png');
+    default:
+      return require('@image/grosir.png');
+  }
+};
+
 const BuyerLocation: React.FC = () => {
   const { params }: any = useRoute();
   const [location] = React.useState<models.ISearchLocationsData | null>(
@@ -43,7 +56,7 @@ const BuyerLocation: React.FC = () => {
         borderColor: color.black40,
       }}>
       <View style={{ flex: 1 }}>
-        <SnbText.B3>Lokasi Toko</SnbText.B3>
+        <SnbText.B3 color={color.black60}>Lokasi Toko</SnbText.B3>
         <View style={{ marginVertical: 4 }} />
         <SnbText.B2>
           {location
@@ -118,11 +131,8 @@ const BuyerCategory: React.FC = () => {
         }}
         style={{
           borderRadius: 16,
-          borderWidth: selectedBuyerCategory?.slug === item?.slug ? 1 : 0.75,
-          borderColor:
-            selectedBuyerCategory?.slug === item?.slug
-              ? color.red60
-              : color.black40,
+          borderWidth: 0.75,
+          borderColor: color.black40,
         }}>
         <View
           style={{
@@ -132,15 +142,27 @@ const BuyerCategory: React.FC = () => {
             alignItems: 'center',
           }}>
           <Image
-            source={{ uri: item.image }}
-            style={{ height: 56, width: 56, backgroundColor: color.black10 }}
+            source={setIcon(item.slug)}
+            style={{ height: 40, width: 40, alignSelf: 'flex-start' }}
+            resizeMode="contain"
           />
           <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbText.H3>{item.name}</SnbText.H3>
             <View style={{ marginTop: 4 }}>
               {item.description.map((el: string, idx: number) => (
-                <SnbText.B3 key={idx}>- {el}</SnbText.B3>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View
+                    style={{
+                      height: 4,
+                      width: 4,
+                      borderRadius: 4,
+                      backgroundColor: color.black80,
+                    }}
+                  />
+                  <View style={{ marginHorizontal: 2 }} />
+                  <SnbText.B3 key={idx}>{el}</SnbText.B3>
+                </View>
               ))}
             </View>
           </View>
@@ -214,7 +236,8 @@ const BuyerCategory: React.FC = () => {
 
 const Content: React.FC = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={{ flex: 1, borderTopColor: color.black40, borderTopWidth: 0.5 }}>
       <BuyerLocation />
       <BuyerCategory />
     </View>

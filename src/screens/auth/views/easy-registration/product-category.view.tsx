@@ -21,7 +21,7 @@ import {
 
 const Content: React.FC = () => {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
       <ProductCategory />
     </View>
   );
@@ -105,13 +105,24 @@ const ProductCategory: React.FC = () => {
         <View style={{ flex: 1, marginHorizontal: 12 }}>
           <SnbText.B1>{item?.name}</SnbText.B1>
         </View>
-        <SnbCheckbox status={item?.isSelected ? 'selected' : 'unselect'} />
+        <SnbCheckbox
+          onPress={() => {
+            const newData = data.map((el) => {
+              if (el.id === item.id) {
+                el.isSelected = !el.isSelected;
+              }
+              return el;
+            });
+            setData(newData);
+          }}
+          status={item?.isSelected ? 'selected' : 'unselect'}
+        />
       </TouchableOpacity>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginTop: 4 }}>
       <View
         style={{
           marginHorizontal: 16,
@@ -150,18 +161,26 @@ const ProductCategory: React.FC = () => {
                         padding: 8,
                       }}>
                       <Image
-                        source={{ uri: 'url' }}
+                        source={require('@image/all_product.png')}
                         style={{
                           width: 24,
                           height: 24,
-                          backgroundColor: color.black40,
                         }}
                       />
                     </View>
                     <View style={{ flex: 1, marginHorizontal: 12 }}>
                       <SnbText.H3>Semua Produk</SnbText.H3>
                     </View>
-                    <SnbCheckbox status={checkBoxStatus} />
+                    <SnbCheckbox
+                      status={checkBoxStatus}
+                      onPress={() => {
+                        setCheckBoxStatus(
+                          checkBoxStatus === 'selected'
+                            ? 'unselect'
+                            : 'selected',
+                        );
+                      }}
+                    />
                   </TouchableOpacity>
                 </View>
               );
