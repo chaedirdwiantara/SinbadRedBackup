@@ -35,13 +35,13 @@ import { useDataAuth } from '@core/redux/Data';
 import {
   useTagListActions,
   useProductDetailCartAction,
-  useAddToCart,
+  // useAddToCart,
   useStockValidationAction,
   useOrderQuantity,
 } from '@screen/product/functions';
 import { useRecentSearch } from '@screen/search/functions';
-import { useCartTotalProductActions } from '@screen/oms/functions';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
@@ -104,7 +104,7 @@ const ProductList: FC<ProductListProps> = ({
     useState<models.ProductList | null>(null);
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
-  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  // const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
@@ -130,10 +130,10 @@ const ProductList: FC<ProductListProps> = ({
   });
   const { addKeyword } = useRecentSearch();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const cartTotalProductActions = useCartTotalProductActions();
+  // const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
-  const addToCartActions = useAddToCart();
+  // const addToCartActions = useAddToCart();
   const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
   const stockValidationActions = useStockValidationAction();
@@ -151,12 +151,12 @@ const ProductList: FC<ProductListProps> = ({
   const { orderQty, onChangeQty } = useOrderQuantity({
     minQty: productDetailState?.minQty ?? 1,
   });
-  const {
-    stateShopingCart: {
-      create: { data: addToCartData, error: addToCartError },
-    },
-    dispatchShopingCart,
-  } = useShopingCartContext();
+  // const {
+  //   stateShopingCart: {
+  //     create: { data: addToCartData, error: addToCartError },
+  //   },
+  //   dispatchShopingCart,
+  // } = useShopingCartContext();
   const { dispatchTag } = useTagContext();
   const {
     stateStock: {
@@ -207,9 +207,9 @@ const ProductList: FC<ProductListProps> = ({
     stockValidationActions.reset(dispatchStock);
     productDetailActions.reset(dispatchProduct);
     supplierSegmentationAction.reset(dispatchSupplier);
-    addToCartActions.reset(dispatchShopingCart);
+    // addToCartActions.reset(dispatchShopingCart);
     sendDataToSupplierActions.reset(dispatchSupplier);
-    setModalErrorAddCart(false);
+    // setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
@@ -237,33 +237,33 @@ const ProductList: FC<ProductListProps> = ({
       return;
     }
 
-    const params: models.AddToCartPayload = {
-      isActiveStore: dataSegmentation.isActiveStore,
-      selected: true,
-      stock: dataStock.stock,
-      productId: productDetailState.id,
-      productName: productDetailState.name,
-      brandId: productDetailState.brandId,
-      urlImages: productDetailState?.images[0]?.url ?? '',
-      qty: orderQty,
-      minQty: productDetailState.minQty,
-      displayPrice: productDetailState.originalPrice,
-      priceBeforeTax:
-        productDetailState.currentPrice ?? productDetailState.originalPrice,
-      priceAfterTax:
-        productDetailState.currentPriceAfterTax ??
-        productDetailState.originalPrice,
-      uom: productDetailState.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-      sellerId: Number(productDetailState.sellerId),
-      channelId: dataSegmentation.dataSuppliers.channelId,
-      groupId: dataSegmentation.dataSuppliers.groupId,
-      typeId: dataSegmentation.dataSuppliers.typeId,
-      clusterId: dataSegmentation.dataSuppliers.clusterId,
-      multipleQty: productDetailState.multipleQty,
-    };
+    // const params: models.AddToCartPayload = {
+    //   isActiveStore: dataSegmentation.isActiveStore,
+    //   selected: true,
+    //   stock: dataStock.stock,
+    //   productId: productDetailState.id,
+    //   productName: productDetailState.name,
+    //   brandId: productDetailState.brandId,
+    //   urlImages: productDetailState?.images[0]?.url ?? '',
+    //   qty: orderQty,
+    //   minQty: productDetailState.minQty,
+    //   displayPrice: productDetailState.originalPrice,
+    //   priceBeforeTax:
+    //     productDetailState.currentPrice ?? productDetailState.originalPrice,
+    //   priceAfterTax:
+    //     productDetailState.currentPriceAfterTax ??
+    //     productDetailState.originalPrice,
+    //   uom: productDetailState.unit,
+    //   warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+    //   sellerId: Number(productDetailState.sellerId),
+    //   channelId: dataSegmentation.dataSuppliers.channelId,
+    //   groupId: dataSegmentation.dataSuppliers.groupId,
+    //   typeId: dataSegmentation.dataSuppliers.typeId,
+    //   clusterId: dataSegmentation.dataSuppliers.clusterId,
+    //   multipleQty: productDetailState.multipleQty,
+    // };
 
-    addToCartActions.fetch(dispatchShopingCart, params);
+    // addToCartActions.fetch(dispatchShopingCart, params);
   };
   /** === EFFECT HOOKS === */
   useEffect(() => {
@@ -274,24 +274,24 @@ const ProductList: FC<ProductListProps> = ({
   }, [productLoading]);
 
   /** => Do something when success add to cart */
-  useEffect(() => {
-    if (addToCartData !== null) {
-      setProductSelected(null);
-      handleCloseModal();
-      cartTotalProductActions.fetch();
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
-        position: 'top',
-        positionValue: StatusBar.currentHeight,
-      });
-    }
-  }, [addToCartData]);
+  // useEffect(() => {
+  //   if (addToCartData !== null) {
+  //     setProductSelected(null);
+  //     handleCloseModal();
+  //     // cartTotalProductActions.fetch();
+  //     SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+  //       position: 'top',
+  //       positionValue: StatusBar.currentHeight,
+  //     });
+  //   }
+  // }, [addToCartData]);
 
   /** => Do something when success add to cart */
-  useEffect(() => {
-    if (addToCartError !== null) {
-      setModalErrorAddCart(true);
-    }
-  }, [addToCartError]);
+  // useEffect(() => {
+  //   if (addToCartError !== null) {
+  //     setModalErrorAddCart(true);
+  //   }
+  // }, [addToCartError]);
 
   /** => Do something when success send data to supplier */
   useEffect(() => {
@@ -427,7 +427,7 @@ const ProductList: FC<ProductListProps> = ({
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
-      addToCartActions.reset(dispatchShopingCart);
+      // addToCartActions.reset(dispatchShopingCart);
       sendDataToSupplierActions.reset(dispatchSupplier);
     };
   }, []);
@@ -611,7 +611,7 @@ const ProductList: FC<ProductListProps> = ({
         isSwipeable={false}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
-      <BottomSheetError
+      {/* <BottomSheetError
         open={modalErrorAddCart}
         error={addToCartError}
         closeAction={handleCloseModal}
@@ -623,7 +623,7 @@ const ProductList: FC<ProductListProps> = ({
             handleCloseModal();
           }
         }}
-      />
+      /> */}
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalErrorSendDataSupplier}

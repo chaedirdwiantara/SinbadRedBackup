@@ -43,6 +43,7 @@ const countPotentialDiscount = (
 ) => {
   let totalDiscount = 0;
   let totalSelectedVoucher = 0;
+  let isHaveBenefitValue = false;
   if (sinbadVoucher !== null) {
     totalDiscount += sinbadVoucher.benefitRebate;
     totalSelectedVoucher += 1;
@@ -50,8 +51,11 @@ const countPotentialDiscount = (
   sellerVouchers.map((item) => {
     totalDiscount += item.benefitRebate;
     totalSelectedVoucher += 1;
+    if (item.benefitType === 'amount') {
+      isHaveBenefitValue = true;
+    }
   });
-  return { totalDiscount, totalSelectedVoucher };
+  return { totalDiscount, totalSelectedVoucher, isHaveBenefitValue };
 };
 /** => get selected vouchers */
 const getSelectedVouchers = (

@@ -11,7 +11,7 @@ import {
   backToLogin,
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
 /** === TYPE === */
@@ -32,7 +32,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   onSearch,
   onSearchClear,
 }) => {
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  // const { dataTotalProductCart } = useCartTotalProductActions();
   const { me } = useDataAuth();
 
   const validateCartVisit = () => {
@@ -52,7 +52,8 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           type="red"
           icon1Name="search"
           icon1Action={goToSearch}
-          icon2Value={dataTotalProductCart.totalProduct}
+          // icon2Value={dataTotalProductCart.totalProduct}
+          icon2Value={0}
           icon2Name="cart"
           icon2Action={validateCartVisit}
         />
@@ -67,7 +68,8 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           onChangeText={(text) => onKeywordChange(text)}
           icon1Name="home"
           icon1Action={goToHome}
-          icon2Value={dataTotalProductCart.totalProduct}
+          // icon2Value={dataTotalProductCart.totalProduct}
+          icon2Value={0}
           icon2Name="cart"
           icon2Action={validateCartVisit}
         />

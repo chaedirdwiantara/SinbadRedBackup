@@ -12,6 +12,7 @@ interface Props {
 }
 
 const MerchantEditView: FC<Props> = (props) => {
+  console.log('props edit view', props);
   /** === HOOK === */
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
@@ -58,7 +59,12 @@ const MerchantEditView: FC<Props> = (props) => {
       case 'merchantAccountName':
       case 'merchantAccountPhoneNo':
         return (
-          <MerchantEditPartialView type={props.route.params.type} showButton />
+          <MerchantEditPartialView
+            type={props.route.params.type}
+            source={props.route.params.source}
+            sourceData={props.route.params.sourceData}
+            showButton
+          />
         );
       default:
         break;

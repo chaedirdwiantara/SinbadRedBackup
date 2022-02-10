@@ -1,99 +1,36 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbCheckbox, SnbButton, color } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
-import { ShoppingCartVoucherTag } from './shopping-cart-voucher-tag.view';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
-import {
-  handleAllSelectedProductsChange,
-  getTotalPrice,
-  useProductMasterCartActions,
-} from '../../functions';
-import { ShoppingCartStyles } from '../../styles';
-import { CartInvoiceGroup } from '@models';
-/** === TYPE ===  */
-interface ShoppingCartFooterProps {
-  allProductsSelected: boolean | 'indeterminate';
-  invoiceGroups: CartInvoiceGroup[];
-  setInvoiceGroups: (any: any) => void;
-  setProductSelectedCount: (any: any) => void;
-  setAllProductsSelected: (any: any) => void;
-  totalProducts: any;
-  productSelectedCount: number;
-  openModalCheckout: (any: any) => void;
-  onUpdateCart: () => void;
-}
-/** === COMPONENT === */
-export const ShoppingCartFooter: FC<ShoppingCartFooterProps> = ({
-  allProductsSelected,
-  invoiceGroups,
-  setInvoiceGroups,
-  setProductSelectedCount,
-  setAllProductsSelected,
-  totalProducts,
-  productSelectedCount,
-  openModalCheckout,
-  onUpdateCart,
-}) => {
-  const { setItemProductMasterCart } = useProductMasterCartActions();
+import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+/** === COMPONENT ===  */
+export const ShoppingCartFooter: FC = () => {
   return (
-    <View style={ShoppingCartStyles.footerContainer}>
-      <ShoppingCartVoucherTag onUpdateCart={onUpdateCart} />
-      <View style={ShoppingCartStyles.footerBody}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-          <SnbCheckbox
-            status={
-              allProductsSelected === 'indeterminate'
-                ? 'indeterminate'
-                : allProductsSelected === true
-                ? 'selected'
-                : 'unselect'
-            }
-            onPress={() =>
-              handleAllSelectedProductsChange(
-                allProductsSelected === 'indeterminate' ||
-                  allProductsSelected === false
-                  ? true
-                  : false,
-                [invoiceGroups, setInvoiceGroups],
-                setProductSelectedCount,
-                setAllProductsSelected,
-                totalProducts,
-                setItemProductMasterCart,
-              )
-            }
-          />
-          <View style={{ marginLeft: 10 }}>
-            <SnbText.B3>Pilih Semua</SnbText.B3>
+    <View
+      style={{
+        padding: 16,
+        backgroundColor: color.white,
+        justifyContent: 'flex-end',
+        elevation: 10,
+      }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
+            <SnbText.H4 color={color.red50}>Rp0</SnbText.H4>
           </View>
+          <SnbText.B4 color={color.black60}>0 barang dipilih</SnbText.B4>
         </View>
-        <View style={{ flexDirection: 'row', minWidth: '50%' }}>
-          <View style={{ marginRight: 10, alignItems: 'flex-end' }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 4,
-              }}>
-              <View style={{ marginRight: 6 }}>
-                <SnbText.B3>Total:</SnbText.B3>
-              </View>
-              <SnbText.B2 color={color.red50}>
-                {toCurrency(getTotalPrice(invoiceGroups), {
-                  withFraction: false,
-                })}
-              </SnbText.B2>
-            </View>
-            <SnbText.C1>{`${productSelectedCount} barang dipilih`}</SnbText.C1>
-          </View>
+        <View>
           <SnbButton.Dynamic
-            disabled={productSelectedCount <= 0}
-            type="primary"
             title="Checkout"
-            size="small"
-            onPress={() => openModalCheckout(true)}
+            type="primary"
+            onPress={() => {}}
+            size={'large'}
           />
         </View>
       </View>

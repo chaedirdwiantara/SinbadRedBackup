@@ -13,7 +13,7 @@ import {
   SnbHtml,
   SnbImageCompressor,
 } from 'react-native-sinbad-ui';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
@@ -110,7 +110,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const { me } = useDataAuth();
   const bannerDetailState = stateBanner.bannerGeneral.detail;
   /** === HOOK === */
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  // const { dataTotalProductCart } = useCartTotalProductActions();
   React.useEffect(() => {
     bannerAction.detail(dispatchBanner, route.params.bannerId);
     return () => {
@@ -135,7 +135,8 @@ const BannerDetailView: React.FC = ({ route }: any) => {
             }
           }}
           iconName={'cart'}
-          iconValue={dataTotalProductCart.totalProduct}
+          // iconValue={dataTotalProductCart.totalProduct}
+          iconValue={0}
         />
       </View>
     );

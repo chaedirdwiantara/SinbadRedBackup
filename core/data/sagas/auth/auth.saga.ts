@@ -3,7 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { AuthApi } from '../../apis/auth/auth.api';
 import * as ActionCreators from '../../actions';
-import { cartTotalProductProcess } from 'src/data/actions';
+// import { cartTotalProductProcess } from 'src/data/actions';
 import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
@@ -49,7 +49,7 @@ function* me() {
       return AuthApi.me();
     });
     yield put(ActionCreators.meSuccess(response));
-    yield put(cartTotalProductProcess());
+    // yield put(cartTotalProductProcess());
   } catch (error: any) {
     yield put(ActionCreators.meFailed(error));
   }

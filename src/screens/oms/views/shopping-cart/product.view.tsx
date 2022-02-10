@@ -1,0 +1,125 @@
+/** === IMPORT PACKAGE HERE ===  */
+import React, { FC } from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
+import {
+  SnbText,
+  SnbCheckbox,
+  SnbIcon,
+  color,
+  SnbNumberCounter,
+  SnbDivider,
+  SnbBadge,
+} from 'react-native-sinbad-ui';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { ShoppingCartStyles } from '../../styles';
+import { toCurrency } from '@core/functions/global/currency-format';
+
+interface ProductViewProps {}
+
+export const ProductView: FC<ProductViewProps> = ({}) => {
+  return (
+    <View
+      style={{
+        ...ShoppingCartStyles.horizontalBottomCardSlot,
+        paddingBottom: 18,
+        borderBottomWidth: 1,
+        borderStyle: 'solid',
+        borderBottomColor: color.black10,
+      }}
+      key={'product-a'}>
+      <View
+        style={{
+          flexDirection: 'column',
+          width: '100%',
+        }}>
+        <View style={{ flexDirection: 'row' }}>
+          <View
+            style={{
+              marginRight: 20,
+              marginLeft: 4,
+              justifyContent: 'center',
+            }}>
+            <SnbCheckbox status={'unselect'} onPress={() => {}} />
+          </View>
+          <TouchableOpacity
+            style={{ alignItems: 'center', justifyContent: 'center' }}
+            onPress={() => {}}>
+            <Image
+              source={{
+                uri: 'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15731/image_1617790892428.png',
+              }}
+              style={{ width: 65, height: 65, marginRight: 5 }}
+            />
+          </TouchableOpacity>
+          <View style={{ justifyContent: 'center' }}>
+            <View style={{ marginBottom: 5 }}>
+              <SnbBadge.Label type="warning" value="Include PPN 10%" />
+            </View>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                width: '100%',
+              }}>
+              <SnbText.B4 color={color.black80}>
+                SGM Ananda 1 - Varian Omicron
+              </SnbText.B4>
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <View style={{ marginRight: 5 }}>
+                <SnbText.B4
+                  color={color.black60}
+                  textDecorationLine="line-through">
+                  {toCurrency(25000, { withFraction: false })}
+                </SnbText.B4>
+              </View>
+              <View>
+                <SnbText.B4 color={color.black100}>
+                  {toCurrency(15000, { withFraction: false })}
+                </SnbText.B4>
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <SnbText.B4
+                color={color.black40}
+                textDecorationLine="line-through">
+                (Renceng)
+              </SnbText.B4>
+              <View style={{ width: 1, marginHorizontal: 5 }}>
+                <SnbDivider />
+              </View>
+              <SnbText.B4 color={color.red50}>Sisa 20 Renceng</SnbText.B4>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: '100%',
+            marginTop: 12,
+          }}>
+          <TouchableOpacity onPress={() => {}} style={{ marginRight: 5 }}>
+            <SnbIcon name="delete_outline" color={color.black80} size={32} />
+          </TouchableOpacity>
+          <SnbNumberCounter
+            value={5}
+            maxLength={6}
+            onBlur={() => {}}
+            onFocus={() => {}}
+            onIncrease={() => {}}
+            onDecrease={() => {}}
+            onChange={() => {}}
+            minusDisabled={false}
+            plusDisabled={false}
+          />
+        </View>
+      </View>
+    </View>
+  );
+};

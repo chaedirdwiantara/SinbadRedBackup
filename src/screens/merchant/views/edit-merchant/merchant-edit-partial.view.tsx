@@ -15,9 +15,14 @@ import { UserHookFunc } from '../../../user/functions';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
 
+import { useQuestTaskAction } from '../../../quest/function';
+import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+
 interface Props {
   type: any;
   showButton: boolean;
+  source: string;
+  sourceData: any;
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
@@ -67,6 +72,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const vehicleAccessibilityAmount = useInput(
     storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
   );
+  // realated quest hook
+  const { dispatchQuest } = useQuestContext();
+  const { update } = useQuestTaskAction();
 
   useEffect(() => {
     if (
@@ -95,6 +103,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       NavigationAction.navigate('MerchantOtpView', {
         type: 'mobilePhone',
         data: mobilePhone.value,
+        source: props.source,
+        sourceData: props.sourceData,
       });
     }
   }, [stateMerchant]);
@@ -132,6 +142,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           mobilePhone: mobilePhone.value,
         };
         changeMobilePhoneAction.changeMobilePhone(dispatchSupplier, { data });
+        // if source Quest & phone verification, update quest task status
+        if (props.source === 'Quest') {
+          const data = {
+            questId: props.sourceData?.questId,
+            taskId: props.sourceData?.taskId,
+            status: 'done',
+          };
+          update(dispatchQuest, { data });
+        }
         break;
       }
       case 'merchantOwnerIdNo': {
@@ -159,6 +178,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         editProfileAction.editProfile(dispatchSupplier, {
           data,
         });
+        // if source Quest & owner name, update quest task status
+        if (props.source === 'Quest') {
+          const data = {
+            questId: props.sourceData?.questId,
+            taskId: props.sourceData?.taskId,
+            status: 'done',
+          };
+          update(dispatchQuest, { data });
+        }
         break;
       }
       case 'merchantAccountName': {
@@ -577,6 +605,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       <View />
     );
   };
+
   /** this for main view */
   return (
     <View style={{ flex: 1 }}>

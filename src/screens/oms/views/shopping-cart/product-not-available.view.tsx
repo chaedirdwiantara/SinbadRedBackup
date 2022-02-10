@@ -1,73 +1,76 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
+import { SnbText, SnbCheckbox, SnbIcon, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { handleProductNotAvailableDelete } from '../../functions';
-import { goToProductDetail } from '@core/functions/product';
 import { ShoppingCartStyles } from '../../styles';
-import {
-  ICartMasterProductNotAvailable,
-  IProductRemoveSelected,
-} from '@models';
-/** === TYPE ===  */
-interface ProductNotAvailableViewProps {
-  product: ICartMasterProductNotAvailable;
-  productIndex: number;
-  productLength: number;
-  onRemoveProduct: (any: IProductRemoveSelected) => void;
-  type: 'dataEmptyStock' | 'dataNotFound';
-}
-/** == COMPONENT === */
-export const ProductNotAvailableView: FC<ProductNotAvailableViewProps> = ({
-  product,
-  productIndex,
-  productLength,
-  onRemoveProduct,
-  type,
-}) => {
+
+interface ProductUnavailableViewProps {}
+
+export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({}) => {
   return (
     <View
       style={{
         ...ShoppingCartStyles.horizontalBottomCardSlot,
         paddingBottom: 18,
-        borderBottomWidth: productIndex === productLength - 1 ? 0 : 1,
+        borderBottomWidth: 1,
         borderStyle: 'solid',
         borderBottomColor: color.black10,
       }}
-      key={product.productName}>
-      <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
-          <Image
-            source={{ uri: product.urlImages }}
-            style={{ marginRight: 8, width: 77, height: 77 }}
-          />
-        </TouchableOpacity>
-        <View>
-          <TouchableOpacity
-            onPress={() => goToProductDetail(product.productId)}
-            style={{ marginBottom: 12, maxWidth: 160 }}>
-            <SnbText.B4>{product.productName}</SnbText.B4>
-          </TouchableOpacity>
-          <View style={{ marginBottom: 12 }}>
-            <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice, { withFraction: false })}
-            </SnbText.B4>
-          </View>
-        </View>
-      </View>
+      key={'product-a'}>
       <View
         style={{
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
+          flexDirection: 'column',
+          width: '100%',
         }}>
-        <TouchableOpacity
-          onPress={() =>
-            handleProductNotAvailableDelete(product, onRemoveProduct, type)
-          }>
-          <SnbIcon name="delete_outline" color={color.black60} size={32} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <View
+            style={{
+              marginRight: 20,
+              marginLeft: 4,
+              justifyContent: 'center',
+            }}>
+            <SnbCheckbox status={'unselect'} onPress={() => {}} />
+          </View>
+          <TouchableOpacity
+            style={{ alignItems: 'center', justifyContent: 'center' }}
+            onPress={() => {}}>
+            <Image
+              source={{
+                uri: 'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15731/image_1617790892428.png',
+              }}
+              style={{ width: 65, height: 65, marginRight: 5, opacity: 0.5 }}
+            />
+          </TouchableOpacity>
+          <View style={{ justifyContent: 'center' }}>
+            <TouchableOpacity
+              onPress={() => {}}
+              style={{
+                width: '100%',
+              }}>
+              <SnbText.B4 color={color.black60}>
+                SGM Ananda 1 - Varian Omicron
+              </SnbText.B4>
+            </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <SnbText.B4 color={color.black80}>Sisa kosong</SnbText.B4>
+            </View>
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: '100%',
+            marginTop: 12,
+          }}>
+          <TouchableOpacity onPress={() => {}}>
+            <SnbIcon name="delete_outline" color={color.black80} size={32} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

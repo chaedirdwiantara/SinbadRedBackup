@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+// import { useCartTotalProductActions } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import { useDataAuth } from '@core/redux/Data';
 
@@ -15,7 +15,7 @@ interface HeaderProps {
 }
 /** === COMPONENT === */
 const HomeHeaderView: FC<HeaderProps> = (props) => {
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  // const { dataTotalProductCart } = useCartTotalProductActions();
   const { totalNotification } = useNotificationTotalActions();
   const { me } = useDataAuth();
   /** === VIEW === */
@@ -43,7 +43,8 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
             NavigationAction.navigate('NotificationView');
           }
         }}
-        icon2Value={dataTotalProductCart.totalProduct}
+        // icon2Value={dataTotalProductCart.totalProduct}
+        icon2Value={0}
         icon2Name="cart"
         icon2Action={() => {
           if (me.data === null) {
