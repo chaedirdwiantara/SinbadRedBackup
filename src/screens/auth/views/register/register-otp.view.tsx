@@ -9,6 +9,7 @@ import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { useCheckAutoLogin } from '@screen/auth/functions';
 
 const RegisterOTPView: React.FC = () => {
   const { checkPhone } = useCheckPhoneNoAvailability();
@@ -16,16 +17,23 @@ const RegisterOTPView: React.FC = () => {
     useOTP();
   const { goBack }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
+  const { checkAutoLogin, checkAutoLoginData } = useCheckAutoLogin();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      getLocationPermissions();
+      checkAutoLogin(verifyOTP.data);
     }
     if (verifyOTP.error !== null) {
       setHide(false);
     }
   }, [verifyOTP]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData.data !== null) {
+      getLocationPermissions();
+    }
+  }, [checkAutoLoginData]);
 
   return (
     <SnbContainer color="white">

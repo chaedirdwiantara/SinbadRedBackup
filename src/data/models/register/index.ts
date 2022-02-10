@@ -100,11 +100,30 @@ export interface ICheckPhoneV2Success {
     message: string;
   };
 }
+export interface ICheckAutoLoginProcess {
+  data: {
+    requestId: string;
+  };
+}
+export interface ICheckAutoLoginSuccess {
+  data: {
+    sessionActiveUntil: string;
+    sessionExpiredUntil: string;
+    user: {
+      id: number;
+      name: string;
+      imageUrl: string;
+    };
+    isBuyerCategoryCompleted: boolean;
+    isDataCompleted: boolean;
+  };
+}
 
 // FAILED MODEL
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}
 export interface ICheckEmailAvailabilityFailed {}
+export interface ICheckAutoLoginFailed {}
 
 export interface ISearchLocationsData {
   id: string;
