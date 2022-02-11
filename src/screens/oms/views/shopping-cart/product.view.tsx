@@ -7,7 +7,6 @@ import {
   SnbIcon,
   color,
   SnbNumberCounter,
-  SnbDivider,
   SnbBadge,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -21,10 +20,6 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
     <View
       style={{
         ...ShoppingCartStyles.horizontalBottomCardSlot,
-        paddingBottom: 18,
-        borderBottomWidth: 1,
-        borderStyle: 'solid',
-        borderBottomColor: color.black10,
       }}
       key={'product-a'}>
       <View
@@ -36,7 +31,6 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
           <View
             style={{
               marginRight: 20,
-              marginLeft: 4,
               justifyContent: 'center',
             }}>
             <SnbCheckbox status={'unselect'} onPress={() => {}} />
@@ -75,25 +69,16 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
                   {toCurrency(25000, { withFraction: false })}
                 </SnbText.B4>
               </View>
-              <View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <SnbText.B4 color={color.black100}>
                   {toCurrency(15000, { withFraction: false })}
                 </SnbText.B4>
+                <SnbIcon
+                  name="arrow_drop_down_circle"
+                  style={{ color: color.green50, marginLeft: 5 }}
+                  size={16}
+                />
               </View>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
-              <SnbText.B4
-                color={color.black40}
-                textDecorationLine="line-through">
-                (Renceng)
-              </SnbText.B4>
-              <View style={{ width: 1, marginHorizontal: 5 }}>
-                <SnbDivider />
-              </View>
-              <SnbText.B4 color={color.red50}>Sisa 20 Renceng</SnbText.B4>
             </View>
           </View>
         </View>
@@ -118,6 +103,15 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
             minusDisabled={false}
             plusDisabled={false}
           />
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            width: '100%',
+            marginTop: 12,
+          }}>
+          <SnbText.B4 color={color.black60}>40pcs dalam 1 Kardus</SnbText.B4>
         </View>
       </View>
     </View>

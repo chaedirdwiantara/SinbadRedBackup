@@ -1,18 +1,16 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
-import { ProductView } from './product.view';
-import { ProductUnavailableView } from './product-not-available.view';
+import { ShoppingCartProducts } from './shopping-cart-products.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { goBack, useCartExampleAction } from '../../functions';
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
-import { ShoppingCartStyles } from '@screen/oms/styles';
 import { contexts } from '@contexts';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -28,15 +26,12 @@ const OmsShoppingCartView: FC = () => {
   return (
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={goBack} />
-      <View style={{ flex: 1 }}>
-        <ShoppingCartAddress />
-        <View style={ShoppingCartStyles.cardContainer}>
-          <ProductView />
+      <ScrollView>
+        <View style={{ flex: 1 }}>
+          <ShoppingCartAddress />
+          <ShoppingCartProducts />
         </View>
-        <View style={ShoppingCartStyles.cardContainer}>
-          <ProductUnavailableView />
-        </View>
-      </View>
+      </ScrollView>
       <ShoppingCartFooter />
     </SnbContainer>
   );

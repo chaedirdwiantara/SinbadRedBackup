@@ -3,18 +3,14 @@ import { color } from 'react-native-sinbad-ui';
 
 export const ShoppingCartStyles = StyleSheet.create({
   cardContainer: {
+    backgroundColor: color.white,
     paddingHorizontal: 16,
-    borderBottomWidth: 8,
-    borderBottomColor: 'rgba(37, 40, 43, 0.05)',
-    borderStyle: 'solid',
+    marginTop: 16,
   },
   topCardSlot: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    borderStyle: 'solid',
-    borderBottomWidth: 1,
-    borderBottomColor: color.black10,
   },
   verticalBottomCardSlot: {
     justifyContent: 'space-between',
