@@ -40,13 +40,9 @@ export const ProductNotAvailableSection: FC = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {[0].map((i) => (
-          <View
-            key={i}
-            style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-            <ProductUnavailableView />
-          </View>
-        ))}
+        <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
+          <ProductUnavailableView />
+        </View>
       </View>
     </View>
   );

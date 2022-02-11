@@ -27,8 +27,21 @@ const useGetCartAction = () => {
     },
   };
 };
+
+const useGetTotalCartAction = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: { type: string }) => any) => {
+      dispatch(Actions.getTotalCartProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: { type: string }) => any) => {
+      dispatch(Actions.getTotalCartReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
-export { useCartExampleAction, useGetCartAction };
+export { useCartExampleAction, useGetCartAction, useGetTotalCartAction };
 /**
  * ================================================================
  * NOTES
