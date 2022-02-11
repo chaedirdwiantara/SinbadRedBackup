@@ -13,6 +13,7 @@ import {
   goBack,
   useCartExampleAction,
   useGetCartAction,
+  useGetTotalCartAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -22,10 +23,12 @@ const OmsShoppingCartView: FC = () => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const cartExampleAction = useCartExampleAction();
   const getCartAction = useGetCartAction();
+  const getTotalCartAction = useGetTotalCartAction();
   /** === HOOKS === */
   useEffect(() => {
     cartExampleAction.fetch(dispatchCart);
     getCartAction.fetch(dispatchCart);
+    getTotalCartAction.fetch(dispatchCart);
   }, []);
   console.log(stateCart);
   /** === VIEW === */
