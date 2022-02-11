@@ -63,10 +63,14 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({}) => {
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             width: '100%',
             marginTop: 12,
           }}>
+          <TouchableOpacity onPress={() => {}}>
+            <SnbText.B4 color={color.blue50}>Cari Produk Sejenis</SnbText.B4>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => {}}>
             <SnbIcon name="delete_outline" color={color.black80} size={32} />
           </TouchableOpacity>

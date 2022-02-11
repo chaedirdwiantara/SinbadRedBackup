@@ -80,6 +80,9 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
                 />
               </View>
             </View>
+            <View>
+              <SnbText.B4 color={color.red70}>Tersedia 10 Kardus</SnbText.B4>
+            </View>
           </View>
         </View>
         <View
