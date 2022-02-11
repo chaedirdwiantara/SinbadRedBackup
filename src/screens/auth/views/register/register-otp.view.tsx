@@ -38,7 +38,6 @@ const RegisterOTPView: React.FC = () => {
       setLoadingCheckAutoLogin(true);
     }
     if (verifyOTP.error !== null) {
-      getLocationPermissions();
       setHide(false);
     }
   }, [verifyOTP]);
