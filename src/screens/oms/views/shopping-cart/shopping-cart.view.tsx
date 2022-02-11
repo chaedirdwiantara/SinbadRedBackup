@@ -2,15 +2,20 @@
 import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE === */
+/** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ProductView } from './product.view';
 import { ProductUnavailableView } from './product-not-available.view';
+/** === IMPORT EXTERNAL COMPONENT HERE === */
+/** === IMPORT INTERNAL FUNCTION HERE === */
+import {
+  goBack,
+  useCartExampleAction,
+  useGetCartAction,
+} from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { goBack, useCartExampleAction } from '../../functions';
-/** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { contexts } from '@contexts';
@@ -18,9 +23,11 @@ import { contexts } from '@contexts';
 const OmsShoppingCartView: FC = () => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const cartExampleAction = useCartExampleAction();
+  const getCartAction = useGetCartAction();
   /** === HOOKS === */
   useEffect(() => {
     cartExampleAction.fetch(dispatchCart);
+    getCartAction.fetch(dispatchCart);
   }, []);
   console.log(stateCart);
   /** === VIEW === */
