@@ -23,7 +23,7 @@ export const cartExampleReducer = simplifyReducer(cartExampleInitialState, {
   /** => Succeeded */
   [types.CART_EXAMPLE_SUCCESS](
     state = cartExampleInitialState,
-    action: models.CreateSuccessAction,
+    action: models.DetailSuccessAction<models.CartExample>,
   ) {
     return {
       ...state,
@@ -34,7 +34,7 @@ export const cartExampleReducer = simplifyReducer(cartExampleInitialState, {
   /** => Failed */
   [types.CART_EXAMPLE_FAILED](
     state = cartExampleInitialState,
-    action: models.CreateFailedAction,
+    action: models.DetailFailedAction,
   ) {
     return {
       ...state,
