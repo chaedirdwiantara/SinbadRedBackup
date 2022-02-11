@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 /** === FUNCTION === */
-/** => voucher cart detail action */
+/** => cart example action */
 const useCartExampleAction = () => {
   const dispatch = useDispatch();
   return {
@@ -11,12 +11,24 @@ const useCartExampleAction = () => {
       dispatch(Actions.cartExampleProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.voucherDetailReset());
+      dispatch(Actions.cartExampleReset(contextDispatch));
+    },
+  };
+};
+/** => get cart action */
+const useGetCartAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.getCartProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.getCartReset(contextDispatch));
     },
   };
 };
 /** === EXPORT === */
-export { useCartExampleAction };
+export { useCartExampleAction, useGetCartAction };
 /**
  * ================================================================
  * NOTES

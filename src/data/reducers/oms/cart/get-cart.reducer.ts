@@ -3,27 +3,26 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type CartExampleInitialProps =
-  models.DetailItemProps<models.CartExample>;
+export type GetCartInitialProps = models.DetailItemProps<models.CartExample>;
 /** === INITIAL STATE HERE === */
-export const cartExampleInitialState: CartExampleInitialProps = {
+export const getCartInitialState: GetCartInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === REDUCER === */
-export const cartExampleReducer = simplifyReducer(cartExampleInitialState, {
+export const getCartReducer = simplifyReducer(getCartInitialState, {
   /** => PROCESS */
-  [types.CART_EXAMPLE_PROCESS]() {
+  [types.GET_CART_PROCESS]() {
     return {
-      ...cartExampleInitialState,
+      ...getCartInitialState,
       loading: true,
     };
   },
   /** => SUCCESS */
-  [types.CART_EXAMPLE_SUCCESS](
-    state = cartExampleInitialState,
-    action: models.DetailSuccessAction<models.CartExample>,
+  [types.GET_CART_SUCCESS](
+    state = getCartInitialState,
+    action: models.DetailSuccessAction<models.GetCart>,
   ) {
     return {
       ...state,
@@ -32,8 +31,8 @@ export const cartExampleReducer = simplifyReducer(cartExampleInitialState, {
     };
   },
   /** => FAILED */
-  [types.CART_EXAMPLE_FAILED](
-    state = cartExampleInitialState,
+  [types.GET_CART_FAILED](
+    state = getCartInitialState,
     action: models.DetailFailedAction,
   ) {
     return {
@@ -43,14 +42,14 @@ export const cartExampleReducer = simplifyReducer(cartExampleInitialState, {
     };
   },
   /** REFRESH */
-  [types.CART_EXAMPLE_REFRESH]() {
+  [types.GET_CART_REFRESH]() {
     return {
-      ...cartExampleInitialState,
+      ...getCartInitialState,
       loading: true,
     };
   },
   /** => RESET */
-  [types.CART_EXAMPLE_RESET]() {
-    return cartExampleInitialState;
+  [types.GET_CART_RESET]() {
+    return getCartInitialState;
   },
 });

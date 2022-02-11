@@ -23,9 +23,27 @@ function* cartExample(action: models.DetailProcessAction) {
     yield put(ActionCreators.cartExampleFailed(error as models.ErrorProps));
   }
 }
+/** => GET CART */
+function* getCart(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.GetCart> = yield call(
+      () => {
+        return CartApi.getCart();
+      },
+    );
+    yield action.contextDispatch(ActionCreators.getCartSuccess(response));
+    yield put(ActionCreators.getCartSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.getCartFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.getCartFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_EXAMPLE_PROCESS, cartExample);
+  yield takeLatest(types.GET_CART_PROCESS, getCart);
 }
 
 export default CartSaga;
