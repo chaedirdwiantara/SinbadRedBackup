@@ -21,10 +21,6 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
     <View
       style={{
         ...ShoppingCartStyles.horizontalBottomCardSlot,
-        paddingBottom: 18,
-        borderBottomWidth: 1,
-        borderStyle: 'solid',
-        borderBottomColor: color.black10,
       }}
       key={'product-a'}>
       <View
@@ -75,10 +71,14 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
                   {toCurrency(25000, { withFraction: false })}
                 </SnbText.B4>
               </View>
-              <View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <SnbText.B4 color={color.black100}>
                   {toCurrency(15000, { withFraction: false })}
                 </SnbText.B4>
+                <SnbIcon
+                  name="arrow_drop_down_circle"
+                  style={{ color: color.green50, marginLeft: 5 }}
+                />
               </View>
             </View>
             <View

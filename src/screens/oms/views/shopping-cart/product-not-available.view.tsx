@@ -12,10 +12,6 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({}) => {
     <View
       style={{
         ...ShoppingCartStyles.horizontalBottomCardSlot,
-        paddingBottom: 18,
-        borderBottomWidth: 1,
-        borderStyle: 'solid',
-        borderBottomColor: color.black10,
       }}
       key={'product-a'}>
       <View
@@ -30,7 +26,11 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({}) => {
               marginLeft: 4,
               justifyContent: 'center',
             }}>
-            <SnbCheckbox status={'unselect'} onPress={() => {}} />
+            <SnbCheckbox
+              disabled={true}
+              status={'unselect'}
+              onPress={() => {}}
+            />
           </View>
           <TouchableOpacity
             style={{ alignItems: 'center', justifyContent: 'center' }}
