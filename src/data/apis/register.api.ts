@@ -22,7 +22,7 @@ const registerMerchant = (data: models.IMerchantData) => {
 };
 
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
-  const path = 'verified-otp';
+  const path = 'validate-otp';
   const mockHost = 'https://7a55376b-ace5-4ee5-a6be-590d732e725d.mock.pstmn.io';
   return apiMock(mockHost, path, '', 'v2', 'POST', data);
 };
@@ -34,8 +34,7 @@ const registermerchantDetail = (data: models.IRegisterMerchantSuccess) => {
 
 const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
   const path = 'check-phone';
-  const mockHost = 'https://7a55376b-ace5-4ee5-a6be-590d732e725d.mock.pstmn.io';
-  return apiMock(mockHost, path, '', 'v2', 'POST', data);
+  return apiAuth(path, 'v2', 'POST', data);
 };
 
 const checkAutoLogin = (data: models.ICheckAutoLoginProcess) => {
