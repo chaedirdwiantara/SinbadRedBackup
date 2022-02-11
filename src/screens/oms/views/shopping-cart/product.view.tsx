@@ -32,7 +32,6 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
           <View
             style={{
               marginRight: 20,
-              marginLeft: 4,
               justifyContent: 'center',
             }}>
             <SnbCheckbox status={'unselect'} onPress={() => {}} />
@@ -78,6 +77,7 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
                 <SnbIcon
                   name="arrow_drop_down_circle"
                   style={{ color: color.green50, marginLeft: 5 }}
+                  size={16}
                 />
               </View>
             </View>
