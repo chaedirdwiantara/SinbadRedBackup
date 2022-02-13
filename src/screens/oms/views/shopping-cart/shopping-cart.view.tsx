@@ -14,21 +14,42 @@ import {
   useCartExampleAction,
   useGetCartAction,
   useGetTotalCartAction,
+  useAddToCartAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
+/** === DUMMIES === */
+const dummyAddToCartPayload = {
+  productId: '53c9b0000000000000000000',
+  productName: 'SGM ANANDA 2 150 GR GRD 2.0',
+  brandId: '33d200000000000000000000',
+  brandName: 'SGM',
+  productImageUrl:
+    'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+  minQty: 3,
+  qty: 3,
+  isPriceAfterTax: true,
+  taxPercentage: 10,
+  price: 13707.1,
+  uomLabel: 'PCS',
+  warehouseId: 3,
+  sellerId: 1,
+  sellerName: 'Tigaraksa',
+};
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const cartExampleAction = useCartExampleAction();
   const getCartAction = useGetCartAction();
   const getTotalCartAction = useGetTotalCartAction();
+  const addToCartAction = useAddToCartAction();
   /** === HOOKS === */
   useEffect(() => {
     cartExampleAction.fetch(dispatchCart);
     getCartAction.fetch(dispatchCart);
     getTotalCartAction.fetch(dispatchCart);
+    addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
   }, []);
   console.log(stateCart);
   /** === VIEW === */
