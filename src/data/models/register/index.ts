@@ -158,3 +158,9 @@ export interface ICreateBasicAccountData {
   };
   message: string;
 }
+
+export interface ISearchLocation {
+  keyword: string;
+  page: number;
+  perPage: number;
+}

@@ -16,10 +16,15 @@ export const useEasyRegistration = () => {
   }, []);
 
   const searchLocation = React.useCallback((keyword: string) => {
-    dispatch(
-      Actions.searchLocation({ keyword, skip: 0, limit: 100, loading: true }),
-    );
+    dispatch(Actions.searchLocation({ keyword, page: 1, perPage: 20 }));
   }, []);
+
+  const loadMoreSearchLocation = React.useCallback(
+    (keyword: string, page: number, perPage: number) => {
+      dispatch(Actions.loadMoreSearchLocation({ keyword, page, perPage }));
+    },
+    [],
+  );
 
   const createBasicAccount = (
     location: models.ISearchLocationsData | null,
@@ -45,5 +50,6 @@ export const useEasyRegistration = () => {
     createBasicAccount,
     getBuyerCategory,
     getProductCategory,
+    loadMoreSearchLocation,
   };
 };
