@@ -2,6 +2,7 @@
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => cart example action */
 const useCartExampleAction = () => {
@@ -40,8 +41,28 @@ const useGetTotalCartAction = () => {
     },
   };
 };
+/** => add to cart action */
+const useAddToCartAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.AddToCartPayload,
+    ) => {
+      dispatch(Actions.addToCartProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.addToCartReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
-export { useCartExampleAction, useGetCartAction, useGetTotalCartAction };
+export {
+  useCartExampleAction,
+  useGetCartAction,
+  useGetTotalCartAction,
+  useAddToCartAction,
+};
 /**
  * ================================================================
  * NOTES
