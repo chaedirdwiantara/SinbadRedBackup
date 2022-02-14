@@ -483,8 +483,7 @@ const ProductDetailView: FC = () => {
           <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
-            originalPrice={dataProduct?.originalPrice!}
-            currentPrice={dataProduct?.currentPrice!}
+            finalPrice={dataProduct?.finalPrice!}
             minQty={dataProduct?.minQty!}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}

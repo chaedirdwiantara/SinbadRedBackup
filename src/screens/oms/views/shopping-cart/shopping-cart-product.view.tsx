@@ -181,7 +181,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice, { withFraction: false })}
+              {toCurrency(product.finalPrice ?? 0, { withFraction: false })}
             </SnbText.B4>
           </View>
           <SnbNumberCounter

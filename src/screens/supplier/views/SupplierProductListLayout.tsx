@@ -58,7 +58,7 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
               <ProductListCard
                 name={product.name}
                 imageUrl={product.thumbnail}
-                currentPrice={product.currentPrice}
+                finalPrice={product.finalPrice}
                 isBundle={product.isBundle}
                 isPromo={product.isPromo}
                 isExclusive={product.isExclusive}

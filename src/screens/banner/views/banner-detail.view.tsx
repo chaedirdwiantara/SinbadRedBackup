@@ -29,6 +29,7 @@ interface RecommendedProduct {
   imageUrl: string;
   displayPrice: number;
   currentPrice: number;
+  finalPrice: number;
   isBundle: boolean;
   isPromo: boolean;
   isExclusive: boolean;
@@ -42,6 +43,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
     displayPrice: 77891,
     currentPrice: 77891,
+    finalPrice: 77891,
     isBundle: false,
     isPromo: true,
     isExclusive: true,
@@ -53,6 +55,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
     displayPrice: 150000,
     currentPrice: 150000,
+    finalPrice: 150000,
     isBundle: false,
     isPromo: false,
     isExclusive: false,
@@ -64,6 +67,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
     displayPrice: 98782,
     currentPrice: 98782,
+    finalPrice: 98782,
     isBundle: true,
     isPromo: true,
     isExclusive: true,
@@ -75,6 +79,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
     displayPrice: 72000,
     currentPrice: 72000,
+    finalPrice: 72000,
     isBundle: false,
     isPromo: true,
     isExclusive: false,
@@ -86,6 +91,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
     displayPrice: 77891,
     currentPrice: 77891,
+    finalPrice: 77891,
     isBundle: false,
     isPromo: false,
     isExclusive: true,
@@ -255,8 +261,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
         flexOne={true}
         name={item.name}
         imageUrl={item.imageUrl}
-        originalPrice={item.displayPrice}
-        currentPrice={item.currentPrice}
+        finalPrice={item.finalPrice}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

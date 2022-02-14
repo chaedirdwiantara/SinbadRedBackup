@@ -18,7 +18,7 @@ interface ProductBundleMainInfoProps {
   imageUrl?: string;
   isExclusive: boolean;
   name: string;
-  currentPrice: number;
+  finalPrice: number;
   packagedQty: number;
   minQty: number;
   minQtyType: string;
@@ -69,7 +69,7 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
             alignItems: 'center',
           }}>
           <SnbText.B2 color={color.red50}>
-            {toCurrency(props.currentPrice ?? 0, {
+            {toCurrency(props.finalPrice ?? 0, {
               withFraction: false,
             })}
           </SnbText.B2>

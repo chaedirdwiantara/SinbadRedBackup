@@ -53,7 +53,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>
-                  {toCurrency(dataProductDetail?.currentPrice ?? 0, {
+                  {toCurrency(dataProductDetail?.finalPrice ?? 0, {
                     withFraction: false,
                   })}
                 </SnbText.B3>
@@ -112,7 +112,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>
-                  {toCurrency(dataProductDetailCart?.currentPrice ?? 0, {
+                  {toCurrency(dataProductDetailCart?.finalPrice ?? 0, {
                     withFraction: false,
                   })}
                 </SnbText.B3>

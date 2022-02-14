@@ -11,6 +11,7 @@ export interface ProductList {
   isExclusive: boolean;
   isPromo: boolean;
   thumbnail: string;
+  finalPrice: number;
 }
 
 export interface ProductListProcessProps extends models.ListProcessProps {
@@ -79,6 +80,7 @@ export interface ProductDetail {
   images: Array<ProductImage>;
   originalPrice: number;
   currentPrice: number | null;
+  finalPrice: number;
   currentPriceAfterTax: number | null;
   isBonus: boolean;
   isExclusive: boolean;
