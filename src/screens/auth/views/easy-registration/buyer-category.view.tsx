@@ -10,13 +10,18 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import {
   Alert,
+  BackHandler,
   FlatList,
   Image,
   RefreshControl,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {
   LIST_LOCATION_VIEW,
   PRODUCT_CATEGORY_VIEW,
@@ -250,6 +255,16 @@ const BuyerCategoryView: React.FC = () => {
   LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
   ]);
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true,
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">
