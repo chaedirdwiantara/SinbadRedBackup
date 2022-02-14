@@ -2,11 +2,11 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { useRoute, useNavigation } from '@react-navigation/core';
 import React from 'react';
-import { PermissionsAndroid, PermissionStatus, Platform } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { BUYER_CATEGORY_VIEW, LIST_LOCATION_VIEW } from './screens_name';
+import { LIST_LOCATION_VIEW } from './screens_name';
 
 const useOTP = () => {
   const dispatch = useDispatch();

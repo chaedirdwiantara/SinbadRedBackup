@@ -12,7 +12,7 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
 import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
 import * as models from '@models';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
 
 const Content: React.FC = () => {
@@ -20,7 +20,8 @@ const Content: React.FC = () => {
   const [selectedLocation, setSelectedLocation] =
     React.useState<models.ISearchLocationsData | null>(null);
   const { searchLocation, searchLocationState } = useEasyRegistration();
-  const { navigate } = useNavigation();
+  const { replace, goBack }: any = useNavigation();
+  const { params }: any = useRoute();
 
   useEffect(() => {
     if (search.value) {
@@ -29,7 +30,14 @@ const Content: React.FC = () => {
   }, [search.value]);
 
   useEffect(() => {
-    selectedLocation && navigate(BUYER_CATEGORY_VIEW, { selectedLocation });
+    if (selectedLocation) {
+      if (params?.setLocation) {
+        params?.setLocation(selectedLocation);
+        goBack();
+      } else {
+        replace(BUYER_CATEGORY_VIEW, { selectedLocation });
+      }
+    }
   }, [selectedLocation]);
 
   function renderLocation({ item }: any) {
@@ -61,7 +69,7 @@ const Content: React.FC = () => {
       <View style={{ padding: 16 }}>
         <SnbTextField.Text
           {...search}
-          placeholder="Cari Kota/Kabupaten, Kecamatan, atau Desa"
+          placeholder="Cari Kota/Kabupaten, Kec. atau Desa"
           prefixIconName="search"
         />
       </View>
