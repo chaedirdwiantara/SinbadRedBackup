@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
   SnbText,
@@ -22,9 +22,14 @@ const SelfRegisterView: React.FC = () => {
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
-      phone.clearText();
-      resetCheckPhone();
-      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+      if (checkPhoneV2.data.isAvailable) {
+        phone.clearText();
+        resetCheckPhone();
+        navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+      } else {
+        phone.setMessageError('Nomor telah terdaftar');
+        phone.setType('error');
+      }
     }
     if (checkPhoneV2.error !== null) {
       phone.setMessageError(checkPhoneV2.error.code);
@@ -33,6 +38,8 @@ const SelfRegisterView: React.FC = () => {
 
   React.useEffect(() => {
     resetCheckPhone();
+    phone.setMessageError('');
+    phone.setType('default');
   }, []);
 
   React.useEffect(() => {
@@ -52,14 +59,16 @@ const SelfRegisterView: React.FC = () => {
 
   const content = () => {
     return (
-      <View style={{ flex: 1, marginBottom: 10 }}>
-        <View style={styles.image}>
-          <Svg name="registration" size={220} />
+      <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginBottom: 25 }}>
+          <View style={styles.image}>
+            <Svg name="registration" size={220} />
+          </View>
+          <View style={{ height: 84, padding: 16 }}>
+            <SnbTextField.Text {...phone} keyboardType="phone-pad" />
+          </View>
         </View>
-        <View style={{ height: 84, padding: 16 }}>
-          <SnbTextField.Text {...phone} keyboardType="phone-pad" />
-        </View>
-      </View>
+      </ScrollView>
     );
   };
 

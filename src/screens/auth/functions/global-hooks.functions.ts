@@ -51,6 +51,7 @@ export const useInputPhone = () => {
     labelText: 'Masukkan Nomor Handphone',
     placeholder: 'Masukkan nomor handphone anda',
     setMessageError,
+    setType,
   };
 };
 
