@@ -19,10 +19,18 @@ const Content: React.FC = () => {
   const search = useInput();
   const [selectedLocation, setSelectedLocation] =
     React.useState<models.ISearchLocationsData | null>(null);
-  const { searchLocation, searchLocationState, loadMoreSearchLocation } =
-    useEasyRegistration();
+  const {
+    searchLocation,
+    searchLocationState,
+    loadMoreSearchLocation,
+    resetSearchLocation,
+  } = useEasyRegistration();
   const { replace, goBack }: any = useNavigation();
   const { params }: any = useRoute();
+
+  useEffect(() => {
+    resetSearchLocation();
+  }, []);
 
   useEffect(() => {
     if (search.value) {

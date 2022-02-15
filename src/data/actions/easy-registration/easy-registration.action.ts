@@ -47,6 +47,10 @@ export const loadMoreSearchLocationSuccess = (
   };
 };
 
+export const resetSearchLocation = () => {
+  return { type: types.SEARCH_LOCATION_RESET };
+};
+
 export const loadMoreSearchLocationFailed = (
   data: models.ErrorProps,
 ): models.ListFailedAction => {

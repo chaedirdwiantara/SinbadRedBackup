@@ -25,6 +25,9 @@ export const useEasyRegistration = () => {
     },
     [],
   );
+  const resetSearchLocation = React.useCallback(() => {
+    dispatch(Actions.resetSearchLocation());
+  }, []);
 
   const createBasicAccount = (
     location: models.ISearchLocationsData | null,
@@ -51,5 +54,6 @@ export const useEasyRegistration = () => {
     getBuyerCategory,
     getProductCategory,
     loadMoreSearchLocation,
+    resetSearchLocation,
   };
 };
