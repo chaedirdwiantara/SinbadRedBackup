@@ -141,7 +141,7 @@ const OmsShoppingCartView: FC = () => {
           <ShoppingCartProducts />
         </View>
       </ScrollView>
-      <ShoppingCartFooter />
+      <ShoppingCartFooter onPressCheckout={() => cartMasterAction.reset()} />
     </SnbContainer>
   );
 };
