@@ -26,7 +26,7 @@ function* cartExample(action: models.DetailProcessAction) {
 /** => GET CART */
 function* getCart(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.GetCart> = yield call(
+    const response: models.DetailSuccessProps<models.GetCartData> = yield call(
       () => {
         return CartApi.getCart();
       },
