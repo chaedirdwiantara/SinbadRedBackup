@@ -3,12 +3,11 @@ import * as types from '@types';
 
 // SEARH LOCATION AFTER SUCCESS REGISTER
 export const searchLocation = (
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
+  data: models.ISearchLocation,
+): models.IRegisterAction<models.ISearchLocation> => {
   return {
     type: types.SEARCH_LOCATION_PROCESS,
     payload: data,
-    contextDispatch: () => undefined,
   };
 };
 
@@ -26,6 +25,37 @@ export const searchLocationFailed = (
 ): models.ListFailedAction => {
   return {
     type: types.SEARCH_LOCATION_FAILED,
+    payload: data,
+  };
+};
+
+export const loadMoreSearchLocation = (
+  data: models.ISearchLocation,
+): models.IRegisterAction<models.ISearchLocation> => {
+  return {
+    type: types.LOAD_MORE_SEARCH_LOCATION_PROCESS,
+    payload: data,
+  };
+};
+
+export const loadMoreSearchLocationSuccess = (
+  data: models.ListSuccessProps<models.ISearchLocationsData>,
+): models.ListSuccessAction<models.ISearchLocationsData> => {
+  return {
+    type: types.LOAD_MORE_SEARCH_LOCATION_SUCCESS,
+    payload: data,
+  };
+};
+
+export const resetSearchLocation = () => {
+  return { type: types.SEARCH_LOCATION_RESET };
+};
+
+export const loadMoreSearchLocationFailed = (
+  data: models.ErrorProps,
+): models.ListFailedAction => {
+  return {
+    type: types.LOAD_MORE_SEARCH_LOCATION_FAILED,
     payload: data,
   };
 };

@@ -4,14 +4,27 @@ import * as models from '@models';
 import { easyRegistrationApi } from '../apis/easy-registration.api';
 import * as ActionCreators from '@actions';
 
-/** check phone no */
-function* searchLocation() {
+function* searchLocation(
+  action: models.IRegisterAction<models.ISearchLocation>,
+) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
-      yield call(() => easyRegistrationApi.searchLocation());
+      yield call(() => easyRegistrationApi.searchLocation(action.payload));
     yield put(ActionCreators.searchLocationSuccess(response));
   } catch (error: any) {
     yield put(ActionCreators.searchLocationFailed(error));
+  }
+}
+
+function* loadMoreSearchLocation(
+  action: models.IRegisterAction<models.ISearchLocation>,
+) {
+  try {
+    const response: models.ListSuccessProps<models.ISearchLocationsData> =
+      yield call(() => easyRegistrationApi.searchLocation(action.payload));
+    yield put(ActionCreators.loadMoreSearchLocationSuccess(response));
+  } catch (error: any) {
+    yield put(ActionCreators.loadMoreSearchLocationFailed(error));
   }
 }
 
@@ -52,6 +65,11 @@ function* getProductCategory() {
 
 function* EasyRegistrationSaga() {
   yield debounce(250, types.SEARCH_LOCATION_PROCESS, searchLocation);
+  yield debounce(
+    100,
+    types.LOAD_MORE_SEARCH_LOCATION_PROCESS,
+    loadMoreSearchLocation,
+  );
   yield takeLatest(types.CREATE_BASIC_ACCOUNT_PROCESS, createBasicAccount);
   yield takeLatest(types.BUYER_CATEGORY_PROCESS, getBuyerCategory);
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
