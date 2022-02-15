@@ -71,6 +71,21 @@ const useUpdateCartAction = () => {
     },
   };
 };
+/** => checkout action */
+const useCheckoutAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckoutPayload,
+    ) => {
+      dispatch(Actions.checkoutProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkoutReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -78,6 +93,7 @@ export {
   useGetTotalCartAction,
   useAddToCartAction,
   useUpdateCartAction,
+  useCheckoutAction,
 };
 /**
  * ================================================================
