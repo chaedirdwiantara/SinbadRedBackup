@@ -76,8 +76,11 @@ const useUpdateCartAction = () => {
 const useRemoveCartProductAction = () => {
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any, id: string) => {
-      dispatch(Actions.removeCartProductProcess(contextDispatch, { id }));
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.RemoveCartProductPayload,
+    ) => {
+      dispatch(Actions.removeCartProductProcess(contextDispatch, { data }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.removeCartProductReset(contextDispatch));

@@ -94,11 +94,14 @@ function* updateCart(
   }
 }
 /** => REMOVE CART PRODUCT */
-function* removeCartProduct(action: models.DeleteProcessAction) {
+function* removeCartProduct(
+  action: models.UpdateProcessAction<models.RemoveCartProductPayload>,
+) {
   try {
-    const response: models.DeleteSuccessV3Props = yield call(() => {
-      return CartApi.removeCartProduct(action.payload);
-    });
+    const response: models.UpdateSuccessV3Props<models.RemoveCartProductResponse> =
+      yield call(() => {
+        return CartApi.removeCartProduct(action.payload);
+      });
     yield action.contextDispatch(
       ActionCreators.removeCartProductSuccess(response),
     );

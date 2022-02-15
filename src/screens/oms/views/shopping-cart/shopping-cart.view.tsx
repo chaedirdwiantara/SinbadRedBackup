@@ -118,10 +118,13 @@ const OmsShoppingCartView: FC = () => {
     getTotalCartAction.fetch(dispatchCart);
     addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
     updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
-    removeCartProductAction.fetch(
-      dispatchCart,
-      'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
-    );
+    removeCartProductAction.fetch(dispatchCart, {
+      cartId: cartMasterAction.cartMaster.id,
+      productIds: [
+        'bd1abe44-87be-11ec-a8a3-0242ac120001',
+        'bd1abe44-87be-11ec-a8a3-0242ac120004',
+      ],
+    });
   }, []);
   /** => Did Update getCart */
   useEffect(() => {

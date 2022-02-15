@@ -59,20 +59,28 @@ const updateCart = (
 ) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'carts';
-  return apiMappingMockV3<
-    models.CreateSuccessV3Props<models.UpdateCartResponse>
-  >(mockHost, path, 'discount', 'v1', 'UPDATE', data);
-};
-
-const removeCartProduct = (data: models.DeleteProcessProps) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = `remove-cart-products/${data.id}`;
-  return apiMappingMockV3<models.DeleteSuccessV3Props>(
+  return apiMappingMockV3<models.UpdateCartResponse>(
     mockHost,
     path,
     'discount',
     'v1',
     'UPDATE',
+    data,
+  );
+};
+
+const removeCartProduct = ({
+  data,
+}: models.UpdateProcessProps<models.RemoveCartProductPayload>) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = `remove-cart-products/${data.cartId}`;
+  return apiMappingMockV3<models.RemoveCartProductResponse>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'UPDATE',
+    data.productIds,
   );
 };
 
