@@ -159,7 +159,10 @@ const OmsShoppingCartView: FC = () => {
     getCartAction.fetch(dispatchCart);
     getTotalCartAction.fetch(dispatchCart);
     addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
-    updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
+    updateCartAction.fetch(dispatchCart, {
+      carts: dummyUpdateCartPayload.carts,
+      id: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+    });
     checkoutAction.fetch(dispatchCart, dummyCheckoutData);
     removeCartProductAction.fetch(
       dispatchCart,

@@ -58,7 +58,7 @@ const updateCart = (
   data: models.UpdateProcessProps<models.UpdateCartPayload>,
 ) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'carts';
+  const path = `carts/${data.data.id}`;
   return apiMappingMockV3<
     models.UpdateSuccessV3Props<models.UpdateCartResponse>
   >(mockHost, path, 'discount', 'v1', 'UPDATE', data);

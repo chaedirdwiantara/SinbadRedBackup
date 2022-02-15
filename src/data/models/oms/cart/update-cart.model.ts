@@ -8,6 +8,7 @@ export interface UpdateCartDataProducts extends CartProductData {}
 export interface UpdateCartData extends CartData<UpdateCartDataProducts> {}
 
 export interface UpdateCartPayload {
+  id: string;
   carts: UpdateCartData[];
 }
 
