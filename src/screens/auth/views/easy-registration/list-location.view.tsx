@@ -14,6 +14,7 @@ import { useEasyRegistration } from '@screen/auth/functions/easy-registration-ho
 import * as models from '@models';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
+import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
   const search = useInput();
@@ -107,6 +108,17 @@ const Content: React.FC = () => {
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: color.black10 }} />
             )}
+            ListEmptyComponent={() => {
+              if (searchLocationState?.error) {
+                return (
+                  <ErrorContent
+                    message={searchLocationState?.error?.message}
+                    action={() => search.value && searchLocation(search.value)}
+                  />
+                );
+              }
+              return null;
+            }}
             ListFooterComponent={() => {
               if (searchLocationState?.isLoadMoreLoading) {
                 return <SnbProgress />;

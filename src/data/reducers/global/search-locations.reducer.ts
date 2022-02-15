@@ -51,7 +51,7 @@ export const searchLocations = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.SEARCH_LOCATION_FAILED](state = INITIAL_STATE, action: any) {
+  [types.LOAD_MORE_SEARCH_LOCATION_FAILED](state = INITIAL_STATE, action: any) {
     return {
       ...state,
       isLoadMoreLoading: false,
