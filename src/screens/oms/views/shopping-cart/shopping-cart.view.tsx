@@ -16,6 +16,7 @@ import {
   useGetTotalCartAction,
   useAddToCartAction,
   useUpdateCartAction,
+  useRemoveCartProductAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -86,6 +87,7 @@ const OmsShoppingCartView: FC = () => {
   const getTotalCartAction = useGetTotalCartAction();
   const addToCartAction = useAddToCartAction();
   const updateCartAction = useUpdateCartAction();
+  const removeCartProductAction = useRemoveCartProductAction();
   /** === HOOKS === */
   useEffect(() => {
     cartExampleAction.fetch(dispatchCart);
@@ -93,6 +95,10 @@ const OmsShoppingCartView: FC = () => {
     getTotalCartAction.fetch(dispatchCart);
     addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
     updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
+    removeCartProductAction.fetch(
+      dispatchCart,
+      'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+    );
   }, []);
   console.log(stateCart);
   /** === VIEW === */
