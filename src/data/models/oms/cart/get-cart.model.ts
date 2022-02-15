@@ -19,7 +19,7 @@ export interface GetCartDataSellers {
 export interface GetCartDataSellersProducts {
   productId: string;
   warehouseId: number;
-  brandId: number;
+  brandId: string;
   brandName: string;
   productName: string;
   qty: number;

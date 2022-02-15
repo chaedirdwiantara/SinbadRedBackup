@@ -49,7 +49,7 @@ const dummyUpdateCartPayload = {
           productId: '53c9b0000000000000000000',
           warehouseId: 3,
           categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
-          brandId: 3,
+          brandId: '33d200000000000000000000',
           productName: 'SGM ANANDA 2 150 GR GRD 2.0',
           brandName: 'SGM',
           minQty: 3,
