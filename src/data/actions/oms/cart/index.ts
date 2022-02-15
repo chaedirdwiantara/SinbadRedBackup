@@ -4,3 +4,5 @@ export * from './total-cart.action';
 export * from './add-to-cart.action';
 export * from './update-cart.action';
 export * from './checkout.action';
+export * from './remove-cart-product.action';
+export * from './cart-master.action';

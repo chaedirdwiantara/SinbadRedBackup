@@ -3,7 +3,7 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type GetCartInitialProps = models.DetailItemProps<models.CartExample>;
+export type GetCartInitialProps = models.DetailItemProps<models.GetCartData>;
 /** === INITIAL STATE HERE === */
 export const getCartInitialState: GetCartInitialProps = {
   data: null,
@@ -22,7 +22,7 @@ export const getCartReducer = simplifyReducer(getCartInitialState, {
   /** => SUCCESS */
   [types.GET_CART_SUCCESS](
     state = getCartInitialState,
-    action: models.DetailSuccessAction<models.GetCart>,
+    action: models.DetailSuccessAction<models.GetCartData>,
   ) {
     return {
       ...state,

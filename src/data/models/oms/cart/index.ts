@@ -5,3 +5,4 @@ export * from './total-cart.model';
 export * from './add-to-cart.model';
 export * from './update-cart.model';
 export * from './checkout.model';
+export * from './cart-master.model';

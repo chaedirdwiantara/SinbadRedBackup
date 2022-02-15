@@ -18,7 +18,7 @@ const exampleCart = () => {
 const getCart = () => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'carts';
-  return apiMappingMockV3<models.GetCart>(
+  return apiMappingMockV3<models.GetCartData>(
     mockHost,
     path,
     'discount',
@@ -44,9 +44,14 @@ const addToCart = (
 ) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'carts';
-  return apiMappingMockV3<
-    models.CreateSuccessV3Props<models.AddToCartResponse>
-  >(mockHost, path, 'discount', 'v1', 'CREATE', data);
+  return apiMappingMockV3<models.AddToCartResponse>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
 };
 
 const updateCart = (
@@ -64,7 +69,7 @@ const checkoutCart = (
 ) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'checkouts';
-  return apiMappingMockV3<models.CreateSuccessV3Props<models.CheckoutResponse>>(
+  return apiMappingMockV3<models.CheckoutResponse>(
     mockHost,
     path,
     'discount',
@@ -73,6 +78,19 @@ const checkoutCart = (
     data,
   );
 };
+
+const removeCartProduct = (data: models.DeleteProcessProps) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = `remove-cart-products/${data.id}`;
+  return apiMappingMockV3<models.DeleteSuccessV3Props>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'UPDATE',
+  );
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
@@ -80,4 +98,5 @@ export const CartApi = {
   addToCart,
   updateCart,
   checkoutCart,
+  removeCartProduct,
 };

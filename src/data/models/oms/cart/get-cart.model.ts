@@ -1,9 +1,6 @@
 /**
  * GET CART
  */
-export interface GetCart {
-  data: GetCartData;
-}
 export interface GetCartData {
   id: string;
   userId: number;
@@ -19,6 +16,7 @@ export interface GetCartDataSellers {
 export interface GetCartDataSellersProducts {
   productId: string;
   warehouseId: number;
+  categoryId: string;
   brandId: string;
   brandName: string;
   productName: string;
@@ -28,6 +26,13 @@ export interface GetCartDataSellersProducts {
   uomLabel: string;
   isPriceAfterTax: boolean;
   taxPercentage: number;
+  lastUsedPrice: number;
   price: number;
+  priceRules: PriceRules[];
   selected: boolean;
+}
+export interface PriceRules {
+  minQty: number;
+  maxQty: number;
+  price: number;
 }

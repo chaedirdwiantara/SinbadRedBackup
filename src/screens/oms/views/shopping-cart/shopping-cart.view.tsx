@@ -17,6 +17,8 @@ import {
   useAddToCartAction,
   useUpdateCartAction,
   useCheckoutAction,
+  useRemoveCartProductAction,
+  useCartMasterAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -25,6 +27,7 @@ import { contexts } from '@contexts';
 const dummyAddToCartPayload = {
   productId: '53c9b0000000000000000000',
   productName: 'SGM ANANDA 2 150 GR GRD 2.0',
+  categoryId: '33d2AB000000000000000000',
   brandId: '33d200000000000000000000',
   brandName: 'SGM',
   productImageUrl:
@@ -33,11 +36,26 @@ const dummyAddToCartPayload = {
   qty: 3,
   isPriceAfterTax: true,
   taxPercentage: 10,
+  lastUsedPrice: 13707.1,
   price: 13707.1,
+  qtyPerBox: 40,
+  priceRules: [
+    {
+      minQty: 1,
+      maxQty: 10,
+      price: 13707.1,
+    },
+    {
+      minQty: 11,
+      maxQty: 20,
+      price: 12707.1,
+    },
+  ],
   uomLabel: 'PCS',
   warehouseId: 3,
   sellerId: 1,
   sellerName: 'Tigaraksa',
+  selected: true,
 };
 
 const dummyUpdateCartPayload = {
@@ -98,6 +116,7 @@ const dummyCheckoutData = {
           qtyPerBox: 40,
           isPriceAfterTax: true,
           taxPercentage: 10,
+          lastUsedPrice: 13707.1,
           price: 13707.1,
           uomLabel: 'PCS',
           selected: true,
@@ -121,14 +140,20 @@ const dummyCheckoutData = {
 
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const {
+    stateCart: { get: getCart },
+    dispatchCart,
+  } = React.useContext(contexts.CartContext);
   const cartExampleAction = useCartExampleAction();
   const getCartAction = useGetCartAction();
   const getTotalCartAction = useGetTotalCartAction();
   const addToCartAction = useAddToCartAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+  const removeCartProductAction = useRemoveCartProductAction();
+  const cartMasterAction = useCartMasterAction();
   /** === HOOKS === */
+  /** => Did Mount */
   useEffect(() => {
     cartExampleAction.fetch(dispatchCart);
     getCartAction.fetch(dispatchCart);
@@ -136,8 +161,18 @@ const OmsShoppingCartView: FC = () => {
     addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
     updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
     checkoutAction.fetch(dispatchCart, dummyCheckoutData);
+    removeCartProductAction.fetch(
+      dispatchCart,
+      'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+    );
   }, []);
-  console.log(stateCart);
+  /** => Did Update getCart */
+  useEffect(() => {
+    if (getCart.data !== null) {
+      cartMasterAction.setCartMaster(getCart.data);
+    }
+  }, [getCart.data]);
+  console.log(getCart, cartMasterAction.cartMaster);
   /** === VIEW === */
   /** => Main */
   return (
@@ -149,7 +184,7 @@ const OmsShoppingCartView: FC = () => {
           <ShoppingCartProducts />
         </View>
       </ScrollView>
-      <ShoppingCartFooter />
+      <ShoppingCartFooter onPressCheckout={() => cartMasterAction.reset()} />
     </SnbContainer>
   );
 };
