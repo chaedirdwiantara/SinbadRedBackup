@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
   return (
@@ -195,11 +196,28 @@ const ProductCategory: React.FC = () => {
           keyExtractor={(_, idx) => idx.toString()}
           renderItem={renderItems}
           contentContainerStyle={{ paddingHorizontal: 24 }}
-          ListEmptyComponent={() => (
-            <View style={{ padding: 16 }}>
-              <SnbProgress />
-            </View>
-          )}
+          ListEmptyComponent={() => {
+            if (productCategories?.loading) {
+              return (
+                <View style={{ padding: 16 }}>
+                  <SnbProgress />
+                </View>
+              );
+            }
+
+            if (productCategories?.error) {
+              return (
+                <View style={{ padding: 16 }}>
+                  <ErrorContent
+                    action={getProductCategory}
+                    message={productCategories?.error?.message}
+                  />
+                </View>
+              );
+            }
+
+            return null;
+          }}
           ItemSeparatorComponent={() => (
             <View style={{ height: 0.75, backgroundColor: color.black40 }} />
           )}
