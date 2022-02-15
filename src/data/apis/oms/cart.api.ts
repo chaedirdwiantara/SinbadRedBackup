@@ -59,10 +59,24 @@ const updateCart = (
   >(mockHost, path, 'discount', 'v1', 'UPDATE', data);
 };
 
+const removeCartProduct = (data: models.DeleteProcessProps) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = `remove-cart-products/${data.id}`;
+  console.log('abcd', `${mockHost}/${path}/${data.id}`);
+  return apiMappingMockV3<models.DeleteSuccessV3Props>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'UPDATE',
+  );
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
   getTotalCart,
   addToCart,
   updateCart,
+  removeCartProduct,
 };

@@ -93,6 +93,25 @@ function* updateCart(
     yield put(ActionCreators.updateCartFailed(error as models.ErrorProps));
   }
 }
+/** => REMOVE CART PRODUCT */
+function* removeCartProduct(action: models.DeleteProcessAction) {
+  try {
+    const response: models.DeleteSuccessV3Props = yield call(() => {
+      return CartApi.removeCartProduct(action.payload);
+    });
+    yield action.contextDispatch(
+      ActionCreators.removeCartProductSuccess(response),
+    );
+    yield put(ActionCreators.removeCartProductSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.removeCartProductFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.removeCartProductFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_EXAMPLE_PROCESS, cartExample);
@@ -100,6 +119,7 @@ function* CartSaga() {
   yield takeLatest(types.GET_TOTAL_CART_PROCESS, getTotalCart);
   yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
   yield takeLatest(types.UPDATE_CART_PROCESS, updateCart);
+  yield takeLatest(types.REMOVE_CART_PRODUCT_PROCESS, removeCartProduct);
 }
 
 export default CartSaga;
