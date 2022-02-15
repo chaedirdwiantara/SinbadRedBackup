@@ -72,8 +72,8 @@ export interface ICheckPhoneNoAvailabilitySuccess {
 }
 
 export interface IVerifyOTPRegister {
-  mobilePhone: string | undefined;
-  otp: string;
+  mobilePhoneNo: string | undefined;
+  otp: number;
 }
 export interface IVerifyOTPSuccess {
   data: {
@@ -86,7 +86,7 @@ export interface IVerifyOTPSuccess {
   };
 }
 export interface ICheckPhoneV2Process {
-  mobilePhone: string | undefined;
+  mobilePhoneNo: string | undefined;
   otpHash: string;
 }
 export interface ICheckPhoneV2Success {

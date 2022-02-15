@@ -20,7 +20,7 @@ export const checkAutoLoginData = simplifyReducer(INITIAL_STATE, {
     return {
       ...state,
       loading: false,
-      data: action.payload.data,
+      data: action.payload,
     };
   },
 

@@ -43,14 +43,17 @@ const RegisterOTPView: React.FC = () => {
   }, [verifyOTP]);
 
   React.useEffect(() => {
-    if (checkAutoLoginData.data !== null) {
+    if (checkAutoLoginData?.data?.message === 'Success') {
       getLocationPermissions();
       resetCheckAutoLogin();
     }
   }, [checkAutoLoginData]);
 
   React.useEffect(() => {
-    if (checkAutoLoginData.error && reCheckAutoLogin !== 3) {
+    if (
+      checkAutoLoginData?.data?.message === 'Processing' &&
+      reCheckAutoLogin !== 3
+    ) {
       setTimeout(() => {
         checkAutoLogin(verifyOTP.data);
         setReCheckAutoLogin(reCheckAutoLogin + 1);
@@ -64,6 +67,13 @@ const RegisterOTPView: React.FC = () => {
     }
   }, [reCheckAutoLogin, checkAutoLoginData]);
 
+  React.useEffect(() => {
+    if (checkAutoLoginData.error !== null) {
+      setModalError(true);
+      setLoadingCheckAutoLogin(false);
+    }
+  }, [checkAutoLoginData.error]);
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
@@ -76,12 +86,12 @@ const RegisterOTPView: React.FC = () => {
           onVerifyOTP={(otp) => {
             setHide(true);
             verifyOTPRegister({
-              mobilePhone,
-              otp,
+              mobilePhoneNo: mobilePhone,
+              otp: Number(otp),
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhone: mobilePhone, otpHash: hashOtp });
+            checkPhone({ mobilePhoneNo: mobilePhone, otpHash: hashOtp });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
@@ -101,7 +111,6 @@ const RegisterOTPView: React.FC = () => {
         retryAction={() => {
           setModalError(false);
           setReCheckAutoLogin(0);
-          checkAutoLogin(verifyOTP.data);
         }}
       />
     </SnbContainer>
