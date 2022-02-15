@@ -71,6 +71,18 @@ const useUpdateCartAction = () => {
     },
   };
 };
+/** => remove cart product action */
+const useRemoveCartProductAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.removeCartProductProcess(contextDispatch, { id }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.removeCartProductReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -78,6 +90,7 @@ export {
   useGetTotalCartAction,
   useAddToCartAction,
   useUpdateCartAction,
+  useRemoveCartProductAction,
 };
 /**
  * ================================================================
