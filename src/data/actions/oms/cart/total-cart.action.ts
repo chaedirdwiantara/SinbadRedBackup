@@ -4,7 +4,7 @@ import * as types from '@types';
 /** === ACTIONS === */
 /** => PROCESS */
 export const getTotalCartProcess = (
-  contextDispatch: (action: { type: string }) => any,
+  contextDispatch: (action: any) => any,
 ): Omit<models.DetailProcessAction, 'payload'> => {
   contextDispatch({ type: types.GET_TOTAL_CART_PROCESS });
   return {
@@ -35,7 +35,7 @@ export const getTotalCartFailed = (
 
 /** RESET */
 export const getTotalCartReset = (
-  contextDispatch: (action: { type: string }) => any,
+  contextDispatch: (action: any) => any,
 ): { type: string } => {
   contextDispatch({ type: types.GET_TOTAL_CART_RESET });
   return {
