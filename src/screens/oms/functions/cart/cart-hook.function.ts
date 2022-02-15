@@ -33,10 +33,10 @@ const useGetTotalCartAction = () => {
   const dispatch = useDispatch();
 
   return {
-    fetch: (contextDispatch: (action: { type: string }) => any) => {
+    fetch: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.getTotalCartProcess(contextDispatch));
     },
-    reset: (contextDispatch: (action: { type: string }) => any) => {
+    reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.getTotalCartReset(contextDispatch));
     },
   };
