@@ -1,4 +1,5 @@
 import apiMapping from '@core/services/apiMapping';
+import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 
 const searchLocation = (data: models.ISearchLocation) => {
@@ -25,10 +26,10 @@ const getBuyerCategory = () => {
 
 const getProductCategory = () => {
   const path = 'product-categories?allParent=true';
-  return apiMapping<models.ListSuccessProps<models.IProductCategoryData>>(
-    'auth',
+  return apiMappingMock<models.ListSuccessProps<models.IProductCategoryData>>(
+    'https://ad534493-7558-4d8f-a1b5-47288a49b84f.mock.pstmn.io',
     path,
-    'product',
+    'account',
     'v1',
     'LIST',
   );

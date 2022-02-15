@@ -16,7 +16,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
 
 const Content: React.FC = () => {
-  const search = useInput('Pekalongan Timur');
+  const search = useInput();
   const [selectedLocation, setSelectedLocation] =
     React.useState<models.ISearchLocationsData | null>(null);
   const { searchLocation, searchLocationState, loadMoreSearchLocation } =
@@ -83,13 +83,18 @@ const Content: React.FC = () => {
             contentContainerStyle={{ paddingHorizontal: 16 }}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={renderLocation}
-            onEndReached={() =>
-              loadMoreSearchLocation(
-                search.value,
-                searchLocationState.data?.meta?.page + 1,
-                searchLocationState.data?.meta?.perPage,
-              )
-            }
+            onEndReached={() => {
+              if (
+                searchLocationState.data?.data?.length <
+                searchLocationState.data?.meta?.total
+              ) {
+                loadMoreSearchLocation(
+                  search.value,
+                  searchLocationState.data?.meta?.page + 1,
+                  searchLocationState.data?.meta?.perPage,
+                );
+              }
+            }}
             onEndReachedThreshold={0.1}
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: color.black10 }} />

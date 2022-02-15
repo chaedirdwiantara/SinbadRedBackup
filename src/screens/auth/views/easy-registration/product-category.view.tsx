@@ -37,10 +37,12 @@ const ProductCategory: React.FC = () => {
   const [data, setData] = React.useState<any[]>(productCategories?.data);
 
   React.useEffect(() => {
+    const isSelected =
+      data.filter((el) => el.isSelected).length === data.length;
     const newData = data.map((el) => {
-      if (checkBoxStatus === 'selected') {
+      if (checkBoxStatus === 'indeterminate') {
         el.isSelected = true;
-      } else if (checkBoxStatus === 'unselect') {
+      } else if (checkBoxStatus === 'unselect' && isSelected) {
         el.isSelected = false;
       }
       return el;
@@ -63,10 +65,10 @@ const ProductCategory: React.FC = () => {
       setCheckBoxStatus('unselect');
       setDisableButton(true);
     } else if (isSelected.length === data.length) {
-      setCheckBoxStatus('selected');
+      setCheckBoxStatus('indeterminate');
       setDisableButton(false);
     } else {
-      setCheckBoxStatus('indeterminate');
+      setCheckBoxStatus('unselect');
       setDisableButton(false);
     }
   }, [data]);
@@ -145,7 +147,9 @@ const ProductCategory: React.FC = () => {
                   <TouchableOpacity
                     onPress={() => {
                       setCheckBoxStatus(
-                        checkBoxStatus === 'selected' ? 'unselect' : 'selected',
+                        checkBoxStatus === 'indeterminate'
+                          ? 'unselect'
+                          : 'indeterminate',
                       );
                     }}
                     style={{
