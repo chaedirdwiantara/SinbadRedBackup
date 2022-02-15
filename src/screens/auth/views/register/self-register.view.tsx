@@ -32,7 +32,7 @@ const SelfRegisterView: React.FC = () => {
       }
     }
     if (checkPhoneV2.error !== null) {
-      phone.setMessageError(checkPhoneV2.error.code);
+      phone.setMessageError(checkPhoneV2.error.message);
     }
   }, [checkPhoneV2]);
 
@@ -79,7 +79,7 @@ const SelfRegisterView: React.FC = () => {
           <SnbButton.Single
             title={'Lanjut'}
             onPress={() =>
-              checkPhone({ mobilePhone: phone.value, otpHash: hashOtp })
+              checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
             }
             type={'primary'}
             disabled={
