@@ -29,6 +29,7 @@ import {
 import * as models from '@models';
 import { LogBox } from 'react-native';
 import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
+import { ErrorContent } from '../shared';
 
 const setIcon = (slug: string) => {
   switch (slug) {
@@ -202,7 +203,22 @@ const BuyerCategory: React.FC = () => {
           keyExtractor={(item) => item.slug}
           renderItem={renderBuyerCategoryItem}
           contentContainerStyle={{ padding: 16, marginVertical: 16 }}
-          ListEmptyComponent={() => <SnbProgress />}
+          ListEmptyComponent={() => {
+            if (buyerCategories?.loading) {
+              return <SnbProgress />;
+            }
+
+            if (buyerCategories?.error) {
+              return (
+                <ErrorContent
+                  action={getBuyerCategory}
+                  message={buyerCategories?.error?.message}
+                />
+              );
+            }
+
+            return null;
+          }}
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={getBuyerCategory} />
           }

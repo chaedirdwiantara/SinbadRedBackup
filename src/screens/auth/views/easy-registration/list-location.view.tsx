@@ -14,14 +14,24 @@ import { useEasyRegistration } from '@screen/auth/functions/easy-registration-ho
 import * as models from '@models';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
+import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
   const search = useInput();
   const [selectedLocation, setSelectedLocation] =
     React.useState<models.ISearchLocationsData | null>(null);
-  const { searchLocation, searchLocationState } = useEasyRegistration();
+  const {
+    searchLocation,
+    searchLocationState,
+    loadMoreSearchLocation,
+    resetSearchLocation,
+  } = useEasyRegistration();
   const { replace, goBack }: any = useNavigation();
   const { params }: any = useRoute();
+
+  useEffect(() => {
+    resetSearchLocation();
+  }, []);
 
   useEffect(() => {
     if (search.value) {
@@ -78,13 +88,43 @@ const Content: React.FC = () => {
           searchLocationState?.loading,
           <SnbProgress />,
           <FlatList
-            data={searchLocationState?.data}
+            data={searchLocationState.data?.data || []}
             contentContainerStyle={{ paddingHorizontal: 16 }}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={renderLocation}
+            onEndReached={() => {
+              if (
+                searchLocationState.data?.data?.length <
+                searchLocationState.data?.meta?.total
+              ) {
+                loadMoreSearchLocation(
+                  search.value,
+                  searchLocationState.data?.meta?.page + 1,
+                  searchLocationState.data?.meta?.perPage,
+                );
+              }
+            }}
+            onEndReachedThreshold={0.1}
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: color.black10 }} />
             )}
+            ListEmptyComponent={() => {
+              if (searchLocationState?.error) {
+                return (
+                  <ErrorContent
+                    message={searchLocationState?.error?.message}
+                    action={() => search.value && searchLocation(search.value)}
+                  />
+                );
+              }
+              return null;
+            }}
+            ListFooterComponent={() => {
+              if (searchLocationState?.isLoadMoreLoading) {
+                return <SnbProgress />;
+              }
+              return null;
+            }}
           />,
         )}
       </View>

@@ -18,6 +18,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
   return (
@@ -37,10 +38,12 @@ const ProductCategory: React.FC = () => {
   const [data, setData] = React.useState<any[]>(productCategories?.data);
 
   React.useEffect(() => {
+    const isSelected =
+      data.filter((el) => el.isSelected).length === data.length;
     const newData = data.map((el) => {
-      if (checkBoxStatus === 'selected') {
+      if (checkBoxStatus === 'indeterminate') {
         el.isSelected = true;
-      } else if (checkBoxStatus === 'unselect') {
+      } else if (checkBoxStatus === 'unselect' && isSelected) {
         el.isSelected = false;
       }
       return el;
@@ -63,10 +66,10 @@ const ProductCategory: React.FC = () => {
       setCheckBoxStatus('unselect');
       setDisableButton(true);
     } else if (isSelected.length === data.length) {
-      setCheckBoxStatus('selected');
+      setCheckBoxStatus('indeterminate');
       setDisableButton(false);
     } else {
-      setCheckBoxStatus('indeterminate');
+      setCheckBoxStatus('unselect');
       setDisableButton(false);
     }
   }, [data]);
@@ -145,7 +148,9 @@ const ProductCategory: React.FC = () => {
                   <TouchableOpacity
                     onPress={() => {
                       setCheckBoxStatus(
-                        checkBoxStatus === 'selected' ? 'unselect' : 'selected',
+                        checkBoxStatus === 'indeterminate'
+                          ? 'unselect'
+                          : 'indeterminate',
                       );
                     }}
                     style={{
@@ -191,11 +196,28 @@ const ProductCategory: React.FC = () => {
           keyExtractor={(_, idx) => idx.toString()}
           renderItem={renderItems}
           contentContainerStyle={{ paddingHorizontal: 24 }}
-          ListEmptyComponent={() => (
-            <View style={{ padding: 16 }}>
-              <SnbProgress />
-            </View>
-          )}
+          ListEmptyComponent={() => {
+            if (productCategories?.loading) {
+              return (
+                <View style={{ padding: 16 }}>
+                  <SnbProgress />
+                </View>
+              );
+            }
+
+            if (productCategories?.error) {
+              return (
+                <View style={{ padding: 16 }}>
+                  <ErrorContent
+                    action={getProductCategory}
+                    message={productCategories?.error?.message}
+                  />
+                </View>
+              );
+            }
+
+            return null;
+          }}
           ItemSeparatorComponent={() => (
             <View style={{ height: 0.75, backgroundColor: color.black40 }} />
           )}

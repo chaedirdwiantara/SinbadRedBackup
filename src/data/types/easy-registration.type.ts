@@ -3,6 +3,11 @@ export const SEARCH_LOCATION_PROCESS = 'SearchLocationProcess';
 export const SEARCH_LOCATION_SUCCESS = 'SearchLocationSuccess';
 export const SEARCH_LOCATION_FAILED = 'SearchLocationFailed';
 export const SEARCH_LOCATION_RESET = 'SearchLocationReset';
+export const LOAD_MORE_SEARCH_LOCATION_PROCESS =
+  'LoadMoreSearchLocationProcess';
+export const LOAD_MORE_SEARCH_LOCATION_SUCCESS =
+  'LoadMoreSearchLocationSuccess';
+export const LOAD_MORE_SEARCH_LOCATION_FAILED = 'LoadMoreSearchLocationFailed';
 
 export const CREATE_BASIC_ACCOUNT_PROCESS = 'CreateBasicAccountProcess';
 export const CREATE_BASIC_ACCOUNT_SUCCESS = 'CreateBasicAccountSuccess';

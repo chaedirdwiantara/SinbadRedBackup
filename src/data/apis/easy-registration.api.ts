@@ -1,6 +1,3 @@
-// import apiGeneral from '@core/services/apiGeneral';
-import apiGeneral from '@core/services/apiGeneral';
-import apiMapping from '@core/services/apiMapping';
 import apiMappingMock from '@core/services/apiMappingMock';
 import * as models from '@models';
 
