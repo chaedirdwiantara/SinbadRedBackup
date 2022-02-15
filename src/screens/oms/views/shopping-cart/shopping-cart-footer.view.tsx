@@ -2,8 +2,12 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+/** === INTERFACE === */
+interface FooterProps {
+  onPressCheckout: () => void;
+}
 /** === COMPONENT ===  */
-export const ShoppingCartFooter: FC = () => {
+export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
   return (
     <View
       style={{
@@ -29,7 +33,7 @@ export const ShoppingCartFooter: FC = () => {
           <SnbButton.Dynamic
             title="Checkout"
             type="primary"
-            onPress={() => {}}
+            onPress={() => onPressCheckout()}
             size={'large'}
           />
         </View>

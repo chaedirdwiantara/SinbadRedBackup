@@ -14,8 +14,8 @@ export const getCartProcess = (
 };
 /** => SUCCESS */
 export const getCartSuccess = (
-  payload: models.DetailSuccessProps<models.GetCart>,
-): models.DetailSuccessAction<models.GetCart> => {
+  payload: models.DetailSuccessProps<models.GetCartData>,
+): models.DetailSuccessAction<models.GetCartData> => {
   return { type: types.GET_CART_SUCCESS, payload };
 };
 /** => FAILED */

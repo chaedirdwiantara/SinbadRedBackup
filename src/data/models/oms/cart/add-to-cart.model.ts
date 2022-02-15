@@ -1,19 +1,9 @@
+import { GetCartDataSellersProducts } from '.';
+
 /**
  * ADD TO CART
  */
-export interface AddToCartPayload {
-  productId: string;
-  productName: string;
-  brandId: string;
-  brandName: string;
-  productImageUrl: string;
-  minQty: number;
-  qty: number;
-  isPriceAfterTax: boolean;
-  taxPercentage: number;
-  price: number;
-  uomLabel: string;
-  warehouseId: number;
+export interface AddToCartPayload extends GetCartDataSellersProducts {
   sellerId: number;
   sellerName: string;
 }

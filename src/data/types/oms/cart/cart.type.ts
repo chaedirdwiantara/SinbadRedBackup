@@ -31,3 +31,6 @@ export const REMOVE_CART_PRODUCT_PROCESS = 'RemoveCartProductProcess';
 export const REMOVE_CART_PRODUCT_SUCCESS = 'RemoveCartProductSuccess';
 export const REMOVE_CART_PRODUCT_FAILED = 'RemoveCartProductFailed';
 export const REMOVE_CART_PRODUCT_RESET = 'RemoveCartProductReset';
+/** => CART MASTER */
+export const SET_CART_MASTER = 'SetCartMaster';
+export const RESET_CART_MASTER = 'ResetCartMaster';
