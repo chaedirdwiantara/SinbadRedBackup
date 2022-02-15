@@ -80,7 +80,7 @@ const removeCartProduct = ({
     'discount',
     'v1',
     'UPDATE',
-    data.productIds,
+    data.removedProducts,
   );
 };
 

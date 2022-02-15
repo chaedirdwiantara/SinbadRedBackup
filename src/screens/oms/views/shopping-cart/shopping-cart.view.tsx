@@ -120,9 +120,15 @@ const OmsShoppingCartView: FC = () => {
     updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
     removeCartProductAction.fetch(dispatchCart, {
       cartId: cartMasterAction.cartMaster.id,
-      productIds: [
-        'bd1abe44-87be-11ec-a8a3-0242ac120001',
-        'bd1abe44-87be-11ec-a8a3-0242ac120004',
+      removedProducts: [
+        {
+          productId: '53c9b0000000000000000000',
+          warehouseId: 1,
+        },
+        {
+          productId: '53c9b0000000000000000002',
+          warehouseId: 2,
+        },
       ],
     });
   }, []);

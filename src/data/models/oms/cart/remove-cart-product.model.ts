@@ -3,10 +3,14 @@
  */
 export interface RemoveCartProductPayload {
   cartId: string;
-  productIds: string[];
+  removedProducts: RemovedProducts[];
 }
 export interface RemoveCartProductResponse {
   id: string;
   createdAt: string;
   updatedAt: string;
+}
+export interface RemovedProducts {
+  productId: string;
+  warehouseId: number;
 }
