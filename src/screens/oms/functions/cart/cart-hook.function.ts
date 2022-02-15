@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDataCartMaster } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => cart example action */
 const useCartExampleAction = () => {
@@ -83,6 +84,20 @@ const useRemoveCartProductAction = () => {
     },
   };
 };
+/** => cart master action */
+const useCartMasterAction = () => {
+  const cartMaster: models.CartMaster = useDataCartMaster();
+  const dispatch = useDispatch();
+  return {
+    cartMaster,
+    setCartMaster: (data: models.SetCartMaster) => {
+      dispatch(Actions.setCartMaster(data));
+    },
+    reset: () => {
+      dispatch(Actions.resetCartMaster());
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -91,6 +106,7 @@ export {
   useAddToCartAction,
   useUpdateCartAction,
   useRemoveCartProductAction,
+  useCartMasterAction,
 };
 /**
  * ================================================================
