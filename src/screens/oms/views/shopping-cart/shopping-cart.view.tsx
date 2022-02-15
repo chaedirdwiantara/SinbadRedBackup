@@ -129,7 +129,6 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(getCart.data);
     }
   }, [getCart.data]);
-  console.log(getCart, cartMasterAction.cartMaster);
   /** === VIEW === */
   /** => Main */
   return (

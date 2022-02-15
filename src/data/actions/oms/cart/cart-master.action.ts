@@ -4,7 +4,6 @@ import * as models from '@models';
 export const setCartMaster = (
   payload: models.SetCartMaster,
 ): models.SetCartMasterAction => {
-  console.log('payload2', payload);
   return { type: types.SET_CART_MASTER, payload };
 };
 /** => RESET CART MASTER DATA TO INITIAL STATE */
