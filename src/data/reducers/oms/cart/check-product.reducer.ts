@@ -3,26 +3,26 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type AddToCartInitialProps = models.CreateItemProps;
+export type CheckProductInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
-export const addToCartInitialState: AddToCartInitialProps = {
+export const checkProductInitialState: CheckProductInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === FUNCTION HERE === */
-export const addToCartReducer = simplifyReducer(addToCartInitialState, {
+export const checkProductReducer = simplifyReducer(checkProductInitialState, {
   /** => PROCESS */
-  [types.ADD_TO_CART_PROCESS]() {
+  [types.CHECK_PRODUCT_PROCESS]() {
     return {
-      ...addToCartInitialState,
+      ...checkProductInitialState,
       loading: true,
     };
   },
   /** => SUCCESS */
-  [types.ADD_TO_CART_SUCCESS](
-    state = addToCartInitialState,
-    action: models.CreateSuccessV3Action<models.AddToCartResponse>,
+  [types.CHECK_PRODUCT_SUCCESS](
+    state = checkProductInitialState,
+    action: models.CreateSuccessV3Action<models.GetCartDataSellersProducts[]>,
   ) {
     return {
       ...state,
@@ -31,8 +31,8 @@ export const addToCartReducer = simplifyReducer(addToCartInitialState, {
     };
   },
   /** => FAILED */
-  [types.ADD_TO_CART_FAILED](
-    state = addToCartInitialState,
+  [types.CHECK_PRODUCT_FAILED](
+    state = checkProductInitialState,
     action: models.CreateFailedAction,
   ) {
     return {
@@ -42,7 +42,7 @@ export const addToCartReducer = simplifyReducer(addToCartInitialState, {
     };
   },
   /** => RESET */
-  [types.ADD_TO_CART_RESET]() {
-    return addToCartInitialState;
+  [types.CHECK_PRODUCT_RESET]() {
+    return checkProductInitialState;
   },
 });

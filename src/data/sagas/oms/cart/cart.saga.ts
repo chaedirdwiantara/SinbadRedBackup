@@ -94,11 +94,14 @@ function* updateCart(
   }
 }
 /** => REMOVE CART PRODUCT */
-function* removeCartProduct(action: models.DeleteProcessAction) {
+function* removeCartProduct(
+  action: models.UpdateProcessAction<models.RemoveCartProductPayload>,
+) {
   try {
-    const response: models.DeleteSuccessV3Props = yield call(() => {
-      return CartApi.removeCartProduct(action.payload);
-    });
+    const response: models.UpdateSuccessV3Props<models.RemoveCartProductResponse> =
+      yield call(() => {
+        return CartApi.removeCartProduct(action.payload);
+      });
     yield action.contextDispatch(
       ActionCreators.removeCartProductSuccess(response),
     );
@@ -112,6 +115,25 @@ function* removeCartProduct(action: models.DeleteProcessAction) {
     );
   }
 }
+/** => CHECK PRODUCT */
+function* checkProduct(
+  action: models.CreateProcessAction<models.CheckProductPayload>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<
+      models.GetCartDataSellersProducts[]
+    > = yield call(() => {
+      return CartApi.checkProduct(action.payload);
+    });
+    yield action.contextDispatch(ActionCreators.checkProductSuccess(response));
+    yield put(ActionCreators.checkProductSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.checkProductFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.checkProductFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_EXAMPLE_PROCESS, cartExample);
@@ -120,6 +142,7 @@ function* CartSaga() {
   yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
   yield takeLatest(types.UPDATE_CART_PROCESS, updateCart);
   yield takeLatest(types.REMOVE_CART_PRODUCT_PROCESS, removeCartProduct);
+  yield takeLatest(types.CHECK_PRODUCT_PROCESS, checkProduct);
 }
 
 export default CartSaga;

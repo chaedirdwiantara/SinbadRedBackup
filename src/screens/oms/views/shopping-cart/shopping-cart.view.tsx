@@ -19,6 +19,7 @@ import {
   useCheckoutAction,
   useRemoveCartProductAction,
   useCartMasterAction,
+  useCheckProductAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -141,7 +142,7 @@ const dummyCheckoutData = {
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   const {
-    stateCart: { get: getCart },
+    stateCart: { get: getCart, checkProduct },
     dispatchCart,
   } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = React.useContext(
@@ -155,24 +156,43 @@ const OmsShoppingCartView: FC = () => {
   const checkoutAction = useCheckoutAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
   /** === HOOKS === */
   /** => Did Mount */
   useEffect(() => {
-    cartExampleAction.fetch(dispatchCart);
-    getCartAction.fetch(dispatchCart);
-    getTotalCartAction.fetch(dispatchCart);
-    addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
-    updateCartAction.fetch(dispatchCart, {
-      carts: dummyUpdateCartPayload.carts,
-      id: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+    // cartExampleAction.fetch(dispatchCart);
+    // getCartAction.fetch(dispatchCart);
+    // getTotalCartAction.fetch(dispatchCart);
+    // addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
+    // updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
+    // removeCartProductAction.fetch(dispatchCart, {
+    //   cartId: cartMasterAction.cartMaster.id,
+    //   removedProducts: [
+    //     {
+    //       productId: '53c9b0000000000000000000',
+    //       warehouseId: 1,
+    //     },
+    //     {
+    //       productId: '53c9b0000000000000000002',
+    //       warehouseId: 2,
+    //     },
+    //   ],
+    // });
+    checkProductAction.fetch(dispatchCart, {
+      carts: [
+        {
+          productId: '53c9b0000000000000000000',
+          warehouseId: 1,
+        },
+        {
+          productId: '53c9b0000000000000000002',
+          warehouseId: 2,
+        },
+      ],
     });
     checkoutAction.fetch(dispatchCheckout, dummyCheckoutData);
-    removeCartProductAction.fetch(
-      dispatchCart,
-      'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
-    );
   }, []);
-  /** => Did Update getCart */
+  /** => after success fetch getCart, save data to redux */
   useEffect(() => {
     if (getCart.data !== null) {
       cartMasterAction.setCartMaster(getCart.data);
@@ -182,6 +202,7 @@ const OmsShoppingCartView: FC = () => {
     getCart,
     cartMaster: cartMasterAction.cartMaster,
     stateCheckout,
+    checkProduct,
   });
   /** === VIEW === */
   /** => Main */

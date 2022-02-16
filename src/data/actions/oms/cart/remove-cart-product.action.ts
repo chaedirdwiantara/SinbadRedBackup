@@ -5,8 +5,8 @@ import * as models from '@models';
 /** => PROCESS */
 export const removeCartProductProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DeleteProcessProps,
-): models.DeleteProcessAction => {
+  data: models.UpdateProcessProps<models.RemoveCartProductPayload>,
+): models.UpdateProcessAction<models.RemoveCartProductPayload> => {
   contextDispatch({
     type: types.REMOVE_CART_PRODUCT_PROCESS,
     payload: data,
@@ -20,15 +20,15 @@ export const removeCartProductProcess = (
 
 /** => SUCCESS */
 export const removeCartProductSuccess = (
-  data: models.DeleteSuccessV3Props,
-): models.DeleteSuccessV3Action => {
+  data: models.UpdateSuccessV3Props<models.RemoveCartProductResponse>,
+): models.UpdateSuccessV3Action<models.RemoveCartProductResponse> => {
   return { type: types.REMOVE_CART_PRODUCT_SUCCESS, payload: data };
 };
 
 /** => FAILED */
 export const removeCartProductFailed = (
   data: models.ErrorProps,
-): models.DeleteFailedAction => {
+): models.UpdateFailedAction => {
   return { type: types.REMOVE_CART_PRODUCT_FAILED, payload: data };
 };
 

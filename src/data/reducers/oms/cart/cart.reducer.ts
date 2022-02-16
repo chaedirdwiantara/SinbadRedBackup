@@ -30,6 +30,11 @@ import {
   removeCartProductReducer,
   RemoveCartProductInitialProps,
 } from './remove-cart-product.reducer';
+import {
+  checkProductInitialState,
+  checkProductReducer,
+  CheckProductInitialProps,
+} from './check-product.reducer';
 
 export interface CartInitialProps {
   example: CartExampleInitialProps;
@@ -38,6 +43,7 @@ export interface CartInitialProps {
   create: AddToCartInitialProps;
   update: UpdateCartInitialProps;
   remove: RemoveCartProductInitialProps;
+  checkProduct: CheckProductInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
@@ -47,10 +53,19 @@ export const cartInitialState = {
   create: addToCartInitialState,
   update: updateCartInitialState,
   remove: removeCartProductInitialState,
+  checkProduct: checkProductInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
-  { example, get, total, create, update, remove }: CartInitialProps,
+  {
+    example,
+    get,
+    total,
+    create,
+    update,
+    remove,
+    checkProduct,
+  }: CartInitialProps,
   action: any,
 ) => ({
   example: cartExampleReducer(example, action),
@@ -59,4 +74,5 @@ export const cartReducer = (
   create: addToCartReducer(create, action),
   update: updateCartReducer(update, action),
   remove: removeCartProductReducer(remove, action),
+  checkProduct: checkProductReducer(checkProduct, action),
 });
