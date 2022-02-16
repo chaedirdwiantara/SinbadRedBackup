@@ -44,7 +44,7 @@ const OTPContent: React.FC<Props> = (props) => {
           <Svg name="sinbad_otp" size={220} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
-          <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
+          <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
           <View style={{ marginVertical: 4 }} />
           <SnbText.B1 align="center">
             Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
@@ -56,7 +56,6 @@ const OTPContent: React.FC<Props> = (props) => {
             type={error ? 'error' : 'default'}
             hideIcon
             showMessage={error || otpSuccess ? true : false}
-            autoFocusOnLoad
             code={otp}
             onCodeChanged={setOtp}
           />
