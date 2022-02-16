@@ -255,11 +255,11 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
             size={32}
           />
         </TouchableOpacity>
-        {(product.stock <= 1000 || product.qty > product.stock) && (
+        {(product.stock < 11 || product.qty > product.stock) && (
           <SnbText.B3 color={color.red50}>
             {product.stock === 0
               ? 'Produk Habis'
-              : `Tersisa ${product.stock} ${product.uom}`}
+              : `Tersisa ${product.stock} ${product.unit}`}
           </SnbText.B3>
         )}
       </View>

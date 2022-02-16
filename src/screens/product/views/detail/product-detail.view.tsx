@@ -484,7 +484,8 @@ const ProductDetailView: FC = () => {
           <ProductDetailMainInfo
             name={dataProduct?.name!}
             finalPrice={dataProduct?.finalPrice!}
-            minQty={dataProduct?.minQty!}
+            qtySoldLabel={dataProduct?.qtySoldLabel!}
+            loading={loadingButton}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
@@ -517,7 +518,7 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Jumlah per-Dus"
-              value={`${dataProduct?.packagedQty} ${dataProduct?.unit}`}
+              value={`${dataProduct?.packagedQty} PCS`}
             />
             <ProductDetailSectionItem
               name="Berat"
