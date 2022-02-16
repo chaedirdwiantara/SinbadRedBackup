@@ -18,6 +18,7 @@ import HistorySaga from './history.saga';
 import StockSaga from './product/stock.saga';
 import QuestSaga from './quest.saga';
 import CartSaga from './oms/cart/cart.saga';
+import CheckoutSaga from './oms/checkout/checkout.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -39,6 +40,7 @@ function* rootSaga() {
   yield all([fork(StockSaga)]);
   yield all([fork(QuestSaga)]);
   yield all([fork(CartSaga)]);
+  yield all([fork(CheckoutSaga)]);
 }
 
 export default rootSaga;

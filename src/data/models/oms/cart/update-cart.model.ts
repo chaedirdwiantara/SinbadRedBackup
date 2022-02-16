@@ -1,17 +1,14 @@
-import { GetCartDataSellersProducts } from '.';
-
 /**
  * UPDATE CART
  */
-export interface UpdateCartDataProducts extends GetCartDataSellersProducts {}
+import { Cart, CartProduct } from '.';
 
-export interface UpdateCartData {
-  sellerId: number;
-  sellerName: string;
-  products: UpdateCartDataProducts[];
-}
+export interface UpdateCartDataProducts extends CartProduct {}
+
+export interface UpdateCartData extends Cart<UpdateCartDataProducts> {}
 
 export interface UpdateCartPayload {
+  id: string;
   carts: UpdateCartData[];
 }
 

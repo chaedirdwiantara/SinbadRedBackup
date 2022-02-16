@@ -22,7 +22,7 @@ export const updateCartReducer = simplifyReducer(updateCartInitialState, {
   /** => update success */
   [types.UPDATE_CART_SUCCESS](
     state = updateCartInitialState,
-    action: models.UpdateSuccessAction,
+    action: models.UpdateSuccessV3Action<models.UpdateCartPayload>,
   ) {
     return {
       ...state,
