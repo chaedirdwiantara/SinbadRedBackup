@@ -11,20 +11,22 @@ interface ProductDetailMainInfoProps {
   name: string;
   finalPrice: number;
   stock: number;
-  minQty: number;
   unit: string;
+  qtySoldLabel: string;
   isExclusive: boolean;
   hasPromo: boolean;
+  loading: boolean;
 }
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
   finalPrice,
   stock,
-  minQty,
   unit,
   isExclusive,
   hasPromo,
+  loading,
+  qtySoldLabel,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
     {isExclusive && <ExclusiveTag />}
@@ -34,7 +36,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {toCurrency(finalPrice ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
-    {stock >= minQty && (
+    {stock < 11 && !loading && (
       <View
         style={{
           flexDirection: 'row',
@@ -54,5 +56,6 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
           color={color.red50}>{`Tersisa ${stock} ${unit}`}</SnbText.B3>
       </View>
     )}
+    <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
   </View>
 );

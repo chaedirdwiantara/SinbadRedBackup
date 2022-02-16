@@ -17,6 +17,7 @@ import { ProductListCardStyle } from '../styles';
 interface ProductListCardProps {
   name: string;
   imageUrl: string;
+  qtySoldLabel: string;
   finalPrice: number;
   isBundle?: boolean;
   isPromo?: boolean;
@@ -78,7 +79,7 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             {!props.isExclusive && (
               <View style={{ marginTop: 8 }}>
                 <SnbText.C1 color={color.red50}>
-                  {toCurrency(props.finalPrice, { withFraction: false })}
+                  {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
                 </SnbText.C1>
               </View>
             )}
@@ -93,7 +94,7 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             }}>
             {props.isExclusive && (
               <SnbText.C1 color={color.red50}>
-                {toCurrency(props.finalPrice, { withFraction: false })}
+                {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
               </SnbText.C1>
             )}
             <TouchableOpacity
@@ -103,6 +104,9 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             </TouchableOpacity>
           </View>
         )}
+        <SnbText.C1 color={color.black80}>{`Terjual ${
+          props.qtySoldLabel ?? ''
+        }`}</SnbText.C1>
       </View>
     </TouchableOpacity>
   </View>

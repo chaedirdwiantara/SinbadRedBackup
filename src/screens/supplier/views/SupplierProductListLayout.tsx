@@ -59,6 +59,7 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
                 name={product.name}
                 imageUrl={product.thumbnail}
                 finalPrice={product.finalPrice}
+                qtySoldLabel={product.qtySoldLabel}
                 isBundle={product.isBundle}
                 isPromo={product.isPromo}
                 isExclusive={product.isExclusive}

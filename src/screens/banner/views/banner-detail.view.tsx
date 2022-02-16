@@ -30,6 +30,7 @@ interface RecommendedProduct {
   displayPrice: number;
   currentPrice: number;
   finalPrice: number;
+  qtySoldLabel: string;
   isBundle: boolean;
   isPromo: boolean;
   isExclusive: boolean;
@@ -46,6 +47,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     finalPrice: 77891,
     isBundle: false,
     isPromo: true,
+    qtySoldLabel: '1,7 rb',
     isExclusive: true,
   },
   {
@@ -57,6 +59,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     currentPrice: 150000,
     finalPrice: 150000,
     isBundle: false,
+    qtySoldLabel: '1,7 rb',
     isPromo: false,
     isExclusive: false,
   },
@@ -66,6 +69,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
     displayPrice: 98782,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 98782,
     finalPrice: 98782,
     isBundle: true,
@@ -78,6 +82,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
     displayPrice: 72000,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 72000,
     finalPrice: 72000,
     isBundle: false,
@@ -90,6 +95,7 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
     displayPrice: 77891,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 77891,
     finalPrice: 77891,
     isBundle: false,
@@ -262,6 +268,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
         name={item.name}
         imageUrl={item.imageUrl}
         finalPrice={item.finalPrice}
+        qtySoldLabel={item.qtySoldLabel}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

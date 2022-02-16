@@ -21,6 +21,7 @@ interface ProductGridCardProps {
   finalPrice: number;
   isBundle?: boolean;
   isPromo?: boolean;
+  qtySoldLabel: string;
   isExclusive?: boolean;
   onCardPress?: () => void;
   withOrderButton?: boolean;
@@ -111,6 +112,9 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             name={props.name}
             finalPrice={props.finalPrice}
           />
+          <SnbText.C1 color={color.black80}>{`Terjual ${
+            props.qtySoldLabel ?? ''
+          }`}</SnbText.C1>
           {props.withOrderButton && (
             <TouchableOpacity
               style={ProductGridCardStyle.orderButton}
