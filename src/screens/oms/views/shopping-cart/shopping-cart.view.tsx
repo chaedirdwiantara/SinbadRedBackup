@@ -144,6 +144,9 @@ const OmsShoppingCartView: FC = () => {
     stateCart: { get: getCart },
     dispatchCart,
   } = React.useContext(contexts.CartContext);
+  const { stateCheckout, dispatchCheckout } = React.useContext(
+    contexts.CheckoutContext,
+  );
   const cartExampleAction = useCartExampleAction();
   const getCartAction = useGetCartAction();
   const getTotalCartAction = useGetTotalCartAction();
@@ -163,7 +166,7 @@ const OmsShoppingCartView: FC = () => {
       carts: dummyUpdateCartPayload.carts,
       id: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
     });
-    checkoutAction.fetch(dispatchCart, dummyCheckoutData);
+    checkoutAction.fetch(dispatchCheckout, dummyCheckoutData);
     removeCartProductAction.fetch(
       dispatchCart,
       'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
@@ -175,7 +178,11 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(getCart.data);
     }
   }, [getCart.data]);
-  console.log(getCart, cartMasterAction.cartMaster);
+  console.log({
+    getCart,
+    cartMaster: cartMasterAction.cartMaster,
+    stateCheckout,
+  });
   /** === VIEW === */
   /** => Main */
   return (

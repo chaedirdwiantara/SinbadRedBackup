@@ -1,20 +1,20 @@
 /**
- * CART
+ * CHECKOUT
  */
 
-export interface Cart<T> {
+export interface CheckoutCart<T> {
   sellerId: number;
   sellerName: string;
   products: T[];
 }
 
-export interface ProductPriceRules {
+export interface CheckoutProductPriceRules {
   minQty: number;
   maxQty: number;
   price: number;
 }
 
-export interface CartProduct {
+export interface CheckoutCartProduct {
   productId: string;
   warehouseId: number;
   categoryId?: string;
@@ -30,6 +30,6 @@ export interface CartProduct {
   taxPercentage: number;
   price: number;
   selected: boolean;
-  priceRules?: ProductPriceRules[];
+  priceRules?: CheckoutProductPriceRules[];
   lastUsedPrice?: number;
 }

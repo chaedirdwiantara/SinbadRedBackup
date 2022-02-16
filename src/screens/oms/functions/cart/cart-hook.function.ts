@@ -72,21 +72,6 @@ const useUpdateCartAction = () => {
     },
   };
 };
-/** => checkout action */
-const useCheckoutAction = () => {
-  const dispatch = useDispatch();
-  return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckoutPayload,
-    ) => {
-      dispatch(Actions.checkoutProcess(contextDispatch, { data }));
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.checkoutReset(contextDispatch));
-    },
-  };
-};
 /** => remove cart product action */
 const useRemoveCartProductAction = () => {
   const dispatch = useDispatch();
@@ -120,7 +105,6 @@ export {
   useGetTotalCartAction,
   useAddToCartAction,
   useUpdateCartAction,
-  useCheckoutAction,
   useRemoveCartProductAction,
   useCartMasterAction,
 };

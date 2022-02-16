@@ -2,11 +2,11 @@
  * CHECKOUT
  */
 
-import { CartData, CartProductData } from '.';
+import { CheckoutCart, CheckoutCartProduct } from '.';
 
-export interface CheckoutProductData extends CartProductData {}
+export interface CheckoutProductData extends CheckoutCartProduct {}
 
-export interface CheckoutCartData extends CartData<CheckoutProductData> {}
+export interface CheckoutCartData extends CheckoutCart<CheckoutProductData> {}
 
 export interface CheckoutPayload {
   buyerAddress: string;

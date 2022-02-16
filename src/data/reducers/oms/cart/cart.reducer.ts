@@ -24,11 +24,7 @@ import {
   updateCartReducer,
   UpdateCartInitialProps,
 } from './update-cart.reducer';
-import {
-  CheckoutInitialProps,
-  checkoutInitialState,
-  checkoutReducer,
-} from './checkout.reducer';
+
 import {
   removeCartProductInitialState,
   removeCartProductReducer,
@@ -41,7 +37,6 @@ export interface CartInitialProps {
   total: GetTotalCartInitialProps;
   create: AddToCartInitialProps;
   update: UpdateCartInitialProps;
-  checkout: CheckoutInitialProps;
   remove: RemoveCartProductInitialProps;
 }
 /** === INITIAL STATE === */
@@ -51,12 +46,11 @@ export const cartInitialState = {
   total: getTotalCartInitialState,
   create: addToCartInitialState,
   update: updateCartInitialState,
-  checkout: checkoutInitialState,
   remove: removeCartProductInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
-  { example, get, total, create, update, checkout, remove }: CartInitialProps,
+  { example, get, total, create, update, remove }: CartInitialProps,
   action: any,
 ) => ({
   example: cartExampleReducer(example, action),
@@ -64,6 +58,5 @@ export const cartReducer = (
   total: getTotalCartReducer(total, action),
   create: addToCartReducer(create, action),
   update: updateCartReducer(update, action),
-  checkout: checkoutReducer(checkout, action),
   remove: removeCartProductReducer(remove, action),
 });
