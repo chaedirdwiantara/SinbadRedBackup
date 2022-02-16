@@ -18,6 +18,7 @@ import {
   useUpdateCartAction,
   useRemoveCartProductAction,
   useCartMasterAction,
+  useCheckProductAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -100,7 +101,7 @@ const dummyUpdateCartPayload = {
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   const {
-    stateCart: { get: getCart },
+    stateCart: { get: getCart, checkProduct },
     dispatchCart,
   } = React.useContext(contexts.CartContext);
   const cartExampleAction = useCartExampleAction();
@@ -110,17 +111,30 @@ const OmsShoppingCartView: FC = () => {
   const updateCartAction = useUpdateCartAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
   /** === HOOKS === */
   /** => Did Mount */
   useEffect(() => {
-    cartExampleAction.fetch(dispatchCart);
-    getCartAction.fetch(dispatchCart);
-    getTotalCartAction.fetch(dispatchCart);
-    addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
-    updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
-    removeCartProductAction.fetch(dispatchCart, {
-      cartId: cartMasterAction.cartMaster.id,
-      removedProducts: [
+    // cartExampleAction.fetch(dispatchCart);
+    // getCartAction.fetch(dispatchCart);
+    // getTotalCartAction.fetch(dispatchCart);
+    // addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
+    // updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
+    // removeCartProductAction.fetch(dispatchCart, {
+    //   cartId: cartMasterAction.cartMaster.id,
+    //   removedProducts: [
+    //     {
+    //       productId: '53c9b0000000000000000000',
+    //       warehouseId: 1,
+    //     },
+    //     {
+    //       productId: '53c9b0000000000000000002',
+    //       warehouseId: 2,
+    //     },
+    //   ],
+    // });
+    checkProductAction.fetch(dispatchCart, {
+      carts: [
         {
           productId: '53c9b0000000000000000000',
           warehouseId: 1,
@@ -132,7 +146,8 @@ const OmsShoppingCartView: FC = () => {
       ],
     });
   }, []);
-  /** => Did Update getCart */
+  console.log(checkProduct);
+  /** => after success fetch getCart, save data to redux */
   useEffect(() => {
     if (getCart.data !== null) {
       cartMasterAction.setCartMaster(getCart.data);
