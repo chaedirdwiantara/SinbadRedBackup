@@ -104,7 +104,7 @@ const checkProduct = ({
 }: models.CreateProcessProps<models.CheckProductPayload>) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'check-products';
-  return apiMappingMockV3<models.GetCartDataSellersProducts[]>(
+  return apiMappingMockV3<models.CheckProductResponse[]>(
     mockHost,
     path,
     'discount',

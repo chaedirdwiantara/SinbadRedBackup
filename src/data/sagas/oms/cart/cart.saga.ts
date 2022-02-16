@@ -120,11 +120,10 @@ function* checkProduct(
   action: models.CreateProcessAction<models.CheckProductPayload>,
 ) {
   try {
-    const response: models.CreateSuccessV3Props<
-      models.GetCartDataSellersProducts[]
-    > = yield call(() => {
-      return CartApi.checkProduct(action.payload);
-    });
+    const response: models.CreateSuccessV3Props<models.CheckProductResponse[]> =
+      yield call(() => {
+        return CartApi.checkProduct(action.payload);
+      });
     yield action.contextDispatch(ActionCreators.checkProductSuccess(response));
     yield put(ActionCreators.checkProductSuccess(response));
   } catch (error) {

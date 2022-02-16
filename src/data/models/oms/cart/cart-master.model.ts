@@ -1,9 +1,9 @@
-import { PriceRules, GetCartDataSellersProducts, GetCartData } from '.';
+import { ProductPriceRules, GetCartDataSellersProducts, GetCartData } from '.';
 
 /**
  * CART MASTER
  */
-export interface CartMasterPriceRules extends PriceRules {}
+export interface CartMasterPriceRules extends ProductPriceRules {}
 export interface CartMaster {
   id: string;
   userId: number;
