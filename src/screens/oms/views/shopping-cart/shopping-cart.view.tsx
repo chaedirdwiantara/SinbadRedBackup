@@ -16,6 +16,7 @@ import {
   useGetTotalCartAction,
   useAddToCartAction,
   useUpdateCartAction,
+  useCheckoutAction,
   useRemoveCartProductAction,
   useCartMasterAction,
 } from '../../functions';
@@ -75,6 +76,46 @@ const dummyUpdateCartPayload = {
           qtyPerBox: 40,
           isPriceAfterTax: true,
           taxPercentage: 10,
+          price: 13707.1,
+          uomLabel: 'PCS',
+          selected: true,
+          priceRules: [
+            {
+              minQty: 1,
+              maxQty: 10,
+              price: 13707.1,
+            },
+            {
+              minQty: 11,
+              maxQty: 20,
+              price: 12707.1,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+const dummyCheckoutData = {
+  buyerAddress: 'Jl. Raya',
+  carts: [
+    {
+      sellerId: 1,
+      sellerName: 'Tigaraksa',
+      products: [
+        {
+          productId: '53c9b0000000000000000000',
+          warehouseId: 3,
+          categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+          brandId: '33d200000000000000000000',
+          productName: 'SGM ANANDA 2 150 GR GRD 2.0',
+          brandName: 'SGM',
+          minQty: 3,
+          qty: 3,
+          qtyPerBox: 40,
+          isPriceAfterTax: true,
+          taxPercentage: 10,
           lastUsedPrice: 13707.1,
           price: 13707.1,
           uomLabel: 'PCS',
@@ -103,11 +144,15 @@ const OmsShoppingCartView: FC = () => {
     stateCart: { get: getCart },
     dispatchCart,
   } = React.useContext(contexts.CartContext);
+  const { stateCheckout, dispatchCheckout } = React.useContext(
+    contexts.CheckoutContext,
+  );
   const cartExampleAction = useCartExampleAction();
   const getCartAction = useGetCartAction();
   const getTotalCartAction = useGetTotalCartAction();
   const addToCartAction = useAddToCartAction();
   const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const cartMasterAction = useCartMasterAction();
   /** === HOOKS === */
@@ -117,7 +162,11 @@ const OmsShoppingCartView: FC = () => {
     getCartAction.fetch(dispatchCart);
     getTotalCartAction.fetch(dispatchCart);
     addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
-    updateCartAction.fetch(dispatchCart, dummyUpdateCartPayload);
+    updateCartAction.fetch(dispatchCart, {
+      carts: dummyUpdateCartPayload.carts,
+      id: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+    });
+    checkoutAction.fetch(dispatchCheckout, dummyCheckoutData);
     removeCartProductAction.fetch(
       dispatchCart,
       'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
@@ -129,7 +178,11 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(getCart.data);
     }
   }, [getCart.data]);
-  console.log(getCart, cartMasterAction.cartMaster);
+  console.log({
+    getCart,
+    cartMaster: cartMasterAction.cartMaster,
+    stateCheckout,
+  });
   /** === VIEW === */
   /** => Main */
   return (
