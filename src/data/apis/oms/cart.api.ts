@@ -84,6 +84,21 @@ const removeCartProduct = ({
   );
 };
 
+const checkProduct = ({
+  data,
+}: models.CreateProcessProps<models.CheckProductPayload>) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'check-products';
+  return apiMappingMockV3<models.GetCartDataSellersProducts[]>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
@@ -91,4 +106,5 @@ export const CartApi = {
   addToCart,
   updateCart,
   removeCartProduct,
+  checkProduct,
 };
