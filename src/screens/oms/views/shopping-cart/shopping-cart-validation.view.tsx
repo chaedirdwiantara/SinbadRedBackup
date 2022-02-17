@@ -1,14 +1,15 @@
 import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
+import { ShoppingCartValidationStyles } from '@screen/oms/styles/shopping-cart/shopping-cart-validation.style';
 /** === INTERFACE === */
-/** => error */
-interface ValidationErrorProps {
+/** => error props */
+interface ShoppingCartValidationProps {
   open: boolean;
   closeAction?: () => void;
 }
 /** === COMPONENT === */
-const ValidationError: React.FC<ValidationErrorProps> = ({
+const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   open,
   ...props
 }) => {
@@ -17,15 +18,15 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
   const contentItemImage = () => {
     const src = require('@image/sinbad_image/cry_sinbad.png');
     return (
-      <View style={styles.contentImageContainer}>
-        <Image source={src} style={styles.image} />
+      <View style={ShoppingCartValidationStyles.contentImageContainer}>
+        <Image source={src} style={ShoppingCartValidationStyles.image} />
       </View>
     );
   };
   /** => content item title */
   const contentItemTitle = () => {
     return (
-      <View style={styles.contentTitleContainer}>
+      <View style={ShoppingCartValidationStyles.contentTitleContainer}>
         <SnbText.H4 align={'center'}>Perubahan Produk di Keranjang</SnbText.H4>
       </View>
     );
@@ -33,7 +34,7 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
   /** => content item message */
   const contentItemMessage = () => {
     return (
-      <View style={styles.contentMessageContainer}>
+      <View style={ShoppingCartValidationStyles.contentMessageContainer}>
         <SnbText.B3 align={'center'}>
           Coba periksa ulang keranjang Anda dikarenakan terdapat perubahan data
           pada produk
@@ -44,7 +45,7 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
   /** => content item */
   const contentItem = () => {
     return (
-      <View style={styles.contentItemContainer}>
+      <View style={ShoppingCartValidationStyles.contentItemContainer}>
         {contentItemImage()}
         {contentItemTitle()}
         {contentItemMessage()}
@@ -54,8 +55,8 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
   /** => button */
   const button = () => {
     return (
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonHeight}>
+      <View style={ShoppingCartValidationStyles.buttonContainer}>
+        <View style={ShoppingCartValidationStyles.buttonHeight}>
           <SnbButton.Single
             title={'Saya Mengerti'}
             onPress={() => {
@@ -70,7 +71,7 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
   /** => content */
   const content = () => {
     return (
-      <View style={styles.contentContainer}>
+      <View style={ShoppingCartValidationStyles.contentContainer}>
         {contentItem()}
         {button()}
       </View>
@@ -87,61 +88,5 @@ const ValidationError: React.FC<ValidationErrorProps> = ({
     />
   );
 };
-/** === STYLE === */
-const styles = StyleSheet.create({
-  contentContainer: {
-    height: '100%',
-  },
-  contentImageContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contentErrorContainer: {
-    width: '20%',
-    height: '10%',
-    position: 'absolute',
-    bottom: '29%',
-    right: '35%',
-  },
-  buttonContainer: {
-    paddingBottom: 16,
-  },
-  errorBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contentTitleContainer: {
-    paddingHorizontal: '10%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contentMessageContainer: {
-    marginTop: 10,
-    paddingHorizontal: '10%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  contentItemContainer: {
-    flex: 1,
-    paddingBottom: 20,
-  },
-  buttonHeight: {
-    height: 90,
-  },
-  callCSButton: {
-    flexDirection: 'row',
-    paddingHorizontal: 8,
-  },
-  callCSButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 8,
-    paddingBottom: 16,
-  },
-  image: {
-    height: '75%',
-    aspectRatio: 1 / 1,
-  },
-});
 
-export default ValidationError;
+export default ShoppingCartValidation;
