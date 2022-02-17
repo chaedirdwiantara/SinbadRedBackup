@@ -22,6 +22,7 @@ import {
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
+  useCancelStockAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -158,6 +159,7 @@ const OmsShoppingCartView: FC = () => {
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
+  const cancelStockAction = useCancelStockAction();
   /** === HOOKS === */
   /** => Did Mount */
   useEffect(() => {
@@ -211,6 +213,7 @@ const OmsShoppingCartView: FC = () => {
         },
       ],
     });
+    cancelStockAction.fetch(dispatchCart);
   }, []);
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {

@@ -129,6 +129,12 @@ const checkStock = ({
   );
 };
 
+const cancelStock = () => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'cancel-reserve-stock';
+  return apiMappingMockV3(mockHost, path, 'discount', 'v1', 'DELETE');
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
@@ -139,4 +145,5 @@ export const CartApi = {
   checkProduct,
   checkSeller,
   checkStock,
+  cancelStock,
 };
