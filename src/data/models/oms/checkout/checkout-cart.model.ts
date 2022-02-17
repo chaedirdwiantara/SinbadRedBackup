@@ -6,7 +6,11 @@ import { CheckoutCart, CheckoutCartProduct } from '.';
 
 export interface CheckoutProductData extends CheckoutCartProduct {}
 
-export interface CheckoutCartData extends CheckoutCart<CheckoutProductData> {}
+export interface CheckoutCartData
+  extends Omit<
+    CheckoutCart<CheckoutProductData>,
+    'lastUsedPrice' | 'isLastPriceUsedRules'
+  > {}
 
 export interface CheckoutPayload {
   buyerAddress: string;

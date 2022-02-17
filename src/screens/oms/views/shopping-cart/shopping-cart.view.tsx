@@ -121,6 +121,7 @@ const dummyCheckoutData = {
           isPriceAfterTax: true,
           taxPercentage: 10,
           lastUsedPrice: 13707.1,
+          isLastPriceUsedRules: true,
           price: 13707.1,
           uomLabel: 'PCS',
           selected: true,

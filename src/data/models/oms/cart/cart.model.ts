@@ -17,8 +17,8 @@ export interface ProductPriceRules {
 export interface CartProduct {
   productId: string;
   warehouseId: number;
-  categoryId?: string;
-  productImageUrl?: string;
+  categoryId: string;
+  productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
@@ -30,7 +30,7 @@ export interface CartProduct {
   taxPercentage: number;
   price: number;
   selected: boolean;
-  priceRules?: ProductPriceRules[];
-  lastUsedPrice?: number;
+  priceRules: ProductPriceRules[];
+  lastUsedPrice: number;
   isLastPriceUsedRules: boolean;
 }
