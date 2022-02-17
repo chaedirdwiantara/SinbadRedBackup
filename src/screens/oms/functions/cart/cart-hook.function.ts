@@ -149,6 +149,18 @@ const useCheckStockAction = () => {
     },
   };
 };
+/** => cancel stock action */
+const useCancelStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cancelStockProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cancelStockReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -161,6 +173,7 @@ export {
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
+  useCancelStockAction,
 };
 /**
  * ================================================================

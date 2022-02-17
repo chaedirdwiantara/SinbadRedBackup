@@ -169,6 +169,19 @@ function* checkStock(
     yield put(ActionCreators.checkStockFailed(error as models.ErrorProps));
   }
 }
+/** => CANCEL STOCK */
+function* cancelStock(action: models.DetailProcessAction) {
+  try {
+    yield call(() => {
+      return CartApi.cancelStock();
+    });
+    yield action.contextDispatch(ActionCreators.cancelStockSuccess());
+    yield put(ActionCreators.cancelStockSuccess());
+  } catch (error) {
+    yield action.contextDispatch(ActionCreators.cancelStockSuccess());
+    yield put(ActionCreators.cancelStockSuccess());
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.CART_EXAMPLE_PROCESS, cartExample);
@@ -180,6 +193,7 @@ function* CartSaga() {
   yield takeLatest(types.CHECK_PRODUCT_PROCESS, checkProduct);
   yield takeLatest(types.CHECK_SELLER_PROCESS, checkSeller);
   yield takeLatest(types.CHECK_STOCK_PROCESS, checkStock);
+  yield takeLatest(types.CANCEL_STOCK_PROCESS, cancelStock);
 }
 
 export default CartSaga;

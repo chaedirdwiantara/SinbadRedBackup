@@ -10,7 +10,7 @@ import {
   SnbBadge,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { ShoppingCartStyles } from '../../styles';
+import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 
 interface ProductViewProps {}

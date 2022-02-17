@@ -8,3 +8,4 @@ export * from './cart-master.action';
 export * from './check-product.action';
 export * from './check-seller.action';
 export * from './check-stock.action';
+export * from './cancel-stock.action';
