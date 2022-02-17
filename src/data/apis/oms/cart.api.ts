@@ -99,6 +99,36 @@ const checkProduct = ({
   );
 };
 
+const checkSeller = ({
+  data,
+}: models.CreateProcessProps<models.CheckSellerPayload>) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'check-sellers';
+  return apiMappingMockV3<models.CheckSellerResponse[]>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
+
+const checkStock = ({
+  data,
+}: models.CreateProcessProps<models.CheckStockPayload>) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'check-stocks';
+  return apiMappingMockV3<models.CheckStockResponse[]>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
@@ -107,4 +137,6 @@ export const CartApi = {
   updateCart,
   removeCartProduct,
   checkProduct,
+  checkSeller,
+  checkStock,
 };

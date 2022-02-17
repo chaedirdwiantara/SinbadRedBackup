@@ -35,6 +35,16 @@ import {
   checkProductReducer,
   CheckProductInitialProps,
 } from './check-product.reducer';
+import {
+  checkSellerInitialState,
+  checkSellerReducer,
+  CheckSellerInitialProps,
+} from './check-seller.reducer';
+import {
+  checkStockInitialState,
+  checkStockReducer,
+  CheckStockInitialProps,
+} from './check-stock.reducer';
 
 export interface CartInitialProps {
   example: CartExampleInitialProps;
@@ -44,6 +54,8 @@ export interface CartInitialProps {
   update: UpdateCartInitialProps;
   remove: RemoveCartProductInitialProps;
   checkProduct: CheckProductInitialProps;
+  checkSeller: CheckSellerInitialProps;
+  checkStock: CheckStockInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
@@ -54,6 +66,8 @@ export const cartInitialState = {
   update: updateCartInitialState,
   remove: removeCartProductInitialState,
   checkProduct: checkProductInitialState,
+  checkSeller: checkSellerInitialState,
+  checkStock: checkStockInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
@@ -65,6 +79,8 @@ export const cartReducer = (
     update,
     remove,
     checkProduct,
+    checkSeller,
+    checkStock,
   }: CartInitialProps,
   action: any,
 ) => ({
@@ -75,4 +91,6 @@ export const cartReducer = (
   update: updateCartReducer(update, action),
   remove: removeCartProductReducer(remove, action),
   checkProduct: checkProductReducer(checkProduct, action),
+  checkSeller: checkSellerReducer(checkSeller, action),
+  checkStock: checkStockReducer(checkStock, action),
 });

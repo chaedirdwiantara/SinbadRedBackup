@@ -3,26 +3,26 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type CheckProductInitialProps = models.CreateItemProps;
+export type CheckStockInitialProps = models.CreateItemProps;
 /** === INITIAL STATE HERE === */
-export const checkProductInitialState: CheckProductInitialProps = {
+export const checkStockInitialState: CheckStockInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === FUNCTION HERE === */
-export const checkProductReducer = simplifyReducer(checkProductInitialState, {
+export const checkStockReducer = simplifyReducer(checkStockInitialState, {
   /** => PROCESS */
-  [types.CHECK_PRODUCT_PROCESS]() {
+  [types.CHECK_STOCK_PROCESS]() {
     return {
-      ...checkProductInitialState,
+      ...checkStockInitialState,
       loading: true,
     };
   },
   /** => SUCCESS */
-  [types.CHECK_PRODUCT_SUCCESS](
-    state = checkProductInitialState,
-    action: models.CreateSuccessV3Action<models.CheckProductResponse[]>,
+  [types.CHECK_STOCK_SUCCESS](
+    state = checkStockInitialState,
+    action: models.CreateSuccessV3Action<models.CheckStockResponse[]>,
   ) {
     return {
       ...state,
@@ -31,8 +31,8 @@ export const checkProductReducer = simplifyReducer(checkProductInitialState, {
     };
   },
   /** => FAILED */
-  [types.CHECK_PRODUCT_FAILED](
-    state = checkProductInitialState,
+  [types.CHECK_STOCK_FAILED](
+    state = checkStockInitialState,
     action: models.CreateFailedAction,
   ) {
     return {
@@ -42,7 +42,7 @@ export const checkProductReducer = simplifyReducer(checkProductInitialState, {
     };
   },
   /** => RESET */
-  [types.CHECK_PRODUCT_RESET]() {
-    return checkProductInitialState;
+  [types.CHECK_STOCK_RESET]() {
+    return checkStockInitialState;
   },
 });
