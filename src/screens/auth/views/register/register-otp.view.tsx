@@ -8,9 +8,14 @@ import {
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
-import { ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
-import BottomSheetError from '@core/components/BottomSheetError';
+import { ScrollView, View, Image } from 'react-native';
+import {
+  SnbContainer,
+  SnbTopNav,
+  SnbBottomSheet,
+  SnbText,
+  SnbButton,
+} from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
   const {
@@ -74,6 +79,42 @@ const RegisterOTPView: React.FC = () => {
     }
   }, [checkAutoLoginData.error]);
 
+  const renderModalError = () => {
+    return (
+      <View>
+        <Image
+          source={require('../../../../assets/images/sinbad_cry.png')}
+          style={{
+            height: 160,
+            width: 160,
+            alignSelf: 'center',
+            marginVertical: 16,
+          }}
+        />
+        <View style={{ margin: 16 }}>
+          <SnbText.B2 align="center">
+            Data Anda masih sedang tahap proses
+          </SnbText.B2>
+          <View style={{ marginVertical: 8 }} />
+          <SnbText.B3 align="center">
+            silahkan tunggu atau hubungi customer service Sinbad
+          </SnbText.B3>
+        </View>
+        <View style={{ height: 75 }}>
+          <SnbButton.Single
+            title="Tutup"
+            type="primary"
+            disabled={false}
+            onPress={() => {
+              setModalError(false);
+              setReCheckAutoLogin(0);
+            }}
+          />
+        </View>
+      </View>
+    );
+  };
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
@@ -102,16 +143,11 @@ const RegisterOTPView: React.FC = () => {
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>
-      <BottomSheetError
+      <SnbBottomSheet
         open={modalError}
-        error={checkAutoLoginData.error}
-        backAction={() => setModalError(false)}
-        isCloseable
-        closeAction={() => setModalError(false)}
-        retryAction={() => {
-          setModalError(false);
-          setReCheckAutoLogin(0);
-        }}
+        title={''}
+        content={renderModalError()}
+        size={'normal'}
       />
     </SnbContainer>
   );
