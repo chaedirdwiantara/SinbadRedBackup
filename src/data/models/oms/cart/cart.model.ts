@@ -32,4 +32,5 @@ export interface CartProduct {
   selected: boolean;
   priceRules?: ProductPriceRules[];
   lastUsedPrice?: number;
+  isLastPriceUsedRules: boolean;
 }
