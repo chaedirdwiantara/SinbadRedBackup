@@ -27,6 +27,7 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
+import { CheckoutPayload } from '@model/oms';
 /** === DUMMIES === */
 // const dummyAddToCartPayload = {
 //   productId: '53c9b0000000000000000000',
@@ -101,7 +102,7 @@ import { contexts } from '@contexts';
 //   ],
 // };
 
-const dummyCheckoutData = {
+const dummyCheckoutData: CheckoutPayload = {
   buyerAddress: 'Jl. Raya',
   carts: [
     {
@@ -115,6 +116,8 @@ const dummyCheckoutData = {
           brandId: '33d200000000000000000000',
           productName: 'SGM ANANDA 2 150 GR GRD 2.0',
           brandName: 'SGM',
+          productImageUrl:
+            'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
           minQty: 3,
           qty: 3,
           qtyPerBox: 40,

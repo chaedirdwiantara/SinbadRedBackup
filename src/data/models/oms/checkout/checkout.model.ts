@@ -17,8 +17,8 @@ export interface CheckoutProductPriceRules {
 export interface CheckoutCartProduct {
   productId: string;
   warehouseId: number;
-  categoryId?: string;
-  productImageUrl?: string;
+  categoryId: string;
+  productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
@@ -31,6 +31,4 @@ export interface CheckoutCartProduct {
   price: number;
   selected: boolean;
   priceRules: CheckoutProductPriceRules[];
-  lastUsedPrice: number;
-  isLastPriceUsedRules: boolean;
 }
