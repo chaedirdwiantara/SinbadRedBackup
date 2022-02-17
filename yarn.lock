@@ -1545,10 +1545,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.34":
-  version "1.0.34"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.34.tgz#73c924effc7f41d5f91ab679f0510e07ec332181"
-  integrity sha512-z/bCQMLwog+Mw9m4JWzfrH+SWP4mFjeH7rjIyMr+W56/ePoFBmr8dsiM/+nXgIN+iQW8vQJXaon/fUJxYNVX/w==
+"@sinbad/react-native-sinbad-ui@1.0.35":
+  version "1.0.35"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.35.tgz#f480260e50f9a71d376c2d03c44a133262e6971b"
+  integrity sha512-PtC8HupTPTB/TM7biSbzZ0osPuNrDUS1MjC0+x8mY34AVJAr6z91VbhOxU6zDf/VdS3n9Yl57ZDYsEhuqkxcDg==
   dependencies:
     moment "2.29.1"
     react-native-calendars "1.1263.0"
@@ -6851,7 +6851,7 @@ react-native-modal@13.0.0:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
 
-react-native-otp-verify@^1.0.4:
+react-native-otp-verify@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-native-otp-verify/-/react-native-otp-verify-1.0.4.tgz#7a330264d2ac3b4155f8b19a5bcaab6ab4fa456c"
   integrity sha512-ME8XnRHxFj8Z7fpe8Gqnup///cicB6WROsf2si75zix2VWK0LW7z5dyT5EL/bOynj9KphSf219LWLKiou2aDAQ==

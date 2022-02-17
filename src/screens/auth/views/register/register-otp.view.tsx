@@ -1,32 +1,78 @@
 import { useNavigation } from '@react-navigation/native';
 import {
   maskPhone,
-  useCheckPhoneNoAvailability,
   useOTP,
   setErrorMessage,
+  useCheckPhoneV2,
+  useCheckAutoLogin,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 const RegisterOTPView: React.FC = () => {
-  const { checkPhone } = useCheckPhoneNoAvailability();
-  const { verifyOTPRegister, verifyOTP, mobilePhone, getLocationPermissions } =
-    useOTP();
+  const {
+    verifyOTPRegister,
+    verifyOTP,
+    mobilePhone,
+    getLocationPermissions,
+    hashOtp,
+  } = useOTP();
   const { goBack }: any = useNavigation();
   const [hide, setHide] = React.useState(true);
+  const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
+    useCheckAutoLogin();
+  const { checkPhone } = useCheckPhoneV2();
+  const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
+  const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
+    React.useState(false);
+  const [modalError, setModalError] = React.useState(false);
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
       setHide(false);
-      getLocationPermissions();
+      checkAutoLogin(verifyOTP.data);
+      setReCheckAutoLogin(0);
+      setLoadingCheckAutoLogin(true);
     }
     if (verifyOTP.error !== null) {
-      getLocationPermissions();
       setHide(false);
     }
   }, [verifyOTP]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData?.data?.message === 'Success') {
+      getLocationPermissions();
+      resetCheckAutoLogin();
+    }
+  }, [checkAutoLoginData]);
+
+  React.useEffect(() => {
+    if (
+      checkAutoLoginData?.data?.message === 'Processing' &&
+      reCheckAutoLogin !== 3
+    ) {
+      setTimeout(() => {
+        checkAutoLogin(verifyOTP.data);
+        setReCheckAutoLogin(reCheckAutoLogin + 1);
+        setLoadingCheckAutoLogin(true);
+      }, 1500);
+    }
+    if (reCheckAutoLogin === 3) {
+      setLoadingCheckAutoLogin(false);
+      setModalError(true);
+      resetCheckAutoLogin();
+    }
+  }, [reCheckAutoLogin, checkAutoLoginData]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData.error !== null) {
+      setModalError(true);
+      setLoadingCheckAutoLogin(false);
+    }
+  }, [checkAutoLoginData.error]);
 
   return (
     <SnbContainer color="white">
@@ -40,22 +86,33 @@ const RegisterOTPView: React.FC = () => {
           onVerifyOTP={(otp) => {
             setHide(true);
             verifyOTPRegister({
-              mobilePhone,
-              otp,
+              mobilePhoneNo: mobilePhone,
+              otp: Number(otp),
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhoneNo: mobilePhone });
+            checkPhone({ mobilePhoneNo: mobilePhone, otpHash: hashOtp });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
           otpSuccess={verifyOTP.data !== null}
           hideIcon={hide}
-          loading={verifyOTP.loading}
+          loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>
+      <BottomSheetError
+        open={modalError}
+        error={checkAutoLoginData.error}
+        backAction={() => setModalError(false)}
+        isCloseable
+        closeAction={() => setModalError(false)}
+        retryAction={() => {
+          setModalError(false);
+          setReCheckAutoLogin(0);
+        }}
+      />
     </SnbContainer>
   );
 };

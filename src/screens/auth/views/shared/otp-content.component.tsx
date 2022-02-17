@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   SnbButton,
   SnbOTPInput,
   SnbText,
   SnbOTPTimer,
-  color,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 import Svg from '@svg';
@@ -21,8 +20,22 @@ interface Props {
 }
 
 const OTPContent: React.FC<Props> = (props) => {
-  const { onVerifyOTP, loading, phoneNo, resend, errorMessage } = props;
+  const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess } =
+    props;
   const { otp, setOtp } = useOTP();
+  const [error, setError] = React.useState(false);
+
+  useEffect(() => {
+    if (otp.length < 5) {
+      setError(false);
+    }
+  }, [otp]);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setError(true);
+    }
+  }, [errorMessage]);
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
@@ -31,7 +44,7 @@ const OTPContent: React.FC<Props> = (props) => {
           <Svg name="sinbad_otp" size={220} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
-          <SnbText.H2>Masukan kode Verifikasi</SnbText.H2>
+          <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
           <View style={{ marginVertical: 4 }} />
           <SnbText.B1 align="center">
             Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
@@ -40,14 +53,13 @@ const OTPContent: React.FC<Props> = (props) => {
         <View style={{ margin: 4 }}>
           <SnbOTPInput
             {...props}
-            autoFocusOnLoad
+            type={error ? 'error' : 'default'}
+            hideIcon
+            showMessage={error || otpSuccess ? true : false}
             code={otp}
             onCodeChanged={setOtp}
           />
         </View>
-        <SnbText.B1 color={color.red70} align="center">
-          {errorMessage}
-        </SnbText.B1>
       </View>
       <View>
         <SnbButton.Single

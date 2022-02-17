@@ -22,18 +22,24 @@ const SelfRegisterView: React.FC = () => {
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
-      phone.clearText();
-      navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value });
+      if (checkPhoneV2.data.isAvailable) {
+        phone.clearText();
+        resetCheckPhone();
+        navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+      } else {
+        phone.setMessageError('Nomor telah terdaftar');
+        phone.setType('error');
+      }
     }
     if (checkPhoneV2.error !== null) {
-      phone.setMessageError(checkPhoneV2.error.code);
+      phone.setMessageError(checkPhoneV2.error.message);
     }
   }, [checkPhoneV2]);
 
   React.useEffect(() => {
-    return () => {
-      resetCheckPhone();
-    };
+    resetCheckPhone();
+    phone.setMessageError('');
+    phone.setType('default');
   }, []);
 
   React.useEffect(() => {
@@ -53,14 +59,16 @@ const SelfRegisterView: React.FC = () => {
 
   const content = () => {
     return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.image}>
-          <Svg name="registration" size={220} />
+      <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 1, marginBottom: 25 }}>
+          <View style={styles.image}>
+            <Svg name="registration" size={220} />
+          </View>
+          <View style={{ height: 84, padding: 16 }}>
+            <SnbTextField.Text {...phone} keyboardType="phone-pad" />
+          </View>
         </View>
-        <View style={{ height: 84, padding: 16 }}>
-          <SnbTextField.Text {...phone} keyboardType="phone-pad" />
-        </View>
-      </View>
+      </ScrollView>
     );
   };
 
@@ -71,7 +79,7 @@ const SelfRegisterView: React.FC = () => {
           <SnbButton.Single
             title={'Lanjut'}
             onPress={() =>
-              checkPhone({ mobilePhone: phone.value, otpHash: hashOtp })
+              checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
             }
             type={'primary'}
             disabled={
@@ -99,11 +107,9 @@ const SelfRegisterView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {header()}
-        {content()}
-        {buttonRegister()}
-      </ScrollView>
+      {header()}
+      {content()}
+      {buttonRegister()}
     </SnbContainer>
   );
 };
