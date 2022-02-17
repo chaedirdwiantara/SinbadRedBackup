@@ -20,7 +20,7 @@ export const productCategories = simplifyReducer(INITIAL_STATE, {
     return {
       ...state,
       loading: false,
-      data: action.payload,
+      data: action.payload.data,
     };
   },
 
