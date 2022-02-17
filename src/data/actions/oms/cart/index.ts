@@ -6,3 +6,5 @@ export * from './update-cart.action';
 export * from './remove-cart-product.action';
 export * from './cart-master.action';
 export * from './check-product.action';
+export * from './check-seller.action';
+export * from './check-stock.action';

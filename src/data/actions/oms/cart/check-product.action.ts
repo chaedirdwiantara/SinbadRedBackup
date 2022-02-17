@@ -19,8 +19,8 @@ export const checkProductProcess = (
 };
 /** => SUCCESS */
 export const checkProductSuccess = (
-  data: models.CreateSuccessV3Props<models.GetCartDataSellersProducts[]>,
-): models.CreateSuccessV3Action<models.GetCartDataSellersProducts[]> => {
+  data: models.CreateSuccessV3Props<models.CheckProductResponse[]>,
+): models.CreateSuccessV3Action<models.CheckProductResponse[]> => {
   return { type: types.CHECK_PRODUCT_SUCCESS, payload: data };
 };
 /** => FAILED */

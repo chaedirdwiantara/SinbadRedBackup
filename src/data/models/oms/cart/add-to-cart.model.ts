@@ -1,9 +1,9 @@
-import { GetCartDataSellersProducts } from '.';
+import { CartProduct } from '.';
 
 /**
  * ADD TO CART
  */
-export interface AddToCartPayload extends GetCartDataSellersProducts {
+export interface AddToCartPayload extends CartProduct {
   sellerId: number;
   sellerName: string;
 }

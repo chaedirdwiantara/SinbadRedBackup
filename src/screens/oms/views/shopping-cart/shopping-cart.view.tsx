@@ -20,6 +20,8 @@ import {
   useCheckoutAction,
   useCartMasterAction,
   useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -141,10 +143,7 @@ const dummyCheckoutData = {
 
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
-  const {
-    stateCart: { get: getCart, checkProduct },
-    dispatchCart,
-  } = React.useContext(contexts.CartContext);
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = React.useContext(
     contexts.CheckoutContext,
   );
@@ -157,6 +156,8 @@ const OmsShoppingCartView: FC = () => {
   const checkoutAction = useCheckoutAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
   /** === HOOKS === */
   /** => Did Mount */
   useEffect(() => {
@@ -194,18 +195,33 @@ const OmsShoppingCartView: FC = () => {
       ],
     });
     checkoutAction.fetch(dispatchCheckout, dummyCheckoutData);
+    checkSellerAction.fetch(dispatchCart, {
+      sellerIds: [1, 2],
+    });
+    checkStockAction.fetch(dispatchCart, {
+      reserved: true,
+      carts: [
+        {
+          productId: '53c9b0000000000000000000',
+          warehouseId: 1,
+        },
+        {
+          productId: '53c9b0000000000000000002',
+          warehouseId: 1,
+        },
+      ],
+    });
   }, []);
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
-    if (getCart.data !== null) {
-      cartMasterAction.setCartMaster(getCart.data);
+    if (stateCart.get.data !== null) {
+      cartMasterAction.setCartMaster(stateCart.get.data);
     }
-  }, [getCart.data]);
+  }, [stateCart.get.data]);
   console.log({
-    getCart,
     cartMaster: cartMasterAction.cartMaster,
     stateCheckout,
-    checkProduct,
+    stateCart,
   });
   /** === VIEW === */
   /** => Main */
