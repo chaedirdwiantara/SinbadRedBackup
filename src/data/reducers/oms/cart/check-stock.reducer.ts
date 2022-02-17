@@ -3,7 +3,9 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type CheckStockInitialProps = models.CreateItemProps;
+export type CheckStockInitialProps = models.CreateItemV3Props<
+  models.CheckStockResponse[]
+>;
 /** === INITIAL STATE HERE === */
 export const checkStockInitialState: CheckStockInitialProps = {
   data: null,

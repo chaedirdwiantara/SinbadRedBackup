@@ -49,3 +49,4 @@ export const CHECK_STOCK_RESET = 'CheckStockReset';
 /** => CART MASTER */
 export const SET_CART_MASTER = 'SetCartMaster';
 export const RESET_CART_MASTER = 'ResetCartMaster';
+export const MERGE_CHECK_PRODUCT = 'MergeCheckProduct';

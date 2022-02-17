@@ -2,8 +2,9 @@
 import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
+import { AddToCartResponse } from '@models';
 /** === TYPE HERE === */
-export type AddToCartInitialProps = models.CreateItemProps;
+export type AddToCartInitialProps = models.CreateItemV3Props<AddToCartResponse>;
 /** === INITIAL STATE HERE === */
 export const addToCartInitialState: AddToCartInitialProps = {
   data: null,

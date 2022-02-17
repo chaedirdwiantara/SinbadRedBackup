@@ -1,4 +1,9 @@
-import { ProductPriceRules, GetCartDataSellersProducts, GetCartData } from '.';
+import {
+  ProductPriceRules,
+  GetCartData,
+  CheckProductResponse,
+  CartProduct,
+} from '.';
 
 /**
  * CART MASTER
@@ -18,12 +23,18 @@ export interface CartMasterSellers {
   products: CartMasterSellersProducts[];
 }
 export interface CartMasterUnavailable extends CartMasterSellersProducts {
-  status: string | null;
-  sellerId: number | null;
+  status: string;
 }
-export interface CartMasterSellersProducts extends GetCartDataSellersProducts {}
+export interface CartMasterSellersProducts extends CartProduct {
+  sellerId: number;
+  sellerName: string;
+}
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {
   type: string;
   payload: SetCartMaster;
+}
+export interface MergeCheckProductAction {
+  type: string;
+  payload: CheckProductResponse[];
 }

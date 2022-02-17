@@ -12,7 +12,7 @@ import { ShoppingCartProducts } from './shopping-cart-products.view';
 import {
   goBack,
   // useCartExampleAction,
-  // useGetCartAction,
+  useGetCartAction,
   // useGetTotalCartAction,
   // useAddToCartAction,
   // useUpdateCartAction,
@@ -148,7 +148,7 @@ const OmsShoppingCartView: FC = () => {
     contexts.CheckoutContext,
   );
   // const cartExampleAction = useCartExampleAction();
-  // const getCartAction = useGetCartAction();
+  const getCartAction = useGetCartAction();
   // const getTotalCartAction = useGetTotalCartAction();
   // const addToCartAction = useAddToCartAction();
   // const updateCartAction = useUpdateCartAction();
@@ -162,7 +162,7 @@ const OmsShoppingCartView: FC = () => {
   /** => Did Mount */
   useEffect(() => {
     // cartExampleAction.fetch(dispatchCart);
-    // getCartAction.fetch(dispatchCart);
+    getCartAction.fetch(dispatchCart);
     // getTotalCartAction.fetch(dispatchCart);
     // addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
     // updateCartAction.fetch(dispatchCart, {
@@ -218,6 +218,15 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(stateCart.get.data);
     }
   }, [stateCart.get.data]);
+  /** => after success fetch checkProduct, merge data to redux */
+  useEffect(() => {
+    if (
+      stateCart.checkProduct.data !== null &&
+      cartMasterAction.cartMaster.id !== ''
+    ) {
+      cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
+    }
+  }, [stateCart.checkProduct.data]);
   console.log({
     cartMaster: cartMasterAction.cartMaster,
     stateCheckout,
