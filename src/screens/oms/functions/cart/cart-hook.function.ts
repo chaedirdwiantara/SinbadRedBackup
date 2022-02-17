@@ -116,6 +116,36 @@ const useCheckProductAction = () => {
     },
   };
 };
+/** => check seller action */
+const useCheckSellerAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckSellerPayload,
+    ) => {
+      dispatch(Actions.checkSellerProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkSellerReset(contextDispatch));
+    },
+  };
+};
+/** => check stock action */
+const useCheckStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckStockPayload,
+    ) => {
+      dispatch(Actions.checkStockProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkStockReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -126,6 +156,8 @@ export {
   useRemoveCartProductAction,
   useCartMasterAction,
   useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
 };
 /**
  * ================================================================
