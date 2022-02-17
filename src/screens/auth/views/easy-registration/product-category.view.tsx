@@ -180,9 +180,9 @@ const ProductCategory: React.FC = () => {
                       status={checkBoxStatus}
                       onPress={() => {
                         setCheckBoxStatus(
-                          checkBoxStatus === 'selected'
+                          checkBoxStatus === 'indeterminate'
                             ? 'unselect'
-                            : 'selected',
+                            : 'indeterminate',
                         );
                       }}
                     />
