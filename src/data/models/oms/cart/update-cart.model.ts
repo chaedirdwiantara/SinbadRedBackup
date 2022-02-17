@@ -3,7 +3,10 @@
  */
 import { Cart, CartProduct } from '.';
 
-export interface UpdateCartDataProducts extends CartProduct {}
+export interface UpdateCartDataProducts extends CartProduct {
+  lastUsedPrice: number;
+  isLastPriceUsedRules: boolean;
+}
 
 export interface UpdateCartData extends Cart<UpdateCartDataProducts> {}
 

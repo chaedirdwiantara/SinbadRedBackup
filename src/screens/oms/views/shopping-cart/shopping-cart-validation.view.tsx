@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Image } from 'react-native';
 import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
-import { ShoppingCartValidationStyles } from '@screen/oms/styles/shopping-cart/shopping-cart-validation.style';
+import { ShoppingCartValidationStyles } from '@screen/oms/styles';
 /** === INTERFACE === */
 /** => error props */
 interface ShoppingCartValidationProps {

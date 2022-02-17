@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { SnbText, SnbCheckbox, SnbIcon, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { ShoppingCartStyles } from '../../styles';
+import { ShoppingCartStyles } from '@screen/oms/styles';
 
 interface ProductUnavailableViewProps {}
 
