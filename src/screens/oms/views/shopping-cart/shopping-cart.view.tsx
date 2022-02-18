@@ -103,7 +103,18 @@ import { CheckoutPayload } from '@model/oms';
 // };
 
 const dummyCheckoutData: CheckoutPayload = {
-  buyerAddress: 'Jl. Raya',
+  buyerAddress: {
+    longtitude: '106°49′35.76',
+    latitude: '6°10′30.00',
+    province: 'DKI Jakarta',
+    city: 'Jakarta Selatan',
+    district: 'Jakarta',
+    urban: 'Jakarta',
+    zipCode: 445351,
+    address: 'Jalan Jakarta',
+    noteAddress: 'pagar putih',
+    locationId: 'rr1334',
+  },
   carts: [
     {
       sellerId: 1,

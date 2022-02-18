@@ -12,8 +12,20 @@ export interface CheckoutProductData extends CheckoutCartProduct {
 export interface CheckoutCartPayload
   extends CheckoutCart<CheckoutProductData> {}
 
+export interface CheckoutBuyerAddressPayload {
+  longtitude: string;
+  latitude: string;
+  province: string;
+  city: string;
+  district: string;
+  urban: string;
+  zipCode: number;
+  address: string;
+  noteAddress: string;
+  locationId: string;
+}
 export interface CheckoutPayload {
-  buyerAddress: string;
+  buyerAddress: CheckoutBuyerAddressPayload;
   carts: CheckoutCartPayload[];
 }
 
