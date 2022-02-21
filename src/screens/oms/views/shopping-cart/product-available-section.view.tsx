@@ -19,15 +19,7 @@ export const ProductAvailableSection: FC = () => {
         flexDirection: 'column',
       }}>
       <View>
-        <View
-          style={{
-            marginTop: 16,
-            marginBottom: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-            flexDirection: 'row',
-            backgroundColor: color.white,
-          }}>
+        <View style={ShoppingCartStyles.sellerContainer}>
           <View style={{ marginRight: 16 }}>
             <SnbCheckbox status={'unselect'} onPress={() => {}} />
           </View>
