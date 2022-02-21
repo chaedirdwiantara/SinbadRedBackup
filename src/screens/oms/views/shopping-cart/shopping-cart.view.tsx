@@ -179,7 +179,8 @@ const OmsShoppingCartView: FC = () => {
       sellerIds: [1, 2],
     });
     checkStockAction.fetch(dispatchCart, {
-      reserved: true,
+      cartId: 'qweqweqw',
+      reserved: false,
       carts: [
         {
           productId: '53c9b0000000000000000000',
@@ -203,20 +204,41 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     if (
       stateCart.checkProduct.data !== null &&
+      stateCart.checkSeller.data !== null &&
+      stateCart.checkStock.data !== null &&
       cartMasterAction.cartMaster.id !== ''
     ) {
       cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
     }
-  }, [stateCart.checkProduct.data]);
+  }, [cartMasterAction.cartMaster.id, stateCart.checkProduct.data]);
   /** => after success fetch checkSeller, merge data to redux */
   useEffect(() => {
     if (
+      stateCart.checkProduct.data !== null &&
       stateCart.checkSeller.data !== null &&
-      cartMasterAction.cartMaster.id !== ''
+      stateCart.checkStock.data !== null &&
+      cartMasterAction.cartMaster.isCheckProductMerged
     ) {
       cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
     }
-  }, [cartMasterAction.cartMaster.sellers, stateCart.checkSeller.data]);
+  }, [
+    cartMasterAction.cartMaster.isCheckProductMerged,
+    stateCart.checkSeller.data,
+  ]);
+  /** => after success fetch checkStock, merge data to redux */
+  useEffect(() => {
+    if (
+      stateCart.checkProduct.data !== null &&
+      stateCart.checkSeller.data !== null &&
+      stateCart.checkStock.data !== null &&
+      cartMasterAction.cartMaster.isCheckSellerMerged
+    ) {
+      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
+    }
+  }, [
+    cartMasterAction.cartMaster.isCheckSellerMerged,
+    stateCart.checkStock.data,
+  ]);
   console.log({
     cartMaster: cartMasterAction.cartMaster,
     stateCart,

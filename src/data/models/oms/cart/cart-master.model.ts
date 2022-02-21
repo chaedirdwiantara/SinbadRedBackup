@@ -35,6 +35,7 @@ export interface CartMasterSellersProducts extends CartProduct {
   sellerName: string;
   lastUsedPrice?: number;
   isLastPriceUsedRules?: boolean;
+  stock?: number;
 }
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {
