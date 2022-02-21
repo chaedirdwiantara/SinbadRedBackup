@@ -10,4 +10,7 @@ export interface GetCartData {
   sellers: GetCartDataSellers[];
 }
 export interface GetCartDataSellers extends Cart<GetCartDataSellersProducts> {}
-export interface GetCartDataSellersProducts extends CartProduct {}
+export interface GetCartDataSellersProducts extends CartProduct {
+  lastUsedPrice: number;
+  isLastPriceUsedRules: boolean;
+}

@@ -10,6 +10,9 @@ const initialState: models.CartMaster = {
   totalProducts: 0,
   sellers: [],
   unavailable: [],
+  isCheckProductMerged: false,
+  isCheckSellerMerged: false,
+  isCheckStockMerged: false,
 };
 
 /** === FUNCTION === */
@@ -66,6 +69,7 @@ export const cartMaster = simplifyReducer(initialState, {
       ...state,
       sellers: sellers,
       unavailable: unavailable,
+      isCheckProductMerged: true,
     };
   },
   /** => RESET CARD MASTER INTO INITIAL STATE */

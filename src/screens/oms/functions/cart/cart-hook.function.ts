@@ -99,6 +99,12 @@ const useCartMasterAction = () => {
     mergeCheckProduct: (data: models.CheckProductResponse[]) => {
       dispatch(Actions.mergeCheckProduct(data));
     },
+    mergeCheckSeller: (data: models.CheckSellerResponse[]) => {
+      dispatch(Actions.mergeCheckSeller(data));
+    },
+    mergeCheckStock: (data: models.CheckStockResponse[]) => {
+      dispatch(Actions.mergeCheckStock(data));
+    },
     reset: () => {
       dispatch(Actions.resetCartMaster());
     },
