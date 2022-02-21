@@ -12,7 +12,7 @@ import * as models from '@models';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 /** === INTERFACES === */
 interface ShoppingCartProductsProps {
-  availableProducts: models.CartMasterSellers;
+  availableProducts: models.CartMasterSellers[];
   unavailableProducts: models.CartMasterUnavailable[];
 }
 /** === COMPONENT === */
