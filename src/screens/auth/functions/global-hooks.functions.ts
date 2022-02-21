@@ -55,13 +55,29 @@ export const useInputPhone = () => {
   };
 };
 
-export const useInput = (initialState: string = '') => {
+export const useInput = (
+  initialState: string = '',
+  fieldType: 'string-only' | 'number-only' | 'default' = 'default',
+) => {
   const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
   const [type, setType] = useState('default');
 
   const onChangeText = (text: string) => {
     setType('default');
+    switch (fieldType) {
+      case 'number-only': {
+        text = text.replace(/[^0-9]/g, '');
+        break;
+      }
+      case 'string-only': {
+        text = text.replace(/[0-9]/g, '');
+        break;
+      }
+      case 'default':
+      default:
+        break;
+    }
     setValue(text);
   };
 
@@ -238,11 +254,6 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
     }
     setValue(text);
   };
-
-  // const setMessageError = (message: string) => {
-  //   setType('error');
-  //   setValMsgError(message);
-  // };
 
   const clearText = () => {
     setValue('');
