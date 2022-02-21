@@ -1,5 +1,6 @@
 /** === IMPORT INTERNAL === */
 // import apiMapping from '@core/services/apiMapping';
+import { serializeUniformKeyQs } from '@core/functions/global/query-string';
 import apiMappingMockV3 from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 
@@ -103,14 +104,15 @@ const checkSeller = ({
   data,
 }: models.CreateProcessProps<models.CheckSellerPayload>) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'check-sellers';
+  const qs = serializeUniformKeyQs('sellerIds[]', data.sellerIds);
+
+  const path = `check-sellers?${qs}`;
   return apiMappingMockV3<models.CheckSellerResponse[]>(
     mockHost,
     path,
     'discount',
     'v1',
-    'CREATE',
-    data,
+    'DETAIL',
   );
 };
 

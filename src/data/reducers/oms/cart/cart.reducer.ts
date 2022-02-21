@@ -45,6 +45,11 @@ import {
   checkStockReducer,
   CheckStockInitialProps,
 } from './check-stock.reducer';
+import {
+  cancelStockInitialState,
+  cancelStockReducer,
+  CancelStockInitialProps,
+} from './cancel-stock.reducer';
 
 export interface CartInitialProps {
   example: CartExampleInitialProps;
@@ -56,6 +61,7 @@ export interface CartInitialProps {
   checkProduct: CheckProductInitialProps;
   checkSeller: CheckSellerInitialProps;
   checkStock: CheckStockInitialProps;
+  cancelStock: CancelStockInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
@@ -68,6 +74,7 @@ export const cartInitialState = {
   checkProduct: checkProductInitialState,
   checkSeller: checkSellerInitialState,
   checkStock: checkStockInitialState,
+  cancelStock: cancelStockInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
@@ -81,6 +88,7 @@ export const cartReducer = (
     checkProduct,
     checkSeller,
     checkStock,
+    cancelStock,
   }: CartInitialProps,
   action: any,
 ) => ({
@@ -93,4 +101,5 @@ export const cartReducer = (
   checkProduct: checkProductReducer(checkProduct, action),
   checkSeller: checkSellerReducer(checkSeller, action),
   checkStock: checkStockReducer(checkStock, action),
+  cancelStock: cancelStockReducer(cancelStock, action),
 });

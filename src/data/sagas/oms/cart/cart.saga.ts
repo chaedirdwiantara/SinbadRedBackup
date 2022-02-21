@@ -170,16 +170,18 @@ function* checkStock(
   }
 }
 /** => CANCEL STOCK */
-function* cancelStock(action: models.DetailProcessAction) {
+function* cancelStock(action: Omit<models.DeleteProcessAction, 'id'>) {
   try {
-    yield call(() => {
+    const response: models.DeleteSuccessV3Props = yield call(() => {
       return CartApi.cancelStock();
     });
-    yield action.contextDispatch(ActionCreators.cancelStockSuccess());
-    yield put(ActionCreators.cancelStockSuccess());
+    yield action.contextDispatch(ActionCreators.cancelStockSuccess(response));
+    yield put(ActionCreators.cancelStockSuccess(response));
   } catch (error) {
-    yield action.contextDispatch(ActionCreators.cancelStockSuccess());
-    yield put(ActionCreators.cancelStockSuccess());
+    yield action.contextDispatch(
+      ActionCreators.cancelStockFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.cancelStockFailed(error as models.ErrorProps));
   }
 }
 /** === LISTENER === */

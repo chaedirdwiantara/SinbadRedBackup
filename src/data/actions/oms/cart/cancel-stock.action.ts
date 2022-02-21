@@ -5,7 +5,7 @@ import * as types from '@types';
 /** => PROCESS */
 export const cancelStockProcess = (
   contextDispatch: (action: any) => any,
-): Omit<models.DetailProcessAction, 'payload'> => {
+): Omit<models.DeleteProcessAction, 'payload'> => {
   contextDispatch({ type: types.CANCEL_STOCK_PROCESS });
   return {
     type: types.CANCEL_STOCK_PROCESS,
@@ -13,12 +13,16 @@ export const cancelStockProcess = (
   };
 };
 /** => SUCCESS */
-export const cancelStockSuccess = () => {
-  return { type: types.CANCEL_STOCK_SUCCESS };
+export const cancelStockSuccess = (
+  data: models.DeleteSuccessV3Props,
+): models.DeleteSuccessV3Action => {
+  return { type: types.CANCEL_STOCK_SUCCESS, payload: data };
 };
 /** => FAILED */
-export const cancelStockFailed = () => {
-  return { type: types.CANCEL_STOCK_FAILED };
+export const cancelStockFailed = (
+  data: models.ErrorProps,
+): models.DeleteFailedAction => {
+  return { type: types.CANCEL_STOCK_FAILED, payload: data };
 };
 /** => RESET */
 export const cancelStockReset = (contextDispatch: (action: any) => any) => {
