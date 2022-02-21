@@ -4,78 +4,100 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import { SnbText, SnbCheckbox, SnbIcon, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
+import * as models from '@models';
 
-interface ProductUnavailableViewProps {}
+interface ProductUnavailableViewProps {
+  unavailableProducts: models.CartMasterUnavailable[];
+}
 
-export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({}) => {
+export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
+  unavailableProducts,
+}) => {
   return (
-    <View
-      style={{
-        ...ShoppingCartStyles.horizontalBottomCardSlot,
-      }}
-      key={'product-a'}>
-      <View
-        style={{
-          flexDirection: 'column',
-          width: '100%',
-        }}>
-        <View style={{ flexDirection: 'row' }}>
+    <React.Fragment>
+      {unavailableProducts.map((item) => {
+        return (
           <View
             style={{
-              marginRight: 20,
-              marginLeft: 4,
-              justifyContent: 'center',
-            }}>
-            <SnbCheckbox
-              disabled={true}
-              status={'unselect'}
-              onPress={() => {}}
-            />
-          </View>
-          <TouchableOpacity
-            style={{ alignItems: 'center', justifyContent: 'center' }}
-            onPress={() => {}}>
-            <Image
-              source={{
-                uri: 'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15731/image_1617790892428.png',
-              }}
-              style={{ width: 65, height: 65, marginRight: 5, opacity: 0.5 }}
-            />
-          </TouchableOpacity>
-          <View style={{ justifyContent: 'center' }}>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{
-                width: '100%',
-              }}>
-              <SnbText.B4 color={color.black60}>
-                SGM Ananda 1 - Varian Omicron
-              </SnbText.B4>
-            </TouchableOpacity>
+              ...ShoppingCartStyles.horizontalBottomCardSlot,
+            }}
+            key={`${item.sellerId}.${item.productId}`}>
             <View
               style={{
-                flexDirection: 'row',
+                flexDirection: 'column',
+                width: '100%',
               }}>
-              <SnbText.B4 color={color.black80}>Sisa kosong</SnbText.B4>
+              <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    marginRight: 20,
+                    marginLeft: 4,
+                    justifyContent: 'center',
+                  }}>
+                  <SnbCheckbox
+                    disabled={true}
+                    status={'unselect'}
+                    onPress={() => {}}
+                  />
+                </View>
+                <TouchableOpacity
+                  style={{ alignItems: 'center', justifyContent: 'center' }}
+                  onPress={() => {}}>
+                  <Image
+                    source={{
+                      uri: item.productImageUrl,
+                    }}
+                    style={{
+                      width: 65,
+                      height: 65,
+                      marginRight: 5,
+                      opacity: 0.5,
+                    }}
+                  />
+                </TouchableOpacity>
+                <View style={{ justifyContent: 'center' }}>
+                  <TouchableOpacity
+                    onPress={() => {}}
+                    style={{
+                      width: '100%',
+                    }}>
+                    <SnbText.B4 color={color.black60}>
+                      {item.productName}
+                    </SnbText.B4>
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
+                    <SnbText.B4 color={color.black80}>{item.status}</SnbText.B4>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  width: '100%',
+                  marginTop: 12,
+                }}>
+                <TouchableOpacity onPress={() => {}}>
+                  <SnbText.B4 color={color.blue50}>
+                    Cari Produk Sejenis
+                  </SnbText.B4>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => {}}>
+                  <SnbIcon
+                    name="delete_outline"
+                    color={color.black80}
+                    size={32}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            width: '100%',
-            marginTop: 12,
-          }}>
-          <TouchableOpacity onPress={() => {}}>
-            <SnbText.B4 color={color.blue50}>Cari Produk Sejenis</SnbText.B4>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}}>
-            <SnbIcon name="delete_outline" color={color.black80} size={32} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+        );
+      })}
+    </React.Fragment>
   );
 };

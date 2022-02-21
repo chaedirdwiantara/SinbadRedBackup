@@ -8,9 +8,18 @@ import { ProductNotAvailableSection } from './product-not-available-section.view
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
+import * as models from '@models';
 import { ShoppingCartStyles } from '@screen/oms/styles';
+/** === INTERFACES === */
+interface ShoppingCartProductsProps {
+  availableProducts: models.CartMasterSellers;
+  unavailableProducts: models.CartMasterUnavailable[];
+}
 /** === COMPONENT === */
-export const ShoppingCartProducts: FC = () => {
+export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
+  availableProducts,
+  unavailableProducts,
+}) => {
   /** === HOOKS === */
   /** === VIEW === */
   /** => Main */
@@ -30,8 +39,8 @@ export const ShoppingCartProducts: FC = () => {
         </View>
         <SnbText.B4 color={color.black100}>Pilih Semua</SnbText.B4>
       </View>
-      <ProductAvailableSection />
-      <ProductNotAvailableSection />
+      <ProductAvailableSection availableProducts={availableProducts} />
+      <ProductNotAvailableSection unavailableProducts={unavailableProducts} />
     </View>
   );
 };

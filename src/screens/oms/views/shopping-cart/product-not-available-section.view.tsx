@@ -7,9 +7,16 @@ import { ProductUnavailableView } from './product-not-available.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
+import * as models from '@models';
 import { ShoppingCartStyles } from '@screen/oms/styles';
+/** === INTERFACES === */
+interface ProductNotAvailableSection {
+  unavailableProducts: models.CartMasterUnavailable[];
+}
 /** === COMPONENT === */
-export const ProductNotAvailableSection: FC = () => {
+export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
+  unavailableProducts,
+}) => {
   /** === HOOKS === */
   /** === VIEW === */
   /** => Main */
@@ -41,7 +48,7 @@ export const ProductNotAvailableSection: FC = () => {
           </View>
         </View>
         <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-          <ProductUnavailableView />
+          <ProductUnavailableView unavailableProducts={unavailableProducts} />
         </View>
       </View>
     </View>
