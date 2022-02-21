@@ -26,16 +26,7 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
         flexDirection: 'column',
       }}>
       <View>
-        <View
-          style={{
-            marginTop: 16,
-            marginBottom: 2,
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: color.white,
-          }}>
+        <View style={ShoppingCartStyles.unavailableHeaderContainer}>
           <SnbText.B4 color={color.black100}>Tidak bisa diproses</SnbText.B4>
           <View>
             <TouchableOpacity
@@ -50,6 +41,9 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
         <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
           <ProductUnavailableView unavailableProducts={unavailableProducts} />
         </View>
+      </View>
+      <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
+        <ProductUnavailableView unavailableProducts={unavailableProducts} />
       </View>
     </View>
   );

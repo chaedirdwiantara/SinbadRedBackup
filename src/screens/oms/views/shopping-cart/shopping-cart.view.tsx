@@ -97,61 +97,6 @@ import * as models from '@models';
 //   ],
 // };
 
-const dummyCheckoutData: CheckoutPayload = {
-  buyerAddress: {
-    longtitude: '106°49′35.76',
-    latitude: '6°10′30.00',
-    province: 'DKI Jakarta',
-    city: 'Jakarta Selatan',
-    district: 'Jakarta',
-    urban: 'Jakarta',
-    zipCode: 445351,
-    address: 'Jalan Jakarta',
-    noteAddress: 'pagar putih',
-    locationId: 'rr1334',
-  },
-  carts: [
-    {
-      sellerId: 1,
-      sellerName: 'Tigaraksa',
-      products: [
-        {
-          productId: '53c9b0000000000000000000',
-          warehouseId: 3,
-          categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
-          brandId: '33d200000000000000000000',
-          productName: 'SGM ANANDA 2 150 GR GRD 2.0',
-          brandName: 'SGM',
-          productImageUrl:
-            'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
-          minQty: 3,
-          qty: 3,
-          qtyPerBox: 40,
-          isPriceAfterTax: true,
-          taxPercentage: 10,
-          lastUsedPrice: 13707.1,
-          isLastPriceUsedRules: true,
-          price: 13707.1,
-          uomLabel: 'PCS',
-          selected: true,
-          priceRules: [
-            {
-              minQty: 1,
-              maxQty: 10,
-              price: 13707.1,
-            },
-            {
-              minQty: 11,
-              maxQty: 20,
-              price: 12707.1,
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();

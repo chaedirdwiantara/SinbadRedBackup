@@ -15,13 +15,13 @@ export const serializeQs = (queryString: { [key: string]: any }): string => {
 };
 
 export const serializeUniformKeyQs = (key: string, array: any[]): string => {
-  const queryParams = [];
+  const queryParams: string[] = [];
 
-  for (let elem in array) {
+  array.forEach((elem) => {
     if (array.length > 0) {
       queryParams.push(`${key}=${encodeURIComponent(elem)}`);
     }
-  }
+  });
 
   return queryParams.join('&');
 };
