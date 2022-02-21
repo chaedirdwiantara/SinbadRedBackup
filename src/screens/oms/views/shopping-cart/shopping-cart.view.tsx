@@ -11,13 +11,7 @@ import { ShoppingCartProducts } from './shopping-cart-products.view';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
   goBack,
-  // useCartExampleAction,
-  // useGetCartAction,
-  // useGetTotalCartAction,
-  // useAddToCartAction,
-  // useUpdateCartAction,
-  // useRemoveCartProductAction,
-  useCheckoutAction,
+  useGetCartAction,
   useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
@@ -27,7 +21,6 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
-import { CheckoutPayload } from '@model/oms';
 /** === DUMMIES === */
 // const dummyAddToCartPayload = {
 //   productId: '53c9b0000000000000000000',
@@ -160,16 +153,7 @@ const dummyCheckoutData: CheckoutPayload = {
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { stateCheckout, dispatchCheckout } = React.useContext(
-    contexts.CheckoutContext,
-  );
-  // const cartExampleAction = useCartExampleAction();
-  // const getCartAction = useGetCartAction();
-  // const getTotalCartAction = useGetTotalCartAction();
-  // const addToCartAction = useAddToCartAction();
-  // const updateCartAction = useUpdateCartAction();
-  // const removeCartProductAction = useRemoveCartProductAction();
-  const checkoutAction = useCheckoutAction();
+  const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -178,27 +162,7 @@ const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
   /** => Did Mount */
   useEffect(() => {
-    // cartExampleAction.fetch(dispatchCart);
-    // getCartAction.fetch(dispatchCart);
-    // getTotalCartAction.fetch(dispatchCart);
-    // addToCartAction.fetch(dispatchCart, dummyAddToCartPayload);
-    // updateCartAction.fetch(dispatchCart, {
-    //   carts: dummyUpdateCartPayload.carts,
-    //   id: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
-    // });
-    // removeCartProductAction.fetch(dispatchCart, {
-    //   cartId: cartMasterAction.cartMaster.id,
-    //   removedProducts: [
-    //     {
-    //       productId: '53c9b0000000000000000000',
-    //       warehouseId: 1,
-    //     },
-    //     {
-    //       productId: '53c9b0000000000000000002',
-    //       warehouseId: 2,
-    //     },
-    //   ],
-    // });
+    getCartAction.fetch(dispatchCart);
     checkProductAction.fetch(dispatchCart, {
       carts: [
         {
@@ -211,12 +175,12 @@ const OmsShoppingCartView: FC = () => {
         },
       ],
     });
-    checkoutAction.fetch(dispatchCheckout, dummyCheckoutData);
     checkSellerAction.fetch(dispatchCart, {
       sellerIds: [1, 2],
     });
     checkStockAction.fetch(dispatchCart, {
-      reserved: true,
+      cartId: 'qweqweqw',
+      reserved: false,
       carts: [
         {
           productId: '53c9b0000000000000000000',
@@ -236,9 +200,47 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(stateCart.get.data);
     }
   }, [stateCart.get.data]);
+  /** => after success fetch checkProduct, merge data to redux */
+  useEffect(() => {
+    if (
+      stateCart.checkProduct.data !== null &&
+      stateCart.checkSeller.data !== null &&
+      stateCart.checkStock.data !== null &&
+      cartMasterAction.cartMaster.id !== ''
+    ) {
+      cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
+    }
+  }, [cartMasterAction.cartMaster.id, stateCart.checkProduct.data]);
+  /** => after success fetch checkSeller, merge data to redux */
+  useEffect(() => {
+    if (
+      stateCart.checkProduct.data !== null &&
+      stateCart.checkSeller.data !== null &&
+      stateCart.checkStock.data !== null &&
+      cartMasterAction.cartMaster.isCheckProductMerged
+    ) {
+      cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
+    }
+  }, [
+    cartMasterAction.cartMaster.isCheckProductMerged,
+    stateCart.checkSeller.data,
+  ]);
+  /** => after success fetch checkStock, merge data to redux */
+  useEffect(() => {
+    if (
+      stateCart.checkProduct.data !== null &&
+      stateCart.checkSeller.data !== null &&
+      stateCart.checkStock.data !== null &&
+      cartMasterAction.cartMaster.isCheckSellerMerged
+    ) {
+      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
+    }
+  }, [
+    cartMasterAction.cartMaster.isCheckSellerMerged,
+    stateCart.checkStock.data,
+  ]);
   console.log({
     cartMaster: cartMasterAction.cartMaster,
-    stateCheckout,
     stateCart,
   });
   /** === VIEW === */

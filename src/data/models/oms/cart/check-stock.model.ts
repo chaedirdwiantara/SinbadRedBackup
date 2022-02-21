@@ -11,6 +11,7 @@ export interface CheckStockResponse {
 
 export interface CheckStockPayload {
   reserved: boolean;
+  cartId: string;
   carts: CheckStockPayloadCarts[];
 }
 

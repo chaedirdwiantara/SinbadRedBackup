@@ -15,4 +15,5 @@ export interface CheckProductPayloadCarts {
 export interface CheckProductResponse extends CartProduct {
   sellerId: number;
   sellerName: string;
+  status: string;
 }
