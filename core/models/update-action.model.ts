@@ -2,6 +2,7 @@
 import {
   UpdateSuccessProps,
   UpdateSuccessV2Props,
+  UpdateSuccessV3Props,
   UpdateProcessProps,
 } from './update.model';
 import { ErrorProps } from './error.model';
@@ -25,4 +26,9 @@ export interface UpdateSuccessAction {
 export interface UpdateSuccessV2Action {
   type: string;
   payload: UpdateSuccessV2Props;
+}
+/** === SUCCESS VERSION 3 === */
+export interface UpdateSuccessV3Action<T> {
+  type: string;
+  payload: UpdateSuccessV3Props<T>;
 }

@@ -276,14 +276,12 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [productLoading]);
 
-  /** => if product success load and empty then show "kelurahan kamu tidak dijangkau oleh supplier" */
+  /** => if product error code 500700000029 "kelurahan kamu tidak dijangkau oleh supplier" */
   useEffect(() => {
-    // if product empty & loading done
-    const condition = [products.length === 0, !productLoading].every((i) => i);
-    if (condition) {
-      modalUrbanRef.current?.trigger();
+    if (productError?.code === 500700000029) {
+      modalUrbanRef.current?.trigger(true);
     }
-  }, [productLoading, products, modalUrbanRef]);
+  }, [productError?.code, modalUrbanRef]);
 
   /** => Do something when success add to cart */
   useEffect(() => {
@@ -688,7 +686,10 @@ const ProductList: FC<ProductListProps> = ({
         }}
       />
       {/* Modal Bottom Sheet error if not in urban */}
-      <NotInUrbanModal ref={modalUrbanRef} />
+      <NotInUrbanModal
+        ref={modalUrbanRef}
+        errorSubtitle={productError?.message ?? ''}
+      />
       {/* Modal Bottom Sheet Need to Login */}
       <NeedLoginModal
         visible={modalNeedToLogin}

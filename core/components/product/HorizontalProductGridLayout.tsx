@@ -49,6 +49,7 @@ export const HorizontalProductGridLayout: FC<
         name={item.name}
         imageUrl={item.thumbnail}
         finalPrice={item.finalPrice}
+        qtySoldLabel={item.qtySoldLabel}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

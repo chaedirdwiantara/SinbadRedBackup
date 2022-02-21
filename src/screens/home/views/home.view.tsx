@@ -17,6 +17,7 @@ import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
 import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
+import PushNotification from '@core/components/PushNotification';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation }: any) => {
   /** === STATE === */
@@ -74,6 +75,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const contentItem = () => {
     return (
       <>
+        <PushNotification />
         <BannerHomeView />
         <CategoryHomeView />
         <RecommendationHomeView navigationParent={navigation} />

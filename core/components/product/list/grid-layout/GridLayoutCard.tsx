@@ -34,6 +34,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         flexOne={true}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
+        qtySoldLabel={product.qtySoldLabel}
         finalPrice={product.finalPrice}
         isBundle={product.isBundle}
         isPromo={product.isPromo}

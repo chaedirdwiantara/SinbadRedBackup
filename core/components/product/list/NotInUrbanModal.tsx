@@ -8,13 +8,16 @@ import BottomModalError from '@core/components/BottomModalError';
 import { NavigationAction } from '@navigation';
 const sinbadCry = require('@image/sinbad_image/cry_sinbad.png');
 
-interface NotInUrbanModalProps {}
+interface NotInUrbanModalProps {
+  errorSubtitle: string;
+}
 export interface NotInUrbanModalRef {
   trigger: (isShow?: boolean) => void;
 }
 /** === COMPONENT === */
 const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
-  (_, ref) => {
+  (props, ref) => {
+    const { errorSubtitle } = props;
     const [isOpen, setIsOpen] = useState(false);
     /** === CREARE CUSTOM REF */
     useImperativeHandle(ref, () => ({
@@ -27,10 +30,12 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
       setIsOpen((prev) => !prev);
       /** ==> timeout for animate close modal */
       setTimeout(() => {
+        /** ==> flow is back to home, to profile screen (get data address), and to address merchant */
         NavigationAction.back();
+        setTimeout(() => NavigationAction.navigate('UserView'), 0);
         setTimeout(
           () => NavigationAction.navigate('MerchantDetailAddressView'),
-          0,
+          1000,
         );
       }, 500);
     }, []);
@@ -39,9 +44,7 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
       <BottomModalError
         isOpen={isOpen}
         errorTitle={'Lokasi tidak terjangkau'}
-        errorSubtitle={
-          'Maaf, supplier Sinbad belum beroperasi di lokasi toko Anda.'
-        }
+        errorSubtitle={errorSubtitle}
         errorImage={sinbadCry}
         buttonTitle={'Atur Ulang Alamat'}
         buttonOnPress={buttonOnPress}

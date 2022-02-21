@@ -48,6 +48,8 @@ import {
   useModaBottomError,
   useActivateVa,
   useModalNeedHelp,
+  useOrderStatusActions,
+  usePaymentStatus,
 } from '../../functions';
 import {
   BillingStatus,
@@ -86,6 +88,8 @@ const HistoryDetailView: FC = () => {
   const activateVA = useActivateVa();
   const modalError = useModaBottomError();
   const modalNeedHelp = useModalNeedHelp();
+  const orderStatusActions = useOrderStatusActions();
+  const getPaymentStatus = usePaymentStatus();
   const { stateHistory, dispatchHistory } = useHistoryContext();
   const {
     paymentInvoice,
@@ -103,6 +107,10 @@ const HistoryDetailView: FC = () => {
   };
   /** => get Payment and Order Detail */
   useEffect(() => {
+    if (orderStatus.data.length === 0 || paymentStatus.data.length === 0) {
+      orderStatusActions.fetch(dispatchHistory);
+      getPaymentStatus.list(dispatchHistory);
+    }
     getPaymentDetail.detail(dispatchHistory, params.billingId);
     historyDetailAction.fetch(dispatchHistory, params.id, params.section);
   }, []);
