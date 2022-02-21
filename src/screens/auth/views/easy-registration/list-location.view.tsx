@@ -17,7 +17,7 @@ import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
 import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
-  const search = useInput();
+  const search = useInput('', 'string-only');
   const [selectedLocation, setSelectedLocation] =
     React.useState<models.ISearchLocationsData | null>(null);
   const {
@@ -34,7 +34,7 @@ const Content: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (search.value) {
+    if (search.value?.length > 1) {
       searchLocation(search.value);
     }
   }, [search.value]);
