@@ -82,14 +82,14 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
   useEffect(() => {
     if (isPressed) {
       const carts =
-        stateCart.get.data?.sellers.flatMap((seller) =>
+        cartMasterAction.cartMaster.sellers.flatMap((seller) =>
           seller.products.map((product) => ({
             productId: product.productId,
             warehouseId: product.warehouseId,
           })),
         ) ?? [];
       const sellerIds =
-        stateCart.get.data?.sellers.map((seller) => seller.sellerId) ?? [];
+        cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ?? [];
 
       console.log({ carts, sellerIds });
 
