@@ -16,43 +16,84 @@ import * as models from '@models';
 
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
+  handleRemoveProductModal: (params: models.RemovedProducts[]) => void;
 }
 
-export const ProductView: FC<ProductViewProps> = ({ product }) => {
+export const ProductView: FC<ProductViewProps> = ({
+  product,
+  handleRemoveProductModal,
+}) => {
+  /** => REMAINING STOCK */
+  const renderRemainingStock = () => {
+    if (Number(product.stock) < 11) {
+      return (
+        <View>
+          <SnbText.B4
+            color={
+              color.red70
+            }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+        </View>
+      );
+    }
+  };
+  /** => PRODUCT IMAGE */
+  const renderProductImage = () => {
+    return (
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          source={{
+            uri: product.productImageUrl,
+          }}
+          style={ShoppingCartStyles.productImg}
+        />
+      </View>
+    );
+  };
+  /** => PPN BADGE */
+  const renderPPNBadge = () => {
+    if (product.isPriceAfterTax) {
+      return (
+        <View style={{ marginBottom: 5 }}>
+          <SnbBadge.Label
+            type="warning"
+            value={`Include PPN ${product.taxPercentage}%`}
+          />
+        </View>
+      );
+    }
+  };
+  /** => REMOVE PRODUCT ICON */
+  const renderRemoveProductIcon = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          const removedProducts: models.RemovedProducts[] = [];
+          removedProducts.push({
+            productId: product.productId,
+            warehouseId: product.warehouseId,
+          });
+          handleRemoveProductModal(removedProducts);
+        }}
+        style={{ marginRight: 5 }}>
+        <SnbIcon name="delete_outline" color={color.black80} size={32} />
+      </TouchableOpacity>
+    );
+  };
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
           <SnbCheckbox status={'unselect'} onPress={() => {}} />
         </View>
-        <TouchableOpacity
-          style={{ alignItems: 'center', justifyContent: 'center' }}
-          onPress={() => {}}>
-          <Image
-            source={{
-              uri: product.productImageUrl,
-            }}
-            style={ShoppingCartStyles.productImg}
-          />
-        </TouchableOpacity>
+        {renderProductImage()}
         <View style={{ justifyContent: 'center' }}>
-          {product.isPriceAfterTax ? (
-            <View style={{ marginBottom: 5 }}>
-              <SnbBadge.Label
-                type="warning"
-                value={`Include PPN ${product.taxPercentage}%`}
-              />
-            </View>
-          ) : (
-            <View />
-          )}
-          <TouchableOpacity
-            onPress={() => {}}
+          {renderPPNBadge()}
+          <View
             style={{
               width: '100%',
             }}>
             <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
-          </TouchableOpacity>
+          </View>
           <View
             style={{
               flexDirection: 'row',
@@ -77,22 +118,11 @@ export const ProductView: FC<ProductViewProps> = ({ product }) => {
               />
             </View>
           </View>
-          {Number(product.stock) < 11 ? (
-            <View>
-              <SnbText.B4
-                color={
-                  color.red70
-                }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
-            </View>
-          ) : (
-            <View />
-          )}
+          {renderRemainingStock()}
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
-        <TouchableOpacity onPress={() => {}} style={{ marginRight: 5 }}>
-          <SnbIcon name="delete_outline" color={color.black80} size={32} />
-        </TouchableOpacity>
+        {renderRemoveProductIcon()}
         <SnbNumberCounter
           value={product.qty}
           maxLength={6}

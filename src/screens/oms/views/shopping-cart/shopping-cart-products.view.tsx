@@ -14,11 +14,13 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 interface ShoppingCartProductsProps {
   availableProducts: models.CartMasterSellers[];
   unavailableProducts: models.CartMasterUnavailable[];
+  handleRemoveProductModal: (params: models.RemovedProducts[]) => void;
 }
 /** === COMPONENT === */
 export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
   availableProducts,
   unavailableProducts,
+  handleRemoveProductModal,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -39,7 +41,10 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
         </View>
         <SnbText.B4 color={color.black100}>Pilih Semua</SnbText.B4>
       </View>
-      <ProductAvailableSection availableProducts={availableProducts} />
+      <ProductAvailableSection
+        availableProducts={availableProducts}
+        handleRemoveProductModal={handleRemoveProductModal}
+      />
       <ProductNotAvailableSection unavailableProducts={unavailableProducts} />
     </View>
   );
