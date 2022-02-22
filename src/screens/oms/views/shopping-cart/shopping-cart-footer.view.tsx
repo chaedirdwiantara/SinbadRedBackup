@@ -14,6 +14,7 @@ import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import BottomSheetError from '@core/components/BottomSheetError';
+import { ShoppingCartStyles } from '@screen/oms/styles';
 
 /** === INTERFACE === */
 interface FooterProps {
@@ -101,13 +102,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
   ]);
 
   return (
-    <View
-      style={{
-        padding: 16,
-        backgroundColor: color.white,
-        justifyContent: 'flex-end',
-        elevation: 10,
-      }}>
+    <View style={ShoppingCartStyles.footerContainer}>
       <View
         style={{
           flexDirection: 'row',
