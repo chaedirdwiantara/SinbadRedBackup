@@ -27,7 +27,6 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
     dispatchProduct,
   } = useProductContext();
   const { fetch, clearContents } = useProductListActions('recommendations');
-  const { me } = useDataAuth();
 
   useFocusEffect(
     useCallback(() => {
@@ -54,7 +53,6 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
         </TouchableOpacity>
       </View>
       <HorizontalProductGridLayout
-        showSoldLabel={me.data !== null}
         data={productListData}
         loading={productListLoading}
       />

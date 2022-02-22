@@ -12,7 +12,6 @@ import * as models from '@models';
 interface GridLayoutCardProps {
   product: models.ProductList;
   index: number;
-  showSoldLabel?: boolean;
   onOrderPress: (item: models.ProductList) => void;
 }
 /** === COMPONENT ===  */
@@ -20,7 +19,6 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
   product,
   index,
   onOrderPress,
-  showSoldLabel,
 }) => {
   const imageKitWidth = isTab ? 300 : 250;
 
@@ -33,7 +31,6 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         marginBottom: 4,
       }}>
       <ProductGridCard
-        showSoldLabel={showSoldLabel}
         flexOne={true}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}

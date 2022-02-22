@@ -13,7 +13,6 @@ import { QuantityModifier } from './QuantityModifier';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { useProductContext } from 'src/data/contexts/product';
-import { useDataAuth } from '@core/redux/Data';
 import {
   goBackFromBundleToDetail,
   goToShoppingCart,
@@ -50,7 +49,6 @@ const ProductBundleView: FC = () => {
       minQty: productDetail?.minQty ?? 1,
     });
   const { fetch } = useProductDetailAction();
-  const { me } = useDataAuth();
 
   useEffect(() => {
     // Will not fetch on mount. Will only fetch when one of the related products is pressed,
@@ -108,7 +106,6 @@ const ProductBundleView: FC = () => {
         />
         <HorizontalProductGridLayout
           data={productListState.data}
-          showSoldLabel={me.data !== null}
           loading={productListState.loading} // relatedProductsState.loading
           withOrderButton={true}
           // onEndReached={() =>
