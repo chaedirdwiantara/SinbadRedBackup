@@ -135,7 +135,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
           <View style={AddToCartModalStyle.lineSeparator} />
           <SnbText.C1>
             min.pembelian{' '}
-            {`${dataProductDetail?.minQty} ${dataProductDetail?.minQtyType}`}
+            {`${dataProductDetail?.minQty} ${dataProductDetail?.unit}`}
           </SnbText.C1>
         </View>
       </View>

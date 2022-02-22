@@ -87,6 +87,7 @@ const ProductBundleView: FC = () => {
           name={productDetail?.name!}
           finalPrice={productDetail?.finalPrice!}
           packagedQty={productDetail?.packagedQty!}
+          unit={productDetail?.unit!}
           minQty={productDetail?.minQty!}
           minQtyType={productDetail?.minQtyType!}
           loading={productDetailLoading}

@@ -81,7 +81,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
                 min.pembelian{' '}
-                {`${dataProductDetail?.minQty} ${dataProductDetail?.minQtyType}`}
+                {`${dataProductDetail?.minQty} ${dataProductDetail?.unit}`}
               </SnbText.C1>
             </View>
           </View>
@@ -140,7 +140,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
                 min.pembelian{' '}
-                {`${dataProductDetailCart?.minQty} ${dataProductDetailCart?.minQtyType}`}
+                {`${dataProductDetailCart?.minQty} ${dataProductDetailCart?.unit}`}
               </SnbText.C1>
             </View>
           </View>
