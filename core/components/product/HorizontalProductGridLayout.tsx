@@ -12,6 +12,7 @@ import * as models from '@models';
 interface HorizontalProductGridLayoutProps {
   data: Array<models.ProductList>;
   loading: boolean;
+  showSoldLabel?: boolean;
   withOrderButton?: boolean;
   onEndReached?: () => void;
   onCardPress?: (item: models.ProductList, index: number) => void;
@@ -27,6 +28,7 @@ export const HorizontalProductGridLayout: FC<
   onEndReached,
   onCardPress,
   onOrderPress,
+  showSoldLabel,
 }) => {
   /** === VIEW === */
   /** === Product Card === */
@@ -46,6 +48,7 @@ export const HorizontalProductGridLayout: FC<
       }}>
       <ProductGridCard
         flexOne={true}
+        showSoldLabel={showSoldLabel}
         name={item.name}
         imageUrl={item.thumbnail}
         finalPrice={item.finalPrice}

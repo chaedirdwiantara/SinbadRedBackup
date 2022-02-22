@@ -22,6 +22,7 @@ interface ProductListCardProps {
   isBundle?: boolean;
   isPromo?: boolean;
   isExclusive?: boolean;
+  showSoldLabel?: boolean;
   onCardPress?: () => void;
   withOrderButton?: boolean;
   onOrderPress?: () => void;
@@ -104,9 +105,11 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             </TouchableOpacity>
           </View>
         )}
-        <SnbText.C1 color={color.black80}>{`Terjual ${
-          props.qtySoldLabel ?? ''
-        }`}</SnbText.C1>
+        {props.showSoldLabel && (
+          <SnbText.C1 color={color.black80}>{`Terjual ${
+            props.qtySoldLabel ?? ''
+          }`}</SnbText.C1>
+        )}
       </View>
     </TouchableOpacity>
   </View>

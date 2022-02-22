@@ -11,21 +11,24 @@ interface ProductDetailMainInfoProps {
   name: string;
   finalPrice: number;
   stock: number;
-  unit: string;
+  unit?: string;
   qtySoldLabel: string;
   isExclusive: boolean;
   hasPromo: boolean;
   loading: boolean;
+  showSoldLabel?: boolean;
+  showStock?: boolean;
 }
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
   finalPrice,
   stock,
-  unit,
   isExclusive,
   hasPromo,
   loading,
+  showSoldLabel,
+  showStock,
   qtySoldLabel,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
@@ -36,7 +39,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {toCurrency(finalPrice ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
-    {stock < 11 && !loading && (
+    {showStock && stock < 11 && !loading && (
       <View
         style={{
           flexDirection: 'row',
@@ -52,10 +55,11 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
             </SnbText.B3>
           </View>
         )}
-        <SnbText.B3
-          color={color.red50}>{`Tersisa ${stock} ${unit}`}</SnbText.B3>
+        <SnbText.B3 color={color.red50}>{`Tersisa ${stock}`}</SnbText.B3>
       </View>
     )}
-    <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
+    {showSoldLabel && (
+      <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
+    )}
   </View>
 );

@@ -266,6 +266,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
       <ProductGridCard
         flexOne={true}
         name={item.name}
+        showSoldLabel={me.data !== null}
         imageUrl={item.imageUrl}
         finalPrice={item.finalPrice}
         qtySoldLabel={item.qtySoldLabel}

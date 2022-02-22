@@ -9,6 +9,7 @@ import { GridSkeleton } from './GridSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
 import { useListDisplayState } from '@core/functions/product';
+import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPE === */
 import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
@@ -30,6 +31,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
     error,
     dataLength: products.length,
   });
+  const { me } = useDataAuth();
   /** === DERIVED ===  */
   const hasTags = withTags && tags.length > 0;
   /** === VIEW ===  */
@@ -73,6 +75,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                 (product, productIndex) =>
                   productIndex % 2 === 0 && (
                     <GridLayoutCard
+                      showSoldLabel={me.data !== null}
                       key={product.id}
                       product={product}
                       index={productIndex}
@@ -86,6 +89,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                 (product, productIndex) =>
                   productIndex % 2 === 1 && (
                     <GridLayoutCard
+                      showSoldLabel={me.data !== null}
                       key={product.id}
                       product={product}
                       index={productIndex}

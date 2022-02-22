@@ -8,6 +8,7 @@ import GridLayoutCard from '@core/components/product/list/grid-layout/GridLayout
 import { GridSkeleton } from '@core/components/product/list/grid-layout/GridSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useListDisplayState } from '@core/functions/product';
+import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPE === */
 import { SupplierProductLayoutProps } from './types';
 /** === COMPONENT === */
@@ -25,6 +26,7 @@ export const SupplierProductGridLayout: FC<SupplierProductLayoutProps> = ({
     error,
     dataLength: products.length,
   });
+  const { me } = useDataAuth();
   /** === DERIVED ===  */
   const hasTags = tags.length > 0;
   /** === VIEW ===  */
@@ -53,6 +55,7 @@ export const SupplierProductGridLayout: FC<SupplierProductLayoutProps> = ({
               (product, productIndex) =>
                 productIndex % 2 === 0 && (
                   <GridLayoutCard
+                    showSoldLabel={me.data !== null}
                     key={product.id}
                     product={product}
                     index={productIndex}
@@ -66,6 +69,7 @@ export const SupplierProductGridLayout: FC<SupplierProductLayoutProps> = ({
               (product, productIndex) =>
                 productIndex % 2 === 1 && (
                   <GridLayoutCard
+                    showSoldLabel={me.data !== null}
                     key={product.id}
                     product={product}
                     index={productIndex}

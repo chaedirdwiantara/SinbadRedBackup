@@ -489,6 +489,8 @@ const ProductDetailView: FC = () => {
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
+            showSoldLabel={me.data !== null}
+            showStock={me.data !== null}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
           {/* <ProductDetailSupplierInfo // Hide temporarily

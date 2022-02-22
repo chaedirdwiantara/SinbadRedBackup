@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
 /** === IMPORT FUNCTIONS === */
 import { useProductListActions } from '@screen/product/functions';
+import { useDataAuth } from '@core/redux/Data';
 import { useProductContext } from 'src/data/contexts/product';
 import { goToProduct } from '../functions';
 /** === IMPORT STYLE === */
@@ -26,6 +27,7 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
     dispatchProduct,
   } = useProductContext();
   const { fetch, clearContents } = useProductListActions('recommendations');
+  const { me } = useDataAuth();
 
   useFocusEffect(
     useCallback(() => {
@@ -52,6 +54,7 @@ const RecommendationHomeView: FC<RecommendationHomeViewProps> = ({
         </TouchableOpacity>
       </View>
       <HorizontalProductGridLayout
+        showSoldLabel={me.data !== null}
         data={productListData}
         loading={productListLoading}
       />

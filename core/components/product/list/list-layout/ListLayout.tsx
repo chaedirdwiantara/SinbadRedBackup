@@ -11,6 +11,7 @@ import {
   goToProductDetail,
   useListDisplayState,
 } from '@core/functions/product';
+import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import { ProductLayoutProps } from '../product-list-core.type';
@@ -33,6 +34,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
     error,
     dataLength: products.length,
   });
+  const { me } = useDataAuth();
   /** === DERIVED === */
   const hasTags = withTags && tags.length > 0;
   const tagList = hasTags ? (
@@ -56,6 +58,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           qtySoldLabel={item.qtySoldLabel}
+          showSoldLabel={me.data !== null}
           isExclusive={item.isExclusive}
           onCardPress={() => {
             goToProductDetail(item.id);

@@ -257,9 +257,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
         </TouchableOpacity>
         {(product.stock < 11 || product.qty > product.stock) && (
           <SnbText.B3 color={color.red50}>
-            {product.stock === 0
-              ? 'Produk Habis'
-              : `Tersisa ${product.stock} ${product.unit}`}
+            {product.stock === 0 ? 'Produk Habis' : `Tersisa ${product.stock}`}
           </SnbText.B3>
         )}
       </View>
