@@ -137,6 +137,18 @@ const cancelStock = () => {
   return apiMappingMockV3(mockHost, path, 'discount', 'v1', 'DELETE');
 };
 
+const cartBuyerAddress = () => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'buyer-address';
+  return apiMappingMockV3<models.CartBuyerAddress>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'DETAIL',
+  );
+};
+
 export const CartApi = {
   exampleCart,
   getCart,
@@ -148,4 +160,5 @@ export const CartApi = {
   checkSeller,
   checkStock,
   cancelStock,
+  cartBuyerAddress,
 };

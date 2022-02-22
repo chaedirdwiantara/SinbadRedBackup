@@ -167,6 +167,18 @@ const useCancelStockAction = () => {
     },
   };
 };
+/** => cart buyer address action */
+const useCartBuyerAddressAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartBuyerAddressProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cartBuyerAddressReset(contextDispatch));
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -180,6 +192,7 @@ export {
   useCheckSellerAction,
   useCheckStockAction,
   useCancelStockAction,
+  useCartBuyerAddressAction,
 };
 /**
  * ================================================================
