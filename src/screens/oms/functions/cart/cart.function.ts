@@ -46,7 +46,7 @@ const matchCartWithCheckData = ({
       };
       const thisCheckProduct: any = {
         ...checkProductData[checkProductIndex],
-        productStatus: checkProductData[checkProductIndex].status,
+        productStatus: checkProductData[checkProductIndex]?.status,
       };
 
       // remove unused property for comparation
