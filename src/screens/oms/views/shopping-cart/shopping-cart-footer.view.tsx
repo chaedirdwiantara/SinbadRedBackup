@@ -6,7 +6,7 @@ import {
   useCheckStockAction,
   useUpdateCartAction,
 } from '@screen/oms/functions';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
@@ -60,7 +60,6 @@ interface FooterProps {
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
-  const [isPressed, setPress] = useState(false);
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
 
   const updateCartAction = useUpdateCartAction();
@@ -75,12 +74,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
       id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
       carts: dummyUpdatePayload.carts,
     });
-
-    setPress((prev) => !prev);
   };
 
   useEffect(() => {
-    if (isPressed) {
+    if (stateCart.update.data) {
       const carts =
         cartMasterAction.cartMaster.sellers.flatMap((seller) =>
           seller.products.map((product) => ({
@@ -89,7 +86,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
           })),
         ) ?? [];
       const sellerIds =
-        cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ?? [];
+        cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ??
+        [];
 
       console.log({ carts, sellerIds });
 
@@ -106,7 +104,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
         carts,
       });
     }
-  }, [isPressed]);
+  }, [stateCart.update.data]);
 
   return (
     <View
