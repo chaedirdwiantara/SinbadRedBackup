@@ -12,10 +12,13 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import * as models from '@models';
 
-interface ProductViewProps {}
+interface ProductViewProps {
+  product: models.CartMasterSellersProducts;
+}
 
-export const ProductView: FC<ProductViewProps> = ({}) => {
+export const ProductView: FC<ProductViewProps> = ({ product }) => {
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
@@ -27,23 +30,28 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
           onPress={() => {}}>
           <Image
             source={{
-              uri: 'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15731/image_1617790892428.png',
+              uri: product.productImageUrl,
             }}
             style={ShoppingCartStyles.productImg}
           />
         </TouchableOpacity>
         <View style={{ justifyContent: 'center' }}>
-          <View style={{ marginBottom: 5 }}>
-            <SnbBadge.Label type="warning" value="Include PPN 10%" />
-          </View>
+          {product.isPriceAfterTax ? (
+            <View style={{ marginBottom: 5 }}>
+              <SnbBadge.Label
+                type="warning"
+                value={`Include PPN ${product.taxPercentage}%`}
+              />
+            </View>
+          ) : (
+            <View />
+          )}
           <TouchableOpacity
             onPress={() => {}}
             style={{
               width: '100%',
             }}>
-            <SnbText.B4 color={color.black80}>
-              SGM Ananda 1 - Varian Omicron
-            </SnbText.B4>
+            <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
           </TouchableOpacity>
           <View
             style={{
@@ -53,12 +61,14 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
               <SnbText.B4
                 color={color.black60}
                 textDecorationLine="line-through">
-                {toCurrency(25000, { withFraction: false })}
+                {toCurrency(Number(product.lastUsedPrice), {
+                  withFraction: false,
+                })}
               </SnbText.B4>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <SnbText.B4 color={color.black100}>
-                {toCurrency(15000, { withFraction: false })}
+                {toCurrency(Number(product.price), { withFraction: false })}
               </SnbText.B4>
               <SnbIcon
                 name="arrow_drop_down_circle"
@@ -67,9 +77,16 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
               />
             </View>
           </View>
-          <View>
-            <SnbText.B4 color={color.red70}>Tersedia 10 Kardus</SnbText.B4>
-          </View>
+          {Number(product.stock) < 11 ? (
+            <View>
+              <SnbText.B4
+                color={
+                  color.red70
+                }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+            </View>
+          ) : (
+            <View />
+          )}
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
@@ -77,7 +94,7 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
           <SnbIcon name="delete_outline" color={color.black80} size={32} />
         </TouchableOpacity>
         <SnbNumberCounter
-          value={5}
+          value={product.qty}
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
@@ -88,9 +105,7 @@ export const ProductView: FC<ProductViewProps> = ({}) => {
           plusDisabled={false}
         />
       </View>
-      <View style={ShoppingCartStyles.actionContainer}>
-        <SnbText.B4 color={color.black60}>40pcs dalam 1 Kardus</SnbText.B4>
-      </View>
+      <View style={ShoppingCartStyles.actionContainer} />
     </View>
   );
 };

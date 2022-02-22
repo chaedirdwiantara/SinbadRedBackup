@@ -7,32 +7,47 @@ import { ProductView } from './product.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT EXTERNAL HOOK FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
+import * as models from '@models';
 import { ShoppingCartStyles } from '@screen/oms/styles';
+/** === INTERFACES === */
+interface ProductAvailableSectionProps {
+  availableProducts: models.CartMasterSellers[];
+}
 /** === COMPONENT === */
-export const ProductAvailableSection: FC = () => {
+export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
+  availableProducts,
+}) => {
   /** === HOOKS === */
   /** === VIEW === */
-  /** => Main */
+  /** => MAIN */
   return (
     <View
       style={{
         flexDirection: 'column',
       }}>
-      <View>
-        <View style={ShoppingCartStyles.sellerContainer}>
-          <View style={{ marginRight: 16 }}>
-            <SnbCheckbox status={'unselect'} onPress={() => {}} />
-          </View>
-          <SnbText.B4 color={color.black100}>Tigaraksa Danone</SnbText.B4>
-        </View>
-        {[0].map((i) => (
-          <View
-            key={i}
-            style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-            <ProductView />
-          </View>
-        ))}
-      </View>
+      {availableProducts.map((item) => {
+        if (item.products.length !== 0) {
+          return (
+            <View key={item.sellerId}>
+              <View style={ShoppingCartStyles.sellerContainer}>
+                <View style={{ marginRight: 16 }}>
+                  <SnbCheckbox status={'unselect'} onPress={() => {}} />
+                </View>
+                <SnbText.B4 color={color.black100}>
+                  {item.sellerName}
+                </SnbText.B4>
+              </View>
+              {item.products.map((product) => (
+                <View
+                  key={`${product.productId}.${product.sellerId}`}
+                  style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
+                  <ProductView product={product} />
+                </View>
+              ))}
+            </View>
+          );
+        }
+      })}
     </View>
   );
 };
