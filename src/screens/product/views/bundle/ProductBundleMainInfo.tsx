@@ -96,7 +96,7 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <SnbText.C1>{`per-Dus ${props.packagedQty} ${props.minQtyType}`}</SnbText.C1>
+          <SnbText.C1>{`per-Dus ${props.packagedQty} Pcs`}</SnbText.C1>
           <View style={ProductBundleStyle.textHorizontalDivider} />
           <SnbText.C1>{`min.pembelian ${props.minQty} ${props.unit}`}</SnbText.C1>
         </View>

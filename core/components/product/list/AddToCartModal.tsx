@@ -129,8 +129,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         </View>
         <View style={{ flexDirection: 'row' }}>
           <SnbText.C1>
-            per-Dus{' '}
-            {`${dataProductDetail?.packagedQty} ${dataProductDetail?.minQtyType}`}
+            per-Dus {`${dataProductDetail?.packagedQty} Pcs`}
           </SnbText.C1>
           <View style={AddToCartModalStyle.lineSeparator} />
           <SnbText.C1>
