@@ -35,8 +35,8 @@ export interface CartMasterUnavailable extends CartMasterSellersProducts {
 export interface CartMasterSellersProducts extends CartProduct {
   sellerId: number;
   sellerName: string;
-  lastUsedPrice?: number;
-  isLastPriceUsedRules?: boolean;
+  lastUsedPrice: number;
+  isLastPriceUsedRules: boolean;
   stock?: number;
   productStatus?: string;
   stockStatus?: string;
