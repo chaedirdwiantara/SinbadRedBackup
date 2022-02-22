@@ -62,3 +62,4 @@ export const RESET_CART_MASTER = 'ResetCartMaster';
 export const MERGE_CHECK_PRODUCT = 'MergeCheckProduct';
 export const MERGE_CHECK_SELLER = 'MergeCheckSeller';
 export const MERGE_CHECK_STOCK = 'MergeCheckStock';
+export const CART_MASTER_REMOVE_PRODUCT = 'CartMasterRemoveProduct';

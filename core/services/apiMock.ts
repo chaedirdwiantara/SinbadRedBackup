@@ -52,6 +52,7 @@ const apiMock = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
+  console.log(`${mockHost}/api/${version}/sinbad-app/${path}`);
   return fetch(`${mockHost}/api/${version}/sinbad-app/${path}`, reqBody)
     .then(handleErrors)
     .then(handleSuccess)

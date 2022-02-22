@@ -16,7 +16,7 @@ import * as models from '@models';
 
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
-  handleRemoveProductModal: (params: models.RemovedProducts[]) => void;
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
@@ -72,7 +72,10 @@ export const ProductView: FC<ProductViewProps> = ({
             productId: product.productId,
             warehouseId: product.warehouseId,
           });
-          handleRemoveProductModal(removedProducts);
+          handleRemoveProductModal({
+            source: 'available',
+            removedProducts,
+          });
         }}
         style={{ marginRight: 5 }}>
         <SnbIcon name="delete_outline" color={color.black80} size={32} />

@@ -74,7 +74,7 @@ const removeCartProduct = ({
   data,
 }: models.UpdateProcessProps<models.RemoveCartProductPayload>) => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = `remove-cart-products/${data.cartId}`;
+  const path = `carts/remove-cart-products/${data.cartId}`;
   return apiMappingMockV3<models.RemoveCartProductResponse>(
     mockHost,
     path,

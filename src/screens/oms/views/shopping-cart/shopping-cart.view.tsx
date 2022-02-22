@@ -31,9 +31,8 @@ const OmsShoppingCartView: FC = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
-  const [selectRemoveProduct, setSelectRemoveProduct] = useState<
-    models.RemovedProducts[]
-  >([]);
+  const [selectRemoveProduct, setSelectRemoveProduct] =
+    useState<models.HandleRemoveProduct | null>(null);
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
@@ -42,8 +41,9 @@ const OmsShoppingCartView: FC = () => {
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
   /** === HOOKS === */
-  /** => Did Mount */
+  /** => did mount & will unmount */
   useEffect(() => {
+    /** did mount */
     getCartAction.fetch(dispatchCart);
     checkProductAction.fetch(dispatchCart, {
       carts: [
@@ -74,6 +74,14 @@ const OmsShoppingCartView: FC = () => {
         },
       ],
     });
+    /** will umount */
+    return () => {
+      checkProductAction.reset(dispatchCart);
+      checkSellerAction.reset(dispatchCart);
+      checkStockAction.reset(dispatchCart);
+      getCartAction.reset(dispatchCart);
+      cartMasterAction.reset();
+    };
   }, []);
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
@@ -92,6 +100,7 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
     }
   }, [
+    cartMasterAction.cartMaster.id,
     stateCart.checkProduct.data,
     stateCart.checkSeller.data,
     stateCart.checkStock.data,
@@ -104,7 +113,10 @@ const OmsShoppingCartView: FC = () => {
     ) {
       cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
     }
-  }, [cartMasterAction.cartMaster.isCheckProductMerged]);
+  }, [
+    cartMasterAction.cartMaster.isCheckProductMerged,
+    stateCart.checkSeller.data,
+  ]);
   /** => after success fetch checkStock, merge data to redux */
   useEffect(() => {
     if (
@@ -113,7 +125,10 @@ const OmsShoppingCartView: FC = () => {
     ) {
       cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
     }
-  }, [cartMasterAction.cartMaster.isCheckSellerMerged]);
+  }, [
+    cartMasterAction.cartMaster.isCheckSellerMerged,
+    stateCart.checkStock.data,
+  ]);
   /** => after success merge all check data to redux, save redux to local state */
   useEffect(() => {
     if (
@@ -126,21 +141,24 @@ const OmsShoppingCartView: FC = () => {
     }
   }, [cartMasterAction.cartMaster]);
   /** => handle remove product modal */
-  const handleRemoveProductModal = (selected: models.RemovedProducts[]) => {
+  const handleRemoveProductModal = (selected: models.HandleRemoveProduct) => {
     setSelectRemoveProduct(selected);
     setModalRemoveProduct(true);
   };
   /** => handle ok action remove product */
   const handleOkActionRemoveProduct = () => {
-    removeCartProductAction.fetch(dispatchCart, {
-      cartId: cartMasterAction.cartMaster.id,
-      removedProducts: selectRemoveProduct,
-    });
+    if (selectRemoveProduct) {
+      removeCartProductAction.fetch(dispatchCart, {
+        cartId: cartMasterAction.cartMaster.id,
+        removedProducts: selectRemoveProduct.removedProducts,
+      });
+    }
   };
   /** => listen remove product fetch */
   useEffect(() => {
     /** success */
-    if (stateCart.remove.data !== null) {
+    if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
+      cartMasterAction.removeProduct(selectRemoveProduct);
       setModalRemoveProduct(false);
     }
     /** error */
@@ -148,6 +166,7 @@ const OmsShoppingCartView: FC = () => {
       // error handle here
     }
   }, [stateCart.remove]);
+  console.log(cartMasterAction);
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {

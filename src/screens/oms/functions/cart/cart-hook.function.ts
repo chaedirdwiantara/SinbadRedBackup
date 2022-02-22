@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useDataCartMaster } from '@core/redux/Data';
+import { HandleRemoveProduct } from '@models';
 /** === FUNCTION === */
 /** => cart example action */
 const useCartExampleAction = () => {
@@ -104,6 +105,9 @@ const useCartMasterAction = () => {
     },
     mergeCheckStock: (data: models.CheckStockResponse[]) => {
       dispatch(Actions.mergeCheckStock(data));
+    },
+    removeProduct: (data: HandleRemoveProduct) => {
+      dispatch(Actions.CartMasterRemoveProduct(data));
     },
     reset: () => {
       dispatch(Actions.resetCartMaster());

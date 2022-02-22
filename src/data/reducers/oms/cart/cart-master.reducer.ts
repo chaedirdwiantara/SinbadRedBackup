@@ -96,7 +96,7 @@ export const cartMaster = simplifyReducer(initialState, {
     { payload }: models.MergeCheckSellerAction,
   ) {
     const sellers: models.CartMasterSellers[] = [];
-    const unavailable: models.CartMasterUnavailable[] = state.unavailable;
+    const unavailable: models.CartMasterUnavailable[] = [...state.unavailable];
     /** => replace all getCart product data with checkSeller data */
     for (let i = 0; i < state.sellers.length; i++) {
       const products: models.CartMasterSellersProducts[] = [];
@@ -141,7 +141,7 @@ export const cartMaster = simplifyReducer(initialState, {
     { payload }: models.MergeCheckStockAction,
   ) {
     const sellers: models.CartMasterSellers[] = [];
-    const unavailable: models.CartMasterUnavailable[] = state.unavailable;
+    const unavailable: models.CartMasterUnavailable[] = [...state.unavailable];
     /** => replace all getCart product data with checkStock data */
     for (let i = 0; i < state.sellers.length; i++) {
       const products: models.CartMasterSellersProducts[] = [];
@@ -203,6 +203,48 @@ export const cartMaster = simplifyReducer(initialState, {
       unavailable: unavailable,
       isCheckStockMerged: true,
     };
+  },
+  /** => MERGE CHECK PRODUCT DATA */
+  [types.CART_MASTER_REMOVE_PRODUCT](
+    state = initialState,
+    { payload }: models.CartMasterRemoveProductAction,
+  ) {
+    const sellers: models.CartMasterSellers[] = [];
+    const unavailable: models.CartMasterUnavailable[] = [];
+    if (payload.source === 'available') {
+      state.sellers.map((item) => {
+        const filteredProducts = item.products.filter((innerItem) => {
+          return (
+            innerItem.productId !== payload.removedProducts[0].productId &&
+            innerItem.warehouseId !== payload.removedProducts[0].warehouseId
+          );
+        });
+        sellers.push({
+          ...item,
+          products: filteredProducts,
+        });
+      });
+      return {
+        ...state,
+        sellers: sellers,
+      };
+    } else {
+      state.unavailable.map((item) => {
+        const isFound =
+          payload.removedProducts.findIndex(
+            (innerItem) =>
+              innerItem.productId === item.productId &&
+              innerItem.warehouseId === item.warehouseId,
+          ) > -1;
+        if (!isFound) {
+          unavailable.push(item);
+        }
+      });
+      return {
+        ...state,
+        unavailable: unavailable,
+      };
+    }
   },
   /** => RESET CARD MASTER INTO INITIAL STATE */
   [types.RESET_CART_MASTER]() {

@@ -12,7 +12,7 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 /** === INTERFACES === */
 interface ProductAvailableSectionProps {
   availableProducts: models.CartMasterSellers[];
-  handleRemoveProductModal: (params: models.RemovedProducts[]) => void;
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({

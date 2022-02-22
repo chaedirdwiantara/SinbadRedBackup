@@ -24,6 +24,12 @@ export const mergeCheckStock = (
 ): models.MergeCheckStockAction => {
   return { type: types.MERGE_CHECK_STOCK, payload };
 };
+/** => CART MASTER REMOVE PRODUCT */
+export const CartMasterRemoveProduct = (
+  payload: models.HandleRemoveProduct,
+): models.CartMasterRemoveProductAction => {
+  return { type: types.CART_MASTER_REMOVE_PRODUCT, payload };
+};
 /** => RESET CART MASTER DATA TO INITIAL STATE */
 export const resetCartMaster = () => {
   return { type: types.RESET_CART_MASTER };
