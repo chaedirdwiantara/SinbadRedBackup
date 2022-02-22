@@ -519,7 +519,7 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Jumlah per-Dus"
-              value={`${dataProduct?.packagedQty} PCS`}
+              value={`${dataProduct?.packagedQty} Pcs`}
             />
             <ProductDetailSectionItem
               name="Berat"

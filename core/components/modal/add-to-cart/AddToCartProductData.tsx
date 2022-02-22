@@ -75,8 +75,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus{' '}
-                {`${dataProductDetail?.packagedQty} ${dataProductDetail?.minQtyType}`}
+                per-Dus {`${dataProductDetail?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
@@ -134,8 +133,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus{' '}
-                {`${dataProductDetailCart?.packagedQty} ${dataProductDetailCart?.minQtyType}`}
+                per-Dus {`${dataProductDetailCart?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
