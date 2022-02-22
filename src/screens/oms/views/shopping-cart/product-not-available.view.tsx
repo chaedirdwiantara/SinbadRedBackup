@@ -81,7 +81,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                   style={{
                     flexDirection: 'row',
                   }}>
-                  <SnbText.B4 color={color.black80}>{item.status}</SnbText.B4>
+                  <SnbText.B4 color={color.black80}>
+                    {item.unavailableMessage}
+                  </SnbText.B4>
                 </View>
               </View>
             </View>

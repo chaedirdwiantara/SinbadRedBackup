@@ -27,9 +27,10 @@ export interface CartMasterSellers {
   sellerId: number;
   sellerName: string;
   products: CartMasterSellersProducts[];
+  status?: string;
 }
 export interface CartMasterUnavailable extends CartMasterSellersProducts {
-  status: string;
+  unavailableMessage: string;
 }
 export interface CartMasterSellersProducts extends CartProduct {
   sellerId: number;
@@ -37,6 +38,8 @@ export interface CartMasterSellersProducts extends CartProduct {
   lastUsedPrice?: number;
   isLastPriceUsedRules?: boolean;
   stock?: number;
+  productStatus?: string;
+  stockStatus?: string;
 }
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {
