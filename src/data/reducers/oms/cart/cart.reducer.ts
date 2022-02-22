@@ -50,6 +50,11 @@ import {
   cancelStockReducer,
   CancelStockInitialProps,
 } from './cancel-stock.reducer';
+import {
+  cartBuyerAddressInitialState,
+  cartBuyerAddressReducer,
+  CartBuyerAddressInitialProps,
+} from './cart-buyer-address.reducer';
 
 export interface CartInitialProps {
   example: CartExampleInitialProps;
@@ -62,6 +67,7 @@ export interface CartInitialProps {
   checkSeller: CheckSellerInitialProps;
   checkStock: CheckStockInitialProps;
   cancelStock: CancelStockInitialProps;
+  buyerAddress: CartBuyerAddressInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
@@ -75,6 +81,7 @@ export const cartInitialState = {
   checkSeller: checkSellerInitialState,
   checkStock: checkStockInitialState,
   cancelStock: cancelStockInitialState,
+  buyerAddress: cartBuyerAddressInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
@@ -89,6 +96,7 @@ export const cartReducer = (
     checkSeller,
     checkStock,
     cancelStock,
+    buyerAddress,
   }: CartInitialProps,
   action: any,
 ) => ({
@@ -102,4 +110,5 @@ export const cartReducer = (
   checkSeller: checkSellerReducer(checkSeller, action),
   checkStock: checkStockReducer(checkStock, action),
   cancelStock: cancelStockReducer(cancelStock, action),
+  buyerAddress: cartBuyerAddressReducer(buyerAddress, action),
 });

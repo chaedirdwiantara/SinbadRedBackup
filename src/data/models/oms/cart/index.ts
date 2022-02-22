@@ -10,3 +10,4 @@ export * from './remove-cart-product.model';
 export * from './check-product.model';
 export * from './check-seller.model';
 export * from './check-stock.model';
+export * from './cart-buyer-address.model';
