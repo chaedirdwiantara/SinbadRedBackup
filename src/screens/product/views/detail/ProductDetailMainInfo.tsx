@@ -53,7 +53,9 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
             </SnbText.B3>
           </View>
         )}
-        <SnbText.B3 color={color.red50}>{`Tersisa ${stock}`}</SnbText.B3>
+        <SnbText.B3 color={color.red50}>
+          {stock === 0 ? 'Produk Habis' : `Tersisa ${stock}`}
+        </SnbText.B3>
       </View>
     )}
     {qtySoldLabel !== '0' && (
