@@ -14,3 +14,8 @@ export interface RemovedProducts {
   productId: string;
   warehouseId: number;
 }
+
+export interface HandleRemoveProduct {
+  removedProducts: RemovedProducts[];
+  source: 'available' | 'unavailable';
+}

@@ -5,6 +5,7 @@ import {
   CartProduct,
   CheckSellerResponse,
   CheckStockResponse,
+  HandleRemoveProduct,
 } from '.';
 
 /**
@@ -53,4 +54,8 @@ export interface MergeCheckSellerAction {
 export interface MergeCheckStockAction {
   type: string;
   payload: CheckStockResponse[];
+}
+export interface CartMasterRemoveProductAction {
+  type: string;
+  payload: HandleRemoveProduct;
 }

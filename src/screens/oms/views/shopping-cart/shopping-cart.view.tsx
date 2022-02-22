@@ -7,6 +7,7 @@ import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
+import { ModalRemoveProduct } from './modal-remove-product.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT INTERNAL FUNCTION HERE === */
@@ -17,7 +18,7 @@ import {
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
-  useCancelStockAction,
+  useRemoveCartProductAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -26,18 +27,23 @@ import * as models from '@models';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
+  /** => STATE */
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
   const [pageLoading, setPageLoading] = useState(true);
+  const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
+  const [selectRemoveProduct, setSelectRemoveProduct] =
+    useState<models.HandleRemoveProduct | null>(null);
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
-  const cancelStockAction = useCancelStockAction();
+  const removeCartProductAction = useRemoveCartProductAction();
   /** === HOOKS === */
-  /** => Did Mount */
+  /** => did mount & will unmount */
   useEffect(() => {
+    /** did mount */
     getCartAction.fetch(dispatchCart);
     checkProductAction.fetch(dispatchCart, {
       carts: [
@@ -68,7 +74,14 @@ const OmsShoppingCartView: FC = () => {
         },
       ],
     });
-    cancelStockAction.fetch(dispatchCart);
+    /** will umount */
+    return () => {
+      checkProductAction.reset(dispatchCart);
+      checkSellerAction.reset(dispatchCart);
+      checkStockAction.reset(dispatchCart);
+      getCartAction.reset(dispatchCart);
+      cartMasterAction.reset();
+    };
   }, []);
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
@@ -86,13 +99,16 @@ const OmsShoppingCartView: FC = () => {
     ) {
       cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
     }
-  }, [cartMasterAction.cartMaster.id, stateCart.checkProduct.data]);
+  }, [
+    cartMasterAction.cartMaster.id,
+    stateCart.checkProduct.data,
+    stateCart.checkSeller.data,
+    stateCart.checkStock.data,
+  ]);
   /** => after success fetch checkSeller, merge data to redux */
   useEffect(() => {
     if (
-      stateCart.checkProduct.data !== null &&
       stateCart.checkSeller.data !== null &&
-      stateCart.checkStock.data !== null &&
       cartMasterAction.cartMaster.isCheckProductMerged
     ) {
       cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
@@ -104,8 +120,6 @@ const OmsShoppingCartView: FC = () => {
   /** => after success fetch checkStock, merge data to redux */
   useEffect(() => {
     if (
-      stateCart.checkProduct.data !== null &&
-      stateCart.checkSeller.data !== null &&
       stateCart.checkStock.data !== null &&
       cartMasterAction.cartMaster.isCheckSellerMerged
     ) {
@@ -126,11 +140,33 @@ const OmsShoppingCartView: FC = () => {
       setPageLoading(false);
     }
   }, [cartMasterAction.cartMaster]);
-  console.log({
-    cartMaster: cartMasterAction.cartMaster,
-    stateCart,
-    localCartMaster,
-  });
+  /** => handle remove product modal */
+  const handleRemoveProductModal = (selected: models.HandleRemoveProduct) => {
+    setSelectRemoveProduct(selected);
+    setModalRemoveProduct(true);
+  };
+  /** => handle ok action remove product */
+  const handleOkActionRemoveProduct = () => {
+    if (selectRemoveProduct) {
+      removeCartProductAction.fetch(dispatchCart, {
+        cartId: cartMasterAction.cartMaster.id,
+        removedProducts: selectRemoveProduct.removedProducts,
+      });
+    }
+  };
+  /** => listen remove product fetch */
+  useEffect(() => {
+    /** success */
+    if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
+      cartMasterAction.removeProduct(selectRemoveProduct);
+      setModalRemoveProduct(false);
+    }
+    /** error */
+    if (stateCart.remove.error !== null) {
+      // error handle here
+    }
+  }, [stateCart.remove]);
+  console.log(cartMasterAction);
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
@@ -141,6 +177,7 @@ const OmsShoppingCartView: FC = () => {
             <View style={{ flex: 1 }}>
               <ShoppingCartAddress />
               <ShoppingCartProducts
+                handleRemoveProductModal={handleRemoveProductModal}
                 unavailableProducts={localCartMaster.unavailable}
                 availableProducts={localCartMaster.sellers}
               />
@@ -158,6 +195,12 @@ const OmsShoppingCartView: FC = () => {
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={goBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
+      {/* MODAL */}
+      <ModalRemoveProduct
+        isOpen={modalRemoveProduct}
+        okAction={() => handleOkActionRemoveProduct()}
+        cancelAction={() => setModalRemoveProduct(false)}
+      />
     </SnbContainer>
   );
 };

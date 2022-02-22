@@ -12,10 +12,12 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 /** === INTERFACES === */
 interface ProductAvailableSectionProps {
   availableProducts: models.CartMasterSellers[];
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
   availableProducts,
+  handleRemoveProductModal,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -41,7 +43,10 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                 <View
                   key={`${product.productId}.${product.sellerId}`}
                   style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-                  <ProductView product={product} />
+                  <ProductView
+                    product={product}
+                    handleRemoveProductModal={handleRemoveProductModal}
+                  />
                 </View>
               ))}
             </View>

@@ -12,14 +12,19 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 /** === INTERFACES === */
 interface ProductNotAvailableSection {
   unavailableProducts: models.CartMasterUnavailable[];
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
 }
 /** === COMPONENT === */
 export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
   unavailableProducts,
+  handleRemoveProductModal,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
-  /** => Main */
+  /** => MAIN */
+  if (unavailableProducts.length === 0) {
+    return null;
+  }
   return (
     <View
       style={{
@@ -30,7 +35,19 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
           <SnbText.B4 color={color.black100}>Tidak bisa diproses</SnbText.B4>
           <View>
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={() => {
+                const removedProducts: models.RemovedProducts[] = [];
+                unavailableProducts.map((item) => {
+                  removedProducts.push({
+                    productId: item.productId,
+                    warehouseId: item.warehouseId,
+                  });
+                });
+                handleRemoveProductModal({
+                  source: 'unavailable',
+                  removedProducts,
+                });
+              }}
               style={{
                 width: '100%',
               }}>
@@ -39,11 +56,11 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
           </View>
         </View>
         <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-          <ProductUnavailableView unavailableProducts={unavailableProducts} />
+          <ProductUnavailableView
+            unavailableProducts={unavailableProducts}
+            handleRemoveProductModal={handleRemoveProductModal}
+          />
         </View>
-      </View>
-      <View style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
-        <ProductUnavailableView unavailableProducts={unavailableProducts} />
       </View>
     </View>
   );
