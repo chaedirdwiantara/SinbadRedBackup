@@ -1,13 +1,113 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import {
+  useCartMasterAction,
+  useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
+  useUpdateCartAction,
+} from '@screen/oms/functions';
+import React, { FC, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+import { contexts } from '@contexts';
+
+const dummyUpdatePayload = {
+  carts: [
+    {
+      sellerId: 1,
+      sellerName: 'Seller 1',
+      products: [
+        {
+          productId: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
+          warehouseId: 1,
+          categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+          productImageUrl:
+            'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+          brandId: '33d200000000000000000000',
+          brandName: 'SGM',
+          productName: 'SGM Ananda 1',
+          qty: 1,
+          minQty: 10,
+          qtyPerBox: 40,
+          uomLabel: 'Kardus',
+          isPriceAfterTax: true,
+          taxPercentage: 5.5,
+          lastUsedPrice: 10000,
+          isLastPriceUsedRules: true,
+          price: 35000,
+          priceRules: [
+            {
+              minQty: 1,
+              maxQty: 10,
+              price: 13707.1,
+            },
+            {
+              minQty: 11,
+              maxQty: 20,
+              price: 12707.1,
+            },
+          ],
+          selected: true,
+        },
+      ],
+    },
+  ],
+};
+
 /** === INTERFACE === */
 interface FooterProps {
   onPressCheckout: () => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
+  const [isPressed, setPress] = useState(false);
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+
+  const updateCartAction = useUpdateCartAction();
+  const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
+
+  const handleOnPressCheckout = () => {
+    onPressCheckout();
+    updateCartAction.fetch(dispatchCart, {
+      id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
+      carts: dummyUpdatePayload.carts,
+    });
+
+    setPress((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (isPressed) {
+      const carts =
+        cartMasterAction.cartMaster.sellers.flatMap((seller) =>
+          seller.products.map((product) => ({
+            productId: product.productId,
+            warehouseId: product.warehouseId,
+          })),
+        ) ?? [];
+      const sellerIds =
+        cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ?? [];
+
+      console.log({ carts, sellerIds });
+
+      /** Input product(s) that's been selected and available as payload */
+      checkProductAction.fetch(dispatchCart, {
+        carts,
+      });
+      checkSellerAction.fetch(dispatchCart, {
+        sellerIds,
+      });
+      checkStockAction.fetch(dispatchCart, {
+        cartId: cartMasterAction.cartMaster.id,
+        reserved: true,
+        carts,
+      });
+    }
+  }, [isPressed]);
+
   return (
     <View
       style={{
@@ -33,7 +133,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
           <SnbButton.Dynamic
             title="Checkout"
             type="primary"
-            onPress={() => onPressCheckout()}
+            onPress={handleOnPressCheckout}
             size={'large'}
           />
         </View>

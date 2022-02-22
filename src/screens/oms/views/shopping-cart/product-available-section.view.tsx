@@ -19,7 +19,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
-  /** => Main */
+  /** => MAIN */
   return (
     <View
       style={{
@@ -29,15 +29,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
         if (item.products.length !== 0) {
           return (
             <View key={item.sellerId}>
-              <View
-                style={{
-                  marginTop: 16,
-                  marginBottom: 2,
-                  paddingHorizontal: 16,
-                  paddingVertical: 16,
-                  flexDirection: 'row',
-                  backgroundColor: color.white,
-                }}>
+              <View style={ShoppingCartStyles.sellerContainer}>
                 <View style={{ marginRight: 16 }}>
                   <SnbCheckbox status={'unselect'} onPress={() => {}} />
                 </View>
