@@ -7,6 +7,7 @@ export interface CheckStockResponse {
   warehouseId: number;
   stock: number;
   status: string;
+  isReserved: boolean;
 }
 
 export interface CheckStockPayload {

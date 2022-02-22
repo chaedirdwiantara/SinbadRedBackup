@@ -1,3 +1,10 @@
+import {
+  CheckProductResponse,
+  CheckStockResponse,
+  CheckSellerResponse,
+  CartMasterUnavailable,
+  CartMaster,
+} from '.';
 /**
  * CART
  */
@@ -17,12 +24,14 @@ export interface ProductPriceRules {
 export interface CartProduct {
   productId: string;
   warehouseId: number;
+  warehouseName: string;
   categoryId: string;
   productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
   qty: number;
+  multipleQty: number;
   minQty: number;
   qtyPerBox: number;
   uomLabel: string;
@@ -31,4 +40,11 @@ export interface CartProduct {
   price: number;
   selected: boolean;
   priceRules: ProductPriceRules[];
+}
+
+export interface CartValidation {
+  checkProductData: CheckProductResponse[];
+  checkSellerData: CheckSellerResponse[];
+  checkStockData: CheckStockResponse[];
+  cartData: CartMaster;
 }

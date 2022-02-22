@@ -64,12 +64,13 @@ export const cartMaster = simplifyReducer(initialState, {
               isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
               qty,
               selected,
+              productStatus: item.status,
             };
             /** => move product data to unavailable if inactive */
             if (item.status === 'inactive') {
               unavailable.push({
                 ...productData,
-                status: 'Produk Tidak Tersedia',
+                unavailableMessage: 'Produk Tidak Tersedia',
                 selected: false,
               });
             } else {
@@ -102,16 +103,18 @@ export const cartMaster = simplifyReducer(initialState, {
       const products: models.CartMasterSellersProducts[] = [];
       let sellerId: number = state.sellers[i].sellerId;
       let sellerName: string = state.sellers[i].sellerName;
+      let status: string = '';
       payload.map((item) => {
         if (state.sellers[i].sellerId === item.sellerId) {
           sellerId = item.sellerId;
           sellerName = item.sellerName;
+          status = item.status;
           /** => check if the seller status inactive, then all products data will moved to unavailable */
           if (item.status === 'inactive') {
             state.sellers[i].products.map((innerItem) => {
               unavailable.push({
                 ...innerItem,
-                status: 'Seller Tidak Tersedia',
+                unavailableMessage: 'Seller Tidak Tersedia',
                 selected: false,
               });
             });
@@ -126,6 +129,7 @@ export const cartMaster = simplifyReducer(initialState, {
         sellerId,
         sellerName,
         products,
+        status,
       });
     }
     return {
@@ -173,18 +177,19 @@ export const cartMaster = simplifyReducer(initialState, {
             qty,
             selected,
             stock: item.stock,
+            stockStatus: item.status,
           };
           /** => move product data to unavailable if not_available */
           if (status === 'not_available') {
             unavailable.push({
               ...productData,
-              status: 'Stok Tidak Tersedia',
+              unavailableMessage: 'Stok Tidak Tersedia',
               selected: false,
             });
           } else if (status === 'stock_not_enough') {
             unavailable.push({
               ...productData,
-              status: 'Stok Tidak Mencukupi',
+              unavailableMessage: 'Stok Tidak Mencukupi',
               selected: false,
             });
           } else {
