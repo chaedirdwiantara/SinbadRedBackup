@@ -22,7 +22,6 @@ interface ProductGridCardProps {
   isBundle?: boolean;
   isPromo?: boolean;
   qtySoldLabel: string;
-  showSoldLabel?: boolean;
   isExclusive?: boolean;
   onCardPress?: () => void;
   withOrderButton?: boolean;
@@ -113,7 +112,7 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             name={props.name}
             finalPrice={props.finalPrice}
           />
-          {props.showSoldLabel && (
+          {props.qtySoldLabel !== '0' && (
             <SnbText.C1 color={color.black80}>{`Terjual ${
               props.qtySoldLabel ?? ''
             }`}</SnbText.C1>

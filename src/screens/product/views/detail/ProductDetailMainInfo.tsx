@@ -16,7 +16,6 @@ interface ProductDetailMainInfoProps {
   isExclusive: boolean;
   hasPromo: boolean;
   loading: boolean;
-  showSoldLabel?: boolean;
   showStock?: boolean;
 }
 /** === COMPONENT ===  */
@@ -27,7 +26,6 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   isExclusive,
   hasPromo,
   loading,
-  showSoldLabel,
   showStock,
   qtySoldLabel,
 }) => (
@@ -55,10 +53,12 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
             </SnbText.B3>
           </View>
         )}
-        <SnbText.B3 color={color.red50}>{`Tersisa ${stock}`}</SnbText.B3>
+        <SnbText.B3 color={color.red50}>
+          {stock === 0 ? 'Produk Habis' : `Tersisa ${stock}`}
+        </SnbText.B3>
       </View>
     )}
-    {showSoldLabel && (
+    {qtySoldLabel !== '0' && (
       <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
     )}
   </View>

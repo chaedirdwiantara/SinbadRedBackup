@@ -23,6 +23,7 @@ interface ProductBundleMainInfoProps {
   minQty: number;
   minQtyType: string;
   loading: boolean;
+  unit: string;
 }
 /** === COMPONENT === */
 export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
@@ -97,7 +98,7 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
           }}>
           <SnbText.C1>{`per-Dus ${props.packagedQty} ${props.minQtyType}`}</SnbText.C1>
           <View style={ProductBundleStyle.textHorizontalDivider} />
-          <SnbText.C1>{`min.pembelian ${props.minQty} ${props.minQtyType}`}</SnbText.C1>
+          <SnbText.C1>{`min.pembelian ${props.minQty} ${props.unit}`}</SnbText.C1>
         </View>
       </View>
     </View>

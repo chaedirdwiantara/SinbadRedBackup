@@ -118,7 +118,9 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
         <React.Fragment>
           {(dataStockDetail.stock < 11 || orderQty > dataStockDetail.stock) && (
             <SnbText.B3 color={color.red50}>
-              {`Tersisa ${dataStockDetail.stock}`}
+              {dataStockDetail.stock === 0
+                ? 'Produk Habis'
+                : `Tersisa ${dataStockDetail.stock}`}
             </SnbText.B3>
           )}
 
