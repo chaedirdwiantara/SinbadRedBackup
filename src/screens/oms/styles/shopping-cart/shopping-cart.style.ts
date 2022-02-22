@@ -52,4 +52,10 @@ export const ShoppingCartStyles = StyleSheet.create({
     width: '100%',
     marginTop: 12,
   },
+  footerContainer: {
+    padding: 16,
+    backgroundColor: color.white,
+    justifyContent: 'flex-end',
+    elevation: 10,
+  },
 });
