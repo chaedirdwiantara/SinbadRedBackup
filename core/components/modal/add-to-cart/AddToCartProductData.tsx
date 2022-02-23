@@ -53,7 +53,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>
-                  {toCurrency(dataProductDetail?.currentPrice ?? 0, {
+                  {toCurrency(dataProductDetail?.finalPrice ?? 0, {
                     withFraction: false,
                   })}
                 </SnbText.B3>
@@ -75,13 +75,12 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus{' '}
-                {`${dataProductDetail?.packagedQty} ${dataProductDetail?.minQtyType}`}
+                per-Dus {`${dataProductDetail?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
                 min.pembelian{' '}
-                {`${dataProductDetail?.minQty} ${dataProductDetail?.minQtyType}`}
+                {`${dataProductDetail?.minQty} ${dataProductDetail?.unit}`}
               </SnbText.C1>
             </View>
           </View>
@@ -112,7 +111,7 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
                 <SnbText.B3 color={color.red50}>
-                  {toCurrency(dataProductDetailCart?.currentPrice ?? 0, {
+                  {toCurrency(dataProductDetailCart?.finalPrice ?? 0, {
                     withFraction: false,
                   })}
                 </SnbText.B3>
@@ -134,13 +133,12 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
             </View>
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus{' '}
-                {`${dataProductDetailCart?.packagedQty} ${dataProductDetailCart?.minQtyType}`}
+                per-Dus {`${dataProductDetailCart?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
                 min.pembelian{' '}
-                {`${dataProductDetailCart?.minQty} ${dataProductDetailCart?.minQtyType}`}
+                {`${dataProductDetailCart?.minQty} ${dataProductDetailCart?.unit}`}
               </SnbText.C1>
             </View>
           </View>

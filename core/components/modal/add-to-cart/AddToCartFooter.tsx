@@ -49,18 +49,15 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
           <SnbText.B3>Total: </SnbText.B3>
           {isFromProductDetail ? (
             <SnbText.B4 color={color.red50}>
-              {toCurrency((dataProductDetail?.currentPrice ?? 0) * orderQty, {
+              {toCurrency((dataProductDetail?.finalPrice ?? 0) * orderQty, {
                 withFraction: false,
               })}
             </SnbText.B4>
           ) : (
             <SnbText.B4 color={color.red50}>
-              {toCurrency(
-                (dataProductDetailCart?.currentPrice ?? 0) * orderQty,
-                {
-                  withFraction: false,
-                },
-              )}
+              {toCurrency((dataProductDetailCart?.finalPrice ?? 0) * orderQty, {
+                withFraction: false,
+              })}
             </SnbText.B4>
           )}
         </View>

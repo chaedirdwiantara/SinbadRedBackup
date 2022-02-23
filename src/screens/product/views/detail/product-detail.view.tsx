@@ -492,12 +492,13 @@ const ProductDetailView: FC = () => {
           <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
-            originalPrice={dataProduct?.originalPrice!}
-            currentPrice={dataProduct?.currentPrice!}
-            minQty={dataProduct?.minQty!}
+            finalPrice={dataProduct?.finalPrice!}
+            qtySoldLabel={dataProduct?.qtySoldLabel!}
+            loading={loadingButton}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
+            showStock={me.data !== null}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
           {/* <ProductDetailSupplierInfo // Hide temporarily
@@ -527,7 +528,7 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Jumlah per-Dus"
-              value={`${dataProduct?.packagedQty} ${dataProduct?.unit}`}
+              value={`${dataProduct?.packagedQty} Pcs`}
             />
             <ProductDetailSectionItem
               name="Berat"

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import { View, StatusBar } from 'react-native';
 import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -9,6 +9,7 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
+import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
   RegisterSupplierModal,
   RejectApprovalModal,
@@ -180,6 +181,8 @@ const ProductList: FC<ProductListProps> = ({
     modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier();
+  /** === REF === */
+  const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
   /** === FUNCTIONS === */
   /** => action send data to supplier */
   const onSendDataSupplier = () => {
@@ -272,6 +275,13 @@ const ProductList: FC<ProductListProps> = ({
       setInitialLoading(false);
     }
   }, [productLoading]);
+
+  /** => if product error code 500700000029 "kelurahan kamu tidak dijangkau oleh supplier" */
+  useEffect(() => {
+    if (productError?.code === 500700000029) {
+      modalUrbanRef.current?.trigger(true);
+    }
+  }, [productError?.code, modalUrbanRef]);
 
   /** => Do something when success add to cart */
   // useEffect(() => {
@@ -674,6 +684,11 @@ const ProductList: FC<ProductListProps> = ({
           handleCloseModal();
           setModalErrorStock(false);
         }}
+      />
+      {/* Modal Bottom Sheet error if not in urban */}
+      <NotInUrbanModal
+        ref={modalUrbanRef}
+        errorSubtitle={productError?.message ?? ''}
       />
       {/* Modal Bottom Sheet Need to Login */}
       <NeedLoginModal
