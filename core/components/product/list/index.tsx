@@ -252,10 +252,12 @@ const ProductList: FC<ProductListProps> = ({
       sellerId: Number(productDetailState.sellerId),
       sellerName: productDetailState.productSeller.name,
       isPriceAfterTax: productDetailState.isPriceAfterTax,
+      taxPercentage: productDetailState.productTax.amount,
       lastUsedPrice: productDetailState.finalPrice,
       isPriceUsedRules: productDetailState.productPriceRules.length !== 0,
       price: productDetailState.finalPrice,
       priceRules: productDetailState.productPriceRules,
+      leadTime: dataStock.leadTime ?? 0,
       selected: true,
     };
 

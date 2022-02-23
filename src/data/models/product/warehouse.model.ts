@@ -13,6 +13,7 @@ export interface IStockValidaitonSuccess {
   message: string;
   stock: number;
   warehouseName: string;
+  leadTime: number;
 }
 
 export interface IChangeStock {

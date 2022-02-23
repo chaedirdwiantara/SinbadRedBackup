@@ -48,10 +48,10 @@ const addToCart = (
   return apiMapping<models.AddToCartResponse>(
     'auth',
     path,
-    'ms-buyer-cart',
+    'buyer-cart',
     'v1',
     'CREATE',
-    data,
+    data.data,
   );
 };
 
