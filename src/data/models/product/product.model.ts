@@ -12,6 +12,7 @@ export interface ProductList {
   basePrice: number;
   finalPrice: number;
   qtySoldLabel: string;
+  warehouseOriginId: string;
 }
 
 export interface ProductListProcessProps extends models.ListProcessProps {
