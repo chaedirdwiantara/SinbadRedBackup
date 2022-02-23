@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
@@ -59,8 +59,9 @@ import * as models from '@models';
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
+  // productId_warehouseOriginId
   const {
-    params: { id: productId },
+    params: { id: productWhId },
   } = NavigationAction.useGetNavParams();
   const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
@@ -81,6 +82,9 @@ const ProductDetailView: FC = () => {
   const cartTotalProductActions = useCartTotalProductActions();
   const { dataTotalProductCart } = useCartTotalProductActions();
   const { me } = useDataAuth();
+
+  /**=> variable */
+  const productId = useMemo(() => productWhId.split('_')[0], [productWhId]);
 
   /** => context */
   const {
@@ -253,14 +257,14 @@ const ProductDetailView: FC = () => {
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
     // supplierSegmentationAction.reset(dispatchSupplier);
-    productDetailActions.fetch(dispatchProduct, productId);
+    productDetailActions.fetch(dispatchProduct, productWhId);
   };
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
     setLoadingButton(true);
-    productDetailActions.fetch(dispatchProduct, productId);
-  }, [productId]);
+    productDetailActions.fetch(dispatchProduct, productWhId);
+  }, [productWhId]);
 
   /** => Listen data product success */
   useEffect(() => {
