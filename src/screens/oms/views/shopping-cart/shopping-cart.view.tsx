@@ -2,6 +2,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
+import { cloneDeep } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
@@ -29,7 +30,7 @@ import * as models from '@models';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** => STATE */
-  const { localCartMaster, setLocalCartMaster } = useCartLocalData();
+  const { localCartMaster, setLocalCartMaster, updateQty } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -137,7 +138,7 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.cartMaster.isCheckSellerMerged &&
       cartMasterAction.cartMaster.isCheckStockMerged
     ) {
-      setLocalCartMaster({ ...cartMasterAction.cartMaster });
+      setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
       setPageLoading(false);
     }
   }, [cartMasterAction.cartMaster]);
@@ -167,7 +168,7 @@ const OmsShoppingCartView: FC = () => {
       // error handle here
     }
   }, [stateCart.remove]);
-  console.log(cartMasterAction);
+  console.log(cartMasterAction.cartMaster, localCartMaster);
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
@@ -181,6 +182,7 @@ const OmsShoppingCartView: FC = () => {
                 handleRemoveProductModal={handleRemoveProductModal}
                 unavailableProducts={localCartMaster.unavailable}
                 availableProducts={localCartMaster.sellers}
+                handleUpdateQty={updateQty}
               />
             </View>
           </ScrollView>

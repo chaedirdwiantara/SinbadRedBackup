@@ -13,11 +13,18 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 interface ProductAvailableSectionProps {
   availableProducts: models.CartMasterSellers[];
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleUpdateQty: ({
+    productId,
+    sellerId,
+    warehouseId,
+    type,
+  }: models.UpdateCartQty) => void;
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
   availableProducts,
   handleRemoveProductModal,
+  handleUpdateQty,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -46,6 +53,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                   <ProductView
                     product={product}
                     handleRemoveProductModal={handleRemoveProductModal}
+                    handleUpdateQty={handleUpdateQty}
                   />
                 </View>
               ))}

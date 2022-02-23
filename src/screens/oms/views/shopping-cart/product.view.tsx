@@ -10,7 +10,6 @@ import {
   SnbBadge,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
-import { useCartLocalData } from '../../functions';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';
@@ -18,13 +17,19 @@ import * as models from '@models';
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleUpdateQty: ({
+    productId,
+    sellerId,
+    warehouseId,
+    type,
+  }: models.UpdateCartQty) => void;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
   product,
   handleRemoveProductModal,
+  handleUpdateQty,
 }) => {
-  const { updateQty } = useCartLocalData();
   /** => REMAINING STOCK */
   const renderRemainingStock = () => {
     if (Number(product.stock) < 11) {
@@ -137,7 +142,7 @@ export const ProductView: FC<ProductViewProps> = ({
           onBlur={() => {}}
           onFocus={() => {}}
           onIncrease={() => {
-            updateQty({
+            handleUpdateQty({
               productId: product.productId,
               sellerId: product.sellerId,
               warehouseId: product.warehouseId,
@@ -145,7 +150,7 @@ export const ProductView: FC<ProductViewProps> = ({
             });
           }}
           onDecrease={() => {
-            updateQty({
+            handleUpdateQty({
               productId: product.productId,
               sellerId: product.sellerId,
               warehouseId: product.warehouseId,
@@ -153,8 +158,8 @@ export const ProductView: FC<ProductViewProps> = ({
             });
           }}
           onChange={() => {}}
-          minusDisabled={false}
-          plusDisabled={false}
+          minusDisabled={!(product.qty > product.minQty)}
+          plusDisabled={!(product.qty < (product.stock ?? 0))}
         />
       </View>
       <View style={ShoppingCartStyles.actionContainer} />

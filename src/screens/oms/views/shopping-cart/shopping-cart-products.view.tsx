@@ -15,12 +15,19 @@ interface ShoppingCartProductsProps {
   availableProducts: models.CartMasterSellers[];
   unavailableProducts: models.CartMasterUnavailable[];
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleUpdateQty: ({
+    productId,
+    sellerId,
+    warehouseId,
+    type,
+  }: models.UpdateCartQty) => void;
 }
 /** === COMPONENT === */
 export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
   availableProducts,
   unavailableProducts,
   handleRemoveProductModal,
+  handleUpdateQty,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -44,6 +51,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
       <ProductAvailableSection
         availableProducts={availableProducts}
         handleRemoveProductModal={handleRemoveProductModal}
+        handleUpdateQty={handleUpdateQty}
       />
       <ProductNotAvailableSection
         unavailableProducts={unavailableProducts}
