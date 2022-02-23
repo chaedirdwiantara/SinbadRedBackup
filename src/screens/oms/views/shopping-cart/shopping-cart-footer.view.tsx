@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import {
   matchCartWithCheckData,
+  useCancelStockAction,
   useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
@@ -21,13 +22,14 @@ interface FooterProps {
   onPressCheckout: () => void;
 }
 /** === COMPONENT ===  */
-export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
+const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const [isErrorShown, setErrorShown] = useState(false);
   const [isRetryShown, setRetryShown] = useState(false);
   const [retryCounter, setRetryCounter] = useState(0);
 
   const updateCartAction = useUpdateCartAction();
+  const cancelCartAction = useCancelStockAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -42,7 +44,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
   };
 
   const checkProductSellerStock = useCallback(() => {
-    if (stateCart.update.data) {
+    if (stateCart.update.data !== null) {
       /** Get available product(s) from .sellers, then filter it based on the selected one */
       const carts =
         cartMasterAction.cartMaster.sellers.flatMap((seller) =>
@@ -74,6 +76,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
         carts,
       });
     }
+
+    return () => {
+      checkProductAction.reset(dispatchCart);
+      checkSellerAction.reset(dispatchCart);
+      checkStockAction.reset(dispatchCart);
+    };
   }, [stateCart.update.data]);
 
   useEffect(() => {
@@ -114,6 +122,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
     stateCart.checkStock.error,
   ]);
 
+  useEffect(() => {
+    cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data ?? []);
+    cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data ?? []);
+    cartMasterAction.mergeCheckStock(stateCart.checkStock.data ?? []);
+
+    return () => {
+      cartMasterAction.reset();
+    };
+  }, [stateCart.cancelStock.data]);
+
   const handleRetry = () => {
     if (retryCounter < 3) {
       checkProductSellerStock();
@@ -121,6 +139,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
     } else {
       setRetryShown(false);
     }
+  };
+
+  const handleClose = () => {
+    cancelCartAction.fetch(dispatchCart);
+    setErrorShown(false);
   };
 
   const renderFooterContent = () => (
@@ -149,10 +172,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
   );
 
   const renderBusinessErrorModal = () => (
-    <ShoppingCartValidation
-      open={isErrorShown}
-      closeAction={() => setErrorShown(false)}
-    />
+    <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
   );
 
   const renderGlobalErrorModal = () => (
@@ -176,3 +196,5 @@ export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
     </View>
   );
 };
+
+export const ShoppingCartFooter = React.memo(ShoppingCartFooterMemo);

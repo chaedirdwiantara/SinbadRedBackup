@@ -82,7 +82,7 @@ const OmsShoppingCartView: FC = () => {
       getCartAction.reset(dispatchCart);
       cartMasterAction.reset();
     };
-  }, []);
+  }, [stateCart.cancelStock.data]);
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
     if (stateCart.get.data !== null) {
