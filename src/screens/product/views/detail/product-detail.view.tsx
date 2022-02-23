@@ -258,6 +258,12 @@ const ProductDetailView: FC = () => {
     stockValidationActions.reset(dispatchStock);
     // supplierSegmentationAction.reset(dispatchSupplier);
     productDetailActions.fetch(dispatchProduct, productWhId);
+    if (dataProduct && me.data) {
+      stockValidationActions.fetch(dispatchStock, {
+        warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
+        productId: dataProduct.id,
+      });
+    }
   };
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
