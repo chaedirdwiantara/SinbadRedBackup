@@ -28,7 +28,7 @@ import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
-import { usePotentialPromoProductAction } from '@screen/promo/functions';
+// import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
@@ -128,29 +128,26 @@ const ProductDetailView: FC = () => {
 
   /** => action from button order */
   const handleOrderPress = () => {
-    if (me.data !== null && dataSegmentation !== null) {
-      if (dataSegmentation.dataSuppliers !== null) {
-        if (
-          me.data.approvalStatus === 'verified' &&
-          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-        ) {
-          setIsAvailable(false);
-        } else {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-          });
-        }
+    if (me.data !== null) {
+      if (me.data.approvalStatus !== 'verified') {
+        // setIsAvailable(false);
       } else {
-        // checkUser({
-        //   sinbadStatus: me.data.approvalStatus,
-        //   supplierStatus: null,
-        // });
-        setIsAvailable(false);
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: 'verified',
+        });
       }
     } else {
+      // checkUser({
+      //   sinbadStatus: me.data.approvalStatus,
+      //   supplierStatus: null,
+      // });
+      // setIsAvailable(false);
       setModalNeedToLogin(true);
     }
+    // else {
+    //   setModalNeedToLogin(true);
+    // }
   };
 
   /** => action send data to supplier */
@@ -184,19 +181,14 @@ const ProductDetailView: FC = () => {
   };
 
   const onSubmitAddToCart = () => {
-    if (
-      dataProduct === null ||
-      dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null ||
-      dataStock === null
-    ) {
+    if (dataProduct === null || dataStock === null) {
       /** => DO SOMETHING */
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
       return;
     }
 
     const params: models.AddToCartPayload = {
-      isActiveStore: dataSegmentation.isActiveStore,
+      // isActiveStore: dataSegmentation.isActiveStore,
       selected: true,
       stock: dataStock.stock,
       productId: dataProduct.id,
@@ -210,12 +202,12 @@ const ProductDetailView: FC = () => {
       priceAfterTax:
         dataProduct.currentPriceAfterTax ?? dataProduct.originalPrice,
       uom: dataProduct.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
       sellerId: Number(dataProduct.sellerId),
-      channelId: dataSegmentation.dataSuppliers.channelId,
-      groupId: dataSegmentation.dataSuppliers.groupId,
-      typeId: dataSegmentation.dataSuppliers.typeId,
-      clusterId: dataSegmentation.dataSuppliers.clusterId,
+      // channelId: dataSegmentation.dataSuppliers.channelId,
+      // groupId: dataSegmentation.dataSuppliers.groupId,
+      // typeId: dataSegmentation.dataSuppliers.typeId,
+      // clusterId: dataSegmentation.dataSuppliers.clusterId,
       multipleQty: dataProduct.multipleQty,
     };
 
@@ -231,7 +223,7 @@ const ProductDetailView: FC = () => {
     dispatchPromo,
   } = React.useContext(contexts.PromoContext);
   const potentialPromoProductList = potentialPromoProduct.detail;
-  const potentialPromoProductAction = usePotentialPromoProductAction();
+  // const potentialPromoProductAction = usePotentialPromoProductAction();
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -260,7 +252,7 @@ const ProductDetailView: FC = () => {
     setLoadingButton(true);
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
-    supplierSegmentationAction.reset(dispatchSupplier);
+    // supplierSegmentationAction.reset(dispatchSupplier);
     productDetailActions.fetch(dispatchProduct, productId);
   };
   /** === EFFECT LISTENER === */
@@ -274,10 +266,10 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (dataProduct !== null && me.data !== null) {
       /** => supplier segmentation effect */
-      supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
+      // supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
       /** => potential promo product effect */
-      potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
+      // potentialPromoProductAction.reset(dispatchPromo);
+      // potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
       /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
     } else if (me.data === null) {
@@ -300,66 +292,42 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation !== null && dataProduct !== null) {
-      if (dataSegmentation.dataSuppliers) {
-        stockValidationActions.fetch(dispatchStock, {
-          warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
-          productId: dataProduct.id,
-        });
-      } else {
-        if (me.data) {
-          // checkUser({
-          //   sinbadStatus: me.data.approvalStatus,
-          //   supplierStatus: null,
-          // });
-          setTimeout(() => {
-            setLoadingButton(false);
-          }, 1500);
-          setIsAvailable(false);
-        } else {
-          stockValidationActions.fetch(dispatchStock, {
-            warehouseId: null,
-            productId: dataProduct.id,
-          });
-        }
-      }
-    }
-  }, [dataSegmentation, dataProduct]);
+    if (dataProduct !== null) {
+      if (!me.data) {
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
 
-  /** => Listen error segmentation and product detail to fetch validation stock */
-  useEffect(() => {
-    if (errorSegmentation !== null && dataProduct !== null) {
-      if (me.data) {
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 1500);
         setIsAvailable(false);
       } else {
         stockValidationActions.fetch(dispatchStock, {
-          warehouseId: null,
+          warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
           productId: dataProduct.id,
         });
+        setIsAvailable(true);
       }
     }
-  }, [errorSegmentation, dataProduct]);
+  }, [dataProduct]);
+
+  /** => Listen error segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (dataProduct !== null) {
+      if (!me.data) {
+        setIsAvailable(true);
+      }
+    }
+  }, [dataProduct, me]);
 
   /** Listen success get stock */
   useEffect(() => {
     if (dataStock !== null) {
-      if (
-        me &&
-        me.data &&
-        me.data.approvalStatus === 'verified' &&
-        dataSegmentation &&
-        dataSegmentation.dataSuppliers &&
-        dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-      ) {
-        setIsAvailable(false);
-        setTimeout(() => {
-          setLoadingButton(false);
-        }, 1500);
-      } else {
-        setTimeout(() => {
-          setLoadingButton(false);
-        }, 1500);
-      }
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 1500);
     }
   }, [dataStock]);
 

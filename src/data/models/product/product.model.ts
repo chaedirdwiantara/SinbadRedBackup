@@ -117,6 +117,7 @@ export interface ProductDetail {
   qtySoldValue: number;
   sellerCode: string;
   thumbnailImageUrl: string;
+  warehouseOriginId?: number | null;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
