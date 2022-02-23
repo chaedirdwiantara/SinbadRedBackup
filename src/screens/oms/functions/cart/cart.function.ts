@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import { isEqual } from 'lodash';
+import { isEqual, cloneDeep } from 'lodash';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as models from '@models';
 /** === FUNCTION === */
@@ -41,13 +41,13 @@ const matchCartWithCheckData = ({
         );
       });
 
-      const thisCartCheckProduct: any = {
-        ...cartData.sellers[i].products[cartProductIndex],
-      };
-      const thisCheckProduct: any = {
+      const thisCartCheckProduct: any = cloneDeep(
+        cartData.sellers[i].products[cartProductIndex],
+      );
+      const thisCheckProduct: any = cloneDeep({
         ...checkProductData[checkProductIndex],
         productStatus: checkProductData[checkProductIndex]?.status,
-      };
+      });
 
       // remove unused property for comparation
       delete thisCartCheckProduct.isLastPriceUsedRules;
@@ -75,8 +75,8 @@ const matchCartWithCheckData = ({
       return item.sellerId === cartData.sellers[i].sellerId;
     });
 
-    const thisCartSeller: any = { ...cartData.sellers[i] };
-    const thisCheckSeller: any = { ...checkSellerData[checkSellerIndex] };
+    const thisCartSeller: any = cloneDeep(cartData.sellers[i]);
+    const thisCheckSeller: any = cloneDeep(checkSellerData[checkSellerIndex]);
 
     // remove unused property for comparation
     delete thisCartSeller.products;
