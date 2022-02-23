@@ -10,6 +10,7 @@ import {
   SnbBadge,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
+import { useCartLocalData } from '../../functions';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';
@@ -23,6 +24,7 @@ export const ProductView: FC<ProductViewProps> = ({
   product,
   handleRemoveProductModal,
 }) => {
+  const { updateQty } = useCartLocalData();
   /** => REMAINING STOCK */
   const renderRemainingStock = () => {
     if (Number(product.stock) < 11) {
@@ -134,8 +136,22 @@ export const ProductView: FC<ProductViewProps> = ({
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
-          onIncrease={() => {}}
-          onDecrease={() => {}}
+          onIncrease={() => {
+            updateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'increase',
+            });
+          }}
+          onDecrease={() => {
+            updateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'decrease',
+            });
+          }}
           onChange={() => {}}
           minusDisabled={false}
           plusDisabled={false}

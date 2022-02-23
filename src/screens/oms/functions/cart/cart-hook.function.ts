@@ -217,11 +217,18 @@ const useCartLocalData = () => {
         const thisProduct =
           newLocalCartMaster.sellers[sellerIndex].products[productIndex];
 
+        // define stock variable
+        const stock = thisProduct.stock ?? 0;
+
         // manage logic increase or decrease
         if (type === 'increase') {
-          thisProduct.qty += 1;
+          if (thisProduct.qty < stock) {
+            thisProduct.qty += 1;
+          }
         } else {
-          thisProduct.qty -= 1;
+          if (thisProduct.qty > thisProduct.minQty) {
+            thisProduct.qty -= 1;
+          }
         }
 
         // save data to local state
