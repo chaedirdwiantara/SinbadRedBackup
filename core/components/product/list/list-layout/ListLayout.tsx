@@ -52,9 +52,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
         <ProductListCard
           name={item.name}
           imageUrl={item.thumbnail}
-          currentPrice={item.currentPrice}
+          finalPrice={item.finalPrice}
           isBundle={item.isBundle}
           isPromo={item.isPromo}
+          qtySoldLabel={item.qtySoldLabel}
           isExclusive={item.isExclusive}
           onCardPress={() => {
             goToProductDetail(item.id);

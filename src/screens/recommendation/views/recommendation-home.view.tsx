@@ -7,6 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { HorizontalProductGridLayout } from '@core/components/product/HorizontalProductGridLayout';
 /** === IMPORT FUNCTIONS === */
 import { useProductListActions } from '@screen/product/functions';
+import { useDataAuth } from '@core/redux/Data';
 import { useProductContext } from 'src/data/contexts/product';
 import { goToProduct } from '../functions';
 /** === IMPORT STYLE === */

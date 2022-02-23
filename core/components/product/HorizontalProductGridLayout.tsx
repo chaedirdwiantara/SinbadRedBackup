@@ -48,8 +48,8 @@ export const HorizontalProductGridLayout: FC<
         flexOne={true}
         name={item.name}
         imageUrl={item.thumbnail}
-        originalPrice={item.originalPrice}
-        currentPrice={item.currentPrice}
+        finalPrice={item.finalPrice}
+        qtySoldLabel={item.qtySoldLabel}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}
