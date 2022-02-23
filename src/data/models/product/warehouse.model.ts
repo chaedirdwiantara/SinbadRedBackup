@@ -12,6 +12,7 @@ export interface StockValidationProcessProps {
 export interface IStockValidaitonSuccess {
   message: string;
   stock: number;
+  warehouseName: string;
 }
 
 export interface IChangeStock {

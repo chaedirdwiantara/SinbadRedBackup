@@ -6,6 +6,8 @@ import { CartProduct } from '.';
 export interface AddToCartPayload extends CartProduct {
   sellerId: number;
   sellerName: string;
+  lastUsedPrice?: number;
+  isPriceUsedRules?: boolean;
 }
 export interface AddToCartResponse {
   id: string;

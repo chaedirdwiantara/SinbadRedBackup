@@ -2,6 +2,7 @@
 // import apiMapping from '@core/services/apiMapping';
 import { serializeUniformKeyQs } from '@core/functions/global/query-string';
 import apiMappingMockV3 from '@core/services/apiMappingMockV3';
+import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
 
 const exampleCart = () => {
@@ -43,12 +44,11 @@ const getTotalCart = () => {
 const addToCart = (
   data: models.CreateProcessProps<models.AddToCartPayload>,
 ) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'carts';
-  return apiMappingMockV3<models.AddToCartResponse>(
-    mockHost,
+  return apiMapping<models.AddToCartResponse>(
+    'auth',
     path,
-    'discount',
+    'ms-buyer-cart',
     'v1',
     'CREATE',
     data,

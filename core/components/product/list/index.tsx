@@ -36,18 +36,18 @@ import { useDataAuth } from '@core/redux/Data';
 import {
   useTagListActions,
   useProductDetailCartAction,
-  // useAddToCart,
   useStockValidationAction,
   useOrderQuantity,
 } from '@screen/product/functions';
 import { useRecentSearch } from '@screen/search/functions';
+import { useAddToCartAction } from '@screen/oms/functions';
 // import { useCartTotalProductActions } from '@screen/oms/functions';
-// import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT TYPES === */
 import * as models from '@models';
+import { contexts } from '@contexts';
 import {
   ProductHeaderType,
   CategoryTabsConfig,
@@ -105,7 +105,7 @@ const ProductList: FC<ProductListProps> = ({
     useState<models.ProductList | null>(null);
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
-  // const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
+  const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
   const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
@@ -134,10 +134,11 @@ const ProductList: FC<ProductListProps> = ({
   // const cartTotalProductActions = useCartTotalProductActions();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
-  // const addToCartActions = useAddToCart();
+  const addToCartActions = useAddToCartAction();
   const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
   const stockValidationActions = useStockValidationAction();
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const {
     stateProduct: {
       list: {
@@ -152,12 +153,6 @@ const ProductList: FC<ProductListProps> = ({
   const { orderQty, onChangeQty } = useOrderQuantity({
     minQty: productDetailState?.minQty ?? 1,
   });
-  // const {
-  //   stateShopingCart: {
-  //     create: { data: addToCartData, error: addToCartError },
-  //   },
-  //   dispatchShopingCart,
-  // } = useShopingCartContext();
   const { dispatchTag } = useTagContext();
   const {
     stateStock: {
@@ -210,9 +205,9 @@ const ProductList: FC<ProductListProps> = ({
     stockValidationActions.reset(dispatchStock);
     productDetailActions.reset(dispatchProduct);
     supplierSegmentationAction.reset(dispatchSupplier);
-    // addToCartActions.reset(dispatchShopingCart);
+    addToCartActions.reset(dispatchCart);
     sendDataToSupplierActions.reset(dispatchSupplier);
-    // setModalErrorAddCart(false);
+    setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
@@ -240,33 +235,31 @@ const ProductList: FC<ProductListProps> = ({
       return;
     }
 
-    // const params: models.AddToCartPayload = {
-    //   isActiveStore: dataSegmentation.isActiveStore,
-    //   selected: true,
-    //   stock: dataStock.stock,
-    //   productId: productDetailState.id,
-    //   productName: productDetailState.name,
-    //   brandId: productDetailState.brandId,
-    //   urlImages: productDetailState?.images[0]?.url ?? '',
-    //   qty: orderQty,
-    //   minQty: productDetailState.minQty,
-    //   displayPrice: productDetailState.originalPrice,
-    //   priceBeforeTax:
-    //     productDetailState.currentPrice ?? productDetailState.originalPrice,
-    //   priceAfterTax:
-    //     productDetailState.currentPriceAfterTax ??
-    //     productDetailState.originalPrice,
-    //   uom: productDetailState.unit,
-    //   warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-    //   sellerId: Number(productDetailState.sellerId),
-    //   channelId: dataSegmentation.dataSuppliers.channelId,
-    //   groupId: dataSegmentation.dataSuppliers.groupId,
-    //   typeId: dataSegmentation.dataSuppliers.typeId,
-    //   clusterId: dataSegmentation.dataSuppliers.clusterId,
-    //   multipleQty: productDetailState.multipleQty,
-    // };
+    const params: models.AddToCartPayload = {
+      productId: productDetailState.id,
+      productName: productDetailState.name,
+      brandId: productDetailState.brandId,
+      brandName: productDetailState.brand,
+      categoryId: productDetailState.categoryId,
+      productImageUrl: productDetailState?.images[0]?.url ?? '',
+      minQty: productDetailState.minQty,
+      qty: orderQty,
+      multipleQty: productDetailState.multipleQty,
+      qtyPerBox: productDetailState.packagedQty,
+      uomLabel: productDetailState.unit,
+      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      warehouseName: dataStock.warehouseName,
+      sellerId: Number(productDetailState.sellerId),
+      sellerName: productDetailState.productSeller.name,
+      isPriceAfterTax: productDetailState.isPriceAfterTax,
+      lastUsedPrice: productDetailState.finalPrice,
+      isPriceUsedRules: productDetailState.productPriceRules.length !== 0,
+      price: productDetailState.finalPrice,
+      priceRules: productDetailState.productPriceRules,
+      selected: true,
+    };
 
-    // addToCartActions.fetch(dispatchShopingCart, params);
+    addToCartActions.fetch(dispatchCart, params);
   };
   /** === EFFECT HOOKS === */
   useEffect(() => {
@@ -284,24 +277,24 @@ const ProductList: FC<ProductListProps> = ({
   }, [productError?.code, modalUrbanRef]);
 
   /** => Do something when success add to cart */
-  // useEffect(() => {
-  //   if (addToCartData !== null) {
-  //     setProductSelected(null);
-  //     handleCloseModal();
-  //     // cartTotalProductActions.fetch();
-  //     SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
-  //       position: 'top',
-  //       positionValue: StatusBar.currentHeight,
-  //     });
-  //   }
-  // }, [addToCartData]);
+  useEffect(() => {
+    if (stateCart.create.data !== null) {
+      setProductSelected(null);
+      handleCloseModal();
+      // cartTotalProductActions.fetch();
+      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
+    }
+  }, [stateCart.create.data]);
 
   /** => Do something when success add to cart */
-  // useEffect(() => {
-  //   if (addToCartError !== null) {
-  //     setModalErrorAddCart(true);
-  //   }
-  // }, [addToCartError]);
+  useEffect(() => {
+    if (stateCart.create.error !== null) {
+      setModalErrorAddCart(true);
+    }
+  }, [stateCart.create.error]);
 
   /** => Do something when success send data to supplier */
   useEffect(() => {
@@ -437,7 +430,7 @@ const ProductList: FC<ProductListProps> = ({
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
-      // addToCartActions.reset(dispatchShopingCart);
+      addToCartActions.reset(dispatchCart);
       sendDataToSupplierActions.reset(dispatchSupplier);
     };
   }, []);
@@ -621,9 +614,9 @@ const ProductList: FC<ProductListProps> = ({
         isSwipeable={false}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
-      {/* <BottomSheetError
+      <BottomSheetError
         open={modalErrorAddCart}
-        error={addToCartError}
+        error={stateCart.create.error}
         closeAction={handleCloseModal}
         retryAction={() => {
           if (productSelected) {
@@ -633,7 +626,7 @@ const ProductList: FC<ProductListProps> = ({
             handleCloseModal();
           }
         }}
-      /> */}
+      />
       {/* Modal Bottom Sheet Error Send data to supplier */}
       <BottomSheetError
         open={modalErrorSendDataSupplier}

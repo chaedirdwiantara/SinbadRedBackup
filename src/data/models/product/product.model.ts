@@ -105,13 +105,14 @@ export interface ProductDetail {
   unit: string;
   tags: Array<string>;
   images: Array<ProductImage>;
-  basePrice: number | null;
-  finalPrice: number | null;
+  basePrice: number;
+  finalPrice: number;
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
   isAvailable?: boolean;
   isBundle?: boolean;
+  isPriceAfterTax: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
   qtySoldLabel: string;
   qtySoldValue: number;
