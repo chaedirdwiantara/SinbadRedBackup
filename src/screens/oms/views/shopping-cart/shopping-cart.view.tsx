@@ -19,6 +19,7 @@ import {
   useCheckSellerAction,
   useCheckStockAction,
   useRemoveCartProductAction,
+  useCartLocalData,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -28,7 +29,7 @@ import * as models from '@models';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** => STATE */
-  const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
+  const { localCartMaster, setLocalCartMaster } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -136,7 +137,7 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.cartMaster.isCheckSellerMerged &&
       cartMasterAction.cartMaster.isCheckStockMerged
     ) {
-      setLocalCartMaster(cartMasterAction.cartMaster);
+      setLocalCartMaster({ ...cartMasterAction.cartMaster });
       setPageLoading(false);
     }
   }, [cartMasterAction.cartMaster]);

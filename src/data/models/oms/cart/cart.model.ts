@@ -48,3 +48,10 @@ export interface CartValidation {
   checkStockData: CheckStockResponse[];
   cartData: CartMaster;
 }
+
+export interface UpdateCartQty {
+  productId: string;
+  sellerId: number;
+  warehouseId: number;
+  type: 'increase' | 'decrease';
+}

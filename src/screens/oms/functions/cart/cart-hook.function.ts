@@ -1,4 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
@@ -183,6 +184,56 @@ const useCartBuyerAddressAction = () => {
     },
   };
 };
+/** => cart local data */
+const useCartLocalData = () => {
+  const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
+  return {
+    updateQty: ({
+      productId,
+      sellerId,
+      warehouseId,
+      type,
+    }: models.UpdateCartQty) => {
+      if (localCartMaster) {
+        // write the data to new constant, so the data refer
+        const newLocalCartMaster = { ...localCartMaster };
+        // find the updated product seller index
+        const sellerIndex = newLocalCartMaster.sellers.findIndex(
+          (sellerItem) => {
+            return sellerItem.sellerId === sellerId;
+          },
+        );
+
+        // find the updated product index
+        const productIndex = newLocalCartMaster.sellers[
+          sellerIndex
+        ].products.findIndex((productItem) => {
+          return (
+            productItem.productId === productId &&
+            productItem.warehouseId === warehouseId
+          );
+        });
+
+        const thisProduct =
+          newLocalCartMaster.sellers[sellerIndex].products[productIndex];
+
+        // manage logic increase or decrease
+        if (type === 'increase') {
+          thisProduct.qty += 1;
+        } else {
+          thisProduct.qty -= 1;
+        }
+
+        // save data to local state
+        setLocalCartMaster(newLocalCartMaster);
+      }
+    },
+    setLocalCartMaster: (newData: models.CartMaster) => {
+      setLocalCartMaster(newData);
+    },
+    localCartMaster,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -197,6 +248,7 @@ export {
   useCheckStockAction,
   useCancelStockAction,
   useCartBuyerAddressAction,
+  useCartLocalData,
 };
 /**
  * ================================================================

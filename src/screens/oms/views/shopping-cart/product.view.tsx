@@ -86,7 +86,10 @@ export const ProductView: FC<ProductViewProps> = ({
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
-          <SnbCheckbox status={'unselect'} onPress={() => {}} />
+          <SnbCheckbox
+            status={product.selected ? 'selected' : 'unselect'}
+            onPress={() => {}}
+          />
         </View>
         {renderProductImage()}
         <View style={{ justifyContent: 'center' }}>
