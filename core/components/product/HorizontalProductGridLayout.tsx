@@ -57,7 +57,7 @@ export const HorizontalProductGridLayout: FC<
           if (onCardPress) {
             onCardPress(item, index);
           } else {
-            goToProductDetail(item.id);
+            goToProductDetail(`${item.id}_${item.warehouseOriginId}`);
           }
         }}
         withOrderButton={withOrderButton}
