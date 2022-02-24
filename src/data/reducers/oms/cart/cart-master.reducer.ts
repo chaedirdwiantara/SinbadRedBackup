@@ -2,6 +2,7 @@
 import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
+import { manageRemoveProduct } from '@screen/oms/functions';
 /** === INITIAL STATE HERE === */
 const initialState: models.CartMaster = {
   id: '',
@@ -210,47 +211,22 @@ export const cartMaster = simplifyReducer(initialState, {
       isCheckStockMerged: true,
     };
   },
-  /** => MERGE CHECK PRODUCT DATA */
   [types.CART_MASTER_REMOVE_PRODUCT](
     state = initialState,
     { payload }: models.CartMasterRemoveProductAction,
   ) {
-    const sellers: models.CartMasterSellers[] = [];
-    const unavailable: models.CartMasterUnavailable[] = [];
-    if (payload.source === 'available') {
-      state.sellers.map((item) => {
-        const filteredProducts = item.products.filter((innerItem) => {
-          return (
-            innerItem.productId !== payload.removedProducts[0].productId &&
-            innerItem.warehouseId !== payload.removedProducts[0].warehouseId
-          );
-        });
-        sellers.push({
-          ...item,
-          products: filteredProducts,
-        });
-      });
-      return {
-        ...state,
-        sellers: sellers,
-      };
-    } else {
-      state.unavailable.map((item) => {
-        const isFound =
-          payload.removedProducts.findIndex(
-            (innerItem) =>
-              innerItem.productId === item.productId &&
-              innerItem.warehouseId === item.warehouseId,
-          ) > -1;
-        if (!isFound) {
-          unavailable.push(item);
-        }
-      });
-      return {
-        ...state,
-        unavailable: unavailable,
-      };
-    }
+    return manageRemoveProduct({
+      source: payload.source,
+      removedProducts: payload.removedProducts,
+      stateData: state,
+    });
+  },
+  /** => REPLACE DATA FROM LOCAL */
+  [types.REPLACE_CART_MASTER_FROM_LOCAL](
+    _ = initialState,
+    { payload }: models.CartMasterReplaceFromLocalAction,
+  ) {
+    return payload;
   },
   /** => RESET CARD MASTER INTO INITIAL STATE */
   [types.RESET_CART_MASTER]() {
