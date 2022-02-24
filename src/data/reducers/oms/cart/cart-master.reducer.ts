@@ -62,6 +62,7 @@ export const cartMaster = simplifyReducer(initialState, {
               ...item,
               lastUsedPrice: thisProduct.lastUsedPrice,
               isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
+              multipleQty: thisProduct.multipleQty,
               qty,
               selected,
               productStatus: item.status,
