@@ -10,11 +10,11 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
-import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
 import * as models from '@models';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { BUYER_CATEGORY_VIEW } from '@screen/auth/functions/screens_name';
 import { ErrorContent } from '../shared';
+import { useEasyRegistration } from '@screen/account/functions/easy-registration-hooks';
+import { BUYER_CATEGORY_VIEW } from '@screen/account/functions/screens_name';
 
 const Content: React.FC = () => {
   const search = useInput('', 'string-only');

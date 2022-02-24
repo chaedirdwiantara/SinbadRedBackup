@@ -22,14 +22,14 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
+import * as models from '@models';
+import { LogBox } from 'react-native';
+import { ErrorContent } from '../shared';
 import {
   LIST_LOCATION_VIEW,
   PRODUCT_CATEGORY_VIEW,
-} from '@screen/auth/functions/screens_name';
-import * as models from '@models';
-import { LogBox } from 'react-native';
-import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
-import { ErrorContent } from '../shared';
+} from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions/easy-registration-hooks';
 
 const setIcon = (slug: string) => {
   switch (slug) {
