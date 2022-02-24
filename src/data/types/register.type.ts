@@ -21,3 +21,15 @@ export const VERIFY_OTP_REGISTER_PROCESS = 'VerifyOTPRegisterProcess';
 export const VERIFY_OTP_REGISTER_SUCCESS = 'VerifyOTPRegisterSuccess';
 export const VERIFY_OTP_REGISTER_FAILED = 'VerifyOTPRegisterFailed';
 export const VERIFY_OTP_RESET = 'VerifyOTPReset';
+
+// CHECK PHONE WHEN REGISTER
+export const CHECK_PHONE_V2_PROCESS = 'CheckPhoneV2Process';
+export const CHECK_PHONE_V2_SUCCESS = 'CheckPhoneV2Success';
+export const CHECK_PHONE_V2_FAILED = 'CheckPhoneV2Failed';
+export const CHECK_PHONE_V2_RESET = 'CheckPhoneV2Reset';
+
+// CHECK AUTO LOGIN AFTER VALIDATE OTP
+export const CHECK_AUTO_LOGIN_PROCESS = 'CheckAutoLoginProcess';
+export const CHECK_AUTO_LOGIN_SUCCESS = 'CheckAutoLoginSuccess';
+export const CHECK_AUTO_LOGIN_FAILED = 'CheckAutoLoginFailed';
+export const CHECK_AUTO_LOGIN_RESET = 'CheckAutoLoginReset';

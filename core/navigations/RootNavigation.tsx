@@ -52,7 +52,7 @@ export const resetToIntroSinbad = () => {
   navigationRef.current?.dispatch(
     CommonActions.reset({
       index: 0,
-      routes: [{ name: 'IntroSinbad' }],
+      routes: [{ name: 'OnBoardingView' }],
     }),
   );
 };
