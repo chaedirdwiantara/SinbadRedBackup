@@ -3,9 +3,9 @@ import {
   matchCartWithCheckData,
   useCancelStockAction,
   useCartMasterAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
+  usePostCheckProductAction,
+  usePostCheckSellerAction,
+  usePostCheckStockAction,
   useUpdateCartAction,
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useEffect, useState } from 'react';
@@ -31,9 +31,9 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   const updateCartAction = useUpdateCartAction();
   const cancelCartAction = useCancelStockAction();
   const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
+  const postCheckProductAction = usePostCheckProductAction();
+  const postCheckSellerAction = usePostCheckSellerAction();
+  const postCheckStockAction = usePostCheckStockAction();
 
   const handleOnPressCheckout = () => {
     onPressCheckout();
@@ -61,26 +61,23 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
         cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ??
         [];
 
-      console.log({ carts, sellerIds });
-
       /** Input product(s) that's been selected and available as payload */
-      checkProductAction.fetch(dispatchCart, {
+      postCheckProductAction.fetch(dispatchCart, {
         carts,
       });
-      checkSellerAction.fetch(dispatchCart, {
+      postCheckSellerAction.fetch(dispatchCart, {
         sellerIds,
       });
-      checkStockAction.fetch(dispatchCart, {
+      postCheckStockAction.fetch(dispatchCart, {
         cartId: cartMasterAction.cartMaster.id,
         reserved: true,
         carts,
       });
     }
-
     return () => {
-      checkProductAction.reset(dispatchCart);
-      checkSellerAction.reset(dispatchCart);
-      checkStockAction.reset(dispatchCart);
+      postCheckProductAction.reset(dispatchCart);
+      postCheckSellerAction.reset(dispatchCart);
+      postCheckStockAction.reset(dispatchCart);
     };
   }, [stateCart.update.data]);
 
@@ -91,9 +88,9 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   useEffect(() => {
     /** Matching response data from checkProduct, checkSeller, and checkStock with data in Cart Master */
     const validationResult = matchCartWithCheckData({
-      checkProductData: stateCart.checkProduct.data ?? [],
-      checkSellerData: stateCart.checkSeller.data ?? [],
-      checkStockData: stateCart.checkStock.data ?? [],
+      checkProductData: stateCart.postCheckProduct.data ?? [],
+      checkSellerData: stateCart.postCheckSeller.data ?? [],
+      checkStockData: stateCart.postCheckStock.data ?? [],
       cartData: cartMasterAction.cartMaster,
     });
 
@@ -102,31 +99,32 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
       setErrorShown(true);
     }
   }, [
-    stateCart.checkProduct.data,
-    stateCart.checkSeller.data,
-    stateCart.checkStock.data,
+    stateCart.postCheckProduct.data,
+    stateCart.postCheckSeller.data,
+    stateCart.postCheckStock.data,
   ]);
 
   useEffect(() => {
     /** Show (Global) error, if and only if one or more of these endpoints got an error response */
     if (
-      stateCart.checkProduct.error ||
-      stateCart.checkSeller.error ||
-      stateCart.checkStock.error
+      stateCart.postCheckProduct.error ||
+      stateCart.postCheckSeller.error ||
+      stateCart.postCheckStock.error
     ) {
       setRetryShown(true);
     }
   }, [
-    stateCart.checkProduct.error,
-    stateCart.checkSeller.error,
-    stateCart.checkStock.error,
+    stateCart.postCheckProduct.error,
+    stateCart.postCheckSeller.error,
+    stateCart.postCheckStock.error,
   ]);
 
   useEffect(() => {
-    cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data ?? []);
-    cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data ?? []);
-    cartMasterAction.mergeCheckStock(stateCart.checkStock.data ?? []);
-
+    if (stateCart.cancelStock.data) {
+      cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
+      cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
+      cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
+    }
     return () => {
       cartMasterAction.reset();
     };
