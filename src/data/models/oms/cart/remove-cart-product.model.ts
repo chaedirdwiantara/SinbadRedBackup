@@ -1,3 +1,5 @@
+import { CartMaster } from '.';
+
 /**
  * REMOVE CART PRODUCT
  */
@@ -18,4 +20,10 @@ export interface RemovedProducts {
 export interface HandleRemoveProduct {
   removedProducts: RemovedProducts[];
   source: 'available' | 'unavailable';
+}
+
+export interface ManageRemoveProduct {
+  removedProducts: RemovedProducts[];
+  source: 'available' | 'unavailable';
+  stateData: CartMaster;
 }

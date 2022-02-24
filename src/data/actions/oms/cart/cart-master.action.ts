@@ -30,6 +30,12 @@ export const CartMasterRemoveProduct = (
 ): models.CartMasterRemoveProductAction => {
   return { type: types.CART_MASTER_REMOVE_PRODUCT, payload };
 };
+/** => REPLACE CART MASTER FROM LOCAL */
+export const replaceCartMasterFromLocal = (
+  payload: models.CartMaster,
+): models.CartMasterReplaceFromLocalAction => {
+  return { type: types.REPLACE_CART_MASTER_FROM_LOCAL, payload };
+};
 /** => RESET CART MASTER DATA TO INITIAL STATE */
 export const resetCartMaster = () => {
   return { type: types.RESET_CART_MASTER };
