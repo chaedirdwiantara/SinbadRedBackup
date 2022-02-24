@@ -57,7 +57,7 @@ export const HorizontalProductGridLayout: FC<
           if (onCardPress) {
             onCardPress(item, index);
           } else {
-            goToProductDetail(item.id);
+            goToProductDetail(`${item.id}_${item.warehouseOriginId}`);
           }
         }}
         withOrderButton={withOrderButton}
@@ -74,7 +74,7 @@ export const HorizontalProductGridLayout: FC<
       showsHorizontalScrollIndicator={false}
       data={data}
       renderItem={renderProductCard}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => `${item.id}_${item.warehouseOriginId}`}
       ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
       onEndReached={onEndReached}
     />

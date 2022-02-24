@@ -12,6 +12,7 @@ export interface ProductList {
   basePrice: number;
   finalPrice: number;
   qtySoldLabel: string;
+  warehouseOriginId: string;
 }
 
 export interface ProductListProcessProps extends models.ListProcessProps {
@@ -117,6 +118,7 @@ export interface ProductDetail {
   qtySoldValue: number;
   sellerCode: string;
   thumbnailImageUrl: string;
+  warehouseOriginId?: number | null;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
