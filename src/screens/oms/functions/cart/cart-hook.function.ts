@@ -1,5 +1,8 @@
 /** === IMPORT PACKAGE HERE === */
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { cloneDeep } from 'lodash';
+import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -228,6 +231,198 @@ const useCartBuyerAddressAction = () => {
     },
   };
 };
+/** => cart local data */
+const useCartLocalData = () => {
+  const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
+  return {
+    updateQty: ({
+      productId,
+      sellerId,
+      warehouseId,
+      type,
+      newQty,
+    }: models.UpdateCartQty) => {
+      if (localCartMaster) {
+        // write the data to new constant, so the data refer
+        const newLocalCartMaster = cloneDeep(localCartMaster);
+        // find the updated product seller index
+        const sellerIndex = newLocalCartMaster.sellers.findIndex(
+          (sellerItem) => {
+            return sellerItem.sellerId === sellerId;
+          },
+        );
+
+        // find the updated product index
+        const productIndex = newLocalCartMaster.sellers[
+          sellerIndex
+        ].products.findIndex((productItem) => {
+          return (
+            productItem.productId === productId &&
+            productItem.warehouseId === warehouseId
+          );
+        });
+
+        const thisProduct =
+          newLocalCartMaster.sellers[sellerIndex].products[productIndex];
+
+        // define stock variable
+        const stock = thisProduct.stock ?? 0;
+
+        // determine the increment / decrement value
+        let updateValue = thisProduct.multipleQty ?? 1;
+
+        // manage logic increase or decrease
+        if (type === 'increase') {
+          if (thisProduct.qty + updateValue <= stock) {
+            thisProduct.qty += updateValue;
+          }
+        } else if (type === 'decrease') {
+          if (thisProduct.qty - updateValue >= thisProduct.minQty) {
+            thisProduct.qty -= updateValue;
+          }
+        } else {
+          // if the user update qty using keyboard
+          if (newQty && Number.isInteger(newQty)) {
+            if (newQty <= stock && newQty >= thisProduct.minQty) {
+              thisProduct.qty = newQty;
+            } else if (newQty < thisProduct.minQty) {
+              thisProduct.qty = thisProduct.minQty;
+            } else if (newQty > stock) {
+              thisProduct.qty = stock;
+            }
+          }
+        }
+
+        // set the product to become selected
+        thisProduct.selected = true;
+
+        // save data to local state
+        setLocalCartMaster(newLocalCartMaster);
+      }
+    },
+    updateSelected: ({
+      productId,
+      sellerId,
+      warehouseId,
+    }: models.UpdateSelected) => {
+      if (localCartMaster) {
+        // write the data to new constant, so the data refer
+        const newLocalCartMaster = cloneDeep(localCartMaster);
+        // find the updated product seller index
+        const sellerIndex = newLocalCartMaster.sellers.findIndex(
+          (sellerItem) => {
+            return sellerItem.sellerId === sellerId;
+          },
+        );
+
+        // find the updated product index
+        const productIndex = newLocalCartMaster.sellers[
+          sellerIndex
+        ].products.findIndex((productItem) => {
+          return (
+            productItem.productId === productId &&
+            productItem.warehouseId === warehouseId
+          );
+        });
+
+        const thisProduct =
+          newLocalCartMaster.sellers[sellerIndex].products[productIndex];
+
+        // invert the selected property
+        thisProduct.selected = !thisProduct.selected;
+
+        // save data to local state
+        setLocalCartMaster(newLocalCartMaster);
+      }
+    },
+    isAnyActiveProduct: () => {
+      let result = false;
+      if (localCartMaster) {
+        for (let i = 0; i < localCartMaster.sellers.length; i++) {
+          if (localCartMaster.sellers[i].products.length > 0) {
+            result = true;
+            break;
+          }
+        }
+      }
+      return result;
+    },
+    manageCheckboxStatus: ({ sellerId }: models.ManageCheckbox) => {
+      let result: ICheckbox = 'unselect';
+      if (localCartMaster) {
+        let countSelected: number = 0;
+        let countUnselected: number = 0;
+        if (sellerId) {
+          // if with seller id, then check the specific seller id only
+          const sellerIndex = localCartMaster.sellers.findIndex((item) => {
+            return item.sellerId === sellerId;
+          });
+          localCartMaster.sellers[sellerIndex].products.map((productItem) => {
+            if (productItem.selected) {
+              countSelected++;
+            } else {
+              countUnselected++;
+            }
+          });
+        } else {
+          // if not with seller id, then check all product in all seller array data
+          localCartMaster.sellers.map((sellerItem) => {
+            sellerItem.products.map((productItem) => {
+              if (productItem.selected) {
+                countSelected++;
+              } else {
+                countUnselected++;
+              }
+            });
+          });
+        }
+        // determine the return
+        if (countSelected !== 0 && countUnselected !== 0) {
+          result = 'indeterminate';
+        } else if (countSelected === 0) {
+          result = 'unselect';
+        } else {
+          result = 'selected';
+        }
+      }
+      return result;
+    },
+    manageCheckboxOnPress: ({
+      sellerId,
+      currentStatus,
+    }: models.ManageCheckbox) => {
+      const nextStatus = currentStatus === 'selected' ? false : true;
+      if (localCartMaster) {
+        const newLocalCartMaster = cloneDeep(localCartMaster);
+        if (sellerId) {
+          // if with seller id, then check the specific seller id only
+          const sellerIndex = newLocalCartMaster.sellers.findIndex((item) => {
+            return item.sellerId === sellerId;
+          });
+          newLocalCartMaster.sellers[sellerIndex].products.map(
+            (productItem) => {
+              productItem.selected = nextStatus;
+            },
+          );
+        } else {
+          // if not with seller id, then check all product in all seller array data
+          newLocalCartMaster.sellers.map((sellerItem) => {
+            sellerItem.products.map((productItem) => {
+              productItem.selected = nextStatus;
+            });
+          });
+        }
+
+        // save data to local state
+        setLocalCartMaster(newLocalCartMaster);
+      }
+    },
+    setLocalCartMaster: (newData: models.CartMaster) => {
+      setLocalCartMaster(newData);
+    },
+    localCartMaster,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -245,6 +440,7 @@ export {
   usePostCheckStockAction,
   useCancelStockAction,
   useCartBuyerAddressAction,
+  useCartLocalData,
 };
 /**
  * ================================================================

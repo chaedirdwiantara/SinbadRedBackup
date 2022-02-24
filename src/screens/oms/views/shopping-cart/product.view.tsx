@@ -17,11 +17,24 @@ import * as models from '@models';
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleUpdateQty: ({
+    productId,
+    sellerId,
+    warehouseId,
+    type,
+  }: models.UpdateCartQty) => void;
+  handleUpdateSelected: ({
+    productId,
+    sellerId,
+    warehouseId,
+  }: models.UpdateSelected) => void;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
   product,
   handleRemoveProductModal,
+  handleUpdateQty,
+  handleUpdateSelected,
 }) => {
   /** => REMAINING STOCK */
   const renderRemainingStock = () => {
@@ -86,7 +99,16 @@ export const ProductView: FC<ProductViewProps> = ({
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
-          <SnbCheckbox status={'unselect'} onPress={() => {}} />
+          <SnbCheckbox
+            status={product.selected ? 'selected' : 'unselect'}
+            onPress={() => {
+              handleUpdateSelected({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+              });
+            }}
+          />
         </View>
         {renderProductImage()}
         <View style={{ justifyContent: 'center' }}>
@@ -131,11 +153,33 @@ export const ProductView: FC<ProductViewProps> = ({
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
-          onIncrease={() => {}}
-          onDecrease={() => {}}
-          onChange={() => {}}
-          minusDisabled={false}
-          plusDisabled={false}
+          onIncrease={() => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'increase',
+            });
+          }}
+          onDecrease={() => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'decrease',
+            });
+          }}
+          onChange={(newQty: number) => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'onChange',
+              newQty,
+            });
+          }}
+          minusDisabled={!(product.qty > product.minQty)}
+          plusDisabled={!(product.qty < (product.stock ?? 0))}
         />
       </View>
       <View style={ShoppingCartStyles.actionContainer} />

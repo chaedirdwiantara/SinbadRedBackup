@@ -48,7 +48,7 @@ import { useProductContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useDataAuth } from '@core/redux/Data';
-// import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
 /** === DUMMY === */
 // const supplierDummy = {
@@ -79,8 +79,7 @@ const ProductDetailView: FC = () => {
   const supplierSegmentationAction = useSupplierSegmentationDetailAction();
   const sendDataToSupplierActions = useRegisterSupplierActions();
   const addToCartAction = useAddToCartAction();
-  // const cartTotalProductActions = useCartTotalProductActions();
-  // const { dataTotalProductCart } = useCartTotalProductActions();
+  const totalCartActions = useGetTotalCartAction();
   const { me } = useDataAuth();
 
   /** => context */
@@ -405,7 +404,7 @@ const ProductDetailView: FC = () => {
   useEffect(() => {
     if (stateCart.create.data !== null) {
       handleCloseModal();
-      // cartTotalProductActions.fetch();
+      totalCartActions.fetch(dispatchCart);
       SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
@@ -438,8 +437,7 @@ const ProductDetailView: FC = () => {
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
         <ProductDetailHeader
-          // cartBadge={dataTotalProductCart.totalProduct}
-          cartBadge={0}
+          cartBadge={stateCart.total.data?.totalProducts ?? 0}
         />
         <ProductDetailSkeleton />
       </SnbContainer>
@@ -451,8 +449,7 @@ const ProductDetailView: FC = () => {
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
         <ProductDetailHeader
-          // cartBadge={dataTotalProductCart.totalProduct}
-          cartBadge={0}
+          cartBadge={stateCart.total.data?.totalProducts ?? 0}
         />
         <ScrollView
           contentContainerStyle={{ flex: 1 }}
@@ -475,8 +472,7 @@ const ProductDetailView: FC = () => {
     <SnbContainer color="white">
       <SnbStatusBar type="transparent1" />
       <ProductDetailHeader
-        // cartBadge={dataTotalProductCart.totalProduct}
-        cartBadge={0}
+        cartBadge={stateCart.total.data?.totalProducts ?? 0}
       />
       {/* Content */}
       <View style={{ flex: 1 }}>
