@@ -35,7 +35,6 @@ export interface CartProduct {
   qtyPerBox: number;
   uomLabel: string;
   isPriceAfterTax: boolean;
-  taxPercentage: number;
   price: number;
   selected: boolean;
   priceRules: ProductPriceRules[];
