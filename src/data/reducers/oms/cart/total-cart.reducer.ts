@@ -4,7 +4,7 @@ import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
 export type GetTotalCartInitialProps =
-  models.DetailItemProps<models.CartExample>;
+  models.DetailItemProps<models.TotalCartData>;
 /** === INITIAL STATE HERE === */
 export const getTotalCartInitialState: GetTotalCartInitialProps = {
   data: null,

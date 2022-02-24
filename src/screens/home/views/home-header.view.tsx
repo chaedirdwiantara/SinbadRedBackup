@@ -1,23 +1,35 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
-// import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import { useDataAuth } from '@core/redux/Data';
 
 /** === IMPORT STYLE HERE === */
 import HomeStyles from '../styles/home.style';
+import { contexts } from '@contexts';
 /** === INTERFACE === */
 interface HeaderProps {
   headerChange: boolean;
 }
 /** === COMPONENT === */
 const HomeHeaderView: FC<HeaderProps> = (props) => {
-  // const { dataTotalProductCart } = useCartTotalProductActions();
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+  const totalCartAction = useGetTotalCartAction();
+  const totalCartState = stateCart.total.data;
   const { totalNotification } = useNotificationTotalActions();
   const { me } = useDataAuth();
+
+  /** === HOOK === */
+  useEffect(() => {
+    totalCartAction.fetch(dispatchCart);
+    return () => {
+      totalCartAction.reset(dispatchCart);
+    };
+  }, []);
+
   /** === VIEW === */
   /** => main */
 
@@ -43,8 +55,7 @@ const HomeHeaderView: FC<HeaderProps> = (props) => {
             NavigationAction.navigate('NotificationView');
           }
         }}
-        // icon2Value={dataTotalProductCart.totalProduct}
-        icon2Value={0}
+        icon2Value={totalCartState?.totalProducts}
         icon2Name="cart"
         icon2Action={() => {
           if (me.data === null) {
