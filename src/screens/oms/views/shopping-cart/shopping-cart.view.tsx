@@ -30,7 +30,15 @@ import * as models from '@models';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
   /** => STATE */
-  const { localCartMaster, setLocalCartMaster, updateQty } = useCartLocalData();
+  const {
+    localCartMaster,
+    setLocalCartMaster,
+    updateQty,
+    updateSelected,
+    isAnyActiveProduct,
+    manageCheckboxStatus,
+    manageCheckboxOnPress,
+  } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -183,6 +191,10 @@ const OmsShoppingCartView: FC = () => {
                 unavailableProducts={localCartMaster.unavailable}
                 availableProducts={localCartMaster.sellers}
                 handleUpdateQty={updateQty}
+                handleUpdateSelected={updateSelected}
+                isAnyActiveProduct={isAnyActiveProduct}
+                manageCheckboxStatus={manageCheckboxStatus}
+                manageCheckboxOnPress={manageCheckboxOnPress}
               />
             </View>
           </ScrollView>

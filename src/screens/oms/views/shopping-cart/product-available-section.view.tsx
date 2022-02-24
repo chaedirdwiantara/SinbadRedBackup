@@ -2,6 +2,7 @@
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbCheckbox, SnbText, color } from 'react-native-sinbad-ui';
+import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ProductView } from './product.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -19,12 +20,25 @@ interface ProductAvailableSectionProps {
     warehouseId,
     type,
   }: models.UpdateCartQty) => void;
+  handleUpdateSelected: ({
+    productId,
+    sellerId,
+    warehouseId,
+  }: models.UpdateSelected) => void;
+  manageCheckboxStatus: ({ sellerId }: models.ManageCheckbox) => ICheckbox;
+  manageCheckboxOnPress: ({
+    sellerId,
+    currentStatus,
+  }: models.ManageCheckbox) => void;
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
   availableProducts,
   handleRemoveProductModal,
   handleUpdateQty,
+  handleUpdateSelected,
+  manageCheckboxStatus,
+  manageCheckboxOnPress,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -36,11 +50,22 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
       }}>
       {availableProducts.map((item) => {
         if (item.products.length !== 0) {
+          const thisSellerCheckboxStatus = manageCheckboxStatus({
+            sellerId: item.sellerId,
+          });
           return (
             <View key={item.sellerId}>
               <View style={ShoppingCartStyles.sellerContainer}>
                 <View style={{ marginRight: 16 }}>
-                  <SnbCheckbox status={'unselect'} onPress={() => {}} />
+                  <SnbCheckbox
+                    status={thisSellerCheckboxStatus}
+                    onPress={() => {
+                      manageCheckboxOnPress({
+                        sellerId: item.sellerId,
+                        currentStatus: thisSellerCheckboxStatus,
+                      });
+                    }}
+                  />
                 </View>
                 <SnbText.B4 color={color.black100}>
                   {item.sellerName}
@@ -54,6 +79,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                     product={product}
                     handleRemoveProductModal={handleRemoveProductModal}
                     handleUpdateQty={handleUpdateQty}
+                    handleUpdateSelected={handleUpdateSelected}
                   />
                 </View>
               ))}

@@ -2,7 +2,6 @@ import {
   CheckProductResponse,
   CheckStockResponse,
   CheckSellerResponse,
-  CartMasterUnavailable,
   CartMaster,
 } from '.';
 /**
@@ -53,5 +52,17 @@ export interface UpdateCartQty {
   productId: string;
   sellerId: number;
   warehouseId: number;
-  type: 'increase' | 'decrease';
+  type: 'increase' | 'decrease' | 'onChange';
+  newQty?: number;
+}
+
+export interface UpdateSelected {
+  productId: string;
+  sellerId: number;
+  warehouseId: number;
+}
+
+export interface ManageCheckbox {
+  sellerId: number | null;
+  currentStatus?: 'selected' | 'unselect' | 'indeterminate';
 }

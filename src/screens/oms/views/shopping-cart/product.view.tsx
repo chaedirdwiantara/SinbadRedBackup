@@ -23,12 +23,18 @@ interface ProductViewProps {
     warehouseId,
     type,
   }: models.UpdateCartQty) => void;
+  handleUpdateSelected: ({
+    productId,
+    sellerId,
+    warehouseId,
+  }: models.UpdateSelected) => void;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
   product,
   handleRemoveProductModal,
   handleUpdateQty,
+  handleUpdateSelected,
 }) => {
   /** => REMAINING STOCK */
   const renderRemainingStock = () => {
@@ -95,7 +101,13 @@ export const ProductView: FC<ProductViewProps> = ({
         <View style={ShoppingCartStyles.checkboxContainer}>
           <SnbCheckbox
             status={product.selected ? 'selected' : 'unselect'}
-            onPress={() => {}}
+            onPress={() => {
+              handleUpdateSelected({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+              });
+            }}
           />
         </View>
         {renderProductImage()}
@@ -157,7 +169,15 @@ export const ProductView: FC<ProductViewProps> = ({
               type: 'decrease',
             });
           }}
-          onChange={() => {}}
+          onChange={(newQty: number) => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'onChange',
+              newQty,
+            });
+          }}
           minusDisabled={!(product.qty > product.minQty)}
           plusDisabled={!(product.qty < (product.stock ?? 0))}
         />
