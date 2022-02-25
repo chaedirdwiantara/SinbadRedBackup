@@ -175,7 +175,7 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   );
 };
 
-export default copilot(copilotOptions(3))(HomeView);
+export default copilot(copilotOptions(4))(HomeView);
 
 /**
  * ================================================================
