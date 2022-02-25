@@ -6,7 +6,6 @@ import * as models from '@models';
 export const useEasyRegistration = () => {
   const dispatch = useDispatch();
   const { global, account } = useSelector((state: any) => state);
-
   const getBuyerCategory = React.useCallback(() => {
     dispatch(Actions.getBuyerCategory());
   }, []);
