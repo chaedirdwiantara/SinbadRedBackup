@@ -74,23 +74,19 @@ const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
   const hasDiscount = originalPrice !== currentPrice;
   const usedPrice = hasDiscount ? currentPrice! : originalPrice;
   /** === VIEW === */
-  console.log('ori:', originalPrice);
-  console.log('used:', usedPrice);
   return (
     <>
       <SnbText.C1 color={color.black100}>{name}</SnbText.C1>
       {hasDiscount && (
         <View style={{ marginTop: 8 }}>
           <SnbText.C3 color={color.black40}>
-            {toCurrency(originalPrice ? originalPrice : 0, {
-              withFraction: false,
-            })}
+            {toCurrency(originalPrice, { withFraction: false })}
           </SnbText.C3>
         </View>
       )}
       <View style={{ marginTop: 8 }}>
         <SnbText.C1 color={color.red50}>
-          {toCurrency(usedPrice ? usedPrice : 0, { withFraction: false })}
+          {toCurrency(usedPrice, { withFraction: false })}
         </SnbText.C1>
       </View>
     </>
