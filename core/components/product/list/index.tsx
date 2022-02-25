@@ -29,7 +29,7 @@ import {
 } from '@core/functions/product';
 import {
   useCheckDataSupplier,
-  useSupplierSegmentationAction,
+  // useSupplierSegmentationAction,
   useSendDataToSupplierActions,
 } from '@core/functions/supplier';
 import { useDataAuth } from '@core/redux/Data';
@@ -108,7 +108,7 @@ const ProductList: FC<ProductListProps> = ({
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
   const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
     useState(false);
-  const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
+  // const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
   const [modalErrorStock, setModalErrorStock] = useState(false);
@@ -135,7 +135,7 @@ const ProductList: FC<ProductListProps> = ({
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
   const addToCartActions = useAddToCartAction();
-  const supplierSegmentationAction = useSupplierSegmentationAction();
+  // const supplierSegmentationAction = useSupplierSegmentationAction();
   const sendDataToSupplierActions = useSendDataToSupplierActions();
   const stockValidationActions = useStockValidationAction();
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
@@ -163,7 +163,7 @@ const ProductList: FC<ProductListProps> = ({
   const { me } = useDataAuth();
   const {
     stateSupplier: {
-      segmentation: { data: dataSegmentation, error: errorSegmentation },
+      // segmentation: { data: dataSegmentation, error: errorSegmentation },
       create: { data: sendToSupplierData, error: sendToSupplierError },
     },
     dispatchSupplier,
@@ -195,8 +195,11 @@ const ProductList: FC<ProductListProps> = ({
     } else {
       setLoadingPreparation(true);
       setProductSelected(product);
-      supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-      productDetailActions.fetch(dispatchProduct, product.id);
+      // supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+      productDetailActions.fetch(
+        dispatchProduct,
+        `${product.id}_${product.warehouseOriginId}`,
+      );
     }
   };
 
@@ -204,7 +207,7 @@ const ProductList: FC<ProductListProps> = ({
   const handleCloseModal = () => {
     stockValidationActions.reset(dispatchStock);
     productDetailActions.reset(dispatchProduct);
-    supplierSegmentationAction.reset(dispatchSupplier);
+    // supplierSegmentationAction.reset(dispatchSupplier);
     addToCartActions.reset(dispatchCart);
     sendDataToSupplierActions.reset(dispatchSupplier);
     setModalErrorAddCart(false);
@@ -224,12 +227,7 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => action submit add to cart  */
   const onSubmitAddToCart = () => {
-    if (
-      productDetailState === null ||
-      dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null ||
-      dataStock === null
-    ) {
+    if (productDetailState === null || dataStock === null) {
       /** => DO SOMETHING */
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
       return;
@@ -319,31 +317,24 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (
-      dataSegmentation &&
-      dataSegmentation.dataSuppliers &&
-      productDetailState
-    ) {
+    if (productDetailState) {
       onChangeQty(productDetailState.minQty);
       stockValidationActions.fetch(dispatchStock, {
-        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+        warehouseId: Number(productDetailState.warehouseOriginId) ?? null,
         productId: productDetailState.id,
       });
     }
-  }, [dataSegmentation, productDetailState]);
+  }, [productDetailState]);
 
   /** => Listen error segmentation and error product detail */
   useEffect(() => {
-    if (modalErrorProductDetail !== null && modalErrorSegmentation !== null) {
-      if (errorSegmentation !== null) {
-        setLoadingPreparation(false);
-        setModalErrorSegmentation(true);
-      } else if (productDetailError !== null) {
+    if (modalErrorProductDetail !== null) {
+      if (productDetailError !== null) {
         setLoadingPreparation(false);
         setModalErrorProductDetail(true);
       }
     }
-  }, [errorSegmentation, productDetailError]);
+  }, [modalErrorProductDetail, productDetailError]);
 
   /** Listen Data Stock */
   useEffect(() => {
@@ -396,20 +387,13 @@ const ProductList: FC<ProductListProps> = ({
   }, [selectedCategory, keywordSearched, withTags]);
 
   useEffect(() => {
-    if (me.data !== null && dataSegmentation !== null) {
-      if (dataSegmentation.dataSuppliers !== null) {
-        if (
-          me.data.approvalStatus === 'verified' &&
-          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-        ) {
-          setModalNotCoverage(true);
-          setLoadingPreparation(false);
-        } else {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-          });
-        }
+    if (me.data !== null) {
+      if (me.data.approvalStatus === 'verified') {
+        setLoadingPreparation(false);
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: 'verified',
+        });
       } else {
         // checkUser({
         //   sinbadStatus: me.data.approvalStatus,
@@ -419,7 +403,7 @@ const ProductList: FC<ProductListProps> = ({
         setLoadingPreparation(false);
       }
     }
-  }, [dataSegmentation]);
+  }, []);
 
   useEffect(() => {
     if (modalRegisterSupplier) {
@@ -431,7 +415,7 @@ const ProductList: FC<ProductListProps> = ({
     return () => {
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
-      supplierSegmentationAction.reset(dispatchSupplier);
+      // supplierSegmentationAction.reset(dispatchSupplier);
       addToCartActions.reset(dispatchCart);
       sendDataToSupplierActions.reset(dispatchSupplier);
     };
@@ -634,24 +618,6 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorSendDataSupplier}
         error={sendToSupplierError}
         closeAction={handleCloseModal}
-      />
-      {/* Modal Bottom Sheet segmentation */}
-      <BottomSheetError
-        open={
-          modalErrorSegmentation &&
-          errorSegmentation !== null &&
-          errorSegmentation.code !== 401
-        }
-        error={errorSegmentation}
-        closeAction={handleCloseModal}
-        retryAction={() => {
-          if (productSelected) {
-            setModalErrorSegmentation(false);
-            handleOrderPress(productSelected);
-          } else {
-            handleCloseModal();
-          }
-        }}
       />
       {/* Modal Bottom Sheet product detail */}
       <BottomSheetError
