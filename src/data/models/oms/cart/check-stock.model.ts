@@ -19,4 +19,5 @@ export interface CheckStockPayload {
 export interface CheckStockPayloadCarts {
   productId: string;
   warehouseId: number;
+  qty: number;
 }

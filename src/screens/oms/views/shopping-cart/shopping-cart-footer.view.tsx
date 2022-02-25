@@ -2,13 +2,15 @@
 import {
   matchCartWithCheckData,
   useCancelStockAction,
+  useCartBuyerAddressAction,
   useCartMasterAction,
+  useCheckoutAction,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
   useUpdateCartAction,
 } from '@screen/oms/functions';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
@@ -23,7 +25,10 @@ interface FooterProps {
 }
 /** === COMPONENT ===  */
 const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+  const { stateCheckout, dispatchCheckout } = useContext(
+    contexts.CheckoutContext,
+  );
   const [isErrorShown, setErrorShown] = useState(false);
   const [isRetryShown, setRetryShown] = useState(false);
   const [retryCounter, setRetryCounter] = useState(0);
@@ -34,6 +39,8 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   const postCheckProductAction = usePostCheckProductAction();
   const postCheckSellerAction = usePostCheckSellerAction();
   const postCheckStockAction = usePostCheckStockAction();
+  const buyerAddressAction = useCartBuyerAddressAction();
+  const checkoutAction = useCheckoutAction();
 
   const handleOnPressCheckout = () => {
     onPressCheckout();
@@ -78,16 +85,18 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
         sellerIds: [1, 2],
       });
       postCheckStockAction.fetch(dispatchCart, {
-        cartId: cartMasterAction.cartMaster.id,
         reserved: true,
+        cartId: '53c9b0000000000000000001',
         carts: [
           {
             productId: '53c9b0000000000000000000',
             warehouseId: 1,
+            qty: 10,
           },
           {
             productId: '53c9b0000000000000000002',
             warehouseId: 1,
+            qty: 10,
           },
         ],
       });
@@ -120,6 +129,8 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         setErrorShown(true);
+      } else {
+        buyerAddressAction.fetch(dispatchCart);
       }
     }
   }, [
@@ -141,6 +152,28 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
     stateCart.postCheckProduct.error,
     stateCart.postCheckSeller.error,
     stateCart.postCheckStock.error,
+  ]);
+
+  useEffect(() => {
+    /** Request Checkout API once the validation complete with no errors
+     * AND buyer address already give the result
+     */
+    if (
+      !stateCart.postCheckProduct.error &&
+      !stateCart.postCheckSeller.error &&
+      !stateCart.postCheckStock.error &&
+      stateCart.buyerAddress.data
+    ) {
+      checkoutAction.fetch(dispatchCheckout, {
+        buyerAddress: stateCart.buyerAddress.data,
+        carts: cartMasterAction.cartMaster.sellers,
+      });
+    }
+  }, [
+    stateCart.postCheckProduct.error,
+    stateCart.postCheckSeller.error,
+    stateCart.postCheckStock.error,
+    stateCart.buyerAddress.data,
   ]);
 
   useEffect(() => {

@@ -38,13 +38,13 @@ export const ProductView: FC<ProductViewProps> = ({
 }) => {
   /** => REMAINING STOCK */
   const renderRemainingStock = () => {
-    if (Number(product.stock) < 11) {
+    if (Number(product?.stock) < 11) {
       return (
         <View>
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+            }>{`Tersedia ${product?.stock} Kardus`}</SnbText.B4>
         </View>
       );
     }
@@ -55,7 +55,7 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Image
           source={{
-            uri: product.productImageUrl,
+            uri: product?.productImageUrl,
           }}
           style={ShoppingCartStyles.productImg}
         />
@@ -64,12 +64,12 @@ export const ProductView: FC<ProductViewProps> = ({
   };
   /** => PPN BADGE */
   const renderPPNBadge = () => {
-    if (product.isPriceAfterTax) {
+    if (product?.isPriceAfterTax) {
       return (
         <View style={{ marginBottom: 5 }}>
           <SnbBadge.Label
             type="warning"
-            value={`Include PPN ${product.taxPercentage}%`}
+            value={`Include PPN ${product?.taxPercentage}%`}
           />
         </View>
       );
@@ -82,8 +82,8 @@ export const ProductView: FC<ProductViewProps> = ({
         onPress={() => {
           const removedProducts: models.RemovedProducts[] = [];
           removedProducts.push({
-            productId: product.productId,
-            warehouseId: product.warehouseId,
+            productId: product?.productId,
+            warehouseId: product?.warehouseId,
           });
           handleRemoveProductModal({
             source: 'available',
@@ -100,12 +100,12 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
           <SnbCheckbox
-            status={product.selected ? 'selected' : 'unselect'}
+            status={product?.selected ? 'selected' : 'unselect'}
             onPress={() => {
               handleUpdateSelected({
-                productId: product.productId,
-                sellerId: product.sellerId,
-                warehouseId: product.warehouseId,
+                productId: product?.productId,
+                sellerId: product?.sellerId,
+                warehouseId: product?.warehouseId,
               });
             }}
           />
@@ -117,7 +117,9 @@ export const ProductView: FC<ProductViewProps> = ({
             style={{
               width: '100%',
             }}>
-            <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
+            <SnbText.B4 color={color.black80}>
+              {product?.productName}
+            </SnbText.B4>
           </View>
           <View
             style={{
@@ -127,14 +129,14 @@ export const ProductView: FC<ProductViewProps> = ({
               <SnbText.B4
                 color={color.black60}
                 textDecorationLine="line-through">
-                {toCurrency(Number(product.lastUsedPrice), {
+                {toCurrency(Number(product?.lastUsedPrice), {
                   withFraction: false,
                 })}
               </SnbText.B4>
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <SnbText.B4 color={color.black100}>
-                {toCurrency(Number(product.price), { withFraction: false })}
+                {toCurrency(Number(product?.price), { withFraction: false })}
               </SnbText.B4>
               <SnbIcon
                 name="arrow_drop_down_circle"
@@ -149,37 +151,37 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={ShoppingCartStyles.actionContainer}>
         {renderRemoveProductIcon()}
         <SnbNumberCounter
-          value={product.qty}
+          value={product?.qty ?? 0}
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
           onIncrease={() => {
             handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
+              productId: product?.productId,
+              sellerId: product?.sellerId,
+              warehouseId: product?.warehouseId,
               type: 'increase',
             });
           }}
           onDecrease={() => {
             handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
+              productId: product?.productId,
+              sellerId: product?.sellerId,
+              warehouseId: product?.warehouseId,
               type: 'decrease',
             });
           }}
           onChange={(newQty: number) => {
             handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
+              productId: product?.productId,
+              sellerId: product?.sellerId,
+              warehouseId: product?.warehouseId,
               type: 'onChange',
               newQty,
             });
           }}
-          minusDisabled={!(product.qty > product.minQty)}
-          plusDisabled={!(product.qty < (product.stock ?? 0))}
+          minusDisabled={!(product?.qty > product?.minQty)}
+          plusDisabled={!(product?.qty < (product?.stock ?? 0))}
         />
       </View>
       <View style={ShoppingCartStyles.actionContainer} />
