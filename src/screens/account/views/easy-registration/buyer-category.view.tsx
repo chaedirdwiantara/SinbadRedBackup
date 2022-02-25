@@ -239,8 +239,7 @@ const BuyerCategory: React.FC = () => {
         <SnbButton.Dynamic
           size="medium"
           onPress={() => {
-            navigate(DATA_COMPLETENESS_INTRO_VIEW);
-            // handleOnCreateBasicAccount('lengkapi');
+            handleOnCreateBasicAccount('lengkapi');
           }}
           title="Lengkapi Akun Saya"
           buttonColor={color.blue50}
