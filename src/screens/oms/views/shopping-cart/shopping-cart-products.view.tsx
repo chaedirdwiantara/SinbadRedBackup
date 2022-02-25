@@ -26,7 +26,7 @@ interface ShoppingCartProductsProps {
     productId,
     sellerId,
     warehouseId,
-  }: models.UpdateSelected) => void;
+  }: models.ProductKeyObject) => void;
   isAnyActiveProduct: () => boolean;
   manageCheckboxStatus: ({ sellerId }: models.ManageCheckbox) => ICheckbox;
   manageCheckboxOnPress: ({

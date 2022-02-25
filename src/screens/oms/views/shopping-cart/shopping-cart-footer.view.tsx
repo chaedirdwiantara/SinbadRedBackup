@@ -18,14 +18,21 @@ import ShoppingCartValidation from './shopping-cart-validation.view';
 import { contexts } from '@contexts';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 /** === INTERFACE === */
 interface FooterProps {
   onPressCheckout: () => void;
+  countTotalProduct: number;
+  countTotalPrice: number;
 }
 /** === COMPONENT ===  */
-const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
-  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+const ShoppingCartFooterMemo: FC<FooterProps> = ({
+  onPressCheckout,
+  countTotalPrice,
+  countTotalProduct,
+}) => {
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
@@ -216,9 +223,14 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
-          <SnbText.H4 color={color.red50}>Rp0</SnbText.H4>
+          <SnbText.H4 color={color.red50}>
+            {toCurrency(countTotalPrice, { withFraction: false })}
+          </SnbText.H4>
         </View>
-        <SnbText.B4 color={color.black60}>0 barang dipilih</SnbText.B4>
+        <SnbText.B4
+          color={
+            color.black60
+          }>{`${countTotalProduct} barang dipilih`}</SnbText.B4>
       </View>
       <View>
         <SnbButton.Dynamic

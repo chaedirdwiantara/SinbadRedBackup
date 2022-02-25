@@ -56,7 +56,7 @@ export interface UpdateCartQty {
   newQty?: number;
 }
 
-export interface UpdateSelected {
+export interface ProductKeyObject {
   productId: string;
   sellerId: number;
   warehouseId: number;
