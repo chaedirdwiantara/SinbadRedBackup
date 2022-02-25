@@ -294,6 +294,8 @@ const useCartLocalData = () => {
             } else if (newQty > stock) {
               thisProduct.qty = stock;
             }
+          } else if (Number(newQty) === 0) {
+            thisProduct.qty = thisProduct.minQty;
           }
         }
 
@@ -308,7 +310,7 @@ const useCartLocalData = () => {
       productId,
       sellerId,
       warehouseId,
-    }: models.UpdateSelected) => {
+    }: models.ProductKeyObject) => {
       if (localCartMaster) {
         // write the data to new constant, so the data refer
         const newLocalCartMaster = cloneDeep(localCartMaster);
@@ -420,6 +422,40 @@ const useCartLocalData = () => {
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
       }
+    },
+    calculateProductTotalPrice: () => {
+      let countTotalProduct: number = 0;
+      let countTotalPrice: number = 0;
+      if (localCartMaster) {
+        localCartMaster.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            if (productItem.selected) {
+              countTotalProduct++;
+              // if the product using price rules
+              if (productItem.priceRules.length > 0) {
+                const priceRulesLastItem =
+                  productItem.priceRules[productItem.priceRules.length - 1];
+                if (priceRulesLastItem.maxQty <= productItem.qty) {
+                  countTotalPrice += priceRulesLastItem.price * productItem.qty;
+                } else {
+                  productItem.priceRules.map((priceRulesItem) => {
+                    if (
+                      productItem.qty >= priceRulesItem.minQty &&
+                      productItem.qty <= priceRulesItem.maxQty
+                    ) {
+                      countTotalPrice += priceRulesItem.price * productItem.qty;
+                    }
+                  });
+                }
+              } else {
+                countTotalPrice += productItem.price * productItem.qty;
+              }
+            }
+          });
+        });
+      }
+
+      return { countTotalPrice, countTotalProduct };
     },
     removeProduct: ({
       removedProducts,

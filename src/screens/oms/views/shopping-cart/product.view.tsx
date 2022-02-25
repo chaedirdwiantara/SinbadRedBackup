@@ -27,7 +27,7 @@ interface ProductViewProps {
     productId,
     sellerId,
     warehouseId,
-  }: models.UpdateSelected) => void;
+  }: models.ProductKeyObject) => void;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
@@ -36,7 +36,45 @@ export const ProductView: FC<ProductViewProps> = ({
   handleUpdateQty,
   handleUpdateSelected,
 }) => {
-  /** => REMAINING STOCK */
+  /** => HANDLE DISPLAY PRICE */
+  const handleDisplayPrice = () => {
+    let displayPrice: number = 0;
+    let lastPrice: number = 0;
+
+    if (product.priceRules.length > 0) {
+      const priceRulesLastItem =
+        product.priceRules[product.priceRules.length - 1];
+      if (priceRulesLastItem.maxQty <= product.qty) {
+        displayPrice = priceRulesLastItem.price;
+      } else {
+        product.priceRules.map((priceRulesItem) => {
+          if (
+            product.qty >= priceRulesItem.minQty &&
+            product.qty <= priceRulesItem.maxQty
+          ) {
+            displayPrice = priceRulesItem.price;
+          }
+        });
+      }
+    } else {
+      displayPrice = product.price;
+    }
+
+    lastPrice = product.lastUsedPrice;
+
+    // make a string variable to determine if the price is higher / lower / same
+    let priceDifference = '';
+    if (displayPrice === lastPrice) {
+      priceDifference = 'same';
+    } else if (displayPrice < lastPrice) {
+      priceDifference = 'lower';
+    } else {
+      priceDifference = 'higher';
+    }
+
+    return { displayPrice, lastPrice, priceDifference };
+  };
+  /** => RENDER REMAINING STOCK */
   const renderRemainingStock = () => {
     if (Number(product.stock) < 11) {
       return (
@@ -49,7 +87,7 @@ export const ProductView: FC<ProductViewProps> = ({
       );
     }
   };
-  /** => PRODUCT IMAGE */
+  /** => RENDER PRODUCT IMAGE */
   const renderProductImage = () => {
     return (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -62,7 +100,7 @@ export const ProductView: FC<ProductViewProps> = ({
       </View>
     );
   };
-  /** => PPN BADGE */
+  /** => RENDER PPN BADGE */
   const renderPPNBadge = () => {
     if (product.isPriceAfterTax) {
       return (
@@ -75,7 +113,7 @@ export const ProductView: FC<ProductViewProps> = ({
       );
     }
   };
-  /** => REMOVE PRODUCT ICON */
+  /** => RENDER REMOVE PRODUCT ICON */
   const renderRemoveProductIcon = () => {
     return (
       <TouchableOpacity
@@ -95,6 +133,54 @@ export const ProductView: FC<ProductViewProps> = ({
       </TouchableOpacity>
     );
   };
+  /** => RENDER PRICE SECTION */
+  const renderPriceSection = () => {
+    const { displayPrice, lastPrice, priceDifference } = handleDisplayPrice();
+
+    let arrowIconName: string = 'arrow_drop_down';
+    let arrowIconColor: string = color.green50;
+    if (priceDifference === 'higher') {
+      arrowIconName = 'arrow_drop_up';
+      arrowIconColor = color.red50;
+    }
+
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        {priceDifference !== 'same' ? (
+          <View style={{ marginRight: 5 }}>
+            <SnbText.B4 color={color.black60} textDecorationLine="line-through">
+              {toCurrency(lastPrice, {
+                withFraction: false,
+              })}
+            </SnbText.B4>
+          </View>
+        ) : (
+          <View />
+        )}
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <SnbText.B4 color={color.black100}>
+            {toCurrency(displayPrice, {
+              withFraction: false,
+            })}
+          </SnbText.B4>
+          {priceDifference !== 'same' ? (
+            <SnbIcon
+              name={arrowIconName}
+              style={{ color: arrowIconColor, marginLeft: 5 }}
+              size={24}
+            />
+          ) : (
+            <View />
+          )}
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
@@ -119,30 +205,7 @@ export const ProductView: FC<ProductViewProps> = ({
             }}>
             <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-            }}>
-            <View style={{ marginRight: 5 }}>
-              <SnbText.B4
-                color={color.black60}
-                textDecorationLine="line-through">
-                {toCurrency(Number(product.lastUsedPrice), {
-                  withFraction: false,
-                })}
-              </SnbText.B4>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <SnbText.B4 color={color.black100}>
-                {toCurrency(Number(product.price), { withFraction: false })}
-              </SnbText.B4>
-              <SnbIcon
-                name="arrow_drop_down_circle"
-                style={{ color: color.green50, marginLeft: 5 }}
-                size={16}
-              />
-            </View>
-          </View>
+          {renderPriceSection()}
           {renderRemainingStock()}
         </View>
       </View>

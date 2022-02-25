@@ -24,7 +24,7 @@ interface ProductAvailableSectionProps {
     productId,
     sellerId,
     warehouseId,
-  }: models.UpdateSelected) => void;
+  }: models.ProductKeyObject) => void;
   manageCheckboxStatus: ({ sellerId }: models.ManageCheckbox) => ICheckbox;
   manageCheckboxOnPress: ({
     sellerId,

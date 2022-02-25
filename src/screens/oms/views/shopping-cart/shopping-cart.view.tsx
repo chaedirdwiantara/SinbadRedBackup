@@ -39,11 +39,16 @@ const OmsShoppingCartView: FC = () => {
     manageCheckboxStatus,
     manageCheckboxOnPress,
     removeProduct,
+    calculateProductTotalPrice,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
+
+  const { countTotalPrice, countTotalProduct } = calculateProductTotalPrice();
+
+  /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
@@ -51,6 +56,7 @@ const OmsShoppingCartView: FC = () => {
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
+
   /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
@@ -206,7 +212,11 @@ const OmsShoppingCartView: FC = () => {
               />
             </View>
           </ScrollView>
-          <ShoppingCartFooter onPressCheckout={() => {}} />
+          <ShoppingCartFooter
+            onPressCheckout={() => {}}
+            countTotalProduct={countTotalProduct}
+            countTotalPrice={countTotalPrice}
+          />
         </React.Fragment>
       );
     }
