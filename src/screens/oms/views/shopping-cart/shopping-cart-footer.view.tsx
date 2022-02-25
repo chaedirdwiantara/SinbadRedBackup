@@ -177,6 +177,13 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   ]);
 
   useEffect(() => {
+    /** Show Checkout error, if and only if one or more of these endpoints got an error response */
+    if (stateCart.buyerAddress.error || stateCheckout.checkout.error) {
+      setRetryShown(true);
+    }
+  }, [stateCart.buyerAddress.error, stateCheckout.checkout.error]);
+
+  useEffect(() => {
     if (stateCart.cancelStock.data) {
       cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
@@ -190,6 +197,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
       setRetryCounter((prev) => prev + 1);
     } else {
       setRetryShown(false);
+      setRetryCounter(0);
     }
   };
 
@@ -227,7 +235,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
     <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
   );
 
-  const renderGlobalErrorModal = () => (
+  const renderErrorRetryModal = () => (
     <BottomSheetError
       open={isRetryShown}
       error={{
@@ -244,7 +252,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
     <View style={ShoppingCartStyles.footerContainer}>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
-      {renderGlobalErrorModal()}
+      {renderErrorRetryModal()}
     </View>
   );
 };
