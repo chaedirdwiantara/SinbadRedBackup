@@ -38,7 +38,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   const handleOnPressCheckout = () => {
     onPressCheckout();
     updateCartAction.fetch(dispatchCart, {
-      id: cartMasterAction.cartMaster.id,
+      id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
       carts: cartMasterAction.cartMaster.sellers,
     });
   };
@@ -63,15 +63,33 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
 
       /** Input product(s) that's been selected and available as payload */
       postCheckProductAction.fetch(dispatchCart, {
-        carts,
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 2,
+          },
+        ],
       });
       postCheckSellerAction.fetch(dispatchCart, {
-        sellerIds,
+        sellerIds: [1, 2],
       });
       postCheckStockAction.fetch(dispatchCart, {
         cartId: cartMasterAction.cartMaster.id,
         reserved: true,
-        carts,
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 1,
+          },
+        ],
       });
     }
     return () => {
@@ -86,17 +104,23 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   }, [checkProductSellerStock]);
 
   useEffect(() => {
-    /** Matching response data from checkProduct, checkSeller, and checkStock with data in Cart Master */
-    const validationResult = matchCartWithCheckData({
-      checkProductData: stateCart.postCheckProduct.data ?? [],
-      checkSellerData: stateCart.postCheckSeller.data ?? [],
-      checkStockData: stateCart.postCheckStock.data ?? [],
-      cartData: cartMasterAction.cartMaster,
-    });
+    if (
+      stateCart.postCheckProduct.data &&
+      stateCart.postCheckSeller.data &&
+      stateCart.postCheckStock.data
+    ) {
+      /** Matching response data from checkProduct, checkSeller, and checkStock with data in Cart Master */
+      const validationResult = matchCartWithCheckData({
+        checkProductData: stateCart.postCheckProduct.data ?? [],
+        checkSellerData: stateCart.postCheckSeller.data ?? [],
+        checkStockData: stateCart.postCheckStock.data ?? [],
+        cartData: cartMasterAction.cartMaster,
+      });
 
-    /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
-    if (!validationResult) {
-      setErrorShown(true);
+      /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
+      if (!validationResult) {
+        setErrorShown(true);
+      }
     }
   }, [
     stateCart.postCheckProduct.data,
@@ -125,9 +149,6 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
       cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
     }
-    return () => {
-      cartMasterAction.reset();
-    };
   }, [stateCart.cancelStock.data]);
 
   const handleRetry = () => {

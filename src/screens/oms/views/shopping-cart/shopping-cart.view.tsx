@@ -53,38 +53,42 @@ const OmsShoppingCartView: FC = () => {
   /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
-    /** did mount */
-    getCartAction.fetch(dispatchCart);
-    checkProductAction.fetch(dispatchCart, {
-      carts: [
-        {
-          productId: '53c9b0000000000000000000',
-          warehouseId: 1,
-        },
-        {
-          productId: '53c9b0000000000000000002',
-          warehouseId: 2,
-        },
-      ],
-    });
-    checkSellerAction.fetch(dispatchCart, {
-      sellerIds: [1, 2],
-    });
-    checkStockAction.fetch(dispatchCart, {
-      cartId: 'qweqweqw',
-      reserved: false,
-      carts: [
-        {
-          productId: '53c9b0000000000000000000',
-          warehouseId: 1,
-        },
-        {
-          productId: '53c9b0000000000000000002',
-          warehouseId: 1,
-        },
-      ],
-    });
-    /** will umount */
+    if (stateCart.get.data === null) {
+      /** did mount */
+      getCartAction.fetch(dispatchCart);
+      checkProductAction.fetch(dispatchCart, {
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 2,
+          },
+        ],
+      });
+      checkSellerAction.fetch(dispatchCart, {
+        sellerIds: [1, 2],
+      });
+      checkStockAction.fetch(dispatchCart, {
+        cartId: 'qweqweqw',
+        reserved: false,
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 1,
+          },
+        ],
+      });
+    }
+  }, [stateCart.cancelStock.data]);
+
+  useEffect(() => {
     return () => {
       checkProductAction.reset(dispatchCart);
       checkSellerAction.reset(dispatchCart);
@@ -92,7 +96,8 @@ const OmsShoppingCartView: FC = () => {
       getCartAction.reset(dispatchCart);
       cartMasterAction.reset();
     };
-  }, [stateCart.cancelStock.data]);
+  }, []);
+
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
     if (stateCart.get.data !== null) {
@@ -198,9 +203,7 @@ const OmsShoppingCartView: FC = () => {
               />
             </View>
           </ScrollView>
-          <ShoppingCartFooter
-            onPressCheckout={() => cartMasterAction.reset()}
-          />
+          <ShoppingCartFooter onPressCheckout={() => {}} />
         </React.Fragment>
       );
     }
