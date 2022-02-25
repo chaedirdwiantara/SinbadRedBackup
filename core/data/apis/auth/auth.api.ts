@@ -31,7 +31,7 @@ const meV2 = () => {
 /** => logout */
 const logout = () => {
   const path = 'logout';
-  return apiGeneral<models.AuthMeSuccess>('auth', path, 'auth', 'v1', 'POST');
+  return apiGeneral<models.LogoutSuccess>('auth', path, 'auth', 'v1', 'POST');
 };
 
 /** === EXPORT FUNCTIONS === */
