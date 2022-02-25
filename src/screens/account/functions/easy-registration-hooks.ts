@@ -5,8 +5,7 @@ import * as models from '@models';
 
 export const useEasyRegistration = () => {
   const dispatch = useDispatch();
-  const { global, easyRegistration } = useSelector((state: any) => state);
-
+  const { global, account } = useSelector((state: any) => state);
   const getBuyerCategory = React.useCallback(() => {
     dispatch(Actions.getBuyerCategory());
   }, []);
@@ -47,9 +46,9 @@ export const useEasyRegistration = () => {
   return {
     searchLocation,
     searchLocationState: global.searchLocations,
-    buyerCategories: easyRegistration.buyerCategories,
-    productCategories: easyRegistration.productCategories,
-    createBasicAccountState: easyRegistration.createBasicAccount,
+    buyerCategories: account.buyerCategories,
+    productCategories: account.productCategories,
+    createBasicAccountState: account.createBasicAccount,
     createBasicAccount,
     getBuyerCategory,
     getProductCategory,

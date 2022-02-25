@@ -10,6 +10,8 @@ import mail from './mail.svg';
 import sinbad_otp from './sinbad_OTP.svg';
 import registration from './registration.svg';
 import onboarding from './onboarding.svg';
+import uprade_vip from './upgrade_vip_icon.svg';
+import info from './info.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -24,4 +26,6 @@ export const SvgRegistery = {
   sinbad_otp,
   registration,
   onboarding,
+  uprade_vip,
+  info,
 };

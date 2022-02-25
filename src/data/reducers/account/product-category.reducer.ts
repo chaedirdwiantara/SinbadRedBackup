@@ -15,7 +15,7 @@ export const productCategories = simplifyReducer(INITIAL_STATE, {
 
   [types.PRODUCT_CATEGORY_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IProductCategoryData>,
+    action: models.IAction<models.IProductCategoryData>,
   ) {
     return {
       ...state,
@@ -26,7 +26,7 @@ export const productCategories = simplifyReducer(INITIAL_STATE, {
 
   [types.PRODUCT_CATEGORY_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,

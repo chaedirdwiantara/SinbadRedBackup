@@ -19,7 +19,7 @@ import {
   productMasterCart,
 } from './oms';
 import { notificaitonTotalReducer } from './notification/notification-total.reducer';
-import { easyRegistration } from './easy-registration';
+import { account } from './account';
 
 export const rootReducer = combineReducers({
   permanentCore,
@@ -37,7 +37,7 @@ export const rootReducer = combineReducers({
   reserveData,
   notificaitonTotalReducer,
   productMasterCart,
-  easyRegistration,
+  account,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
