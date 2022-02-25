@@ -23,9 +23,20 @@ import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
 import PushNotification from '@core/components/PushNotification';
-import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import {
+  copilot,
+  CopilotStep,
+  CopilotTooltipProps,
+  walkthroughable,
+} from 'react-native-copilot';
 import HomeStyles from '../styles/home.style';
 const CopilotView = walkthroughable(View);
+import { useCoachmark } from '@screen/account/functions/coachmark-hooks';
+import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
+import {
+  ModalStartCoachmark,
+  SinbadEngage,
+} from '@screen/account/views/shared';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation, start }: any) => {
   /** === STATE === */
@@ -44,9 +55,10 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   const changeHeader = (height: number) => {
     height > 100 ? actionHeaderChange(true) : actionHeaderChange(false);
   };
+  const { getCoachmark } = useCoachmark();
 
   React.useEffect(() => {
-    start();
+    getCoachmark();
   }, []);
 
   React.useEffect(() => {
@@ -83,7 +95,10 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   const header = () => {
     return (
       <View style={HomeStyles.topNavContainer}>
-        <CopilotStep text="" order={1} name="searchbar">
+        <CopilotStep
+          text="Cari dan temukan produk terbaik untuk stok toko Anda."
+          order={1}
+          name="Temukan Produk yang Anda inginkan">
           <CopilotView>
             <HomeHeaderView headerChange={stateHeaderChange} />
           </CopilotView>
@@ -96,16 +111,31 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
     return (
       <>
         <PushNotification />
-        <CopilotStep text="" order={2} name="banner">
+        <CopilotStep
+          text="Cek promo terbaik setiap hari biar belanja makin hemat."
+          order={2}
+          name="Promo terbaik Sinbad">
           <CopilotView>
             <BannerHomeView />
           </CopilotView>
         </CopilotStep>
-        <CopilotStep text="" order={3} name="category">
+        <CopilotStep
+          text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+          order={3}
+          name="Jadi anggota VIP Sinbad">
           <CopilotView>
-            <RecommendationHomeView navigationParent={navigation} />
+            <UpgradeVIPAccountBadge />
           </CopilotView>
         </CopilotStep>
+        <CopilotStep
+          text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+          order={4}
+          name="Kumpulkan poin, makin untung">
+          <CopilotView>
+            <SinbadEngage />
+          </CopilotView>
+        </CopilotStep>
+        <RecommendationHomeView navigationParent={navigation} />
         <CategoryHomeView />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
@@ -142,29 +172,22 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
       />
     );
   };
+
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
       {bottomSheetError()}
+      <ModalStartCoachmark onStartCoachmark={start} />
     </SnbContainer>
   );
 };
 
 const { width } = Dimensions.get('screen');
 
-type ICopilotProps = {
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  handleNext: () => void;
-  handlePrev: () => void;
-  handleStop: () => void;
-  currentStep: any;
-};
-
 const copilotOptions: any = (totalCoachMark: number) => {
-  const Tooltip: React.FC<ICopilotProps> = ({
+  const Tooltip: React.FC<CopilotTooltipProps> = ({
     handleNext,
     currentStep,
     isLastStep,
@@ -174,11 +197,9 @@ const copilotOptions: any = (totalCoachMark: number) => {
   }) => {
     return (
       <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
-        <SnbText.H4>Temukan produk yang Anda inginkan</SnbText.H4>
+        <SnbText.H4>{currentStep.name}</SnbText.H4>
         <View style={{ marginVertical: 4 }} />
-        <SnbText.B1>
-          Beragam produk berkualitas bisa Anda cari dengan mudah.
-        </SnbText.B1>
+        <SnbText.B1>{currentStep.text}</SnbText.B1>
         <View
           style={{
             flexDirection: 'row',

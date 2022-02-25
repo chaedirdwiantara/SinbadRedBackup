@@ -3,19 +3,19 @@ import * as types from '@types';
 import * as models from '@models';
 
 const INITIAL_STATE = {
-  data: [],
+  data: null,
   loading: false,
   error: null,
 };
 
-export const buyerCategories = simplifyReducer(INITIAL_STATE, {
-  [types.BUYER_CATEGORY_PROCESS]() {
+export const coachmark = simplifyReducer(INITIAL_STATE, {
+  [types.GET_COACHMARK_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.BUYER_CATEGORY_SUCCESS](
+  [types.GET_COACHMARK_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IBuyerCategoryData>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -24,18 +24,14 @@ export const buyerCategories = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.BUYER_CATEGORY_FAILED](
+  [types.GET_COACHMARK_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
       loading: false,
       error: action.payload,
     };
-  },
-
-  [types.BUYER_CATEGORY_RESET]() {
-    return INITIAL_STATE;
   },
 });

@@ -1,15 +1,15 @@
 import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import * as types from '@types';
 import * as models from '@models';
-import { easyRegistrationApi } from '../apis/easy-registration.api';
 import * as ActionCreators from '@actions';
+import { easyRegistrationApi, searchLocationApi } from 'src/data/apis/account';
 
 function* searchLocation(
   action: models.IRegisterAction<models.ISearchLocation>,
 ) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
-      yield call(() => easyRegistrationApi.searchLocation(action.payload));
+      yield call(() => searchLocationApi.searchLocation(action.payload));
     yield put(ActionCreators.searchLocationSuccess(response));
   } catch (error: any) {
     yield put(ActionCreators.searchLocationFailed(error));
@@ -21,7 +21,7 @@ function* loadMoreSearchLocation(
 ) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
-      yield call(() => easyRegistrationApi.searchLocation(action.payload));
+      yield call(() => searchLocationApi.searchLocation(action.payload));
     yield put(ActionCreators.loadMoreSearchLocationSuccess(response));
   } catch (error: any) {
     yield put(ActionCreators.loadMoreSearchLocationFailed(error));

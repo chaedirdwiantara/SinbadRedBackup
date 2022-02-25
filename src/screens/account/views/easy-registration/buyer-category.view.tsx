@@ -29,7 +29,7 @@ import {
   LIST_LOCATION_VIEW,
   PRODUCT_CATEGORY_VIEW,
 } from '@screen/account/functions/screens_name';
-import { useEasyRegistration } from '@screen/account/functions/easy-registration-hooks';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const setIcon = (slug: string) => {
   switch (slug) {
@@ -85,7 +85,7 @@ const BuyerLocation: React.FC = () => {
 const BuyerCategory: React.FC = () => {
   const [selectedBuyerCategory, setSelectedBuyerCategory] =
     React.useState<any>(null);
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
   const [selectedProductCategory, setSelectedProductCategory] = React.useState<
     any[]
   >([]);
@@ -108,7 +108,7 @@ const BuyerCategory: React.FC = () => {
   React.useEffect(() => {
     if (createBasicAccountState.data) {
       if (actionFrom === 'mulai') {
-        Alert.alert('Info', 'Action will be direct to Home Page');
+        reset({ index: 0, routes: [{ name: 'Home' }] });
       } else if (actionFrom === 'lengkapi') {
         Alert.alert(
           'Info',
