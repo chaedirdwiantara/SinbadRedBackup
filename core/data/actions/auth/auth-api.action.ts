@@ -114,3 +114,22 @@ export const logoutFailed = (
 export const logoutReset = () => {
   return { type: types.LOGOUT_RESET };
 };
+/** === ME 2 === */
+/** => process */
+export const meV2Process = (): models.MeProcessAction => {
+  return { type: types.ME_V2_PROCESS };
+};
+/** => success */
+export const meV2Success = (
+  data: models.LoginSuccess,
+): models.MeSuccessAction => {
+  return { type: types.ME_V2_SUCCESS, payload: data };
+};
+/** => failed */
+export const meV2Failed = (data: models.ErrorProps): models.MeFailedAction => {
+  return { type: types.ME_V2_FAILED, payload: data };
+};
+/** => reset */
+export const meV2Reset = () => {
+  return { type: types.ME_V2_RESET };
+};
