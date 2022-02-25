@@ -1,13 +1,14 @@
 /** === IMPORT PACKAGE HERE ===  */
 import {
   matchCartWithCheckData,
+  useCancelStockAction,
   useCartMasterAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
+  usePostCheckProductAction,
+  usePostCheckSellerAction,
+  usePostCheckStockAction,
   useUpdateCartAction,
 } from '@screen/oms/functions';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
@@ -21,124 +22,198 @@ interface FooterProps {
   onPressCheckout: () => void;
 }
 /** === COMPONENT ===  */
-export const ShoppingCartFooter: FC<FooterProps> = ({ onPressCheckout }) => {
+const ShoppingCartFooterMemo: FC<FooterProps> = ({ onPressCheckout }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const [isErrorShown, setErrorShown] = useState(false);
   const [isRetryShown, setRetryShown] = useState(false);
+  const [retryCounter, setRetryCounter] = useState(0);
 
   const updateCartAction = useUpdateCartAction();
+  const cancelCartAction = useCancelStockAction();
   const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
+  const postCheckProductAction = usePostCheckProductAction();
+  const postCheckSellerAction = usePostCheckSellerAction();
+  const postCheckStockAction = usePostCheckStockAction();
 
   const handleOnPressCheckout = () => {
     onPressCheckout();
     updateCartAction.fetch(dispatchCart, {
-      id: cartMasterAction.cartMaster.id,
+      id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
       carts: cartMasterAction.cartMaster.sellers,
     });
   };
 
-  useEffect(() => {
-    if (stateCart.update.data) {
+  const checkProductSellerStock = useCallback(() => {
+    if (stateCart.update.data !== null) {
+      /** Get available product(s) from .sellers, then filter it based on the selected one */
       const carts =
         cartMasterAction.cartMaster.sellers.flatMap((seller) =>
-          seller.products.map((product) => ({
-            productId: product.productId,
-            warehouseId: product.warehouseId,
-          })),
+          seller.products
+            .filter((product) => !!product.selected)
+            .map((product) => ({
+              productId: product.productId,
+              warehouseId: product.warehouseId,
+            })),
         ) ?? [];
+
+      /** Form an array of sellerId(s) */
       const sellerIds =
         cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ??
         [];
 
-      console.log({ carts, sellerIds });
-
       /** Input product(s) that's been selected and available as payload */
-      checkProductAction.fetch(dispatchCart, {
-        carts,
+      postCheckProductAction.fetch(dispatchCart, {
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 2,
+          },
+        ],
       });
-      checkSellerAction.fetch(dispatchCart, {
-        sellerIds,
+      postCheckSellerAction.fetch(dispatchCart, {
+        sellerIds: [1, 2],
       });
-      checkStockAction.fetch(dispatchCart, {
+      postCheckStockAction.fetch(dispatchCart, {
         cartId: cartMasterAction.cartMaster.id,
         reserved: true,
-        carts,
+        carts: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 1,
+          },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 1,
+          },
+        ],
       });
     }
+    return () => {
+      postCheckProductAction.reset(dispatchCart);
+      postCheckSellerAction.reset(dispatchCart);
+      postCheckStockAction.reset(dispatchCart);
+    };
   }, [stateCart.update.data]);
 
   useEffect(() => {
-    const validationResult = matchCartWithCheckData({
-      checkProductData: stateCart.checkProduct.data ?? [],
-      checkSellerData: stateCart.checkSeller.data ?? [],
-      checkStockData: stateCart.checkStock.data ?? [],
-      cartData: cartMasterAction.cartMaster,
-    });
-
-    if (!validationResult) {
-      setErrorShown(true);
-    }
-  }, [
-    stateCart.checkProduct.data,
-    stateCart.checkSeller.data,
-    stateCart.checkStock.data,
-  ]);
+    checkProductSellerStock();
+  }, [checkProductSellerStock]);
 
   useEffect(() => {
     if (
-      stateCart.checkProduct.error ||
-      stateCart.checkSeller.error ||
-      stateCart.checkStock.error
+      stateCart.postCheckProduct.data &&
+      stateCart.postCheckSeller.data &&
+      stateCart.postCheckStock.data
+    ) {
+      /** Matching response data from checkProduct, checkSeller, and checkStock with data in Cart Master */
+      const validationResult = matchCartWithCheckData({
+        checkProductData: stateCart.postCheckProduct.data ?? [],
+        checkSellerData: stateCart.postCheckSeller.data ?? [],
+        checkStockData: stateCart.postCheckStock.data ?? [],
+        cartData: cartMasterAction.cartMaster,
+      });
+
+      /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
+      if (!validationResult) {
+        setErrorShown(true);
+      }
+    }
+  }, [
+    stateCart.postCheckProduct.data,
+    stateCart.postCheckSeller.data,
+    stateCart.postCheckStock.data,
+  ]);
+
+  useEffect(() => {
+    /** Show (Global) error, if and only if one or more of these endpoints got an error response */
+    if (
+      stateCart.postCheckProduct.error ||
+      stateCart.postCheckSeller.error ||
+      stateCart.postCheckStock.error
     ) {
       setRetryShown(true);
     }
   }, [
-    stateCart.checkProduct.error,
-    stateCart.checkSeller.error,
-    stateCart.checkStock.error,
+    stateCart.postCheckProduct.error,
+    stateCart.postCheckSeller.error,
+    stateCart.postCheckStock.error,
   ]);
+
+  useEffect(() => {
+    if (stateCart.cancelStock.data) {
+      cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
+      cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
+      cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
+    }
+  }, [stateCart.cancelStock.data]);
+
+  const handleRetry = () => {
+    if (retryCounter < 3) {
+      checkProductSellerStock();
+      setRetryCounter((prev) => prev + 1);
+    } else {
+      setRetryShown(false);
+    }
+  };
+
+  const handleClose = () => {
+    cancelCartAction.fetch(dispatchCart);
+    setErrorShown(false);
+  };
+
+  const renderFooterContent = () => (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+      <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
+          <SnbText.H4 color={color.red50}>Rp0</SnbText.H4>
+        </View>
+        <SnbText.B4 color={color.black60}>0 barang dipilih</SnbText.B4>
+      </View>
+      <View>
+        <SnbButton.Dynamic
+          title="Checkout"
+          type="primary"
+          onPress={handleOnPressCheckout}
+          size={'large'}
+        />
+      </View>
+    </View>
+  );
+
+  const renderBusinessErrorModal = () => (
+    <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
+  );
+
+  const renderGlobalErrorModal = () => (
+    <BottomSheetError
+      open={isRetryShown}
+      error={{
+        message: "There's an issue in our service",
+        errorMessage: 'Error',
+        type: '',
+        code: retryCounter < 3 ? 12340378910 : 12340078910,
+      }}
+      retryAction={handleRetry}
+    />
+  );
 
   return (
     <View style={ShoppingCartStyles.footerContainer}>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-        <View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
-            <SnbText.H4 color={color.red50}>Rp0</SnbText.H4>
-          </View>
-          <SnbText.B4 color={color.black60}>0 barang dipilih</SnbText.B4>
-        </View>
-        <View>
-          <SnbButton.Dynamic
-            title="Checkout"
-            type="primary"
-            onPress={handleOnPressCheckout}
-            size={'large'}
-          />
-        </View>
-      </View>
-      <ShoppingCartValidation
-        open={isErrorShown}
-        closeAction={() => setErrorShown(false)}
-      />
-      <BottomSheetError
-        open={isRetryShown}
-        error={{
-          message: "There's an issue in our service",
-          errorMessage: 'Error',
-          type: '',
-          code: 12340378910,
-        }}
-        retryAction={() => setRetryShown(false)}
-      />
+      {renderFooterContent()}
+      {renderBusinessErrorModal()}
+      {renderGlobalErrorModal()}
     </View>
   );
 };
+
+export const ShoppingCartFooter = React.memo(ShoppingCartFooterMemo);

@@ -136,6 +136,21 @@ const useCheckProductAction = () => {
     },
   };
 };
+/** => post check product action */
+const usePostCheckProductAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckProductPayload,
+    ) => {
+      dispatch(Actions.postCheckProductProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postCheckProductReset(contextDispatch));
+    },
+  };
+};
 /** => check seller action */
 const useCheckSellerAction = () => {
   const dispatch = useDispatch();
@@ -151,6 +166,21 @@ const useCheckSellerAction = () => {
     },
   };
 };
+/** => post check seller action */
+const usePostCheckSellerAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckSellerPayload,
+    ) => {
+      dispatch(Actions.postCheckSellerProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postCheckSellerReset(contextDispatch));
+    },
+  };
+};
 /** => check stock action */
 const useCheckStockAction = () => {
   const dispatch = useDispatch();
@@ -163,6 +193,21 @@ const useCheckStockAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkStockReset(contextDispatch));
+    },
+  };
+};
+/** => post check stock action */
+const usePostCheckStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CheckStockPayload,
+    ) => {
+      dispatch(Actions.postCheckStockProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postCheckStockReset(contextDispatch));
     },
   };
 };
@@ -406,8 +451,11 @@ export {
   useRemoveCartProductAction,
   useCartMasterAction,
   useCheckProductAction,
+  usePostCheckProductAction,
   useCheckSellerAction,
+  usePostCheckSellerAction,
   useCheckStockAction,
+  usePostCheckStockAction,
   useCancelStockAction,
   useCartBuyerAddressAction,
   useCartLocalData,

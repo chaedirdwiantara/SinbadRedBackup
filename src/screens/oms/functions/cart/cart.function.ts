@@ -22,7 +22,7 @@ const matchCartWithCheckData = ({
   checkStockData,
   cartData,
 }: models.CartValidation) => {
-  let result = false;
+  let result = true;
   for (let i = 0; i < cartData.sellers.length; i++) {
     for (
       let cartProductIndex = 0;
@@ -63,7 +63,7 @@ const matchCartWithCheckData = ({
 
       if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
         console.log('check product data not match');
-        result = true;
+        result = false;
         break;
       }
     }
@@ -83,14 +83,14 @@ const matchCartWithCheckData = ({
 
     if (!isEqual(thisCartSeller, thisCheckSeller)) {
       console.log('check seller data not match');
-      result = true;
+      result = false;
       break;
     }
   }
 
   if (validationWarehouse(checkStockData)) {
     console.log('check stock data not match');
-    result = true;
+    result = false;
   }
 
   return result;

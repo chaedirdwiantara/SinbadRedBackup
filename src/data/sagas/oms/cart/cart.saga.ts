@@ -133,6 +133,28 @@ function* checkProduct(
     yield put(ActionCreators.checkProductFailed(error as models.ErrorProps));
   }
 }
+/** => POST CHECK PRODUCT */
+function* postCheckProduct(
+  action: models.CreateProcessAction<models.CheckProductPayload>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<models.CheckProductResponse[]> =
+      yield call(() => {
+        return CartApi.checkProduct(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.postCheckProductSuccess(response),
+    );
+    yield put(ActionCreators.postCheckProductSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.postCheckProductFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.postCheckProductFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** => CHECK SELLER */
 function* checkSeller(
   action: models.CreateProcessAction<models.CheckSellerPayload>,
@@ -151,6 +173,26 @@ function* checkSeller(
     yield put(ActionCreators.checkSellerFailed(error as models.ErrorProps));
   }
 }
+/** => POST CHECK SELLER */
+function* postCheckSeller(
+  action: models.CreateProcessAction<models.CheckSellerPayload>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<models.CheckSellerResponse[]> =
+      yield call(() => {
+        return CartApi.checkSeller(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.postCheckSellerSuccess(response),
+    );
+    yield put(ActionCreators.postCheckSellerSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.postCheckSellerFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.postCheckSellerFailed(error as models.ErrorProps));
+  }
+}
 /** => CHECK STOCK */
 function* checkStock(
   action: models.CreateProcessAction<models.CheckStockPayload>,
@@ -167,6 +209,26 @@ function* checkStock(
       ActionCreators.checkStockFailed(error as models.ErrorProps),
     );
     yield put(ActionCreators.checkStockFailed(error as models.ErrorProps));
+  }
+}
+/** => POST CHECK STOCK */
+function* postCheckStock(
+  action: models.CreateProcessAction<models.CheckStockPayload>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<models.CheckStockResponse[]> =
+      yield call(() => {
+        return CartApi.checkStock(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.postCheckStockSuccess(response),
+    );
+    yield put(ActionCreators.postCheckStockSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.postCheckStockFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.postCheckStockFailed(error as models.ErrorProps));
   }
 }
 /** => CANCEL STOCK */
@@ -213,8 +275,11 @@ function* CartSaga() {
   yield takeLatest(types.UPDATE_CART_PROCESS, updateCart);
   yield takeLatest(types.REMOVE_CART_PRODUCT_PROCESS, removeCartProduct);
   yield takeLatest(types.CHECK_PRODUCT_PROCESS, checkProduct);
+  yield takeLatest(types.POST_CHECK_PRODUCT_PROCESS, postCheckProduct);
   yield takeLatest(types.CHECK_SELLER_PROCESS, checkSeller);
+  yield takeLatest(types.POST_CHECK_SELLER_PROCESS, postCheckSeller);
   yield takeLatest(types.CHECK_STOCK_PROCESS, checkStock);
+  yield takeLatest(types.POST_CHECK_STOCK_PROCESS, postCheckStock);
   yield takeLatest(types.CANCEL_STOCK_PROCESS, cancelStock);
   yield takeLatest(types.CART_BUYER_ADDRESS_PROCESS, cartBuyerAddress);
 }
