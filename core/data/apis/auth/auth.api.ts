@@ -23,10 +23,15 @@ const me = () => {
   const path = 'me';
   return apiAuth<models.AuthMeSuccess>(path, 'v1', 'GET');
 };
+/** => me V2 */
+const meV2 = () => {
+  const path = 'me';
+  return apiAuth<models.AuthMeSuccess>(path, 'v2', 'GET');
+};
 /** => logout */
 const logout = () => {
   const path = 'logout';
-  return apiGeneral<models.LogoutSuccess>('auth', path, 'auth', 'v1', 'POST');
+  return apiGeneral<models.AuthMeSuccess>('auth', path, 'auth', 'v1', 'POST');
 };
 
 /** === EXPORT FUNCTIONS === */
@@ -36,4 +41,5 @@ export const AuthApi = {
   verificationOTP,
   me,
   logout,
+  meV2,
 };
