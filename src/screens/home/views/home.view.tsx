@@ -24,10 +24,10 @@ const CopilotView = walkthroughable(View);
 import { useCoachmark } from '@screen/account/functions/coachmark-hooks';
 import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
+  copilotOptions,
   ModalStartCoachmark,
   SinbadEngage,
 } from '@screen/account/views/shared';
-import { copilotOptions } from '@screen/account/views/shared/coachmark-tooltip.component';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation, start }: any) => {
   /** === STATE === */
