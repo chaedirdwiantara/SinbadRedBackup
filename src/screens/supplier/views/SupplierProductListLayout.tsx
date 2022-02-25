@@ -65,7 +65,9 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
                 isPromo={product.isPromo}
                 isExclusive={product.isExclusive}
                 onCardPress={() => {
-                  goToProductDetail(product.id);
+                  goToProductDetail(
+                    `${product.id}_${product.warehouseOriginId}`,
+                  );
                 }}
                 withOrderButton={true}
                 onOrderPress={() => onOrderPress(product)}

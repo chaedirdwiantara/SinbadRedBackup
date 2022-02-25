@@ -247,7 +247,7 @@ const ProductList: FC<ProductListProps> = ({
       multipleQty: productDetailState.multipleQty,
       qtyPerBox: productDetailState.packagedQty,
       uomLabel: productDetailState.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
+      warehouseId: Number(productDetailState.warehouseOriginId),
       warehouseName: dataStock.warehouseName,
       sellerId: Number(productDetailState.sellerId),
       sellerName: productDetailState.productSeller.name,
