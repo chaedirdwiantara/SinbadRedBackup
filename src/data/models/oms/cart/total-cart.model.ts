@@ -7,8 +7,5 @@ export interface GetTotalCart {
 }
 
 export interface TotalCartData {
-  id: string;
   totalProducts: number;
-  createdAt: string;
-  updatedAt: string;
 }

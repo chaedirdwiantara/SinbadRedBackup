@@ -13,13 +13,13 @@ export interface CheckoutCartPayload
   extends CheckoutCart<CheckoutProductData> {}
 
 export interface CheckoutBuyerAddressPayload {
-  longtitude: string;
+  longitude: string;
   latitude: string;
   province: string;
   city: string;
   district: string;
   urban: string;
-  zipCode: number;
+  zipCode: string;
   address: string;
   noteAddress: string;
   locationId: string;

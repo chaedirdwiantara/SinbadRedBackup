@@ -63,10 +63,10 @@ export const cartMaster = simplifyReducer(initialState, {
               ...item,
               lastUsedPrice: thisProduct.lastUsedPrice,
               isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
-              multipleQty: thisProduct.multipleQty,
               qty,
               selected,
               productStatus: item.status,
+              leadTime: thisProduct.leadTime,
             };
             /** => move product data to unavailable if inactive */
             if (item.status === 'inactive') {

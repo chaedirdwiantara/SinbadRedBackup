@@ -55,10 +55,10 @@ const matchCartWithCheckData = ({
       delete thisCartCheckProduct.qty;
       delete thisCartCheckProduct.selected;
       delete thisCartCheckProduct.stock;
-      delete thisCartCheckProduct.multipleQty;
       delete thisCartCheckProduct.status;
       delete thisCartCheckProduct.stockStatus;
       delete thisCartCheckProduct.warehouseName;
+      delete thisCartCheckProduct.leadTime;
       delete thisCheckProduct.status;
 
       if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {

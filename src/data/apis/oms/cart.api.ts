@@ -30,12 +30,11 @@ const getCart = () => {
 };
 
 const getTotalCart = () => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'total-products';
-  return apiMappingMockV3<models.GetTotalCart>(
-    mockHost,
+  const path = 'carts/total-products';
+  return apiMapping<models.GetTotalCart>(
+    'auth',
     path,
-    'discount',
+    'buyer-cart',
     'v1',
     'DETAIL',
   );
@@ -131,6 +130,21 @@ const checkStock = ({
   );
 };
 
+const checkStockReserved = ({
+  data,
+}: models.CreateProcessProps<models.CheckStockPayload>) => {
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'check-stocks-reserve';
+  return apiMappingMockV3<models.CheckStockResponse[]>(
+    mockHost,
+    path,
+    'discount',
+    'v1',
+    'CREATE',
+    data,
+  );
+};
+
 const cancelStock = () => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'cancel-reserve-stock';
@@ -159,6 +173,7 @@ export const CartApi = {
   checkProduct,
   checkSeller,
   checkStock,
+  checkStockReserved,
   cancelStock,
   cartBuyerAddress,
 };

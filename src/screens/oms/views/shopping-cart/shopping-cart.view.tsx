@@ -85,10 +85,12 @@ const OmsShoppingCartView: FC = () => {
           {
             productId: '53c9b0000000000000000000',
             warehouseId: 1,
+            qty: 10,
           },
           {
             productId: '53c9b0000000000000000002',
             warehouseId: 1,
+            qty: 10,
           },
         ],
       });

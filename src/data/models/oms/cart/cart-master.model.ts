@@ -40,7 +40,7 @@ export interface CartMasterSellersProducts extends CartProduct {
   stock?: number;
   productStatus?: string;
   stockStatus?: string;
-  taxPercentage?: number;
+  leadTime: number;
 }
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {

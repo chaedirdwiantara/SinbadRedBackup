@@ -218,7 +218,7 @@ function* postCheckStock(
   try {
     const response: models.CreateSuccessV3Props<models.CheckStockResponse[]> =
       yield call(() => {
-        return CartApi.checkStock(action.payload);
+        return CartApi.checkStockReserved(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.postCheckStockSuccess(response),

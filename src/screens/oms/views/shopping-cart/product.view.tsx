@@ -205,6 +205,30 @@ export const ProductView: FC<ProductViewProps> = ({
             }}>
             <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
           </View>
+          <View
+            style={{
+              flexDirection: 'row',
+            }}>
+            <View style={{ marginRight: 5 }}>
+              <SnbText.B4
+                color={color.black60}
+                textDecorationLine="line-through">
+                {toCurrency(Number(product.lastUsedPrice), {
+                  withFraction: false,
+                })}
+              </SnbText.B4>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <SnbText.B4 color={color.black100}>
+                {toCurrency(Number(product.price), { withFraction: false })}
+              </SnbText.B4>
+              <SnbIcon
+                name="arrow_drop_down_circle"
+                style={{ color: color.green50, marginLeft: 5 }}
+                size={16}
+              />
+            </View>
+          </View>
           {renderPriceSection()}
           {renderRemainingStock()}
         </View>
@@ -212,7 +236,7 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={ShoppingCartStyles.actionContainer}>
         {renderRemoveProductIcon()}
         <SnbNumberCounter
-          value={product.qty}
+          value={product.qty ?? 0}
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
