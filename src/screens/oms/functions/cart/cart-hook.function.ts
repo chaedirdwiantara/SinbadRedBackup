@@ -7,7 +7,8 @@ import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useDataCartMaster } from '@core/redux/Data';
-import { HandleRemoveProduct } from '@models';
+import { CartMaster, HandleRemoveProduct } from '@models';
+import { manageRemoveProduct } from './cart.function';
 /** === FUNCTION === */
 /** => cart example action */
 const useCartExampleAction = () => {
@@ -111,6 +112,9 @@ const useCartMasterAction = () => {
     },
     removeProduct: (data: HandleRemoveProduct) => {
       dispatch(Actions.CartMasterRemoveProduct(data));
+    },
+    replaceFromLocal: (data: CartMaster) => {
+      dispatch(Actions.replaceCartMasterFromLocal(data));
     },
     reset: () => {
       dispatch(Actions.resetCartMaster());
@@ -415,6 +419,20 @@ const useCartLocalData = () => {
 
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
+      }
+    },
+    removeProduct: ({
+      removedProducts,
+      source,
+    }: models.HandleRemoveProduct) => {
+      if (localCartMaster) {
+        const updatedData = manageRemoveProduct({
+          source,
+          removedProducts,
+          stateData: localCartMaster,
+        });
+        // save data to local state
+        setLocalCartMaster(updatedData);
       }
     },
     setLocalCartMaster: (newData: models.CartMaster) => {

@@ -96,4 +96,57 @@ const matchCartWithCheckData = ({
   return result;
 };
 
-export { matchCartWithCheckData };
+const manageRemoveProduct = ({
+  source,
+  removedProducts,
+  stateData,
+}: models.ManageRemoveProduct) => {
+  const sellers: models.CartMasterSellers[] = [];
+  const unavailable: models.CartMasterUnavailable[] = [];
+  if (source === 'available') {
+    stateData.sellers.map((sellerItem) => {
+      const products: models.CartMasterSellersProducts[] = [];
+      sellerItem.products.map((productItem) => {
+        const isFound =
+          removedProducts.findIndex((innerItem) => {
+            return (
+              innerItem.productId === productItem.productId &&
+              innerItem.warehouseId === productItem.warehouseId
+            );
+          }) > -1;
+        if (!isFound) {
+          products.push(productItem);
+        }
+      });
+
+      sellers.push({
+        ...sellerItem,
+        products,
+      });
+    });
+    // save data to local state
+    return {
+      ...stateData,
+      sellers: sellers,
+    };
+  } else {
+    stateData.unavailable.map((item) => {
+      const isFound =
+        removedProducts.findIndex(
+          (innerItem) =>
+            innerItem.productId === item.productId &&
+            innerItem.warehouseId === item.warehouseId,
+        ) > -1;
+      if (!isFound) {
+        unavailable.push(item);
+      }
+    });
+    // save data to local state
+    return {
+      ...stateData,
+      unavailable: unavailable,
+    };
+  }
+};
+
+export { matchCartWithCheckData, manageRemoveProduct };

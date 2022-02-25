@@ -40,6 +40,7 @@ export interface CartMasterSellersProducts extends CartProduct {
   stock?: number;
   productStatus?: string;
   stockStatus?: string;
+  taxPercentage?: number;
 }
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {
@@ -61,4 +62,8 @@ export interface MergeCheckStockAction {
 export interface CartMasterRemoveProductAction {
   type: string;
   payload: HandleRemoveProduct;
+}
+export interface CartMasterReplaceFromLocalAction {
+  type: string;
+  payload: CartMaster;
 }

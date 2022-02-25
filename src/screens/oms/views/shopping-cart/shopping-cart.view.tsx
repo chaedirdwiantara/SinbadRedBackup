@@ -38,6 +38,7 @@ const OmsShoppingCartView: FC = () => {
     isAnyActiveProduct,
     manageCheckboxStatus,
     manageCheckboxOnPress,
+    removeProduct,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
@@ -110,7 +111,8 @@ const OmsShoppingCartView: FC = () => {
       stateCart.checkProduct.data !== null &&
       stateCart.checkSeller.data !== null &&
       stateCart.checkStock.data !== null &&
-      cartMasterAction.cartMaster.id !== ''
+      cartMasterAction.cartMaster.id !== '' &&
+      cartMasterAction.cartMaster.isCheckProductMerged === false
     ) {
       cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
     }
@@ -173,6 +175,7 @@ const OmsShoppingCartView: FC = () => {
   useEffect(() => {
     /** success */
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
+      removeProduct(selectRemoveProduct);
       cartMasterAction.removeProduct(selectRemoveProduct);
       setModalRemoveProduct(false);
     }
