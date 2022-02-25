@@ -7,11 +7,13 @@ import { SnbContainer, SnbSvgIcon, SnbProgress } from 'react-native-sinbad-ui';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
+import { useOTP } from '@screen/auth/functions';
 /** === IMPORT STYLE HERE === */
 import IntroStyle from '../styles/intro.style';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   const { meV2 } = useDataAuth();
+  const { getLocationPermissions } = useOTP();
   /** === HOOK === */
   // usePageAfterIntro();
   const authCoreAction = useAuthCoreAction();
@@ -23,15 +25,18 @@ const IntroSplashView: React.FC = () => {
   }, []);
   React.useEffect(() => {
     setTimeout(() => {
-      if (!meV2.data && !meV2.loading) {
+      if (!meV2.data && !meV2.loading && meV2.error) {
         NavigationAction.resetToIntroSinbad();
       } else {
-        NavigationAction.resetToHome();
-        // if (meV2.data?.data?.isBuyerCategoryCompleted) {
-        //   NavigationAction.resetToHome();
-        // } else {
-        //   console.log('disini');
-        // }
+        if (meV2.data?.data?.isBuyerCategoryCompleted === true && !meV2.error) {
+          NavigationAction.resetToHome();
+        }
+        if (
+          meV2.data?.data?.isBuyerCategoryCompleted === false &&
+          !meV2.error
+        ) {
+          getLocationPermissions();
+        }
       }
     }, 2000);
   }, [meV2.data, meV2.loading, meV2.error]);
