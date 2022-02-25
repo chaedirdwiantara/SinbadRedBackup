@@ -1,3 +1,14 @@
 export const LIST_LOCATION_VIEW = 'ListLocationView';
 export const BUYER_CATEGORY_VIEW = 'BuyerCategoryView';
 export const PRODUCT_CATEGORY_VIEW = 'ProductCategoryView';
+export const DATA_COMPLETENESS_INTRO_VIEW = 'DataCompletenessIntroView';
+export const DATA_COMPLETENESS_VIEW = 'DataCompletenessView';
+export const DATA_DIRI_STEP_1_VIEW = 'DataDiriStep1View';
+export const DATA_DIRI_STEP_2_VIEW = 'DataDiriStep2View';
+export const DATA_DIRI_STEP_3_VIEW = 'DataDiriStep3View';
+export const DATA_DIRI_STEP_4_VIEW = 'DataDiriStep4View';
+export const DATA_DIRI_STEP_5_VIEW = 'DataDiriStep5View';
+export const DATA_DIRI_STEP_6_VIEW = 'DataDiriStep6View';
+export const DATA_TOKO_STEP_1_VIEW = 'DataTokoStep1View';
+export const DATA_TOKO_STEP_2_VIEW = 'DataTokoStep2View';
+export const DATA_TOKO_STEP_3_VIEW = 'DataTokoStep3View';

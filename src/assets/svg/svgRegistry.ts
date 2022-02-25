@@ -12,6 +12,12 @@ import registration from './registration.svg';
 import onboarding from './onboarding.svg';
 import uprade_vip from './upgrade_vip_icon.svg';
 import info from './info.svg';
+import murah from './murah.svg';
+import cepat from './cepat.svg';
+import original from './original.svg';
+import flexibel from './flexibel.svg';
+import personal_data from './personal_data.svg';
+import store_data from './store_data.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -28,4 +34,10 @@ export const SvgRegistery = {
   onboarding,
   uprade_vip,
   info,
+  murah,
+  cepat,
+  original,
+  flexibel,
+  personal_data,
+  store_data,
 };

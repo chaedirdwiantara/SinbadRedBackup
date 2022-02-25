@@ -63,7 +63,7 @@ const StackNavigator: React.FC = () => {
   };
 
   return (
-    <Navigator initialRouteName={'Splash'}>
+    <Navigator initialRouteName={'BuyerCategoryView'}>
       {IntroSplashNav()}
       {IntroSinbadNav()}
       {tabNav()}
