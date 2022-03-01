@@ -6,6 +6,7 @@ import { copilotOptions } from './coachmark-tooltip.component';
 import SnbCardButtonType3 from './card-button-type-3.component';
 import Stepper from './stepper.component';
 import ListOfSteps from './list-of-steps.component';
+import ModalBack from './modal-back.component';
 
 export {
   ErrorContent,
@@ -16,4 +17,5 @@ export {
   SnbCardButtonType3,
   Stepper,
   ListOfSteps,
+  ModalBack,
 };
