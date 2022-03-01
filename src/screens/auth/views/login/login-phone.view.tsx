@@ -74,22 +74,6 @@ const Content: React.FC = () => {
           requestOTPState.loading
         }
       />
-      {/* <View style={loginPhoneStyles.choosenText}>
-        <View style={loginPhoneStyles.line} />
-        <View style={{ marginHorizontal: 8 }}>
-          <SnbText.B4>atau masuk dengan</SnbText.B4>
-        </View>
-        <View style={loginPhoneStyles.line} />
-      </View>
-      <SnbButton.Single
-        title="ID Toko"
-        onPress={() => {
-          phone.clearText();
-          navigate(LOGIN_ID_VIEW);
-        }}
-        type="secondary"
-        disabled={false}
-      /> */}
       <View style={loginPhoneStyles.registerLink}>
         <View>
           <SnbText.B3>Belum punya akun Sinbad?</SnbText.B3>
