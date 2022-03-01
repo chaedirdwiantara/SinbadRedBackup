@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
+import { useEasyRegistration } from '@screen/account/functions';
 import {
   color,
   SnbButton,

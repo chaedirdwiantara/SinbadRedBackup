@@ -15,7 +15,7 @@ export const createBasicAccount = simplifyReducer(INITIAL_STATE, {
 
   [types.CREATE_BASIC_ACCOUNT_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -26,7 +26,7 @@ export const createBasicAccount = simplifyReducer(INITIAL_STATE, {
 
   [types.CREATE_BASIC_ACCOUNT_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,

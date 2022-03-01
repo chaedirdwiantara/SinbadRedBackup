@@ -9,7 +9,6 @@ import {
   SnbTopNav,
 } from '@sinbad/react-native-sinbad-ui';
 import {
-  Alert,
   BackHandler,
   FlatList,
   Image,
@@ -22,14 +21,15 @@ import {
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
-import {
-  LIST_LOCATION_VIEW,
-  PRODUCT_CATEGORY_VIEW,
-} from '@screen/auth/functions/screens_name';
 import * as models from '@models';
 import { LogBox } from 'react-native';
-import { useEasyRegistration } from '@screen/auth/functions/easy-registration-hooks';
 import { ErrorContent } from '../shared';
+import {
+  DATA_COMPLETENESS_INTRO_VIEW,
+  LIST_LOCATION_VIEW,
+  PRODUCT_CATEGORY_VIEW,
+} from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const setIcon = (slug: string) => {
   switch (slug) {
@@ -85,7 +85,7 @@ const BuyerLocation: React.FC = () => {
 const BuyerCategory: React.FC = () => {
   const [selectedBuyerCategory, setSelectedBuyerCategory] =
     React.useState<any>(null);
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
   const [selectedProductCategory, setSelectedProductCategory] = React.useState<
     any[]
   >([]);
@@ -108,12 +108,9 @@ const BuyerCategory: React.FC = () => {
   React.useEffect(() => {
     if (createBasicAccountState.data) {
       if (actionFrom === 'mulai') {
-        Alert.alert('Info', 'Action will be direct to Home Page');
+        reset({ index: 0, routes: [{ name: 'Home' }] });
       } else if (actionFrom === 'lengkapi') {
-        Alert.alert(
-          'Info',
-          'Action will be direct to Premium Account Data Completeness',
-        );
+        navigate(DATA_COMPLETENESS_INTRO_VIEW);
       }
     }
   }, [createBasicAccountState]);
@@ -241,7 +238,9 @@ const BuyerCategory: React.FC = () => {
       <View style={{ marginBottom: 16 }}>
         <SnbButton.Dynamic
           size="medium"
-          onPress={() => handleOnCreateBasicAccount('lengkapi')}
+          onPress={() => {
+            handleOnCreateBasicAccount('lengkapi');
+          }}
           title="Lengkapi Akun Saya"
           buttonColor={color.blue50}
           type="tertiary"

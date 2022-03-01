@@ -1,4 +1,9 @@
 import {
+  BuyerCategoryView,
+  ListLocationView,
+  ProductCategoryView,
+} from '@screen/account/views';
+import {
   LoginOTPView,
   LoginPhoneView,
   RegisterOTPView,
@@ -13,9 +18,6 @@ import {
   InputManualLocationView,
   OnBoardingView,
   SelfRegisterView,
-  ListLocationView,
-  BuyerCategoryView,
-  ProductCategoryView,
 } from '@screen/auth/views';
 
 const AuthNav = {
