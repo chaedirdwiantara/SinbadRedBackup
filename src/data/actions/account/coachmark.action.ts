@@ -5,7 +5,9 @@ export const getCoachmarkProcess = (): models.IAction<any> => {
   return { type: types.GET_COACHMARK_PROCESS };
 };
 
-export const getCoachmarkSuccess = (data: any): models.IAction<any> => {
+export const getCoachmarkSuccess = (
+  data: models.ICoachmarkData,
+): models.IAction<models.ICoachmarkData> => {
   return { type: types.GET_COACHMARK_SUCCESS, payload: data };
 };
 

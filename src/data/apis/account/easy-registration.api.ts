@@ -25,29 +25,24 @@ const getProductCategory = () => {
 
 const createBasicAccount = (data: models.ICreateBasicAccount) => {
   const path = 'profile/complete-data';
-  return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
-};
-
-const getCoachmark = () => {
-  const path = 'coachmark';
-  return apiMapping<models.ICoachmarkData>(
+  return apiMapping<models.ICreateBasicAccountData>(
     'auth',
     path,
-    'auth',
-    'v1',
-    'DETAIL',
+    'account',
+    'v2',
+    'UPDATE',
+    data,
   );
 };
 
-const updateCoachmark = (data: models.ICoachmarkAction) => {
-  const path = 'coachmark';
-  return apiMapping<models.ICoachmarkData>(
+const getCompleteData = () => {
+  const path = 'profile/complete-data';
+  return apiMapping<models.ICompleteData>(
     'auth',
     path,
-    'auth',
-    'v1',
-    'UPDATE',
-    { [data]: true },
+    'account',
+    'v2',
+    'DETAIL',
   );
 };
 
@@ -55,6 +50,5 @@ export const easyRegistrationApi = {
   createBasicAccount,
   getBuyerCategory,
   getProductCategory,
-  getCoachmark,
-  updateCoachmark,
+  getCompleteData,
 };

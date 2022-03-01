@@ -67,3 +67,17 @@ export const getProductCategoryFailed = (data: any): any => {
     payload: data,
   };
 };
+
+export const getCompleteData = (): models.IAction<any> => {
+  return { type: types.GET_COMPLETE_DATA_PROCESS };
+};
+
+export const getCompleteDataSuccess = (
+  data: models.ICompleteData,
+): models.IAction<models.ICompleteData> => {
+  return { type: types.GET_COMPLETE_DATA_SUCCESS, payload: data };
+};
+
+export const getCompleteDataFailed = (data: any): models.IAction<any> => {
+  return { type: types.GET_COMPLETE_DATA_FAILED, payload: data };
+};

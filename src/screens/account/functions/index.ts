@@ -1,3 +1,3 @@
-import { useCoachmark } from './coachmark-hooks';
-import { useEasyRegistration } from './easy-registration-hooks';
+import { useCoachmark } from './coachmark-hooks.function';
+import { useEasyRegistration } from './easy-registration-hooks.function';
 export { useCoachmark, useEasyRegistration };
