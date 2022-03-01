@@ -5,6 +5,7 @@ import SinbadEngage from './sinbad-engage.component';
 import { copilotOptions } from './coachmark-tooltip.component';
 import SnbCardButtonType3 from './card-button-type-3.component';
 import Stepper from './stepper.component';
+import ListOfSteps from './list-of-steps.component';
 
 export {
   ErrorContent,
@@ -14,4 +15,5 @@ export {
   copilotOptions,
   SnbCardButtonType3,
   Stepper,
+  ListOfSteps,
 };

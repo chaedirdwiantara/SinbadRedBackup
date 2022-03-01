@@ -4,8 +4,9 @@ import {
   SnbTopNav,
   SnbTextField,
   SnbButton,
+  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { Stepper } from '../../shared/index';
+import { Stepper, ListOfSteps } from '../../shared/index';
 import { View, ScrollView } from 'react-native';
 import Svg from '@svg';
 import { useNavigation } from '@react-navigation/core';
@@ -14,6 +15,27 @@ import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 const DataDiriStep1View: React.FC = () => {
   const { navigate } = useNavigation();
   const [storeName, setStoreName] = useState('');
+  const [openModalStep, setOpenModalStep] = useState(false);
+
+  const listOfSteps = () => {
+    return (
+      <View>
+        <SnbBottomSheet
+          open={openModalStep}
+          content={
+            <ListOfSteps
+              type="user"
+              closeModal={() => setOpenModalStep(false)}
+            />
+          }
+          closeAction={() => setOpenModalStep(false)}
+          isSwipeable
+          title="Konfirmasi Data Diri"
+          actionIcon="close"
+        />
+      </View>
+    );
+  };
 
   return (
     <SnbContainer color="white">
@@ -23,7 +45,11 @@ const DataDiriStep1View: React.FC = () => {
           type="white"
           title="Nama Lengkap"
         />
-        <Stepper complete={1} total={7} onPress={() => {}} />
+        <Stepper
+          complete={1}
+          total={7}
+          onPress={() => setOpenModalStep(true)}
+        />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
           <Svg name="notification" size={240} />
         </View>
@@ -46,6 +72,7 @@ const DataDiriStep1View: React.FC = () => {
           onPress={() => navigate(DATA_DIRI_STEP_2_VIEW)}
         />
       </View>
+      {listOfSteps()}
     </SnbContainer>
   );
 };
