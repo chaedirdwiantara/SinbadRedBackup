@@ -19,7 +19,7 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
     return (
       <View>
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
-          <Svg name="completness_back" size={180} />
+          <Svg name="completeness_back" size={180} />
         </View>
         <View style={{ alignItems: 'center' }}>
           <SnbText.H3 color={colors.black100}>Yakin Ingin Keluar?</SnbText.H3>
