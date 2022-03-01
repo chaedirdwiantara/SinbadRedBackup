@@ -28,8 +28,33 @@ const createBasicAccount = (data: models.ICreateBasicAccount) => {
   return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
 };
 
+const getCoachmark = () => {
+  const path = 'coachmark';
+  return apiMapping<models.ICoachmarkData>(
+    'auth',
+    path,
+    'auth',
+    'v1',
+    'DETAIL',
+  );
+};
+
+const updateCoachmark = (data: models.ICoachmarkAction) => {
+  const path = 'coachmark';
+  return apiMapping<models.ICoachmarkData>(
+    'auth',
+    path,
+    'auth',
+    'v1',
+    'UPDATE',
+    { [data]: true },
+  );
+};
+
 export const easyRegistrationApi = {
   createBasicAccount,
   getBuyerCategory,
   getProductCategory,
+  getCoachmark,
+  updateCoachmark,
 };

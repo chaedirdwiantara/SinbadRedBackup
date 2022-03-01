@@ -1,3 +1,5 @@
+import { useDataAuth } from '@core/redux/Data';
+import { useCoachmark } from '@screen/account/functions';
 import {
   SnbBottomSheet,
   SnbButton,
@@ -11,7 +13,25 @@ interface Props {
 }
 
 const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
-  const [open, setOpen] = React.useState<boolean>(true);
+  const [open, setOpen] = React.useState<boolean>(false);
+  const { coachmarkState } = useCoachmark();
+  const { getCoachmark, resetCoachmark } = useCoachmark();
+  const { me } = useDataAuth();
+
+  React.useEffect(() => {
+    resetCoachmark();
+  }, []);
+
+  React.useEffect(() => {
+    me.data && getCoachmark();
+  }, [me.data]);
+
+  React.useEffect(() => {
+    if (typeof coachmarkState.data?.homeCoachmark === 'boolean') {
+      setOpen(!coachmarkState.data?.homeCoachmark);
+    }
+  }, [coachmarkState.data]);
+
   return (
     <SnbBottomSheet
       open={open}

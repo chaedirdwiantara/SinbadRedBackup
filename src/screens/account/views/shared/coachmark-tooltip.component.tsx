@@ -2,10 +2,19 @@ import React from 'react';
 import { Dimensions, View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import { CopilotTooltipProps } from 'react-native-copilot';
+import { useCoachmark } from '@screen/account/functions';
 
 const { width } = Dimensions.get('screen');
+type ICoachmarkAction =
+  | 'homeCoachmark'
+  | 'orderCoachmark'
+  | 'helpCoachmark'
+  | 'profileCoachmark';
 
-export const copilotOptions: any = (totalCoachMark: number) => {
+export const copilotOptions: any = (
+  totalCoachMark: number,
+  action: ICoachmarkAction,
+) => {
   const Tooltip: React.FC<CopilotTooltipProps> = ({
     handleNext,
     currentStep,
@@ -14,6 +23,11 @@ export const copilotOptions: any = (totalCoachMark: number) => {
     handlePrev,
     isFirstStep,
   }) => {
+    const { updateCoachmarkState, updateCoachmark, resetCoachmark } =
+      useCoachmark();
+    React.useEffect(() => {
+      updateCoachmarkState?.data && handleStop();
+    }, [updateCoachmarkState]);
     return (
       <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
         <SnbText.H4>{currentStep.name}</SnbText.H4>
@@ -60,11 +74,13 @@ export const copilotOptions: any = (totalCoachMark: number) => {
             )}
             <SnbButton.Dynamic
               size="small"
+              loading={updateCoachmarkState.loading}
               type="primary"
               title={isLastStep ? 'Selesai' : 'Lanjut'}
               onPress={() => {
                 if (isLastStep) {
-                  handleStop();
+                  resetCoachmark();
+                  updateCoachmark(action);
                 } else {
                   handleNext();
                 }
