@@ -28,7 +28,7 @@ const Stepper: FC<StepperProps> = (props) => {
           <SnbText.C2 color={colors.blue60}>Lihat</SnbText.C2>
         </TouchableOpacity>
       </View>
-      <View style={{ marginHorizontal: 16 }}>
+      <View>
         <SnbText.C2
           color={
             colors.black60
