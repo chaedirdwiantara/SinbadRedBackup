@@ -31,3 +31,5 @@ export const GET_COACHMARK_FAILED = 'GetCoachmarkFailed';
 export const UPDATE_COACHMARK_PROCESS = 'UpdateCoachmarkProcess';
 export const UPDATE_COACHMARK_SUCCESS = 'UpdateCoachmarkSuccess';
 export const UPDATE_COACHMARK_FAILED = 'UpdateCoachmarkFailed';
+
+export const RESET_COACHMARK = 'ResetCoachmark';
