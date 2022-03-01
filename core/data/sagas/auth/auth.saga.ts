@@ -65,6 +65,17 @@ function* logout() {
     yield put(ActionCreators.logoutFailed(error));
   }
 }
+/** => me V2 */
+function* meV2() {
+  try {
+    const response: models.LoginSuccess = yield call(() => {
+      return AuthApi.meV2();
+    });
+    yield put(ActionCreators.meV2Success(response));
+  } catch (error: any) {
+    yield put(ActionCreators.meV2Failed(error));
+  }
+}
 
 /** === LISTEN FUNCTION === */
 function* AuthCoreSaga() {
@@ -73,6 +84,7 @@ function* AuthCoreSaga() {
   yield takeLatest(types.VERIFICATION_OTP_PROCESS, verificationOTP);
   yield takeLatest(types.ME_PROCESS, me);
   yield takeLatest(types.LOGOUT_PROCESS, logout);
+  yield takeLatest(types.ME_V2_PROCESS, meV2);
 }
 
 export default AuthCoreSaga;

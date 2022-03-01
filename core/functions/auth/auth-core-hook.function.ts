@@ -37,6 +37,10 @@ const useAuthCoreAction = () => {
     resetLogout: () => {
       dispatch(Actions.logoutReset());
     },
+    meV2: () => {
+      dispatch(Actions.meV2Reset());
+      dispatch(Actions.meV2Process());
+    },
   };
 };
 /** === EXPORT === */
