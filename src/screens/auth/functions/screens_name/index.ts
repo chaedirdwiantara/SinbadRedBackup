@@ -1,5 +1,4 @@
 export const LOGIN_PHONE_VIEW = 'LoginPhoneView';
-export const LOGIN_ID_VIEW = 'LoginIDView';
 export const LOGIN_OTP_VIEW = 'LoginOTPView';
 export const REGISTER_VIEW = 'RegisterView';
 export const REGISTER_OTP_VIEW = 'RegisterOTPView';

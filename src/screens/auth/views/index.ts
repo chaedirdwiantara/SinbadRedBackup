@@ -1,5 +1,4 @@
 import LoginPhoneView from './login/login-phone.view';
-import LoginIDView from './login/login-id.view';
 import LoginOTPView from './login/login-otp.view';
 import RegisterOTPView from './register/register-otp.view';
 import RegisterView from './register/register.view';
@@ -18,7 +17,6 @@ import BuyerCategoryView from './easy-registration/buyer-category.view';
 import ProductCategoryView from './easy-registration/product-category.view';
 export {
   LoginPhoneView,
-  LoginIDView,
   LoginOTPView,
   RegisterView,
   RegisterOTPView,

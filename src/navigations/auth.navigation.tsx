@@ -1,5 +1,4 @@
 import {
-  LoginIDView,
   LoginOTPView,
   LoginPhoneView,
   RegisterOTPView,
@@ -25,9 +24,6 @@ const AuthNav = {
   },
   LoginPhoneView: {
     component: LoginPhoneView,
-  },
-  LoginIDView: {
-    component: LoginIDView,
   },
   LoginOTPView: {
     component: LoginOTPView,
