@@ -1,13 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import { color, SnbIcon, SnbText } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import { DATA_COMPLETENESS_INTRO_VIEW } from '@screen/account/functions/screens_name';
 
 const UpgradeVIPAccountBadge: React.FC = () => {
+  const { navigate } = useNavigation();
   return (
     <TouchableOpacity
       activeOpacity={0.75}
-      onPress={() => {}}
+      onPress={() => navigate(DATA_COMPLETENESS_INTRO_VIEW)}
       style={{
         backgroundColor: color.yellow10,
         paddingHorizontal: 16,
