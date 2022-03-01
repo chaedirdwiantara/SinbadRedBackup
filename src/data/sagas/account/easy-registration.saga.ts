@@ -63,6 +63,17 @@ function* getProductCategory() {
   }
 }
 
+function* getCompleteData() {
+  try {
+    const response: models.ICompleteData = yield call(() =>
+      easyRegistrationApi.getCompleteData(),
+    );
+    yield put(ActionCreators.getCompleteDataSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.getCompleteDataFailed(error));
+  }
+}
+
 function* EasyRegistrationSaga() {
   yield debounce(250, types.SEARCH_LOCATION_PROCESS, searchLocation);
   yield debounce(
@@ -73,6 +84,7 @@ function* EasyRegistrationSaga() {
   yield takeLatest(types.CREATE_BASIC_ACCOUNT_PROCESS, createBasicAccount);
   yield takeLatest(types.BUYER_CATEGORY_PROCESS, getBuyerCategory);
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
+  yield takeLatest(types.GET_COMPLETE_DATA_PROCESS, getCompleteData);
 }
 
 export default EasyRegistrationSaga;

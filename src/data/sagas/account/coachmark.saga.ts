@@ -2,12 +2,12 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import * as types from '@types';
 import * as models from '@models';
 import * as ActionCreators from '@actions';
-import { easyRegistrationApi } from 'src/data/apis/account';
+import { coachmarkApi } from 'src/data/apis/account';
 
 function* getCoachmark() {
   try {
     const response: models.ICoachmarkData = yield call(() =>
-      easyRegistrationApi.getCoachmark(),
+      coachmarkApi.getCoachmark(),
     );
     yield put(ActionCreators.getCoachmarkSuccess(response));
   } catch (error) {
@@ -18,7 +18,7 @@ function* getCoachmark() {
 function* updateCoachmark(action: models.IAction<any>) {
   try {
     const response: models.ICoachmarkData = yield call(() =>
-      easyRegistrationApi.updateCoachmark(action.payload),
+      coachmarkApi.updateCoachmark(action.payload),
     );
     yield put(ActionCreators.updateCoachmarkSuccess(response));
   } catch (error) {

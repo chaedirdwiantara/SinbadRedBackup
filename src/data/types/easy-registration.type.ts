@@ -33,3 +33,7 @@ export const UPDATE_COACHMARK_SUCCESS = 'UpdateCoachmarkSuccess';
 export const UPDATE_COACHMARK_FAILED = 'UpdateCoachmarkFailed';
 
 export const RESET_COACHMARK = 'ResetCoachmark';
+
+export const GET_COMPLETE_DATA_PROCESS = 'GetCompleteDataProcess';
+export const GET_COMPLETE_DATA_SUCCESS = 'GetCompleteDataSuccess';
+export const GET_COMPLETE_DATA_FAILED = 'GetCompleteDataFailed';

@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { useEasyRegistration } from '@screen/account/functions';
 import {
   DATA_DIRI_STEP_1_VIEW,
   DATA_TOKO_STEP_1_VIEW,
@@ -13,11 +14,47 @@ import {
   SnbText,
   SnbButton,
   SnbIcon,
+  SnbSkeletonAnimator,
 } from 'react-native-sinbad-ui';
-import { SnbCardButtonType3 } from '../shared';
+import { ErrorContent, SnbCardButtonType3 } from '../shared';
+
+const CompleteDataSkeleton: React.FC = () => {
+  return (
+    <View style={{ flex: 1, paddingVertical: 32, paddingHorizontal: 16 }}>
+      <SnbSkeletonAnimator>
+        <View style={{ height: 40, borderRadius: 4 }} />
+        <View style={{ marginVertical: 8 }} />
+        <View style={{ height: 24, borderRadius: 4, width: 120 }} />
+        <View style={{ marginVertical: 32 }} />
+        <View style={{ height: 84, borderRadius: 8 }} />
+        <View style={{ marginVertical: 6 }} />
+        <View style={{ height: 84, borderRadius: 8 }} />
+      </SnbSkeletonAnimator>
+    </View>
+  );
+};
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
+  const { getCompleteData, completeDataState } = useEasyRegistration();
+
+  React.useEffect(() => {
+    getCompleteData();
+  }, []);
+
+  if (completeDataState.loading) {
+    return <CompleteDataSkeleton />;
+  }
+
+  if (completeDataState.error) {
+    return (
+      <ErrorContent
+        action={getCompleteData}
+        message={completeDataState.error?.message}
+      />
+    );
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View
