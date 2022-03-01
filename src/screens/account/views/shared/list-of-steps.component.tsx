@@ -143,8 +143,6 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const renderContentBuyer = () => {
     return dataBuyer.map((item, index) => {
       const disable = checkContentDisable(item, index);
-      console.log(disable);
-
       return (
         <View style={{ marginBottom: 16, marginHorizontal: 16 }} key={index}>
           <SnbCardButtonType1
