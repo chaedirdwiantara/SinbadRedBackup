@@ -22,7 +22,10 @@ export const copilotOptions: any = (
     const { updateCoachmarkState, updateCoachmark, resetCoachmark } =
       useCoachmark();
     React.useEffect(() => {
-      updateCoachmarkState?.data && handleStop();
+      if (updateCoachmarkState?.data) {
+        resetCoachmark();
+        handleStop();
+      }
     }, [updateCoachmarkState]);
     return (
       <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
@@ -75,7 +78,6 @@ export const copilotOptions: any = (
               title={isLastStep ? 'Selesai' : 'Lanjut'}
               onPress={() => {
                 if (isLastStep) {
-                  resetCoachmark();
                   updateCoachmark(action);
                 } else {
                   handleNext();
