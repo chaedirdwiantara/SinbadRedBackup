@@ -4,7 +4,6 @@ import {
   useInputPhone,
 } from '@screen/auth/functions';
 import {
-  LOGIN_ID_VIEW,
   LOGIN_OTP_VIEW,
   REGISTER_VIEW,
 } from '@screen/auth/functions/screens_name';
@@ -74,22 +73,6 @@ const Content: React.FC = () => {
           phone.valMsgError !== '' ||
           requestOTPState.loading
         }
-      />
-      <View style={loginPhoneStyles.choosenText}>
-        <View style={loginPhoneStyles.line} />
-        <View style={{ marginHorizontal: 8 }}>
-          <SnbText.B4>atau masuk dengan</SnbText.B4>
-        </View>
-        <View style={loginPhoneStyles.line} />
-      </View>
-      <SnbButton.Single
-        title="ID Toko"
-        onPress={() => {
-          phone.clearText();
-          navigate(LOGIN_ID_VIEW);
-        }}
-        type="secondary"
-        disabled={false}
       />
       <View style={loginPhoneStyles.registerLink}>
         <View>
