@@ -3,17 +3,13 @@ import { Dimensions, View } from 'react-native';
 import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import { CopilotTooltipProps } from 'react-native-copilot';
 import { useCoachmark } from '@screen/account/functions';
+import * as models from '@models';
 
 const { width } = Dimensions.get('screen');
-type ICoachmarkAction =
-  | 'homeCoachmark'
-  | 'orderCoachmark'
-  | 'helpCoachmark'
-  | 'profileCoachmark';
 
 export const copilotOptions: any = (
   totalCoachMark: number,
-  action: ICoachmarkAction,
+  action: models.ICoachmarkAction,
 ) => {
   const Tooltip: React.FC<CopilotTooltipProps> = ({
     handleNext,
