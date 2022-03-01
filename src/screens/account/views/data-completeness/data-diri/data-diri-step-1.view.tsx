@@ -6,16 +6,20 @@ import {
   SnbButton,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-import { Stepper, ListOfSteps } from '../../shared/index';
+import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView } from 'react-native';
 import Svg from '@svg';
 import { useNavigation } from '@react-navigation/core';
-import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
+import {
+  DATA_DIRI_STEP_2_VIEW,
+  DATA_COMPLETENESS_VIEW,
+} from '@screen/account/functions/screens_name';
 
 const DataDiriStep1View: React.FC = () => {
   const { navigate } = useNavigation();
   const [storeName, setStoreName] = useState('');
   const [openModalStep, setOpenModalStep] = useState(false);
+  const [openModalBack, setOPenModalBack] = useState(false);
 
   const listOfSteps = () => {
     return (
@@ -41,7 +45,7 @@ const DataDiriStep1View: React.FC = () => {
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav.Type3
-          backAction={() => {}}
+          backAction={() => setOPenModalBack(true)}
           type="white"
           title="Nama Lengkap"
         />
@@ -72,6 +76,11 @@ const DataDiriStep1View: React.FC = () => {
           onPress={() => navigate(DATA_DIRI_STEP_2_VIEW)}
         />
       </View>
+      <ModalBack
+        open={openModalBack}
+        closeModal={() => setOPenModalBack(false)}
+        confirm={() => navigate(DATA_COMPLETENESS_VIEW)}
+      />
       {listOfSteps()}
     </SnbContainer>
   );

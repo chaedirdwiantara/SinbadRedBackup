@@ -19,6 +19,7 @@ import flexibel from './flexibel.svg';
 import personal_data from './personal_data.svg';
 import store_data from './store_data.svg';
 import notification from './notification.svg';
+import completeness_back from './completeness-back.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -42,4 +43,5 @@ export const SvgRegistery = {
   personal_data,
   store_data,
   notification,
+  completeness_back,
 };
