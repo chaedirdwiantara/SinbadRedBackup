@@ -1,11 +1,12 @@
 /** === IMPORT PACKAGE HERE === */
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { cloneDeep } from 'lodash';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
 import { useDataCartMaster } from '@core/redux/Data';
 import { CartMaster, HandleRemoveProduct } from '@models';
 import { manageRemoveProduct } from './cart.function';
@@ -123,13 +124,27 @@ const useCartMasterAction = () => {
 };
 /** => check product action */
 const useCheckProductAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckProductPayload,
-    ) => {
-      dispatch(Actions.checkProductProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckProductPayloadCarts[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+            });
+          });
+        });
+        dispatch(
+          Actions.checkProductProcess(contextDispatch, {
+            data: { carts: data },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkProductReset(contextDispatch));
@@ -153,13 +168,24 @@ const usePostCheckProductAction = () => {
 };
 /** => check seller action */
 const useCheckSellerAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckSellerPayload,
-    ) => {
-      dispatch(Actions.checkSellerProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: number[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          data.push(sellerItem.sellerId);
+        });
+        dispatch(
+          Actions.checkSellerProcess(contextDispatch, {
+            data: {
+              sellerIds: data,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkSellerReset(contextDispatch));
@@ -183,13 +209,32 @@ const usePostCheckSellerAction = () => {
 };
 /** => check stock action */
 const useCheckStockAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckStockPayload,
-    ) => {
-      dispatch(Actions.checkStockProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any, isReserved: boolean) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckStockPayloadCarts[] = [];
+        stateCart.get.data?.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+              qty: productItem.qty,
+            });
+          });
+        });
+        dispatch(
+          Actions.checkStockProcess(contextDispatch, {
+            data: {
+              cartId: stateCart.get.data.id,
+              reserved: isReserved,
+              carts: data,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkStockReset(contextDispatch));
@@ -477,6 +522,36 @@ const useCartLocalData = () => {
     localCartMaster,
   };
 };
+/** => oms general failed state */
+const useOmsGeneralFailedState = () => {
+  const [isOpen, setOpen] = useState(false);
+  const [retryAction, setRetryAction] = useState<Function>(() => {});
+  const [closeAction, setCloseAction] = useState<Function>(() => {});
+  const [errorData, setErrorData] = useState<models.ErrorProps | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setRetryAction: (value: () => void) => {
+      setRetryAction(value);
+    },
+    setCloseAction: (value: () => void) => {
+      setCloseAction(value);
+    },
+    setErrorData: (value: models.ErrorProps | null) => {
+      setErrorData(value);
+    },
+    setRetryCount: (value: number) => {
+      setRetryCount(value);
+    },
+    isOpen,
+    retryAction,
+    closeAction,
+    errorData,
+    retryCount,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -495,6 +570,7 @@ export {
   useCancelStockAction,
   useCartBuyerAddressAction,
   useCartLocalData,
+  useOmsGeneralFailedState,
 };
 /**
  * ================================================================

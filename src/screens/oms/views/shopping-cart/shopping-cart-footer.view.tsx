@@ -50,11 +50,14 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   const checkoutAction = useCheckoutAction();
 
   const handleOnPressCheckout = () => {
-    onPressCheckout();
-    updateCartAction.fetch(dispatchCart, {
-      id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
-      carts: cartMasterAction.cartMaster.sellers,
-    });
+    if (stateCart.buyerAddress.data) {
+      onPressCheckout();
+      updateCartAction.fetch(dispatchCart, {
+        buyerName: stateCart.buyerAddress.data.buyerName,
+        id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
+        carts: cartMasterAction.cartMaster.sellers,
+      });
+    }
   };
 
   const checkProductSellerStock = useCallback(() => {
@@ -172,6 +175,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
       stateCart.buyerAddress.data
     ) {
       checkoutAction.fetch(dispatchCheckout, {
+        buyerName: stateCart.buyerAddress.data.buyerName,
         buyerAddress: stateCart.buyerAddress.data,
         carts: cartMasterAction.cartMaster.sellers,
       });
