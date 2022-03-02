@@ -242,7 +242,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => CONTENT */
   const renderContent = () => {
     if (localCartMaster && localCartMaster.id !== '') {
-      console.log(isAnyActiveProduct());
       const isCartEmpty =
         (!isAnyActiveProduct() && localCartMaster.unavailable.length === 0) ||
         stateCart.get.error?.code === 40010000009;

@@ -1,9 +1,8 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
-import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import { useDataAuth } from '@core/redux/Data';
 
@@ -16,19 +15,10 @@ interface HeaderProps {
 }
 /** === COMPONENT === */
 const HomeHeaderView: FC<HeaderProps> = (props) => {
-  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  const totalCartAction = useGetTotalCartAction();
+  const { stateCart } = useContext(contexts.CartContext);
   const totalCartState = stateCart.total.data;
   const { totalNotification } = useNotificationTotalActions();
   const { me } = useDataAuth();
-
-  /** === HOOK === */
-  useEffect(() => {
-    totalCartAction.fetch(dispatchCart);
-    return () => {
-      totalCartAction.reset(dispatchCart);
-    };
-  }, []);
 
   /** === VIEW === */
   /** => main */
