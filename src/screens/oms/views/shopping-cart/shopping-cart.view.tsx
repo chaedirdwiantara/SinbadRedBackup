@@ -10,6 +10,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
+import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
 /** === IMPORT INTERNAL FUNCTION HERE === */
 import {
@@ -21,6 +22,7 @@ import {
   useCheckStockAction,
   useRemoveCartProductAction,
   useCartLocalData,
+  useOmsGeneralFailedState,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -46,6 +48,9 @@ const OmsShoppingCartView: FC = () => {
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
 
+  // state error modal
+  const errorModal = useOmsGeneralFailedState();
+
   const { countTotalPrice, countTotalProduct } = calculateProductTotalPrice();
 
   /** => ACTION */
@@ -63,41 +68,12 @@ const OmsShoppingCartView: FC = () => {
     if (stateCart.get.data === null) {
       /** did mount */
       getCartAction.fetch(dispatchCart);
-      checkProductAction.fetch(dispatchCart, {
-        carts: [
-          {
-            productId: '53c9b0000000000000000000',
-            warehouseId: 1,
-          },
-          {
-            productId: '53c9b0000000000000000002',
-            warehouseId: 2,
-          },
-        ],
-      });
-      checkSellerAction.fetch(dispatchCart, {
-        sellerIds: [1, 2],
-      });
-      checkStockAction.fetch(dispatchCart, {
-        cartId: 'qweqweqw',
-        reserved: false,
-        carts: [
-          {
-            productId: '53c9b0000000000000000000',
-            warehouseId: 1,
-            qty: 10,
-          },
-          {
-            productId: '53c9b0000000000000000002',
-            warehouseId: 1,
-            qty: 10,
-          },
-        ],
-      });
+      errorModal.setRetryCount(3);
+      checkProductAction.fetch(dispatchCart);
+      checkSellerAction.fetch(dispatchCart);
+      checkStockAction.fetch(dispatchCart, false);
     }
-  }, [stateCart.cancelStock.data]);
-
-  useEffect(() => {
+    /** will unmount */
     return () => {
       checkProductAction.reset(dispatchCart);
       checkSellerAction.reset(dispatchCart);
@@ -105,7 +81,7 @@ const OmsShoppingCartView: FC = () => {
       getCartAction.reset(dispatchCart);
       cartMasterAction.reset();
     };
-  }, []);
+  }, [stateCart.cancelStock.data]);
 
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
@@ -113,7 +89,55 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.setCartMaster(stateCart.get.data);
     }
   }, [stateCart.get.data]);
-  /** => after success fetch checkProduct, merge data to redux */
+  /** => if one of the check endpoint fail, show error retry */
+  useEffect(() => {
+    // wait all fetch done first
+    if (
+      !stateCart.checkProduct.loading &&
+      !stateCart.checkSeller.loading &&
+      !stateCart.checkStock.loading
+    ) {
+      // check which check endpoint fetch was fail
+      const isErrorCheckProduct: boolean =
+        stateCart.checkProduct.error !== null;
+      const isErrorCheckSeller: boolean = stateCart.checkSeller.error !== null;
+      const isErrorCheckStock: boolean = stateCart.checkStock.error !== null;
+      // determine the retry action
+      const action = () => {
+        if (errorModal.retryCount > 0) {
+          if (isErrorCheckProduct) {
+            checkProductAction.fetch(dispatchCart);
+          }
+          if (isErrorCheckSeller) {
+            checkSellerAction.fetch(dispatchCart);
+          }
+          if (isErrorCheckStock) {
+            checkStockAction.fetch(dispatchCart, false);
+          }
+          // decrease the retry count
+          errorModal.setRetryCount(errorModal.retryCount - 1);
+        } else {
+          goBack();
+        }
+      };
+      // determine the error data
+      let errorData = null;
+      if (isErrorCheckProduct) {
+        errorData = stateCart.checkProduct.error;
+      } else if (isErrorCheckSeller) {
+        errorData = stateCart.checkSeller.error;
+      } else {
+        errorData = stateCart.checkStock.error;
+      }
+      // show the modal and the data
+      if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
+        errorModal.setErrorAction(() => action);
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
+      }
+    }
+  }, [stateCart.checkProduct, stateCart.checkSeller, stateCart.checkStock]);
+  /** => after success fetch checkProduct, checkSeller & checkStock then merge data to redux */
   useEffect(() => {
     if (
       stateCart.checkProduct.data !== null &&
@@ -123,35 +147,13 @@ const OmsShoppingCartView: FC = () => {
       cartMasterAction.cartMaster.isCheckProductMerged === false
     ) {
       cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
+      cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
+      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
     }
   }, [
     cartMasterAction.cartMaster.id,
     stateCart.checkProduct.data,
     stateCart.checkSeller.data,
-    stateCart.checkStock.data,
-  ]);
-  /** => after success fetch checkSeller, merge data to redux */
-  useEffect(() => {
-    if (
-      stateCart.checkSeller.data !== null &&
-      cartMasterAction.cartMaster.isCheckProductMerged
-    ) {
-      cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
-    }
-  }, [
-    cartMasterAction.cartMaster.isCheckProductMerged,
-    stateCart.checkSeller.data,
-  ]);
-  /** => after success fetch checkStock, merge data to redux */
-  useEffect(() => {
-    if (
-      stateCart.checkStock.data !== null &&
-      cartMasterAction.cartMaster.isCheckSellerMerged
-    ) {
-      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
-    }
-  }, [
-    cartMasterAction.cartMaster.isCheckSellerMerged,
     stateCart.checkStock.data,
   ]);
   /** => after success merge all check data to redux, save redux to local state */
@@ -228,11 +230,25 @@ const OmsShoppingCartView: FC = () => {
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={goBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
-      {/* MODAL */}
+      {/* Dialog Remove Product */}
       <ModalRemoveProduct
         isOpen={modalRemoveProduct}
         okAction={() => handleOkActionRemoveProduct()}
         cancelAction={() => setModalRemoveProduct(false)}
+      />
+      {/* Error Modal Check Product, Seller & Stock */}
+      <BottomSheetError
+        open={errorModal.isOpen}
+        error={errorModal.errorData}
+        retryAction={() => {
+          errorModal.errorAction();
+          errorModal.setOpen(false);
+        }}
+        closeAction={() => {
+          // goBack();
+          errorModal.errorAction();
+          errorModal.setOpen(false);
+        }}
       />
     </SnbContainer>
   );
