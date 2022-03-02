@@ -6,5 +6,9 @@ import { NavigationAction } from '@navigation';
 const goBack = () => {
   NavigationAction.back();
 };
+/** => go to category */
+const goToCategory = () => {
+  NavigationAction.navigate('CategoryView');
+};
 
-export { goBack };
+export { goBack, goToCategory };

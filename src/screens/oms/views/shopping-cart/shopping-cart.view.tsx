@@ -29,6 +29,7 @@ import {
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
+import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = () => {
@@ -241,30 +242,37 @@ const OmsShoppingCartView: FC = () => {
   /** => CONTENT */
   const renderContent = () => {
     if (localCartMaster && localCartMaster.id !== '') {
-      return (
-        <React.Fragment>
-          <ScrollView>
-            <View style={{ flex: 1 }}>
-              <ShoppingCartAddress />
-              <ShoppingCartProducts
-                handleRemoveProductModal={handleRemoveProductModal}
-                unavailableProducts={localCartMaster.unavailable}
-                availableProducts={localCartMaster.sellers}
-                handleUpdateQty={updateQty}
-                handleUpdateSelected={updateSelected}
-                isAnyActiveProduct={isAnyActiveProduct}
-                manageCheckboxStatus={manageCheckboxStatus}
-                manageCheckboxOnPress={manageCheckboxOnPress}
-              />
-            </View>
-          </ScrollView>
-          <ShoppingCartFooter
-            onPressCheckout={() => {}}
-            countTotalProduct={countTotalProduct}
-            countTotalPrice={countTotalPrice}
-          />
-        </React.Fragment>
-      );
+      const isCartEmpty =
+        stateCart.get.data?.sellers.length === 0 ||
+        stateCart.get.error?.code === 40010000009;
+      if (!isCartEmpty) {
+        return (
+          <React.Fragment>
+            <ScrollView>
+              <View style={{ flex: 1 }}>
+                <ShoppingCartAddress />
+                <ShoppingCartProducts
+                  handleRemoveProductModal={handleRemoveProductModal}
+                  unavailableProducts={localCartMaster.unavailable}
+                  availableProducts={localCartMaster.sellers}
+                  handleUpdateQty={updateQty}
+                  handleUpdateSelected={updateSelected}
+                  isAnyActiveProduct={isAnyActiveProduct}
+                  manageCheckboxStatus={manageCheckboxStatus}
+                  manageCheckboxOnPress={manageCheckboxOnPress}
+                />
+              </View>
+            </ScrollView>
+            <ShoppingCartFooter
+              onPressCheckout={() => {}}
+              countTotalProduct={countTotalProduct}
+              countTotalPrice={countTotalPrice}
+            />
+          </React.Fragment>
+        );
+      } else {
+        return <ShoppingCartEmpty />;
+      }
     }
   };
   /** => MAIN */
