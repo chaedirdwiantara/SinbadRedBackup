@@ -1,5 +1,4 @@
 /** === IMPORT INTERNAL === */
-// import apiMapping from '@core/services/apiMapping';
 import { serializeUniformKeyQs } from '@core/functions/global/query-string';
 import apiMappingMockV3 from '@core/services/apiMappingMockV3';
 import apiMapping from '@core/services/apiMappingV3';
@@ -18,12 +17,11 @@ const exampleCart = () => {
 };
 
 const getCart = () => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'carts';
-  return apiMappingMockV3<models.GetCartData>(
-    mockHost,
+  return apiMapping<models.GetCartData>(
+    'auth',
     path,
-    'discount',
+    'buyer-cart',
     'v1',
     'DETAIL',
   );
@@ -72,15 +70,16 @@ const updateCart = (
 const removeCartProduct = ({
   data,
 }: models.UpdateProcessProps<models.RemoveCartProductPayload>) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = `carts/remove-cart-products/${data.cartId}`;
-  return apiMappingMockV3<models.RemoveCartProductResponse>(
-    mockHost,
+  return apiMapping<models.RemoveCartProductResponse>(
+    'auth',
     path,
-    'discount',
+    'buyer-cart',
     'v1',
     'UPDATE',
-    data.removedProducts,
+    {
+      removeProducts: data.removedProducts,
+    },
   );
 };
 

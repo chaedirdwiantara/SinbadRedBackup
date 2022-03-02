@@ -4,6 +4,7 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import { SnbText, SnbCheckbox, SnbIcon, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
+import { goToProduct } from '@screen/category/functions';
 import * as models from '@models';
 
 interface ProductUnavailableViewProps {
@@ -32,7 +33,16 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
   const renderActionSection = (product: models.CartMasterUnavailable) => {
     return (
       <View style={ShoppingCartStyles.unavailableActionContainer}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity
+          onPress={() => {
+            const category = {
+              id: product.categoryId,
+              name: '',
+              icon: '',
+              hasChild: false,
+            };
+            goToProduct(category);
+          }}>
           <SnbText.B4 color={color.blue50}>Cari Produk Sejenis</SnbText.B4>
         </TouchableOpacity>
         <TouchableOpacity

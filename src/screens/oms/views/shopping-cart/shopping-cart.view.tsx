@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState } from 'react';
-import { View, ScrollView } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { View, ScrollView, StatusBar } from 'react-native';
+import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
@@ -23,6 +23,7 @@ import {
   useRemoveCartProductAction,
   useCartLocalData,
   useOmsGeneralFailedState,
+  useGetTotalCartAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -61,6 +62,7 @@ const OmsShoppingCartView: FC = () => {
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
+  const totalCartActions = useGetTotalCartAction();
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -96,6 +98,7 @@ const OmsShoppingCartView: FC = () => {
       checkSellerAction.reset(dispatchCart);
       checkStockAction.reset(dispatchCart);
       getCartAction.reset(dispatchCart);
+      removeCartProductAction.reset(dispatchCart);
       cartMasterAction.reset();
     };
   }, [stateCart.cancelStock.data]);
@@ -116,7 +119,7 @@ const OmsShoppingCartView: FC = () => {
       !stateCart.checkStock.loading &&
       !stateCart.get.loading
     ) {
-      // check which check endpoint fetch was fail
+      // check which endpoint fetch was fail
       const isErrorCheckProduct = stateCart.checkProduct.error !== null;
       const isErrorCheckSeller = stateCart.checkSeller.error !== null;
       const isErrorCheckStock = stateCart.checkStock.error !== null;
@@ -211,11 +214,20 @@ const OmsShoppingCartView: FC = () => {
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
       removeProduct(selectRemoveProduct);
       cartMasterAction.removeProduct(selectRemoveProduct);
+      totalCartActions.fetch(dispatchCart);
+      SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
       setModalRemoveProduct(false);
     }
     /** error */
     if (stateCart.remove.error !== null) {
-      // error handle here
+      SnbToast.show('Produk gagal dihapus dari keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
+      setModalRemoveProduct(false);
     }
   }, [stateCart.remove]);
 

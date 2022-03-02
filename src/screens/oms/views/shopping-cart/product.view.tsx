@@ -212,7 +212,7 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={ShoppingCartStyles.actionContainer}>
         {renderRemoveProductIcon()}
         <SnbNumberCounter
-          value={product.qty ?? 0}
+          value={product.qty}
           maxLength={6}
           onBlur={() => {}}
           onFocus={() => {}}
