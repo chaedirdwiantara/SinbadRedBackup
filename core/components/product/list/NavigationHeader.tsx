@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
@@ -11,7 +11,6 @@ import {
   backToLogin,
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
-import { useGetTotalCartAction } from '@screen/oms/functions';
 /** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
 import { contexts } from '@contexts';
@@ -33,8 +32,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   onSearch,
   onSearchClear,
 }) => {
-  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  const totalCartAction = useGetTotalCartAction();
+  const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
 
   const validateCartVisit = () => {
@@ -44,10 +42,6 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
       goToShoppingCart();
     }
   };
-
-  useEffect(() => {
-    totalCartAction.fetch(dispatchCart);
-  }, []);
 
   return (
     <View>
