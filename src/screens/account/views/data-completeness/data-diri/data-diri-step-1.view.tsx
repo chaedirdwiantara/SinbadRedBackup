@@ -4,7 +4,6 @@ import {
   SnbTopNav,
   SnbTextField,
   SnbButton,
-  SnbBottomSheet,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView } from 'react-native';
@@ -20,26 +19,6 @@ const DataDiriStep1View: React.FC = () => {
   const [storeName, setStoreName] = useState('');
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOPenModalBack] = useState(false);
-
-  const listOfSteps = () => {
-    return (
-      <View>
-        <SnbBottomSheet
-          open={openModalStep}
-          content={
-            <ListOfSteps
-              type="user"
-              closeModal={() => setOpenModalStep(false)}
-            />
-          }
-          closeAction={() => setOpenModalStep(false)}
-          isSwipeable
-          title="Konfirmasi Data Diri"
-          actionIcon="close"
-        />
-      </View>
-    );
-  };
 
   return (
     <SnbContainer color="white">
@@ -81,7 +60,11 @@ const DataDiriStep1View: React.FC = () => {
         closeModal={() => setOPenModalBack(false)}
         confirm={() => navigate(DATA_COMPLETENESS_VIEW)}
       />
-      {listOfSteps()}
+      <ListOfSteps
+        open={openModalStep}
+        type="user"
+        closeModal={() => setOpenModalStep(false)}
+      />
     </SnbContainer>
   );
 };
