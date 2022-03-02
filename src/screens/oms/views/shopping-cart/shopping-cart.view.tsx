@@ -24,6 +24,7 @@ import {
   useCartLocalData,
   useOmsGeneralFailedState,
   useGetTotalCartAction,
+  useCartBuyerAddressAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -64,6 +65,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const totalCartActions = useGetTotalCartAction();
+  const cartBuyerAddressAction = useCartBuyerAddressAction();
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -89,6 +91,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       /** did mount */
       errorModal.setRetryCount(3);
       getCartAction.fetch(dispatchCart);
+      cartBuyerAddressAction.fetch(dispatchCart);
     }
     /** will unmount */
     return () => {
@@ -103,33 +106,49 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
-    if (stateCart.get.data !== null) {
+    if (stateCart.get.data !== null && stateCart.buyerAddress.data !== null) {
       cartMasterAction.setCartMaster(stateCart.get.data);
       errorModal.setRetryCount(3);
       checkProductAction.fetch(dispatchCart);
       checkSellerAction.fetch(dispatchCart);
       checkStockAction.fetch(dispatchCart, false);
     }
-  }, [stateCart.get.data]);
+  }, [stateCart.get.data, stateCart.buyerAddress.data]);
 
-  /** => if get cart failed */
+  /** => if get cart or buyer address failed */
   useEffect(() => {
-    if (stateCart.get.error !== null) {
+    if (!stateCart.get.loading !== null && !stateCart.buyerAddress.loading) {
+      // check which endpoint fetch was fail
+      const isErrorGetCart = stateCart.get.error !== null;
+      const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
+      // determine retry action
       const action = () => {
         if (errorModal.retryCount > 0) {
-          getCartAction.fetch(dispatchCart);
+          if (isErrorGetCart) {
+            getCartAction.fetch(dispatchCart);
+          }
+          if (isErrorBuyerAddress) {
+            cartBuyerAddressAction.fetch(dispatchCart);
+          }
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
           goBack();
         }
       };
+      // determine the error data
+      let errorData = null;
+      if (isErrorGetCart) {
+        errorData = stateCart.get.error;
+      } else {
+        errorData = stateCart.buyerAddress.error;
+      }
       errorModal.setRetryAction(() => action);
       errorModal.setCloseAction(() => goBack);
-      errorModal.setErrorData(stateCart.get.error);
+      errorModal.setErrorData(errorData);
       errorModal.setOpen(true);
     }
-  }, [stateCart.get.error]);
+  }, [stateCart.get.error, stateCart.buyerAddress.error]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
