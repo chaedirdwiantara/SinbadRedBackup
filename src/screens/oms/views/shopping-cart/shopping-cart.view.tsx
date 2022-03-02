@@ -101,6 +101,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       getCartAction.reset(dispatchCart);
       removeCartProductAction.reset(dispatchCart);
       cartMasterAction.reset();
+      cartBuyerAddressAction.reset(dispatchCart);
     };
   }, [stateCart.cancelStock.data]);
 
