@@ -2,6 +2,8 @@
  * CART BUYER ADDRESS
  */
 export interface CartBuyerAddress {
+  buyerId: number;
+  buyerName: string;
   latitude: string;
   longitude: string;
   province: string;

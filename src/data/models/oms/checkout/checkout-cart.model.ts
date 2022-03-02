@@ -25,6 +25,7 @@ export interface CheckoutBuyerAddressPayload {
   locationId: string;
 }
 export interface CheckoutPayload {
+  buyerName: string;
   buyerAddress: CheckoutBuyerAddressPayload;
   carts: CheckoutCartPayload[];
 }
