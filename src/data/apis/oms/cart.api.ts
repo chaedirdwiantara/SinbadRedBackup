@@ -78,7 +78,7 @@ const removeCartProduct = ({
     'v1',
     'UPDATE',
     {
-      removeProducts: data.removedProducts,
+      removedProducts: data.removedProducts,
     },
   );
 };
