@@ -13,6 +13,10 @@ export const completeData = simplifyReducer(INITIAL_STATE, {
     return { ...INITIAL_STATE, loading: true };
   },
 
+  [types.REFETCH_COMPLETE_DATA_PROCESS]() {
+    return { ...INITIAL_STATE };
+  },
+
   [types.GET_COMPLETE_DATA_SUCCESS](
     state = INITIAL_STATE,
     action: models.IAction<any>,
