@@ -4,7 +4,6 @@ import {
   SnbTopNav,
   SnbButton,
   SnbUploadPhotoRules,
-  SnbText,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { View, Image } from 'react-native';
@@ -55,7 +54,6 @@ const DataDiriStep3View: React.FC = () => {
       <SnbUploadPhotoRules
         rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
         imgSrc={require('../../../../../assets/images/npwp_image.png')}
-        // title="Unggah Foto NPWP"
         buttonLabel="Ambil Foto"
         rules={[
           'Pastikan NPWP sesuai dengan identitas Anda',
@@ -64,6 +62,7 @@ const DataDiriStep3View: React.FC = () => {
           'Hindari Tangan Menutupi NPWP',
         ]}
         action={() => openCamera('npwp')}
+        listType={'number'}
       />
     );
   };
@@ -84,14 +83,8 @@ const DataDiriStep3View: React.FC = () => {
     // else {
     //   uri = merchantData.user?.taxImageUrl;
     // }
-
-    console.log('uri:', uri);
-
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ margin: 16, marginBottom: 0 }}>
-          <SnbText.B3>Unggah Foto NPWP</SnbText.B3>
-        </View>
         <Image
           resizeMode="contain"
           source={{ uri }}
@@ -132,7 +125,7 @@ const DataDiriStep3View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <View style={{ flex: 1 }}>
+      <View>
         <SnbTopNav.Type3
           backAction={() => setOPenModalBack(true)}
           type="white"
@@ -143,8 +136,8 @@ const DataDiriStep3View: React.FC = () => {
           total={7}
           onPress={() => setOpenModalStep(true)}
         />
-        {!isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       </View>
+      {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
         open={openModalBack}
         closeModal={() => setOPenModalBack(false)}

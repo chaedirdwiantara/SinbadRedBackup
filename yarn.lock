@@ -1540,16 +1540,22 @@
   resolved "https://registry.yarnpkg.com/@sideway/pinpoint/-/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
   integrity sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==
 
+"@sinbad/design-token@0.0.1":
+  version "0.0.1"
+  resolved "http://lib.sinbad.web.id/@sinbad%2fdesign-token/-/design-token-0.0.1.tgz#89d03af234c3642924aaceab98a5d0d3475052e0"
+  integrity sha512-dGMcHNrskd99IXnUZezVOmgyzmIgCOwhXChXGEwj3kNDl4s9BlYlj6rxPw1+2jTU068vbJClS+zLAsfSGGAsAw==
+
 "@sinbad/image-editor@2.3.1":
   version "2.3.1"
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.35":
-  version "1.0.35"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.35.tgz#f480260e50f9a71d376c2d03c44a133262e6971b"
-  integrity sha512-PtC8HupTPTB/TM7biSbzZ0osPuNrDUS1MjC0+x8mY34AVJAr6z91VbhOxU6zDf/VdS3n9Yl57ZDYsEhuqkxcDg==
+"@sinbad/react-native-sinbad-ui@1.0.37":
+  version "1.0.37"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.37.tgz#d1ac1be6ba0418287f09608433d0bab939465a85"
+  integrity sha512-3pIR93fwOkVHkKXHWi6webX7zi7xIJUqSvV/DEx4T7ziTVYle93oTv3ZLMfRF6e7YLdScwPZxgQO40fjU7lEdA==
   dependencies:
+    "@sinbad/design-token" "0.0.1"
     moment "2.29.1"
     react-native-calendars "1.1263.0"
     react-native-color-matrix-image-filters "5.2.10"
@@ -1559,6 +1565,7 @@
     react-native-size-matters "0.4.0"
     react-native-snap-carousel "3.9.1"
     react-native-vector-icons "8.1.0"
+    rn-range-slider "2.1.1"
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
@@ -7335,6 +7342,11 @@ rn-color-matrices@^4.1.0:
   integrity sha512-a8++z3Zi4GhA0oWwKS3etdrVuVQ2q/ByTMh6lMxo+vaSv3SRSSg5SzpZk65GS0NCAqMhFT8WSvgSgNhO/F+xag==
   dependencies:
     clamp "^1.0.1"
+
+rn-range-slider@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/rn-range-slider/-/rn-range-slider-2.1.1.tgz#c469138a3d51a4c79ab53b56d7ba5801e02372b4"
+  integrity sha512-tDfH8G4e/k+waGMMd+HaYTlpOqyh1dd3aWdDmqKo0WGh1BfHB+NXy0X2REyr1ZJDvsrq7WEeFZ+PBTdD6cisbw==
 
 rsvp@^4.8.4:
   version "4.8.5"
