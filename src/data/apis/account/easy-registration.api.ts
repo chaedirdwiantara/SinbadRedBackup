@@ -46,9 +46,15 @@ const getCompleteData = () => {
   );
 };
 
+const updateCompleteData = (data: models.IUpdateCompleteData) => {
+  const path = 'profile/complete-data-buyer';
+  return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
+};
+
 export const easyRegistrationApi = {
   createBasicAccount,
   getBuyerCategory,
   getProductCategory,
   getCompleteData,
+  updateCompleteData,
 };

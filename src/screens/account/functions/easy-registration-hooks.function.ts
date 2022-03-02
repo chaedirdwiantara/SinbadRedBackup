@@ -24,8 +24,13 @@ export const useEasyRegistration = () => {
     },
     [],
   );
+
   const resetSearchLocation = React.useCallback(() => {
     dispatch(Actions.resetSearchLocation());
+  }, []);
+
+  const resetUpdateCompleteData = React.useCallback(() => {
+    dispatch(Actions.resetUpdateCompleteData());
   }, []);
 
   const createBasicAccount = (
@@ -47,6 +52,10 @@ export const useEasyRegistration = () => {
     dispatch(Actions.getCompleteData());
   }, []);
 
+  const updateCompleteData = (data: models.IUpdateCompleteData) => {
+    dispatch(Actions.updateCompleteData(data));
+  };
+
   return {
     searchLocation,
     createBasicAccount,
@@ -55,10 +64,13 @@ export const useEasyRegistration = () => {
     loadMoreSearchLocation,
     resetSearchLocation,
     getCompleteData,
+    updateCompleteData,
+    resetUpdateCompleteData,
     searchLocationState: global.searchLocations,
     buyerCategories: account.buyerCategories,
     productCategories: account.productCategories,
     createBasicAccountState: account.createBasicAccount,
     completeDataState: account.completeData,
+    updateCompleteDataState: account.updateCompleteData,
   };
 };

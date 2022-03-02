@@ -37,3 +37,8 @@ export const RESET_COACHMARK = 'ResetCoachmark';
 export const GET_COMPLETE_DATA_PROCESS = 'GetCompleteDataProcess';
 export const GET_COMPLETE_DATA_SUCCESS = 'GetCompleteDataSuccess';
 export const GET_COMPLETE_DATA_FAILED = 'GetCompleteDataFailed';
+
+export const UPDATE_COMPLETE_DATA_PROCESS = 'UpdateCompleteDataProcess';
+export const UPDATE_COMPLETE_DATA_SUCCESS = 'UpdateCompleteDataSuccess';
+export const UPDATE_COMPLETE_DATA_FAILED = 'UpdateCompleteDataFailed';
+export const UPDATE_COMPLETE_DATA_RESET = 'UpdateCompleteDataReset';

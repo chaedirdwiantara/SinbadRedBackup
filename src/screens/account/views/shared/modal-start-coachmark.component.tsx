@@ -16,19 +16,21 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const { coachmarkState } = useCoachmark();
   const { getCoachmark, resetCoachmark } = useCoachmark();
-  const { me } = useDataAuth();
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
     resetCoachmark();
   }, []);
 
   React.useEffect(() => {
-    me.data && getCoachmark();
-  }, [me.data]);
+    meV2.data && getCoachmark();
+  }, [meV2.data]);
 
   React.useEffect(() => {
     if (typeof coachmarkState.data?.homeCoachmark === 'boolean') {
-      setOpen(!coachmarkState.data?.homeCoachmark);
+      setTimeout(() => {
+        setOpen(!coachmarkState.data?.homeCoachmark);
+      }, 1500);
     }
   }, [coachmarkState.data]);
 

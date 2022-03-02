@@ -3,81 +3,87 @@ import * as types from '@types';
 
 export const createBasicAccount = (
   data: models.ICreateBasicAccount,
-): models.IAction<models.ICreateBasicAccount> => {
-  return {
-    type: types.CREATE_BASIC_ACCOUNT_PROCESS,
-    payload: data,
-  };
-};
+): models.IAction<models.ICreateBasicAccount> => ({
+  type: types.CREATE_BASIC_ACCOUNT_PROCESS,
+  payload: data,
+});
 
-export const createBasicAccountSuccess = (data: any): any => {
-  return {
-    type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
-    payload: data,
-  };
-};
+export const createBasicAccountSuccess = (data: any) => ({
+  type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
+  payload: data,
+});
 
-export const createBasicAccountFailed = (data: any): any => {
-  return {
-    type: types.CREATE_BASIC_ACCOUNT_FAILED,
-    payload: data,
-  };
-};
+export const createBasicAccountFailed = (data: any) => ({
+  type: types.CREATE_BASIC_ACCOUNT_FAILED,
+  payload: data,
+});
 
-export const getBuyerCategory = () => {
-  return {
-    type: types.BUYER_CATEGORY_PROCESS,
-  };
-};
+export const getBuyerCategory = () => ({
+  type: types.BUYER_CATEGORY_PROCESS,
+});
 
 export const getBuyerCategorySuccess = (
   data: models.IBuyerCategoryData,
-): models.IAction<models.IBuyerCategoryData> => {
-  return {
-    type: types.BUYER_CATEGORY_SUCCESS,
-    payload: data,
-  };
-};
+): models.IAction<models.IBuyerCategoryData> => ({
+  type: types.BUYER_CATEGORY_SUCCESS,
+  payload: data,
+});
 
-export const getBuyerCategoryFailed = (data: any): any => {
-  return {
-    type: types.BUYER_CATEGORY_FAILED,
-    payload: data,
-  };
-};
+export const getBuyerCategoryFailed = (data: any) => ({
+  type: types.BUYER_CATEGORY_FAILED,
+  payload: data,
+});
 
-export const getProductCategory = () => {
-  return {
-    type: types.PRODUCT_CATEGORY_PROCESS,
-  };
-};
+export const getProductCategory = () => ({
+  type: types.PRODUCT_CATEGORY_PROCESS,
+});
 
 export const getProductCategorySuccess = (
   data: models.IProductCategoryData,
-): models.IAction<models.IProductCategoryData> => {
-  return {
-    type: types.PRODUCT_CATEGORY_SUCCESS,
-    payload: data,
-  };
-};
+): models.IAction<models.IProductCategoryData> => ({
+  type: types.PRODUCT_CATEGORY_SUCCESS,
+  payload: data,
+});
 
-export const getProductCategoryFailed = (data: any): any => {
-  return {
-    type: types.PRODUCT_CATEGORY_FAILED,
-    payload: data,
-  };
-};
+export const getProductCategoryFailed = (data: any) => ({
+  type: types.PRODUCT_CATEGORY_FAILED,
+  payload: data,
+});
 
-export const getCompleteData = (): models.IAction<any> => {
-  return { type: types.GET_COMPLETE_DATA_PROCESS };
-};
+export const getCompleteData = (): models.IAction<any> => ({
+  type: types.GET_COMPLETE_DATA_PROCESS,
+  payload: null,
+});
 
 export const getCompleteDataSuccess = (
   data: models.ICompleteData,
-): models.IAction<models.ICompleteData> => {
-  return { type: types.GET_COMPLETE_DATA_SUCCESS, payload: data };
-};
+): models.IAction<models.ICompleteData> => ({
+  type: types.GET_COMPLETE_DATA_SUCCESS,
+  payload: data,
+});
 
-export const getCompleteDataFailed = (data: any): models.IAction<any> => {
-  return { type: types.GET_COMPLETE_DATA_FAILED, payload: data };
-};
+export const getCompleteDataFailed = (data: any): models.IAction<any> => ({
+  type: types.GET_COMPLETE_DATA_FAILED,
+  payload: data,
+});
+
+export const updateCompleteData = (
+  data: models.IUpdateCompleteData,
+): models.IAction<models.IUpdateCompleteData> => ({
+  type: types.UPDATE_COMPLETE_DATA_PROCESS,
+  payload: data,
+});
+
+export const updateCompleteDataSuccess = (data: any) => ({
+  type: types.UPDATE_COMPLETE_DATA_SUCCESS,
+  payload: data,
+});
+
+export const updateCompleteDataFailed = (data: any) => ({
+  type: types.UPDATE_COMPLETE_DATA_FAILED,
+  payload: data,
+});
+
+export const resetUpdateCompleteData = () => ({
+  type: types.UPDATE_COMPLETE_DATA_RESET,
+});
