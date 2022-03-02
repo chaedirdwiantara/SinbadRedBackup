@@ -86,12 +86,11 @@ const removeCartProduct = ({
 const checkProduct = ({
   data,
 }: models.CreateProcessProps<models.CheckProductPayload>) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = 'check-products';
-  return apiMappingMockV3<models.CheckProductResponse[]>(
-    mockHost,
+  return apiMapping<models.CheckProductResponse[]>(
+    'auth',
     path,
-    'discount',
+    'product',
     'v1',
     'CREATE',
     data,
@@ -101,14 +100,13 @@ const checkProduct = ({
 const checkSeller = ({
   data,
 }: models.CreateProcessProps<models.CheckSellerPayload>) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const qs = serializeUniformKeyQs('sellerIds[]', data.sellerIds);
 
   const path = `check-sellers?${qs}`;
-  return apiMappingMockV3<models.CheckSellerResponse[]>(
-    mockHost,
+  return apiMapping<models.CheckSellerResponse[]>(
+    'auth',
     path,
-    'discount',
+    'account',
     'v1',
     'DETAIL',
   );
@@ -117,12 +115,11 @@ const checkSeller = ({
 const checkStock = ({
   data,
 }: models.CreateProcessProps<models.CheckStockPayload>) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'check-stocks';
-  return apiMappingMockV3<models.CheckStockResponse[]>(
-    mockHost,
+  const path = 'warehouse-products/check-stocks';
+  return apiMapping<models.CheckStockResponse[]>(
+    'auth',
     path,
-    'discount',
+    'warehouse',
     'v1',
     'CREATE',
     data,
@@ -145,9 +142,8 @@ const checkStockReserved = ({
 };
 
 const cancelStock = () => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'cancel-reserve-stock';
-  return apiMappingMockV3(mockHost, path, 'discount', 'v1', 'DELETE');
+  const path = 'warehouse-products/unreserve-stock';
+  return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
 };
 
 const cartBuyerAddress = () => {

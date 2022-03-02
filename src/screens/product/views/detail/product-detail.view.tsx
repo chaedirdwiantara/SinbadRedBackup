@@ -186,6 +186,7 @@ const ProductDetailView: FC = () => {
     }
 
     const params: models.AddToCartPayload = {
+      buyerName: me.data?.user.name ?? '',
       productId: dataProduct.id,
       productName: dataProduct.name,
       brandId: dataProduct.brandId,

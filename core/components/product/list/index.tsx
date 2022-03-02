@@ -234,6 +234,7 @@ const ProductList: FC<ProductListProps> = ({
     }
 
     const params: models.AddToCartPayload = {
+      buyerName: me.data?.user.name ?? '',
       productId: productDetailState.id,
       productName: productDetailState.name,
       brandId: productDetailState.brandId,
