@@ -8,14 +8,14 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const buyerCategories = simplifyReducer(INITIAL_STATE, {
-  [types.BUYER_CATEGORY_PROCESS]() {
+export const productCategories = simplifyReducer(INITIAL_STATE, {
+  [types.PRODUCT_CATEGORY_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.BUYER_CATEGORY_SUCCESS](
+  [types.PRODUCT_CATEGORY_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IBuyerCategoryData>,
+    action: models.IAction<models.IProductCategoryData>,
   ) {
     return {
       ...state,
@@ -24,9 +24,9 @@ export const buyerCategories = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.BUYER_CATEGORY_FAILED](
+  [types.PRODUCT_CATEGORY_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -35,7 +35,7 @@ export const buyerCategories = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.BUYER_CATEGORY_RESET]() {
+  [types.PRODUCT_CATEGORY_RESET]() {
     return INITIAL_STATE;
   },
 });

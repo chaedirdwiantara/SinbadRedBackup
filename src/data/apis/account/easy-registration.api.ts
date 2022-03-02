@@ -1,17 +1,6 @@
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
 
-const searchLocation = (data: models.ISearchLocation) => {
-  const path = `location?keyword=${data.keyword}&page=${data.page}&perPage=${data.perPage}`;
-  return apiMapping<models.ListSuccessProps<models.ISearchLocationsData>>(
-    'public',
-    path,
-    'location',
-    'v1',
-    'LIST',
-  );
-};
-
 const getBuyerCategory = () => {
   const path = 'buyer-category';
   return apiMapping<models.ListSuccessProps<models.IBuyerCategoryData>>(
@@ -36,12 +25,30 @@ const getProductCategory = () => {
 
 const createBasicAccount = (data: models.ICreateBasicAccount) => {
   const path = 'profile/complete-data';
-  return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
+  return apiMapping<models.ICreateBasicAccountData>(
+    'auth',
+    path,
+    'account',
+    'v2',
+    'UPDATE',
+    data,
+  );
+};
+
+const getCompleteData = () => {
+  const path = 'profile/complete-data';
+  return apiMapping<models.ICompleteData>(
+    'auth',
+    path,
+    'account',
+    'v2',
+    'DETAIL',
+  );
 };
 
 export const easyRegistrationApi = {
-  searchLocation,
   createBasicAccount,
   getBuyerCategory,
   getProductCategory,
+  getCompleteData,
 };

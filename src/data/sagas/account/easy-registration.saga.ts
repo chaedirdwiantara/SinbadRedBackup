@@ -1,15 +1,15 @@
 import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import * as types from '@types';
 import * as models from '@models';
-import { easyRegistrationApi } from '../apis/easy-registration.api';
 import * as ActionCreators from '@actions';
+import { easyRegistrationApi, searchLocationApi } from 'src/data/apis/account';
 
 function* searchLocation(
   action: models.IRegisterAction<models.ISearchLocation>,
 ) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
-      yield call(() => easyRegistrationApi.searchLocation(action.payload));
+      yield call(() => searchLocationApi.searchLocation(action.payload));
     yield put(ActionCreators.searchLocationSuccess(response));
   } catch (error: any) {
     yield put(ActionCreators.searchLocationFailed(error));
@@ -21,7 +21,7 @@ function* loadMoreSearchLocation(
 ) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
-      yield call(() => easyRegistrationApi.searchLocation(action.payload));
+      yield call(() => searchLocationApi.searchLocation(action.payload));
     yield put(ActionCreators.loadMoreSearchLocationSuccess(response));
   } catch (error: any) {
     yield put(ActionCreators.loadMoreSearchLocationFailed(error));
@@ -63,6 +63,17 @@ function* getProductCategory() {
   }
 }
 
+function* getCompleteData() {
+  try {
+    const response: models.ICompleteData = yield call(() =>
+      easyRegistrationApi.getCompleteData(),
+    );
+    yield put(ActionCreators.getCompleteDataSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.getCompleteDataFailed(error));
+  }
+}
+
 function* EasyRegistrationSaga() {
   yield debounce(250, types.SEARCH_LOCATION_PROCESS, searchLocation);
   yield debounce(
@@ -73,6 +84,7 @@ function* EasyRegistrationSaga() {
   yield takeLatest(types.CREATE_BASIC_ACCOUNT_PROCESS, createBasicAccount);
   yield takeLatest(types.BUYER_CATEGORY_PROCESS, getBuyerCategory);
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
+  yield takeLatest(types.GET_COMPLETE_DATA_PROCESS, getCompleteData);
 }
 
 export default EasyRegistrationSaga;

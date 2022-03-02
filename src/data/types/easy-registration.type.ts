@@ -23,3 +23,17 @@ export const PRODUCT_CATEGORY_PROCESS = 'ProductCategoryProcess';
 export const PRODUCT_CATEGORY_SUCCESS = 'ProductCategorySuccess';
 export const PRODUCT_CATEGORY_FAILED = 'ProductCategoryFailed';
 export const PRODUCT_CATEGORY_RESET = 'ProductCategoryReset';
+
+export const GET_COACHMARK_PROCESS = 'GetCoachmarkProcess';
+export const GET_COACHMARK_SUCCESS = 'GetCoachmarkSuccess';
+export const GET_COACHMARK_FAILED = 'GetCoachmarkFailed';
+
+export const UPDATE_COACHMARK_PROCESS = 'UpdateCoachmarkProcess';
+export const UPDATE_COACHMARK_SUCCESS = 'UpdateCoachmarkSuccess';
+export const UPDATE_COACHMARK_FAILED = 'UpdateCoachmarkFailed';
+
+export const RESET_COACHMARK = 'ResetCoachmark';
+
+export const GET_COMPLETE_DATA_PROCESS = 'GetCompleteDataProcess';
+export const GET_COMPLETE_DATA_SUCCESS = 'GetCompleteDataSuccess';
+export const GET_COMPLETE_DATA_FAILED = 'GetCompleteDataFailed';

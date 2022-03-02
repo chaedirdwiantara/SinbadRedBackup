@@ -183,3 +183,60 @@ export interface ISearchLocation {
   page: number;
   perPage: number;
 }
+
+interface IUserCompleteStatus {
+  isFullName: boolean;
+  isIdImageUrl: boolean;
+  isTaxImageUrl: boolean;
+  isSelfieImageUrl: boolean;
+  isValidIdNumber: boolean;
+  isEmail: boolean;
+}
+
+interface IBuyerCompleteStatus {
+  isBuyerInformation: boolean;
+  isImageUrl: boolean;
+  isAddress: boolean;
+}
+
+interface IUserCompleteData {
+  fullName: string;
+  idImageUrl: string;
+  taxImageUrl: string;
+  selfieImageUrl: string;
+  idNo: string;
+  taxNo: string;
+  email: string;
+}
+
+interface IVehicleAccessibility {
+  id: null;
+  name: null;
+}
+interface IBuyerCompleteData {
+  buyerCode: string;
+  buyerName: string;
+  buyerPhoneNo: string;
+  imageUrl: string;
+  address: string;
+  noteAddress: string;
+  vehicleAccessibility: IVehicleAccessibility;
+  vehicleAccessibilityAmount: number;
+  latitude: number;
+  longitude: number;
+}
+
+interface IProgress {
+  completed: number;
+  total: number;
+}
+export interface ICompleteData {
+  user: IUserCompleteStatus;
+  buyer: IBuyerCompleteStatus;
+  userData: IUserCompleteData;
+  buyerData: IBuyerCompleteData;
+  accountType: string;
+  isDataCompleted: boolean;
+  buyerProgress: IProgress;
+  userProgress: IProgress;
+}

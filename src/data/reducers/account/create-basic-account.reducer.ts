@@ -3,19 +3,19 @@ import * as types from '@types';
 import * as models from '@models';
 
 const INITIAL_STATE = {
-  data: [],
+  data: null,
   loading: false,
   error: null,
 };
 
-export const productCategories = simplifyReducer(INITIAL_STATE, {
-  [types.PRODUCT_CATEGORY_PROCESS]() {
+export const createBasicAccount = simplifyReducer(INITIAL_STATE, {
+  [types.CREATE_BASIC_ACCOUNT_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.PRODUCT_CATEGORY_SUCCESS](
+  [types.CREATE_BASIC_ACCOUNT_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IProductCategoryData>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -24,9 +24,9 @@ export const productCategories = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.PRODUCT_CATEGORY_FAILED](
+  [types.CREATE_BASIC_ACCOUNT_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
@@ -35,7 +35,7 @@ export const productCategories = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.PRODUCT_CATEGORY_RESET]() {
+  [types.CREATE_BASIC_ACCOUNT_RESET]() {
     return INITIAL_STATE;
   },
 });

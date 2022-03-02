@@ -8,14 +8,14 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const createBasicAccount = simplifyReducer(INITIAL_STATE, {
-  [types.CREATE_BASIC_ACCOUNT_PROCESS]() {
+export const completeData = simplifyReducer(INITIAL_STATE, {
+  [types.GET_COMPLETE_DATA_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.CREATE_BASIC_ACCOUNT_SUCCESS](
+  [types.GET_COMPLETE_DATA_SUCCESS](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<models.ICompleteData>,
   ) {
     return {
       ...state,
@@ -24,18 +24,14 @@ export const createBasicAccount = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.CREATE_BASIC_ACCOUNT_FAILED](
+  [types.GET_COMPLETE_DATA_FAILED](
     state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
+    action: models.IAction<any>,
   ) {
     return {
       ...state,
       loading: false,
       error: action.payload,
     };
-  },
-
-  [types.CREATE_BASIC_ACCOUNT_RESET]() {
-    return INITIAL_STATE;
   },
 });

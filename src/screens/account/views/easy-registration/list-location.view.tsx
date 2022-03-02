@@ -13,8 +13,8 @@ import { renderIF, useInput } from '@screen/auth/functions';
 import * as models from '@models';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { ErrorContent } from '../shared';
-import { useEasyRegistration } from '@screen/account/functions/easy-registration-hooks';
 import { BUYER_CATEGORY_VIEW } from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const Content: React.FC = () => {
   const search = useInput('', 'string-only');
