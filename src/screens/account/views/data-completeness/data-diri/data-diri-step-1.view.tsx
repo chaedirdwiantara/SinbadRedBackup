@@ -24,8 +24,6 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOPenModalBack] = useState(false);
 
-  console.log('data:', completeDataState?.data?.data?.buyer);
-
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
