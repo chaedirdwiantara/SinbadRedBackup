@@ -20,6 +20,7 @@ import {
   DATA_TOKO_STEP_2_VIEW,
   DATA_TOKO_STEP_3_VIEW,
 } from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 interface ListOfStepsProps {
   type: 'user' | 'buyer';
@@ -28,45 +29,46 @@ interface ListOfStepsProps {
 }
 
 const ListOfSteps: FC<ListOfStepsProps> = (props) => {
+  const { completeDataState } = useEasyRegistration();
   const { navigate } = useNavigation();
   const dataUser = [
     {
       title: 'Nama Lengkap',
-      value: true,
+      value: completeDataState?.data?.data?.user?.isFullName || false,
     },
     {
       title: 'Foto KTP',
-      value: true,
+      value: completeDataState?.data?.data?.user?.isIdImageUrl || false,
     },
     {
       title: 'Foto NPWP',
-      value: false,
+      value: completeDataState?.data?.data?.user?.isTaxImageUrl || false,
     },
     {
       title: 'Foto Selfie dengan KTP',
-      value: false,
+      value: completeDataState?.data?.data?.user?.isSelfieImageUrl || false,
     },
     {
       title: 'Konfirmasi Kartu Identitas',
-      value: false,
+      value: completeDataState?.data?.data?.user?.isValidIdNumber || false,
     },
     {
       title: 'Email',
-      value: false,
+      value: completeDataState?.data?.data?.user?.isEmail || false,
     },
   ];
   const dataBuyer = [
     {
       title: 'Informasi Toko',
-      value: false,
+      value: completeDataState?.data?.data?.buyer?.isBuyerInformation || false,
     },
     {
       title: 'Foto Toko',
-      value: false,
+      value: completeDataState?.data?.data?.buyer?.isImageUrl || false,
     },
     {
       title: 'Alamat Toko',
-      value: false,
+      value: completeDataState?.data?.data?.buyer?.isAddress || false,
     },
   ];
 

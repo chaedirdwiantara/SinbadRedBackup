@@ -49,6 +49,13 @@ const DataDiriStep3View: React.FC = () => {
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
+  React.useEffect(() => {
+    if (stateGlobal.uploadImage.data) {
+      navigate(DATA_DIRI_STEP_4_VIEW);
+      save(dispatchGlobal, '');
+    }
+  }, [stateGlobal.uploadImage.data]);
+
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
@@ -69,16 +76,9 @@ const DataDiriStep3View: React.FC = () => {
 
   const renderImagePreview = () => {
     const isImageCaptured = capturedImage?.data?.type === 'npwp';
-    let action = () => {
-      navigate(DATA_DIRI_STEP_4_VIEW);
-    };
-
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
-      action = () => {
-        upload(dispatchGlobal, capturedImage.data.url);
-      };
     }
     // else {
     //   uri = merchantData.user?.taxImageUrl;
@@ -111,7 +111,7 @@ const DataDiriStep3View: React.FC = () => {
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
-              onPress={action}
+              onPress={() => upload(dispatchGlobal, capturedImage.data.url)}
             />
           </View>
         </View>

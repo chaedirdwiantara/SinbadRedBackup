@@ -13,12 +13,18 @@ import {
   DATA_DIRI_STEP_2_VIEW,
   DATA_COMPLETENESS_VIEW,
 } from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep1View: React.FC = () => {
   const { navigate } = useNavigation();
-  const [storeName, setStoreName] = useState('');
+  const { completeDataState } = useEasyRegistration();
+  const [name, setName] = useState(
+    completeDataState?.data?.data?.userData?.fullName,
+  );
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOPenModalBack] = useState(false);
+
+  console.log('data:', completeDataState?.data?.data?.buyer);
 
   return (
     <SnbContainer color="white">
@@ -39,8 +45,8 @@ const DataDiriStep1View: React.FC = () => {
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
             type={'default'}
-            value={storeName}
-            onChangeText={(text) => setStoreName(text)}
+            value={name}
+            onChangeText={(text) => setName(text)}
             placeholder={'Masukkan Nama Lengkap'}
             labelText={'Nama Lengkap'}
             mandatory
@@ -51,7 +57,7 @@ const DataDiriStep1View: React.FC = () => {
         <SnbButton.Single
           title="Lanjut"
           type="primary"
-          disabled={storeName ? false : true}
+          disabled={name ? false : true}
           onPress={() => navigate(DATA_DIRI_STEP_2_VIEW)}
         />
       </View>
