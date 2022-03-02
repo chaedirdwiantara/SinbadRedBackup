@@ -76,7 +76,7 @@ const apiGeneral = async <T>(
   const throwError = (response: any) => {
     throw {
       message: response.statusText,
-      errorMessage: response.statusText,
+      data: response.statusText,
       type: response.type,
       code: response.status,
     };
@@ -97,7 +97,7 @@ const apiGeneral = async <T>(
     });
     throw {
       message: error.message,
-      errorMessage: error.errorMessage ? error.errorMessage : error.message,
+      data: error.data ? error.data : error.data,
       type: error.type ? error.type : error.error,
       code: error.code ? error.code : error.statusCode,
     };
