@@ -24,6 +24,7 @@ import StockSaga from './product/stock.saga';
 import CheckoutDoneSaga from './oms/checkout-done/checkout-done.saga';
 import QuestSaga from './quest.saga';
 import EasyRegistrationSaga from './account/easy-registration.saga';
+import CoachmarkSaga from './account/coachmark.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -50,6 +51,7 @@ function* rootSaga() {
   yield all([fork(QuestSaga)]);
   yield all([fork(CheckoutDoneSaga)]);
   yield all([fork(EasyRegistrationSaga)]);
+  yield all([fork(CoachmarkSaga)]);
 }
 
 export default rootSaga;

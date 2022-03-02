@@ -21,7 +21,6 @@ import PushNotification from '@core/components/PushNotification';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import HomeStyles from '../styles/home.style';
 const CopilotView = walkthroughable(View);
-import { useCoachmark } from '@screen/account/functions/coachmark-hooks';
 import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
   copilotOptions,
@@ -46,11 +45,6 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   const changeHeader = (height: number) => {
     height > 100 ? actionHeaderChange(true) : actionHeaderChange(false);
   };
-  const { getCoachmark } = useCoachmark();
-
-  React.useEffect(() => {
-    getCoachmark();
-  }, []);
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -175,7 +169,7 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   );
 };
 
-export default copilot(copilotOptions(4))(HomeView);
+export default copilot(copilotOptions(4, 'homeCoachmark'))(HomeView);
 
 /**
  * ================================================================

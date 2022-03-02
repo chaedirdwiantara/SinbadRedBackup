@@ -43,16 +43,22 @@ export const useEasyRegistration = () => {
     dispatch(Actions.createBasicAccount(data));
   };
 
+  const getCompleteData = React.useCallback(() => {
+    dispatch(Actions.getCompleteData());
+  }, []);
+
   return {
     searchLocation,
-    searchLocationState: global.searchLocations,
-    buyerCategories: account.buyerCategories,
-    productCategories: account.productCategories,
-    createBasicAccountState: account.createBasicAccount,
     createBasicAccount,
     getBuyerCategory,
     getProductCategory,
     loadMoreSearchLocation,
     resetSearchLocation,
+    getCompleteData,
+    searchLocationState: global.searchLocations,
+    buyerCategories: account.buyerCategories,
+    productCategories: account.productCategories,
+    createBasicAccountState: account.createBasicAccount,
+    completeDataState: account.completeData,
   };
 };

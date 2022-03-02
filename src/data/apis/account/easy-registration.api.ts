@@ -25,11 +25,30 @@ const getProductCategory = () => {
 
 const createBasicAccount = (data: models.ICreateBasicAccount) => {
   const path = 'profile/complete-data';
-  return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
+  return apiMapping<models.ICreateBasicAccountData>(
+    'auth',
+    path,
+    'account',
+    'v2',
+    'UPDATE',
+    data,
+  );
+};
+
+const getCompleteData = () => {
+  const path = 'profile/complete-data';
+  return apiMapping<models.ICompleteData>(
+    'auth',
+    path,
+    'account',
+    'v2',
+    'DETAIL',
+  );
 };
 
 export const easyRegistrationApi = {
   createBasicAccount,
   getBuyerCategory,
   getProductCategory,
+  getCompleteData,
 };
