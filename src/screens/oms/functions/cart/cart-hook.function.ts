@@ -516,15 +516,19 @@ const useCartLocalData = () => {
 /** => oms general failed state */
 const useOmsGeneralFailedState = () => {
   const [isOpen, setOpen] = useState(false);
-  const [errorAction, setErrorAction] = useState<Function>(() => {});
+  const [retryAction, setRetryAction] = useState<Function>(() => {});
+  const [closeAction, setCloseAction] = useState<Function>(() => {});
   const [errorData, setErrorData] = useState<models.ErrorProps | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   return {
     setOpen: (value: boolean) => {
       setOpen(value);
     },
-    setErrorAction: (value: () => void) => {
-      setErrorAction(value);
+    setRetryAction: (value: () => void) => {
+      setRetryAction(value);
+    },
+    setCloseAction: (value: () => void) => {
+      setCloseAction(value);
     },
     setErrorData: (value: models.ErrorProps | null) => {
       setErrorData(value);
@@ -533,7 +537,8 @@ const useOmsGeneralFailedState = () => {
       setRetryCount(value);
     },
     isOpen,
-    errorAction,
+    retryAction,
+    closeAction,
     errorData,
     retryCount,
   };
