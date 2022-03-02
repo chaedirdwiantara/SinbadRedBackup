@@ -55,6 +55,11 @@ export const getCompleteData = (): models.IAction<any> => ({
   payload: null,
 });
 
+export const refetchCompleteData = (): models.IAction<any> => ({
+  type: types.REFETCH_COMPLETE_DATA_PROCESS,
+  payload: null,
+});
+
 export const getCompleteDataSuccess = (
   data: models.ICompleteData,
 ): models.IAction<models.ICompleteData> => ({

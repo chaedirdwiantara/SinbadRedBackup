@@ -97,6 +97,7 @@ function* EasyRegistrationSaga() {
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
   yield takeLatest(types.GET_COMPLETE_DATA_PROCESS, getCompleteData);
   yield takeLatest(types.UPDATE_COMPLETE_DATA_PROCESS, updateCompleteData);
+  yield takeLatest(types.REFETCH_COMPLETE_DATA_PROCESS, getCompleteData);
 }
 
 export default EasyRegistrationSaga;
