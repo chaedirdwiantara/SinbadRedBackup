@@ -10,7 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { Stepper } from '../../shared';
+import { ListOfSteps, Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
 import { DATA_TOKO_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -142,11 +142,18 @@ const Content: React.FC = () => {
 };
 
 const DataTokoStep2View: React.FC = () => {
+  const [openModalStep, setOpenModalStep] = React.useState(false);
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto Toko" />
-      <Stepper complete={2} total={3} onPress={() => {}} />
+      <Stepper complete={2} total={3} onPress={() => setOpenModalStep(true)} />
       <Content />
+      <ListOfSteps
+        open={openModalStep}
+        type="buyer"
+        closeModal={() => setOpenModalStep(false)}
+      />
     </SnbContainer>
   );
 };
