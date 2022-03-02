@@ -32,7 +32,7 @@ import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 /** === DUMMIES === */
 /** === COMPONENT === */
-const OmsShoppingCartView: FC = () => {
+const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => STATE */
   const {
     localCartMaster,
@@ -242,8 +242,10 @@ const OmsShoppingCartView: FC = () => {
   /** => CONTENT */
   const renderContent = () => {
     if (localCartMaster && localCartMaster.id !== '') {
+      console.log(isAnyActiveProduct());
       const isCartEmpty =
-        stateCart.get.data?.sellers.length === 0 ||
+        !isAnyActiveProduct() ||
+        localCartMaster.unavailable.length === 0 ||
         stateCart.get.error?.code === 40010000009;
       if (!isCartEmpty) {
         return (
@@ -271,7 +273,7 @@ const OmsShoppingCartView: FC = () => {
           </React.Fragment>
         );
       } else {
-        return <ShoppingCartEmpty />;
+        return <ShoppingCartEmpty navigationParent={navigation} />;
       }
     }
   };

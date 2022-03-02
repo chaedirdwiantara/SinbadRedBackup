@@ -6,8 +6,13 @@ import { SnbText, SnbButton } from 'react-native-sinbad-ui';
 import { RecommendationHomeView } from '@screen/recommendation/views';
 /** === IMPORT EXTERNAL FUNCTION HERE ===  */
 import { goToCategory } from '../../functions';
+interface ShoppingCartEmptyProps {
+  navigationParent: any;
+}
 /** === COMPONENT ===  */
-export const ShoppingCartEmpty: FC = ({}) => (
+export const ShoppingCartEmpty: FC<ShoppingCartEmptyProps> = ({
+  navigationParent,
+}) => (
   <ScrollView>
     <View
       style={{
@@ -36,7 +41,7 @@ export const ShoppingCartEmpty: FC = ({}) => (
       />
     </View>
     <View>
-      <RecommendationHomeView />
+      <RecommendationHomeView navigationParent={navigationParent} />
     </View>
   </ScrollView>
 );
