@@ -123,13 +123,23 @@ const useCartMasterAction = () => {
 };
 /** => check product action */
 const useCheckProductAction = () => {
+  const cartMaster: models.CartMaster = useDataCartMaster();
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckProductPayload,
-    ) => {
-      dispatch(Actions.checkProductProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      // format payload from redux master
+      const data: models.CheckProductPayloadCarts[] = [];
+      cartMaster.sellers.map((sellerItem) => {
+        sellerItem.products.map((productItem) => {
+          data.push({
+            productId: productItem.productId,
+            warehouseId: productItem.warehouseId,
+          });
+        });
+      });
+      dispatch(
+        Actions.checkProductProcess(contextDispatch, { data: { carts: data } }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkProductReset(contextDispatch));
@@ -153,13 +163,22 @@ const usePostCheckProductAction = () => {
 };
 /** => check seller action */
 const useCheckSellerAction = () => {
+  const cartMaster: models.CartMaster = useDataCartMaster();
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckSellerPayload,
-    ) => {
-      dispatch(Actions.checkSellerProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      // format payload from redux master
+      const data: number[] = [];
+      cartMaster.sellers.map((sellerItem) => {
+        data.push(sellerItem.sellerId);
+      });
+      dispatch(
+        Actions.checkSellerProcess(contextDispatch, {
+          data: {
+            sellerIds: data,
+          },
+        }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkSellerReset(contextDispatch));
@@ -183,13 +202,30 @@ const usePostCheckSellerAction = () => {
 };
 /** => check stock action */
 const useCheckStockAction = () => {
+  const cartMaster: models.CartMaster = useDataCartMaster();
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckStockPayload,
-    ) => {
-      dispatch(Actions.checkStockProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any, isReserved: boolean) => {
+      // format payload from redux master
+      const data: models.CheckStockPayloadCarts[] = [];
+      cartMaster.sellers.map((sellerItem) => {
+        sellerItem.products.map((productItem) => {
+          data.push({
+            productId: productItem.productId,
+            warehouseId: productItem.warehouseId,
+            qty: productItem.qty,
+          });
+        });
+      });
+      dispatch(
+        Actions.checkStockProcess(contextDispatch, {
+          data: {
+            cartId: cartMaster.id,
+            reserved: isReserved,
+            carts: data,
+          },
+        }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.checkStockReset(contextDispatch));
@@ -477,6 +513,31 @@ const useCartLocalData = () => {
     localCartMaster,
   };
 };
+/** => oms general failed state */
+const useOmsGeneralFailedState = () => {
+  const [isOpen, setOpen] = useState(false);
+  const [errorAction, setErrorAction] = useState<Function>(() => {});
+  const [errorData, setErrorData] = useState<models.ErrorProps | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  return {
+    setOpen: (value: boolean) => {
+      setOpen(value);
+    },
+    setErrorAction: (value: () => void) => {
+      setErrorAction(value);
+    },
+    setErrorData: (value: models.ErrorProps | null) => {
+      setErrorData(value);
+    },
+    setRetryCount: (value: number) => {
+      setRetryCount(value);
+    },
+    isOpen,
+    errorAction,
+    errorData,
+    retryCount,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -495,6 +556,7 @@ export {
   useCancelStockAction,
   useCartBuyerAddressAction,
   useCartLocalData,
+  useOmsGeneralFailedState,
 };
 /**
  * ================================================================
