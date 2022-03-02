@@ -13,6 +13,7 @@ import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
 import { DATA_TOKO_STEP_3_VIEW } from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -21,27 +22,44 @@ const Content: React.FC = () => {
   );
   const { upload, save } = useUploadImageAction();
   const { navigate } = useNavigation();
+  const {
+    updateCompleteData,
+    updateCompleteDataState,
+    completeDataState,
+    resetUpdateCompleteData,
+  } = useEasyRegistration();
+  const { imageUrl } = completeDataState.data?.buyerData || {};
 
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
+      resetUpdateCompleteData();
     };
   }, []);
 
   React.useEffect(() => {
     if (
-      stateGlobal.uploadImage.data !== null &&
+      Boolean(stateGlobal.uploadImage.data) &&
       capturedImage.data?.type === 'store'
     ) {
-      navigate(DATA_TOKO_STEP_3_VIEW);
-      resetCamera();
+      updateCompleteData({
+        buyer: { imageUrl: stateGlobal.uploadImage.data?.url },
+      });
     }
 
     if (stateGlobal.uploadImage.error !== null) {
       SnbToast.show('Foto Gagal Diupload', 2500, { positionValue: 40 });
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
+
+  React.useEffect(() => {
+    if (updateCompleteDataState.data !== null) {
+      navigate(DATA_TOKO_STEP_3_VIEW);
+      resetCamera();
+      resetUpdateCompleteData();
+    }
+  }, [updateCompleteDataState]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -68,35 +86,49 @@ const Content: React.FC = () => {
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <Image
           resizeMode="contain"
-          source={{ uri: capturedImage?.data?.url }}
+          source={{ uri: capturedImage?.data?.url || imageUrl }}
           borderRadius={4}
           style={{
             height: undefined,
             width: undefined,
             flex: 0.75,
             margin: 16,
-            backgroundColor: 'red',
           }}
         />
         <View style={{ height: 72 }}>
-          <SnbButton.Multiple
-            leftType={'secondary'}
-            rightType={'primary'}
-            leftTitle={'Ulangi'}
-            rightTitle={'Lanjutkan'}
-            onPressLeft={() => openCamera('store')}
-            onPressRight={() => upload(dispatchGlobal, capturedImage.data.url)}
-            rightDisabled={false}
-            leftDisabled={false}
-            rightLoading={false}
-            leftLoading={false}
-          />
+          {renderIF(
+            capturedImage?.data?.url,
+            <SnbButton.Multiple
+              leftType={'secondary'}
+              rightType={'primary'}
+              leftTitle={'Ulangi'}
+              rightTitle={'Lanjutkan'}
+              onPressLeft={() => openCamera('store')}
+              onPressRight={() =>
+                upload(dispatchGlobal, capturedImage.data.url)
+              }
+              rightDisabled={stateGlobal.uploadImage.loading}
+              leftDisabled={stateGlobal.uploadImage.loading}
+              rightLoading={stateGlobal.uploadImage.loading}
+            />,
+            <SnbButton.Multiple
+              leftType={'secondary'}
+              rightType={'primary'}
+              leftTitle={'Ubah Foto'}
+              rightTitle={'Lewati'}
+              onPressLeft={() => openCamera('store')}
+              onPressRight={() => navigate(DATA_TOKO_STEP_3_VIEW)}
+              rightDisabled={false}
+              leftDisabled={false}
+            />,
+          )}
         </View>
       </View>
     );
   };
 
-  const isImageAvailable = capturedImage.data?.type === 'store';
+  const isImageAvailable =
+    Boolean(imageUrl) || capturedImage.data?.type === 'store';
 
   return (
     <View style={{ flex: 1 }}>

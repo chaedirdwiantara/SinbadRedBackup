@@ -4,9 +4,7 @@ import * as models from '@models';
 import * as ActionCreators from '@actions';
 import { easyRegistrationApi, searchLocationApi } from 'src/data/apis/account';
 
-function* searchLocation(
-  action: models.IRegisterAction<models.ISearchLocation>,
-) {
+function* searchLocation(action: models.IAction<models.ISearchLocation>) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
       yield call(() => searchLocationApi.searchLocation(action.payload));
@@ -17,7 +15,7 @@ function* searchLocation(
 }
 
 function* loadMoreSearchLocation(
-  action: models.IRegisterAction<models.ISearchLocation>,
+  action: models.IAction<models.ISearchLocation>,
 ) {
   try {
     const response: models.ListSuccessProps<models.ISearchLocationsData> =
@@ -29,7 +27,7 @@ function* loadMoreSearchLocation(
 }
 
 function* createBasicAccount(
-  action: models.IRegisterAction<models.ICreateBasicAccount>,
+  action: models.IAction<models.ICreateBasicAccount>,
 ) {
   try {
     const response: models.ICreateBasicAccountData = yield call(() =>
@@ -74,6 +72,19 @@ function* getCompleteData() {
   }
 }
 
+function* updateCompleteData(
+  action: models.IAction<models.IUpdateCompleteData>,
+) {
+  try {
+    const response: models.ICreateBasicAccountData = yield call(() =>
+      easyRegistrationApi.updateCompleteData(action.payload),
+    );
+    yield put(ActionCreators.updateCompleteDataSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.updateCompleteDataFailed(error));
+  }
+}
+
 function* EasyRegistrationSaga() {
   yield debounce(250, types.SEARCH_LOCATION_PROCESS, searchLocation);
   yield debounce(
@@ -85,6 +96,7 @@ function* EasyRegistrationSaga() {
   yield takeLatest(types.BUYER_CATEGORY_PROCESS, getBuyerCategory);
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
   yield takeLatest(types.GET_COMPLETE_DATA_PROCESS, getCompleteData);
+  yield takeLatest(types.UPDATE_COMPLETE_DATA_PROCESS, updateCompleteData);
 }
 
 export default EasyRegistrationSaga;
