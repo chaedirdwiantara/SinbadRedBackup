@@ -3,6 +3,7 @@ import {
   SnbText,
   color as colors,
   SnbCardButtonType1,
+  SnbBottomSheet,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
@@ -22,7 +23,8 @@ import {
 
 interface ListOfStepsProps {
   type: 'user' | 'buyer';
-  closeModal: any;
+  closeModal: () => void;
+  open: boolean;
 }
 
 const ListOfSteps: FC<ListOfStepsProps> = (props) => {
@@ -34,7 +36,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     },
     {
       title: 'Foto KTP',
-      value: false,
+      value: true,
     },
     {
       title: 'Foto NPWP',
@@ -155,17 +157,34 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
       );
     });
   };
-  return (
-    <ScrollView>
-      <View style={{ marginVertical: 16 }}>
-        <View style={{ alignItems: 'center' }}>
-          <SnbText.B3 color={colors.black60}>
-            Pastikan data yang anda masukkan sudah benar
-          </SnbText.B3>
+  const renderContent = () => {
+    return (
+      <ScrollView>
+        <View style={{ marginVertical: 16 }}>
+          <View style={{ alignItems: 'center' }}>
+            <SnbText.B3 color={colors.black60}>
+              Pastikan data yang anda masukkan sudah benar
+            </SnbText.B3>
+          </View>
         </View>
-      </View>
-      {props.type === 'user' ? renderContentUser() : renderContentBuyer()}
-    </ScrollView>
+        {props.type === 'user' ? renderContentUser() : renderContentBuyer()}
+      </ScrollView>
+    );
+  };
+  return (
+    <View>
+      <SnbBottomSheet
+        title={
+          props.type === 'user'
+            ? 'Konfirmasi Data Diri'
+            : 'Konfirmasi Data Toko'
+        }
+        open={props.open}
+        content={renderContent()}
+        closeAction={props.closeModal}
+        actionIcon="close"
+      />
+    </View>
   );
 };
 

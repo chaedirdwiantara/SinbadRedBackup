@@ -1,3 +1,4 @@
 import { useCoachmark } from './coachmark-hooks';
 import { useEasyRegistration } from './easy-registration-hooks';
-export { useCoachmark, useEasyRegistration };
+import { useCamera } from './camera-hooks.functions';
+export { useCoachmark, useEasyRegistration, useCamera };
