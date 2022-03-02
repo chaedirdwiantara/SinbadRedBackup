@@ -29,7 +29,8 @@ import {
   LIST_LOCATION_VIEW,
   PRODUCT_CATEGORY_VIEW,
 } from '@screen/account/functions/screens_name';
-import { useEasyRegistration } from '@screen/account/functions';
+import { useCoachmark, useEasyRegistration } from '@screen/account/functions';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const setIcon = (slug: string) => {
   switch (slug) {
@@ -100,6 +101,8 @@ const BuyerCategory: React.FC = () => {
   const [location] = React.useState<models.ISearchLocationsData | null>(
     params?.selectedLocation,
   );
+  const { getCoachmark } = useCoachmark();
+  const { meV2 } = useAuthCoreAction();
 
   React.useEffect(() => {
     getBuyerCategory();
@@ -108,6 +111,8 @@ const BuyerCategory: React.FC = () => {
   React.useEffect(() => {
     if (createBasicAccountState.data) {
       if (actionFrom === 'mulai') {
+        meV2();
+        getCoachmark();
         reset({ index: 0, routes: [{ name: 'Home' }] });
       } else if (actionFrom === 'lengkapi') {
         navigate(DATA_COMPLETENESS_INTRO_VIEW);

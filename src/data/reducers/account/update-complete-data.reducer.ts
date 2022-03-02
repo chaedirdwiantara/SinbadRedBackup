@@ -8,12 +8,12 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const completeData = simplifyReducer(INITIAL_STATE, {
-  [types.GET_COMPLETE_DATA_PROCESS]() {
+export const updateCompleteData = simplifyReducer(INITIAL_STATE, {
+  [types.UPDATE_COACHMARK_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.GET_COMPLETE_DATA_SUCCESS](
+  [types.UPDATE_COMPLETE_DATA_SUCCESS](
     state = INITIAL_STATE,
     action: models.IAction<any>,
   ) {
@@ -24,7 +24,7 @@ export const completeData = simplifyReducer(INITIAL_STATE, {
     };
   },
 
-  [types.GET_COMPLETE_DATA_FAILED](
+  [types.UPDATE_COMPLETE_DATA_FAILED](
     state = INITIAL_STATE,
     action: models.IAction<any>,
   ) {
@@ -33,5 +33,8 @@ export const completeData = simplifyReducer(INITIAL_STATE, {
       loading: false,
       error: action.payload,
     };
+  },
+  [types.UPDATE_COMPLETE_DATA_RESET]() {
+    return INITIAL_STATE;
   },
 });
