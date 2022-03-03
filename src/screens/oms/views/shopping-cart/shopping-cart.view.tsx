@@ -25,6 +25,7 @@ import {
   useOmsGeneralFailedState,
   useGetTotalCartAction,
   useCartBuyerAddressAction,
+  useCancelStockAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -46,6 +47,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeProduct,
     calculateProductTotalPrice,
   } = useCartLocalData();
+  const [isInitialCancelReserveDone, setInitialCancelReserveDone] =
+    useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -66,6 +69,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const removeCartProductAction = useRemoveCartProductAction();
   const totalCartActions = useGetTotalCartAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const cancelCartAction = useCancelStockAction();
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -84,15 +88,21 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
+  /** => handle save local state to redux */
+  const handleSaveLocalStateToRedux = () => {
+    if (localCartMaster) {
+      cartMasterAction.replaceFromLocal(localCartMaster);
+    }
+  };
+
   /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
-    if (stateCart.get.data === null) {
-      /** did mount */
-      errorModal.setRetryCount(3);
-      getCartAction.fetch(dispatchCart);
-      cartBuyerAddressAction.fetch(dispatchCart);
-    }
+    /** did mount */
+    errorModal.setRetryCount(3);
+    cancelCartAction.fetch(dispatchCart);
+    cartBuyerAddressAction.fetch(dispatchCart);
+
     /** will unmount */
     return () => {
       checkProductAction.reset(dispatchCart);
@@ -103,30 +113,22 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       cartMasterAction.reset();
       cartBuyerAddressAction.reset(dispatchCart);
     };
-  }, [stateCart.cancelStock.data]);
-
-  /** => after success fetch getCart, save data to redux */
-  useEffect(() => {
-    if (stateCart.get.data !== null && stateCart.buyerAddress.data !== null) {
-      cartMasterAction.setCartMaster(stateCart.get.data);
-      errorModal.setRetryCount(3);
-      checkProductAction.fetch(dispatchCart);
-      checkSellerAction.fetch(dispatchCart);
-      checkStockAction.fetch(dispatchCart, false);
-    }
-  }, [stateCart.get.data, stateCart.buyerAddress.data]);
+  }, []);
 
   /** => if get cart or buyer address failed */
   useEffect(() => {
-    if (!stateCart.get.loading !== null && !stateCart.buyerAddress.loading) {
+    if (
+      !stateCart.cancelStock.loading !== null &&
+      !stateCart.buyerAddress.loading
+    ) {
       // check which endpoint fetch was fail
-      const isErrorGetCart = stateCart.get.error !== null;
+      const isErrorCancelStock = stateCart.cancelStock.error !== null;
       const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
       // determine retry action
       const action = () => {
         if (errorModal.retryCount > 0) {
-          if (isErrorGetCart) {
-            getCartAction.fetch(dispatchCart);
+          if (isErrorCancelStock) {
+            cancelCartAction.fetch(dispatchCart);
           }
           if (isErrorBuyerAddress) {
             cartBuyerAddressAction.fetch(dispatchCart);
@@ -139,7 +141,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       };
       // determine the error data
       let errorData = null;
-      if (isErrorGetCart) {
+      if (isErrorCancelStock) {
         errorData = stateCart.get.error;
       } else {
         errorData = stateCart.buyerAddress.error;
@@ -149,7 +151,48 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       errorModal.setErrorData(errorData);
       errorModal.setOpen(true);
     }
-  }, [stateCart.get.error, stateCart.buyerAddress.error]);
+  }, [stateCart.cancelStock.error, stateCart.buyerAddress.error]);
+
+  /** => after success fetch cancelStock & buyerAddress, fetch getCart */
+  useEffect(() => {
+    if (
+      stateCart.cancelStock.data !== null &&
+      stateCart.buyerAddress.data !== null
+    ) {
+      errorModal.setRetryCount(3);
+      setInitialCancelReserveDone(true);
+      getCartAction.fetch(dispatchCart);
+    }
+  }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
+
+  /** => after success fetch getCart, save data to redux */
+  useEffect(() => {
+    if (stateCart.get.data !== null && stateCart.buyerAddress.data !== null) {
+      cartMasterAction.setCartMaster(stateCart.get.data);
+      errorModal.setRetryCount(3);
+      checkProductAction.fetch(dispatchCart);
+      checkSellerAction.fetch(dispatchCart);
+      checkStockAction.fetch(dispatchCart, false);
+    }
+  }, [stateCart.get.data, stateCart.buyerAddress.data]);
+
+  /** => if get cart failed */
+  useEffect(() => {
+    if (stateCart.get.error !== null) {
+      const action = () => {
+        if (errorModal.retryCount > 0) {
+          getCartAction.fetch(dispatchCart);
+          errorModal.setRetryCount(errorModal.retryCount - 1);
+        } else {
+          goBack();
+        }
+      };
+      errorModal.setRetryAction(() => action);
+      errorModal.setCloseAction(() => goBack);
+      errorModal.setErrorData(stateCart.get.error);
+      errorModal.setOpen(true);
+    }
+  }, [stateCart.get.error]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
@@ -284,9 +327,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               </View>
             </ScrollView>
             <ShoppingCartFooter
-              onPressCheckout={() => {}}
+              onPressCheckout={() => {
+                handleSaveLocalStateToRedux();
+              }}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
+              isInitialCancelReserveDone={isInitialCancelReserveDone}
             />
           </React.Fragment>
         );

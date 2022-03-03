@@ -19,18 +19,21 @@ import { contexts } from '@contexts';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { usePrevious } from '@core/functions/hook/prev-value';
 
 /** === INTERFACE === */
 interface FooterProps {
   onPressCheckout: () => void;
   countTotalProduct: number;
   countTotalPrice: number;
+  isInitialCancelReserveDone: boolean;
 }
 /** === COMPONENT ===  */
 const ShoppingCartFooterMemo: FC<FooterProps> = ({
   onPressCheckout,
   countTotalPrice,
   countTotalProduct,
+  isInitialCancelReserveDone,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -49,12 +52,14 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   const buyerAddressAction = useCartBuyerAddressAction();
   const checkoutAction = useCheckoutAction();
 
-  const handleOnPressCheckout = () => {
+  const prevCartMaster = usePrevious(cartMasterAction.cartMaster);
+
+  const handleOnPressCheckout = async () => {
     if (stateCart.buyerAddress.data) {
       onPressCheckout();
       updateCartAction.fetch(dispatchCart, {
         buyerName: stateCart.buyerAddress.data.buyerName,
-        id: 'bd1abe44-87be-11ec-a8a3-0242ac120002',
+        id: cartMasterAction.cartMaster.id,
         carts: cartMasterAction.cartMaster.sellers,
       });
     }
@@ -169,10 +174,10 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
      * AND buyer address already give the result
      */
     if (
-      !stateCart.postCheckProduct.error &&
-      !stateCart.postCheckSeller.error &&
-      !stateCart.postCheckStock.error &&
-      stateCart.buyerAddress.data
+      stateCart.postCheckProduct.data !== null &&
+      stateCart.postCheckSeller.data !== null &&
+      stateCart.postCheckStock.data !== null &&
+      stateCart.buyerAddress.data !== null
     ) {
       checkoutAction.fetch(dispatchCheckout, {
         buyerName: stateCart.buyerAddress.data.buyerName,
@@ -195,12 +200,12 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   }, [stateCart.buyerAddress.error, stateCheckout.checkout.error]);
 
   useEffect(() => {
-    if (stateCart.cancelStock.data) {
+    if (stateCart.cancelStock.data && !isInitialCancelReserveDone) {
       cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
       cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
     }
-  }, [stateCart.cancelStock.data]);
+  }, [stateCart.cancelStock.data, isInitialCancelReserveDone]);
 
   const handleRetry = () => {
     if (retryCounter < 3) {
