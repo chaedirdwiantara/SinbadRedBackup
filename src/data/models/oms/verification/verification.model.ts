@@ -47,6 +47,7 @@ export interface VerificationOrderDetailNonPromoList {
   displayPrice: number;
   priceBeforeTax: number;
   priceAfterTax: number;
+  finalPrice: number;
 }
 export interface VerificationOrderDetailGrandTotal {
   grandTotalPrice: number;

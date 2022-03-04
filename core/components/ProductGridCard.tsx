@@ -18,10 +18,10 @@ interface ProductGridCardProps {
   flexOne?: boolean;
   name: string;
   imageUrl: string;
-  originalPrice: number;
-  currentPrice?: number;
+  finalPrice: number;
   isBundle?: boolean;
   isPromo?: boolean;
+  qtySoldLabel: string;
   isExclusive?: boolean;
   onCardPress?: () => void;
   withOrderButton?: boolean;
@@ -30,8 +30,7 @@ interface ProductGridCardProps {
 
 interface ProductGridCardInfoProps {
   name: string;
-  originalPrice: number;
-  currentPrice?: number;
+  finalPrice: number;
 }
 /** === COMPONENTS === */
 const PromoTag = () => (
@@ -67,26 +66,15 @@ const ExclusiveTag = () => (
 
 const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
   name,
-  originalPrice,
-  currentPrice,
+  finalPrice,
 }) => {
-  /** === DERIVED VALUES === */
-  const hasDiscount = originalPrice !== currentPrice;
-  const usedPrice = hasDiscount ? currentPrice! : originalPrice;
   /** === VIEW === */
   return (
     <>
       <SnbText.C1 color={color.black100}>{name}</SnbText.C1>
-      {hasDiscount && (
-        <View style={{ marginTop: 8 }}>
-          <SnbText.C3 color={color.black40}>
-            {toCurrency(originalPrice, { withFraction: false })}
-          </SnbText.C3>
-        </View>
-      )}
       <View style={{ marginTop: 8 }}>
         <SnbText.C1 color={color.red50}>
-          {toCurrency(usedPrice, { withFraction: false })}
+          {toCurrency(finalPrice ?? 0, { withFraction: false })}
         </SnbText.C1>
       </View>
     </>
@@ -122,9 +110,13 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
         <View style={{ padding: 12 }}>
           <ProductGridCardInfo
             name={props.name}
-            originalPrice={props.originalPrice}
-            currentPrice={props.currentPrice}
+            finalPrice={props.finalPrice}
           />
+          {props.qtySoldLabel !== '0' && (
+            <SnbText.C1 color={color.black80}>{`Terjual ${
+              props.qtySoldLabel ?? ''
+            }`}</SnbText.C1>
+          )}
           {props.withOrderButton && (
             <TouchableOpacity
               style={ProductGridCardStyle.orderButton}

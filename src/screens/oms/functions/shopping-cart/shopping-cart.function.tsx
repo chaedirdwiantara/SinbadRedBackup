@@ -28,7 +28,7 @@ const getTotalPrice = (invoiceGroups: Array<CartInvoiceGroup>) => {
       if (brand.selected) {
         brand.products.forEach((product) => {
           if (product.selected) {
-            totalPrice += Number(product.displayPrice) * Number(product.qty);
+            totalPrice += Number(product.finalPrice ?? 0) * Number(product.qty);
           }
         });
       }

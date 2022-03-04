@@ -181,7 +181,7 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
           </TouchableOpacity>
           <View style={{ marginBottom: 12 }}>
             <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice, { withFraction: false })}
+              {toCurrency(product.finalPrice ?? 0, { withFraction: false })}
             </SnbText.B4>
           </View>
           <SnbNumberCounter
@@ -255,11 +255,9 @@ export const ShoppingCartProduct: FC<ShoppingCartProductProps> = ({
             size={32}
           />
         </TouchableOpacity>
-        {(product.stock <= 1000 || product.qty > product.stock) && (
+        {(product.stock < 11 || product.qty > product.stock) && (
           <SnbText.B3 color={color.red50}>
-            {product.stock === 0
-              ? 'Produk Habis'
-              : `Tersisa ${product.stock} ${product.uom}`}
+            {product.stock === 0 ? 'Produk Habis' : `Tersisa ${product.stock}`}
           </SnbText.B3>
         )}
       </View>
