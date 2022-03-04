@@ -429,6 +429,7 @@ const OmsCheckoutView: FC = () => {
     modalProductList.setData(data);
   };
 
+  /** => check expired time  */
   const handleCheckExpiredSession = () => {
     if (!expiredTime.check()) {
       return false;
@@ -437,6 +438,18 @@ const OmsCheckoutView: FC = () => {
       return true;
     }
   };
+
+  /** => set expired time  */
+  const dateCurrent = new Date();
+  const timeNow = dateCurrent.getTime() / 1000;
+  const addTime = dateCurrent.getTime() / 1000 + 300000;
+  const timeToExpired = addTime - timeNow;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setExpiredSession(true);
+    }, timeToExpired);
+  }, []);
 
   /** === VIEW === */
   const ModalErrorCreateOrders = () => {

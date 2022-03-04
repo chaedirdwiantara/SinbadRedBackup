@@ -12,11 +12,11 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
   return (
     <BottomModalError
       isOpen={isOpen}
-      errorTitle={'Terjadi kesalahan'}
+      errorTitle={'Batas waktu pemesanan habis'}
       errorSubtitle={
-        'Sesi checkout Anda sudah habis. Silakan ulangi proses checkout Anda.'
+        'Silahkan ulangi proses pemesanan dan selesaikan kurang dari 5 menit.'
       }
-      errorImage={require('../../../../assets/images/cry_sinbad.png')}
+      errorImage={require('../../../../assets/images/expired_time.png')}
       buttonTitle={'Ok'}
       buttonOnPress={() => {
         close();
