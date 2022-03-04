@@ -3,9 +3,11 @@ import { color } from 'react-native-sinbad-ui';
 
 export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
-    padding: 16,
     marginTop: 8,
     backgroundColor: color.white,
+  },
+  invoiceGroupListField: {
+    padding: 16,
   },
   headerSection: {
     flexDirection: 'row',
@@ -71,6 +73,17 @@ export const CheckoutStyle = StyleSheet.create({
   modalDetailTotalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  warningTimer: {
+    backgroundColor: color.white,
+  },
+  warningTextContainer: {
+    flexDirection: 'row',
+    margin: 16,
+    padding: 16,
+    backgroundColor: color.yellow10,
+    borderRadius: 5,
+    justifyContent: 'space-around',
   },
 });
 

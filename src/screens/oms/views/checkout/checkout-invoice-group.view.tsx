@@ -11,6 +11,7 @@ import { CheckoutPaymentTypeView } from './checkout-payment-type.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 /** === TYPE === */
 import * as models from '@models';
+import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
   data: models.IInvoiceCheckout;
@@ -31,7 +32,8 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
 
   return (
     <View style={CheckoutStyle.invoiceGroupListContainer}>
-      <View>
+      <CheckoutWarningTime />
+      <View style={CheckoutStyle.invoiceGroupListField}>
         <View style={CheckoutStyle.headerSection}>
           <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
           <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
@@ -42,14 +44,14 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
           products={handleTransformProductBrands(data.brands)}
           openModalProduct={openModalProductList}
         />
+        <CheckoutShipmentDetailView />
+        <CheckoutPaymentTypeView
+          data={data}
+          openModalPaymentType={openModalPaymentType}
+          index={index}
+        />
+        <CheckoutPaymentDetailView data={data} />
       </View>
-      <CheckoutShipmentDetailView />
-      <CheckoutPaymentTypeView
-        data={data}
-        openModalPaymentType={openModalPaymentType}
-        index={index}
-      />
-      <CheckoutPaymentDetailView data={data} />
     </View>
   );
 };
@@ -60,8 +62,8 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
  * ================================================================
  * createdBy: Maulana Ghozi (pyramid)
  * createDate: 25112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (Valkyrie)
+ * updatedDate: 04032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
