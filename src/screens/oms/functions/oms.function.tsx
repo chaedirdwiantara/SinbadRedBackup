@@ -54,6 +54,10 @@ const goToCategory = () => {
 const goToHistoryList = () => {
   NavigationAction.navigate('HistoryListView');
 };
+/** => Go to Thank You Page */
+const goToThankYouPage = () => {
+  NavigationAction.navigate('OmsThankYouPageView');
+};
 
 export {
   goBack,
@@ -69,4 +73,5 @@ export {
   goToVoucherCartList,
   goToCategory,
   goToHistoryList,
+  goToThankYouPage
 };

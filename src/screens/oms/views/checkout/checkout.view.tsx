@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbButton } from 'react-native-sinbad-ui';
 import { usePaymentAction } from '../../functions/checkout';
 import LoadingPage from '@core/components/LoadingPage';
 import { contexts } from '@contexts';
@@ -42,6 +42,7 @@ import {
   useCartCheckedoutActions,
   useModalParcelDetail,
   useModalProductList,
+  goToThankYouPage,
 } from '@screen/oms/functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
@@ -489,6 +490,12 @@ const OmsCheckoutView: FC = () => {
       ) : (
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
+            <SnbButton.Single
+              type="primary"
+              title="Thank Youu"
+              disabled={false}
+              onPress={goToThankYouPage}
+            />
             <CheckoutAddressView />
             {Array.isArray(checkoutMaster.invoices) &&
               checkoutMaster.invoices.length > 0 &&
