@@ -19,21 +19,20 @@ import { contexts } from '@contexts';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { usePrevious } from '@core/functions/hook/prev-value';
 
 /** === INTERFACE === */
 interface FooterProps {
-  onPressCheckout: () => void;
   countTotalProduct: number;
   countTotalPrice: number;
   isInitialCancelReserveDone: boolean;
+  onPressCheckout: () => void;
 }
 /** === COMPONENT ===  */
 const ShoppingCartFooterMemo: FC<FooterProps> = ({
-  onPressCheckout,
   countTotalPrice,
   countTotalProduct,
   isInitialCancelReserveDone,
+  onPressCheckout,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -52,9 +51,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   const buyerAddressAction = useCartBuyerAddressAction();
   const checkoutAction = useCheckoutAction();
 
-  const prevCartMaster = usePrevious(cartMasterAction.cartMaster);
-
-  const handleOnPressCheckout = async () => {
+  const handleOnPressCheckout = useCallback(() => {
     if (stateCart.buyerAddress.data) {
       onPressCheckout();
       updateCartAction.fetch(dispatchCart, {
@@ -63,7 +60,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
         carts: cartMasterAction.cartMaster.sellers,
       });
     }
-  };
+  }, []);
 
   const checkProductSellerStock = useCallback(() => {
     if (stateCart.update.data !== null) {
@@ -153,7 +150,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   }, [stateCart.cancelStock.data, isInitialCancelReserveDone]);
 
   const handleRetry = () => {
-    if (retryCounter < 3) {
+    if (retryCounter <= 3) {
       checkProductSellerStock();
       setRetryCounter((prev) => prev + 1);
     } else {

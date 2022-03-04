@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
@@ -89,11 +89,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
 
   /** => handle save local state to redux */
-  const handleSaveLocalStateToRedux = () => {
+  const handleSaveLocalStateToRedux = useCallback(() => {
     if (localCartMaster) {
+      console.log('REDUX REPLACED WITH:', localCartMaster);
+
       cartMasterAction.replaceFromLocal(localCartMaster);
     }
-  };
+  }, [localCartMaster]);
 
   /** === HOOKS === */
   /** => did mount & will unmount */
@@ -311,6 +313,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (!isCartEmpty) {
         return (
           <React.Fragment>
+            {console.log('localCartMaster', localCartMaster)}
             <ScrollView>
               <View style={{ flex: 1 }}>
                 <ShoppingCartAddress />
@@ -327,6 +330,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               </View>
             </ScrollView>
             <ShoppingCartFooter
+              key={JSON.stringify(localCartMaster)}
               onPressCheckout={() => {
                 handleSaveLocalStateToRedux();
               }}
