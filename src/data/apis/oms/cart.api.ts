@@ -155,7 +155,6 @@ export const CartApi = {
   checkProduct,
   checkSeller,
   checkStock,
-  checkStockReserved,
   cancelStock,
   cartBuyerAddress,
 };
