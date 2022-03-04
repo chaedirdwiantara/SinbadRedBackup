@@ -3,9 +3,11 @@ import { color } from 'react-native-sinbad-ui';
 
 export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
-    padding: 16,
     marginTop: 8,
     backgroundColor: color.white,
+  },
+  invoiceGroupListField: {
+    padding: 16,
   },
   headerSection: {
     flexDirection: 'row',
