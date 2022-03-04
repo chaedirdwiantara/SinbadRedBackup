@@ -55,15 +55,17 @@ const addToCart = (
 const updateCart = (
   data: models.UpdateProcessProps<models.UpdateCartPayload>,
 ) => {
-  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
   const path = `carts/${data.data.id}`;
-  return apiMappingMockV3<models.UpdateCartResponse>(
-    mockHost,
+  return apiMapping<models.UpdateCartResponse>(
+    'auth',
     path,
-    'discount',
+    'buyer-cart',
     'v1',
     'UPDATE',
-    data,
+    {
+      buyerName: data.data.buyerName,
+      carts: data.data.carts,
+    },
   );
 };
 
@@ -142,8 +144,9 @@ const checkStockReserved = ({
 };
 
 const cancelStock = () => {
-  const path = 'warehouse-products/unreserve-stock';
-  return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
+  const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
+  const path = 'warehouse-products/unreserve-stock/1';
+  return apiMappingMockV3(mockHost, path, 'warehouse', 'v1', 'DELETE');
 };
 
 const cartBuyerAddress = () => {
