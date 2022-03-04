@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
   DATA_DIRI_STEP_1_VIEW,
-  DATA_TOKO_STEP_2_VIEW,
+  DATA_TOKO_STEP_1_VIEW,
 } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
@@ -79,7 +79,7 @@ const Content: React.FC = () => {
         <SnbCardButtonType3
           title="Data Toko"
           desc="1-2 Menit Pengisian"
-          onPress={() => navigate(DATA_TOKO_STEP_2_VIEW)}
+          onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
           svgIcon={() => <Svg name="store_data" size={48} />}
         />
       </View>
