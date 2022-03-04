@@ -54,6 +54,7 @@ import { ErrorFetchModal } from './checkout-error-fetch-modal';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { usePrevious } from '@core/functions/hook/prev-value';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import { CheckoutWarningTime } from './checkout-warning-time';
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** === HOOK === */
@@ -490,6 +491,7 @@ const OmsCheckoutView: FC = () => {
         <>
           <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
+            <CheckoutWarningTime />
             {Array.isArray(checkoutMaster.invoices) &&
               checkoutMaster.invoices.length > 0 &&
               checkoutMaster.invoices.map((invoiceGroup, index) => (

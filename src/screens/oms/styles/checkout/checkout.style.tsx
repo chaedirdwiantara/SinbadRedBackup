@@ -72,6 +72,17 @@ export const CheckoutStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  warningTimer: {
+    backgroundColor: color.white,
+  },
+  warningTextContainer: {
+    flexDirection: 'row',
+    margin: 16,
+    padding: 16,
+    backgroundColor: color.yellow10,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+  },
 });
 
 export default CheckoutStyle;
