@@ -67,54 +67,10 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
 
   const checkProductSellerStock = useCallback(() => {
     if (stateCart.update.data !== null) {
-      /** Get available product(s) from .sellers, then filter it based on the selected one */
-      const carts =
-        cartMasterAction.cartMaster.sellers.flatMap((seller) =>
-          seller.products
-            .filter((product) => !!product.selected)
-            .map((product) => ({
-              productId: product.productId,
-              warehouseId: product.warehouseId,
-            })),
-        ) ?? [];
-
-      /** Form an array of sellerId(s) */
-      const sellerIds =
-        cartMasterAction.cartMaster.sellers.map((seller) => seller.sellerId) ??
-        [];
-
       /** Input product(s) that's been selected and available as payload */
-      postCheckProductAction.fetch(dispatchCart, {
-        carts: [
-          {
-            productId: '53c9b0000000000000000000',
-            warehouseId: 1,
-          },
-          {
-            productId: '53c9b0000000000000000002',
-            warehouseId: 2,
-          },
-        ],
-      });
-      postCheckSellerAction.fetch(dispatchCart, {
-        sellerIds: [1, 2],
-      });
-      postCheckStockAction.fetch(dispatchCart, {
-        reserved: true,
-        cartId: '53c9b0000000000000000001',
-        carts: [
-          {
-            productId: '53c9b0000000000000000000',
-            warehouseId: 1,
-            qty: 10,
-          },
-          {
-            productId: '53c9b0000000000000000002',
-            warehouseId: 1,
-            qty: 10,
-          },
-        ],
-      });
+      postCheckProductAction.fetch(dispatchCart);
+      postCheckSellerAction.fetch(dispatchCart);
+      postCheckStockAction.fetch(dispatchCart);
     }
     return () => {
       postCheckProductAction.reset(dispatchCart);
@@ -173,18 +129,7 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
     /** Request Checkout API once the validation complete with no errors
      * AND buyer address already give the result
      */
-    if (
-      stateCart.postCheckProduct.data !== null &&
-      stateCart.postCheckSeller.data !== null &&
-      stateCart.postCheckStock.data !== null &&
-      stateCart.buyerAddress.data !== null
-    ) {
-      checkoutAction.fetch(dispatchCheckout, {
-        buyerName: stateCart.buyerAddress.data.buyerName,
-        buyerAddress: stateCart.buyerAddress.data,
-        carts: cartMasterAction.cartMaster.sellers,
-      });
-    }
+    checkoutAction.fetch(dispatchCheckout);
   }, [
     stateCart.postCheckProduct.error,
     stateCart.postCheckSeller.error,

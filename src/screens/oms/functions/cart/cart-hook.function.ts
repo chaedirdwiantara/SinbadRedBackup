@@ -153,13 +153,27 @@ const useCheckProductAction = () => {
 };
 /** => post check product action */
 const usePostCheckProductAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckProductPayload,
-    ) => {
-      dispatch(Actions.postCheckProductProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckProductPayloadCarts[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+            });
+          });
+        });
+        dispatch(
+          Actions.postCheckProductProcess(contextDispatch, {
+            data: { carts: data },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckProductReset(contextDispatch));
@@ -194,13 +208,22 @@ const useCheckSellerAction = () => {
 };
 /** => post check seller action */
 const usePostCheckSellerAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckSellerPayload,
-    ) => {
-      dispatch(Actions.postCheckSellerProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: number[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          data.push(sellerItem.sellerId);
+        });
+        dispatch(
+          Actions.postCheckSellerProcess(contextDispatch, {
+            data: { sellerIds: data },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckSellerReset(contextDispatch));
@@ -243,13 +266,32 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckStockPayload,
-    ) => {
-      dispatch(Actions.postCheckStockProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckStockPayloadCarts[] = [];
+        stateCart.get.data?.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+              qty: productItem.qty,
+            });
+          });
+        });
+        dispatch(
+          Actions.postCheckStockProcess(contextDispatch, {
+            data: {
+              cartId: stateCart.get.data.id,
+              reserved: true,
+              carts: data,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckStockReset(contextDispatch));

@@ -129,7 +129,7 @@ const checkStock = ({
 };
 
 const cancelStock = () => {
-  const path = 'warehouse-products/unreserve-stock/1';
+  const path = 'warehouse-products/cancel-reserve-stock';
   return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
 };
 
