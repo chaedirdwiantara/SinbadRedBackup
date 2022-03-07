@@ -76,8 +76,39 @@ const ModalSelection: React.FC<Props> = ({
                 <View style={{ height: 1, backgroundColor: color.black10 }} />
               )}
               renderItem={({ item }) => {
-                let status: IRadioButton =
-                  selectedItem?.item?.id === item?.id ? 'selected' : 'unselect';
+                let status: IRadioButton = 'unselect';
+                let label = '';
+                const { id, city, district, urban } = selectedItem?.item || {};
+                switch (type) {
+                  case 'listCity': {
+                    if (city === item?.city) {
+                      status = 'selected';
+                    }
+                    label = item.city;
+                    break;
+                  }
+                  case 'listDistrict': {
+                    if (district === item?.district) {
+                      status = 'selected';
+                    }
+                    label = item.district;
+                    break;
+                  }
+                  case 'listUrban': {
+                    if (urban === item?.urban) {
+                      status = 'selected';
+                    }
+                    label = item.urban;
+                    break;
+                  }
+                  default: {
+                    if (id === item?.id) {
+                      status = 'selected';
+                    }
+                    label = item.name;
+                    break;
+                  }
+                }
                 return (
                   <TouchableOpacity
                     onPress={() => onSelectedItem({ item, type })}
@@ -88,7 +119,7 @@ const ModalSelection: React.FC<Props> = ({
                       justifyContent: 'space-between',
                     }}>
                     <View style={{ flex: 1 }}>
-                      <SnbText.B1>{item.name}</SnbText.B1>
+                      <SnbText.B1>{label}</SnbText.B1>
                     </View>
                     <View style={{ marginHorizontal: 4 }} />
                     <SnbRadioButton

@@ -9,16 +9,26 @@ import {
   SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
+import { ModalSelection } from '../shared';
+import * as models from '@models';
 
 const Content = () => {
-  const { gotoSelection, selectedItem, resetSelectedItem } =
-    useTextFieldSelect();
+  const {
+    selectedItem,
+    resetSelectedItem,
+    resetGetSelection,
+    getSelection,
+    onSelectedItem,
+  } = useTextFieldSelect();
   const [province, setProvince] = React.useState<any>(null);
   const [city, setCity] = React.useState<any>(null);
   const [district, setDistrict] = React.useState<any>(null);
   const [urban, setUrban] = React.useState<any>(null);
   const { getLocation, locations } = useLocations();
   const { goBack } = useNavigation();
+  const [type, setType] = React.useState<models.ITypeList>('');
+  const [openModalSelection, setOpenModalSelection] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (locations.data?.length > 0) {
@@ -53,98 +63,104 @@ const Content = () => {
       default:
         break;
     }
-    return resetSelectedItem;
   }, [selectedItem]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
-      <View style={{ padding: 16 }}>
-        <SnbTextFieldSelect
-          labelText="Provinsi"
-          placeholder="Pilih Provinsi"
-          mandatory
-          value={province?.name || ''}
-          type="default"
-          onPress={() => {
-            gotoSelection({ type: 'listProvince' });
-          }}
-          rightType="icon"
-          rightIcon="chevron_right"
-        />
-        <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
-          labelText="Kota"
-          placeholder="Pilih Kota"
-          mandatory
-          value={city?.city || ''}
-          type="default"
-          onPress={() => {
-            if (province?.id) {
-              gotoSelection({
-                type: 'listCity',
-                params: `provinceId=${province.id}`,
-                meta: {
-                  limit: 100,
-                },
-              });
-            }
-          }}
-          rightType="icon"
-          rightIcon="chevron_right"
-        />
-        <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
-          labelText="Kecamatan"
-          placeholder="Pilih Kecamatan"
-          mandatory
-          value={district?.district || ''}
-          type="default"
-          onPress={() => {
-            if (city?.city) {
-              gotoSelection({
-                type: 'listDistrict',
-                params: `city=${city.city}`,
-                meta: {
-                  limit: 100,
-                },
-              });
-            }
-          }}
-          rightType="icon"
-          rightIcon="chevron_right"
-        />
-        <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
-          labelText="Desa/Kelurahan"
-          placeholder="Pilih Desa/Kelurahan"
-          value={urban?.urban || ''}
-          mandatory
-          type="default"
-          onPress={() => {
-            if (district?.district) {
-              gotoSelection({
-                type: 'listUrban',
-                params: `district=${district.district}`,
-                meta: {
-                  limit: 100,
-                },
-              });
-            }
-          }}
-          rightType="icon"
-          rightIcon="chevron_right"
-        />
-        <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
-          labelText="Kode Pos"
-          placeholder="Lihat Kode Pos"
-          mandatory
-          value={urban?.zipCode || ''}
-          type="default"
-          onPress={() => {}}
-          rightType="icon"
-          rightIcon="chevron_right"
-        />
+      <View style={{ flex: 1 }}>
+        <View style={{ padding: 16 }}>
+          <SnbTextFieldSelect
+            labelText="Provinsi"
+            placeholder="Pilih Provinsi"
+            mandatory
+            value={province?.name || ''}
+            type="default"
+            onPress={() => {
+              setType('listProvince');
+              getSelection({ type: 'listProvince' });
+              setOpenModalSelection(true);
+              province &&
+                onSelectedItem({ item: province, type: 'listProvince' });
+            }}
+            rightType="icon"
+            rightIcon="chevron_right"
+          />
+          <View style={{ marginVertical: 12 }} />
+          <SnbTextFieldSelect
+            labelText="Kota"
+            placeholder="Pilih Kota"
+            mandatory
+            value={city?.city || ''}
+            type="default"
+            onPress={() => {
+              if (province?.id) {
+                setType('listCity');
+                setOpenModalSelection(true);
+                getSelection({
+                  type: 'listCity',
+                  params: `provinceId=${province.id}`,
+                });
+                city && onSelectedItem({ item: city, type: 'listCity' });
+              }
+            }}
+            rightType="icon"
+            rightIcon="chevron_right"
+          />
+          <View style={{ marginVertical: 12 }} />
+          <SnbTextFieldSelect
+            labelText="Kecamatan"
+            placeholder="Pilih Kecamatan"
+            mandatory
+            value={district?.district || ''}
+            type="default"
+            onPress={() => {
+              if (city?.city) {
+                setType('listDistrict');
+                setOpenModalSelection(true);
+                getSelection({
+                  type: 'listDistrict',
+                  params: `city=${city.city}`,
+                });
+                district &&
+                  onSelectedItem({ type: 'listDistrict', item: district });
+              }
+            }}
+            rightType="icon"
+            rightIcon="chevron_right"
+          />
+          <View style={{ marginVertical: 12 }} />
+          <SnbTextFieldSelect
+            labelText="Desa/Kelurahan"
+            placeholder="Pilih Desa/Kelurahan"
+            value={urban?.urban || ''}
+            mandatory
+            type="default"
+            onPress={() => {
+              if (district?.district) {
+                setType('listUrban');
+                getSelection({
+                  type: 'listUrban',
+                  params: `district=${district.district}`,
+                });
+                urban && onSelectedItem({ type: 'listUrban', item: urban });
+                setOpenModalSelection(true);
+              }
+            }}
+            rightType="icon"
+            rightIcon="chevron_right"
+          />
+          <View style={{ marginVertical: 12 }} />
+          <SnbTextFieldSelect
+            labelText="Kode Pos"
+            placeholder="Lihat Kode Pos"
+            mandatory
+            value={urban?.zipCode || ''}
+            type="default"
+            onPress={() => {}}
+            rightType="icon"
+            rightIcon="chevron_right"
+          />
+        </View>
       </View>
       <View style={{ height: 72 }}>
         <SnbButton.Single
@@ -163,6 +179,17 @@ const Content = () => {
           type="primary"
         />
       </View>
+      <ModalSelection
+        type={type}
+        open={openModalSelection}
+        onCloseModalSelection={(result: any) => {
+          if (result) {
+          }
+          setOpenModalSelection(false);
+          resetGetSelection();
+          resetSelectedItem();
+        }}
+      />
     </View>
   );
 };

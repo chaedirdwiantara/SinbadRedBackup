@@ -81,9 +81,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listCity',
                 params: `provinceId=${province.id}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}
@@ -101,9 +98,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listDistrict',
                 params: `city=${city.city}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}
@@ -121,9 +115,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listUrban',
                 params: `district=${district.district}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}

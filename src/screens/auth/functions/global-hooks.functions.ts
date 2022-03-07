@@ -201,7 +201,7 @@ export const useTextFieldSelect = () => {
     dispatch(Actions.resetGetSelection());
   };
 
-  const onSelectedItem = (data: any) => {
+  const onSelectedItem = (data: models.IOnSelectedItem) => {
     dispatch(Actions.onSelectedItem(data));
   };
 
