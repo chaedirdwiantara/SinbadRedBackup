@@ -145,7 +145,7 @@ const checkStockReserved = ({
 
 const cancelStock = () => {
   const mockHost = 'https://d3d7848e-6688-43ae-b6e0-f436565227b4.mock.pstmn.io';
-  const path = 'warehouse-products/unreserve-stock/1';
+  const path = 'warehouse-products/cancel-reserve-stock';
   return apiMappingMockV3(mockHost, path, 'warehouse', 'v1', 'DELETE');
 };
 
