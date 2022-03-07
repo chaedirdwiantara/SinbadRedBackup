@@ -102,7 +102,6 @@ const OmsThankYouPageView: FC = () => {
   };
   const handleThankYouPageOrderDetail = () => {
     // modalThankYouPageOrderDetail.setData(data);
-    SnbToast.show("irpan open modal", 2000);
     modalThankYouPageOrderDetail.setOpen(true)
   };
   /** => Payment Total */
