@@ -78,8 +78,15 @@ const ModalSelection: React.FC<Props> = ({
               renderItem={({ item }) => {
                 let status: IRadioButton = 'unselect';
                 let label = '';
-                const { id, city, district, urban } = selectedItem?.item || {};
+                const { id, city, name } = selectedItem?.item || {};
                 switch (type) {
+                  case 'listProvince': {
+                    if (name === item?.name) {
+                      status = 'selected';
+                    }
+                    label = item.name;
+                    break;
+                  }
                   case 'listCity': {
                     if (city === item?.city) {
                       status = 'selected';
@@ -88,14 +95,14 @@ const ModalSelection: React.FC<Props> = ({
                     break;
                   }
                   case 'listDistrict': {
-                    if (district === item?.district) {
+                    if (id === item?.id) {
                       status = 'selected';
                     }
                     label = item.district;
                     break;
                   }
                   case 'listUrban': {
-                    if (urban === item?.urban) {
+                    if (id === item?.id) {
                       status = 'selected';
                     }
                     label = item.urban;

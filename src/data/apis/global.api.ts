@@ -35,9 +35,7 @@ const getSelection = (data: models.IListSelection) => {
   let path = '';
   let module: TModule = 'location';
   let access: 'public' | 'auth' = data?.action === 'edit' ? 'auth' : 'public';
-  let meta = `page=${data.meta?.page || 0}&perPage=${
-    data.meta?.perPage || 10
-  }&keyword=${data.meta?.keyword || ''}`;
+  let meta = `page=${data.meta?.page || 1}&perPage=${data.meta?.perPage || 10}`;
   switch (data.type) {
     case 'listNumOfEmployee': {
       path = 'number-of-employees';
@@ -50,19 +48,19 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
     case 'listProvince': {
-      path = `location/province?page=${1}&perPage${10}`;
+      path = `location/province?${meta}`;
       break;
     }
     case 'listCity': {
-      path = `location/city?page=${1}&perPage=${10}&province=${'DKI Jakarta'}`;
+      path = `location/city?${data.params}&${meta}`;
       break;
     }
     case 'listDistrict': {
-      path = `location/district?page=${1}&perPage=${10}&province=${'DKI Jakarta'}&city=${'Jakarta Selatan'}`;
+      path = `location/district?${data.params}&${meta}`;
       break;
     }
     case 'listUrban': {
-      path = `location/urban?page=1&perPage=10&province=${'DKI Jakarta'}&city=${'Jakarta Selatan'}&district=${'Kemang'}`;
+      path = `location/urban?${data.params}&${meta}`;
       break;
     }
     case 'listUrbanID': {

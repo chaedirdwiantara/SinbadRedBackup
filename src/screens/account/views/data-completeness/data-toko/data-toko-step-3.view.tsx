@@ -14,7 +14,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalSelection, Stepper } from '../../shared';
 import * as models from '@models';
-import { INPUT_MANUAL_LOCATION_MODAL_VIEW } from '@screen/account/functions/screens_name';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const Content: React.FC = () => {
   const address = useInput();
@@ -30,6 +30,10 @@ const Content: React.FC = () => {
   const [type, setType] = React.useState<models.ITypeList>('');
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
+  const { completeDataState } = useEasyRegistration();
+  const { latitude, longitude } = completeDataState.data?.buyerData || {};
+
+  const isLatLngAvailable = latitude && longitude;
 
   return (
     <View style={{ flex: 1 }}>
@@ -43,23 +47,26 @@ const Content: React.FC = () => {
                 alignItems: 'center',
               }}>
               <SnbText.H4>Titik Lokasi</SnbText.H4>
-              <SnbButton.Dynamic
-                onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
-                title="Ubah Titik Lokasi"
-                disabled={false}
-                type="tertiary"
-                buttonColor={color.blue50}
-                size="small"
-              />
+              {renderIF(
+                isLatLngAvailable,
+                <SnbButton.Dynamic
+                  onPress={() => navigate('MapsView', { action: 'register' })}
+                  title="Ubah Titik Lokasi"
+                  disabled={false}
+                  type="tertiary"
+                  buttonColor={color.blue50}
+                  size="small"
+                />,
+              )}
             </View>
             <View style={{ paddingVertical: 4 }} />
             {renderIF(
-              false,
+              isLatLngAvailable,
               <MapView
                 ref={mapRef}
                 initialRegion={{
-                  latitude: 0,
-                  longitude: 0,
+                  latitude,
+                  longitude,
                   latitudeDelta: 0.02,
                   longitudeDelta: 0.02,
                 }}
@@ -67,12 +74,7 @@ const Content: React.FC = () => {
                 pitchEnabled={false}
                 scrollEnabled={false}
                 style={styles.pinPoint}>
-                <Marker
-                  coordinate={{
-                    latitude: 0,
-                    longitude: 0,
-                  }}
-                />
+                <Marker coordinate={{ latitude, longitude }} />
               </MapView>,
               <TouchableOpacity
                 onPress={() => navigate('MapsView', { action: 'register' })}

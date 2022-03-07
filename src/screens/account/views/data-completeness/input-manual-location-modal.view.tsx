@@ -93,12 +93,12 @@ const Content = () => {
             value={city?.city || ''}
             type="default"
             onPress={() => {
-              if (province?.id) {
+              if (province) {
                 setType('listCity');
                 setOpenModalSelection(true);
                 getSelection({
                   type: 'listCity',
-                  params: `provinceId=${province.id}`,
+                  params: `province=${province?.name || ''}`,
                 });
                 city && onSelectedItem({ item: city, type: 'listCity' });
               }
@@ -119,7 +119,7 @@ const Content = () => {
                 setOpenModalSelection(true);
                 getSelection({
                   type: 'listDistrict',
-                  params: `city=${city.city}`,
+                  params: `province=${province?.name}&city=${city?.city || ''}`,
                 });
                 district &&
                   onSelectedItem({ type: 'listDistrict', item: district });
@@ -140,7 +140,9 @@ const Content = () => {
                 setType('listUrban');
                 getSelection({
                   type: 'listUrban',
-                  params: `district=${district.district}`,
+                  params: `province=${province?.name || ''}&city=${
+                    city?.city || ''
+                  }&district=${district?.district || ''}`,
                 });
                 urban && onSelectedItem({ type: 'listUrban', item: urban });
                 setOpenModalSelection(true);
