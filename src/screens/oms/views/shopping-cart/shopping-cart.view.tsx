@@ -283,8 +283,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       cartMasterAction.cartMaster.isCheckSellerMerged &&
       cartMasterAction.cartMaster.isCheckStockMerged
     ) {
-      console.log('Set Local Cart Master!');
-
       setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
       setPageLoading(false);
     }

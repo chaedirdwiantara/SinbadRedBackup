@@ -219,7 +219,6 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   }, [stateCheckout.checkout]);
 
   useEffect(() => {
-    console.log('isInitialCancelReserveDone', isInitialCancelReserveDone);
     if (stateCart.cancelStock.data && !isInitialCancelReserveDone) {
       cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
