@@ -67,6 +67,7 @@ export const cartMaster = simplifyReducer(initialState, {
               selected,
               productStatus: item.status,
               leadTime: thisProduct.leadTime,
+              price: item.finalPrice,
             };
             /** => move product data to unavailable if inactive */
             if (item.status === 'inactive') {
