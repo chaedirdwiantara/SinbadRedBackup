@@ -132,7 +132,7 @@ const DataDiriStep4View: React.FC = () => {
           title="Foto Diri Dengan KTP"
         />
         <Stepper
-          complete={1}
+          complete={4}
           total={7}
           onPress={() => setOpenModalStep(true)}
         />

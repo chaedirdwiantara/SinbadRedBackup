@@ -132,7 +132,7 @@ const DataDiriStep3View: React.FC = () => {
           title="Foto NPWP"
         />
         <Stepper
-          complete={1}
+          complete={3}
           total={7}
           onPress={() => setOpenModalStep(true)}
         />
