@@ -17,14 +17,26 @@ export interface IPaymentDetail {
   type: string;
 }
 
+/** === DUMMY === */
+const data = {
+  totalProduct: 5,
+  totalPriceBeforeTax: 1500000,
+  totalPromoSellerAndVoucher: 90,
+  tax: 20,
+  totalPromoPayment: 120000,
+  totalFee: 120000,
+};
+
 export interface CheckoutPaymentDetailViewProps {
-  data: models.IInvoiceCheckout;
+  // data: models.IInvoiceCheckout;
 }
 
 /** === COMPONENT === */
-export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
-  data,
-}) => {
+export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = (
+  {
+    // data,
+  },
+) => {
   /** === HOOK === */
   const paymentAccordion = usePaymentDetailAccorrdion();
   const isActive = paymentAccordion.active === 1;

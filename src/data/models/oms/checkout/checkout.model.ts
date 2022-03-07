@@ -30,5 +30,5 @@ export interface CheckoutCartProduct {
   taxPercentage: number;
   price: number;
   selected: boolean;
-  priceRules: CheckoutProductPriceRules[];
+  priceRules: CheckoutProductPriceRules;
 }

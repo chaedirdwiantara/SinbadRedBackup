@@ -14,20 +14,22 @@ import * as models from '@models';
 import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: models.IInvoiceCheckout;
-  openModalPaymentType: (value: boolean) => void;
-  openModalParcelDetail: any;
-  openModalProductList: (data: models.ProductCheckout[]) => void;
-  index: number;
+  // data: models.IInvoiceCheckout;
+  // openModalPaymentType: (value: boolean) => void;
+  // openModalParcelDetail: any;
+  // openModalProductList: (data: models.ProductCheckout[]) => void;
+  // index: number;
 }
 /** === COMPONENT === */
-export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
-  data,
-  openModalPaymentType,
-  openModalParcelDetail,
-  openModalProductList,
-  index,
-}) => {
+export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = (
+  {
+    // data,
+    // openModalPaymentType,
+    // openModalParcelDetail,
+    // openModalProductList,
+    // index,
+  },
+) => {
   /** === HOOK === */
 
   return (
@@ -35,12 +37,16 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       <CheckoutWarningTime />
       <View style={CheckoutStyle.invoiceGroupListField}>
         <View style={CheckoutStyle.headerSection}>
-          <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
-          <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
+          {/* <SnbText.H4>{data.invoiceGroupName}</SnbText.H4> */}
+          {/* <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
+            <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
+          </TouchableOpacity> */}
+          <SnbText.H4>PT. Tigaraksa</SnbText.H4>
+          <TouchableOpacity onPress={() => {}}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity>
         </View>
-        <CheckoutSKUListView
+        {/* <CheckoutSKUListView
           products={handleTransformProductBrands(data.brands)}
           openModalProduct={openModalProductList}
         />
@@ -50,7 +56,8 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
           openModalPaymentType={openModalPaymentType}
           index={index}
         />
-        <CheckoutPaymentDetailView data={data} />
+        <CheckoutPaymentDetailView data={data} /> */}
+        <CheckoutPaymentDetailView />
       </View>
     </View>
   );

@@ -488,7 +488,10 @@ const OmsCheckoutView: FC = () => {
         <LoadingPage />
       ) : ( */}
       <>
-        <CheckoutAddressView />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <CheckoutAddressView />
+          <CheckoutInvoiceGroupView />
+        </ScrollView>
         {/* <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
             {Array.isArray(checkoutMaster.invoices) &&

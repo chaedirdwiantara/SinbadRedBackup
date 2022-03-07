@@ -54,11 +54,12 @@ export const cartMaster = simplifyReducer(initialState, {
              * 1. min qty dari 5 naik ke 10 dan cart qty masih 7 maka qty bakal ke force jadi 10 (ke uncheck)
              */
             let qty: number = thisProduct.qty;
-            let selected: boolean = item.selected;
+            let selected: boolean = thisProduct.selected;
             if (item.minQty >= thisProduct.qty) {
               qty = item.minQty;
               selected = false;
             }
+
             const productData: models.CartMasterSellersProducts = {
               ...item,
               lastUsedPrice: thisProduct.lastUsedPrice,

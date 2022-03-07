@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
@@ -26,13 +26,13 @@ import {
   useGetTotalCartAction,
   useCartBuyerAddressAction,
   useCancelStockAction,
+  useUpdateCartAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
-import { goToCheckout } from '@core/functions/product';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -71,6 +71,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const totalCartActions = useGetTotalCartAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
   const cancelCartAction = useCancelStockAction();
+  const updateCartAction = useUpdateCartAction();
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -89,13 +90,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
-  /** => handle save local state to redux */
-  const handleSaveLocalStateToRedux = () => {
-    if (localCartMaster) {
-      cartMasterAction.replaceFromLocal(localCartMaster);
-    }
-  };
-
   /** => handle refetch cart */
   const handleRefetchCart = () => {
     checkProductAction.reset(dispatchCart);
@@ -109,6 +103,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     errorModal.setRetryCount(3);
     cancelCartAction.fetch(dispatchCart);
     cartBuyerAddressAction.fetch(dispatchCart);
+  };
+
+  const handleGoBack = () => {
+    goBack();
+    if (localCartMaster) {
+      updateCartAction.fetch(dispatchCart, localCartMaster);
+    }
   };
 
   /** === HOOKS === */
@@ -128,15 +129,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       removeCartProductAction.reset(dispatchCart);
       cartMasterAction.reset();
       cartBuyerAddressAction.reset(dispatchCart);
+      updateCartAction.reset(dispatchCart);
     };
   }, []);
 
   /** => if get cart or buyer address failed */
   useEffect(() => {
-    if (
-      !stateCart.cancelStock.loading !== null &&
-      !stateCart.buyerAddress.loading
-    ) {
+    if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
       // check which endpoint fetch was fail
       const isErrorCancelStock = stateCart.cancelStock.error !== null;
       const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
@@ -152,7 +151,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       // determine the error data
@@ -163,7 +162,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         errorData = stateCart.buyerAddress.error;
       }
       errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => goBack);
+      errorModal.setCloseAction(() => handleGoBack);
       errorModal.setErrorData(errorData);
       errorModal.setOpen(true);
     }
@@ -200,11 +199,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           getCartAction.fetch(dispatchCart);
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => goBack);
+      errorModal.setCloseAction(() => handleGoBack);
       errorModal.setErrorData(stateCart.get.error);
       errorModal.setOpen(true);
     }
@@ -238,7 +237,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       // determine the error data
@@ -253,7 +252,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
         errorModal.setRetryAction(() => action);
-        errorModal.setCloseAction(() => goBack);
+        errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
@@ -343,13 +342,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               </View>
             </ScrollView>
             <ShoppingCartFooter
-              onPressCheckout={() => {
-                // handleSaveLocalStateToRedux();
-                goToCheckout();
-              }}
+              cartData={localCartMaster}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isInitialCancelReserveDone={isInitialCancelReserveDone}
+              isCheckoutDisabled={
+                isAnyActiveProduct() && countTotalPrice < 100000
+              }
             />
           </React.Fragment>
         );
@@ -361,7 +360,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MAIN */
   return (
     <SnbContainer color="grey">
-      <ShoppingCartHeader goBack={goBack} />
+      <ShoppingCartHeader goBack={handleGoBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
       {/* Dialog Remove Product */}
       <ModalRemoveProduct

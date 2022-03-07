@@ -59,6 +59,7 @@ const matchCartWithCheckData = ({
       delete thisCartCheckProduct.stockStatus;
       delete thisCartCheckProduct.warehouseName;
       delete thisCartCheckProduct.leadTime;
+      delete thisCartCheckProduct.price;
       delete thisCheckProduct.status;
 
       if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
