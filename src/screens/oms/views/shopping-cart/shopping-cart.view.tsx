@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useState, Fragment, useEffect } from 'react';
 import { ScrollView, StatusBar } from 'react-native';
-import { SnbContainer, SnbDialog, SnbToast } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbDialog, SnbToast, SnbButton } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ShoppingCartInvoiceGroup } from './shopping-cart-invoice-group.view';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
@@ -41,6 +41,7 @@ import {
   useCartMasterActions,
   useCheckoutMaster,
   goBack,
+  goToThankYouPage,
 } from '../../functions';
 import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { usePromoContext } from 'src/data/contexts/promo/usePromoContext';
@@ -693,6 +694,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             cartMaster.dataNotFound.length > 0) ? (
             <Fragment>
               <ScrollView>
+              <SnbButton.Single
+                title={'Thank Youu'}
+                onPress={goToThankYouPage}
+                type={'primary'}
+              />
                 <ShippingAddress />
                 {/* Invoice Group List */}
                 <Fragment>

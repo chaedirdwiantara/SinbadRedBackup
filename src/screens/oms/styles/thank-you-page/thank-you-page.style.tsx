@@ -28,7 +28,16 @@ export const ThankYouPageStyle = StyleSheet.create({
   },
   defaultContentPadding : {
     paddingTop: 12
+  },
+  OrderDetailItem : {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    flex: 1,
+    marginVertical: 6
+  },
+  expandableButton: {
+    alignItems: 'center', 
+    marginVertical: 6
   }
-
 })
 
