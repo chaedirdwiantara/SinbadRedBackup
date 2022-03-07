@@ -66,12 +66,37 @@ const useAddToCartAction = () => {
 /** => update cart action */
 const useUpdateCartAction = () => {
   const dispatch = useDispatch();
+  const { stateCart } = useContext(contexts.CartContext);
   return {
     fetch: (
       contextDispatch: (action: any) => any,
-      data: models.UpdateCartPayload,
+      cartData: models.CartMaster,
     ) => {
-      dispatch(Actions.updateCartProcess(contextDispatch, { data }));
+      if (stateCart.buyerAddress.data !== null) {
+        const carts: models.CartMasterSellers[] = [];
+        cartData.unavailable.map((product) => {
+          const sellerFound = cartData.sellers.find(
+            (seller) => seller.sellerId === product.sellerId,
+          );
+
+          if (sellerFound) {
+            carts.push({
+              ...sellerFound,
+              products: [...sellerFound?.products, product],
+            });
+          }
+        });
+
+        dispatch(
+          Actions.updateCartProcess(contextDispatch, {
+            data: {
+              buyerName: stateCart.buyerAddress.data.buyerName,
+              id: cartData.id,
+              carts,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.updateCartReset(contextDispatch));
@@ -153,13 +178,27 @@ const useCheckProductAction = () => {
 };
 /** => post check product action */
 const usePostCheckProductAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckProductPayload,
-    ) => {
-      dispatch(Actions.postCheckProductProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckProductPayloadCarts[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+            });
+          });
+        });
+        dispatch(
+          Actions.postCheckProductProcess(contextDispatch, {
+            data: { carts: data },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckProductReset(contextDispatch));
@@ -194,13 +233,22 @@ const useCheckSellerAction = () => {
 };
 /** => post check seller action */
 const usePostCheckSellerAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckSellerPayload,
-    ) => {
-      dispatch(Actions.postCheckSellerProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: number[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          data.push(sellerItem.sellerId);
+        });
+        dispatch(
+          Actions.postCheckSellerProcess(contextDispatch, {
+            data: { sellerIds: data },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckSellerReset(contextDispatch));
@@ -243,13 +291,32 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (
-      contextDispatch: (action: any) => any,
-      data: models.CheckStockPayload,
-    ) => {
-      dispatch(Actions.postCheckStockProcess(contextDispatch, { data }));
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const data: models.CheckStockPayloadCarts[] = [];
+        stateCart.get.data?.sellers.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            data.push({
+              productId: productItem.productId,
+              warehouseId: productItem.warehouseId,
+              qty: productItem.qty,
+            });
+          });
+        });
+        dispatch(
+          Actions.postCheckStockProcess(contextDispatch, {
+            data: {
+              cartId: stateCart.get.data.id,
+              reserved: true,
+              carts: data,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postCheckStockReset(contextDispatch));
