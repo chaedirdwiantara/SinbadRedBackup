@@ -12,3 +12,4 @@ export * from './reserve-data';
 export * from './checkout/create-orders.model';
 export * from './checkout-done';
 export * from './product-master';
+export * from './thank-you-page/thank-you-page.model';

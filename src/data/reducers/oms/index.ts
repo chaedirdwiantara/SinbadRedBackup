@@ -8,3 +8,4 @@ export * from './reserve-data';
 export * from './checkout/checkout.reducer';
 export * from './checkout-done/checkout-done.reducer';
 export * from './product-master';
+export * from './thank-you-page/thank-you-page.reducer';

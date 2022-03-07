@@ -685,6 +685,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         <LoadingPage />
       ) : (
         <>
+        
           {(Array.isArray(cartMaster.data) && cartMaster.data.length > 0) ||
           (Array.isArray(cartMaster.dataEmptyStock) &&
             cartMaster.dataEmptyStock.length > 0) ||
