@@ -137,7 +137,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
             postCheckSellerAction.fetch(dispatchCart);
           }
           if (isErrorCheckStock) {
-            postCheckStockAction.fetch(dispatchCart, false);
+            postCheckStockAction.fetch(dispatchCart);
           }
           // decrease the retry count
           retryCheckModal.setRetryCount(retryCheckModal.retryCount - 1);

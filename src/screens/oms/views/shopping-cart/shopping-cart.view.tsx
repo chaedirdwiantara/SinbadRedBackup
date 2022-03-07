@@ -26,6 +26,7 @@ import {
   useGetTotalCartAction,
   useCartBuyerAddressAction,
   useCancelStockAction,
+  useUpdateCartAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -70,6 +71,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const totalCartActions = useGetTotalCartAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
   const cancelCartAction = useCancelStockAction();
+  const updateCartAction = useUpdateCartAction();
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -103,6 +105,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.fetch(dispatchCart);
   };
 
+  const handleGoBack = () => {
+    goBack();
+    if (localCartMaster) {
+      updateCartAction.fetch(dispatchCart, localCartMaster);
+    }
+  };
+
   /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
@@ -120,6 +129,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       removeCartProductAction.reset(dispatchCart);
       cartMasterAction.reset();
       cartBuyerAddressAction.reset(dispatchCart);
+      updateCartAction.reset(dispatchCart);
     };
   }, []);
 
@@ -141,7 +151,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       // determine the error data
@@ -152,7 +162,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         errorData = stateCart.buyerAddress.error;
       }
       errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => goBack);
+      errorModal.setCloseAction(() => handleGoBack);
       errorModal.setErrorData(errorData);
       errorModal.setOpen(true);
     }
@@ -189,11 +199,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           getCartAction.fetch(dispatchCart);
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => goBack);
+      errorModal.setCloseAction(() => handleGoBack);
       errorModal.setErrorData(stateCart.get.error);
       errorModal.setOpen(true);
     }
@@ -227,7 +237,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          goBack();
+          handleGoBack();
         }
       };
       // determine the error data
@@ -242,7 +252,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
         errorModal.setRetryAction(() => action);
-        errorModal.setCloseAction(() => goBack);
+        errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
@@ -350,7 +360,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MAIN */
   return (
     <SnbContainer color="grey">
-      <ShoppingCartHeader goBack={goBack} />
+      <ShoppingCartHeader goBack={handleGoBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
