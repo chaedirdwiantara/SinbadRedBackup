@@ -4,6 +4,7 @@ import LoadingPage from '@core/components/LoadingPage';
 import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
+import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
 import { useThankYouPageAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
 import { color, SnbContainer, SnbText, SnbToast, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
@@ -14,13 +15,14 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'; 
+import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 
 const OmsThankYouPageView: FC = () => {
+  const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   // const orderDetail = {
   //   "data":
   //   {
-      
   //     "id": "1",
   //     "code": "1812251000",
   //     "expiredDate": "2020-11-05T01:54:09.463Z",
@@ -98,6 +100,10 @@ const OmsThankYouPageView: FC = () => {
     Clipboard.setString(orderAmount.toString());
     SnbToast.show('Copied To Clipboard', 2000);
   };
+  const handleThankYouPageOrderDetail = () => {
+    // modalThankYouPageOrderDetail.setData(data);
+    modalThankYouPageOrderDetail.setOpen(true)
+  };
   /** => Payment Total */
   const renderPaymentTotal = () => {
     if(thankYouPageData === null || thankYouPageData === undefined) {
@@ -108,7 +114,7 @@ const OmsThankYouPageView: FC = () => {
     title="Total Pembayaran"
     headerButton={true}
     headerButtonTitle="Lihat Detail"
-    // headerButtonAction={}
+    headerButtonAction={handleThankYouPageOrderDetail}
     >
     <View
      style={ThankYouPageStyle.defaultContentPadding}
@@ -170,6 +176,19 @@ const OmsThankYouPageView: FC = () => {
         {renderThankYouPageContent()}
     </View>
   );
+ /** => ModalOrderDetail */
+  const renderModalOrderDetail = () => {
+    return (
+      <ModalThankYouPageOrderDetail
+        isOpen={modalThankYouPageOrderDetail.isOpen}
+        close={() => {
+          modalThankYouPageOrderDetail.setData(null);
+          modalThankYouPageOrderDetail.setOpen(false);
+        }}
+        data={modalThankYouPageOrderDetail.data}
+      />
+    );
+  };
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -186,6 +205,7 @@ const OmsThankYouPageView: FC = () => {
       
       {renderContent()}
       {/* {renderFooter()} */}
+      {renderModalOrderDetail()}
       </>
       )}
     </SnbContainer>
