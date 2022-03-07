@@ -95,6 +95,21 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
+  /** => handle refetch cart */
+  const handleRefetchCart = () => {
+    checkProductAction.reset(dispatchCart);
+    checkSellerAction.reset(dispatchCart);
+    checkStockAction.reset(dispatchCart);
+    getCartAction.reset(dispatchCart);
+    removeCartProductAction.reset(dispatchCart);
+    cartMasterAction.reset();
+    cartBuyerAddressAction.reset(dispatchCart);
+
+    errorModal.setRetryCount(3);
+    cancelCartAction.fetch(dispatchCart);
+    cartBuyerAddressAction.fetch(dispatchCart);
+  };
+
   /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
