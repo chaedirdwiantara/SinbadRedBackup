@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
-import { meReset } from '@core/data/actions';
+import { meReset, meV2Reset } from '@core/data/actions';
 /** === FUNCTION === */
 /** => call auth action */
 const useAuthAction = () => {
@@ -27,6 +27,7 @@ const useAuthAction = () => {
     logout: () => {
       dispatch(Actions.logoutProcess());
       dispatch(meReset());
+      dispatch(meV2Reset());
       dispatch(Actions.cartTotalProductReset());
       dispatch(Actions.resetCheckoutMasterData());
       dispatch(Actions.resetCartMasterData());
