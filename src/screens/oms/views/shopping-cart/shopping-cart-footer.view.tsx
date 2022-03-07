@@ -27,23 +27,22 @@ interface FooterProps {
   countTotalProduct: number;
   countTotalPrice: number;
   isInitialCancelReserveDone: boolean;
-  onPressCheckout: () => void;
   isCheckoutDisabled: boolean;
 }
 /** === COMPONENT ===  */
-const ShoppingCartFooterMemo: FC<FooterProps> = ({
+export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
   countTotalPrice,
   countTotalProduct,
   isInitialCancelReserveDone,
-  onPressCheckout,
   isCheckoutDisabled,
 }) => {
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
   const [isErrorShown, setErrorShown] = useState(false);
+  const [isMatchValid, setMatchValid] = useState(false);
 
   const cancelCartAction = useCancelStockAction();
   const cartMasterAction = useCartMasterAction();
@@ -58,15 +57,9 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
   const retryCheckoutModal = useOmsGeneralFailedState();
 
   const handleOnPressCheckout = useCallback(() => {
-    onPressCheckout();
-    if (stateCart.buyerAddress.data !== null) {
-      updateCartAction.fetch(dispatchCart, {
-        buyerName: stateCart.buyerAddress.data.buyerName,
-        id: cartData.id,
-        carts: cartData.sellers,
-      });
-    }
-  }, [stateCart.buyerAddress.data]);
+    cartMasterAction.replaceFromLocal(cartData);
+    updateCartAction.fetch(dispatchCart, cartData);
+  }, [cartData, stateCart.buyerAddress.data]);
 
   const checkProductSellerStock = useCallback(() => {
     if (stateCart.update.data !== null) {
@@ -108,6 +101,8 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
         checkStockData: stateCart.postCheckStock.data ?? [],
         cartData: cartMasterAction.cartMaster,
       });
+
+      setMatchValid(validationResult);
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
@@ -177,14 +172,19 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
     /** Request Checkout API once the validation complete with no errors
      * AND buyer address already give the result
      */
-    retryCheckoutModal.setRetryCount(3);
-    checkoutAction.fetch(dispatchCheckout);
-  }, [
-    stateCart.postCheckProduct.error,
-    stateCart.postCheckSeller.error,
-    stateCart.postCheckStock.error,
-    stateCart.buyerAddress.data,
-  ]);
+    if (isMatchValid) {
+      retryCheckoutModal.setRetryCount(3);
+      checkoutAction.fetch(dispatchCheckout);
+    }
+  }, [isMatchValid]);
+
+  useEffect(() => {
+    if (stateCheckout.checkout.data !== null) {
+      /**
+       * NAVIGATE TO CHECKOUT PAGE
+       */
+    }
+  }, [stateCheckout.checkout.data]);
 
   useEffect(() => {
     // wait all fetch done first
@@ -305,5 +305,3 @@ const ShoppingCartFooterMemo: FC<FooterProps> = ({
     </View>
   );
 };
-
-export const ShoppingCartFooter = React.memo(ShoppingCartFooterMemo);

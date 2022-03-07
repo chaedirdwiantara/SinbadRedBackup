@@ -66,12 +66,37 @@ const useAddToCartAction = () => {
 /** => update cart action */
 const useUpdateCartAction = () => {
   const dispatch = useDispatch();
+  const { stateCart } = useContext(contexts.CartContext);
   return {
     fetch: (
       contextDispatch: (action: any) => any,
-      data: models.UpdateCartPayload,
+      cartData: models.CartMaster,
     ) => {
-      dispatch(Actions.updateCartProcess(contextDispatch, { data }));
+      if (stateCart.buyerAddress.data !== null) {
+        const carts: models.CartMasterSellers[] = [];
+        cartData.unavailable.map((product) => {
+          const sellerFound = cartData.sellers.find(
+            (seller) => seller.sellerId === product.sellerId,
+          );
+
+          if (sellerFound) {
+            carts.push({
+              ...sellerFound,
+              products: [...sellerFound?.products, product],
+            });
+          }
+        });
+
+        dispatch(
+          Actions.updateCartProcess(contextDispatch, {
+            data: {
+              buyerName: stateCart.buyerAddress.data.buyerName,
+              id: cartData.id,
+              carts,
+            },
+          }),
+        );
+      }
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.updateCartReset(contextDispatch));

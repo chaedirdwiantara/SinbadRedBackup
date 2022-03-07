@@ -24,7 +24,7 @@ const useCheckoutAction = () => {
           stateCart.buyerAddress.data,
         );
 
-        const carts: models.CheckoutCartPayload[] = cartMaster.sellers.map(
+        const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
           (seller) => {
             const products: models.CheckoutProductData[] = seller.products
               .filter((product) => product.selected)
@@ -59,11 +59,23 @@ const useCheckoutAction = () => {
           },
         );
 
+        const carts = cartsTemp.map((cart) => {
+          return {
+            sellerId: cart.sellerId,
+            sellerName: cart.sellerName,
+            products: cart.products,
+          };
+        });
+
         dispatch(
           Actions.checkoutProcess(contextDispatch, {
             data: {
               buyerName: stateCart.buyerAddress.data.buyerName,
-              buyerAddress,
+              buyerAddress: {
+                ...buyerAddress,
+                longitude: buyerAddress.longitude.toString(),
+                latitude: buyerAddress.latitude.toString(),
+              },
               carts,
             },
           }),

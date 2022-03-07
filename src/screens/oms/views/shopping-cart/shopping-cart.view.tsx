@@ -88,13 +88,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
-  /** => handle save local state to redux */
-  const handleSaveLocalStateToRedux = useCallback(() => {
-    if (localCartMaster) {
-      cartMasterAction.replaceFromLocal(localCartMaster);
-    }
-  }, [localCartMaster]);
-
   /** => handle refetch cart */
   const handleRefetchCart = () => {
     checkProductAction.reset(dispatchCart);
@@ -340,7 +333,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             </ScrollView>
             <ShoppingCartFooter
               cartData={localCartMaster}
-              onPressCheckout={handleSaveLocalStateToRedux}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isInitialCancelReserveDone={isInitialCancelReserveDone}
