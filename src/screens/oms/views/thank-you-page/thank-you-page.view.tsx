@@ -2,6 +2,7 @@
 import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
+import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
 import { color, SnbContainer, SnbText, SnbToast, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 import React, { FC } from 'react';
@@ -11,8 +12,10 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
+import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 
 const OmsThankYouPageView: FC = () => {
+  const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   const orderDetail = {
     "loading": false,
     "data":
@@ -77,13 +80,18 @@ const OmsThankYouPageView: FC = () => {
     Clipboard.setString(orderAmount.toString());
     SnbToast.show('Copied To Clipboard', 2000);
   };
+  const handleThankYouPageOrderDetail = () => {
+    // modalThankYouPageOrderDetail.setData(data);
+    SnbToast.show("irpan open modal", 2000);
+    modalThankYouPageOrderDetail.setOpen(true)
+  };
   /** => Payment Total */
   const renderPaymentTotal = () => (
     <ThankYouPageCard 
     title="Total Pembayaran"
     headerButton={true}
     headerButtonTitle="Lihat Detail"
-    // headerButtonAction={}
+    headerButtonAction={handleThankYouPageOrderDetail}
     >
     <View
      style={ThankYouPageStyle.defaultContentPadding}
@@ -138,6 +146,19 @@ const OmsThankYouPageView: FC = () => {
         {renderThankYouPageContent()}
     </View>
   );
+ /** => ModalOrderDetail */
+  const renderModalOrderDetail = () => {
+    return (
+      <ModalThankYouPageOrderDetail
+        isOpen={modalThankYouPageOrderDetail.isOpen}
+        close={() => {
+          modalThankYouPageOrderDetail.setData(null);
+          modalThankYouPageOrderDetail.setOpen(false);
+        }}
+        data={modalThankYouPageOrderDetail.data}
+      />
+    );
+  };
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -147,6 +168,7 @@ const OmsThankYouPageView: FC = () => {
       />
       {renderContent()}
       {/* {renderFooter()} */}
+      {renderModalOrderDetail()}
     </SnbContainer>
   );
 }
