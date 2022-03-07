@@ -38,9 +38,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
   
   const [expanded, setExpanded] = useState(false);
   const productPerSellerList = (sellerData : models.OrderSeller) => {
-    console.log('irpan 2',sellerData)
     if(expanded){
-      console.log('irpan 2 expanded', sellerData.products.length)
       return sellerData.products.map((product, index) => (
           <>
             <View>
@@ -92,7 +90,6 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
     }
   }
   const productPriceList = () => {
-    console.log('irpan', data?.sellers)
     if(expanded){
       return data?.sellers.map((dataSeller) => (
         <>
