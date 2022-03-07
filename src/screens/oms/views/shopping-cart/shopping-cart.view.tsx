@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
@@ -85,13 +85,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         cartId: cartMasterAction.cartMaster.id,
         removedProducts: selectRemoveProduct.removedProducts,
       });
-    }
-  };
-
-  /** => handle save local state to redux */
-  const handleSaveLocalStateToRedux = () => {
-    if (localCartMaster) {
-      cartMasterAction.replaceFromLocal(localCartMaster);
     }
   };
 
@@ -339,12 +332,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               </View>
             </ScrollView>
             <ShoppingCartFooter
-              onPressCheckout={() => {
-                handleSaveLocalStateToRedux();
-              }}
+              cartData={localCartMaster}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isInitialCancelReserveDone={isInitialCancelReserveDone}
+              isCheckoutDisabled={
+                isAnyActiveProduct() && countTotalPrice < 100000
+              }
             />
           </React.Fragment>
         );

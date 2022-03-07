@@ -59,6 +59,7 @@ export const cartMaster = simplifyReducer(initialState, {
               qty = item.minQty;
               selected = false;
             }
+
             const productData: models.CartMasterSellersProducts = {
               ...item,
               lastUsedPrice: thisProduct.lastUsedPrice,
