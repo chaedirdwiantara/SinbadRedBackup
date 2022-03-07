@@ -1,15 +1,13 @@
 /** === EXPORT ALL === */
-export * from './oms.function';
-export * from './cart/cart-hook.function';
-export * from './cart/cart.function';
-export * from './checkout';
-export * from './checkout/checkout-hook.function';
+export * from './checkout-hook.function';
+export * from './create-orders-hook.function';
+export * from './checkout.function';
 /**
  * ================================================================
  * NOTES
  * ================================================================
  * createdBy: ryan (team)
- * createDate: 31082021
+ * createDate: 07102021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

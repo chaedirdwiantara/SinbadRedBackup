@@ -17,9 +17,11 @@ export const CheckoutAddressView: FC = () => {
       <SnbText.B2>Alamat Pengiriman</SnbText.B2>
       <SnbDivider style={{ marginVertical: 8 }} />
       <View style={{ marginBottom: 6 }}>
-        <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4>
+        {/* <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4> */}
+        <SnbText.B4>Chaedir</SnbText.B4>
       </View>
-      <SnbText.B1>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B1>
+      {/* <SnbText.B1>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B1> */}
+      <SnbText.B1>Sungai Musik, Sentul, Bogor</SnbText.B1>
     </View>
   );
 };

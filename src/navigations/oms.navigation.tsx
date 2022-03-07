@@ -1,8 +1,11 @@
-import { OmsShoppingCartView } from '@screen/oms/views';
+import { OmsShoppingCartView, OmsCheckoutView } from '@screen/oms/views';
 
 const OmsNav = {
   OmsShoppingCartView: {
     component: OmsShoppingCartView,
+  },
+  OmsCheckoutView: {
+    component: OmsCheckoutView,
   },
 };
 

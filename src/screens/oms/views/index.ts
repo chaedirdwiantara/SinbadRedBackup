@@ -1,7 +1,8 @@
 /** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
 import OmsShoppingCartView from './shopping-cart/shopping-cart.view';
+import OmsCheckoutView from './checkout/checkout.view';
 /** === EXPORT ALL === */
-export { OmsShoppingCartView };
+export { OmsShoppingCartView, OmsCheckoutView };
 /**
  * ================================================================
  * NOTES

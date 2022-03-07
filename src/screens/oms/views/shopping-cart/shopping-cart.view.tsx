@@ -32,6 +32,7 @@ import {
 import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
+import { goToCheckout } from '@core/functions/product';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -343,7 +344,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             </ScrollView>
             <ShoppingCartFooter
               onPressCheckout={() => {
-                handleSaveLocalStateToRedux();
+                // handleSaveLocalStateToRedux();
+                goToCheckout();
               }}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
