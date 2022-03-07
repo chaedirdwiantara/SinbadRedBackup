@@ -132,10 +132,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => if get cart or buyer address failed */
   useEffect(() => {
-    if (
-      !stateCart.cancelStock.loading !== null &&
-      !stateCart.buyerAddress.loading
-    ) {
+    if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
       // check which endpoint fetch was fail
       const isErrorCancelStock = stateCart.cancelStock.error !== null;
       const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
