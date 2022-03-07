@@ -7,6 +7,7 @@ import SnbCardButtonType3 from './card-button-type-3.component';
 import Stepper from './stepper.component';
 import ListOfSteps from './list-of-steps.component';
 import ModalBack from './modal-back.component';
+import ModalSelection from './modal-selection.component';
 
 export {
   ErrorContent,
@@ -18,4 +19,5 @@ export {
   Stepper,
   ListOfSteps,
   ModalBack,
+  ModalSelection,
 };

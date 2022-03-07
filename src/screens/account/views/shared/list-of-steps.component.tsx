@@ -34,41 +34,41 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const dataUser = [
     {
       title: 'Nama Lengkap',
-      value: completeDataState?.data?.data?.user?.isFullName || false,
+      value: completeDataState?.data?.user?.isFullName || false,
     },
     {
       title: 'Foto KTP',
-      value: completeDataState?.data?.data?.user?.isIdImageUrl || false,
+      value: completeDataState?.data?.user?.isIdImageUrl || false,
     },
     {
       title: 'Foto NPWP',
-      value: completeDataState?.data?.data?.user?.isTaxImageUrl || false,
+      value: completeDataState?.data?.user?.isTaxImageUrl || false,
     },
     {
       title: 'Foto Selfie dengan KTP',
-      value: completeDataState?.data?.data?.user?.isSelfieImageUrl || false,
+      value: completeDataState?.data?.user?.isSelfieImageUrl || false,
     },
     {
       title: 'Konfirmasi Kartu Identitas',
-      value: completeDataState?.data?.data?.user?.isValidIdNumber || false,
+      value: completeDataState?.data?.user?.isValidIdNumber || false,
     },
     {
       title: 'Email',
-      value: completeDataState?.data?.data?.user?.isEmail || false,
+      value: completeDataState?.data?.user?.isEmail || false,
     },
   ];
   const dataBuyer = [
     {
       title: 'Informasi Toko',
-      value: completeDataState?.data?.data?.buyer?.isBuyerInformation || false,
+      value: completeDataState?.data?.buyer?.isBuyerInformation || false,
     },
     {
       title: 'Foto Toko',
-      value: completeDataState?.data?.data?.buyer?.isImageUrl || false,
+      value: completeDataState?.data?.buyer?.isImageUrl || false,
     },
     {
       title: 'Alamat Toko',
-      value: completeDataState?.data?.data?.buyer?.isAddress || false,
+      value: completeDataState?.data?.buyer?.isAddress || false,
     },
   ];
 

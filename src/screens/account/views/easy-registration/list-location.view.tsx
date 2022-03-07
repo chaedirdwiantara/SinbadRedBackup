@@ -79,7 +79,7 @@ const Content: React.FC = () => {
       <View style={{ padding: 16 }}>
         <SnbTextField.Text
           {...search}
-          placeholder="Cari Kota/Kabupaten, Kec. dan Desa"
+          placeholder="Cari Kota/Kabupaten, Kec. dan Kelurahan"
           prefixIconName="search"
         />
       </View>
