@@ -27,7 +27,7 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
     case 'listVehicleAccess': {
-      path = `vehicle-accessibilities/all?keyword=${data.meta?.keyword}`;
+      path = `vehicle-accessibilities/all?keyword=${data.meta?.keyword || ''}`;
       module = 'account';
       break;
     }

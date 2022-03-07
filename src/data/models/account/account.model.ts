@@ -164,3 +164,15 @@ export interface IUpdateCompleteData {
   user?: IUpdateUserCompletData;
   buyer?: IUpdateBuyerCompleteData;
 }
+
+export type ITypeList =
+  | ''
+  | 'listNumOfEmployee'
+  | 'listProvince'
+  | 'listCity'
+  | 'listDistrict'
+  | 'listUrban'
+  | 'listVehicleAccessAmount'
+  | 'listUrbanID'
+  | 'listVehicleAccess'
+  | 'listBank';

@@ -12,6 +12,7 @@ import DataDiriStep6View from './data-completeness/data-diri/data-diri-step-6.vi
 import DataTokoStep1View from './data-completeness/data-toko/data-toko-step-1.view';
 import DataTokoStep2View from './data-completeness/data-toko/data-toko-step-2.view';
 import DataTokoStep3View from './data-completeness/data-toko/data-toko-step-3.view';
+import InputManualLocationModalView from './data-completeness/input-manual-location-modal.view';
 export {
   ListLocationView,
   BuyerCategoryView,
@@ -27,4 +28,5 @@ export {
   DataTokoStep1View,
   DataTokoStep2View,
   DataTokoStep3View,
+  InputManualLocationModalView,
 };

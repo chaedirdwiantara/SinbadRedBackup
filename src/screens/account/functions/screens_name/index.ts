@@ -12,3 +12,4 @@ export const DATA_DIRI_STEP_6_VIEW = 'DataDiriStep6View';
 export const DATA_TOKO_STEP_1_VIEW = 'DataTokoStep1View';
 export const DATA_TOKO_STEP_2_VIEW = 'DataTokoStep2View';
 export const DATA_TOKO_STEP_3_VIEW = 'DataTokoStep3View';
+export const INPUT_MANUAL_LOCATION_MODAL_VIEW = 'InputManualLocationModalView';

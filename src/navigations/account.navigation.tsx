@@ -11,6 +11,7 @@ import {
   DataTokoStep1View,
   DataTokoStep2View,
   DataTokoStep3View,
+  InputManualLocationModalView,
   ListLocationView,
   ProductCategoryView,
 } from '@screen/account/views';
@@ -57,6 +58,9 @@ const AccountNav = {
   },
   DataTokoStep3View: {
     component: DataTokoStep3View,
+  },
+  InputManualLocationModalView: {
+    component: InputManualLocationModalView,
   },
 };
 

@@ -4,7 +4,11 @@ import { formatter } from './auth-utils.functions';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
-import { IListSelection } from '@models';
+
+const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
+  { id: 1, name: '1 Kendaraan', value: 1 },
+  { id: 2, name: '2 Kendaraan', value: 2 },
+];
 
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
@@ -177,14 +181,20 @@ export const useTextFieldSelect = () => {
     (state: any) => state.global,
   );
 
-  const gotoSelection = (data: IListSelection) => {
+  const gotoSelection = (data: models.IListSelection) => {
     resetSelectedItem();
     resetGetSelection();
     navigate('ListAndSearchView', data);
   };
 
-  const getSelection = (data: IListSelection) => {
-    dispatch(Actions.getSelectionProcess(data));
+  const getSelection = (data: models.IListSelection) => {
+    if (data.type === 'listVehicleAccessAmount') {
+      dispatch(
+        Actions.getSelectionSuccess({ data: DEFAULT_VEHICLE_ACCESS_AMOUNT }),
+      );
+    } else {
+      dispatch(Actions.getSelectionProcess(data));
+    }
   };
 
   const resetGetSelection = () => {
