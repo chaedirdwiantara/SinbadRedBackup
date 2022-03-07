@@ -21,5 +21,14 @@ export const ThankYouPageStyle = StyleSheet.create({
     marginRight: 16,
     borderColor: color.black5
   },
+  paymentDetail: {
+    flexDirection: 'row',
+    paddingTop: 12,
+    paddingHorizontal: 25
+  },
+  defaultContentPadding : {
+    paddingTop: 12
+  }
+
 })
 

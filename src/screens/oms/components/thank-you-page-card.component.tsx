@@ -10,6 +10,7 @@ interface ThankYouPageCardProps {
   contentTopSpaces?: number;
   headerButton?: boolean;
   headerButtonTitle? : string;
+  headerButtonAction? : any;
 }
 export const ThankYouPageCard: FC<ThankYouPageCardProps> = ({
   title,
@@ -17,6 +18,7 @@ export const ThankYouPageCard: FC<ThankYouPageCardProps> = ({
   headerButton = false,
   headerButtonTitle,
   contentTopSpaces,
+  headerButtonAction,
   children,
 }) => (
   <View>
@@ -24,7 +26,7 @@ export const ThankYouPageCard: FC<ThankYouPageCardProps> = ({
       <View style={ThankYouPageStyle.cardHeader}>
         <SnbText.H4>{title}</SnbText.H4>
         {headerButton && (
-        <TouchableOpacity onPress={()=> console.log('ok')}>
+        <TouchableOpacity onPress={()=> headerButtonAction()}>
           <SnbText.B3 color={color.blue50}>{headerButtonTitle}</SnbText.B3>
         </TouchableOpacity>
         )}

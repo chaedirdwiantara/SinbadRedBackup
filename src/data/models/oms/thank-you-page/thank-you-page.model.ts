@@ -1,4 +1,4 @@
-export interface OrderDetailProps {
+export interface ThankYouOrderDetailProps {
   id: string,
   code: string,
   expiredDate: string,

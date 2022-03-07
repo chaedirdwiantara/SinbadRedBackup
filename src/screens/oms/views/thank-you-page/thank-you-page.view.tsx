@@ -83,17 +83,14 @@ const OmsThankYouPageView: FC = () => {
     title="Total Pembayaran"
     headerButton={true}
     headerButtonTitle="Lihat Detail"
+    // headerButtonAction={}
     >
     <View
-     style={{
-       paddingTop:12
-     }}
+     style={ThankYouPageStyle.defaultContentPadding}
     >
       <SnbText.H4 color={color.red50}>{toCurrency(Number(orderDetail?.data?.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H4>
       <View
-      style={{
-        paddingTop:12
-      }}
+      style={ThankYouPageStyle.defaultContentPadding}
       >
         <TouchableOpacity onPress={() => onOrderAmountCopied()}>
           <SnbText.B4 color={color.blue50}>{'Salin Jumlah'}</SnbText.B4>
@@ -107,11 +104,7 @@ const OmsThankYouPageView: FC = () => {
   const renderPaymentDetail = () => (
   <ThankYouPageCard title="Detail Pembayaran">
     <View
-      style={{
-        flexDirection: 'row',
-        paddingTop: 12,
-        paddingHorizontal: 25
-      }}>
+      style={ThankYouPageStyle.paymentDetail}>
       <Image
         source={{
           uri: orderDetail?.data?.payment_icon_url,
@@ -121,7 +114,7 @@ const OmsThankYouPageView: FC = () => {
       <View>
         <SnbText.H2>{orderDetail?.data?.vaAccountNo}</SnbText.H2>
         <TouchableOpacity onPress={() => onVACopied()}>
-          <SnbText.C1 color= {color.blue80}>{'Salin no. Virtual Account'}</SnbText.C1>
+          <SnbText.C1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.C1>
         </TouchableOpacity>
       </View>
             

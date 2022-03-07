@@ -19,6 +19,7 @@ export * from './checkout/create-orders.action';
 export * from './checkout-done';
 export * from './shoping-cart/cart-checkedout-api.action';
 export * from './shoping-cart/product-master-napi.action';
+export * from './thank-you-page/thank-you-page-api.action';
 /**
  * ================================================================
  * NOTES

@@ -38,6 +38,10 @@ import {
   CheckoutDoneProvider,
 } from './oms/checkout-done/CheckoutDoneProvider';
 import { QuestProvider, QuestContext } from './quest/QuestProvider';
+import {
+  ThankYouPageContext,
+  ThankYouPageProvider
+} from './oms/thank-you-page/ThankYouPageProvider'
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -63,6 +67,7 @@ export const providers = [
   StockProvider,
   QuestProvider,
   CheckoutDoneProvider,
+  ThankYouPageProvider
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -87,4 +92,5 @@ export const contexts = {
   StockContext,
   QuestContext,
   CheckoutDoneContext,
+  ThankYouPageContext,
 };
