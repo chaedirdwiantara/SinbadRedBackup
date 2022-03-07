@@ -10,7 +10,7 @@ function* thankYouPageOrderDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.ThankYouOrderDetailProps> =
       yield call(() => {
-        return ThankYouPageApi.thankYouPageOrderDetail(action.payload.id);
+        return ThankYouPageApi.thankYouPageOrderDetail(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.thankYouPageOrderDetailSuccess(response),
