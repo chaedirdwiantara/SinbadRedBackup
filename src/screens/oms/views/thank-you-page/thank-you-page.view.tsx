@@ -85,7 +85,7 @@ const OmsThankYouPageView: FC = () => {
   
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'1')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'2')
   }, [])
 
   /** => function to copy VA Number */
@@ -101,7 +101,7 @@ const OmsThankYouPageView: FC = () => {
     SnbToast.show('Copied To Clipboard', 2000);
   };
   const handleThankYouPageOrderDetail = () => {
-    // modalThankYouPageOrderDetail.setData(data);
+    modalThankYouPageOrderDetail.setData(thankYouPageData);
     modalThankYouPageOrderDetail.setOpen(true)
   };
   /** => Payment Total */
