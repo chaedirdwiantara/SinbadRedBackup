@@ -144,6 +144,8 @@ export const ProductView: FC<ProductViewProps> = ({
       arrowIconColor = color.red50;
     }
 
+    console.log('PRICE', { lastPrice, displayPrice });
+
     return (
       <View
         style={{

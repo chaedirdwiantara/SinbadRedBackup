@@ -91,8 +91,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => handle save local state to redux */
   const handleSaveLocalStateToRedux = useCallback(() => {
     if (localCartMaster) {
-      console.log('REDUX REPLACED WITH:', localCartMaster);
-
       cartMasterAction.replaceFromLocal(localCartMaster);
     }
   }, [localCartMaster]);
@@ -273,6 +271,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       cartMasterAction.cartMaster.isCheckSellerMerged &&
       cartMasterAction.cartMaster.isCheckStockMerged
     ) {
+      console.log('Set Local Cart Master!');
+
       setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
       setPageLoading(false);
     }
@@ -313,7 +313,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (!isCartEmpty) {
         return (
           <React.Fragment>
-            {console.log('localCartMaster', localCartMaster)}
             <ScrollView>
               <View style={{ flex: 1 }}>
                 <ShoppingCartAddress />
@@ -330,13 +329,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               </View>
             </ScrollView>
             <ShoppingCartFooter
-              key={JSON.stringify(localCartMaster)}
-              onPressCheckout={() => {
-                handleSaveLocalStateToRedux();
-              }}
+              cartData={localCartMaster}
+              onPressCheckout={handleSaveLocalStateToRedux}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isInitialCancelReserveDone={isInitialCancelReserveDone}
+              isCheckoutDisabled={
+                isAnyActiveProduct() && countTotalPrice < 100000
+              }
             />
           </React.Fragment>
         );

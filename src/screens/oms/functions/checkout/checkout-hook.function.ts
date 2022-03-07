@@ -20,12 +20,51 @@ const useCheckoutAction = () => {
         stateCart.postCheckStock.data !== null &&
         stateCart.buyerAddress.data !== null
       ) {
+        const buyerAddress = (({ buyerId, buyerName, ...rest }) => rest)(
+          stateCart.buyerAddress.data,
+        );
+
+        const carts: models.CheckoutCartPayload[] = cartMaster.sellers.map(
+          (seller) => {
+            const products: models.CheckoutProductData[] = seller.products
+              .filter((product) => product.selected)
+              .map((product) => {
+                let priceRules: models.ProductPriceRules | {} = {};
+                // if the product using price rules
+                if (product.priceRules.length > 0) {
+                  const priceRulesLastItem =
+                    product.priceRules[product.priceRules.length - 1];
+                  if (priceRulesLastItem.maxQty <= product.qty) {
+                    priceRules = priceRulesLastItem;
+                  } else {
+                    product.priceRules.map((priceRulesItem) => {
+                      if (
+                        product.qty >= priceRulesItem.minQty &&
+                        product.qty <= priceRulesItem.maxQty
+                      ) {
+                        priceRules = priceRulesItem;
+                      }
+                    });
+                  }
+                }
+                return {
+                  ...product,
+                  priceRules,
+                } as models.CheckoutProductData;
+              });
+            return {
+              ...seller,
+              products,
+            };
+          },
+        );
+
         dispatch(
           Actions.checkoutProcess(contextDispatch, {
             data: {
               buyerName: stateCart.buyerAddress.data.buyerName,
-              buyerAddress: stateCart.buyerAddress.data,
-              carts: cartMaster.sellers,
+              buyerAddress,
+              carts,
             },
           }),
         );
