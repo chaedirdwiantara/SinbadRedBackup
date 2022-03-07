@@ -102,7 +102,7 @@ const BuyerCategory: React.FC = () => {
     params?.selectedLocation,
   );
   const { getCoachmark } = useCoachmark();
-  const { meV2 } = useAuthCoreAction();
+  const { meV2, me } = useAuthCoreAction();
 
   React.useEffect(() => {
     getBuyerCategory();
@@ -111,6 +111,7 @@ const BuyerCategory: React.FC = () => {
   React.useEffect(() => {
     if (createBasicAccountState.data) {
       if (actionFrom === 'mulai') {
+        me();
         meV2();
         getCoachmark();
         reset({ index: 0, routes: [{ name: 'Home' }] });
