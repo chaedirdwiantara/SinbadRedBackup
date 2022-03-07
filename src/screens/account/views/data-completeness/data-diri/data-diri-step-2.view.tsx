@@ -28,7 +28,7 @@ const Content: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
   } = useEasyRegistration();
-  const { imageUrl } = completeDataState.data?.userData || {};
+  const { idImageUrl } = completeDataState.data?.userData || {};
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -87,7 +87,7 @@ const Content: React.FC = () => {
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <Image
           resizeMode="contain"
-          source={{ uri: capturedImage?.data?.url || imageUrl }}
+          source={{ uri: capturedImage?.data?.url || idImageUrl }}
           borderRadius={4}
           style={{
             height: undefined,
@@ -129,7 +129,7 @@ const Content: React.FC = () => {
   };
 
   const isImageAvailable =
-    Boolean(imageUrl) || capturedImage.data?.type === 'ktp';
+    Boolean(idImageUrl) || capturedImage.data?.type === 'ktp';
 
   return (
     <View style={{ flex: 1 }}>
