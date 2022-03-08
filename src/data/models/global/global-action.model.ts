@@ -29,8 +29,8 @@ export interface IListSelection {
   type: ITypeList;
   params?: string;
   meta?: {
-    skip?: number;
-    limit?: number;
+    page?: number;
+    perPage?: number;
     keyword?: string;
   };
   action?: 'create' | 'edit' | undefined;
@@ -42,4 +42,9 @@ export interface IUrbanID {
     limit?: number;
     keyword?: string;
   };
+}
+
+export interface IOnSelectedItem {
+  type: ITypeList;
+  item: any;
 }

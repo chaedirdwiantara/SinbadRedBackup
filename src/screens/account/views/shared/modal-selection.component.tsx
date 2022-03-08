@@ -3,6 +3,7 @@ import {
   color,
   SnbBottomSheet,
   SnbButton,
+  SnbProgress,
   SnbRadioButton,
   SnbText,
 } from '@sinbad/react-native-sinbad-ui';
@@ -15,6 +16,7 @@ interface Props {
   open: boolean;
   type: models.ITypeList;
   onCloseModalSelection: (result?: any) => void;
+  params?: string;
 }
 
 function setTitle(type: models.ITypeList) {
@@ -48,15 +50,87 @@ function setTitle(type: models.ITypeList) {
 
   return title;
 }
+
+function handleRadioButtonStatus(
+  type: models.ITypeList,
+  item: any,
+  selectedItem: any,
+) {
+  let status: IRadioButton = 'unselect';
+  let label = '';
+  const { id, city, name, district, province } = selectedItem?.item || {};
+
+  switch (type) {
+    case 'listProvince': {
+      if (name === item?.name) {
+        status = 'selected';
+      }
+      if (province === item?.name) {
+        status = 'selected';
+      }
+      label = item.name;
+      break;
+    }
+    case 'listCity': {
+      if (city === item?.city) {
+        status = 'selected';
+      }
+      label = item.city;
+      break;
+    }
+    case 'listDistrict': {
+      if (district === item?.district) {
+        status = 'selected';
+      }
+      label = item.district;
+      break;
+    }
+    case 'listUrban': {
+      if (id === item?.id) {
+        status = 'selected';
+      }
+      label = item.urban;
+      break;
+    }
+    default: {
+      if (id === item?.id) {
+        status = 'selected';
+      }
+      label = item.name;
+      break;
+    }
+  }
+  return { label, status };
+}
+
 const ModalSelection: React.FC<Props> = ({
   type,
   open,
   onCloseModalSelection,
+  params,
 }) => {
-  const { listSelection, selectedItem, onSelectedItem } = useTextFieldSelect();
+  const { listSelection, selectedItem, loadMoreSelection } =
+    useTextFieldSelect();
+  const [tempSelectedItem, setTempSelectedItem] =
+    React.useState<any>(selectedItem);
+
+  function handleLoadMore() {
+    const {
+      data: { data, meta },
+      isLoadMoreLoading,
+    } = listSelection || {};
+    if (data?.length < meta?.total && !isLoadMoreLoading) {
+      loadMoreSelection({
+        type,
+        meta: { page: meta?.page + 1 },
+        params,
+      });
+    }
+  }
 
   return (
     <SnbBottomSheet
+      isSwipeable
       open={open}
       title={setTitle(type)}
       closeAction={() => onCloseModalSelection()}
@@ -66,21 +140,23 @@ const ModalSelection: React.FC<Props> = ({
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <FlatList
-              data={listSelection.data}
+              data={listSelection.data?.data}
               keyExtractor={(_, idx) => idx.toString()}
-              contentContainerStyle={{
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-              }}
+              contentContainerStyle={{ paddingHorizontal: 16 }}
+              onEndReached={handleLoadMore}
+              onEndReachedThreshold={1}
               ItemSeparatorComponent={() => (
                 <View style={{ height: 1, backgroundColor: color.black10 }} />
               )}
-              renderItem={({ item }) => {
-                let status: IRadioButton =
-                  selectedItem?.item?.id === item?.id ? 'selected' : 'unselect';
+              renderItem={({ item, index }) => {
+                const { label, status } = handleRadioButtonStatus(
+                  type,
+                  item,
+                  tempSelectedItem,
+                );
                 return (
                   <TouchableOpacity
-                    onPress={() => onSelectedItem({ item, type })}
+                    onPress={() => setTempSelectedItem({ item, type })}
                     style={{
                       paddingVertical: 16,
                       flexDirection: 'row',
@@ -88,11 +164,13 @@ const ModalSelection: React.FC<Props> = ({
                       justifyContent: 'space-between',
                     }}>
                     <View style={{ flex: 1 }}>
-                      <SnbText.B1>{item.name}</SnbText.B1>
+                      <SnbText.B1>
+                        {index + 1}. {label}
+                      </SnbText.B1>
                     </View>
                     <View style={{ marginHorizontal: 4 }} />
                     <SnbRadioButton
-                      onPress={() => onSelectedItem({ item, type })}
+                      onPress={() => setTempSelectedItem({ item, type })}
                       status={status}
                     />
                   </TouchableOpacity>
@@ -100,11 +178,12 @@ const ModalSelection: React.FC<Props> = ({
               }}
             />
           </View>
+          {listSelection.isLoadMoreLoading && <SnbProgress />}
           <View style={{ height: 72 }}>
             <SnbButton.Single
               title={setTitle(type)}
-              onPress={() => onCloseModalSelection(selectedItem)}
-              disabled={selectedItem === null}
+              onPress={() => onCloseModalSelection(tempSelectedItem)}
+              disabled={tempSelectedItem === null}
               type="primary"
             />
           </View>

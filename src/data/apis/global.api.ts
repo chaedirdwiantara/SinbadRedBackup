@@ -1,6 +1,23 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiGeneral from '@core/services/apiGeneral';
+import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
+
+type TModule =
+  | 'account'
+  | 'cart'
+  | 'product'
+  | 'discount'
+  | 'auth'
+  | 'common'
+  | 'banner'
+  | 'order'
+  | 'payment'
+  | 'warehouse'
+  | 'order'
+  | 'quests'
+  | 'location';
+
 /** === FUNCTION === */
 const uploadImage = (data: models.IUploadImage) => {
   const path = 'upload/store-images';
@@ -13,13 +30,12 @@ const uploadImage = (data: models.IUploadImage) => {
     data,
   );
 };
+
 const getSelection = (data: models.IListSelection) => {
   let path = '';
-  let module = 'common';
+  let module: TModule = 'location';
   let access: 'public' | 'auth' = data?.action === 'edit' ? 'auth' : 'public';
-  let meta = `skip=${data.meta?.skip || 0}&limit=${
-    data.meta?.limit || 10
-  }&keyword=${data.meta?.keyword || ''}`;
+  let meta = `page=${data.meta?.page || 1}&perPage=${data.meta?.perPage || 10}`;
   switch (data.type) {
     case 'listNumOfEmployee': {
       path = 'number-of-employees';
@@ -32,23 +48,23 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
     case 'listProvince': {
-      path = `provinces/all?keyword=${data.meta?.keyword}`;
+      path = `location/province?${meta}`;
       break;
     }
     case 'listCity': {
-      path = `locations/city?${data.params}&${meta}`;
+      path = `location/city?${data.params}&${meta}`;
       break;
     }
     case 'listDistrict': {
-      path = `locations/district?${data.params}&${meta}`;
+      path = `location/district?${data.params}&${meta}`;
       break;
     }
     case 'listUrban': {
-      path = `locations/urban?${data.params}&${meta}`;
+      path = `location/urban?${data.params}&${meta}`;
       break;
     }
     case 'listUrbanID': {
-      meta = `skip=${data.meta?.skip}&limit=${data.meta?.limit}`;
+      meta = `skip=${data.meta?.page}&limit=${data.meta?.perPage}`;
       path = `locations/search?${data.params}&${meta}`;
       break;
     }
@@ -59,12 +75,12 @@ const getSelection = (data: models.IListSelection) => {
       break;
     }
   }
-  return apiGeneral<models.IGetSelectionSuccess<any>>(
+  return apiMapping<models.IGetSelectionSuccess<any>>(
     access,
     path,
     module,
     'v1',
-    'GET',
+    'DETAIL',
   );
 };
 

@@ -27,14 +27,15 @@ const Content: React.FC = () => {
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    refetchCompleteData,
   } = useEasyRegistration();
   const { imageUrl } = completeDataState.data?.buyerData || {};
 
   React.useEffect(() => {
     return () => {
+      resetUpdateCompleteData();
       save(dispatchGlobal, '');
       resetCamera();
-      resetUpdateCompleteData();
     };
   }, []);
 
@@ -55,9 +56,10 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
-      navigate(DATA_TOKO_STEP_3_VIEW);
-      resetCamera();
+      refetchCompleteData();
       resetUpdateCompleteData();
+      resetCamera();
+      navigate(DATA_TOKO_STEP_3_VIEW);
     }
   }, [updateCompleteDataState]);
 

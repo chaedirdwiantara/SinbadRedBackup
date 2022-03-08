@@ -27,6 +27,7 @@ const Content: React.FC = () => {
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    refetchCompleteData,
   } = useEasyRegistration();
   const { idImageUrl } = completeDataState.data?.userData || {};
   React.useEffect(() => {
@@ -54,9 +55,10 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
-      navigate(DATA_DIRI_STEP_3_VIEW);
+      refetchCompleteData();
       resetCamera();
       resetUpdateCompleteData();
+      navigate(DATA_DIRI_STEP_3_VIEW);
     }
   }, [updateCompleteDataState]);
 
@@ -142,21 +144,21 @@ const Content: React.FC = () => {
   );
 };
 
-const DataTokoStep2View: React.FC = () => {
+const DataDiriStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto Toko" />
+      <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto KTP" />
       <Stepper complete={2} total={7} onPress={() => setOpenModalStep(true)} />
       <Content />
       <ListOfSteps
         open={openModalStep}
-        type="buyer"
+        type="user"
         closeModal={() => setOpenModalStep(false)}
       />
     </SnbContainer>
   );
 };
 
-export default DataTokoStep2View;
+export default DataDiriStep2View;
