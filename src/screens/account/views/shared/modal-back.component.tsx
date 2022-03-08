@@ -7,6 +7,7 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import Svg from '@svg';
+import { useEasyRegistration } from '@screen/account/functions';
 
 interface ListOfStepsProps {
   closeModal: () => void;
@@ -15,6 +16,8 @@ interface ListOfStepsProps {
 }
 
 const ModalBack: FC<ListOfStepsProps> = (props) => {
+  const { updateCompleteDataState } = useEasyRegistration();
+
   const renderContent = () => {
     return (
       <View>
@@ -44,6 +47,8 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
               type="primary"
               onPress={() => props.confirm()}
               title="Ya, Keluar"
+              disabled={updateCompleteDataState.loading}
+              loading={updateCompleteDataState.loading}
             />
           </View>
         </View>
