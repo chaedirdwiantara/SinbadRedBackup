@@ -80,10 +80,18 @@ const useUpdateCartAction = () => {
           );
 
           if (sellerFound) {
-            carts.push({
-              ...sellerFound,
-              products: [...sellerFound?.products, product],
-            });
+            const indexCartFound = carts.findIndex(
+              (cart) => cart.sellerId === sellerFound.sellerId,
+            );
+
+            if (indexCartFound !== -1) {
+              carts[indexCartFound].products.push(product);
+            } else {
+              carts.push({
+                ...sellerFound,
+                products: [...sellerFound?.products, product],
+              });
+            }
           }
         });
 
