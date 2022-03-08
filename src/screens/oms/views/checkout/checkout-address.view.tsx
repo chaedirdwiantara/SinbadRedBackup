@@ -3,7 +3,6 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
-import { contexts } from '@contexts';
 
 export interface CheckoutAddressProps {
   buyerName: string;
@@ -15,12 +14,6 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
   buyerAddress,
   buyerName,
 }) => {
-  const {
-    stateUser: {
-      detail: { data: storeDetail },
-    },
-  } = React.useContext(contexts.UserContext);
-
   return (
     <View style={CheckoutStyle.addessSection}>
       <SnbText.H4>Alamat Pengiriman</SnbText.H4>
@@ -43,8 +36,8 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
  * ================================================================
  * createdBy: Maulana Ghozi (pyramid)
  * createDate: 25112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (valkyrie)
+ * updatedDate: 08032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

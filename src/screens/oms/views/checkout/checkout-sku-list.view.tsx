@@ -11,12 +11,10 @@ export interface IProductCheckout {
 export interface CheckoutSKUListViewProps {
   products: any;
   // products: IProductCheckout[];
-  // openModalProduct: (data: models.ProductCheckout[]) => void;
 }
 /** === COMPONENT === */
 export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
   products,
-  // openModalProduct,
 }) => {
   /** === HOOK === */
 
