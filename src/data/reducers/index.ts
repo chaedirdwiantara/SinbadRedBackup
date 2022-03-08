@@ -9,16 +9,8 @@ import { permanent } from './permanent';
 import { auth } from './auth';
 import { global } from './global';
 import { voucher } from './voucher/voucher-local-data.reducer';
-import {
-  checkout,
-  cartSelected,
-  paymentChannelsModal,
-  cartMaster,
-  cartTotalProduct,
-  reserveData,
-  productMasterCart,
-} from './oms';
 import { notificaitonTotalReducer } from './notification/notification-total.reducer';
+import { cartMaster } from './oms/cart/cart-master.reducer';
 
 export const rootReducer = combineReducers({
   permanentCore,
@@ -28,14 +20,8 @@ export const rootReducer = combineReducers({
   auth,
   global,
   voucher,
-  cartSelected,
-  checkout,
-  paymentChannelsModal,
-  cartMaster,
-  cartTotalProduct,
-  reserveData,
   notificaitonTotalReducer,
-  productMasterCart,
+  cartMaster,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

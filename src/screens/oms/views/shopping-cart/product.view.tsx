@@ -1,0 +1,251 @@
+/** === IMPORT PACKAGE HERE ===  */
+import React, { FC } from 'react';
+import { View, Image, TouchableOpacity } from 'react-native';
+import {
+  SnbText,
+  SnbCheckbox,
+  SnbIcon,
+  color,
+  SnbNumberCounter,
+  SnbBadge,
+} from 'react-native-sinbad-ui';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { ShoppingCartStyles } from '@screen/oms/styles';
+import { toCurrency } from '@core/functions/global/currency-format';
+import * as models from '@models';
+
+interface ProductViewProps {
+  product: models.CartMasterSellersProducts;
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleUpdateQty: ({
+    productId,
+    sellerId,
+    warehouseId,
+    type,
+  }: models.UpdateCartQty) => void;
+  handleUpdateSelected: ({
+    productId,
+    sellerId,
+    warehouseId,
+  }: models.ProductKeyObject) => void;
+}
+
+export const ProductView: FC<ProductViewProps> = ({
+  product,
+  handleRemoveProductModal,
+  handleUpdateQty,
+  handleUpdateSelected,
+}) => {
+  /** => HANDLE DISPLAY PRICE */
+  const handleDisplayPrice = () => {
+    let displayPrice: number = 0;
+    let lastPrice: number = 0;
+
+    if (product.priceRules.length > 0) {
+      const priceRulesLastItem =
+        product.priceRules[product.priceRules.length - 1];
+      if (priceRulesLastItem.maxQty <= product.qty) {
+        displayPrice = priceRulesLastItem.price;
+      } else {
+        product.priceRules.map((priceRulesItem) => {
+          if (
+            product.qty >= priceRulesItem.minQty &&
+            product.qty <= priceRulesItem.maxQty
+          ) {
+            displayPrice = priceRulesItem.price;
+          }
+        });
+      }
+    } else {
+      displayPrice = product.price;
+    }
+
+    lastPrice = product.lastUsedPrice;
+
+    // make a string variable to determine if the price is higher / lower / same
+    let priceDifference = '';
+    if (displayPrice === lastPrice) {
+      priceDifference = 'same';
+    } else if (displayPrice < lastPrice) {
+      priceDifference = 'lower';
+    } else {
+      priceDifference = 'higher';
+    }
+
+    return { displayPrice, lastPrice, priceDifference };
+  };
+  /** => RENDER REMAINING STOCK */
+  const renderRemainingStock = () => {
+    if (Number(product.stock) < 11) {
+      return (
+        <View>
+          <SnbText.B4
+            color={
+              color.red70
+            }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+        </View>
+      );
+    }
+  };
+  /** => RENDER PRODUCT IMAGE */
+  const renderProductImage = () => {
+    return (
+      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image
+          source={{
+            uri: product.productImageUrl,
+          }}
+          style={ShoppingCartStyles.productImg}
+        />
+      </View>
+    );
+  };
+  /** => RENDER PPN BADGE */
+  const renderPPNBadge = () => {
+    if (product.isPriceAfterTax) {
+      return (
+        <View style={{ marginBottom: 5 }}>
+          <SnbBadge.Label
+            type="warning"
+            value={`Include PPN ${product.taxPercentage}%`}
+          />
+        </View>
+      );
+    }
+  };
+  /** => RENDER REMOVE PRODUCT ICON */
+  const renderRemoveProductIcon = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          const removedProducts: models.RemovedProducts[] = [];
+          removedProducts.push({
+            productId: product.productId,
+            warehouseId: product.warehouseId,
+          });
+          handleRemoveProductModal({
+            source: 'available',
+            removedProducts,
+          });
+        }}
+        style={{ marginRight: 5 }}>
+        <SnbIcon name="delete_outline" color={color.black80} size={32} />
+      </TouchableOpacity>
+    );
+  };
+  /** => RENDER PRICE SECTION */
+  const renderPriceSection = () => {
+    const { displayPrice, lastPrice, priceDifference } = handleDisplayPrice();
+
+    let arrowIconName: string = 'arrow_drop_down';
+    let arrowIconColor: string = color.green50;
+    if (priceDifference === 'higher') {
+      arrowIconName = 'arrow_drop_up';
+      arrowIconColor = color.red50;
+    }
+
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}>
+        {priceDifference !== 'same' ? (
+          <View style={{ marginRight: 5 }}>
+            <SnbText.B4 color={color.black60} textDecorationLine="line-through">
+              {toCurrency(lastPrice, {
+                withFraction: false,
+              })}
+            </SnbText.B4>
+          </View>
+        ) : (
+          <View />
+        )}
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <SnbText.B4 color={color.black100}>
+            {toCurrency(displayPrice, {
+              withFraction: false,
+            })}
+          </SnbText.B4>
+          {priceDifference !== 'same' ? (
+            <SnbIcon
+              name={arrowIconName}
+              style={{ color: arrowIconColor, marginLeft: 5 }}
+              size={24}
+            />
+          ) : (
+            <View />
+          )}
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View style={ShoppingCartStyles.horizontalCardContent}>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={ShoppingCartStyles.checkboxContainer}>
+          <SnbCheckbox
+            status={product.selected ? 'selected' : 'unselect'}
+            onPress={() => {
+              handleUpdateSelected({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+              });
+            }}
+          />
+        </View>
+        {renderProductImage()}
+        <View style={{ justifyContent: 'center' }}>
+          {renderPPNBadge()}
+          <View
+            style={{
+              width: '100%',
+            }}>
+            <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
+          </View>
+          {renderPriceSection()}
+          {renderRemainingStock()}
+        </View>
+      </View>
+      <View style={ShoppingCartStyles.actionContainer}>
+        {renderRemoveProductIcon()}
+        <SnbNumberCounter
+          value={product.qty}
+          maxLength={6}
+          onBlur={() => {}}
+          onFocus={() => {}}
+          onIncrease={() => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'increase',
+            });
+          }}
+          onDecrease={() => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'decrease',
+            });
+          }}
+          onChange={(newQty: number) => {
+            handleUpdateQty({
+              productId: product.productId,
+              sellerId: product.sellerId,
+              warehouseId: product.warehouseId,
+              type: 'onChange',
+              newQty,
+            });
+          }}
+          minusDisabled={!(product.qty > product.minQty)}
+          plusDisabled={!(product.qty < (product.stock ?? 0))}
+        />
+      </View>
+      <View style={ShoppingCartStyles.actionContainer} />
+    </View>
+  );
+};

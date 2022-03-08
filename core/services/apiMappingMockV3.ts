@@ -18,7 +18,8 @@ const apiMappingMock = <T>(
     | 'discount'
     | 'auth'
     | 'order'
-    | 'payment',
+    | 'payment'
+    | 'warehouse',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
   type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE',
   params?: object,

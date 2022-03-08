@@ -1,40 +1,42 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { Image, TouchableOpacity } from 'react-native';
-import { SnbSKUList } from 'react-native-sinbad-ui';
+import { FlatList, Image, View } from 'react-native';
 import * as models from '@models';
+import { SnbText, color } from 'react-native-sinbad-ui';
 /** === TYPE === */
 export interface IProductCheckout {
-  urlImages: string;
+  // urlImages: string;
 }
 export interface CheckoutSKUListViewProps {
-  products: IProductCheckout[];
-  openModalProduct: (data: models.ProductCheckout[]) => void;
+  products: any;
+  // products: IProductCheckout[];
 }
 /** === COMPONENT === */
 export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
   products,
-  openModalProduct,
 }) => {
   /** === HOOK === */
+
   return (
-    <SnbSKUList
+    <FlatList
+      keyExtractor={(_, index) => index.toString()}
       data={products}
-      renderItem={({ item }: any) => {
-        return (
-          <TouchableOpacity
-            onPress={() =>
-              openModalProduct(products as models.ProductCheckout[])
-            }>
-            <Image
-              source={{ uri: item.urlImages }}
-              style={CheckoutStyle.skuImage}
-            />
-          </TouchableOpacity>
-        );
-      }}
-      expandable
+      renderItem={({ item }) => (
+        <View style={CheckoutStyle.productsContainer}>
+          <Image
+            source={{ uri: item.productImageUrl }}
+            style={CheckoutStyle.skuImage}
+          />
+          <View style={CheckoutStyle.productsDescription}>
+            <SnbText.B4 color={color.black60}>{item.productName}</SnbText.B4>
+            <SnbText.B4 color={color.black60}>
+              {item.qty} {item.uomLabel}
+            </SnbText.B4>
+            <SnbText.B4 color={color.black100}>Rp {item.price}</SnbText.B4>
+          </View>
+        </View>
+      )}
     />
   );
 };

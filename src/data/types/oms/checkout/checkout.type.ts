@@ -1,12 +1,5 @@
-/** => Get Checkout */
-export const GET_CHECKOUT_PROCESS = 'GetCheckoutProcess';
-export const GET_CHECKOUT_SUCCESS = 'GetCheckoutSuccess';
-export const GET_CHECKOUT_FAILED = 'GetCheckoutFailed';
-export const GET_CHECKOUT_REFRESH = 'GetCheckoutRefresh';
-export const GET_CHECKOUT_RESET = 'GetCheckoutReset';
-
-/** => Create Order */
-export const CREATE_ORDER_PROCESS = 'CreateOrderProcess';
-export const CREATE_ORDER_SUCCESS = 'CreateOrderSuccess';
-export const CREATE_ORDER_FAILED = 'CreateOrderFailed';
-export const CREATE_ORDER_RESET = 'CreateOrderReset';
+/** => CHECKOUT CART */
+export const CHECKOUT_PROCESS = 'CheckoutProcess';
+export const CHECKOUT_SUCCESS = 'CheckoutSuccess';
+export const CHECKOUT_FAILED = 'CheckoutFailed';
+export const CHECKOUT_RESET = 'CheckoutReset';

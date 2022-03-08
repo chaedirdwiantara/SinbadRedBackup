@@ -2,13 +2,12 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
+import { SnbText, color } from 'react-native-sinbad-ui';
 /** === COMPONENT === */
 export const CheckoutShipmentDetailView: FC = () => {
   return (
     <View style={{ marginTop: 16 }}>
-      <SnbText.H4>Rincian Pengiriman</SnbText.H4>
-      <SnbDivider style={{ marginVertical: 8 }} />
+      <SnbText.H4>Detail Pengiriman</SnbText.H4>
       <View style={CheckoutStyle.shipmentDetail}>
         <View>
           <SnbText.B1>(± 3 Hari)</SnbText.B1>

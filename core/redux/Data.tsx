@@ -25,29 +25,11 @@ const useDataGlobal = () => {
 const useDataVoucher = (): models.VoucherDataProps => {
   return useSelector((state: RootState) => state.voucher);
 };
-const useDataCartSelected = () => {
-  return useSelector((state: RootState) => state.cartSelected);
-};
-const useDataCheckout = () => {
-  return useSelector((state: RootState) => state.checkout);
-};
-const useDataPaymentChannels = () => {
-  return useSelector((state: RootState) => state.paymentChannelsModal);
-};
-const useDataCartMaster = () => {
-  return useSelector((state: RootState) => state.cartMaster);
-};
-const useDataTotalProductCart = () => {
-  return useSelector((state: RootState) => state.cartTotalProduct);
-};
-const useDataReserve = (): models.ReserveData => {
-  return useSelector((state: RootState) => state.reserveData);
-};
 const useDataTotalNotification = () => {
   return useSelector((state: RootState) => state.notificaitonTotalReducer);
 };
-const useDataProductMasterCart = () => {
-  return useSelector((state: RootState) => state.productMasterCart);
+const useDataCartMaster = (): models.CartMaster => {
+  return useSelector((state: RootState) => state.cartMaster);
 };
 /** === EXPORT === */
 export {
@@ -56,14 +38,8 @@ export {
   useDataVoucher,
   useDataFlagRTDB,
   useDataAuth,
-  useDataCartSelected,
-  useDataCheckout,
-  useDataPaymentChannels,
-  useDataCartMaster,
-  useDataTotalProductCart,
-  useDataReserve,
   useDataTotalNotification,
-  useDataProductMasterCart,
+  useDataCartMaster,
 };
 /**
  * ================================================================

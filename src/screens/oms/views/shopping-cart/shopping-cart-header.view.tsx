@@ -7,5 +7,9 @@ interface ShoppingCartHeaderProps {
 }
 
 export const ShoppingCartHeader: FC<ShoppingCartHeaderProps> = ({ goBack }) => (
-  <SnbTopNav.Type3 type="red" title={'Keranjang'} backAction={() => goBack()} />
+  <SnbTopNav.Type3
+    type="white"
+    title={'Keranjang'}
+    backAction={() => goBack()}
+  />
 );
