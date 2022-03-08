@@ -230,8 +230,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     setErrorShown(false);
   };
 
-  console.log('ERROR STATUS: ', { errorModal });
-
   const renderFooterContent = () => (
     <View
       style={{
