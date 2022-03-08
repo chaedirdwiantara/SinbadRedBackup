@@ -124,8 +124,6 @@ const DataDiriStep3View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
-  console.log('back:', backHandle);
-
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
