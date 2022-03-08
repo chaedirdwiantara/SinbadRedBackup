@@ -43,6 +43,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   );
   const [isErrorShown, setErrorShown] = useState(false);
   const [isMatchValid, setMatchValid] = useState(false);
+  const [isCheckoutPressed, setCheckoutPressed] = useState(false);
 
   const cancelCartAction = useCancelStockAction();
   const cartMasterAction = useCartMasterAction();
@@ -59,14 +60,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const handleOnPressCheckout = useCallback(() => {
     cartMasterAction.replaceFromLocal(cartData);
     updateCartAction.fetch(dispatchCart, cartData);
+    setCheckoutPressed(true);
   }, [cartData, stateCart.buyerAddress.data]);
 
   const checkProductSellerStock = useCallback(() => {
-    if (stateCart.update.data !== null) {
+    if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
       postCheckProductAction.fetch(dispatchCart);
       postCheckSellerAction.fetch(dispatchCart);
       postCheckStockAction.fetch(dispatchCart);
+      setCheckoutPressed(false);
     }
   }, [stateCart.update.data]);
 
