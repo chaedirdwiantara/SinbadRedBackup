@@ -14,5 +14,9 @@ const goToCategory = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
+/** => Go to Thank You Page */
+const goToThankYouPage = () => {
+  NavigationAction.navigate('OmsThankYouPageView');
+};
 
-export { goBack, goToCategory, goToCheckout };
+export { goBack, goToCategory, goToCheckout, goToThankYouPage };
