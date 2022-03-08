@@ -6,7 +6,7 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
 import { useNavigation } from '@react-navigation/core';
 import {
@@ -16,25 +16,55 @@ import {
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep1View: React.FC = () => {
-  const { navigate } = useNavigation();
-  const { completeDataState } = useEasyRegistration();
-  const [name, setName] = useState(
-    completeDataState?.data?.data?.userData?.fullName,
-  );
+  const { navigate, reset } = useNavigation();
+  const {
+    updateCompleteData,
+    updateCompleteDataState,
+    completeDataState,
+    resetUpdateCompleteData,
+  } = useEasyRegistration();
+  const [name, setName] = useState(completeDataState?.data?.userData?.fullName);
   const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOPenModalBack] = useState(false);
+  const [openModalBack, setOpenModalBack] = useState(false);
+  const [backHandle, setBackHandle] = useState(false);
+
+  // HANDLE BACK DEVICE
+  React.useEffect(() => {
+    const backAction = () => {
+      setOpenModalBack(true);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
+
+  React.useEffect(() => {
+    if (updateCompleteDataState.data !== null) {
+      if (backHandle) {
+        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        resetUpdateCompleteData();
+        setBackHandle(false);
+      } else {
+        navigate(DATA_DIRI_STEP_2_VIEW);
+        resetUpdateCompleteData();
+      }
+    }
+  }, [updateCompleteDataState]);
 
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav.Type3
-          backAction={() => setOPenModalBack(true)}
+          backAction={() => setOpenModalBack(true)}
           type="white"
           title="Nama Lengkap"
         />
         <Stepper
-          complete={1}
-          total={7}
+          complete={completeDataState?.data?.userProgress?.completed || 1}
+          total={completeDataState?.data?.userProgress?.total || 7}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
@@ -55,14 +85,18 @@ const DataDiriStep1View: React.FC = () => {
         <SnbButton.Single
           title="Lanjut"
           type="primary"
-          disabled={name ? false : true}
-          onPress={() => navigate(DATA_DIRI_STEP_2_VIEW)}
+          disabled={name || updateCompleteDataState.loading ? false : true}
+          onPress={() => updateCompleteData({ user: { name: name }})}
+          loading={updateCompleteDataState.loading}
         />
       </View>
       <ModalBack
         open={openModalBack}
-        closeModal={() => setOPenModalBack(false)}
-        confirm={() => navigate(DATA_COMPLETENESS_VIEW)}
+        closeModal={() => setOpenModalBack(false)}
+        confirm={() => {
+          setBackHandle(true);
+          updateCompleteData({ user: { name: name }});
+        }}
       />
       <ListOfSteps
         open={openModalStep}
