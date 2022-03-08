@@ -96,7 +96,8 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
 
     return unsubscribe;
   }, [navigation]);
-  //FOR START COUCHMARK
+
+  //function for start couchmark
   useEffect(() => {
     if (!coachmarkState?.data?.orderCoachmark) {
       setTimeout(() => {
