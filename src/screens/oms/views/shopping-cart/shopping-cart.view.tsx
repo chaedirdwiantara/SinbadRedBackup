@@ -133,7 +133,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     };
   }, []);
 
-  /** => if get cart or buyer address failed */
+  /** => if cancel stock or buyer address failed */
   useEffect(() => {
     if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
       // check which endpoint fetch was fail
@@ -157,16 +157,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       // determine the error data
       let errorData = null;
       if (isErrorCancelStock) {
-        errorData = stateCart.get.error;
+        errorData = stateCart.cancelStock.error;
       } else {
         errorData = stateCart.buyerAddress.error;
       }
-      errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => handleGoBack);
-      errorModal.setErrorData(errorData);
-      errorModal.setOpen(true);
+      if (isErrorCancelStock || isErrorBuyerAddress) {
+        errorModal.setRetryAction(() => action);
+        errorModal.setCloseAction(() => handleGoBack);
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
+      }
     }
-  }, [stateCart.cancelStock.error, stateCart.buyerAddress.error]);
+  }, [stateCart.cancelStock, stateCart.buyerAddress]);
 
   /** => after success fetch cancelStock & buyerAddress, fetch getCart */
   useEffect(() => {
