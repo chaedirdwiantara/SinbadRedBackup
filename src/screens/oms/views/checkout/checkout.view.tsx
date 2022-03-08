@@ -33,7 +33,7 @@ const OmsCheckoutView: FC = () => {
             categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
             brandId: '33d200000000000000000000',
             brandName: 'ATAPI SGM',
-            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productName: 'Bintang',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
             qty: 10,
@@ -59,7 +59,7 @@ const OmsCheckoutView: FC = () => {
             categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec5',
             brandId: '33d200000000000000000003',
             brandName: 'ATAPI SGM',
-            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productName: 'Guinness',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
             qty: 10,

@@ -39,19 +39,19 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
   const deliveryFee = 0;
 
   const totalBarangPrice = () => {
-    let sum = 0;
-    for (var i = 0; i < products.length; i++) {
-      sum = sum + products[i].qty * products[i].price;
+    let total = 0;
+    for (let i = 0; i < products.length; i++) {
+      total = total + products[i].qty * products[i].price;
     }
-    return sum;
+    return total;
   };
 
   const subTotalQty = () => {
-    let sum = 0;
-    for (var i = 0; i < products.length; i++) {
-      sum = sum + products[i].qty;
+    let total = 0;
+    for (let i = 0; i < products.length; i++) {
+      total = total + products[i].qty;
     }
-    return sum;
+    return total;
   };
 
   return (
