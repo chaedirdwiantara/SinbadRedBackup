@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 };
 
 export const updateCompleteData = simplifyReducer(INITIAL_STATE, {
-  [types.UPDATE_COACHMARK_PROCESS]() {
+  [types.UPDATE_COMPLETE_DATA_PROCESS]() {
     return { ...INITIAL_STATE, loading: true };
   },
 

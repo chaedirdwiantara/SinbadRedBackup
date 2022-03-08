@@ -34,23 +34,23 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const dataUser = [
     {
       title: 'Nama Lengkap',
-      value: completeDataState?.data?.user?.isFullName || false,
+      value: completeDataState?.data?.user?.isFullName || true,
     },
     {
       title: 'Foto KTP',
-      value: completeDataState?.data?.user?.isIdImageUrl || false,
+      value: completeDataState?.data?.user?.isIdImageUrl || true,
     },
     {
       title: 'Foto NPWP',
-      value: completeDataState?.data?.user?.isTaxImageUrl || false,
+      value: completeDataState?.data?.user?.isTaxImageUrl || true,
     },
     {
       title: 'Foto Selfie dengan KTP',
-      value: completeDataState?.data?.user?.isSelfieImageUrl || false,
+      value: completeDataState?.data?.user?.isSelfieImageUrl || true,
     },
     {
       title: 'Konfirmasi Kartu Identitas',
-      value: completeDataState?.data?.user?.isValidIdNumber || false,
+      value: completeDataState?.data?.user?.isValidIdNumber || true,
     },
     {
       title: 'Email',
