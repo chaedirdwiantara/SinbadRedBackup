@@ -50,7 +50,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     },
     {
       title: 'Konfirmasi Kartu Identitas',
-      value: completeDataState?.data?.user?.isValidIdNumber || true,
+      value: completeDataState?.data?.user?.isValidIdNumber || false,
     },
     {
       title: 'Email',
