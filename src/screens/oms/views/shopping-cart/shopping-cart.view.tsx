@@ -359,7 +359,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
   /** => MAIN */
   return (
-<<<<<<< HEAD
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={handleGoBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
@@ -368,124 +367,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         isOpen={modalRemoveProduct}
         okAction={() => handleOkActionRemoveProduct()}
         cancelAction={() => setModalRemoveProduct(false)}
-=======
-    <SnbContainer color="white">
-      <ShoppingCartHeader
-        goBack={() => {
-          if (dataProductMasterCart.length > 0) {
-            setModalConfirmationBackVisible(true);
-          } else {
-            goBack();
-          }
-        }}
-      />
-      {loadingPage ? (
-        <LoadingPage />
-      ) : (
-        <>
-        
-          {(Array.isArray(cartMaster.data) && cartMaster.data.length > 0) ||
-          (Array.isArray(cartMaster.dataEmptyStock) &&
-            cartMaster.dataEmptyStock.length > 0) ||
-          (Array.isArray(cartMaster.dataNotFound) &&
-            cartMaster.dataNotFound.length > 0) ? (
-            <Fragment>
-              <ScrollView>
-                <ShippingAddress />
-                {/* Invoice Group List */}
-                <Fragment>
-                  {cartMaster.data.map((invoiceGroup, invoiceGroupIndex) => (
-                    <ShoppingCartInvoiceGroup
-                      key={invoiceGroup.invoiceGroupId.toString()}
-                      invoiceGroup={invoiceGroup}
-                      invoiceGroupIndex={invoiceGroupIndex}
-                      invoiceGroups={cartMaster.data}
-                      setInvoiceGroups={setCartMasterData}
-                      productSelectedCount={productSelectedCount}
-                      setProductSelectedCount={setProductSelectedCount}
-                      setAllProductsSelected={setAllProductsSelected}
-                      totalProducts={totalProducts}
-                      sassionQty={sassionQty}
-                      setSassionQty={setSassionQty}
-                      onRemoveProduct={onRemoveProduct}
-                      isFocus={isFocus}
-                      setIsFocus={setIsFocus}
-                      onUpdateCart={onUpdateCart}
-                    />
-                  ))}
-                </Fragment>
-                <Fragment>
-                  {Array.isArray(cartMaster.dataNotFound) &&
-                    cartMaster.dataNotFound.length > 0 && (
-                      <ProductEmptyStockView
-                        sectionName={'Product Tidak Tersedia'}
-                        data={cartMaster.dataNotFound}
-                        onRemoveProduct={onRemoveProduct}
-                        type={'dataNotFound'}
-                      />
-                    )}
-                </Fragment>
-                <Fragment>
-                  {Array.isArray(cartMaster.dataEmptyStock) &&
-                    cartMaster.dataEmptyStock.length > 0 && (
-                      <ProductEmptyStockView
-                        sectionName={'Product Habis'}
-                        data={cartMaster.dataEmptyStock}
-                        onRemoveProduct={onRemoveProduct}
-                        type={'dataEmptyStock'}
-                      />
-                    )}
-                </Fragment>
-              </ScrollView>
-              <ShoppingCartFooter
-                allProductsSelected={allProductsSelected}
-                invoiceGroups={cartMaster.data}
-                setInvoiceGroups={setCartMasterData}
-                setProductSelectedCount={setProductSelectedCount}
-                setAllProductsSelected={setAllProductsSelected}
-                totalProducts={totalProducts}
-                productSelectedCount={productSelectedCount}
-                openModalCheckout={setModalConfirmationCheckoutVisible}
-                onUpdateCart={onUpdateCart}
-              />
-            </Fragment>
-          ) : (
-            <ShoppingCartEmpty navigationParent={navigation} />
-          )}
-        </>
-      )}
-      {/* Confirmation Modal Checkout */}
-      <SnbDialog
-        open={modalConfirmationCheckoutVisible}
-        title="Konfirmasi"
-        content="Konfirmasi order dan lanjut ke Checkout?"
-        okText={'Ya'}
-        ok={onSubmitCheckout}
-        cancelText={'Tidak'}
-        cancel={() => setModalConfirmationCheckoutVisible(false)}
-        loading={loadingCreateVerificationOrder || updateCartLoading}
-      />
-      <SnbDialog
-        open={modalConfirmationRemoveProductVisible}
-        title="Konfirmasi"
-        content="Apakah Anda yakin untuk menghapus barang?"
-        okText={'Tidak'}
-        ok={onCancelRemoveProduct}
-        cancelText={'Ya'}
-        cancel={onConfirmRemoveProduct}
-        loading={loadingRemoveProduct}
-      />
-      {/* Confirmation Modal Back */}
-      <SnbDialog
-        open={modalConfirmationBackVisible}
-        title="Konfirmasi"
-        content="Apakah Anda yakin untuk keluar dari halaman keranjang?"
-        okText={'Tidak'}
-        ok={() => setModalConfirmationBackVisible(false)}
-        cancelText={'Ya'}
-        cancel={handleGoBackHeader}
-        loading={loadingCreateVerificationOrder || updateCartLoading}
->>>>>>> feature/TBP-773
       />
       {/* Error Modal Check Product, Seller & Stock */}
       <BottomSheetError
