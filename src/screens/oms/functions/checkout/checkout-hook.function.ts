@@ -1,12 +1,94 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDataCheckout, useDataPaymentChannels } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
+import { useContext } from 'react';
+import { useDataCartMaster } from '@core/redux/Data';
 /** === FUNCTION === */
-/** => master data checkout */
+/** => checkout action */
+const useCheckoutAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
+  const cartMaster: models.CartMaster = useDataCartMaster();
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      if (
+        stateCart.postCheckProduct.data !== null &&
+        stateCart.postCheckSeller.data !== null &&
+        stateCart.postCheckStock.data !== null &&
+        stateCart.buyerAddress.data !== null
+      ) {
+        const buyerAddress = (({ buyerId, buyerName, ...rest }) => rest)(
+          stateCart.buyerAddress.data,
+        );
+
+        const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
+          (seller) => {
+            const products: models.CheckoutProductData[] = seller.products
+              .filter((product) => product.selected)
+              .map((product) => {
+                let priceRules: models.ProductPriceRules | {} = {};
+                // if the product using price rules
+                if (product.priceRules.length > 0) {
+                  const priceRulesLastItem =
+                    product.priceRules[product.priceRules.length - 1];
+                  if (priceRulesLastItem.maxQty <= product.qty) {
+                    priceRules = priceRulesLastItem;
+                  } else {
+                    product.priceRules.map((priceRulesItem) => {
+                      if (
+                        product.qty >= priceRulesItem.minQty &&
+                        product.qty <= priceRulesItem.maxQty
+                      ) {
+                        priceRules = priceRulesItem;
+                      }
+                    });
+                  }
+                }
+                return {
+                  ...product,
+                  priceRules,
+                } as models.CheckoutProductData;
+              });
+            return {
+              ...seller,
+              products,
+            };
+          },
+        );
+
+        const carts = cartsTemp.map((cart) => {
+          return {
+            sellerId: cart.sellerId,
+            sellerName: cart.sellerName,
+            products: cart.products,
+          };
+        });
+
+        dispatch(
+          Actions.checkoutProcess(contextDispatch, {
+            data: {
+              buyerName: stateCart.buyerAddress.data.buyerName,
+              buyerAddress: {
+                ...buyerAddress,
+                longitude: buyerAddress.longitude.toString(),
+                latitude: buyerAddress.latitude.toString(),
+              },
+              carts,
+            },
+          }),
+        );
+      }
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkoutReset(contextDispatch));
+    },
+  };
+};
+
 const useCheckoutMaster = () => {
   const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
   const dispatch = useDispatch();
@@ -291,9 +373,9 @@ const useErrorWarningModal = () => {
     },
   };
 };
-
 /** === EXPORT === */
 export {
+  useCheckoutAction,
   useCheckoutMaster,
   usePaymentDetailAccorrdion,
   useTermsAndConditionsModal,
@@ -311,8 +393,8 @@ export {
  * ================================================================
  * NOTES
  * ================================================================
- * createdBy: ryan (team)
- * createDate: 07102021
+ * createdBy: eryz (team)
+ * createDate: 16022022
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

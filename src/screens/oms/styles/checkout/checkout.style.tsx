@@ -7,6 +7,8 @@ export const CheckoutStyle = StyleSheet.create({
     backgroundColor: color.white,
   },
   invoiceGroupListField: {
+    marginBottom: 8,
+    backgroundColor: color.white,
     padding: 16,
   },
   headerSection: {
@@ -19,9 +21,16 @@ export const CheckoutStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  productsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   skuImage: {
     height: 60,
     width: 60,
+  },
+  productsDescription: {
+    paddingLeft: 15,
   },
   bottomContentContainer: {
     flexDirection: 'row',

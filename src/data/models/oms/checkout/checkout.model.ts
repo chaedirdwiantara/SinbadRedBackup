@@ -1,38 +1,34 @@
-export interface ProductCheckout {
-  productId: string;
-  productName: string;
-  urlImages: string;
-  qty: number;
-  displayPrice: number;
-  priceBeforeTax: number;
-  priceAfterTax: number;
-  uom: string;
-  warehouseId: number;
+/**
+ * CHECKOUT
+ */
+
+export interface CheckoutCart<T> {
+  sellerId: number;
+  sellerName: string;
+  products: T[];
 }
 
-export interface BrandCheckout {
+export interface CheckoutProductPriceRules {
+  minQty: number;
+  maxQty: number;
+  price: number;
+}
+
+export interface CheckoutCartProduct {
+  productId: string;
+  warehouseId: number;
+  categoryId: string;
+  productImageUrl: string;
   brandId: string;
   brandName: string;
-  products: ProductCheckout[];
-}
-
-export interface InvoiceCheckout {
-  invoiceGroupId: string;
-  totalProduct: number;
-  totalPriceBeforeTax: number;
-  totalPriceAfterTax: number;
-  tax: number;
-  isPotentialPaymentPromo: boolean;
-  brands: BrandCheckout[];
-  invoiceGroupName: string;
-  sellerId: number;
-  channelId: number;
-  groupId: number;
-  typeId: number;
-  clusterId: number;
-}
-
-export interface CheckoutSuccess {
-  cartId: string;
-  invoices: InvoiceCheckout[];
+  productName: string;
+  qty: number;
+  minQty: number;
+  qtyPerBox: number;
+  uomLabel: string;
+  isPriceAfterTax: boolean;
+  taxPercentage: number;
+  price: number;
+  selected: boolean;
+  priceRules: CheckoutProductPriceRules;
 }

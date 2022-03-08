@@ -3,15 +3,8 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbDivider, color, SnbIcon } from 'react-native-sinbad-ui';
-import { contexts } from '@contexts';
 /** === COMPONENT === */
 export const CheckoutWarningTime: FC = () => {
-  const {
-    stateUser: {
-      detail: { data: storeDetail },
-    },
-  } = React.useContext(contexts.UserContext);
-
   return (
     <View style={CheckoutStyle.warningTimer}>
       <View style={CheckoutStyle.warningTextContainer}>

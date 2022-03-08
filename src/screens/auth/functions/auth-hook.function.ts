@@ -1,8 +1,10 @@
 /** === IMPORT PACKAGE HERE === */
+import { useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
 import { meReset } from '@core/data/actions';
 /** === FUNCTION === */
 /** => call auth action */
@@ -11,6 +13,7 @@ const useAuthAction = () => {
   const { loginUsername, requestOTP, verifyOTP } = useSelector(
     (state: any) => state.auth,
   );
+  const { dispatchCart } = useContext(contexts.CartContext);
   return {
     loginUserName: (data: models.LoginUserName) => {
       dispatch(Actions.loginUserNameProcess(data));
@@ -27,9 +30,7 @@ const useAuthAction = () => {
     logout: () => {
       dispatch(Actions.logoutProcess());
       dispatch(meReset());
-      dispatch(Actions.cartTotalProductReset());
-      dispatch(Actions.resetCheckoutMasterData());
-      dispatch(Actions.resetCartMasterData());
+      dispatch(Actions.getTotalCartReset(dispatchCart));
       dispatch(Actions.notificationTotalReset());
     },
     resetRequestOTP: () => {

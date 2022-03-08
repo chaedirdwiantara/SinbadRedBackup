@@ -105,3 +105,8 @@ export const goToProductDetail = (id: string) => {
 export const backToLogin = () => {
   NavigationAction.navigate('LoginPhoneView');
 };
+
+/** => go to checkout */
+export const goToCheckout = () => {
+  NavigationAction.navigate('OmsCheckoutView');
+};

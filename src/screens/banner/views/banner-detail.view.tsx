@@ -13,7 +13,7 @@ import {
   SnbHtml,
   SnbImageCompressor,
 } from 'react-native-sinbad-ui';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
@@ -118,15 +118,24 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   /** === STATE === */
   const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const bannerAction = useBannerAction();
+  const totalCartAction = useGetTotalCartAction();
   const { me } = useDataAuth();
   const bannerDetailState = stateBanner.bannerGeneral.detail;
+  const totalCartState = stateCart.total.data;
   /** === HOOK === */
-  const { dataTotalProductCart } = useCartTotalProductActions();
   React.useEffect(() => {
     bannerAction.detail(dispatchBanner, route.params.bannerId);
     return () => {
       bannerAction.resetDetail(dispatchBanner);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    totalCartAction.fetch(dispatchCart);
+    return () => {
+      totalCartAction.reset(dispatchCart);
     };
   }, []);
   /** === VIEW === */
@@ -147,7 +156,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
             }
           }}
           iconName={'cart'}
-          iconValue={dataTotalProductCart.totalProduct}
+          iconValue={totalCartState?.totalProducts}
         />
       </View>
     );
