@@ -7,12 +7,6 @@ export const useEasyRegistration = () => {
   const dispatch = useDispatch();
   const { global, account } = useSelector((state: any) => state);
 
-  React.useEffect(() => {
-    if (account.updateCompleteData.data) {
-      refetchCompleteData();
-    }
-  }, [account.updateCompleteData.data]);
-
   const getBuyerCategory = React.useCallback(() => {
     dispatch(Actions.getBuyerCategory());
   }, []);
@@ -77,6 +71,7 @@ export const useEasyRegistration = () => {
     getCompleteData,
     updateCompleteData,
     resetUpdateCompleteData,
+    refetchCompleteData,
     searchLocationState: global.searchLocations,
     buyerCategories: account.buyerCategories,
     productCategories: account.productCategories,

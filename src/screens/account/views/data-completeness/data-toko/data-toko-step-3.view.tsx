@@ -173,6 +173,7 @@ const Content: React.FC = () => {
               default:
                 break;
             }
+            onSelectedItem(result.item);
           }
           setOpenModalSelection(false);
           resetGetSelection();

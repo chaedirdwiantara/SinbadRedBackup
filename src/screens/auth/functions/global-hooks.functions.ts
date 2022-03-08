@@ -197,6 +197,10 @@ export const useTextFieldSelect = () => {
     }
   };
 
+  const loadMoreSelection = (data: models.IListSelection) => {
+    dispatch(Actions.loadMoreSelectionProcess(data));
+  };
+
   const resetGetSelection = () => {
     dispatch(Actions.resetGetSelection());
   };
@@ -217,6 +221,7 @@ export const useTextFieldSelect = () => {
     selectedItem,
     onSelectedItem,
     resetSelectedItem,
+    loadMoreSelection,
   };
 };
 

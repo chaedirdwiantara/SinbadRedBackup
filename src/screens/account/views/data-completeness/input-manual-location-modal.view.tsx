@@ -13,13 +13,8 @@ import { ModalSelection } from '../shared';
 import * as models from '@models';
 
 const Content = () => {
-  const {
-    selectedItem,
-    resetSelectedItem,
-    resetGetSelection,
-    getSelection,
-    onSelectedItem,
-  } = useTextFieldSelect();
+  const { resetSelectedItem, resetGetSelection, getSelection, onSelectedItem } =
+    useTextFieldSelect();
   const [province, setProvince] = React.useState<any>(null);
   const [city, setCity] = React.useState<any>(null);
   const [district, setDistrict] = React.useState<any>(null);
@@ -29,6 +24,7 @@ const Content = () => {
   const [type, setType] = React.useState<models.ITypeList>('');
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
+  const [params, setParams] = React.useState('');
 
   React.useEffect(() => {
     if (locations.data?.length > 0) {
@@ -37,33 +33,10 @@ const Content = () => {
   }, [locations]);
 
   React.useEffect(() => {
-    switch (selectedItem?.type) {
-      case 'listProvince': {
-        setProvince(selectedItem.item);
-        setCity(null);
-        setDistrict(null);
-        setUrban(null);
-        break;
-      }
-      case 'listCity': {
-        setCity(selectedItem.item);
-        setDistrict(null);
-        setUrban(null);
-        break;
-      }
-      case 'listDistrict': {
-        setDistrict(selectedItem.item);
-        setUrban(null);
-        break;
-      }
-      case 'listUrban': {
-        setUrban(selectedItem.item);
-        break;
-      }
-      default:
-        break;
+    if (type === 'listProvince' && province) {
+      onSelectedItem({ item: province, type: 'listProvince' });
     }
-  }, [selectedItem]);
+  }, [type]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
@@ -79,8 +52,6 @@ const Content = () => {
               setType('listProvince');
               getSelection({ type: 'listProvince' });
               setOpenModalSelection(true);
-              province &&
-                onSelectedItem({ item: province, type: 'listProvince' });
             }}
             rightType="icon"
             rightIcon="chevron_right"
@@ -94,13 +65,15 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (province) {
+                const cityParams = `province=${province?.name || ''}`;
                 setType('listCity');
-                setOpenModalSelection(true);
+                setParams(cityParams);
+                city && onSelectedItem({ item: city, type: 'listCity' });
                 getSelection({
                   type: 'listCity',
-                  params: `province=${province?.name || ''}`,
+                  params: cityParams,
                 });
-                city && onSelectedItem({ item: city, type: 'listCity' });
+                setOpenModalSelection(true);
               }
             }}
             rightType="icon"
@@ -115,14 +88,18 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (city?.city) {
+                const districtParams = `province=${province?.name}&city=${
+                  city?.city || ''
+                }`;
                 setType('listDistrict');
-                setOpenModalSelection(true);
-                getSelection({
-                  type: 'listDistrict',
-                  params: `province=${province?.name}&city=${city?.city || ''}`,
-                });
+                setParams(districtParams);
                 district &&
                   onSelectedItem({ type: 'listDistrict', item: district });
+                getSelection({
+                  type: 'listDistrict',
+                  params: districtParams,
+                });
+                setOpenModalSelection(true);
               }
             }}
             rightType="icon"
@@ -137,12 +114,14 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (district?.district) {
+                const urbanParams = `province=${province?.name || ''}&city=${
+                  city?.city || ''
+                }&district=${district?.district || ''}`;
                 setType('listUrban');
+                setParams(urbanParams);
                 getSelection({
                   type: 'listUrban',
-                  params: `province=${province?.name || ''}&city=${
-                    city?.city || ''
-                  }&district=${district?.district || ''}`,
+                  params: urbanParams,
                 });
                 urban && onSelectedItem({ type: 'listUrban', item: urban });
                 setOpenModalSelection(true);
@@ -184,12 +163,40 @@ const Content = () => {
       <ModalSelection
         type={type}
         open={openModalSelection}
-        onCloseModalSelection={(result: any) => {
+        params={params}
+        onCloseModalSelection={(result) => {
           if (result) {
+            onSelectedItem(result);
+            switch (result?.type) {
+              case 'listProvince': {
+                setProvince(result.item);
+                setCity(null);
+                setDistrict(null);
+                setUrban(null);
+                break;
+              }
+              case 'listCity': {
+                setCity(result.item);
+                setDistrict(null);
+                setUrban(null);
+                break;
+              }
+              case 'listDistrict': {
+                setDistrict(result.item);
+                setUrban(null);
+                break;
+              }
+              case 'listUrban': {
+                setUrban(result.item);
+                break;
+              }
+              default:
+                break;
+            }
           }
-          setOpenModalSelection(false);
           resetGetSelection();
           resetSelectedItem();
+          setOpenModalSelection(false);
         }}
       />
     </View>
