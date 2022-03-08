@@ -276,11 +276,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         error={errorModal.errorData}
         retryAction={() => {
           errorModal.retryAction();
-          // errorModal.setOpen(false);
         }}
         closeAction={() => {
           errorModal.closeAction();
-          // errorModal.setOpen(false);
         }}
       />
     </View>
