@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import {
@@ -11,90 +11,71 @@ import {
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
-export interface IPaymentDetail {
-  name: string;
-  value: number;
-  type: string;
-}
+export interface IPaymentDetail {}
 
-/** === DUMMY === */
-const data = {
-  totalProduct: 5,
-  totalPriceBeforeTax: 150000,
-  totalPromoSellerAndVoucher: 90,
-  tax: 20,
-  totalPromoPayment: 120000,
-  totalFee: 120000,
-};
+// /** === DUMMY === */
+// const data = {
+//   totalProduct: 5,
+//   totalPriceBeforeTax: 150000,
+//   totalPromoSellerAndVoucher: 90,
+//   tax: 20,
+//   totalPromoPayment: 120000,
+//   totalFee: 120000,
+// };
 
 export interface CheckoutPaymentDetailViewProps {
   // data: models.IInvoiceCheckout;
+  products: any;
 }
 
 /** === COMPONENT === */
-export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = (
-  {
-    // data,
-  },
-) => {
+export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
+  // data,
+  products,
+}) => {
   /** === HOOK === */
   const paymentAccordion = usePaymentDetailAccorrdion();
   const isActive = paymentAccordion.active === 1;
+  const deliveryFee = 0;
+
+  const totalBarangPrice = () => {
+    let sum = 0;
+    for (var i = 0; i < products.length; i++) {
+      sum = sum + products[i].qty * products[i].price;
+    }
+    return sum;
+  };
+
+  const subTotalQty = () => {
+    let sum = 0;
+    for (var i = 0; i < products.length; i++) {
+      sum = sum + products[i].qty;
+    }
+    return sum;
+  };
 
   return (
     <View>
       {isActive ? (
-        <View style={{ marginLeft: 32 }}>
+        <View>
           <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.black100}>
-              {`Total Barang (${data.totalProduct})`}
+            <SnbText.B3 color={color.black60}>
+              {`Total Barang (${subTotalQty()})`}
             </SnbText.B3>
-            <SnbText.B3 color={color.black100}>
-              {toCurrency(data.totalPriceBeforeTax, { withFraction: false })}
+            <SnbText.B3 color={color.black60}>
+              {/* {toCurrency(products.totalPriceBeforeTax, { withFraction: false })} */}
+              {`Rp ${totalBarangPrice()}`}
             </SnbText.B3>
           </View>
-          {data.totalPromoSellerAndVoucher ? (
-            <View style={CheckoutStyle.detailItemContainer}>
-              <SnbText.B3 color={color.green50}>
-                Total Potongan Harga
-              </SnbText.B3>
-              <SnbText.B3 color={color.green50}>
-                -{' '}
-                {toCurrency(data.totalPromoSellerAndVoucher ?? 0, {
-                  withFraction: false,
-                })}
-              </SnbText.B3>
-            </View>
-          ) : null}
           <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.black100}>{`PPN ${data.tax}%`}</SnbText.B3>
-            <SnbText.B3 color={color.black100}>
-              {toCurrency(calculateTax(data), {
+            <SnbText.B3 color={color.black60}>Total Pengiriman</SnbText.B3>
+            <SnbText.B3 color={color.green60}>
+              {/* {toCurrency(products.totalPriceBeforeTax, {
                 withFraction: false,
-              })}
+              })} */}
+              Rp. {deliveryFee}
             </SnbText.B3>
           </View>
-          {data.totalPromoPayment ? (
-            <View style={CheckoutStyle.detailItemContainer}>
-              <SnbText.B3 color={color.green50}>Promo Pembayaran</SnbText.B3>
-              <SnbText.B3 color={color.green50}>
-                -{' '}
-                {toCurrency(data.totalPromoPayment ?? 0, {
-                  withFraction: false,
-                })}
-              </SnbText.B3>
-            </View>
-          ) : null}
-          {data.totalFee ? (
-            <View style={CheckoutStyle.detailItemContainer}>
-              <SnbText.B3 color={color.black100}>Layanan Pembayaran</SnbText.B3>
-              <SnbText.B3 color={color.black100}>
-                {toCurrency(data.totalFee ?? 0, {
-                  withFraction: false,
-                })}
-              </SnbText.B3>
-            </View>
-          ) : null}
         </View>
       ) : (
         <View />
@@ -113,9 +94,10 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = (
           </View>
         </View>
         <SnbText.H4>
-          {handleSubTotalPrice(data, {
+          {/* {handleSubTotalPrice(products, {
             withFraction: false,
-          })}
+          })} */}
+          {totalBarangPrice() + deliveryFee}
         </SnbText.H4>
       </TouchableOpacity>
     </View>

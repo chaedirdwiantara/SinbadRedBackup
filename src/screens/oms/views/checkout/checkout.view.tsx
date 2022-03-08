@@ -36,7 +36,7 @@ const OmsCheckoutView: FC = () => {
             productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
-            qty: 99,
+            qty: 10,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -45,7 +45,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 13707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 100000,
             priceRules: {
               minQty: 8,
               maxQty: 10,
@@ -62,7 +62,7 @@ const OmsCheckoutView: FC = () => {
             productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
-            qty: 99,
+            qty: 10,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -71,7 +71,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 13707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 100000,
             priceRules: {
               minQty: 8,
               maxQty: 10,
@@ -94,7 +94,7 @@ const OmsCheckoutView: FC = () => {
             productName: 'ATAPI MADU TIGA RAKSA',
             productImageUrl:
               'https://s1.bukalapak.com/img/1586409473/large/Madu_TJ_murni_500_gram.jpg.webp',
-            qty: 99,
+            qty: 20,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -103,7 +103,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 15707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 120000,
             priceRules: {
               minQty: 8,
               maxQty: 10,

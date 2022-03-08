@@ -1,6 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { View, ScrollView, StatusBar } from 'react-native';
+import {
+  View,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
@@ -33,6 +39,7 @@ import {
 import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
+import { goToCheckout } from '@core/functions/product';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -381,6 +388,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
+      <TouchableOpacity onPress={goToCheckout}>
+        <Text>GoCheckOut</Text>
+      </TouchableOpacity>
     </SnbContainer>
   );
 };

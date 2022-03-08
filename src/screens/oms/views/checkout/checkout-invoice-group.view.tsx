@@ -46,10 +46,9 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                 <SnbText.B2 color={color.blue50}>Lihat Detail</SnbText.B2>
               </TouchableOpacity>
             </View>
-
             <CheckoutSKUListView products={item.products} />
             <CheckoutShipmentDetailView />
-            <CheckoutPaymentDetailView />
+            <CheckoutPaymentDetailView products={item.products} />
           </View>
         )}
       />
