@@ -30,7 +30,6 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   // index,
 }) => {
   /** === HOOK === */
-  console.log(data, 'datax');
 
   return (
     <>

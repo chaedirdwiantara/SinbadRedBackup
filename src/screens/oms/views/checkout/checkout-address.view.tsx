@@ -2,10 +2,19 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbDivider } from 'react-native-sinbad-ui';
+import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
+
+export interface CheckoutAddressProps {
+  buyerName: string;
+  buyerAddress: {};
+}
+
 /** === COMPONENT === */
-export const CheckoutAddressView: FC = () => {
+export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
+  buyerAddress,
+  buyerName,
+}) => {
   const {
     stateUser: {
       detail: { data: storeDetail },
@@ -14,14 +23,16 @@ export const CheckoutAddressView: FC = () => {
 
   return (
     <View style={CheckoutStyle.addessSection}>
-      <SnbText.B2>Alamat Pengiriman</SnbText.B2>
+      <SnbText.H4>Alamat Pengiriman</SnbText.H4>
       <SnbDivider style={{ marginVertical: 8 }} />
       <View style={{ marginBottom: 6 }}>
-        {/* <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4> */}
-        <SnbText.B4>Toko Chaedir</SnbText.B4>
+        <SnbText.B2>{buyerName}</SnbText.B2>
       </View>
-      {/* <SnbText.B1>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B1> */}
-      <SnbText.B1>Sungai Musik, Sentul, Bogor</SnbText.B1>
+      <SnbText.B3 color={color.black60}>
+        {buyerAddress.address}, {buyerAddress.urban}, {buyerAddress.district},{' '}
+        {buyerAddress.city}, {buyerAddress.province}
+      </SnbText.B3>
+      <SnbText.B3 color={color.black60}>{buyerAddress.zipCode}</SnbText.B3>
     </View>
   );
 };

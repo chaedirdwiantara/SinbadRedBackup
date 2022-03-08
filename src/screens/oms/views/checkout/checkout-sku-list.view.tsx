@@ -1,18 +1,10 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { FlatList, Image, TouchableOpacity } from 'react-native';
-import { SnbSKUList } from 'react-native-sinbad-ui';
+import { FlatList, Image, View } from 'react-native';
 import * as models from '@models';
+import { SnbText, color } from 'react-native-sinbad-ui';
 /** === TYPE === */
-
-/** === DUMMY === */
-// const products = [
-//   {
-//     urlImages:
-//       'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
-//   },
-// ];
 export interface IProductCheckout {
   // urlImages: string;
 }
@@ -27,43 +19,25 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
   // openModalProduct,
 }) => {
   /** === HOOK === */
-  console.log(products, 'products');
 
   return (
-    // <SnbSKUList
-    //   data={products}
-    //   renderItem={({ item }: any) => {
-    //     return (
-    //       <TouchableOpacity
-    //         onPress={() =>
-    //           // openModalProduct(products as models.ProductCheckout[])
-    //           {}
-    //         }>
-    //         <Image
-    //           // source={{ uri: item.urlImages }}
-    //           source={item.urlImages}
-    //           style={CheckoutStyle.skuImage}
-    //         />
-    //       </TouchableOpacity>
-    //     );
-    //   }}
-    //   expandable
-    // />
     <FlatList
       keyExtractor={(_, index) => index.toString()}
       data={products}
       renderItem={({ item }) => (
-        <TouchableOpacity
-          onPress={() =>
-            // openModalProduct(products as models.ProductCheckout[])
-            {}
-          }>
+        <View style={CheckoutStyle.productsContainer}>
           <Image
-            // source={{ uri: item.urlImages }}
             source={{ uri: item.productImageUrl }}
             style={CheckoutStyle.skuImage}
           />
-        </TouchableOpacity>
+          <View style={CheckoutStyle.productsDescription}>
+            <SnbText.B4 color={color.black60}>{item.productName}</SnbText.B4>
+            <SnbText.B4 color={color.black60}>
+              {item.qty} {item.uomLabel}
+            </SnbText.B4>
+            <SnbText.B4 color={color.black100}>Rp {item.price}</SnbText.B4>
+          </View>
+        </View>
       )}
     />
   );

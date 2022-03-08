@@ -112,7 +112,7 @@ const OmsCheckoutView: FC = () => {
   // } = statePayment;
   // const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
   // const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  // const [isExpiredSession, setExpiredSession] = useState(false);
+  const [isExpiredSession, setExpiredSession] = useState(false);
   // const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
 
   // const handleRetryCreateOrder = () => {
@@ -497,7 +497,7 @@ const OmsCheckoutView: FC = () => {
             brandName: 'ATAPI SGM',
             productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
             productImageUrl:
-              'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+              'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
             qty: 99,
             minQty: 3,
             multipleQty: 10,
@@ -529,7 +529,7 @@ const OmsCheckoutView: FC = () => {
             brandName: 'MADU TJ',
             productName: 'ATAPI MADU TIGA RAKSA',
             productImageUrl:
-              'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+              'https://s1.bukalapak.com/img/1586409473/large/Madu_TJ_murni_500_gram.jpg.webp',
             qty: 99,
             minQty: 3,
             multipleQty: 10,
@@ -564,6 +564,22 @@ const OmsCheckoutView: FC = () => {
     },
   };
 
+  /** => set expired time  */
+  const dateCurrent = new Date();
+  const timeNow = dateCurrent.getTime() / 1000;
+  const addTime = dateCurrent.getTime() / 1000 + 300000;
+  const timeToExpired = addTime - timeNow;
+  useEffect(() => {
+    setTimeout(() => {
+      setExpiredSession(true);
+    }, timeToExpired);
+  }, []);
+
+  /** handle back to cart */
+  const handleBackToCart = () => {
+    // ADD BACK TO CART FUNCTION
+  };
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -576,9 +592,16 @@ const OmsCheckoutView: FC = () => {
       ) : ( */}
       <>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <CheckoutAddressView />
+          <CheckoutAddressView
+            buyerAddress={data.buyerAddress}
+            buyerName={data.buyerName}
+          />
           <CheckoutInvoiceGroupView data={data} />
         </ScrollView>
+        <ModalBottomErrorExpiredTime
+          isOpen={isExpiredSession}
+          close={handleBackToCart}
+        />
         {/* <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
             {Array.isArray(checkoutMaster.invoices) &&

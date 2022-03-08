@@ -21,9 +21,16 @@ export const CheckoutStyle = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  productsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   skuImage: {
     height: 60,
     width: 60,
+  },
+  productsDescription: {
+    paddingLeft: 15,
   },
   bottomContentContainer: {
     flexDirection: 'row',
