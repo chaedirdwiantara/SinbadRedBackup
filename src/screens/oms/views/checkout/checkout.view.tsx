@@ -516,6 +516,38 @@ const OmsCheckoutView: FC = () => {
           },
         ],
       },
+      {
+        sellerId: 2,
+        sellerName: 'Seller 2',
+        products: [
+          {
+            productId: '53c9b0000000000000000001',
+            warehouseId: 3,
+            warehouseName: 'ATAPI DC Cianjur',
+            categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec5',
+            brandId: '33d200000000000000000001',
+            brandName: 'MADU TJ',
+            productName: 'ATAPI MADU TIGA RAKSA',
+            productImageUrl:
+              'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+            qty: 99,
+            minQty: 3,
+            multipleQty: 10,
+            qtyPerBox: 40,
+            uomLabel: 'PCS',
+            isPriceAfterTax: true,
+            taxPercentage: 10,
+            lastUsedPrice: 15707.099609375, //price
+            leadTime: 10,
+            price: 0,
+            priceRules: {
+              minQty: 8,
+              maxQty: 10,
+              price: 1212121,
+            },
+          },
+        ],
+      },
     ],
     buyerName: 'Toko Ahmad',
     buyerAddress: {

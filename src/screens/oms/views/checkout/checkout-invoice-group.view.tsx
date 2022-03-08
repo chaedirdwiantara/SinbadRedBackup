@@ -33,50 +33,51 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   console.log(data, 'datax');
 
   return (
-    <View style={CheckoutStyle.invoiceGroupListContainer}>
-      <CheckoutWarningTime />
-      <View style={CheckoutStyle.invoiceGroupListField}>
-        <FlatList
-          keyExtractor={(_, index) => index.toString()}
-          data={data.sellers}
-          renderItem={({ item, index }) => (
-            <>
-              <View style={CheckoutStyle.headerSection}>
-                {/* <SnbText.H4>{data.invoiceGroupName}</SnbText.H4> */}
-                {/* <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
+    <>
+      <View style={CheckoutStyle.invoiceGroupListContainer}>
+        <CheckoutWarningTime />
+      </View>
+
+      <FlatList
+        keyExtractor={(_, index) => index.toString()}
+        data={data.sellers}
+        renderItem={({ item, index }) => (
+          <View style={CheckoutStyle.invoiceGroupListField}>
+            <View style={CheckoutStyle.headerSection}>
+              {/* <SnbText.H4>{data.invoiceGroupName}</SnbText.H4> */}
+              {/* <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity> */}
-                <SnbText.H4>{item.sellerName}</SnbText.H4>
-                <TouchableOpacity onPress={() => {}}>
-                  <SnbText.B2 color={color.blue50}>Lihat Detail</SnbText.B2>
-                </TouchableOpacity>
-              </View>
-              {/* <CheckoutSKUListView
+              <SnbText.H4>{item.sellerName}</SnbText.H4>
+              <TouchableOpacity onPress={() => {}}>
+                <SnbText.B2 color={color.blue50}>Lihat Detail</SnbText.B2>
+              </TouchableOpacity>
+            </View>
+            {/* <CheckoutSKUListView
           products={handleTransformProductBrands(data.brands)}
           openModalProduct={openModalProductList}
         /> */}
-              <CheckoutSKUListView products={item.products} />
-              <CheckoutShipmentDetailView />
-              {/* <CheckoutPaymentTypeView
+            <CheckoutSKUListView products={item.products} />
+            <CheckoutShipmentDetailView />
+            {/* <CheckoutPaymentTypeView
           data={data}
           openModalPaymentType={openModalPaymentType}
           index={index}
         /> */}
 
-              {/* WE DONT NEED CHECKOUT PAYMENT TYPE IN THIS PAGE */}
-              {/* <CheckoutPaymentTypeView
+            {/* WE DONT NEED CHECKOUT PAYMENT TYPE IN THIS PAGE */}
+            {/* <CheckoutPaymentTypeView
           data={data}
           openModalPaymentType={openModalPaymentType}
           index={index}
         /> */}
 
-              {/*  <CheckoutPaymentDetailView data={data} /> */}
-              <CheckoutPaymentDetailView />
-            </>
-          )}
-        />
-      </View>
-    </View>
+            {/*  <CheckoutPaymentDetailView data={data} /> */}
+            <CheckoutPaymentDetailView />
+          </View>
+        )}
+      />
+    </>
   );
 };
 

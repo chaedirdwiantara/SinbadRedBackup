@@ -7,6 +7,8 @@ export const CheckoutStyle = StyleSheet.create({
     backgroundColor: color.white,
   },
   invoiceGroupListField: {
+    marginBottom: 8,
+    backgroundColor: color.white,
     padding: 16,
   },
   headerSection: {
