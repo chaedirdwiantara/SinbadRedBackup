@@ -171,15 +171,15 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
-    updateCartAction.reset(dispatchCart);
-    setExpiredSession(false);
+    // checkProductAction.reset(dispatchCart);
+    // checkSellerAction.reset(dispatchCart);
+    // checkStockAction.reset(dispatchCart);
+    // getCartAction.reset(dispatchCart);
+    // removeCartProductAction.reset(dispatchCart);
+    // cartMasterAction.reset();
+    // cartBuyerAddressAction.reset(dispatchCart);
+    // updateCartAction.reset(dispatchCart);
+    // setExpiredSession(false);
     goToShoppingCart();
   };
 
