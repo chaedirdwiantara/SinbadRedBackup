@@ -1,4 +1,8 @@
-import { OmsShoppingCartView, OmsCheckoutView } from '@screen/oms/views';
+import {
+  OmsShoppingCartView,
+  OmsCheckoutView,
+  OmsThankYouPageView,
+} from '@screen/oms/views';
 
 const OmsNav = {
   OmsShoppingCartView: {
@@ -7,6 +11,9 @@ const OmsNav = {
   OmsCheckoutView: {
     component: OmsCheckoutView,
   },
+  OmsThankYouPageView: {
+    component: OmsThankYouPageView,
+  }
 };
 
 export default OmsNav;
