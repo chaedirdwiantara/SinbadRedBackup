@@ -96,6 +96,7 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
 
     return unsubscribe;
   }, [navigation]);
+  //FOR START COUCHMARK
   useEffect(() => {
     if (!coachmarkState?.data?.orderCoachmark) {
       setTimeout(() => {
@@ -281,6 +282,7 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
       }
     />
   );
+  //walkthrough couchmark
   const couchmarkWalkthrough = () => {
     if (!coachmarkState?.data?.orderCoachmark) {
       return (
