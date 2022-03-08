@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 import { handleTransformProductBrands } from '@screen/oms/functions';
 /** === IMPORT EXTERNAL COMPONENT === */
@@ -14,6 +14,7 @@ import * as models from '@models';
 import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
+  data: any;
   // data: models.IInvoiceCheckout;
   // openModalPaymentType: (value: boolean) => void;
   // openModalParcelDetail: any;
@@ -21,43 +22,59 @@ interface CheckoutInvoiceGroupViewProps {
   // index: number;
 }
 /** === COMPONENT === */
-export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = (
-  {
-    // data,
-    // openModalPaymentType,
-    // openModalParcelDetail,
-    // openModalProductList,
-    // index,
-  },
-) => {
+export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
+  data,
+  // openModalPaymentType,
+  // openModalParcelDetail,
+  // openModalProductList,
+  // index,
+}) => {
   /** === HOOK === */
+  console.log(data, 'datax');
 
   return (
     <View style={CheckoutStyle.invoiceGroupListContainer}>
       <CheckoutWarningTime />
       <View style={CheckoutStyle.invoiceGroupListField}>
-        <View style={CheckoutStyle.headerSection}>
-          {/* <SnbText.H4>{data.invoiceGroupName}</SnbText.H4> */}
-          {/* <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
+        <FlatList
+          keyExtractor={(_, index) => index.toString()}
+          data={data.sellers}
+          renderItem={({ item, index }) => (
+            <>
+              <View style={CheckoutStyle.headerSection}>
+                {/* <SnbText.H4>{data.invoiceGroupName}</SnbText.H4> */}
+                {/* <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
             <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
           </TouchableOpacity> */}
-          <SnbText.H4>PT. Tigaraksa</SnbText.H4>
-          <TouchableOpacity onPress={() => {}}>
-            <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
-          </TouchableOpacity>
-        </View>
-        {/* <CheckoutSKUListView
+                <SnbText.H4>{item.sellerName}</SnbText.H4>
+                <TouchableOpacity onPress={() => {}}>
+                  <SnbText.B2 color={color.blue50}>Lihat Detail</SnbText.B2>
+                </TouchableOpacity>
+              </View>
+              {/* <CheckoutSKUListView
           products={handleTransformProductBrands(data.brands)}
           openModalProduct={openModalProductList}
-        />
-        <CheckoutShipmentDetailView />
-        <CheckoutPaymentTypeView
+        /> */}
+              <CheckoutSKUListView products={item.products} />
+              <CheckoutShipmentDetailView />
+              {/* <CheckoutPaymentTypeView
           data={data}
           openModalPaymentType={openModalPaymentType}
           index={index}
+        /> */}
+
+              {/* WE DONT NEED CHECKOUT PAYMENT TYPE IN THIS PAGE */}
+              {/* <CheckoutPaymentTypeView
+          data={data}
+          openModalPaymentType={openModalPaymentType}
+          index={index}
+        /> */}
+
+              {/*  <CheckoutPaymentDetailView data={data} /> */}
+              <CheckoutPaymentDetailView />
+            </>
+          )}
         />
-        <CheckoutPaymentDetailView data={data} /> */}
-        <CheckoutPaymentDetailView />
       </View>
     </View>
   );

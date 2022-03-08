@@ -20,7 +20,7 @@ export interface IPaymentDetail {
 /** === DUMMY === */
 const data = {
   totalProduct: 5,
-  totalPriceBeforeTax: 1500000,
+  totalPriceBeforeTax: 150000,
   totalPromoSellerAndVoucher: 90,
   tax: 20,
   totalPromoPayment: 120000,

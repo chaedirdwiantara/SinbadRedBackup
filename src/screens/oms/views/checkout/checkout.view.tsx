@@ -477,6 +477,61 @@ const OmsCheckoutView: FC = () => {
   //   );
   // };
 
+  /** === DUMMY === */
+  const data = {
+    id: '53c9b0000000000000000000',
+    userId: 2,
+    cartId: '62173bc2cf4b811334e2d5c4',
+    buyerId: 1,
+    sellers: [
+      {
+        sellerId: 1,
+        sellerName: 'Seller 1',
+        products: [
+          {
+            productId: '53c9b0000000000000000000',
+            warehouseId: 3,
+            warehouseName: 'ATAPI DC Kemang',
+            categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
+            brandId: '33d200000000000000000000',
+            brandName: 'ATAPI SGM',
+            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productImageUrl:
+              'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png',
+            qty: 99,
+            minQty: 3,
+            multipleQty: 10,
+            qtyPerBox: 40,
+            uomLabel: 'PCS',
+            isPriceAfterTax: true,
+            taxPercentage: 10,
+            lastUsedPrice: 13707.099609375, //price
+            leadTime: 10,
+            price: 0,
+            priceRules: {
+              minQty: 8,
+              maxQty: 10,
+              price: 1212121,
+            },
+          },
+        ],
+      },
+    ],
+    buyerName: 'Toko Ahmad',
+    buyerAddress: {
+      longtitude: '106°49′35.76',
+      latitude: '6°10′30.00',
+      province: 'DKI Jakarta',
+      city: 'Jakarta Selatan',
+      district: 'Jakarta',
+      urban: 'Jakarta',
+      zipCode: '445351',
+      address: 'Jalan Jakarta',
+      noteAddress: 'pagar putih',
+      locationId: '53c9b0000000000000000000',
+    },
+  };
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -490,7 +545,7 @@ const OmsCheckoutView: FC = () => {
       <>
         <ScrollView showsVerticalScrollIndicator={false}>
           <CheckoutAddressView />
-          <CheckoutInvoiceGroupView />
+          <CheckoutInvoiceGroupView data={data} />
         </ScrollView>
         {/* <ScrollView showsVerticalScrollIndicator={false}>
             <CheckoutAddressView />
