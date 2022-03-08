@@ -255,8 +255,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         <SnbButton.Dynamic
           title="Checkout"
           type="primary"
-          // onPress={handleOnPressCheckout}
-          onPress={goToCheckout}
+          onPress={handleOnPressCheckout}
           size={'large'}
           disabled={isCheckoutDisabled}
         />

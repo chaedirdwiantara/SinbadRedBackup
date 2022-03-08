@@ -52,6 +52,32 @@ const OmsCheckoutView: FC = () => {
               price: 1212121,
             },
           },
+          {
+            productId: '53c9b0000000000000000002',
+            warehouseId: 4,
+            warehouseName: 'ATAPI DC Kemang',
+            categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec5',
+            brandId: '33d200000000000000000003',
+            brandName: 'ATAPI SGM',
+            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productImageUrl:
+              'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
+            qty: 99,
+            minQty: 3,
+            multipleQty: 10,
+            qtyPerBox: 40,
+            uomLabel: 'PCS',
+            isPriceAfterTax: true,
+            taxPercentage: 10,
+            lastUsedPrice: 13707.099609375, //price
+            leadTime: 10,
+            price: 0,
+            priceRules: {
+              minQty: 8,
+              maxQty: 10,
+              price: 1212121,
+            },
+          },
         ],
       },
       {
