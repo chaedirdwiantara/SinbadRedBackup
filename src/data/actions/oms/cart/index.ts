@@ -12,4 +12,5 @@ export * from './post-check-seller.action';
 export * from './check-stock.action';
 export * from './post-check-stock.action';
 export * from './cancel-stock.action';
+export * from './post-cancel-stock.action';
 export * from './cart-buyer-address.action';

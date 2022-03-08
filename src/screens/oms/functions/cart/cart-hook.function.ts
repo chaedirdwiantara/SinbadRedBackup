@@ -73,7 +73,7 @@ const useUpdateCartAction = () => {
       cartData: models.CartMaster,
     ) => {
       if (stateCart.buyerAddress.data !== null) {
-        const carts: models.CartMasterSellers[] = [];
+        const carts: models.CartMasterSellers[] = [...cartData.sellers];
         cartData.unavailable.map((product) => {
           const sellerFound = cartData.sellers.find(
             (seller) => seller.sellerId === product.sellerId,
@@ -85,7 +85,12 @@ const useUpdateCartAction = () => {
             );
 
             if (indexCartFound !== -1) {
-              carts[indexCartFound].products.push(product);
+              const isProductAlreadyExist = carts[indexCartFound].products.some(
+                (prod) => prod.productId === product.productId,
+              );
+              if (!isProductAlreadyExist) {
+                carts[indexCartFound].products.push(product);
+              }
             } else {
               carts.push({
                 ...sellerFound,
@@ -340,6 +345,18 @@ const useCancelStockAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.cancelStockReset(contextDispatch));
+    },
+  };
+};
+/** => post cancel stock action */
+const usePostCancelStockAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postCancelStockProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postCancelStockReset(contextDispatch));
     },
   };
 };
@@ -643,6 +660,7 @@ export {
   useCheckStockAction,
   usePostCheckStockAction,
   useCancelStockAction,
+  usePostCancelStockAction,
   useCartBuyerAddressAction,
   useCartLocalData,
   useOmsGeneralFailedState,

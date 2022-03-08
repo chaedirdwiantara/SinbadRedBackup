@@ -57,10 +57,13 @@ const matchCartWithCheckData = ({
       delete thisCartCheckProduct.stock;
       delete thisCartCheckProduct.status;
       delete thisCartCheckProduct.stockStatus;
+      delete thisCartCheckProduct.productStatus;
       delete thisCartCheckProduct.warehouseName;
       delete thisCartCheckProduct.leadTime;
       delete thisCartCheckProduct.price;
+      delete thisCartCheckProduct.unavailableMessage;
       delete thisCheckProduct.status;
+      delete thisCheckProduct.productStatus;
 
       if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
         console.log('check product data not match');

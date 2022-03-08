@@ -1,10 +1,10 @@
 /** === IMPORT PACKAGE HERE ===  */
 import {
   matchCartWithCheckData,
-  useCancelStockAction,
   useCartMasterAction,
   useCheckoutAction,
   useOmsGeneralFailedState,
+  usePostCancelStockAction,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
@@ -20,13 +20,13 @@ import * as models from '@models';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { cloneDeep } from 'lodash';
 
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
   countTotalProduct: number;
   countTotalPrice: number;
-  isInitialCancelReserveDone: boolean;
   isCheckoutDisabled: boolean;
 }
 /** === COMPONENT ===  */
@@ -34,7 +34,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
   countTotalPrice,
   countTotalProduct,
-  isInitialCancelReserveDone,
   isCheckoutDisabled,
 }) => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
@@ -45,7 +44,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
 
-  const cancelCartAction = useCancelStockAction();
+  const postCancelCartAction = usePostCancelStockAction();
   const cartMasterAction = useCartMasterAction();
   const postCheckProductAction = usePostCheckProductAction();
   const postCheckSellerAction = usePostCheckSellerAction();
@@ -58,7 +57,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const retryCheckoutModal = useOmsGeneralFailedState();
 
   const handleOnPressCheckout = useCallback(() => {
-    cartMasterAction.replaceFromLocal(cartData);
+    cartMasterAction.replaceFromLocal(cloneDeep(cartData));
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
   }, [cartData, stateCart.buyerAddress.data]);
@@ -222,15 +221,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   }, [stateCheckout.checkout]);
 
   useEffect(() => {
-    if (stateCart.cancelStock.data && !isInitialCancelReserveDone) {
+    if (stateCart.postCancelStock.data !== null) {
       cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
       cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
     }
-  }, [stateCart.cancelStock.data, isInitialCancelReserveDone]);
+
+    return () => {
+      postCancelCartAction.reset(dispatchCart);
+    };
+  }, [stateCart.postCancelStock.data]);
 
   const handleClose = () => {
-    cancelCartAction.fetch(dispatchCart);
+    postCancelCartAction.fetch(dispatchCart);
     setErrorShown(false);
   };
 

@@ -33,6 +33,7 @@ import {
 import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
+import { NavigationAction } from '@core/functions/navigation';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -48,8 +49,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeProduct,
     calculateProductTotalPrice,
   } = useCartLocalData();
-  const [isInitialCancelReserveDone, setInitialCancelReserveDone] =
-    useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -133,6 +132,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     };
   }, []);
 
+  /** => hardware back handler */
+  NavigationAction.useCustomBackHardware(() => {
+    handleGoBack();
+  });
+
   /** => if get cart or buyer address failed */
   useEffect(() => {
     if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
@@ -175,7 +179,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.buyerAddress.data !== null
     ) {
       errorModal.setRetryCount(3);
-      setInitialCancelReserveDone(true);
       getCartAction.fetch(dispatchCart);
     }
   }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
@@ -345,7 +348,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               cartData={localCartMaster}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
-              isInitialCancelReserveDone={isInitialCancelReserveDone}
               isCheckoutDisabled={
                 isAnyActiveProduct() && countTotalPrice < 100000
               }
