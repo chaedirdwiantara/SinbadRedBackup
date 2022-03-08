@@ -67,8 +67,6 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
     [historyListState.data],
   );
 
-  console.log('couch:', coachmarkState);
-
   useFocusEffect(
     useCallback(() => {
       if (activeTab === 0) {
