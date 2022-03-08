@@ -70,8 +70,8 @@ const DataDiriStep6View: React.FC = () => {
           title="Alamat Email"
         />
         <Stepper
-          complete={1}
-          total={7}
+          complete={completeDataState?.data?.userProgress?.completed || 1}
+          total={completeDataState?.data?.userProgress?.total || 7}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
