@@ -116,6 +116,7 @@ const OmsCheckoutView: FC = () => {
   /** handle back to cart */
   const handleBackToCart = () => {
     // ADD BACK TO CART FUNCTION
+    setExpiredSession(false);
   };
 
   return (
