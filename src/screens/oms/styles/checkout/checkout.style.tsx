@@ -24,6 +24,7 @@ export const CheckoutStyle = StyleSheet.create({
   productsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 12,
   },
   skuImage: {
     height: 60,
@@ -93,6 +94,10 @@ export const CheckoutStyle = StyleSheet.create({
     backgroundColor: color.yellow10,
     borderRadius: 5,
     justifyContent: 'space-around',
+  },
+  showMoreProduct: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
