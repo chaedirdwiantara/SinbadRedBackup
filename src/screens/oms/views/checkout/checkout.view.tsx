@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
@@ -9,11 +9,41 @@ import { CheckoutHeader } from './checkout-header.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
+import {
+  useGetCartAction,
+  useCartMasterAction,
+  useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
+  useRemoveCartProductAction,
+  useCartLocalData,
+  useOmsGeneralFailedState,
+  useGetTotalCartAction,
+  useCartBuyerAddressAction,
+  useCancelStockAction,
+  useUpdateCartAction,
+} from '../../functions';
+import { goToShoppingCart } from '@core/functions/product';
 
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
+  /** => ACTION */
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const getCartAction = useGetCartAction();
+  const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
+  const removeCartProductAction = useRemoveCartProductAction();
+  const totalCartActions = useGetTotalCartAction();
+  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const cancelCartAction = useCancelStockAction();
+  const updateCartAction = useUpdateCartAction();
+
   /** === HOOK === */
   const [isExpiredSession, setExpiredSession] = useState(false);
+  // const { stateCheckout } = useContext(contexts.CheckoutContext);
+  // const data = stateCheckout.checkout.data;
 
   /** === DUMMY === */
   const data = {
@@ -136,13 +166,21 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setExpiredSession(true);
-    }, timeToExpired);
+    }, 1000);
   }, []);
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    // ADD BACK TO CART FUNCTION
+    checkProductAction.reset(dispatchCart);
+    checkSellerAction.reset(dispatchCart);
+    checkStockAction.reset(dispatchCart);
+    getCartAction.reset(dispatchCart);
+    removeCartProductAction.reset(dispatchCart);
+    cartMasterAction.reset();
+    cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
     setExpiredSession(false);
+    goToShoppingCart();
   };
 
   return (
