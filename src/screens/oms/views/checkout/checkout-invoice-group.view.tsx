@@ -10,6 +10,7 @@ import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 import { CheckoutWarningTime } from './checkout-warning-time';
 /** === TYPE === */
 import * as models from '@models';
+import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
   data: any;
