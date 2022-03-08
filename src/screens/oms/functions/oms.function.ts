@@ -15,4 +15,4 @@ const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
 
-export { goBack, goToCategory };
+export { goBack, goToCategory, goToCheckout };
