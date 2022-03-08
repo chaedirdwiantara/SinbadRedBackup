@@ -182,12 +182,22 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
-    if (stateCart.get.data !== null && stateCart.buyerAddress.data !== null) {
+    if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length > 0 &&
+      stateCart.buyerAddress.data !== null
+    ) {
       cartMasterAction.setCartMaster(stateCart.get.data);
       errorModal.setRetryCount(3);
       checkProductAction.fetch(dispatchCart);
       checkSellerAction.fetch(dispatchCart);
       checkStockAction.fetch(dispatchCart, false);
+    } else if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length === 0
+    ) {
+      setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
+      setPageLoading(false);
     }
   }, [stateCart.get.data, stateCart.buyerAddress.data]);
 
@@ -319,7 +329,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
-    if (localCartMaster && localCartMaster.id !== '') {
+    if (localCartMaster) {
       const isCartEmpty =
         (!isAnyActiveProduct() && localCartMaster.unavailable.length === 0) ||
         stateCart.get.error?.code === 40010000009;
