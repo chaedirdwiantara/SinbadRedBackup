@@ -1,6 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDataCheckout, useDataPaymentChannels } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';

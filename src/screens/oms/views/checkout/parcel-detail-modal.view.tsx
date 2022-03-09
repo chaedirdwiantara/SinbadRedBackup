@@ -10,6 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
+import { totalBarangPrice } from '../../functions/checkout';
 
 const { height } = Dimensions.get('window');
 
@@ -32,13 +33,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 }) => {
   /** === HOOK === */
   const deliveryFee = 0;
-  const totalBarangPrice = () => {
-    let total = 0;
-    for (let i = 0; i < data.length; i++) {
-      total = total + data[i].qty * data[i].price;
-    }
-    return total;
-  };
+  const totalProductsPrice = totalBarangPrice(data);
 
   const productDetail = () => {
     if (data === null) {
@@ -63,7 +58,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             <SnbText.H4 color={color.black100}>Total</SnbText.H4>
           </View>
           <SnbText.B2 color={color.black100}>
-            Rp {totalBarangPrice() + deliveryFee}
+            Rp {totalProductsPrice + deliveryFee}
           </SnbText.B2>
         </View>
       </View>
