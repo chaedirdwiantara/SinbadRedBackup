@@ -1,6 +1,6 @@
 import { renderIF, useCamera } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -10,18 +10,26 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { ListOfSteps, Stepper } from '../../shared';
+import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
-import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
+import {
+  DATA_COMPLETENESS_VIEW,
+  DATA_DIRI_STEP_3_VIEW,
+} from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
-const Content: React.FC = () => {
-  const { openCamera, capturedImage, resetCamera } = useCamera();
+const DataDiriStep2View: React.FC = () => {
+  const [openModalStep, setOpenModalStep] = React.useState(false);
+  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const [backHandle, setBackHandle] = React.useState(false);
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
+
+  const { openCamera, capturedImage, resetCamera } = useCamera();
+
   const { upload, save } = useUploadImageAction();
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -55,12 +63,30 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
-      refetchCompleteData();
-      resetCamera();
-      resetUpdateCompleteData();
-      navigate(DATA_DIRI_STEP_3_VIEW);
+      if (backHandle) {
+        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        resetUpdateCompleteData();
+        setBackHandle(false);
+      } else {
+        refetchCompleteData();
+        resetCamera();
+        resetUpdateCompleteData();
+        navigate(DATA_DIRI_STEP_3_VIEW);
+      }
     }
   }, [updateCompleteDataState]);
+
+  React.useEffect(() => {
+    const backAction = () => {
+      setOpenModalBack(true);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -134,28 +160,32 @@ const Content: React.FC = () => {
     Boolean(idImageUrl) || capturedImage.data?.type === 'ktp';
 
   return (
-    <View style={{ flex: 1 }}>
-      {renderIF(
-        isImageAvailable,
-        renderImagePreview(),
-        renderUploadPhotoRules(),
-      )}
-    </View>
-  );
-};
-
-const DataDiriStep2View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-
-  return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto KTP" />
-      <Stepper complete={2} total={7} onPress={() => setOpenModalStep(true)} />
-      <Content />
+      <Stepper
+        complete={completeDataState?.data?.userProgress?.completed || 1}
+        total={completeDataState?.data?.userProgress?.total || 6}
+        onPress={() => setOpenModalStep(true)}
+      />
+      <View style={{ flex: 1 }}>
+        {renderIF(
+          isImageAvailable,
+          renderImagePreview(),
+          renderUploadPhotoRules(),
+        )}
+      </View>
       <ListOfSteps
         open={openModalStep}
         type="user"
         closeModal={() => setOpenModalStep(false)}
+      />
+      <ModalBack
+        open={openModalBack}
+        closeModal={() => setOpenModalBack(false)}
+        confirm={() => {
+          setBackHandle(true);
+          upload(dispatchGlobal, capturedImage.data.url);
+        }}
       />
     </SnbContainer>
   );

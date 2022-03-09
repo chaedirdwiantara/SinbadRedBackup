@@ -6,14 +6,14 @@ import {
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
 import { useNavigation } from '@react-navigation/core';
 import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep6View: React.FC = () => {
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -22,10 +22,23 @@ const DataDiriStep6View: React.FC = () => {
   } = useEasyRegistration();
   const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
   const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOPenModalBack] = useState(false);
+  const [openModalBack, setOpenModalBack] = useState(false);
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [backHandle, setBackHandle] = useState(false);
+
+  // HANDLE BACK DEVICE
+  React.useEffect(() => {
+    const backAction = () => {
+      setOpenModalBack(true);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+    return () => backHandler.remove();
+  }, []);
 
   /** VALIDATE EMAIL */
   const validateEmail = (textEmail: string) => {
@@ -51,7 +64,7 @@ const DataDiriStep6View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        navigate(DATA_COMPLETENESS_VIEW);
+        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
@@ -65,13 +78,13 @@ const DataDiriStep6View: React.FC = () => {
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav.Type3
-          backAction={() => setOPenModalBack(true)}
+          backAction={() => setOpenModalBack(true)}
           type="white"
           title="Alamat Email"
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed || 1}
-          total={completeDataState?.data?.userProgress?.total || 7}
+          total={completeDataState?.data?.userProgress?.total || 6}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
@@ -104,7 +117,7 @@ const DataDiriStep6View: React.FC = () => {
       </View>
       <ModalBack
         open={openModalBack}
-        closeModal={() => setOPenModalBack(false)}
+        closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
           confirm();

@@ -6,7 +6,7 @@ import {
   SnbUploadPhotoRules,
   SnbToast,
 } from 'react-native-sinbad-ui';
-import { View, Image } from 'react-native';
+import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { useNavigation } from '@react-navigation/core';
 import {
@@ -16,22 +16,44 @@ import {
 import { useCamera } from '@screen/account/functions';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
+import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep4View: React.FC = () => {
-  const { navigate } = useNavigation();
+  const { navigate, reset } = useNavigation();
   const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOPenModalBack] = useState(false);
+  const [openModalBack, setOpenModalBack] = useState(false);
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
+  const [backHandle, setBackHandle] = useState(false);
+  const {
+    updateCompleteData,
+    updateCompleteDataState,
+    completeDataState,
+    resetUpdateCompleteData,
+  } = useEasyRegistration();
 
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
       resetCamera();
+      resetUpdateCompleteData();
     };
+  }, []);
+
+  // HANDLE BACK DEVICE
+  React.useEffect(() => {
+    const backAction = () => {
+      setOpenModalBack(true);
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   }, []);
 
   React.useEffect(() => {
@@ -40,7 +62,6 @@ const DataDiriStep4View: React.FC = () => {
       capturedImage.data?.type === 'selfie'
     ) {
       SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
-      // saveUserData({ taxImageUrl: stateGlobal.uploadImage.data.url });
       resetCamera();
     }
 
@@ -49,12 +70,55 @@ const DataDiriStep4View: React.FC = () => {
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
-  React.useEffect(() => {
-    if (stateGlobal.uploadImage.data) {
-      navigate(DATA_DIRI_STEP_5_VIEW);
-      save(dispatchGlobal, '');
+  //CONFIRM UPLOAD IMAGE
+  const confirm = () => {
+    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
+      upload(dispatchGlobal, capturedImage.data.url);
+    } else {
+      if (completeDataState?.data?.userData?.selfieImageUrl) {
+        navigate(DATA_DIRI_STEP_5_VIEW);
+      } else {
+        openCamera('selfie');
+      }
     }
-  }, [stateGlobal.uploadImage.data]);
+  };
+
+   //BACK AND SAVE
+   const backSave = () => {
+    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
+      upload(dispatchGlobal, capturedImage.data.url);
+      setBackHandle(true);
+    } else {
+      reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+    }
+  };
+
+  //FOR CHECK IF IMAGE UPLOADED AND HIT API UPDATE COMPLETENESS DATA
+  React.useEffect(() => {
+    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'selfie') {
+      updateCompleteData({
+        user: { selfieImageUrl: stateGlobal.uploadImage?.data?.url },
+      });
+    }
+  }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
+
+  // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
+  React.useEffect(() => {
+    if (updateCompleteDataState.data !== null) {
+      if (backHandle) {
+        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        resetUpdateCompleteData();
+        setBackHandle(false);
+        save(dispatchGlobal, '');
+        resetCamera();
+      } else {
+        navigate(DATA_DIRI_STEP_5_VIEW);
+        resetUpdateCompleteData();
+        save(dispatchGlobal, '');
+        resetCamera();
+      }
+    }
+  }, [updateCompleteDataState]);
 
   const renderUploadPhotoRules = () => {
     return (
@@ -69,7 +133,6 @@ const DataDiriStep4View: React.FC = () => {
           'Hindari Tangan Menutupi KTP.',
         ]}
         action={() => openCamera('selfie')}
-        listType={'number'}
       />
     );
   };
@@ -79,10 +142,9 @@ const DataDiriStep4View: React.FC = () => {
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
+    } else {
+      uri = completeDataState?.data?.userData?.selfieImageUrl;
     }
-    // else {
-    //   uri = merchantData.user?.taxImageUrl;
-    // }
     return (
       <View style={{ flex: 1 }}>
         <Image
@@ -111,7 +173,7 @@ const DataDiriStep4View: React.FC = () => {
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
-              onPress={() => upload(dispatchGlobal, capturedImage.data.url)}
+              onPress={() => confirm()}
             />
           </View>
         </View>
@@ -120,28 +182,28 @@ const DataDiriStep4View: React.FC = () => {
   };
 
   const isImageAvailable =
-    // merchantData?.user?.taxImageUrl !== '' ||
+    completeDataState?.data?.userData?.selfieImageUrl !== null ||
     capturedImage.data?.type === 'selfie';
 
   return (
     <SnbContainer color="white">
       <View>
         <SnbTopNav.Type3
-          backAction={() => setOPenModalBack(true)}
+          backAction={() => setOpenModalBack(true)}
           type="white"
           title="Foto Diri Dengan KTP"
         />
         <Stepper
-          complete={4}
-          total={7}
+          complete={completeDataState?.data?.userProgress?.completed || 1}
+          total={completeDataState?.data?.userProgress?.total || 6}
           onPress={() => setOpenModalStep(true)}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
         open={openModalBack}
-        closeModal={() => setOPenModalBack(false)}
-        confirm={() => navigate(DATA_COMPLETENESS_VIEW)}
+        closeModal={() => setOpenModalBack(false)}
+        confirm={() => backSave()}
       />
       <ListOfSteps
         open={openModalStep}
