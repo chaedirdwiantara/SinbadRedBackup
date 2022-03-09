@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { useContext } from 'react';
-import {
-  ScrollView,
-  RefreshControl,
-  View,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import { ScrollView, RefreshControl, View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import HomeHeaderView from './home-header.view';
@@ -18,7 +12,7 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
-import { goToCheckout, useGetTotalCartAction } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useDataAuth } from '@core/redux/Data';
 // import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
@@ -86,11 +80,6 @@ const HomeView: React.FC = ({ navigation }: any) => {
         <PushNotification />
         <BannerHomeView />
         <CategoryHomeView />
-        <TouchableOpacity
-          onPress={goToCheckout}
-          style={{ padding: 10, backgroundColor: 'silver' }}>
-          <Text>GO CHECKOUT</Text>
-        </TouchableOpacity>
         <RecommendationHomeView navigationParent={navigation} />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
