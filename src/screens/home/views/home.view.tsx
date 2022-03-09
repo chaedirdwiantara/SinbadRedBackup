@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE === */
 import React, { useContext } from 'react';
 import { ScrollView, RefreshControl, View } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbButton } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import HomeHeaderView from './home-header.view';
 import { BannerHomeView } from '../../banner/views';
@@ -12,7 +12,7 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
-import { useGetTotalCartAction } from '@screen/oms/functions';
+import { goToThankYouPage, useGetTotalCartAction } from '@screen/oms/functions';
 import { useDataAuth } from '@core/redux/Data';
 // import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
@@ -81,6 +81,11 @@ const HomeView: React.FC = ({ navigation }: any) => {
         <BannerHomeView />
         <CategoryHomeView />
         <RecommendationHomeView navigationParent={navigation} />
+        <SnbButton.Single
+            title={"dummy"}
+            onPress={goToThankYouPage}
+            type={'primary'}
+          />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
       </>

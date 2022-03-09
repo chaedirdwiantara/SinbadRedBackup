@@ -7,7 +7,7 @@ import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.com
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
 import { useThankYouPageAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbContainer, SnbText, SnbToast, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect } from 'react';
 import {
   ScrollView,
@@ -17,9 +17,43 @@ import {
 } from 'react-native'; 
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+import CustomAccordion from '@screen/history/components/CustomAccordion';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
+  const paymentGuideDummy = {
+    "data":  [
+      {
+        "id": 1,
+        "paymentMethodId": "bca_va",
+        "title": "ATM BCA",
+        "content": "<p>1  Masukkan Kartu ATM BCA dan Pin Anda</p><p>2  Pilih menu Transaksi Lainnya - Transfer - Rekening BCA Virtual Account</p><p>3  Masukkan No. Virtual Account [Generated VA Number]</p><p>4  Pastikan detil pembayaran Anda sudah sesuai</p><p>5  Masukkan jumlah Transfer sesuai dengan Jumlah yang harus dibayar</p><p>6  Ikuti instruksi untuk menyelesaikan transaksi</p><p>7  Simpan struk transaksi sebagai bukti pembayaran Anda</p>",
+        "createdAt": "2021-02-01T06:19:55.516Z",
+        "updatedAt": "2021-02-01T06:19:55.516Z"
+      },
+      {
+        "id": 2,
+        "paymentMethodId": "bca_va",
+        "title": "m-BCA",
+        "content": "<p>1  Log in pada aplikasi BCA Mobile</p><p>2  Pilih menu m-BCA dan masukkan kode akses Anda</p><p>3  Pilih m-Transfer - BCA Virtual Account</p><p>4  Masukkan No. Virtual Account [Generated VA Number]</p><p>5  Masukkan pin m-BCA Anda</p><p>6  Simpan bukti pembayaran Anda</p>",
+        "createdAt": "2021-02-01T06:19:55.516Z",
+        "updatedAt": "2021-02-01T06:19:55.516Z"
+      },
+      {
+        "id": 3,
+        "paymentMethodId": "bca_va",
+        "title": "Internet Banking BCA",
+        "content": '<p>1  Login di halaman internet Banking BCA ( <a href="https://klikbca.com/" target="blank_">https://klikbca.com/</a> )</p><p>2  Pilih Transafer Dana</p><p>3  Masukkan No. Virtual Account [Generated VA Number]</p><p>4  Pastikan detil pembayaran Anda sudah sesuai</p><p>5  Masukkan mToken</p><p>6  Simpan bukti pembayaran Anda</p>',
+        "createdAt": "2021-02-01T06:19:55.516Z",
+        "updatedAt": "2021-02-01T06:19:55.516Z"
+      },
+    ],
+    "meta": {
+      "skip": 0,
+      "limit": 10,
+      "total": 1
+    }
+  }
   // const orderDetail = {
   //   "data":
   //   {
@@ -158,6 +192,33 @@ const OmsThankYouPageView: FC = () => {
     </ThankYouPageCard>
     )
   }
+  const generatePaymentGuideListData = (data: any) => {
+    return data.data.map ((item : any) => {
+        return {
+          name: item.title,
+          instruction: item.content
+        }
+    })
+  }
+  /** => Payment Guide List */
+  const renderPaymentGuideList = (data:any) => {
+    return (
+        <CustomAccordion data={generatePaymentGuideListData(data)}/>
+    )
+  }
+  /** => Payment Guide */
+  const renderPaymentGuide = () => {
+    return (
+      <ThankYouPageCard title="Panduan Pembayaran">
+        <View style={ThankYouPageStyle.defaultContentPadding}>
+          {paymentGuideDummy !== null && paymentGuideDummy !== undefined &&
+            renderPaymentGuideList(paymentGuideDummy)
+          }
+
+        </View>
+      </ThankYouPageCard>
+    )
+  }
   /** => Thank You Page Content */
   const renderThankYouPageContent = () => (
     <ScrollView
@@ -165,6 +226,7 @@ const OmsThankYouPageView: FC = () => {
     <>
     {renderPaymentDetail()}
     {renderPaymentTotal()}
+    {renderPaymentGuide()}
     </>
     </ScrollView>
   );
