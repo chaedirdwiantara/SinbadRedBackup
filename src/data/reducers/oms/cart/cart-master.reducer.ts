@@ -55,7 +55,7 @@ export const cartMaster = simplifyReducer(initialState, {
              */
             let qty: number = thisProduct.qty;
             let selected: boolean = thisProduct.selected;
-            if (item.minQty >= thisProduct.qty) {
+            if (item.minQty > thisProduct.qty) {
               qty = item.minQty;
               selected = false;
             }
