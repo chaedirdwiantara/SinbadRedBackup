@@ -163,7 +163,7 @@ const totalBarangPrice = (products: any) => {
   for (let i = 0; i < products.length; i++) {
     total = total + products[i].qty * products[i].price;
   }
-  return total;
+  return toCurrency(total, { withFraction: false });
 };
 
 const subTotalQty = (products: any) => {
@@ -181,7 +181,7 @@ const totalPayment = (sellers: any) => {
       total = total + sellers[i].products[a].qty * sellers[i].products[a].price;
     }
   }
-  return total;
+  return toCurrency(total, { withFraction: false });
 };
 
 export {

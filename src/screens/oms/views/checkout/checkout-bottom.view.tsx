@@ -76,19 +76,19 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     return (
       <View style={CheckoutStyle.bottomContentContainer}>
         <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>Rp {sellers}</SnbText.H4>
+        <SnbText.H4 color={color.red50}>{sellers}</SnbText.H4>
       </View>
     );
   };
 
   return (
     <View style={CheckoutStyle.bottomContainer}>
-      <SnbButton.Content
-        // size="small"
+      {content()}
+      <SnbButton.Dynamic
+        size="small"
         type={'primary'}
         // onPress={pressButton}
-        content={content()}
-        title={'Bayar'}
+        title={'Pilih Pembayaran'}
         // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
       />
     </View>

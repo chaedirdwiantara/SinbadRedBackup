@@ -11,6 +11,7 @@ import {
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
 import { totalBarangPrice } from '../../functions/checkout';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 const { height } = Dimensions.get('window');
 
@@ -58,7 +59,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             <SnbText.H4 color={color.black100}>Total</SnbText.H4>
           </View>
           <SnbText.B2 color={color.black100}>
-            Rp {totalProductsPrice + deliveryFee}
+            {totalProductsPrice + deliveryFee}
           </SnbText.B2>
         </View>
       </View>
@@ -75,7 +76,10 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
               {product.productName} {product.qty}
             </SnbText.B1>
           </View>
-          <SnbText.B1>Rp {product.price * product.qty}</SnbText.B1>
+          <SnbText.B1>
+            {' '}
+            {toCurrency(product.price * product.qty, { withFraction: false })}
+          </SnbText.B1>
         </View>
       </>
     ));

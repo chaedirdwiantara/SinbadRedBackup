@@ -166,8 +166,8 @@ const OmsCheckoutView: FC = () => {
   const timeToExpired = addTime - timeNow;
   useEffect(() => {
     setTimeout(() => {
-      setExpiredSession(false);
-    }, timeToExpired);
+      setExpiredSession(true);
+    }, 1000);
   }, []);
 
   /** handle back to cart */

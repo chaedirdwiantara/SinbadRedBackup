@@ -48,10 +48,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.B3 color={color.black60}>
               {`Total Barang (${subQty})`}
             </SnbText.B3>
-            <SnbText.B3 color={color.black60}>
-              {/* {toCurrency(products.totalPriceBeforeTax, { withFraction: false })} */}
-              {`Rp ${totalProductsPrice}`}
-            </SnbText.B3>
+            <SnbText.B3 color={color.black60}>{totalProductsPrice}</SnbText.B3>
           </View>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black60}>Total Pengiriman</SnbText.B3>
@@ -79,12 +76,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.H4>Sub Total</SnbText.H4>
           </View>
         </View>
-        <SnbText.H4>
-          {/* {handleSubTotalPrice(products, {
-            withFraction: false,
-          })} */}
-          Rp {totalProductsPrice + deliveryFee}
-        </SnbText.H4>
+        <SnbText.H4>{totalProductsPrice + deliveryFee}</SnbText.H4>
       </TouchableOpacity>
     </View>
   );
