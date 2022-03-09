@@ -5,10 +5,10 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
 import { color, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -18,94 +18,14 @@ import {
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import CustomAccordion from '@screen/history/components/CustomAccordion';
+import { PaymentGuideListItem } from '@model/oms';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
-  const paymentGuideDummy = {
-    "data":  [
-      {
-        "id": 1,
-        "paymentMethodId": "bca_va",
-        "title": "ATM BCA",
-        "content": "<p>1  Masukkan Kartu ATM BCA dan Pin Anda</p><p>2  Pilih menu Transaksi Lainnya - Transfer - Rekening BCA Virtual Account</p><p>3  Masukkan No. Virtual Account [Generated VA Number]</p><p>4  Pastikan detil pembayaran Anda sudah sesuai</p><p>5  Masukkan jumlah Transfer sesuai dengan Jumlah yang harus dibayar</p><p>6  Ikuti instruksi untuk menyelesaikan transaksi</p><p>7  Simpan struk transaksi sebagai bukti pembayaran Anda</p>",
-        "createdAt": "2021-02-01T06:19:55.516Z",
-        "updatedAt": "2021-02-01T06:19:55.516Z"
-      },
-      {
-        "id": 2,
-        "paymentMethodId": "bca_va",
-        "title": "m-BCA",
-        "content": "<p>1  Log in pada aplikasi BCA Mobile</p><p>2  Pilih menu m-BCA dan masukkan kode akses Anda</p><p>3  Pilih m-Transfer - BCA Virtual Account</p><p>4  Masukkan No. Virtual Account [Generated VA Number]</p><p>5  Masukkan pin m-BCA Anda</p><p>6  Simpan bukti pembayaran Anda</p>",
-        "createdAt": "2021-02-01T06:19:55.516Z",
-        "updatedAt": "2021-02-01T06:19:55.516Z"
-      },
-      {
-        "id": 3,
-        "paymentMethodId": "bca_va",
-        "title": "Internet Banking BCA",
-        "content": '<p>1  Login di halaman internet Banking BCA ( <a href="https://klikbca.com/" target="blank_">https://klikbca.com/</a> )</p><p>2  Pilih Transafer Dana</p><p>3  Masukkan No. Virtual Account [Generated VA Number]</p><p>4  Pastikan detil pembayaran Anda sudah sesuai</p><p>5  Masukkan mToken</p><p>6  Simpan bukti pembayaran Anda</p>',
-        "createdAt": "2021-02-01T06:19:55.516Z",
-        "updatedAt": "2021-02-01T06:19:55.516Z"
-      },
-    ],
-    "meta": {
-      "skip": 0,
-      "limit": 10,
-      "total": 1
-    }
-  }
-  // const orderDetail = {
-  //   "data":
-  //   {
-  //     "id": "1",
-  //     "code": "1812251000",
-  //     "expiredDate": "2020-11-05T01:54:09.463Z",
-  //     "vaAccountNo": "132323",
-  //     "payment_icon_url": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //     "totalOrderAmount": "403000",
-  //     "sellers": [
-  //         {
-  //             "sellerId": 1,
-  //             "sellerName": "Seller 1",
-  //             "products": [
-  //                 {
-  //                     "productId": "53c9b0000000000000000000",
-  //                     "warehouseId": 3,
-  //                     "warehouseName": "ATAPI DC Kemang",
-  //                     "categoryId": "e3a76d0b-4aa9-4588-8bdd-2840236e5ec4",
-  //                     "brandId": "33d200000000000000000000",
-  //                     "brandName": "ATAPI SGM",
-  //                     "productName": "ATAPI SGM ANANDA 2 150 GR GRD 2.0",
-  //                     "productImageUrl": "https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png",
-  //                     "qty": 99,
-  //                     "qtyPerBox": 40,
-  //                     "uomLabel": "PCS",
-  //                     "isPriceAfterTax": true,
-  //                     "taxPercentage": 10,
-  //                     "lastUsedPrice": 13707.099609375,
-  //                     "leadTime": 10
-  //                 }
-  //             ]
-  //         }
-  //     ],
-  //     "buyerAddress": {
-  //         "longtitude": "106°49′35.76",
-  //         "latitude": "6°10′30.00",
-  //         "province": "DKI Jakarta",
-  //         "city": "Jakarta Selatan",
-  //         "district": "Jakarta",
-  //         "urban": "Jakarta",
-  //         "zipCode": "445351",
-  //         "address": "Jalan Jakarta",
-  //         "noteAddress": "pagar putih",
-  //         "locationId": "53c9b0000000000000000000"
-  //     },
-  //     "createdAt": "2021-02-01T06:19:55.516Z",
-  //     "updatedAt": "2021-02-01T06:19:55.516Z"
-  //   }
-  // }
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
+  const [paymentMethodId, setPaymentMethodId]= useState('');
+  const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
   const {
     stateThankYouPage: {
       detail: {
@@ -113,14 +33,30 @@ const OmsThankYouPageView: FC = () => {
         loading: thankYouPageLoading,
         // error: thankYouPageError,
       },
+      paymentGuide: {
+        data: thankYouPagePaymentGuidelistData,
+        loading: thankYouPagePaymentGuideListLoading
+      }
     },
     dispatchThankYouPage
   } = useThankYouPageContext()
   
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'2')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'3')
   }, [])
+
+  useEffect(() => {
+    if(thankYouPageData != null ){
+      setPaymentMethodId(thankYouPageData.paymentMethodId)
+    }
+  }, [thankYouPageData])
+
+  useEffect(() => {
+    if(paymentMethodId != '' ){
+      thankYouPagePaymentGuideListAction.fetch(dispatchThankYouPage,{paymentMethodId})
+    }
+  }, [paymentMethodId])
 
   /** => function to copy VA Number */
   const onVACopied = () => {
@@ -177,7 +113,7 @@ const OmsThankYouPageView: FC = () => {
         style={ThankYouPageStyle.paymentDetail}>
         <Image
           source={{
-            uri: thankYouPageData?.payment_icon_url,
+            uri: thankYouPageData?.paymentIconUrl,
           }}
           style={ThankYouPageStyle.mediumIcon}
         />
@@ -192,8 +128,8 @@ const OmsThankYouPageView: FC = () => {
     </ThankYouPageCard>
     )
   }
-  const generatePaymentGuideListData = (data: any) => {
-    return data.data.map ((item : any) => {
+  const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
+    return data.map ((item : PaymentGuideListItem) => {
         return {
           name: item.title,
           instruction: item.content
@@ -201,7 +137,7 @@ const OmsThankYouPageView: FC = () => {
     })
   }
   /** => Payment Guide List */
-  const renderPaymentGuideList = (data:any) => {
+  const renderPaymentGuideList = (data: PaymentGuideListItem[]) => {
     return (
         <CustomAccordion data={generatePaymentGuideListData(data)}/>
     )
@@ -211,10 +147,9 @@ const OmsThankYouPageView: FC = () => {
     return (
       <ThankYouPageCard title="Panduan Pembayaran">
         <View style={ThankYouPageStyle.defaultContentPadding}>
-          {paymentGuideDummy !== null && paymentGuideDummy !== undefined &&
-            renderPaymentGuideList(paymentGuideDummy)
+          {!thankYouPagePaymentGuideListLoading &&
+            renderPaymentGuideList(thankYouPagePaymentGuidelistData)
           }
-
         </View>
       </ThankYouPageCard>
     )
