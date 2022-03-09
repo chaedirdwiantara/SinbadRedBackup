@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState, useContext } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
+import { useFocusEffect } from '@react-navigation/native';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutHeader } from './checkout-header.view';
@@ -167,11 +168,11 @@ const OmsCheckoutView: FC = () => {
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
-  useEffect(() => {
+  useFocusEffect(() => {
     setTimeout(() => {
       setExpiredSession(true);
     }, timeToExpired);
-  }, []);
+  });
 
   /** handle back to cart */
   const handleBackToCart = () => {
@@ -189,8 +190,8 @@ const OmsCheckoutView: FC = () => {
   };
 
   const handleOpenTNCModal = () => {
-      setModalTNCOpen(true)
-  }
+    setModalTNCOpen(true);
+  };
 
   return (
     <SnbContainer color="grey">
@@ -209,14 +210,14 @@ const OmsCheckoutView: FC = () => {
           buyerName={data.buyerName}
         />
         <CheckoutInvoiceGroupView data={data} />
-        <CheckoutTNCView clickAction={handleOpenTNCModal}/>
+        <CheckoutTNCView clickAction={handleOpenTNCModal} />
       </ScrollView>
 
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
-      <ModalCheckoutTNC 
+      <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
         close={() => setModalTNCOpen(false)}
       />
