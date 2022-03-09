@@ -2,12 +2,13 @@
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
-  SnbText,
+  SnbText2,
   SnbCheckbox,
   SnbIcon,
   color,
   SnbNumberCounter,
   SnbBadge,
+  SnbText,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
@@ -214,11 +215,13 @@ export const ProductView: FC<ProductViewProps> = ({
         {renderProductImage()}
         <View style={{ justifyContent: 'center' }}>
           {renderPPNBadge()}
-          <View
-            style={{
-              width: '100%',
-            }}>
-            <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
+          <View style={{ width: '100%' }}>
+            <SnbText2.Paragraph.Default
+              color={color.black80}
+              numberOfLines={1}
+              ellipsizeMode={'tail'}>
+              {product.productName}
+            </SnbText2.Paragraph.Default>
           </View>
           {renderPriceSection()}
           {renderRemainingStock()}
