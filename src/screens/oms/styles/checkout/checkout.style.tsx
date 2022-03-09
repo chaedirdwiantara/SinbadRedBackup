@@ -126,6 +126,11 @@ export const CheckoutStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  tncLabelSection : {
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: color.white
+  }
 });
 
 export default CheckoutStyle;
