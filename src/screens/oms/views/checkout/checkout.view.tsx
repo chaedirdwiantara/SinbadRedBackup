@@ -163,7 +163,7 @@ const OmsCheckoutView: FC = () => {
   const timeToExpired = addTime - timeNow;
   useEffect(() => {
     setTimeout(() => {
-      setExpiredSession(false);
+      setExpiredSession(true);
     }, timeToExpired);
   }, []);
 
@@ -182,8 +182,8 @@ const OmsCheckoutView: FC = () => {
   };
 
   const handleOpenTNCModal = () => {
-      setModalTNCOpen(true)
-  }
+    setModalTNCOpen(true);
+  };
 
   return (
     <SnbContainer color="grey">
@@ -202,14 +202,14 @@ const OmsCheckoutView: FC = () => {
           buyerName={data.buyerName}
         />
         <CheckoutInvoiceGroupView data={data} />
-        <CheckoutTNCView clickAction={handleOpenTNCModal}/>
+        <CheckoutTNCView clickAction={handleOpenTNCModal} />
       </ScrollView>
 
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
-      <ModalCheckoutTNC 
+      <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
         close={() => setModalTNCOpen(false)}
       />
