@@ -1,23 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
-import BottomModalError from '@core/components/BottomModalError';
 import React, { FC } from 'react';
 import { Image, View } from 'react-native';
-import {
-  SnbDialog,
-  SnbBottomSheet,
-  SnbText,
-  SnbButton,
-} from 'react-native-sinbad-ui';
-import {
-  useGetCartAction,
-  useCartMasterAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
-  useRemoveCartProductAction,
-  useCartBuyerAddressAction,
-  useUpdateCartAction,
-} from '../../functions';
+import { SnbBottomSheet, SnbText, SnbButton } from 'react-native-sinbad-ui';
 
 interface BackToCartModalProps {
   isOpen: boolean;
@@ -31,29 +15,6 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
   handleNoAction,
 }) => {
   /** => ACTION */
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
-  const removeCartProductAction = useRemoveCartProductAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const updateCartAction = useUpdateCartAction();
-
-  /** handle back to cart */
-  const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
-    updateCartAction.reset(dispatchCart);
-    handleOkAction;
-  };
-
   const button = () => {
     return (
       <View
@@ -67,7 +28,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
           leftTitle={'Ya'}
           leftType={'secondary'}
           rightType={'primary'}
-          onPressLeft={handleBackToCart}
+          onPressLeft={handleOkAction}
           onPressRight={handleNoAction}
         />
       </View>
@@ -93,18 +54,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
     );
   };
 
-  return (
-    // <SnbDialog
-    //   open={isOpen}
-    //   title="Konfirmasi"
-    //   content="Apakah anda ingin membatalkan pesanan?"
-    //   ok={handleNoAction}
-    //   cancel={handleOkAction}
-    //   okText="Tidak"
-    //   cancelText="Ya"
-    // />
-    <SnbBottomSheet open={isOpen} content={content()} size={'normal'} />
-  );
+  return <SnbBottomSheet open={isOpen} content={content()} size={'normal'} />;
 };
 
 /**
@@ -113,8 +63,8 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
  * ================================================================
  * createdBy: Ryan (voyager)
  * createDate: 30112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (valkyrie)
+ * updatedDate: 09032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
