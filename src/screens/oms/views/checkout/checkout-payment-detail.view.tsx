@@ -6,8 +6,8 @@ import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import {
   usePaymentDetailAccorrdion,
-  handleSubTotalPrice,
-  calculateTax,
+  totalBarangPrice,
+  subTotalQty,
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
@@ -37,22 +37,8 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
   const paymentAccordion = usePaymentDetailAccorrdion();
   const isActive = paymentAccordion.active === 1;
   const deliveryFee = 0;
-
-  const totalBarangPrice = () => {
-    let total = 0;
-    for (let i = 0; i < products.length; i++) {
-      total = total + products[i].qty * products[i].price;
-    }
-    return total;
-  };
-
-  const subTotalQty = () => {
-    let total = 0;
-    for (let i = 0; i < products.length; i++) {
-      total = total + products[i].qty;
-    }
-    return total;
-  };
+  const totalProductsPrice = totalBarangPrice(products);
+  const subQty = subTotalQty(products);
 
   return (
     <View>
@@ -60,12 +46,9 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
         <View>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black60}>
-              {`Total Barang (${subTotalQty()})`}
+              {`Total Barang (${subQty})`}
             </SnbText.B3>
-            <SnbText.B3 color={color.black60}>
-              {/* {toCurrency(products.totalPriceBeforeTax, { withFraction: false })} */}
-              {`Rp ${totalBarangPrice()}`}
-            </SnbText.B3>
+            <SnbText.B3 color={color.black60}>{totalProductsPrice}</SnbText.B3>
           </View>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black60}>Total Pengiriman</SnbText.B3>
@@ -93,12 +76,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.H4>Sub Total</SnbText.H4>
           </View>
         </View>
-        <SnbText.H4>
-          {/* {handleSubTotalPrice(products, {
-            withFraction: false,
-          })} */}
-          {totalBarangPrice() + deliveryFee}
-        </SnbText.H4>
+        <SnbText.H4>{totalProductsPrice + deliveryFee}</SnbText.H4>
       </TouchableOpacity>
     </View>
   );

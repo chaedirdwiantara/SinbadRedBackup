@@ -9,6 +9,7 @@ import { CheckoutHeader } from './checkout-header.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
+import { CheckoutBottomView } from './checkout-bottom.view';
 import {
   useGetCartAction,
   useCartMasterAction,
@@ -166,20 +167,20 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setExpiredSession(true);
-    }, timeToExpired);
+    }, 1000);
   }, []);
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    // checkProductAction.reset(dispatchCart);
-    // checkSellerAction.reset(dispatchCart);
-    // checkStockAction.reset(dispatchCart);
-    // getCartAction.reset(dispatchCart);
-    // removeCartProductAction.reset(dispatchCart);
-    // cartMasterAction.reset();
-    // cartBuyerAddressAction.reset(dispatchCart);
-    // updateCartAction.reset(dispatchCart);
-    // setExpiredSession(false);
+    checkProductAction.reset(dispatchCart);
+    checkSellerAction.reset(dispatchCart);
+    checkStockAction.reset(dispatchCart);
+    getCartAction.reset(dispatchCart);
+    removeCartProductAction.reset(dispatchCart);
+    cartMasterAction.reset();
+    cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
+    setExpiredSession(false);
     goToShoppingCart();
   };
 
@@ -201,9 +202,18 @@ const OmsCheckoutView: FC = () => {
         />
         <CheckoutInvoiceGroupView data={data} />
       </ScrollView>
+
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
+      />
+
+      <CheckoutBottomView
+        data={data}
+        // openTCModal={() => paymentTCModal.setOpen(true)}
+        // openErrorWarning={() => errorWarningModal.setOpen(true)}
+        // closeErrorWarning={() => errorWarningModal.setOpen(false)}
+        // checkExpiredTime={handleCheckExpiredSession}
       />
 
       {/* )} */}

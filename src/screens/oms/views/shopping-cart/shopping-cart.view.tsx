@@ -388,6 +388,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
+      {/* <TouchableOpacity onPress={goToCheckout}>
+        <Text>GoCheckOut</Text>
+      </TouchableOpacity> */}
     </SnbContainer>
   );
 };

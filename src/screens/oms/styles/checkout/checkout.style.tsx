@@ -58,6 +58,13 @@ export const CheckoutStyle = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  bottomContainer: {
+    flexDirection: 'row',
+    height: 75,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: color.white,
+  },
   addessSection: {
     padding: 16,
     backgroundColor: color.white,
