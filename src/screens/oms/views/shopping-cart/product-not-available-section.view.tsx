@@ -22,9 +22,9 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
   /** === HOOKS === */
   /** === VIEW === */
   /** => MAIN */
-  // if (unavailableProducts.length === 0) {
-  //   return null;
-  // }
+  if (unavailableProducts.length === 0) {
+    return null;
+  }
   return (
     <View
       style={{
