@@ -74,7 +74,7 @@ export const cartMaster = simplifyReducer(initialState, {
             if (item.status === 'inactive') {
               unavailable.push({
                 ...productData,
-                unavailableMessage: 'Produk Tidak Tersedia',
+                unavailableMessage: 'Tidak tersedia di lokasi anda',
                 selected: false,
               });
             } else {
@@ -118,7 +118,7 @@ export const cartMaster = simplifyReducer(initialState, {
             state.sellers[i].products.map((innerItem) => {
               unavailable.push({
                 ...innerItem,
-                unavailableMessage: 'Seller Tidak Tersedia',
+                unavailableMessage: 'Supplier nonaktif',
                 selected: false,
               });
             });
@@ -167,7 +167,7 @@ export const cartMaster = simplifyReducer(initialState, {
           let qty: number = thisProduct.qty;
           let selected: boolean = thisProduct.selected;
           let status: string = item.status;
-          if (thisProduct.qty >= item.stock) {
+          if (thisProduct.qty > item.stock) {
             qty = item.stock;
             selected = false;
           }
@@ -187,13 +187,13 @@ export const cartMaster = simplifyReducer(initialState, {
           if (status === 'not_available') {
             unavailable.push({
               ...productData,
-              unavailableMessage: 'Stok Tidak Tersedia',
+              unavailableMessage: 'Tidak tersedia di lokasi anda',
               selected: false,
             });
           } else if (status === 'stock_not_enough') {
             unavailable.push({
               ...productData,
-              unavailableMessage: 'Stok Tidak Mencukupi',
+              unavailableMessage: 'Stok kosong',
               selected: false,
             });
           } else {

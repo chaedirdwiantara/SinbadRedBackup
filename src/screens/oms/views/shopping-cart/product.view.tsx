@@ -12,6 +12,7 @@ import {
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { Images } from 'src/assets';
 import * as models from '@models';
 
 interface ProductViewProps {
@@ -82,7 +83,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+            }>{`Tersedia ${product.stock} ${product.uomLabel}`}</SnbText.B4>
         </View>
       );
     }
@@ -95,6 +96,7 @@ export const ProductView: FC<ProductViewProps> = ({
           source={{
             uri: product.productImageUrl,
           }}
+          defaultSource={Images.opacityPlaceholder}
           style={ShoppingCartStyles.productImg}
         />
       </View>
@@ -181,6 +183,19 @@ export const ProductView: FC<ProductViewProps> = ({
     );
   };
 
+  // determine inc / dec disabled
+  let isDecreaseDisabled = false;
+  let isIncreaseDisabled = false;
+  const stock = product.stock ?? 0;
+
+  if (product.multipleQty > 1) {
+    isDecreaseDisabled = !(product.qty - product.multipleQty >= product.minQty);
+    isIncreaseDisabled = !(product.qty + product.multipleQty < stock);
+  } else {
+    isDecreaseDisabled = !(product.qty > product.minQty);
+    isIncreaseDisabled = !(product.qty < stock);
+  }
+
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
@@ -211,39 +226,47 @@ export const ProductView: FC<ProductViewProps> = ({
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
         {renderRemoveProductIcon()}
-        <SnbNumberCounter
-          value={product.qty}
-          maxLength={6}
-          onBlur={() => {}}
-          onFocus={() => {}}
-          onIncrease={() => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'increase',
-            });
-          }}
-          onDecrease={() => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'decrease',
-            });
-          }}
-          onChange={(newQty: number) => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'onChange',
-              newQty,
-            });
-          }}
-          minusDisabled={!(product.qty > product.minQty)}
-          plusDisabled={!(product.qty < (product.stock ?? 0))}
-        />
+        <View>
+          <SnbNumberCounter
+            value={product.qty}
+            maxLength={6}
+            onBlur={() => {}}
+            onFocus={() => {}}
+            onIncrease={() => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'increase',
+              });
+            }}
+            onDecrease={() => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'decrease',
+              });
+            }}
+            onChange={(newQty: number) => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'onChange',
+                newQty,
+              });
+            }}
+            minusDisabled={isDecreaseDisabled}
+            plusDisabled={isIncreaseDisabled}
+          />
+          <View style={{ alignItems: 'center', marginTop: 8 }}>
+            <SnbText.B4
+              color={
+                color.black60
+              }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
+          </View>
+        </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />
     </View>
