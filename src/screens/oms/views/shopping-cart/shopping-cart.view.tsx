@@ -27,6 +27,7 @@ import {
   useCartBuyerAddressAction,
   useCancelStockAction,
   useUpdateCartAction,
+  useKeyboardFocus,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -51,6 +52,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
+  const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
 
@@ -351,6 +353,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                   isAnyActiveProduct={isAnyActiveProduct}
                   manageCheckboxStatus={manageCheckboxStatus}
                   manageCheckboxOnPress={manageCheckboxOnPress}
+                  keyboardFocus={keyboardFocus}
                 />
               </View>
             </ScrollView>
@@ -359,7 +362,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isCheckoutDisabled={
-                !isAnyActiveProduct() || countTotalPrice < 100000
+                !isAnyActiveProduct() ||
+                countTotalPrice < 100000 ||
+                keyboardFocus.isFocus
               }
               handleCartCycle={handleCartCyle}
             />

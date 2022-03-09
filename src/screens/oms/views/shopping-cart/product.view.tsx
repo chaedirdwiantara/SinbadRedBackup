@@ -30,6 +30,7 @@ interface ProductViewProps {
     sellerId,
     warehouseId,
   }: models.ProductKeyObject) => void;
+  keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
 }
 
 export const ProductView: FC<ProductViewProps> = ({
@@ -37,6 +38,7 @@ export const ProductView: FC<ProductViewProps> = ({
   handleRemoveProductModal,
   handleUpdateQty,
   handleUpdateSelected,
+  keyboardFocus,
 }) => {
   /** => HANDLE DISPLAY PRICE */
   const handleDisplayPrice = () => {
@@ -75,6 +77,46 @@ export const ProductView: FC<ProductViewProps> = ({
     }
 
     return { displayPrice, lastPrice, priceDifference };
+  };
+  /** => HANDLE ON BLUR */
+  const handleOnBlur = ({
+    qty,
+    minQty,
+    multipleQty,
+  }: models.updateCartQtyBlur) => {
+    // if the user update qty using keyboard
+    let updatedQty = 1;
+    if (qty && Number.isInteger(qty)) {
+      if (multipleQty > 1) {
+        const minValue = minQty;
+        const maxValue = stock - ((stock + minQty) % multipleQty);
+        if (qty <= maxValue && qty >= minValue) {
+          updatedQty = qty;
+        } else if (qty < minValue) {
+          updatedQty = minValue;
+        } else if (qty > maxValue) {
+          updatedQty = maxValue;
+        }
+      } else {
+        if (qty <= stock && qty >= minQty) {
+          updatedQty = qty;
+        } else if (qty < minQty) {
+          updatedQty = minQty;
+        } else if (qty > stock) {
+          updatedQty = stock;
+        }
+      }
+    }
+
+    handleUpdateQty({
+      productId: product.productId,
+      sellerId: product.sellerId,
+      warehouseId: product.warehouseId,
+      type: 'onBlur',
+      newQty: updatedQty,
+    });
+
+    keyboardFocus.setFocus(false);
   };
   /** => RENDER REMAINING STOCK */
   const renderRemainingStock = () => {
@@ -233,8 +275,16 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbNumberCounter
             value={product.qty}
             maxLength={6}
-            onBlur={() => {}}
-            onFocus={() => {}}
+            onBlur={() => {
+              handleOnBlur({
+                qty: product.qty,
+                minQty: product.minQty,
+                multipleQty: product.multipleQty,
+              });
+            }}
+            onFocus={() => {
+              keyboardFocus.setFocus(true);
+            }}
             onIncrease={() => {
               handleUpdateQty({
                 productId: product.productId,
