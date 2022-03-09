@@ -45,5 +45,13 @@ export const ThankYouPageStyle = StyleSheet.create({
     marginTop: 8,
     width: '100%',
   },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 24
+  },
 })
 
