@@ -3,6 +3,7 @@ import React, { FC, useEffect, useState, useCallback, useMemo } from 'react';
 import { FlatList, View } from 'react-native';
 import { SnbContainer, SnbTopNav, SnbTabs } from 'react-native-sinbad-ui';
 import { useFocusEffect } from '@react-navigation/native';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 /** === IMPORT COMPONENTS === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import { EmptyState } from '@core/components/EmptyState';
@@ -24,13 +25,16 @@ import {
   goToHistoryDetail,
 } from '@screen/history/functions';
 import { useHistoryContext } from 'src/data/contexts/history/useHistoryContext';
+import { copilotOptions } from '@screen/account/views/shared';
+import { useCoachmark } from '@screen/account/functions';
 /** === IMPORT TYPE === */
 import * as models from '@models';
 import { additionalOrderStatusList } from '../types';
 /** === CONSTANT === */
 const historyTabs = ['Tagihan', 'Order'];
+const CopilotView = walkthroughable(View);
 /** === COMPONENT === */
-const HistoryListView: FC = ({ navigation }: any) => {
+const HistoryListView: FC = ({ navigation, start }: any) => {
   /** === HOOKS === */
   const [activeTab, setActiveTab] = useState(1);
   const [keyword, setKeyword] = useState('');
@@ -53,6 +57,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
     },
     dispatchHistory,
   } = useHistoryContext();
+  const { coachmarkState } = useCoachmark();
   const historyPaymentList = useMemo(
     () =>
       historyListState.data.filter(
@@ -91,6 +96,15 @@ const HistoryListView: FC = ({ navigation }: any) => {
 
     return unsubscribe;
   }, [navigation]);
+
+  //function for start couchmark
+  useEffect(() => {
+    if (!coachmarkState?.data?.orderCoachmark) {
+      setTimeout(() => {
+        start();
+      }, 100);
+    }
+  }, [coachmarkState?.data?.orderCoachmark]);
   /** === FUNCTIONS === */
   const handleDateChange = (type: 'start' | 'end', value: string) => {
     if (type === 'start') {
@@ -269,6 +283,47 @@ const HistoryListView: FC = ({ navigation }: any) => {
       }
     />
   );
+  //walkthrough couchmark
+  const couchmarkWalkthrough = () => {
+    if (!coachmarkState?.data?.orderCoachmark) {
+      return (
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{flex: 1}}>
+            <CopilotStep
+              text="Semua tagihan dari pembelian Anda bisa dilihat disini."
+              order={1}
+              name="Lihat tagihan Anda">
+              <CopilotView
+                style={{
+                  height: 45,
+                  width: '100%',
+                  position: 'absolute',
+                  marginTop: -46,
+                  elevation: -100
+                }}
+              />
+            </CopilotStep>
+          </View>
+          <View style={{flex: 1}}>
+            <CopilotStep
+              text="Semua pesanan Anda bisa dilihat disini."
+              order={2}
+              name="Lihat pesanan Anda">
+              <CopilotView
+                style={{
+                  height: 45,
+                  width: '100%',
+                  position: 'absolute',
+                  marginTop: -46,
+                  elevation: -100
+                }}
+              />
+            </CopilotStep>
+          </View>
+        </View>
+      );
+    }
+  };
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -278,6 +333,7 @@ const HistoryListView: FC = ({ navigation }: any) => {
         activeTabs={activeTab}
         onChangeActiveTabs={(tabIndex: number) => setActiveTab(tabIndex)}
       />
+      {couchmarkWalkthrough()}
       <HistoryListFilters
         onSearch={() => {
           if (keyword === '') {
@@ -349,4 +405,4 @@ const HistoryListView: FC = ({ navigation }: any) => {
   );
 };
 
-export default HistoryListView;
+export default copilot(copilotOptions(2, 'orderCoachmark'))(HistoryListView);
