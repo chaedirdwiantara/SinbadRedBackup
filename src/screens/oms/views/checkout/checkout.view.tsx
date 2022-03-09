@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
@@ -9,11 +9,41 @@ import { CheckoutHeader } from './checkout-header.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
+import {
+  useGetCartAction,
+  useCartMasterAction,
+  useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
+  useRemoveCartProductAction,
+  useCartLocalData,
+  useOmsGeneralFailedState,
+  useGetTotalCartAction,
+  useCartBuyerAddressAction,
+  useCancelStockAction,
+  useUpdateCartAction,
+} from '../../functions';
+import { goToShoppingCart } from '@core/functions/product';
 
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
+  /** => ACTION */
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const getCartAction = useGetCartAction();
+  const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
+  const removeCartProductAction = useRemoveCartProductAction();
+  const totalCartActions = useGetTotalCartAction();
+  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const cancelCartAction = useCancelStockAction();
+  const updateCartAction = useUpdateCartAction();
+
   /** === HOOK === */
   const [isExpiredSession, setExpiredSession] = useState(false);
+  // const { stateCheckout } = useContext(contexts.CheckoutContext);
+  // const data = stateCheckout.checkout.data;
 
   /** === DUMMY === */
   const data = {
@@ -33,10 +63,10 @@ const OmsCheckoutView: FC = () => {
             categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec4',
             brandId: '33d200000000000000000000',
             brandName: 'ATAPI SGM',
-            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productName: 'Bintang',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
-            qty: 99,
+            qty: 10,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -45,7 +75,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 13707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 100000,
             priceRules: {
               minQty: 8,
               maxQty: 10,
@@ -59,10 +89,10 @@ const OmsCheckoutView: FC = () => {
             categoryId: 'e3a76d0b-4aa9-4588-8bdd-2840236e5ec5',
             brandId: '33d200000000000000000003',
             brandName: 'ATAPI SGM',
-            productName: 'ATAPI SGM ANANDA 2 150 GR GRD 2.0',
+            productName: 'Guinness',
             productImageUrl:
               'https://images.k24klik.com/product/large/apotek_online_k24klik_2021080901503023085_FAW-Hero-Image-Thumbnail-SGM-Eksplor-Gain-Optigrow-1-Plus-Vanila-400g-01.png',
-            qty: 99,
+            qty: 10,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -71,7 +101,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 13707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 100000,
             priceRules: {
               minQty: 8,
               maxQty: 10,
@@ -94,7 +124,7 @@ const OmsCheckoutView: FC = () => {
             productName: 'ATAPI MADU TIGA RAKSA',
             productImageUrl:
               'https://s1.bukalapak.com/img/1586409473/large/Madu_TJ_murni_500_gram.jpg.webp',
-            qty: 99,
+            qty: 20,
             minQty: 3,
             multipleQty: 10,
             qtyPerBox: 40,
@@ -103,7 +133,7 @@ const OmsCheckoutView: FC = () => {
             taxPercentage: 10,
             lastUsedPrice: 15707.099609375, //price
             leadTime: 10,
-            price: 0,
+            price: 120000,
             priceRules: {
               minQty: 8,
               maxQty: 10,
@@ -141,8 +171,16 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    // ADD BACK TO CART FUNCTION
-    setExpiredSession(false);
+    // checkProductAction.reset(dispatchCart);
+    // checkSellerAction.reset(dispatchCart);
+    // checkStockAction.reset(dispatchCart);
+    // getCartAction.reset(dispatchCart);
+    // removeCartProductAction.reset(dispatchCart);
+    // cartMasterAction.reset();
+    // cartBuyerAddressAction.reset(dispatchCart);
+    // updateCartAction.reset(dispatchCart);
+    // setExpiredSession(false);
+    goToShoppingCart();
   };
 
   return (

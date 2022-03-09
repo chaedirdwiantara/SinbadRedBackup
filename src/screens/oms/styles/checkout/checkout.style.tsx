@@ -20,15 +20,35 @@ export const CheckoutStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 9,
+    marginTop: 8,
+    borderWidth: 2,
+    borderColor: color.black10,
+    borderRadius: 5,
+  },
+  shipmentTxt: {
+    padding: 5,
+    backgroundColor: color.black10,
+    borderRadius: 5,
   },
   productsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
+  shipmentIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   skuImage: {
     height: 60,
     width: 60,
+  },
+  deliveryIcon: {
+    height: 35,
+    width: 35,
   },
   productsDescription: {
     paddingLeft: 15,
