@@ -56,7 +56,7 @@ const DataDiriStep5View: React.FC = () => {
           title="Konfirmasi Kartu Identitas"
         />
         <Stepper
-          complete={5}
+          complete={completeDataState?.data?.userProgress?.completed || 5}
           total={7}
           onPress={() => setOpenModalStep(true)}
         />
