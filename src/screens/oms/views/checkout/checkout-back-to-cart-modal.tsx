@@ -8,6 +8,16 @@ import {
   SnbText,
   SnbButton,
 } from 'react-native-sinbad-ui';
+import {
+  useGetCartAction,
+  useCartMasterAction,
+  useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
+  useRemoveCartProductAction,
+  useCartBuyerAddressAction,
+  useUpdateCartAction,
+} from '../../functions';
 
 interface BackToCartModalProps {
   isOpen: boolean;
@@ -20,6 +30,30 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
   handleOkAction,
   handleNoAction,
 }) => {
+  /** => ACTION */
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const getCartAction = useGetCartAction();
+  const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
+  const removeCartProductAction = useRemoveCartProductAction();
+  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const updateCartAction = useUpdateCartAction();
+
+  /** handle back to cart */
+  const handleBackToCart = () => {
+    checkProductAction.reset(dispatchCart);
+    checkSellerAction.reset(dispatchCart);
+    checkStockAction.reset(dispatchCart);
+    getCartAction.reset(dispatchCart);
+    removeCartProductAction.reset(dispatchCart);
+    cartMasterAction.reset();
+    cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
+    handleOkAction;
+  };
+
   const button = () => {
     return (
       <View
@@ -33,7 +67,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
           leftTitle={'Ya'}
           leftType={'secondary'}
           rightType={'primary'}
-          onPressLeft={handleOkAction}
+          onPressLeft={handleBackToCart}
           onPressRight={handleNoAction}
         />
       </View>
@@ -69,13 +103,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
     //   okText="Tidak"
     //   cancelText="Ya"
     // />
-    <SnbBottomSheet
-      open={isOpen}
-      content={content()}
-      // title={'Batalkan Pesanan'}
-      // closeAction={handleOkAction}
-      size={'normal'}
-    />
+    <SnbBottomSheet open={isOpen} content={content()} size={'normal'} />
   );
 };
 
