@@ -433,12 +433,7 @@ const useCartLocalData = () => {
             thisProduct.selected = true;
           }
         } else if (type === 'onChange') {
-          const updatedQty = newQty ?? 1;
-          if (updatedQty < thisProduct.minQty) {
-            thisProduct.qty = thisProduct.minQty;
-          } else {
-            thisProduct.qty = updatedQty;
-          }
+          thisProduct.qty = newQty ?? 1;
           thisProduct.selected = true;
         } else {
           thisProduct.qty = newQty ?? thisProduct.minQty;
