@@ -12,8 +12,11 @@ import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
-import { DATA_TOKO_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
+import {
+  DATA_TOKO_STEP_3_VIEW,
+  MAPS_VIEW_TYPE_2,
+} from '@screen/account/functions/screens_name';
 
 const Content: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -59,7 +62,7 @@ const Content: React.FC = () => {
       refetchCompleteData();
       resetUpdateCompleteData();
       resetCamera();
-      navigate(DATA_TOKO_STEP_3_VIEW);
+      navigate(MAPS_VIEW_TYPE_2);
     }
   }, [updateCompleteDataState]);
 
@@ -117,9 +120,17 @@ const Content: React.FC = () => {
               leftType={'secondary'}
               rightType={'primary'}
               leftTitle={'Ubah Foto'}
-              rightTitle={'Lewati'}
+              rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('store')}
-              onPressRight={() => navigate(DATA_TOKO_STEP_3_VIEW)}
+              onPressRight={() => {
+                const { latitude, longitude } =
+                  completeDataState.data?.buyer || {};
+                if (latitude !== null && longitude !== null) {
+                  navigate(DATA_TOKO_STEP_3_VIEW);
+                } else {
+                  navigate(MAPS_VIEW_TYPE_2);
+                }
+              }}
               rightDisabled={false}
               leftDisabled={false}
             />,

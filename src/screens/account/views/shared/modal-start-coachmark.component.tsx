@@ -32,9 +32,7 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
 
   React.useEffect(() => {
     if (typeof coachmarkState.data?.homeCoachmark === 'boolean' && mounted) {
-      setTimeout(() => {
-        setOpen(coachmarkState.data?.homeCoachmark);
-      }, 1500);
+      setOpen(!coachmarkState.data?.homeCoachmark);
     }
   }, [coachmarkState.data]);
 

@@ -43,7 +43,7 @@ export const loadMoreSelectionFailed = (data: any) => {
 };
 
 export const getLocationProcess = (
-  data: models.IUrbanID,
+  data: models.ILocationSearch,
 ): models.IRegisterAction<any> => {
   return {
     type: types.GET_LOCATION_PROCESS,

@@ -6,8 +6,10 @@ import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
 
 const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
-  { id: 1, name: '1 Kendaraan', value: 1 },
-  { id: 2, name: '2 Kendaraan', value: 2 },
+  { id: 1, value: 1 },
+  { id: 2, value: 2 },
+  { id: 3, value: 3 },
+  { id: 4, value: 4 },
 ];
 
 export const useInputPhone = () => {
@@ -229,7 +231,7 @@ export const useLocations = () => {
   const dispatch = useDispatch();
   const { locations } = useSelector((state: any) => state.global);
 
-  const getLocation = (data: models.IUrbanID) => {
+  const getLocation = (data: models.ILocationSearch) => {
     dispatch(Actions.getLocationProcess(data));
   };
   const resetLocation = () => {

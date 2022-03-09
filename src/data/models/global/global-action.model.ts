@@ -35,13 +35,8 @@ export interface IListSelection {
   };
   action?: 'create' | 'edit' | undefined;
 }
-export interface IUrbanID {
+export interface ILocationSearch {
   params?: string;
-  meta?: {
-    skip?: number;
-    limit?: number;
-    keyword?: string;
-  };
 }
 
 export interface IOnSelectedItem {

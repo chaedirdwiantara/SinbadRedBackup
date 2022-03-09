@@ -13,3 +13,4 @@ export const DATA_TOKO_STEP_1_VIEW = 'DataTokoStep1View';
 export const DATA_TOKO_STEP_2_VIEW = 'DataTokoStep2View';
 export const DATA_TOKO_STEP_3_VIEW = 'DataTokoStep3View';
 export const INPUT_MANUAL_LOCATION_MODAL_VIEW = 'InputManualLocationModalView';
+export const MAPS_VIEW_TYPE_2 = 'MapsViewType2';

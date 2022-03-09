@@ -55,61 +55,75 @@ const Content: React.FC = () => {
     );
   }
 
-  return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{
-          borderTopWidth: 1,
-          borderTopColor: color.black10,
-          flex: 1,
-          paddingHorizontal: 16,
-          paddingVertical: 32,
-        }}>
-        <SnbText.H3>Selangkah Lagi Untuk Mengembangkan Toko Anda</SnbText.H3>
-        <View style={{ marginVertical: 8 }} />
-        <SnbText.B1>Silakan lengkapi data untuk menjadi anggota VIP</SnbText.B1>
-        <View style={{ marginVertical: 32 }} />
-        <SnbCardButtonType3
-          title="Data Diri"
-          desc="1-2 Menit Pengisian"
-          onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
-          svgIcon={() => <Svg name="personal_data" size={48} />}
-        />
-        <View style={{ marginVertical: 6 }} />
-        <SnbCardButtonType3
-          title="Data Toko"
-          desc="1-2 Menit Pengisian"
-          onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
-          svgIcon={() => <Svg name="store_data" size={48} />}
-        />
-      </View>
-      <View>
+  if (completeDataState.data) {
+    const { userProgress, buyerProgress, isDataCompleted } =
+      completeDataState.data || {};
+    const isShowBadgeSuccessUser =
+      userProgress.completed === userProgress.total;
+    const isShowBadgeSuccessBuyer =
+      buyerProgress.completed === buyerProgress.total;
+
+    return (
+      <View style={{ flex: 1 }}>
         <View
           style={{
-            flexDirection: 'row',
-            marginHorizontal: 16,
-            alignItems: 'center',
+            borderTopWidth: 1,
+            borderTopColor: color.black10,
+            flex: 1,
+            paddingHorizontal: 16,
+            paddingVertical: 32,
           }}>
-          <SnbIcon name="verified_user" color={color.blue50} size={24} />
-          <View style={{ flex: 1, marginLeft: 8 }}>
-            <SnbText.B3 color={color.black40}>
-              Kami menjamin keamanan data dan kerahasiaan informasi yang anda
-              berikan.
-            </SnbText.B3>
-          </View>
-        </View>
-        <View style={{ marginVertical: 16 }} />
-        <View style={{ height: 72 }}>
-          <SnbButton.Single
-            title="Konfirmasi"
-            onPress={() => {}}
-            type="primary"
-            disabled
+          <SnbText.H3>Selangkah Lagi Untuk Mengembangkan Toko Anda</SnbText.H3>
+          <View style={{ marginVertical: 8 }} />
+          <SnbText.B1>
+            Silakan lengkapi data untuk menjadi anggota VIP
+          </SnbText.B1>
+          <View style={{ marginVertical: 32 }} />
+          <SnbCardButtonType3
+            title="Data Diri"
+            desc="1-2 Menit Pengisian"
+            onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
+            svgIcon={() => <Svg name="personal_data" size={48} />}
+            showBadge={isShowBadgeSuccessUser}
+          />
+          <View style={{ marginVertical: 6 }} />
+          <SnbCardButtonType3
+            title="Data Toko"
+            desc="1-2 Menit Pengisian"
+            onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
+            svgIcon={() => <Svg name="store_data" size={48} />}
+            showBadge={isShowBadgeSuccessBuyer}
           />
         </View>
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginHorizontal: 16,
+              alignItems: 'center',
+            }}>
+            <SnbIcon name="verified_user" color={color.blue50} size={24} />
+            <View style={{ flex: 1, marginLeft: 8 }}>
+              <SnbText.B3 color={color.black40}>
+                Kami menjamin keamanan data dan kerahasiaan informasi yang anda
+                berikan.
+              </SnbText.B3>
+            </View>
+          </View>
+          <View style={{ marginVertical: 16 }} />
+          <View style={{ height: 72 }}>
+            <SnbButton.Single
+              title="Konfirmasi"
+              onPress={() => {}}
+              type="primary"
+              disabled={!isDataCompleted}
+            />
+          </View>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
+  return null;
 };
 
 const DataCompletenessView: React.FC = () => {
