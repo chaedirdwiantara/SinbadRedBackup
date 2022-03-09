@@ -24,11 +24,38 @@ function* thankYouPageOrderDetail(action: models.DetailProcessAction) {
     yield put(ActionCreators.thankYouPageOrderDetailFailed(error));
   }
 }
+
+function* thankYouPagePaymentGuideList(
+  action: models.ListProcessAction<
+  models.ListProcessProps<models.PaymentGuideProps>
+  >
+) {
+  try {
+    const response: models.ListSuccessProps<models.PaymentGuideListItem[]> =
+      yield call(() => {
+        return ThankYouPageApi.thankYouPagePaymentGuideList(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.thankYouPagePaymentGuideListSuccess(response),
+    );
+
+    yield put(ActionCreators.thankYouPagePaymentGuideListSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.thankYouPagePaymentGuideListFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.thankYouPagePaymentGuideListFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* ThankYouPageSaga() {
   yield takeLatest(
     types.THANK_YOU_PAGE_ORDER_DETAIL_PROCESS,
     thankYouPageOrderDetail,
+  );
+  yield takeLatest(
+    types.THANK_YOU_PAGE_PAYMENT_GUIDE_LIST_PROCESS,
+    thankYouPagePaymentGuideList,
   );
 }
 

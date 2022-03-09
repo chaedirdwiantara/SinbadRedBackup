@@ -1,9 +1,9 @@
 export interface ThankYouOrderDetailProps {
   id: string,
-  code: string,
+  paymentMethodId: string,
   expiredDate: string,
   vaAccountNo: string,
-  payment_icon_url: string,
+  paymentIconUrl: string,
   totalOrderAmount: string,
   sellers:OrderSeller[],
   buyerAddress: OrderBuyerAddress,
@@ -46,4 +46,13 @@ export interface OrderBuyerAddress {
   address: string,
   noteAddress: string,
   locationId: string  
+}
+
+export interface PaymentGuideListItem {
+  id: number,
+  paymentMethodId: string,
+  title: string,
+  content: string,
+  createdAt: string,
+  updatedAt: string
 }

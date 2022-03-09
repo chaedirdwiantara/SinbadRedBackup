@@ -5,10 +5,10 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbContainer, SnbText, SnbToast, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect } from 'react';
+import { color, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -17,61 +17,15 @@ import {
 } from 'react-native'; 
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+import CustomAccordion from '@screen/history/components/CustomAccordion';
+import { PaymentGuideListItem } from '@model/oms';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
-  // const orderDetail = {
-  //   "data":
-  //   {
-  //     "id": "1",
-  //     "code": "1812251000",
-  //     "expiredDate": "2020-11-05T01:54:09.463Z",
-  //     "vaAccountNo": "132323",
-  //     "payment_icon_url": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //     "totalOrderAmount": "403000",
-  //     "sellers": [
-  //         {
-  //             "sellerId": 1,
-  //             "sellerName": "Seller 1",
-  //             "products": [
-  //                 {
-  //                     "productId": "53c9b0000000000000000000",
-  //                     "warehouseId": 3,
-  //                     "warehouseName": "ATAPI DC Kemang",
-  //                     "categoryId": "e3a76d0b-4aa9-4588-8bdd-2840236e5ec4",
-  //                     "brandId": "33d200000000000000000000",
-  //                     "brandName": "ATAPI SGM",
-  //                     "productName": "ATAPI SGM ANANDA 2 150 GR GRD 2.0",
-  //                     "productImageUrl": "https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/catalogue-images/15515/image_1617790108395.png",
-  //                     "qty": 99,
-  //                     "qtyPerBox": 40,
-  //                     "uomLabel": "PCS",
-  //                     "isPriceAfterTax": true,
-  //                     "taxPercentage": 10,
-  //                     "lastUsedPrice": 13707.099609375,
-  //                     "leadTime": 10
-  //                 }
-  //             ]
-  //         }
-  //     ],
-  //     "buyerAddress": {
-  //         "longtitude": "106°49′35.76",
-  //         "latitude": "6°10′30.00",
-  //         "province": "DKI Jakarta",
-  //         "city": "Jakarta Selatan",
-  //         "district": "Jakarta",
-  //         "urban": "Jakarta",
-  //         "zipCode": "445351",
-  //         "address": "Jalan Jakarta",
-  //         "noteAddress": "pagar putih",
-  //         "locationId": "53c9b0000000000000000000"
-  //     },
-  //     "createdAt": "2021-02-01T06:19:55.516Z",
-  //     "updatedAt": "2021-02-01T06:19:55.516Z"
-  //   }
-  // }
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
+  const [paymentMethodId, setPaymentMethodId]= useState('');
+  const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
   const {
     stateThankYouPage: {
       detail: {
@@ -79,14 +33,30 @@ const OmsThankYouPageView: FC = () => {
         loading: thankYouPageLoading,
         // error: thankYouPageError,
       },
+      paymentGuide: {
+        data: thankYouPagePaymentGuidelistData,
+        loading: thankYouPagePaymentGuideListLoading
+      }
     },
     dispatchThankYouPage
   } = useThankYouPageContext()
   
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'2')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'3')
   }, [])
+
+  useEffect(() => {
+    if(thankYouPageData != null ){
+      setPaymentMethodId(thankYouPageData.paymentMethodId)
+    }
+  }, [thankYouPageData])
+
+  useEffect(() => {
+    if(paymentMethodId != '' ){
+      thankYouPagePaymentGuideListAction.fetch(dispatchThankYouPage,{paymentMethodId})
+    }
+  }, [paymentMethodId])
 
   /** => function to copy VA Number */
   const onVACopied = () => {
@@ -143,7 +113,7 @@ const OmsThankYouPageView: FC = () => {
         style={ThankYouPageStyle.paymentDetail}>
         <Image
           source={{
-            uri: thankYouPageData?.payment_icon_url,
+            uri: thankYouPageData?.paymentIconUrl,
           }}
           style={ThankYouPageStyle.mediumIcon}
         />
@@ -158,6 +128,32 @@ const OmsThankYouPageView: FC = () => {
     </ThankYouPageCard>
     )
   }
+  const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
+    return data.map ((item : PaymentGuideListItem) => {
+        return {
+          name: item.title,
+          instruction: item.content
+        }
+    })
+  }
+  /** => Payment Guide List */
+  const renderPaymentGuideList = (data: PaymentGuideListItem[]) => {
+    return (
+        <CustomAccordion data={generatePaymentGuideListData(data)}/>
+    )
+  }
+  /** => Payment Guide */
+  const renderPaymentGuide = () => {
+    return (
+      <ThankYouPageCard title="Panduan Pembayaran">
+        <View style={ThankYouPageStyle.defaultContentPadding}>
+          {!thankYouPagePaymentGuideListLoading &&
+            renderPaymentGuideList(thankYouPagePaymentGuidelistData)
+          }
+        </View>
+      </ThankYouPageCard>
+    )
+  }
   /** => Thank You Page Content */
   const renderThankYouPageContent = () => (
     <ScrollView
@@ -165,6 +161,7 @@ const OmsThankYouPageView: FC = () => {
     <>
     {renderPaymentDetail()}
     {renderPaymentTotal()}
+    {renderPaymentGuide()}
     </>
     </ScrollView>
   );
