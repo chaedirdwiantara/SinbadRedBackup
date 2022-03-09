@@ -17,11 +17,7 @@ import {
   useCheckSellerAction,
   useCheckStockAction,
   useRemoveCartProductAction,
-  useCartLocalData,
-  useOmsGeneralFailedState,
-  useGetTotalCartAction,
   useCartBuyerAddressAction,
-  useCancelStockAction,
   useUpdateCartAction,
 } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
@@ -36,9 +32,7 @@ const OmsCheckoutView: FC = () => {
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
-  const totalCartActions = useGetTotalCartAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
 
   /** === HOOK === */
@@ -166,7 +160,7 @@ const OmsCheckoutView: FC = () => {
   const timeToExpired = addTime - timeNow;
   useEffect(() => {
     setTimeout(() => {
-      setExpiredSession(true);
+      setExpiredSession(false);
     }, timeToExpired);
   }, []);
 

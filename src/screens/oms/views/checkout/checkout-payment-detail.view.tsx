@@ -76,7 +76,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText.H4>Sub Total</SnbText.H4>
           </View>
         </View>
-        <SnbText.H4>{totalProductsPrice + deliveryFee}</SnbText.H4>
+        <SnbText.H4>{totalProductsPrice}</SnbText.H4>
       </TouchableOpacity>
     </View>
   );
