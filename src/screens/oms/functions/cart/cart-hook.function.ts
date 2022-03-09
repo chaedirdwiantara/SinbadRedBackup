@@ -100,6 +100,13 @@ const useUpdateCartAction = () => {
           }
         });
 
+        // rewrite lastUsedPrice
+        carts.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            productItem.lastUsedPrice = productItem.price;
+          });
+        });
+
         dispatch(
           Actions.updateCartProcess(contextDispatch, {
             data: {
@@ -424,12 +431,26 @@ const useCartLocalData = () => {
         } else {
           // if the user update qty using keyboard
           if (newQty && Number.isInteger(newQty)) {
-            if (newQty <= stock && newQty >= thisProduct.minQty) {
-              thisProduct.qty = newQty;
-            } else if (newQty < thisProduct.minQty) {
-              thisProduct.qty = thisProduct.minQty;
-            } else if (newQty > stock) {
-              thisProduct.qty = stock;
+            if (thisProduct.multipleQty > 1) {
+              const minValue = thisProduct.minQty;
+              const maxValue =
+                stock -
+                ((stock + thisProduct.minQty) % thisProduct.multipleQty);
+              if (newQty <= maxValue && newQty >= minValue) {
+                thisProduct.qty = newQty;
+              } else if (newQty < minValue) {
+                thisProduct.qty = minValue;
+              } else if (newQty > maxValue) {
+                thisProduct.qty = maxValue;
+              }
+            } else {
+              if (newQty <= stock && newQty >= thisProduct.minQty) {
+                thisProduct.qty = newQty;
+              } else if (newQty < thisProduct.minQty) {
+                thisProduct.qty = thisProduct.minQty;
+              } else if (newQty > stock) {
+                thisProduct.qty = stock;
+              }
             }
           } else if (Number(newQty) === 0) {
             thisProduct.qty = thisProduct.minQty;
