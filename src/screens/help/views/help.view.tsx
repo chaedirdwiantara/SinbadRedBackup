@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { View, Image, ScrollView } from 'react-native';
 import {
   SnbContainer,
@@ -11,10 +11,15 @@ import DeviceInfo from 'react-native-device-info';
 import ModalCallCs from '../components/ModalCallCs';
 import { useCallCsModal } from '../functions';
 import { NavigationAction } from '@navigation';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import { copilotOptions } from '@screen/account/views/shared';
+import { useCoachmark } from '@screen/account/functions';
 /** === IMPORT STYLE HERE === */
 import HelpStyle from '../styles/help.style';
+/** === CONSTANT === */
+const CopilotView = walkthroughable(View);
 
-const HelpView: FC = () => {
+const HelpView: FC = ({ start }: any) => {
   const [menu] = useState([
     {
       name: 'Hubungi Customer Services',
@@ -31,6 +36,16 @@ const HelpView: FC = () => {
   ]);
   /** === HOOK === */
   const callCsModal = useCallCsModal();
+  const { coachmarkState } = useCoachmark();
+
+  //function for start couchmark
+  useEffect(() => {
+    if (!coachmarkState?.data?.helpCoachmark) {
+      setTimeout(() => {
+        start();
+      }, 100);
+    }
+  }, [coachmarkState?.data?.helpCoachmark]);
 
   const handleClearCache = () => {};
 
@@ -105,11 +120,54 @@ const HelpView: FC = () => {
       </View>
     );
   };
+
+  //walkthrough couchmark
+  const couchmarkWalkthrough = () => {
+    if (!coachmarkState?.data?.helpCoachmark) {
+      return (
+        <View>
+          <View style={{ flex: 1 }}>
+            <CopilotStep
+              text="Hubungi customer service kami yang siap membantu masalah Anda."
+              order={1}
+              name="Perlu bantuan?">
+              <CopilotView
+                style={{
+                  height: 50,
+                  width: '100%',
+                  position: 'absolute',
+                  elevation: -100,
+                }}
+              />
+            </CopilotStep>
+          </View>
+          <View style={{ flex: 1 }}>
+            <CopilotStep
+              text="Pertanyaan yang sering ditanyakan bisa Anda temukan di sini."
+              order={2}
+              name="Cari jawaban di sini">
+              <CopilotView
+                style={{
+                  height: 50,
+                  width: '100%',
+                  position: 'absolute',
+                  marginTop: 50,
+                  elevation: -100,
+                }}
+              />
+            </CopilotStep>
+          </View>
+        </View>
+      );
+    }
+  };
+
   /** === RENDER CONTENT === */
   const renderContent = () => {
     return (
       <ScrollView>
         {renderContentHeader()}
+        {couchmarkWalkthrough()}
         {renderContentMenu()}
         {renderContentVersion()}
       </ScrollView>
@@ -140,4 +198,4 @@ const HelpView: FC = () => {
   );
 };
 
-export default HelpView;
+export default copilot(copilotOptions(2, 'helpCoachmark'))(HelpView);

@@ -12,7 +12,10 @@ import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
-import { DATA_COMPLETENESS_VIEW, DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
+import {
+  DATA_COMPLETENESS_VIEW,
+  DATA_DIRI_STEP_3_VIEW,
+} from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep2View: React.FC = () => {
@@ -70,7 +73,7 @@ const DataDiriStep2View: React.FC = () => {
         resetUpdateCompleteData();
         navigate(DATA_DIRI_STEP_3_VIEW);
       }
-    } 
+    }
   }, [updateCompleteDataState]);
 
   React.useEffect(() => {
@@ -80,7 +83,7 @@ const DataDiriStep2View: React.FC = () => {
     };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      backAction,
     );
     return () => backHandler.remove();
   }, []);
@@ -159,14 +162,18 @@ const DataDiriStep2View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto KTP" />
-      <Stepper complete={completeDataState?.data?.userProgress?.completed || 1} total={completeDataState?.data?.userProgress?.total || 6} onPress={() => setOpenModalStep(true)} />
+      <Stepper
+        complete={completeDataState?.data?.userProgress?.completed || 1}
+        total={completeDataState?.data?.userProgress?.total || 6}
+        onPress={() => setOpenModalStep(true)}
+      />
       <View style={{ flex: 1 }}>
-      {renderIF(
-        isImageAvailable,
-        renderImagePreview(),
-        renderUploadPhotoRules(),
-      )}
-    </View>
+        {renderIF(
+          isImageAvailable,
+          renderImagePreview(),
+          renderUploadPhotoRules(),
+        )}
+      </View>
       <ListOfSteps
         open={openModalStep}
         type="user"
@@ -177,7 +184,7 @@ const DataDiriStep2View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          upload(dispatchGlobal, capturedImage.data.url)
+          upload(dispatchGlobal, capturedImage.data.url);
         }}
       />
     </SnbContainer>
