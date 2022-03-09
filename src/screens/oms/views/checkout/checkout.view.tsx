@@ -9,6 +9,8 @@ import { CheckoutHeader } from './checkout-header.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
+import { CheckoutTNCView } from './checkout-terms-n-condition.view';
+import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import {
   useGetCartAction,
@@ -43,6 +45,7 @@ const OmsCheckoutView: FC = () => {
 
   /** === HOOK === */
   const [isExpiredSession, setExpiredSession] = useState(false);
+  const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   // const { stateCheckout } = useContext(contexts.CheckoutContext);
   // const data = stateCheckout.checkout.data;
 
@@ -184,6 +187,10 @@ const OmsCheckoutView: FC = () => {
     goToShoppingCart();
   };
 
+  const handleOpenTNCModal = () => {
+      setModalTNCOpen(true)
+  }
+
   return (
     <SnbContainer color="grey">
       <CheckoutHeader
@@ -201,11 +208,16 @@ const OmsCheckoutView: FC = () => {
           buyerName={data.buyerName}
         />
         <CheckoutInvoiceGroupView data={data} />
+        <CheckoutTNCView clickAction={handleOpenTNCModal}/>
       </ScrollView>
 
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
+      />
+      <ModalCheckoutTNC 
+        isOpen={isModalTNCOpen}
+        close={() => setModalTNCOpen(false)}
       />
 
       <CheckoutBottomView
