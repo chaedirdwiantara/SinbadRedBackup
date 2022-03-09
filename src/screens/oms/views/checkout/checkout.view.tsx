@@ -21,6 +21,9 @@ import {
   useUpdateCartAction,
 } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
+import { BackToCartModal } from './checkout-back-to-cart-modal';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook.function';
 
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
@@ -36,9 +39,12 @@ const OmsCheckoutView: FC = () => {
   const updateCartAction = useUpdateCartAction();
 
   /** === HOOK === */
+  const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
   // const { stateCheckout } = useContext(contexts.CheckoutContext);
   // const data = stateCheckout.checkout.data;
+
+  useCustomBackHardware(() => backToCartModal.setOpen(true));
 
   /** === DUMMY === */
   const data = {
@@ -182,7 +188,7 @@ const OmsCheckoutView: FC = () => {
     <SnbContainer color="grey">
       <CheckoutHeader
         backAction={() => {
-          // backToCartModal.setOpen(true);
+          backToCartModal.setOpen(true);
         }}
       />
       {/* {checkoutLoading ? (
@@ -202,12 +208,14 @@ const OmsCheckoutView: FC = () => {
         close={handleBackToCart}
       />
 
-      <CheckoutBottomView
-        data={data}
-        // openTCModal={() => paymentTCModal.setOpen(true)}
-        // openErrorWarning={() => errorWarningModal.setOpen(true)}
-        // closeErrorWarning={() => errorWarningModal.setOpen(false)}
-        // checkExpiredTime={handleCheckExpiredSession}
+      <CheckoutBottomView data={data} />
+
+      <BackToCartModal
+        isOpen={backToCartModal.isOpen}
+        handleNoAction={() => {
+          backToCartModal.setOpen(false);
+        }}
+        handleOkAction={handleBackToCart}
       />
 
       {/* )} */}

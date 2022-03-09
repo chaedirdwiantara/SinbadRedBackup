@@ -1,6 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
+import BottomModalError from '@core/components/BottomModalError';
 import React, { FC } from 'react';
-import { SnbDialog } from 'react-native-sinbad-ui';
+import { Image, View } from 'react-native';
+import {
+  SnbDialog,
+  SnbBottomSheet,
+  SnbText,
+  SnbButton,
+} from 'react-native-sinbad-ui';
 
 interface BackToCartModalProps {
   isOpen: boolean;
@@ -13,15 +20,61 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
   handleOkAction,
   handleNoAction,
 }) => {
+  const button = () => {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+        }}>
+        <SnbButton.Multiple
+          rightTitle={'Tidak'}
+          leftTitle={'Ya'}
+          leftType={'secondary'}
+          rightType={'primary'}
+          onPressLeft={handleOkAction}
+          onPressRight={handleNoAction}
+        />
+      </View>
+    );
+  };
+
+  const content = () => {
+    return (
+      <>
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingBottom: 60,
+          }}>
+          <View style={{ marginBottom: 16, alignItems: 'center' }}>
+            <Image source={require('../../../../assets/images/cancel.png')} />
+            <SnbText.H3>Batalkan Pesanan</SnbText.H3>
+            <SnbText.B1>Apakah anda ingin membatalkan pesanan?</SnbText.B1>
+          </View>
+        </View>
+        {button()}
+      </>
+    );
+  };
+
   return (
-    <SnbDialog
+    // <SnbDialog
+    //   open={isOpen}
+    //   title="Konfirmasi"
+    //   content="Apakah anda ingin membatalkan pesanan?"
+    //   ok={handleNoAction}
+    //   cancel={handleOkAction}
+    //   okText="Tidak"
+    //   cancelText="Ya"
+    // />
+    <SnbBottomSheet
       open={isOpen}
-      title="Konfirmasi"
-      content="Apakah anda ingin membatalkan pesanan?"
-      ok={handleNoAction}
-      cancel={handleOkAction}
-      okText="Tidak"
-      cancelText="Ya"
+      content={content()}
+      // title={'Batalkan Pesanan'}
+      // closeAction={handleOkAction}
+      size={'normal'}
     />
   );
 };
