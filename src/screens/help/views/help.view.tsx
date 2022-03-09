@@ -38,6 +38,8 @@ const HelpView: FC = ({ start }: any) => {
   const callCsModal = useCallCsModal();
   const { coachmarkState } = useCoachmark();
 
+  console.log('couchmark:', coachmarkState?.data?.helpCoachmark);
+  
   //function for start couchmark
   useEffect(() => {
     if (!coachmarkState?.data?.helpCoachmark) {
