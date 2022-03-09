@@ -200,7 +200,7 @@ const DataDiriStep3View: React.FC = () => {
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed || 3}
-          total={7}
+          total={completeDataState?.data?.userProgress?.total || 6}
           onPress={() => setOpenModalStep(true)}
         />
       </View>
