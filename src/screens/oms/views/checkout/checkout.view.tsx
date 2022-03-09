@@ -181,6 +181,7 @@ const OmsCheckoutView: FC = () => {
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     setExpiredSession(false);
+    backToCartModal.setOpen(false);
     goToShoppingCart();
   };
 
