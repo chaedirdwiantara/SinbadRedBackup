@@ -38,6 +38,12 @@ export const ThankYouPageStyle = StyleSheet.create({
   expandableButton: {
     alignItems: 'center', 
     marginVertical: 6
-  }
+  },
+  cardItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 8,
+    width: '100%',
+  },
 })
 
