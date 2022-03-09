@@ -19,6 +19,8 @@ import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-moda
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import CustomAccordion from '@screen/history/components/CustomAccordion';
 import { PaymentGuideListItem } from '@model/oms';
+import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
+import { toLocalDateTime } from '@core/functions/global/date-format';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
@@ -154,6 +156,22 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     )
   }
+  /** => Order Notes */
+  const renderOrderNotes = () => {
+    if(thankYouPageData != null){
+      return (
+        <ThankYouPageCard title="Catatan Pesanan">
+          <ThankYouPageCardItem 
+            title='Tanggal Pembelian'
+            value={
+              thankYouPageData?.createdAt ? toLocalDateTime(thankYouPageData?.createdAt) : '-'
+            }
+          />
+        </ThankYouPageCard>
+      )
+    }
+    
+  }
   /** => Thank You Page Content */
   const renderThankYouPageContent = () => (
     <ScrollView
@@ -162,6 +180,7 @@ const OmsThankYouPageView: FC = () => {
     {renderPaymentDetail()}
     {renderPaymentTotal()}
     {renderPaymentGuide()}
+    {renderOrderNotes()}
     </>
     </ScrollView>
   );
