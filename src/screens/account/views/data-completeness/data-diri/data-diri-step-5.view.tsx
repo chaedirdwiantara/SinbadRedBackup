@@ -49,15 +49,15 @@ const DataDiriStep5View: React.FC = () => {
 
   return(
     <SnbContainer color="white">
-      <ScrollView style={{ flex: 1 }}>
-        <SnbTopNav.Type3
+      <SnbTopNav.Type3
           backAction={() => setOpenModalBack(true)}
           type="white"
           title="Konfirmasi Kartu Identitas"
         />
+      <ScrollView style={{ flex: 1 }}>
         <Stepper
-          complete={5}
-          total={7}
+          complete={completeDataState?.data?.userProgress?.completed || 1}
+          total={completeDataState?.data?.userProgress?.total || 6}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>

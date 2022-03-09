@@ -89,11 +89,7 @@ const DataDiriStep4View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      if (completeDataState?.data?.userData?.selfieImageUrl) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
-      } else {
-        openCamera('selfie');
-      }
+      reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
     }
   };
 
@@ -137,7 +133,6 @@ const DataDiriStep4View: React.FC = () => {
           'Hindari Tangan Menutupi KTP.',
         ]}
         action={() => openCamera('selfie')}
-        listType={'number'}
       />
     );
   };
@@ -199,8 +194,8 @@ const DataDiriStep4View: React.FC = () => {
           title="Foto Diri Dengan KTP"
         />
         <Stepper
-          complete={4}
-          total={7}
+          complete={completeDataState?.data?.userProgress?.completed || 1}
+          total={completeDataState?.data?.userProgress?.total || 6}
           onPress={() => setOpenModalStep(true)}
         />
       </View>
