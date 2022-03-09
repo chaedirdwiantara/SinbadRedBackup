@@ -146,11 +146,16 @@ const Content: React.FC = () => {
 
 const DataDiriStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
+  const { completeDataState } = useEasyRegistration();
 
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto KTP" />
-      <Stepper complete={2} total={7} onPress={() => setOpenModalStep(true)} />
+      <Stepper
+        complete={completeDataState?.data?.userProgress?.completed || 1}
+        total={completeDataState?.data?.userProgress?.total || 6}
+        onPress={() => setOpenModalStep(true)}
+      />
       <Content />
       <ListOfSteps
         open={openModalStep}
