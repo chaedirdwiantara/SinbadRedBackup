@@ -124,12 +124,12 @@ const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
 
 const useModalParcelDetail = () => {
   const [isOpen, setOpen] = useState(false);
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<models.IInvoiceCheckout | null>(null);
 
   return {
     isOpen,
     data,
-    setData: (value: any | null) => {
+    setData: (value: models.IInvoiceCheckout | null) => {
       setData(value);
       if (value !== null) {
         setOpen(true);
