@@ -7,8 +7,6 @@ import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
-import { useDataCartMaster } from '@core/redux/Data';
-import { CartMaster, HandleRemoveProduct } from '@models';
 import { manageRemoveProduct } from './cart.function';
 /** === FUNCTION === */
 /** => cart example action */
@@ -135,35 +133,6 @@ const useRemoveCartProductAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.removeCartProductReset(contextDispatch));
-    },
-  };
-};
-/** => cart master action */
-const useCartMasterAction = () => {
-  const cartMaster: models.CartMaster = useDataCartMaster();
-  const dispatch = useDispatch();
-  return {
-    cartMaster,
-    setCartMaster: (data: models.SetCartMaster) => {
-      dispatch(Actions.setCartMaster(data));
-    },
-    mergeCheckProduct: (data: models.CheckProductResponse[]) => {
-      dispatch(Actions.mergeCheckProduct(data));
-    },
-    mergeCheckSeller: (data: models.CheckSellerResponse[]) => {
-      dispatch(Actions.mergeCheckSeller(data));
-    },
-    mergeCheckStock: (data: models.CheckStockResponse[]) => {
-      dispatch(Actions.mergeCheckStock(data));
-    },
-    removeProduct: (data: HandleRemoveProduct) => {
-      dispatch(Actions.CartMasterRemoveProduct(data));
-    },
-    replaceFromLocal: (data: CartMaster) => {
-      dispatch(Actions.replaceCartMasterFromLocal(data));
-    },
-    reset: () => {
-      dispatch(Actions.resetCartMaster());
     },
   };
 };
@@ -846,7 +815,6 @@ export {
   useAddToCartAction,
   useUpdateCartAction,
   useRemoveCartProductAction,
-  useCartMasterAction,
   useCheckProductAction,
   usePostCheckProductAction,
   useCheckSellerAction,
