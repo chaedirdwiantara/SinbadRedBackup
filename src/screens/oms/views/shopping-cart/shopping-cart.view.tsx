@@ -234,13 +234,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     ) {
       setLocalCartMaster({
         id: stateCart.get.data.id,
+        userId: stateCart.get.data.userId,
         buyerId: stateCart.get.data.buyerId,
         totalProducts: stateCart.get.data.totalProducts,
         sellers: stateCart.get.data.sellers,
         unavailable: [],
-        isCheckProductMerged: false,
-        isCheckSellerMerged: false,
-        isCheckStockMerged: false,
       });
       checkProductAction.fetch(dispatchCart);
       checkSellerAction.fetch(dispatchCart);

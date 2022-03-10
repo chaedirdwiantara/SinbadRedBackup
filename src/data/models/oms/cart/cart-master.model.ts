@@ -30,14 +30,14 @@ export interface CartMasterUnavailable extends CartMasterSellersProducts {
   unavailableMessage: string;
 }
 export interface CartMasterSellersProducts extends CartProduct {
-  sellerId: number;
-  sellerName: string;
+  sellerId?: number;
+  sellerName?: string;
   lastUsedPrice: number;
   isLastPriceUsedRules: boolean;
   stock?: number;
   productStatus?: string;
   stockStatus?: string;
-  leadTime: number;
+  leadTime?: number;
 }
 export interface SetCartMaster extends GetCartData {}
 export interface SetCartMasterAction {
