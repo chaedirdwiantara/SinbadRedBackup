@@ -58,9 +58,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           <View style={{ width: '50%' }}>
             <SnbText.H4 color={color.black100}>Total</SnbText.H4>
           </View>
-          <SnbText.B2 color={color.black100}>
-            {totalProductsPrice + deliveryFee}
-          </SnbText.B2>
+          <SnbText.B2 color={color.black100}>{totalProductsPrice}</SnbText.B2>
         </View>
       </View>
     );

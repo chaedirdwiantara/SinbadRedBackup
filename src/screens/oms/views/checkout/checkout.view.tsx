@@ -21,11 +21,7 @@ import {
   useCheckSellerAction,
   useCheckStockAction,
   useRemoveCartProductAction,
-  useCartLocalData,
-  useOmsGeneralFailedState,
-  useGetTotalCartAction,
   useCartBuyerAddressAction,
-  useCancelStockAction,
   useUpdateCartAction,
 } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
@@ -40,9 +36,7 @@ const OmsCheckoutView: FC = () => {
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
-  const totalCartActions = useGetTotalCartAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
 
   /** === HOOK === */
@@ -183,7 +177,7 @@ const OmsCheckoutView: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setExpiredSession(true);
-    }, 1000);
+    }, timeToExpired);
   }, []);
 
   /** handle back to cart */
@@ -222,14 +216,14 @@ const OmsCheckoutView: FC = () => {
           buyerName={data.buyerName}
         />
         <CheckoutInvoiceGroupView data={data} />
-        <CheckoutTNCView clickAction={handleOpenTNCModal}/>
+        <CheckoutTNCView clickAction={handleOpenTNCModal} />
       </ScrollView>
 
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
-      <ModalCheckoutTNC 
+      <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
         close={() => setModalTNCOpen(false)}
         data={TncContentData}

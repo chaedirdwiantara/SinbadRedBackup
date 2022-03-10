@@ -184,6 +184,16 @@ const totalPayment = (sellers: any) => {
   return toCurrency(total, { withFraction: false });
 };
 
+const totalPaymentWithoutCurrency = (sellers: any) => {
+  let total = 0;
+  for (let i = 0; i < sellers.length; i++) {
+    for (let a = 0; a < sellers[i].products.length; a++) {
+      total = total + sellers[i].products[a].qty * sellers[i].products[a].price;
+    }
+  }
+  return total;
+};
+
 export {
   handleTotalPrice,
   handleSubTotalPrice,
@@ -195,4 +205,5 @@ export {
   totalBarangPrice,
   subTotalQty,
   totalPayment,
+  totalPaymentWithoutCurrency,
 };
