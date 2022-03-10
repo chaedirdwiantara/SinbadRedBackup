@@ -72,3 +72,9 @@ export interface ManageCheckbox {
   sellerId: number | null;
   currentStatus?: 'selected' | 'unselect' | 'indeterminate';
 }
+
+export interface MergeCheckData {
+  checkProductData: CheckProductResponse[];
+  checkSellerData: CheckSellerResponse[];
+  checkStockData: CheckStockResponse[];
+}
