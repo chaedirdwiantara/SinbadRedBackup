@@ -90,6 +90,7 @@ const OmsCheckoutView: FC = () => {
     goToShoppingCart();
   };
 
+  /** handle term n condition */
   const handleOpenTNCModal = () => {
     getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
     setModalTNCOpen(true);
