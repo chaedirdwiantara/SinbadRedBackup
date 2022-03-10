@@ -104,7 +104,6 @@ const BuyerCategory: React.FC = () => {
   const { meV2, me } = useAuthCoreAction();
 
   React.useEffect(() => {
-    console.log(selectedProductCategory);
     if (buyerCategories.data.length === 0) {
       getBuyerCategory();
     }
