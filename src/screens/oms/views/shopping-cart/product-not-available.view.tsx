@@ -7,7 +7,7 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 import { goToProduct } from '@screen/category/functions';
 import * as models from '@models';
 import { UnavailableAccordionView } from './product-not-available-accordion.view';
-import { Images } from '@assets';
+import { Images } from 'src/assets';
 
 interface ProductUnavailableViewProps {
   unavailableProducts: models.CartMasterUnavailable[];
