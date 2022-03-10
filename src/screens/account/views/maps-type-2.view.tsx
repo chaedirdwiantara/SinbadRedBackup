@@ -19,7 +19,11 @@ import {
   DATA_TOKO_STEP_3_VIEW,
   INPUT_MANUAL_LOCATION_MODAL_VIEW,
 } from '../functions/screens_name';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  StackActions,
+} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import { extractAddress, renderIF } from '@screen/auth/functions';
 import apiMaps from '@core/services/apiMaps';
@@ -38,7 +42,7 @@ const MapsViewType2: React.FC = () => {
     longitude: DEFAULT_LONGITUDE,
   });
   const refMaps = React.useRef<MapView>(null);
-  const { navigate, replace }: any = useNavigation();
+  const { navigate, dispatch } = useNavigation();
   const [showModalAreaNotFound, setShowModalAreaNotFound] =
     React.useState(false);
   const [addressResult, setAddressResult] = React.useState<any[]>([]);
@@ -90,16 +94,20 @@ const MapsViewType2: React.FC = () => {
         });
         goBack();
       } else {
-        replace(DATA_TOKO_STEP_3_VIEW, {
-          coordinate: latLng,
-          formattedAddress:
-            addressResult.length > 0 ? addressResult[0].formatted_address : '',
-          location: locations.data.id,
-          street:
-            addressResult.length > 0
-              ? getStreetName(addressResult[0].address_components)
-              : '',
-        });
+        dispatch(
+          StackActions.replace(DATA_TOKO_STEP_3_VIEW, {
+            coordinate: latLng,
+            formattedAddress:
+              addressResult.length > 0
+                ? addressResult[0].formatted_address
+                : '',
+            location: locations.data.id,
+            street:
+              addressResult.length > 0
+                ? getStreetName(addressResult[0].address_components)
+                : '',
+          }),
+        );
       }
     }
   }, [locations]);

@@ -1,6 +1,6 @@
 import { renderIF, useCamera } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -10,7 +10,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { ListOfSteps, Stepper } from '../../shared';
+import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
@@ -31,11 +31,22 @@ const Content: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     refetchCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const { imageUrl } = completeDataState.data?.buyerData || {};
+  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
     return () => {
+      backHandler.remove();
       resetUpdateCompleteData();
       save(dispatchGlobal, '');
       resetCamera();
@@ -62,7 +73,11 @@ const Content: React.FC = () => {
       refetchCompleteData();
       resetUpdateCompleteData();
       resetCamera();
-      navigate(MAPS_VIEW_TYPE_2);
+      if (backHandle) {
+        backToDataCompleteness();
+      } else {
+        navigate(MAPS_VIEW_TYPE_2);
+      }
     }
   }, [updateCompleteDataState]);
 
@@ -150,6 +165,18 @@ const Content: React.FC = () => {
         renderImagePreview(),
         renderUploadPhotoRules(),
       )}
+      <ModalBack
+        open={openModalBack}
+        closeModal={() => setOpenModalBack(false)}
+        confirm={() => {
+          if (capturedImage?.data?.url) {
+            upload(dispatchGlobal, capturedImage.data.url);
+            setBackHandle(true);
+          } else {
+            backToDataCompleteness();
+          }
+        }}
+      />
     </View>
   );
 };

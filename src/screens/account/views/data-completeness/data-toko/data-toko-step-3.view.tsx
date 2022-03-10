@@ -12,7 +12,7 @@ import {
   SnbTextField,
   SnbTextFieldSelect,
 } from 'react-native-sinbad-ui';
-import { ListOfSteps, ModalSelection, Stepper } from '../../shared';
+import { ListOfSteps, ModalBack, ModalSelection, Stepper } from '../../shared';
 import * as models from '@models';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
@@ -65,7 +65,10 @@ const Content: React.FC = () => {
     updateCompleteDataState,
     resetUpdateCompleteData,
     refetchCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
+  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -89,7 +92,11 @@ const Content: React.FC = () => {
     if (updateCompleteDataState.data) {
       refetchCompleteData();
       resetUpdateCompleteData();
-      navigate(DATA_COMPLETENESS_VIEW);
+      if (backHandle) {
+        backToDataCompleteness;
+      } else {
+        navigate(DATA_COMPLETENESS_VIEW);
+      }
     }
   }, [updateCompleteDataState]);
 
@@ -281,6 +288,17 @@ const Content: React.FC = () => {
           setOpenModalSelection(false);
           resetGetSelection();
           resetSelectedItem();
+        }}
+      />
+      <ModalBack
+        open={openModalBack}
+        closeModal={() => setOpenModalBack(false)}
+        confirm={() => {
+          if (false) {
+            setBackHandle(true);
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
     </View>
