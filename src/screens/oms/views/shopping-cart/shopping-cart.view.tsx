@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
@@ -55,6 +55,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   // state error modal
   const errorModal = useOmsGeneralFailedState();
@@ -118,6 +119,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (localCartMaster) {
       updateCartAction.fetch(dispatchCart, localCartMaster);
     }
+  };
+
+  const scrollToBottom = () => {
+    scrollRef.current?.scrollToEnd();
   };
 
   /** === HOOKS === */
@@ -341,7 +346,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       if (!isCartEmpty) {
         return (
           <React.Fragment>
-            <ScrollView>
+            <ScrollView ref={scrollRef}>
               <View style={{ flex: 1 }}>
                 <ShoppingCartAddress />
                 <ShoppingCartProducts
@@ -354,6 +359,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                   manageCheckboxStatus={manageCheckboxStatus}
                   manageCheckboxOnPress={manageCheckboxOnPress}
                   keyboardFocus={keyboardFocus}
+                  handleScrollToBottom={scrollToBottom}
                 />
               </View>
             </ScrollView>
