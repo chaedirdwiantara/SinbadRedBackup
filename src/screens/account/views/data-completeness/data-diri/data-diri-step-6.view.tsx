@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
@@ -54,12 +54,23 @@ const DataDiriStep6View: React.FC = () => {
   };
 
   const confirm = () => {
-    if (emailIsNotValid === false) {
-      updateCompleteData({ user: { email: email } });
+    if (completeDataState?.data?.userData?.email !== email) {
+      if (emailIsNotValid === false) {
+        updateCompleteData({ user: { email: email } });
+      } else {
+        setErrorMessage('Pastikan email yang Anda masukkan benar');
+      }
     } else {
-      setErrorMessage('Pastikan email yang Anda masukkan benar');
+      dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
     }
   };
+
+  useEffect(()=> {
+    if (updateCompleteDataState.error) {
+      setEmailIsNotValid(true);
+      setErrorMessage(updateCompleteDataState.error.message);
+    }
+  }, [updateCompleteDataState.error]);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
