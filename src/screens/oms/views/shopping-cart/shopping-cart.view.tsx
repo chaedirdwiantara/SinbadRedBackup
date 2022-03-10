@@ -50,7 +50,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeProduct,
     calculateProductTotalPrice,
   } = useCartLocalData();
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -107,11 +107,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle cart cycle */
   const handleCartCyle = () => {
-    // handleResetContexts();
-    // setPageLoading(true);
-    // errorModal.setRetryCount(3);
+    handleResetContexts();
+    setPageLoading(false);
     // cancelCartAction.fetch(dispatchCart);
-    // cartBuyerAddressAction.fetch(dispatchCart);
+    cartBuyerAddressAction.fetch(dispatchCart);
   };
 
   /** => handle update cart on blur  */
@@ -126,9 +125,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   const handleGoBack = () => {
     goBack();
-    // if (localCartMaster) {
-    //   updateCartAction.fetch(dispatchCart, localCartMaster);
-    // }
+    if (localCartMaster) {
+      updateCartAction.fetch(dispatchCart, localCartMaster);
+    }
   };
 
   const scrollToBottom = () => {
