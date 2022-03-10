@@ -109,8 +109,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const handleCartCyle = () => {
     handleResetContexts();
     setPageLoading(false);
-    // cancelCartAction.fetch(dispatchCart);
-    // cartBuyerAddressAction.fetch(dispatchCart);
+    cancelCartAction.fetch(dispatchCart);
+    cartBuyerAddressAction.fetch(dispatchCart);
   };
 
   /** => handle update cart on blur  */
@@ -268,9 +268,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       cartMasterAction.cartMaster.id !== '' &&
       cartMasterAction.cartMaster.isCheckProductMerged === false
     ) {
-      cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
-      cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
-      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
+      // cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
+      // cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
+      // cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
     }
   }, [
     cartMasterAction.cartMaster.id,
