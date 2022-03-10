@@ -9,17 +9,14 @@ import {
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { useNavigation, StackActions } from '@react-navigation/core';
-import {
-  DATA_COMPLETENESS_VIEW,
-  DATA_DIRI_STEP_5_VIEW,
-} from '@screen/account/functions/screens_name';
+import { DATA_DIRI_STEP_5_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep4View: React.FC = () => {
-  const { navigate, dispatch } = useNavigation();
+  const { dispatch } = useNavigation();
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOpenModalBack] = useState(false);
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -33,6 +30,7 @@ const DataDiriStep4View: React.FC = () => {
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
 
   React.useEffect(() => {
@@ -76,20 +74,20 @@ const DataDiriStep4View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
     } else {
       if (completeDataState?.data?.userData?.selfieImageUrl) {
-        navigate(DATA_DIRI_STEP_5_VIEW);
+        dispatch(StackActions.replace(DATA_DIRI_STEP_5_VIEW));
       } else {
         openCamera('selfie');
       }
     }
   };
 
-   //BACK AND SAVE
-   const backSave = () => {
+  //BACK AND SAVE
+  const backSave = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+      backToDataCompleteness();
     }
   };
 
@@ -106,13 +104,13 @@ const DataDiriStep4View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
         save(dispatchGlobal, '');
         resetCamera();
       } else {
-        navigate(DATA_DIRI_STEP_5_VIEW);
+        dispatch(StackActions.replace(DATA_DIRI_STEP_5_VIEW));
         resetUpdateCompleteData();
         save(dispatchGlobal, '');
         resetCamera();

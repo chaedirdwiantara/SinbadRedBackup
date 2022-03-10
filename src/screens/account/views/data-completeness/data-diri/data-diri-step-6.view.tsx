@@ -8,17 +8,15 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useNavigation, StackActions } from '@react-navigation/core';
-import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep6View: React.FC = () => {
-  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
   const [openModalStep, setOpenModalStep] = useState(false);
@@ -61,7 +59,7 @@ const DataDiriStep6View: React.FC = () => {
         setErrorMessage('Pastikan email yang Anda masukkan benar');
       }
     } else {
-      dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+      backToDataCompleteness();
     }
   };
 
@@ -75,11 +73,11 @@ const DataDiriStep6View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
         resetUpdateCompleteData();
       }
     }

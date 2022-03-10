@@ -9,19 +9,17 @@ import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
 import { useNavigation, StackActions } from '@react-navigation/core';
-import {
-  DATA_DIRI_STEP_2_VIEW,
-  DATA_COMPLETENESS_VIEW,
-} from '@screen/account/functions/screens_name';
+import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep1View: React.FC = () => {
-  const { navigate, dispatch } = useNavigation();
+  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const [name, setName] = useState(completeDataState?.data?.userData?.fullName);
   const [openModalStep, setOpenModalStep] = useState(false);
@@ -36,7 +34,7 @@ const DataDiriStep1View: React.FC = () => {
     };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      backAction,
     );
     return () => backHandler.remove();
   }, []);
@@ -44,11 +42,11 @@ const DataDiriStep1View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_DIRI_STEP_2_VIEW);
+        dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
         resetUpdateCompleteData();
       }
     }
@@ -86,7 +84,7 @@ const DataDiriStep1View: React.FC = () => {
           title="Lanjut"
           type="primary"
           disabled={name || updateCompleteDataState.loading ? false : true}
-          onPress={() => updateCompleteData({ user: { name: name }})}
+          onPress={() => updateCompleteData({ user: { name: name } })}
           loading={updateCompleteDataState.loading}
         />
       </View>
@@ -95,7 +93,7 @@ const DataDiriStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ user: { name: name }});
+          updateCompleteData({ user: { name: name } });
         }}
       />
       <ListOfSteps

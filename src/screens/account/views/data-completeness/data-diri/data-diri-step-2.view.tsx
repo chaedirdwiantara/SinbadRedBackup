@@ -12,10 +12,7 @@ import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useNavigation, StackActions } from '@react-navigation/native';
-import {
-  DATA_COMPLETENESS_VIEW,
-  DATA_DIRI_STEP_3_VIEW,
-} from '@screen/account/functions/screens_name';
+import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep2View: React.FC = () => {
@@ -29,13 +26,14 @@ const DataDiriStep2View: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
 
   const { upload, save } = useUploadImageAction();
-  const { navigate, dispatch } = useNavigation();
+  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
     refetchCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const { idImageUrl } = completeDataState.data?.userData || {};
   React.useEffect(() => {
@@ -64,14 +62,14 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
         refetchCompleteData();
         resetCamera();
         resetUpdateCompleteData();
-        navigate(DATA_DIRI_STEP_3_VIEW);
+        dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW));
       }
     }
   }, [updateCompleteDataState]);
@@ -146,7 +144,7 @@ const DataDiriStep2View: React.FC = () => {
               leftTitle={'Ubah Foto'}
               rightTitle={'Lewati'}
               onPressLeft={() => openCamera('ktp')}
-              onPressRight={() => navigate(DATA_DIRI_STEP_3_VIEW)}
+              onPressRight={() => dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW))}
               rightDisabled={false}
               leftDisabled={false}
             />,
@@ -163,7 +161,7 @@ const DataDiriStep2View: React.FC = () => {
       setBackHandle(true);
     } else {
       if (completeDataState?.data?.userData?.taxImageUrl) {
-        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
+        backToDataCompleteness();
       } else {
         openCamera('ktp');
       }
@@ -175,7 +173,11 @@ const DataDiriStep2View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => setOpenModalBack(true)} type="white" title="Foto KTP" />
+      <SnbTopNav.Type3
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Foto KTP"
+      />
       <Stepper
         complete={completeDataState?.data?.userProgress?.completed || 1}
         total={completeDataState?.data?.userProgress?.total || 6}
