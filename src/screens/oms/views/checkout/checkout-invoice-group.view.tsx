@@ -14,25 +14,16 @@ import * as models from '@models';
 // import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: any;
-  //data: models.IInvoiceCheckout;
-  // openModalPaymentType: (value: boolean) => void;
-  // openModalParcelDetail: any;
-  // openModalProductList: (data: models.ProductCheckout[]) => void;
-  // index: number;
+  data: models.CheckoutData;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
-  // openModalPaymentType,
-  // openModalParcelDetail,
-  // openModalProductList,
-  // index,
 }) => {
   /** === HOOK === */
 
   const [openModal, setOpenModal] = useState(false);
-  const [dataModal, setDataModal] = useState([]);
+  const [dataModal, setDataModal]: any = useState([]);
 
   return (
     <>

@@ -24,6 +24,7 @@ import {
   useRemoveCartProductAction,
   useCartBuyerAddressAction,
   useUpdateCartAction,
+  useCheckoutAction,
 } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
@@ -33,7 +34,7 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
@@ -42,6 +43,7 @@ const OmsCheckoutView: FC = () => {
   const removeCartProductAction = useRemoveCartProductAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
   const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
 
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
@@ -85,6 +87,7 @@ const OmsCheckoutView: FC = () => {
     cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
     goToShoppingCart();

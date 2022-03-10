@@ -187,7 +187,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       goToCheckout();
     }
   }, [stateCheckout.checkout.data]);
-  console.log(stateCheckout.checkout.data, 'datanya');
 
   useEffect(() => {
     // wait all fetch done first
