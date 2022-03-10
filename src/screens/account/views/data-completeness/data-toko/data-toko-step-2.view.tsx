@@ -139,7 +139,7 @@ const Content: React.FC = () => {
               onPressLeft={() => openCamera('store')}
               onPressRight={() => {
                 const { latitude, longitude } =
-                  completeDataState.data?.buyer || {};
+                  completeDataState.data?.buyerData || {};
                 if (latitude !== null && longitude !== null) {
                   navigate(DATA_TOKO_STEP_3_VIEW);
                 } else {

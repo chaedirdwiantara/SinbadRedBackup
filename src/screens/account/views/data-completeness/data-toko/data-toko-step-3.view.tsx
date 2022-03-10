@@ -226,7 +226,11 @@ const Content: React.FC = () => {
             <SnbTextFieldSelect
               labelText="Jumlah Akses Jalan"
               mandatory
-              value={`${vehicleAccessibilityAmount?.value} Kendaraan`}
+              value={
+                vehicleAccessibilityAmount?.value
+                  ? `${vehicleAccessibilityAmount?.value} Kendaraan`
+                  : ''
+              }
               placeholder="Pilih jumlah akses jalan"
               type="default"
               onPress={() => {
