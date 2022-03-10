@@ -2,16 +2,18 @@
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
-  SnbText,
+  SnbText2,
   SnbCheckbox,
   SnbIcon,
   color,
   SnbNumberCounter,
   SnbBadge,
+  SnbText,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { Images } from 'src/assets';
 import * as models from '@models';
 
 interface ProductViewProps {
@@ -28,6 +30,7 @@ interface ProductViewProps {
     sellerId,
     warehouseId,
   }: models.ProductKeyObject) => void;
+  keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
 }
 
 export const ProductView: FC<ProductViewProps> = ({
@@ -35,6 +38,7 @@ export const ProductView: FC<ProductViewProps> = ({
   handleRemoveProductModal,
   handleUpdateQty,
   handleUpdateSelected,
+  keyboardFocus,
 }) => {
   /** => HANDLE DISPLAY PRICE */
   const handleDisplayPrice = () => {
@@ -74,6 +78,52 @@ export const ProductView: FC<ProductViewProps> = ({
 
     return { displayPrice, lastPrice, priceDifference };
   };
+  /** => HANDLE ON BLUR */
+  const handleOnBlur = ({
+    qty,
+    minQty,
+    multipleQty,
+  }: models.updateCartQtyBlur) => {
+    // if the user update qty using keyboard
+    let updatedQty = 1;
+    if (qty && Number.isInteger(qty)) {
+      if (multipleQty > 1) {
+        const isMod = (qty - minQty) % multipleQty === 0;
+        const minValue = minQty;
+        const maxValue = stock - ((stock + minQty) % multipleQty);
+        if (qty <= maxValue && qty >= minValue) {
+          if (isMod) {
+            updatedQty = qty;
+          } else {
+            const modValue = (qty - minQty) % multipleQty;
+            updatedQty = qty - modValue;
+          }
+        } else if (qty < minValue) {
+          updatedQty = minValue;
+        } else if (qty > maxValue) {
+          updatedQty = maxValue;
+        }
+      } else {
+        if (qty <= stock && qty >= minQty) {
+          updatedQty = qty;
+        } else if (qty < minQty) {
+          updatedQty = minQty;
+        } else if (qty > stock) {
+          updatedQty = stock;
+        }
+      }
+    }
+
+    handleUpdateQty({
+      productId: product.productId,
+      sellerId: product.sellerId,
+      warehouseId: product.warehouseId,
+      type: 'onBlur',
+      newQty: updatedQty,
+    });
+
+    keyboardFocus.setFocus(false);
+  };
   /** => RENDER REMAINING STOCK */
   const renderRemainingStock = () => {
     if (Number(product.stock) < 11) {
@@ -82,7 +132,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} Kardus`}</SnbText.B4>
+            }>{`Tersedia ${product.stock} ${product.uomLabel}`}</SnbText.B4>
         </View>
       );
     }
@@ -95,6 +145,7 @@ export const ProductView: FC<ProductViewProps> = ({
           source={{
             uri: product.productImageUrl,
           }}
+          defaultSource={Images.opacityPlaceholder}
           style={ShoppingCartStyles.productImg}
         />
       </View>
@@ -181,6 +232,19 @@ export const ProductView: FC<ProductViewProps> = ({
     );
   };
 
+  // determine inc / dec disabled
+  let isDecreaseDisabled = false;
+  let isIncreaseDisabled = false;
+  const stock = product.stock ?? 0;
+
+  if (product.multipleQty > 1) {
+    isDecreaseDisabled = !(product.qty - product.multipleQty >= product.minQty);
+    isIncreaseDisabled = !(product.qty + product.multipleQty < stock);
+  } else {
+    isDecreaseDisabled = !(product.qty > product.minQty);
+    isIncreaseDisabled = !(product.qty < stock);
+  }
+
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
@@ -197,13 +261,15 @@ export const ProductView: FC<ProductViewProps> = ({
           />
         </View>
         {renderProductImage()}
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center', flex: 1 }}>
           {renderPPNBadge()}
-          <View
-            style={{
-              width: '100%',
-            }}>
-            <SnbText.B4 color={color.black80}>{product.productName}</SnbText.B4>
+          <View style={{ flex: 1 }}>
+            <SnbText2.Paragraph.Default
+              color={color.black80}
+              numberOfLines={1}
+              ellipsizeMode={'tail'}>
+              {product.productName}
+            </SnbText2.Paragraph.Default>
           </View>
           {renderPriceSection()}
           {renderRemainingStock()}
@@ -211,39 +277,55 @@ export const ProductView: FC<ProductViewProps> = ({
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
         {renderRemoveProductIcon()}
-        <SnbNumberCounter
-          value={product.qty}
-          maxLength={6}
-          onBlur={() => {}}
-          onFocus={() => {}}
-          onIncrease={() => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'increase',
-            });
-          }}
-          onDecrease={() => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'decrease',
-            });
-          }}
-          onChange={(newQty: number) => {
-            handleUpdateQty({
-              productId: product.productId,
-              sellerId: product.sellerId,
-              warehouseId: product.warehouseId,
-              type: 'onChange',
-              newQty,
-            });
-          }}
-          minusDisabled={!(product.qty > product.minQty)}
-          plusDisabled={!(product.qty < (product.stock ?? 0))}
-        />
+        <View>
+          <SnbNumberCounter
+            value={product.qty}
+            maxLength={6}
+            onBlur={() => {
+              handleOnBlur({
+                qty: product.qty,
+                minQty: product.minQty,
+                multipleQty: product.multipleQty,
+              });
+            }}
+            onFocus={() => {
+              keyboardFocus.setFocus(true);
+            }}
+            onIncrease={() => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'increase',
+              });
+            }}
+            onDecrease={() => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'decrease',
+              });
+            }}
+            onChange={(newQty: number) => {
+              handleUpdateQty({
+                productId: product.productId,
+                sellerId: product.sellerId,
+                warehouseId: product.warehouseId,
+                type: 'onChange',
+                newQty,
+              });
+            }}
+            minusDisabled={isDecreaseDisabled}
+            plusDisabled={isIncreaseDisabled}
+          />
+          <View style={{ alignItems: 'center', marginTop: 8 }}>
+            <SnbText.B4
+              color={
+                color.black60
+              }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
+          </View>
+        </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />
     </View>

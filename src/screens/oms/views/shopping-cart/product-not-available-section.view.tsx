@@ -13,11 +13,13 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 interface ProductNotAvailableSection {
   unavailableProducts: models.CartMasterUnavailable[];
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleScrollToBottom: () => void;
 }
 /** === COMPONENT === */
 export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
   unavailableProducts,
   handleRemoveProductModal,
+  handleScrollToBottom,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -59,6 +61,7 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
           <ProductUnavailableView
             unavailableProducts={unavailableProducts}
             handleRemoveProductModal={handleRemoveProductModal}
+            handleScrollToBottom={handleScrollToBottom}
           />
         </View>
       </View>
