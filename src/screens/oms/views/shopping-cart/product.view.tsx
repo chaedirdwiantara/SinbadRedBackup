@@ -261,9 +261,9 @@ export const ProductView: FC<ProductViewProps> = ({
           />
         </View>
         {renderProductImage()}
-        <View style={{ justifyContent: 'center' }}>
+        <View style={{ justifyContent: 'center', flex: 1 }}>
           {renderPPNBadge()}
-          <View style={{ width: '100%' }}>
+          <View style={{ flex: 1 }}>
             <SnbText2.Paragraph.Default
               color={color.black80}
               numberOfLines={1}
