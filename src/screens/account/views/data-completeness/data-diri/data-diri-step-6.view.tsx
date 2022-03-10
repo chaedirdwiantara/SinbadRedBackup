@@ -8,12 +8,12 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, StackActions } from '@react-navigation/core';
 import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep6View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
+  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -64,11 +64,11 @@ const DataDiriStep6View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_COMPLETENESS_VIEW);
+        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
         resetUpdateCompleteData();
       }
     }

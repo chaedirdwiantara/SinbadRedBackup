@@ -1,6 +1,5 @@
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useRoute } from '@react-navigation/core';
 import { useTextFieldSelect } from '@screen/auth/functions';
-import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import React from 'react';
 import { View } from 'react-native';
 import {
@@ -13,24 +12,18 @@ import { ModalSelection } from '../shared';
 import * as models from '@models';
 
 const Content = () => {
+  const { onInputManualResult }: any = useRoute().params || {};
   const { resetSelectedItem, resetGetSelection, getSelection, onSelectedItem } =
     useTextFieldSelect();
   const [province, setProvince] = React.useState<any>(null);
   const [city, setCity] = React.useState<any>(null);
   const [district, setDistrict] = React.useState<any>(null);
   const [urban, setUrban] = React.useState<any>(null);
-  const { getLocation, locations } = useLocations();
   const { goBack } = useNavigation();
   const [type, setType] = React.useState<models.ITypeList>('');
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
   const [params, setParams] = React.useState('');
-
-  React.useEffect(() => {
-    if (locations.data?.length > 0) {
-      goBack();
-    }
-  }, [locations]);
 
   React.useEffect(() => {
     if (type === 'listProvince' && province) {
@@ -46,7 +39,7 @@ const Content = () => {
             labelText="Provinsi"
             placeholder="Pilih Provinsi"
             mandatory
-            value={province?.name || ''}
+            value={province?.province || ''}
             type="default"
             onPress={() => {
               setType('listProvince');
@@ -65,7 +58,7 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (province) {
-                const cityParams = `province=${province?.name || ''}`;
+                const cityParams = `province=${province?.province || ''}`;
                 setType('listCity');
                 setParams(cityParams);
                 city && onSelectedItem({ item: city, type: 'listCity' });
@@ -88,7 +81,7 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (city?.city) {
-                const districtParams = `province=${province?.name}&city=${
+                const districtParams = `province=${province?.province}&city=${
                   city?.city || ''
                 }`;
                 setType('listDistrict');
@@ -114,9 +107,11 @@ const Content = () => {
             type="default"
             onPress={() => {
               if (district?.district) {
-                const urbanParams = `province=${province?.name || ''}&city=${
-                  city?.city || ''
-                }&district=${district?.district || ''}`;
+                const urbanParams = `province=${
+                  province?.province || ''
+                }&city=${city?.city || ''}&district=${
+                  district?.district || ''
+                }`;
                 setType('listUrban');
                 setParams(urbanParams);
                 getSelection({
@@ -146,15 +141,12 @@ const Content = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="Simpan Lokasi Manual"
-          loading={locations.loading}
+          loading={false}
           onPress={() => {
-            getLocation({
-              params: `province=${province.name}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
-              meta: {
-                limit: 10,
-                skip: 0,
-              },
-            });
+            onInputManualResult(
+              `province=${province.province}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
+            );
+            goBack();
           }}
           disabled={!province || !city || !district || !urban}
           type="primary"

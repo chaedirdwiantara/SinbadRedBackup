@@ -154,7 +154,7 @@ export interface IUpdateBuyerCompleteData {
   address?: string;
   noteAddress?: string;
   vehicleAccessibilityId?: number;
-  vehicleAccessbilityAmount?: number;
+  vehicleAccessibilityAmount?: number;
   latitude?: number;
   longitude?: number;
   locationId?: string;

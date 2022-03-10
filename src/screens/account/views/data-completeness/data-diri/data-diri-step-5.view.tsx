@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import { DATA_COMPLETENESS_VIEW, DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
@@ -8,7 +8,7 @@ import { SnbButton, SnbContainer, SnbTextField, SnbTopNav } from 'react-native-s
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 
 const DataDiriStep5View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
+  const { navigate, dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -37,7 +37,7 @@ const DataDiriStep5View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {

@@ -58,17 +58,13 @@ function handleRadioButtonStatus(
 ) {
   let status: IRadioButton = 'unselect';
   let label = '';
-  const { id, city, name, district, province } = selectedItem?.item || {};
-
+  const { id, city, district, province } = selectedItem?.item || {};
   switch (type) {
     case 'listProvince': {
-      if (name === item?.name) {
+      if (province === item?.province) {
         status = 'selected';
       }
-      if (province === item?.name) {
-        status = 'selected';
-      }
-      label = item.name;
+      label = item.province;
       break;
     }
     case 'listCity': {
@@ -92,6 +88,13 @@ function handleRadioButtonStatus(
       label = item.urban;
       break;
     }
+    case 'listVehicleAccessAmount': {
+      if (id === item?.id) {
+        status = 'selected';
+      }
+      label = `${item.value} Kendaraan`;
+      break;
+    }
     default: {
       if (id === item?.id) {
         status = 'selected';
@@ -111,8 +114,11 @@ const ModalSelection: React.FC<Props> = ({
 }) => {
   const { listSelection, selectedItem, loadMoreSelection } =
     useTextFieldSelect();
-  const [tempSelectedItem, setTempSelectedItem] =
-    React.useState<any>(selectedItem);
+  const [tempSelectedItem, setTempSelectedItem] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    setTempSelectedItem(selectedItem);
+  }, [selectedItem]);
 
   function handleLoadMore() {
     const {
@@ -148,7 +154,7 @@ const ModalSelection: React.FC<Props> = ({
               ItemSeparatorComponent={() => (
                 <View style={{ height: 1, backgroundColor: color.black10 }} />
               )}
-              renderItem={({ item, index }) => {
+              renderItem={({ item }) => {
                 const { label, status } = handleRadioButtonStatus(
                   type,
                   item,
@@ -164,9 +170,7 @@ const ModalSelection: React.FC<Props> = ({
                       justifyContent: 'space-between',
                     }}>
                     <View style={{ flex: 1 }}>
-                      <SnbText.B1>
-                        {index + 1}. {label}
-                      </SnbText.B1>
+                      <SnbText.B1>{label}</SnbText.B1>
                     </View>
                     <View style={{ marginHorizontal: 4 }} />
                     <SnbRadioButton

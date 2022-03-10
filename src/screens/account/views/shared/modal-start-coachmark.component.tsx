@@ -1,4 +1,5 @@
 import { useDataAuth } from '@core/redux/Data';
+import { useNavigation } from '@react-navigation/native';
 import { useCoachmark } from '@screen/account/functions';
 import {
   SnbBottomSheet,
@@ -18,6 +19,7 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
   const { getCoachmark, resetCoachmark } = useCoachmark();
   const { me } = useDataAuth();
   const [mounted, setMounted] = React.useState(true);
+  const { navigate } = useNavigation();
 
   React.useEffect(() => {
     resetCoachmark();
@@ -30,15 +32,15 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
 
   React.useEffect(() => {
     if (typeof coachmarkState.data?.homeCoachmark === 'boolean' && mounted) {
-      setTimeout(() => {
-        setOpen(!coachmarkState.data?.homeCoachmark);
-      }, 1500);
+      setOpen(!coachmarkState.data?.homeCoachmark);
     }
   }, [coachmarkState.data]);
 
   return (
     <SnbBottomSheet
       open={open}
+      isSwipeable
+      closeAction={() => setOpen(false)}
       content={
         <View style={{ alignItems: 'center', padding: 12 }}>
           <Image
@@ -60,6 +62,7 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
             <SnbButton.Single
               title="Mulai Jelajah"
               onPress={() => {
+                navigate('HomeView');
                 setOpen(false);
                 onStartCoachmark();
               }}

@@ -1,23 +1,28 @@
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
-import { SnbButton, SnbContainer, SnbText, SnbTextField, SnbTopNav } from 'react-native-sinbad-ui';
+import {
+  SnbButton,
+  SnbContainer,
+  SnbText,
+  SnbTextField,
+  SnbTopNav,
+} from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useEasyRegistration } from '@screen/account/functions';
-import {
-  DATA_TOKO_STEP_2_VIEW,
-  DATA_COMPLETENESS_VIEW,
-} from '@screen/account/functions/screens_name';
+import { DATA_TOKO_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 const DataTokoStep1View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
+  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     completeDataState,
     updateCompleteDataState,
     resetUpdateCompleteData,
+    refetchCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
-  
+
   const [name, setName] = useState(
     completeDataState?.data?.buyerData?.buyerName,
   );
@@ -35,31 +40,23 @@ const DataTokoStep1View: React.FC = () => {
     };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      backAction,
     );
-    return () => backHandler.remove();
+    return backHandler.remove;
   }, []);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
+      resetUpdateCompleteData();
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
-        resetUpdateCompleteData();
-        setBackHandle(false);
+        backToDataCompleteness();
       } else {
-        navigate(DATA_TOKO_STEP_2_VIEW);
-        resetUpdateCompleteData();
-      }
-    } else {
-      if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
-        resetUpdateCompleteData();
-        setBackHandle(false);
+        dispatch(StackActions.replace(DATA_TOKO_STEP_2_VIEW));
       }
     }
-    // reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
   }, [updateCompleteDataState]);
-  
+
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
@@ -75,7 +72,7 @@ const DataTokoStep1View: React.FC = () => {
         />
         <View style={{ margin: 16 }}>
           <SnbText.H4>Sinbad ID</SnbText.H4>
-          <SnbText.B1 color='#aaa'>001122334455</SnbText.B1>
+          <SnbText.B1 color="#aaa">001122334455</SnbText.B1>
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
@@ -105,7 +102,9 @@ const DataTokoStep1View: React.FC = () => {
           title="Lanjut"
           type="primary"
           disabled={name && telp ? false : true}
-          onPress={() => updateCompleteData({ buyer: { name: name, phoneNo: telp }})}
+          onPress={() =>
+            updateCompleteData({ buyer: { name: name, phoneNo: telp } })
+          }
         />
       </View>
       <ModalBack
@@ -113,7 +112,7 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ buyer: { name: name, phoneNo: telp }});
+          updateCompleteData({ buyer: { name: name, phoneNo: telp } });
         }}
       />
       <ListOfSteps

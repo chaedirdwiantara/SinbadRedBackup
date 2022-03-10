@@ -1,6 +1,6 @@
 import { renderIF, useCamera } from '@screen/auth/functions';
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -10,29 +10,48 @@ import {
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { ListOfSteps, Stepper } from '../../shared';
-import { useNavigation } from '@react-navigation/native';
-import { DATA_TOKO_STEP_3_VIEW } from '@screen/account/functions/screens_name';
+import { ListOfSteps, ModalBack, Stepper } from '../../shared';
+import { StackActions, useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
+import {
+  DATA_TOKO_STEP_3_VIEW,
+  MAPS_VIEW_TYPE_2,
+} from '@screen/account/functions/screens_name';
 
-const Content: React.FC = () => {
+interface Props {
+  openModalBack: boolean;
+  onCloseModalBack: (value: boolean) => void;
+}
+
+const Content: React.FC<Props> = (props) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
   );
   const { upload, save } = useUploadImageAction();
-  const { navigate } = useNavigation();
+  const { navigate, dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
     refetchCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const { imageUrl } = completeDataState.data?.buyerData || {};
+  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
     return () => {
+      backHandler.remove();
       resetUpdateCompleteData();
       save(dispatchGlobal, '');
       resetCamera();
@@ -59,7 +78,16 @@ const Content: React.FC = () => {
       refetchCompleteData();
       resetUpdateCompleteData();
       resetCamera();
-      navigate(DATA_TOKO_STEP_3_VIEW);
+      if (backHandle) {
+        backToDataCompleteness();
+      } else {
+        const { latitude, longitude } = completeDataState.data?.buyerData || {};
+        if (latitude !== null && longitude !== null) {
+          dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW));
+        } else {
+          navigate(MAPS_VIEW_TYPE_2);
+        }
+      }
     }
   }, [updateCompleteDataState]);
 
@@ -117,9 +145,17 @@ const Content: React.FC = () => {
               leftType={'secondary'}
               rightType={'primary'}
               leftTitle={'Ubah Foto'}
-              rightTitle={'Lewati'}
+              rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('store')}
-              onPressRight={() => navigate(DATA_TOKO_STEP_3_VIEW)}
+              onPressRight={() => {
+                const { latitude, longitude } =
+                  completeDataState.data?.buyerData || {};
+                if (latitude !== null && longitude !== null) {
+                  dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW));
+                } else {
+                  navigate(MAPS_VIEW_TYPE_2);
+                }
+              }}
               rightDisabled={false}
               leftDisabled={false}
             />,
@@ -139,18 +175,41 @@ const Content: React.FC = () => {
         renderImagePreview(),
         renderUploadPhotoRules(),
       )}
+      <ModalBack
+        open={openModalBack || props.openModalBack}
+        closeModal={() => {
+          setOpenModalBack(false);
+          props.onCloseModalBack(false);
+        }}
+        confirm={() => {
+          if (capturedImage?.data?.url) {
+            upload(dispatchGlobal, capturedImage.data.url);
+            setBackHandle(true);
+          } else {
+            backToDataCompleteness();
+          }
+        }}
+      />
     </View>
   );
 };
 
 const DataTokoStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
+  const [openModalBack, setOpenModalBack] = React.useState(false);
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto Toko" />
+      <SnbTopNav.Type3
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Foto Toko"
+      />
       <Stepper complete={2} total={3} onPress={() => setOpenModalStep(true)} />
-      <Content />
+      <Content
+        openModalBack={openModalBack}
+        onCloseModalBack={setOpenModalBack}
+      />
       <ListOfSteps
         open={openModalStep}
         type="buyer"

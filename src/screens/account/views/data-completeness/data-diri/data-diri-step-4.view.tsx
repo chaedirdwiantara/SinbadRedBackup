@@ -8,7 +8,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, StackActions } from '@react-navigation/core';
 import {
   DATA_COMPLETENESS_VIEW,
   DATA_DIRI_STEP_5_VIEW,
@@ -19,7 +19,7 @@ import { contexts } from '@contexts';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep4View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
+  const { navigate, dispatch } = useNavigation();
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOpenModalBack] = useState(false);
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -89,7 +89,7 @@ const DataDiriStep4View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+      dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
     }
   };
 
@@ -106,7 +106,7 @@ const DataDiriStep4View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW));
         resetUpdateCompleteData();
         setBackHandle(false);
         save(dispatchGlobal, '');
