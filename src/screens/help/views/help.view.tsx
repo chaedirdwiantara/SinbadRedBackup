@@ -40,7 +40,7 @@ const HelpView: FC = ({ start }: any) => {
 
   //function for start couchmark
   useEffect(() => {
-    if (!coachmarkState?.data?.helpCoachmark) {
+    if (coachmarkState?.data?.helpCoachmark === false) {
       setTimeout(() => {
         start();
       }, 100);
