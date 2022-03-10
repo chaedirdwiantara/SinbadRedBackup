@@ -52,8 +52,14 @@ export interface UpdateCartQty {
   productId: string;
   sellerId: number;
   warehouseId: number;
-  type: 'increase' | 'decrease' | 'onChange';
+  type: 'increase' | 'decrease' | 'onChange' | 'onBlur';
   newQty?: number;
+}
+
+export interface updateCartQtyBlur {
+  qty: number;
+  minQty: number;
+  multipleQty: number;
 }
 
 export interface ProductKeyObject {

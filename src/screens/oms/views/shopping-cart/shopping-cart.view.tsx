@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
@@ -27,6 +27,7 @@ import {
   useCartBuyerAddressAction,
   useCancelStockAction,
   useUpdateCartAction,
+  useKeyboardFocus,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -51,6 +52,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
+  const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
 
@@ -89,8 +91,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
-  /** => handle refetch cart */
-  const handleRefetchCart = () => {
+  /** => handle reset contexts */
+  const handleResetContexts = () => {
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
@@ -98,7 +100,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeCartProductAction.reset(dispatchCart);
     cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
+    cancelCartAction.reset(dispatchCart);
+  };
 
+  /** => handle cart cycle */
+  const handleCartCyle = () => {
+    handleResetContexts();
+    setPageLoading(true);
     errorModal.setRetryCount(3);
     cancelCartAction.fetch(dispatchCart);
     cartBuyerAddressAction.fetch(dispatchCart);
@@ -115,22 +124,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    errorModal.setRetryCount(3);
-    cancelCartAction.fetch(dispatchCart);
-    cartBuyerAddressAction.fetch(dispatchCart);
+    const unsubscribe = navigation.addListener('focus', () => {
+      handleCartCyle();
+    });
 
     /** will unmount */
-    return () => {
-      checkProductAction.reset(dispatchCart);
-      checkSellerAction.reset(dispatchCart);
-      checkStockAction.reset(dispatchCart);
-      getCartAction.reset(dispatchCart);
-      removeCartProductAction.reset(dispatchCart);
-      cartMasterAction.reset();
-      cartBuyerAddressAction.reset(dispatchCart);
-      updateCartAction.reset(dispatchCart);
-    };
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
   /** => hardware back handler */
   NavigationAction.useCustomBackHardware(() => {
@@ -353,6 +353,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                   isAnyActiveProduct={isAnyActiveProduct}
                   manageCheckboxStatus={manageCheckboxStatus}
                   manageCheckboxOnPress={manageCheckboxOnPress}
+                  keyboardFocus={keyboardFocus}
                 />
               </View>
             </ScrollView>
@@ -361,8 +362,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
               isCheckoutDisabled={
-                isAnyActiveProduct() && countTotalPrice < 100000
+                !isAnyActiveProduct() ||
+                countTotalPrice < 100000 ||
+                keyboardFocus.isFocus
               }
+              handleCartCycle={handleCartCyle}
             />
           </React.Fragment>
         );

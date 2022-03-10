@@ -28,6 +28,7 @@ interface FooterProps {
   countTotalProduct: number;
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
+  handleCartCycle: () => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -35,6 +36,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   countTotalPrice,
   countTotalProduct,
   isCheckoutDisabled,
+  handleCartCycle,
 }) => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -226,7 +228,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   }, [stateCart.postCancelStock.data]);
 
   const handleClose = () => {
-    postCancelCartAction.fetch(dispatchCart);
+    handleCartCycle();
     setErrorShown(false);
   };
 

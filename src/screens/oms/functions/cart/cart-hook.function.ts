@@ -100,6 +100,13 @@ const useUpdateCartAction = () => {
           }
         });
 
+        // rewrite lastUsedPrice
+        carts.map((sellerItem) => {
+          sellerItem.products.map((productItem) => {
+            productItem.lastUsedPrice = productItem.price;
+          });
+        });
+
         dispatch(
           Actions.updateCartProcess(contextDispatch, {
             data: {
@@ -416,28 +423,21 @@ const useCartLocalData = () => {
         if (type === 'increase') {
           if (thisProduct.qty + updateValue <= stock) {
             thisProduct.qty += updateValue;
+            // set the product to become selected
+            thisProduct.selected = true;
           }
         } else if (type === 'decrease') {
           if (thisProduct.qty - updateValue >= thisProduct.minQty) {
             thisProduct.qty -= updateValue;
+            // set the product to become selected
+            thisProduct.selected = true;
           }
+        } else if (type === 'onChange') {
+          thisProduct.qty = newQty ?? 1;
+          thisProduct.selected = true;
         } else {
-          // if the user update qty using keyboard
-          if (newQty && Number.isInteger(newQty)) {
-            if (newQty <= stock && newQty >= thisProduct.minQty) {
-              thisProduct.qty = newQty;
-            } else if (newQty < thisProduct.minQty) {
-              thisProduct.qty = thisProduct.minQty;
-            } else if (newQty > stock) {
-              thisProduct.qty = stock;
-            }
-          } else if (Number(newQty) === 0) {
-            thisProduct.qty = thisProduct.minQty;
-          }
+          thisProduct.qty = newQty ?? thisProduct.minQty;
         }
-
-        // set the product to become selected
-        thisProduct.selected = true;
 
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
@@ -644,6 +644,17 @@ const useOmsGeneralFailedState = () => {
     retryCount,
   };
 };
+/** => keyboard focus */
+const useKeyboardFocus = () => {
+  const [isFocus, setFocus] = useState(false);
+
+  return {
+    setFocus: (newValue: boolean) => {
+      setFocus(newValue);
+    },
+    isFocus,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -664,6 +675,7 @@ export {
   useCartBuyerAddressAction,
   useCartLocalData,
   useOmsGeneralFailedState,
+  useKeyboardFocus,
 };
 /**
  * ================================================================
