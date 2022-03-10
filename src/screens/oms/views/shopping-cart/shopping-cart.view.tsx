@@ -109,7 +109,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const handleCartCyle = () => {
     handleResetContexts();
     setPageLoading(false);
-    cancelCartAction.fetch(dispatchCart);
+    // cancelCartAction.fetch(dispatchCart);
     // cartBuyerAddressAction.fetch(dispatchCart);
   };
 
