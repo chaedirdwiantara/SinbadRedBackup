@@ -20,10 +20,7 @@ import {
   DEFAULT_LONGITUDE,
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
-import {
-  DATA_COMPLETENESS_VIEW,
-  MAPS_VIEW_TYPE_2,
-} from '@screen/account/functions/screens_name';
+import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
 
 interface Props {
   openModalBack: boolean;
@@ -73,7 +70,6 @@ const Content: React.FC<Props> = (props) => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const [openModalBack, setOpenModalBack] = React.useState(false);
-  const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -97,11 +93,7 @@ const Content: React.FC<Props> = (props) => {
     if (updateCompleteDataState.data) {
       refetchCompleteData();
       resetUpdateCompleteData();
-      if (backHandle) {
-        backToDataCompleteness;
-      } else {
-        navigate(DATA_COMPLETENESS_VIEW);
-      }
+      backToDataCompleteness();
     }
   }, [updateCompleteDataState]);
 
@@ -307,7 +299,6 @@ const Content: React.FC<Props> = (props) => {
         }}
         confirm={() => {
           if (false) {
-            setBackHandle(true);
           } else {
             backToDataCompleteness();
           }
