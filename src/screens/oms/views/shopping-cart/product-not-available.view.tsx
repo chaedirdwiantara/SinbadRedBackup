@@ -7,6 +7,7 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 import { goToProduct } from '@screen/category/functions';
 import * as models from '@models';
 import { UnavailableAccordionView } from './product-not-available-accordion.view';
+import { Images } from '@assets';
 
 interface ProductUnavailableViewProps {
   unavailableProducts: models.CartMasterUnavailable[];
@@ -32,6 +33,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           source={{
             uri: imageUrl,
           }}
+          defaultSource={Images.opacityPlaceholder}
           style={ShoppingCartStyles.productImg}
         />
       </View>
