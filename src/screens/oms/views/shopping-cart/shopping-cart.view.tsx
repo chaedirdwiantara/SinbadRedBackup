@@ -1,12 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import {
-  View,
-  ScrollView,
-  StatusBar,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
 import { cloneDeep } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
@@ -33,13 +27,14 @@ import {
   useCartBuyerAddressAction,
   useCancelStockAction,
   useUpdateCartAction,
+  useKeyboardFocus,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
-import { goToCheckout } from '@core/functions/product';
+import { NavigationAction } from '@core/functions/navigation';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -55,10 +50,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeProduct,
     calculateProductTotalPrice,
   } = useCartLocalData();
-  const [isInitialCancelReserveDone, setInitialCancelReserveDone] =
-    useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
+  const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
 
@@ -97,8 +91,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
-  /** => handle refetch cart */
-  const handleRefetchCart = () => {
+  /** => handle reset contexts */
+  const handleResetContexts = () => {
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
@@ -106,7 +100,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     removeCartProductAction.reset(dispatchCart);
     cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
+    cancelCartAction.reset(dispatchCart);
+  };
 
+  /** => handle cart cycle */
+  const handleCartCyle = () => {
+    handleResetContexts();
+    setPageLoading(true);
     errorModal.setRetryCount(3);
     cancelCartAction.fetch(dispatchCart);
     cartBuyerAddressAction.fetch(dispatchCart);
@@ -123,24 +124,20 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    errorModal.setRetryCount(3);
-    cancelCartAction.fetch(dispatchCart);
-    cartBuyerAddressAction.fetch(dispatchCart);
+    const unsubscribe = navigation.addListener('focus', () => {
+      handleCartCyle();
+    });
 
     /** will unmount */
-    return () => {
-      checkProductAction.reset(dispatchCart);
-      checkSellerAction.reset(dispatchCart);
-      checkStockAction.reset(dispatchCart);
-      getCartAction.reset(dispatchCart);
-      removeCartProductAction.reset(dispatchCart);
-      cartMasterAction.reset();
-      cartBuyerAddressAction.reset(dispatchCart);
-      updateCartAction.reset(dispatchCart);
-    };
-  }, []);
+    return unsubscribe;
+  }, [navigation]);
 
-  /** => if get cart or buyer address failed */
+  /** => hardware back handler */
+  NavigationAction.useCustomBackHardware(() => {
+    handleGoBack();
+  });
+
+  /** => if cancel stock or buyer address failed */
   useEffect(() => {
     if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
       // check which endpoint fetch was fail
@@ -164,16 +161,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       // determine the error data
       let errorData = null;
       if (isErrorCancelStock) {
-        errorData = stateCart.get.error;
+        errorData = stateCart.cancelStock.error;
       } else {
         errorData = stateCart.buyerAddress.error;
       }
-      errorModal.setRetryAction(() => action);
-      errorModal.setCloseAction(() => handleGoBack);
-      errorModal.setErrorData(errorData);
-      errorModal.setOpen(true);
+      if (isErrorCancelStock || isErrorBuyerAddress) {
+        errorModal.setRetryAction(() => action);
+        errorModal.setCloseAction(() => handleGoBack);
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
+      }
     }
-  }, [stateCart.cancelStock.error, stateCart.buyerAddress.error]);
+  }, [stateCart.cancelStock, stateCart.buyerAddress]);
 
   /** => after success fetch cancelStock & buyerAddress, fetch getCart */
   useEffect(() => {
@@ -182,19 +181,28 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.buyerAddress.data !== null
     ) {
       errorModal.setRetryCount(3);
-      setInitialCancelReserveDone(true);
       getCartAction.fetch(dispatchCart);
     }
   }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
 
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
-    if (stateCart.get.data !== null && stateCart.buyerAddress.data !== null) {
+    if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length > 0 &&
+      stateCart.buyerAddress.data !== null
+    ) {
       cartMasterAction.setCartMaster(stateCart.get.data);
       errorModal.setRetryCount(3);
       checkProductAction.fetch(dispatchCart);
       checkSellerAction.fetch(dispatchCart);
       checkStockAction.fetch(dispatchCart, false);
+    } else if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length === 0
+    ) {
+      setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
+      setPageLoading(false);
     }
   }, [stateCart.get.data, stateCart.buyerAddress.data]);
 
@@ -326,7 +334,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
-    if (localCartMaster && localCartMaster.id !== '') {
+    if (localCartMaster) {
       const isCartEmpty =
         (!isAnyActiveProduct() && localCartMaster.unavailable.length === 0) ||
         stateCart.get.error?.code === 40010000009;
@@ -345,6 +353,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                   isAnyActiveProduct={isAnyActiveProduct}
                   manageCheckboxStatus={manageCheckboxStatus}
                   manageCheckboxOnPress={manageCheckboxOnPress}
+                  keyboardFocus={keyboardFocus}
                 />
               </View>
             </ScrollView>
@@ -352,10 +361,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               cartData={localCartMaster}
               countTotalProduct={countTotalProduct}
               countTotalPrice={countTotalPrice}
-              isInitialCancelReserveDone={isInitialCancelReserveDone}
               isCheckoutDisabled={
-                isAnyActiveProduct() && countTotalPrice < 100000
+                !isAnyActiveProduct() ||
+                countTotalPrice < 100000 ||
+                keyboardFocus.isFocus
               }
+              handleCartCycle={handleCartCyle}
             />
           </React.Fragment>
         );
@@ -388,9 +399,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
-      {/* <TouchableOpacity onPress={goToCheckout}>
-        <Text>GoCheckOut</Text>
-      </TouchableOpacity> */}
     </SnbContainer>
   );
 };

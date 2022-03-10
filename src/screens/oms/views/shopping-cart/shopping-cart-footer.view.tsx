@@ -1,10 +1,10 @@
 /** === IMPORT PACKAGE HERE ===  */
 import {
   matchCartWithCheckData,
-  useCancelStockAction,
   useCartMasterAction,
   useCheckoutAction,
   useOmsGeneralFailedState,
+  usePostCancelStockAction,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
@@ -21,22 +21,23 @@ import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { goToCheckout } from '@core/functions/product';
+import { cloneDeep } from 'lodash';
 
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
   countTotalProduct: number;
   countTotalPrice: number;
-  isInitialCancelReserveDone: boolean;
   isCheckoutDisabled: boolean;
+  handleCartCycle: () => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
   countTotalPrice,
   countTotalProduct,
-  isInitialCancelReserveDone,
   isCheckoutDisabled,
+  handleCartCycle,
 }) => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -44,8 +45,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   );
   const [isErrorShown, setErrorShown] = useState(false);
   const [isMatchValid, setMatchValid] = useState(false);
+  const [isCheckoutPressed, setCheckoutPressed] = useState(false);
 
-  const cancelCartAction = useCancelStockAction();
+  const postCancelCartAction = usePostCancelStockAction();
   const cartMasterAction = useCartMasterAction();
   const postCheckProductAction = usePostCheckProductAction();
   const postCheckSellerAction = usePostCheckSellerAction();
@@ -54,27 +56,28 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const checkoutAction = useCheckoutAction();
 
   // state error modal
-  const retryCheckModal = useOmsGeneralFailedState();
-  const retryCheckoutModal = useOmsGeneralFailedState();
+  const errorModal = useOmsGeneralFailedState();
 
   const handleOnPressCheckout = useCallback(() => {
-    cartMasterAction.replaceFromLocal(cartData);
+    cartMasterAction.replaceFromLocal(cloneDeep(cartData));
     updateCartAction.fetch(dispatchCart, cartData);
+    setCheckoutPressed(true);
   }, [cartData, stateCart.buyerAddress.data]);
 
   const checkProductSellerStock = useCallback(() => {
-    if (stateCart.update.data !== null) {
+    if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
       postCheckProductAction.fetch(dispatchCart);
       postCheckSellerAction.fetch(dispatchCart);
       postCheckStockAction.fetch(dispatchCart);
+      setCheckoutPressed(false);
     }
   }, [stateCart.update.data]);
 
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    retryCheckModal.setRetryCount(3);
+    errorModal.setRetryCount(3);
 
     /** will unmount */
     return () => {
@@ -130,7 +133,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       const isErrorCheckStock = stateCart.postCheckStock.error !== null;
       // determine the retry action
       const action = () => {
-        if (retryCheckModal.retryCount > 0) {
+        if (errorModal.retryCount > 0) {
           if (isErrorCheckProduct) {
             postCheckProductAction.fetch(dispatchCart);
           }
@@ -141,9 +144,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
             postCheckStockAction.fetch(dispatchCart);
           }
           // decrease the retry count
-          retryCheckModal.setRetryCount(retryCheckModal.retryCount - 1);
+          errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          retryCheckModal.setOpen(false);
+          errorModal.setOpen(false);
         }
       };
       // determine the error data
@@ -157,16 +160,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        retryCheckModal.setRetryAction(() => action);
-        retryCheckModal.setCloseAction(() => retryCheckModal.setOpen(false));
-        retryCheckModal.setErrorData(errorData);
-        retryCheckModal.setOpen(true);
+        errorModal.setRetryAction(() => action);
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
       }
     }
   }, [
     stateCart.postCheckProduct,
     stateCart.postCheckSeller,
     stateCart.postCheckStock,
+    errorModal.retryCount,
   ]);
 
   useEffect(() => {
@@ -174,61 +177,58 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
      * AND buyer address already give the result
      */
     if (isMatchValid) {
-      retryCheckoutModal.setRetryCount(3);
+      errorModal.setRetryCount(3);
       checkoutAction.fetch(dispatchCheckout);
     }
   }, [isMatchValid]);
 
   useEffect(() => {
     if (stateCheckout.checkout.data !== null) {
-      /**
-       * NAVIGATE TO CHECKOUT PAGE
-       */
+      goToCheckout();
     }
   }, [stateCheckout.checkout.data]);
+  console.log(stateCheckout.checkout.data, 'datanya');
 
   useEffect(() => {
     // wait all fetch done first
     if (!stateCheckout.checkout.loading) {
+      const isChekoutError = stateCheckout.checkout.error !== null;
       // determine the retry action
       const action = () => {
-        if (retryCheckModal.retryCount > 0) {
-          if (stateCheckout.checkout.error !== null) {
-            checkoutAction.fetch(dispatchCart);
-          }
+        if (errorModal.retryCount > 0) {
+          checkoutAction.fetch(dispatchCart);
           // decrease the retry count
-          retryCheckoutModal.setRetryCount(retryCheckoutModal.retryCount - 1);
+          errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
-          retryCheckoutModal.setOpen(false);
+          errorModal.setOpen(false);
         }
       };
       // determine the error data
       let errorData = null;
-      if (stateCheckout.checkout.error !== null) {
-        errorData = stateCheckout.checkout.error;
-      }
       // show the modal and the data
-      if (stateCheckout.checkout.error !== null) {
-        retryCheckoutModal.setRetryAction(() => action);
-        retryCheckoutModal.setCloseAction(() => {
-          retryCheckoutModal.setOpen(false);
-        });
-        retryCheckoutModal.setErrorData(errorData);
-        retryCheckoutModal.setOpen(true);
+      if (isChekoutError) {
+        errorData = stateCheckout.checkout.error;
+        errorModal.setRetryAction(() => action);
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
       }
     }
-  }, [stateCheckout.checkout]);
+  }, [stateCheckout.checkout, errorModal.retryCount]);
 
   useEffect(() => {
-    if (stateCart.cancelStock.data && !isInitialCancelReserveDone) {
+    if (stateCart.postCancelStock.data !== null) {
       cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
       cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
       cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
     }
-  }, [stateCart.cancelStock.data, isInitialCancelReserveDone]);
+
+    return () => {
+      postCancelCartAction.reset(dispatchCart);
+    };
+  }, [stateCart.postCancelStock.data]);
 
   const handleClose = () => {
-    cancelCartAction.fetch(dispatchCart);
+    handleCartCycle();
     setErrorShown(false);
   };
 
@@ -267,42 +267,20 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
   );
 
-  const renderErrorRetryModal = () => (
-    <BottomSheetError
-      open={retryCheckModal.isOpen}
-      error={retryCheckModal.errorData}
-      retryAction={() => {
-        retryCheckModal.retryAction();
-        retryCheckModal.setOpen(false);
-      }}
-      closeAction={() => {
-        retryCheckModal.closeAction();
-        retryCheckModal.setOpen(false);
-      }}
-    />
-  );
-
-  const renderErrorRetryCheckoutModal = () => (
-    <BottomSheetError
-      open={retryCheckoutModal.isOpen}
-      error={retryCheckoutModal.errorData}
-      retryAction={() => {
-        retryCheckoutModal.retryAction();
-        retryCheckoutModal.setOpen(false);
-      }}
-      closeAction={() => {
-        retryCheckoutModal.closeAction();
-        retryCheckoutModal.setOpen(false);
-      }}
-    />
-  );
-
   return (
     <View style={ShoppingCartStyles.footerContainer}>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
-      {renderErrorRetryModal()}
-      {renderErrorRetryCheckoutModal()}
+      <BottomSheetError
+        open={errorModal.isOpen}
+        error={errorModal.errorData}
+        retryAction={() => {
+          errorModal.retryAction();
+        }}
+        closeAction={() => {
+          errorModal.closeAction();
+        }}
+      />
     </View>
   );
 };
