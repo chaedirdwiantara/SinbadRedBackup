@@ -11,7 +11,11 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {
+  StackActions,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
   DATA_TOKO_STEP_3_VIEW,
@@ -29,7 +33,7 @@ const Content: React.FC<Props> = (props) => {
     contexts.GlobalContext,
   );
   const { upload, save } = useUploadImageAction();
-  const { navigate, dispatch } = useNavigation();
+  const { navigate, dispatch, goBack } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -41,22 +45,31 @@ const Content: React.FC<Props> = (props) => {
   const { imageUrl } = completeDataState.data?.buyerData || {};
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
     return () => {
-      backHandler.remove();
       resetUpdateCompleteData();
       save(dispatchGlobal, '');
       resetCamera();
     };
   }, []);
+
+  React.useEffect(() => {
+    const backAction = () => {
+      if (isFocused) {
+        setOpenModalBack(true);
+      } else {
+        goBack();
+      }
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return backHandler.remove;
+  }, [isFocused]);
 
   React.useEffect(() => {
     if (
