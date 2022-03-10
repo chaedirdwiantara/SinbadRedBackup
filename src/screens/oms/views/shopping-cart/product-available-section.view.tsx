@@ -30,6 +30,7 @@ interface ProductAvailableSectionProps {
     sellerId,
     currentStatus,
   }: models.ManageCheckbox) => void;
+  keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
@@ -39,6 +40,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
   handleUpdateSelected,
   manageCheckboxStatus,
   manageCheckboxOnPress,
+  keyboardFocus,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -80,6 +82,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                     handleRemoveProductModal={handleRemoveProductModal}
                     handleUpdateQty={handleUpdateQty}
                     handleUpdateSelected={handleUpdateSelected}
+                    keyboardFocus={keyboardFocus}
                   />
                 </View>
               ))}

@@ -423,42 +423,21 @@ const useCartLocalData = () => {
         if (type === 'increase') {
           if (thisProduct.qty + updateValue <= stock) {
             thisProduct.qty += updateValue;
+            // set the product to become selected
+            thisProduct.selected = true;
           }
         } else if (type === 'decrease') {
           if (thisProduct.qty - updateValue >= thisProduct.minQty) {
             thisProduct.qty -= updateValue;
+            // set the product to become selected
+            thisProduct.selected = true;
           }
+        } else if (type === 'onChange') {
+          thisProduct.qty = newQty ?? 1;
+          thisProduct.selected = true;
         } else {
-          // if the user update qty using keyboard
-          if (newQty && Number.isInteger(newQty)) {
-            if (thisProduct.multipleQty > 1) {
-              const minValue = thisProduct.minQty;
-              const maxValue =
-                stock -
-                ((stock + thisProduct.minQty) % thisProduct.multipleQty);
-              if (newQty <= maxValue && newQty >= minValue) {
-                thisProduct.qty = newQty;
-              } else if (newQty < minValue) {
-                thisProduct.qty = minValue;
-              } else if (newQty > maxValue) {
-                thisProduct.qty = maxValue;
-              }
-            } else {
-              if (newQty <= stock && newQty >= thisProduct.minQty) {
-                thisProduct.qty = newQty;
-              } else if (newQty < thisProduct.minQty) {
-                thisProduct.qty = thisProduct.minQty;
-              } else if (newQty > stock) {
-                thisProduct.qty = stock;
-              }
-            }
-          } else if (Number(newQty) === 0) {
-            thisProduct.qty = thisProduct.minQty;
-          }
+          thisProduct.qty = newQty ?? thisProduct.minQty;
         }
-
-        // set the product to become selected
-        thisProduct.selected = true;
 
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
@@ -665,6 +644,17 @@ const useOmsGeneralFailedState = () => {
     retryCount,
   };
 };
+/** => keyboard focus */
+const useKeyboardFocus = () => {
+  const [isFocus, setFocus] = useState(false);
+
+  return {
+    setFocus: (newValue: boolean) => {
+      setFocus(newValue);
+    },
+    isFocus,
+  };
+};
 /** === EXPORT === */
 export {
   useCartExampleAction,
@@ -685,6 +675,7 @@ export {
   useCartBuyerAddressAction,
   useCartLocalData,
   useOmsGeneralFailedState,
+  useKeyboardFocus,
 };
 /**
  * ================================================================

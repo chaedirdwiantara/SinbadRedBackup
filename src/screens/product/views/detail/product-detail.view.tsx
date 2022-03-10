@@ -589,7 +589,8 @@ const ProductDetailView: FC = () => {
           dataProduct === null ||
           dataStock === null ||
           orderQty > dataStock.stock ||
-          orderQty < dataProduct?.minQty
+          orderQty < dataProduct?.minQty ||
+          orderQty + dataProduct.multipleQty > dataStock.stock
         }
         isFromProductDetail={true}
       />

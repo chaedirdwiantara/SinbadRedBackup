@@ -33,6 +33,7 @@ interface ShoppingCartProductsProps {
     sellerId,
     currentStatus,
   }: models.ManageCheckbox) => void;
+  keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
 }
 /** === COMPONENT === */
 export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
@@ -44,6 +45,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
   isAnyActiveProduct,
   manageCheckboxStatus,
   manageCheckboxOnPress,
+  keyboardFocus,
 }) => {
   const allSellerCheckboxStatus = manageCheckboxStatus({ sellerId: null });
   /** === HOOKS === */
@@ -84,6 +86,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
         handleUpdateSelected={handleUpdateSelected}
         manageCheckboxStatus={manageCheckboxStatus}
         manageCheckboxOnPress={manageCheckboxOnPress}
+        keyboardFocus={keyboardFocus}
       />
       <ProductNotAvailableSection
         unavailableProducts={unavailableProducts}
