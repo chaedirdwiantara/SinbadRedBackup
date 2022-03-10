@@ -15,7 +15,7 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
   } = useEasyRegistration();
-  
+
   const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
   const [npwp, setNpwp] = React.useState(completeDataState?.data?.userData?.taxNo);
   const [openModalStep, setOpenModalStep] = React.useState(false);
@@ -47,7 +47,7 @@ const DataDiriStep5View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
-  return(
+  return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
           backAction={() => setOpenModalBack(true)}
