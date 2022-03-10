@@ -252,7 +252,7 @@ const ProductList: FC<ProductListProps> = ({
       isPriceAfterTax: productDetailState.isPriceAfterTax,
       taxPercentage: productDetailState.productTax.amount,
       lastUsedPrice: productDetailState.finalPrice,
-      isPriceUsedRules: productDetailState.productPriceRules.length !== 0,
+      isLastPriceUsedRules: productDetailState.productPriceRules.length !== 0,
       price: productDetailState.finalPrice,
       priceRules: productDetailState.productPriceRules,
       leadTime: dataStock.leadTime ?? 0,

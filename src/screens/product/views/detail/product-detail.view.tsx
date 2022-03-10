@@ -204,7 +204,7 @@ const ProductDetailView: FC = () => {
       isPriceAfterTax: dataProduct.isPriceAfterTax,
       taxPercentage: dataProduct.productTax.amount,
       lastUsedPrice: dataProduct.finalPrice,
-      isPriceUsedRules: dataProduct.productPriceRules.length !== 0,
+      isLastPriceUsedRules: dataProduct.productPriceRules.length !== 0,
       price: dataProduct.finalPrice,
       priceRules: dataProduct.productPriceRules,
       leadTime: dataStock.leadTime ?? 0,

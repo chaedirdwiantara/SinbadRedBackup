@@ -94,12 +94,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle reset contexts */
   const handleResetContexts = () => {
+    cartMasterAction.reset();
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
     getCartAction.reset(dispatchCart);
     removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
