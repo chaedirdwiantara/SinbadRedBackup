@@ -151,8 +151,16 @@ const DataDiriStep5View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
-        }}
+          if(ktp !== '' && npwp !== '') {
+            updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          } else if (ktp !== '') {
+            updateCompleteData({ user: { idNo: ktp } });
+          } else if (npwp !== '') {
+            updateCompleteData({ user: { taxNo: npwp } });
+          } else {
+            backToDataCompleteness();
+          }
+        }} 
       />
       <ListOfSteps
         open={openModalStep}

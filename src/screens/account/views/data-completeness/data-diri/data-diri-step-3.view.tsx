@@ -88,11 +88,7 @@ const DataDiriStep3View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      if (completeDataState?.data?.userData?.taxImageUrl) {
-        backToDataCompleteness();
-      } else {
-        openCamera('npwp');
-      }
+      backToDataCompleteness();
     }
   };
 

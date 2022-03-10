@@ -27,12 +27,6 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalBack, setOpenModalBack] = useState(false);
   const [backHandle, setBackHandle] = useState(false);
 
-  React.useEffect(() => {
-    return () => {
-      resetUpdateCompleteData();
-    };
-  }, []);
-
   // HANDLE BACK DEVICE
   React.useEffect(() => {
     const backAction = () => {
@@ -48,29 +42,15 @@ const DataDiriStep1View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      resetUpdateCompleteData();
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
-        resetUpdateCompleteData();
-        setBackHandle(false);
       } else {
         dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
-        resetUpdateCompleteData();
       }
     }
   }, [updateCompleteDataState]);
-
-  // React.useEffect(() => {
-  //   console.log('updateCompleteDataState.data', updateCompleteDataState.data);
-  //   if (updateCompleteDataState.data !== null && !backHandle) {
-  //     refetchCompleteData();
-  //     dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
-  //     resetUpdateCompleteData();
-  //   } else if (backHandle) {
-  //     backToDataCompleteness();
-  //     setBackHandle(false);
-  //   }
-  // }, [updateCompleteDataState]);
 
   return (
     <SnbContainer color="white">
@@ -113,7 +93,12 @@ const DataDiriStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ user: { name: name } });
+          if ( name && name !== ''){
+            updateCompleteData({ user: { name: name } });
+            resetUpdateCompleteData();
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
       <ListOfSteps
