@@ -61,7 +61,7 @@ const DataDiriStep5View: React.FC = () => {
 
   React.useEffect(() => {
     //validate KTP
-    if (ktp.length === 16 || ktp === '') {
+    if (ktp?.length === 16 || ktp === '' || ktp === null) {
       setMessageErrorKTP('');
       setIsKTPValid(true);
     } else {
@@ -69,7 +69,7 @@ const DataDiriStep5View: React.FC = () => {
       setIsKTPValid(false);
     }
     //validate NPWP
-    if (npwp.length === 15 || npwp === '') {
+    if (npwp?.length === 15 || npwp === '' || ktp === null) {
       setMessageErrorNPWP('');
       setIsNPWPValid(true);
     } else {
@@ -136,7 +136,7 @@ const DataDiriStep5View: React.FC = () => {
           title="Lanjut"
           type="primary"
           disabled={
-            !isKTPValid || !isNPWPValid || updateCompleteDataState.loading
+            !isKTPValid || !isNPWPValid || updateCompleteDataState.loading || !ktp || !npwp
           }
           onPress={() =>
             updateCompleteData({ user: { idNo: ktp, taxNo: npwp } })
