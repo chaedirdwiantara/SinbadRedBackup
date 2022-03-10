@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
@@ -113,6 +113,16 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.fetch(dispatchCart);
   };
 
+  /** => handle update cart on blur  */
+  const handleUpdateCartOnBlur = () => {
+    if (localCartMaster) {
+      if (!isEqual(localCartMaster, cartMasterAction.cartMaster)) {
+        cartMasterAction.replaceFromLocal(cloneDeep(localCartMaster));
+        updateCartAction.fetch(dispatchCart, localCartMaster);
+      }
+    }
+  };
+
   const handleGoBack = () => {
     goBack();
     if (localCartMaster) {
@@ -121,15 +131,24 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
 
   /** === HOOKS === */
+  /** => define blur function */
+  useEffect(() => {
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      handleUpdateCartOnBlur();
+    });
+
+    return unsubscribeBlur;
+  }, [localCartMaster]);
+
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
       handleCartCyle();
     });
 
     /** will unmount */
-    return unsubscribe;
+    return unsubscribeFocus;
   }, [navigation]);
 
   /** => hardware back handler */
