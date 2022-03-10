@@ -8,20 +8,21 @@ import {
   color,
   SnbBottomSheet,
 } from 'react-native-sinbad-ui';
-
+import * as models from '@models';
 const { height } = Dimensions.get('window');
 
 /** === INTERFACE === */
 interface ModalCheckoutTNCProps {
   isOpen: boolean;
   close: () => void;
-  // data: models.CheckoutTNC | null;
+  data: models.CheckoutTnc | null;
 }
 
 /** === COMPONENT === */
 export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
   isOpen,
-  close
+  close,
+  data
 }) => {
   const content = () => {
     return (
@@ -29,11 +30,13 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
           <ScrollView
             style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
             showsVerticalScrollIndicator={false}>
-            <Html
-              value={"<p>- Pembeli harus membayar 12 jam setelah pesanan dibuat. </p><p>- Pesanan tidak akan diproses apabila pembayaran belum dilakukan. </p><p>- Pesanan akan dibatalkan jika batas waktupembayaran habis. </p><p>- Pembeli diharapkan melakukan pembayaran sesuai metode pembayaran yang dipilih. </p><p>- Pembeli diharuskan mentransfer pembayaran ke nomor virtual account yang tertera. </p>"}
-              fontSize={12}
-            >
-            </Html>
+            {data != null && data != undefined && (
+              <Html
+                value={data.content}
+                fontSize={12}
+              />
+             )
+            }
           </ScrollView>
       </View>
     )
