@@ -11,9 +11,6 @@ const initialState: models.CartMaster = {
   totalProducts: 0,
   sellers: [],
   unavailable: [],
-  isCheckProductMerged: false,
-  isCheckSellerMerged: false,
-  isCheckStockMerged: false,
 };
 
 /** === FUNCTION === */

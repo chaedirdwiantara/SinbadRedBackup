@@ -19,9 +19,6 @@ export interface CartMaster {
   totalProducts: number;
   sellers: CartMasterSellers[];
   unavailable: CartMasterUnavailable[];
-  isCheckProductMerged: boolean;
-  isCheckSellerMerged: boolean;
-  isCheckStockMerged: boolean;
 }
 export interface CartMasterSellers {
   sellerId: number;
