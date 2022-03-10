@@ -14,6 +14,7 @@ import {
   InputManualLocationModalView,
   ListLocationView,
   ProductCategoryView,
+  MapsViewType2,
 } from '@screen/account/views';
 
 const AccountNav = {
@@ -61,6 +62,9 @@ const AccountNav = {
   },
   InputManualLocationModalView: {
     component: InputManualLocationModalView,
+  },
+  MapsViewType2: {
+    component: MapsViewType2,
   },
 };
 

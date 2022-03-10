@@ -84,15 +84,14 @@ const getSelection = (data: models.IListSelection) => {
   );
 };
 
-const getLocation = (data: models.IUrbanID) => {
-  let meta = `skip=${data.meta?.skip || 0}&limit=${data.meta?.limit || 10}`;
-  let path = `locations/search?${data.params}&${meta}`;
-  return apiGeneral<models.IGetSelectionSuccess<any>>(
+const getLocation = (data: models.ILocationSearch) => {
+  let path = `location/search?${data.params}`;
+  return apiMapping<models.IAction<any>>(
     'public',
     path,
-    'common',
+    'location',
     'v1',
-    'GET',
+    'DETAIL',
   );
 };
 

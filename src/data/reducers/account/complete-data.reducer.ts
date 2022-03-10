@@ -13,8 +13,8 @@ export const completeData = simplifyReducer(INITIAL_STATE, {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.REFETCH_COMPLETE_DATA_PROCESS]() {
-    return { ...INITIAL_STATE };
+  [types.REFETCH_COMPLETE_DATA_PROCESS](state = INITIAL_STATE) {
+    return { ...state };
   },
 
   [types.GET_COMPLETE_DATA_SUCCESS](

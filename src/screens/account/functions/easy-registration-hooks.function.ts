@@ -2,10 +2,22 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { DATA_COMPLETENESS_VIEW } from './screens_name';
 
 export const useEasyRegistration = () => {
   const dispatch = useDispatch();
   const { global, account } = useSelector((state: any) => state);
+  const { dispatch: navigationDispatch, getState } = useNavigation();
+
+  const backToDataCompleteness = () => {
+    const dataCompletenessIndex = getState().routes.findIndex(
+      (el) => el.name === DATA_COMPLETENESS_VIEW,
+    );
+    navigationDispatch(
+      StackActions.pop(getState().index - dataCompletenessIndex),
+    );
+  };
 
   const getBuyerCategory = React.useCallback(() => {
     dispatch(Actions.getBuyerCategory());
@@ -72,6 +84,7 @@ export const useEasyRegistration = () => {
     updateCompleteData,
     resetUpdateCompleteData,
     refetchCompleteData,
+    backToDataCompleteness,
     searchLocationState: global.searchLocations,
     buyerCategories: account.buyerCategories,
     productCategories: account.productCategories,
