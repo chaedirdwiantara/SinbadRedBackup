@@ -1,5 +1,5 @@
 import {
-  useIsFocused,
+  useFocusEffect,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -46,7 +46,7 @@ const Content: React.FC<Props> = (props) => {
   const noteAddress = useInput(buyerData?.noteAddress);
   const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
     useTextFieldSelect();
-  const { navigate, goBack } = useNavigation();
+  const { navigate } = useNavigation();
   const [vehicleAccessibility, setVehicleAccessibility] = React.useState<any>(
     buyerData?.vehicleAccessibility || null,
   );
@@ -84,7 +84,6 @@ const Content: React.FC<Props> = (props) => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const [openModalBack, setOpenModalBack] = React.useState(false);
-  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -98,21 +97,18 @@ const Content: React.FC<Props> = (props) => {
     location && setLocationId(location);
   }, []);
 
-  React.useEffect(() => {
-    const backAction = () => {
-      if (isFocused) {
-        setOpenModalBack(true);
-      } else {
-        goBack();
-      }
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
     return backHandler.remove;
-  }, [isFocused]);
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     setTimeout(() => {
