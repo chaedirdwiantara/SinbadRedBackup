@@ -18,7 +18,12 @@ import {
   MAPS_VIEW_TYPE_2,
 } from '@screen/account/functions/screens_name';
 
-const Content: React.FC = () => {
+interface Props {
+  openModalBack: boolean;
+  onCloseModalBack: (value: boolean) => void;
+}
+
+const Content: React.FC<Props> = (props) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -166,8 +171,11 @@ const Content: React.FC = () => {
         renderUploadPhotoRules(),
       )}
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        open={openModalBack || props.openModalBack}
+        closeModal={() => {
+          setOpenModalBack(false);
+          props.onCloseModalBack(false);
+        }}
         confirm={() => {
           if (capturedImage?.data?.url) {
             upload(dispatchGlobal, capturedImage.data.url);
@@ -183,12 +191,20 @@ const Content: React.FC = () => {
 
 const DataTokoStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
+  const [openModalBack, setOpenModalBack] = React.useState(false);
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => {}} type="white" title="Foto Toko" />
+      <SnbTopNav.Type3
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Foto Toko"
+      />
       <Stepper complete={2} total={3} onPress={() => setOpenModalStep(true)} />
-      <Content />
+      <Content
+        openModalBack={openModalBack}
+        onCloseModalBack={setOpenModalBack}
+      />
       <ListOfSteps
         open={openModalStep}
         type="buyer"

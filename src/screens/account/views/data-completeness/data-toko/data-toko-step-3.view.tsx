@@ -25,7 +25,12 @@ import {
   MAPS_VIEW_TYPE_2,
 } from '@screen/account/functions/screens_name';
 
-const Content: React.FC = () => {
+interface Props {
+  openModalBack: boolean;
+  onCloseModalBack: (value: boolean) => void;
+}
+
+const Content: React.FC<Props> = (props) => {
   const { completeDataState } = useEasyRegistration();
   const { buyerData } = completeDataState.data || {};
   const { coordinate, formattedAddress, location, street }: any =
@@ -295,8 +300,11 @@ const Content: React.FC = () => {
         }}
       />
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        open={openModalBack || props.openModalBack}
+        closeModal={() => {
+          setOpenModalBack(false);
+          props.onCloseModalBack(false);
+        }}
         confirm={() => {
           if (false) {
             setBackHandle(true);
@@ -311,12 +319,20 @@ const Content: React.FC = () => {
 
 const DataTokoStep3View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
+  const [openModalBack, setOpenModalBack] = React.useState(false);
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={() => {}} type="white" title="Alamat Toko" />
+      <SnbTopNav.Type3
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Alamat Toko"
+      />
       <Stepper complete={3} total={3} onPress={() => setOpenModalStep(true)} />
-      <Content />
+      <Content
+        openModalBack={openModalBack}
+        onCloseModalBack={setOpenModalBack}
+      />
       <ListOfSteps
         open={openModalStep}
         type="buyer"
