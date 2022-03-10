@@ -16,7 +16,6 @@ import LoadingPage from '@core/components/LoadingPage';
 import {
   goBack,
   useGetCartAction,
-  // useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
@@ -68,7 +67,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
-  // const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
@@ -97,7 +95,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle reset contexts */
   const handleResetContexts = () => {
-    // cartMasterAction.reset();
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
@@ -123,6 +120,27 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
+  /** => handle merge check data */
+  const handleMergeCheckData = async ({
+    checkProductData,
+    checkSellerData,
+    checkStockData,
+  }: models.MergeCheckData) => {
+    const resultMergeCheckProduct = mergeCheckProduct(checkProductData);
+    const resultMergeCheckSeller = mergeCheckSeller(
+      checkSellerData,
+      resultMergeCheckProduct,
+    );
+    const resultMergeCheckStock = mergeCheckStock(
+      checkStockData,
+      resultMergeCheckSeller,
+    );
+    if (resultMergeCheckStock) {
+      setLocalCartMaster(resultMergeCheckStock);
+    }
+  };
+
+  /** => handle go back */
   const handleGoBack = () => {
     goBack();
     if (localCartMaster) {
@@ -130,9 +148,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   };
 
+  /** => scroll to bottom (for accordion) */
   const scrollToBottom = () => {
     scrollRef.current?.scrollToEnd();
   };
+
+  /** => hardware back handler */
+  NavigationAction.useCustomBackHardware(() => {
+    handleGoBack();
+  });
 
   /** === HOOKS === */
   /** => will unmount */
@@ -161,11 +185,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     return unsubscribeFocus;
   }, [navigation]);
 
-  /** => hardware back handler */
-  NavigationAction.useCustomBackHardware(() => {
-    handleGoBack();
-  });
-
   /** => if cancel stock or buyer address failed */
   useEffect(() => {
     if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
@@ -193,10 +212,18 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.cancelStock.data !== null &&
       stateCart.buyerAddress.data !== null
     ) {
-      errorModal.setRetryCount(3);
       getCartAction.fetch(dispatchCart);
     }
   }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
+
+  /** => if get cart failed */
+  useEffect(() => {
+    if (stateCart.get.error !== null) {
+      errorModal.setCloseAction(() => handleGoBack);
+      errorModal.setErrorData(stateCart.get.error);
+      errorModal.setOpen(true);
+    }
+  }, [stateCart.get.error]);
 
   /** => after success fetch getCart, save data to redux */
   useEffect(() => {
@@ -215,8 +242,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         isCheckSellerMerged: false,
         isCheckStockMerged: false,
       });
-      // cartMasterAction.setCartMaster(stateCart.get.data);
-      errorModal.setRetryCount(3);
       checkProductAction.fetch(dispatchCart);
       checkSellerAction.fetch(dispatchCart);
       checkStockAction.fetch(dispatchCart, false);
@@ -224,19 +249,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.get.data !== null &&
       stateCart.get.data.sellers.length === 0
     ) {
-      // setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
       setPageLoading(false);
     }
   }, [stateCart.get.data, stateCart.buyerAddress.data]);
-
-  /** => if get cart failed */
-  useEffect(() => {
-    if (stateCart.get.error !== null) {
-      errorModal.setCloseAction(() => handleGoBack);
-      errorModal.setErrorData(stateCart.get.error);
-      errorModal.setOpen(true);
-    }
-  }, [stateCart.get.error]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
@@ -278,9 +293,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       localCartMaster &&
       localCartMaster.id !== ''
     ) {
-      mergeCheckProduct(stateCart.checkProduct.data);
-      mergeCheckSeller(stateCart.checkSeller.data);
-      mergeCheckStock(stateCart.checkStock.data);
+      handleMergeCheckData({
+        checkProductData: stateCart.checkProduct.data,
+        checkSellerData: stateCart.checkSeller.data,
+        checkStockData: stateCart.checkStock.data,
+      });
       setPageLoading(false);
     }
   }, [
@@ -349,6 +366,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 keyboardFocus.isFocus
               }
               handleCartCycle={handleCartCyle}
+              handleMergeCheckData={handleMergeCheckData}
             />
           </React.Fragment>
         );
