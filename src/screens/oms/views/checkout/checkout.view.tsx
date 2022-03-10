@@ -168,11 +168,13 @@ const OmsCheckoutView: FC = () => {
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
-  useFocusEffect(() => {
-    setTimeout(() => {
-      setExpiredSession(true);
-    }, timeToExpired);
-  });
+  useFocusEffect(
+    React.useCallback(() => {
+      setTimeout(() => {
+        setExpiredSession(true);
+      }, timeToExpired);
+    }, []),
+  );
 
   /** handle back to cart */
   const handleBackToCart = () => {
@@ -195,6 +197,7 @@ const OmsCheckoutView: FC = () => {
 
   return (
     <SnbContainer color="grey">
+      {/* header view */}
       <CheckoutHeader
         backAction={() => {
           backToCartModal.setOpen(true);
@@ -205,25 +208,33 @@ const OmsCheckoutView: FC = () => {
       ) : ( */}
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        {/* address view */}
         <CheckoutAddressView
           buyerAddress={data.buyerAddress}
           buyerName={data.buyerName}
         />
+        {/* main body view */}
         <CheckoutInvoiceGroupView data={data} />
+        {/* term and condition view */}
         <CheckoutTNCView clickAction={handleOpenTNCModal} />
       </ScrollView>
 
+      {/* bottom view */}
+      <CheckoutBottomView data={data} />
+
+      {/* modal expired time */}
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
+
+      {/* modal Term and Condition */}
       <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
         close={() => setModalTNCOpen(false)}
       />
 
-      <CheckoutBottomView data={data} />
-
+      {/* modal back to cart */}
       <BackToCartModal
         isOpen={backToCartModal.isOpen}
         handleNoAction={() => {
