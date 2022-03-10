@@ -12,7 +12,6 @@ import {
   BackHandler,
   FlatList,
   Image,
-  RefreshControl,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -84,6 +83,7 @@ const BuyerLocation: React.FC = () => {
 };
 
 const BuyerCategory: React.FC = () => {
+  const { params }: any = useRoute();
   const [selectedBuyerCategory, setSelectedBuyerCategory] =
     React.useState<any>(null);
   const { navigate, reset } = useNavigation();
@@ -97,7 +97,6 @@ const BuyerCategory: React.FC = () => {
     getBuyerCategory,
     createBasicAccountState,
   } = useEasyRegistration();
-  const { params }: any = useRoute();
   const [location] = React.useState<models.ISearchLocationsData | null>(
     params?.selectedLocation,
   );
@@ -105,7 +104,10 @@ const BuyerCategory: React.FC = () => {
   const { meV2, me } = useAuthCoreAction();
 
   React.useEffect(() => {
-    getBuyerCategory();
+    console.log(selectedProductCategory);
+    if (buyerCategories.data.length === 0) {
+      getBuyerCategory();
+    }
   }, []);
 
   React.useEffect(() => {
@@ -135,8 +137,10 @@ const BuyerCategory: React.FC = () => {
       <TouchableOpacity
         onPress={() => {
           setSelectedBuyerCategory(item);
-          setSelectedProductCategory([]);
-          navigate(PRODUCT_CATEGORY_VIEW, { setSelectedProductCategory });
+          navigate(PRODUCT_CATEGORY_VIEW, {
+            setSelectedProductCategory,
+            selectedProductCategory,
+          });
         }}
         style={{
           borderRadius: 16,
@@ -222,9 +226,6 @@ const BuyerCategory: React.FC = () => {
 
             return null;
           }}
-          refreshControl={
-            <RefreshControl refreshing={false} onRefresh={getBuyerCategory} />
-          }
           ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
         />
       </View>
