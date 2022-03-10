@@ -69,7 +69,7 @@ const DataDiriStep5View: React.FC = () => {
       setIsKTPValid(false);
     }
     //validate NPWP
-    if (npwp?.length === 15 || npwp === '' || ktp === null) {
+    if (npwp?.length === 15 || npwp === '' || npwp === null) {
       setMessageErrorNPWP('');
       setIsNPWPValid(true);
     } else {
