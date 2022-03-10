@@ -373,6 +373,22 @@ const useErrorWarningModal = () => {
     },
   };
 };
+
+/** => get TNC content */
+const useGetTncContent = () => {
+  const dispatch = useDispatch();
+  return {
+    tncContentGet : (
+      contextDispatch: (action : any) => any,
+      id: string
+    ) => {
+      dispatch(Actions.checkoutTNCProcess(contextDispatch, {id}))
+    },
+    tncContentReset: (contextDispatch: (action:any) => any) => {
+      contextDispatch(Actions.checkoutTNCReset());
+    }
+  }
+}
 /** === EXPORT === */
 export {
   useCheckoutAction,
@@ -388,6 +404,7 @@ export {
   useErrorModalBottom,
   useCheckoutFailedFetchState,
   useErrorWarningModal,
+  useGetTncContent
 };
 /**
  * ================================================================
