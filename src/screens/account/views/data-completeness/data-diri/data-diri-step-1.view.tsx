@@ -20,11 +20,18 @@ const DataDiriStep1View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
   const [name, setName] = useState(completeDataState?.data?.userData?.fullName);
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOpenModalBack] = useState(false);
   const [backHandle, setBackHandle] = useState(false);
+
+  React.useEffect(() => {
+    return () => {
+      resetUpdateCompleteData();
+    };
+  }, []);
 
   // HANDLE BACK DEVICE
   React.useEffect(() => {
@@ -41,6 +48,7 @@ const DataDiriStep1View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -51,6 +59,18 @@ const DataDiriStep1View: React.FC = () => {
       }
     }
   }, [updateCompleteDataState]);
+
+  // React.useEffect(() => {
+  //   console.log('updateCompleteDataState.data', updateCompleteDataState.data);
+  //   if (updateCompleteDataState.data !== null && !backHandle) {
+  //     refetchCompleteData();
+  //     dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
+  //     resetUpdateCompleteData();
+  //   } else if (backHandle) {
+  //     backToDataCompleteness();
+  //     setBackHandle(false);
+  //   }
+  // }, [updateCompleteDataState]);
 
   return (
     <SnbContainer color="white">

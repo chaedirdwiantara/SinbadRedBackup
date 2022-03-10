@@ -20,6 +20,7 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
@@ -48,6 +49,7 @@ const DataDiriStep5View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
