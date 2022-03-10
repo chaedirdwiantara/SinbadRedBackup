@@ -24,10 +24,10 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
           <Svg name="completeness_back" size={180} />
         </View>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', marginHorizontal: 24 }}>
           <SnbText.H3 color={colors.black100}>Yakin Ingin Keluar?</SnbText.H3>
         </View>
-        <View style={{ marginVertical: 16 }}>
+        <View style={{ marginVertical: 16, marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center' }}>
             <SnbText.B1 color={colors.black60} align="center">
               Jangan khawatir, data yang Anda masukkan otomatis tersimpan
