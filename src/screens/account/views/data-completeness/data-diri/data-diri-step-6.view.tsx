@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
@@ -8,17 +8,15 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useNavigation } from '@react-navigation/core';
-import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep6View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
   const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
   const [openModalStep, setOpenModalStep] = useState(false);
@@ -54,21 +52,32 @@ const DataDiriStep6View: React.FC = () => {
   };
 
   const confirm = () => {
-    if (emailIsNotValid === false) {
-      updateCompleteData({ user: { email: email } });
+    if (completeDataState?.data?.userData?.email !== email) {
+      if (emailIsNotValid === false) {
+        updateCompleteData({ user: { email: email } });
+      } else {
+        setErrorMessage('Pastikan email yang Anda masukkan benar');
+      }
     } else {
-      setErrorMessage('Pastikan email yang Anda masukkan benar');
+      backToDataCompleteness();
     }
   };
+
+  useEffect(()=> {
+    if (updateCompleteDataState.error) {
+      setEmailIsNotValid(true);
+      setErrorMessage(updateCompleteDataState.error.message);
+    }
+  }, [updateCompleteDataState.error]);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_COMPLETENESS_VIEW);
+        backToDataCompleteness();
         resetUpdateCompleteData();
       }
     }

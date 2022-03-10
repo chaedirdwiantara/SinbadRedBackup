@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
-import { DATA_COMPLETENESS_VIEW, DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
+import { DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
@@ -8,14 +8,15 @@ import { SnbButton, SnbContainer, SnbTextField, SnbTopNav } from 'react-native-s
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 
 const DataDiriStep5View: React.FC = () => {
-  const { navigate, reset } = useNavigation();
+  const { dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
+    backToDataCompleteness,
   } = useEasyRegistration();
-  
+
   const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
   const [npwp, setNpwp] = React.useState(completeDataState?.data?.userData?.taxNo);
   const [openModalStep, setOpenModalStep] = React.useState(false);
@@ -37,17 +38,17 @@ const DataDiriStep5View: React.FC = () => {
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
       if (backHandle) {
-        reset({ index: 0, routes: [{ name: DATA_COMPLETENESS_VIEW }] });
+        backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_DIRI_STEP_6_VIEW);
+        dispatch(StackActions.replace(DATA_DIRI_STEP_6_VIEW));
         resetUpdateCompleteData();
       }
     }
   }, [updateCompleteDataState]);
 
-  return(
+  return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
           backAction={() => setOpenModalBack(true)}
