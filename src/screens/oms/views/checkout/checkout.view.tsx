@@ -131,7 +131,7 @@ const OmsCheckoutView: FC = () => {
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
-
+      
       {/* modal Term and Condition */}
       <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
