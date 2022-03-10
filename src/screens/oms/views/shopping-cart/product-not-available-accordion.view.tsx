@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, ReactNode, useRef, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import {
   View,
   TouchableWithoutFeedback,
