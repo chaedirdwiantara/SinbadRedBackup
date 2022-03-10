@@ -11,13 +11,7 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 import React from 'react';
-import {
-  FlatList,
-  Image,
-  RefreshControl,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
@@ -35,7 +29,7 @@ const ProductCategory: React.FC = () => {
     React.useState<ICheckbox>('unselect');
   const [disableButton, setDisableButton] = React.useState(true);
   const { getProductCategory, productCategories } = useEasyRegistration();
-  const [data, setData] = React.useState<any[]>(productCategories?.data);
+  const [data, setData] = React.useState<any[]>([]);
 
   React.useEffect(() => {
     const isSelected =
@@ -54,6 +48,19 @@ const ProductCategory: React.FC = () => {
   React.useEffect(() => {
     getProductCategory();
   }, []);
+
+  React.useEffect(() => {
+    if (productCategories?.data) {
+      params.selectedProductCategory.forEach((selectedCategory: any) => {
+        productCategories.data.forEach((el: any) => {
+          if (selectedCategory.id === el.id) {
+            el.isSelected = true;
+          }
+        });
+      });
+      setData(productCategories.data);
+    }
+  }, [productCategories]);
 
   React.useEffect(() => {
     setData(productCategories?.data);
@@ -221,9 +228,6 @@ const ProductCategory: React.FC = () => {
           ItemSeparatorComponent={() => (
             <View style={{ height: 0.75, backgroundColor: color.black40 }} />
           )}
-          refreshControl={
-            <RefreshControl refreshing={false} onRefresh={getProductCategory} />
-          }
         />
       </View>
       <View style={{ height: 72 }}>

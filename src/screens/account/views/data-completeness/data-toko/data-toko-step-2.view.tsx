@@ -13,7 +13,7 @@ import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import {
   StackActions,
-  useIsFocused,
+  useFocusEffect,
   useNavigation,
 } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -33,7 +33,7 @@ const Content: React.FC<Props> = (props) => {
     contexts.GlobalContext,
   );
   const { upload, save } = useUploadImageAction();
-  const { navigate, dispatch, goBack } = useNavigation();
+  const { navigate, dispatch } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -45,7 +45,6 @@ const Content: React.FC<Props> = (props) => {
   const { imageUrl } = completeDataState.data?.buyerData || {};
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
-  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     return () => {
@@ -55,21 +54,18 @@ const Content: React.FC<Props> = (props) => {
     };
   }, []);
 
-  React.useEffect(() => {
-    const backAction = () => {
-      if (isFocused) {
-        setOpenModalBack(true);
-      } else {
-        goBack();
-      }
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
     return backHandler.remove;
-  }, [isFocused]);
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (
