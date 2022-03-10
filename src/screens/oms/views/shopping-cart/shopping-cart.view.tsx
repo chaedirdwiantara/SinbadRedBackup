@@ -107,11 +107,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle cart cycle */
   const handleCartCyle = () => {
-    handleResetContexts();
-    setPageLoading(true);
-    errorModal.setRetryCount(3);
-    cancelCartAction.fetch(dispatchCart);
-    cartBuyerAddressAction.fetch(dispatchCart);
+    // handleResetContexts();
+    // setPageLoading(true);
+    // errorModal.setRetryCount(3);
+    // cancelCartAction.fetch(dispatchCart);
+    // cartBuyerAddressAction.fetch(dispatchCart);
   };
 
   /** => handle update cart on blur  */
@@ -136,6 +136,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
 
   /** === HOOKS === */
+  /** => will unmount */
+  useEffect(() => {
+    return () => {
+      handleResetContexts();
+    };
+  }, []);
+
   /** => define blur function */
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -145,14 +152,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     return unsubscribeBlur;
   }, [localCartMaster]);
 
-  /** => did mount & will unmount */
+  /** => define focus function */
   useEffect(() => {
     /** did mount */
     const unsubscribeFocus = navigation.addListener('focus', () => {
       handleCartCyle();
     });
 
-    /** will unmount */
     return unsubscribeFocus;
   }, [navigation]);
 
