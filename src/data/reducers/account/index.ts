@@ -5,6 +5,7 @@ import { createBasicAccount } from './create-basic-account.reducer';
 import { coachmark, updateCoachmark } from './coachmark.reducer';
 import { completeData } from './complete-data.reducer';
 import { updateCompleteData } from './update-complete-data.reducer';
+import { completeDataConfirmation } from './complete-data-confirmation.reducer';
 export const account = combineReducers({
   buyerCategories,
   productCategories,
@@ -13,4 +14,5 @@ export const account = combineReducers({
   updateCoachmark,
   completeData,
   updateCompleteData,
+  completeDataConfirmation,
 });

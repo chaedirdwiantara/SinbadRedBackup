@@ -73,6 +73,14 @@ export const useEasyRegistration = () => {
     dispatch(Actions.updateCompleteData(data));
   };
 
+  const completeDataConfirmation = () => {
+    dispatch(Actions.completeDataConfirmation());
+  };
+
+  const resetCompleteDataConfirmation = () => {
+    dispatch(Actions.resetCompleteDataConfirmation());
+  };
+
   return {
     searchLocation,
     createBasicAccount,
@@ -85,11 +93,14 @@ export const useEasyRegistration = () => {
     resetUpdateCompleteData,
     refetchCompleteData,
     backToDataCompleteness,
+    completeDataConfirmation,
+    resetCompleteDataConfirmation,
     searchLocationState: global.searchLocations,
     buyerCategories: account.buyerCategories,
     productCategories: account.productCategories,
     createBasicAccountState: account.createBasicAccount,
     completeDataState: account.completeData,
     updateCompleteDataState: account.updateCompleteData,
+    completeDataConfirmationState: account.completeDataConfirmation,
   };
 };

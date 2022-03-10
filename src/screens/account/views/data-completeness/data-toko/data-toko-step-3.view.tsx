@@ -1,7 +1,17 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { renderIF, useInput, useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  BackHandler,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
   SnbContainer,
@@ -36,7 +46,7 @@ const Content: React.FC<Props> = (props) => {
   const noteAddress = useInput(buyerData?.noteAddress);
   const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
     useTextFieldSelect();
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [vehicleAccessibility, setVehicleAccessibility] = React.useState<any>(
     buyerData?.vehicleAccessibility || null,
   );
@@ -53,11 +63,15 @@ const Content: React.FC<Props> = (props) => {
   const [type, setType] = React.useState<models.ITypeList>('');
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
-  const [latLng, setLatLng] = React.useState<LatLng>({
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-  });
-  const { latitude, longitude } = completeDataState.data?.buyerData || {};
+  const [latLng, setLatLng] = React.useState<LatLng | any>(null);
+  const {
+    latitude,
+    longitude,
+    address: existingAddress,
+    noteAddress: existingNoteAddress,
+    vehicleAccessibility: existingVehicleAccessibility,
+    vehicleAccessibilityAmount: existingVehicleAccessibilityAmount,
+  } = completeDataState.data?.buyerData || {};
   const isLatLngAvailable = latitude && longitude;
   const [streetName, setStreetName] = React.useState();
   const [staticAddress, setStaticAddress] = React.useState();
@@ -70,6 +84,7 @@ const Content: React.FC<Props> = (props) => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const [openModalBack, setOpenModalBack] = React.useState(false);
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -82,6 +97,22 @@ const Content: React.FC<Props> = (props) => {
     isLatLngAvailable && setLatLng({ longitude, latitude });
     location && setLocationId(location);
   }, []);
+
+  React.useEffect(() => {
+    const backAction = () => {
+      if (isFocused) {
+        setOpenModalBack(true);
+      } else {
+        goBack();
+      }
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return backHandler.remove;
+  }, [isFocused]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -108,12 +139,22 @@ const Content: React.FC<Props> = (props) => {
   }
 
   function handleDisableSaveButton() {
+    const dataIsChanged =
+      address.value !== existingAddress ||
+      noteAddress.value !== existingNoteAddress ||
+      vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
+      vehicleAccessibilityAmount?.value !==
+        existingVehicleAccessibilityAmount ||
+      latLng.latitude !== latitude ||
+      latLng.longitude !== longitude;
+
     if (
-      locationId !== '' &&
+      dataIsChanged &&
       address.value !== '' &&
       noteAddress.value !== '' &&
       vehicleAccessibility !== null &&
-      vehicleAccessibilityAmount !== null
+      vehicleAccessibilityAmount !== null &&
+      latLng !== null
     ) {
       return false;
     }
@@ -155,15 +196,31 @@ const Content: React.FC<Props> = (props) => {
               latLng !== null,
               <MapView
                 ref={mapRef}
-                initialRegion={{
-                  ...latLng,
-                  ...REGION_OPTIONS,
-                }}
+                initialRegion={
+                  latLng
+                    ? {
+                        ...latLng,
+                        ...REGION_OPTIONS,
+                      }
+                    : {
+                        latitude: DEFAULT_LATITUDE,
+                        longitude: DEFAULT_LONGITUDE,
+                        ...REGION_OPTIONS,
+                      }
+                }
                 zoomEnabled={false}
                 pitchEnabled={false}
                 scrollEnabled={false}
                 style={styles.pinPoint}>
-                <Marker coordinate={latLng} />
+                <Marker
+                  image={require('@image/pin_point.png')}
+                  coordinate={
+                    latLng || {
+                      latitude: DEFAULT_LATITUDE,
+                      longitude: DEFAULT_LONGITUDE,
+                    }
+                  }
+                />
               </MapView>,
               <TouchableOpacity
                 onPress={() => navigate('MapsView', { action: 'register' })}
@@ -263,8 +320,10 @@ const Content: React.FC<Props> = (props) => {
             });
           }}
           type="primary"
-          loading={false}
-          disabled={handleDisableSaveButton()}
+          loading={updateCompleteDataState.loading}
+          disabled={
+            handleDisableSaveButton() || updateCompleteDataState.loading
+          }
         />
       </View>
       <ModalSelection
@@ -298,7 +357,17 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (false) {
+          if (!handleDisableSaveButton()) {
+            updateCompleteData({
+              buyer: {
+                address: address.value,
+                noteAddress: noteAddress.value,
+                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+                vehicleAccessibilityId: vehicleAccessibility?.id,
+                locationId,
+                ...latLng,
+              },
+            });
           } else {
             backToDataCompleteness();
           }

@@ -6,7 +6,7 @@ import {
   SnbBottomSheet,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, StackActions } from '@react-navigation/core';
 import {
   DATA_DIRI_STEP_1_VIEW,
   DATA_DIRI_STEP_2_VIEW,
@@ -30,7 +30,7 @@ interface ListOfStepsProps {
 
 const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const { completeDataState } = useEasyRegistration();
-  const { navigate } = useNavigation();
+  const { dispatch } = useNavigation();
   const dataUser = [
     {
       title: 'Nama Lengkap',
@@ -90,22 +90,22 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     if (props.type === 'user') {
       switch (index) {
         case 0:
-          navigate(DATA_DIRI_STEP_1_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_1_VIEW));
           break;
         case 1:
-          navigate(DATA_DIRI_STEP_2_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
           break;
         case 2:
-          navigate(DATA_DIRI_STEP_3_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW));
           break;
         case 3:
-          navigate(DATA_DIRI_STEP_4_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_4_VIEW));
           break;
         case 4:
-          navigate(DATA_DIRI_STEP_5_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_5_VIEW));
           break;
         case 5:
-          navigate(DATA_DIRI_STEP_6_VIEW);
+          dispatch(StackActions.replace(DATA_DIRI_STEP_6_VIEW));
           break;
         default:
           break;
@@ -114,13 +114,13 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     if (props.type === 'buyer') {
       switch (index) {
         case 0:
-          navigate(DATA_TOKO_STEP_1_VIEW);
+          dispatch(StackActions.replace(DATA_TOKO_STEP_1_VIEW));
           break;
         case 1:
-          navigate(DATA_TOKO_STEP_2_VIEW);
+          dispatch(StackActions.replace(DATA_TOKO_STEP_2_VIEW));
           break;
         case 2:
-          navigate(DATA_TOKO_STEP_3_VIEW);
+          dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW));
           break;
         default:
           break;

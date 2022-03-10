@@ -72,6 +72,17 @@ function* getCompleteData() {
   }
 }
 
+function* completeDataConfirmation() {
+  try {
+    const response: models.ICompleteData = yield call(() =>
+      easyRegistrationApi.completeDataConfirmation(),
+    );
+    yield put(ActionCreators.completeDataConfirmationSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.completeDataConfirmationFailed(error));
+  }
+}
+
 function* updateCompleteData(
   action: models.IAction<models.IUpdateCompleteData>,
 ) {
@@ -92,12 +103,17 @@ function* EasyRegistrationSaga() {
     types.LOAD_MORE_SEARCH_LOCATION_PROCESS,
     loadMoreSearchLocation,
   );
+
   yield takeLatest(types.CREATE_BASIC_ACCOUNT_PROCESS, createBasicAccount);
   yield takeLatest(types.BUYER_CATEGORY_PROCESS, getBuyerCategory);
   yield takeLatest(types.PRODUCT_CATEGORY_PROCESS, getProductCategory);
   yield takeLatest(types.GET_COMPLETE_DATA_PROCESS, getCompleteData);
   yield takeLatest(types.UPDATE_COMPLETE_DATA_PROCESS, updateCompleteData);
   yield takeLatest(types.REFETCH_COMPLETE_DATA_PROCESS, getCompleteData);
+  yield takeLatest(
+    types.COMPLETE_DATA_CONFIRMATION_PROCESS,
+    completeDataConfirmation,
+  );
 }
 
 export default EasyRegistrationSaga;

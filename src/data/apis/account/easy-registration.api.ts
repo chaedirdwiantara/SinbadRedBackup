@@ -46,6 +46,17 @@ const getCompleteData = () => {
   );
 };
 
+const completeDataConfirmation = () => {
+  const path = 'profile/confirmation';
+  return apiMapping<models.ICompleteData>(
+    'auth',
+    path,
+    'account',
+    'v2',
+    'UPDATE',
+  );
+};
+
 const updateCompleteData = (data: models.IUpdateCompleteData) => {
   const path = 'profile/complete-data-buyer';
   return apiMapping<any>('auth', path, 'account', 'v2', 'UPDATE', data);
@@ -57,4 +68,5 @@ export const easyRegistrationApi = {
   getProductCategory,
   getCompleteData,
   updateCompleteData,
+  completeDataConfirmation,
 };

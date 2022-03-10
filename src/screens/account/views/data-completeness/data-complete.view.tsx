@@ -1,3 +1,4 @@
+import { useAuthCoreAction } from '@core/functions/auth';
 import { useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
@@ -35,12 +36,27 @@ const CompleteDataSkeleton: React.FC = () => {
 };
 
 const Content: React.FC = () => {
-  const { navigate } = useNavigation();
-  const { getCompleteData, completeDataState } = useEasyRegistration();
+  const { navigate, reset } = useNavigation();
+  const {
+    getCompleteData,
+    completeDataState,
+    completeDataConfirmation,
+    completeDataConfirmationState,
+    resetCompleteDataConfirmation,
+  } = useEasyRegistration();
+  const { meV2 } = useAuthCoreAction();
 
   React.useEffect(() => {
     getCompleteData();
   }, []);
+
+  React.useEffect(() => {
+    if (completeDataConfirmationState.data) {
+      meV2();
+      resetCompleteDataConfirmation();
+      reset({ index: 0, routes: [{ name: 'Home' }] });
+    }
+  }, [completeDataConfirmationState]);
 
   if (completeDataState.loading) {
     return <CompleteDataSkeleton />;
@@ -56,8 +72,7 @@ const Content: React.FC = () => {
   }
 
   if (completeDataState.data) {
-    const { userProgress, buyerProgress, isDataCompleted } =
-      completeDataState.data || {};
+    const { userProgress, buyerProgress } = completeDataState.data || {};
     const isShowBadgeSuccessUser =
       userProgress.completed === userProgress.total;
     const isShowBadgeSuccessBuyer =
@@ -114,9 +129,13 @@ const Content: React.FC = () => {
           <View style={{ height: 72 }}>
             <SnbButton.Single
               title="Konfirmasi"
-              onPress={() => {}}
+              onPress={() => completeDataConfirmation()}
               type="primary"
-              disabled={!isDataCompleted}
+              disabled={
+                (!isShowBadgeSuccessBuyer && !isShowBadgeSuccessUser) ||
+                completeDataConfirmationState.loading
+              }
+              loading={completeDataConfirmationState.loading}
             />
           </View>
         </View>
