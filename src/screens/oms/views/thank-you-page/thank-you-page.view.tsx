@@ -7,13 +7,14 @@ import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.com
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
 import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native'; 
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
@@ -21,6 +22,9 @@ import CustomAccordion from '@screen/history/components/CustomAccordion';
 import { PaymentGuideListItem } from '@model/oms';
 import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
 import { toLocalDateTime } from '@core/functions/global/date-format';
+import { goToHome } from '@core/functions/product';
+import { goToHistoryInvoice } from '@screen/history/functions';
+import { goToThankYouPage } from '@screen/oms/functions';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
@@ -205,6 +209,25 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
+  /** => Footer */
+  const renderFooter = () => (
+    <View
+      style={ThankYouPageStyle.footer}>
+        <SnbButton.Dynamic
+          size="medium"
+          type="secondary"
+          title={'Kembali ke Beranda'}
+          onPress={goToHome}
+        />
+        <SnbButton.Dynamic
+          size="medium"
+          type="primary"
+          title={'Cek Status'}
+          onPress={goToThankYouPage}
+
+        />
+    </View>
+  );
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -220,7 +243,7 @@ const OmsThankYouPageView: FC = () => {
       />
       
       {renderContent()}
-      {/* {renderFooter()} */}
+      {renderFooter()}
       {renderModalOrderDetail()}
       </>
       )}
