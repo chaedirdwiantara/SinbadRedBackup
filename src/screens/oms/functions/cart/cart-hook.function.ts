@@ -664,34 +664,37 @@ const useCartLocalData = () => {
             products,
           });
         }
-
-        setLocalCartMaster({
+        return {
           ...localCartMaster,
           sellers: sellers,
           unavailable: unavailable,
-        });
+        };
       }
     },
-    mergeCheckSeller: (payload: models.CheckSellerResponse[]) => {
-      if (localCartMaster) {
+    mergeCheckSeller: (
+      payload: models.CheckSellerResponse[],
+      resultAfterCheckProduct: models.CartMaster | undefined,
+    ) => {
+      if (resultAfterCheckProduct) {
         const sellers: models.CartMasterSellers[] = [];
         const unavailable: models.CartMasterUnavailable[] = [
-          ...localCartMaster.unavailable,
+          ...resultAfterCheckProduct.unavailable,
         ];
         /** => replace all getCart product data with checkSeller data */
-        for (let i = 0; i < localCartMaster.sellers.length; i++) {
+        for (let i = 0; i < resultAfterCheckProduct.sellers.length; i++) {
           const products: models.CartMasterSellersProducts[] = [];
-          let sellerId: number = localCartMaster.sellers[i].sellerId;
-          let sellerName: string = localCartMaster.sellers[i].sellerName;
+          let sellerId: number = resultAfterCheckProduct.sellers[i].sellerId;
+          let sellerName: string =
+            resultAfterCheckProduct.sellers[i].sellerName;
           let status: string = '';
           payload.map((item) => {
-            if (localCartMaster.sellers[i].sellerId === item.sellerId) {
+            if (resultAfterCheckProduct.sellers[i].sellerId === item.sellerId) {
               sellerId = item.sellerId;
               sellerName = item.sellerName;
               status = item.status;
               /** => check if the seller status inactive, then all products data will moved to unavailable */
               if (item.status === 'inactive') {
-                localCartMaster.sellers[i].products.map((innerItem) => {
+                resultAfterCheckProduct.sellers[i].products.map((innerItem) => {
                   unavailable.push({
                     ...innerItem,
                     unavailableMessage: 'Supplier nonaktif',
@@ -699,7 +702,7 @@ const useCartLocalData = () => {
                   });
                 });
               } else {
-                localCartMaster.sellers[i].products.map((innerItem) => {
+                resultAfterCheckProduct.sellers[i].products.map((innerItem) => {
                   products.push({ ...innerItem });
                 });
               }
@@ -712,25 +715,27 @@ const useCartLocalData = () => {
             status,
           });
         }
-
-        setLocalCartMaster({
-          ...localCartMaster,
+        return {
+          ...resultAfterCheckProduct,
           sellers: sellers,
           unavailable: unavailable,
-        });
+        };
       }
     },
-    mergeCheckStock: (payload: models.CheckStockResponse[]) => {
-      if (localCartMaster) {
+    mergeCheckStock: (
+      payload: models.CheckStockResponse[],
+      resultAfterCheckSeller: models.CartMaster | undefined,
+    ) => {
+      if (resultAfterCheckSeller) {
         const sellers: models.CartMasterSellers[] = [];
         const unavailable: models.CartMasterUnavailable[] = [
-          ...localCartMaster.unavailable,
+          ...resultAfterCheckSeller.unavailable,
         ];
         /** => replace all getCart product data with checkStock data */
-        for (let i = 0; i < localCartMaster.sellers.length; i++) {
+        for (let i = 0; i < resultAfterCheckSeller.sellers.length; i++) {
           const products: models.CartMasterSellersProducts[] = [];
           payload.map((item) => {
-            const thisProduct = localCartMaster.sellers[i].products.find(
+            const thisProduct = resultAfterCheckSeller.sellers[i].products.find(
               (innerItem) =>
                 innerItem.productId === item.productId &&
                 innerItem.warehouseId === item.warehouseId,
@@ -778,16 +783,15 @@ const useCartLocalData = () => {
             }
           });
           sellers.push({
-            ...localCartMaster.sellers[i],
+            ...resultAfterCheckSeller.sellers[i],
             products,
           });
         }
-
-        setLocalCartMaster({
-          ...localCartMaster,
+        return {
+          ...resultAfterCheckSeller,
           sellers: sellers,
           unavailable: unavailable,
-        });
+        };
       }
     },
     localCartMaster,
