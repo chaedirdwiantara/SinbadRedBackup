@@ -126,9 +126,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   const handleGoBack = () => {
     goBack();
-    if (localCartMaster) {
-      updateCartAction.fetch(dispatchCart, localCartMaster);
-    }
+    // if (localCartMaster) {
+    //   updateCartAction.fetch(dispatchCart, localCartMaster);
+    // }
   };
 
   const scrollToBottom = () => {
