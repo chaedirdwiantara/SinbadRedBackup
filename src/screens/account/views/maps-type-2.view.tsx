@@ -186,6 +186,7 @@ const MapsViewType2: React.FC = () => {
             <Marker
               coordinate={latLng}
               draggable
+              image={require('@image/pin_point.png')}
               onDragEnd={({ nativeEvent: { coordinate } }: any) => {
                 setLatLng(coordinate);
                 refMaps.current?.animateToRegion({
@@ -278,9 +279,9 @@ const MapsViewType2: React.FC = () => {
         <View style={{ height: 72 }}>
           <SnbButton.Single
             title="Pilih Lokasi ini"
-            disabled={addressResult.length === 0}
+            disabled={addressResult.length === 0 || locations.loading}
             type="primary"
-            loading={false}
+            loading={locations.loading}
             onPress={() => {
               const address = extractAddress(
                 addressResult[0]?.address_components,

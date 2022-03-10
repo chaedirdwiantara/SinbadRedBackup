@@ -92,3 +92,22 @@ export const updateCompleteDataFailed = (data: any) => ({
 export const resetUpdateCompleteData = () => ({
   type: types.UPDATE_COMPLETE_DATA_RESET,
 });
+
+export const completeDataConfirmation = (): models.IAction<any> => ({
+  type: types.COMPLETE_DATA_CONFIRMATION_PROCESS,
+  payload: null,
+});
+
+export const completeDataConfirmationSuccess = (data: any) => ({
+  type: types.COMPLETE_DATA_CONFIRMATION_SUCCESS,
+  payload: data,
+});
+
+export const completeDataConfirmationFailed = (data: any) => ({
+  type: types.COMPLETE_DATA_CONFIRMATION_FAILED,
+  payload: data,
+});
+
+export const resetCompleteDataConfirmation = () => ({
+  type: types.RESET_COMPLETE_DATA_CONFIRMATION,
+});

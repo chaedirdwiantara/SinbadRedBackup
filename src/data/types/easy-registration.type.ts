@@ -43,3 +43,11 @@ export const UPDATE_COMPLETE_DATA_PROCESS = 'UpdateCompleteDataProcess';
 export const UPDATE_COMPLETE_DATA_SUCCESS = 'UpdateCompleteDataSuccess';
 export const UPDATE_COMPLETE_DATA_FAILED = 'UpdateCompleteDataFailed';
 export const UPDATE_COMPLETE_DATA_RESET = 'UpdateCompleteDataReset';
+
+export const COMPLETE_DATA_CONFIRMATION_PROCESS =
+  'CompleteDataConfirmationProcess';
+export const COMPLETE_DATA_CONFIRMATION_SUCCESS =
+  'CompleteDataConfirmationSuccess';
+export const COMPLETE_DATA_CONFIRMATION_FAILED =
+  'CompleteDataConfirmationFailed';
+export const RESET_COMPLETE_DATA_CONFIRMATION = 'ResetCompleteDataConfirmation';
