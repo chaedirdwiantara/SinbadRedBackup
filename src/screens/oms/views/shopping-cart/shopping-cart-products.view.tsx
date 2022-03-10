@@ -34,6 +34,7 @@ interface ShoppingCartProductsProps {
     currentStatus,
   }: models.ManageCheckbox) => void;
   keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
+  handleScrollToBottom: () => void;
 }
 /** === COMPONENT === */
 export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
@@ -46,6 +47,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
   manageCheckboxStatus,
   manageCheckboxOnPress,
   keyboardFocus,
+  handleScrollToBottom,
 }) => {
   const allSellerCheckboxStatus = manageCheckboxStatus({ sellerId: null });
   /** === HOOKS === */
@@ -91,6 +93,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
       <ProductNotAvailableSection
         unavailableProducts={unavailableProducts}
         handleRemoveProductModal={handleRemoveProductModal}
+        handleScrollToBottom={handleScrollToBottom}
       />
     </View>
   );

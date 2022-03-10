@@ -5,23 +5,24 @@ import {
   TouchableWithoutFeedback,
   LayoutAnimation,
   StyleSheet,
-  ScrollView,
 } from 'react-native';
 /** === IMPORT COMPONENTS AND UTILS ===  */
 import { SnbIcon, SnbText, color } from '@sinbad/react-native-sinbad-ui';
 /** === TYPE === */
 interface UnavailableAccordionProps {
   totalRemaining: number;
+  handleScrollToBottom: () => void;
   children: ReactNode;
 }
 /** === COMPONENT === */
 export const UnavailableAccordionView: FC<UnavailableAccordionProps> = ({
   totalRemaining,
+  handleScrollToBottom,
   children,
 }) => {
   /** == HOOK === */
   const [isOpen, setOpen] = useState<boolean>(false);
-  const scrollRef = useRef<ScrollView>(null);
+  // const scrollRef = useRef<ScrollView>(null);
   /** == VIEW === */
   if (totalRemaining === 0) {
     return null;
@@ -29,18 +30,12 @@ export const UnavailableAccordionView: FC<UnavailableAccordionProps> = ({
 
   return (
     <View style={{ flex: 1, backgroundColor: color.white }}>
-      {isOpen && (
-        <ScrollView
-          ref={scrollRef}
-          scrollEventThrottle={0}
-          onContentSizeChange={() => scrollRef.current?.scrollToEnd()}>
-          {children}
-        </ScrollView>
-      )}
+      {isOpen && <>{children}</>}
       <TouchableWithoutFeedback
         onPress={() => {
           LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
           setOpen((prev) => !prev);
+          handleScrollToBottom();
         }}>
         <View style={AccordionStyle.panel}>
           <SnbText.B4 color={color.blue50}>

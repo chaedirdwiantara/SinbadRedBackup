@@ -11,11 +11,13 @@ import { UnavailableAccordionView } from './product-not-available-accordion.view
 interface ProductUnavailableViewProps {
   unavailableProducts: models.CartMasterUnavailable[];
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleScrollToBottom: () => void;
 }
 
 export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
   unavailableProducts,
   handleRemoveProductModal,
+  handleScrollToBottom,
 }) => {
   /** => PRODUCT IMAGE */
   const renderProductImage = (imageUrl: string) => {
@@ -104,7 +106,8 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         {renderActionSection(unavailableProducts[0])}
       </View>
       <UnavailableAccordionView
-        totalRemaining={unavailableProducts.slice(1).length}>
+        totalRemaining={unavailableProducts.slice(1).length}
+        handleScrollToBottom={handleScrollToBottom}>
         {unavailableProducts.slice(1).map((item) => {
           return (
             <View
