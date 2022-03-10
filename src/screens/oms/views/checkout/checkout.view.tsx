@@ -11,6 +11,8 @@ import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
+import { useGetTncContent } from '@screen/oms/functions';
+import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import {
   useGetCartAction,
@@ -155,6 +157,17 @@ const OmsCheckoutView: FC = () => {
       locationId: '53c9b0000000000000000000',
     },
   };
+  /** => Get TNC Contents  */
+  const getTncContent = useGetTncContent();
+  const {
+    stateCheckout: {
+      checkoutTnc: {
+        data: TncContentData,
+        loading: TncContentLoading,
+      },
+    },
+    dispatchCheckout
+  } = useCheckoutContext()
 
   /** => set expired time  */
   const dateCurrent = new Date();
@@ -182,8 +195,9 @@ const OmsCheckoutView: FC = () => {
   };
 
   const handleOpenTNCModal = () => {
-    setModalTNCOpen(true);
-  };
+    getTncContent.tncContentGet(dispatchCheckout,'termAndConditions')
+    setModalTNCOpen(true)
+  }
 
   return (
     <SnbContainer color="grey">
@@ -212,6 +226,7 @@ const OmsCheckoutView: FC = () => {
       <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
         close={() => setModalTNCOpen(false)}
+        data={TncContentData}
       />
 
       <CheckoutBottomView
