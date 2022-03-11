@@ -7,8 +7,6 @@ import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
-import { useDataCartMaster } from '@core/redux/Data';
-import { CartMaster, HandleRemoveProduct } from '@models';
 import { manageRemoveProduct } from './cart.function';
 /** === FUNCTION === */
 /** => cart example action */
@@ -135,35 +133,6 @@ const useRemoveCartProductAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.removeCartProductReset(contextDispatch));
-    },
-  };
-};
-/** => cart master action */
-const useCartMasterAction = () => {
-  const cartMaster: models.CartMaster = useDataCartMaster();
-  const dispatch = useDispatch();
-  return {
-    cartMaster,
-    setCartMaster: (data: models.SetCartMaster) => {
-      dispatch(Actions.setCartMaster(data));
-    },
-    mergeCheckProduct: (data: models.CheckProductResponse[]) => {
-      dispatch(Actions.mergeCheckProduct(data));
-    },
-    mergeCheckSeller: (data: models.CheckSellerResponse[]) => {
-      dispatch(Actions.mergeCheckSeller(data));
-    },
-    mergeCheckStock: (data: models.CheckStockResponse[]) => {
-      dispatch(Actions.mergeCheckStock(data));
-    },
-    removeProduct: (data: HandleRemoveProduct) => {
-      dispatch(Actions.CartMasterRemoveProduct(data));
-    },
-    replaceFromLocal: (data: CartMaster) => {
-      dispatch(Actions.replaceCartMasterFromLocal(data));
-    },
-    reset: () => {
-      dispatch(Actions.resetCartMaster());
     },
   };
 };
@@ -611,6 +580,189 @@ const useCartLocalData = () => {
     setLocalCartMaster: (newData: models.CartMaster) => {
       setLocalCartMaster(newData);
     },
+    mergeCheckProduct: (payload: models.CheckProductResponse[]) => {
+      if (localCartMaster) {
+        const sellers: models.CartMasterSellers[] = [];
+        const unavailable: models.CartMasterUnavailable[] = [];
+        /** => replace all getCart product data with checkProduct data */
+        for (let i = 0; i < localCartMaster.sellers.length; i++) {
+          const products: models.CartMasterSellersProducts[] = [];
+          payload.map((item) => {
+            if (item.sellerId === localCartMaster.sellers[i].sellerId) {
+              const thisProduct = localCartMaster.sellers[i].products.find(
+                (innerItem) =>
+                  innerItem.productId === item.productId &&
+                  innerItem.warehouseId === item.warehouseId,
+              );
+              if (thisProduct) {
+                /** => processing rules:
+                 * 1. min qty dari 5 naik ke 10 dan cart qty masih 7 maka qty bakal ke force jadi 10 (ke uncheck)
+                 */
+                let qty: number = thisProduct.qty;
+                let selected: boolean = thisProduct.selected;
+                if (item.minQty > thisProduct.qty) {
+                  qty = item.minQty;
+                  selected = false;
+                }
+
+                const productData: models.CartMasterSellersProducts = {
+                  ...item,
+                  lastUsedPrice: thisProduct.lastUsedPrice,
+                  isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
+                  qty,
+                  selected,
+                  productStatus: item.status,
+                  leadTime: thisProduct.leadTime,
+                  price: item.finalPrice,
+                };
+                /** => move product data to unavailable if inactive */
+                if (item.status === 'inactive') {
+                  unavailable.push({
+                    ...productData,
+                    unavailableMessage: 'Tidak tersedia di lokasi anda',
+                    selected: false,
+                  });
+                } else {
+                  products.push({ ...productData });
+                }
+              }
+            }
+          });
+          sellers.push({
+            ...localCartMaster.sellers[i],
+            products,
+          });
+        }
+        return {
+          ...localCartMaster,
+          sellers: sellers,
+          unavailable: unavailable,
+        };
+      }
+    },
+    mergeCheckSeller: (
+      payload: models.CheckSellerResponse[],
+      resultAfterCheckProduct: models.CartMaster | undefined,
+    ) => {
+      if (resultAfterCheckProduct) {
+        const sellers: models.CartMasterSellers[] = [];
+        const unavailable: models.CartMasterUnavailable[] = [
+          ...resultAfterCheckProduct.unavailable,
+        ];
+        /** => replace all getCart product data with checkSeller data */
+        for (let i = 0; i < resultAfterCheckProduct.sellers.length; i++) {
+          const products: models.CartMasterSellersProducts[] = [];
+          let sellerId: number = resultAfterCheckProduct.sellers[i].sellerId;
+          let sellerName: string =
+            resultAfterCheckProduct.sellers[i].sellerName;
+          let status: string = '';
+          payload.map((item) => {
+            if (resultAfterCheckProduct.sellers[i].sellerId === item.sellerId) {
+              sellerId = item.sellerId;
+              sellerName = item.sellerName;
+              status = item.status;
+              /** => check if the seller status inactive, then all products data will moved to unavailable */
+              if (item.status === 'inactive') {
+                resultAfterCheckProduct.sellers[i].products.map((innerItem) => {
+                  unavailable.push({
+                    ...innerItem,
+                    unavailableMessage: 'Supplier nonaktif',
+                    selected: false,
+                  });
+                });
+              } else {
+                resultAfterCheckProduct.sellers[i].products.map((innerItem) => {
+                  products.push({ ...innerItem });
+                });
+              }
+            }
+          });
+          sellers.push({
+            sellerId,
+            sellerName,
+            products,
+            status,
+          });
+        }
+        return {
+          ...resultAfterCheckProduct,
+          sellers: sellers,
+          unavailable: unavailable,
+        };
+      }
+    },
+    mergeCheckStock: (
+      payload: models.CheckStockResponse[],
+      resultAfterCheckSeller: models.CartMaster | undefined,
+    ) => {
+      if (resultAfterCheckSeller) {
+        const sellers: models.CartMasterSellers[] = [];
+        const unavailable: models.CartMasterUnavailable[] = [
+          ...resultAfterCheckSeller.unavailable,
+        ];
+        /** => replace all getCart product data with checkStock data */
+        for (let i = 0; i < resultAfterCheckSeller.sellers.length; i++) {
+          const products: models.CartMasterSellersProducts[] = [];
+          payload.map((item) => {
+            const thisProduct = resultAfterCheckSeller.sellers[i].products.find(
+              (innerItem) =>
+                innerItem.productId === item.productId &&
+                innerItem.warehouseId === item.warehouseId,
+            );
+            if (thisProduct) {
+              /** => processing rules:
+               * 1. add cart ketika min qty 5 dengan qty add = 7, terus sisa stock menjadi 6, qty bakalan ke force 6 (ke uncheck)
+               * 2. min qty < stock warehouse, maka product not available
+               */
+              let qty: number = thisProduct.qty;
+              let selected: boolean = thisProduct.selected;
+              let status: string = item.status;
+              if (thisProduct.qty > item.stock) {
+                qty = item.stock;
+                selected = false;
+              }
+              if (thisProduct.minQty > item.stock) {
+                status = 'stock_not_enough';
+              }
+              const productData: models.CartMasterSellersProducts = {
+                ...thisProduct,
+                lastUsedPrice: thisProduct.lastUsedPrice,
+                isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
+                qty,
+                selected,
+                stock: item.stock,
+                stockStatus: item.status,
+              };
+              /** => move product data to unavailable if not_available */
+              if (status === 'not_available') {
+                unavailable.push({
+                  ...productData,
+                  unavailableMessage: 'Tidak tersedia di lokasi anda',
+                  selected: false,
+                });
+              } else if (status === 'stock_not_enough') {
+                unavailable.push({
+                  ...productData,
+                  unavailableMessage: 'Stok kosong',
+                  selected: false,
+                });
+              } else {
+                products.push({ ...productData });
+              }
+            }
+          });
+          sellers.push({
+            ...resultAfterCheckSeller.sellers[i],
+            products,
+          });
+        }
+        return {
+          ...resultAfterCheckSeller,
+          sellers: sellers,
+          unavailable: unavailable,
+        };
+      }
+    },
     localCartMaster,
   };
 };
@@ -663,7 +815,6 @@ export {
   useAddToCartAction,
   useUpdateCartAction,
   useRemoveCartProductAction,
-  useCartMasterAction,
   useCheckProductAction,
   usePostCheckProductAction,
   useCheckSellerAction,

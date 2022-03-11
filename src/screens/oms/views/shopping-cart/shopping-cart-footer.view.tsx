@@ -1,10 +1,8 @@
 /** === IMPORT PACKAGE HERE ===  */
 import {
   matchCartWithCheckData,
-  useCartMasterAction,
   useCheckoutAction,
   useOmsGeneralFailedState,
-  usePostCancelStockAction,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
@@ -20,7 +18,6 @@ import * as models from '@models';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { cloneDeep } from 'lodash';
 
 /** === INTERFACE === */
 interface FooterProps {
@@ -29,6 +26,7 @@ interface FooterProps {
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
   handleCartCycle: () => void;
+  handleMergeCheckData: (props: models.MergeCheckData) => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -37,6 +35,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   countTotalProduct,
   isCheckoutDisabled,
   handleCartCycle,
+  handleMergeCheckData,
 }) => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -46,8 +45,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
 
-  const postCancelCartAction = usePostCancelStockAction();
-  const cartMasterAction = useCartMasterAction();
   const postCheckProductAction = usePostCheckProductAction();
   const postCheckSellerAction = usePostCheckSellerAction();
   const postCheckStockAction = usePostCheckStockAction();
@@ -58,7 +55,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const errorModal = useOmsGeneralFailedState();
 
   const handleOnPressCheckout = useCallback(() => {
-    cartMasterAction.replaceFromLocal(cloneDeep(cartData));
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
   }, [cartData, stateCart.buyerAddress.data]);
@@ -101,7 +97,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         checkProductData: stateCart.postCheckProduct.data ?? [],
         checkSellerData: stateCart.postCheckSeller.data ?? [],
         checkStockData: stateCart.postCheckStock.data ?? [],
-        cartData: cartMasterAction.cartMaster,
+        cartData,
       });
 
       setMatchValid(validationResult);
@@ -176,7 +172,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
      */
     if (isMatchValid) {
       errorModal.setRetryCount(3);
-      checkoutAction.fetch(dispatchCheckout);
+      checkoutAction.fetch(dispatchCheckout, cartData);
     }
   }, [isMatchValid]);
 
@@ -195,7 +191,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       // determine the retry action
       const action = () => {
         if (errorModal.retryCount > 0) {
-          checkoutAction.fetch(dispatchCart);
+          checkoutAction.fetch(dispatchCart, cartData);
           // decrease the retry count
           errorModal.setRetryCount(errorModal.retryCount - 1);
         } else {
@@ -216,14 +212,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   useEffect(() => {
     if (stateCart.postCancelStock.data !== null) {
-      cartMasterAction.mergeCheckProduct(stateCart.postCheckProduct.data ?? []);
-      cartMasterAction.mergeCheckSeller(stateCart.postCheckSeller.data ?? []);
-      cartMasterAction.mergeCheckStock(stateCart.postCheckStock.data ?? []);
+      handleMergeCheckData({
+        checkProductData: stateCart.postCheckProduct.data ?? [],
+        checkSellerData: stateCart.postCheckSeller.data ?? [],
+        checkStockData: stateCart.postCheckStock.data ?? [],
+      });
     }
-
-    return () => {
-      postCancelCartAction.reset(dispatchCart);
-    };
   }, [stateCart.postCancelStock.data]);
 
   const handleClose = () => {

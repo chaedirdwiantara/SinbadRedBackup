@@ -5,15 +5,16 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 import { useContext } from 'react';
-import { useDataCartMaster } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => checkout action */
 const useCheckoutAction = () => {
   const { stateCart } = useContext(contexts.CartContext);
-  const cartMaster: models.CartMaster = useDataCartMaster();
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartMaster: models.CartMaster,
+    ) => {
       if (
         stateCart.postCheckProduct.data !== null &&
         stateCart.postCheckSeller.data !== null &&

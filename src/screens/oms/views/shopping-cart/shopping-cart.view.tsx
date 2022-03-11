@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
-import { cloneDeep, isEqual } from 'lodash';
+// import { cloneDeep, isEqual } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
@@ -16,7 +16,6 @@ import LoadingPage from '@core/components/LoadingPage';
 import {
   goBack,
   useGetCartAction,
-  useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
@@ -49,8 +48,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     manageCheckboxOnPress,
     removeProduct,
     calculateProductTotalPrice,
+    mergeCheckProduct,
+    mergeCheckSeller,
+    mergeCheckStock,
   } = useCartLocalData();
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
@@ -65,7 +67,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
@@ -84,9 +85,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle ok action remove product */
   const handleOkActionRemoveProduct = () => {
-    if (selectRemoveProduct) {
+    if (selectRemoveProduct && localCartMaster) {
       removeCartProductAction.fetch(dispatchCart, {
-        cartId: cartMasterAction.cartMaster.id,
+        cartId: localCartMaster.id,
         removedProducts: selectRemoveProduct.removedProducts,
       });
     }
@@ -94,7 +95,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle reset contexts */
   const handleResetContexts = () => {
-    cartMasterAction.reset();
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
@@ -109,7 +109,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const handleCartCyle = () => {
     handleResetContexts();
     setPageLoading(true);
-    errorModal.setRetryCount(3);
     cancelCartAction.fetch(dispatchCart);
     cartBuyerAddressAction.fetch(dispatchCart);
   };
@@ -117,25 +116,56 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => handle update cart on blur  */
   const handleUpdateCartOnBlur = () => {
     if (localCartMaster) {
-      if (!isEqual(localCartMaster, cartMasterAction.cartMaster)) {
-        cartMasterAction.replaceFromLocal(cloneDeep(localCartMaster));
-        updateCartAction.fetch(dispatchCart, localCartMaster);
-      }
+      updateCartAction.fetch(dispatchCart, localCartMaster);
     }
   };
 
-  const handleGoBack = () => {
-    goBack();
-    // if (localCartMaster) {
-    //   updateCartAction.fetch(dispatchCart, localCartMaster);
-    // }
+  /** => handle merge check data */
+  const handleMergeCheckData = async ({
+    checkProductData,
+    checkSellerData,
+    checkStockData,
+  }: models.MergeCheckData) => {
+    const resultMergeCheckProduct = mergeCheckProduct(checkProductData);
+    const resultMergeCheckSeller = mergeCheckSeller(
+      checkSellerData,
+      resultMergeCheckProduct,
+    );
+    const resultMergeCheckStock = mergeCheckStock(
+      checkStockData,
+      resultMergeCheckSeller,
+    );
+    if (resultMergeCheckStock) {
+      setLocalCartMaster(resultMergeCheckStock);
+    }
   };
 
+  /** => handle go back */
+  const handleGoBack = () => {
+    goBack();
+    if (localCartMaster) {
+      updateCartAction.fetch(dispatchCart, localCartMaster);
+    }
+  };
+
+  /** => scroll to bottom (for accordion) */
   const scrollToBottom = () => {
     scrollRef.current?.scrollToEnd();
   };
 
+  /** => hardware back handler */
+  NavigationAction.useCustomBackHardware(() => {
+    handleGoBack();
+  });
+
   /** === HOOKS === */
+  /** => will unmount */
+  useEffect(() => {
+    return () => {
+      handleResetContexts();
+    };
+  }, []);
+
   /** => define blur function */
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
@@ -145,21 +175,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     return unsubscribeBlur;
   }, [localCartMaster]);
 
-  /** => did mount & will unmount */
+  /** => define focus function */
   useEffect(() => {
     /** did mount */
     const unsubscribeFocus = navigation.addListener('focus', () => {
       handleCartCyle();
     });
 
-    /** will unmount */
     return unsubscribeFocus;
   }, [navigation]);
-
-  /** => hardware back handler */
-  NavigationAction.useCustomBackHardware(() => {
-    handleGoBack();
-  });
 
   /** => if cancel stock or buyer address failed */
   useEffect(() => {
@@ -188,31 +212,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.cancelStock.data !== null &&
       stateCart.buyerAddress.data !== null
     ) {
-      errorModal.setRetryCount(3);
       getCartAction.fetch(dispatchCart);
     }
   }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
-
-  /** => after success fetch getCart, save data to redux */
-  useEffect(() => {
-    if (
-      stateCart.get.data !== null &&
-      stateCart.get.data.sellers.length > 0 &&
-      stateCart.buyerAddress.data !== null
-    ) {
-      cartMasterAction.setCartMaster(stateCart.get.data);
-      errorModal.setRetryCount(3);
-      checkProductAction.fetch(dispatchCart);
-      checkSellerAction.fetch(dispatchCart);
-      checkStockAction.fetch(dispatchCart, false);
-    } else if (
-      stateCart.get.data !== null &&
-      stateCart.get.data.sellers.length === 0
-    ) {
-      setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
-      setPageLoading(false);
-    }
-  }, [stateCart.get.data, stateCart.buyerAddress.data]);
 
   /** => if get cart failed */
   useEffect(() => {
@@ -222,6 +224,33 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       errorModal.setOpen(true);
     }
   }, [stateCart.get.error]);
+
+  /** => after success fetch getCart, save data to redux */
+  useEffect(() => {
+    if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length > 0 &&
+      stateCart.buyerAddress.data !== null
+    ) {
+      setLocalCartMaster({
+        id: stateCart.get.data.id,
+        userId: stateCart.get.data.userId,
+        buyerId: stateCart.get.data.buyerId,
+        buyerName: stateCart.get.data.buyerName,
+        totalProducts: stateCart.get.data.totalProducts,
+        sellers: stateCart.get.data.sellers,
+        unavailable: [],
+      });
+      checkProductAction.fetch(dispatchCart);
+      checkSellerAction.fetch(dispatchCart);
+      checkStockAction.fetch(dispatchCart, false);
+    } else if (
+      stateCart.get.data !== null &&
+      stateCart.get.data.sellers.length === 0
+    ) {
+      setPageLoading(false);
+    }
+  }, [stateCart.get.data, stateCart.buyerAddress.data]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
@@ -260,38 +289,28 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       stateCart.checkProduct.data !== null &&
       stateCart.checkSeller.data !== null &&
       stateCart.checkStock.data !== null &&
-      cartMasterAction.cartMaster.id !== '' &&
-      cartMasterAction.cartMaster.isCheckProductMerged === false
+      localCartMaster &&
+      localCartMaster.id !== ''
     ) {
-      cartMasterAction.mergeCheckProduct(stateCart.checkProduct.data);
-      cartMasterAction.mergeCheckSeller(stateCart.checkSeller.data);
-      cartMasterAction.mergeCheckStock(stateCart.checkStock.data);
+      handleMergeCheckData({
+        checkProductData: stateCart.checkProduct.data,
+        checkSellerData: stateCart.checkSeller.data,
+        checkStockData: stateCart.checkStock.data,
+      });
+      setPageLoading(false);
     }
   }, [
-    cartMasterAction.cartMaster.id,
+    localCartMaster?.id,
     stateCart.checkProduct.data,
     stateCart.checkSeller.data,
     stateCart.checkStock.data,
   ]);
-
-  /** => after success merge all check data to redux, save redux to local state */
-  useEffect(() => {
-    if (
-      cartMasterAction.cartMaster.isCheckProductMerged &&
-      cartMasterAction.cartMaster.isCheckSellerMerged &&
-      cartMasterAction.cartMaster.isCheckStockMerged
-    ) {
-      setLocalCartMaster(cloneDeep(cartMasterAction.cartMaster));
-      setPageLoading(false);
-    }
-  }, [cartMasterAction.cartMaster]);
 
   /** => listen remove product fetch */
   useEffect(() => {
     /** success */
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
       removeProduct(selectRemoveProduct);
-      cartMasterAction.removeProduct(selectRemoveProduct);
       totalCartActions.fetch(dispatchCart);
       SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
         position: 'top',
@@ -308,8 +327,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       setModalRemoveProduct(false);
     }
   }, [stateCart.remove]);
-
-  console.log(cartMasterAction.cartMaster, localCartMaster);
 
   /** === VIEW === */
   /** => CONTENT */
@@ -348,6 +365,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 keyboardFocus.isFocus
               }
               handleCartCycle={handleCartCyle}
+              handleMergeCheckData={handleMergeCheckData}
             />
           </React.Fragment>
         );
