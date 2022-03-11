@@ -236,7 +236,14 @@ const usePostCheckSellerAction = () => {
         // format payload from redux master
         const data: number[] = [];
         cartData.sellers.map((sellerItem) => {
-          if (sellerItem.status === 'active') {
+          let isAnyItemSelectedInThisSeller = false;
+          sellerItem.products.map((productItem) => {
+            if (productItem.selected) {
+              isAnyItemSelectedInThisSeller = true;
+            }
+          });
+
+          if (isAnyItemSelectedInThisSeller) {
             data.push(sellerItem.sellerId);
           }
         });
