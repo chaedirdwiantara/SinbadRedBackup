@@ -64,6 +64,9 @@ const OmsCheckoutView: FC = () => {
     dispatchCheckout,
   } = useCheckoutContext();
 
+  /** => Abort Timeout warning */
+  const [abortTimeout, setAbortTimeout] = React.useState(false);
+
   /** => set expired time  */
   const dateCurrent = new Date();
   const timeNow = dateCurrent.getTime() / 1000;
@@ -71,9 +74,12 @@ const OmsCheckoutView: FC = () => {
   const timeToExpired = addTime - timeNow;
   useFocusEffect(
     React.useCallback(() => {
-      setTimeout(() => {
-        setExpiredSession(true);
-      }, timeToExpired);
+      setTimeout(
+        () => {
+          setExpiredSession(true);
+        },
+        abortTimeout ? null : timeToExpired,
+      );
     }, []),
   );
 
@@ -90,6 +96,7 @@ const OmsCheckoutView: FC = () => {
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
+    setAbortTimeout(true);
     goToShoppingCart();
   };
 
@@ -124,7 +131,11 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} expiredTime={addTime} />
+      <CheckoutBottomView
+        data={data}
+        expiredTime={addTime}
+        abortTimOut={() => setAbortTimeout(true)}
+      />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime
