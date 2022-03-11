@@ -34,7 +34,7 @@ const thankYouPagePaymentGuideList = (
   return apiMapping<models.PaymentGuideListItem[]>(
     'auth',
     path,
-    'buyer-order',
+    'buyer-payment',
     'v1',
     'LIST',
   );
