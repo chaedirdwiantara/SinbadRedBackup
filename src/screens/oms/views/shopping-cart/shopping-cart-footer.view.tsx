@@ -26,7 +26,6 @@ interface FooterProps {
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
   handleCartCycle: () => void;
-  handleMergeCheckData: (props: models.MergeCheckData) => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -35,8 +34,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   countTotalProduct,
   isCheckoutDisabled,
   handleCartCycle,
-  handleMergeCheckData,
 }) => {
+  /** === STATES === */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
@@ -44,21 +43,23 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isErrorShown, setErrorShown] = useState(false);
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
+  const errorModal = useOmsGeneralFailedState();
 
+  /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
   const postCheckSellerAction = usePostCheckSellerAction();
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
-  // state error modal
-  const errorModal = useOmsGeneralFailedState();
-
+  /** === FUNCTIONS === */
+  /** Update cart after checkout button was clicked */
   const handleOnPressCheckout = useCallback(() => {
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
   }, [cartData, stateCart.buyerAddress.data]);
 
+  /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
   const checkProductSellerStock = useCallback(() => {
     if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
@@ -69,10 +70,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCart.update.data]);
 
+  /** ==> Run cart validation cycle after business error modal dismissed */
+  const handleClose = () => {
+    handleCartCycle();
+    setErrorShown(false);
+  };
+
+  /** === HOOKS === */
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    errorModal.setRetryCount(3);
 
     /** will unmount */
     return () => {
@@ -82,17 +89,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     };
   }, []);
 
+  /** => Check product, seller, and stock */
   useEffect(() => {
     checkProductSellerStock();
   }, [checkProductSellerStock]);
 
+  /** ==> Check curren cart data with response from check product, seller, and stock */
   useEffect(() => {
     if (
       stateCart.postCheckProduct.data !== null &&
       stateCart.postCheckSeller.data !== null &&
       stateCart.postCheckStock.data !== null
     ) {
-      /** Matching response data from checkProduct, checkSeller, and checkStock with data in Cart Master */
+      /** Check whether cart and several check responses match */
       const validationResult = matchCartWithCheckData({
         checkProductData: stateCart.postCheckProduct.data ?? [],
         checkSellerData: stateCart.postCheckSeller.data ?? [],
@@ -113,7 +122,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     stateCart.postCheckStock.data,
   ]);
 
-  /** => if one of the check endpoint fail, show error retry */
+  /** => if one of the check endpoint fail, show CTA */
   useEffect(() => {
     // wait all fetch done first
     if (
@@ -125,24 +134,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       const isErrorCheckProduct = stateCart.postCheckProduct.error !== null;
       const isErrorCheckSeller = stateCart.postCheckSeller.error !== null;
       const isErrorCheckStock = stateCart.postCheckStock.error !== null;
-      // determine the retry action
-      const action = () => {
-        if (errorModal.retryCount > 0) {
-          if (isErrorCheckProduct) {
-            postCheckProductAction.fetch(dispatchCart);
-          }
-          if (isErrorCheckSeller) {
-            postCheckSellerAction.fetch(dispatchCart);
-          }
-          if (isErrorCheckStock) {
-            postCheckStockAction.fetch(dispatchCart);
-          }
-          // decrease the retry count
-          errorModal.setRetryCount(errorModal.retryCount - 1);
-        } else {
-          errorModal.setOpen(false);
-        }
-      };
       // determine the error data
       let errorData = null;
       if (isErrorCheckProduct) {
@@ -154,7 +145,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        errorModal.setRetryAction(() => action);
+        errorModal.setCloseAction(() => errorModal.setOpen(false));
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
@@ -163,7 +154,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     stateCart.postCheckProduct,
     stateCart.postCheckSeller,
     stateCart.postCheckStock,
-    errorModal.retryCount,
   ]);
 
   useEffect(() => {
@@ -171,7 +161,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
      * AND buyer address already give the result
      */
     if (isMatchValid) {
-      errorModal.setRetryCount(3);
       checkoutAction.fetch(dispatchCheckout, cartData);
     }
   }, [isMatchValid]);
@@ -184,47 +173,25 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCheckout.checkout.data]);
 
+  /** If checkout results in an error, show CTA */
   useEffect(() => {
     // wait all fetch done first
     if (!stateCheckout.checkout.loading) {
       const isChekoutError = stateCheckout.checkout.error !== null;
-      // determine the retry action
-      const action = () => {
-        if (errorModal.retryCount > 0) {
-          checkoutAction.fetch(dispatchCart, cartData);
-          // decrease the retry count
-          errorModal.setRetryCount(errorModal.retryCount - 1);
-        } else {
-          errorModal.setOpen(false);
-        }
-      };
       // determine the error data
       let errorData = null;
       // show the modal and the data
       if (isChekoutError) {
         errorData = stateCheckout.checkout.error;
-        errorModal.setRetryAction(() => action);
+        errorModal.setCloseAction(() => errorModal.setOpen(false));
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
     }
-  }, [stateCheckout.checkout, errorModal.retryCount]);
+  }, [stateCheckout.checkout]);
 
-  useEffect(() => {
-    if (stateCart.postCancelStock.data !== null) {
-      handleMergeCheckData({
-        checkProductData: stateCart.postCheckProduct.data ?? [],
-        checkSellerData: stateCart.postCheckSeller.data ?? [],
-        checkStockData: stateCart.postCheckStock.data ?? [],
-      });
-    }
-  }, [stateCart.postCancelStock.data]);
-
-  const handleClose = () => {
-    handleCartCycle();
-    setErrorShown(false);
-  };
-
+  /** === VIEWS === */
+  /** ==> content */
   const renderFooterContent = () => (
     <View
       style={{
@@ -256,10 +223,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     </View>
   );
 
+  /** ==> Error Business Modal */
   const renderBusinessErrorModal = () => (
     <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
   );
 
+  /** ==> Main */
   return (
     <View style={ShoppingCartStyles.footerContainer}>
       {renderFooterContent()}
@@ -267,9 +236,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       <BottomSheetError
         open={errorModal.isOpen}
         error={errorModal.errorData}
-        retryAction={() => {
-          errorModal.retryAction();
-        }}
         closeAction={() => {
           errorModal.closeAction();
         }}
