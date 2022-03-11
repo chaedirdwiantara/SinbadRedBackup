@@ -1,5 +1,5 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMapping from '@core/services/apiMappingv3';
+import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 /** === FUNCTION === */
