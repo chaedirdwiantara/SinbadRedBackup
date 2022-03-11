@@ -122,10 +122,10 @@ const ModalSelection: React.FC<Props> = ({
 
   function handleLoadMore() {
     const {
-      data: { data, meta },
+      data: { meta },
       isLoadMoreLoading,
     } = listSelection || {};
-    if (data?.length < meta?.total && !isLoadMoreLoading) {
+    if (meta?.page < meta?.totalPage && !isLoadMoreLoading) {
       loadMoreSelection({
         type,
         meta: { page: meta?.page + 1 },

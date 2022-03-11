@@ -219,7 +219,13 @@ const Content: React.FC<Props> = (props) => {
                 />
               </MapView>,
               <TouchableOpacity
-                onPress={() => navigate('MapsView', { action: 'register' })}
+                onPress={() =>
+                  navigate(MAPS_VIEW_TYPE_2, {
+                    onMapsResult,
+                    action: 'edit',
+                    existingLatLang: latLng,
+                  })
+                }
                 style={styles.pinPoint}>
                 <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
               </TouchableOpacity>,
