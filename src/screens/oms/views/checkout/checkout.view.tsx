@@ -124,14 +124,14 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} />
+      <CheckoutBottomView data={data} expiredTime={addTime} />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime
         isOpen={isExpiredSession}
         close={handleBackToCart}
       />
-      
+
       {/* modal Term and Condition */}
       <ModalCheckoutTNC
         isOpen={isModalTNCOpen}
