@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
@@ -33,17 +33,18 @@ const DataTokoStep1View: React.FC = () => {
   const [openModalBack, setOpenModalBack] = useState(false);
   const [backHandle, setBackHandle] = useState(false);
 
-  React.useEffect(() => {
-    const backAction = () => {
-      setOpenModalBack(true);
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
     return backHandler.remove;
   }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
