@@ -70,8 +70,9 @@ const useUpdateCartAction = () => {
       contextDispatch: (action: any) => any,
       cartData: models.CartMaster,
     ) => {
+      const newCartData = cloneDeep(cartData);
       if (stateCart.buyerAddress.data !== null) {
-        const carts: models.CartMasterSellers[] = [...cartData.sellers];
+        const carts: models.CartMasterSellers[] = [...newCartData.sellers];
         cartData.unavailable.map((product) => {
           const sellerFound = cartData.sellers.find(
             (seller) => seller.sellerId === product.sellerId,
