@@ -34,6 +34,7 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
+import { isEqual } from 'lodash';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -51,6 +52,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckProduct,
     mergeCheckSeller,
     mergeCheckStock,
+    setInitialLocalData,
+    initialCartData,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
@@ -113,10 +116,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.fetch(dispatchCart);
   };
 
-  /** => handle update cart on blur  */
-  const handleUpdateCartOnBlur = () => {
+  /** => handle update cart */
+  const handleUpdateCart = () => {
     if (localCartMaster) {
-      updateCartAction.fetch(dispatchCart, localCartMaster);
+      if (!isEqual(localCartMaster, initialCartData)) {
+        updateCartAction.fetch(dispatchCart, localCartMaster);
+      }
     }
   };
 
@@ -136,16 +141,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       resultMergeCheckSeller,
     );
     if (resultMergeCheckStock) {
-      setLocalCartMaster(resultMergeCheckStock);
+      setInitialLocalData(resultMergeCheckStock);
     }
   };
 
   /** => handle go back */
   const handleGoBack = () => {
     goBack();
-    if (localCartMaster) {
-      updateCartAction.fetch(dispatchCart, localCartMaster);
-    }
+    handleUpdateCart();
   };
 
   /** => scroll to bottom (for accordion) */
@@ -169,7 +172,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => define blur function */
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
-      handleUpdateCartOnBlur();
+      handleUpdateCart();
     });
 
     return unsubscribeBlur;

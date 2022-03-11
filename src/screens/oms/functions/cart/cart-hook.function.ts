@@ -339,6 +339,7 @@ const useCartBuyerAddressAction = () => {
 /** => cart local data */
 const useCartLocalData = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
+  const [initialCartData, setInitialCartData] = useState<models.CartMaster>();
   return {
     updateQty: ({
       productId,
@@ -751,7 +752,12 @@ const useCartLocalData = () => {
         };
       }
     },
+    setInitialLocalData: (params: models.CartMaster) => {
+      setLocalCartMaster(params);
+      setInitialCartData(params);
+    },
     localCartMaster,
+    initialCartData,
   };
 };
 /** => oms general failed state */
