@@ -7,7 +7,7 @@ export interface AddToCartPayload extends CartProduct {
   sellerId: number;
   sellerName: string;
   lastUsedPrice: number;
-  isPriceUsedRules: boolean;
+  isLastPriceUsedRules: boolean;
   taxPercentage: number;
   leadTime: number;
 }

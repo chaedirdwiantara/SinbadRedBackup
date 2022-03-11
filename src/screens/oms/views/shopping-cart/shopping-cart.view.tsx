@@ -2,7 +2,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
 import { ShoppingCartAddress } from './shopping-cart-address.view';
@@ -94,12 +94,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => handle reset contexts */
   const handleResetContexts = () => {
+    cartMasterAction.reset();
     checkProductAction.reset(dispatchCart);
     checkSellerAction.reset(dispatchCart);
     checkStockAction.reset(dispatchCart);
     getCartAction.reset(dispatchCart);
     removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
@@ -114,11 +114,21 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.fetch(dispatchCart);
   };
 
+  /** => handle update cart on blur  */
+  const handleUpdateCartOnBlur = () => {
+    if (localCartMaster) {
+      if (!isEqual(localCartMaster, cartMasterAction.cartMaster)) {
+        cartMasterAction.replaceFromLocal(cloneDeep(localCartMaster));
+        updateCartAction.fetch(dispatchCart, localCartMaster);
+      }
+    }
+  };
+
   const handleGoBack = () => {
     goBack();
-    if (localCartMaster) {
-      updateCartAction.fetch(dispatchCart, localCartMaster);
-    }
+    // if (localCartMaster) {
+    //   updateCartAction.fetch(dispatchCart, localCartMaster);
+    // }
   };
 
   const scrollToBottom = () => {
@@ -126,15 +136,24 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   };
 
   /** === HOOKS === */
+  /** => define blur function */
+  useEffect(() => {
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      handleUpdateCartOnBlur();
+    });
+
+    return unsubscribeBlur;
+  }, [localCartMaster]);
+
   /** => did mount & will unmount */
   useEffect(() => {
     /** did mount */
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
       handleCartCyle();
     });
 
     /** will unmount */
-    return unsubscribe;
+    return unsubscribeFocus;
   }, [navigation]);
 
   /** => hardware back handler */
@@ -148,21 +167,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       // check which endpoint fetch was fail
       const isErrorCancelStock = stateCart.cancelStock.error !== null;
       const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
-      // determine retry action
-      const action = () => {
-        if (errorModal.retryCount > 0) {
-          if (isErrorCancelStock) {
-            cancelCartAction.fetch(dispatchCart);
-          }
-          if (isErrorBuyerAddress) {
-            cartBuyerAddressAction.fetch(dispatchCart);
-          }
-          // decrease the retry count
-          errorModal.setRetryCount(errorModal.retryCount - 1);
-        } else {
-          handleGoBack();
-        }
-      };
       // determine the error data
       let errorData = null;
       if (isErrorCancelStock) {
@@ -171,7 +175,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         errorData = stateCart.buyerAddress.error;
       }
       if (isErrorCancelStock || isErrorBuyerAddress) {
-        errorModal.setRetryAction(() => action);
         errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
@@ -214,15 +217,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => if get cart failed */
   useEffect(() => {
     if (stateCart.get.error !== null) {
-      const action = () => {
-        if (errorModal.retryCount > 0) {
-          getCartAction.fetch(dispatchCart);
-          errorModal.setRetryCount(errorModal.retryCount - 1);
-        } else {
-          handleGoBack();
-        }
-      };
-      errorModal.setRetryAction(() => action);
       errorModal.setCloseAction(() => handleGoBack);
       errorModal.setErrorData(stateCart.get.error);
       errorModal.setOpen(true);
@@ -242,24 +236,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       const isErrorCheckProduct = stateCart.checkProduct.error !== null;
       const isErrorCheckSeller = stateCart.checkSeller.error !== null;
       const isErrorCheckStock = stateCart.checkStock.error !== null;
-      // determine the retry action
-      const action = () => {
-        if (errorModal.retryCount > 0) {
-          if (isErrorCheckProduct) {
-            checkProductAction.fetch(dispatchCart);
-          }
-          if (isErrorCheckSeller) {
-            checkSellerAction.fetch(dispatchCart);
-          }
-          if (isErrorCheckStock) {
-            checkStockAction.fetch(dispatchCart, false);
-          }
-          // decrease the retry count
-          errorModal.setRetryCount(errorModal.retryCount - 1);
-        } else {
-          handleGoBack();
-        }
-      };
       // determine the error data
       let errorData = null;
       if (isErrorCheckProduct) {
@@ -271,7 +247,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        errorModal.setRetryAction(() => action);
         errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
@@ -396,10 +371,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       <BottomSheetError
         open={errorModal.isOpen}
         error={errorModal.errorData}
-        retryAction={() => {
-          errorModal.retryAction();
-          errorModal.setOpen(false);
-        }}
         closeAction={() => {
           errorModal.closeAction();
           errorModal.setOpen(false);
