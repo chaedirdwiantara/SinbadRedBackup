@@ -365,7 +365,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
                 keyboardFocus.isFocus
               }
               handleCartCycle={handleCartCyle}
-              handleMergeCheckData={handleMergeCheckData}
             />
           </React.Fragment>
         );

@@ -324,18 +324,6 @@ const useCancelStockAction = () => {
     },
   };
 };
-/** => post cancel stock action */
-const usePostCancelStockAction = () => {
-  const dispatch = useDispatch();
-  return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.postCancelStockProcess(contextDispatch));
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.postCancelStockReset(contextDispatch));
-    },
-  };
-};
 /** => cart buyer address action */
 const useCartBuyerAddressAction = () => {
   const dispatch = useDispatch();
@@ -822,7 +810,6 @@ export {
   useCheckStockAction,
   usePostCheckStockAction,
   useCancelStockAction,
-  usePostCancelStockAction,
   useCartBuyerAddressAction,
   useCartLocalData,
   useOmsGeneralFailedState,

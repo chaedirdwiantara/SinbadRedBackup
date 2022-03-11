@@ -26,7 +26,6 @@ interface FooterProps {
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
   handleCartCycle: () => void;
-  handleMergeCheckData: (props: models.MergeCheckData) => void;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -35,7 +34,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   countTotalProduct,
   isCheckoutDisabled,
   handleCartCycle,
-  handleMergeCheckData,
 }) => {
   /** === STATES === */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
@@ -192,16 +190,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCheckout.checkout]);
 
-  /** After cancel stock API requested, merge response from all checks to cart master */
-  useEffect(() => {
-    if (stateCart.cancelStock.data !== null) {
-      handleMergeCheckData({
-        checkProductData: stateCart.postCheckProduct.data ?? [],
-        checkSellerData: stateCart.postCheckSeller.data ?? [],
-        checkStockData: stateCart.postCheckStock.data ?? [],
-      });
-    }
-  }, [stateCart.cancelStock.data]);
 
   /** === VIEWS === */
   const renderFooterContent = () => (
