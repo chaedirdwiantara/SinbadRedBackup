@@ -40,10 +40,12 @@ const HelpView: FC = ({ start }: any) => {
 
   //function for start couchmark
   useEffect(() => {
-    if (coachmarkState?.data?.helpCoachmark === false) {
-      setTimeout(() => {
-        start();
-      }, 100);
+    if (typeof coachmarkState.data?.homeCoachmark === 'boolean') {
+      if (coachmarkState?.data?.helpCoachmark === false) {
+        setTimeout(() => {
+          start();
+        }, 100);
+      }
     }
   }, [coachmarkState?.data?.helpCoachmark]);
 
@@ -123,7 +125,10 @@ const HelpView: FC = ({ start }: any) => {
 
   //walkthrough couchmark
   const couchmarkWalkthrough = () => {
-    if (!coachmarkState?.data?.helpCoachmark) {
+    if (
+      typeof coachmarkState?.data?.helpCoachmark === 'boolean' &&
+      coachmarkState?.data?.helpCoachmark === false
+    ) {
       return (
         <View>
           <View style={{ flex: 1 }}>
