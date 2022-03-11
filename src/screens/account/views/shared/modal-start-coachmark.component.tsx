@@ -16,13 +16,12 @@ interface Props {
 const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
   const [open, setOpen] = React.useState<boolean>(false);
   const { coachmarkState } = useCoachmark();
-  const { getCoachmark, resetCoachmark } = useCoachmark();
+  const { getCoachmark } = useCoachmark();
   const { me } = useDataAuth();
   const [mounted, setMounted] = React.useState(true);
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
-    resetCoachmark();
     return () => setMounted(false);
   }, []);
 

@@ -1,4 +1,4 @@
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Svg from '@svg';
 import React from 'react';
 import { View } from 'react-native';
@@ -36,7 +36,7 @@ const STATIC_CONTENT = [
 ];
 
 const Content: React.FC = () => {
-  const { dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   return (
     <View style={{ borderTopWidth: 1, borderTopColor: color.black10, flex: 1 }}>
       <View style={{ flex: 1 }}>
@@ -68,7 +68,7 @@ const Content: React.FC = () => {
         <SnbButton.Single
           title="Lengkapi Data Sekarang"
           type="primary"
-          onPress={() => dispatch(StackActions.replace(DATA_COMPLETENESS_VIEW))}
+          onPress={() => navigate(DATA_COMPLETENESS_VIEW)}
           disabled={false}
         />
       </View>
