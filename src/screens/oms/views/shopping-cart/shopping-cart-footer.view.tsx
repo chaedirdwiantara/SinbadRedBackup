@@ -190,8 +190,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCheckout.checkout]);
 
-
   /** === VIEWS === */
+  /** ==> content */
   const renderFooterContent = () => (
     <View
       style={{
@@ -223,10 +223,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     </View>
   );
 
+  /** ==> Error Business Modal */
   const renderBusinessErrorModal = () => (
     <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
   );
 
+  /** ==> Main */
   return (
     <View style={ShoppingCartStyles.footerContainer}>
       {renderFooterContent()}
