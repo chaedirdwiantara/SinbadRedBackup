@@ -20,6 +20,7 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
@@ -48,6 +49,7 @@ const DataDiriStep5View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -149,8 +151,16 @@ const DataDiriStep5View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
-        }}
+          if(ktp !== '' && npwp !== '') {
+            updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          } else if (ktp !== '') {
+            updateCompleteData({ user: { idNo: ktp } });
+          } else if (npwp !== '') {
+            updateCompleteData({ user: { taxNo: npwp } });
+          } else {
+            backToDataCompleteness();
+          }
+        }} 
       />
       <ListOfSteps
         open={openModalStep}

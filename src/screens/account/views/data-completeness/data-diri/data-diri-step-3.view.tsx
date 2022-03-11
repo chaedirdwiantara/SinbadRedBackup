@@ -31,6 +31,7 @@ const DataDiriStep3View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   React.useEffect(() => {
@@ -87,11 +88,7 @@ const DataDiriStep3View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      if (completeDataState?.data?.userData?.taxImageUrl) {
-        backToDataCompleteness();
-      } else {
-        openCamera('npwp');
-      }
+      backToDataCompleteness();
     }
   };
 
@@ -107,6 +104,7 @@ const DataDiriStep3View: React.FC = () => {
   // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -135,7 +133,6 @@ const DataDiriStep3View: React.FC = () => {
           'Hindari Tangan Menutupi NPWP',
         ]}
         action={() => openCamera('npwp')}
-        listType={'number'}
       />
     );
   };
