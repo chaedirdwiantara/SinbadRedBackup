@@ -4,7 +4,12 @@ import { DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
-import { SnbButton, SnbContainer, SnbTextField, SnbTopNav } from 'react-native-sinbad-ui';
+import {
+  SnbButton,
+  SnbContainer,
+  SnbTextField,
+  SnbTopNav,
+} from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 
 const DataDiriStep5View: React.FC = () => {
@@ -15,13 +20,20 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
-  const [npwp, setNpwp] = React.useState(completeDataState?.data?.userData?.taxNo);
+  const [npwp, setNpwp] = React.useState(
+    completeDataState?.data?.userData?.taxNo,
+  );
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
+  const [isKTPValid, setIsKTPValid] = React.useState(false);
+  const [isNPWPValid, setIsNPWPValid] = React.useState(false);
+  const [messageErrorKTP, setMessageErrorKTP] = React.useState('');
+  const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
 
   React.useEffect(() => {
     const backAction = () => {
@@ -30,13 +42,14 @@ const DataDiriStep5View: React.FC = () => {
     };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      backAction,
     );
     return () => backHandler.remove();
   }, []);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -48,13 +61,32 @@ const DataDiriStep5View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
+  React.useEffect(() => {
+    //validate KTP
+    if (ktp?.length === 16 || ktp === '' || ktp === null) {
+      setMessageErrorKTP('');
+      setIsKTPValid(true);
+    } else {
+      setMessageErrorKTP('Pastikan Nomor KTP 16 Digit');
+      setIsKTPValid(false);
+    }
+    //validate NPWP
+    if (npwp?.length === 15 || npwp === '' || npwp === null) {
+      setMessageErrorNPWP('');
+      setIsNPWPValid(true);
+    } else {
+      setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+      setIsNPWPValid(false);
+    }
+  }, [ktp, npwp]);
+
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
-          backAction={() => setOpenModalBack(true)}
-          type="white"
-          title="Konfirmasi Kartu Identitas"
-        />
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Konfirmasi Kartu Identitas"
+      />
       <ScrollView style={{ flex: 1 }}>
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed || 1}
@@ -66,26 +98,38 @@ const DataDiriStep5View: React.FC = () => {
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
-            type={'default'}
+            type={isKTPValid ? 'default' : 'error'}
             value={ktp}
             maxLength={16}
-            onChangeText={(text) => setKtp(text)}
+            onChangeText={(text) => {
+              text = text.replace(/[^0-9]/g, '');
+              setKtp(text);
+              setIsKTPValid(false);
+              setMessageErrorKTP('');
+            }}
             placeholder={'Default Text'}
             labelText={'Nomor KTP'}
             keyboardType={'number-pad'}
             mandatory
+            valMsgError={messageErrorKTP}
           />
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
-            type={'default'}
+            type={isNPWPValid ? 'default' : 'error'}
             value={npwp}
             maxLength={15}
-            onChangeText={(text) => setNpwp(text)}
+            onChangeText={(text) => {
+              text = text.replace(/[^0-9]/g, '');
+              setNpwp(text);
+              setIsNPWPValid(false);
+              setMessageErrorNPWP('');
+            }}
             placeholder={'Default Text'}
             labelText={'Nomor NPWP'}
             keyboardType={'number-pad'}
             mandatory
+            valMsgError={messageErrorNPWP}
           />
         </View>
       </ScrollView>
@@ -93,8 +137,12 @@ const DataDiriStep5View: React.FC = () => {
         <SnbButton.Single
           title="Lanjut"
           type="primary"
-          disabled={ktp && npwp || updateCompleteDataState.loading ? false : true}
-          onPress={() => updateCompleteData({ user: { idNo: ktp, taxNo: npwp }})}
+          disabled={
+            !isKTPValid || !isNPWPValid || updateCompleteDataState.loading || !ktp || !npwp
+          }
+          onPress={() =>
+            updateCompleteData({ user: { idNo: ktp, taxNo: npwp } })
+          }
           loading={updateCompleteDataState.loading}
         />
       </View>
@@ -103,15 +151,24 @@ const DataDiriStep5View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ user: { idNo: ktp, taxNo: npwp  }});
-        }}
+          if(ktp !== '' && npwp !== '') {
+            updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          } else if (ktp !== '') {
+            updateCompleteData({ user: { idNo: ktp } });
+          } else if (npwp !== '') {
+            updateCompleteData({ user: { taxNo: npwp } });
+          } else {
+            backToDataCompleteness();
+          }
+        }} 
       />
       <ListOfSteps
         open={openModalStep}
         type="user"
         closeModal={() => setOpenModalStep(false)}
       />
-    </SnbContainer>);
+    </SnbContainer>
+  );
 };
 
 export default DataDiriStep5View;
