@@ -402,7 +402,7 @@ const ProductDetailView: FC = () => {
       productDetailActions.reset(dispatchProduct);
       supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
-      // addToCartActions.reset(dispatchShopingCart);
+      addToCartAction.reset(dispatchCart);
     };
   }, []);
 
