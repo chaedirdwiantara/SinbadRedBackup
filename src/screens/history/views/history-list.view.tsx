@@ -99,10 +99,12 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
 
   //function for start couchmark
   useEffect(() => {
-    if (!coachmarkState?.data?.orderCoachmark) {
-      setTimeout(() => {
-        start();
-      }, 100);
+    if (typeof coachmarkState.data?.homeCoachmark === 'boolean') {
+      if (coachmarkState?.data?.orderCoachmark === false) {
+        setTimeout(() => {
+          start();
+        }, 100);
+      }
     }
   }, [coachmarkState?.data?.orderCoachmark]);
   /** === FUNCTIONS === */
@@ -285,10 +287,13 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
   );
   //walkthrough couchmark
   const couchmarkWalkthrough = () => {
-    if (!coachmarkState?.data?.orderCoachmark) {
+    if (
+      typeof coachmarkState?.data?.orderCoachmark === 'boolean' &&
+      coachmarkState?.data?.orderCoachmark === false
+    ) {
       return (
         <View style={{ flexDirection: 'row' }}>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CopilotStep
               text="Semua tagihan dari pembelian Anda bisa dilihat disini."
               order={1}
@@ -299,12 +304,12 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
                   width: '100%',
                   position: 'absolute',
                   marginTop: -46,
-                  elevation: -100
+                  elevation: -100,
                 }}
               />
             </CopilotStep>
           </View>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <CopilotStep
               text="Semua pesanan Anda bisa dilihat disini."
               order={2}
@@ -315,7 +320,7 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
                   width: '100%',
                   position: 'absolute',
                   marginTop: -46,
-                  elevation: -100
+                  elevation: -100,
                 }}
               />
             </CopilotStep>
