@@ -152,7 +152,7 @@ const DataDiriStep5View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if(ktp !== '' && npwp !== '' && isKTPValid && isNPWPValid) {
+          if (ktp !== '' && npwp !== '' && isKTPValid && isNPWPValid) {
             updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
           } else if (ktp !== '' && isKTPValid) {
             updateCompleteData({ user: { idNo: ktp } });
@@ -161,7 +161,7 @@ const DataDiriStep5View: React.FC = () => {
           } else {
             backToDataCompleteness();
           }
-        }} 
+        }}
       />
       <ListOfSteps
         open={openModalStep}
