@@ -87,7 +87,7 @@ const DataTokoStep1View: React.FC = () => {
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
             type={'default'}
-            keyboardType={'phone-pad'}
+            keyboardType={'numeric'}
             value={telp}
             maxLength={11}
             onChangeText={(text) => setTelp(text)}
