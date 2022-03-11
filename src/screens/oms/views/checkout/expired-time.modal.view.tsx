@@ -17,7 +17,7 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
         'Silahkan ulangi proses pemesanan dan selesaikan kurang dari 5 menit.'
       }
       errorImage={require('../../../../assets/images/expired_time.png')}
-      buttonTitle={'Ok'}
+      buttonTitle={'Kembali ke Keranjang'}
       buttonOnPress={() => {
         close();
       }}
