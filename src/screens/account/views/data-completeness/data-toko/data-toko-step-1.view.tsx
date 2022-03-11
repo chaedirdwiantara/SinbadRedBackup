@@ -90,7 +90,10 @@ const DataTokoStep1View: React.FC = () => {
             keyboardType={'numeric'}
             value={telp}
             maxLength={11}
-            onChangeText={(text) => setTelp(text)}
+            onChangeText={(text) => {
+              text = text.replace(/[^0-9]/g, '');
+              setTelp(text);
+            }}
             placeholder={'Contoh: 0812345678'}
             labelText={'Nomor Telepon Toko'}
             mandatory
