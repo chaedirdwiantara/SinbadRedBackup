@@ -41,7 +41,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                   {products[0].qty} {products[0].uomLabel}
                 </SnbText.B4>
                 <SnbText.B4 color={color.black100}>
-                  {toCurrency(products[0].price, { withFraction: false })}
+                  {toCurrency(products[0].lastUsedPrice, { withFraction: false })}
                 </SnbText.B4>
               </View>
             </View>
@@ -74,7 +74,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                       {item.qty} {item.uomLabel}
                     </SnbText.B4>
                     <SnbText.B4 color={color.black100}>
-                      {toCurrency(item.price, { withFraction: false })}
+                      {toCurrency(item.lastUsedPrice, { withFraction: false })}
                     </SnbText.B4>
                   </View>
                 </View>
