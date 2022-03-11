@@ -46,8 +46,11 @@ const DataDiriStep1View: React.FC = () => {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
+        resetUpdateCompleteData();
+        setBackHandle(false);
       } else {
         dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
+        resetUpdateCompleteData();
       }
     }
   }, [updateCompleteDataState]);
