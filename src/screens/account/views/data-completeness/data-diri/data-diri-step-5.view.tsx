@@ -22,15 +22,17 @@ const DataDiriStep5View: React.FC = () => {
     backToDataCompleteness,
   } = useEasyRegistration();
 
-  const [ktp, setKtp] = React.useState(completeDataState?.data?.userData?.idNo);
+  const [ktp, setKtp] = React.useState(
+    completeDataState?.data?.userData?.idNo || '',
+  );
   const [npwp, setNpwp] = React.useState(
     completeDataState?.data?.userData?.taxNo,
   );
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
-  const [isKTPValid, setIsKTPValid] = React.useState(false);
-  const [isNPWPValid, setIsNPWPValid] = React.useState(false);
+  const [isKTPValid, setIsKTPValid] = React.useState(true);
+  const [isNPWPValid, setIsNPWPValid] = React.useState(true);
   const [messageErrorKTP, setMessageErrorKTP] = React.useState('');
   const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
 
@@ -59,25 +61,6 @@ const DataDiriStep5View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
-  React.useEffect(() => {
-    //validate KTP
-    if (ktp?.length === 16 || ktp === '' || ktp === null) {
-      setMessageErrorKTP('');
-      setIsKTPValid(true);
-    } else {
-      setMessageErrorKTP('Pastikan Nomor KTP 16 Digit');
-      setIsKTPValid(false);
-    }
-    //validate NPWP
-    if (npwp?.length === 15 || npwp === '' || npwp === null) {
-      setMessageErrorNPWP('');
-      setIsNPWPValid(true);
-    } else {
-      setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
-      setIsNPWPValid(false);
-    }
-  }, [ktp, npwp]);
-
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
@@ -104,6 +87,13 @@ const DataDiriStep5View: React.FC = () => {
               setKtp(text);
               setIsKTPValid(false);
               setMessageErrorKTP('');
+              if (text?.length === 16 || text === '' || text === null) {
+                setMessageErrorKTP('');
+                setIsKTPValid(true);
+              } else {
+                setMessageErrorKTP('Pastikan Nomor KTP 16 Digit');
+                setIsKTPValid(false);
+              }
             }}
             placeholder={'Default Text'}
             labelText={'Nomor KTP'}
@@ -122,6 +112,13 @@ const DataDiriStep5View: React.FC = () => {
               setNpwp(text);
               setIsNPWPValid(false);
               setMessageErrorNPWP('');
+              if (text?.length === 15 || text === '' || text === null) {
+                setMessageErrorNPWP('');
+                setIsNPWPValid(true);
+              } else {
+                setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+                setIsNPWPValid(false);
+              }
             }}
             placeholder={'Default Text'}
             labelText={'Nomor NPWP'}
@@ -136,7 +133,11 @@ const DataDiriStep5View: React.FC = () => {
           title="Lanjut"
           type="primary"
           disabled={
-            !isKTPValid || !isNPWPValid || updateCompleteDataState.loading || !ktp || !npwp
+            !isKTPValid ||
+            !isNPWPValid ||
+            updateCompleteDataState.loading ||
+            !ktp ||
+            !npwp
           }
           onPress={() =>
             updateCompleteData({ user: { idNo: ktp, taxNo: npwp } })
@@ -148,8 +149,12 @@ const DataDiriStep5View: React.FC = () => {
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
-          setBackHandle(true);
-          updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          if (isKTPValid || isNPWPValid || ktp || npwp) {
+            setBackHandle(true);
+            updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
       <ListOfSteps

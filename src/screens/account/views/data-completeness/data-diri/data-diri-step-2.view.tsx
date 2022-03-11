@@ -11,7 +11,7 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { useNavigation, StackActions, useFocusEffect } from '@react-navigation/native';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
@@ -74,17 +74,18 @@ const DataDiriStep2View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
-  React.useEffect(() => {
-    const backAction = () => {
-      setOpenModalBack(true);
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
-    return () => backHandler.remove();
+    return backHandler.remove;
   }, []);
+
+  useFocusEffect(handleBackButton);
 
   const renderUploadPhotoRules = () => {
     return (

@@ -92,8 +92,12 @@ const DataDiriStep1View: React.FC = () => {
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
-          setBackHandle(true);
-          updateCompleteData({ user: { name: name } });
+          if (name) {
+            setBackHandle(true);
+            updateCompleteData({ user: { name: name } });
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
       <ListOfSteps

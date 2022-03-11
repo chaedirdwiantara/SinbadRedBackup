@@ -8,7 +8,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { useNavigation, StackActions } from '@react-navigation/core';
+import { useNavigation, StackActions, useFocusEffect } from '@react-navigation/core';
 import { DATA_DIRI_STEP_5_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -42,17 +42,18 @@ const DataDiriStep4View: React.FC = () => {
   }, []);
 
   // HANDLE BACK DEVICE
-  React.useEffect(() => {
-    const backAction = () => {
-      setOpenModalBack(true);
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
-    return () => backHandler.remove();
+    return backHandler.remove;
   }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (
