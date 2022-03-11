@@ -178,10 +178,12 @@ const usePostCheckProductAction = () => {
         const data: models.CheckProductPayloadCarts[] = [];
         cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
-            data.push({
-              productId: productItem.productId,
-              warehouseId: productItem.warehouseId,
-            });
+            if (productItem.selected) {
+              data.push({
+                productId: productItem.productId,
+                warehouseId: productItem.warehouseId,
+              });
+            }
           });
         });
         dispatch(
@@ -234,7 +236,9 @@ const usePostCheckSellerAction = () => {
         // format payload from redux master
         const data: number[] = [];
         cartData.sellers.map((sellerItem) => {
-          data.push(sellerItem.sellerId);
+          if (sellerItem.status === 'active') {
+            data.push(sellerItem.sellerId);
+          }
         });
         dispatch(
           Actions.postCheckSellerProcess(contextDispatch, {
@@ -295,11 +299,13 @@ const usePostCheckStockAction = () => {
         const data: models.CheckStockPayloadCarts[] = [];
         cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
-            data.push({
-              productId: productItem.productId,
-              warehouseId: productItem.warehouseId,
-              qty: productItem.qty,
-            });
+            if (productItem.selected) {
+              data.push({
+                productId: productItem.productId,
+                warehouseId: productItem.warehouseId,
+                qty: productItem.qty,
+              });
+            }
           });
         });
         dispatch(

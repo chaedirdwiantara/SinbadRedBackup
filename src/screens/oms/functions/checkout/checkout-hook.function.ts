@@ -32,7 +32,7 @@ const useCheckoutAction = () => {
               .filter((product) => product.selected)
               .map((product) => {
                 let priceRules: models.ProductPriceRules | {} = {};
-                // if the product using price rules
+                /** ==> To be continued on bulk pricing sprint */
                 if (product.priceRules.length > 0) {
                   const priceRulesLastItem =
                     product.priceRules[product.priceRules.length - 1];
