@@ -167,14 +167,16 @@ const useCheckProductAction = () => {
 };
 /** => post check product action */
 const usePostCheckProductAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: models.CheckProductPayloadCarts[] = [];
-        stateCart.get.data.sellers.map((sellerItem) => {
+        cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
             data.push({
               productId: productItem.productId,
@@ -222,14 +224,16 @@ const useCheckSellerAction = () => {
 };
 /** => post check seller action */
 const usePostCheckSellerAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: number[] = [];
-        stateCart.get.data.sellers.map((sellerItem) => {
+        cartData.sellers.map((sellerItem) => {
           data.push(sellerItem.sellerId);
         });
         dispatch(
@@ -280,14 +284,16 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
-        stateCart.get.data?.sellers.map((sellerItem) => {
+        cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
             data.push({
               productId: productItem.productId,
@@ -299,7 +305,7 @@ const usePostCheckStockAction = () => {
         dispatch(
           Actions.postCheckStockProcess(contextDispatch, {
             data: {
-              cartId: stateCart.get.data.id,
+              cartId: cartData.id,
               reserved: true,
               carts: data,
             },

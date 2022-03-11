@@ -75,7 +75,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
               </View>
               {item.products.map((product) => (
                 <View
-                  key={`${product.productId}.${product.sellerId}`}
+                  key={`${product.productId}.${product.sellerId}.${product.warehouseId}`}
                   style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
                   <ProductView
                     product={product}

@@ -60,15 +60,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   }, [cartData, stateCart.buyerAddress.data]);
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
-  const checkProductSellerStock = useCallback(() => {
+  const checkProductSellerStock = () => {
     if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
-      postCheckProductAction.fetch(dispatchCart);
-      postCheckSellerAction.fetch(dispatchCart);
-      postCheckStockAction.fetch(dispatchCart);
+      postCheckProductAction.fetch(dispatchCart, cartData);
+      postCheckSellerAction.fetch(dispatchCart, cartData);
+      postCheckStockAction.fetch(dispatchCart, cartData);
       setCheckoutPressed(false);
     }
-  }, [stateCart.update.data]);
+  };
 
   /** ==> Run cart validation cycle after business error modal dismissed */
   const handleClose = () => {
