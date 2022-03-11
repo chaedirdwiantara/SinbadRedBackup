@@ -8,6 +8,7 @@ export interface CartMaster {
   id: string;
   userId: number;
   buyerId: number;
+  buyerName: string;
   totalProducts: number;
   sellers: CartMasterSellers[];
   unavailable: CartMasterUnavailable[];

@@ -236,6 +236,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         id: stateCart.get.data.id,
         userId: stateCart.get.data.userId,
         buyerId: stateCart.get.data.buyerId,
+        buyerName: stateCart.get.data.buyerName,
         totalProducts: stateCart.get.data.totalProducts,
         sellers: stateCart.get.data.sellers,
         unavailable: [],
