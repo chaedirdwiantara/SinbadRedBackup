@@ -21,6 +21,7 @@ const useCheckoutAction = () => {
         stateCart.postCheckStock.data !== null &&
         stateCart.buyerAddress.data !== null
       ) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const buyerAddress = (({ buyerId, buyerName, ...rest }) => rest)(
           stateCart.buyerAddress.data,
         );
