@@ -1,4 +1,4 @@
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
@@ -13,7 +13,7 @@ import { useEasyRegistration } from '@screen/account/functions';
 import { DATA_TOKO_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 const DataTokoStep1View: React.FC = () => {
-  const { dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     completeDataState,
@@ -52,7 +52,7 @@ const DataTokoStep1View: React.FC = () => {
       if (backHandle) {
         backToDataCompleteness();
       } else {
-        dispatch(StackActions.replace(DATA_TOKO_STEP_2_VIEW));
+        navigate(DATA_TOKO_STEP_2_VIEW);
       }
     }
   }, [updateCompleteDataState]);
@@ -115,7 +115,7 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if (name !== '' || telp !== ''){
+          if (name !== '' || telp !== '') {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } });
           } else {
             backToDataCompleteness();

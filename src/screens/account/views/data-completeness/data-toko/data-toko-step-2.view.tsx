@@ -11,11 +11,7 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import {
-  StackActions,
-  useFocusEffect,
-  useNavigation,
-} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
   DATA_TOKO_STEP_3_VIEW,
@@ -33,7 +29,7 @@ const Content: React.FC<Props> = (props) => {
     contexts.GlobalContext,
   );
   const { upload, save } = useUploadImageAction();
-  const { navigate, dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -92,7 +88,7 @@ const Content: React.FC<Props> = (props) => {
       } else {
         const { latitude, longitude } = completeDataState.data?.buyerData || {};
         if (latitude !== null && longitude !== null) {
-          dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW));
+          navigate(DATA_TOKO_STEP_3_VIEW);
         } else {
           navigate(MAPS_VIEW_TYPE_2);
         }
@@ -160,7 +156,7 @@ const Content: React.FC<Props> = (props) => {
                 const { latitude, longitude } =
                   completeDataState.data?.buyerData || {};
                 if (latitude !== null && longitude !== null) {
-                  dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW));
+                  navigate(DATA_TOKO_STEP_3_VIEW);
                 } else {
                   navigate(MAPS_VIEW_TYPE_2);
                 }

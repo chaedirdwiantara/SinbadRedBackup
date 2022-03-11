@@ -8,12 +8,12 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useNavigation, StackActions } from '@react-navigation/core';
+import { useNavigation, useFocusEffect } from '@react-navigation/core';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
 const DataDiriStep1View: React.FC = () => {
-  const { dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -27,18 +27,18 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalBack, setOpenModalBack] = useState(false);
   const [backHandle, setBackHandle] = useState(false);
 
-  // HANDLE BACK DEVICE
-  React.useEffect(() => {
-    const backAction = () => {
-      setOpenModalBack(true);
-      return true;
-    };
+  const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction,
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
     );
-    return () => backHandler.remove();
+    return backHandler.remove;
   }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
@@ -49,7 +49,7 @@ const DataDiriStep1View: React.FC = () => {
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        dispatch(StackActions.replace(DATA_DIRI_STEP_2_VIEW));
+        navigate(DATA_DIRI_STEP_2_VIEW);
         resetUpdateCompleteData();
       }
     }
@@ -96,7 +96,7 @@ const DataDiriStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if ( name && name !== ''){
+          if (name && name !== '') {
             updateCompleteData({ user: { name: name } });
             resetUpdateCompleteData();
           } else {

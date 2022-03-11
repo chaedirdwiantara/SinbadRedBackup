@@ -19,10 +19,15 @@ export const copilotOptions: any = (
     handlePrev,
     isFirstStep,
   }) => {
-    const { updateCoachmarkState, updateCoachmark, resetCoachmark } =
-      useCoachmark();
+    const {
+      updateCoachmarkState,
+      updateCoachmark,
+      resetCoachmark,
+      getCoachmark,
+    } = useCoachmark();
     React.useEffect(() => {
       if (updateCoachmarkState?.data) {
+        getCoachmark();
         resetCoachmark();
         handleStop();
       }

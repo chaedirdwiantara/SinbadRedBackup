@@ -11,7 +11,7 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 
@@ -26,7 +26,7 @@ const DataDiriStep2View: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
 
   const { upload, save } = useUploadImageAction();
-  const { dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -69,7 +69,7 @@ const DataDiriStep2View: React.FC = () => {
       } else {
         resetCamera();
         resetUpdateCompleteData();
-        dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW));
+        navigate(DATA_DIRI_STEP_3_VIEW);
       }
     }
   }, [updateCompleteDataState]);
@@ -144,7 +144,7 @@ const DataDiriStep2View: React.FC = () => {
               leftTitle={'Ubah Foto'}
               rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('ktp')}
-              onPressRight={() => dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW))}
+              onPressRight={() => navigate(DATA_DIRI_STEP_3_VIEW)}
               rightDisabled={false}
               leftDisabled={false}
             />,
