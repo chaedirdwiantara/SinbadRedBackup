@@ -1,4 +1,4 @@
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import { DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
@@ -13,7 +13,7 @@ import {
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 
 const DataDiriStep5View: React.FC = () => {
-  const { dispatch } = useNavigation();
+  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -57,7 +57,7 @@ const DataDiriStep5View: React.FC = () => {
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        dispatch(StackActions.replace(DATA_DIRI_STEP_6_VIEW));
+        navigate(DATA_DIRI_STEP_6_VIEW);
         resetUpdateCompleteData();
       }
     }
@@ -152,7 +152,7 @@ const DataDiriStep5View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if(ktp !== '' && npwp !== '' && isKTPValid && isNPWPValid) {
+          if (ktp !== '' && npwp !== '' && isKTPValid && isNPWPValid) {
             updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
           } else if (ktp !== '' && isKTPValid) {
             updateCompleteData({ user: { idNo: ktp } });
@@ -161,7 +161,7 @@ const DataDiriStep5View: React.FC = () => {
           } else {
             backToDataCompleteness();
           }
-        }} 
+        }}
       />
       <ListOfSteps
         open={openModalStep}
