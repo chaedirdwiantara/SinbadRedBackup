@@ -61,12 +61,12 @@ const DataDiriStep2View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        refetchCompleteData();
         resetCamera();
         resetUpdateCompleteData();
         dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW));
@@ -143,7 +143,7 @@ const DataDiriStep2View: React.FC = () => {
               leftType={'secondary'}
               rightType={'primary'}
               leftTitle={'Ubah Foto'}
-              rightTitle={'Lewati'}
+              rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('ktp')}
               onPressRight={() => dispatch(StackActions.replace(DATA_DIRI_STEP_3_VIEW))}
               rightDisabled={false}
@@ -161,11 +161,7 @@ const DataDiriStep2View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
-      if (completeDataState?.data?.userData?.taxImageUrl) {
-        backToDataCompleteness();
-      } else {
-        openCamera('ktp');
-      }
+      backToDataCompleteness();
     }
   };
 

@@ -31,6 +31,7 @@ const DataDiriStep4View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   React.useEffect(() => {
@@ -104,6 +105,7 @@ const DataDiriStep4View: React.FC = () => {
   // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();

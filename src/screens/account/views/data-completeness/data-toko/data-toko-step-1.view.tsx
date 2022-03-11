@@ -87,10 +87,13 @@ const DataTokoStep1View: React.FC = () => {
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
             type={'default'}
-            keyboardType={'phone-pad'}
+            keyboardType={'numeric'}
             value={telp}
             maxLength={11}
-            onChangeText={(text) => setTelp(text)}
+            onChangeText={(text) => {
+              text = text.replace(/[^0-9]/g, '');
+              setTelp(text);
+            }}
             placeholder={'Contoh: 0812345678'}
             labelText={'Nomor Telepon Toko'}
             mandatory
@@ -112,7 +115,11 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          updateCompleteData({ buyer: { name: name, phoneNo: telp } });
+          if (name !== '' || telp !== ''){
+            updateCompleteData({ buyer: { name: name, phoneNo: telp } });
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
       <ListOfSteps

@@ -17,6 +17,7 @@ const DataDiriStep6View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
   const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
   const [openModalStep, setOpenModalStep] = useState(false);
@@ -33,7 +34,7 @@ const DataDiriStep6View: React.FC = () => {
     };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      backAction
+      backAction,
     );
     return () => backHandler.remove();
   }, []);
@@ -63,7 +64,7 @@ const DataDiriStep6View: React.FC = () => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     if (updateCompleteDataState.error) {
       setEmailIsNotValid(true);
       setErrorMessage(updateCompleteDataState.error.message);
@@ -72,6 +73,7 @@ const DataDiriStep6View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -128,8 +130,12 @@ const DataDiriStep6View: React.FC = () => {
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
-          setBackHandle(true);
-          confirm();
+          if (email && email !== '' && !emailIsNotValid) {
+            setBackHandle(true);
+            confirm();
+          } else {
+            backToDataCompleteness();
+          }
         }}
       />
       <ListOfSteps

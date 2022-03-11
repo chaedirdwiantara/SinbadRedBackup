@@ -20,6 +20,7 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
 
   const [ktp, setKtp] = React.useState(
@@ -50,6 +51,7 @@ const DataDiriStep5View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -149,13 +151,17 @@ const DataDiriStep5View: React.FC = () => {
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
-          if (isKTPValid || isNPWPValid || ktp || npwp) {
-            setBackHandle(true);
+          setBackHandle(true);
+          if(ktp !== '' && npwp !== '' && isKTPValid && isNPWPValid) {
             updateCompleteData({ user: { idNo: ktp, taxNo: npwp } });
+          } else if (ktp !== '' && isKTPValid) {
+            updateCompleteData({ user: { idNo: ktp } });
+          } else if (npwp !== '' && isNPWPValid) {
+            updateCompleteData({ user: { taxNo: npwp } });
           } else {
             backToDataCompleteness();
           }
-        }}
+        }} 
       />
       <ListOfSteps
         open={openModalStep}

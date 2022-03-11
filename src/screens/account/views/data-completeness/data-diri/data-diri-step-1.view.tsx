@@ -20,6 +20,7 @@ const DataDiriStep1View: React.FC = () => {
     completeDataState,
     resetUpdateCompleteData,
     backToDataCompleteness,
+    refetchCompleteData,
   } = useEasyRegistration();
   const [name, setName] = useState(completeDataState?.data?.userData?.fullName);
   const [openModalStep, setOpenModalStep] = useState(false);
@@ -41,6 +42,8 @@ const DataDiriStep1View: React.FC = () => {
 
   React.useEffect(() => {
     if (updateCompleteDataState.data !== null) {
+      resetUpdateCompleteData();
+      refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
@@ -92,9 +95,10 @@ const DataDiriStep1View: React.FC = () => {
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
-          if (name) {
-            setBackHandle(true);
+          setBackHandle(true);
+          if ( name && name !== ''){
             updateCompleteData({ user: { name: name } });
+            resetUpdateCompleteData();
           } else {
             backToDataCompleteness();
           }

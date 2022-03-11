@@ -141,8 +141,8 @@ const Content: React.FC<Props> = (props) => {
       vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
       vehicleAccessibilityAmount?.value !==
         existingVehicleAccessibilityAmount ||
-      latLng.latitude !== latitude ||
-      latLng.longitude !== longitude;
+      latLng?.latitude !== latitude ||
+      latLng?.longitude !== longitude;
 
     if (
       dataIsChanged &&
