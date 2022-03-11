@@ -190,6 +190,23 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCheckout.checkout]);
 
+  /** If update results in an error, show CTA */
+  useEffect(() => {
+    // wait all fetch done first
+    if (!stateCart.update.loading) {
+      const isUpdateError = stateCart.update.error !== null;
+      // determine the error data
+      let errorData = null;
+      // show the modal and the data
+      if (isUpdateError) {
+        errorData = stateCart.update.error;
+        errorModal.setCloseAction(() => errorModal.setOpen(false));
+        errorModal.setErrorData(errorData);
+        errorModal.setOpen(true);
+      }
+    }
+  }, [stateCart.update]);
+
   /** === VIEWS === */
   /** ==> content */
   const renderFooterContent = () => (
