@@ -9,20 +9,27 @@ import {
   paymentMethodGerWaitingPaymentOrderReducer,
   paymentMethodGetWaitingPaymentOrderInitialProps,
 } from './payment-method-get-waiting-payment-order.reducer';
+import {
+  PaymentMethodCreateOrderInitialState,
+  paymentMethodCreateOrderReducer,
+  PaymentMethodCreateOrderProps,
+} from './payment-method-create-order.reducer';
 
 /** === TYPE HERE === */
 export interface PaymentMethodState {
   paymentMethod: paymentMethodListInitialProps;
   getWaitingPaymentOrder: paymentMethodGetWaitingPaymentOrderInitialProps;
+  createOrder: PaymentMethodCreateOrderProps;
 }
 /** === INITIAL HERE === */
 export const paymentMethodInitialState = {
   paymentMethod: paymentMethodListInitialState,
   getWaitingPaymentOrder: paymentMethodGetWaitingPaymentOrderInitialState,
+  createOrder: PaymentMethodCreateOrderInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const paymentMethodReducer = (
-  { paymentMethod, getWaitingPaymentOrder }: PaymentMethodState,
+  { paymentMethod, getWaitingPaymentOrder, createOrder }: PaymentMethodState,
   action: any,
 ) => ({
   paymentMethod: paymentMethodListReducer(paymentMethod, action),
@@ -30,4 +37,5 @@ export const paymentMethodReducer = (
     getWaitingPaymentOrder,
     action,
   ),
+  createOrder: paymentMethodCreateOrderReducer(createOrder, action),
 });

@@ -16,3 +16,9 @@ export const PAYMENT_METHOD_GET_WAITING_PAYMENT_ORDER_RESET =
   'paymentMethodGetWaitingPaymentOrderReset';
 export const PAYMENT_METHOD_GET_WAITING_PAYMENT_ORDER_LOADING =
   'paymentMethodGetWaitingPaymentOrderLoading';
+
+/** => PAYMENT METHOD CREATE ORDER */
+export const POST_CREATE_ORDER_PROCESS = 'PostCreateOrderProcess';
+export const POST_CREATE_ORDER_SUCCESS = 'PostCreateOrderSuccess';
+export const POST_CREATE_ORDER_FAILED = 'PostCreateOrderFailed';
+export const POST_CREATE_ORDER_RESET = 'PostCreateOrderReset';

@@ -16,6 +16,7 @@ const paymentMethodListApi = (
   );
 };
 
+// ENDPOINT STILL WRONG
 const paymentMethodGetWaitingPaymentOrderApi = (
   payload: models.ListProcessProps<models.PaymentMethodGetWaitingPaymentOrder>,
 ) => {
@@ -29,8 +30,24 @@ const paymentMethodGetWaitingPaymentOrderApi = (
   );
 };
 
+// ENDPOINT STILL WRONG
+const paymentMethodCreateOrdertApi = (
+  data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
+) => {
+  const path = `create-order`;
+  return apiMapping<models.PaymentMethodList>(
+    'auth',
+    path,
+    'order',
+    'v1',
+    'CREATE',
+    data.data,
+  );
+};
+
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
   paymentMethodListApi,
   paymentMethodGetWaitingPaymentOrderApi,
+  paymentMethodCreateOrdertApi,
 };

@@ -48,6 +48,28 @@ function* paymentMethodGetWaitingPaymentOrder(
   }
 }
 
+function* paymentMethodCreateOrder(
+  action: models.CreateProcessAction<models.PaymentMethodCreateOrderData>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<
+      models.PaymentMethodCreateOrderResponse[]
+    > = yield call(() => {
+      return PaymentMethodListApi.paymentMethodCreateOrdertApi(action.data);
+    });
+    yield action.contextDispatch(
+      ActionCreators.postPaymentMethodCreateOrderSuccess(response),
+    );
+
+    yield put(ActionCreators.postPaymentMethodCreateOrderSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.postPaymentMethodCreateOrderFailed(error),
+    );
+    yield put(ActionCreators.postPaymentMethodCreateOrderFailed(error));
+  }
+}
+
 /** === LISTEN FUNCTION === */
 function* paymentMethodListSaga() {
   yield takeLatest(types.PAYMENT_METHOD_LIST_PROCESS, paymentMethodList);
@@ -55,6 +77,7 @@ function* paymentMethodListSaga() {
     types.PAYMENT_METHOD_GET_WAITING_PAYMENT_ORDER_PROCESS,
     paymentMethodGetWaitingPaymentOrder,
   );
+  yield takeLatest(types.POST_CREATE_ORDER_PROCESS, paymentMethodCreateOrder);
 }
 
 export default paymentMethodListSaga;
