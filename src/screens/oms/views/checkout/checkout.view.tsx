@@ -64,6 +64,12 @@ const OmsCheckoutView: FC = () => {
     dispatchCheckout,
   } = useCheckoutContext();
 
+  /** handle term n condition */
+  const handleOpenTNCModal = () => {
+    getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
+    setModalTNCOpen(true);
+  };
+
   /** => Abort Timeout warning */
   const [abortTimeout, setAbortTimeout] = React.useState(false);
 
@@ -98,12 +104,6 @@ const OmsCheckoutView: FC = () => {
     backToCartModal.setOpen(false);
     setAbortTimeout(true);
     goToShoppingCart();
-  };
-
-  /** handle term n condition */
-  const handleOpenTNCModal = () => {
-    getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
-    setModalTNCOpen(true);
   };
 
   return (

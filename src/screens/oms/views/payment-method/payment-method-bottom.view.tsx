@@ -3,17 +3,18 @@ import React, { FC } from 'react';
 import { SnbButton } from '@sinbad/react-native-sinbad-ui';
 import { CheckoutStyle } from '@screen/oms/styles';
 
-interface PaymentMethodBottomProps {}
+interface PaymentMethodBottomProps {
+  data: any;
+}
 
-const PaymentMethodBottom: FC<PaymentMethodBottomProps> = () => {
+export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = () => {
   const pressButton = () => {
     // NEED SOMETHING
   };
 
   return (
-    <View style={CheckoutStyle.bottomContainer}>
-      <SnbButton.Dynamic
-        size="small"
+    <View style={{ height: 75 }}>
+      <SnbButton.Single
         type={'primary'}
         onPress={pressButton}
         title={'Buat Pesanan'}
@@ -23,5 +24,3 @@ const PaymentMethodBottom: FC<PaymentMethodBottomProps> = () => {
     </View>
   );
 };
-
-export default PaymentMethodBottom;

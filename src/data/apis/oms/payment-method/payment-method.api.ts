@@ -16,7 +16,21 @@ const paymentMethodListApi = (
   );
 };
 
+const paymentMethodGetWaitingPaymentOrder = (
+  payload: models.ListProcessProps<models.PaymentMethodGetWaitingPaymentOrder>,
+) => {
+  const path = `orders?skip=${payload.skip}&limit=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&status=${payload.status}`;
+  return apiMapping<models.PaymentMethodList>(
+    'auth',
+    path,
+    'order',
+    'v1',
+    'DETAIL',
+  );
+};
+
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
   paymentMethodListApi,
+  paymentMethodGetWaitingPaymentOrder,
 };
