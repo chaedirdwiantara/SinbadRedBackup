@@ -8,11 +8,11 @@ import {
 const PaymentMethodContext = React.createContext<{
   // state: InitialStateType;
   statePaymentMethod: PaymentMethodState;
-  dispatchCheckout: React.Dispatch<any>;
+  dispatchPaymentMethod: React.Dispatch<any>;
 }>({
   // state: initialState,
   statePaymentMethod: paymentMethodInitialState,
-  dispatchCheckout: () => null,
+  dispatchPaymentMethod: () => null,
 });
 
 export {
