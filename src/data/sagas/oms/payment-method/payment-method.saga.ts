@@ -22,9 +22,39 @@ function* paymentMethodList(action: models.ListProcessAction) {
     yield put(ActionCreators.paymentMethodListFailed(error));
   }
 }
+
+function* paymentMethodGetWaitingPaymentOrder(
+  action: models.ListProcessAction,
+) {
+  try {
+    const response: models.ListSuccessProps<models.PaymentMethodGetWaitingPaymentOrder> =
+      yield call(() => {
+        return PaymentMethodListApi.paymentMethodGetWaitingPaymentOrderApi(
+          action.payload,
+        );
+      });
+    yield action.contextDispatch(
+      ActionCreators.paymentMethodGetWaitingPaymentOrderSuccess(response),
+    );
+
+    yield put(
+      ActionCreators.paymentMethodGetWaitingPaymentOrderSuccess(response),
+    );
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.paymentMethodGetWaitingPaymentOrderFailed(error),
+    );
+    yield put(ActionCreators.paymentMethodGetWaitingPaymentOrderFailed(error));
+  }
+}
+
 /** === LISTEN FUNCTION === */
 function* paymentMethodListSaga() {
   yield takeLatest(types.PAYMENT_METHOD_LIST_PROCESS, paymentMethodList);
+  yield takeLatest(
+    types.PAYMENT_METHOD_GET_WAITING_PAYMENT_ORDER_PROCESS,
+    paymentMethodGetWaitingPaymentOrder,
+  );
 }
 
 export default paymentMethodListSaga;

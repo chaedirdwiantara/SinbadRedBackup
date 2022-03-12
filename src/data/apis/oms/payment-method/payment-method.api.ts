@@ -16,11 +16,11 @@ const paymentMethodListApi = (
   );
 };
 
-const paymentMethodGetWaitingPaymentOrder = (
+const paymentMethodGetWaitingPaymentOrderApi = (
   payload: models.ListProcessProps<models.PaymentMethodGetWaitingPaymentOrder>,
 ) => {
   const path = `orders?skip=${payload.skip}&limit=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&status=${payload.status}`;
-  return apiMapping<models.PaymentMethodList>(
+  return apiMapping<models.PaymentMethodGetWaitingPaymentOrder>(
     'auth',
     path,
     'order',
@@ -32,5 +32,5 @@ const paymentMethodGetWaitingPaymentOrder = (
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
   paymentMethodListApi,
-  paymentMethodGetWaitingPaymentOrder,
+  paymentMethodGetWaitingPaymentOrderApi,
 };
