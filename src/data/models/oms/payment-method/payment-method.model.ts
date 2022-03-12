@@ -1,4 +1,4 @@
-export interface PaymentMethodType {
+export interface PaymentMethodList {
   skip: number;
   limit: number;
   keyword: string;

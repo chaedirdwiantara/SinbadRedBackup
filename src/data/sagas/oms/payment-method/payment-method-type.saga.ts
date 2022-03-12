@@ -4,27 +4,27 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import * as ActionCreators from '@actions';
 import * as types from '@types';
 import * as models from '@models';
-import { PaymentMethodTypeApi } from 'src/data/apis/oms/payment-method/payment-method.api';
+import { PaymentMethodListApi } from 'src/data/apis/oms/payment-method/payment-method.api';
 
-function* paymentMethodType(action: models.DetailProcessAction) {
+function* paymentMethodList(action: models.ListProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.PaymentMethodType> =
+    const response: models.ListSuccessProps<models.PaymentMethodList> =
       yield call(() => {
-        return PaymentMethodTypeApi.paymentMethodTypeApi(action.payload);
+        return PaymentMethodListApi.paymentMethodListApi(action.payload);
       });
     yield action.contextDispatch(
-      ActionCreators.paymentMethodTypeSuccess(response),
+      ActionCreators.paymentMethodListSuccess(response),
     );
 
-    yield put(ActionCreators.paymentMethodTypeSuccess(response));
+    yield put(ActionCreators.paymentMethodListSuccess(response));
   } catch (error: any) {
-    yield action.contextDispatch(ActionCreators.paymentMethodTypeFailed(error));
-    yield put(ActionCreators.paymentMethodTypeFailed(error));
+    yield action.contextDispatch(ActionCreators.paymentMethodListFailed(error));
+    yield put(ActionCreators.paymentMethodListFailed(error));
   }
 }
 /** === LISTEN FUNCTION === */
-function* PaymentMethodTypeSaga() {
-  yield takeLatest(types.PAYMENT_METHOD_TYPE_PROCESS, paymentMethodType);
+function* paymentMethodListSaga() {
+  yield takeLatest(types.PAYMENT_METHOD_LIST_PROCESS, paymentMethodList);
 }
 
-export default PaymentMethodTypeSaga;
+export default paymentMethodListSaga;

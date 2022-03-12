@@ -3,30 +3,30 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type PaymentMethodTypeInitialProps =
-  models.DetailItemProps<models.PaymentMethodType>;
+export type paymentMethodListInitialProps =
+  models.DetailItemProps<models.PaymentMethodList>;
 /** === INITIAL STATE HERE === */
-export const paymentMethodTypeInitialState: PaymentMethodTypeInitialProps = {
+export const paymentMethodListInitialState: paymentMethodListInitialProps = {
   data: null,
   error: null,
   loading: false,
 };
 /** === FUNCTION HERE === */
-export const paymentMethodTypeReducer = simplifyReducer(
-  paymentMethodTypeInitialState,
+export const paymentMethodListReducer = simplifyReducer(
+  paymentMethodListInitialState,
   {
     /** ===> DETAIL */
     /** => process */
-    [types.PAYMENT_METHOD_TYPE_PROCESS]() {
+    [types.PAYMENT_METHOD_LIST_PROCESS]() {
       return {
-        ...paymentMethodTypeInitialState,
+        ...paymentMethodListInitialState,
         loading: true,
       };
     },
     /** => success */
-    [types.PAYMENT_METHOD_TYPE_SUCCESS](
-      state = paymentMethodTypeInitialState,
-      action: models.DetailSuccessAction<models.PaymentMethodType>,
+    [types.PAYMENT_METHOD_LIST_SUCCESS](
+      state = paymentMethodListInitialState,
+      action: models.DetailSuccessAction<models.PaymentMethodList>,
     ) {
       return {
         ...state,
@@ -35,8 +35,8 @@ export const paymentMethodTypeReducer = simplifyReducer(
       };
     },
     /** => failed */
-    [types.PAYMENT_METHOD_TYPE_FAILED](
-      state = paymentMethodTypeInitialState,
+    [types.PAYMENT_METHOD_LIST_FAILED](
+      state = paymentMethodListInitialState,
       action: models.DetailFailedAction,
     ) {
       return {
@@ -46,13 +46,13 @@ export const paymentMethodTypeReducer = simplifyReducer(
       };
     },
     /** => reset */
-    [types.PAYMENT_METHOD_TYPE_RESET]() {
-      return paymentMethodTypeInitialState;
+    [types.PAYMENT_METHOD_LIST_RESET]() {
+      return paymentMethodListInitialState;
     },
     /** => process */
-    [types.PAYMENT_METHOD_TYPE_LOADING]() {
+    [types.PAYMENT_METHOD_LIST_LOADING]() {
       return {
-        ...paymentMethodTypeInitialState,
+        ...paymentMethodListInitialState,
         loading: true,
       };
     },

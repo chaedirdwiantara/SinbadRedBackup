@@ -3,11 +3,11 @@ import apiMapping from '@core/services/apiMapping';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 /** === FUNCTION === */
-const paymentMethodTypeApi = (
-  payload: models.ListProcessProps<models.PaymentMethodType>,
+const paymentMethodListApi = (
+  payload: models.ListProcessProps<models.PaymentMethodList>,
 ) => {
   const path = `payment-method-types?skip=${payload.skip}&limit=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
-  return apiMapping<models.PaymentMethodType>(
+  return apiMapping<models.PaymentMethodList>(
     'auth',
     path,
     'order',
@@ -17,6 +17,6 @@ const paymentMethodTypeApi = (
 };
 
 /** === EXPORT FUNCTIONS === */
-export const PaymentMethodTypeApi = {
-  paymentMethodTypeApi,
+export const PaymentMethodListApi = {
+  paymentMethodListApi,
 };

@@ -1,6 +1,6 @@
 /** => PAYMENT METHOD TYPE */
-export const PAYMENT_METHOD_TYPE_PROCESS = 'PaymentMethodTypeProcess';
-export const PAYMENT_METHOD_TYPE_SUCCESS = 'PaymentMethodTypeSuccess';
-export const PAYMENT_METHOD_TYPE_FAILED = 'PaymentMethodTypeFailed';
-export const PAYMENT_METHOD_TYPE_RESET = 'PaymentMethodTypeReset';
-export const PAYMENT_METHOD_TYPE_LOADING = 'PaymentMethodTypeLoading';
+export const PAYMENT_METHOD_LIST_PROCESS = 'paymentMethodListProcess';
+export const PAYMENT_METHOD_LIST_SUCCESS = 'paymentMethodListSuccess';
+export const PAYMENT_METHOD_LIST_FAILED = 'paymentMethodListFailed';
+export const PAYMENT_METHOD_LIST_RESET = 'paymentMethodListReset';
+export const PAYMENT_METHOD_LIST_LOADING = 'paymentMethodListLoading';
