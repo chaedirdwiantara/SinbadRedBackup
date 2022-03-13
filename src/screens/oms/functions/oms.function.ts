@@ -19,8 +19,8 @@ const goToThankYouPage = () => {
   NavigationAction.navigate('OmsThankYouPageView');
 };
 /** => Go to Payment Method */
-const goToPaymentMethod = () => {
-  NavigationAction.navigate('OmsPaymentMethod');
+const goToPaymentMethod = (data: any) => {
+  NavigationAction.navigate('OmsPaymentMethod', { data });
 };
 
 export {

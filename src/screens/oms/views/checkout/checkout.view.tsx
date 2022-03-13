@@ -12,7 +12,11 @@ import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
-import { useGetTncContent } from '@screen/oms/functions';
+import {
+  goToPaymentMethod,
+  totalPaymentWithoutCurrency,
+  useGetTncContent,
+} from '@screen/oms/functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import {
@@ -51,6 +55,7 @@ const OmsCheckoutView: FC = () => {
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -70,24 +75,22 @@ const OmsCheckoutView: FC = () => {
     setModalTNCOpen(true);
   };
 
-  /** => Abort Timeout warning */
-  const [abortTimeout, setAbortTimeout] = React.useState(false);
-
   /** => set expired time  */
   const dateCurrent = new Date();
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
-  useFocusEffect(
-    React.useCallback(() => {
-      setTimeout(
-        () => {
-          setExpiredSession(true);
-        },
-        abortTimeout ? null : timeToExpired,
-      );
-    }, []),
-  );
+
+  const timer = setTimeout(() => {
+    setExpiredSession(true);
+  }, timeToExpired);
+
+  /** => to Payment Method Page  */
+  const dataToPaymentMethod = { totalPaymentNumber, addTime };
+  function toPaymentMethod() {
+    clearTimeout(timer);
+    goToPaymentMethod(dataToPaymentMethod);
+  }
 
   /** handle back to cart */
   const handleBackToCart = () => {
@@ -102,7 +105,7 @@ const OmsCheckoutView: FC = () => {
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
-    setAbortTimeout(true);
+    clearTimeout(timer);
     goToShoppingCart();
   };
 
@@ -131,11 +134,7 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView
-        data={data}
-        expiredTime={addTime}
-        abortTimOut={() => setAbortTimeout(true)}
-      />
+      <CheckoutBottomView data={data} abortTimeOut={toPaymentMethod} />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime

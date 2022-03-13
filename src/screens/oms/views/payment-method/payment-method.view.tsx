@@ -12,12 +12,13 @@ import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/us
 import { usePaymentMethodListContent } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 
 interface PaymentMethodInterface {
-  dataToPaymentMethod: {};
+  props: {};
+  route: any;
 }
 
-const OmsPaymentMethod: FC<PaymentMethodInterface> = ({
-  dataToPaymentMethod,
-}) => {
+const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
+  console.log(props.route.params, 'data');
+
   /** => Get payment method  */
   // const { statePaymentMethod } = useContext(contexts.PaymentMethodContext);
   const {

@@ -3,13 +3,7 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import {
-  usePaymentAction,
-  handleTotalPrice,
-  useCheckoutMaster,
-  useExpiredTime,
-  goToPaymentMethod,
-} from '@screen/oms/functions';
+import { goToPaymentMethod } from '@screen/oms/functions';
 import {
   useGetCartAction,
   useCartMasterAction,
@@ -31,13 +25,13 @@ import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
 
 interface CheckoutBottomViewProps {
-  data: models.IInvoiceCheckout[];
-  expiredTime: number;
+  data: any;
+  abortTimeOut: () => void;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
-  expiredTime,
+  abortTimeOut,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const getCartAction = useGetCartAction();
@@ -63,17 +57,15 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     setReachLimit(false);
+    abortTimeOut;
     goToShoppingCart();
   };
 
-  const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
+  // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
 
   const pressButton = () => {
-    if (totalPaymentNumber > 999999999) {
-      setReachLimit(true);
-    } else {
-      goToPaymentMethod({ dataToPaymentMethod });
-    }
+    setReachLimit(true);
+    // goToPaymentMethod(dataToPaymentMethod);
   };
 
   const content = () => {
@@ -88,13 +80,23 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   return (
     <View style={CheckoutStyle.bottomContainer}>
       {content()}
-      <SnbButton.Dynamic
-        size="small"
-        type={'primary'}
-        onPress={pressButton}
-        title={'Pilih Pembayaran'}
-        // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
-      />
+      {totalPaymentNumber > 999999999 ? (
+        <SnbButton.Dynamic
+          size="small"
+          type={'primary'}
+          onPress={pressButton}
+          title={'Pilih Pembayaran'}
+          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
+        />
+      ) : (
+        <SnbButton.Dynamic
+          size="small"
+          type={'primary'}
+          onPress={abortTimeOut}
+          title={'Pilih Pembayaran'}
+          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
+        />
+      )}
       <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />
     </View>
   );

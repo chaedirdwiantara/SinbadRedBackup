@@ -161,7 +161,7 @@ const useModalProductList = () => {
 const totalBarangPrice = (products: any) => {
   let total = 0;
   for (let i = 0; i < products.length; i++) {
-      total = total + products[i].qty * products[i].lastUsedPrice; 
+    total = total + products[i].qty * products[i].lastUsedPrice;
   }
   return toCurrency(total, { withFraction: false });
 };
@@ -178,17 +178,21 @@ const totalPayment = (sellers: any) => {
   let total = 0;
   for (let i = 0; i < sellers.length; i++) {
     for (let a = 0; a < sellers[i].products.length; a++) {
-      total = total + sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;
+      total =
+        total +
+        sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;
     }
   }
   return toCurrency(total, { withFraction: false });
 };
 
-const totalPaymentWithoutCurrency = (sellers: any) => {
+const totalPaymentWithoutCurrency = (sellers: [any]) => {
   let total = 0;
   for (let i = 0; i < sellers.length; i++) {
     for (let a = 0; a < sellers[i].products.length; a++) {
-      total = total + sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;
+      total =
+        total +
+        sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;
     }
   }
   return total;
