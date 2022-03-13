@@ -35,6 +35,13 @@ export const PaymentMethodStyle = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
   },
+  paymentStatusItem: {
+    marginBottom: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    width: '100%',
+  },
 });
 
 export default PaymentMethodStyle;

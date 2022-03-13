@@ -25,6 +25,7 @@ import {
   useCheckoutAction,
 } from '../../functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
+import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 
 interface PaymentMethodInterface {
   props: {};
@@ -47,6 +48,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
+  const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
@@ -146,6 +148,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     setSelectMethod(selected);
   };
 
+  /** => handle payment status */
+  const handlePaymentStatus = () => {
+    setPaymentStatusSession(true);
+  };
+
   /** => set expired time  */
   const dateCurrent = new Date();
   const timeNow = dateCurrent.getTime() / 1000;
@@ -153,6 +160,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const timeToExpired = addTime - timeNow;
   const timer = setTimeout(() => {
     setExpiredSession(true);
+    setPaymentStatusSession(false);
   }, timeToExpired);
 
   /** handle back to cart */
@@ -171,6 +179,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     goToShoppingCart();
   };
 
+  const handleToThankYouPage = () => {
+    // DO SOMETHING HERE
+  };
+
   return (
     <SnbContainer color="grey">
       {/* HEADER */}
@@ -182,12 +194,24 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       {/* BODY */}
       <PaymentMethodBody data={data} onSelectedType={handleSelect} />
       {/* FOOTER */}
-      <PaymentMethodBottom data={''} choice={selectMethod} />
+      <PaymentMethodBottom
+        data={''}
+        choice={selectMethod}
+        paymentStatusModal={handlePaymentStatus}
+      />
 
       {/* Modal Expired Time */}
       <PaymentMethodExpiredTimeModal
         isOpen={isExpiredSession}
         close={handleBackToCart}
+      />
+      {/* Modal Status Pending */}
+      <PaymentStatusModal
+        isOpen={isPaymentStatusSession}
+        handleNoAction={() => {
+          setPaymentStatusSession(false);
+        }}
+        handleOkAction={handleToThankYouPage}
       />
     </SnbContainer>
   );
