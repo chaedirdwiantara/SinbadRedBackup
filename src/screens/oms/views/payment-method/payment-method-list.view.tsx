@@ -10,16 +10,19 @@ import { PaymentMethodStyle } from '@screen/oms/styles';
 interface PaymentMethodListProps {
   payMethod: any;
   onSelectMethod: any;
+  dataChoosen: any;
 }
 
 const PaymentMethodListView: FC<PaymentMethodListProps> = ({
   payMethod,
   onSelectMethod,
+  dataChoosen,
 }) => {
   const [selectMethod, setSelectMethod] = useState(-1); //handle selected method
 
-  const handleOnpress = (data: number) => {
+  const handleOnpress = (data: number, item: any) => {
     onSelectMethod(data.toString());
+    dataChoosen(item);
     setSelectMethod(data);
   };
 
@@ -36,7 +39,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               : { borderColor: color.black40 },
           ]}
           onPress={() => {
-            handleOnpress(index);
+            handleOnpress(index, item);
           }}>
           <Image
             source={{ uri: item.iconURL }}

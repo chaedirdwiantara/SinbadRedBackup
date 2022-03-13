@@ -15,8 +15,15 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
   data,
   onSelectedType,
 }) => {
+  const [selectMethod, setSelectMethod] = useState('');
+  const [dataSelected, setDataSelected] = useState('');
   const handleSelect = (selected: string) => {
     onSelectedType(selected);
+    setSelectMethod(selected);
+  };
+
+  const handleDataChoosen = (data: any) => {
+    setDataSelected(data);
   };
 
   return (
@@ -26,9 +33,15 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
         <PaymentMethodListView
           payMethod={data[0]?.paymentMethods}
           onSelectMethod={handleSelect}
+          dataChoosen={handleDataChoosen}
         />
       </View>
-      <PaymentMethodDetail data={''} servicePayment={0} choice={''} />
+      <PaymentMethodDetail
+        data={''}
+        servicePayment={0}
+        choice={selectMethod}
+        dataChoose={dataSelected}
+      />
     </>
   );
 };

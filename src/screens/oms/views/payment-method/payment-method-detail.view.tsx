@@ -12,13 +12,17 @@ interface PaymentMethodDetailProps {
   data: any;
   servicePayment: number;
   choice: string;
+  dataChoose: any;
 }
 
 const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
   data,
   servicePayment,
   choice,
+  dataChoose,
 }) => {
+  console.log(choice, 'choice');
+  console.log(dataChoose, 'dataChoose');
   return (
     <View style={PaymentMethodStyle.detailContainer}>
       <View style={PaymentMethodStyle.detailRow}>
@@ -27,7 +31,18 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       </View>
       <View style={PaymentMethodStyle.detailRow}>
         <SnbText.B2 color={color.black80}>Biaya Layanan</SnbText.B2>
-        <SnbText.B2 color={color.black80}>Rp-</SnbText.B2>
+        {dataChoose != '' ? (
+          <SnbText.B2
+            color={
+              dataChoose.serviceFeeNonDeduct == 0
+                ? color.green80
+                : color.black80
+            }>
+            Rp{dataChoose.serviceFeeNonDeduct}
+          </SnbText.B2>
+        ) : (
+          <SnbText.B2 color={color.black80}>Rp-</SnbText.B2>
+        )}
       </View>
       <SnbDivider style={{ marginVertical: 1 }} />
       <View style={PaymentMethodStyle.detailRow}>

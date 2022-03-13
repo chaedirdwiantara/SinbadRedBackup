@@ -20,7 +20,6 @@ interface PaymentMethodInterface {
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
-  console.log(selectMethod, 'CHOOSEN');
 
   /** => Get payment method  */
   // const { statePaymentMethod } = useContext(contexts.PaymentMethodContext);
@@ -31,7 +30,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     dispatchPaymentMethod,
   } = usePaymentMethodContext();
 
-  console.log(paymentMethodData, 'paymentMethodData');
+  // console.log(paymentMethodData, 'paymentMethodData');
 
   // DUMMY
   const data = [

@@ -11,8 +11,6 @@ interface PaymentMethodBottomProps {
 export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   choice,
 }) => {
-  console.log(choice, 'choice');
-
   const pressButton = () => {
     // NEED SOMETHING
   };
