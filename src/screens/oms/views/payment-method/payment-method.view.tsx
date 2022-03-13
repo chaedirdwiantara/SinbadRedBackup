@@ -10,6 +10,7 @@ import { PaymentMethodBottom } from './payment-method-bottom.view';
 import { goToCheckout } from '@screen/oms/functions';
 import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
 import { usePaymentMethodListContent } from '@screen/oms/functions/payment-method/payment-method-hook.function';
+import PaymentMethodBody from './payment-method-body.view';
 
 interface PaymentMethodInterface {
   props: {};
@@ -17,7 +18,9 @@ interface PaymentMethodInterface {
 }
 
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
-  console.log(props.route.params, 'data');
+  /** => Hooks */
+  const [selectMethod, setSelectMethod] = useState(''); //handle selected method
+  console.log(selectMethod, 'CHOOSEN');
 
   /** => Get payment method  */
   // const { statePaymentMethod } = useContext(contexts.PaymentMethodContext);
@@ -29,6 +32,60 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   } = usePaymentMethodContext();
 
   console.log(paymentMethodData, 'paymentMethodData');
+
+  // DUMMY
+  const data = [
+    {
+      id: 1,
+      code: 'bank_transfer_va',
+      displayLabel: 'Transfer Bank (Cek Otomatis)',
+      paymentMethods: [
+        {
+          code: 'BCA',
+          displayLabel: 'BCA Virtual Account',
+          iconURL:
+            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bca.png',
+          serviceFeeDeduct: 0,
+          serviceFeeNonDeduct: 4400,
+          isServiceFeeFree: true,
+          isSelected: true,
+        },
+        {
+          code: 'BNI',
+          displayLabel: 'BNI Virtual Account',
+          iconURL:
+            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bni.png',
+          serviceFeeDeduct: 0,
+          serviceFeeNonDeduct: 4400,
+          isServiceFeeFree: true,
+          isSelected: true,
+        },
+
+        {
+          code: 'BRI',
+          displayLabel: 'BRI Virtual Account',
+          iconURL:
+            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bri.png',
+          serviceFeeDeduct: 0,
+          serviceFeeNonDeduct: 0,
+          isServiceFeeFree: true,
+          isSelected: false,
+        },
+        {
+          code: 'Mandiri',
+          displayLabel: 'Mandiri Virtual Account',
+          iconURL:
+            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/mandiri.png',
+          serviceFeeDeduct: 0,
+          serviceFeeNonDeduct: 0,
+          isServiceFeeFree: true,
+          isSelected: false,
+        },
+      ],
+      createdAt: '2021-02-01T06:19:55.516Z',
+      updatedAt: '2021-02-01T06:19:55.516Z',
+    },
+  ];
 
   /** handle payment method */
   const payloadPaymentMethod = {
@@ -54,6 +111,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }, []),
   );
 
+  /** handle selected method */
+  const handleSelect = (selected: string) => {
+    setSelectMethod(selected);
+  };
+
   return (
     <SnbContainer color="grey">
       {/* HEADER */}
@@ -64,18 +126,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       />
 
       {/* BODY */}
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: 'white',
-        }}>
-        <Text>TES</Text>
-      </View>
+      <PaymentMethodBody data={data} onSelectedType={handleSelect} />
 
       {/* FOOTER */}
-      <PaymentMethodBottom data={''} />
+      <PaymentMethodBottom data={''} choice={selectMethod} />
     </SnbContainer>
   );
 };

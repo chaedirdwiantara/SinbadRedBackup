@@ -42,8 +42,8 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const removeCartProductAction = useRemoveCartProductAction();
   const cartBuyerAddressAction = useCartBuyerAddressAction();
   const updateCartAction = useUpdateCartAction();
-  const totalPaymentFull = totalPayment(data.sellers);
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
+  const totalPaymentFull = totalPayment(data?.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
 
   const [reachLimit, setReachLimit] = useState(false);
 

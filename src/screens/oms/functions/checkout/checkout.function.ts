@@ -176,8 +176,8 @@ const subTotalQty = (products: any) => {
 
 const totalPayment = (sellers: any) => {
   let total = 0;
-  for (let i = 0; i < sellers.length; i++) {
-    for (let a = 0; a < sellers[i].products.length; a++) {
+  for (let i = 0; i < sellers?.length; i++) {
+    for (let a = 0; a < sellers[i]?.products.length; a++) {
       total =
         total +
         sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;
@@ -188,8 +188,8 @@ const totalPayment = (sellers: any) => {
 
 const totalPaymentWithoutCurrency = (sellers: [any]) => {
   let total = 0;
-  for (let i = 0; i < sellers.length; i++) {
-    for (let a = 0; a < sellers[i].products.length; a++) {
+  for (let i = 0; i < sellers?.length; i++) {
+    for (let a = 0; a < sellers[i]?.products.length; a++) {
       total =
         total +
         sellers[i].products[a].qty * sellers[i].products[a].lastUsedPrice;

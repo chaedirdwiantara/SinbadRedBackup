@@ -55,7 +55,7 @@ const OmsCheckoutView: FC = () => {
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -124,8 +124,8 @@ const OmsCheckoutView: FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* address view */}
         <CheckoutAddressView
-          buyerAddress={data.buyerAddress}
-          buyerName={data.buyerName}
+          buyerAddress={data?.buyerAddress}
+          buyerName={data?.buyerName}
         />
         {/* main body view */}
         <CheckoutInvoiceGroupView data={data} />

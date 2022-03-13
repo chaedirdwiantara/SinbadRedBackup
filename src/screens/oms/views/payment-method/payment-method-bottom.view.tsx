@@ -5,9 +5,14 @@ import { CheckoutStyle } from '@screen/oms/styles';
 
 interface PaymentMethodBottomProps {
   data: any;
+  choice: any;
 }
 
-export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = () => {
+export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
+  choice,
+}) => {
+  console.log(choice, 'choice');
+
   const pressButton = () => {
     // NEED SOMETHING
   };
@@ -18,6 +23,7 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = () => {
         type={'primary'}
         onPress={pressButton}
         title={'Buat Pesanan'}
+        disabled={choice != '' ? false : true}
         // loading={}
       />
       {/* add modal validation status */}
