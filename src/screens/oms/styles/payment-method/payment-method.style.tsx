@@ -39,8 +39,6 @@ export const PaymentMethodStyle = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    textAlign: 'center',
-    width: '100%',
   },
 });
 
