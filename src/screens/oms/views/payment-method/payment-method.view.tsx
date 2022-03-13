@@ -26,6 +26,7 @@ import {
 } from '../../functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
+import PaymentMethodErrorModal from './payment-method-error-modal.view';
 
 interface PaymentMethodInterface {
   props: {};
@@ -49,6 +50,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
   const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
+  const [isErrorSession, setErrorSession] = useState(false); //handle error modal
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
@@ -129,7 +131,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     amount: 900,
   };
   const getPaymentMethodListContent = usePaymentMethodListContent();
-  const handleOpenTNCModal = () => {
+  const handlePaymentMethodList = () => {
     getPaymentMethodListContent.paymentMethodListContentGet(
       dispatchPaymentMethod,
       payloadPaymentMethod,
@@ -139,19 +141,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => call payment method list */
   useFocusEffect(
     React.useCallback(() => {
-      handleOpenTNCModal();
+      handlePaymentMethodList();
     }, []),
   );
-
-  /** => handle selected method */
-  const handleSelect = (selected: string) => {
-    setSelectMethod(selected);
-  };
-
-  /** => handle payment status */
-  const handlePaymentStatus = () => {
-    setPaymentStatusSession(true);
-  };
 
   /** => set expired time  */
   const dateCurrent = new Date();
@@ -161,6 +153,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const timer = setTimeout(() => {
     setExpiredSession(true);
     setPaymentStatusSession(false);
+    setErrorSession(false);
   }, timeToExpired);
 
   /** handle back to cart */
@@ -177,6 +170,21 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     setExpiredSession(false);
     clearTimeout(timer);
     goToShoppingCart();
+  };
+
+  /** => handle selected method */
+  const handleSelect = (selected: string) => {
+    setSelectMethod(selected);
+  };
+
+  /** => handle payment status */
+  const handlePaymentStatus = () => {
+    setPaymentStatusSession(true);
+  };
+
+  /** => handle error status */
+  const handleErrorStatus = () => {
+    setErrorSession(true);
   };
 
   const handleToThankYouPage = () => {
@@ -198,6 +206,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         data={''}
         choice={selectMethod}
         paymentStatusModal={handlePaymentStatus}
+        errorModal={handleErrorStatus}
       />
 
       {/* Modal Expired Time */}
@@ -212,6 +221,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           setPaymentStatusSession(false);
         }}
         handleOkAction={handleToThankYouPage}
+      />
+      {/* Modal Status Error */}
+      <PaymentMethodErrorModal
+        isOpen={isErrorSession}
+        close={handleBackToCart}
       />
     </SnbContainer>
   );

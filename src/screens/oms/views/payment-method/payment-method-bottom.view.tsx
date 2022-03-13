@@ -7,11 +7,13 @@ interface PaymentMethodBottomProps {
   data: any;
   choice: any;
   paymentStatusModal: () => void;
+  errorModal: () => void;
 }
 
 export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   choice,
   paymentStatusModal,
+  errorModal,
 }) => {
   const pressButton = () => {
     // NEED SOMETHING
@@ -21,7 +23,7 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
     <View style={{ height: 75 }}>
       <SnbButton.Single
         type={'primary'}
-        onPress={paymentStatusModal}
+        onPress={errorModal}
         title={'Buat Pesanan'}
         disabled={choice != '' ? false : true}
         // loading={}
