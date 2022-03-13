@@ -18,6 +18,8 @@ interface PaymentMethodInterface {
 }
 
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
+  console.log(props, 'props');
+
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
 
@@ -86,6 +88,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     },
   ];
 
+  /** => data from checkout */
+  const dataCheckout = props.route.params.data;
+
   /** handle payment method */
   const payloadPaymentMethod = {
     skip: '0',
@@ -125,7 +130,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       />
 
       {/* BODY */}
-      <PaymentMethodBody data={data} onSelectedType={handleSelect} />
+      <PaymentMethodBody
+        data={data}
+        onSelectedType={handleSelect}
+        dataFromCheckout={dataCheckout}
+      />
 
       {/* FOOTER */}
       <PaymentMethodBottom data={''} choice={selectMethod} />

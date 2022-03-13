@@ -9,11 +9,13 @@ import PaymentMethodDetail from './payment-method-detail.view';
 interface PaymentMethodBodyProps {
   data: any;
   onSelectedType: any;
+  dataFromCheckout: any;
 }
 
 const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
   data,
   onSelectedType,
+  dataFromCheckout,
 }) => {
   const [selectMethod, setSelectMethod] = useState('');
   const [dataSelected, setDataSelected] = useState('');
@@ -37,8 +39,7 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
         />
       </View>
       <PaymentMethodDetail
-        data={''}
-        servicePayment={0}
+        dataFromCheckout={dataFromCheckout}
         choice={selectMethod}
         dataChoose={dataSelected}
       />
