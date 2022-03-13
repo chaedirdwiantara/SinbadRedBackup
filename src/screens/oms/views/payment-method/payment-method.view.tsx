@@ -11,6 +11,20 @@ import { goToCheckout } from '@screen/oms/functions';
 import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
 import { usePaymentMethodListContent } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import PaymentMethodBody from './payment-method-body.view';
+import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
+import { goToShoppingCart } from '@core/functions/product';
+import {
+  useGetCartAction,
+  useCartMasterAction,
+  useCheckProductAction,
+  useCheckSellerAction,
+  useCheckStockAction,
+  useRemoveCartProductAction,
+  useCartBuyerAddressAction,
+  useUpdateCartAction,
+  useCheckoutAction,
+} from '../../functions';
+import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 
 interface PaymentMethodInterface {
   props: {};
@@ -18,8 +32,25 @@ interface PaymentMethodInterface {
 }
 
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
+  /** => ACTION */
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+  const getCartAction = useGetCartAction();
+  const cartMasterAction = useCartMasterAction();
+  const checkProductAction = useCheckProductAction();
+  const checkSellerAction = useCheckSellerAction();
+  const checkStockAction = useCheckStockAction();
+  const removeCartProductAction = useRemoveCartProductAction();
+  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
+
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
+  const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
+  const { stateCheckout, dispatchCheckout } = useContext(
+    contexts.CheckoutContext,
+  );
+  const datax = stateCheckout.checkout.data;
 
   /** => Get payment method  */
   // const { statePaymentMethod } = useContext(contexts.PaymentMethodContext);
@@ -86,7 +117,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     },
   ];
 
-  /** handle payment method */
+  /** => handle payment method */
   const payloadPaymentMethod = {
     skip: '0',
     limit: '10',
@@ -103,16 +134,41 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     );
   };
 
-  /** call payment method list */
+  /** => call payment method list */
   useFocusEffect(
     React.useCallback(() => {
       handleOpenTNCModal();
     }, []),
   );
 
-  /** handle selected method */
+  /** => handle selected method */
   const handleSelect = (selected: string) => {
     setSelectMethod(selected);
+  };
+
+  /** => set expired time  */
+  const dateCurrent = new Date();
+  const timeNow = dateCurrent.getTime() / 1000;
+  const addTime = props.route.params.data.addTime;
+  const timeToExpired = addTime - timeNow;
+  const timer = setTimeout(() => {
+    setExpiredSession(true);
+  }, timeToExpired);
+
+  /** handle back to cart */
+  const handleBackToCart = () => {
+    checkProductAction.reset(dispatchCart);
+    checkSellerAction.reset(dispatchCart);
+    checkStockAction.reset(dispatchCart);
+    getCartAction.reset(dispatchCart);
+    removeCartProductAction.reset(dispatchCart);
+    cartMasterAction.reset();
+    cartBuyerAddressAction.reset(dispatchCart);
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    setExpiredSession(false);
+    clearTimeout(timer);
+    goToShoppingCart();
   };
 
   return (
@@ -123,12 +179,16 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           goToCheckout();
         }}
       />
-
       {/* BODY */}
       <PaymentMethodBody data={data} onSelectedType={handleSelect} />
-
       {/* FOOTER */}
       <PaymentMethodBottom data={''} choice={selectMethod} />
+
+      {/* Modal Expired Time */}
+      <PaymentMethodExpiredTimeModal
+        isOpen={isExpiredSession}
+        close={handleBackToCart}
+      />
     </SnbContainer>
   );
 };

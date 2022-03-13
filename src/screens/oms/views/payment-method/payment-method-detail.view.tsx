@@ -21,8 +21,6 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
   choice,
   dataChoose,
 }) => {
-  console.log(choice, 'choice');
-  console.log(dataChoose, 'dataChoose');
   return (
     <View style={PaymentMethodStyle.detailContainer}>
       <View style={PaymentMethodStyle.detailRow}>
