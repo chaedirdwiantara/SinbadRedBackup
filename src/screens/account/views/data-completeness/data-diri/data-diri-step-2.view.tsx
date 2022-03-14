@@ -119,7 +119,7 @@ const DataDiriStep2View: React.FC = () => {
           style={{
             height: undefined,
             width: undefined,
-            flex: 0.75,
+            flex: 0.6,
             margin: 16,
           }}
         />
