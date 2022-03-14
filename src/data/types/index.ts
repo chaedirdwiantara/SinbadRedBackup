@@ -21,6 +21,7 @@ export * from './quest.type';
 export * from './history';
 export * from './quest.type';
 export * from './oms';
+export * from './order-history';
 /**
  * ================================================================
  * NOTES
