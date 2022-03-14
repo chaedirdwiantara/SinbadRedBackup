@@ -185,15 +185,18 @@ const MapsViewType2: React.FC = () => {
             <Marker
               coordinate={latLng}
               draggable
-              image={require('@image/pin_point.png')}
               onDragEnd={({ nativeEvent: { coordinate } }: any) => {
                 setLatLng(coordinate);
                 refMaps.current?.animateToRegion({
                   ...coordinate,
                   ...REGION_OPTIONS,
                 });
-              }}
-            />,
+              }}>
+              <Image
+                source={require('@image/pin_point.png')}
+                style={{ height: 44, width: 44, resizeMode: 'contain' }}
+              />
+            </Marker>,
           )}
         </MapView>
         <View style={{ ...styles.floatingButton }}>

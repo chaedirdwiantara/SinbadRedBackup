@@ -32,6 +32,26 @@ import {
 } from '@screen/auth/functions/auth-utils.functions';
 import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
 
+function removeEmptyValue(data: any) {
+  if (!data) {
+    return { buyer: {} };
+  }
+
+  let buyer = data?.buyer;
+  if (buyer) {
+    for (const key in buyer) {
+      if (
+        buyer[key] === null ||
+        typeof buyer[key] === 'undefined' ||
+        (typeof buyer[key] === 'string' && buyer[key] === '')
+      ) {
+        delete buyer[key];
+      }
+    }
+  }
+  return { buyer };
+}
+
 interface Props {
   openModalBack: boolean;
   onCloseModalBack: (value: boolean) => void;
@@ -146,8 +166,8 @@ const Content: React.FC<Props> = (props) => {
 
     if (
       dataIsChanged &&
-      address.value !== '' &&
-      noteAddress.value !== '' &&
+      address.value &&
+      noteAddress.value &&
       vehicleAccessibility !== null &&
       vehicleAccessibilityAmount !== null &&
       latLng !== null
@@ -359,17 +379,27 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (!handleDisableSaveButton()) {
-            updateCompleteData({
-              buyer: {
-                address: address.value,
-                noteAddress: noteAddress.value,
-                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
-                vehicleAccessibilityId: vehicleAccessibility?.id,
-                locationId,
-                ...latLng,
-              },
-            });
+          if (
+            address.value !== existingAddress ||
+            noteAddress.value !== existingNoteAddress ||
+            vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
+            vehicleAccessibilityAmount?.value !==
+              existingVehicleAccessibilityAmount ||
+            latLng
+          ) {
+            updateCompleteData(
+              removeEmptyValue({
+                buyer: {
+                  address: address.value,
+                  noteAddress: noteAddress.value,
+                  vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+                  vehicleAccessibilityId: vehicleAccessibility?.id,
+                  locationId,
+                  latitude: latLng?.latitude || 0,
+                  longitude: latLng?.longitude || 0,
+                },
+              }),
+            );
           } else {
             backToDataCompleteness();
           }
