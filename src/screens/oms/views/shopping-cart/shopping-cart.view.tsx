@@ -395,6 +395,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.closeAction();
           errorModal.setOpen(false);
         }}
+        retryAction={() => {
+          errorModal.closeAction();
+          errorModal.setOpen(false);
+        }}
       />
     </SnbContainer>
   );

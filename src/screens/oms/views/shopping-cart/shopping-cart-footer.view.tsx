@@ -43,6 +43,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isErrorShown, setErrorShown] = useState(false);
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
+  const [isUpdateError, setUpdateError] = useState(false);
   const errorModal = useOmsGeneralFailedState();
 
   /** === ACTIONS === */
@@ -190,22 +191,24 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [stateCheckout.checkout]);
 
-  /** If update results in an error, show CTA */
+  /** if fetch update error, set state variable  */
   useEffect(() => {
-    // wait all fetch done first
-    if (!stateCart.update.loading) {
-      const isUpdateError = stateCart.update.error !== null;
-      // determine the error data
-      let errorData = null;
-      // show the modal and the data
-      if (isUpdateError) {
-        errorData = stateCart.update.error;
-        errorModal.setCloseAction(() => errorModal.setOpen(false));
-        errorModal.setErrorData(errorData);
-        errorModal.setOpen(true);
-      }
+    if (stateCart.update.error) {
+      setUpdateError(true);
     }
-  }, [stateCart.update]);
+  }, [stateCart.update.error]);
+
+  useEffect(() => {
+    if (isUpdateError && stateCart.update.error) {
+      const action = () => {
+        setUpdateError(false);
+        errorModal.setOpen(false);
+      };
+      errorModal.setCloseAction(() => action);
+      errorModal.setErrorData(stateCart.update.error);
+      errorModal.setOpen(true);
+    }
+  }, [isUpdateError]);
 
   /** === VIEWS === */
   /** ==> content */
@@ -254,6 +257,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         open={errorModal.isOpen}
         error={errorModal.errorData}
         closeAction={() => {
+          errorModal.closeAction();
+        }}
+        retryAction={() => {
           errorModal.closeAction();
         }}
       />
