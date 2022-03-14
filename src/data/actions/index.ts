@@ -20,6 +20,7 @@ export * from './quest';
 export * from './history';
 export * from './quest';
 export * from './oms';
+export * from './order-history';
 /**
  * ================================================================
  * NOTES

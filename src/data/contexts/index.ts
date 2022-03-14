@@ -29,8 +29,12 @@ import {
 } from './oms/checkout/CheckoutProvider';
 import {
   ThankYouPageContext,
-  ThankYouPageProvider
-} from './oms/thank-you-page/ThankYouPageProvider'
+  ThankYouPageProvider,
+} from './oms/thank-you-page/ThankYouPageProvider';
+import {
+  OrderHistoryContext,
+  OrderHistoryProvider,
+} from './order-history/OrderHistoryProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -53,7 +57,8 @@ export const providers = [
   QuestProvider,
   CartProvider,
   CheckoutProvider,
-  ThankYouPageProvider
+  ThankYouPageProvider,
+  OrderHistoryProvider,
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -76,4 +81,5 @@ export const contexts = {
   CartContext,
   CheckoutContext,
   ThankYouPageContext,
+  OrderHistoryContext,
 };
