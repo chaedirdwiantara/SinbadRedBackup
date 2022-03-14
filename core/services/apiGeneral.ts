@@ -51,8 +51,6 @@ const apiGeneral = async <T>(
   };
   /** === HANDLE ERROR RESPONSE === */
   const handleErrors = (response: any) => {
-    console.log(response, 'RESPONSE');
-
     if (!response.ok) {
       if (response.headers.map['content-type'] === 'text/html') {
         if (response.status === 401) {
