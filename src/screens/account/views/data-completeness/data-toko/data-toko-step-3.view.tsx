@@ -94,8 +94,8 @@ const Content: React.FC<Props> = (props) => {
   } = completeDataState.data?.buyerData || {};
   const isLatLngAvailable = latitude && longitude;
   const [streetName, setStreetName] = React.useState();
-  const [staticAddress, setStaticAddress] = React.useState();
-  const [locationId, setLocationId] = React.useState('');
+  const [staticAddress, setStaticAddress] = React.useState(buyerData?.address);
+  const [locationId, setLocationId] = React.useState(buyerData?.locationId);
   const {
     updateCompleteData,
     updateCompleteDataState,
