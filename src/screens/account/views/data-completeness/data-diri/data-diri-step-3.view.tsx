@@ -147,7 +147,7 @@ const DataDiriStep3View: React.FC = () => {
       uri = completeDataState?.data?.userData?.taxImageUrl;
     }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: 'space-between'}}>
         <Image
           resizeMode="contain"
           source={{ uri }}
@@ -155,7 +155,7 @@ const DataDiriStep3View: React.FC = () => {
           style={{
             height: undefined,
             width: undefined,
-            flex: 1,
+            flex: 0.6,
             margin: 16,
           }}
         />
