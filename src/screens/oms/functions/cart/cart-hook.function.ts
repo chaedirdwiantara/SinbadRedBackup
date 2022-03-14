@@ -9,18 +9,6 @@ import * as models from '@models';
 import { contexts } from '@contexts';
 import { manageRemoveProduct } from './cart.function';
 /** === FUNCTION === */
-/** => cart example action */
-const useCartExampleAction = () => {
-  const dispatch = useDispatch();
-  return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartExampleProcess(contextDispatch));
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartExampleReset(contextDispatch));
-    },
-  };
-};
 /** => get cart action */
 const useGetCartAction = () => {
   const dispatch = useDispatch();
@@ -823,7 +811,6 @@ const useKeyboardFocus = () => {
 };
 /** === EXPORT === */
 export {
-  useCartExampleAction,
   useGetCartAction,
   useGetTotalCartAction,
   useAddToCartAction,
