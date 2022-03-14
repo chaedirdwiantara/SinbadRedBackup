@@ -9,18 +9,6 @@ import * as models from '@models';
 import { contexts } from '@contexts';
 import { manageRemoveProduct } from './cart.function';
 /** === FUNCTION === */
-/** => cart example action */
-const useCartExampleAction = () => {
-  const dispatch = useDispatch();
-  return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartExampleProcess(contextDispatch));
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartExampleReset(contextDispatch));
-    },
-  };
-};
 /** => get cart action */
 const useGetCartAction = () => {
   const dispatch = useDispatch();
@@ -70,8 +58,9 @@ const useUpdateCartAction = () => {
       contextDispatch: (action: any) => any,
       cartData: models.CartMaster,
     ) => {
+      const newCartData = cloneDeep(cartData);
       if (stateCart.buyerAddress.data !== null) {
-        const carts: models.CartMasterSellers[] = [...cartData.sellers];
+        const carts: models.CartMasterSellers[] = [...newCartData.sellers];
         cartData.unavailable.map((product) => {
           const sellerFound = cartData.sellers.find(
             (seller) => seller.sellerId === product.sellerId,
@@ -167,19 +156,23 @@ const useCheckProductAction = () => {
 };
 /** => post check product action */
 const usePostCheckProductAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: models.CheckProductPayloadCarts[] = [];
-        stateCart.get.data.sellers.map((sellerItem) => {
+        cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
-            data.push({
-              productId: productItem.productId,
-              warehouseId: productItem.warehouseId,
-            });
+            if (productItem.selected) {
+              data.push({
+                productId: productItem.productId,
+                warehouseId: productItem.warehouseId,
+              });
+            }
           });
         });
         dispatch(
@@ -222,15 +215,26 @@ const useCheckSellerAction = () => {
 };
 /** => post check seller action */
 const usePostCheckSellerAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: number[] = [];
-        stateCart.get.data.sellers.map((sellerItem) => {
-          data.push(sellerItem.sellerId);
+        cartData.sellers.map((sellerItem) => {
+          let isAnyItemSelectedInThisSeller = false;
+          sellerItem.products.map((productItem) => {
+            if (productItem.selected) {
+              isAnyItemSelectedInThisSeller = true;
+            }
+          });
+
+          if (isAnyItemSelectedInThisSeller) {
+            data.push(sellerItem.sellerId);
+          }
         });
         dispatch(
           Actions.postCheckSellerProcess(contextDispatch, {
@@ -280,26 +284,30 @@ const useCheckStockAction = () => {
 };
 /** => post check stock action */
 const usePostCheckStockAction = () => {
-  const { stateCart } = useContext(contexts.CartContext);
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
-      if (stateCart.get.data !== null) {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartData: models.CartMaster,
+    ) => {
+      if (cartData?.sellers !== null) {
         // format payload from redux master
         const data: models.CheckStockPayloadCarts[] = [];
-        stateCart.get.data?.sellers.map((sellerItem) => {
+        cartData.sellers.map((sellerItem) => {
           sellerItem.products.map((productItem) => {
-            data.push({
-              productId: productItem.productId,
-              warehouseId: productItem.warehouseId,
-              qty: productItem.qty,
-            });
+            if (productItem.selected) {
+              data.push({
+                productId: productItem.productId,
+                warehouseId: productItem.warehouseId,
+                qty: productItem.qty,
+              });
+            }
           });
         });
         dispatch(
           Actions.postCheckStockProcess(contextDispatch, {
             data: {
-              cartId: stateCart.get.data.id,
+              cartId: cartData.id,
               reserved: true,
               carts: data,
             },
@@ -339,6 +347,7 @@ const useCartBuyerAddressAction = () => {
 /** => cart local data */
 const useCartLocalData = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
+  const [initialCartData, setInitialCartData] = useState<models.CartMaster>();
   return {
     updateQty: ({
       productId,
@@ -704,13 +713,9 @@ const useCartLocalData = () => {
                */
               let qty: number = thisProduct.qty;
               let selected: boolean = thisProduct.selected;
-              let status: string = item.status;
               if (thisProduct.qty > item.stock) {
                 qty = item.stock;
                 selected = false;
-              }
-              if (thisProduct.minQty > item.stock) {
-                status = 'stock_not_enough';
               }
               const productData: models.CartMasterSellersProducts = {
                 ...thisProduct,
@@ -719,19 +724,20 @@ const useCartLocalData = () => {
                 qty,
                 selected,
                 stock: item.stock,
-                stockStatus: item.status,
+                isStockAvailable: item.isAvailable,
+                warehouseName: item.warehouseName,
               };
               /** => move product data to unavailable if not_available */
-              if (status === 'not_available') {
-                unavailable.push({
-                  ...productData,
-                  unavailableMessage: 'Tidak tersedia di lokasi anda',
-                  selected: false,
-                });
-              } else if (status === 'stock_not_enough') {
+              if (thisProduct.minQty > item.stock) {
                 unavailable.push({
                   ...productData,
                   unavailableMessage: 'Stok kosong',
+                  selected: false,
+                });
+              } else if (!item.isAvailable) {
+                unavailable.push({
+                  ...productData,
+                  unavailableMessage: 'Tidak tersedia di lokasi anda',
                   selected: false,
                 });
               } else {
@@ -751,7 +757,12 @@ const useCartLocalData = () => {
         };
       }
     },
+    setInitialLocalData: (params: models.CartMaster) => {
+      setLocalCartMaster(params);
+      setInitialCartData(params);
+    },
     localCartMaster,
+    initialCartData,
   };
 };
 /** => oms general failed state */
@@ -797,7 +808,6 @@ const useKeyboardFocus = () => {
 };
 /** === EXPORT === */
 export {
-  useCartExampleAction,
   useGetCartAction,
   useGetTotalCartAction,
   useAddToCartAction,

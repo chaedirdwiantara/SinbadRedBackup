@@ -1,10 +1,5 @@
 /** === IMPORT INTERNAL === */
 import {
-  cartExampleInitialState,
-  cartExampleReducer,
-  CartExampleInitialProps,
-} from './example-cart.reducer';
-import {
   getCartInitialState,
   getCartReducer,
   GetCartInitialProps,
@@ -72,7 +67,6 @@ import {
 } from './cart-buyer-address.reducer';
 
 export interface CartInitialProps {
-  example: CartExampleInitialProps;
   get: GetCartInitialProps;
   total: GetTotalCartInitialProps;
   create: AddToCartInitialProps;
@@ -89,7 +83,6 @@ export interface CartInitialProps {
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
-  example: cartExampleInitialState,
   get: getCartInitialState,
   total: getTotalCartInitialState,
   create: addToCartInitialState,
@@ -107,7 +100,6 @@ export const cartInitialState = {
 /** === REDUCER === */
 export const cartReducer = (
   {
-    example,
     get,
     total,
     create,
@@ -124,7 +116,6 @@ export const cartReducer = (
   }: CartInitialProps,
   action: any,
 ) => ({
-  example: cartExampleReducer(example, action),
   get: getCartReducer(get, action),
   total: getTotalCartReducer(total, action),
   create: addToCartReducer(create, action),

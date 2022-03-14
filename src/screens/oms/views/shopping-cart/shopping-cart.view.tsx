@@ -51,6 +51,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckProduct,
     mergeCheckSeller,
     mergeCheckStock,
+    setInitialLocalData,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
@@ -113,8 +114,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.fetch(dispatchCart);
   };
 
-  /** => handle update cart on blur  */
-  const handleUpdateCartOnBlur = () => {
+  /** => handle update cart */
+  const handleUpdateCart = () => {
     if (localCartMaster) {
       updateCartAction.fetch(dispatchCart, localCartMaster);
     }
@@ -136,16 +137,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       resultMergeCheckSeller,
     );
     if (resultMergeCheckStock) {
-      setLocalCartMaster(resultMergeCheckStock);
+      setInitialLocalData(resultMergeCheckStock);
     }
   };
 
   /** => handle go back */
   const handleGoBack = () => {
     goBack();
-    if (localCartMaster) {
-      updateCartAction.fetch(dispatchCart, localCartMaster);
-    }
+    handleUpdateCart();
   };
 
   /** => scroll to bottom (for accordion) */
@@ -169,7 +168,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => define blur function */
   useEffect(() => {
     const unsubscribeBlur = navigation.addListener('blur', () => {
-      handleUpdateCartOnBlur();
+      handleUpdateCart();
     });
 
     return unsubscribeBlur;
@@ -389,6 +388,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={errorModal.isOpen}
         error={errorModal.errorData}
         closeAction={() => {
+          errorModal.closeAction();
+          errorModal.setOpen(false);
+        }}
+        retryAction={() => {
           errorModal.closeAction();
           errorModal.setOpen(false);
         }}
