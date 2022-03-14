@@ -3,7 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { enableScreens } from 'react-native-screens';
 import { View, Platform } from 'react-native';
 import { HomeView } from '@screen/home/views';
-import { HistoryListView } from '@screen/history/views';
+// import { HistoryListView } from '@screen/history/views';
+import { OrderHistoryListView } from '@screen/order-history/views';
 import { HelpView } from '@screen/help/views';
 import { UserView } from '@screen/user/views';
 import FastOrderView from '../components/FastOrderView';
@@ -57,7 +58,7 @@ const TabNavigator = () => {
       />
       <Screen
         name="HistoryListView"
-        component={HistoryListView}
+        component={OrderHistoryListView}
         listeners={() => ({
           tabPress: (e) => {
             e.preventDefault();
