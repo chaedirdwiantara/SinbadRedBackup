@@ -127,14 +127,18 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   useEffect(() => {
     // wait all fetch done first
     if (
-      !stateCart.postCheckProduct.loading &&
-      !stateCart.postCheckSeller.loading &&
-      !stateCart.postCheckStock.loading
+      stateCart.postCheckProduct.error !== null ||
+      stateCart.postCheckSeller.error !== null ||
+      stateCart.postCheckStock.error !== null
     ) {
       // check which endpoint fetch was fail
       const isErrorCheckProduct = stateCart.postCheckProduct.error !== null;
       const isErrorCheckSeller = stateCart.postCheckSeller.error !== null;
       const isErrorCheckStock = stateCart.postCheckStock.error !== null;
+
+      const action = () => {
+        errorModal.setOpen(false);
+      };
       // determine the error data
       let errorData = null;
       if (isErrorCheckProduct) {
@@ -146,15 +150,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        errorModal.setCloseAction(() => errorModal.setOpen(false));
+        errorModal.setCloseAction(() => action);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
       }
     }
   }, [
-    stateCart.postCheckProduct,
-    stateCart.postCheckSeller,
-    stateCart.postCheckStock,
+    stateCart.postCheckProduct.error,
+    stateCart.postCheckSeller.error,
+    stateCart.postCheckStock.error,
   ]);
 
   useEffect(() => {
@@ -177,19 +181,19 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** If checkout results in an error, show CTA */
   useEffect(() => {
     // wait all fetch done first
-    if (!stateCheckout.checkout.loading) {
-      const isChekoutError = stateCheckout.checkout.error !== null;
+    if (stateCheckout.checkout.error !== null) {
+      const action = () => {
+        errorModal.setOpen(false);
+      };
       // determine the error data
-      let errorData = null;
+      let errorData = stateCheckout.checkout.error;
       // show the modal and the data
-      if (isChekoutError) {
-        errorData = stateCheckout.checkout.error;
-        errorModal.setCloseAction(() => errorModal.setOpen(false));
-        errorModal.setErrorData(errorData);
-        errorModal.setOpen(true);
-      }
+      errorData = stateCheckout.checkout.error;
+      errorModal.setCloseAction(() => action);
+      errorModal.setErrorData(errorData);
+      errorModal.setOpen(true);
     }
-  }, [stateCheckout.checkout]);
+  }, [stateCheckout.checkout.error]);
 
   /** if fetch update error, set state variable  */
   useEffect(() => {
