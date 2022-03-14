@@ -1,10 +1,20 @@
 export interface PaymentMethodList {
-  skip: string;
-  limit: string;
-  keyword: string;
-  sort: string;
-  sortBy: string;
-  amount: number;
+  id: string;
+  code: string;
+  displayLabel: string;
+  paymentMethods: PaymentMethod[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaymentMethod {
+  code: string;
+  displayLabel: string;
+  icon_url: string;
+  serviceFeeDeduct: string;
+  serviceFeeNonDeduct: string;
+  isServiceFeeFree: string;
+  isSelected: boolean;
 }
 
 export interface PaymentMethodGetWaitingPaymentOrder {

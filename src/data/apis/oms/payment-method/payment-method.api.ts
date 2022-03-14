@@ -1,18 +1,18 @@
 /** === IMPORT EXTERNAL FUNCTION === */
-import apiMapping from '@core/services/apiMapping';
+import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 /** === FUNCTION === */
 const paymentMethodListApi = (
-  payload: models.ListProcessProps<models.PaymentMethodList>,
+  payload: models.ListProcessProps<models.PaymentMethodProps>,
 ) => {
   const path = `payment-method-types?skip=${payload.skip}&limit=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
   return apiMapping<models.PaymentMethodList>(
     'auth',
     path,
-    'order',
+    'buyer-payment',
     'v1',
-    'DETAIL',
+    'LIST',
   );
 };
 

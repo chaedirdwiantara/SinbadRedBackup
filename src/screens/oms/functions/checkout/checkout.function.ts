@@ -174,6 +174,16 @@ const subTotalQty = (products: any) => {
   return total;
 };
 
+const totalQty = (sellers: any) => {
+  let total = 0;
+  for (let i = 0; i < sellers?.length; i++) {
+    for (let a = 0; a < sellers[i]?.products.length; a++) {
+      total = total + sellers[i].products[a].qty;
+    }
+  }
+  return total;
+};
+
 const totalPayment = (sellers: any) => {
   let total = 0;
   for (let i = 0; i < sellers?.length; i++) {
@@ -208,6 +218,7 @@ export {
   calculateTax,
   totalBarangPrice,
   subTotalQty,
+  totalQty,
   totalPayment,
   totalPaymentWithoutCurrency,
 };

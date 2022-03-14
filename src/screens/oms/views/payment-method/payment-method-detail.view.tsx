@@ -7,25 +7,30 @@ import {
   SnbText,
 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 interface PaymentMethodDetailProps {
-  data: any;
-  servicePayment: number;
+  dataFromCheckout: any;
   choice: string;
   dataChoose: any;
 }
 
 const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
-  data,
-  servicePayment,
+  dataFromCheckout,
   choice,
   dataChoose,
 }) => {
   return (
     <View style={PaymentMethodStyle.detailContainer}>
       <View style={PaymentMethodStyle.detailRow}>
-        <SnbText.B2 color={color.black80}>Total Produk (2)</SnbText.B2>
-        <SnbText.B2 color={color.black80}>Rp200.000</SnbText.B2>
+        <SnbText.B2 color={color.black80}>
+          Total Produk {`(${dataFromCheckout.totalQtyCheckout})`}
+        </SnbText.B2>
+        <SnbText.B2 color={color.black80}>
+          {toCurrency(dataFromCheckout.totalPaymentNumber, {
+            withFraction: false,
+          })}
+        </SnbText.B2>
       </View>
       <View style={PaymentMethodStyle.detailRow}>
         <SnbText.B2 color={color.black80}>Biaya Layanan</SnbText.B2>
@@ -36,7 +41,9 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
                 ? color.green80
                 : color.black80
             }>
-            Rp{dataChoose.serviceFeeNonDeduct}
+            {toCurrency(dataChoose.serviceFeeNonDeduct, {
+              withFraction: false,
+            })}
           </SnbText.B2>
         ) : (
           <SnbText.B2 color={color.black80}>Rp-</SnbText.B2>
@@ -45,7 +52,27 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       <SnbDivider style={{ marginVertical: 1 }} />
       <View style={PaymentMethodStyle.detailRow}>
         <SnbText.B2 color={color.black100}>Total Pembayaran</SnbText.B2>
-        <SnbText.B2 color={color.black100}>Rp200.000</SnbText.B2>
+        {dataChoose != '' ? (
+          <SnbText.B2 color={color.black100}>
+            {toCurrency(
+              dataFromCheckout.totalPaymentNumber +
+                dataChoose.serviceFeeNonDeduct,
+              {
+                withFraction: false,
+              },
+            )}
+          </SnbText.B2>
+        ) : (
+          <SnbText.B2 color={color.black100}>
+            {toCurrency(
+              dataFromCheckout.totalPaymentNumber,
+
+              {
+                withFraction: false,
+              },
+            )}
+          </SnbText.B2>
+        )}
       </View>
     </View>
   );

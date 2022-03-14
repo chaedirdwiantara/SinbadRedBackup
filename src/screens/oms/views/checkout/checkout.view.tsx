@@ -15,6 +15,7 @@ import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
+  totalQty,
   useGetTncContent,
 } from '@screen/oms/functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
@@ -56,6 +57,7 @@ const OmsCheckoutView: FC = () => {
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const totalQtyCheckout = totalQty(data?.sellers);
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -86,7 +88,7 @@ const OmsCheckoutView: FC = () => {
   }, timeToExpired);
 
   /** => to Payment Method Page  */
-  const dataToPaymentMethod = { totalPaymentNumber, addTime };
+  const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   function toPaymentMethod() {
     clearTimeout(timer);
     goToPaymentMethod(dataToPaymentMethod);

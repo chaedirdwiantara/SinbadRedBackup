@@ -3,13 +3,18 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type paymentMethodListInitialProps =
-  models.DetailItemProps<models.PaymentMethodList>;
+export type paymentMethodListInitialProps = models.ListItemProps<
+  models.PaymentMethodList[]
+>;
 /** === INITIAL STATE HERE === */
 export const paymentMethodListInitialState: paymentMethodListInitialProps = {
-  data: null,
+  data: [],
   error: null,
-  loading: false,
+  loading: true,
+  loadMore: false,
+  refresh: false,
+  total: 0,
+  skip: 0,
 };
 /** === FUNCTION HERE === */
 export const paymentMethodListReducer = simplifyReducer(
@@ -17,31 +22,42 @@ export const paymentMethodListReducer = simplifyReducer(
   {
     /** ===> DETAIL */
     /** => process */
-    [types.PAYMENT_METHOD_LIST_PROCESS]() {
+    [types.PAYMENT_METHOD_LIST_PROCESS](
+      state = paymentMethodListInitialState,
+      { payload }: models.ListProcessAction,
+    ) {
       return {
-        ...paymentMethodListInitialState,
-        loading: true,
+        ...state,
+        loading: payload.loading,
+        error: null,
       };
     },
     /** => success */
     [types.PAYMENT_METHOD_LIST_SUCCESS](
       state = paymentMethodListInitialState,
-      action: models.DetailSuccessAction<models.PaymentMethodList>,
+      { payload }: models.ListSuccessAction<models.PaymentMethodList[]>,
     ) {
+      state.error = null;
       return {
         ...state,
-        data: action.payload.data,
+        data: [...state.data, ...payload.data],
         loading: false,
+        loadMore: false,
+        refresh: false,
+        total: payload.meta.total,
+        skip: payload.meta.skip,
       };
     },
     /** => failed */
     [types.PAYMENT_METHOD_LIST_FAILED](
       state = paymentMethodListInitialState,
-      action: models.DetailFailedAction,
+      action: models.ListFailedAction,
     ) {
       return {
         ...state,
         loading: false,
+        loadMore: false,
+        refresh: false,
         error: action.payload,
       };
     },
@@ -49,7 +65,7 @@ export const paymentMethodListReducer = simplifyReducer(
     [types.PAYMENT_METHOD_LIST_RESET]() {
       return paymentMethodListInitialState;
     },
-    /** => process */
+    /** => loading */
     [types.PAYMENT_METHOD_LIST_LOADING]() {
       return {
         ...paymentMethodListInitialState,

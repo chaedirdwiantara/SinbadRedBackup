@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => process */
 export const paymentMethodListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
+  data: models.ListProcessProps,
+): models.ListProcessAction => {
   contextDispatch({
     type: types.PAYMENT_METHOD_LIST_PROCESS,
     payload: data,
@@ -18,14 +18,14 @@ export const paymentMethodListProcess = (
 };
 /** => success */
 export const paymentMethodListSuccess = (
-  data: models.DetailSuccessProps<models.PaymentMethodList>,
-): models.DetailSuccessAction<models.PaymentMethodList> => {
-  return { type: types.PAYMENT_METHOD_LIST_SUCCESS, payload: data };
+  payload: models.ListSuccessProps<models.PaymentMethodList[]>,
+): models.ListSuccessAction<models.PaymentMethodList[]> => {
+  return { type: types.PAYMENT_METHOD_LIST_SUCCESS, payload };
 };
 /** => failed */
 export const paymentMethodListFailed = (
   data: models.ErrorProps,
-): models.DetailFailedAction => {
+): models.ListFailedAction => {
   return { type: types.PAYMENT_METHOD_LIST_FAILED, payload: data };
 };
 /** => reset */

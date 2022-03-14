@@ -6,9 +6,13 @@ import * as types from '@types';
 import * as models from '@models';
 import { PaymentMethodListApi } from 'src/data/apis/oms/payment-method/payment-method.api';
 
-function* paymentMethodList(action: models.ListProcessAction) {
+function* paymentMethodList(
+  action: models.ListProcessAction<
+    models.ListProcessProps<models.PaymentMethodProps>
+  >,
+) {
   try {
-    const response: models.ListSuccessProps<models.PaymentMethodList> =
+    const response: models.ListSuccessProps<models.PaymentMethodList[]> =
       yield call(() => {
         return PaymentMethodListApi.paymentMethodListApi(action.payload);
       });
