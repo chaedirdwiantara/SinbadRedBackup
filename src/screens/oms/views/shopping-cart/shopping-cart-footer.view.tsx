@@ -61,6 +61,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const handleOnPressCheckout = useCallback(() => {
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
+    setCheckoutBtnLoading(true);
   }, [cartData, stateCart.buyerAddress.data]);
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
@@ -71,6 +72,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckSellerAction.fetch(dispatchCart, cartData);
       postCheckStockAction.fetch(dispatchCart, cartData);
       setCheckoutPressed(false);
+      setCheckoutBtnLoading(true);
     }
   };
 
@@ -118,6 +120,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         setErrorShown(true);
+        setCheckoutBtnLoading(false);
       }
     }
   }, [
@@ -156,6 +159,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         errorModal.setCloseAction(() => action);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
+        setCheckoutBtnLoading(false);
       }
     }
   }, [
@@ -170,6 +174,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
      */
     if (isMatchValid) {
       checkoutAction.fetch(dispatchCheckout, cartData);
+      setCheckoutBtnLoading(true);
     }
   }, [isMatchValid]);
 
@@ -178,6 +183,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       /**
        * NAVIGATE TO CHECKOUT PAGE
        */
+      setCheckoutBtnLoading(false);
     }
   }, [stateCheckout.checkout.data]);
 
@@ -195,6 +201,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       errorModal.setCloseAction(() => action);
       errorModal.setErrorData(errorData);
       errorModal.setOpen(true);
+      setCheckoutBtnLoading(false);
     }
   }, [stateCheckout.checkout.error]);
 
@@ -214,25 +221,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       errorModal.setCloseAction(() => action);
       errorModal.setErrorData(stateCart.update.error);
       errorModal.setOpen(true);
+      setCheckoutBtnLoading(false);
     }
   }, [isUpdateError]);
-
-  useEffect(() => {
-    const isLoading =
-      stateCart.update.loading ||
-      stateCart.postCheckProduct.loading ||
-      stateCart.postCheckSeller.loading ||
-      stateCart.postCheckStock.loading ||
-      stateCheckout.checkout.loading;
-
-    setCheckoutBtnLoading(isLoading);
-  }, [
-    stateCart.update,
-    stateCart.postCheckProduct,
-    stateCart.postCheckSeller,
-    stateCart.postCheckStock,
-    stateCheckout.checkout,
-  ]);
 
   /** === VIEWS === */
   /** ==> content */
