@@ -2,6 +2,7 @@ import {
   OmsShoppingCartView,
   OmsCheckoutView,
   OmsThankYouPageView,
+  OmsPaymentMethod,
 } from '@screen/oms/views';
 
 const OmsNav = {
@@ -13,7 +14,10 @@ const OmsNav = {
   },
   OmsThankYouPageView: {
     component: OmsThankYouPageView,
-  }
+  },
+  OmsPaymentMethod: {
+    component: OmsPaymentMethod,
+  },
 };
 
 export default OmsNav;

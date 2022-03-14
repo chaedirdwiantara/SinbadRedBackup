@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
@@ -14,25 +14,20 @@ import * as models from '@models';
 // import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: any;
-  //data: models.IInvoiceCheckout;
-  // openModalPaymentType: (value: boolean) => void;
-  // openModalParcelDetail: any;
-  // openModalProductList: (data: models.ProductCheckout[]) => void;
-  // index: number;
+  data: models.CheckoutData;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
-  // openModalPaymentType,
-  // openModalParcelDetail,
-  // openModalProductList,
-  // index,
 }) => {
   /** === HOOK === */
 
   const [openModal, setOpenModal] = useState(false);
-  const [dataModal, setDataModal] = useState([]);
+  const [dataModal, setDataModal]: any = useState([]);
+  //get max lead time from product list
+  const getMaxLeadTime = (products : models.CheckoutProducts[]) => {
+    return Math.max.apply(Math, products.map(function(o) { return o.leadTime; }))
+  }
 
   return (
     <>
@@ -56,7 +51,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                 </TouchableOpacity>
               </View>
               <CheckoutSKUListView products={item.products} />
-              <CheckoutShipmentDetailView />
+              <CheckoutShipmentDetailView leadTime={getMaxLeadTime(item.products)} />
               <CheckoutPaymentDetailView products={item.products} />
             </View>
             <ModalParcelDetail

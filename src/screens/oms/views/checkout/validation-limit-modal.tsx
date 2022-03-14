@@ -5,19 +5,19 @@ interface CheckoutBottomErrorModalProps {
   close: () => void;
 }
 /** === COMPONENT === */
-export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
+export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
   isOpen,
   close,
 }) => {
   return (
     <BottomModalError
       isOpen={isOpen}
-      errorTitle={'Batas waktu pemesanan habis'}
+      errorTitle={'Total pembelian terlalu besar'}
       errorSubtitle={
-        'Silahkan ulangi proses pemesanan dan selesaikan kurang dari 5 menit.'
+        'Coba kurangi produk di keranjang Anda hingga di bawah Rp999.999.999.'
       }
       errorImage={require('../../../../assets/images/expired_time.png')}
-      buttonTitle={'Kembali ke Keranjang'}
+      buttonTitle={'Kembali Ke Keranjang'}
       buttonOnPress={() => {
         close();
       }}
@@ -25,4 +25,4 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
   );
 };
 
-export default ModalBottomErrorExpiredTime;
+export default ModalValidationLimit;

@@ -4,7 +4,12 @@ import React, { FC } from 'react';
 import { Image, View } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === COMPONENT === */
-export const CheckoutShipmentDetailView: FC = () => {
+interface CheckoutShipmentDetailViewProps {
+  leadTime: number;
+}
+export const CheckoutShipmentDetailView: FC<CheckoutShipmentDetailViewProps> = ({
+  leadTime
+}) => {
   return (
     <View style={{ marginTop: 16 }}>
       <SnbText.H4 color={color.black80}>Detail Pengiriman</SnbText.H4>
@@ -17,7 +22,7 @@ export const CheckoutShipmentDetailView: FC = () => {
           <View style={{ marginLeft: 6 }}>
             <SnbText.B3 color={color.black80}>Pengiriman</SnbText.B3>
             <SnbText.B4 color={color.black100}>
-              Pengiriman Supplier (3 hari)
+              {`Pengiriman Supplier (${leadTime} hari)`}
             </SnbText.B4>
           </View>
         </View>

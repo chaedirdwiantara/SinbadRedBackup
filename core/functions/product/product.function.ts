@@ -106,7 +106,10 @@ export const backToLogin = () => {
   NavigationAction.navigate('LoginPhoneView');
 };
 
-/** => go to checkout */
 export const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
+};
+
+export const goToPaymentMethod = () => {
+  NavigationAction.navigate('OmsPaymentMethod');
 };

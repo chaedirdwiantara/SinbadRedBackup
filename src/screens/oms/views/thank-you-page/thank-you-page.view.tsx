@@ -1,5 +1,4 @@
 /** === IMPORT PACKAGES === */
-import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -7,13 +6,14 @@ import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.com
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
 import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useState } from 'react';
 import {
   ScrollView,
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from 'react-native'; 
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
@@ -21,6 +21,11 @@ import CustomAccordion from '@screen/history/components/CustomAccordion';
 import { PaymentGuideListItem } from '@model/oms';
 import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
 import { toLocalDateTime } from '@core/functions/global/date-format';
+import { goToHome } from '@core/functions/product';
+import { goToThankYouPage } from '@screen/oms/functions';
+import moment from 'moment';
+import { CountDownTimer } from '@screen/history/components';
+import { NavigationAction } from '@core/functions/navigation';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
@@ -43,9 +48,22 @@ const OmsThankYouPageView: FC = () => {
     dispatchThankYouPage
   } = useThankYouPageContext()
   
+  //hardware back handler
+  useEffect(() => {
+    const backAction = () => {
+      goToHome();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
+  }, []);
+
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'3')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'6')
   }, [])
 
   useEffect(() => {
@@ -75,6 +93,38 @@ const OmsThankYouPageView: FC = () => {
   const handleThankYouPageOrderDetail = () => {
     modalThankYouPageOrderDetail.setData(thankYouPageData);
     modalThankYouPageOrderDetail.setOpen(true)
+  };
+  /** => render countdown */
+  const renderCountDown = () => {
+    if(thankYouPageData != null && thankYouPageData != undefined){
+      console.log('irpan',thankYouPageData )
+      const expiredPaymentTime = thankYouPageData?.expiredDate;
+
+      return moment.utc(new Date()).local() <
+        moment.utc(expiredPaymentTime).local() &&
+        expiredPaymentTime !== null ? (
+        <View style={styles.shadowForBox10}>
+          <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+            <SnbText.H4 align="center">
+              Silahkan lakukan pembayaran dalam waktu
+            </SnbText.H4>
+            <View style={{ alignItems: 'center', marginVertical: 8 }}>
+              <CountDownTimer
+                type={'big'}
+                expiredTime={thankYouPageData!.expiredDate}
+              />
+            </View>
+            <SnbText.B3 color={color.black60} align="center">
+              {`Sebelum ${moment(expiredPaymentTime).format('LLLL')} WIB`}
+            </SnbText.B3>
+          </View>
+          <View style={{ height: 10, backgroundColor: color.black10 }} />
+        </View>
+      ) : (
+        <View />
+      );
+    } 
+    
   };
   /** => Payment Total */
   const renderPaymentTotal = () => {
@@ -177,6 +227,7 @@ const OmsThankYouPageView: FC = () => {
     <ScrollView
     >
     <>
+    {renderCountDown()}
     {renderPaymentDetail()}
     {renderPaymentTotal()}
     {renderPaymentGuide()}
@@ -205,6 +256,24 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
+  /** => Footer */
+  const renderFooter = () => (
+    <View
+      style={ThankYouPageStyle.footer}>
+        <SnbButton.Dynamic
+          size="medium"
+          type="secondary"
+          title={'Kembali ke Beranda'}
+          onPress={goToHome}
+        />
+        <SnbButton.Dynamic
+          size="medium"
+          type="primary"
+          title={'Cek Status'}
+          onPress={() =>NavigationAction.navigate('HistoryListView')}
+        />
+    </View>
+  );
   /** => Main */
   return (
     <SnbContainer color="white">
@@ -220,7 +289,7 @@ const OmsThankYouPageView: FC = () => {
       />
       
       {renderContent()}
-      {/* {renderFooter()} */}
+      {renderFooter()}
       {renderModalOrderDetail()}
       </>
       )}

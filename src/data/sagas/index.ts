@@ -21,6 +21,7 @@ import CartSaga from './oms/cart/cart.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
 import ThankYouPageSaga from './oms/thank-you-page/thank-you-page.saga';
 import OrderHistorySaga from './order-history/order-history.saga';
+import CheckoutTncSaga from './oms/checkout/checkout-tnc.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -45,6 +46,7 @@ function* rootSaga() {
   yield all([fork(CheckoutSaga)]);
   yield all([fork(ThankYouPageSaga)]);
   yield all([fork(OrderHistorySaga)]);
+  yield all([fork(CheckoutTncSaga)])
 }
 
 export default rootSaga;
