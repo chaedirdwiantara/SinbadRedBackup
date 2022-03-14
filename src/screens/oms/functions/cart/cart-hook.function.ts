@@ -713,13 +713,9 @@ const useCartLocalData = () => {
                */
               let qty: number = thisProduct.qty;
               let selected: boolean = thisProduct.selected;
-              let status: string = item.status;
               if (thisProduct.qty > item.stock) {
                 qty = item.stock;
                 selected = false;
-              }
-              if (thisProduct.minQty > item.stock) {
-                status = 'stock_not_enough';
               }
               const productData: models.CartMasterSellersProducts = {
                 ...thisProduct,
@@ -728,20 +724,20 @@ const useCartLocalData = () => {
                 qty,
                 selected,
                 stock: item.stock,
-                stockStatus: item.status,
+                isStockAvailable: item.isAvailable,
                 warehouseName: item.warehouseName,
               };
               /** => move product data to unavailable if not_available */
-              if (status === 'not_available') {
-                unavailable.push({
-                  ...productData,
-                  unavailableMessage: 'Tidak tersedia di lokasi anda',
-                  selected: false,
-                });
-              } else if (status === 'stock_not_enough') {
+              if (thisProduct.minQty > item.stock) {
                 unavailable.push({
                   ...productData,
                   unavailableMessage: 'Stok kosong',
+                  selected: false,
+                });
+              } else if (!item.isAvailable) {
+                unavailable.push({
+                  ...productData,
+                  unavailableMessage: 'Tidak tersedia di lokasi anda',
                   selected: false,
                 });
               } else {

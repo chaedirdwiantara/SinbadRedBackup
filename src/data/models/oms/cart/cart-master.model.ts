@@ -29,6 +29,6 @@ export interface CartMasterSellersProducts extends CartProduct {
   isLastPriceUsedRules: boolean;
   stock?: number;
   productStatus?: string;
-  stockStatus?: string;
+  isStockAvailable?: boolean;
   leadTime?: number;
 }
