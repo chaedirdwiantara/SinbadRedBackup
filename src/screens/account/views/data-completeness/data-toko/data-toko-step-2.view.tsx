@@ -202,6 +202,7 @@ const Content: React.FC<Props> = (props) => {
 const DataTokoStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
+  const { completeDataState } = useEasyRegistration();
 
   return (
     <SnbContainer color="white">
@@ -210,7 +211,11 @@ const DataTokoStep2View: React.FC = () => {
         type="white"
         title="Foto Toko"
       />
-      <Stepper complete={2} total={3} onPress={() => setOpenModalStep(true)} />
+      <Stepper
+        complete={completeDataState?.data?.buyerProgress?.completed || 1}
+        total={completeDataState?.data?.buyerProgress?.total || 3}
+        onPress={() => setOpenModalStep(true)}
+      />
       <Content
         openModalBack={openModalBack}
         onCloseModalBack={setOpenModalBack}

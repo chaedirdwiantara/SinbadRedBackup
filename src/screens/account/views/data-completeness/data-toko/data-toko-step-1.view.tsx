@@ -67,8 +67,8 @@ const DataTokoStep1View: React.FC = () => {
           title="Informasi Toko"
         />
         <Stepper
-          complete={1}
-          total={3}
+          complete={completeDataState?.data?.buyerProgress?.completed || 1}
+          total={completeDataState?.data?.buyerProgress?.total || 3}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ margin: 16 }}>
