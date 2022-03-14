@@ -729,6 +729,7 @@ const useCartLocalData = () => {
                 selected,
                 stock: item.stock,
                 stockStatus: item.status,
+                warehouseName: item.warehouseName,
               };
               /** => move product data to unavailable if not_available */
               if (status === 'not_available') {
