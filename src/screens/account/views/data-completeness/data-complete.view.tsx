@@ -132,7 +132,8 @@ const Content: React.FC = () => {
               onPress={() => completeDataConfirmation()}
               type="primary"
               disabled={
-                (!isShowBadgeSuccessBuyer && !isShowBadgeSuccessUser) ||
+                !isShowBadgeSuccessBuyer ||
+                !isShowBadgeSuccessUser ||
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
