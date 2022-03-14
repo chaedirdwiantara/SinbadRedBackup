@@ -18,6 +18,7 @@ import * as models from '@models';
 import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { useIsFocused } from '@react-navigation/native';
 
 /** === INTERFACE === */
 interface FooterProps {
@@ -43,8 +44,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isErrorShown, setErrorShown] = useState(false);
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
+  const [isCheckoutBtnLoading, setCheckoutBtnLoading] = useState(false);
   const [isUpdateError, setUpdateError] = useState(false);
   const errorModal = useOmsGeneralFailedState();
+  const isFocused = useIsFocused();
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -197,10 +200,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** if fetch update error, set state variable  */
   useEffect(() => {
-    if (stateCart.update.error) {
+    if (isFocused && stateCart.update.error) {
       setUpdateError(true);
     }
-  }, [stateCart.update.error]);
+  }, [isFocused, stateCart.update.error]);
 
   useEffect(() => {
     if (isUpdateError && stateCart.update.error) {
@@ -213,6 +216,23 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       errorModal.setOpen(true);
     }
   }, [isUpdateError]);
+
+  useEffect(() => {
+    const isLoading =
+      stateCart.update.loading ||
+      stateCart.postCheckProduct.loading ||
+      stateCart.postCheckSeller.loading ||
+      stateCart.postCheckStock.loading ||
+      stateCheckout.checkout.loading;
+
+    setCheckoutBtnLoading(isLoading);
+  }, [
+    stateCart.update,
+    stateCart.postCheckProduct,
+    stateCart.postCheckSeller,
+    stateCart.postCheckStock,
+    stateCheckout.checkout,
+  ]);
 
   /** === VIEWS === */
   /** ==> content */
@@ -242,6 +262,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
           onPress={handleOnPressCheckout}
           size={'large'}
           disabled={isCheckoutDisabled}
+          loading={isCheckoutBtnLoading}
         />
       </View>
     </View>
