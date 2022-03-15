@@ -8,4 +8,10 @@ interface PaymentMethodHeaderProps {
 /** === COMPONENT ===  */
 export const PaymentMethodHeader: FC<PaymentMethodHeaderProps> = ({
   backAction,
-}) => <SnbTopNav.Type3 type="red" title={'Checkout'} backAction={backAction} />;
+}) => (
+  <SnbTopNav.Type3
+    type="red"
+    title={'Pilih Pembayaran'}
+    backAction={backAction}
+  />
+);
