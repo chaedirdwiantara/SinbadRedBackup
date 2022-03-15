@@ -6,11 +6,11 @@ import {
   SnbText,
 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
-
+import * as models from '@models';
 interface PaymentMethodListProps {
-  payMethod: any;
-  onSelectMethod: any;
-  dataChoosen: any;
+  payMethod: models.PaymentMethod[];
+  onSelectMethod: (selected: string) => void;
+  dataChoosen: (data: any) => void;
 }
 
 const PaymentMethodListView: FC<PaymentMethodListProps> = ({
@@ -21,7 +21,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
   const [selectMethod, setSelectMethod] = useState(-1); //handle selected method
   const [pressed, setPressed] = useState(false); //handle isAlready selected
 
-  const handleOnpress = (data: number, item: any) => {
+  const handleOnpress = (data: number, item: models.PaymentMethod) => {
     onSelectMethod(data.toString());
     dataChoosen(item);
     setSelectMethod(data);

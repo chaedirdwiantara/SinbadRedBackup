@@ -3,7 +3,7 @@ import * as models from '@models';
 
 /** === ACTION === */
 /** => PROCESS */
-export const postPaymentMethodCreateOrder = (
+export const postPaymentMethodCreateOrderProcess = (
   contextDispatch: (action: any) => any,
   data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
 ): models.CreateProcessAction<models.PaymentMethodCreateOrderData> => {

@@ -7,14 +7,12 @@ import { findIsSelected } from '@screen/oms/functions/payment-method/payment-met
 interface PaymentMethodBottomProps {
   data: any;
   choice: any;
-  paymentStatusModal: () => void;
-  errorModal: () => void;
+  onCreateOrder: () => void;
 }
 
 export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   choice,
-  paymentStatusModal,
-  errorModal,
+  onCreateOrder,
   data,
 }) => {
   const dataPaymentMethod = data[0]?.paymentMethods;
@@ -22,18 +20,13 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   console.log(isSelected, 'isSelected');
   console.log(choice, 'choice');
 
-  const pressButton = () => {
-    // NEED SOMETHING
-  };
-
   return (
     <View style={{ height: 75 }}>
       <SnbButton.Single
         type={'primary'}
-        onPress={errorModal}
+        onPress={onCreateOrder}
         title={'Buat Pesanan'}
-        disabled={choice != '' && isSelected != [] ? false : true}
-        // loading={}
+        disabled={choice != null && isSelected != [] ? false : true}
       />
       {/* add modal validation status */}
     </View>

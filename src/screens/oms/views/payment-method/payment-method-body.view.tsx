@@ -5,27 +5,30 @@ import { PaymentMethodStyle } from '@screen/oms/styles';
 import { SnbText } from '@sinbad/react-native-sinbad-ui';
 import PaymentMethodListView from './payment-method-list.view';
 import PaymentMethodDetail from './payment-method-detail.view';
-
+import * as models from '@models';
 interface PaymentMethodBodyProps {
-  data: any;
-  onSelectedType: any;
+  data: models.PaymentMethodList[];
+  onSelectedType: (selected: string) => void;
+  onDataChoosen: (data: models.PaymentMethod) => void;
   dataFromCheckout: any;
 }
 
 const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
   data,
   onSelectedType,
+  onDataChoosen,
   dataFromCheckout,
 }) => {
-  const [dataSelected, setDataSelected] = useState(''); //contain data
+  const [dataSelected, setDataSelected] = useState<models.PaymentMethod | null >(null); //contain data
 
   const handleSelect = (selected: string) => {
     onSelectedType(selected); //index send to parent
   };
 
-  const handleDataChoosen = (data: any) => {
+  const handleDataChoosen = (data: models.PaymentMethod) => {
     setDataSelected(data); //data send to child
     //data send to parent
+    onDataChoosen(data);
   };
 
   return (

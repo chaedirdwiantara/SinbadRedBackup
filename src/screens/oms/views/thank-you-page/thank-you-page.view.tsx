@@ -63,7 +63,7 @@ const OmsThankYouPageView: FC = () => {
 
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'6')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'7')
   }, [])
 
   useEffect(() => {

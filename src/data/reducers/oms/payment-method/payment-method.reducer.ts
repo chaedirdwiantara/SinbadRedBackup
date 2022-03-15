@@ -12,14 +12,14 @@ import {
 import {
   PaymentMethodCreateOrderInitialState,
   paymentMethodCreateOrderReducer,
-  PaymentMethodCreateOrderProps,
+  PaymentMethodCreateOrderInitialProps,
 } from './payment-method-create-order.reducer';
 
 /** === TYPE HERE === */
 export interface PaymentMethodState {
   paymentMethod: paymentMethodListInitialProps;
   getWaitingPaymentOrder: paymentMethodGetWaitingPaymentOrderInitialProps;
-  createOrder: PaymentMethodCreateOrderProps;
+  createOrder: PaymentMethodCreateOrderInitialProps;
 }
 /** === INITIAL HERE === */
 export const paymentMethodInitialState = {

@@ -32,7 +32,7 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       </View>
       <View style={PaymentMethodStyle.detailRow}>
         <SnbText.B2 color={color.black80}>Biaya Layanan</SnbText.B2>
-        {dataChoose != '' ? (
+        {dataChoose != null ? (
           <SnbText.B2
             color={
               dataChoose.serviceFeeNonDeduct == 0
@@ -50,7 +50,7 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       <SnbDivider style={{ marginVertical: 1 }} />
       <View style={PaymentMethodStyle.detailRow}>
         <SnbText.B2 color={color.black100}>Total Pembayaran</SnbText.B2>
-        {dataChoose != '' ? (
+        {dataChoose != null ? (
           <SnbText.B2 color={color.black100}>
             {toCurrency(
               dataFromCheckout.totalPaymentNumber +
