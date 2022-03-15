@@ -5,10 +5,8 @@ import { useHistoryListActions } from './use-history-list.hook';
 // type
 import * as models from '@models';
 
-const { Context } = HistoryListContext;
-
 export const useInitialGetList = () => {
-  const [state] = useContext(Context);
+  const [state] = useContext(HistoryListContext.Context);
   const { dispatchOrderHistory } = useOrderHistoryContext();
   const { fetch, reset } = useHistoryListActions();
 
@@ -25,7 +23,7 @@ export const useInitialGetList = () => {
 };
 
 export const useHistoryListFunction = () => {
-  const [state] = useContext(Context);
+  const [state] = useContext(HistoryListContext.Context);
   const {
     dispatchOrderHistory,
     stateOrderHistory: { list },
@@ -38,8 +36,9 @@ export const useHistoryListFunction = () => {
       orderStatus: state.orderStatus,
       status: state.status,
     };
+
     loadMore(dispatchOrderHistory, list, derivedQueryOptions);
-  }, [state.keyword, state.orderStatus, state.status]);
+  }, [state.keyword, state.orderStatus, state.status, list]);
 
   return { onLoadMore };
 };
