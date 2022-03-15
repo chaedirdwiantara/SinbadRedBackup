@@ -99,7 +99,7 @@ const HistoryListView: FC = ({ navigation, start }: any) => {
 
   //function for start couchmark
   useEffect(() => {
-    if (typeof coachmarkState.data?.homeCoachmark === 'boolean') {
+    if (typeof coachmarkState.data?.orderCoachmark === 'boolean') {
       if (coachmarkState?.data?.orderCoachmark === false) {
         setTimeout(() => {
           start();

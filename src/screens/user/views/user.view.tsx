@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { View, ScrollView, Image } from 'react-native';
 import {
@@ -24,8 +24,13 @@ import { UserHookFunc } from '../functions';
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import { copilotOptions } from '@screen/account/views/shared';
+import { useCoachmark } from '@screen/account/functions';
 
-const UserView: FC = () => {
+const CopilotView = walkthroughable(View);
+
+const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
@@ -33,6 +38,7 @@ const UserView: FC = () => {
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const { coachmarkState } = useCoachmark();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -44,6 +50,17 @@ const UserView: FC = () => {
   const showBadge = (show: boolean) => {
     action(show);
   };
+
+  //function for start couchmark
+  useEffect(() => {
+    if (typeof coachmarkState.data?.profileCoachmark === 'boolean') {
+      if (coachmarkState?.data?.profileCoachmark === false) {
+        setTimeout(() => {
+          start();
+        }, 100);
+      }
+    }
+  }, [coachmarkState?.data?.profileCoachmark]);
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -135,48 +152,63 @@ const UserView: FC = () => {
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
     return (
-      <View>
-        <View style={{ marginVertical: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Pemilik</SnbText.B4>
-            <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
-          </View>
-          <SnbListButtonType2
-            title={'Data Diri'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailProfileView')
-            }
-          />
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Toko</SnbText.B4>
-            <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
-          </View>
-          <SnbListButtonType2
-            title={'Informasi Toko'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailInformationView')
-            }
-          />
-          <SnbListButtonType2
-            title={'Alamat Toko'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailAddressView')
-            }
-          />
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Supplier</SnbText.B4>
-          </View>
-          <SnbListButtonType2
-            title={'Informasi Supplier'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantSupplierInformationView')
-            }
-          />
-        </View>
+      <View style={{ marginBottom: 74 }}>
+        <CopilotStep
+          text="Atur identitas diri dan toko Anda dengan mudah disini."
+          order={1}
+          name="Atur Identitas">
+          <CopilotView>
+            <View style={{ marginVertical: 16 }}>
+              <View style={UserStyles.bodyTitleContainer}>
+                <SnbText.B4>Data Pemilik</SnbText.B4>
+                <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
+              </View>
+              <SnbListButtonType2
+                title={'Data Diri'}
+                onPress={() =>
+                  NavigationAction.navigate('MerchantDetailProfileView')
+                }
+              />
+            </View>
+            <View style={{ marginBottom: 16 }}>
+              <View style={UserStyles.bodyTitleContainer}>
+                <SnbText.B4>Data Toko</SnbText.B4>
+                <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
+              </View>
+              <SnbListButtonType2
+                title={'Informasi Toko'}
+                onPress={() =>
+                  NavigationAction.navigate('MerchantDetailInformationView')
+                }
+              />
+              <SnbListButtonType2
+                title={'Alamat Toko'}
+                onPress={() =>
+                  NavigationAction.navigate('MerchantDetailAddressView')
+                }
+              />
+            </View>
+          </CopilotView>
+        </CopilotStep>
+
+        <CopilotStep
+          text="Informasi lengkap supplier yang terdaftar dengan toko Anda."
+          order={2}
+          name="Lihat info supplier">
+          <CopilotView>
+            <View style={{ marginBottom: 16 }}>
+              <View style={UserStyles.bodyTitleContainer}>
+                <SnbText.B4>Data Supplier</SnbText.B4>
+              </View>
+              <SnbListButtonType2
+                title={'Informasi Supplier'}
+                onPress={() =>
+                  NavigationAction.navigate('MerchantSupplierInformationView')
+                }
+              />
+            </View>
+          </CopilotView>
+        </CopilotStep>
       </View>
     );
   };
@@ -200,7 +232,6 @@ const UserView: FC = () => {
     return (
       <>
         {renderHeaderInformation()}
-        {/* HIDE SEMENTARA */}
         {renderLoyaltiInformation()}
         {renderBadgeInformation()}
         {renderUserInformation()}
@@ -286,4 +317,4 @@ const UserView: FC = () => {
   );
 };
 
-export default UserView;
+export default copilot(copilotOptions(2, 'profileCoachmark'))(UserView);
