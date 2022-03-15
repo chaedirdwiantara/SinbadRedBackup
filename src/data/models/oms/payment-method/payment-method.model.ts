@@ -40,15 +40,15 @@ export interface PaymentMethodCreateOrderData {
   cartId: string;
   buyerId: number;
   sellers: PaymentMethodSellers[];
+  buyerName: string;
+  buyerAddress: PaymentMethodBuyerAdress;
+  paymentMethod: PaymentMethodChoosen;
 }
 
 export interface PaymentMethodSellers {
   sellerId: number;
   sellerName: string;
   products: PaymentMethodProducts[];
-  buyerName: string;
-  buyerAddress: PaymentMethodBuyerAdress;
-  paymentMethod: PaymentMethodChoosen;
 }
 export interface PaymentMethodBuyerAdress {
   longtitude: string;

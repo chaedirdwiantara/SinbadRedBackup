@@ -3,11 +3,11 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type PaymentMethodCreateOrderProps = models.CreateItemV3Props<
-  models.PaymentMethodCreateOrderResponse[]
+export type PaymentMethodCreateOrderInitialProps = models.CreateItemV3Props<
+  models.PaymentMethodCreateOrderResponse
 >;
 /** === INITIAL STATE HERE === */
-export const PaymentMethodCreateOrderInitialState: PaymentMethodCreateOrderProps =
+export const PaymentMethodCreateOrderInitialState: PaymentMethodCreateOrderInitialProps =
   {
     data: null,
     error: null,
@@ -28,7 +28,7 @@ export const paymentMethodCreateOrderReducer = simplifyReducer(
     [types.POST_CREATE_ORDER_SUCCESS](
       state = PaymentMethodCreateOrderInitialState,
       action: models.CreateSuccessV3Action<
-        models.PaymentMethodCreateOrderResponse[]
+        models.PaymentMethodCreateOrderResponse
       >,
     ) {
       return {

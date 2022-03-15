@@ -57,20 +57,20 @@ function* paymentMethodCreateOrder(
 ) {
   try {
     const response: models.CreateSuccessV3Props<
-      models.PaymentMethodCreateOrderResponse[]
+      models.PaymentMethodCreateOrderResponse
     > = yield call(() => {
-      return PaymentMethodListApi.paymentMethodCreateOrdertApi(action.data);
+      return PaymentMethodListApi.paymentMethodCreateOrdertApi(action.payload);
     });
     yield action.contextDispatch(
       ActionCreators.postPaymentMethodCreateOrderSuccess(response),
     );
 
     yield put(ActionCreators.postPaymentMethodCreateOrderSuccess(response));
-  } catch (error: any) {
+  } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.postPaymentMethodCreateOrderFailed(error),
+      ActionCreators.postPaymentMethodCreateOrderFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.postPaymentMethodCreateOrderFailed(error));
+    yield put(ActionCreators.postPaymentMethodCreateOrderFailed(error as models.ErrorProps));
   }
 }
 

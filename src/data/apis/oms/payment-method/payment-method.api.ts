@@ -35,10 +35,10 @@ const paymentMethodCreateOrdertApi = (
   data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
 ) => {
   const path = `create-order`;
-  return apiMapping<models.PaymentMethodList>(
+  return apiMapping<models.PaymentMethodCreateOrderResponse>(
     'auth',
     path,
-    'order',
+    'buyer-order',
     'v1',
     'CREATE',
     data.data,
