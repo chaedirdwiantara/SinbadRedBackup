@@ -116,7 +116,7 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if (name !== '' || telp !== '') {
+          if (name && name !== '' || telp && telp !== '') {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } });
           } else {
             backToDataCompleteness();
