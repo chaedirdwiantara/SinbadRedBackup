@@ -2,6 +2,7 @@ import { View, Text } from 'react-native';
 import React, { FC } from 'react';
 import { SnbButton } from '@sinbad/react-native-sinbad-ui';
 import { CheckoutStyle } from '@screen/oms/styles';
+import { findIsSelected } from '@screen/oms/functions/payment-method/payment-method.function';
 
 interface PaymentMethodBottomProps {
   data: any;
@@ -14,7 +15,13 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   choice,
   paymentStatusModal,
   errorModal,
+  data,
 }) => {
+  const dataPaymentMethod = data[0]?.paymentMethods;
+  const isSelected = findIsSelected(dataPaymentMethod);
+  console.log(isSelected, 'isSelected');
+  console.log(choice, 'choice');
+
   const pressButton = () => {
     // NEED SOMETHING
   };
@@ -25,7 +32,7 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
         type={'primary'}
         onPress={errorModal}
         title={'Buat Pesanan'}
-        disabled={choice != '' ? false : true}
+        disabled={choice != '' && isSelected != [] ? false : true}
         // loading={}
       />
       {/* add modal validation status */}

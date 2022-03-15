@@ -25,6 +25,7 @@ import { goToHome } from '@core/functions/product';
 import { goToThankYouPage } from '@screen/oms/functions';
 import moment from 'moment';
 import { CountDownTimer } from '@screen/history/components';
+import { NavigationAction } from '@core/functions/navigation';
 
 const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
@@ -269,7 +270,7 @@ const OmsThankYouPageView: FC = () => {
           size="medium"
           type="primary"
           title={'Cek Status'}
-          onPress={goToThankYouPage}
+          onPress={() =>NavigationAction.navigate('HistoryListView')}
         />
     </View>
   );

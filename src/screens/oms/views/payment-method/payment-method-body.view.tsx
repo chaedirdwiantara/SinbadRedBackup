@@ -17,15 +17,15 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
   onSelectedType,
   dataFromCheckout,
 }) => {
-  const [selectMethod, setSelectMethod] = useState('');
-  const [dataSelected, setDataSelected] = useState('');
+  const [dataSelected, setDataSelected] = useState(''); //contain data
+
   const handleSelect = (selected: string) => {
-    onSelectedType(selected);
-    setSelectMethod(selected);
+    onSelectedType(selected); //index send to parent
   };
 
   const handleDataChoosen = (data: any) => {
-    setDataSelected(data);
+    setDataSelected(data); //data send to child
+    //data send to parent
   };
 
   return (
@@ -40,7 +40,6 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
       </View>
       <PaymentMethodDetail
         dataFromCheckout={dataFromCheckout}
-        choice={selectMethod}
         dataChoose={dataSelected}
       />
     </>
