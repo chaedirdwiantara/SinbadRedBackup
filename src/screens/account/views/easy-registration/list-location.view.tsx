@@ -42,7 +42,7 @@ const Content: React.FC = () => {
   useEffect(() => {
     if (selectedLocation) {
       if (params?.setLocation) {
-        params?.setLocation(selectedLocation);
+        params.setLocation(selectedLocation);
         goBack();
       } else {
         replace(BUYER_CATEGORY_VIEW, { selectedLocation });
