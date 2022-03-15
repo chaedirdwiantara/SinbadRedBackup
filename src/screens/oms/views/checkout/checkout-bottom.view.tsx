@@ -17,12 +17,14 @@ import {
 import {
   totalPayment,
   totalPaymentWithoutCurrency,
+  useCheckoutAction,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
 import * as models from '@models';
 import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
+import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 
 interface CheckoutBottomViewProps {
   data: any;
@@ -34,6 +36,9 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   abortTimeOut,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { stateCheckout, dispatchCheckout } = React.useContext(
+    contexts.CheckoutContext,
+  );
   const getCartAction = useGetCartAction();
   const cartMasterAction = useCartMasterAction();
   const checkProductAction = useCheckProductAction();
@@ -44,6 +49,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const updateCartAction = useUpdateCartAction();
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const checkoutAction = useCheckoutAction();
 
   const [reachLimit, setReachLimit] = useState(false);
 
@@ -56,6 +62,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     cartMasterAction.reset();
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
     setReachLimit(false);
     abortTimeOut;
     goToShoppingCart();
