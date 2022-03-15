@@ -36,6 +36,9 @@ const SearchInputFilter = () => {
     setSearch('');
   }, [state.status]);
 
+  // hide search
+  if (state.status === 'waiting_for_payment') return <View />;
+
   return (
     <View style={styles.main}>
       <View style={styles.input}>
