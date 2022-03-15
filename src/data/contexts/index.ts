@@ -35,6 +35,7 @@ import {
   OrderHistoryContext,
   OrderHistoryProvider,
 } from './order-history/OrderHistoryProvider';
+import {
   PaymentMethodProvider,
   PaymentMethodContext,
 } from './oms/payment-method/PaymentMethodProvider';

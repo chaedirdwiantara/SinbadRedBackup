@@ -11,13 +11,11 @@ import { toCurrency } from '@core/functions/global/currency-format';
 
 interface PaymentMethodDetailProps {
   dataFromCheckout: any;
-  choice: string;
   dataChoose: any;
 }
 
 const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
   dataFromCheckout,
-  choice,
   dataChoose,
 }) => {
   return (

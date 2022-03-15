@@ -65,60 +65,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     dispatchPaymentMethod,
   } = usePaymentMethodContext();
 
-  const dataX = paymentMethodData;
-
-  // DUMMY
-  const data = [
-    {
-      id: 1,
-      code: 'TRX-VA',
-      displayLabel: 'Transfer Bank (Cek Otomatis)',
-      paymentMethods: [
-        {
-          code: 'BCA',
-          displayLabel: 'BCA Virtual Account',
-          iconURL:
-            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bca.png',
-          serviceFeeDeduct: 0,
-          serviceFeeNonDeduct: 0,
-          isServiceFeeFree: true,
-          isSelected: false,
-        },
-        {
-          code: 'BNI',
-          displayLabel: 'BNI Virtual Account',
-          iconURL:
-            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bni.png',
-          serviceFeeDeduct: 0,
-          serviceFeeNonDeduct: 0,
-          isServiceFeeFree: true,
-          isSelected: false,
-        },
-        {
-          code: 'BRI',
-          displayLabel: 'BRI Virtual Account',
-          iconURL:
-            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/bri.png',
-          serviceFeeDeduct: 0,
-          serviceFeeNonDeduct: 0,
-          isServiceFeeFree: true,
-          isSelected: true,
-        },
-        {
-          code: 'Mandiri',
-          displayLabel: 'Mandiri Virtual Account',
-          iconURL:
-            'https://sinbad-website-sg.s3-ap-southeast-1.amazonaws.com/dev/payment_method_icon/mandiri.png',
-          serviceFeeDeduct: 0,
-          serviceFeeNonDeduct: 0,
-          isServiceFeeFree: true,
-          isSelected: false,
-        },
-      ],
-      createdAt: '2022-03-10T15:40:42Z',
-      updatedAt: '2022-03-10T15:40:42Z',
-    },
-  ];
+  const data = paymentMethodData;
 
   /** => data from checkout */
   const dataCheckout = props.route.params.data;

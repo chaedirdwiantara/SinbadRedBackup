@@ -19,6 +19,8 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
 }) => {
   const dataPaymentMethod = data[0]?.paymentMethods;
   const isSelected = findIsSelected(dataPaymentMethod);
+  console.log(isSelected, 'isSelected');
+  console.log(choice, 'choice');
 
   const pressButton = () => {
     // NEED SOMETHING
@@ -30,7 +32,7 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
         type={'primary'}
         onPress={errorModal}
         title={'Buat Pesanan'}
-        disabled={choice != '' || isSelected == [] ? false : true}
+        disabled={choice != '' && isSelected != [] ? false : true}
         // loading={}
       />
       {/* add modal validation status */}
