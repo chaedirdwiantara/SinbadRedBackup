@@ -93,21 +93,27 @@ const MapsViewType2: React.FC = () => {
         });
         goBack();
       } else {
-        dispatch(
-          StackActions.replace(DATA_TOKO_STEP_3_VIEW, {
-            coordinate: latLng,
-            formattedAddress:
-              addressResult.length > 0
-                ? addressResult[0].formatted_address
-                : '',
-            location: locations.data.id,
-            street:
-              addressResult.length > 0
-                ? getStreetName(addressResult[0].address_components)
-                : '',
-          }),
-        );
+        setTimeout(() => {
+          dispatch(
+            StackActions.replace(DATA_TOKO_STEP_3_VIEW, {
+              coordinate: latLng,
+              formattedAddress:
+                addressResult.length > 0
+                  ? addressResult[0].formatted_address
+                  : '',
+              location: locations.data.id,
+              street:
+                addressResult.length > 0
+                  ? getStreetName(addressResult[0].address_components)
+                  : '',
+            }),
+          );
+        }, 0);
       }
+    }
+
+    if (locations.error) {
+      setShowModalAreaNotFound(true);
     }
   }, [locations]);
 
@@ -157,10 +163,6 @@ const MapsViewType2: React.FC = () => {
     } catch (error) {
       console.log(error);
     }
-  }
-
-  function onInputManualResult(data: any) {
-    getLocation({ params: data });
   }
 
   LogBox.ignoreLogs([
@@ -251,11 +253,7 @@ const MapsViewType2: React.FC = () => {
             </View>
             <SnbButton.Dynamic
               title="Cari Lokasi"
-              onPress={() =>
-                navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW, {
-                  onInputManualResult,
-                })
-              }
+              onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
               disabled={false}
               type="tertiary"
               buttonColor={color.blue50}
@@ -321,9 +319,7 @@ const MapsViewType2: React.FC = () => {
               <SnbButton.Single
                 onPress={() => {
                   setShowModalAreaNotFound(false);
-                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW, {
-                    onInputManualResult,
-                  });
+                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
                 }}
                 title="Masukkan Lokasi Manual"
                 disabled={false}
