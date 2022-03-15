@@ -25,9 +25,14 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal]: any = useState([]);
   //get max lead time from product list
-  const getMaxLeadTime = (products : models.CheckoutProducts[]) => {
-    return Math.max.apply(Math, products.map(function(o) { return o.leadTime; }))
-  }
+  const getMaxLeadTime = (products: models.CheckoutProducts[]) => {
+    return Math.max.apply(
+      Math,
+      products.map(function (o) {
+        return o.leadTime;
+      }),
+    );
+  };
 
   return (
     <>
@@ -37,7 +42,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
 
       <FlatList
         keyExtractor={(_, index) => index.toString()}
-        data={data.sellers}
+        data={data?.sellers}
         renderItem={({ item, index }) => (
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
@@ -51,7 +56,9 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
                 </TouchableOpacity>
               </View>
               <CheckoutSKUListView products={item.products} />
-              <CheckoutShipmentDetailView leadTime={getMaxLeadTime(item.products)} />
+              <CheckoutShipmentDetailView
+                leadTime={getMaxLeadTime(item.products)}
+              />
               <CheckoutPaymentDetailView products={item.products} />
             </View>
             <ModalParcelDetail

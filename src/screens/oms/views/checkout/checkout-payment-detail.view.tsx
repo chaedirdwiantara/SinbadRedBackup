@@ -13,16 +13,6 @@ import {
 import * as models from '@models';
 export interface IPaymentDetail {}
 
-// /** === DUMMY === */
-// const data = {
-//   totalProduct: 5,
-//   totalPriceBeforeTax: 150000,
-//   totalPromoSellerAndVoucher: 90,
-//   tax: 20,
-//   totalPromoPayment: 120000,
-//   totalFee: 120000,
-// };
-
 export interface CheckoutPaymentDetailViewProps {
   // data: models.IInvoiceCheckout;
   products: any;
@@ -52,12 +42,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
           </View>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText.B3 color={color.black60}>Total Pengiriman</SnbText.B3>
-            <SnbText.B3 color={color.green60}>
-              {/* {toCurrency(products.totalPriceBeforeTax, {
-                withFraction: false,
-              })} */}
-              Rp. {deliveryFee}
-            </SnbText.B3>
+            <SnbText.B3 color={color.green60}>Rp. {deliveryFee}</SnbText.B3>
           </View>
         </View>
       ) : (

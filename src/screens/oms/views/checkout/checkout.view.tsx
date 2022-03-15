@@ -12,7 +12,12 @@ import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
-import { useGetTncContent } from '@screen/oms/functions';
+import {
+  goToPaymentMethod,
+  totalPaymentWithoutCurrency,
+  totalQty,
+  useGetTncContent,
+} from '@screen/oms/functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import {
@@ -51,6 +56,8 @@ const OmsCheckoutView: FC = () => {
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const totalQtyCheckout = totalQty(data?.sellers);
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -64,18 +71,28 @@ const OmsCheckoutView: FC = () => {
     dispatchCheckout,
   } = useCheckoutContext();
 
+  /** handle term n condition */
+  const handleOpenTNCModal = () => {
+    getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
+    setModalTNCOpen(true);
+  };
+
   /** => set expired time  */
   const dateCurrent = new Date();
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
-  useFocusEffect(
-    React.useCallback(() => {
-      setTimeout(() => {
-        setExpiredSession(true);
-      }, timeToExpired);
-    }, []),
-  );
+
+  const timer = setTimeout(() => {
+    setExpiredSession(true);
+  }, timeToExpired);
+
+  /** => to Payment Method Page  */
+  const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
+  function toPaymentMethod() {
+    clearTimeout(timer);
+    goToPaymentMethod(dataToPaymentMethod);
+  }
 
   /** handle back to cart */
   const handleBackToCart = () => {
@@ -90,13 +107,8 @@ const OmsCheckoutView: FC = () => {
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
+    clearTimeout(timer);
     goToShoppingCart();
-  };
-
-  /** handle term n condition */
-  const handleOpenTNCModal = () => {
-    getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
-    setModalTNCOpen(true);
   };
 
   return (
@@ -114,8 +126,8 @@ const OmsCheckoutView: FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* address view */}
         <CheckoutAddressView
-          buyerAddress={data.buyerAddress}
-          buyerName={data.buyerName}
+          buyerAddress={data?.buyerAddress}
+          buyerName={data?.buyerName}
         />
         {/* main body view */}
         <CheckoutInvoiceGroupView data={data} />
@@ -124,7 +136,7 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} expiredTime={addTime} />
+      <CheckoutBottomView data={data} abortTimeOut={toPaymentMethod} />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime
