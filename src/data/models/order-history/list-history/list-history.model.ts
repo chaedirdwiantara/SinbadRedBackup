@@ -30,7 +30,7 @@ export interface OrderListHistoryQueryOptions {
 }
 
 export type OrderListHistoryProcessProps = Omit<
-  models.ListProcessDefaultProps,
-  'sort' | 'sortBy' | 'keyword'
+  models.ListProcessDefaultV3Props,
+  'sort' | 'sortBy' | 'limit' | 'skip'
 > &
   OrderListHistoryQueryOptions;

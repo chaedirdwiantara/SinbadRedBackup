@@ -4,6 +4,8 @@ import {
   SnbText,
   SnbBadge,
   color,
+  SnbProductListSkeleton,
+  SnbEmptyData,
   SnbImageCompressor,
 } from '@sinbad/react-native-sinbad-ui';
 import {
@@ -12,18 +14,27 @@ import {
   Pressable,
   TouchableOpacity,
   FlatList,
+  Image,
+  Dimensions,
 } from 'react-native';
 import moment from 'moment';
 import BottomSheetConfirmation, {
   BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmation';
-import { Context, mockData } from './context';
+// function
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
+import { Context } from './context';
+import { useHistoryListFunction } from '../../functions/history-list';
+// type
+import * as models from '@models';
 
 type CardProps = {
-  data: typeof mockData[0];
+  data: models.OrderListHistory;
   onCancelOrder?: () => void;
   onConFirmOrder?: () => void;
 };
+
+const { width: W } = Dimensions.get('screen');
 
 const labelStatus: {
   [key: string]: 'success' | 'error' | 'information' | 'warning';
@@ -104,20 +115,76 @@ const Card: FC<CardProps> = (props) => {
   );
 };
 
+const EmptyImage = () => (
+  <Image
+    source={require('../../../../assets/images/empty_sinbad.png')}
+    resizeMode="contain"
+    style={{ height: W * 0.7, aspectRatio: 1 }}
+  />
+);
+
+const wordingEmpty = (keyword: string): string => {
+  if (keyword) return 'Pencarian tidak ditemukan';
+  return 'Tidak ada pesanan';
+};
+
 const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
+  const { onLoadMore } = useHistoryListFunction();
+  const {
+    stateOrderHistory: {
+      list: {
+        loading: historyListLoading,
+        data: historyListData,
+        error: historyListError,
+      },
+    },
+  } = useOrderHistoryContext();
+
+  // loading view
+  if ([historyListLoading].some((i) => i)) {
+    return <SnbProductListSkeleton />;
+  }
+  // error View
+  if ([historyListError].some((i) => i)) {
+    return (
+      <SnbEmptyData
+        image={<EmptyImage />}
+        subtitle=""
+        title={'Terjadi gangguan pada jaringan'}
+      />
+    );
+  }
+
+  // render list waiting paymment
+  if (state.status === 'waiting_for_payment') {
+    return (
+      <View>
+        <SnbText.B2>Waiting Payment</SnbText.B2>
+      </View>
+    );
+  }
+  // render order history list
   return (
     <>
       <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
-        data={state.data}
+        data={historyListData}
         keyExtractor={(i) => i.id}
         renderItem={({ item }) => (
           <Card
             data={item}
             onCancelOrder={() => confirmModalRef.current?.show(item.id)}
             onConFirmOrder={() => {}}
+          />
+        )}
+        onEndReached={onLoadMore}
+        ListEmptyComponent={() => (
+          <SnbEmptyData
+            image={<EmptyImage />}
+            subtitle=""
+            title={wordingEmpty(state.keyword)}
           />
         )}
       />

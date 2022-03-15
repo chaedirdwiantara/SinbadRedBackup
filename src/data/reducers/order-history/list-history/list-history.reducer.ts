@@ -3,7 +3,7 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
-export type ListHistoryProps = models.ListItemProps<
+export type ListHistoryProps = models.ListItemV3Props<
   Array<models.OrderListHistory>
 >;
 /** === INITIAL STATE === */
@@ -13,15 +13,16 @@ export const listHistoryInitialState: ListHistoryProps = {
   loadMore: false,
   refresh: false,
   error: null,
-  total: 0,
-  skip: 0,
+  totalPage: 0,
+  page: 0,
+  perPage: 10,
 };
 /** === REDUCER == */
 export const listHistoryReducer = simplifyReducer(listHistoryInitialState, {
   /** => Process */
   [types.ORDER_HISTORY_LIST_PROCESS](
     state = listHistoryInitialState,
-    { payload }: models.ListProcessAction,
+    { payload }: models.ListProcessV3Action,
   ) {
     return {
       ...state,
@@ -32,7 +33,7 @@ export const listHistoryReducer = simplifyReducer(listHistoryInitialState, {
   /** => Succeeded */
   [types.ORDER_HISTORY_LIST_SUCCESS](
     state = listHistoryInitialState,
-    { payload }: models.ListSuccessAction<Array<models.OrderParcels>>,
+    { payload }: models.ListSuccessV3Action<Array<models.OrderListHistory>>,
   ) {
     return {
       ...state,
@@ -41,8 +42,9 @@ export const listHistoryReducer = simplifyReducer(listHistoryInitialState, {
       loadMore: false,
       refresh: false,
       error: null,
-      total: payload.meta.total,
-      skip: payload.meta.skip,
+      totalPage: payload.meta.totalPage,
+      page: payload.meta.page,
+      perPage: payload.meta.perPage,
     };
   },
   /** => Failed */
