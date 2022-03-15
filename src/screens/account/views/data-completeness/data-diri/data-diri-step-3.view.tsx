@@ -195,8 +195,8 @@ const DataDiriStep3View: React.FC = () => {
           title="Foto NPWP"
         />
         <Stepper
-          complete={completeDataState?.data?.userProgress?.completed || 1}
-          total={completeDataState?.data?.userProgress?.total || 6}
+          complete={completeDataState?.data?.userProgress?.completed}
+          total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
       </View>

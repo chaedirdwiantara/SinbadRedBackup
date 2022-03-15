@@ -72,8 +72,8 @@ const DataDiriStep5View: React.FC = () => {
       />
       <ScrollView style={{ flex: 1 }}>
         <Stepper
-          complete={completeDataState?.data?.userProgress?.completed || 1}
-          total={completeDataState?.data?.userProgress?.total || 6}
+          complete={completeDataState?.data?.userProgress?.completed}
+          total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ alignItems: 'center', marginVertical: 16 }}>
