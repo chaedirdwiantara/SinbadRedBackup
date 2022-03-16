@@ -41,14 +41,17 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   );
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
-  
+  const checkoutAction = useCheckoutAction();
+  const updateCartAction = useUpdateCartAction();
 
   const [reachLimit, setReachLimit] = useState(false);
 
   const handleBackToCart = () => {
     setReachLimit(false);
     abortTimeOut;
-    callBackToCartFunction(dispatchCart, dispatchCheckout)
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    goToShoppingCart();
   };
 
   // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };

@@ -40,7 +40,7 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  
+
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
@@ -49,6 +49,8 @@ const OmsCheckoutView: FC = () => {
   const data = stateCheckout.checkout.data;
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
   const totalQtyCheckout = totalQty(data?.sellers);
+  const checkoutAction = useCheckoutAction();
+  const updateCartAction = useUpdateCartAction();
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -90,9 +92,10 @@ const OmsCheckoutView: FC = () => {
     setExpiredSession(false);
     backToCartModal.setOpen(false);
     clearTimeout(timer);
-    callBackToCartFunction(dispatchCart, dispatchCheckout)
-    
-};
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    goToShoppingCart();
+  };
 
   return (
     <SnbContainer color="grey">

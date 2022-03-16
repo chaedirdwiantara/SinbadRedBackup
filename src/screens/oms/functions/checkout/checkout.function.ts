@@ -15,12 +15,7 @@ const checkoutAction = useCheckoutAction();
 const updateCartAction = useUpdateCartAction();
 /** => calculate total price */
 
-
 /** => calculate sub total price */
-
-
-
-
 
 const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
   const { statePromo } = useContext(contexts.PromoContext);
@@ -48,10 +43,6 @@ const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
 
   return { vouchersSeller, promosSeller };
 };
-
-
-
-
 
 const totalBarangPrice = (products: any) => {
   let total = 0;
@@ -103,11 +94,14 @@ const totalPaymentWithoutCurrency = (sellers: [any]) => {
   return total;
 };
 
-const callBackToCartFunction = (dispatchCart: any, dispatchCheckout: any) =>  {
+const { dispatchCart } = useContext(contexts.CartContext);
+const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+
+const callBackToCartFunction = () => {
   updateCartAction.reset(dispatchCart);
   checkoutAction.reset(dispatchCheckout);
   goToShoppingCart();
-}
+};
 
 export {
   handleDiscountInvoiceGroups,
@@ -116,5 +110,5 @@ export {
   totalQty,
   totalPayment,
   totalPaymentWithoutCurrency,
-  callBackToCartFunction
+  callBackToCartFunction,
 };
