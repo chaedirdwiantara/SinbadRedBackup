@@ -132,14 +132,9 @@ const MapsViewType2: React.FC = () => {
   }
 
   async function getUserLocation() {
-    Geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setLatLng({ latitude, longitude });
-      },
-      (error) => {
-        console.log(error);
-      },
-    );
+    Geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
+      setLatLng({ latitude, longitude });
+    });
   }
 
   async function getLocationPermissions() {
@@ -160,9 +155,7 @@ const MapsViewType2: React.FC = () => {
       } else {
         getUserLocation();
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }
 
   LogBox.ignoreLogs([
