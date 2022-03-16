@@ -21,7 +21,7 @@ export const getOrderHistoryList = (
   return apiMapping<Array<models.OrderListHistory>>(
     'auth',
     `${historyOrderPath}?${qs}`,
-    'order',
+    'buyer-order',
     'v1',
     'LIST',
   );
