@@ -34,7 +34,6 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
-import { isEqual } from 'lodash';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -53,7 +52,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckSeller,
     mergeCheckStock,
     setInitialLocalData,
-    initialCartData,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
@@ -119,9 +117,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => handle update cart */
   const handleUpdateCart = () => {
     if (localCartMaster) {
-      if (!isEqual(localCartMaster, initialCartData)) {
-        updateCartAction.fetch(dispatchCart, localCartMaster);
-      }
+      updateCartAction.fetch(dispatchCart, localCartMaster);
     }
   };
 
