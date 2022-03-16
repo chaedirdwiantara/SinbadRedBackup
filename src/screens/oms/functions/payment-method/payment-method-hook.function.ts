@@ -36,4 +36,23 @@ const usePaymentMethodListContent = () => {
   };
 };
 
-export { usePaymentMethodListContent };
+/** => get payment method list content */
+const usePaymentMethodCreateOrder = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.PaymentMethodCreateOrderData,
+    ) => {
+      dispatch(Actions.postPaymentMethodCreateOrderProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.postPaymentMethodCreateOrderReset(contextDispatch));
+    },
+  };
+};
+
+export { 
+  usePaymentMethodListContent,
+  usePaymentMethodCreateOrder
+};

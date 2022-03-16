@@ -3,7 +3,7 @@ import * as models from '@models';
 
 /** === ACTION === */
 /** => PROCESS */
-export const postPaymentMethodCreateOrder = (
+export const postPaymentMethodCreateOrderProcess = (
   contextDispatch: (action: any) => any,
   data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
 ): models.CreateProcessAction<models.PaymentMethodCreateOrderData> => {
@@ -19,8 +19,8 @@ export const postPaymentMethodCreateOrder = (
 };
 /** => SUCCESS */
 export const postPaymentMethodCreateOrderSuccess = (
-  data: models.CreateSuccessV3Props<models.PaymentMethodCreateOrderResponse[]>,
-): models.CreateSuccessV3Action<models.PaymentMethodCreateOrderResponse[]> => {
+  data: models.CreateSuccessV3Props<models.PaymentMethodCreateOrderResponse>,
+): models.CreateSuccessV3Action<models.PaymentMethodCreateOrderResponse> => {
   return { type: types.POST_CREATE_ORDER_SUCCESS, payload: data };
 };
 /** => FAILED */

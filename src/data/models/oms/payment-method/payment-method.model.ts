@@ -1,5 +1,5 @@
 export interface PaymentMethodList {
-  id: string;
+  id: number;
   code: string;
   displayLabel: string;
   paymentMethods: PaymentMethod[];
@@ -10,7 +10,7 @@ export interface PaymentMethodList {
 export interface PaymentMethod {
   code: string;
   displayLabel: string;
-  icon_url: string;
+  iconURL: string;
   serviceFeeDeduct: string;
   serviceFeeNonDeduct: string;
   isServiceFeeFree: string;
@@ -40,15 +40,15 @@ export interface PaymentMethodCreateOrderData {
   cartId: string;
   buyerId: number;
   sellers: PaymentMethodSellers[];
+  buyerName: string;
+  buyerAddress: PaymentMethodBuyerAdress;
+  paymentMethod: PaymentMethodChoosen;
 }
 
 export interface PaymentMethodSellers {
   sellerId: number;
   sellerName: string;
   products: PaymentMethodProducts[];
-  buyerName: string;
-  buyerAddress: PaymentMethodBuyerAdress;
-  paymentMethod: PaymentMethodChoosen;
 }
 export interface PaymentMethodBuyerAdress {
   longtitude: string;
@@ -70,6 +70,7 @@ export interface PaymentMethodChoosen {
   serviceFeeNonDeduct: number;
   displayLabel: string;
   isServiceFeeFree: boolean;
+  iconURL: string;
 }
 export interface PaymentMethodProducts {
   productId: string;
