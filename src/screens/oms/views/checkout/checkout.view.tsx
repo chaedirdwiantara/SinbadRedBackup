@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState, useContext } from 'react';
-import { ScrollView } from 'react-native';
+import { LogBox, ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -13,7 +13,6 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
-  callBackToCartFunction,
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
   totalQty,
@@ -30,6 +29,7 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
+  LogBox.ignoreAllLogs();
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();

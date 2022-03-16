@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { StyleSheet, Text, View } from 'react-native';
+import { LogBox } from 'react-native';
 import React, { FC, useEffect, useState, useContext } from 'react';
 import { SnbContainer } from '@sinbad/react-native-sinbad-ui';
 import { contexts } from '@contexts';
@@ -32,6 +32,7 @@ interface PaymentMethodInterface {
 
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => ACTION */
+  LogBox.ignoreAllLogs();
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
