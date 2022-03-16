@@ -8,7 +8,7 @@ import * as models from '@models';
 const validationWarehouse = (checkStockData: models.CheckStockResponse[]) => {
   let result = false;
   for (let i = 0; i < checkStockData.length; i++) {
-    if (!checkStockData[i].isReserved) {
+    if (!checkStockData[i].isReserved || !checkStockData[i].isAvailable) {
       result = true;
     }
   }
