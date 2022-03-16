@@ -27,16 +27,6 @@ const MenuStatusFilter = () => {
 
   const onSelectFilter = useCallback(
     (id: string) => {
-      if (id === state.status) {
-        // reset
-        setState((prev) => ({
-          ...prev,
-          status: '',
-          orderStatus: '',
-          keyword: '',
-        }));
-        return void 0;
-      }
       setState((prev) => ({
         ...prev,
         status: id,
@@ -67,6 +57,7 @@ const MenuStatusFilter = () => {
         {menuList.map((i) => (
           <TouchableOpacity
             key={i.id}
+            disabled={i.id === state.status}
             style={mainStyle(i.id)}
             onPress={() => onSelectFilter(i.id)}>
             <SnbText.C2

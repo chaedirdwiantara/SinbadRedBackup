@@ -6,14 +6,14 @@ import * as types from '@types';
 export const orderHistoryListProcess = (
   contextDispatch: (action: any) => any,
   payload: models.OrderListHistoryProcessProps,
-): models.ListProcessAction => {
+): models.ListProcessV3Action => {
   contextDispatch({ type: types.ORDER_HISTORY_LIST_PROCESS, payload });
   return { type: types.ORDER_HISTORY_LIST_PROCESS, payload, contextDispatch };
 };
 /** => Succeeded */
 export const orderHistoryListSuccess = (
-  payload: models.ListSuccessProps<Array<models.OrderListHistory>>,
-): models.ListSuccessAction<models.OrderListHistory[]> => {
+  payload: models.ListSuccessV3Props<Array<models.OrderListHistory>>,
+): models.ListSuccessV3Action<models.OrderListHistory[]> => {
   return { type: types.ORDER_HISTORY_LIST_SUCCESS, payload };
 };
 /** => Failed */

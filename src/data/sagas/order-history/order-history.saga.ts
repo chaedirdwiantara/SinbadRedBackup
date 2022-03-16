@@ -7,9 +7,9 @@ import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
 /** History List */
-function* OrderHistoryList(action: models.ListProcessAction) {
+function* OrderHistoryList(action: models.ListProcessV3Action) {
   try {
-    const response: models.ListSuccessProps<Array<models.OrderListHistory>> =
+    const response: models.ListSuccessV3Props<Array<models.OrderListHistory>> =
       yield call(() => {
         return OrderHistoryApi.getOrderHistoryList(
           action.payload as models.OrderListHistoryProcessProps,
@@ -21,9 +21,11 @@ function* OrderHistoryList(action: models.ListProcessAction) {
     yield put(ActionCreators.orderHistoryListSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.historyListFailed(error as models.ErrorProps),
+      ActionCreators.orderHistoryListFailed(error as models.ErrorProps),
     );
-    yield put(ActionCreators.historyListFailed(error as models.ErrorProps));
+    yield put(
+      ActionCreators.orderHistoryListFailed(error as models.ErrorProps),
+    );
   }
 }
 
