@@ -6,7 +6,6 @@ import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import { goToPaymentMethod } from '@screen/oms/functions';
 import {
   useGetCartAction,
-  useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
@@ -15,6 +14,7 @@ import {
   useUpdateCartAction,
 } from '../../functions';
 import {
+  callBackToCartFunction,
   totalPayment,
   totalPaymentWithoutCurrency,
   useCheckoutAction,
@@ -39,33 +39,16 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const { stateCheckout, dispatchCheckout } = React.useContext(
     contexts.CheckoutContext,
   );
-  const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
-  const removeCartProductAction = useRemoveCartProductAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const updateCartAction = useUpdateCartAction();
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
-  const checkoutAction = useCheckoutAction();
+  
 
   const [reachLimit, setReachLimit] = useState(false);
 
   const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
-    updateCartAction.reset(dispatchCart);
-    checkoutAction.reset(dispatchCheckout);
     setReachLimit(false);
     abortTimeOut;
-    goToShoppingCart();
+    callBackToCartFunction(dispatchCart, dispatchCheckout)
   };
 
   // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };

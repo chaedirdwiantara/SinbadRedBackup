@@ -13,6 +13,7 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
+  callBackToCartFunction,
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
   totalQty,
@@ -22,7 +23,6 @@ import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutCo
 import { CheckoutBottomView } from './checkout-bottom.view';
 import {
   useGetCartAction,
-  useCartMasterAction,
   useCheckProductAction,
   useCheckSellerAction,
   useCheckStockAction,
@@ -40,16 +40,7 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
-  const removeCartProductAction = useRemoveCartProductAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const updateCartAction = useUpdateCartAction();
-  const checkoutAction = useCheckoutAction();
-
+  
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
@@ -96,20 +87,12 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
-    updateCartAction.reset(dispatchCart);
-    checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
     clearTimeout(timer);
-    goToShoppingCart();
-  };
+    callBackToCartFunction(dispatchCart, dispatchCheckout)
+    
+};
 
   return (
     <SnbContainer color="grey">
