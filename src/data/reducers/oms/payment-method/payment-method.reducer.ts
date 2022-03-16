@@ -5,10 +5,10 @@ import {
   paymentMethodListInitialProps,
 } from './payment-method-type.reducer';
 import {
-  paymentMethodGetWaitingPaymentOrderInitialState,
-  paymentMethodGerWaitingPaymentOrderReducer,
-  paymentMethodGetWaitingPaymentOrderInitialProps,
-} from './payment-method-get-waiting-payment-order.reducer';
+  paymentMethodSubRtdbInitialState,
+  paymentMethodSubRtdbReducer,
+  paymentMethodSubRtdbProps,
+} from './payment-method-sub-rtdb-order.reducer';
 import {
   PaymentMethodCreateOrderInitialState,
   paymentMethodCreateOrderReducer,
@@ -18,24 +18,21 @@ import {
 /** === TYPE HERE === */
 export interface PaymentMethodState {
   paymentMethod: paymentMethodListInitialProps;
-  getWaitingPaymentOrder: paymentMethodGetWaitingPaymentOrderInitialProps;
+  subOrderRtdb: paymentMethodSubRtdbProps;
   createOrder: PaymentMethodCreateOrderInitialProps;
 }
 /** === INITIAL HERE === */
 export const paymentMethodInitialState = {
   paymentMethod: paymentMethodListInitialState,
-  getWaitingPaymentOrder: paymentMethodGetWaitingPaymentOrderInitialState,
+  subOrderRtdb: paymentMethodSubRtdbInitialState,
   createOrder: PaymentMethodCreateOrderInitialState,
 };
 /** === EXPORT ALL HERE === */
 export const paymentMethodReducer = (
-  { paymentMethod, getWaitingPaymentOrder, createOrder }: PaymentMethodState,
+  { paymentMethod, subOrderRtdb, createOrder }: PaymentMethodState,
   action: any,
 ) => ({
   paymentMethod: paymentMethodListReducer(paymentMethod, action),
-  getWaitingPaymentOrder: paymentMethodGerWaitingPaymentOrderReducer(
-    getWaitingPaymentOrder,
-    action,
-  ),
+  subOrderRtdb: paymentMethodSubRtdbReducer(subOrderRtdb, action),
   createOrder: paymentMethodCreateOrderReducer(createOrder, action),
 });

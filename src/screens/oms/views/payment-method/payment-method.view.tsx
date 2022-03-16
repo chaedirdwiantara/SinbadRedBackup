@@ -22,6 +22,8 @@ import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
 import { LoadingPage } from '@core/components/Loading';
+import { useDispatch } from 'react-redux';
+import { PaymentMethodListApi } from '../../../../data/apis/oms/payment-method/payment-method.api';
 
 interface PaymentMethodInterface {
   props: {};
@@ -34,6 +36,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
+  const dispatch = useDispatch();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(''); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
@@ -46,16 +49,20 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     contexts.CheckoutContext,
   );
   const checkoutContextData = stateCheckout.checkout.data;
-  console.log('irpan2', checkoutContextData);
   /** => Get payment method  */
-  // const { statePaymentMethod } = useContext(contexts.PaymentMethodContext);
+  const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
+  console.log(statePaymentMethod, 'statePaymentMethod');
+
   const {
     statePaymentMethod: {
       paymentMethod: { data: paymentMethodData, loading: paymentMethodLoading },
     },
     dispatchPaymentMethod,
   } = usePaymentMethodContext();
+
   const data = paymentMethodData;
+  console.log(data, 'data');
+
   /** => data from checkout */
   const dataCheckout = props.route.params.data;
 
@@ -80,6 +87,27 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       handlePaymentMethodList();
     }, []),
   );
+
+  /** => call payment method order result */
+  //call useFocusEffect, if statePaymentMethod.createOrder.data.id === true then call subscribe rtb action
+  // const dataOrder = statePaymentMethod.createOrder.data?.id;
+  // React.useEffect(() => {
+  //   if (dataOrder === true) {
+  //     dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
+  //   }
+  // }, [statePaymentMethod]);
+
+  //CALL RTDB REDUCER HERE
+
+  /** => call 5 second checkout */
+  React.useEffect(() => {
+    if (isLoading == true) {
+      setTimeout(() => {
+        //if else if theres change on rtdb
+        handleErrorStatus;
+      }, 5000);
+    }
+  }, [isLoading]);
 
   /** => set expired time  */
   const dateCurrent = new Date();
