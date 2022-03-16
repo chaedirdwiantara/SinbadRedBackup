@@ -96,13 +96,14 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
+    // checkProductAction.reset(dispatchCart);
+    // checkSellerAction.reset(dispatchCart);
+    // checkStockAction.reset(dispatchCart);
+    // getCartAction.reset(dispatchCart);
+    // removeCartProductAction.reset(dispatchCart);
+    // cartMasterAction.reset();
+    // cartBuyerAddressAction.reset(dispatchCart);
+    backToCart;
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);

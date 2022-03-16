@@ -54,13 +54,13 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const [reachLimit, setReachLimit] = useState(false);
 
   const handleBackToCart = () => {
-    checkProductAction.reset(dispatchCart);
-    checkSellerAction.reset(dispatchCart);
-    checkStockAction.reset(dispatchCart);
-    getCartAction.reset(dispatchCart);
-    removeCartProductAction.reset(dispatchCart);
-    cartMasterAction.reset();
-    cartBuyerAddressAction.reset(dispatchCart);
+    // checkProductAction.reset(dispatchCart);
+    // checkSellerAction.reset(dispatchCart);
+    // checkStockAction.reset(dispatchCart);
+    // getCartAction.reset(dispatchCart);
+    // removeCartProductAction.reset(dispatchCart);
+    // cartMasterAction.reset();
+    // cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setReachLimit(false);
