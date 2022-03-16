@@ -11,8 +11,6 @@ interface ToCurrencyOptions {
   withFraction?: boolean;
 }
 
-const checkoutAction = useCheckoutAction();
-const updateCartAction = useUpdateCartAction();
 /** => calculate total price */
 
 /** => calculate sub total price */
@@ -94,13 +92,15 @@ const totalPaymentWithoutCurrency = (sellers: [any]) => {
   return total;
 };
 
-const { dispatchCart } = useContext(contexts.CartContext);
-const { dispatchCheckout } = useContext(contexts.CheckoutContext);
-
 const callBackToCartFunction = () => {
-  updateCartAction.reset(dispatchCart);
-  checkoutAction.reset(dispatchCheckout);
-  goToShoppingCart();
+  // const checkoutAction = useCheckoutAction();
+  // const updateCartAction = useUpdateCartAction();
+  // const { dispatchCart } = useContext(contexts.CartContext);
+  // const { dispatchCheckout } = useContext(contexts.CheckoutContext);
+  // updateCartAction.reset(dispatchCart);
+  // checkoutAction.reset(dispatchCheckout);
+  // goToShoppingCart();
+  console.log('HAI');
 };
 
 export {
