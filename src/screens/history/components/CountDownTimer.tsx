@@ -7,7 +7,7 @@ import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
   expiredTime: string;
-  type: 'small' | 'big';
+  type: 'small' | 'big' |'simple';
 }
 
 export const CountDownTimer: FC<CountDownTimerProps> = ({
@@ -98,6 +98,11 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
       </View>
     </View>
   );
+  const timerWaitingPaymentCard = () => (
+    <View>
+        <SnbText.B4 color={color.red50}>{`${hours} :${minutes} :${seconds}`}</SnbText.B4>
+    </View>
+  );
 
   const renderContent = () => {
     switch (type) {
@@ -105,6 +110,8 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
         return timerHistoryCard();
       case 'big':
         return timerCheckoutDone();
+      case 'simple':
+        return timerWaitingPaymentCard();
       default:
         return timerHistoryCard();
     }

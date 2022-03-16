@@ -7,6 +7,7 @@ import {
   SnbProductListSkeleton,
   SnbEmptyData,
   SnbImageCompressor,
+  SnbButton,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   View,
@@ -25,6 +26,7 @@ import BottomSheetConfirmation, {
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 import { useHistoryListFunction } from '../../functions/history-list';
+import { CountDownTimer } from '@screen/history/components';
 // type
 import * as models from '@models';
 
@@ -32,6 +34,11 @@ type CardProps = {
   data: models.OrderListHistory;
   onCancelOrder?: () => void;
   onConFirmOrder?: () => void;
+};
+
+type CardWaitingForPaymentProps = {
+  data: models.WaitingPaymentListHistory;
+  onDetailOrder?: () => void;
 };
 
 const { width: W } = Dimensions.get('screen');
@@ -115,6 +122,60 @@ const Card: FC<CardProps> = (props) => {
   );
 };
 
+const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
+  const { 
+    data, 
+    onDetailOrder
+  } = props;
+  return (
+    <View style={styles.card}>
+      <View style={{ margin: 16 }}>
+        {/* countdown timer*/}
+        <View style={{flexDirection:'row',backgroundColor:color.red10, marginBottom:16, padding:8, alignItems:'center',justifyContent: 'center'}}>
+          <SnbText.C1 color={color.red50}>{"Batas waktu pembayaran: "}
+          </SnbText.C1>
+          <CountDownTimer
+                type={'simple'}
+                expiredTime={data!.paymentExpiredDate}
+          />
+        </View>
+        {/* virtual account information*/}
+        <View style={{flexDirection:'row', paddingTop:6, paddingHorizontal:16}}>
+          <Image
+            source={{
+              uri: data.paymentIconUrl,
+            }}
+            style={{
+              width: 100,
+              height: 50,
+              marginRight: 16,
+              borderColor: color.black5
+            }}
+          />
+          <View>
+            <SnbText.H3>{data.paymentDisplayLabel}</SnbText.H3>
+            <SnbText.C2>{data.vaAccountNo}</SnbText.C2>
+          </View>
+          
+        </View>
+        {/* button action and total*/ }
+        <View style={{flexDirection:'row',justifyContent: 'space-between',paddingTop:6, paddingHorizontal:16}}>
+        <View>
+        <SnbText.C1>Total Pembayaran:</SnbText.C1>
+        <SnbText.H4>{toCurrency(Number(data.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H4>
+        </View>
+        <SnbButton.Dynamic
+          size="small"
+          type="primary"
+          title={'Detail pesanan'}
+          onPress={onDetailOrder}
+        />
+        </View>
+      </View>
+    </View>
+  )
+}
+
 const EmptyImage = () => (
   <Image
     source={require('../../../../assets/images/empty_sinbad.png')}
@@ -149,17 +210,40 @@ const ListCard = () => {
   //     {
   //     "id": 1,
   //     "code": "1812251000",
-  //     "paymentExpiredDate": "2021-02-01T06:19:55.516Z",
-  //     "paymentIconUrl": "https://asdasdas",
+  //     "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+  //     "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
   //     "paymentDisplayLabel": "BCA Virtual Account",
   //     "vaAccountNo": "123123123",
   //     "totalOrderAmount": "400000",
   //     "status": "waiting_for_payment",
   //     "createdAt": "2021-02-01T06:19:55.516Z",
   //     "updatedAt": "2021-02-01T06:19:55.516Z"
-  //     }
+  //     },
+  //     {
+  //       "id": 1,
+  //       "code": "1812251000",
+  //       "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+  //       "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
+  //       "paymentDisplayLabel": "BCA Virtual Account",
+  //       "vaAccountNo": "123123123",
+  //       "totalOrderAmount": "400000",
+  //       "status": "waiting_for_payment",
+  //       "createdAt": "2021-02-01T06:19:55.516Z",
+  //       "updatedAt": "2021-02-01T06:19:55.516Z"
+  //       },
+  //       {
+  //         "id": 1,
+  //         "code": "1812251000",
+  //         "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+  //         "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
+  //         "paymentDisplayLabel": "BCA Virtual Account",
+  //         "vaAccountNo": "123123123",
+  //         "totalOrderAmount": "400000",
+  //         "status": "waiting_for_payment",
+  //         "createdAt": "2021-02-01T06:19:55.516Z",
+  //         "updatedAt": "2021-02-01T06:19:55.516Z"
+  //         }
   // ]
-  const dummyData = []
 
   // loading view
   if ([historyListLoading].some((i) => i)) {
@@ -182,10 +266,13 @@ const ListCard = () => {
       <>
         <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
-        data={dummyData}
+        data={historyListData}
         keyExtractor={(i) => String(i.id)}
         renderItem={({ item }) => (
-          <SnbText.B4>{item.vaAccountNo}</SnbText.B4>
+          <CardWaitingForPayment
+            data={item}
+            onDetailOrder={()=>console.log('hayo')}
+          />
         )}
         onEndReached={onLoadMore}
         ListEmptyComponent={() => (
@@ -269,6 +356,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   delivered: {
+    backgroundColor: color.red50,
+    borderRadius: 4,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+  },
+  detailOrder: {
     backgroundColor: color.red50,
     borderRadius: 4,
     paddingVertical: 6,
