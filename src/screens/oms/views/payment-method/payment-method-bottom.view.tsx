@@ -17,8 +17,6 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
 }) => {
   const dataPaymentMethod = data[0]?.paymentMethods;
   const isSelected = findIsSelected(dataPaymentMethod);
-  console.log(isSelected, 'isSelected');
-  console.log(choice, 'choice');
 
   return (
     <View style={{ height: 75 }}>

@@ -38,7 +38,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const dispatch = useDispatch();
   /** => Hooks */
-  const [selectMethod, setSelectMethod] = useState(''); //handle selected method
+  const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
     useState<models.PaymentMethod | null>(null);
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
@@ -90,12 +90,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => call payment method order result */
   //call useFocusEffect, if statePaymentMethod.createOrder.data.id === true then call subscribe rtb action
-  // const dataOrder = statePaymentMethod.createOrder.data?.id;
-  // React.useEffect(() => {
-  //   if (dataOrder === true) {
-  //     dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
-  //   }
-  // }, [statePaymentMethod]);
+  const dataOrder = statePaymentMethod.createOrder.data;
+  React.useEffect(() => {
+    if (dataOrder?.id === true) {
+      dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
+    }
+  }, [statePaymentMethod]);
 
   //CALL RTDB REDUCER HERE
 
@@ -104,7 +104,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     if (isLoading == true) {
       setTimeout(() => {
         //if else if theres change on rtdb
-        handleErrorStatus;
+        handleErrorStatus();
       }, 5000);
     }
   }, [isLoading]);
@@ -167,7 +167,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             iconURL: selectedPaymentMethodData.iconURL,
           },
         };
-        // paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
+        paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
       }
     }
   };
@@ -182,6 +182,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             }}
           />
           <LoadingPage />
+          {/* Modal Status Error */}
+          <PaymentMethodErrorModal
+            isOpen={isErrorSession}
+            close={handleBackToCart}
+          />
         </>
       ) : (
         <>
@@ -218,11 +223,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
               setPaymentStatusSession(false);
             }}
             handleOkAction={handleCreateOrder}
-          />
-          {/* Modal Status Error */}
-          <PaymentMethodErrorModal
-            isOpen={isErrorSession}
-            close={handleBackToCart}
           />
         </>
       )}
