@@ -25,7 +25,10 @@ import BottomSheetConfirmation, {
 // function
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
-import { useHistoryListFunction } from '../../functions/history-list';
+import { 
+  useHistoryListFunction,
+  goToWaitingPaymentOrderDetail 
+} from '../../functions/history-list';
 import { CountDownTimer } from '@screen/history/components';
 // type
 import * as models from '@models';
@@ -206,44 +209,44 @@ const ListCard = () => {
     },
   } = useOrderHistoryContext();
 
-  // const dummyData = [
-  //     {
-  //     "id": 1,
-  //     "code": "1812251000",
-  //     "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //     "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //     "paymentDisplayLabel": "BCA Virtual Account",
-  //     "vaAccountNo": "123123123",
-  //     "totalOrderAmount": "400000",
-  //     "status": "waiting_for_payment",
-  //     "createdAt": "2021-02-01T06:19:55.516Z",
-  //     "updatedAt": "2021-02-01T06:19:55.516Z"
-  //     },
-  //     {
-  //       "id": 1,
-  //       "code": "1812251000",
-  //       "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //       "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //       "paymentDisplayLabel": "BCA Virtual Account",
-  //       "vaAccountNo": "123123123",
-  //       "totalOrderAmount": "400000",
-  //       "status": "waiting_for_payment",
-  //       "createdAt": "2021-02-01T06:19:55.516Z",
-  //       "updatedAt": "2021-02-01T06:19:55.516Z"
-  //       },
-  //       {
-  //         "id": 1,
-  //         "code": "1812251000",
-  //         "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //         "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //         "paymentDisplayLabel": "BCA Virtual Account",
-  //         "vaAccountNo": "123123123",
-  //         "totalOrderAmount": "400000",
-  //         "status": "waiting_for_payment",
-  //         "createdAt": "2021-02-01T06:19:55.516Z",
-  //         "updatedAt": "2021-02-01T06:19:55.516Z"
-  //         }
-  // ]
+  const dummyData = [
+      {
+      "id": 1,
+      "code": "1812251000",
+      "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+      "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
+      "paymentDisplayLabel": "BCA Virtual Account",
+      "vaAccountNo": "123123123",
+      "totalOrderAmount": "400000",
+      "status": "waiting_for_payment",
+      "createdAt": "2021-02-01T06:19:55.516Z",
+      "updatedAt": "2021-02-01T06:19:55.516Z"
+      },
+      {
+        "id": 1,
+        "code": "1812251000",
+        "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+        "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
+        "paymentDisplayLabel": "BCA Virtual Account",
+        "vaAccountNo": "123123123",
+        "totalOrderAmount": "400000",
+        "status": "waiting_for_payment",
+        "createdAt": "2021-02-01T06:19:55.516Z",
+        "updatedAt": "2021-02-01T06:19:55.516Z"
+        },
+        {
+          "id": 1,
+          "code": "1812251000",
+          "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
+          "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
+          "paymentDisplayLabel": "BCA Virtual Account",
+          "vaAccountNo": "123123123",
+          "totalOrderAmount": "400000",
+          "status": "waiting_for_payment",
+          "createdAt": "2021-02-01T06:19:55.516Z",
+          "updatedAt": "2021-02-01T06:19:55.516Z"
+          }
+  ]
 
   // loading view
   if ([historyListLoading].some((i) => i)) {
@@ -266,12 +269,12 @@ const ListCard = () => {
       <>
         <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
-        data={historyListData}
+        data={dummyData}
         keyExtractor={(i) => String(i.id)}
         renderItem={({ item }) => (
           <CardWaitingForPayment
             data={item}
-            onDetailOrder={()=>console.log('hayo')}
+            onDetailOrder={goToWaitingPaymentOrderDetail}
           />
         )}
         onEndReached={onLoadMore}
