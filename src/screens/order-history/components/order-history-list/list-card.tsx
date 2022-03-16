@@ -127,6 +127,9 @@ const wordingEmpty = (keyword: string): string => {
   if (keyword) return 'Pencarian tidak ditemukan';
   return 'Tidak ada pesanan';
 };
+const wordingWaitingForPaymentEmpty = () => {
+  return 'Belum ada pesanan';
+}
 
 const ListCard = () => {
   const [state] = useContext(Context);
@@ -141,6 +144,22 @@ const ListCard = () => {
       },
     },
   } = useOrderHistoryContext();
+
+  // const dummyData = [
+  //     {
+  //     "id": 1,
+  //     "code": "1812251000",
+  //     "paymentExpiredDate": "2021-02-01T06:19:55.516Z",
+  //     "paymentIconUrl": "https://asdasdas",
+  //     "paymentDisplayLabel": "BCA Virtual Account",
+  //     "vaAccountNo": "123123123",
+  //     "totalOrderAmount": "400000",
+  //     "status": "waiting_for_payment",
+  //     "createdAt": "2021-02-01T06:19:55.516Z",
+  //     "updatedAt": "2021-02-01T06:19:55.516Z"
+  //     }
+  // ]
+  const dummyData = []
 
   // loading view
   if ([historyListLoading].some((i) => i)) {
@@ -160,9 +179,27 @@ const ListCard = () => {
   // render list waiting paymment
   if (state.status === 'waiting_for_payment') {
     return (
-      <View>
-        <SnbText.B2>Waiting Payment</SnbText.B2>
-      </View>
+      <>
+        <FlatList
+        contentContainerStyle={{ paddingBottom: 50 }}
+        data={dummyData}
+        keyExtractor={(i) => String(i.id)}
+        renderItem={({ item }) => (
+          <SnbText.B4>{item.vaAccountNo}</SnbText.B4>
+        )}
+        onEndReached={onLoadMore}
+        ListEmptyComponent={() => (
+          <View style={styles.waitingForPaymentEmpty}>
+          <SnbEmptyData
+            image={<EmptyImage />}
+            subtitle=""
+            title={wordingWaitingForPaymentEmpty()}
+          />
+          </View>
+          
+        )}
+      />
+      </>
     );
   }
   // render order history list
@@ -240,6 +277,7 @@ const styles = StyleSheet.create({
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { flexDirection: 'row-reverse', marginTop: 8 },
+  waitingForPaymentEmpty: { marginTop: 60, marginHorizontal: 60 }
 });
 
 export default memo(ListCard);
