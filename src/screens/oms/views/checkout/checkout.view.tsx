@@ -20,17 +20,7 @@ import {
 } from '@screen/oms/functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
-import {
-  useGetCartAction,
-  useCartMasterAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
-  useRemoveCartProductAction,
-  useCartBuyerAddressAction,
-  useUpdateCartAction,
-  useCheckoutAction,
-} from '../../functions';
+import { useUpdateCartAction, useCheckoutAction } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
@@ -40,13 +30,6 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
-  const removeCartProductAction = useRemoveCartProductAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
@@ -96,13 +79,6 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    // checkProductAction.reset(dispatchCart);
-    // checkSellerAction.reset(dispatchCart);
-    // checkStockAction.reset(dispatchCart);
-    // getCartAction.reset(dispatchCart);
-    // removeCartProductAction.reset(dispatchCart);
-    // cartMasterAction.reset();
-    // cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
