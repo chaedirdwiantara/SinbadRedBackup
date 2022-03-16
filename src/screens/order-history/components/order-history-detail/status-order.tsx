@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { SnbText, SnbBadge, color } from '@sinbad/react-native-sinbad-ui';
 import { Divider, mockData } from './information';
 import { labelStatus } from '../../types';
+import { NavigationAction } from '@core/functions/navigation';
 
 const StatusOrder = () => {
   return (
@@ -21,7 +22,13 @@ const StatusOrder = () => {
           style={{
             justifyContent: 'center',
           }}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() =>
+              NavigationAction.navigate('HistoryTrackingView', {
+                id: 'some_id_tracking',
+              })
+            }>
             <SnbText.B2 color={color.red70}>Lacak</SnbText.B2>
           </TouchableOpacity>
         </View>
