@@ -6,23 +6,6 @@ import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
 /** === FUNCTIONS === */
-/** => CART EXAMPLE */
-function* cartExample(action: models.DetailProcessAction) {
-  try {
-    const response: models.DetailSuccessProps<models.CartExample> = yield call(
-      () => {
-        return CartApi.exampleCart();
-      },
-    );
-    yield action.contextDispatch(ActionCreators.cartExampleSuccess(response));
-    yield put(ActionCreators.cartExampleSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.cartExampleFailed(error as models.ErrorProps),
-    );
-    yield put(ActionCreators.cartExampleFailed(error as models.ErrorProps));
-  }
-}
 /** => GET CART */
 function* getCart(action: models.DetailProcessAction) {
   try {
@@ -246,23 +229,6 @@ function* cancelStock(action: Omit<models.DeleteProcessAction, 'id'>) {
     yield put(ActionCreators.cancelStockFailed(error as models.ErrorProps));
   }
 }
-/** => POST CANCEL STOCK */
-function* postCancelStock(action: Omit<models.DeleteProcessAction, 'id'>) {
-  try {
-    const response: models.DeleteSuccessV3Props = yield call(() => {
-      return CartApi.cancelStock();
-    });
-    yield action.contextDispatch(
-      ActionCreators.postCancelStockSuccess(response),
-    );
-    yield put(ActionCreators.postCancelStockSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.postCancelStockFailed(error as models.ErrorProps),
-    );
-    yield put(ActionCreators.postCancelStockFailed(error as models.ErrorProps));
-  }
-}
 /** => CART BUYER ADDRESS */
 function* cartBuyerAddress(action: models.DetailProcessAction) {
   try {
@@ -285,7 +251,6 @@ function* cartBuyerAddress(action: models.DetailProcessAction) {
 }
 /** === LISTENER === */
 function* CartSaga() {
-  yield takeLatest(types.CART_EXAMPLE_PROCESS, cartExample);
   yield takeLatest(types.GET_CART_PROCESS, getCart);
   yield takeLatest(types.GET_TOTAL_CART_PROCESS, getTotalCart);
   yield takeLatest(types.ADD_TO_CART_PROCESS, addToCart);
@@ -298,7 +263,6 @@ function* CartSaga() {
   yield takeLatest(types.CHECK_STOCK_PROCESS, checkStock);
   yield takeLatest(types.POST_CHECK_STOCK_PROCESS, postCheckStock);
   yield takeLatest(types.CANCEL_STOCK_PROCESS, cancelStock);
-  yield takeLatest(types.POST_CANCEL_STOCK_PROCESS, postCancelStock);
   yield takeLatest(types.CART_BUYER_ADDRESS_PROCESS, cartBuyerAddress);
 }
 

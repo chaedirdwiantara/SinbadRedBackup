@@ -13,6 +13,7 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
+  callBackToCartFunction,
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
   totalQty,
@@ -112,7 +113,7 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} abortTimeOut={toPaymentMethod} />
+      <CheckoutBottomView data={data} goToPaymentMethod={toPaymentMethod} />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime

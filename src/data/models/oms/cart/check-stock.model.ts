@@ -5,8 +5,9 @@
 export interface CheckStockResponse {
   productId: string;
   warehouseId: number;
+  warehouseName: string;
   stock: number;
-  status: string;
+  isAvailable: boolean;
   isReserved: boolean;
 }
 

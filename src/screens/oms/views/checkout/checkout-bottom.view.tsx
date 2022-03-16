@@ -4,16 +4,7 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import { goToPaymentMethod } from '@screen/oms/functions';
-import {
-  useGetCartAction,
-  useCartMasterAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
-  useRemoveCartProductAction,
-  useCartBuyerAddressAction,
-  useUpdateCartAction,
-} from '../../functions';
+import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
   totalPaymentWithoutCurrency,
@@ -21,50 +12,33 @@ import {
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
-import * as models from '@models';
 import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
-import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 
 interface CheckoutBottomViewProps {
   data: any;
-  abortTimeOut: () => void;
+  goToPaymentMethod: () => void;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
-  abortTimeOut,
+  goToPaymentMethod,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = React.useContext(
     contexts.CheckoutContext,
   );
-  const getCartAction = useGetCartAction();
-  const cartMasterAction = useCartMasterAction();
-  const checkProductAction = useCheckProductAction();
-  const checkSellerAction = useCheckSellerAction();
-  const checkStockAction = useCheckStockAction();
-  const removeCartProductAction = useRemoveCartProductAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
-  const updateCartAction = useUpdateCartAction();
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
   const [reachLimit, setReachLimit] = useState(false);
 
   const handleBackToCart = () => {
-    // checkProductAction.reset(dispatchCart);
-    // checkSellerAction.reset(dispatchCart);
-    // checkStockAction.reset(dispatchCart);
-    // getCartAction.reset(dispatchCart);
-    // removeCartProductAction.reset(dispatchCart);
-    // cartMasterAction.reset();
-    // cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setReachLimit(false);
-    abortTimeOut;
     goToShoppingCart();
   };
 
@@ -72,7 +46,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
 
   const pressButton = () => {
     setReachLimit(true);
-    // goToPaymentMethod(dataToPaymentMethod);
   };
 
   const content = () => {
@@ -99,7 +72,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         <SnbButton.Dynamic
           size="small"
           type={'primary'}
-          onPress={abortTimeOut}
+          onPress={goToPaymentMethod}
           title={'Pilih Pembayaran'}
           // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />
