@@ -88,8 +88,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }, []),
   );
 
-  /** => call payment method order result */
-  //call useFocusEffect, if statePaymentMethod.createOrder.data.id === true then call subscribe rtb action
+  /** => call subscribe rtdb for order  */
   const dataOrder = statePaymentMethod.createOrder.data;
   React.useEffect(() => {
     if (dataOrder?.id === true) {
@@ -97,13 +96,19 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   }, [statePaymentMethod]);
 
-  //CALL RTDB REDUCER HERE
+  /** => call navigation to thankyou page */
+  useFocusEffect(
+    React.useCallback(() => {
+      if (statePaymentMethod.subOrderRtdb.data == true) {
+        //TO THANK YOU PAGE
+      }
+    }, []),
+  );
 
   /** => call 5 second checkout */
   React.useEffect(() => {
     if (isLoading == true) {
       setTimeout(() => {
-        //if else if theres change on rtdb
         handleErrorStatus();
       }, 5000);
     }
