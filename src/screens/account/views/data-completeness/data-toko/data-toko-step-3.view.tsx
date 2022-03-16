@@ -11,6 +11,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Image,
 } from 'react-native';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
@@ -229,14 +230,17 @@ const Content: React.FC<Props> = (props) => {
                 scrollEnabled={false}
                 style={styles.pinPoint}>
                 <Marker
-                  image={require('@image/pin_point.png')}
                   coordinate={
                     latLng || {
                       latitude: DEFAULT_LATITUDE,
                       longitude: DEFAULT_LONGITUDE,
                     }
-                  }
-                />
+                  }>
+                  <Image
+                    source={require('@image/pin_point.png')}
+                    style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  />
+                </Marker>
               </MapView>,
               <TouchableOpacity
                 onPress={() =>
@@ -422,8 +426,8 @@ const DataTokoStep3View: React.FC = () => {
         title="Alamat Toko"
       />
       <Stepper
-        complete={completeDataState?.data?.buyerProgress?.completed || 1}
-        total={completeDataState?.data?.buyerProgress?.total || 3}
+        complete={completeDataState?.data?.buyerProgress?.completed}
+        total={completeDataState?.data?.buyerProgress?.total}
         onPress={() => setOpenModalStep(true)}
       />
       <Content

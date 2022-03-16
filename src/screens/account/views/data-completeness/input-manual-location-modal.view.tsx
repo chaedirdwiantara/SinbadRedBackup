@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/core';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
 import { View } from 'react-native';
@@ -10,9 +10,9 @@ import {
 } from 'react-native-sinbad-ui';
 import { ModalSelection } from '../shared';
 import * as models from '@models';
+import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 
 const Content = () => {
-  const { onInputManualResult }: any = useRoute().params || {};
   const { resetSelectedItem, resetGetSelection, getSelection, onSelectedItem } =
     useTextFieldSelect();
   const [province, setProvince] = React.useState<any>(null);
@@ -24,12 +24,22 @@ const Content = () => {
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
   const [params, setParams] = React.useState('');
+  const { getLocation, locations, resetLocation } = useLocations();
 
   React.useEffect(() => {
     if (type === 'listProvince' && province) {
       onSelectedItem({ item: province, type: 'listProvince' });
     }
   }, [type]);
+
+  React.useEffect(() => {
+    if (locations.data) {
+      goBack();
+      resetLocation();
+    }
+
+    return resetLocation;
+  }, [locations]);
 
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
@@ -141,14 +151,15 @@ const Content = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="Simpan Lokasi Manual"
-          loading={false}
+          loading={locations.loading}
           onPress={() => {
-            onInputManualResult(
-              `province=${province.province}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
-            );
-            goBack();
+            getLocation({
+              params: `province=${province.province}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
+            });
           }}
-          disabled={!province || !city || !district || !urban}
+          disabled={
+            !province || !city || !district || !urban || locations.loading
+          }
           type="primary"
         />
       </View>

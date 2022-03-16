@@ -46,9 +46,10 @@ const setIcon = (slug: string) => {
 
 const BuyerLocation: React.FC = () => {
   const { params }: any = useRoute();
-  const [location] = React.useState<models.ISearchLocationsData | null>(
-    params?.selectedLocation,
-  );
+  const [location, setLocation] =
+    React.useState<models.ISearchLocationsData | null>(
+      params?.selectedLocation,
+    );
   const { navigate } = useNavigation();
 
   return (
@@ -73,7 +74,7 @@ const BuyerLocation: React.FC = () => {
       <View style={{ marginHorizontal: 4 }} />
       <SnbButton.Dynamic
         title="Ubah"
-        onPress={() => navigate(LIST_LOCATION_VIEW)}
+        onPress={() => navigate(LIST_LOCATION_VIEW, { setLocation })}
         type="secondary"
         disabled={false}
         size="small"

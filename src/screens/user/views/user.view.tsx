@@ -152,7 +152,7 @@ const UserView: FC = ({ start }: any) => {
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
     return (
-      <View style={{ marginBottom: 74 }}>
+      <View style={{ marginBottom: 90 }}>
         <CopilotStep
           text="Atur identitas diri dan toko Anda dengan mudah disini."
           order={1}
@@ -170,7 +170,7 @@ const UserView: FC = ({ start }: any) => {
                 }
               />
             </View>
-            <View style={{ marginBottom: 16 }}>
+            <View>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText.B4>Data Toko</SnbText.B4>
                 <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
@@ -196,7 +196,7 @@ const UserView: FC = ({ start }: any) => {
           order={2}
           name="Lihat info supplier">
           <CopilotView>
-            <View style={{ marginBottom: 16 }}>
+            <View style={{ marginTop: 16 }}>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText.B4>Data Supplier</SnbText.B4>
               </View>
