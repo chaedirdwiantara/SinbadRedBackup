@@ -208,16 +208,6 @@ const totalPaymentWithoutCurrency = (sellers: [any]) => {
   return total;
 };
 
-const backToCart = (
-  updateCartAction: any,
-  checkoutAction: any,
-  goToShoppingCart: any,
-) => {
-  updateCartAction.reset();
-  checkoutAction.reset();
-  goToShoppingCart();
-};
-
 export {
   handleTotalPrice,
   handleSubTotalPrice,

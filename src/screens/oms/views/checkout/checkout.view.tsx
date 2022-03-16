@@ -103,7 +103,6 @@ const OmsCheckoutView: FC = () => {
     // removeCartProductAction.reset(dispatchCart);
     // cartMasterAction.reset();
     // cartBuyerAddressAction.reset(dispatchCart);
-    backToCart;
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
