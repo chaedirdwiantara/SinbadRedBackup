@@ -114,13 +114,15 @@ export const ProductView: FC<ProductViewProps> = ({
       }
     }
 
-    handleUpdateQty({
-      productId: product.productId,
-      sellerId: product.sellerId,
-      warehouseId: product.warehouseId,
-      type: 'onBlur',
-      newQty: updatedQty,
-    });
+    if (product.sellerId) {
+      handleUpdateQty({
+        productId: product.productId,
+        sellerId: product.sellerId,
+        warehouseId: product.warehouseId,
+        type: 'onBlur',
+        newQty: updatedQty,
+      });
+    }
 
     keyboardFocus.setFocus(false);
   };
@@ -252,11 +254,13 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbCheckbox
             status={product.selected ? 'selected' : 'unselect'}
             onPress={() => {
-              handleUpdateSelected({
-                productId: product.productId,
-                sellerId: product.sellerId,
-                warehouseId: product.warehouseId,
-              });
+              if (product.sellerId) {
+                handleUpdateSelected({
+                  productId: product.productId,
+                  sellerId: product.sellerId,
+                  warehouseId: product.warehouseId,
+                });
+              }
             }}
           />
         </View>
@@ -292,29 +296,35 @@ export const ProductView: FC<ProductViewProps> = ({
               keyboardFocus.setFocus(true);
             }}
             onIncrease={() => {
-              handleUpdateQty({
-                productId: product.productId,
-                sellerId: product.sellerId,
-                warehouseId: product.warehouseId,
-                type: 'increase',
-              });
+              if (product.sellerId) {
+                handleUpdateQty({
+                  productId: product.productId,
+                  sellerId: product.sellerId,
+                  warehouseId: product.warehouseId,
+                  type: 'increase',
+                });
+              }
             }}
             onDecrease={() => {
-              handleUpdateQty({
-                productId: product.productId,
-                sellerId: product.sellerId,
-                warehouseId: product.warehouseId,
-                type: 'decrease',
-              });
+              if (product.sellerId) {
+                handleUpdateQty({
+                  productId: product.productId,
+                  sellerId: product.sellerId,
+                  warehouseId: product.warehouseId,
+                  type: 'decrease',
+                });
+              }
             }}
             onChange={(newQty: number) => {
-              handleUpdateQty({
-                productId: product.productId,
-                sellerId: product.sellerId,
-                warehouseId: product.warehouseId,
-                type: 'onChange',
-                newQty,
-              });
+              if (product.sellerId) {
+                handleUpdateQty({
+                  productId: product.productId,
+                  sellerId: product.sellerId,
+                  warehouseId: product.warehouseId,
+                  type: 'onChange',
+                  newQty,
+                });
+              }
             }}
             minusDisabled={isDecreaseDisabled}
             plusDisabled={isIncreaseDisabled}

@@ -6,6 +6,7 @@ export interface GetCartData {
   id: string;
   userId: number;
   buyerId: number;
+  buyerName: string;
   totalProducts: number;
   sellers: GetCartDataSellers[];
 }

@@ -1,10 +1,5 @@
 /** === IMPORT INTERNAL === */
 import {
-  cartExampleInitialState,
-  cartExampleReducer,
-  CartExampleInitialProps,
-} from './example-cart.reducer';
-import {
   getCartInitialState,
   getCartReducer,
   GetCartInitialProps,
@@ -66,18 +61,12 @@ import {
   CancelStockInitialProps,
 } from './cancel-stock.reducer';
 import {
-  postCancelStockInitialState,
-  postCancelStockReducer,
-  PostCancelStockInitialProps,
-} from './post-cancel-stock.reducer';
-import {
   cartBuyerAddressInitialState,
   cartBuyerAddressReducer,
   CartBuyerAddressInitialProps,
 } from './cart-buyer-address.reducer';
 
 export interface CartInitialProps {
-  example: CartExampleInitialProps;
   get: GetCartInitialProps;
   total: GetTotalCartInitialProps;
   create: AddToCartInitialProps;
@@ -90,12 +79,10 @@ export interface CartInitialProps {
   checkStock: CheckStockInitialProps;
   postCheckStock: PostCheckStockInitialProps;
   cancelStock: CancelStockInitialProps;
-  postCancelStock: PostCancelStockInitialProps;
   buyerAddress: CartBuyerAddressInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
-  example: cartExampleInitialState,
   get: getCartInitialState,
   total: getTotalCartInitialState,
   create: addToCartInitialState,
@@ -108,13 +95,11 @@ export const cartInitialState = {
   checkStock: checkStockInitialState,
   postCheckStock: postCheckStockInitialState,
   cancelStock: cancelStockInitialState,
-  postCancelStock: postCancelStockInitialState,
   buyerAddress: cartBuyerAddressInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
   {
-    example,
     get,
     total,
     create,
@@ -127,12 +112,10 @@ export const cartReducer = (
     checkStock,
     postCheckStock,
     cancelStock,
-    postCancelStock,
     buyerAddress,
   }: CartInitialProps,
   action: any,
 ) => ({
-  example: cartExampleReducer(example, action),
   get: getCartReducer(get, action),
   total: getTotalCartReducer(total, action),
   create: addToCartReducer(create, action),
@@ -145,6 +128,5 @@ export const cartReducer = (
   checkStock: checkStockReducer(checkStock, action),
   postCheckStock: postCheckStockReducer(postCheckStock, action),
   cancelStock: cancelStockReducer(cancelStock, action),
-  postCancelStock: postCancelStockReducer(postCancelStock, action),
   buyerAddress: cartBuyerAddressReducer(buyerAddress, action),
 });

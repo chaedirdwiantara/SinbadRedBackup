@@ -1,20 +1,7 @@
 /** === IMPORT INTERNAL === */
 import { serializeUniformKeyQs } from '@core/functions/global/query-string';
-import apiMappingMockV3 from '@core/services/apiMappingMockV3';
 import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
-
-const exampleCart = () => {
-  const mockHost = 'https://690d9a8b-8da9-4142-b577-d543b2682e7f.mock.pstmn.io';
-  const path = 'example-cart';
-  return apiMappingMockV3<models.CartExample>(
-    mockHost,
-    path,
-    'discount',
-    'v1',
-    'DETAIL',
-  );
-};
 
 const getCart = () => {
   const path = 'carts';
@@ -145,7 +132,6 @@ const cartBuyerAddress = () => {
 };
 
 export const CartApi = {
-  exampleCart,
   getCart,
   getTotalCart,
   addToCart,

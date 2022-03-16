@@ -6,21 +6,23 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 import { useContext } from 'react';
-import { useDataCartMaster } from '@core/redux/Data';
 /** === FUNCTION === */
 /** => checkout action */
 const useCheckoutAction = () => {
   const { stateCart } = useContext(contexts.CartContext);
-  const cartMaster: models.CartMaster = useDataCartMaster();
   const dispatch = useDispatch();
   return {
-    fetch: (contextDispatch: (action: any) => any) => {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartMaster: models.CartMaster,
+    ) => {
       if (
         stateCart.postCheckProduct.data !== null &&
         stateCart.postCheckSeller.data !== null &&
         stateCart.postCheckStock.data !== null &&
         stateCart.buyerAddress.data !== null
       ) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const buyerAddress = (({ buyerId, buyerName, ...rest }) => rest)(
           stateCart.buyerAddress.data,
         );
@@ -31,7 +33,7 @@ const useCheckoutAction = () => {
               .filter((product) => product.selected)
               .map((product) => {
                 let priceRules: models.ProductPriceRules | {} = {};
-                // if the product using price rules
+                /** ==> To be continued on bulk pricing sprint */
                 if (product.priceRules.length > 0) {
                   const priceRulesLastItem =
                     product.priceRules[product.priceRules.length - 1];
@@ -60,12 +62,15 @@ const useCheckoutAction = () => {
           },
         );
 
-        const carts = cartsTemp.map((cart) => {
-          return {
-            sellerId: cart.sellerId,
-            sellerName: cart.sellerName,
-            products: cart.products,
-          };
+        const carts = cartsTemp.filter((cart) => {
+          let isAnyItemSelectedInThisSeller = false;
+          cart.products.some((productItem) => {
+            if (productItem.selected) {
+              isAnyItemSelectedInThisSeller = true;
+            }
+          });
+
+          return isAnyItemSelectedInThisSeller;
         });
 
         dispatch(

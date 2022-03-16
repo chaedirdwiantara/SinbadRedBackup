@@ -28,9 +28,6 @@ const useDataVoucher = (): models.VoucherDataProps => {
 const useDataTotalNotification = () => {
   return useSelector((state: RootState) => state.notificaitonTotalReducer);
 };
-const useDataCartMaster = (): models.CartMaster => {
-  return useSelector((state: RootState) => state.cartMaster);
-};
 /** === EXPORT === */
 export {
   useDataPermanent,
@@ -39,7 +36,6 @@ export {
   useDataFlagRTDB,
   useDataAuth,
   useDataTotalNotification,
-  useDataCartMaster,
 };
 /**
  * ================================================================

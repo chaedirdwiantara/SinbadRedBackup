@@ -49,24 +49,26 @@ const matchCartWithCheckData = ({
         productStatus: checkProductData[checkProductIndex]?.status,
       });
 
-      // remove unused property for comparation
-      delete thisCartCheckProduct.isLastPriceUsedRules;
-      delete thisCartCheckProduct.lastUsedPrice;
-      delete thisCartCheckProduct.qty;
-      delete thisCartCheckProduct.selected;
-      delete thisCartCheckProduct.stock;
-      delete thisCartCheckProduct.status;
-      delete thisCartCheckProduct.stockStatus;
-      delete thisCartCheckProduct.warehouseName;
-      delete thisCartCheckProduct.leadTime;
-      delete thisCartCheckProduct.price;
-      delete thisCartCheckProduct.unavailableMessage;
-      delete thisCheckProduct.status;
+      if (thisCartCheckProduct.selected) {
+        // remove unused property for comparation
+        delete thisCartCheckProduct.isLastPriceUsedRules;
+        delete thisCartCheckProduct.lastUsedPrice;
+        delete thisCartCheckProduct.qty;
+        delete thisCartCheckProduct.selected;
+        delete thisCartCheckProduct.stock;
+        delete thisCartCheckProduct.status;
+        delete thisCartCheckProduct.isStockAvailable;
+        delete thisCartCheckProduct.warehouseName;
+        delete thisCartCheckProduct.leadTime;
+        delete thisCartCheckProduct.price;
+        delete thisCartCheckProduct.unavailableMessage;
+        delete thisCheckProduct.status;
 
-      if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
-        console.log('check product data not match');
-        result = false;
-        break;
+        if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
+          console.log('check product data not match');
+          result = false;
+          break;
+        }
       }
     }
 
@@ -77,16 +79,25 @@ const matchCartWithCheckData = ({
       return item.sellerId === cartData.sellers[i].sellerId;
     });
 
-    const thisCartSeller: any = cloneDeep(cartData.sellers[i]);
-    const thisCheckSeller: any = cloneDeep(checkSellerData[checkSellerIndex]);
+    let isAnyItemSelectedInThisSeller = false;
+    cartData.sellers[i].products.map((productItem) => {
+      if (productItem.selected) {
+        isAnyItemSelectedInThisSeller = true;
+      }
+    });
 
-    // remove unused property for comparation
-    delete thisCartSeller.products;
+    if (isAnyItemSelectedInThisSeller) {
+      const thisCartSeller: any = cloneDeep(cartData.sellers[i]);
+      const thisCheckSeller: any = cloneDeep(checkSellerData[checkSellerIndex]);
 
-    if (!isEqual(thisCartSeller, thisCheckSeller)) {
-      console.log('check seller data not match');
-      result = false;
-      break;
+      // remove unused property for comparation
+      delete thisCartSeller.products;
+
+      if (!isEqual(thisCartSeller, thisCheckSeller)) {
+        console.log('check seller data not match');
+        result = false;
+        break;
+      }
     }
   }
 
