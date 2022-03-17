@@ -11,6 +11,7 @@ import { FlatList, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { IRadioButton } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/RadioButtonTypes';
+import ErrorContent from './error-content.component';
 
 interface Props {
   open: boolean;
@@ -112,7 +113,7 @@ const ModalSelection: React.FC<Props> = ({
   onCloseModalSelection,
   params,
 }) => {
-  const { listSelection, selectedItem, loadMoreSelection } =
+  const { listSelection, selectedItem, loadMoreSelection, getSelection } =
     useTextFieldSelect();
   const [tempSelectedItem, setTempSelectedItem] = React.useState<any>(null);
 
@@ -146,6 +147,19 @@ const ModalSelection: React.FC<Props> = ({
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <FlatList
+              ListEmptyComponent={() => {
+                if (listSelection.loading) {
+                  return <SnbProgress />;
+                }
+                return (
+                  <ErrorContent
+                    action={() => getSelection({ type, params })}
+                    message={
+                      listSelection.error?.message || 'Terjadi kesalahan'
+                    }
+                  />
+                );
+              }}
               data={listSelection.data?.data}
               keyExtractor={(_, idx) => idx.toString()}
               contentContainerStyle={{ paddingHorizontal: 16 }}
@@ -187,7 +201,7 @@ const ModalSelection: React.FC<Props> = ({
             <SnbButton.Single
               title={setTitle(type)}
               onPress={() => onCloseModalSelection(tempSelectedItem)}
-              disabled={tempSelectedItem === null}
+              disabled={tempSelectedItem === null || listSelection.data === null}
               type="primary"
             />
           </View>
