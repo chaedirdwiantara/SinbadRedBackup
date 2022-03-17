@@ -12,6 +12,7 @@ import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/us
 import {
   usePaymentMethodListContent,
   usePaymentMethodCreateOrder,
+  usePaymentMethodSubRtdb,
 } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import PaymentMethodBody from './payment-method-body.view';
 import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
@@ -37,6 +38,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
+  const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
   const dispatch = useDispatch();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
@@ -92,9 +94,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => call subscribe rtdb for order  */
   const dataOrder = statePaymentMethod.createOrder.data;
   React.useEffect(() => {
-    if (dataOrder?.id === true) {
-      dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
-    }
+    // if (dataOrder?.id === true) {
+    //   dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
+    // }
+    PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, '95');
   }, [statePaymentMethod]);
 
   /** => call navigation to thankyou page */
