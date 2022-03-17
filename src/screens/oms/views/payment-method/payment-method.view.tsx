@@ -54,7 +54,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const checkoutContextData = stateCheckout.checkout.data;
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
-  console.log(statePaymentMethod, 'statePaymentMethod');
 
   const {
     statePaymentMethod: {
@@ -93,12 +92,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => call subscribe rtdb for order  */
   const dataOrder = statePaymentMethod.createOrder.data;
-  React.useEffect(() => {
-    // if (dataOrder?.id === true) {
-    //   dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
-    // }
-    PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, '95');
-  }, [statePaymentMethod]);
+  // React.useEffect(() => {
+  //   // if (dataOrder?.id === true) {
+  //   //   dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
+  //   // }
+  //   PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder);
+  // }, [statePaymentMethod]);
 
   /** => call navigation to thankyou page */
   useFocusEffect(
@@ -182,7 +181,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   };
 
   return (
-    <SnbContainer color="grey">
+    <SnbContainer color="white">
       {isLoading ? (
         <>
           <PaymentMethodHeader

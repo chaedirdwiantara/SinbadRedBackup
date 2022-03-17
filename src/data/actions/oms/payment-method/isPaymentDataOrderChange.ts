@@ -17,7 +17,7 @@ export const isOrderRTDBChangeProcess = (
   };
 };
 
-export const isOrderRTDBChange = (
+export const isOrderRTDBChangeSuccess = (
   data: models.PaymentMethodOrderRTDB,
 ): models.isOrderRTDBChangeAction => {
   return { type: types.PAYMENT_METHOD_SUB_RTDB_SUCCESS, payload: data };

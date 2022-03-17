@@ -62,13 +62,12 @@ const paymentMethodCreateOrdertApi = (
 //   return () => database().ref(`order/${orderId}`).off('value', order);
 // };
 const useCheckDataOrder = (orderId: string) => {
-  // const dispatch = useDispatch();
   const order = database()
-    .ref(`order/95`)
+    .ref(`order/${orderId}`)
     .on('value', (querySnapshot) => {
       let data = querySnapshot.val();
       let dataItem = { ...data };
-      ActionCreators.isOrderRTDBChange({ dataItem });
+      ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
     });
   return () => database().ref(`order/${orderId}`).off('value', order);
 };

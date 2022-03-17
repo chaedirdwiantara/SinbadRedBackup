@@ -87,9 +87,11 @@ function* paymentMethodSubRtdb(action: models.isOrderRTDBChangeAction) {
       yield call(() => {
         return PaymentMethodListApi.useCheckDataOrder(action.payload);
       });
-    yield action.contextDispatch(ActionCreators.isOrderRTDBChange(response));
+    yield action.contextDispatch(
+      ActionCreators.isOrderRTDBChangeSuccess(response),
+    );
 
-    yield put(ActionCreators.isOrderRTDBChange(response));
+    yield put(ActionCreators.isOrderRTDBChangeSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
       ActionCreators.isOrderRTDBChangeFailed(error as models.ErrorProps),

@@ -89,7 +89,7 @@ const OmsCheckoutView: FC = () => {
   };
 
   return (
-    <SnbContainer color="grey">
+    <SnbContainer color="white">
       {/* header view */}
       <CheckoutHeader
         backAction={() => {
