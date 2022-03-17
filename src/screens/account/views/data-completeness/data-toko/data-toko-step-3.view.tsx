@@ -41,11 +41,7 @@ function removeEmptyValue(data: any) {
   let buyer = data?.buyer;
   if (buyer) {
     for (const key in buyer) {
-      if (
-        buyer[key] === null ||
-        typeof buyer[key] === 'undefined' ||
-        (typeof buyer[key] === 'string' && buyer[key] === '')
-      ) {
+      if (buyer[key] === null || typeof buyer[key] === 'undefined') {
         delete buyer[key];
       }
     }
@@ -385,9 +381,11 @@ const Content: React.FC<Props> = (props) => {
             address.value !== existingAddress ||
             noteAddress.value !== existingNoteAddress ||
             vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
-            vehicleAccessibilityAmount?.value !==
+            (typeof vehicleAccessibilityAmount !== 'undefined' &&
+              vehicleAccessibilityAmount?.id) !==
               existingVehicleAccessibilityAmount ||
-            latLng
+            latLng.latitude !== latitude ||
+            latLng.longitude !== longitude
           ) {
             updateCompleteData(
               removeEmptyValue({
