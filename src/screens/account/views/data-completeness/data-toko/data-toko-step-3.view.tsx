@@ -146,13 +146,11 @@ const Content: React.FC<Props> = (props) => {
   }, [updateCompleteDataState]);
 
   function onMapsResult(data: any) {
-    if (data.formattedAddress) {
-      address.setValue(data.formattedAddress);
-      setStaticAddress(data.formattedAddress);
-    }
-    data.street && setStreetName(data.street);
-    data.coordinate && setLatLng(data.coordinate);
-    data.location && setLocationId(data.location);
+    address.setValue(data.formattedAddress);
+    setStaticAddress(data.formattedAddress);
+    setStreetName(data.street);
+    setLatLng(data.coordinate);
+    setLocationId(data.location);
   }
 
   function handleDisableSaveButton() {
