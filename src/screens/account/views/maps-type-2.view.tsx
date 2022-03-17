@@ -80,34 +80,24 @@ const MapsViewType2: React.FC = () => {
 
   React.useEffect(() => {
     if (locations.data) {
+      const formattedAddress =
+        addressResult.length > 0 ? addressResult[0].formatted_address : '';
+      const street =
+        addressResult.length > 0
+          ? getStreetName(addressResult[0].address_components)
+          : '';
+      const mapResult = {
+        coordinate: latLng,
+        formattedAddress,
+        location: locations.data.id,
+        street,
+      };
       if (action === 'edit') {
-        onMapsResult({
-          coordinate: latLng,
-          formattedAddress:
-            addressResult.length > 0 ? addressResult[0].formatted_address : '',
-          location: locations.data.id,
-          street:
-            addressResult.length > 0
-              ? getStreetName(addressResult[0].address_components)
-              : '',
-        });
+        onMapsResult(mapResult);
         goBack();
       } else {
         setTimeout(() => {
-          dispatch(
-            StackActions.replace(DATA_TOKO_STEP_3_VIEW, {
-              coordinate: latLng,
-              formattedAddress:
-                addressResult.length > 0
-                  ? addressResult[0].formatted_address
-                  : '',
-              location: locations.data.id,
-              street:
-                addressResult.length > 0
-                  ? getStreetName(addressResult[0].address_components)
-                  : '',
-            }),
-          );
+          dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW, mapResult));
         }, 0);
       }
     }
