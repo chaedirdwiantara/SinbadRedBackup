@@ -132,9 +132,23 @@ const MapsViewType2: React.FC = () => {
   }
 
   async function getUserLocation() {
-    Geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
-      setLatLng({ latitude, longitude });
-    });
+    Geolocation.getCurrentPosition(
+      ({ coords: { latitude, longitude } }) => {
+        setLatLng({ latitude, longitude });
+      },
+      (error: any) => {
+        if (error?.code === 3) {
+          getUserLocation();
+        } else {
+          setShowModalAreaNotFound(true);
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000,
+      },
+    );
   }
 
   async function getLocationPermissions() {
@@ -272,21 +286,29 @@ const MapsViewType2: React.FC = () => {
         <View style={{ height: 72 }}>
           <SnbButton.Single
             title="Pilih Lokasi ini"
-            disabled={addressResult.length === 0 || locations.loading}
+            disabled={loadingGetAddress || locations.loading}
             type="primary"
             loading={locations.loading}
             onPress={() => {
-              const address = extractAddress(
-                addressResult[0]?.address_components,
-              );
-              getLocation({
-                params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
-              });
+              if (addressResult.length === 0) {
+                setShowModalAreaNotFound(true);
+              } else {
+                const address = extractAddress(
+                  addressResult[0]?.address_components,
+                );
+                getLocation({
+                  params: `province=${address.province}&city=${address.city}&district=${address.district}&urban=${address.urban}`,
+                });
+              }
             }}
           />
         </View>
       </View>
       <SnbBottomSheet
+        closeAction={() => {
+          setShowModalAreaNotFound(false);
+        }}
+        isSwipeable
         open={showModalAreaNotFound}
         content={
           <View style={{ alignItems: 'center' }}>
