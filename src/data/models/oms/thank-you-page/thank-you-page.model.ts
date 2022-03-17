@@ -56,3 +56,16 @@ export interface PaymentGuideListItem {
   createdAt: string,
   updatedAt: string
 }
+
+export interface CancelOrder<T> {
+  data: T
+}
+
+export interface CancelOrderData {
+  orderId: string,
+  createdAt: string,
+  updatedAt: string,
+  message: string
+}
+
+export interface CancelOrderResponse extends CancelOrder<CancelOrderData> {}

@@ -53,8 +53,24 @@ const thankYouPagePaymentGuideList = (
 //     'LIST'
 //   )
 // }
+
+//* === CANCEL ORDER ==== */
+const thankYouPageCancelOrder = (data: models.UpdateProcessProps<models.CancelOrderPayload>) => {
+  const path = `orders/${data.data.id}`;
+  return apiMapping<models.CancelOrderResponse>(
+    'auth',
+    path,
+    'buyer-order',
+    'v1',
+    'UPDATE',
+    {
+      status: data.data.status
+    },
+  )
+}
 /** === EXPORT FUNCTIONS === */
 export const ThankYouPageApi = {
   thankYouPageOrderDetail,
-  thankYouPagePaymentGuideList
+  thankYouPagePaymentGuideList,
+  thankYouPageCancelOrder
 };

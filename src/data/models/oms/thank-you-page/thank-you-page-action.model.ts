@@ -4,3 +4,7 @@ export interface PaymentGuideProps {
 export interface PaymentGuideQueryOptions {
   paymentMethodId: string;
 }
+export interface CancelOrderPayload {
+  status: string;
+  id: string
+}
