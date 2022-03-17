@@ -106,7 +106,7 @@ const MerchantDetailProfileView: FC = () => {
         <Image source={source} style={MerchantStyles.imageProfile} />
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          // onPress={() => goTo({ type: 'merchantOwnerImage' })}
+          onPress={() => goTo({ type: 'merchantOwnerImage' })}
         >
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
