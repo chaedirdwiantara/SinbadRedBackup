@@ -341,7 +341,7 @@ const OmsThankYouPageView: FC = () => {
       (
       <>
       <SnbTopNav.Type1
-        type="red"
+        type="white"
         title={`Menunggu Pembayaran`}
       />
       
