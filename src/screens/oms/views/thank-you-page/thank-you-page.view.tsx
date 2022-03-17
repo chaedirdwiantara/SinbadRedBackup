@@ -4,10 +4,10 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageAction, useThankYouPageCancelOrderAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect, useState } from 'react';
+import { color, SnbBottomSheet, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -26,6 +26,9 @@ import moment from 'moment';
 import { CountDownTimer } from '@screen/history/components';
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import BottomSheetConfirmation, {
+  BottomSheetTransactionRef,
+} from '@core/components/BottomSheetConfirmation';
 
 type ThankYouPageParamList = {
   Detail: { section: 'orderHistory' | 'payment'; orderId: string; };
@@ -35,11 +38,13 @@ type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 
 const OmsThankYouPageView: FC = () => {
   const { params } = useRoute<ThankYouPageRouteProp>();
+  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
   const [paymentMethodId, setPaymentMethodId]= useState('');
   const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const {
     stateThankYouPage: {
       detail: {
@@ -215,7 +220,12 @@ const OmsThankYouPageView: FC = () => {
   }
   /** => batalkan pesanan */
   const handleCancelOrder = () => {
-    goToHome();
+    confirmModalRef.current?.show(params.orderId)
+  }
+  const handleConfirmationCancelOrder = () => {
+    // update order to cancelled and back to history list view
+    // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
+    NavigationAction.navigate('HistoryListView')
   }
   /** => Order Notes */
   const renderOrderNotes = () => {
@@ -275,6 +285,18 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
+  {/* confirmation  batalkan*/}
+  const renderModalConfirmationCancelOrder = () => {
+    return (
+      <BottomSheetConfirmation
+          ref={confirmModalRef}
+          title="Batalkan Pesanan?"
+          desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
+          onSubmit={handleConfirmationCancelOrder}
+      />
+    )
+  }
+  
   /** => Footer */
   const renderFooter = () => (
     <>
@@ -319,13 +341,14 @@ const OmsThankYouPageView: FC = () => {
       (
       <>
       <SnbTopNav.Type1
-        type="red"
+        type="white"
         title={`Menunggu Pembayaran`}
       />
       
       {renderContent()}
       {renderFooter()}
       {renderModalOrderDetail()}
+      {renderModalConfirmationCancelOrder()}
       </>
       )}
     </SnbContainer>

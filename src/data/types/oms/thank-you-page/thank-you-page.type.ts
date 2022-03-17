@@ -18,3 +18,11 @@ export const  THANK_YOU_PAGE_PAYMENT_GUIDE_LIST_FAILED = 'ThankYouPagePaymentGui
 export const  THANK_YOU_PAGE_PAYMENT_GUIDE_LIST_RESET = 'ThankYouPagePaymentGuideListReset';
 export const  THANK_YOU_PAGE_PAYMENT_GUIDE_LIST_LOADING =
   'TThankYouPagePaymentGuideListLoading';
+
+  /** => thank you page cancel order */
+export const THANK_YOU_PAGE_CANCEL_ORDER_PROCESS =
+'ThankYouPageCancelOrderProcess';
+export const  THANK_YOU_PAGE_CANCEL_ORDER_SUCCESS =
+'ThankYouPageCancelOrderSuccess';
+export const  THANK_YOU_PAGE_CANCEL_ORDER_FAILED = 'ThankYouPageCancelOrderFailed';
+export const  THANK_YOU_PAGE_CANCEL_ORDER_RESET = 'ThankYouPageCancelOrderReset';

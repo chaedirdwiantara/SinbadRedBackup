@@ -56,8 +56,24 @@ const useThankYouPagePaymentGuideListAction = () => {
     },
   };
 }
+
+const useThankYouPageCancelOrderAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.CancelOrderPayload,      
+    ) => {
+      dispatch(Actions.thankYouPageCancelOrderProcess(contextDispatch, {data}))
+    }, 
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.thankYouPageCancelOrderReset(contextDispatch))
+    }
+  }
+}
 /** === EXPORT === */
 export {
   useThankYouPageAction,
-  useThankYouPagePaymentGuideListAction
+  useThankYouPagePaymentGuideListAction,
+  useThankYouPageCancelOrderAction
 }

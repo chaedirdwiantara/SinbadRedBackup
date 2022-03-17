@@ -71,3 +71,43 @@ export const thankYouPagePaymentGuideListLoading = () => {
 export const thankYouPagePaymentGuideListReset = () => {
   return { type: types.THANK_YOU_PAGE_PAYMENT_GUIDE_LIST_RESET };
 };
+
+/** === CANCEL ORDER ACTION ===*/
+/** => Process */
+export const thankYouPageCancelOrderProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.UpdateProcessProps<models.CancelOrderPayload>
+): models.UpdateProcessAction<models.CancelOrderPayload> => {
+  contextDispatch({
+    type: types.THANK_YOU_PAGE_CANCEL_ORDER_PROCESS,
+    payload: data
+  })
+  return {
+    type: types.THANK_YOU_PAGE_CANCEL_ORDER_PROCESS,
+    payload: data,
+    contextDispatch
+  }
+}
+/** => Succeeded */
+export const thankYouPageCancelOrderSuccess = (
+  data: models.UpdateSuccessV3Props<models.CancelOrderResponse>,
+): models.UpdateSuccessV3Action<models.CancelOrderResponse> => {
+  return {
+    type: types.THANK_YOU_PAGE_CANCEL_ORDER_SUCCESS,
+    payload: data
+  }
+}
+/** => Failed */
+export const thankYouPageCancelOrderFailed = (
+  data: models.ErrorProps,
+): models.UpdateFailedAction => {
+  return {
+    type: types.THANK_YOU_PAGE_CANCEL_ORDER_FAILED,
+    payload: data
+  }
+}
+/** => Reset */
+export const thankYouPageCancelOrderReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({ type: types.THANK_YOU_PAGE_CANCEL_ORDER_RESET });
+  return { type: types.THANK_YOU_PAGE_CANCEL_ORDER_RESET };
+};
