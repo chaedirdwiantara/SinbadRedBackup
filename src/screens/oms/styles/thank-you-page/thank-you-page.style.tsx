@@ -53,5 +53,13 @@ export const ThankYouPageStyle = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 24
   },
+  footerCancelOrder: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+  },
+  footerCancelOrderButton: {
+    height: 70
+  }
 })
 

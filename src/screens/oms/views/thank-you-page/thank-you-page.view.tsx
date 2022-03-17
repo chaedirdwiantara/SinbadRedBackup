@@ -213,6 +213,10 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     )
   }
+  /** => batalkan pesanan */
+  const handleCancelOrder = () => {
+    goToHome();
+  }
   /** => Order Notes */
   const renderOrderNotes = () => {
     if(thankYouPageData != null){
@@ -273,21 +277,37 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => Footer */
   const renderFooter = () => (
-    <View
-      style={ThankYouPageStyle.footer}>
-        <SnbButton.Dynamic
-          size="medium"
-          type="secondary"
-          title={'Kembali ke Beranda'}
-          onPress={goToHome}
-        />
-        <SnbButton.Dynamic
-          size="medium"
+    <>
+    {params.section == 'orderHistory' ?
+    <View style={ThankYouPageStyle.footerCancelOrder}>
+      <View style={ThankYouPageStyle.footerCancelOrderButton}>
+        <SnbButton.Single
           type="primary"
-          title={'Cek Status'}
-          onPress={() =>NavigationAction.navigate('HistoryListView')}
+          title={'Batalkan Pesanan'}
+          onPress={handleCancelOrder}
         />
+      </View>
+      
     </View>
+    :
+    <View style={ThankYouPageStyle.footer}
+    >
+      <SnbButton.Dynamic
+        size="medium"
+        type="secondary"
+        title={'Kembali ke Beranda'}
+        onPress={goToHome}
+      />
+      <SnbButton.Dynamic
+        size="medium"
+        type="primary"
+        title={'Cek Status'}
+        onPress={() =>NavigationAction.navigate('HistoryListView')}
+      />
+  </View>
+    } 
+    </>
+    
   );
   /** => Main */
   return (
