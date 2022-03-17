@@ -23,8 +23,6 @@ import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
 import { LoadingPage } from '@core/components/Loading';
-import { useDispatch } from 'react-redux';
-import { PaymentMethodListApi } from '../../../../data/apis/oms/payment-method/payment-method.api';
 
 interface PaymentMethodInterface {
   props: {};
@@ -39,7 +37,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
-  const dispatch = useDispatch();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
@@ -63,7 +60,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   } = usePaymentMethodContext();
 
   const data = paymentMethodData;
-  console.log(data, 'data');
 
   /** => data from checkout */
   const dataCheckout = props.route.params.data;
@@ -94,8 +90,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const dataOrder = statePaymentMethod.createOrder.data;
   useFocusEffect(
     React.useCallback(() => {
-      if (dataOrder?.id === true) {
-        PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder);
+      if (dataOrder?.id) {
+        PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder.id);
       }
     }, []),
   );
