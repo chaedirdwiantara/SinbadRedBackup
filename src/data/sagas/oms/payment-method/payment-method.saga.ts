@@ -88,6 +88,7 @@ function* paymentMethodSubRtdb(action: models.isOrderRTDBChangeAction) {
         return PaymentMethodListApi.useCheckDataOrder(action.payload);
       });
     yield action.contextDispatch(
+      // console.log(response, 'SAGA RESPON'),
       ActionCreators.isOrderRTDBChangeSuccess(response),
     );
 

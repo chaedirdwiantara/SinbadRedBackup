@@ -19,6 +19,8 @@ export const paymentMethodSubRtdbReducer = simplifyReducer(
       state = paymentMethodSubRtdbInitialState,
       action: models.DetailSuccessAction<any>,
     ) {
+      // console.log('REDUCER');
+
       return {
         ...state,
         data: action.payload.data,

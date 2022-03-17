@@ -92,12 +92,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => call subscribe rtdb for order  */
   const dataOrder = statePaymentMethod.createOrder.data;
-  // React.useEffect(() => {
-  //   // if (dataOrder?.id === true) {
-  //   //   dispatch(PaymentMethodListApi.useCheckDataOrder(dataOrder));
-  //   // }
-  //   PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder);
-  // }, [statePaymentMethod]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (dataOrder?.id === true) {
+        PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder);
+      }
+    }, []),
+  );
 
   /** => call navigation to thankyou page */
   useFocusEffect(

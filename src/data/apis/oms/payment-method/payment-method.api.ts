@@ -50,26 +50,17 @@ const paymentMethodCreateOrdertApi = (
 };
 
 /** check data order */
-// const useCheckDataOrder = (orderId: string) => {
-//   const dispatch = useDispatch();
-//   const order = database()
-//     .ref(`order/95`)
-//     .on('value', (querySnapshot) => {
-//       let data = querySnapshot.val();
-//       let dataItem = { ...data };
-//       dispatch(ActionCreators.isOrderRTDBChange({ dataItem }));
-//     });
-//   return () => database().ref(`order/${orderId}`).off('value', order);
-// };
 const useCheckDataOrder = (orderId: string) => {
   const order = database()
-    .ref(`order/${orderId}`)
+    .ref(`order`)
     .on('value', (querySnapshot) => {
       let data = querySnapshot.val();
       let dataItem = { ...data };
+      // console.log(dataItem, 'ITEM');
+
       ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
     });
-  return () => database().ref(`order/${orderId}`).off('value', order);
+  return () => database().ref(`order`).off('value', order);
 };
 
 /** === EXPORT FUNCTIONS === */

@@ -57,9 +57,11 @@ const usePaymentMethodCreateOrder = () => {
 /** => get payment method list content */
 const usePaymentMethodSubRtdb = () => {
   const dispatch = useDispatch();
+  // console.log('MASUK FUNCTION');
+
   return {
     fetch: (contextDispatch: (action: any) => any, data: string) => {
-      dispatch(Actions.isOrderRTDBChangeSuccess(contextDispatch, { data }));
+      dispatch(Actions.isOrderRTDBChangeProcess(contextDispatch, { data }));
     },
   };
 };
