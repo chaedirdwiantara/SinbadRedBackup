@@ -2,12 +2,11 @@ import React, { FC, useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbListButtonType2,
   SnbButton,
   SnbDialog,
   SnbToast,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
 import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
@@ -71,15 +70,6 @@ const UserSettingView: FC = () => {
   const content = () => {
     return (
       <ScrollView scrollEventThrottle={16} showsVerticalScrollIndicator={false}>
-        <View>
-          <SnbListButtonType2
-            title={'Ganti Kata Sandi'}
-            onPress={() => {
-              setShowConfirmation(false);
-              NavigationAction.navigate('UserChangePasswordView');
-            }}
-          />
-        </View>
         <SnbButton.Single
           type="secondary"
           title="Log Out"
