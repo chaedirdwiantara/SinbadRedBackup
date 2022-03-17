@@ -5,7 +5,7 @@ import {
 } from '@screen/auth/functions';
 import {
   LOGIN_OTP_VIEW,
-  REGISTER_VIEW,
+  SELF_REGISTRATION_VIEW
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
@@ -83,10 +83,10 @@ const Content: React.FC = () => {
           size="small"
           onPress={() => {
             phone.clearText();
-            navigate(REGISTER_VIEW);
+            navigate(SELF_REGISTRATION_VIEW);
           }}
           type="tertiary"
-          disabled={true || false}
+          // disabled={true || false}
         />
       </View>
     </ScrollView>
