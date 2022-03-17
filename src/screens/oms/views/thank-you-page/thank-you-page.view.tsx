@@ -4,7 +4,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageAction, useThankYouPageCancelOrderAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
 import { color, SnbBottomSheet, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -44,6 +44,7 @@ const OmsThankYouPageView: FC = () => {
   const thankYouPageAction = useThankYouPageAction();
   const [paymentMethodId, setPaymentMethodId]= useState('');
   const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const {
     stateThankYouPage: {
       detail: {
@@ -222,6 +223,8 @@ const OmsThankYouPageView: FC = () => {
     confirmModalRef.current?.show(params.orderId)
   }
   const handleConfirmationCancelOrder = () => {
+    // update order to cancelled and back to history list view
+    // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
     NavigationAction.navigate('HistoryListView')
   }
   /** => Order Notes */
