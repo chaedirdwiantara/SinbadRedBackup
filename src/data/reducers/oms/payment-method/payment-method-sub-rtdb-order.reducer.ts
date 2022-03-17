@@ -11,19 +11,25 @@ export const paymentMethodSubRtdbInitialState: paymentMethodSubRtdbProps = {
   loading: false,
 };
 /** === FUNCTION HERE === */
+
 export const paymentMethodSubRtdbReducer = simplifyReducer(
   paymentMethodSubRtdbInitialState,
   {
+    /** => PROCESS */
+    [types.PAYMENT_METHOD_SUB_RTDB_PROCESS]() {
+      return {
+        ...paymentMethodSubRtdbInitialState,
+        loading: true,
+      };
+    },
     /** => success */
     [types.PAYMENT_METHOD_SUB_RTDB_SUCCESS](
       state = paymentMethodSubRtdbInitialState,
-      action: models.DetailSuccessAction<any>,
+      action: models.CreateSuccessV3Action<any>,
     ) {
-      // console.log('REDUCER');
-
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
       };
     },

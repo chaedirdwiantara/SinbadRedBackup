@@ -1,5 +1,6 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMappingV3';
+import React, { useEffect } from 'react';
 import * as ActionCreators from '@actions';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import { useDispatch } from 'react-redux';
@@ -51,16 +52,26 @@ const paymentMethodCreateOrdertApi = (
 
 /** check data order */
 const useCheckDataOrder = (orderId: string) => {
-  const order = database()
-    .ref(`order`)
-    .on('value', (querySnapshot) => {
-      let data = querySnapshot.val();
+  // const order = database()
+  //   .ref(`order`)
+  //   .on('value', (snapshot) => {
+  //     // let data = snapshot.val();
+  //     // let dataItem = { ...data };
+  //     let dataItem = 'true';
+  //     console.log(snapshot, 'snapshot');
+  //     ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
+  //   });
+  // return () => database().ref(`order`).off('value', order);
+  const dataSnap: [] = [];
+  database()
+    .ref(`order/${orderId}`)
+    .on('value', (snapshot) => {
+      let data = snapshot.val();
       let dataItem = { ...data };
-      // console.log(dataItem, 'ITEM');
-
-      ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
+      dataSnap.push(dataItem);
     });
-  return () => database().ref(`order`).off('value', order);
+
+  return dataSnap;
 };
 
 /** === EXPORT FUNCTIONS === */

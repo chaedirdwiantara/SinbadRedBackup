@@ -81,14 +81,15 @@ function* paymentMethodCreateOrder(
   }
 }
 
-function* paymentMethodSubRtdb(action: models.isOrderRTDBChangeAction) {
+function* paymentMethodSubRtdb(
+  action: models.CreateProcessAction<models.isOrderRTDBChangeAction>,
+) {
   try {
-    const response: models.CreateSuccessV3Props<models.PaymentMethodCreateOrderResponse> =
+    const response: models.CreateSuccessV3Props<string | null | boolean> =
       yield call(() => {
         return PaymentMethodListApi.useCheckDataOrder(action.payload);
       });
     yield action.contextDispatch(
-      // console.log(response, 'SAGA RESPON'),
       ActionCreators.isOrderRTDBChangeSuccess(response),
     );
 
