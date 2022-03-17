@@ -181,7 +181,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   };
 
   return (
-    <SnbContainer color="white">
+    <SnbContainer color="grey">
       {isLoading ? (
         <>
           <PaymentMethodHeader

@@ -7,5 +7,5 @@ interface CheckoutHeaderProps {
 }
 /** === COMPONENT ===  */
 export const CheckoutHeader: FC<CheckoutHeaderProps> = ({ backAction }) => (
-  <SnbTopNav.Type3 type="red" title={'Checkout'} backAction={backAction} />
+  <SnbTopNav.Type3 type="white" title={'Checkout'} backAction={backAction} />
 );
