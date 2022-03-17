@@ -166,14 +166,14 @@ const MerchantDetailProfileView: FC = () => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
             <TouchableOpacity
-              // onPress={() => goTo(data)}
+              onPress={() => goTo(data)}
               style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
             </TouchableOpacity>
           )}
           {data.action === 'ubah' && (
             <TouchableOpacity
-              // onPress={() => goTo(data)}
+              onPress={() => goTo(data)}
               style={{ paddingVertical: 10 }}>
               <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
             </TouchableOpacity>
