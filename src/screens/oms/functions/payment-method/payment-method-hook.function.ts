@@ -44,7 +44,9 @@ const usePaymentMethodCreateOrder = () => {
       contextDispatch: (action: any) => any,
       data: models.PaymentMethodCreateOrderData,
     ) => {
-      dispatch(Actions.postPaymentMethodCreateOrderProcess(contextDispatch, { data }));
+      dispatch(
+        Actions.postPaymentMethodCreateOrderProcess(contextDispatch, { data }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postPaymentMethodCreateOrderReset(contextDispatch));
@@ -52,7 +54,20 @@ const usePaymentMethodCreateOrder = () => {
   };
 };
 
-export { 
+/** => get payment method list content */
+const usePaymentMethodSubRtdb = () => {
+  const dispatch = useDispatch();
+  // console.log('MASUK FUNCTION');
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, data: string) => {
+      dispatch(Actions.isOrderRTDBChangeProcess(contextDispatch, { data }));
+    },
+  };
+};
+
+export {
   usePaymentMethodListContent,
-  usePaymentMethodCreateOrder
+  usePaymentMethodCreateOrder,
+  usePaymentMethodSubRtdb,
 };

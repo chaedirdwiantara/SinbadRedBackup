@@ -22,3 +22,9 @@ export const POST_CREATE_ORDER_PROCESS = 'PostCreateOrderProcess';
 export const POST_CREATE_ORDER_SUCCESS = 'PostCreateOrderSuccess';
 export const POST_CREATE_ORDER_FAILED = 'PostCreateOrderFailed';
 export const POST_CREATE_ORDER_RESET = 'PostCreateOrderReset';
+
+/** => PAYMENT METHOD SUB RTDB */
+export const PAYMENT_METHOD_SUB_RTDB_PROCESS = 'PaymentMethodSubRtdbProcess';
+export const PAYMENT_METHOD_SUB_RTDB_SUCCESS = 'PaymentMethodSubRtdbSuccess';
+export const PAYMENT_METHOD_SUB_RTDB_FAILED = 'PaymentMethodSubRtdbFailed';
+export const PAYMENT_METHOD_SUB_RTDB_RESET = 'PaymentMethodSubRtdbReset';

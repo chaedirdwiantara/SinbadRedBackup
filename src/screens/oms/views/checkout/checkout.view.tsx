@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState, useContext } from 'react';
-import { ScrollView } from 'react-native';
+import { LogBox, ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -13,7 +13,6 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
-  callBackToCartFunction,
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
   totalQty,
@@ -21,16 +20,7 @@ import {
 } from '@screen/oms/functions';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
-import {
-  useGetCartAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
-  useRemoveCartProductAction,
-  useCartBuyerAddressAction,
-  useUpdateCartAction,
-  useCheckoutAction,
-} from '../../functions';
+import { useUpdateCartAction, useCheckoutAction } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
@@ -39,8 +29,11 @@ import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
+  LogBox.ignoreAllLogs();
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
-  
+  const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
+
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
@@ -87,12 +80,13 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
     clearTimeout(timer);
-    callBackToCartFunction(dispatchCart, dispatchCheckout)
-    
-};
+    goToShoppingCart();
+  };
 
   return (
     <SnbContainer color="grey">
@@ -119,7 +113,7 @@ const OmsCheckoutView: FC = () => {
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} abortTimeOut={toPaymentMethod} />
+      <CheckoutBottomView data={data} goToPaymentMethod={toPaymentMethod} />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime

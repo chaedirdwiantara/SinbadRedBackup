@@ -56,11 +56,12 @@ function* paymentMethodCreateOrder(
   action: models.CreateProcessAction<models.PaymentMethodCreateOrderData>,
 ) {
   try {
-    const response: models.CreateSuccessV3Props<
-      models.PaymentMethodCreateOrderResponse
-    > = yield call(() => {
-      return PaymentMethodListApi.paymentMethodCreateOrdertApi(action.payload);
-    });
+    const response: models.CreateSuccessV3Props<models.PaymentMethodCreateOrderResponse> =
+      yield call(() => {
+        return PaymentMethodListApi.paymentMethodCreateOrdertApi(
+          action.payload,
+        );
+      });
     yield action.contextDispatch(
       ActionCreators.postPaymentMethodCreateOrderSuccess(response),
     );
@@ -68,9 +69,38 @@ function* paymentMethodCreateOrder(
     yield put(ActionCreators.postPaymentMethodCreateOrderSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.postPaymentMethodCreateOrderFailed(error as models.ErrorProps),
+      ActionCreators.postPaymentMethodCreateOrderFailed(
+        error as models.ErrorProps,
+      ),
     );
-    yield put(ActionCreators.postPaymentMethodCreateOrderFailed(error as models.ErrorProps));
+    yield put(
+      ActionCreators.postPaymentMethodCreateOrderFailed(
+        error as models.ErrorProps,
+      ),
+    );
+  }
+}
+
+function* paymentMethodSubRtdb(
+  action: models.CreateProcessAction<models.isOrderRTDBChangeAction>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<string | null | boolean> =
+      yield call(() => {
+        return PaymentMethodListApi.useCheckDataOrder(action.payload);
+      });
+    yield action.contextDispatch(
+      ActionCreators.isOrderRTDBChangeSuccess(response),
+    );
+
+    yield put(ActionCreators.isOrderRTDBChangeSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.isOrderRTDBChangeFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.isOrderRTDBChangeFailed(error as models.ErrorProps),
+    );
   }
 }
 
@@ -82,6 +112,7 @@ function* paymentMethodListSaga() {
     paymentMethodGetWaitingPaymentOrder,
   );
   yield takeLatest(types.POST_CREATE_ORDER_PROCESS, paymentMethodCreateOrder);
+  yield takeLatest(types.PAYMENT_METHOD_SUB_RTDB_PROCESS, paymentMethodSubRtdb);
 }
 
 export default paymentMethodListSaga;

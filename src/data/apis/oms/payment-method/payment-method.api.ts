@@ -1,7 +1,12 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMappingV3';
+import React, { useEffect } from 'react';
+import * as ActionCreators from '@actions';
 import apiMappingMock from '@core/services/apiMappingMockV3';
+import { useDispatch } from 'react-redux';
 import * as models from '@models';
+import { uniqueId } from '@core/functions/global/device-data';
+import database from '@react-native-firebase/database';
 /** === FUNCTION === */
 const paymentMethodListApi = (
   payload: models.ListProcessProps<models.PaymentMethodProps>,
@@ -45,9 +50,34 @@ const paymentMethodCreateOrdertApi = (
   );
 };
 
+/** check data order */
+const useCheckDataOrder = (orderId: string) => {
+  // const order = database()
+  //   .ref(`order`)
+  //   .on('value', (snapshot) => {
+  //     // let data = snapshot.val();
+  //     // let dataItem = { ...data };
+  //     let dataItem = 'true';
+  //     console.log(snapshot, 'snapshot');
+  //     ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
+  //   });
+  // return () => database().ref(`order`).off('value', order);
+  const dataSnap: [] = [];
+  database()
+    .ref(`order/${orderId}`)
+    .on('value', (snapshot) => {
+      let data = snapshot.val();
+      let dataItem = { ...data };
+      dataSnap.push(dataItem);
+    });
+
+  return dataSnap;
+};
+
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
   paymentMethodListApi,
   paymentMethodGetWaitingPaymentOrderApi,
   paymentMethodCreateOrdertApi,
+  useCheckDataOrder,
 };

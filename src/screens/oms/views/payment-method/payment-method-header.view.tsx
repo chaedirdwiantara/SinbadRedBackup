@@ -10,7 +10,7 @@ export const PaymentMethodHeader: FC<PaymentMethodHeaderProps> = ({
   backAction,
 }) => (
   <SnbTopNav.Type3
-    type="red"
+    type="white"
     title={'Pilih Pembayaran'}
     backAction={backAction}
   />
