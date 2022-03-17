@@ -15,8 +15,11 @@ const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
 /** => Go to Thank You Page */
-const goToThankYouPage = () => {
-  NavigationAction.navigate('OmsThankYouPageView');
+const goToThankYouPage = (
+  section: string,
+  orderId: number
+) => {
+  NavigationAction.navigate('OmsThankYouPageView',{section, orderId});
 };
 /** => Go to Payment Method */
 const goToPaymentMethod = (data: any) => {
