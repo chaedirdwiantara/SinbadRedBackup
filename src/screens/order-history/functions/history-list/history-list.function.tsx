@@ -50,7 +50,10 @@ export const useHistoryListFunction = () => {
   return { onLoadMore };
 };
 
-/** => Go to Thank You Page */
-export const goToWaitingPaymentOrderDetail = () => {
-  NavigationAction.navigate('OmsThankYouPageView');
+/** => Go to Waiting for Payment History Detail */
+export const goToWaitingPaymentHistoryDetail = (
+  section: string,
+  orderId: number
+) => {
+  NavigationAction.navigate('OmsThankYouPageView', {section, orderId});
 };

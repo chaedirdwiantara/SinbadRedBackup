@@ -22,12 +22,19 @@ import { PaymentGuideListItem } from '@model/oms';
 import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { goToHome } from '@core/functions/product';
-import { goToThankYouPage } from '@screen/oms/functions';
 import moment from 'moment';
 import { CountDownTimer } from '@screen/history/components';
 import { NavigationAction } from '@core/functions/navigation';
+import { RouteProp, useRoute } from '@react-navigation/native';
+
+type ThankYouPageParamList = {
+  Detail: { section: 'orderHistory' | 'payment'; orderId: string; };
+};
+
+type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 
 const OmsThankYouPageView: FC = () => {
+  const { params } = useRoute<ThankYouPageRouteProp>();
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
@@ -63,7 +70,7 @@ const OmsThankYouPageView: FC = () => {
 
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'7')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage, params.orderId)
   }, [])
 
   useEffect(() => {
@@ -206,6 +213,10 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     )
   }
+  /** => batalkan pesanan */
+  const handleCancelOrder = () => {
+    goToHome();
+  }
   /** => Order Notes */
   const renderOrderNotes = () => {
     if(thankYouPageData != null){
@@ -217,6 +228,14 @@ const OmsThankYouPageView: FC = () => {
               thankYouPageData?.createdAt ? toLocalDateTime(thankYouPageData?.createdAt) : '-'
             }
           />
+          {params.section == 'orderHistory' &&
+            <ThankYouPageCardItem 
+            title='Alamat Pengiriman'
+            value={
+              `${thankYouPageData?.buyerAddress.address} ${thankYouPageData?.buyerAddress.noteAddress} ${thankYouPageData?.buyerAddress.urban} ${thankYouPageData?.buyerAddress.district} ${thankYouPageData?.buyerAddress.city} ${thankYouPageData?.buyerAddress.province}, ${thankYouPageData?.buyerAddress.zipCode}`
+            }
+          />
+          }
         </ThankYouPageCard>
       )
     }
@@ -258,21 +277,37 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => Footer */
   const renderFooter = () => (
-    <View
-      style={ThankYouPageStyle.footer}>
-        <SnbButton.Dynamic
-          size="medium"
-          type="secondary"
-          title={'Kembali ke Beranda'}
-          onPress={goToHome}
-        />
-        <SnbButton.Dynamic
-          size="medium"
+    <>
+    {params.section == 'orderHistory' ?
+    <View style={ThankYouPageStyle.footerCancelOrder}>
+      <View style={ThankYouPageStyle.footerCancelOrderButton}>
+        <SnbButton.Single
           type="primary"
-          title={'Cek Status'}
-          onPress={() =>NavigationAction.navigate('HistoryListView')}
+          title={'Batalkan Pesanan'}
+          onPress={handleCancelOrder}
         />
+      </View>
+      
     </View>
+    :
+    <View style={ThankYouPageStyle.footer}
+    >
+      <SnbButton.Dynamic
+        size="medium"
+        type="secondary"
+        title={'Kembali ke Beranda'}
+        onPress={goToHome}
+      />
+      <SnbButton.Dynamic
+        size="medium"
+        type="primary"
+        title={'Cek Status'}
+        onPress={() =>NavigationAction.navigate('HistoryListView')}
+      />
+  </View>
+    } 
+    </>
+    
   );
   /** => Main */
   return (

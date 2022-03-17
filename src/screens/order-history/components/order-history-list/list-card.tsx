@@ -27,7 +27,7 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 import { Context } from './context';
 import { 
   useHistoryListFunction,
-  goToWaitingPaymentOrderDetail 
+  goToWaitingPaymentHistoryDetail 
 } from '../../functions/history-list';
 import { CountDownTimer } from '@screen/history/components';
 // type
@@ -274,7 +274,9 @@ const ListCard = () => {
         renderItem={({ item }) => (
           <CardWaitingForPayment
             data={item}
-            onDetailOrder={goToWaitingPaymentOrderDetail}
+            onDetailOrder={() =>
+              goToWaitingPaymentHistoryDetail('orderHistory',item.id)
+            }
           />
         )}
         onEndReached={onLoadMore}
