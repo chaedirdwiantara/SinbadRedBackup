@@ -27,7 +27,7 @@ const DataDiriStep5View: React.FC = () => {
     completeDataState?.data?.userData?.idNo || '',
   );
   const [npwp, setNpwp] = React.useState(
-    completeDataState?.data?.userData?.taxNo,
+    completeDataState?.data?.userData?.taxNo || '',
   );
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
@@ -97,7 +97,7 @@ const DataDiriStep5View: React.FC = () => {
                 setIsKTPValid(false);
               }
             }}
-            placeholder={'Default Text'}
+            placeholder={'Masukkan Nomor KTP'}
             labelText={'Nomor KTP'}
             keyboardType={'number-pad'}
             mandatory
@@ -122,7 +122,7 @@ const DataDiriStep5View: React.FC = () => {
                 setIsNPWPValid(false);
               }
             }}
-            placeholder={'Default Text'}
+            placeholder={'Masukkan Nomor NPWP'}
             labelText={'Nomor NPWP'}
             keyboardType={'number-pad'}
             mandatory
