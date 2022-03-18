@@ -102,12 +102,12 @@ const ListAndSearchView = () => {
         )}
 
         <FlatList
-          data={listSelection.data}
+          data={listSelection.data?.data}
           keyExtractor={(el, index) => index.toString()}
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent:
-              listSelection.data?.length === 0 || listSelection.error
+              listSelection.data?.data?.length === 0 || listSelection.error
                 ? 'center'
                 : 'flex-start',
           }}
