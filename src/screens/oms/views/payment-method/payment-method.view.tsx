@@ -25,6 +25,8 @@ import * as models from '@models';
 import { LoadingPage } from '@core/components/Loading';
 import { useThankYouPageCancelOrderAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import { goBack } from '@screen/quest/function';
 
 interface PaymentMethodInterface {
   props: {};
@@ -42,6 +44,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const { dispatchThankYouPage } = useThankYouPageContext();
   /** => Hooks */
+  const [backHandler, setBackHandler] = useState(null); //handle selected method
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
     useState<models.PaymentMethod | null>(null);
@@ -104,7 +107,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (statePaymentMethod.subOrderRtdb.data == true) {
-        goToThankYouPage('payment', dataOrder.id);
+        goToThankYouPage('payment', Number(dataOrder?.id));
       }
     }, []),
   );
@@ -185,12 +188,22 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   };
 
+  /** => back handler */
+  const handleBackHardware = () => {
+    clearTimeout(timer);
+    goBack();
+  };
+
+  /** => Back handler */
+  useCustomBackHardware(() => handleBackHardware());
+
   return (
     <SnbContainer color="grey">
       {isLoading ? (
         <>
           <PaymentMethodHeader
             backAction={() => {
+              clearTimeout(timer);
               goToCheckout();
             }}
           />
