@@ -21,6 +21,7 @@ import moment from 'moment';
 import BottomSheetConfirmation, {
   BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmation';
+import ConfirmationTime from '../confirmation-time';
 // function
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
@@ -58,6 +59,12 @@ const Card: FC<CardProps> = (props) => {
             type={labelStatus[data.statusValue] || 'error'}
           />
         </View>
+        {/* Timer */}
+        {data.statusValue === 'delivered' ? (
+          <ConfirmationTime doneAt={data?.doneAt || ''} />
+        ) : (
+          <View />
+        )}
         {/* product */}
         <View>
           <View style={styles.product}>

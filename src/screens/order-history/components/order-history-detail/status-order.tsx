@@ -3,6 +3,7 @@ import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { SnbText, SnbBadge, color } from '@sinbad/react-native-sinbad-ui';
 import { NavigationAction } from '@core/functions/navigation';
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+import ConfirmationTime from '../confirmation-time';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Divider } from './information';
 import { labelStatus } from '../../types';
@@ -47,6 +48,13 @@ const StatusOrder = () => {
             </TouchableOpacity>
           </View>
         </View>
+        {/* time ticking delivered */}
+        {data?.statusValue === 'delivered' ? (
+          <ConfirmationTime doneAt={data?.doneAt || ''} />
+        ) : (
+          <View />
+        )}
+        {/* reason canceled */}
         {data?.orderSellerFailedReason ? (
           <View style={styles.reason}>
             <SnbText.C1 color={color.red70}>
