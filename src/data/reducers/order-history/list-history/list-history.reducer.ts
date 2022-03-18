@@ -54,7 +54,7 @@ export const listHistoryReducer = simplifyReducer(listHistoryInitialState, {
   ) {
     return {
       ...state,
-      loading: false,
+      loading: true,
       loadMore: false,
       refresh: false,
       error: payload,
