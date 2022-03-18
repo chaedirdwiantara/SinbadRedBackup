@@ -41,52 +41,6 @@ export const Description = (props: DescProps) => {
 
 export const Divider = () => <View style={styles.div} />;
 
-export const mockData = {
-  id: '1',
-  statusValue: 'created',
-  statusLabel: 'Diproses',
-  orderSellerCode: 'S01000342004314',
-  orderedAt: '2022-03-10T03:16:19.401Z',
-  orderOrigin: 'DC TANGERANG',
-  orderDestionation: 'Jl. Nangka',
-  estimationDeliveredAt: '2022-03-13T03:16:19.401Z',
-  products: [
-    {
-      id: '623150a5a52e77965f1f4520',
-      image: 'https://picsum.photos/200/300',
-      name: 'SGM Ananda 1',
-      qty: '4',
-      uom: 'pcs',
-      price: 50000,
-      totalPrice: 200000,
-    },
-    {
-      id: '623150a5a52e77965f1f4521',
-      image: 'https://picsum.photos/200/300',
-      name: 'SGM Ananda 2',
-      qty: '10',
-      uom: 'pcs',
-      price: 70000,
-      totalPrice: 700000,
-    },
-    {
-      id: '623150a5a52e77965f1f4522',
-      image: 'https://picsum.photos/200/300',
-      name: 'SGM Ananda 3',
-      qty: '2',
-      uom: 'pcs',
-      price: 100000,
-      totalPrice: 200000,
-    },
-  ],
-  totalOrderProducts: 3,
-  paymentMethodName: 'BCA Virtual Account',
-  totalProductsPrice: 100000,
-  totalOrderPrice: 100000,
-  isCancellable: false,
-  isOrderAbleToDone: true,
-};
-
 const styles = StyleSheet.create({
   divHeader: {
     backgroundColor: color.black10,

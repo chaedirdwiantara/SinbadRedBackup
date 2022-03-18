@@ -41,7 +41,14 @@ const { width: W } = Dimensions.get('screen');
 const Card: FC<CardProps> = (props) => {
   const { data, onCancelOrder, onConFirmOrder } = props;
   return (
-    <Pressable style={styles.card} android_ripple={{ color: color.black40 }}>
+    <Pressable
+      style={styles.card}
+      android_ripple={{ color: color.black40 }}
+      onPress={() =>
+        NavigationAction.navigate('OrderHistoryDetailView', {
+          id: data.id,
+        })
+      }>
       <View style={{ margin: 16 }}>
         {/* title */}
         <View style={styles.title}>
@@ -66,9 +73,9 @@ const Card: FC<CardProps> = (props) => {
               </SnbText.C1>
             </View>
           </View>
-          {data.totalOrderProducts - 1 > 0 && (
+          {data.totalOrderProducts > 0 && (
             <SnbText.C1 color={color.black60} align="center">
-              + {data.totalOrderProducts - 1} produk lainnya
+              + {data.totalOrderProducts} produk lainnya
             </SnbText.C1>
           )}
           <View style={styles.div} />
@@ -117,8 +124,8 @@ const EmptyImage = () => (
 );
 
 const wordingEmpty = (keyword: string): string => {
-  if (keyword) return 'Pencarian tidak ditemukan';
-  return 'Tidak ada pesanan';
+  if (keyword) return 'Pesanan tidak ditemukan';
+  return 'Belum ada pesanan';
 };
 
 const ListCard = () => {
@@ -152,22 +159,13 @@ const ListCard = () => {
 
   // render list waiting paymment
   if (state.status === 'waiting_for_payment') {
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          NavigationAction.navigate('OrderHistoryDetailView', {
-            id: 'product_id_random',
-          })
-        }>
-        <SnbText.B2>Waiting Payment</SnbText.B2>
-      </TouchableOpacity>
-    );
+    return <SnbText.B2>Waiting Payment</SnbText.B2>;
   }
   // render order history list
   return (
     <>
       <FlatList
-        contentContainerStyle={{ paddingBottom: 50 }}
+        contentContainerStyle={styles.contentContainerStyle}
         data={historyListData}
         keyExtractor={(i) => i.id}
         renderItem={({ item }) => (
@@ -238,6 +236,7 @@ const styles = StyleSheet.create({
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { flexDirection: 'row-reverse', marginTop: 8 },
+  contentContainerStyle: { paddingBottom: 50, paddingTop: 30 },
 });
 
 export default memo(ListCard);

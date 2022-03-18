@@ -1,15 +1,18 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import {
   SnbText,
   color,
   SnbImageCompressor,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Header, Divider, mockData } from './information';
+import { Header, Divider } from './information';
+import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
+import { Products } from '@model/order-history/detail-history.model';
 
 type CardProps = {
-  data: typeof mockData.products[0];
+  data: Products;
 };
 
 const Card: FC<CardProps> = (props) => {
@@ -48,19 +51,38 @@ const Card: FC<CardProps> = (props) => {
 
 const ListProductOrder = () => {
   const [showMore, setShowMore] = useState(false);
-  const [fristProduct, ...listProduct] = mockData.products;
+
+  const {
+    stateOrderHistory: {
+      detail: { loading, data },
+    },
+  } = useOrderHistoryContext();
+
+  const [fristProduct, ...listProduct] = useMemo(
+    () => data?.products || [],
+    [data?.products],
+  );
+  if (loading)
+    return (
+      <SkeletonAnimator>
+        <View style={styles.skeleton} />
+      </SkeletonAnimator>
+    );
+
   return (
     <>
       <View style={styles.main}>
         <Header title="Daftar Produk" />
-        <Card data={fristProduct} />
+        {fristProduct && <Card data={fristProduct} />}
         {showMore && listProduct.map((i) => <Card key={i.id} data={i} />)}
-        <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
-          <SnbText.B3 color={color.blue60} align="center">
-            {showMore ? 'Sembunyikan' : 'Tampilkan'}{' '}
-            {mockData.totalOrderProducts - 1} produk lainnya
-          </SnbText.B3>
-        </TouchableOpacity>
+        {data?.totalOrderProducts && (
+          <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
+            <SnbText.B3 color={color.blue60} align="center">
+              {showMore ? 'Sembunyikan' : 'Tampilkan'} {data.totalOrderProducts}{' '}
+              produk lainnya
+            </SnbText.B3>
+          </TouchableOpacity>
+        )}
       </View>
       <Divider />
     </>
@@ -109,6 +131,11 @@ const styles = StyleSheet.create({
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { flexDirection: 'row-reverse', marginTop: 8 },
+  skeleton: {
+    flex: 1,
+    height: 300,
+    marginBottom: 10,
+  },
 });
 
 export default ListProductOrder;

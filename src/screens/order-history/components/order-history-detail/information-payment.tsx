@@ -1,23 +1,39 @@
 import React from 'react';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { View, StyleSheet } from 'react-native';
-import { Description, Header, mockData } from './information';
+import { Description, Header } from './information';
+import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 
 const InformationPayment = () => {
+  const {
+    stateOrderHistory: {
+      detail: { loading, data },
+    },
+  } = useOrderHistoryContext();
+
+  if (loading)
+    return (
+      <SkeletonAnimator>
+        <View style={styles.skeleton} />
+      </SkeletonAnimator>
+    );
   return (
     <View style={styles.main}>
       <Header title="Informasi Pembayaran" />
       <Description
         title="Metode Pembayaran"
-        value={mockData.paymentMethodName}
+        value={data?.paymentMethodName || ''}
       />
       <Description
-        title={`Total Harga (${mockData.totalOrderProducts} Barang)`}
-        value={toCurrency(mockData.totalProductsPrice, { withFraction: false })}
+        title={`Total Harga (${data?.totalOrderProducts || ''} Barang)`}
+        value={toCurrency(data?.totalProductsPrice || 0, {
+          withFraction: false,
+        })}
       />
       <Description
         title="Total Belanja"
-        value={toCurrency(mockData.totalOrderPrice, { withFraction: false })}
+        value={toCurrency(data?.totalOrderPrice || 0, { withFraction: false })}
       />
     </View>
   );
@@ -25,6 +41,11 @@ const InformationPayment = () => {
 
 const styles = StyleSheet.create({
   main: { margin: 16 },
+  skeleton: {
+    flex: 1,
+    height: 80,
+    marginBottom: 10,
+  },
 });
 
 export default InformationPayment;

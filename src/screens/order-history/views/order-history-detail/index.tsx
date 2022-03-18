@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 import {
@@ -11,8 +11,14 @@ import {
 } from '@screen/order-history/components/order-history-detail';
 //function
 import { NavigationAction } from '@core/functions/navigation';
+import { useDetailHistoryOrder } from '../../functions/history-detail';
 
 const OrderHistoryDetail = () => {
+  const { get } = useDetailHistoryOrder();
+  // get detail data history
+  useEffect(() => {
+    get();
+  }, []);
   return (
     <SnbContainer color="white">
       <SnbTopNav.Type3
