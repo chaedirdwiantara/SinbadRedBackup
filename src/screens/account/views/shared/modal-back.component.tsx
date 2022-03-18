@@ -30,7 +30,7 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
         <View style={{ marginVertical: 16, marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center' }}>
             <SnbText.B1 color={colors.black60} align="center">
-              Jangan khawatir, data yang Anda masukkan otomatis tersimpan
+              Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan
             </SnbText.B1>
           </View>
         </View>
