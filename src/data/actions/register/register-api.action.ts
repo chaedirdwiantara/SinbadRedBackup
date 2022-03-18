@@ -140,6 +140,10 @@ export const checkPhoneV2Failed = (
   };
 };
 
+export const checkPhoneV2Reset = () => {
+  return { type: types.CHECK_PHONE_V2_RESET };
+};
+
 // CHECK AUTO LOGIN AFTER REGISTER
 export const checkAutoLoginProcess = (
   data: models.ICheckAutoLoginProcess,

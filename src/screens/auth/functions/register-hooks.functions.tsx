@@ -40,6 +40,9 @@ export const useCheckPhoneV2 = () => {
     resetCheckPhone: () => {
       dispatch(Actions.resetCheckPhoneNoAvailability());
     },
+    checkPhoneV2Reset: () => {
+      dispatch(Actions.checkPhoneV2Reset());
+    },
     checkPhoneV2,
   };
 };
