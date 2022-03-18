@@ -44,7 +44,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const { dispatchThankYouPage } = useThankYouPageContext();
   /** => Hooks */
-  const [backHandler, setBackHandler] = useState(null); //handle selected method
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
     useState<models.PaymentMethod | null>(null);
