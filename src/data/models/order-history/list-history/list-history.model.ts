@@ -18,7 +18,7 @@ export type OrderListHistory = {
   totalOrderPrice: number;
   orderedAt: string;
   isCancellable: boolean;
-  isOrderDone: boolean;
+  isOrderAbleToDone: boolean;
 };
 
 export interface OrderListHistoryQueryOptions {
