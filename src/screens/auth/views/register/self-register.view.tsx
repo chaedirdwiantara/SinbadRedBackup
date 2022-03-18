@@ -17,7 +17,7 @@ import RNOtpVerify from 'react-native-otp-verify';
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
   const phone = useInputPhone();
-  const { checkPhone, resetCheckPhone, checkPhoneV2 } = useCheckPhoneV2();
+  const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } = useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
 
   React.useEffect(() => {
@@ -25,6 +25,7 @@ const SelfRegisterView: React.FC = () => {
       if (checkPhoneV2.data.isAvailable) {
         phone.clearText();
         resetCheckPhone();
+        checkPhoneV2Reset();
         navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
       } else {
         phone.setMessageError('Nomor telah terdaftar');
