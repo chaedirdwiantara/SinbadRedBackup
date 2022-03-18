@@ -23,6 +23,7 @@ export interface orderDetailHistory {
   estimationShippedAt?: string;
   shippedAt?: string;
   cancelledAt?: string;
+  doneAt?: string;
   products: Array<Products>;
   totalOrderProducts: number;
   paymentMethodName: string;
