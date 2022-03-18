@@ -192,8 +192,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     clearTimeout(timer);
     goBack();
   };
-
-  /** => Back handler */
   useCustomBackHardware(() => handleBackHardware());
 
   return (
@@ -202,8 +200,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         <>
           <PaymentMethodHeader
             backAction={() => {
-              clearTimeout(timer);
-              goToCheckout();
+              handleBackHardware();
             }}
           />
           <LoadingPage />
@@ -218,7 +215,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           {/* HEADER */}
           <PaymentMethodHeader
             backAction={() => {
-              goToCheckout();
+              handleBackHardware();
             }}
           />
           {/* BODY */}
