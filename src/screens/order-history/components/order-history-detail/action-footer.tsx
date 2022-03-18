@@ -23,10 +23,15 @@ const ActionFooter = () => {
   }, [data?.isCancellable, data?.isOrderAbleToDone]);
 
   const onOpenWhatsapp = useCallback(() => {
-    Linking.openURL('whatsapp://send?phone=+6282260106010').catch((err) =>
-      err ? Linking.openURL('market://details?id=com.whatsapp') : null,
+    const text = `
+    saya butuh bantuan
+    nomor pesanan : ${data?.orderSellerCode || ''}
+    `;
+    Linking.openURL(`whatsapp://send?phone=+6282260106010&text=${text}`).catch(
+      (err) =>
+        err ? Linking.openURL('market://details?id=com.whatsapp') : null,
     );
-  }, []);
+  }, [data?.orderSellerCode]);
 
   if (loading) return <View />;
 
@@ -35,12 +40,14 @@ const ActionFooter = () => {
       <TouchableOpacity onPress={onOpenWhatsapp}>
         <SnbText.B2 color={color.blue60}>Butuh Bantuan?</SnbText.B2>
       </TouchableOpacity>
-      {(data?.isCancellable || data?.isOrderAbleToDone) && (
+      {data?.isCancellable || data?.isOrderAbleToDone ? (
         <TouchableOpacity style={styles.button} onPress={onPressAction}>
           <SnbText.B3 color={color.white}>
             {data?.isCancellable ? 'Batalkan' : 'Pesanan Diterima'}
           </SnbText.B3>
         </TouchableOpacity>
+      ) : (
+        <View />
       )}
     </View>
   );

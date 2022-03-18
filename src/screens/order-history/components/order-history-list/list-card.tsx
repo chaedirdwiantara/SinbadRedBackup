@@ -98,16 +98,20 @@ const Card: FC<CardProps> = (props) => {
         {/* action */}
         <View style={styles.buttonContainer}>
           {/* if process */}
-          {data.isCancellable && (
+          {data.isCancellable ? (
             <TouchableOpacity style={styles.cancel} onPress={onCancelOrder}>
               <SnbText.C1 color={color.white}>Batalkan</SnbText.C1>
             </TouchableOpacity>
+          ) : (
+            <View />
           )}
           {/* if delivered */}
-          {data.isOrderDone && (
+          {data.isOrderAbleToDone ? (
             <TouchableOpacity style={styles.delivered} onPress={onConFirmOrder}>
               <SnbText.C1 color={color.white}>Pesanan Diterima</SnbText.C1>
             </TouchableOpacity>
+          ) : (
+            <View />
           )}
         </View>
       </View>
@@ -214,6 +218,7 @@ const styles = StyleSheet.create({
   },
   descProduct: {
     marginLeft: 16,
+    width: '70%',
     justifyContent: 'center',
   },
   div: {

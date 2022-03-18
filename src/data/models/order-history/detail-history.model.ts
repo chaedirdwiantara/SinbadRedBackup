@@ -19,7 +19,10 @@ export interface orderDetailHistory {
   orderedAt: string;
   orderOrigin: string;
   orderDestionation: string;
-  estimationDeliveredAt: string;
+  estimationDeliveredAt?: string;
+  estimationShippedAt?: string;
+  shippedAt?: string;
+  cancelledAt?: string;
   products: Array<Products>;
   totalOrderProducts: number;
   paymentMethodName: string;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import moment from 'moment';
 import { View, StyleSheet } from 'react-native';
 import { Description, Header, Divider } from './information';
@@ -11,6 +11,36 @@ const InformationDelivery = () => {
       detail: { loading, data },
     },
   } = useOrderHistoryContext();
+
+  const titleDateShipment = useMemo(() => {
+    const title: { [key: string]: string } = {
+      created: 'Estimasi Tanggal Pengiriman',
+      packed: 'Estimasi Tanggal Pengiriman',
+
+      shipped: 'Tanggal Pengiriman',
+      delivered: 'Tanggal Pengiriman',
+      done: 'Tanggal Pengiriman',
+
+      cancelled: 'Tanggal Pembatalan',
+      delivery_failed: 'Tanggal Pembatalan',
+    };
+    return title[data?.statusValue || 'created'];
+  }, [data?.statusValue]);
+
+  const dateShipment = useMemo(() => {
+    const date: { [key: string]: string | undefined } = {
+      created: data?.estimationDeliveredAt,
+      packed: data?.estimationShippedAt,
+
+      shipped: data?.shippedAt,
+      delivered: data?.shippedAt,
+      done: data?.shippedAt,
+
+      cancelled: data?.cancelledAt,
+      delivery_failed: data?.shippedAt,
+    };
+    return date[data?.statusValue || 'created'];
+  }, [data?.statusValue, data?.estimationDeliveredAt]);
 
   if (loading)
     return (
@@ -28,10 +58,8 @@ const InformationDelivery = () => {
         />
         <Description title="Dikirim Dari" value={data?.orderOrigin || ''} />
         <Description
-          title="Estimasi Pengiriman"
-          value={moment(data?.estimationDeliveredAt || '').format(
-            'DD MMM YYYY',
-          )}
+          title={titleDateShipment}
+          value={moment(dateShipment || '').format('DD MMM YYYY')}
         />
       </View>
       <Divider />

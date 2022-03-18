@@ -73,15 +73,21 @@ const ListProductOrder = () => {
     <>
       <View style={styles.main}>
         <Header title="Daftar Produk" />
-        {fristProduct && <Card data={fristProduct} />}
-        {showMore && listProduct.map((i) => <Card key={i.id} data={i} />)}
-        {data?.totalOrderProducts && (
+        {fristProduct ? <Card data={fristProduct} /> : <View />}
+        {showMore ? (
+          listProduct.map((i) => <Card key={i.id} data={i} />)
+        ) : (
+          <View />
+        )}
+        {data?.totalOrderProducts ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
             <SnbText.B3 color={color.blue60} align="center">
-              {showMore ? 'Sembunyikan' : 'Tampilkan'} {data.totalOrderProducts}{' '}
+              {showMore ? 'Sembunyikan' : 'Lihat'} {data.totalOrderProducts}{' '}
               produk lainnya
             </SnbText.B3>
           </TouchableOpacity>
+        ) : (
+          <View />
         )}
       </View>
       <Divider />
@@ -110,6 +116,7 @@ const styles = StyleSheet.create({
   descProduct: {
     marginLeft: 16,
     justifyContent: 'center',
+    width: '70%',
   },
   div: {
     height: 1,

@@ -47,12 +47,14 @@ const StatusOrder = () => {
             </TouchableOpacity>
           </View>
         </View>
-        {data?.orderSellerFailedReason && (
+        {data?.orderSellerFailedReason ? (
           <View style={styles.reason}>
             <SnbText.C1 color={color.red70}>
               {data?.orderSellerFailedReason}
             </SnbText.C1>
           </View>
+        ) : (
+          <View />
         )}
       </View>
       <Divider />
