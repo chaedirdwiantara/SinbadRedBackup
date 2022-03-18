@@ -16,13 +16,13 @@ export const useInitialGetList = () => {
     // get & reload by filter
     const { keyword, orderStatus, status } = state;
     if (status === 'waiting_for_payment') {
-      reset(dispatchOrderHistory);
-      // fetch(dispatchOrderHistory, 
-      //   { 
-      //     orderStatus: '', 
-      //     status, 
-      //     keyword: '' 
-      //   });
+      // reset(dispatchOrderHistory);
+      fetch(dispatchOrderHistory, 
+        { 
+          orderStatus: '', 
+          status, 
+          keyword: '' 
+        });
     } else {
       fetch(dispatchOrderHistory, { orderStatus, status, keyword });
     }
