@@ -23,7 +23,10 @@ import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
 import { LoadingPage } from '@core/components/Loading';
-import { useThankYouPageCancelOrderAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import {
+  useThankYouPageAction,
+  useThankYouPageCancelOrderAction,
+} from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 import { goBack } from '@screen/quest/function';
@@ -42,7 +45,21 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
-  const { dispatchThankYouPage } = useThankYouPageContext();
+  const thankYouPageAction = useThankYouPageAction();
+  const {
+    stateThankYouPage: {
+      detail: {
+        data: thankYouPageData,
+        loading: thankYouPageLoading,
+        // error: thankYouPageError,
+      },
+      paymentGuide: {
+        data: thankYouPagePaymentGuidelistData,
+        loading: thankYouPagePaymentGuideListLoading,
+      },
+    },
+    dispatchThankYouPage,
+  } = useThankYouPageContext();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
@@ -50,6 +67,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
   const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
   const [isErrorSession, setErrorSession] = useState(false); //handle error modal
+  const [getOrderStatus, setGetOrderStatus] = useState(false); //handle order status
   const [isLoading, setLoading] = useState(false);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
@@ -102,11 +120,39 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }, []),
   );
 
-  /** => call navigation to thankyou page */
+  /** try to get status payment from order detail when there's no update from rtdb*/
+  const handleStatusPayment = () => {
+    thankYouPageAction.thankYoupageOrderDetail(
+      dispatchThankYouPage,
+      dataOrder?.id,
+    );
+    setGetOrderStatus(true);
+  };
+
+  /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
+  React.useEffect(() => {
+    if (getOrderStatus == true) {
+      if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
+        clearTimeout(timer);
+        goToThankYouPage('payment', Number(dataOrder?.id));
+      } else {
+        // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+        //   id: params.orderId,
+        //   status: 'cancelled',
+        // });
+        handleErrorStatus();
+      }
+    }
+  }, [getOrderStatus]);
+
+  /** => call navigation to thankyou page when there's an update from rtdb*/
   useFocusEffect(
     React.useCallback(() => {
       if (statePaymentMethod.subOrderRtdb.data == true) {
+        clearTimeout(timer);
         goToThankYouPage('payment', Number(dataOrder?.id));
+      } else {
+        handleStatusPayment();
       }
     }, []),
   );
@@ -115,11 +161,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   React.useEffect(() => {
     if (isLoading == true) {
       setTimeout(() => {
-        // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
-        //   id: params.orderId,
-        //   status: 'cancelled',
-        // });
-        handleErrorStatus();
+        handleStatusPayment();
       }, 5000);
     }
   }, [isLoading]);
