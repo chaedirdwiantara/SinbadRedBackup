@@ -5,14 +5,14 @@ import * as Actions from '@actions';
 const callListProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
-  skip: number,
-  limit: number,
+  page: number,
+  perPage: number,
   queryOptions: models.PaymentMethodProps,
 ) => {
   return Actions.paymentMethodListProcess(contextDispatch, {
     loading,
-    skip,
-    limit,
+    page,
+    perPage,
     ...queryOptions,
   });
 };
@@ -27,7 +27,7 @@ const usePaymentMethodListContent = () => {
     ) => {
       contextDispatch(Actions.paymentMethodListReset());
       dispatch(
-        callListProcessAction(contextDispatch, true, 0, 10, queryOptions),
+        callListProcessAction(contextDispatch, true, 1, 10, queryOptions),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -57,7 +57,6 @@ const usePaymentMethodCreateOrder = () => {
 /** => get payment method list content */
 const usePaymentMethodSubRtdb = () => {
   const dispatch = useDispatch();
-  // console.log('MASUK FUNCTION');
 
   return {
     fetch: (contextDispatch: (action: any) => any, data: string) => {

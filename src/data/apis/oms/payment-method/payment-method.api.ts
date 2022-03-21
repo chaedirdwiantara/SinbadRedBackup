@@ -11,7 +11,7 @@ import database from '@react-native-firebase/database';
 const paymentMethodListApi = (
   payload: models.ListProcessProps<models.PaymentMethodProps>,
 ) => {
-  const path = `payment-method-types?skip=${payload.skip}&limit=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
+  const path = `payment-method-types?page=${payload.skip}&perPage=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
   return apiMapping<models.PaymentMethodList>(
     'auth',
     path,

@@ -3,14 +3,14 @@ import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 /** === FUNCTION === */
-const thankYouPageOrderDetail = (id : string) => {
+const thankYouPageOrderDetail = (id: string) => {
   const path = `orders/${id}`;
   return apiMapping<models.ThankYouOrderDetailProps>(
     'auth',
     path,
     'buyer-order',
     'v1',
-    'DETAIL'
+    'DETAIL',
   );
 };
 /** === MOCK API === */
@@ -55,7 +55,9 @@ const thankYouPagePaymentGuideList = (
 // }
 
 //* === CANCEL ORDER ==== */
-const thankYouPageCancelOrder = (data: models.UpdateProcessProps<models.CancelOrderPayload>) => {
+const thankYouPageCancelOrder = (
+  data: models.UpdateProcessProps<models.CancelOrderPayload>,
+) => {
   const path = `orders/${data.data.id}`;
   return apiMapping<models.CancelOrderResponse>(
     'auth',
@@ -64,13 +66,13 @@ const thankYouPageCancelOrder = (data: models.UpdateProcessProps<models.CancelOr
     'v1',
     'UPDATE',
     {
-      status: data.data.status
+      status: data.data.status,
     },
-  )
-}
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const ThankYouPageApi = {
   thankYouPageOrderDetail,
   thankYouPagePaymentGuideList,
-  thankYouPageCancelOrder
+  thankYouPageCancelOrder,
 };

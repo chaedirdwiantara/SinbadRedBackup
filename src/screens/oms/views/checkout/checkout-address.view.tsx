@@ -3,10 +3,11 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
+import * as models from '@models';
 
 export interface CheckoutAddressProps {
   buyerName: string;
-  buyerAddress: {};
+  buyerAddress: models.CheckoutAddressDetail;
 }
 
 /** === COMPONENT === */
@@ -22,8 +23,11 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
         <SnbText.B2>{buyerName}</SnbText.B2>
       </View>
       <SnbText.B3 color={color.black60}>
-        {buyerAddress?.address}, {buyerAddress?.urban}, {buyerAddress?.district}
-        , {buyerAddress?.city}, {buyerAddress?.province}
+        {buyerAddress?.address}
+        {buyerAddress?.urban ? `,` : null} {buyerAddress?.urban}
+        {buyerAddress?.district ? `,` : null} {buyerAddress?.district}
+        {buyerAddress?.city ? `,` : null} {buyerAddress?.city}
+        {buyerAddress?.province ? `,` : null} {buyerAddress?.province}
       </SnbText.B3>
       <SnbText.B3 color={color.black60}>{buyerAddress?.zipCode}</SnbText.B3>
     </View>

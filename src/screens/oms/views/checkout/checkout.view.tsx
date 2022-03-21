@@ -40,6 +40,7 @@ const OmsCheckoutView: FC = () => {
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
+
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
   const totalQtyCheckout = totalQty(data?.sellers);
 
