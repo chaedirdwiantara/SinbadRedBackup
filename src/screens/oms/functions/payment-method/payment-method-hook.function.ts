@@ -5,11 +5,13 @@ import * as Actions from '@actions';
 const callListProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
+  page: number,
   perPage: number,
   queryOptions: models.PaymentMethodProps,
 ) => {
   return Actions.paymentMethodListProcess(contextDispatch, {
     loading,
+    page,
     perPage,
     ...queryOptions,
   });
@@ -24,7 +26,9 @@ const usePaymentMethodListContent = () => {
       queryOptions: models.ListProcessProps<models.PaymentMethodProps>,
     ) => {
       contextDispatch(Actions.paymentMethodListReset());
-      dispatch(callListProcessAction(contextDispatch, true, 1, queryOptions));
+      dispatch(
+        callListProcessAction(contextDispatch, true, 1, 10, queryOptions),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.paymentMethodListReset());

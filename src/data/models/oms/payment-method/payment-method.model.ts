@@ -70,7 +70,7 @@ export interface PaymentMethodChoosen {
   serviceFeeNonDeduct: number;
   displayLabel: string;
   isServiceFeeFree: boolean;
-  iconURL: string;
+  iconUrl: string;
 }
 export interface PaymentMethodProducts {
   productId: string;

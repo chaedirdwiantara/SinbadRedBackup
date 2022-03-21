@@ -221,7 +221,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
               selectedPaymentMethodData.isServiceFeeFree,
             ),
             displayLabel: selectedPaymentMethodData.displayLabel,
-            iconURL: selectedPaymentMethodData.iconURL,
+            iconUrl: selectedPaymentMethodData.iconUrl,
           },
         };
         paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
