@@ -22,7 +22,7 @@ const InformationDelivery = () => {
       done: 'Tanggal Pengiriman',
 
       cancelled: 'Tanggal Pembatalan',
-      delivery_failed: 'Tanggal Pembatalan',
+      delivery_failed: 'Tanggal Pengiriman',
     };
     return title[data?.statusValue || 'created'];
   }, [data?.statusValue]);
@@ -37,7 +37,7 @@ const InformationDelivery = () => {
       done: data?.shippedAt,
 
       cancelled: data?.cancelledAt,
-      delivery_failed: data?.cancelledAt,
+      delivery_failed: data?.shippedAt,
     };
     return date[data?.statusValue || 'created'];
   }, [
