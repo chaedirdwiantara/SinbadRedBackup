@@ -231,7 +231,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => back handler */
   const handleBackHardware = () => {
-    clearTimeout(timer);
     goBack();
   };
   useCustomBackHardware(() => handleBackHardware());
