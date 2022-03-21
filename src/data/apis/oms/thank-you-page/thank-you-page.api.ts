@@ -3,28 +3,28 @@ import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
 /** === FUNCTION === */
-// const thankYouPageOrderDetail = (id : string) => {
-//   const path = `orders/${id}`;
-//   return apiMapping<models.ThankYouOrderDetailProps>(
-//     'auth',
-//     path,
-//     'order',
-//     'v1',
-//     'DETAIL'
-//   );
-// };
-/** === MOCK API === */
-const thankYouPageOrderDetail = (data: models.DetailProcessProps) => {
-  const mockHost = "http://d03a91a4-20a4-4a03-a368-340d3e36437c.mock.pstmn.io"
-  const path = `orders/${data.id}`;
-  return apiMappingMock<models.ThankYouOrderDetailProps>(
-    mockHost,
+const thankYouPageOrderDetail = (id : string) => {
+  const path = `orders/${id}`;
+  return apiMapping<models.ThankYouOrderDetailProps>(
+    'auth',
     path,
-    'order',//not used in apiMock but must filled
+    'buyer-order',
     'v1',
     'DETAIL'
-  )
-}
+  );
+};
+/** === MOCK API === */
+// const thankYouPageOrderDetail = (data: models.DetailProcessProps) => {
+//   const mockHost = "http://d03a91a4-20a4-4a03-a368-340d3e36437c.mock.pstmn.io"
+//   const path = `orders/${data.id}`;
+//   return apiMappingMock<models.ThankYouOrderDetailProps>(
+//     mockHost,
+//     path,
+//     'order',//not used in apiMock but must filled
+//     'v1',
+//     'DETAIL'
+//   )
+// }
 
 /** === FUNCTION PAYMENT GUIDE LIST === */
 const thankYouPagePaymentGuideList = (
