@@ -23,6 +23,7 @@ const ConfirmationTime: FC<Props> = (props) => {
 
   const timeTicking = useCallback(() => {
     ticking.current = setInterval(() => {
+      // setup time
       const timeNow = new Date().getTime();
       const diff = doneAt - timeNow;
       const duration = moment.duration(diff, 'milliseconds');
@@ -31,12 +32,19 @@ const ConfirmationTime: FC<Props> = (props) => {
       const hh = joinZero(duration.hours());
       const mm = joinZero(duration.minutes());
 
+      if (isNaN(seconds)) {
+        setTime(`${hh}:${mm}:${ss}`);
+        clearInterval(ticking.current);
+        return void 0;
+      }
+      // if time is over, stop interval
       if (Number(seconds) <= 0) {
         clearInterval(ticking.current);
         setTime('00:00:00');
-      } else {
-        setTime(`${hh}:${mm}:${ss}`);
+        return void 0;
       }
+
+      setTime(`${hh}:${mm}:${ss}`);
     }, 1000);
   }, []);
 
