@@ -140,7 +140,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       } else {
         thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
           id: params?.orderId,
-          status: 'cancelled',
+          status: 'created_timeout',
         });
         handleErrorStatus();
       }
