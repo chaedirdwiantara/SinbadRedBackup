@@ -720,11 +720,10 @@ const useCartLocalData = () => {
 
               let updatedQty: number = qty;
 
-              /** ==> TBD Monday w/ Ryan */
               if (thisProduct.multipleQty > 1) {
-                const isStockAvailable =
+                const isStockValid =
                   (qty - thisProduct.minQty) % thisProduct.multipleQty === 0;
-                if (isStockAvailable) {
+                if (isStockValid) {
                   updatedQty = qty;
                 } else {
                   const modValue =
