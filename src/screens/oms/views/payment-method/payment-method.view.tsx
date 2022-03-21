@@ -7,7 +7,7 @@ import { useFocusEffect } from '@react-navigation/native';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { PaymentMethodHeader } from './payment-method-header.view';
 import { PaymentMethodBottom } from './payment-method-bottom.view';
-import { goToCheckout } from '@screen/oms/functions';
+import { goToCheckout, goToThankYouPage } from '@screen/oms/functions';
 import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
 import {
   usePaymentMethodListContent,
@@ -23,6 +23,10 @@ import { PaymentStatusModal } from './payment-method-payment-status.modal.view';
 import PaymentMethodErrorModal from './payment-method-error-modal.view';
 import * as models from '@models';
 import { LoadingPage } from '@core/components/Loading';
+import { useThankYouPageCancelOrderAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import { goBack } from '@screen/quest/function';
 
 interface PaymentMethodInterface {
   props: {};
@@ -37,6 +41,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
+  const { dispatchThankYouPage } = useThankYouPageContext();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
@@ -100,7 +106,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (statePaymentMethod.subOrderRtdb.data == true) {
-        //TO THANK YOU PAGE
+        goToThankYouPage('payment', Number(dataOrder?.id));
       }
     }, []),
   );
@@ -109,6 +115,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   React.useEffect(() => {
     if (isLoading == true) {
       setTimeout(() => {
+        // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+        //   id: params.orderId,
+        //   status: 'cancelled',
+        // });
         handleErrorStatus();
       }, 5000);
     }
@@ -177,13 +187,20 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   };
 
+  /** => back handler */
+  const handleBackHardware = () => {
+    clearTimeout(timer);
+    goBack();
+  };
+  useCustomBackHardware(() => handleBackHardware());
+
   return (
     <SnbContainer color="grey">
       {isLoading ? (
         <>
           <PaymentMethodHeader
             backAction={() => {
-              goToCheckout();
+              handleBackHardware();
             }}
           />
           <LoadingPage />
@@ -198,7 +215,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           {/* HEADER */}
           <PaymentMethodHeader
             backAction={() => {
-              goToCheckout();
+              handleBackHardware();
             }}
           />
           {/* BODY */}
