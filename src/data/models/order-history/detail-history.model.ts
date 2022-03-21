@@ -18,7 +18,7 @@ export interface orderDetailHistory {
   orderSellerCode: string;
   orderedAt: string;
   orderOrigin: string;
-  orderDestionation: string;
+  orderDestination: string;
   estimationDeliveredAt?: string;
   estimationShippedAt?: string;
   shippedAt?: string;
