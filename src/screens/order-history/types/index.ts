@@ -5,4 +5,5 @@ export const labelStatus: {
   created: 'warning',
   packed: 'information',
   shipped: 'information',
+  done: 'success',
 };
