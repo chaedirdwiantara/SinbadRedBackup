@@ -29,7 +29,7 @@ const InformationDelivery = () => {
 
   const dateShipment = useMemo(() => {
     const date: { [key: string]: string | undefined } = {
-      created: data?.estimationDeliveredAt,
+      created: data?.estimationShippedAt,
       packed: data?.estimationShippedAt,
 
       shipped: data?.shippedAt,
@@ -37,10 +37,15 @@ const InformationDelivery = () => {
       done: data?.shippedAt,
 
       cancelled: data?.cancelledAt,
-      delivery_failed: data?.shippedAt,
+      delivery_failed: data?.cancelledAt,
     };
     return date[data?.statusValue || 'created'];
-  }, [data?.statusValue, data?.estimationDeliveredAt]);
+  }, [
+    data?.statusValue,
+    data?.estimationShippedAt,
+    data?.shippedAt,
+    data?.cancelledAt,
+  ]);
 
   if (loading)
     return (
@@ -54,7 +59,7 @@ const InformationDelivery = () => {
         <Header title="Informasi Pengiriman" />
         <Description
           title="Alamat Pengiriman"
-          value={data?.orderDestionation || ''}
+          value={data?.orderDestination || ''}
         />
         <Description title="Dikirim Dari" value={data?.orderOrigin || ''} />
         <Description
