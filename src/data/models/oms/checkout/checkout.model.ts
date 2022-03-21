@@ -73,3 +73,12 @@ export interface CheckoutPriceRules {
   maxQty: number;
   price: number;
 }
+
+export interface CheckoutAddressDetail {
+  address: string;
+  urban: string;
+  district: string;
+  city: string;
+  province: string;
+  zipCode: string;
+}
