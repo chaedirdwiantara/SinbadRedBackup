@@ -122,11 +122,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** try to get status payment from order detail when there's no update from rtdb*/
   const handleStatusPayment = () => {
-    thankYouPageAction.thankYoupageOrderDetail(
-      dispatchThankYouPage,
-      dataOrder?.id,
-    );
-    setGetOrderStatus(true);
+    if (statePaymentMethod.subOrderRtdb.data !== true) {
+      thankYouPageAction.thankYoupageOrderDetail(
+        dispatchThankYouPage,
+        dataOrder?.id,
+      );
+      setGetOrderStatus(true);
+    }
   };
 
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
@@ -151,8 +153,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       if (statePaymentMethod.subOrderRtdb.data == true) {
         clearTimeout(timer);
         goToThankYouPage('payment', Number(dataOrder?.id));
-      } else {
-        handleStatusPayment();
       }
     }, []),
   );
