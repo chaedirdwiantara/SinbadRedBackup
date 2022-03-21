@@ -41,7 +41,7 @@ const StatusOrder = () => {
               style={styles.button}
               onPress={() =>
                 NavigationAction.navigate('HistoryTrackingView', {
-                  id: 'some_id_tracking',
+                  id: data?.id,
                 })
               }>
               <SnbText.B2 color={color.red70}>Lacak</SnbText.B2>

@@ -9,7 +9,7 @@ import * as types from '@types';
 import { NavigationAction } from '@core/functions/navigation';
 /** === FUNCTIONS === */
 
-/** History List */
+/** Get History List */
 function* OrderHistoryList(action: models.ListProcessV3Action) {
   try {
     const response: models.ListSuccessV3Props<Array<models.OrderListHistory>> =
@@ -31,7 +31,7 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
     );
   }
 }
-/** History List */
+/** Get History Detail */
 function* OrderHistoryDetail(action: models.DetailProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.orderDetailHistory> =
@@ -59,11 +59,47 @@ function* OrderHistoryDetail(action: models.DetailProcessAction) {
     NavigationAction.back();
   }
 }
+/** Get History Tracking Detail */
+function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.orderTrackingDetailHistory> =
+      yield call(() => {
+        return OrderHistoryApi.getOrderHistoryTrackingDetail(
+          action.payload as models.OrderHistoryTrackingDetailProcessProps,
+        );
+      });
+
+    yield action.contextDispatch(
+      ActionCreators.orderHistoryTrackingDetailSuccess(response),
+    );
+
+    yield put(ActionCreators.orderHistoryTrackingDetailSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.orderHistoryTrackingDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    yield put(
+      ActionCreators.orderHistoryTrackingDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    SnbToast.show(error.message, 3000, { positionValue: 50 });
+    NavigationAction.back();
+  }
+}
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
   yield takeLatest(types.ORDER_HISTORY_DETAIL_PROCESS, OrderHistoryDetail);
+  yield takeLatest(
+    types.ORDER_HISTORY_TRACKING_DETAIL_PROCESS,
+    OrderHistoryTrackingDetail,
+  );
 }
 
 export default OrderHistorySaga;

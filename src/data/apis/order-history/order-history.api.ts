@@ -7,6 +7,7 @@ import * as models from '@models';
 const historyOrderPath = 'order-histories';
 
 /** === FUNCTIONS === */
+// get order history list
 export const getOrderHistoryList = (
   payload: models.OrderListHistoryProcessProps,
 ) => {
@@ -26,11 +27,21 @@ export const getOrderHistoryList = (
     'LIST',
   );
 };
-
+// get detail order history
 export const getOrderHistoryDetail = ({ id }: { id: string }) => {
   return apiMappingV3<Array<models.OrderListHistory>>(
     'auth',
     `${historyOrderPath}/${id}`,
+    'buyer-order',
+    'v1',
+    'DETAIL',
+  );
+};
+// get detail tracking order history
+export const getOrderHistoryTrackingDetail = ({ id }: { id: string }) => {
+  return apiMappingV3<Array<models.orderTrackingDetailHistory>>(
+    'auth',
+    `${historyOrderPath}/${id}/histories`,
     'buyer-order',
     'v1',
     'DETAIL',
