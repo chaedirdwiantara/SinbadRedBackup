@@ -138,10 +138,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         clearTimeout(timer);
         goToThankYouPage('payment', Number(dataOrder?.id));
       } else {
-        // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
-        //   id: params.orderId,
-        //   status: 'cancelled',
-        // });
+        thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+          id: params?.orderId,
+          status: 'cancelled',
+        });
         handleErrorStatus();
       }
     }
