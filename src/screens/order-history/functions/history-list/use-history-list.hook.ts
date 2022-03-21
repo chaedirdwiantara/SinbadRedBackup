@@ -50,8 +50,8 @@ export const useHistoryListActions = () => {
       state: models.ListItemV3Props<Array<models.OrderListHistory>>,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
-      if (state.data.length < state.totalPage) {
-        contextDispatch(Actions.orderHistoryListRefresh());
+      if (state.page < state.totalPage) {
+        contextDispatch(Actions.orderHistoryListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
