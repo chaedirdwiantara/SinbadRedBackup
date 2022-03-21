@@ -573,13 +573,11 @@ const ProductList: FC<ProductListProps> = ({
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         disabled={
-          /** ==> TBD Monday w/ Ryan */
           productDetailState === null ||
           dataStock === null ||
           orderQty > dataStock.stock ||
           orderQty < productDetailState?.minQty ||
           productDetailState.minQty > dataStock.stock
-          // 1 + productDetailState.multipleQty > dataStock.stock
         }
       />
 

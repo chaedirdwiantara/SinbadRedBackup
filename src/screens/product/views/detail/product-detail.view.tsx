@@ -586,13 +586,11 @@ const ProductDetailView: FC = () => {
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         disabled={
-          /** ==> TBD Monday w/ Ryan */
           dataProduct === null ||
           dataStock === null ||
           orderQty > dataStock.stock ||
           orderQty < dataProduct?.minQty ||
           dataProduct.minQty > dataStock.stock
-          // 1 + dataProduct.multipleQty > dataStock.stock
         }
         isFromProductDetail={true}
       />
