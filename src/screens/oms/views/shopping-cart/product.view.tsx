@@ -160,7 +160,7 @@ export const ProductView: FC<ProductViewProps> = ({
         <View style={{ marginBottom: 5 }}>
           <SnbBadge.Label
             type="warning"
-            value={`Include PPN ${product.taxPercentage}%`}
+            value={`Termasuk Pajak ${product.taxPercentage}%`}
           />
         </View>
       );
