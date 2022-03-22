@@ -8,12 +8,12 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useNavigation, useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/core';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
+import { NavigationAction } from '@navigation';
 
 const DataDiriStep1View: React.FC = () => {
-  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -49,7 +49,7 @@ const DataDiriStep1View: React.FC = () => {
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_DIRI_STEP_2_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_2_VIEW);
         resetUpdateCompleteData();
       }
     }

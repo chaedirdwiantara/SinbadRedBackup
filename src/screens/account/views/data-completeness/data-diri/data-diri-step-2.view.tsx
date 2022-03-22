@@ -11,9 +11,10 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
+import { NavigationAction } from '@navigation';
 
 const DataDiriStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
@@ -26,7 +27,6 @@ const DataDiriStep2View: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
 
   const { upload, save } = useUploadImageAction();
-  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -69,7 +69,7 @@ const DataDiriStep2View: React.FC = () => {
       } else {
         resetCamera();
         resetUpdateCompleteData();
-        navigate(DATA_DIRI_STEP_3_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
       }
     }
   }, [updateCompleteDataState]);
@@ -145,7 +145,7 @@ const DataDiriStep2View: React.FC = () => {
               leftTitle={'Ubah Foto'}
               rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('ktp')}
-              onPressRight={() => navigate(DATA_DIRI_STEP_3_VIEW)}
+              onPressRight={() => NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW)}
               rightDisabled={false}
               leftDisabled={false}
             />,

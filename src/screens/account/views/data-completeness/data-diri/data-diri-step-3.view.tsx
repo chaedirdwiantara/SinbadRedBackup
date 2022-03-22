@@ -8,15 +8,15 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { useNavigation, useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect } from '@react-navigation/core';
 import { DATA_DIRI_STEP_4_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import { useEasyRegistration } from '@screen/account/functions';
+import { NavigationAction } from '@navigation';
 
 const DataDiriStep3View: React.FC = () => {
-  const { navigate } = useNavigation();
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOpenModalBack] = useState(false);
   const { openCamera, capturedImage, resetCamera } = useCamera();
@@ -76,7 +76,7 @@ const DataDiriStep3View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
     } else {
       if (completeDataState?.data?.userData?.taxImageUrl) {
-        navigate(DATA_DIRI_STEP_4_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_4_VIEW);
       } else {
         openCamera('npwp');
       }
@@ -113,7 +113,7 @@ const DataDiriStep3View: React.FC = () => {
         save(dispatchGlobal, '');
         resetCamera();
       } else {
-        navigate(DATA_DIRI_STEP_4_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_4_VIEW);
         resetUpdateCompleteData();
         save(dispatchGlobal, '');
         resetCamera();
