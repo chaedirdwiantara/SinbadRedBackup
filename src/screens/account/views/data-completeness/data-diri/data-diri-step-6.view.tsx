@@ -89,7 +89,6 @@ const DataDiriStep6View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
-  console.log('email:', email);
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
