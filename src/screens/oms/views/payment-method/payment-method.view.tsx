@@ -81,10 +81,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const dataCheckout = props.route.params.data;
 
   /** => handle payment method */
-  const payloadPaymentMethod = {
-    loading: true,
-    skip: 0,
-    limit: 10,
+  const payloadPaymentMethod: any = {
     amount: 900,
     keyword: '',
     sort: 'desc',
