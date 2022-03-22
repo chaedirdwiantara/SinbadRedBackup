@@ -134,7 +134,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} ${product.uomLabel}`}</SnbText.B4>
+            }>{`Tersisa ${product.stock} ${product.uomLabel}`}</SnbText.B4>
         </View>
       );
     }
@@ -160,7 +160,7 @@ export const ProductView: FC<ProductViewProps> = ({
         <View style={{ marginBottom: 5 }}>
           <SnbBadge.Label
             type="warning"
-            value={`Include PPN ${product.taxPercentage}%`}
+            value={`Termasuk Pajak ${product.taxPercentage}%`}
           />
         </View>
       );
