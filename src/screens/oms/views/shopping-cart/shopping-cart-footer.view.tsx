@@ -177,6 +177,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (isMatchValid) {
       checkoutAction.fetch(dispatchCheckout, cartData);
       setCheckoutBtnLoading(true);
+      setMatchValid(false);
     }
   }, [isMatchValid]);
 

@@ -7,6 +7,7 @@ export interface CheckStockResponse {
   warehouseId: number;
   warehouseName: string;
   stock: number;
+  leadTime: number;
   isAvailable: boolean;
   isReserved: boolean;
 }

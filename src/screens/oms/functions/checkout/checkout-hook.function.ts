@@ -77,11 +77,7 @@ const useCheckoutAction = () => {
           Actions.checkoutProcess(contextDispatch, {
             data: {
               buyerName: stateCart.buyerAddress.data.buyerName,
-              buyerAddress: {
-                ...buyerAddress,
-                longitude: buyerAddress.longitude.toString(),
-                latitude: buyerAddress.latitude.toString(),
-              },
+              buyerAddress,
               carts,
             },
           }),

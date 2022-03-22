@@ -717,15 +717,31 @@ const useCartLocalData = () => {
                 qty = item.stock;
                 selected = false;
               }
+
+              let updatedQty: number = qty;
+
+              if (thisProduct.multipleQty > 1) {
+                const isStockValid =
+                  (qty - thisProduct.minQty) % thisProduct.multipleQty === 0;
+                if (isStockValid) {
+                  updatedQty = qty;
+                } else {
+                  const modValue =
+                    (qty - thisProduct.minQty) % thisProduct.multipleQty;
+                  updatedQty = qty - modValue;
+                }
+              }
+
               const productData: models.CartMasterSellersProducts = {
                 ...thisProduct,
                 lastUsedPrice: thisProduct.lastUsedPrice,
                 isLastPriceUsedRules: thisProduct.isLastPriceUsedRules,
-                qty,
+                qty: updatedQty,
                 selected,
                 stock: item.stock,
                 isStockAvailable: item.isAvailable,
                 warehouseName: item.warehouseName,
+                leadTime: item.leadTime,
               };
               /** => move product data to unavailable if not_available */
               if (thisProduct.minQty > item.stock) {
