@@ -134,7 +134,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} ${product.uomLabel}`}</SnbText.B4>
+            }>{`Tersisa ${product.stock} ${product.uomLabel}`}</SnbText.B4>
         </View>
       );
     }
