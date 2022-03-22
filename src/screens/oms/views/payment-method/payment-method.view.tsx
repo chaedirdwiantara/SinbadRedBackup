@@ -48,20 +48,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const thankYouPageAction = useThankYouPageAction();
   const {
     stateThankYouPage: {
-      detail: {
-        data: thankYouPageData,
-        loading: thankYouPageLoading,
-        // error: thankYouPageError,
-      },
-      paymentGuide: {
-        data: thankYouPagePaymentGuidelistData,
-        loading: thankYouPagePaymentGuideListLoading,
-      },
+      detail: { data: thankYouPageData },
     },
     dispatchThankYouPage,
   } = useThankYouPageContext();
   /** => Hooks */
-  const [selectMethod, setSelectMethod] = useState(null); //handle selected method
+  const [selectMethod, setSelectMethod] = useState<string | null>(null); //handle selected method
   const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
     useState<models.PaymentMethod | null>(null);
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
@@ -90,6 +82,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => handle payment method */
   const payloadPaymentMethod = {
+    loading: true,
+    skip: 0,
+    limit: 10,
     amount: 900,
     keyword: '',
     sort: 'desc',
@@ -123,11 +118,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** try to get status payment from order detail when there's no update from rtdb*/
   const handleStatusPayment = () => {
     if (statePaymentMethod.subOrderRtdb.data !== true) {
-      thankYouPageAction.thankYoupageOrderDetail(
-        dispatchThankYouPage,
-        dataOrder?.id,
-      );
-      setGetOrderStatus(true);
+      if (dataOrder) {
+        thankYouPageAction.thankYoupageOrderDetail(
+          dispatchThankYouPage,
+          dataOrder?.id,
+        );
+        setGetOrderStatus(true);
+      }
     }
   };
 
@@ -138,11 +135,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         clearTimeout(timer);
         goToThankYouPage('payment', Number(dataOrder?.id));
       } else {
-        thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
-          id: params?.orderId,
-          status: 'created_timeout',
-        });
-        handleErrorStatus();
+        if (dataOrder) {
+          thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+            id: dataOrder?.id,
+            status: 'created_timeout',
+          });
+          handleErrorStatus();
+        }
       }
     }
   }, [getOrderStatus]);
@@ -206,10 +205,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         setPaymentStatusSession(true);
       } else {
         setLoading(true);
-        const params: models.PaymentMethodCreateOrderData = {
+        const params: models.PaymentMethodCreateOrderData | any = {
           ...checkoutContextData,
           paymentMethod: {
-            id: 1,
+            id: selectedPaymentMethodData.id,
             code: selectedPaymentMethodData.code,
             serviceFeeDeduct: Number(
               selectedPaymentMethodData.serviceFeeDeduct,

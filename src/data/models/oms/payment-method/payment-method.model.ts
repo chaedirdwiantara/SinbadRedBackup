@@ -8,6 +8,7 @@ export interface PaymentMethodList {
 }
 
 export interface PaymentMethod {
+  id: number;
   code: string;
   displayLabel: string;
   iconUrl: string;
