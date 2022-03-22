@@ -105,10 +105,11 @@ const DataTokoStep1View: React.FC = () => {
         <SnbButton.Single
           title="Lanjut"
           type="primary"
-          disabled={name && telp ? false : true}
+          disabled={name && telp || updateCompleteDataState.loading ? false : true}
           onPress={() =>
             updateCompleteData({ buyer: { name: name, phoneNo: telp } })
           }
+          loading={updateCompleteDataState.loading}
         />
       </View>
       <ModalBack
