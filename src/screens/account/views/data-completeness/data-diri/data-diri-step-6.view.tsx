@@ -49,6 +49,10 @@ const DataDiriStep6View: React.FC = () => {
       setEmailIsNotValid(true);
       setErrorMessage('Pastikan email yang Anda masukkan benar');
     }
+    if (textEmail === '') {
+      setEmailIsNotValid(false);
+      setErrorMessage('');
+    }
     setEmail(textEmail);
   };
 
@@ -118,7 +122,7 @@ const DataDiriStep6View: React.FC = () => {
           title="Simpan"
           type="primary"
           disabled={
-            (emailIsNotValid && email) || updateCompleteDataState.loading
+            (emailIsNotValid && email) || updateCompleteDataState.loading || email === ''
               ? true
               : false
           }

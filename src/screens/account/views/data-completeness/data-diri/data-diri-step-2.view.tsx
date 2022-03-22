@@ -11,9 +11,10 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
+import { NavigationAction } from '@navigation';
 
 const DataDiriStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
@@ -26,7 +27,6 @@ const DataDiriStep2View: React.FC = () => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
 
   const { upload, save } = useUploadImageAction();
-  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -36,6 +36,8 @@ const DataDiriStep2View: React.FC = () => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const { idImageUrl } = completeDataState.data?.userData || {};
+  const isFocused  = useIsFocused();
+
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -60,7 +62,7 @@ const DataDiriStep2View: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
@@ -69,10 +71,10 @@ const DataDiriStep2View: React.FC = () => {
       } else {
         resetCamera();
         resetUpdateCompleteData();
-        navigate(DATA_DIRI_STEP_3_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
@@ -145,7 +147,7 @@ const DataDiriStep2View: React.FC = () => {
               leftTitle={'Ubah Foto'}
               rightTitle={'Lanjutkan'}
               onPressLeft={() => openCamera('ktp')}
-              onPressRight={() => navigate(DATA_DIRI_STEP_3_VIEW)}
+              onPressRight={() => NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW)}
               rightDisabled={false}
               leftDisabled={false}
             />,

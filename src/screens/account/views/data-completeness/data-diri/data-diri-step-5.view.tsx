@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import { DATA_DIRI_STEP_6_VIEW } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
@@ -11,9 +10,10 @@ import {
   SnbTopNav,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
+import { NavigationAction } from '@navigation';
+import { useIsFocused } from '@react-navigation/core';
 
 const DataDiriStep5View: React.FC = () => {
-  const { navigate } = useNavigation();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -36,6 +36,7 @@ const DataDiriStep5View: React.FC = () => {
   const [isNPWPValid, setIsNPWPValid] = React.useState(true);
   const [messageErrorKTP, setMessageErrorKTP] = React.useState('');
   const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
+  const isFocused  = useIsFocused();
 
   React.useEffect(() => {
     const backAction = () => {
@@ -50,18 +51,19 @@ const DataDiriStep5View: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
       } else {
-        navigate(DATA_DIRI_STEP_6_VIEW);
+        // navigate(DATA_DIRI_STEP_6_VIEW);
+        NavigationAction.navigate(DATA_DIRI_STEP_6_VIEW);
         resetUpdateCompleteData();
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   return (
     <SnbContainer color="white">
