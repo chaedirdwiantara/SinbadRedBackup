@@ -8,7 +8,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import { DATA_DIRI_STEP_4_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -33,6 +33,7 @@ const DataDiriStep3View: React.FC = () => {
     backToDataCompleteness,
     refetchCompleteData,
   } = useEasyRegistration();
+  const isFocused  = useIsFocused();
 
   React.useEffect(() => {
     return () => {
@@ -75,7 +76,7 @@ const DataDiriStep3View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
     } else {
-      if (completeDataState?.data?.userData?.taxImageUrl) {
+      if (completeDataState?.data?.userData?.taxImageUrl && isFocused) {
         NavigationAction.navigate(DATA_DIRI_STEP_4_VIEW);
       } else {
         openCamera('npwp');
@@ -104,7 +105,7 @@ const DataDiriStep3View: React.FC = () => {
 
   // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
@@ -119,7 +120,7 @@ const DataDiriStep3View: React.FC = () => {
         resetCamera();
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   const renderUploadPhotoRules = () => {
     return (

@@ -41,10 +41,14 @@ const DataDiriStep6View: React.FC = () => {
 
   /** VALIDATE EMAIL */
   const validateEmail = (textEmail: string) => {
+    console.log('email:', textEmail);
+    
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(textEmail)) {
       setEmailIsNotValid(false);
       setErrorMessage('');
+    } else if (textEmail === '') {
+      setEmailIsNotValid(true);
     } else {
       setEmailIsNotValid(true);
       setErrorMessage('Pastikan email yang Anda masukkan benar');

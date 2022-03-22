@@ -11,7 +11,7 @@ import {
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
@@ -36,6 +36,8 @@ const DataDiriStep2View: React.FC = () => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const { idImageUrl } = completeDataState.data?.userData || {};
+  const isFocused  = useIsFocused();
+
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -60,7 +62,7 @@ const DataDiriStep2View: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
@@ -72,7 +74,7 @@ const DataDiriStep2View: React.FC = () => {
         NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(

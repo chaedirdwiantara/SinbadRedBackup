@@ -8,7 +8,7 @@ import {
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
@@ -26,6 +26,7 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = useState(false);
   const [openModalBack, setOpenModalBack] = useState(false);
   const [backHandle, setBackHandle] = useState(false);
+  const isFocused  = useIsFocused();
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
@@ -41,7 +42,7 @@ const DataDiriStep1View: React.FC = () => {
   useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       resetUpdateCompleteData();
       refetchCompleteData();
       if (backHandle) {
@@ -53,7 +54,7 @@ const DataDiriStep1View: React.FC = () => {
         resetUpdateCompleteData();
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   return (
     <SnbContainer color="white">

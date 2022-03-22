@@ -11,6 +11,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { NavigationAction } from '@navigation';
+import { useIsFocused } from '@react-navigation/core';
 
 const DataDiriStep5View: React.FC = () => {
   const {
@@ -35,6 +36,7 @@ const DataDiriStep5View: React.FC = () => {
   const [isNPWPValid, setIsNPWPValid] = React.useState(true);
   const [messageErrorKTP, setMessageErrorKTP] = React.useState('');
   const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
+  const isFocused  = useIsFocused();
 
   React.useEffect(() => {
     const backAction = () => {
@@ -49,7 +51,7 @@ const DataDiriStep5View: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null) {
+    if (updateCompleteDataState.data !== null && isFocused) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
@@ -61,7 +63,7 @@ const DataDiriStep5View: React.FC = () => {
         resetUpdateCompleteData();
       }
     }
-  }, [updateCompleteDataState]);
+  }, [updateCompleteDataState, isFocused]);
 
   return (
     <SnbContainer color="white">
