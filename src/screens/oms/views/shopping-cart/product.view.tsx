@@ -90,7 +90,7 @@ export const ProductView: FC<ProductViewProps> = ({
       if (multipleQty > 1) {
         const isMod = (qty - minQty) % multipleQty === 0;
         const minValue = minQty;
-        const maxValue = stock - ((stock + minQty) % multipleQty);
+        const maxValue = stock - ((stock - minQty) % multipleQty);
         if (qty <= maxValue && qty >= minValue) {
           if (isMod) {
             updatedQty = qty;
