@@ -60,7 +60,7 @@ const BottomSheetConfirmation = forwardRef<
         </View>
       </>
     ),
-    [desc, title],
+    [desc, title, dataId],
   );
 
   // custom ref
