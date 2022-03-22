@@ -41,17 +41,17 @@ const DataDiriStep6View: React.FC = () => {
 
   /** VALIDATE EMAIL */
   const validateEmail = (textEmail: string) => {
-    console.log('email:', textEmail);
-    
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(textEmail)) {
       setEmailIsNotValid(false);
       setErrorMessage('');
-    } else if (textEmail === '') {
-      setEmailIsNotValid(true);
     } else {
       setEmailIsNotValid(true);
       setErrorMessage('Pastikan email yang Anda masukkan benar');
+    }
+    if (textEmail === '') {
+      setEmailIsNotValid(false);
+      setErrorMessage('');
     }
     setEmail(textEmail);
   };
@@ -89,6 +89,7 @@ const DataDiriStep6View: React.FC = () => {
     }
   }, [updateCompleteDataState]);
 
+  console.log('email:', email);
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
@@ -122,7 +123,7 @@ const DataDiriStep6View: React.FC = () => {
           title="Simpan"
           type="primary"
           disabled={
-            (emailIsNotValid && email) || updateCompleteDataState.loading
+            (emailIsNotValid && email) || updateCompleteDataState.loading || email === ''
               ? true
               : false
           }
