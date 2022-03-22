@@ -22,3 +22,11 @@ export const ORDER_HISTORY_TRACKING_DETAIL_FAILED =
   'OrderHistoryTrackingDetailFailed';
 export const ORDER_HISTORY_TRACKING_DETAIL_RESET =
   'OrderHistoryTrackingDetailReset';
+/** => POST DONE ORDER HISTORY */
+export const DONE_ORDER_HISTORY_PROCESS = 'DoneOrderHistoryProcess';
+export const DONE_ORDER_HISTORY_SUCCESS = 'DoneOrderHistorySuccess';
+export const DONE_ORDER_HISTORY_FAILED = 'DoneOrderHistoryFailed';
+/** => POST CANCEL ORDER HISTORY */
+export const CANCEL_ORDER_HISTORY_PROCESS = 'CancelOrderHistoryProcess';
+export const CANCEL_ORDER_HISTORY_SUCCESS = 'CancelOrderHistorySuccess';
+export const CANCEL_ORDER_HISTORY_FAILED = 'CancelOrderHistoryFailed';

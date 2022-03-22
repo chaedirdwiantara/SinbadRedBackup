@@ -91,6 +91,108 @@ function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
     NavigationAction.back();
   }
 }
+/** Post Done Order */
+function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
+  try {
+    const { keyword, orderStatus, status, id } = action.payload;
+
+    const response: models.UpdateSuccessV3Props<any> = yield call(() => {
+      return OrderHistoryApi.postDoneOrderHistory(
+        action.payload as models.UpdateOrderHistoryProcessProps,
+      );
+    });
+
+    if (action.payload.type === 'list') {
+      yield action.contextDispatch(ActionCreators.orderHistoryListReset());
+      yield put(
+        ActionCreators.orderHistoryListProcess(action.contextDispatch, {
+          keyword,
+          orderStatus,
+          status,
+          loading: true,
+          page: 1,
+        }),
+      );
+    }
+    if (action.payload.type === 'detail') {
+      yield action.contextDispatch(
+        ActionCreators.orderHistoryDetailReset(action.contextDispatch),
+      );
+      yield put(
+        ActionCreators.orderHistoryDetailProcess(action.contextDispatch, {
+          id,
+        }),
+      );
+    }
+
+    yield action.contextDispatch(
+      ActionCreators.doneOrderHistorySuccess(response),
+    );
+
+    yield put(ActionCreators.doneOrderHistorySuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.doneOrderHistoryFailed(error as models.ErrorProps),
+    );
+
+    yield put(
+      ActionCreators.doneOrderHistoryFailed(error as models.ErrorProps),
+    );
+
+    SnbToast.show(error.message, 3000, { positionValue: 50 });
+  }
+}
+/** Post Cancel Order */
+function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
+  try {
+    const { keyword, orderStatus, status, id } = action.payload;
+
+    const response: models.UpdateSuccessV3Props<any> = yield call(() => {
+      return OrderHistoryApi.postCancelOrderHistory(
+        action.payload as models.UpdateOrderHistoryProcessProps,
+      );
+    });
+
+    if (action.payload.type === 'list') {
+      yield action.contextDispatch(ActionCreators.orderHistoryListReset());
+      yield put(
+        ActionCreators.orderHistoryListProcess(action.contextDispatch, {
+          keyword,
+          orderStatus,
+          status,
+          loading: true,
+          page: 1,
+        }),
+      );
+    }
+    if (action.payload.type === 'detail') {
+      yield action.contextDispatch(
+        ActionCreators.orderHistoryDetailReset(action.contextDispatch),
+      );
+      yield put(
+        ActionCreators.orderHistoryDetailProcess(action.contextDispatch, {
+          id,
+        }),
+      );
+    }
+
+    yield action.contextDispatch(
+      ActionCreators.doneOrderHistorySuccess(response),
+    );
+
+    yield put(ActionCreators.doneOrderHistorySuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.doneOrderHistoryFailed(error as models.ErrorProps),
+    );
+
+    yield put(
+      ActionCreators.doneOrderHistoryFailed(error as models.ErrorProps),
+    );
+
+    SnbToast.show(error.message, 3000, { positionValue: 50 });
+  }
+}
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
@@ -100,6 +202,8 @@ function* OrderHistorySaga() {
     types.ORDER_HISTORY_TRACKING_DETAIL_PROCESS,
     OrderHistoryTrackingDetail,
   );
+  yield takeLatest(types.DONE_ORDER_HISTORY_PROCESS, DoneOrderHistory);
+  yield takeLatest(types.CANCEL_ORDER_HISTORY_PROCESS, CancelOrderHistory);
 }
 
 export default OrderHistorySaga;

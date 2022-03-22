@@ -3,16 +3,30 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 import { useHistoryDetailActions } from './use-history-detail.hook';
 import { useGetNavParams } from '@core/functions/navigation/navigation-hook.function';
 
+type UpdateOrder = {
+  id: string;
+  type: 'list' | 'detail';
+  keyword?: string;
+  status?: string;
+  orderStatus?: string;
+};
+
 export const useDetailHistoryOrder = () => {
-  const {
-    params: { id },
-  } = useGetNavParams();
+  const { params } = useGetNavParams();
   const { dispatchOrderHistory } = useOrderHistoryContext();
-  const { fetch } = useHistoryDetailActions();
+  const { fetch, cancel, done } = useHistoryDetailActions();
 
   const get = useCallback(() => {
-    fetch(dispatchOrderHistory, { id });
-  }, [id]);
+    fetch(dispatchOrderHistory, { id: params?.id });
+  }, [params?.id]);
 
-  return { get };
+  const cancelOrder = useCallback((data: UpdateOrder) => {
+    cancel(dispatchOrderHistory, data);
+  }, []);
+
+  const doneOrder = useCallback((data: UpdateOrder) => {
+    done(dispatchOrderHistory, data);
+  }, []);
+
+  return { get, doneOrder, cancelOrder };
 };
