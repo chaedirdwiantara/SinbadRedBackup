@@ -741,6 +741,7 @@ const useCartLocalData = () => {
                 stock: item.stock,
                 isStockAvailable: item.isAvailable,
                 warehouseName: item.warehouseName,
+                leadTime: item.leadTime,
               };
               /** => move product data to unavailable if not_available */
               if (thisProduct.minQty > item.stock) {
