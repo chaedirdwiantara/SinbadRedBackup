@@ -60,6 +60,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
   const [isErrorSession, setErrorSession] = useState(false); //handle error modal
   const [getOrderStatus, setGetOrderStatus] = useState(false); //handle order status
+  const [dataOrder, setDataOrder] = useState<any>(null); //handle order status
   const [isLoading, setLoading] = useState(false);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
@@ -102,11 +103,19 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }, []),
   );
 
-  /** => call subscribe rtdb for order  */
-  const dataOrder = statePaymentMethod.createOrder.data;
+  /** => sub payment method create order for data Id*/
   useFocusEffect(
     React.useCallback(() => {
-      if (dataOrder?.id) {
+      if (statePaymentMethod.createOrder.data != null) {
+        setDataOrder(statePaymentMethod.createOrder.data);
+      }
+    }, [statePaymentMethod.createOrder.data]),
+  );
+
+  /** => call subscribe rtdb for order  */
+  useFocusEffect(
+    React.useCallback(() => {
+      if (dataOrder) {
         PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder.id);
       }
     }, []),
@@ -121,6 +130,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           dataOrder?.id,
         );
         setGetOrderStatus(true);
+      } else {
+        handleErrorStatus();
       }
     }
   };
@@ -139,6 +150,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
           });
           handleErrorStatus();
         }
+        handleErrorStatus();
       }
     }
   }, [getOrderStatus]);
@@ -227,7 +239,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => back handler */
   const handleBackHardware = () => {
-    goBack();
+    isLoading ? null : goBack();
   };
   useCustomBackHardware(() => handleBackHardware());
 
@@ -235,11 +247,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     <SnbContainer color="grey">
       {isLoading ? (
         <>
-          <PaymentMethodHeader
-            backAction={() => {
-              handleBackHardware();
-            }}
-          />
           <LoadingPage />
           {/* Modal Status Error */}
           <PaymentMethodErrorModal
