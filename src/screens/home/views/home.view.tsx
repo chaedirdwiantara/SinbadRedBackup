@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, RefreshControl, View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -12,22 +12,22 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
-import { useCartTotalProductActions } from '@screen/oms/functions';
-import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
-import { useCheckoutMaster } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
+import { useDataAuth } from '@core/redux/Data';
+// import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
 import PushNotification from '@core/components/PushNotification';
+import { contexts } from '@contexts';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation }: any) => {
   /** === STATE === */
+  const { dispatchCart } = useContext(contexts.CartContext);
   const [modalError, setModalError] = React.useState(false);
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
-  const { data } = useDataTotalProductCart();
-  const { setCartId } = useCheckoutMaster();
-  const cartTotalProductActions = useCartTotalProductActions();
+  const totalCartActions = useGetTotalCartAction();
   const notificationTotalActions = useNotificationTotalActions();
   const { me } = useDataAuth();
   useGetTokenNotLogin();
@@ -40,7 +40,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (me.data !== null) {
-        cartTotalProductActions.fetch();
+        totalCartActions.fetch(dispatchCart);
         notificationTotalActions.fetch();
       }
     });
@@ -50,17 +50,10 @@ const HomeView: React.FC = ({ navigation }: any) => {
 
   React.useEffect(() => {
     if (me.data !== null) {
-      cartTotalProductActions.fetch();
+      totalCartActions.fetch(dispatchCart);
       notificationTotalActions.fetch();
     }
   }, [me.data]);
-
-  /** => listen changes data cart id */
-  React.useEffect(() => {
-    if (data && data.cartId) {
-      setCartId({ cartId: data.cartId });
-    }
-  }, [data.cartId]);
 
   React.useEffect(() => {
     if (me.error !== null && me.error.code === undefined) {

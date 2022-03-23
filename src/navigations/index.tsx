@@ -1,4 +1,3 @@
-import OmsNav from './oms.navigation';
 import AuthNav from './auth.navigation';
 import SharedNav from './shared.navigation';
 import UserNav from './user.navigation';
@@ -16,9 +15,9 @@ import NotificationNav from './notification.navigations';
 import SupplierNav from './supplier.navigation';
 import RecommendationNav from './recommendation.navigation';
 import QuestNav from './quest.navigation';
+import OmsNav from './oms.navigation';
 
 const index = {
-  ...OmsNav,
   ...AuthNav,
   ...SharedNav,
   ...UserNav,
@@ -36,6 +35,7 @@ const index = {
   ...SupplierNav,
   ...RecommendationNav,
   ...QuestNav,
+  ...OmsNav,
 };
 
 export default index;
