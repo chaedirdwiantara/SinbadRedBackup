@@ -8,7 +8,7 @@ import * as models from '@models';
 const validationWarehouse = (checkStockData: models.CheckStockResponse[]) => {
   let result = false;
   for (let i = 0; i < checkStockData.length; i++) {
-    if (!checkStockData[i].isReserved) {
+    if (!checkStockData[i].isReserved || !checkStockData[i].isAvailable) {
       result = true;
     }
   }
@@ -65,7 +65,6 @@ const matchCartWithCheckData = ({
         delete thisCheckProduct.status;
 
         if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
-          console.log('check product data not match');
           result = false;
           break;
         }
@@ -94,7 +93,6 @@ const matchCartWithCheckData = ({
       delete thisCartSeller.products;
 
       if (!isEqual(thisCartSeller, thisCheckSeller)) {
-        console.log('check seller data not match');
         result = false;
         break;
       }
@@ -102,7 +100,6 @@ const matchCartWithCheckData = ({
   }
 
   if (validationWarehouse(checkStockData)) {
-    console.log('check stock data not match');
     result = false;
   }
 

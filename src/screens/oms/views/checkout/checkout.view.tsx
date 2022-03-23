@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useEffect, useState, useContext, useRef } from 'react';
 import { LogBox, ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import LoadingPage from '@core/components/LoadingPage';
@@ -38,6 +38,7 @@ const OmsCheckoutView: FC = () => {
   const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
+  const [timer, setTimer] = useState(null);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
 
@@ -68,14 +69,17 @@ const OmsCheckoutView: FC = () => {
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
 
-  const timer = setTimeout(() => {
-    setExpiredSession(true);
-  }, timeToExpired);
+  const timeRef = useRef<any>(null);
+  useEffect(() => {
+    timeRef.current = setTimeout(() => {
+      setExpiredSession(true);
+    }, timeToExpired);
+  }, []);
 
   /** => to Payment Method Page  */
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   function toPaymentMethod() {
-    clearTimeout(timer);
+    clearTimeout(timeRef.current);
     goToPaymentMethod(dataToPaymentMethod);
   }
 
@@ -85,7 +89,7 @@ const OmsCheckoutView: FC = () => {
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
     backToCartModal.setOpen(false);
-    clearTimeout(timer);
+    clearTimeout(timeRef.current);
     goToShoppingCart();
   };
 
