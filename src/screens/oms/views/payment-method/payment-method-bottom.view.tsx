@@ -24,7 +24,7 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
         type={'primary'}
         onPress={onCreateOrder}
         title={'Buat Pesanan'}
-        disabled={choice != null && isSelected != [] ? false : true}
+        disabled={choice != null || isSelected != [] ? false : true}
       />
       {/* add modal validation status */}
     </View>

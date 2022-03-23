@@ -30,6 +30,7 @@ import {
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 import { goBack } from '@screen/quest/function';
+import { findIsSelected } from '@screen/oms/functions/payment-method/payment-method.function';
 
 interface PaymentMethodInterface {
   props: {};
@@ -54,8 +55,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   } = useThankYouPageContext();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState<string | null>(null); //handle selected method
-  const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
-    useState<models.PaymentMethod | null>(null);
+  const [selectedPaymentMethodData, setSelectedPaymentMethodData] = useState<
+    models.PaymentMethod | any
+  >(null);
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
   const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
   const [isErrorSession, setErrorSession] = useState(false); //handle error modal
@@ -80,6 +82,16 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => data from checkout */
   const dataCheckout = props.route.params.data;
+
+  /** => get data if there's isSelected:true */
+  const dataPaymentMethod = data[0]?.paymentMethods;
+  const isSelected = findIsSelected(dataPaymentMethod);
+
+  useEffect(() => {
+    selectedPaymentMethodData == null && isSelected !== []
+      ? setSelectedPaymentMethodData(isSelected)
+      : null;
+  }, [selectedPaymentMethodData]);
 
   /** => handle payment method */
   const payloadPaymentMethod: any = {
@@ -207,32 +219,34 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const handleOnDataChoosen = (selectedData: models.PaymentMethod) => {
     setSelectedPaymentMethodData(selectedData);
   };
+
+  const createTheOrder = () => {
+    isLoading == false ? setLoading(true) : null;
+    const params: models.PaymentMethodCreateOrderData | any = {
+      ...checkoutContextData,
+      paymentMethod: {
+        id: selectedPaymentMethodData.id,
+        code: selectedPaymentMethodData.code,
+        serviceFeeDeduct: Number(selectedPaymentMethodData.serviceFeeDeduct),
+        serviceFeeNonDeduct: Number(
+          selectedPaymentMethodData.serviceFeeNonDeduct,
+        ),
+        isServiceFeeFree: Boolean(selectedPaymentMethodData.isServiceFeeFree),
+        displayLabel: selectedPaymentMethodData.displayLabel,
+        iconUrl: selectedPaymentMethodData.iconUrl,
+      },
+    };
+    paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
+  };
+
   //==> handle create order
   const handleCreateOrder = () => {
-    if (selectedPaymentMethodData != null && checkoutContextData != null) {
-      if (selectedPaymentMethodData.isSelected) {
+    if (checkoutContextData != null) {
+      if (isSelected !== []) {
         setPaymentStatusSession(true);
       } else {
         setLoading(true);
-        const params: models.PaymentMethodCreateOrderData | any = {
-          ...checkoutContextData,
-          paymentMethod: {
-            id: selectedPaymentMethodData.id,
-            code: selectedPaymentMethodData.code,
-            serviceFeeDeduct: Number(
-              selectedPaymentMethodData.serviceFeeDeduct,
-            ),
-            serviceFeeNonDeduct: Number(
-              selectedPaymentMethodData.serviceFeeNonDeduct,
-            ),
-            isServiceFeeFree: Boolean(
-              selectedPaymentMethodData.isServiceFeeFree,
-            ),
-            displayLabel: selectedPaymentMethodData.displayLabel,
-            iconUrl: selectedPaymentMethodData.iconUrl,
-          },
-        };
-        paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
+        createTheOrder();
       }
     }
   };
@@ -288,7 +302,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             handleNoAction={() => {
               setPaymentStatusSession(false);
             }}
-            handleOkAction={handleCreateOrder}
+            handleOkAction={createTheOrder}
           />
         </>
       )}
