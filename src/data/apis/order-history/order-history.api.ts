@@ -1,6 +1,6 @@
 /** === IMPORT INTERNAL === */
 import { serializeQs } from '@core/functions/global/query-string';
-import apiMapping from '@core/services/apiMapping';
+import apiMappingV3 from '@core/services/apiMappingV3';
 import * as models from '@models';
 
 /** === CONSTANT === */
@@ -18,11 +18,21 @@ export const getOrderHistoryList = (
     keyword: payload.keyword,
   });
 
-  return apiMapping<Array<models.OrderListHistory>>(
+  return apiMappingV3<Array<models.OrderListHistory>>(
     'auth',
     `${historyOrderPath}?${qs}`,
     'buyer-order',
     'v1',
     'LIST',
+  );
+};
+
+export const getOrderHistoryDetail = ({ id }: { id: string }) => {
+  return apiMappingV3<Array<models.OrderListHistory>>(
+    'auth',
+    `${historyOrderPath}/${id}`,
+    'buyer-order',
+    'v1',
+    'DETAIL',
   );
 };
