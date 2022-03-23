@@ -1,4 +1,4 @@
-import React, { FC, memo, useContext, useRef } from 'react';
+import React, { FC, memo, useCallback, useContext, useRef } from 'react';
 import { toCurrency } from '@core/functions/global/currency-format';
 import {
   SnbText,
@@ -16,6 +16,7 @@ import {
   FlatList,
   Image,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import moment from 'moment';
 import BottomSheetConfirmation, {
@@ -26,6 +27,7 @@ import ConfirmationTime from '../confirmation-time';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 import { useHistoryListFunction } from '../../functions/history-list';
+import { useDetailHistoryOrder } from '../../functions/history-detail';
 import { NavigationAction } from '@core/functions/navigation';
 // type
 import * as models from '@models';
@@ -142,21 +144,36 @@ const wordingEmpty = (keyword: string): string => {
 const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
-  const { onLoadMore } = useHistoryListFunction();
+  const { onLoadMore, onRefresh } = useHistoryListFunction();
+  const { cancelOrder, doneOrder } = useDetailHistoryOrder();
   const {
     stateOrderHistory: {
       list: {
         loading: historyListLoading,
         data: historyListData,
         error: historyListError,
+        loadMore: historyListLoadMore,
       },
     },
   } = useOrderHistoryContext();
 
-  // loading view
-  if ([historyListLoading].some((i) => i)) {
-    return <SnbProductListSkeleton />;
-  }
+  // function
+  const onCancelOrder = useCallback(
+    (idOrder: string) => {
+      const { keyword, orderStatus, status } = state;
+      const payload = { keyword, orderStatus, status, id: idOrder };
+      cancelOrder({ ...payload, type: 'list' });
+    },
+    [state.keyword, state.orderStatus, state.status],
+  );
+  const onDoneOrder = useCallback(
+    (idOrder: string) => {
+      const { keyword, orderStatus, status } = state;
+      const payload = { keyword, orderStatus, status, id: idOrder };
+      doneOrder({ ...payload, type: 'list' });
+    },
+    [state.keyword, state.orderStatus, state.status],
+  );
   // error View
   if ([historyListError].some((i) => i)) {
     return (
@@ -183,24 +200,36 @@ const ListCard = () => {
           <Card
             data={item}
             onCancelOrder={() => confirmModalRef.current?.show(item.id)}
-            onConFirmOrder={() => {}}
+            onConFirmOrder={() => onDoneOrder(item.id)}
           />
         )}
         onEndReached={onLoadMore}
-        ListEmptyComponent={() => (
-          <SnbEmptyData
-            image={<EmptyImage />}
-            subtitle=""
-            title={wordingEmpty(state.keyword)}
+        ListEmptyComponent={() =>
+          !historyListLoading ? (
+            <SnbEmptyData
+              image={<EmptyImage />}
+              subtitle=""
+              title={wordingEmpty(state.keyword)}
+            />
+          ) : (
+            <View />
+          )
+        }
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => onRefresh()}
+            refreshing={[historyListLoading, historyListLoadMore].some(
+              (i) => i,
+            )}
           />
-        )}
+        }
       />
       {/* confirmation  batalkan*/}
       <BottomSheetConfirmation
         ref={confirmModalRef}
         title="Konfirmasi"
         desc="Yakin ingin membatalkan pesanan?"
-        onSubmit={(id) => {}}
+        onSubmit={(idOrder) => onCancelOrder(idOrder)}
       />
     </>
   );

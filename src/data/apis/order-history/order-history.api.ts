@@ -5,8 +5,10 @@ import * as models from '@models';
 
 /** === CONSTANT === */
 const historyOrderPath = 'order-histories';
+const orderSellerPath = 'order-sellers';
 
 /** === FUNCTIONS === */
+// get order history list
 export const getOrderHistoryList = (
   payload: models.OrderListHistoryProcessProps,
 ) => {
@@ -26,7 +28,7 @@ export const getOrderHistoryList = (
     'LIST',
   );
 };
-
+// get detail order history
 export const getOrderHistoryDetail = ({ id }: { id: string }) => {
   return apiMappingV3<Array<models.OrderListHistory>>(
     'auth',
@@ -34,5 +36,39 @@ export const getOrderHistoryDetail = ({ id }: { id: string }) => {
     'buyer-order',
     'v1',
     'DETAIL',
+  );
+};
+// get detail tracking order history
+export const getOrderHistoryTrackingDetail = ({ id }: { id: string }) => {
+  return apiMappingV3<Array<models.orderTrackingDetailHistory>>(
+    'auth',
+    `${historyOrderPath}/${id}/histories`,
+    'buyer-order',
+    'v1',
+    'DETAIL',
+  );
+};
+// update done order history
+export const postDoneOrderHistory = ({
+  id,
+}: models.UpdateOrderHistoryProcessProps) => {
+  return apiMappingV3<Array<models.orderTrackingDetailHistory>>(
+    'auth',
+    `${orderSellerPath}/${id}/done`,
+    'buyer-order',
+    'v1',
+    'CREATE',
+  );
+};
+// update cancel order history
+export const postCancelOrderHistory = ({
+  id,
+}: models.UpdateOrderHistoryProcessProps) => {
+  return apiMappingV3<Array<models.orderTrackingDetailHistory>>(
+    'auth',
+    `${orderSellerPath}/${id}/cancel`,
+    'buyer-order',
+    'v1',
+    'CREATE',
   );
 };

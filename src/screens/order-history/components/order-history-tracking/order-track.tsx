@@ -5,10 +5,10 @@ import {
   Divider,
 } from '../../components/order-history-detail/information';
 import Stepper from './stepper';
+import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 
-// created packed shipped delivered done cancelled delivery_failed
-const mockStatus = 'packed';
-const status2id = {
+const status2id: { [key: string]: number } = {
   created: 0,
   packed: 1,
   shipped: 2,
@@ -21,58 +21,59 @@ type ListTrack = {
   id: number;
   icon?: 'packed' | 'shiped' | 'delivered' | 'done_order';
   label: string;
-  status: string;
 };
 const listTrack: Array<ListTrack> = [
   {
     id: 1,
     icon: 'packed',
     label: 'Dikemas',
-    status: 'done',
   },
   {
     id: 2,
     icon: 'shiped',
     label: 'Dikirim',
-    status: 'process',
   },
   {
     id: 3,
     icon: 'delivered',
     label: 'Tiba di Tujuan',
-    status: 'waiting',
   },
   {
     id: 4,
     icon: 'done_order',
     label: 'Selesai',
-    status: 'waiting',
   },
 ];
 
 const OrderTrack = () => {
+  const {
+    stateOrderHistory: {
+      tracking: { data, loading },
+    },
+  } = useOrderHistoryContext();
+
   const checkStatus = useCallback(
     (id: number) => {
+      // status cancel, maka semua status waiting
+      if (data?.status === 'cancelled') return 'waiting';
       // status jika id sama atau lebih maka done
-      if (status2id[mockStatus] >= id) {
-        return 'done';
-      }
+      if (status2id[data?.status || 'packed'] >= id) return 'done';
       // jika di antara array itu, maka disable
-      if (
-        ['cancelled', 'delivery_failed', 'created'].some(
-          (i) => i === mockStatus,
-        )
-      ) {
+      if (['delivery_failed', 'created'].some((i) => i === data?.status))
         return 'waiting';
-      }
       // jika id berbeda kurang dari 1, maka set red opacity .5
-      if (status2id[mockStatus] == id - 1) {
-        return 'process';
-      }
+      if (status2id[data?.status || 'packed'] == id - 1) return 'process';
       return 'waiting';
     },
-    [mockStatus],
+    [data?.status],
   );
+  if (loading)
+    return (
+      <SkeletonAnimator>
+        <View style={styles.skeleton} />
+      </SkeletonAnimator>
+    );
+
   return (
     <>
       <View style={styles.main}>
@@ -94,6 +95,11 @@ const OrderTrack = () => {
 
 const styles = StyleSheet.create({
   main: { margin: 16 },
+  skeleton: {
+    flex: 1,
+    height: 300,
+    marginBottom: 10,
+  },
 });
 
 export default OrderTrack;

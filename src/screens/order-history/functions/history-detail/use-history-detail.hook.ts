@@ -12,6 +12,22 @@ const callProcessAction = (
     ...payload,
   });
 };
+const callCancelAction = (
+  contextDispatch: (action: any) => any,
+  payload: models.UpdateOrderHistoryProcessProps,
+) => {
+  return Actions.cancelOrderHistoryProcess(contextDispatch, {
+    ...payload,
+  });
+};
+const callDoneAction = (
+  contextDispatch: (action: any) => any,
+  payload: models.UpdateOrderHistoryProcessProps,
+) => {
+  return Actions.doneOrderHistoryProcess(contextDispatch, {
+    ...payload,
+  });
+};
 
 export const useHistoryDetailActions = () => {
   const dispatch = useDispatch();
@@ -32,6 +48,18 @@ export const useHistoryDetailActions = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.orderHistoryDetailReset(dispatch));
+    },
+    done: (
+      contextDispatch: (action: any) => any,
+      payload: models.UpdateOrderHistoryProcessProps,
+    ) => {
+      dispatch(callDoneAction(contextDispatch, payload));
+    },
+    cancel: (
+      contextDispatch: (action: any) => any,
+      payload: models.UpdateOrderHistoryProcessProps,
+    ) => {
+      dispatch(callCancelAction(contextDispatch, payload));
     },
   };
 };

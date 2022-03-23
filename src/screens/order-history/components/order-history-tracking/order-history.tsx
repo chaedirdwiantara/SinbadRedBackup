@@ -2,41 +2,33 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Header } from '../../components/order-history-detail/information';
 import Stepper from './stepper';
-
-const orderHistoryLogsMock = [
-  {
-    id: '1',
-    logLabel: 'Pesanan Diproses',
-    logCreatedAt: '2022-03-13T07:00:00.000Z',
-  },
-  {
-    id: '2',
-    logLabel: 'Pesanan Dikemas',
-    logCreatedAt: '2022-03-13T07:05:00.000Z',
-  },
-  {
-    id: '3',
-    logLabel: 'Pesanan Dikirim',
-    logCreatedAt: '2022-03-13T07:20:00.000Z',
-  },
-  {
-    id: '4',
-    logLabel: 'Pesanan Tiba di Tujuan',
-    logCreatedAt: '2022-03-13T13:00:00.000Z',
-  },
-  {
-    id: '5',
-    logLabel: 'Pesanan Selesai',
-    logCreatedAt: '2022-03-13T14:00:00.000Z',
-  },
-];
+import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 
 const OrderHistory = () => {
+  const {
+    stateOrderHistory: {
+      tracking: { data, loading },
+    },
+  } = useOrderHistoryContext();
+
+  if (loading)
+    return (
+      <SkeletonAnimator>
+        <View style={styles.skeleton} />
+      </SkeletonAnimator>
+    );
+
   return (
     <View style={styles.main}>
       <Header title="Riwayat Pesanan" />
-      {orderHistoryLogsMock.map((i) => (
-        <Stepper label={i.logLabel} status="done" timeStamp={i.logCreatedAt} />
+      {data?.orderHistoryLogs.map((i) => (
+        <Stepper
+          key={i.id}
+          label={i.logLabel}
+          status="done"
+          timeStamp={i.logCreatedAt}
+        />
       ))}
     </View>
   );
@@ -44,6 +36,10 @@ const OrderHistory = () => {
 
 const styles = StyleSheet.create({
   main: { margin: 16 },
+  skeleton: {
+    flex: 1,
+    height: 200,
+  },
 });
 
 export default OrderHistory;
