@@ -39,7 +39,7 @@ const paymentMethodGetWaitingPaymentOrderApi = (
 const paymentMethodCreateOrdertApi = (
   data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
 ) => {
-  const path = `create-order`;
+  const path = `orders`;
   return apiMapping<models.PaymentMethodCreateOrderResponse>(
     'auth',
     path,
@@ -51,7 +51,7 @@ const paymentMethodCreateOrdertApi = (
 };
 
 /** check data order */
-const useCheckDataOrder = (orderId: string) => {
+const useCheckDataOrder = (orderId: any) => {
   // const order = database()
   //   .ref(`order`)
   //   .on('value', (snapshot) => {
@@ -64,7 +64,7 @@ const useCheckDataOrder = (orderId: string) => {
   // return () => database().ref(`order`).off('value', order);
   const dataSnap: [] = [];
   database()
-    .ref(`order/${orderId}`)
+    .ref(`order/${orderId.data}`)
     .on('value', (snapshot) => {
       let data = snapshot.val();
       let dataItem = { ...data };
