@@ -54,22 +54,15 @@ const OrderTrack = () => {
 
   const checkStatus = useCallback(
     (id: number) => {
+      // status cancel, maka semua status waiting
+      if (data?.status === 'cancelled') return 'waiting';
       // status jika id sama atau lebih maka done
-      if (status2id[data?.status || 'packed'] >= id) {
-        return 'done';
-      }
+      if (status2id[data?.status || 'packed'] >= id) return 'done';
       // jika di antara array itu, maka disable
-      if (
-        ['cancelled', 'delivery_failed', 'created'].some(
-          (i) => i === data?.status,
-        )
-      ) {
+      if (['delivery_failed', 'created'].some((i) => i === data?.status))
         return 'waiting';
-      }
       // jika id berbeda kurang dari 1, maka set red opacity .5
-      if (status2id[data?.status || 'packed'] == id - 1) {
-        return 'process';
-      }
+      if (status2id[data?.status || 'packed'] == id - 1) return 'process';
       return 'waiting';
     },
     [data?.status],
