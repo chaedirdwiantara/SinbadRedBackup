@@ -17,11 +17,7 @@ const OrderHistoryList = () => {
   useInitialGetList();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
-        type="red"
-        title="Pesanan"
-        backAction={NavigationAction.back}
-      />
+      <SnbTopNav.Type1 type="red" title="Pesanan" />
       <MenuStatusFilter />
       <SearchInputFilter />
       <ListCard />

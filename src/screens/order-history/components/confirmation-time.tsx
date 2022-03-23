@@ -23,10 +23,12 @@ const counter = (time1: CounterProp, time2: CounterProp) => {
   // setup time
   const diff = doneAt - timeNow;
   const duration = moment.duration(diff, 'milliseconds');
+  const seconds = duration.asSeconds();
   const ss = joinZero(duration.seconds());
   const hh = joinZero(duration.hours());
   const mm = joinZero(duration.minutes());
 
+  if (Number(seconds) <= 0) return '00:00:00';
   return `${hh}:${mm}:${ss}`;
 };
 
