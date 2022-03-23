@@ -80,25 +80,29 @@ const MapsViewType2: React.FC = () => {
 
   React.useEffect(() => {
     if (locations.data) {
-      const formattedAddress =
-        addressResult.length > 0 ? addressResult[0].formatted_address : '';
-      const street =
-        addressResult.length > 0
-          ? getStreetName(addressResult[0].address_components)
-          : '';
-      const mapResult = {
-        coordinate: latLng,
-        formattedAddress,
-        location: locations.data.id,
-        street,
-      };
-      if (action === 'edit') {
-        onMapsResult(mapResult);
-        goBack();
+      if (locations.data.id !== null) {
+        const formattedAddress =
+          addressResult.length > 0 ? addressResult[0].formatted_address : '';
+        const street =
+          addressResult.length > 0
+            ? getStreetName(addressResult[0].address_components)
+            : '';
+        const mapResult = {
+          coordinate: latLng,
+          formattedAddress,
+          location: locations.data.id,
+          street,
+        };
+        if (action === 'edit') {
+          onMapsResult(mapResult);
+          goBack();
+        } else {
+          setTimeout(() => {
+            dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW, mapResult));
+          }, 0);
+        }
       } else {
-        setTimeout(() => {
-          dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW, mapResult));
-        }, 0);
+        setShowModalAreaNotFound(true);
       }
     }
 
