@@ -16,24 +16,35 @@ type Props = {
 
 const joinZero = (num: number | string) => (num < 10 ? `0${num}` : num);
 
+type CounterProp = number | string | Date;
+const counter = (time1: CounterProp, time2: CounterProp) => {
+  const doneAt = new Date(time1).getTime();
+  const timeNow = new Date(time2).getTime();
+  // setup time
+  const diff = doneAt - timeNow;
+  const duration = moment.duration(diff, 'milliseconds');
+  const ss = joinZero(duration.seconds());
+  const hh = joinZero(duration.hours());
+  const mm = joinZero(duration.minutes());
+
+  return `${hh}:${mm}:${ss}`;
+};
+
 const ConfirmationTime: FC<Props> = (props) => {
   const ticking = useRef<any>();
   const doneAt = useRef(new Date(props.doneAt).getTime()).current;
-  const [time, setTime] = useState('-:-:-');
+  const [time, setTime] = useState(counter(doneAt, new Date()));
 
   const timeTicking = useCallback(() => {
     ticking.current = setInterval(() => {
       // setup time
       const timeNow = new Date().getTime();
-      const diff = doneAt - timeNow;
-      const duration = moment.duration(diff, 'milliseconds');
-      const seconds = duration.asSeconds();
-      const ss = joinZero(duration.seconds());
-      const hh = joinZero(duration.hours());
-      const mm = joinZero(duration.minutes());
+      const seconds = moment
+        .duration(doneAt - timeNow, 'milliseconds')
+        .asSeconds();
 
       if (isNaN(seconds)) {
-        setTime(`${hh}:${mm}:${ss}`);
+        setTime(counter(doneAt, new Date()));
         clearInterval(ticking.current);
         return void 0;
       }
@@ -44,7 +55,7 @@ const ConfirmationTime: FC<Props> = (props) => {
         return void 0;
       }
 
-      setTime(`${hh}:${mm}:${ss}`);
+      setTime(counter(doneAt, new Date()));
     }, 1000);
   }, []);
 
