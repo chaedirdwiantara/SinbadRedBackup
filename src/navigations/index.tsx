@@ -16,6 +16,7 @@ import SupplierNav from './supplier.navigation';
 import RecommendationNav from './recommendation.navigation';
 import QuestNav from './quest.navigation';
 import OmsNav from './oms.navigation';
+import OrderHistoryNav from './order-history.navigation';
 
 const index = {
   ...AuthNav,
@@ -36,6 +37,7 @@ const index = {
   ...RecommendationNav,
   ...QuestNav,
   ...OmsNav,
+  ...OrderHistoryNav,
 };
 
 export default index;

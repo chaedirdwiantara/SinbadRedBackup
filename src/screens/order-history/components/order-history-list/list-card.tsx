@@ -25,8 +25,10 @@ import BottomSheetConfirmation, {
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 import { useHistoryListFunction } from '../../functions/history-list';
+import { NavigationAction } from '@core/functions/navigation';
 // type
 import * as models from '@models';
+import { labelStatus } from '../../types';
 
 type CardProps = {
   data: models.OrderListHistory;
@@ -35,15 +37,6 @@ type CardProps = {
 };
 
 const { width: W } = Dimensions.get('screen');
-
-const labelStatus: {
-  [key: string]: 'success' | 'error' | 'information' | 'warning';
-} = {
-  delivered: 'success',
-  created: 'warning',
-  packed: 'information',
-  shipped: 'information',
-};
 
 const Card: FC<CardProps> = (props) => {
   const { data, onCancelOrder, onConFirmOrder } = props;
@@ -160,9 +153,14 @@ const ListCard = () => {
   // render list waiting paymment
   if (state.status === 'waiting_for_payment') {
     return (
-      <View>
+      <TouchableOpacity
+        onPress={() =>
+          NavigationAction.navigate('OrderHistoryDetailView', {
+            id: 'product_id_random',
+          })
+        }>
         <SnbText.B2>Waiting Payment</SnbText.B2>
-      </View>
+      </TouchableOpacity>
     );
   }
   // render order history list

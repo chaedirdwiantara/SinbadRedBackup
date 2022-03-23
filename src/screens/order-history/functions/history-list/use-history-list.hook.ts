@@ -21,22 +21,26 @@ const callProcessAction = (
 
 export const useHistoryListActions = () => {
   const dispatch = useDispatch();
-  const page = 10;
-
+  const perPage = 10;
+  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListReset());
-      dispatch(callProcessAction(contextDispatch, true, 0, page, queryOptions));
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
     },
     refresh: (
       contextDispatch: (action: any) => any,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListRefresh());
-      dispatch(callProcessAction(contextDispatch, true, 0, page, queryOptions));
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.orderHistoryListReset());
@@ -52,8 +56,8 @@ export const useHistoryListActions = () => {
           callProcessAction(
             contextDispatch,
             false,
-            state.page + page,
-            page,
+            state.page + 1,
+            perPage,
             queryOptions,
           ),
         );
