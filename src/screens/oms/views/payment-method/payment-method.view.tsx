@@ -286,8 +286,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
           {/* FOOTER */}
           <PaymentMethodBottom
-            data={data}
             choice={selectMethod}
+            isSelected={isSelected}
             onCreateOrder={handleCreateOrder}
           />
 
