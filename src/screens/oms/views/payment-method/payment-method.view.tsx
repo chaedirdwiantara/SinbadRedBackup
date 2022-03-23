@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { LogBox } from 'react-native';
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useEffect, useState, useContext, useRef } from 'react';
 import { SnbContainer } from '@sinbad/react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useFocusEffect } from '@react-navigation/native';
@@ -89,11 +89,14 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = props.route.params.data.addTime;
   const timeToExpired = addTime - timeNow;
-  const timer = setTimeout(() => {
-    setPaymentStatusSession(false);
-    setErrorSession(false);
-    setExpiredSession(true);
-  }, timeToExpired);
+  const timeRef = useRef<any>(null);
+  useEffect(() => {
+    timeRef.current = setTimeout(() => {
+      setPaymentStatusSession(false);
+      setErrorSession(false);
+      setExpiredSession(true);
+    }, timeToExpired);
+  }, []);
 
   /** => get data if there's isSelected:true */
   const dataPaymentMethod = data[0]?.paymentMethods;
@@ -150,7 +153,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => try to get status payment from order detail when there's no update from rtdb */
   React.useEffect(() => {
     if (handleStatusPayment == true) {
-      clearTimeout(timer);
+      clearTimeout(timeRef.current);
       if (statePaymentMethod.createOrder.data?.id == dataOrder.id) {
         thankYouPageAction.thankYoupageOrderDetail(
           dispatchThankYouPage,
@@ -166,15 +169,15 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
   React.useEffect(() => {
     if (getOrderStatus == true) {
-      if (thankYouPageData?.orderStatus == 'create_started') {
-        clearTimeout(timer);
+      if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
+        clearTimeout(timeRef.current);
         updateCartAction.reset(dispatchCart);
         checkoutAction.reset(dispatchCheckout);
         goToThankYouPage(
           'payment',
           Number(statePaymentMethod.createOrder.data?.id),
         );
-      } else if (thankYouPageData?.orderStatus == 'create_NGASAL') {
+      } else if (thankYouPageData?.orderStatus == 'create_started') {
         if (statePaymentMethod.createOrder.data) {
           thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
             id: statePaymentMethod.createOrder.data?.id,
@@ -191,7 +194,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (statePaymentMethod.subOrderRtdb.data == true) {
-        clearTimeout(timer);
+        clearTimeout(timeRef.current);
         updateCartAction.reset(dispatchCart);
         checkoutAction.reset(dispatchCheckout);
         goToThankYouPage('payment', Number(dataOrder?.id));
@@ -213,7 +216,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     setExpiredSession(false);
-    clearTimeout(timer);
+    clearTimeout(timeRef.current);
     goToShoppingCart();
   };
 
@@ -259,7 +262,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       if (isSelected.length !== 0) {
         setPaymentStatusSession(true);
       } else {
-        clearTimeout(timer);
+        clearTimeout(timeRef.current);
         createTheOrder();
       }
     }
