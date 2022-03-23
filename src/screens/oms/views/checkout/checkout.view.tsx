@@ -68,7 +68,6 @@ const OmsCheckoutView: FC = () => {
   const timeNow = dateCurrent.getTime() / 1000;
   const addTime = dateCurrent.getTime() / 1000 + 300000;
   const timeToExpired = addTime - timeNow;
-
   const timeRef = useRef<any>(null);
   useEffect(() => {
     timeRef.current = setTimeout(() => {
@@ -78,10 +77,10 @@ const OmsCheckoutView: FC = () => {
 
   /** => to Payment Method Page  */
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
-  function toPaymentMethod() {
+  const toPaymentMethod = () => {
     clearTimeout(timeRef.current);
     goToPaymentMethod(dataToPaymentMethod);
-  }
+  };
 
   /** handle back to cart */
   const handleBackToCart = () => {

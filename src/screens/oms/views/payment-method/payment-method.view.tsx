@@ -123,6 +123,14 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     );
   };
 
+  /** => to thank you page */
+  const toThankYouPage = () => {
+    clearTimeout(timeRef.current);
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    goToThankYouPage('payment', Number(dataOrder?.id));
+  };
+
   /** => call payment method list */
   useFocusEffect(
     React.useCallback(() => {
@@ -150,6 +158,33 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }, [dataOrder]),
   );
 
+  /** => call navigation to thankyou page when there's an update from rtdb*/
+  useFocusEffect(
+    React.useCallback(() => {
+      if (statePaymentMethod.subOrderRtdb.data == true) {
+        toThankYouPage();
+      }
+    }, [statePaymentMethod.subOrderRtdb.data]),
+  );
+
+  /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
+  React.useEffect(() => {
+    if (getOrderStatus == true) {
+      if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
+        toThankYouPage();
+      } else if (thankYouPageData?.orderStatus == 'create_started') {
+        if (statePaymentMethod.createOrder.data) {
+          thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+            id: statePaymentMethod.createOrder.data?.id,
+            status: 'created_timeout',
+          });
+          handleErrorStatus();
+        }
+        handleErrorStatus();
+      }
+    }
+  }, [getOrderStatus, thankYouPageData]);
+
   /** => try to get status payment from order detail when there's no update from rtdb */
   React.useEffect(() => {
     if (handleStatusPayment == true) {
@@ -166,42 +201,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
 
-  /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
-  React.useEffect(() => {
-    if (getOrderStatus == true) {
-      if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
-        clearTimeout(timeRef.current);
-        updateCartAction.reset(dispatchCart);
-        checkoutAction.reset(dispatchCheckout);
-        goToThankYouPage(
-          'payment',
-          Number(statePaymentMethod.createOrder.data?.id),
-        );
-      } else if (thankYouPageData?.orderStatus == 'create_started') {
-        if (statePaymentMethod.createOrder.data) {
-          thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
-            id: statePaymentMethod.createOrder.data?.id,
-            status: 'created_timeout',
-          });
-          handleErrorStatus();
-        }
-        handleErrorStatus();
-      }
-    }
-  }, [getOrderStatus, thankYouPageData]);
-
-  /** => call navigation to thankyou page when there's an update from rtdb*/
-  useFocusEffect(
-    React.useCallback(() => {
-      if (statePaymentMethod.subOrderRtdb.data == true) {
-        clearTimeout(timeRef.current);
-        updateCartAction.reset(dispatchCart);
-        checkoutAction.reset(dispatchCheckout);
-        goToThankYouPage('payment', Number(dataOrder?.id));
-      }
-    }, [statePaymentMethod.subOrderRtdb.data]),
-  );
-
   /** => call 5 second checkout */
   React.useEffect(() => {
     if (isLoading == true) {
@@ -211,32 +210,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   }, [isLoading]);
 
-  /** handle back to cart */
-  const handleBackToCart = () => {
-    updateCartAction.reset(dispatchCart);
-    checkoutAction.reset(dispatchCheckout);
-    setExpiredSession(false);
-    clearTimeout(timeRef.current);
-    goToShoppingCart();
-  };
-
-  /** => handle selected method */
-  const handleSelect = (selected: string) => {
-    setSelectMethod(selected);
-  };
-
-  /** => handle error status */
-  const handleErrorStatus = () => {
-    setErrorSession(true);
-  };
-
-  const handleOnDataChoosen = (selectedData: models.PaymentMethod) => {
-    setSelectedPaymentMethodData(selectedData);
-  };
-
   //==> dispatch create order
   const createTheOrder = () => {
-    // isLoading == false ? setLoading(true) : null;
     const params: models.PaymentMethodCreateOrderData | any = {
       ...checkoutContextData,
       paymentMethod: {
@@ -266,6 +241,28 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         createTheOrder();
       }
     }
+  };
+
+  /** => handle error status */
+  const handleErrorStatus = () => {
+    setErrorSession(true);
+  };
+
+  /** => handle selected method */
+  const handleSelect = (selected: string) => {
+    setSelectMethod(selected);
+  };
+  const handleOnDataChoosen = (selectedData: models.PaymentMethod) => {
+    setSelectedPaymentMethodData(selectedData);
+  };
+
+  /** handle back to cart */
+  const handleBackToCart = () => {
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    setExpiredSession(false);
+    clearTimeout(timeRef.current);
+    goToShoppingCart();
   };
 
   /** => back handler */
