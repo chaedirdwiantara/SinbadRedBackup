@@ -16,6 +16,7 @@ import {
   FlatList,
   Image,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import moment from 'moment';
 import BottomSheetConfirmation, {
@@ -143,7 +144,7 @@ const wordingEmpty = (keyword: string): string => {
 const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
-  const { onLoadMore } = useHistoryListFunction();
+  const { onLoadMore, onRefresh } = useHistoryListFunction();
   const { cancelOrder, doneOrder } = useDetailHistoryOrder();
   const {
     stateOrderHistory: {
@@ -151,6 +152,7 @@ const ListCard = () => {
         loading: historyListLoading,
         data: historyListData,
         error: historyListError,
+        loadMore: historyListLoadMore,
       },
     },
   } = useOrderHistoryContext();
@@ -172,10 +174,6 @@ const ListCard = () => {
     },
     [state.keyword, state.orderStatus, state.status],
   );
-  // loading view
-  if ([historyListLoading].some((i) => i)) {
-    return <SnbProductListSkeleton />;
-  }
   // error View
   if ([historyListError].some((i) => i)) {
     return (
@@ -206,13 +204,25 @@ const ListCard = () => {
           />
         )}
         onEndReached={onLoadMore}
-        ListEmptyComponent={() => (
-          <SnbEmptyData
-            image={<EmptyImage />}
-            subtitle=""
-            title={wordingEmpty(state.keyword)}
+        ListEmptyComponent={() =>
+          !historyListLoading ? (
+            <SnbEmptyData
+              image={<EmptyImage />}
+              subtitle=""
+              title={wordingEmpty(state.keyword)}
+            />
+          ) : (
+            <View />
+          )
+        }
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => onRefresh()}
+            refreshing={[historyListLoading, historyListLoadMore].some(
+              (i) => i,
+            )}
           />
-        )}
+        }
       />
       {/* confirmation  batalkan*/}
       <BottomSheetConfirmation

@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 import {
   StatusOrder,
@@ -11,13 +11,24 @@ import {
 } from '@screen/order-history/components/order-history-detail';
 //function
 import { NavigationAction } from '@core/functions/navigation';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
 
 const OrderHistoryDetail = () => {
-  const { get } = useDetailHistoryOrder();
+  const {
+    stateOrderHistory: {
+      detail: { loading },
+    },
+  } = useOrderHistoryContext();
+
+  const { get, clear } = useDetailHistoryOrder();
   // get detail data history
   useEffect(() => {
     get();
+
+    return () => {
+      clear();
+    };
   }, []);
   return (
     <SnbContainer color="white">
@@ -26,7 +37,10 @@ const OrderHistoryDetail = () => {
         title="Detail Pesanan"
         backAction={NavigationAction.back}
       />
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={get} />
+        }>
         <StatusOrder />
         <InformationInvoice />
         <InformationDelivery />

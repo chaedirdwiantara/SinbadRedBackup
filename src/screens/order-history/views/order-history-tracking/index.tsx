@@ -1,14 +1,21 @@
 import React, { memo, useEffect } from 'react';
-import { ScrollView } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
 import { NavigationAction } from '@core/functions/navigation';
 import {
   OrderTrack,
   OrderHistory,
 } from '../../components/order-history-tracking';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-tracking-detail';
 
 const HistoryTracking = () => {
+  const {
+    stateOrderHistory: {
+      tracking: { loading },
+    },
+  } = useOrderHistoryContext();
+
   const { clear, get } = useDetailHistoryOrder();
 
   // get detail tracking
@@ -25,7 +32,10 @@ const HistoryTracking = () => {
         title="Detail Status"
         backAction={NavigationAction.back}
       />
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={get} />
+        }>
         <OrderTrack />
         <OrderHistory />
       </ScrollView>
