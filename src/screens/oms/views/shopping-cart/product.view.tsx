@@ -241,7 +241,7 @@ export const ProductView: FC<ProductViewProps> = ({
 
   if (product.multipleQty > 1) {
     isDecreaseDisabled = !(product.qty - product.multipleQty >= product.minQty);
-    isIncreaseDisabled = !(product.qty + product.multipleQty < stock);
+    isIncreaseDisabled = !(product.qty + product.multipleQty <= stock);
   } else {
     isDecreaseDisabled = !(product.qty > product.minQty);
     isIncreaseDisabled = !(product.qty < stock);

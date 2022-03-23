@@ -1,7 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbCheckbox, SnbIcon, color } from 'react-native-sinbad-ui';
+import {
+  SnbText,
+  SnbText2,
+  SnbCheckbox,
+  SnbIcon,
+  color,
+} from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { goToProduct } from '@screen/category/functions';
@@ -86,19 +92,14 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
             />
           </View>
           {renderProductImage(unavailableProducts[0].productImageUrl)}
-          <View style={{ justifyContent: 'center' }}>
-            <View
-              style={{
-                width: '100%',
-              }}>
-              <SnbText.B4 color={color.black60}>
+          <View style={{ justifyContent: 'center', flex: 1 }}>
+            <View style={{ flex: 1 }}>
+              <SnbText2.Paragraph.Default
+                color={color.black80}
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
                 {unavailableProducts[0].productName}
-              </SnbText.B4>
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-              }}>
+              </SnbText2.Paragraph.Default>
               <SnbText.B4 color={color.black80}>
                 {unavailableProducts[0].unavailableMessage}
               </SnbText.B4>
@@ -124,19 +125,14 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                   />
                 </View>
                 {renderProductImage(item.productImageUrl)}
-                <View style={{ justifyContent: 'center' }}>
-                  <View
-                    style={{
-                      width: '100%',
-                    }}>
-                    <SnbText.B4 color={color.black60}>
+                <View style={{ flex: 1 }}>
+                  <View style={{ flex: 1 }}>
+                    <SnbText2.Paragraph.Default
+                      color={color.black80}
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}>
                       {item.productName}
-                    </SnbText.B4>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                    }}>
+                    </SnbText2.Paragraph.Default>
                     <SnbText.B4 color={color.black80}>
                       {item.unavailableMessage}
                     </SnbText.B4>
