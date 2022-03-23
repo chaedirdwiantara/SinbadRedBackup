@@ -14,7 +14,7 @@ type UpdateOrder = {
 export const useDetailHistoryOrder = () => {
   const { params } = useGetNavParams();
   const { dispatchOrderHistory } = useOrderHistoryContext();
-  const { fetch, cancel, done } = useHistoryDetailActions();
+  const { fetch, cancel, done, reset } = useHistoryDetailActions();
 
   const get = useCallback(() => {
     fetch(dispatchOrderHistory, { id: params?.id });
@@ -28,5 +28,9 @@ export const useDetailHistoryOrder = () => {
     done(dispatchOrderHistory, data);
   }, []);
 
-  return { get, doneOrder, cancelOrder };
+  const clear = useCallback(() => {
+    reset(dispatchOrderHistory);
+  }, []);
+
+  return { get, doneOrder, cancelOrder, clear };
 };
