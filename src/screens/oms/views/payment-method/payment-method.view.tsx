@@ -220,6 +220,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     setSelectedPaymentMethodData(selectedData);
   };
 
+  //==> dispatch create order
   const createTheOrder = () => {
     isLoading == false ? setLoading(true) : null;
     const params: models.PaymentMethodCreateOrderData | any = {
@@ -236,13 +237,14 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         iconUrl: selectedPaymentMethodData.iconUrl,
       },
     };
+
     paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
   };
 
   //==> handle create order
   const handleCreateOrder = () => {
     if (checkoutContextData != null) {
-      if (isSelected !== []) {
+      if (isSelected.length !== 0) {
         setPaymentStatusSession(true);
       } else {
         setLoading(true);
