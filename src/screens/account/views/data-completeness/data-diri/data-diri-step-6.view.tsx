@@ -122,7 +122,10 @@ const DataDiriStep6View: React.FC = () => {
           title="Simpan"
           type="primary"
           disabled={
-            (emailIsNotValid && email) || updateCompleteDataState.loading || email === ''
+            (emailIsNotValid && email) ||
+            updateCompleteDataState.loading ||
+            email === '' ||
+            email === null
               ? true
               : false
           }
