@@ -38,7 +38,6 @@ const OmsCheckoutView: FC = () => {
   const backToCartModal = useBackToCartModal();
   const [isExpiredSession, setExpiredSession] = useState(false);
   const [isModalTNCOpen, setModalTNCOpen] = useState(false);
-  const [timer, setTimer] = useState(null);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
 

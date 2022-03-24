@@ -225,6 +225,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         iconUrl: selectedPaymentMethodData.iconUrl,
       },
     };
+    console.log(JSON.stringify(params), 'PARAMS');
 
     paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
     clearTimeout(timeRef.current);
@@ -241,6 +242,16 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       }
     }
   };
+
+  /** => Error handling */
+  // when failed create order
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (statePaymentMethod.createOrder.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
 
   /** => handle error status */
   const handleErrorStatus = () => {
