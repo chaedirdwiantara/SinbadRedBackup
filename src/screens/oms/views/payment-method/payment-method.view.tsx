@@ -161,10 +161,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => call navigation to thankyou page when there's an update from rtdb*/
   useFocusEffect(
     React.useCallback(() => {
-      if (statePaymentMethod.subOrderRtdb.data == true) {
-        toThankYouPage();
+      if (handleStatusPayment == false) {
+        if (statePaymentMethod.subOrderRtdb.data == true) {
+          toThankYouPage();
+        }
       }
-    }, [statePaymentMethod.subOrderRtdb.data]),
+    }, [handleStatusPayment, statePaymentMethod.subOrderRtdb.data]),
   );
 
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
@@ -188,15 +190,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => try to get status payment from order detail when there's no update from rtdb */
   React.useEffect(() => {
     if (handleStatusPayment == true) {
-      clearTimeout(timeRef.current);
-      if (statePaymentMethod.createOrder.data?.id == dataOrder.id) {
+      if (statePaymentMethod.createOrder.data?.id) {
         thankYouPageAction.thankYoupageOrderDetail(
           dispatchThankYouPage,
-          dataOrder.id,
+          statePaymentMethod.createOrder.data?.id,
         );
         setGetOrderStatus(true);
-      } else {
-        handleErrorStatus();
       }
     }
   }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
@@ -228,6 +227,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     };
 
     paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
+    clearTimeout(timeRef.current);
     setLoading(true);
   };
 
@@ -237,7 +237,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       if (isSelected.length !== 0) {
         setPaymentStatusSession(true);
       } else {
-        clearTimeout(timeRef.current);
         createTheOrder();
       }
     }
