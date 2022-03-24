@@ -41,8 +41,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => ACTION */
   LogBox.ignoreAllLogs();
   const { stateThankYouPage } = useContext(contexts.ThankYouPageContext);
-  console.log(stateThankYouPage, 'stateThankYouPage');
-
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
@@ -71,6 +69,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
+
   const checkoutContextData = stateCheckout.checkout.data;
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
@@ -175,7 +174,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
   React.useEffect(() => {
     if (getOrderStatus == true) {
-      console.log(thankYouPageData, 'YOYOYO');
       if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
         toThankYouPage();
       } else if (thankYouPageData?.orderStatus == 'create_started') {
@@ -271,6 +269,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       }
     }
   }, [handleStatusPayment, stateThankYouPage.cancelOrder.error]);
+  // payment method list failed
+  React.useEffect(() => {
+    if (stateCheckout.checkout.error != null) {
+      handleErrorStatus();
+    }
+  }, [stateCheckout.checkout.error]);
 
   /** => handle error status */
   const handleErrorStatus = () => {
