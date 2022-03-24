@@ -242,6 +242,16 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     }
   };
 
+  /** => Error handling */
+  // when failed create order
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (statePaymentMethod.createOrder.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
+
   /** => handle error status */
   const handleErrorStatus = () => {
     setErrorSession(true);

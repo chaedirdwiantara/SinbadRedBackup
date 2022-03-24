@@ -35,11 +35,9 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
         {dataChoose != null ? (
           <SnbText.B2
             color={
-              dataChoose.serviceFeeNonDeduct == 0
-                ? color.green80
-                : color.black80
+              dataChoose.serviceFeeDeduct == 0 ? color.green80 : color.black80
             }>
-            {toCurrency(dataChoose.serviceFeeNonDeduct, {
+            {toCurrency(dataChoose.serviceFeeDeduct, {
               withFraction: false,
             })}
           </SnbText.B2>
@@ -53,8 +51,7 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
         {dataChoose != null ? (
           <SnbText.B2 color={color.black100}>
             {toCurrency(
-              dataFromCheckout.totalPaymentNumber +
-                dataChoose.serviceFeeNonDeduct,
+              dataFromCheckout.totalPaymentNumber + dataChoose.serviceFeeDeduct,
               {
                 withFraction: false,
               },
