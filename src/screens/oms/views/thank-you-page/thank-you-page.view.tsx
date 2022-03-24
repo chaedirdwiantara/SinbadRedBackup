@@ -109,7 +109,6 @@ const OmsThankYouPageView: FC = () => {
   /** => render countdown */
   const renderCountDown = () => {
     if(thankYouPageData != null && thankYouPageData != undefined){
-      console.log('irpan',thankYouPageData )
       const expiredPaymentTime = thankYouPageData?.expiredDate;
 
       return moment.utc(new Date()).local() <
