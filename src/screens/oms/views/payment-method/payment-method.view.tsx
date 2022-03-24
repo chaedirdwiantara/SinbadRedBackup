@@ -225,7 +225,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         iconUrl: selectedPaymentMethodData.iconUrl,
       },
     };
-    console.log(JSON.stringify(params), 'PARAMS');
 
     paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
     clearTimeout(timeRef.current);

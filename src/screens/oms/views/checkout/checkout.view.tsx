@@ -18,6 +18,7 @@ import {
   totalQty,
   useGetTncContent,
 } from '@screen/oms/functions';
+import { usePaymentMethodCreateOrder } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { useUpdateCartAction, useCheckoutAction } from '../../functions';
@@ -25,6 +26,7 @@ import { goToShoppingCart } from '@core/functions/product';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook.function';
+import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
 
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
@@ -33,6 +35,7 @@ const OmsCheckoutView: FC = () => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+  const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
 
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
@@ -55,6 +58,7 @@ const OmsCheckoutView: FC = () => {
     },
     dispatchCheckout,
   } = useCheckoutContext();
+  const { dispatchPaymentMethod } = usePaymentMethodContext();
 
   /** handle term n condition */
   const handleOpenTNCModal = () => {
@@ -77,6 +81,7 @@ const OmsCheckoutView: FC = () => {
   /** => to Payment Method Page  */
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   const toPaymentMethod = () => {
+    paymentMethodCreateOrder.reset(dispatchPaymentMethod);
     clearTimeout(timeRef.current);
     goToPaymentMethod(dataToPaymentMethod);
   };
