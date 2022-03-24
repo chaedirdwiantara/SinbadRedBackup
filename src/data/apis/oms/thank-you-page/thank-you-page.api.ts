@@ -30,7 +30,7 @@ const thankYouPageOrderDetail = (id: string) => {
 const thankYouPagePaymentGuideList = (
   payload: models.ListProcessProps<models.PaymentGuideProps>,
 ) => {
-  const path = `payment-guides?paymentMethodId=${payload.paymentMethodId}&$limit=${payload.limit}&$skip=${payload.skip}`;
+  const path = `payment-guides?paymentMethodId=${payload.paymentMethodId}&perPage=${payload.limit}&page=${payload.skip}`;
   return apiMapping<models.PaymentGuideListItem[]>(
     'auth',
     path,

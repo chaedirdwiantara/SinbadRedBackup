@@ -27,7 +27,8 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 import { Context } from './context';
 import { 
   useHistoryListFunction,
-  goToWaitingPaymentHistoryDetail 
+  goToWaitingPaymentHistoryDetail, 
+  useHistoryListPaymentFunction
 } from '../../functions/history-list';
 import { CountDownTimer } from '@screen/history/components';
 // type
@@ -199,6 +200,7 @@ const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const { onLoadMore } = useHistoryListFunction();
+  const { onLoadMorePayment } = useHistoryListPaymentFunction();
   const {
     stateOrderHistory: {
       list: {
@@ -206,54 +208,20 @@ const ListCard = () => {
         data: historyListData,
         error: historyListError,
       },
+      listWaitingPayment: {
+        loading: historyListPaymentLoading,
+        data: historyListPaymentData,
+        error: historyListPaymentError
+      }
     },
   } = useOrderHistoryContext();
 
-  // const dummyData = [
-  //     {
-  //     "id": 1,
-  //     "code": "1812251000",
-  //     "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //     "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //     "paymentDisplayLabel": "BCA Virtual Account",
-  //     "vaAccountNo": "123123123",
-  //     "totalOrderAmount": "400000",
-  //     "status": "waiting_for_payment",
-  //     "createdAt": "2021-02-01T06:19:55.516Z",
-  //     "updatedAt": "2021-02-01T06:19:55.516Z"
-  //     },
-  //     {
-  //       "id": 1,
-  //       "code": "1812251000",
-  //       "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //       "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //       "paymentDisplayLabel": "BCA Virtual Account",
-  //       "vaAccountNo": "123123123",
-  //       "totalOrderAmount": "400000",
-  //       "status": "waiting_for_payment",
-  //       "createdAt": "2021-02-01T06:19:55.516Z",
-  //       "updatedAt": "2021-02-01T06:19:55.516Z"
-  //       },
-  //       {
-  //         "id": 1,
-  //         "code": "1812251000",
-  //         "paymentExpiredDate": "2022-03-17T06:19:55.516Z",
-  //         "paymentIconUrl": "https://www.freepnglogos.com/uploads/logo-bca-png/bank-central-asia-logo-bank-central-asia-bca-format-cdr-png-gudril-1.png",
-  //         "paymentDisplayLabel": "BCA Virtual Account",
-  //         "vaAccountNo": "123123123",
-  //         "totalOrderAmount": "400000",
-  //         "status": "waiting_for_payment",
-  //         "createdAt": "2021-02-01T06:19:55.516Z",
-  //         "updatedAt": "2021-02-01T06:19:55.516Z"
-  //         }
-  // ]
-
   // loading view
-  if ([historyListLoading].some((i) => i)) {
+  if ([historyListLoading].some((i) => i) || [historyListPaymentLoading].some((i) => i) ) {
     return <SnbProductListSkeleton />;
   }
   // error View
-  if ([historyListError].some((i) => i)) {
+  if ([historyListError].some((i) => i) || [historyListPaymentError].some((i) => i)) {
     return (
       <SnbEmptyData
         image={<EmptyImage />}
@@ -269,7 +237,7 @@ const ListCard = () => {
       <>
         <FlatList
         contentContainerStyle={{ paddingBottom: 50 }}
-        data={historyListData}
+        data={historyListPaymentData}
         keyExtractor={(i) => String(i.id)}
         renderItem={({ item }) => (
           <CardWaitingForPayment
@@ -279,7 +247,7 @@ const ListCard = () => {
             }
           />
         )}
-        onEndReached={onLoadMore}
+        onEndReached={onLoadMorePayment}
         ListEmptyComponent={() => (
           <View style={styles.waitingForPaymentEmpty}>
           <SnbEmptyData

@@ -29,9 +29,33 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
   }
 }
 
+/** History Waiting Payment List */
+function* OrderHistoryListPayment(action: models.ListProcessV3Action) {
+  try {
+    const response: models.ListSuccessV3Props<Array<models.WaitingPaymentListHistory>> =
+      yield call(() => {
+        return OrderHistoryApi.getOrderHistoryListPayment(
+          action.payload as models.OrderListHistoryProcessProps,
+        );
+      });
+    yield action.contextDispatch(
+      ActionCreators.orderHistoryListPaymentSuccess(response),
+    );
+    yield put(ActionCreators.orderHistoryListPaymentSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.orderHistoryListPaymentFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.orderHistoryListPaymentFailed(error as models.ErrorProps),
+    );
+  }
+}
+
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
+  yield takeLatest(types.ORDER_HISTORY_LIST_PAYMENT_PROCESS, OrderHistoryListPayment );
 }
 
 export default OrderHistorySaga;
