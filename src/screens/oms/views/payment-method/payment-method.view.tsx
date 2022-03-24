@@ -40,6 +40,9 @@ interface PaymentMethodInterface {
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => ACTION */
   LogBox.ignoreAllLogs();
+  const { stateThankYouPage } = useContext(contexts.ThankYouPageContext);
+  console.log(stateThankYouPage, 'stateThankYouPage');
+
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
@@ -172,6 +175,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
   React.useEffect(() => {
     if (getOrderStatus == true) {
+      console.log(thankYouPageData, 'YOYOYO');
       if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
         toThankYouPage();
       } else if (thankYouPageData?.orderStatus == 'create_started') {
@@ -251,6 +255,22 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       }
     }
   }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
+  // when detail failed
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (stateThankYouPage.detail.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, stateThankYouPage.detail.error]);
+  // when cancel status order failed
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (stateThankYouPage.cancelOrder.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, stateThankYouPage.cancelOrder.error]);
 
   /** => handle error status */
   const handleErrorStatus = () => {
