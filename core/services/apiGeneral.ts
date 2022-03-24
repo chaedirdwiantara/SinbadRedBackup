@@ -47,7 +47,6 @@ const apiGeneral = async <T>(
   };
   /** === HANDLE SUCCESS RESPONS === */
   const handleSuccess = (response: any) => {
-    console.log('irpan', response)
     return response.json().then((data: T) => data);
   };
   /** === HANDLE ERROR RESPONSE === */
