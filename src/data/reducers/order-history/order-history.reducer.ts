@@ -5,10 +5,22 @@ import {
   ListHistoryProps,
   listHistoryReducer,
 } from './list-history/list-history.reducer';
+import {
+  DetailHistoryProps,
+  detailHistoryInitialState,
+  detailHistoryReducer,
+} from './detail-history/detail-history.reducer';
+import {
+  DetailTrackingHistoryProps,
+  detailTrackingHistoryInitialState,
+  detailTrackingHistoryReducer,
+} from './detail-tracking-history/detail-tracking-history.reducer';
 /** === TYPE === */
 export interface OrderHistoryState {
   list: ListHistoryProps;
   listWaitingPayment: ListHistoryPaymentProps
+  detail: DetailHistoryProps;
+  tracking: DetailTrackingHistoryProps;
 }
 /** === INITIAL STATE === */
 export const orderHistoryInitialState = {
@@ -21,5 +33,7 @@ export const orderHistoryReducer = (
   action: any,
 ) => ({
   list: listHistoryReducer(list, action),
-  listWaitingPayment: listHistoryPaymentReducer(listWaitingPayment, action)
+  listWaitingPayment: listHistoryPaymentReducer(listWaitingPayment, action),
+  detail: detailHistoryInitialState,
+  tracking: detailTrackingHistoryInitialState,
 });

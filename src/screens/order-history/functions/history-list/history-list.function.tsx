@@ -1,4 +1,5 @@
-import { useEffect, useContext, useCallback } from 'react';
+import { useEffect, useContext, useCallback, useMemo } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { HistoryListContext } from '../../components/order-history-list';
 import { useHistoryListActions, useHistoryListPaymentActions } from './use-history-list.hook';
@@ -36,19 +37,26 @@ export const useHistoryListFunction = () => {
     dispatchOrderHistory,
     stateOrderHistory: { list },
   } = useOrderHistoryContext();
-  const { loadMore } = useHistoryListActions();
+  const { loadMore, refresh } = useHistoryListActions();
 
-  const onLoadMore = useCallback(() => {
-    const derivedQueryOptions: models.OrderListHistoryQueryOptions = {
+  const derivedQueryOptions = useMemo<models.OrderListHistoryQueryOptions>(
+    () => ({
       keyword: state.keyword,
       orderStatus: state.orderStatus,
       status: state.status,
-    };
+    }),
+    [state.keyword, state.orderStatus, state.status],
+  );
 
+  const onLoadMore = useCallback(() => {
     loadMore(dispatchOrderHistory, list, derivedQueryOptions);
-  }, [state.keyword, state.orderStatus, state.status, list]);
+  }, [derivedQueryOptions, list]);
 
-  return { onLoadMore };
+  const onRefresh = useCallback(() => {
+    refresh(dispatchOrderHistory, derivedQueryOptions);
+  }, [derivedQueryOptions]);
+
+  return { onLoadMore, refresh, onRefresh };
 };
 
 export const useHistoryListPaymentFunction = () => {

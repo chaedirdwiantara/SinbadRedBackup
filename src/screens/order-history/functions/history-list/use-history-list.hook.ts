@@ -36,22 +36,26 @@ const callProcessActionPayment = (
 
 export const useHistoryListActions = () => {
   const dispatch = useDispatch();
-  const page = 10;
-
+  const perPage = 10;
+  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListReset());
-      dispatch(callProcessAction(contextDispatch, true, 0, page, queryOptions));
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
     },
     refresh: (
       contextDispatch: (action: any) => any,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListRefresh());
-      dispatch(callProcessAction(contextDispatch, true, 0, page, queryOptions));
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.orderHistoryListReset());
@@ -61,14 +65,14 @@ export const useHistoryListActions = () => {
       state: models.ListItemV3Props<Array<models.OrderListHistory>>,
       queryOptions?: models.OrderListHistoryQueryOptions,
     ) => {
-      if (state.data.length < state.totalPage) {
-        contextDispatch(Actions.orderHistoryListRefresh());
+      if (state.page < state.totalPage) {
+        contextDispatch(Actions.orderHistoryListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
             false,
-            state.page + page,
-            page,
+            state.page + 1,
+            perPage,
             queryOptions,
           ),
         );

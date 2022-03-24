@@ -14,7 +14,7 @@ export const listHistoryInitialState: ListHistoryProps = {
   refresh: false,
   error: null,
   totalPage: 0,
-  page: 0,
+  page: 1,
   perPage: 10,
 };
 /** === REDUCER == */
