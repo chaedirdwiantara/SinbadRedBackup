@@ -13,22 +13,23 @@ export const useInitialGetList = () => {
   const { fetch, reset } = useHistoryListActions();
   const { fetchWaitingPayment, resetWaitingPayment } = useHistoryListPaymentActions();
 
-  useEffect(() => {
-    // list history
-    // get & reload by filter
-    const { keyword, orderStatus, status } = state;
-    if (status === 'waiting_for_payment') {
-      resetWaitingPayment(dispatchOrderHistory);
-      fetchWaitingPayment(dispatchOrderHistory, 
-        { 
-          orderStatus: '', 
-          status, 
-          keyword: '' 
-        });
-    } else {
-      fetch(dispatchOrderHistory, { orderStatus, status, keyword });
-    }
-  }, [state.keyword, state.orderStatus, state.status]);
+  useFocusEffect(
+    useCallback(() => {
+      // list history
+      // get & reload by filter
+      const { keyword, orderStatus, status } = state;
+      if (status === 'waiting_for_payment') {
+        fetchWaitingPayment(dispatchOrderHistory, 
+          { 
+            orderStatus: '', 
+            status, 
+            keyword: '' 
+          });
+      } else {
+        fetch(dispatchOrderHistory, { orderStatus, status, keyword });
+      }
+    }, [state.keyword, state.orderStatus, state.status]),
+  );
 };
 
 export const useHistoryListFunction = () => {

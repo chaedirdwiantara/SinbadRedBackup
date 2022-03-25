@@ -232,7 +232,7 @@ const ListCard = () => {
   } = useOrderHistoryContext();
 
   // loading view
-  if ([historyListLoading].some((i) => i) || [historyListPaymentLoading].some((i) => i) ) {
+  if ([historyListLoading].some((i) => i) ) {
     return <SnbProductListSkeleton />;
   }
   // function
@@ -253,7 +253,7 @@ const ListCard = () => {
     [state.keyword, state.orderStatus, state.status],
   );
   // error View
-  if ([historyListError].some((i) => i) || [historyListPaymentError].some((i) => i)) {
+  if ([historyListError].some((i) => i)) {
     return (
       <SnbEmptyData
         image={<EmptyImage />}
@@ -267,30 +267,40 @@ const ListCard = () => {
   if (state.status === 'waiting_for_payment') {
     return (
       <>
-        <FlatList
-        contentContainerStyle={{ paddingBottom: 50 }}
-        data={historyListPaymentData}
-        keyExtractor={(i) => String(i.id)}
-        renderItem={({ item }) => (
-          <CardWaitingForPayment
-            data={item}
-            onDetailOrder={() =>
-              goToWaitingPaymentHistoryDetail('orderHistory',Number(item.id))
-            }
-          />
-        )}
-        onEndReached={onLoadMorePayment}
-        ListEmptyComponent={() => (
-          <View style={styles.waitingForPaymentEmpty}>
+        { [historyListPaymentLoading].some((i) => i) ?
+          <SnbProductListSkeleton />
+          : [historyListPaymentError].some((i) => i) ?
           <SnbEmptyData
             image={<EmptyImage />}
             subtitle=""
-            title={wordingWaitingForPaymentEmpty()}
+            title={'Terjadi gangguan pada jaringan'}
           />
-          </View>
-          
-        )}
-      />
+          :
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 50 }}
+            data={historyListPaymentData}
+            keyExtractor={(i) => String(i.id)}
+            renderItem={({ item }) => (
+              <CardWaitingForPayment
+                data={item}
+                onDetailOrder={() =>
+                  goToWaitingPaymentHistoryDetail('orderHistory',Number(item.id))
+                }
+              />
+            )}
+            onEndReached={onLoadMorePayment}
+            ListEmptyComponent={() => (
+              <View style={styles.waitingForPaymentEmpty}>
+              <SnbEmptyData
+                image={<EmptyImage />}
+                subtitle=""
+                title={wordingWaitingForPaymentEmpty()}
+              />
+              </View>
+              
+            )}
+          />
+        }
       </>
     );
   }

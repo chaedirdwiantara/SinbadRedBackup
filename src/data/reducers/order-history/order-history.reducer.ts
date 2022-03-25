@@ -25,15 +25,17 @@ export interface OrderHistoryState {
 /** === INITIAL STATE === */
 export const orderHistoryInitialState = {
   list: listHistoryInitialState,
-  listWaitingPayment: listHistoryPaymentInitialState
+  listWaitingPayment: listHistoryPaymentInitialState,
+  detail: detailHistoryInitialState,
+  tracking: detailTrackingHistoryInitialState,
 };
 /** === REDUCER === */
 export const orderHistoryReducer = (
-  { list, listWaitingPayment }: OrderHistoryState,
+  { list, listWaitingPayment,detail, tracking }: OrderHistoryState,
   action: any,
 ) => ({
   list: listHistoryReducer(list, action),
   listWaitingPayment: listHistoryPaymentReducer(listWaitingPayment, action),
-  detail: detailHistoryInitialState,
-  tracking: detailTrackingHistoryInitialState,
+  detail: detailHistoryReducer(detail, action),
+  tracking: detailTrackingHistoryReducer(tracking, action),
 });
