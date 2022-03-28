@@ -9,7 +9,7 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import { REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
+import { REGISTER_OTP_VIEW, LOGIN_PHONE_VIEW } from '@screen/auth/functions/screens_name';
 import Svg from '@svg';
 import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
@@ -98,7 +98,7 @@ const SelfRegisterView: React.FC = () => {
             alignSelf: 'center',
           }}>
           <SnbText.B4>Sudah punya akun Sinbad? </SnbText.B4>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigate(LOGIN_PHONE_VIEW)}>
             <SnbText.B4 color={color.blue50}>Masuk</SnbText.B4>
           </TouchableOpacity>
         </View>
