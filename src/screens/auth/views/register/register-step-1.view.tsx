@@ -169,7 +169,7 @@ const RegisterStep1View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={goBack} type="white" title=""/>
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="" />
       <Content />
     </SnbContainer>
   );
