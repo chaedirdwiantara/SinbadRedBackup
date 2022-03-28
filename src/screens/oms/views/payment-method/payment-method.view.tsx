@@ -178,17 +178,20 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
   React.useEffect(() => {
     if (getOrderStatus == true) {
-      if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
-        toThankYouPage();
-      } else if (thankYouPageData?.orderStatus == 'create_started') {
-        if (statePaymentMethod.createOrder.data) {
-          thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
-            id: statePaymentMethod.createOrder.data?.id,
-            status: 'created_timeout',
-          });
-          handleErrorStatus();
+      if (thankYouPageData?.orderStatus) {
+        if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
+          toThankYouPage();
+        } else if (thankYouPageData?.orderStatus != 'waiting_for_payment') {
+          if (statePaymentMethod.createOrder.data) {
+            thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+              id: statePaymentMethod.createOrder.data?.id,
+              status: 'created_timeout',
+            });
+            handleErrorStatus();
+          } else {
+            handleErrorStatus();
+          }
         }
-        handleErrorStatus();
       }
     }
   }, [getOrderStatus, thankYouPageData]);
