@@ -40,6 +40,7 @@ interface PaymentMethodInterface {
 const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   /** => ACTION */
   LogBox.ignoreAllLogs();
+  const { stateThankYouPage } = useContext(contexts.ThankYouPageContext);
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
@@ -68,6 +69,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
+
   const checkoutContextData = stateCheckout.checkout.data;
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
@@ -162,7 +164,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (handleStatusPayment == false) {
-        if (statePaymentMethod.subOrderRtdb.data == true) {
+        if (statePaymentMethod.subOrderRtdb.data == 'true') {
           toThankYouPage();
         }
       }
@@ -251,6 +253,28 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       }
     }
   }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
+  // when detail failed
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (stateThankYouPage.detail.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, stateThankYouPage.detail.error]);
+  // when cancel status order failed
+  React.useEffect(() => {
+    if (handleStatusPayment == true) {
+      if (stateThankYouPage.cancelOrder.error != null) {
+        handleErrorStatus();
+      }
+    }
+  }, [handleStatusPayment, stateThankYouPage.cancelOrder.error]);
+  // payment method list failed
+  React.useEffect(() => {
+    if (stateCheckout.checkout.error != null) {
+      handleErrorStatus();
+    }
+  }, [stateCheckout.checkout.error]);
 
   /** => handle error status */
   const handleErrorStatus = () => {
