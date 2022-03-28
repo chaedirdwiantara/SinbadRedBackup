@@ -166,7 +166,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (handleStatusPayment == false) {
-        if (statePaymentMethod.subOrderRtdb.data.length >= 1) {
+        if (statePaymentMethod.subOrderRtdb.data?.length >= 1) {
           statePaymentMethod.subOrderRtdb.data[0] == 'true'
             ? toThankYouPage()
             : null;
