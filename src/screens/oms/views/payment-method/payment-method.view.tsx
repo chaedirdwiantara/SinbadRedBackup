@@ -301,6 +301,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
+    PaymentMethodSubRtdb.reset(dispatchPaymentMethod);
     setExpiredSession(false);
     clearTimeout(timeRef.current);
     goToShoppingCart();

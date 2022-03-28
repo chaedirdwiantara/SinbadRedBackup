@@ -56,6 +56,9 @@ const usePaymentMethodSubRtdb = () => {
     fetch: (contextDispatch: (action: any) => any, data: string) => {
       dispatch(Actions.isOrderRTDBChangeProcess(contextDispatch, { data }));
     },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.isOrderRTDBChangeReset(contextDispatch));
+    },
   };
 };
 
