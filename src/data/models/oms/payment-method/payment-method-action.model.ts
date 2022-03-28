@@ -1,5 +1,7 @@
 export interface PaymentMethodProps {
   amount: number;
+  page: string;
+  perPage: string;
 }
 
 export interface isOrderRTDBChangeAction {

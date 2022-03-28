@@ -11,7 +11,7 @@ import database from '@react-native-firebase/database';
 const paymentMethodListApi = (
   payload: models.ListProcessProps<models.PaymentMethodProps>,
 ) => {
-  const path = `payment-method-types?page=${payload.skip}&perPage=${payload.limit}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
+  const path = `payment-method-types?page=${payload.page}&perPage=${payload.perPage}&keyword=${payload.keyword}&sort=${payload.sort}&sortBy=${payload.sortBy}&amount=${payload.amount}`;
   return apiMapping<models.PaymentMethodList>(
     'auth',
     path,
@@ -52,23 +52,12 @@ const paymentMethodCreateOrdertApi = (
 
 /** check data order */
 const useCheckDataOrder = (orderId: any) => {
-  // const order = database()
-  //   .ref(`order`)
-  //   .on('value', (snapshot) => {
-  //     // let data = snapshot.val();
-  //     // let dataItem = { ...data };
-  //     let dataItem = 'true';
-  //     console.log(snapshot, 'snapshot');
-  //     ActionCreators.isOrderRTDBChangeSuccess({ dataItem });
-  //   });
-  // return () => database().ref(`order`).off('value', order);
-  const dataSnap: [] = [];
+  let dataSnap: any = [];
   database()
     .ref(`order/${orderId.data}`)
     .on('value', (snapshot) => {
       let data = snapshot.val();
-      let dataItem = { ...data };
-      dataSnap.push(dataItem);
+      dataSnap.push(data);
     });
 
   return dataSnap;

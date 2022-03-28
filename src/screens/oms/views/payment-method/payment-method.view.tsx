@@ -112,7 +112,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => handle payment method */
   const payloadPaymentMethod: any = {
-    amount: 900,
+    amount: dataCheckout?.totalPaymentNumber,
+    page: 1,
+    perPage: 10,
     keyword: '',
     sort: 'desc',
     sortBy: '',
@@ -164,8 +166,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (handleStatusPayment == false) {
-        if (statePaymentMethod.subOrderRtdb.data == 'true') {
-          toThankYouPage();
+        if (statePaymentMethod.subOrderRtdb.data.length >= 1) {
+          statePaymentMethod.subOrderRtdb.data[0] == 'true'
+            ? toThankYouPage()
+            : null;
         }
       }
     }, [handleStatusPayment, statePaymentMethod.subOrderRtdb.data]),
