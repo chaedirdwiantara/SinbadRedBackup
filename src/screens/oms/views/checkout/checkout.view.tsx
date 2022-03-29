@@ -18,7 +18,10 @@ import {
   totalQty,
   useGetTncContent,
 } from '@screen/oms/functions';
-import { usePaymentMethodCreateOrder } from '@screen/oms/functions/payment-method/payment-method-hook.function';
+import {
+  usePaymentMethodCreateOrder,
+  usePaymentMethodSubRtdb,
+} from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 import { CheckoutBottomView } from './checkout-bottom.view';
 import { useUpdateCartAction, useCheckoutAction } from '../../functions';
@@ -36,6 +39,7 @@ const OmsCheckoutView: FC = () => {
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
+  const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
 
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
@@ -82,6 +86,7 @@ const OmsCheckoutView: FC = () => {
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   const toPaymentMethod = () => {
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
+    PaymentMethodSubRtdb.reset(dispatchPaymentMethod);
     clearTimeout(timeRef.current);
     goToPaymentMethod(dataToPaymentMethod);
   };
