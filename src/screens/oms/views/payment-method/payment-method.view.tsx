@@ -206,7 +206,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   React.useEffect(() => {
     if (handleStatusPayment == true && statePaymentMethod.subOrderRtdb.data) {
       if (
-        statePaymentMethod.subOrderRtdb.data[0] == 'false' &&
+        statePaymentMethod.subOrderRtdb.data[0] != 'true' &&
         statePaymentMethod.createOrder.data?.id
       ) {
         thankYouPageAction.thankYoupageOrderDetail(
