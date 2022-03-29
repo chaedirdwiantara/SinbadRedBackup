@@ -93,10 +93,8 @@ const Content: React.FC = () => {
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={renderLocation}
             onEndReached={() => {
-              if (
-                searchLocationState.data?.data?.length <
-                searchLocationState.data?.meta?.total
-              ) {
+              const { meta, isLoadMoreLoading } = searchLocationState.data;
+              if (meta?.page < meta?.totalPage && !isLoadMoreLoading) {
                 loadMoreSearchLocation(
                   search.value,
                   searchLocationState.data?.meta?.page + 1,
