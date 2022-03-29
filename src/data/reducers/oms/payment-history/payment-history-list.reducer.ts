@@ -48,7 +48,7 @@ export const listHistoryPaymentReducer = simplifyReducer(listHistoryPaymentIniti
     };
   },
   /** => Failed */
-  [types.ORDER_HISTORY_LIST_FAILED](
+  [types.ORDER_HISTORY_LIST_PAYMENT_FAILED](
     state = listHistoryPaymentInitialState,
     { payload }: models.ListFailedAction,
   ) {
@@ -61,21 +61,21 @@ export const listHistoryPaymentReducer = simplifyReducer(listHistoryPaymentIniti
     };
   },
   /** => Refresh */
-  [types.ORDER_HISTORY_LIST_REFRESH]() {
+  [types.ORDER_HISTORY_LIST_PAYMENT_REFRESH]() {
     return {
       ...listHistoryPaymentInitialState,
       refresh: true,
     };
   },
   /** => Load More */
-  [types.ORDER_HISTORY_LIST_LOADMORE](state = listHistoryPaymentInitialState) {
+  [types.ORDER_HISTORY_LIST_PAYMENT_LOADMORE](state = listHistoryPaymentInitialState) {
     return {
       ...state,
       loadMore: true,
     };
   },
   /** => Reset */
-  [types.ORDER_HISTORY_LIST_RESET]() {
+  [types.ORDER_HISTORY_LIST_PAYMENT_RESET]() {
     return listHistoryPaymentInitialState;
   },
 });

@@ -6,10 +6,12 @@ import { useHistoryListActions, useHistoryListPaymentActions } from './use-histo
 import { NavigationAction } from '@navigation';
 // type
 import * as models from '@models';
+import { usePaymentHistoryContext } from 'src/data/contexts/oms/payment-history/usePaymentHistoryContext';
 
 export const useInitialGetList = () => {
   const [state] = useContext(HistoryListContext.Context);
   const { dispatchOrderHistory } = useOrderHistoryContext();
+  const { dispatchPaymentHistory } = usePaymentHistoryContext();
   const { fetch, reset } = useHistoryListActions();
   const { fetchWaitingPayment, resetWaitingPayment } = useHistoryListPaymentActions();
 
@@ -19,11 +21,13 @@ export const useInitialGetList = () => {
       // get & reload by filter
       const { keyword, orderStatus, status } = state;
       if (status === 'waiting_for_payment') {
-        fetchWaitingPayment(dispatchOrderHistory, 
+        fetchWaitingPayment(dispatchPaymentHistory, 
           { 
             orderStatus: '', 
             status, 
-            keyword: '' 
+            keyword: '',
+            sort: 'desc',
+            sortBy: 'id'
           });
       } else {
         fetch(dispatchOrderHistory, { orderStatus, status, keyword });
@@ -63,28 +67,36 @@ export const useHistoryListFunction = () => {
 export const useHistoryListPaymentFunction = () => {
   const [state] = useContext(HistoryListContext.Context);
   const {
-    dispatchOrderHistory,
-    stateOrderHistory: { listWaitingPayment },
-  } = useOrderHistoryContext();
-  const { loadMoreWaitingPayment } = useHistoryListPaymentActions();
-
-  const onLoadMorePayment = useCallback(() => {
-    const derivedQueryOptions: models.OrderListHistoryQueryOptions = {
+    dispatchPaymentHistory,
+    statePaymentHistory: { listWaitingPayment },
+  } = usePaymentHistoryContext();
+  const { loadMoreWaitingPayment, refreshWaitingPayment } = useHistoryListPaymentActions();
+  
+  const derivedQueryOptions = useMemo<models.PaymentListHistoryQueryOptions>(
+    () => ({
       keyword: state.keyword,
       orderStatus: state.orderStatus,
       status: state.status,
-    };
+      sort: 'desc',
+      sortBy: 'id'
+    }),
+    [state.keyword, state.orderStatus, state.status],
+  );
 
-    loadMoreWaitingPayment(dispatchOrderHistory, listWaitingPayment, derivedQueryOptions);
+  const onLoadMorePayment = useCallback(() => {
+    loadMoreWaitingPayment(dispatchPaymentHistory, listWaitingPayment, derivedQueryOptions);
   }, [state.keyword, state.orderStatus, state.status, listWaitingPayment]);
 
-  return { onLoadMorePayment };
+  const onRefreshPayment = useCallback(() => {
+    refreshWaitingPayment(dispatchPaymentHistory, derivedQueryOptions);
+  }, [derivedQueryOptions]);
+  return { onLoadMorePayment, refreshWaitingPayment, onRefreshPayment };
 };
 
 /** => Go to Waiting for Payment History Detail */
 export const goToWaitingPaymentHistoryDetail = (
   section: string,
-  orderId: number
+  orderId: number,
 ) => {
-  NavigationAction.navigate('OmsThankYouPageView', {section, orderId});
+  NavigationAction.navigate('OmsThankYouPageView', { section, orderId });
 };

@@ -194,33 +194,10 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   }
 }
 
-/** History Waiting Payment List */
-function* OrderHistoryListPayment(action: models.ListProcessV3Action) {
-  try {
-    const response: models.ListSuccessV3Props<Array<models.WaitingPaymentListHistory>> =
-      yield call(() => {
-        return OrderHistoryApi.getOrderHistoryListPayment(
-          action.payload as models.OrderListHistoryProcessProps,
-        );
-      });
-    yield action.contextDispatch(
-      ActionCreators.orderHistoryListPaymentSuccess(response),
-    );
-    yield put(ActionCreators.orderHistoryListPaymentSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.orderHistoryListPaymentFailed(error as models.ErrorProps),
-    );
-    yield put(
-      ActionCreators.orderHistoryListPaymentFailed(error as models.ErrorProps),
-    );
-  }
-}
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
-  yield takeLatest(types.ORDER_HISTORY_LIST_PAYMENT_PROCESS, OrderHistoryListPayment );
   yield takeLatest(types.ORDER_HISTORY_DETAIL_PROCESS, OrderHistoryDetail);
   yield takeLatest(
     types.ORDER_HISTORY_TRACKING_DETAIL_PROCESS,

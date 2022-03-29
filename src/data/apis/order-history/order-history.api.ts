@@ -29,26 +29,6 @@ export const getOrderHistoryList = (
     'LIST',
   );
 };
-
-export const getOrderHistoryListPayment = (
-  payload: models.OrderListHistoryProcessProps,
-) => {
-  const qs = serializeQs({
-    page: payload.page,
-    perPage: payload.perPage,
-    status: payload.status,
-    orderStatus: payload.orderStatus,
-    keyword: payload.keyword,
-  });
-
-  return apiMappingV3<Array<models.WaitingPaymentListHistory>>(
-    'auth',
-    `${historyOrderPaymentPath}?${qs}`,
-    'buyer-order',
-    'v1',
-    'LIST',
-  );
-};
 // get detail order history
 export const getOrderHistoryDetail = ({ id }: { id: string }) => {
   return apiMappingV3<Array<models.OrderListHistory>>(

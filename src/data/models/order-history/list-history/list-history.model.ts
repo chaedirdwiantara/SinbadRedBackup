@@ -22,17 +22,6 @@ export type OrderListHistory = {
   isOrderAbleToDone: boolean;
 };
 
-export type WaitingPaymentListHistory = {
-  id: number
-  code: string
-  paymentExpiredDate: string
-  paymentIconUrl: string
-  paymentDisplayLabel: string
-  vaAccountNo: string
-  totalOrderAmount: string
-  status: string
-}
-
 export interface OrderListHistoryQueryOptions {
   page?: number;
   perPage?: number;

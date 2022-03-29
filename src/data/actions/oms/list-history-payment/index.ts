@@ -5,7 +5,7 @@ import * as types from '@types';
 /** => Process */
 export const orderHistoryListPaymentProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.OrderListHistoryProcessProps,
+  payload: models.PaymentListHistoryProcessProps,
 ): models.ListProcessV3Action => {
   contextDispatch({ type: types.ORDER_HISTORY_LIST_PAYMENT_PROCESS, payload });
   return { type: types.ORDER_HISTORY_LIST_PAYMENT_PROCESS, payload, contextDispatch };

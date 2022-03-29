@@ -223,8 +223,10 @@ const OmsThankYouPageView: FC = () => {
   }
   const handleConfirmationCancelOrder = () => {
     // update order to cancelled and back to history list view
-    // thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
-    NavigationAction.navigate('HistoryListView')
+    thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
+    setTimeout(() => {
+      NavigationAction.navigate('HistoryListView');
+    }, 1000);
   }
   /** => Order Notes */
   const renderOrderNotes = () => {
