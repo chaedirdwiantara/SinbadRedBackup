@@ -291,7 +291,6 @@ const ListCard = () => {
 
   // render list waiting paymment
   if (state.status === 'waiting_for_payment') {
-    console.log('irpan', historyListPaymentLoading,historyListPaymentError,historyListPaymentData)
     return (
       <>
         { [historyListPaymentLoading].some((i) => i) ?
