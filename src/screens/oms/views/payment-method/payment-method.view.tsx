@@ -166,7 +166,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (handleStatusPayment == false) {
-        if (statePaymentMethod.subOrderRtdb.data?.length >= 1) {
+        if (statePaymentMethod.subOrderRtdb.data) {
+          statePaymentMethod.subOrderRtdb.data[0] == 'true'
+            ? toThankYouPage()
+            : null;
+        }
+      } else if (handleStatusPayment == true) {
+        if (statePaymentMethod.subOrderRtdb.data) {
           statePaymentMethod.subOrderRtdb.data[0] == 'true'
             ? toThankYouPage()
             : null;
@@ -198,8 +204,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => try to get status payment from order detail when there's no update from rtdb */
   React.useEffect(() => {
-    if (handleStatusPayment == true) {
-      if (statePaymentMethod.createOrder.data?.id) {
+    if (handleStatusPayment == true && statePaymentMethod.subOrderRtdb.data) {
+      if (
+        statePaymentMethod.subOrderRtdb.data[0] == 'false' &&
+        statePaymentMethod.createOrder.data?.id
+      ) {
         thankYouPageAction.thankYoupageOrderDetail(
           dispatchThankYouPage,
           statePaymentMethod.createOrder.data?.id,
@@ -207,7 +216,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
         setGetOrderStatus(true);
       }
     }
-  }, [handleStatusPayment, statePaymentMethod.createOrder.data]);
+  }, [
+    handleStatusPayment,
+    statePaymentMethod.createOrder.data,
+    statePaymentMethod.subOrderRtdb.data,
+  ]);
 
   /** => call 5 second checkout */
   React.useEffect(() => {
