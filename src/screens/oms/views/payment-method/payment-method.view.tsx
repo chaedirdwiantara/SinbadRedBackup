@@ -256,7 +256,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   //==> handle create order
   const handleCreateOrder = () => {
     if (checkoutContextData != null) {
-      if (isSelected.length !== 0) {
+      if (selectedPaymentMethodData.isActive == true) {
         setPaymentStatusSession(true);
       } else {
         createTheOrder();
