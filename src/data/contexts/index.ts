@@ -39,6 +39,10 @@ import {
   PaymentMethodProvider,
   PaymentMethodContext,
 } from './oms/payment-method/PaymentMethodProvider';
+import { 
+  PaymentHistoryProvider, 
+  PaymentHistoryContext 
+} from './oms/payment-history/PaymentHistoryProvider';
 /** === EXPORT ALL PROVIDER HERE === */
 export const providers = [
   GlobalProvider,
@@ -64,6 +68,7 @@ export const providers = [
   ThankYouPageProvider,
   OrderHistoryProvider,
   PaymentMethodProvider,
+  PaymentHistoryProvider
 ];
 /** === EXPORT ALL CONTEXT HERE === */
 export const contexts = {
@@ -88,4 +93,5 @@ export const contexts = {
   ThankYouPageContext,
   OrderHistoryContext,
   PaymentMethodContext,
+  PaymentHistoryContext
 };

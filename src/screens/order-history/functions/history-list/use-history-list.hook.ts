@@ -83,22 +83,23 @@ export const useHistoryListActions = () => {
 
 export const useHistoryListPaymentActions = () => {
   const dispatch = useDispatch();
-  const page = 10;
+  const perPage = 10;
+  const page = 1;
 
   return {
     fetchWaitingPayment: (
       contextDispatch: (action: any) => any,
-      queryOptions?: models.OrderListHistoryQueryOptions,
+      queryOptions?: models.PaymentListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListPaymentReset());
-      dispatch(callProcessActionPayment(contextDispatch, true, 0, page, queryOptions));
+      dispatch(callProcessActionPayment(contextDispatch, true, page, perPage, queryOptions));
     },
     refreshWaitingPayment: (
       contextDispatch: (action: any) => any,
-      queryOptions?: models.OrderListHistoryQueryOptions,
+      queryOptions?: models.PaymentListHistoryQueryOptions,
     ) => {
       contextDispatch(Actions.orderHistoryListPaymentRefresh());
-      dispatch(callProcessActionPayment(contextDispatch, true, 0, page, queryOptions));
+      dispatch(callProcessActionPayment(contextDispatch, true, page, perPage, queryOptions));
     },
     resetWaitingPayment: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.orderHistoryListPaymentReset());
@@ -106,16 +107,16 @@ export const useHistoryListPaymentActions = () => {
     loadMoreWaitingPayment: (
       contextDispatch: (action: any) => any,
       state: models.ListItemV3Props<Array<models.WaitingPaymentListHistory>>,
-      queryOptions?: models.OrderListHistoryQueryOptions,
+      queryOptions?: models.PaymentListHistoryQueryOptions,
     ) => {
-      if (state.data.length < state.totalPage) {
+      if (state.page < state.totalPage) {
         contextDispatch(Actions.orderHistoryListPaymentRefresh());
         dispatch(
           callProcessActionPayment(
             contextDispatch,
             false,
-            state.page + page,
-            page,
+            state.page + 1,
+            perPage,
             queryOptions,
           ),
         );

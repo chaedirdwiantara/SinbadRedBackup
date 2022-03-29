@@ -38,6 +38,7 @@ import { NavigationAction } from '@core/functions/navigation';
 // type
 import * as models from '@models';
 import { labelStatus } from '../../types';
+import { usePaymentHistoryContext } from 'src/data/contexts/oms/payment-history/usePaymentHistoryContext';
 
 type CardProps = {
   data: models.OrderListHistory;
@@ -140,24 +141,35 @@ const Card: FC<CardProps> = (props) => {
 };
 
 const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
-  const { 
-    data, 
-    onDetailOrder
-  } = props;
+  const { data, onDetailOrder } = props;
   return (
     <View style={styles.card}>
       <View style={{ margin: 16 }}>
         {/* countdown timer*/}
-        <View style={{flexDirection:'row',backgroundColor:color.red10, marginBottom:16, padding:8, alignItems:'center',justifyContent: 'center'}}>
-          <SnbText.C1 color={color.red50}>{"Batas waktu pembayaran: "}
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: color.red10,
+            marginBottom: 16,
+            padding: 8,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <SnbText.C1 color={color.red50}>
+            {'Batas waktu pembayaran: '}
           </SnbText.C1>
           <CountDownTimer
-                type={'simple'}
-                expiredTime={data!.paymentExpiredDate}
+            type={'simple'}
+            expiredTime={data!.paymentExpiredDate}
           />
         </View>
         {/* virtual account information*/}
-        <View style={{flexDirection:'row', paddingTop:6, paddingHorizontal:16}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingTop: 6,
+            paddingHorizontal: 16,
+          }}>
           <Image
             source={{
               uri: data.paymentIconUrl,
@@ -166,32 +178,41 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
               width: 100,
               height: 50,
               marginRight: 16,
-              borderColor: color.black5
+              borderColor: color.black5,
             }}
           />
           <View>
             <SnbText.H3>{data.paymentDisplayLabel}</SnbText.H3>
             <SnbText.C2>{data.vaAccountNo}</SnbText.C2>
           </View>
-          
         </View>
-        {/* button action and total*/ }
-        <View style={{flexDirection:'row',justifyContent: 'space-between',paddingTop:6, paddingHorizontal:16}}>
-        <View>
-        <SnbText.C1>Total Pembayaran:</SnbText.C1>
-        <SnbText.H4>{toCurrency(Number(data.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H4>
-        </View>
-        <SnbButton.Dynamic
-          size="small"
-          type="primary"
-          title={'Detail pesanan'}
-          onPress={onDetailOrder}
-        />
+        {/* button action and total*/}
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingTop: 6,
+            paddingHorizontal: 16,
+          }}>
+          <View>
+            <SnbText.C1>Total Pembayaran:</SnbText.C1>
+            <SnbText.H4>
+              {toCurrency(Number(data.totalOrderAmount) ?? 0, {
+                withFraction: false,
+              })}
+            </SnbText.H4>
+          </View>
+          <SnbButton.Dynamic
+            size="small"
+            type="primary"
+            title={'Detail pesanan'}
+            onPress={onDetailOrder}
+          />
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const EmptyImage = () => (
   <Image
@@ -207,12 +228,12 @@ const wordingEmpty = (keyword: string): string => {
 };
 const wordingWaitingForPaymentEmpty = () => {
   return 'Belum ada pesanan';
-}
+};
 
 const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
-  const { onLoadMorePayment } = useHistoryListPaymentFunction();
+  const { onLoadMorePayment, onRefreshPayment } = useHistoryListPaymentFunction();
   const { onLoadMore, onRefresh } = useHistoryListFunction();
   const { cancelOrder, doneOrder } = useDetailHistoryOrder();
   const {
@@ -222,14 +243,19 @@ const ListCard = () => {
         data: historyListData,
         error: historyListError,
         loadMore: historyListLoadMore,
-      },
-      listWaitingPayment: {
-        loading: historyListPaymentLoading,
-        data: historyListPaymentData,
-        error: historyListPaymentError
       }
     },
   } = useOrderHistoryContext();
+  const {
+    statePaymentHistory: {
+      listWaitingPayment: {
+        loading: historyListPaymentLoading,
+        data: historyListPaymentData,
+        error: historyListPaymentError,
+        loadMore: historyListPaymentLoadMore
+      }
+    },
+  } = usePaymentHistoryContext();
 
   // loading view
   if ([historyListLoading].some((i) => i) ) {
@@ -282,6 +308,7 @@ const ListCard = () => {
             keyExtractor={(i) => String(i.id)}
             renderItem={({ item }) => (
               <CardWaitingForPayment
+                key={String(item.id)}
                 data={item}
                 onDetailOrder={() =>
                   goToWaitingPaymentHistoryDetail('orderHistory',Number(item.id))
@@ -299,6 +326,14 @@ const ListCard = () => {
               </View>
               
             )}
+            refreshControl={
+              <RefreshControl
+                onRefresh={() => onRefreshPayment()}
+                refreshing={[historyListPaymentLoading, historyListPaymentLoadMore].some(
+                  (i) => i,
+                )}
+              />
+            }
           />
         }
       </>
