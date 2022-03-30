@@ -5,7 +5,6 @@ import { SnbText, color, SnbButton, styles } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
-// import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '@core/styles';
@@ -30,11 +29,6 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
       cart: { data: dataProductDetailCart },
     },
   } = useProductContext();
-  // const {
-  //   stateShopingCart: {
-  //     create: { loading: addToCartLoading },
-  //   },
-  // } = useShopingCartContext();
   const {
     stateStock: {
       validation: { error: errorStock },
@@ -65,7 +59,6 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
       </View>
       {isFromProductDetail ? (
         <SnbButton.Dynamic
-          // loading={addToCartLoading}
           disabled={disabled}
           size="small"
           type="primary"
@@ -75,7 +68,6 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
         />
       ) : (
         <SnbButton.Dynamic
-          // loading={addToCartLoading}
           disabled={disabled}
           size="small"
           type="primary"
