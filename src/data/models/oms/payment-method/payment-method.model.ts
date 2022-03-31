@@ -16,6 +16,7 @@ export interface PaymentMethod {
   serviceFeeNonDeduct: string;
   isServiceFeeFree: string;
   isSelected: boolean;
+  isActive: boolean;
 }
 
 export interface PaymentMethodGetWaitingPaymentOrder {
