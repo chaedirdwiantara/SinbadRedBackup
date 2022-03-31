@@ -48,7 +48,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
                 </View>
                 <View>
                   <SnbText.C2>
-                    {toCurrency(product.lastUsedPrice * sellerData.products[0]?.qty, { withFraction: false })}
+                    {toCurrency(product.lastUsedPrice * product?.qty, { withFraction: false })}
                   </SnbText.C2>
                 </View>
               </View>
