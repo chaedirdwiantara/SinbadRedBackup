@@ -4,36 +4,25 @@ import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
 import { goToPaymentMethod } from '@screen/oms/functions';
+import { useUpdateCartAction } from '../../functions';
 import {
-  useGetCartAction,
-  useCheckProductAction,
-  useCheckSellerAction,
-  useCheckStockAction,
-  useRemoveCartProductAction,
-  useCartBuyerAddressAction,
-  useUpdateCartAction,
-} from '../../functions';
-import {
-  callBackToCartFunction,
   totalPayment,
   totalPaymentWithoutCurrency,
   useCheckoutAction,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
 /** === TYPE === */
-import * as models from '@models';
 import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
-import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
 
 interface CheckoutBottomViewProps {
   data: any;
-  abortTimeOut: () => void;
+  goToPaymentMethod: () => void;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
-  abortTimeOut,
+  goToPaymentMethod,
 }) => {
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { stateCheckout, dispatchCheckout } = React.useContext(
@@ -41,16 +30,15 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   );
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
-  const checkoutAction = useCheckoutAction();
   const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
 
   const [reachLimit, setReachLimit] = useState(false);
 
   const handleBackToCart = () => {
-    setReachLimit(false);
-    abortTimeOut;
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
+    setReachLimit(false);
     goToShoppingCart();
   };
 
@@ -58,7 +46,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
 
   const pressButton = () => {
     setReachLimit(true);
-    // goToPaymentMethod(dataToPaymentMethod);
   };
 
   const content = () => {
@@ -85,7 +72,7 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
         <SnbButton.Dynamic
           size="small"
           type={'primary'}
-          onPress={abortTimeOut}
+          onPress={goToPaymentMethod}
           title={'Pilih Pembayaran'}
           // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />

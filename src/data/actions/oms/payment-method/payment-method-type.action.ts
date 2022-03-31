@@ -29,7 +29,10 @@ export const paymentMethodListFailed = (
   return { type: types.PAYMENT_METHOD_LIST_FAILED, payload: data };
 };
 /** => reset */
-export const paymentMethodListReset = () => {
+export const paymentMethodListReset = (
+  contextDispatch: (action: any) => any,
+) => {
+  contextDispatch({ type: types.PAYMENT_METHOD_LIST_RESET });
   return { type: types.PAYMENT_METHOD_LIST_RESET };
 };
 /** => loading */

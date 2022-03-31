@@ -4,10 +4,10 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageAction, useThankYouPageCancelOrderAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
-import React, { FC, useEffect, useState } from 'react';
+import { color, SnbBottomSheet, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -22,17 +22,29 @@ import { PaymentGuideListItem } from '@model/oms';
 import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { goToHome } from '@core/functions/product';
-import { goToThankYouPage } from '@screen/oms/functions';
 import moment from 'moment';
 import { CountDownTimer } from '@screen/history/components';
 import { NavigationAction } from '@core/functions/navigation';
+import { RouteProp, useRoute } from '@react-navigation/native';
+import BottomSheetConfirmation, {
+  BottomSheetTransactionRef,
+} from '@core/components/BottomSheetConfirmation';
+
+type ThankYouPageParamList = {
+  Detail: { section: 'orderHistory' | 'payment'; orderId: string; };
+};
+
+type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 
 const OmsThankYouPageView: FC = () => {
+  const { params } = useRoute<ThankYouPageRouteProp>();
+  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
   const [paymentMethodId, setPaymentMethodId]= useState('');
   const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const {
     stateThankYouPage: {
       detail: {
@@ -63,7 +75,7 @@ const OmsThankYouPageView: FC = () => {
 
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage,'7')
+    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage, params.orderId)
   }, [])
 
   useEffect(() => {
@@ -97,7 +109,6 @@ const OmsThankYouPageView: FC = () => {
   /** => render countdown */
   const renderCountDown = () => {
     if(thankYouPageData != null && thankYouPageData != undefined){
-      console.log('irpan',thankYouPageData )
       const expiredPaymentTime = thankYouPageData?.expiredDate;
 
       return moment.utc(new Date()).local() <
@@ -206,6 +217,17 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     )
   }
+  /** => batalkan pesanan */
+  const handleCancelOrder = () => {
+    confirmModalRef.current?.show(params.orderId)
+  }
+  const handleConfirmationCancelOrder = () => {
+    // update order to cancelled and back to history list view
+    thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
+    setTimeout(() => {
+      NavigationAction.navigate('HistoryListView');
+    }, 1000);
+  }
   /** => Order Notes */
   const renderOrderNotes = () => {
     if(thankYouPageData != null){
@@ -217,6 +239,14 @@ const OmsThankYouPageView: FC = () => {
               thankYouPageData?.createdAt ? toLocalDateTime(thankYouPageData?.createdAt) : '-'
             }
           />
+          {params.section == 'orderHistory' &&
+            <ThankYouPageCardItem 
+            title='Alamat Pengiriman'
+            value={
+              `${thankYouPageData?.buyerAddress.address} ${thankYouPageData?.buyerAddress.noteAddress} ${thankYouPageData?.buyerAddress.urban} ${thankYouPageData?.buyerAddress.district} ${thankYouPageData?.buyerAddress.city} ${thankYouPageData?.buyerAddress.province}, ${thankYouPageData?.buyerAddress.zipCode}`
+            }
+          />
+          }
         </ThankYouPageCard>
       )
     }
@@ -256,23 +286,51 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
+  {/* confirmation  batalkan*/}
+  const renderModalConfirmationCancelOrder = () => {
+    return (
+      <BottomSheetConfirmation
+          ref={confirmModalRef}
+          title="Batalkan Pesanan?"
+          desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
+          onSubmit={handleConfirmationCancelOrder}
+      />
+    )
+  }
+  
   /** => Footer */
   const renderFooter = () => (
-    <View
-      style={ThankYouPageStyle.footer}>
-        <SnbButton.Dynamic
-          size="medium"
-          type="secondary"
-          title={'Kembali ke Beranda'}
-          onPress={goToHome}
-        />
-        <SnbButton.Dynamic
-          size="medium"
+    <>
+    {params.section == 'orderHistory' ?
+    <View style={ThankYouPageStyle.footerCancelOrder}>
+      <View style={ThankYouPageStyle.footerCancelOrderButton}>
+        <SnbButton.Single
           type="primary"
-          title={'Cek Status'}
-          onPress={() =>NavigationAction.navigate('HistoryListView')}
+          title={'Batalkan Pesanan'}
+          onPress={handleCancelOrder}
         />
+      </View>
+      
     </View>
+    :
+    <View style={ThankYouPageStyle.footer}
+    >
+      <SnbButton.Dynamic
+        size="medium"
+        type="secondary"
+        title={'Kembali ke Beranda'}
+        onPress={goToHome}
+      />
+      <SnbButton.Dynamic
+        size="medium"
+        type="primary"
+        title={'Cek Status'}
+        onPress={() =>NavigationAction.navigate('HistoryListView')}
+      />
+  </View>
+    } 
+    </>
+    
   );
   /** => Main */
   return (
@@ -284,13 +342,14 @@ const OmsThankYouPageView: FC = () => {
       (
       <>
       <SnbTopNav.Type1
-        type="red"
+        type="white"
         title={`Menunggu Pembayaran`}
       />
       
       {renderContent()}
       {renderFooter()}
       {renderModalOrderDetail()}
+      {renderModalConfirmationCancelOrder()}
       </>
       )}
     </SnbContainer>

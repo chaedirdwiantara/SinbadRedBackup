@@ -6,11 +6,9 @@ import {
 } from '@reducer/oms/checkout/checkout.reducer';
 
 const CheckoutContext = React.createContext<{
-  // state: InitialStateType;
   stateCheckout: CheckoutInitialProps;
   dispatchCheckout: React.Dispatch<any>;
 }>({
-  // state: initialState,
   stateCheckout: checkoutInitialState,
   dispatchCheckout: () => null,
 });

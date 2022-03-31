@@ -8,13 +8,15 @@ export interface PaymentMethodList {
 }
 
 export interface PaymentMethod {
+  id: number;
   code: string;
   displayLabel: string;
-  iconURL: string;
+  iconUrl: string;
   serviceFeeDeduct: string;
   serviceFeeNonDeduct: string;
   isServiceFeeFree: string;
   isSelected: boolean;
+  isActive: boolean;
 }
 
 export interface PaymentMethodGetWaitingPaymentOrder {
@@ -70,7 +72,7 @@ export interface PaymentMethodChoosen {
   serviceFeeNonDeduct: number;
   displayLabel: string;
   isServiceFeeFree: boolean;
-  iconURL: string;
+  iconUrl: string;
 }
 export interface PaymentMethodProducts {
   productId: string;

@@ -22,13 +22,11 @@ import { contexts } from '@contexts';
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation }: any) => {
   /** === STATE === */
-  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+  const { dispatchCart } = useContext(contexts.CartContext);
   const [modalError, setModalError] = React.useState(false);
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
-  // const { data } = useDataTotalProductCart();
-  // const { setCartId } = useCheckoutMaster();
   const totalCartActions = useGetTotalCartAction();
   const notificationTotalActions = useNotificationTotalActions();
   const { me } = useDataAuth();
@@ -56,13 +54,6 @@ const HomeView: React.FC = ({ navigation }: any) => {
       notificationTotalActions.fetch();
     }
   }, [me.data]);
-
-  /** => listen changes data cart id */
-  // React.useEffect(() => {
-  //   if (data && data.cartId) {
-  //     // setCartId({ cartId: data.cartId });
-  //   }
-  // }, [data.cartId]);
 
   React.useEffect(() => {
     if (me.error !== null && me.error.code === undefined) {

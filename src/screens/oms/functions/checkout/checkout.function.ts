@@ -1,19 +1,12 @@
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { contexts } from '@contexts';
-import { useCheckoutAction } from './checkout-hook.function';
-import { useUpdateCartAction } from '../cart/cart-hook.function';
-import { goToShoppingCart } from '../../../product/functions';
 
 interface ToCurrencyOptions {
   withPrefix?: boolean;
   withFraction?: boolean;
 }
-
-/** => calculate total price */
-
-/** => calculate sub total price */
 
 const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
   const { statePromo } = useContext(contexts.PromoContext);
@@ -92,17 +85,6 @@ const totalPaymentWithoutCurrency = (sellers: [any]) => {
   return total;
 };
 
-const callBackToCartFunction = () => {
-  // const checkoutAction = useCheckoutAction();
-  // const updateCartAction = useUpdateCartAction();
-  // const { dispatchCart } = useContext(contexts.CartContext);
-  // const { dispatchCheckout } = useContext(contexts.CheckoutContext);
-  // updateCartAction.reset(dispatchCart);
-  // checkoutAction.reset(dispatchCheckout);
-  // goToShoppingCart();
-  console.log('HAI');
-};
-
 export {
   handleDiscountInvoiceGroups,
   totalBarangPrice,
@@ -110,5 +92,4 @@ export {
   totalQty,
   totalPayment,
   totalPaymentWithoutCurrency,
-  callBackToCartFunction,
 };

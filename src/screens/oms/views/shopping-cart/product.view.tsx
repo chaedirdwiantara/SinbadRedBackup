@@ -90,7 +90,7 @@ export const ProductView: FC<ProductViewProps> = ({
       if (multipleQty > 1) {
         const isMod = (qty - minQty) % multipleQty === 0;
         const minValue = minQty;
-        const maxValue = stock - ((stock + minQty) % multipleQty);
+        const maxValue = stock - ((stock - minQty) % multipleQty);
         if (qty <= maxValue && qty >= minValue) {
           if (isMod) {
             updatedQty = qty;
@@ -134,7 +134,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText.B4
             color={
               color.red70
-            }>{`Tersedia ${product.stock} ${product.uomLabel}`}</SnbText.B4>
+            }>{`Tersisa ${product.stock} ${product.uomLabel}`}</SnbText.B4>
         </View>
       );
     }
@@ -160,7 +160,7 @@ export const ProductView: FC<ProductViewProps> = ({
         <View style={{ marginBottom: 5 }}>
           <SnbBadge.Label
             type="warning"
-            value={`Include PPN ${product.taxPercentage}%`}
+            value={`Termasuk Pajak ${product.taxPercentage}%`}
           />
         </View>
       );
@@ -241,7 +241,7 @@ export const ProductView: FC<ProductViewProps> = ({
 
   if (product.multipleQty > 1) {
     isDecreaseDisabled = !(product.qty - product.multipleQty >= product.minQty);
-    isIncreaseDisabled = !(product.qty + product.multipleQty < stock);
+    isIncreaseDisabled = !(product.qty + product.multipleQty <= stock);
   } else {
     isDecreaseDisabled = !(product.qty > product.minQty);
     isIncreaseDisabled = !(product.qty < stock);

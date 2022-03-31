@@ -23,6 +23,7 @@ import ThankYouPageSaga from './oms/thank-you-page/thank-you-page.saga';
 import OrderHistorySaga from './order-history/order-history.saga';
 import CheckoutTncSaga from './oms/checkout/checkout-tnc.saga';
 import paymentMethodListSaga from './oms/payment-method/payment-method.saga';
+import PaymentHistorySaga from './oms/payment-history/payment-history.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -49,6 +50,7 @@ function* rootSaga() {
   yield all([fork(OrderHistorySaga)]);
   yield all([fork(CheckoutTncSaga)]);
   yield all([fork(paymentMethodListSaga)]);
+  yield all([fork(PaymentHistorySaga)]);
 }
 
 export default rootSaga;

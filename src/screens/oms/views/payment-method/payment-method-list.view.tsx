@@ -43,7 +43,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               handleOnpress(index, item);
             }}>
             <Image
-              source={{ uri: item.iconURL }}
+              source={{ uri: item.iconUrl }}
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>
@@ -64,7 +64,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               handleOnpress(index, item);
             }}>
             <Image
-              source={{ uri: item.iconURL }}
+              source={{ uri: item.iconUrl }}
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>

@@ -5,14 +5,10 @@ import * as Actions from '@actions';
 const callListProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
-  skip: number,
-  limit: number,
   queryOptions: models.PaymentMethodProps,
 ) => {
   return Actions.paymentMethodListProcess(contextDispatch, {
     loading,
-    skip,
-    limit,
     ...queryOptions,
   });
 };
@@ -25,13 +21,11 @@ const usePaymentMethodListContent = () => {
       contextDispatch: (action: any) => any,
       queryOptions: models.ListProcessProps<models.PaymentMethodProps>,
     ) => {
-      contextDispatch(Actions.paymentMethodListReset());
-      dispatch(
-        callListProcessAction(contextDispatch, true, 0, 10, queryOptions),
-      );
+      contextDispatch(Actions.paymentMethodListReset(contextDispatch));
+      dispatch(callListProcessAction(contextDispatch, true, queryOptions));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.paymentMethodListReset());
+      contextDispatch(Actions.paymentMethodListReset(contextDispatch));
     },
   };
 };
@@ -44,7 +38,9 @@ const usePaymentMethodCreateOrder = () => {
       contextDispatch: (action: any) => any,
       data: models.PaymentMethodCreateOrderData,
     ) => {
-      dispatch(Actions.postPaymentMethodCreateOrderProcess(contextDispatch, { data }));
+      dispatch(
+        Actions.postPaymentMethodCreateOrderProcess(contextDispatch, { data }),
+      );
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.postPaymentMethodCreateOrderReset(contextDispatch));
@@ -52,7 +48,22 @@ const usePaymentMethodCreateOrder = () => {
   };
 };
 
-export { 
+/** => get payment method rtdb status */
+const usePaymentMethodSubRtdb = () => {
+  const dispatch = useDispatch();
+
+  return {
+    fetch: (contextDispatch: (action: any) => any, data: string) => {
+      dispatch(Actions.isOrderRTDBChangeProcess(contextDispatch, { data }));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.isOrderRTDBChangeReset(contextDispatch));
+    },
+  };
+};
+
+export {
   usePaymentMethodListContent,
-  usePaymentMethodCreateOrder
+  usePaymentMethodCreateOrder,
+  usePaymentMethodSubRtdb,
 };

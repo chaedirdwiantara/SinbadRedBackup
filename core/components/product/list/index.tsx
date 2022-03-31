@@ -577,7 +577,7 @@ const ProductList: FC<ProductListProps> = ({
           dataStock === null ||
           orderQty > dataStock.stock ||
           orderQty < productDetailState?.minQty ||
-          orderQty + productDetailState.multipleQty > dataStock.stock
+          productDetailState.minQty > dataStock.stock
         }
       />
 
