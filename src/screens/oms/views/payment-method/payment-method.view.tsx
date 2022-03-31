@@ -66,11 +66,12 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [handleStatusPayment, setHandleStatusPayment] = useState<any>(false); //handle order status
   const [isLoading, setLoading] = useState(false);
   const [createTheOrder, setCreateTheOrder] = useState(false);
+  const [isSelected, setIsSelected] = useState<models.PaymentMethod | any>([]);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
-
   const checkoutContextData = stateCheckout.checkout.data;
+
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
 
@@ -81,35 +82,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     dispatchPaymentMethod,
   } = usePaymentMethodContext();
 
-  const data = paymentMethodData;
-
   /** => data from checkout */
   const dataCheckout = props.route.params.data;
-
-  /** => set expired time  */
-  const dateCurrent = new Date();
-  const timeNow = dateCurrent.getTime() / 1000;
-  const addTime = props.route.params.data.addTime;
-  const timeToExpired = addTime - timeNow;
-  const timeRef = useRef<any>(null);
-  useEffect(() => {
-    timeRef.current = setTimeout(() => {
-      setPaymentStatusSession(false);
-      setErrorSession(false);
-      setExpiredSession(true);
-    }, timeToExpired);
-  }, []);
-
-  /** => get data if there's isSelected:true */
-  const dataPaymentMethod = data[0]?.paymentMethods;
-  const isSelected = findIsSelected(dataPaymentMethod);
-
-  useEffect(() => {
-    console.log('irpan', selectedPaymentMethodData == null, isSelected != []);
-    selectedPaymentMethodData == null && isSelected != []
-      ? setSelectedPaymentMethodData(isSelected[0])
-      : null;
-  }, [selectedPaymentMethodData]);
 
   /** => handle payment method */
   const payloadPaymentMethod: any = {
@@ -128,9 +102,40 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     );
   };
 
+  const data = paymentMethodData;
+
+  /** => set expired time  */
+  const dateCurrent = new Date();
+  const timeNow = dateCurrent.getTime() / 1000;
+  const addTime = props.route.params.data.addTime;
+  const timeToExpired = addTime - timeNow;
+  const timeRef = useRef<any>(null);
+  useEffect(() => {
+    timeRef.current = setTimeout(() => {
+      setPaymentStatusSession(false);
+      setErrorSession(false);
+      setExpiredSession(true);
+    }, timeToExpired);
+  }, []);
+
+  /** => get data if there's isSelected:true */
+  const dataPaymentMethod = data[0]?.paymentMethods;
+
+  useEffect(() => {
+    if (dataPaymentMethod != undefined) {
+      setIsSelected(findIsSelected(dataPaymentMethod));
+    }
+  }, [dataPaymentMethod]);
+
+  useEffect(() => {
+    selectedPaymentMethodData == null && isSelected != []
+      ? setSelectedPaymentMethodData(isSelected[0])
+      : null;
+  }, [selectedPaymentMethodData, isSelected]);
+
   /** => to thank you page */
   const toThankYouPage = () => {
-    // setSelectedPaymentMethodData(null)
+    setSelectedPaymentMethodData(null);
     clearTimeout(timeRef.current);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
@@ -236,7 +241,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   //==> dispatch create order
   React.useEffect(() => {
     if (createTheOrder == true) {
-      console.log('irpan create order', selectedPaymentMethodData);
       const params: models.PaymentMethodCreateOrderData | any = {
         ...checkoutContextData,
         paymentMethod: {
@@ -318,7 +322,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
-    // setSelectedPaymentMethodData(null);
+    setSelectedPaymentMethodData(null);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
@@ -380,7 +384,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             handleNoAction={() => {
               setPaymentStatusSession(false);
             }}
-            handleOkAction={() => setCreateTheOrder}
+            handleOkAction={() => {
+              setCreateTheOrder(true);
+            }}
           />
           {/* } */}
         </>

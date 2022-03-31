@@ -21,11 +21,11 @@ const usePaymentMethodListContent = () => {
       contextDispatch: (action: any) => any,
       queryOptions: models.ListProcessProps<models.PaymentMethodProps>,
     ) => {
-      contextDispatch(Actions.paymentMethodListReset());
+      contextDispatch(Actions.paymentMethodListReset(contextDispatch));
       dispatch(callListProcessAction(contextDispatch, true, queryOptions));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.paymentMethodListReset());
+      contextDispatch(Actions.paymentMethodListReset(contextDispatch));
     },
   };
 };

@@ -19,6 +19,7 @@ import {
   useGetTncContent,
 } from '@screen/oms/functions';
 import {
+  usePaymentMethodListContent,
   usePaymentMethodCreateOrder,
   usePaymentMethodSubRtdb,
 } from '@screen/oms/functions/payment-method/payment-method-hook.function';
@@ -30,6 +31,11 @@ import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
 import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
+import {
+  useThankYouPageAction,
+  useThankYouPageCancelOrderAction,
+} from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
@@ -38,8 +44,11 @@ const OmsCheckoutView: FC = () => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+  const paymentMethodList = usePaymentMethodListContent();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
+  const thankYouPageAction = useThankYouPageAction();
 
   /** === HOOK === */
   const backToCartModal = useBackToCartModal();
@@ -63,6 +72,7 @@ const OmsCheckoutView: FC = () => {
     dispatchCheckout,
   } = useCheckoutContext();
   const { dispatchPaymentMethod } = usePaymentMethodContext();
+  const { dispatchThankYouPage } = useThankYouPageContext();
 
   /** handle term n condition */
   const handleOpenTNCModal = () => {
@@ -85,8 +95,11 @@ const OmsCheckoutView: FC = () => {
   /** => to Payment Method Page  */
   const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
   const toPaymentMethod = () => {
+    paymentMethodList.reset(dispatchPaymentMethod);
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
     PaymentMethodSubRtdb.reset(dispatchPaymentMethod);
+    thankYouPageCancelOrderAction.reset(dispatchThankYouPage);
+    thankYouPageAction.thankYouPageReset(dispatchThankYouPage);
     clearTimeout(timeRef.current);
     goToPaymentMethod(dataToPaymentMethod);
   };
