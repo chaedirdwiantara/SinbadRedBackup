@@ -5,7 +5,6 @@ import * as models from '@models';
 
 /** === CONSTANT === */
 const historyOrderPath = 'order-histories';
-const historyOrderPaymentPath = 'orders';
 const orderSellerPath = 'order-sellers';
 
 /** === FUNCTIONS === */
