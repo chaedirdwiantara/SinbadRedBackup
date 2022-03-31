@@ -110,7 +110,7 @@ export const useHistoryListPaymentActions = () => {
       queryOptions?: models.PaymentListHistoryQueryOptions,
     ) => {
       if (state.page < state.totalPage) {
-        contextDispatch(Actions.orderHistoryListPaymentRefresh());
+        contextDispatch(Actions.orderHistoryListPaymentLoadMore());
         dispatch(
           callProcessActionPayment(
             contextDispatch,
