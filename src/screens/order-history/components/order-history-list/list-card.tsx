@@ -178,6 +178,7 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
               width: 100,
               height: 50,
               marginRight: 16,
+              resizeMode: 'contain',
               borderColor: color.black5,
             }}
           />

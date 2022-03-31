@@ -19,15 +19,16 @@ export const ThankYouPageStyle = StyleSheet.create({
     width: 100,
     height: 50,
     marginRight: 16,
+    resizeMode: 'contain',
     borderColor: color.black5
   },
   paymentDetail: {
     flexDirection: 'row',
-    paddingTop: 12,
-    paddingHorizontal: 25
+    paddingVertical: 16,
+    paddingHorizontal: 16
   },
   defaultContentPadding : {
-    paddingTop: 12
+    paddingTop: 16
   },
   OrderDetailItem : {
     flexDirection: "row",

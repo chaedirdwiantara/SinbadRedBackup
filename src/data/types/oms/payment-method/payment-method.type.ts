@@ -28,3 +28,9 @@ export const PAYMENT_METHOD_SUB_RTDB_PROCESS = 'PaymentMethodSubRtdbProcess';
 export const PAYMENT_METHOD_SUB_RTDB_SUCCESS = 'PaymentMethodSubRtdbSuccess';
 export const PAYMENT_METHOD_SUB_RTDB_FAILED = 'PaymentMethodSubRtdbFailed';
 export const PAYMENT_METHOD_SUB_RTDB_RESET = 'PaymentMethodSubRtdbReset';
+
+/** => PAYMENT METHOD COMMIT CART */
+export const PAYMENT_METHOD_COMMIT_CART_PROCESS = 'PaymentMethodCommitCartProcess';
+export const PAYMENT_METHOD_COMMIT_CART_SUCCESS = 'PaymentMethodCommitCartSuccess';
+export const PAYMENT_METHOD_COMMIT_CART_FAILED = 'PaymentMethodCommitCartFailed';
+export const PAYMENT_METHOD_COMMIT_CART_RESET = 'PaymentMethodCommitCartReset';
