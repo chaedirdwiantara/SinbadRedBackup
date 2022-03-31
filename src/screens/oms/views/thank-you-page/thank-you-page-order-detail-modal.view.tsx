@@ -48,7 +48,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
                 </View>
                 <View>
                   <SnbText.C2>
-                    {toCurrency(product.lastUsedPrice, { withFraction: false })}
+                    {toCurrency(product.lastUsedPrice * sellerData.products[0]?.qty, { withFraction: false })}
                   </SnbText.C2>
                 </View>
               </View>
@@ -66,7 +66,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
               </View>
               <View>
                 <SnbText.C2>
-                  {toCurrency(sellerData.products[0]?.lastUsedPrice, { withFraction: false })}
+                  {toCurrency(sellerData.products[0]?.lastUsedPrice * sellerData.products[0]?.qty, { withFraction: false })}
                 </SnbText.C2>
               </View>
             </View>
@@ -79,7 +79,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
               </View>
               <View>
                 <SnbText.C2>
-                  {toCurrency(sellerData.products[1]?.lastUsedPrice, { withFraction: false })}
+                  {toCurrency(sellerData.products[1]?.lastUsedPrice * sellerData.products[1]?.qty, { withFraction: false })}
                 </SnbText.C2>
               </View>
             </View>
@@ -102,6 +102,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
         </>
       ))
     }else{
+    if(data != null){
       if(data.sellers[0].products.length >= 2){
         return (
           <>
@@ -125,7 +126,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
           </>
         ))
       }
-      
+    } 
     }
   }
   const expandableButton = () => {
