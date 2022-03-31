@@ -56,9 +56,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   } = useThankYouPageContext();
   /** => Hooks */
   const [selectMethod, setSelectMethod] = useState<string | null>(null); //handle selected method
-  const [selectedPaymentMethodData, setSelectedPaymentMethodData] = useState<
-    models.PaymentMethod | any
-  >(null);
+  const [selectedPaymentMethodData, setSelectedPaymentMethodData] =
+    useState<models.PaymentMethod | null>(null);
   const [isExpiredSession, setExpiredSession] = useState(false); //handle expired time
   const [isPaymentStatusSession, setPaymentStatusSession] = useState(false); //handle payment status
   const [isErrorSession, setErrorSession] = useState(false); //handle error modal
@@ -66,6 +65,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [dataOrder, setDataOrder] = useState<any>(null); //handle order status
   const [handleStatusPayment, setHandleStatusPayment] = useState<any>(false); //handle order status
   const [isLoading, setLoading] = useState(false);
+  const [createTheOrder, setCreateTheOrder] = useState(false);
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
@@ -105,8 +105,9 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const isSelected = findIsSelected(dataPaymentMethod);
 
   useEffect(() => {
-    selectedPaymentMethodData == null && isSelected !== []
-      ? setSelectedPaymentMethodData(isSelected)
+    console.log('irpan', selectedPaymentMethodData == null, isSelected != []);
+    selectedPaymentMethodData == null && isSelected != []
+      ? setSelectedPaymentMethodData(isSelected[0])
       : null;
   }, [selectedPaymentMethodData]);
 
@@ -129,6 +130,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => to thank you page */
   const toThankYouPage = () => {
+    // setSelectedPaymentMethodData(null)
     clearTimeout(timeRef.current);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
@@ -232,34 +234,39 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   }, [isLoading]);
 
   //==> dispatch create order
-  const createTheOrder = () => {
-    const params: models.PaymentMethodCreateOrderData | any = {
-      ...checkoutContextData,
-      paymentMethod: {
-        id: selectedPaymentMethodData.id,
-        code: selectedPaymentMethodData.code,
-        serviceFeeDeduct: Number(selectedPaymentMethodData.serviceFeeDeduct),
-        serviceFeeNonDeduct: Number(
-          selectedPaymentMethodData.serviceFeeNonDeduct,
-        ),
-        isServiceFeeFree: Boolean(selectedPaymentMethodData.isServiceFeeFree),
-        displayLabel: selectedPaymentMethodData.displayLabel,
-        iconUrl: selectedPaymentMethodData.iconUrl,
-      },
-    };
+  React.useEffect(() => {
+    if (createTheOrder == true) {
+      console.log('irpan create order', selectedPaymentMethodData);
+      const params: models.PaymentMethodCreateOrderData | any = {
+        ...checkoutContextData,
+        paymentMethod: {
+          id: selectedPaymentMethodData?.id,
+          code: selectedPaymentMethodData?.code,
+          serviceFeeDeduct: Number(selectedPaymentMethodData?.serviceFeeDeduct),
+          serviceFeeNonDeduct: Number(
+            selectedPaymentMethodData?.serviceFeeNonDeduct,
+          ),
+          isServiceFeeFree: Boolean(
+            selectedPaymentMethodData?.isServiceFeeFree,
+          ),
+          displayLabel: selectedPaymentMethodData?.displayLabel,
+          iconUrl: selectedPaymentMethodData?.iconUrl,
+        },
+      };
 
-    paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
-    clearTimeout(timeRef.current);
-    setLoading(true);
-  };
+      paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
+      clearTimeout(timeRef.current);
+      setLoading(true);
+    }
+  }, [createTheOrder]);
 
   //==> handle create order
   const handleCreateOrder = () => {
     if (checkoutContextData != null) {
-      if (selectedPaymentMethodData.isActive == true) {
+      if (selectedPaymentMethodData?.isActive == true) {
         setPaymentStatusSession(true);
       } else {
-        createTheOrder();
+        setCreateTheOrder(true);
       }
     }
   };
@@ -311,6 +318,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
+    // setSelectedPaymentMethodData(null);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     paymentMethodCreateOrder.reset(dispatchPaymentMethod);
@@ -366,13 +374,15 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             close={handleBackToCart}
           />
           {/* Modal Status Pending */}
+          {/* { selectedPaymentMethodData  && */}
           <PaymentStatusModal
             isOpen={isPaymentStatusSession}
             handleNoAction={() => {
               setPaymentStatusSession(false);
             }}
-            handleOkAction={createTheOrder}
+            handleOkAction={() => setCreateTheOrder}
           />
+          {/* } */}
         </>
       )}
     </SnbContainer>
