@@ -62,6 +62,20 @@ const useCheckDataOrder = (orderId: any) => {
 
   return dataSnap;
 };
+/** commit cart endpoint*/
+const commitCartApi = (
+  data : models.CreateProcessProps<models.PaymentMethodCommitCartData>
+  ) => {
+    const path = `carts/commit`;
+    return apiMapping<models.CommitCartResponseData>(
+      'auth',
+      path,
+      'buyer-cart',
+      'v1',
+      'CREATE',
+      data.data,
+    );
+  };
 
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
@@ -69,4 +83,5 @@ export const PaymentMethodListApi = {
   paymentMethodGetWaitingPaymentOrderApi,
   paymentMethodCreateOrdertApi,
   useCheckDataOrder,
+  commitCartApi
 };
