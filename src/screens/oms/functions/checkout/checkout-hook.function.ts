@@ -52,6 +52,7 @@ const useCheckoutAction = () => {
                 }
                 return {
                   ...product,
+                  lastUsedPrice: product.price,
                   priceRules,
                 } as models.CheckoutProductData;
               });

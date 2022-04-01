@@ -17,20 +17,19 @@ export interface CheckoutProductPriceRules {
 export interface CheckoutCartProduct {
   productId: string;
   warehouseId: number;
+  warehouseName: string;
   categoryId: string;
   productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
   qty: number;
-  minQty: number;
   qtyPerBox: number;
   uomLabel: string;
   isPriceAfterTax: boolean;
   taxPercentage: number;
-  price: number;
+  leadTime: number;
   selected: boolean;
-  priceRules: CheckoutProductPriceRules;
 }
 
 export interface CheckoutData {
