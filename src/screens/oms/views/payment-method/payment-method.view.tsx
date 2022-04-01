@@ -73,7 +73,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     contexts.CheckoutContext,
   );
   const checkoutContextData = stateCheckout.checkout.data;
-
   /** => Get payment method  */
   const { statePaymentMethod } = useContext(contexts.PaymentMethodContext); //get id to sub rtdb
 
