@@ -101,3 +101,22 @@ export interface PaymentMethodPriceRules {
   maxQty: number;
   price: number;
 }
+
+export interface PaymentMethodCommitCartData {
+  checkoutId: string;
+  orderId: number
+}
+
+export interface CommitCart<T> {
+  data: T;
+  message: string;
+}
+
+export interface CommitCartResponseData {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CommitCartResponse extends CommitCart<CommitCartResponseData> {}
+

@@ -38,7 +38,7 @@ const callListProcessAction = (
 
 const useThankYouPagePaymentGuideListAction = () => {
   const dispatch = useDispatch();
-  const limit = 3;
+  const limit = 10;
 
   return {
     /** => LIST */

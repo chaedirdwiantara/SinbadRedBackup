@@ -13,6 +13,7 @@ import {
   usePaymentMethodListContent,
   usePaymentMethodCreateOrder,
   usePaymentMethodSubRtdb,
+  usePaymentMethodCommitCart
 } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import PaymentMethodBody from './payment-method-body.view';
 import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
@@ -45,6 +46,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
   const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
+  const paymentMethodCommitCart = usePaymentMethodCommitCart();
   const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const thankYouPageAction = useThankYouPageAction();
@@ -163,6 +165,13 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (dataOrder) {
+        if(checkoutContextData){
+          const paramsCommitCart : models.PaymentMethodCommitCartData = {
+            checkoutId: checkoutContextData.id,
+            orderId: Number(dataOrder.id)
+          }
+          paymentMethodCommitCart.fetch(dispatchPaymentMethod, paramsCommitCart);
+        }
         PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder.id);
       }
     }, [dataOrder]),

@@ -104,6 +104,34 @@ function* paymentMethodSubRtdb(
   }
 }
 
+function* paymentMethodCommitCart(
+  action: models.CreateProcessAction<models.PaymentMethodCommitCartData>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<models.CommitCartResponse> =
+      yield call(() => {
+        return PaymentMethodListApi.commitCartApi(
+          action.payload,
+        );
+      });
+    yield action.contextDispatch(
+      ActionCreators.paymentMethodCommitCartSuccess(response),
+    );
+
+    yield put(ActionCreators.paymentMethodCommitCartSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.paymentMethodCommitCartFailed(
+        error as models.ErrorProps,
+      ),
+    );
+    yield put(
+      ActionCreators.paymentMethodCommitCartFailed(
+        error as models.ErrorProps,
+      ),
+    );
+  }
+}
 /** === LISTEN FUNCTION === */
 function* paymentMethodListSaga() {
   yield takeLatest(types.PAYMENT_METHOD_LIST_PROCESS, paymentMethodList);
@@ -113,6 +141,7 @@ function* paymentMethodListSaga() {
   );
   yield takeLatest(types.POST_CREATE_ORDER_PROCESS, paymentMethodCreateOrder);
   yield takeLatest(types.PAYMENT_METHOD_SUB_RTDB_PROCESS, paymentMethodSubRtdb);
+  yield takeLatest(types.PAYMENT_METHOD_COMMIT_CART_PROCESS, paymentMethodCommitCart);
 }
 
 export default paymentMethodListSaga;

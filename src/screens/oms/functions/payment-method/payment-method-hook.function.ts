@@ -62,8 +62,26 @@ const usePaymentMethodSubRtdb = () => {
   };
 };
 
+/** => get payment method list content */
+const usePaymentMethodCommitCart = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      data: models.PaymentMethodCommitCartData,
+    ) => {
+      dispatch(
+        Actions.paymentMethodCommitCartProcess(contextDispatch, { data }),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.paymentMethodCommitCartReset(contextDispatch));
+    },
+  };
+};
 export {
   usePaymentMethodListContent,
   usePaymentMethodCreateOrder,
   usePaymentMethodSubRtdb,
+  usePaymentMethodCommitCart,
 };

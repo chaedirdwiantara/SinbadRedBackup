@@ -15,12 +15,12 @@ const useModalThankYouPageOrderDetail = () => {
     data,
     setData: (value: any) => {
       setData(value);
-      // if (value !== null) {
-      //   setOpen(true);
-      // } else {
-      //   setOpen(false);
-      // }
-      setOpen(true)
+      if (value !== null) {
+        setOpen(true);
+      } else {
+        setOpen(false);
+      }
+      // setOpen(true)
     }
   }
 }

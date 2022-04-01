@@ -104,7 +104,7 @@ const OmsThankYouPageView: FC = () => {
   };
   const handleThankYouPageOrderDetail = () => {
     modalThankYouPageOrderDetail.setData(thankYouPageData);
-    modalThankYouPageOrderDetail.setOpen(true)
+    // modalThankYouPageOrderDetail.setOpen(true)
   };
   /** => render countdown */
   const renderCountDown = () => {
@@ -173,20 +173,25 @@ const OmsThankYouPageView: FC = () => {
     return (
     <ThankYouPageCard title="Detail Pembayaran">
       <View
-        style={ThankYouPageStyle.paymentDetail}>
-        <Image
-          source={{
-            uri: thankYouPageData?.paymentIconUrl,
-          }}
-          style={ThankYouPageStyle.mediumIcon}
-        />
-        <View>
-          <SnbText.H2>{thankYouPageData?.vaAccountNo}</SnbText.H2>
-          <TouchableOpacity onPress={() => onVACopied()}>
-            <SnbText.C1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.C1>
-          </TouchableOpacity>
+     style={ThankYouPageStyle.defaultContentPadding}
+    >
+      <View style={styles.shadowForBox5}>
+          <View
+            style={ThankYouPageStyle.paymentDetail}>
+            <Image
+              source={{
+                uri: thankYouPageData?.paymentIconUrl,
+              }}
+              style={ThankYouPageStyle.mediumIcon}
+            />
+            <View>
+              <SnbText.H2>{thankYouPageData?.vaAccountNo}</SnbText.H2>
+              <TouchableOpacity onPress={() => onVACopied()}>
+                <SnbText.C1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.C1>
+              </TouchableOpacity>
+            </View>
         </View>
-              
+      </View>
       </View>
     </ThankYouPageCard>
     )
@@ -280,7 +285,7 @@ const OmsThankYouPageView: FC = () => {
         isOpen={modalThankYouPageOrderDetail.isOpen}
         close={() => {
           modalThankYouPageOrderDetail.setData(null);
-          modalThankYouPageOrderDetail.setOpen(false);
+          // modalThankYouPageOrderDetail.setOpen(false);
         }}
         data={modalThankYouPageOrderDetail.data}
       />

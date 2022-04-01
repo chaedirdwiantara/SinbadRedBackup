@@ -194,7 +194,6 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   }
 }
 
-
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
