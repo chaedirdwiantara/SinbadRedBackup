@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "clear": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache",
-    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:assembleRelease"
+    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:bundleRelease"
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "2.2.2",
