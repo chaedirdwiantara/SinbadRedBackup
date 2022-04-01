@@ -9,7 +9,6 @@ import {
   goToSearch,
   goToShoppingCart,
   backToLogin,
-  goToCheckout,
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPE === */
@@ -40,7 +39,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
     if (me.data === null) {
       backToLogin();
     } else {
-      goToCheckout();
+      goToShoppingCart();
     }
   };
 
