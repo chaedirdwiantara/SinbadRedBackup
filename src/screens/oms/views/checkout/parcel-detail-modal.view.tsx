@@ -18,7 +18,7 @@ const { height } = Dimensions.get('window');
 interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
-  data: models.IInvoiceCheckout | null;
+  data: models.CheckoutProducts[] | null;
 }
 
 interface ContentListData {
@@ -64,7 +64,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     );
   };
 
-  const productList = (data: models.BrandCheckout[]) => {
+  const productList = (data: models.CheckoutProducts[]) => {
     const products = data;
     return products.map((product) => (
       <>
@@ -76,7 +76,9 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           </View>
           <SnbText.B1>
             {' '}
-            {toCurrency(product.price * product.qty, { withFraction: false })}
+            {toCurrency(product.lastUsedPrice * product.qty, {
+              withFraction: false,
+            })}
           </SnbText.B1>
         </View>
       </>
