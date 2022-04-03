@@ -43,14 +43,14 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
           <>
             <View>
               <View style={ThankYouPageStyle.OrderDetailItem}>
-                <View>
-                    <SnbText.C2>{product.productName}</SnbText.C2>
+                <View style={{ width: '50%'}}>
+                    <SnbText.B1 color={color.black60}>{product.productName}  {product.qty}</SnbText.B1>
                 </View>
-                <View>
-                  <SnbText.C2>
+                {/* <View> */}
+                  <SnbText.B1 color={color.black60}>
                     {toCurrency(product.lastUsedPrice * product?.qty, { withFraction: false })}
-                  </SnbText.C2>
-                </View>
+                  </SnbText.B1>
+                {/* </View> */}
               </View>
             </View>
             
@@ -61,27 +61,27 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
         <>
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
-              <View>
-                  <SnbText.C2>{sellerData.products[0]?.productName}</SnbText.C2>
+              <View style={{ width: '50%'}}>
+                  <SnbText.B1 color={color.black60}>{sellerData.products[0]?.productName} {sellerData.products[1]?.qty}</SnbText.B1>
               </View>
-              <View>
-                <SnbText.C2>
+              {/* <View> */}
+                <SnbText.B1 color={color.black60}>
                   {toCurrency(sellerData.products[0]?.lastUsedPrice * sellerData.products[0]?.qty, { withFraction: false })}
-                </SnbText.C2>
-              </View>
+                </SnbText.B1>
+              {/* </View> */}
             </View>
           </View>
           {sellerData.products[1] != undefined &&
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
-              <View>
-                  <SnbText.C2>{sellerData.products[1]?.productName}</SnbText.C2>
+              <View style={{ width: '50%'}}>
+                  <SnbText.B1 color={color.black60}>{sellerData.products[1]?.productName} {sellerData.products[1]?.qty}</SnbText.B1>
               </View>
-              <View>
-                <SnbText.C2>
+              {/* <View> */}
+                <SnbText.B1 color={color.black60}>
                   {toCurrency(sellerData.products[1]?.lastUsedPrice * sellerData.products[1]?.qty, { withFraction: false })}
-                </SnbText.C2>
-              </View>
+                </SnbText.B1>
+              {/* </View> */}
             </View>
           </View>
         }
@@ -95,7 +95,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
         <>
           <View>
                 <View style={{marginVertical: 6}}>
-                  <SnbText.B4>{dataSeller.sellerName}</SnbText.B4>
+                  <SnbText.H4 color={color.black60}>{dataSeller.sellerName}</SnbText.H4>
                 </View>
                 {productPerSellerList(dataSeller)}
           </View>
@@ -108,7 +108,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
           <>
           <View>
                   <View style={{marginVertical: 6}}>
-                    <SnbText.B4>{data?.sellers[0].sellerName}</SnbText.B4>
+                    <SnbText.H4 color={color.black60}>{data?.sellers[0].sellerName}</SnbText.H4>
                   </View>
                   {productPerSellerList(data.sellers[0])}
             </View>
@@ -119,7 +119,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
           <>
           <View>
                   <View style={{marginVertical: 6}}>
-                    <SnbText.B4>{dataSeller.sellerName}</SnbText.B4>
+                    <SnbText.H4 color={color.black60}>{dataSeller.sellerName}</SnbText.H4>
                   </View>
                   {productPerSellerList(dataSeller)}
             </View>
@@ -155,24 +155,24 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-                <SnbText.C2>Total Pengiriman</SnbText.C2>
+                <SnbText.B1 color={color.black60}>Total Pengiriman</SnbText.B1>
             </View>
             <View >
-              <SnbText.C2 color={color.green50}>
+              <SnbText.B1 color={color.green50}>
                 {toCurrency(0, { withFraction: false })}
-              </SnbText.C2>
+              </SnbText.B1>
             </View>
           </View>
         </View>
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View >
-                <SnbText.C2>Biaya Layanan</SnbText.C2>
+                <SnbText.B1 color={color.black60}>Biaya Layanan</SnbText.B1>
             </View>
             <View >
-              <SnbText.C2 color={color.green50}>
+              <SnbText.B1 color={color.green50}>
                 {toCurrency(0, { withFraction: false })}
-              </SnbText.C2>
+              </SnbText.B1>
             </View>
           </View>
         </View>
@@ -186,12 +186,12 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
       <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-                <SnbText.C2>Total</SnbText.C2>
+                <SnbText.H4 color={color.black100}>Total</SnbText.H4>
             </View>
             <View>
-              <SnbText.C2>
+              <SnbText.B2 color={color.black100}>
                 {toCurrency(Number(data?.totalOrderAmount), { withFraction: false })}
-              </SnbText.C2>
+              </SnbText.B2>
             </View>
           </View>
         </View>
