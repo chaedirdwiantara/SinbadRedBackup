@@ -20,6 +20,7 @@ import personal_data from './personal_data.svg';
 import store_data from './store_data.svg';
 import notification from './notification.svg';
 import completeness_back from './completeness-back.svg';
+import sinbad_logo from './sinbad-logo.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -44,4 +45,5 @@ export const SvgRegistery = {
   store_data,
   notification,
   completeness_back,
+  sinbad_logo,
 };

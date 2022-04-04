@@ -2,6 +2,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { SnbContainer, SnbSvgIcon, SnbProgress } from 'react-native-sinbad-ui';
+import Svg from '@svg';
 /** === IMPORT EXTERNAL FUNCTION === */
 // import { usePageAfterIntro } from '../functions';
 import { useAuthCoreAction } from '@core/functions/auth';
@@ -45,7 +46,7 @@ const IntroSplashView: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View style={IntroStyle.sinbadLogo}>
-        <SnbSvgIcon name="sinbad" size={140} />
+        <Svg name={'sinbad_logo'} size={200} />
       </View>
       <View style={{ marginBottom: 16 }}>
         <SnbProgress size={50} />
