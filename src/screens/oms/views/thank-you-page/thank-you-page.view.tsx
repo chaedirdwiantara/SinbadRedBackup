@@ -152,12 +152,12 @@ const OmsThankYouPageView: FC = () => {
     <View
      style={ThankYouPageStyle.defaultContentPadding}
     >
-      <SnbText.H4 color={color.red50}>{toCurrency(Number(thankYouPageData?.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H4>
+      <SnbText.H3 color={color.red50}>{toCurrency(Number(thankYouPageData?.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H3>
       <View
       style={ThankYouPageStyle.defaultContentPadding}
       >
         <TouchableOpacity onPress={() => onOrderAmountCopied()}>
-          <SnbText.B4 color={color.blue50}>{'Salin Jumlah'}</SnbText.B4>
+          <SnbText.B1 color={color.blue50}>{'Salin Jumlah'}</SnbText.B1>
         </TouchableOpacity>
       </View>
       
@@ -184,10 +184,10 @@ const OmsThankYouPageView: FC = () => {
               }}
               style={ThankYouPageStyle.mediumIcon}
             />
-            <View>
+            <View style={{ width: '60%' }}>
               <SnbText.H2>{thankYouPageData?.vaAccountNo}</SnbText.H2>
               <TouchableOpacity onPress={() => onVACopied()}>
-                <SnbText.C1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.C1>
+                <SnbText.B1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.B1>
               </TouchableOpacity>
             </View>
         </View>
