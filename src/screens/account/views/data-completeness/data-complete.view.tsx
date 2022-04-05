@@ -1,6 +1,6 @@
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useNavigation } from '@react-navigation/native';
-import { useEasyRegistration } from '@screen/account/functions';
+import { useCoachmark, useEasyRegistration } from '@screen/account/functions';
 import {
   DATA_DIRI_STEP_1_VIEW,
   DATA_TOKO_STEP_1_VIEW,
@@ -45,6 +45,7 @@ const Content: React.FC = () => {
     resetCompleteDataConfirmation,
   } = useEasyRegistration();
   const { meV2 } = useAuthCoreAction();
+  const { getCoachmark } = useCoachmark();
 
   React.useEffect(() => {
     getCompleteData();
@@ -53,6 +54,7 @@ const Content: React.FC = () => {
   React.useEffect(() => {
     if (completeDataConfirmationState.data) {
       meV2();
+      getCoachmark();
       resetCompleteDataConfirmation();
       reset({ index: 0, routes: [{ name: 'Home' }] });
     }
