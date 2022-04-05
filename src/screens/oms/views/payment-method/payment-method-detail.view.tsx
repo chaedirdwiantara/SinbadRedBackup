@@ -8,15 +8,18 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
+import * as models from '@models';
 
 interface PaymentMethodDetailProps {
   dataFromCheckout: any;
   dataChoose: any;
+  isSelected: models.PaymentMethod | any;
 }
 
 const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
   dataFromCheckout,
   dataChoose,
+  isSelected,
 }) => {
   return (
     <View style={PaymentMethodStyle.detailContainer}>
@@ -38,6 +41,17 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
               dataChoose.serviceFeeDeduct == 0 ? color.green80 : color.black80
             }>
             {toCurrency(dataChoose.serviceFeeDeduct, {
+              withFraction: false,
+            })}
+          </SnbText.B2>
+        ) : isSelected != [] && isSelected[0] && dataChoose == null ? (
+          <SnbText.B2
+            color={
+              isSelected[0]?.serviceFeeDeduct == 0
+                ? color.green80
+                : color.black80
+            }>
+            {toCurrency(isSelected[0].serviceFeeDeduct, {
               withFraction: false,
             })}
           </SnbText.B2>

@@ -27,10 +27,10 @@ import ConfirmationTime from '../confirmation-time';
 // function
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
-import { 
+import {
   useHistoryListFunction,
-  goToWaitingPaymentHistoryDetail, 
-  useHistoryListPaymentFunction
+  goToWaitingPaymentHistoryDetail,
+  useHistoryListPaymentFunction,
 } from '../../functions/history-list';
 import { CountDownTimer } from '@screen/history/components';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
@@ -152,8 +152,9 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
             backgroundColor: color.red10,
             marginBottom: 16,
             padding: 8,
+            paddingLeft: 16,
             alignItems: 'center',
-            justifyContent: 'center',
+            justifyContent: 'flex-start',
           }}>
           <SnbText.C1 color={color.red50}>
             {'Batas waktu pembayaran: '}
@@ -234,7 +235,8 @@ const wordingWaitingForPaymentEmpty = () => {
 const ListCard = () => {
   const [state] = useContext(Context);
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
-  const { onLoadMorePayment, onRefreshPayment } = useHistoryListPaymentFunction();
+  const { onLoadMorePayment, onRefreshPayment } =
+    useHistoryListPaymentFunction();
   const { onLoadMore, onRefresh } = useHistoryListFunction();
   const { cancelOrder, doneOrder } = useDetailHistoryOrder();
   const {
@@ -244,7 +246,7 @@ const ListCard = () => {
         data: historyListData,
         error: historyListError,
         loadMore: historyListLoadMore,
-      }
+      },
     },
   } = useOrderHistoryContext();
   const {
@@ -253,13 +255,13 @@ const ListCard = () => {
         loading: historyListPaymentLoading,
         data: historyListPaymentData,
         error: historyListPaymentError,
-        loadMore: historyListPaymentLoadMore
-      }
+        loadMore: historyListPaymentLoadMore,
+      },
     },
   } = usePaymentHistoryContext();
 
   // loading view
-  if ([historyListLoading].some((i) => i) ) {
+  if ([historyListLoading].some((i) => i)) {
     return <SnbProductListSkeleton />;
   }
   // function
@@ -294,15 +296,15 @@ const ListCard = () => {
   if (state.status === 'waiting_for_payment') {
     return (
       <>
-        { [historyListPaymentLoading].some((i) => i) ?
+        {[historyListPaymentLoading].some((i) => i) ? (
           <SnbProductListSkeleton />
-          : [historyListPaymentError].some((i) => i) ?
+        ) : [historyListPaymentError].some((i) => i) ? (
           <SnbEmptyData
             image={<EmptyImage />}
             subtitle=""
             title={'Terjadi gangguan pada jaringan'}
           />
-          :
+        ) : (
           <FlatList
             contentContainerStyle={{ paddingBottom: 50 }}
             data={historyListPaymentData}
@@ -312,31 +314,34 @@ const ListCard = () => {
                 key={String(item.id)}
                 data={item}
                 onDetailOrder={() =>
-                  goToWaitingPaymentHistoryDetail('orderHistory',Number(item.id))
+                  goToWaitingPaymentHistoryDetail(
+                    'orderHistory',
+                    Number(item.id),
+                  )
                 }
               />
             )}
             onEndReached={onLoadMorePayment}
             ListEmptyComponent={() => (
               <View style={styles.waitingForPaymentEmpty}>
-              <SnbEmptyData
-                image={<EmptyImage />}
-                subtitle=""
-                title={wordingWaitingForPaymentEmpty()}
-              />
+                <SnbEmptyData
+                  image={<EmptyImage />}
+                  subtitle=""
+                  title={wordingWaitingForPaymentEmpty()}
+                />
               </View>
-              
             )}
             refreshControl={
               <RefreshControl
                 onRefresh={() => onRefreshPayment()}
-                refreshing={[historyListPaymentLoading, historyListPaymentLoadMore].some(
-                  (i) => i,
-                )}
+                refreshing={[
+                  historyListPaymentLoading,
+                  historyListPaymentLoadMore,
+                ].some((i) => i)}
               />
             }
           />
-        }
+        )}
       </>
     );
   }
