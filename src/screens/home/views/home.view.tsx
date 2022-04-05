@@ -112,23 +112,33 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
         </CopilotStep>
         {renderIF(
           isBadgeVIPAvailable,
+          <>
+            <CopilotStep
+              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+              order={3}
+              name="Jadi anggota VIP Sinbad">
+              <CopilotView>
+                <UpgradeVIPAccountBadge />
+              </CopilotView>
+            </CopilotStep>
+            <CopilotStep
+              text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+              order={4}
+              name="Kumpulkan poin, makin untung">
+              <CopilotView>
+                <SinbadEngage />
+              </CopilotView>
+            </CopilotStep>
+          </>,
           <CopilotStep
-            text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+            text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
             order={3}
-            name="Jadi anggota VIP Sinbad">
+            name="Kumpulkan poin, makin untung">
             <CopilotView>
-              <UpgradeVIPAccountBadge />
+              <SinbadEngage />
             </CopilotView>
           </CopilotStep>,
         )}
-        <CopilotStep
-          text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
-          order={isBadgeVIPAvailable ? 4 : 3}
-          name="Kumpulkan poin, makin untung">
-          <CopilotView>
-            <SinbadEngage />
-          </CopilotView>
-        </CopilotStep>
         <RecommendationHomeView navigationParent={navigation} />
         <CategoryHomeView />
         <BrandHomeView />
