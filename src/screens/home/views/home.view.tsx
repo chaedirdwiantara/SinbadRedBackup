@@ -27,6 +27,8 @@ import {
   ModalStartCoachmark,
   SinbadEngage,
 } from '@screen/account/views/shared';
+import { renderIF } from '@screen/auth/functions';
+
 /** === COMPONENT === */
 const HomeView: React.FC = ({ navigation, start }: any) => {
   /** === STATE === */
@@ -38,7 +40,7 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   const { setCartId } = useCheckoutMaster();
   const cartTotalProductActions = useCartTotalProductActions();
   const notificationTotalActions = useNotificationTotalActions();
-  const { me } = useDataAuth();
+  const { me, meV2 } = useDataAuth();
   useGetTokenNotLogin();
   setFlagByDeviceId();
   /** === FUNCTION FOR HOOK === */
@@ -93,6 +95,10 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   };
   /** => content item */
   const contentItem = () => {
+    const isBadgeVIPAvailable =
+      typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
+      meV2.data?.data?.isDataCompleted === false;
+
     return (
       <>
         <PushNotification />
@@ -104,22 +110,35 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
             <BannerHomeView />
           </CopilotView>
         </CopilotStep>
-        <CopilotStep
-          text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
-          order={3}
-          name="Jadi anggota VIP Sinbad">
-          <CopilotView>
-            <UpgradeVIPAccountBadge />
-          </CopilotView>
-        </CopilotStep>
-        <CopilotStep
-          text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
-          order={4}
-          name="Kumpulkan poin, makin untung">
-          <CopilotView>
-            <SinbadEngage />
-          </CopilotView>
-        </CopilotStep>
+        {renderIF(
+          isBadgeVIPAvailable,
+          <>
+            <CopilotStep
+              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+              order={3}
+              name="Jadi anggota VIP Sinbad">
+              <CopilotView>
+                <UpgradeVIPAccountBadge />
+              </CopilotView>
+            </CopilotStep>
+            <CopilotStep
+              text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+              order={4}
+              name="Kumpulkan poin, makin untung">
+              <CopilotView>
+                <SinbadEngage />
+              </CopilotView>
+            </CopilotStep>
+          </>,
+          <CopilotStep
+            text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+            order={3}
+            name="Kumpulkan poin, makin untung">
+            <CopilotView>
+              <SinbadEngage />
+            </CopilotView>
+          </CopilotStep>,
+        )}
         <RecommendationHomeView navigationParent={navigation} />
         <CategoryHomeView />
         <BrandHomeView />

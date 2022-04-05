@@ -4,6 +4,7 @@ import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
 import { CopilotTooltipProps } from 'react-native-copilot';
 import { useCoachmark } from '@screen/account/functions';
 import * as models from '@models';
+import { useDataAuth } from '@core/redux/Data';
 
 const { width } = Dimensions.get('screen');
 
@@ -19,12 +20,14 @@ export const copilotOptions: any = (
     handlePrev,
     isFirstStep,
   }) => {
+    const { meV2 } = useDataAuth();
     const {
       updateCoachmarkState,
       updateCoachmark,
       resetCoachmark,
       getCoachmark,
     } = useCoachmark();
+
     React.useEffect(() => {
       if (updateCoachmarkState?.data) {
         getCoachmark();
@@ -32,6 +35,16 @@ export const copilotOptions: any = (
         handleStop();
       }
     }, [updateCoachmarkState]);
+
+    React.useEffect(() => {
+      if (
+        typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
+        meV2.data?.data?.isDataCompleted === true &&
+        action === 'homeCoachmark'
+      ) {
+        totalCoachMark = 3;
+      }
+    }, [meV2]);
     return (
       <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
         <SnbText.H4>{currentStep.name}</SnbText.H4>
