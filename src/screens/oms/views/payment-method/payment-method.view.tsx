@@ -242,7 +242,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     if (isLoading == true) {
       setTimeout(() => {
         setHandleStatusPayment(true);
-      }, 5000);
+      }, 10000);
     }
   }, [isLoading]);
 
