@@ -11,6 +11,7 @@ interface PaymentMethodBodyProps {
   onSelectedType: (selected: string) => void;
   onDataChoosen: (data: models.PaymentMethod) => void;
   dataFromCheckout: any;
+  isSelected: models.PaymentMethod | any;
 }
 
 const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
@@ -18,8 +19,11 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
   onSelectedType,
   onDataChoosen,
   dataFromCheckout,
+  isSelected,
 }) => {
-  const [dataSelected, setDataSelected] = useState<models.PaymentMethod | null >(null); //contain data
+  const [dataSelected, setDataSelected] = useState<models.PaymentMethod | null>(
+    null,
+  ); //contain data
 
   const handleSelect = (selected: string) => {
     onSelectedType(selected); //index send to parent
@@ -44,6 +48,7 @@ const PaymentMethodBody: FC<PaymentMethodBodyProps> = ({
       <PaymentMethodDetail
         dataFromCheckout={dataFromCheckout}
         dataChoose={dataSelected}
+        isSelected={isSelected}
       />
     </>
   );

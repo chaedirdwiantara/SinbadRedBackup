@@ -13,7 +13,7 @@ import {
   usePaymentMethodListContent,
   usePaymentMethodCreateOrder,
   usePaymentMethodSubRtdb,
-  usePaymentMethodCommitCart
+  usePaymentMethodCommitCart,
 } from '@screen/oms/functions/payment-method/payment-method-hook.function';
 import PaymentMethodBody from './payment-method-body.view';
 import PaymentMethodExpiredTimeModal from './payment-method-expired-time.modal.view';
@@ -69,6 +69,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [createTheOrder, setCreateTheOrder] = useState(false);
   const [isSelected, setIsSelected] = useState<models.PaymentMethod | any>([]);
+
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
@@ -165,12 +166,15 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (dataOrder) {
-        if(checkoutContextData){
-          const paramsCommitCart : models.PaymentMethodCommitCartData = {
+        if (checkoutContextData) {
+          const paramsCommitCart: models.PaymentMethodCommitCartData = {
             checkoutId: checkoutContextData.id,
-            orderId: Number(dataOrder.id)
-          }
-          paymentMethodCommitCart.fetch(dispatchPaymentMethod, paramsCommitCart);
+            orderId: Number(dataOrder.id),
+          };
+          paymentMethodCommitCart.fetch(
+            dispatchPaymentMethod,
+            paramsCommitCart,
+          );
         }
         PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder.id);
       }
@@ -371,6 +375,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             onSelectedType={handleSelect}
             dataFromCheckout={dataCheckout}
             onDataChoosen={handleOnDataChoosen}
+            isSelected={isSelected}
           />
 
           {/* FOOTER */}
