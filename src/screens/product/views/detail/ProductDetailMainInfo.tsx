@@ -9,34 +9,35 @@ import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPE ===  */
 interface ProductDetailMainInfoProps {
   name: string;
-  originalPrice: number;
-  currentPrice: number;
+  finalPrice: number;
   stock: number;
-  minQty: number;
-  unit: string;
+  unit?: string;
+  qtySoldLabel: string;
   isExclusive: boolean;
   hasPromo: boolean;
+  loading: boolean;
+  showStock?: boolean;
 }
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
-  originalPrice,
-  currentPrice,
+  finalPrice,
   stock,
-  minQty,
-  unit,
   isExclusive,
   hasPromo,
+  loading,
+  showStock,
+  qtySoldLabel,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
     {isExclusive && <ExclusiveTag />}
     <SnbText.H4>{name}</SnbText.H4>
     <View style={{ marginVertical: 8 }}>
       <SnbText.B2 color={color.red50}>
-        {toCurrency(currentPrice ?? 0, { withFraction: false })}
+        {toCurrency(finalPrice ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
-    {stock >= minQty && (
+    {showStock && stock < 11 && !loading && (
       <View
         style={{
           flexDirection: 'row',
@@ -46,15 +47,19 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {hasPromo && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <SnbText.B3 color={color.black40}>
-              {toCurrency(originalPrice ?? 0, {
+              {toCurrency(finalPrice ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>
           </View>
         )}
-        <SnbText.B3
-          color={color.red50}>{`Tersisa ${stock} ${unit}`}</SnbText.B3>
+        <SnbText.B3 color={color.red50}>
+          {stock === 0 ? 'Produk Habis' : `Tersisa ${stock}`}
+        </SnbText.B3>
       </View>
+    )}
+    {qtySoldLabel !== '0' && (
+      <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
     )}
   </View>
 );

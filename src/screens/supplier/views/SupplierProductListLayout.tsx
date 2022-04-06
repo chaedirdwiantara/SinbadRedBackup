@@ -11,6 +11,7 @@ import {
   goToProductDetail,
   useListDisplayState,
 } from '@core/functions/product';
+import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPE === */
 import { SupplierProductLayoutProps } from './types';
 /** === COMPONENT === */
@@ -58,12 +59,15 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
               <ProductListCard
                 name={product.name}
                 imageUrl={product.thumbnail}
-                currentPrice={product.currentPrice}
+                finalPrice={product.finalPrice}
+                qtySoldLabel={product.qtySoldLabel}
                 isBundle={product.isBundle}
                 isPromo={product.isPromo}
                 isExclusive={product.isExclusive}
                 onCardPress={() => {
-                  goToProductDetail(product.id);
+                  goToProductDetail(
+                    `${product.id}_${product.warehouseOriginId}`,
+                  );
                 }}
                 withOrderButton={true}
                 onOrderPress={() => onOrderPress(product)}

@@ -1,74 +1,149 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
-import { SnbText, SnbIcon, color } from 'react-native-sinbad-ui';
-import { toCurrency } from '../../../../../core/functions/global/currency-format';
-/** === IMPORT EXTERNAL FUNCTION HERE === */
-import { handleProductNotAvailableDelete } from '../../functions';
-import { goToProductDetail } from '@core/functions/product';
-import { ShoppingCartStyles } from '../../styles';
 import {
-  ICartMasterProductNotAvailable,
-  IProductRemoveSelected,
-} from '@models';
-/** === TYPE ===  */
-interface ProductNotAvailableViewProps {
-  product: ICartMasterProductNotAvailable;
-  productIndex: number;
-  productLength: number;
-  onRemoveProduct: (any: IProductRemoveSelected) => void;
-  type: 'dataEmptyStock' | 'dataNotFound';
+  SnbText,
+  SnbText2,
+  SnbCheckbox,
+  SnbIcon,
+  color,
+} from 'react-native-sinbad-ui';
+/** === IMPORT EXTERNAL FUNCTION HERE === */
+import { ShoppingCartStyles } from '@screen/oms/styles';
+import { goToProduct } from '@screen/category/functions';
+import * as models from '@models';
+import { UnavailableAccordionView } from './product-not-available-accordion.view';
+import { Images } from 'src/assets';
+
+interface ProductUnavailableViewProps {
+  unavailableProducts: models.CartMasterUnavailable[];
+  handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
+  handleScrollToBottom: () => void;
 }
-/** == COMPONENT === */
-export const ProductNotAvailableView: FC<ProductNotAvailableViewProps> = ({
-  product,
-  productIndex,
-  productLength,
-  onRemoveProduct,
-  type,
+
+export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
+  unavailableProducts,
+  handleRemoveProductModal,
+  handleScrollToBottom,
 }) => {
-  return (
-    <View
-      style={{
-        ...ShoppingCartStyles.horizontalBottomCardSlot,
-        paddingBottom: 18,
-        borderBottomWidth: productIndex === productLength - 1 ? 0 : 1,
-        borderStyle: 'solid',
-        borderBottomColor: color.black10,
-      }}
-      key={product.productName}>
-      <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity onPress={() => goToProductDetail(product.productId)}>
-          <Image
-            source={{ uri: product.urlImages }}
-            style={{ marginRight: 8, width: 77, height: 77 }}
-          />
-        </TouchableOpacity>
-        <View>
-          <TouchableOpacity
-            onPress={() => goToProductDetail(product.productId)}
-            style={{ marginBottom: 12, maxWidth: 160 }}>
-            <SnbText.B4>{product.productName}</SnbText.B4>
-          </TouchableOpacity>
-          <View style={{ marginBottom: 12 }}>
-            <SnbText.B4 color={color.red50}>
-              {toCurrency(product.displayPrice, { withFraction: false })}
-            </SnbText.B4>
-          </View>
-        </View>
-      </View>
+  /** => PRODUCT IMAGE */
+  const renderProductImage = (imageUrl: string) => {
+    return (
       <View
         style={{
-          justifyContent: 'space-between',
-          alignItems: 'flex-end',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 0.5,
         }}>
+        <Image
+          source={{
+            uri: imageUrl,
+          }}
+          defaultSource={Images.opacityPlaceholder}
+          style={ShoppingCartStyles.productImg}
+        />
+      </View>
+    );
+  };
+  /** => ACTION SECTION */
+  const renderActionSection = (product: models.CartMasterUnavailable) => {
+    return (
+      <View style={ShoppingCartStyles.unavailableActionContainer}>
         <TouchableOpacity
-          onPress={() =>
-            handleProductNotAvailableDelete(product, onRemoveProduct, type)
-          }>
-          <SnbIcon name="delete_outline" color={color.black60} size={32} />
+          onPress={() => {
+            const category = {
+              id: product.categoryId,
+              name: '',
+              icon: '',
+              hasChild: false,
+            };
+            goToProduct(category);
+          }}>
+          <SnbText.B4 color={color.blue50}>Cari Produk Sejenis</SnbText.B4>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            const removedProducts: models.RemovedProducts[] = [];
+            removedProducts.push({
+              productId: product.productId,
+              warehouseId: product.warehouseId,
+            });
+            handleRemoveProductModal({
+              source: 'unavailable',
+              removedProducts,
+            });
+          }}>
+          <SnbIcon name="delete_outline" color={color.black80} size={32} />
         </TouchableOpacity>
       </View>
-    </View>
+    );
+  };
+  return (
+    <React.Fragment>
+      <View
+        key={`${unavailableProducts[0].productId}.${unavailableProducts[0].sellerId}`}
+        style={ShoppingCartStyles.horizontalCardContent}>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={ShoppingCartStyles.checkboxContainer}>
+            <SnbCheckbox
+              disabled={true}
+              status={'unselect'}
+              onPress={() => {}}
+            />
+          </View>
+          {renderProductImage(unavailableProducts[0].productImageUrl)}
+          <View style={{ justifyContent: 'center', flex: 1 }}>
+            <View style={{ flex: 1 }}>
+              <SnbText2.Paragraph.Default
+                color={color.black80}
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
+                {unavailableProducts[0].productName}
+              </SnbText2.Paragraph.Default>
+              <SnbText.B4 color={color.black80}>
+                {unavailableProducts[0].unavailableMessage}
+              </SnbText.B4>
+            </View>
+          </View>
+        </View>
+        {renderActionSection(unavailableProducts[0])}
+      </View>
+      <UnavailableAccordionView
+        totalRemaining={unavailableProducts.slice(1).length}
+        handleScrollToBottom={handleScrollToBottom}>
+        {unavailableProducts.slice(1).map((item) => {
+          return (
+            <View
+              key={`${item.productId}.${item.sellerId}`}
+              style={ShoppingCartStyles.horizontalCardContent}>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={ShoppingCartStyles.checkboxContainer}>
+                  <SnbCheckbox
+                    disabled={true}
+                    status={'unselect'}
+                    onPress={() => {}}
+                  />
+                </View>
+                {renderProductImage(item.productImageUrl)}
+                <View style={{ flex: 1 }}>
+                  <View style={{ flex: 1 }}>
+                    <SnbText2.Paragraph.Default
+                      color={color.black80}
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}>
+                      {item.productName}
+                    </SnbText2.Paragraph.Default>
+                    <SnbText.B4 color={color.black80}>
+                      {item.unavailableMessage}
+                    </SnbText.B4>
+                  </View>
+                </View>
+              </View>
+              {renderActionSection(item)}
+            </View>
+          );
+        })}
+      </UnavailableAccordionView>
+    </React.Fragment>
   );
 };

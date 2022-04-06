@@ -74,12 +74,15 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
-      <SnbText.C1 color={color.black60}>Jumlah/pcs</SnbText.C1>
+      <SnbText.C1 color={color.black60}>
+        Jumlah/
+        {dataProductDetail?.unit ?? dataProductDetailCart?.unit}{' '}
+      </SnbText.C1>
       {dataStock && dataProductDetailCart && (
         <React.Fragment>
-          {(dataStock.stock < 1000 || orderQty > dataStock.stock) && (
+          {(dataStock.stock < 11 || orderQty > dataStock.stock) && (
             <SnbText.B3 color={color.red50}>
-              {`Tersisa ${dataStock.stock} ${dataProductDetailCart.unit}`}
+              {`Tersisa ${dataStock.stock}`}
             </SnbText.B3>
           )}
 
@@ -113,10 +116,11 @@ export const AddToCartQuantityModifier: FC<AddToCartQuantityModifierProps> = ({
       )}
       {isFromProductDetail && dataStockDetail && dataProductDetail && (
         <React.Fragment>
-          {(dataStockDetail.stock <= 1000 ||
-            orderQty > dataStockDetail.stock) && (
+          {(dataStockDetail.stock < 11 || orderQty > dataStockDetail.stock) && (
             <SnbText.B3 color={color.red50}>
-              {`Tersisa ${dataStockDetail.stock} ${dataProductDetail.unit}`}
+              {dataStockDetail.stock === 0
+                ? 'Produk Habis'
+                : `Tersisa ${dataStockDetail.stock}`}
             </SnbText.B3>
           )}
 

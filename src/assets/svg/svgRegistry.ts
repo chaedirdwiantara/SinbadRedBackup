@@ -7,6 +7,11 @@ import otp_icon from './otp.svg';
 import call from './call.svg';
 import whatsapp from './whatsapp.svg';
 import mail from './mail.svg';
+// history tracking icon
+import packed from './packed.svg';
+import shiped from './shiped.svg';
+import delivered from './delivered.svg';
+import done_order from './done_order.svg';
 import sinbad_otp from './sinbad_OTP.svg';
 import registration from './registration.svg';
 import onboarding from './onboarding.svg';
@@ -32,6 +37,10 @@ export const SvgRegistery = {
   call,
   whatsapp,
   mail,
+  packed,
+  shiped,
+  delivered,
+  done_order,
   sinbad_otp,
   registration,
   onboarding,

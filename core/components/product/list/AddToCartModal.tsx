@@ -107,7 +107,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={AddToCartModalStyle.priceContainer}>
           <View style={{ marginRight: 8 }}>
             <SnbText.B3 color={color.red50}>
-              {toCurrency(dataProductDetail?.currentPrice ?? 0, {
+              {toCurrency(dataProductDetail?.finalPrice ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>
@@ -129,13 +129,12 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         </View>
         <View style={{ flexDirection: 'row' }}>
           <SnbText.C1>
-            per-Dus{' '}
-            {`${dataProductDetail?.packagedQty} ${dataProductDetail?.minQtyType}`}
+            per-Dus {`${dataProductDetail?.packagedQty} Pcs`}
           </SnbText.C1>
           <View style={AddToCartModalStyle.lineSeparator} />
           <SnbText.C1>
             min.pembelian{' '}
-            {`${dataProductDetail?.minQty} ${dataProductDetail?.minQtyType}`}
+            {`${dataProductDetail?.minQty} ${dataProductDetail?.unit}`}
           </SnbText.C1>
         </View>
       </View>
@@ -148,7 +147,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
           <SnbText.B3>Total: </SnbText.B3>
           <SnbText.B4 color={color.red50}>
-            {toCurrency(dataProductDetail?.currentPrice ?? 0 * orderQty, {
+            {toCurrency(dataProductDetail?.finalPrice ?? 0 * orderQty, {
               withFraction: false,
             })}
           </SnbText.B4>
