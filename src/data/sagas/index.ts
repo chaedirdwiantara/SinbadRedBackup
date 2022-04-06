@@ -20,6 +20,8 @@ import QuestSaga from './quest.saga';
 import CartSaga from './oms/cart/cart.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
 import OrderHistorySaga from './order-history/order-history.saga';
+import EasyRegistrationSaga from './account/easy-registration.saga';
+import CoachmarkSaga from './account/coachmark.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -43,6 +45,8 @@ function* rootSaga() {
   yield all([fork(CartSaga)]);
   yield all([fork(CheckoutSaga)]);
   yield all([fork(OrderHistorySaga)]);
+  yield all([fork(EasyRegistrationSaga)]);
+  yield all([fork(CoachmarkSaga)]);
 }
 
 export default rootSaga;

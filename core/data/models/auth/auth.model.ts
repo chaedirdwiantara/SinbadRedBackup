@@ -56,6 +56,16 @@ export interface AuthMeDataProps {
   sellerIds: UserSellerAuthData[];
 }
 
+export interface AuthMeV2DataProps {
+  data: {
+    sessionActiveUntil: Date;
+    sessionExpiredUntil: Date;
+    user: UserAuthData;
+    isBuyerCategoryCompleted: boolean;
+    isDataCompleted: boolean;
+  };
+}
+
 export interface AuthMeSuccess {
   data: AuthMeDataProps;
 }

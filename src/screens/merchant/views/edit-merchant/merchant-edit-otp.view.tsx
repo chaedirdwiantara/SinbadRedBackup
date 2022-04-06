@@ -123,7 +123,7 @@ const OTPContent: React.FC<Props> = (props) => {
       });
     } else {
       NavigationAction.backToPage('MerchantDetailProfileView');
-      storeDetailAction.detail(dispatchUser, { id: '3' });
+      storeDetailAction.detail(dispatchUser);
     }
     NavigationAction.backToPage('MerchantDetailProfileView');
     storeDetailAction.detail(dispatchUser);
@@ -134,7 +134,7 @@ const OTPContent: React.FC<Props> = (props) => {
       });
     } else {
       NavigationAction.backToPage('MerchantDetailProfileView');
-      storeDetailAction.detail(dispatchUser, { id: '3' });
+      storeDetailAction.detail(dispatchUser);
     }
   };
 
@@ -207,6 +207,7 @@ const OTPContent: React.FC<Props> = (props) => {
               onCodeChanged={setOtp}
               otpSuccess={successOTP}
               hideIcon={hideIcon}
+              type={'default'}
             />
           </View>
           <View

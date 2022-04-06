@@ -4,7 +4,11 @@ import { formatter } from './auth-utils.functions';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
-import { IListSelection } from '@models';
+
+const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
+  { id: 1, value: 1 },
+  { id: 2, value: 2 },
+];
 
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
@@ -48,19 +52,36 @@ export const useInputPhone = () => {
     valMsgError,
     clearText,
     maxLength: 14,
-    labelText: 'Nomor Handphone',
+    labelText: 'Masukkan Nomor Handphone',
     placeholder: 'Masukkan nomor handphone anda',
     setMessageError,
+    setType,
   };
 };
 
-export const useInput = (initialState: string = '') => {
+export const useInput = (
+  initialState: string = '',
+  fieldType: 'string-only' | 'number-only' | 'default' = 'default',
+) => {
   const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
   const [type, setType] = useState('default');
 
   const onChangeText = (text: string) => {
     setType('default');
+    switch (fieldType) {
+      case 'number-only': {
+        text = text.replace(/[^0-9]/g, '');
+        break;
+      }
+      case 'string-only': {
+        text = text.replace(/[0-9]/g, '');
+        break;
+      }
+      case 'default':
+      default:
+        break;
+    }
     setValue(text);
   };
 
@@ -160,21 +181,31 @@ export const useTextFieldSelect = () => {
     (state: any) => state.global,
   );
 
-  const gotoSelection = (data: IListSelection) => {
+  const gotoSelection = (data: models.IListSelection) => {
     resetSelectedItem();
     resetGetSelection();
     navigate('ListAndSearchView', data);
   };
 
-  const getSelection = (data: IListSelection) => {
-    dispatch(Actions.getSelectionProcess(data));
+  const getSelection = (data: models.IListSelection) => {
+    if (data.type === 'listVehicleAccessAmount') {
+      dispatch(
+        Actions.getSelectionSuccess({ data: DEFAULT_VEHICLE_ACCESS_AMOUNT }),
+      );
+    } else {
+      dispatch(Actions.getSelectionProcess(data));
+    }
+  };
+
+  const loadMoreSelection = (data: models.IListSelection) => {
+    dispatch(Actions.loadMoreSelectionProcess(data));
   };
 
   const resetGetSelection = () => {
     dispatch(Actions.resetGetSelection());
   };
 
-  const onSelectedItem = (data: any) => {
+  const onSelectedItem = (data: models.IOnSelectedItem) => {
     dispatch(Actions.onSelectedItem(data));
   };
 
@@ -190,6 +221,7 @@ export const useTextFieldSelect = () => {
     selectedItem,
     onSelectedItem,
     resetSelectedItem,
+    loadMoreSelection,
   };
 };
 
@@ -197,7 +229,7 @@ export const useLocations = () => {
   const dispatch = useDispatch();
   const { locations } = useSelector((state: any) => state.global);
 
-  const getLocation = (data: models.IUrbanID) => {
+  const getLocation = (data: models.ILocationSearch) => {
     dispatch(Actions.getLocationProcess(data));
   };
   const resetLocation = () => {
@@ -237,11 +269,6 @@ export const useInputFormat = (format: 'npwp' | 'ktp' | 'email') => {
     }
     setValue(text);
   };
-
-  // const setMessageError = (message: string) => {
-  //   setType('error');
-  //   setValMsgError(message);
-  // };
 
   const clearText = () => {
     setValue('');

@@ -2,9 +2,9 @@ import { contexts } from '@contexts';
 import { navigate } from '@core/navigations/RootNavigation';
 import apiMaps from '@core/services/apiMaps';
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { INPUT_MANUAL_LOCATION_MODAL_VIEW } from '@screen/account/functions/screens_name';
 import { extractAddress, useMerchant } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
-import { INPUT_MANUAL_LOCATION_VIEW } from '@screen/auth/functions/screens_name';
 import React from 'react';
 import { View, Image } from 'react-native';
 import MapView, { LatLng, Region } from 'react-native-maps';
@@ -208,7 +208,7 @@ const MapsView = () => {
                     longitude: position?.longitude,
                   });
                   setShowModal(false);
-                  navigate(INPUT_MANUAL_LOCATION_VIEW);
+                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
                 }}
                 disabled={false}
                 type="primary"

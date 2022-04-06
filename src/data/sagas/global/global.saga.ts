@@ -34,6 +34,18 @@ function* getSelection(action: any) {
     yield put(ActionCreators.getSelectionFailed(error));
   }
 }
+
+function* loadMoreSelection(action: any) {
+  try {
+    const response: models.IGetSelectionSuccess<any> = yield call(() =>
+      GlobalApi.getSelection(action.payload),
+    );
+    yield put(ActionCreators.loadMoreSelectionSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.loadMoreSelectionFailed(error));
+  }
+}
+
 function* getLocation(action: any) {
   try {
     const response: models.IGetSelectionSuccess<any> = yield call(() =>
@@ -48,6 +60,7 @@ function* getLocation(action: any) {
 function* GlobalSaga() {
   yield takeLatest(types.UPLOAD_IMAGE_PROCESS, uploadImage);
   yield takeLatest(types.GET_SELECTION_PROCESS, getSelection);
+  yield takeLatest(types.LOAD_MORE_SELECTION_PROCESS, loadMoreSelection);
   yield takeLatest(types.GET_LOCATION_PROCESS, getLocation);
 }
 

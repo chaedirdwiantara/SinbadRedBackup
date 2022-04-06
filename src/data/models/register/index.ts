@@ -72,8 +72,8 @@ export interface ICheckPhoneNoAvailabilitySuccess {
 }
 
 export interface IVerifyOTPRegister {
-  mobilePhone: string | undefined;
-  otp: string;
+  mobilePhoneNo: string | undefined;
+  otp: number;
 }
 export interface IVerifyOTPSuccess {
   data: {
@@ -85,8 +85,42 @@ export interface IVerifyOTPSuccess {
     };
   };
 }
+export interface ICheckPhoneV2Process {
+  mobilePhoneNo: string | undefined;
+  otpHash: string;
+}
+export interface ICheckPhoneV2Success {
+  data: {
+    data: {
+      id: number | null;
+      isAvailable: boolean;
+      createdAt: string;
+      updatedAt: string;
+    };
+    message: string;
+  };
+}
+export interface ICheckAutoLoginProcess {
+  data: {
+    requestId: string;
+  };
+}
+export interface ICheckAutoLoginSuccess {
+  data: {
+    sessionActiveUntil: string;
+    sessionExpiredUntil: string;
+    user: {
+      id: number;
+      name: string;
+      imageUrl: string;
+    };
+    isBuyerCategoryCompleted: boolean;
+    isDataCompleted: boolean;
+  };
+}
 
 // FAILED MODEL
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}
 export interface ICheckEmailAvailabilityFailed {}
+export interface ICheckAutoLoginFailed {}
