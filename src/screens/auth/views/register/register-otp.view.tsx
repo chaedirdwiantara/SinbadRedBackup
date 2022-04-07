@@ -124,6 +124,7 @@ const RegisterOTPView: React.FC = () => {
       />
       <ScrollView>
         <OTPContent
+          testID="register"
           onVerifyOTP={(otp) => {
             setHide(true);
             verifyOTPRegister({

@@ -17,6 +17,7 @@ interface Props {
   phoneNo: string;
   resend: () => void;
   errorMessage: string;
+  testID: string;
 }
 
 const OTPContent: React.FC<Props> = (props) => {
