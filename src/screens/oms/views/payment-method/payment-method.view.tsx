@@ -68,6 +68,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   const [handleStatusPayment, setHandleStatusPayment] = useState<any>(false); //handle order status
   const [isLoading, setLoading] = useState(false);
   const [createTheOrder, setCreateTheOrder] = useState(false);
+  const [hitOrderDetail, setHitOrderDetail] = useState(true);
   const [isSelected, setIsSelected] = useState<models.PaymentMethod | any>([]);
 
   const { stateCheckout, dispatchCheckout } = useContext(
@@ -104,6 +105,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     );
   };
 
+  let intervalCheckStatus = useRef<any>(null);
+
   const data = paymentMethodData;
 
   /** => set expired time  */
@@ -137,6 +140,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => to thank you page */
   const toThankYouPage = () => {
+    setHitOrderDetail(false);
+    clearInterval(intervalCheckStatus.current);
     setSelectedPaymentMethodData(null);
     clearTimeout(timeRef.current);
     updateCartAction.reset(dispatchCart);
@@ -186,9 +191,19 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     React.useCallback(() => {
       if (handleStatusPayment == false) {
         if (statePaymentMethod.subOrderRtdb.data) {
-          statePaymentMethod.subOrderRtdb.data[0] == 'true'
-            ? toThankYouPage()
-            : null;
+          if (statePaymentMethod.subOrderRtdb.data[0] == 'true') {
+            toThankYouPage();
+          } else if (statePaymentMethod.subOrderRtdb.data[0] == null) {
+            if (statePaymentMethod.createOrder.data != null) {
+              intervalCheckStatus.current = setInterval(() => {
+                thankYouPageAction.thankYoupageOrderDetail(
+                  dispatchThankYouPage,
+                  statePaymentMethod.createOrder.data.id,
+                );
+                setGetOrderStatus(true);
+              }, 1000);
+            }
+          }
         }
       } else if (handleStatusPayment == true) {
         if (statePaymentMethod.subOrderRtdb.data) {
@@ -197,7 +212,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
             : null;
         }
       }
-    }, [handleStatusPayment, statePaymentMethod.subOrderRtdb.data]),
+    }, [
+      handleStatusPayment,
+      statePaymentMethod.subOrderRtdb.data,
+      statePaymentMethod.createOrder.data,
+    ]),
   );
 
   /** navigate to thankyou page if orderStatus == waiting_for_payment'*/
@@ -223,7 +242,11 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => try to get status payment from order detail when there's no update from rtdb */
   React.useEffect(() => {
-    if (handleStatusPayment == true && statePaymentMethod.subOrderRtdb.data) {
+    if (
+      handleStatusPayment == true &&
+      statePaymentMethod.subOrderRtdb.data &&
+      hitOrderDetail == true
+    ) {
       if (
         statePaymentMethod.subOrderRtdb.data[0] != 'true' &&
         statePaymentMethod.createOrder.data?.id
@@ -321,6 +344,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** => handle error status */
   const handleErrorStatus = () => {
+    clearInterval(intervalCheckStatus.current);
+    setHitOrderDetail(false);
     setErrorSession(true);
   };
 
@@ -334,6 +359,8 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
+    clearInterval(intervalCheckStatus.current);
+    setHitOrderDetail(false);
     setSelectedPaymentMethodData(null);
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
