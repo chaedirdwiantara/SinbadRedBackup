@@ -43,9 +43,13 @@ const getList = (
 };
 
 const getDetail = (payload: models.DetailProcessProps) => {
+  const [productId, warehouseId] = payload.id.split('_');
+  const qs = serializeQs({
+    warehouseId,
+  });
   return apiMapping<models.ProductDetail>(
     'public',
-    `products/${payload.id}`,
+    `products/${productId}?${qs}`,
     'product',
     'v1',
     'DETAIL',

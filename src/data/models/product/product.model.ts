@@ -4,13 +4,15 @@ export interface ProductList {
   id: string;
   name: string;
   sellerId: string;
-  originalPrice: number;
-  currentPrice: number;
   isBundle: boolean;
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
   thumbnail: string;
+  basePrice: number;
+  finalPrice: number;
+  qtySoldLabel: string;
+  warehouseOriginId: string;
 }
 
 export interface ProductListProcessProps extends models.ListProcessProps {
@@ -45,6 +47,28 @@ interface ProductListSuccessProps {
   data: Array<ProductList>;
 }
 
+interface ProductBrnd {
+  id: string;
+  name: string;
+}
+
+interface productPriceRules {
+  maxQty: number;
+  minQty: number;
+  price: number;
+}
+
+interface productTax {
+  amount: number;
+  calculate: string;
+  name: string;
+  typeAmount: string;
+}
+
+interface productSeller {
+  id: string;
+  name: string;
+}
 export interface ProductListSuccessAction {
   type: string;
   payload: ProductListSuccessProps;
@@ -56,6 +80,7 @@ export interface ProductImage {
 
 export interface ProductDetail {
   id: string;
+  categoryId: string;
   supplierCode: string;
   sellerId: string;
   name: string;
@@ -63,6 +88,10 @@ export interface ProductDetail {
   description: string;
   productWeight: number;
   productDimension: number;
+  productBrand: ProductBrnd;
+  productPriceRules: Array<productPriceRules>;
+  productSeller: productSeller;
+  productTax: productTax;
   packagedWeight: number;
   packagedDimension: number;
   minQty: number;
@@ -77,15 +106,20 @@ export interface ProductDetail {
   unit: string;
   tags: Array<string>;
   images: Array<ProductImage>;
-  originalPrice: number;
-  currentPrice: number | null;
-  currentPriceAfterTax: number | null;
+  basePrice: number;
+  finalPrice: number;
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
   isAvailable?: boolean;
   isBundle?: boolean;
+  isPriceAfterTax: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+  qtySoldLabel: string;
+  qtySoldValue: number;
+  sellerCode: string;
+  thumbnailImageUrl: string;
+  warehouseOriginId?: number | null;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;

@@ -34,13 +34,13 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         flexOne={true}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
-        originalPrice={product.originalPrice}
-        currentPrice={product.currentPrice}
+        qtySoldLabel={product.qtySoldLabel}
+        finalPrice={product.finalPrice}
         isBundle={product.isBundle}
         isPromo={product.isPromo}
         isExclusive={product.isExclusive}
         onCardPress={() => {
-          goToProductDetail(product.id);
+          goToProductDetail(`${product.id}_${product.warehouseOriginId}`);
         }}
         withOrderButton={true}
         onOrderPress={() => onOrderPress(product)}

@@ -1,43 +1,21 @@
 /** === IMPORT INTERNAL === */
-import apiMapping from '@core/services/apiMapping';
+import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
 
-const getCheckout = () => {
-  const path = 'carts/checkout';
-  return apiMapping<models.CheckoutSuccess>(
+const checkoutCart = ({
+  data,
+}: models.CreateProcessProps<models.CheckoutPayload>) => {
+  const path = 'checkouts';
+  return apiMapping<models.CheckoutResponse>(
     'auth',
     path,
-    'cart',
-    'v1',
-    'DETAIL',
-  );
-};
-
-const createOrders = (data: models.CreateOrders) => {
-  const path = 'orders';
-  return apiMapping<models.CreateOrderSuccess>(
-    'auth',
-    path,
-    'order',
+    'buyer-cart',
     'v1',
     'CREATE',
     data,
   );
 };
 
-const getOrdersDetail = (data: models.CheckoutDoneProcessProps) => {
-  const path = `orders/${data.id}`;
-  return apiMapping<models.DetailSuccessProps<models.CheckoutDoneOrders>>(
-    'auth',
-    path,
-    'order',
-    'v1',
-    'DETAIL',
-  );
-};
-
 export const CheckoutApi = {
-  getCheckout,
-  createOrders,
-  getOrdersDetail,
+  checkoutCart,
 };

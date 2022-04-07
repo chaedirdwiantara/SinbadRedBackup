@@ -90,6 +90,7 @@ export interface ListItemV3Props<T> {
   refresh: boolean;
   page: number;
   perPage: number;
+  totalPage: number;
   data: T;
   error: ErrorProps | null;
 }
@@ -111,6 +112,7 @@ export type ListProcessV3Props<T = object> = ListProcessDefaultV3Props & T;
 export interface PaginationV3 {
   page: number;
   perPage: number;
+  totalPage: number;
 }
 /** === THIS FOR SUCCESS FETCH DATA === */
 export interface ListSuccessV3Props<T> {

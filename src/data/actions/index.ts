@@ -10,7 +10,6 @@ export * from './product';
 export * from './user';
 export * from './merchant';
 export * from './voucher';
-export * from './oms';
 export * from './category';
 export * from './promo';
 export * from './brand';
@@ -20,6 +19,8 @@ export * from './supplier';
 export * from './quest';
 export * from './history';
 export * from './quest';
+export * from './oms';
+export * from './order-history';
 export * from './account';
 /**
  * ================================================================

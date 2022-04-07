@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { View } from 'react-native';
 import { SnbTopNav } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
@@ -11,9 +11,9 @@ import {
   backToLogin,
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
-import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
+import { contexts } from '@contexts';
 /** === TYPE === */
 interface NavigationHeaderProps {
   type?: ProductHeaderType;
@@ -32,7 +32,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   onSearch,
   onSearchClear,
 }) => {
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
 
   const validateCartVisit = () => {
@@ -52,7 +52,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           type="red"
           icon1Name="search"
           icon1Action={goToSearch}
-          icon2Value={dataTotalProductCart.totalProduct}
+          icon2Value={stateCart.total.data?.totalProducts}
           icon2Name="cart"
           icon2Action={validateCartVisit}
         />
@@ -67,7 +67,7 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           onChangeText={(text) => onKeywordChange(text)}
           icon1Name="home"
           icon1Action={goToHome}
-          icon2Value={dataTotalProductCart.totalProduct}
+          icon2Value={stateCart.total.data?.totalProducts}
           icon2Name="cart"
           icon2Action={validateCartVisit}
         />
