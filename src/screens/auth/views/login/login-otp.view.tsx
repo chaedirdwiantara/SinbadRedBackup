@@ -63,6 +63,7 @@ const LoginOTPView: React.FC = () => {
       />
       <ScrollView>
         <OTPContent
+          testID="login"
           onVerifyOTP={(otp) => {
             setHide(true);
             resetVerifyOTP();
