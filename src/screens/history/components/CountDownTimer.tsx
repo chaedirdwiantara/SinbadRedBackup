@@ -7,7 +7,7 @@ import { HistoryStyle } from '../styles';
 
 interface CountDownTimerProps {
   expiredTime: string;
-  type: 'small' | 'big';
+  type: 'small' | 'big' |'simple';
 }
 
 export const CountDownTimer: FC<CountDownTimerProps> = ({
@@ -90,12 +90,17 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <SnbText.H4>{hours} </SnbText.H4>
-        <SnbText.B1> Jam</SnbText.B1>
+        <SnbText.B1> Jam:</SnbText.B1>
         <SnbText.H4> {minutes} </SnbText.H4>
-        <SnbText.B1> Menit</SnbText.B1>
+        <SnbText.B1> Menit:</SnbText.B1>
         <SnbText.H4> {seconds} </SnbText.H4>
         <SnbText.B1>Detik</SnbText.B1>
       </View>
+    </View>
+  );
+  const timerWaitingPaymentCard = () => (
+    <View>
+        <SnbText.B4 color={color.red50}>{`${hours} :${minutes} :${seconds}`}</SnbText.B4>
     </View>
   );
 
@@ -105,6 +110,8 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
         return timerHistoryCard();
       case 'big':
         return timerCheckoutDone();
+      case 'simple':
+        return timerWaitingPaymentCard();
       default:
         return timerHistoryCard();
     }

@@ -333,7 +333,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (localCartMaster) {
       const isCartEmpty =
         (!isAnyActiveProduct() && localCartMaster.unavailable.length === 0) ||
-        stateCart.get.error?.code === 40010000009;
+        stateCart.get.error?.code === 20130000008;
       if (!isCartEmpty) {
         return (
           <React.Fragment>
