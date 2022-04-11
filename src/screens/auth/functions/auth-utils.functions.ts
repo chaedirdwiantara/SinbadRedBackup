@@ -71,6 +71,23 @@ export const extractAddress = (data: any) => {
   return dataAddress;
 };
 
+export const DEFAULT_LATITUDE = -6.2;
+export const DEFAULT_LONGITUDE = 106.816666;
+export const REGION_OPTIONS = {
+  latitudeDelta: 0.02,
+  longitudeDelta: 0.02,
+};
+
+export function getStreetName(data: any) {
+  let streetName = 'Jalan tidak diketahui';
+  data?.map((item: any) => {
+    if (item.types.indexOf('route') > -1) {
+      streetName = item.long_name;
+    }
+  });
+  return streetName;
+}
+
 export const setErrorMessage = (code: number, message?: string) => {
   switch (code) {
     case 10002: {

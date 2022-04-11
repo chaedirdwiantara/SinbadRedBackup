@@ -585,9 +585,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           type={'primary'}
           onPress={() => confirm()}
           disabled={
-            true ||
             checkButton() ||
-            false ||
             stateMerchant.merchantEdit.loading ||
             stateMerchant.profileEdit.loading ||
             stateMerchant.changeMobilePhone.loading ||

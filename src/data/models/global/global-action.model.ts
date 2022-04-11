@@ -1,4 +1,5 @@
 /** === IMPORT EXTERNAL MODEL === */
+import { ITypeList } from '..';
 import { UploadImageSaveProps } from './global.model';
 /** === UPLOAD IMAGE === */
 export interface uploadImageAction {
@@ -25,29 +26,20 @@ export interface IGetSelectionSuccess<T> {
 }
 
 export interface IListSelection {
-  type:
-    | 'listNumOfEmployee'
-    | 'listProvince'
-    | 'listCity'
-    | 'listDistrict'
-    | 'listUrban'
-    | 'listVehicleAccessAmount'
-    | 'listUrbanID'
-    | 'listVehicleAccess'
-    | 'listBank';
+  type: ITypeList;
   params?: string;
   meta?: {
-    skip?: number;
-    limit?: number;
+    page?: number;
+    perPage?: number;
     keyword?: string;
   };
   action?: 'create' | 'edit' | undefined;
 }
-export interface IUrbanID {
+export interface ILocationSearch {
   params?: string;
-  meta?: {
-    skip?: number;
-    limit?: number;
-    keyword?: string;
-  };
+}
+
+export interface IOnSelectedItem {
+  type: ITypeList;
+  item: any;
 }
