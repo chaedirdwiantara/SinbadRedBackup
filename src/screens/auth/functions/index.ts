@@ -8,6 +8,8 @@ import {
 import {
   useCheckPhoneNoAvailability,
   useRegister,
+  useCheckPhoneV2,
+  useCheckAutoLogin,
 } from './register-hooks.functions';
 import {
   useMerchant,
@@ -36,4 +38,6 @@ export {
   extractAddress,
   useRegister,
   setErrorMessage,
+  useCheckPhoneV2,
+  useCheckAutoLogin,
 };

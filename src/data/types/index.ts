@@ -22,6 +22,7 @@ export * from './history';
 export * from './quest.type';
 export * from './oms';
 export * from './order-history';
+export * from './easy-registration.type';
 /**
  * ================================================================
  * NOTES

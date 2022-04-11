@@ -1,5 +1,4 @@
 export const LOGIN_PHONE_VIEW = 'LoginPhoneView';
-export const LOGIN_ID_VIEW = 'LoginIDView';
 export const LOGIN_OTP_VIEW = 'LoginOTPView';
 export const REGISTER_VIEW = 'RegisterView';
 export const REGISTER_OTP_VIEW = 'RegisterOTPView';
@@ -11,3 +10,4 @@ export const REGISTER_STEP_5_VIEW = 'RegisterStep5View';
 export const REGISTER_STEP_6_VIEW = 'RegisterStep6View';
 export const REGISTER_STEP_7_VIEW = 'RegisterStep7View';
 export const INPUT_MANUAL_LOCATION_VIEW = 'InputManualLocationView';
+export const SELF_REGISTRATION_VIEW = 'SelfRegisterView';

@@ -19,8 +19,19 @@ import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
 import PushNotification from '@core/components/PushNotification';
 import { contexts } from '@contexts';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import HomeStyles from '../styles/home.style';
+const CopilotView = walkthroughable(View);
+import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
+import {
+  copilotOptions,
+  ModalStartCoachmark,
+  SinbadEngage,
+} from '@screen/account/views/shared';
+import { renderIF } from '@screen/auth/functions';
+
 /** === COMPONENT === */
-const HomeView: React.FC = ({ navigation }: any) => {
+const HomeView: React.FC = ({ navigation, start }: any) => {
   /** === STATE === */
   const { dispatchCart } = useContext(contexts.CartContext);
   const [modalError, setModalError] = React.useState(false);
@@ -29,7 +40,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   const { stateRefresh, actionRefresh } = useRefresh();
   const totalCartActions = useGetTotalCartAction();
   const notificationTotalActions = useNotificationTotalActions();
-  const { me } = useDataAuth();
+  const { me, meV2 } = useDataAuth();
   useGetTokenNotLogin();
   setFlagByDeviceId();
   /** === FUNCTION FOR HOOK === */
@@ -62,16 +73,67 @@ const HomeView: React.FC = ({ navigation }: any) => {
   }, [me.error]);
   /** => header */
   const header = () => {
-    return <HomeHeaderView headerChange={stateHeaderChange} />;
+    return (
+      <View style={HomeStyles.topNavContainer}>
+        <CopilotStep
+          text="Cari dan temukan produk terbaik untuk stok toko Anda."
+          order={1}
+          name="Temukan Produk yang Anda inginkan">
+          <CopilotView>
+            <HomeHeaderView headerChange={stateHeaderChange} />
+          </CopilotView>
+        </CopilotStep>
+      </View>
+    );
   };
   /** => content item */
   const contentItem = () => {
+    const isBadgeVIPAvailable =
+      typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
+      meV2.data?.data?.isDataCompleted === false;
+
     return (
       <>
         <PushNotification />
-        <BannerHomeView />
-        <CategoryHomeView />
+        <CopilotStep
+          text="Cek promo terbaik setiap hari biar belanja makin hemat."
+          order={2}
+          name="Promo terbaik Sinbad">
+          <CopilotView>
+            <BannerHomeView />
+          </CopilotView>
+        </CopilotStep>
+        {renderIF(
+          isBadgeVIPAvailable,
+          <>
+            <CopilotStep
+              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+              order={3}
+              name="Jadi anggota VIP Sinbad">
+              <CopilotView>
+                <UpgradeVIPAccountBadge />
+              </CopilotView>
+            </CopilotStep>
+            <CopilotStep
+              text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+              order={4}
+              name="Kumpulkan poin, makin untung">
+              <CopilotView>
+                <SinbadEngage />
+              </CopilotView>
+            </CopilotStep>
+          </>,
+          <CopilotStep
+            text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
+            order={3}
+            name="Kumpulkan poin, makin untung">
+            <CopilotView>
+              <SinbadEngage />
+            </CopilotView>
+          </CopilotStep>,
+        )}
         <RecommendationHomeView navigationParent={navigation} />
+        <CategoryHomeView />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
       </>
@@ -107,17 +169,19 @@ const HomeView: React.FC = ({ navigation }: any) => {
       />
     );
   };
+
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
       {bottomSheetError()}
+      <ModalStartCoachmark onStartCoachmark={start} />
     </SnbContainer>
   );
 };
 
-export default HomeView;
+export default copilot(copilotOptions(4, 'homeCoachmark'))(HomeView);
 
 /**
  * ================================================================

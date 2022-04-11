@@ -21,13 +21,23 @@ const registerMerchant = (data: models.IMerchantData) => {
 };
 
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
-  const path = 'otp/verification/self-registration';
-  return apiAuth(path, 'v1', 'POST', data);
+  const path = 'validate-otp';
+  return apiAuth(path, 'v2', 'POST', data);
 };
 
 const registermerchantDetail = (data: models.IRegisterMerchantSuccess) => {
   const path = `registration/check-self-registration/${data.data.requestId}`;
   return apiAuth(path, 'v1', 'GET');
+};
+
+const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
+  const path = 'check-phone';
+  return apiAuth(path, 'v2', 'POST', data);
+};
+
+const checkAutoLogin = (data: models.ICheckAutoLoginProcess) => {
+  const path = `check-registration?id=${data.data.requestId}`;
+  return apiAuth(path, 'v2', 'GET');
 };
 
 export const registerApi = {
@@ -36,4 +46,6 @@ export const registerApi = {
   checkEmailAvailability,
   verifyOTPRegister,
   registermerchantDetail,
+  checkPhoneV2,
+  checkAutoLogin,
 };
