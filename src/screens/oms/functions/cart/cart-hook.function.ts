@@ -714,7 +714,7 @@ const useCartLocalData = () => {
               let qty: number = thisProduct.qty;
               let selected: boolean = thisProduct.selected;
               if (thisProduct.qty > item.stock) {
-                qty = item.stock;
+                qty = item.stock <= 0 ? thisProduct.qty : item.stock;
                 selected = false;
               }
 

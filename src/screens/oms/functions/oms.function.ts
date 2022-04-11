@@ -10,5 +10,26 @@ const goBack = () => {
 const goToCategory = () => {
   NavigationAction.navigate('CategoryView');
 };
+/** => go to checkout */
+const goToCheckout = () => {
+  NavigationAction.navigate('OmsCheckoutView');
+};
+/** => Go to Thank You Page */
+const goToThankYouPage = (
+  section: string,
+  orderId: number
+) => {
+  NavigationAction.navigate('OmsThankYouPageView',{section, orderId});
+};
+/** => Go to Payment Method */
+const goToPaymentMethod = (data: any) => {
+  NavigationAction.navigate('OmsPaymentMethod', { data });
+};
 
-export { goBack, goToCategory };
+export {
+  goBack,
+  goToCategory,
+  goToCheckout,
+  goToThankYouPage,
+  goToPaymentMethod,
+};
