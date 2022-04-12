@@ -67,7 +67,7 @@ const IntroSplashView: React.FC = () => {
             <View style={{ marginBottom: -50 }}>
               <Svg name={'splash_highlight_text'} size={200} />
             </View>
-            <Svg name={'splash_logo'} size={240} />
+            <Svg name={'sinbad_onboard'} size={240} />
           </View>
           <View style={{ marginBottom: 16 }}>
             <SnbProgress color={color.white} size={50} />
