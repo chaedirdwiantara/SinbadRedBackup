@@ -26,6 +26,9 @@ import store_data from './store_data.svg';
 import notification from './notification.svg';
 import completeness_back from './completeness-back.svg';
 import sinbad_logo from './sinbad-logo.svg';
+import white_sinbad_logo from './white-sinbad-logo.svg';
+import splash_logo from './splash-logo.svg';
+import splash_highlight_text from './splash-highlight-text.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -55,4 +58,7 @@ export const SvgRegistery = {
   notification,
   completeness_back,
   sinbad_logo,
+  white_sinbad_logo,
+  splash_logo,
+  splash_highlight_text
 };
