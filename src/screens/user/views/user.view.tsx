@@ -22,6 +22,7 @@ import UserStyles from '../styles/user.style';
 import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { ModalUserProfileCompletion } from './modal-user-profile-completion.view';
 import LoadingPage from '@core/components/LoadingPage';
 import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
@@ -29,6 +30,11 @@ import { copilotOptions } from '@screen/account/views/shared';
 import { useCoachmark } from '@screen/account/functions';
 
 const CopilotView = walkthroughable(View);
+
+/** === INTERFACE === */
+interface NavigationParams {
+  isProfileCompletionCart: boolean;
+}
 
 const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
@@ -39,6 +45,11 @@ const UserView: FC = ({ start }: any) => {
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
   const { coachmarkState } = useCoachmark();
+
+  // usage for show modal
+  const [modalUserProfileCompletion, setModalUserProfileCompletion] = React.useState(false);
+  const isProfileCompletionCart = NavigationAction.useGetNavParams<NavigationParams>()?.params?.isProfileCompletionCart;
+  console.log(isProfileCompletionCart);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -288,6 +299,10 @@ const UserView: FC = ({ start }: any) => {
             showsVerticalScrollIndicator={false}>
             {contentItem()}
           </ScrollView>
+          {/* Modal Profile Completion */}
+          <ModalUserProfileCompletion isOpen={modalUserProfileCompletion} handleNavigateToCart={() => {
+            NavigationAction.navigate('OmsShoppingCartView');
+          }} />
         </View>
       );
     }
