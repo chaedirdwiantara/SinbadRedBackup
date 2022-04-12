@@ -29,6 +29,9 @@ import sinbad_logo from './sinbad-logo.svg';
 import white_sinbad_logo from './white-sinbad-logo.svg';
 import splash_logo from './splash-logo.svg';
 import splash_highlight_text from './splash-highlight-text.svg';
+import ktp from './ktp.svg';
+import location from './location.svg';
+import store from './store.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -60,5 +63,8 @@ export const SvgRegistery = {
   sinbad_logo,
   white_sinbad_logo,
   splash_logo,
-  splash_highlight_text
+  splash_highlight_text,
+  ktp,
+  location,
+  store
 };

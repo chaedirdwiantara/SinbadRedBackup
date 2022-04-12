@@ -3,15 +3,12 @@ import { color } from 'react-native-sinbad-ui';
 
 const UserStyles = StyleSheet.create({
   headerInformationContainer: {
-    backgroundColor: color.red50,
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 22,
+    flex: 1,
   },
   imageContainer: {
     height: 50,
     width: 50,
-    marginRight: 16,
+    margin: 16,
   },
   image: {
     width: 50,
@@ -21,9 +18,9 @@ const UserStyles = StyleSheet.create({
     borderColor: color.white,
   },
   userInfo: {
-    justifyContent: 'space-between',
     paddingVertical: 5,
     width: '80%',
+    alignSelf: 'center',
   },
   bodyTitleContainer: {
     flexDirection: 'row',
@@ -34,6 +31,36 @@ const UserStyles = StyleSheet.create({
     backgroundColor: color.red50,
     height: 30,
     width: '100%',
+  },
+  shadowStyle: {
+    shadowColor: color.black100,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2,
+  },
+  cardBody: {
+    borderRadius: 5,
+    marginHorizontal: 16,
+    marginVertical: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  /** Pagination */
+  activeDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: color.red50,
+  },
+  inactiveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: color.black40,
   },
 });
 export default UserStyles;
