@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { View, ScrollView, Image } from 'react-native';
+import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -175,6 +175,11 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText.B4>Data Toko</SnbText.B4>
                 <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
               </View>
+              <TouchableOpacity onPress={() =>
+                  NavigationAction.navigate('MerchantDetailInformationView')} style={UserStyles.appButtonContainer}>
+                <SnbSvgIcon name={'verified_user'} size={20} />
+                <Text style={UserStyles.appButtonText}>{'Informasi Toko'}</Text>
+              </TouchableOpacity>
               <SnbListButtonType2
                 title={'Informasi Toko'}
                 onPress={() =>

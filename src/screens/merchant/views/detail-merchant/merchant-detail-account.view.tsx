@@ -15,6 +15,16 @@ const MerchantDetailAccountView: FC = () => {
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
+
+
+  const dummy = {
+    kategori: 'Grosir', 
+    kategoriProduk: 'Makanan dan Perlengkapan Hewan, Mandi dan Perawatan Tubuh, Minuman, Susu, Permen, Kosmetik, Makanan', 
+    name: 'Jaya Makmur Sentosa', 
+    phoneNo: '081122334455', 
+    ukuran: '20', 
+    imageUrl: 'udah aja pokoknya', 
+  }
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -74,10 +84,10 @@ const MerchantDetailAccountView: FC = () => {
       <View style={MerchantStyles.boxContent}>
         <View>
           <View style={{ marginBottom: 6 }}>
-            <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
+            <SnbText.H4 color={color.black100} >{data.key}</SnbText.H4>
           </View>
-          <SnbText.B3 color={data.fontColor ? data.fontColor : color.black100}>
-            {data.value}
+          <SnbText.B3 color={data.fontColor ? data.fontColor : color.black60}>
+            {data.value + " m\u00B2"}
           </SnbText.B3>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -92,7 +102,7 @@ const MerchantDetailAccountView: FC = () => {
             <TouchableOpacity
               onPress={() => goTo(data)}
               style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
+              <SnbText.C2 color={color.blue60}>Ubah</SnbText.C2>
             </TouchableOpacity>
           )}
         </View>
@@ -106,38 +116,57 @@ const MerchantDetailAccountView: FC = () => {
       <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View>
           {renderContentSection({
-            key: 'Sinbad ID',
+            key: 'ID Toko',
             value: storeData?.storeAccount.code,
           })}
+          <View style={{borderBottomColor:'#aaa', borderTopColor:'#aaa', paddingVertical: 10, marginHorizontal: 15, borderBottomWidth: 0.2 }} />
+            {renderContentSection({
+              key: 'Kategori Toko',
+              value: storeData?.storeAccount.code,
+            })}
+            {renderContentSection({
+              key: 'Kategori Produk',
+              value: storeData?.storeAccount.code,
+            })}
+          <View style={{borderBottomColor:'#aaa', borderTopColor:'#aaa', paddingVertical: 10, marginHorizontal: 15, borderBottomWidth: 0.2 }} />
           {renderContentSection({
             key: 'Nama Toko',
-            value: storeData?.storeAccount.name,
-            action: storeData?.storeAccount.name ? 'ubah' : 'tambah',
+            value: dummy.name,
+            action: 'ubah',
             type: 'merchantAccountName',
-            title: storeData?.storeAccount.name
+            title: dummy.name
               ? 'Ubah Nama Toko'
               : 'Tambah Nama Toko',
           })}
           {renderContentSection({
-            key: 'Nomor Handphone',
-            value: storeData?.storeAccount.phoneNo
-              ? storeData?.storeAccount.phoneNo
+            key: 'Nomor Handphone Toko',
+            value: dummy.phoneNo
+              ? dummy.phoneNo
               : '-',
-            action: storeData?.storeAccount.phoneNo ? 'ubah' : 'tambah',
+            action: 'ubah',
             type: 'merchantAccountPhoneNo',
-            title: storeData?.storeAccount.phoneNo
+            title: dummy.phoneNo
               ? 'Ubah No. Handphone Toko'
               : 'Tambah No. Handphone Toko',
           })}
+         {renderContentSection({
+            key: 'Ukuran Toko',
+            value: dummy.ukuran,
+            action: 'ubah',
+            type: 'merchantAccountSize',
+            title: dummy.ukuran
+              ? 'Ubah Ukuran Toko'
+              : 'Tambah Ukuran Toko',
+          })}
           {renderContentSection({
             key: 'Foto Toko',
-            fontColor: storeData?.storeAccount.imageUrl
+            fontColor: dummy.imageUrl
               ? color.green50
               : color.black100,
-            value: storeData?.storeAccount.imageUrl
+            value: dummy.imageUrl
               ? 'Berhasil Di Upload'
               : '-',
-            action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
+            action: 'ubah',
             type: 'merchantAccountImage',
             title: 'Foto Toko',
           })}
