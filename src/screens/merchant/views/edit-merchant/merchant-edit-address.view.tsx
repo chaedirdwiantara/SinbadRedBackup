@@ -1,183 +1,339 @@
-import { contexts } from '@contexts';
-import { useNavigation } from '@react-navigation/core';
-import { useInput, useMerchant } from '@screen/auth/functions';
-import { MerchantHookFunc } from '@screen/merchant/function';
-import { UserHookFunc } from '@screen/user/functions';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { renderIF, useInput, useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import MapView, { Marker } from 'react-native-maps';
 import {
-  color,
-  SnbButton,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+} from 'react-native';
+import MapView, { LatLng, Marker } from 'react-native-maps';
+import {
   SnbContainer,
-  SnbText,
-  SnbTextField,
   SnbTopNav,
+  SnbText,
+  SnbButton,
+  color,
+  SnbTextField,
+  SnbTextFieldSelect,
 } from 'react-native-sinbad-ui';
+import * as models from '@models';
+import {
+  DEFAULT_LATITUDE,
+  DEFAULT_LONGITUDE,
+  REGION_OPTIONS,
+} from '@screen/auth/functions/auth-utils.functions';
+import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
+import { ModalSelection } from '@screen/account/views/shared';
+import { contexts } from '@contexts';
 
-const MerchantEditAddressView = () => {
+const Content: React.FC = () => {
+  const { coordinate, formattedAddress, location, street }: any =
+    useRoute().params || {};
   const { stateUser } = React.useContext(contexts.UserContext);
-  const { storeAddress }: any = stateUser.detail.data?.storeData || {};
-  const { navigate, goBack } = useNavigation();
-  const { merchantData, resetMerchantData } = useMerchant();
-  const address = useInput(merchantData.address || storeAddress?.address);
-  const noteAddress = useInput(
-    merchantData.noteAddress || storeAddress?.noteAddress,
+  const {
+    storeAddress,
+    storeInformation: { storeDetailCompleteness },
+  }: any = stateUser.detail.data?.storeData || {};
+  const {
+    vehicleAccessibility: currentVehicleAccessibility,
+    vehicleAccessibilityAmount: currentVehicleAccessibilityAmount,
+  } = storeDetailCompleteness;
+  const {
+    latitude,
+    longitude,
+    address: currentAddress,
+    noteAddress: currentNoteAddress,
+  } = storeAddress;
+  const address = useInput(currentAddress);
+  const noteAddress = useInput(currentNoteAddress);
+  const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
+    useTextFieldSelect();
+  const { navigate } = useNavigation();
+  const [vehicleAccessibility, setVehicleAccessibility] = React.useState<any>(
+    currentVehicleAccessibility || null,
   );
+  const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] =
+    React.useState<any>(
+      currentVehicleAccessibilityAmount
+        ? {
+            id: currentVehicleAccessibilityAmount,
+            value: currentVehicleAccessibilityAmount,
+          }
+        : null,
+    );
   let mapRef = React.useRef<MapView>(null);
-  const { editMerchant, reset } = MerchantHookFunc.useEditMerchant();
-  const { detail } = UserHookFunc.useStoreDetailAction();
-  const { stateMerchant, dispatchSupplier } = React.useContext(
-    contexts.MerchantContext,
+  const [type, setType] = React.useState<models.ITypeList>('');
+  const [openModalSelection, setOpenModalSelection] =
+    React.useState<boolean>(false);
+  const [latLng, setLatLng] = React.useState<LatLng | any>(null);
+  const isLatLngAvailable = latitude && longitude;
+  const [streetName, setStreetName] = React.useState();
+  const [staticAddress, setStaticAddress] = React.useState(
+    storeAddress?.address,
   );
-  const { dispatchUser } = React.useContext(contexts.UserContext);
+  const [locationId, setLocationId] = React.useState(storeAddress?.locationId);
 
   React.useEffect(() => {
-    if (stateMerchant.merchantEdit.data) {
-      goBack();
-      reset(dispatchSupplier);
-      resetMerchantData();
-      detail(dispatchUser);
+    if (formattedAddress) {
+      address.setValue(formattedAddress);
+      setStaticAddress(formattedAddress);
     }
-  }, [stateMerchant]);
+    street && setStreetName(street);
+    coordinate && setLatLng(coordinate);
+    isLatLngAvailable && setLatLng({ longitude, latitude });
+    location && setLocationId(location);
+  }, []);
 
   React.useEffect(() => {
-    if (merchantData?.longitude !== null && merchantData?.latitude !== null) {
-      mapRef.current?.animateToRegion({
-        latitude: merchantData?.latitude || 0,
-        longitude: merchantData?.longitude || 0,
-        longitudeDelta: 0.02,
-        latitudeDelta: 0.02,
-      });
-    }
-    if (merchantData.address !== '') {
-      address.setValue(merchantData.address || '');
-    }
-  }, [merchantData]);
+    setTimeout(() => {
+      mapRef.current?.animateToRegion({ ...latLng, ...REGION_OPTIONS });
+    }, 10);
+  }, [latLng]);
 
-  const handleDisableButton = () => {
-    if (address.value && noteAddress.value) {
-      if (
-        merchantData.latitude !== null ||
-        merchantData.longitude !== null ||
-        merchantData.urbanId !== null
-      ) {
-        return false;
-      } else if (
-        noteAddress.value === storeAddress?.noteAddress &&
-        address.value === storeAddress?.address
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
+  function onMapsResult(data: any) {
+    address.setValue(data.formattedAddress);
+    setStaticAddress(data.formattedAddress);
+    setStreetName(data.street);
+    setLatLng(data.coordinate);
+    setLocationId(data.location);
+  }
 
-  const handleUpdate = () => {
-    const data: any = {};
-    if (merchantData.latitude !== null && merchantData.longitude !== null) {
-      data.latitude = merchantData.latitude;
-      data.longitude = merchantData.longitude;
+  function handleDisableSaveButton() {
+    const dataIsChanged =
+      address.value !== currentAddress ||
+      noteAddress.value !== currentNoteAddress ||
+      vehicleAccessibility?.id !== currentVehicleAccessibility?.id ||
+      vehicleAccessibilityAmount?.value !== currentVehicleAccessibilityAmount ||
+      latLng?.latitude !== latitude ||
+      latLng?.longitude !== longitude;
+
+    if (
+      dataIsChanged &&
+      address.value &&
+      noteAddress.value &&
+      vehicleAccessibility !== null &&
+      vehicleAccessibilityAmount !== null &&
+      latLng !== null
+    ) {
+      return false;
     }
-    if (merchantData.urbanId !== null) {
-      data.urbanId = merchantData.urbanId;
-    }
-    if (address.value !== storeAddress?.address) {
-      data.address = address.value;
-    }
-    if (noteAddress.value !== storeAddress?.noteAddress) {
-      data.noteAddress = noteAddress.value;
-    }
-    editMerchant(dispatchSupplier, { data });
-  };
+    return true;
+  }
 
   return (
-    <SnbContainer color={'white'}>
-      <SnbTopNav.Type3 type="red" title="Alamat Toko" backAction={goBack} />
+    <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <ScrollView>
-          <View style={{ marginTop: 16, marginHorizontal: 16 }}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ padding: 16 }}>
             <View
               style={{
                 justifyContent: 'space-between',
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText.H4>Koordinat Lokasi</SnbText.H4>
-              <TouchableOpacity
-                onPress={() => navigate('MapsView', { action: 'edit' })}>
-                <SnbText.B4>Ubah</SnbText.B4>
-              </TouchableOpacity>
+              <SnbText.H4>Titik Lokasi</SnbText.H4>
+              {renderIF(
+                latLng !== null,
+                <SnbButton.Dynamic
+                  onPress={() =>
+                    navigate(MAPS_VIEW_TYPE_2, {
+                      onMapsResult,
+                      action: 'update',
+                      currentLatLng: latLng,
+                    })
+                  }
+                  title="Ubah Titik Lokasi"
+                  disabled={false}
+                  type="tertiary"
+                  buttonColor={color.blue50}
+                  size="small"
+                />,
+              )}
             </View>
             <View style={{ paddingVertical: 4 }} />
-            <MapView
-              ref={mapRef}
-              initialRegion={{
-                latitude: storeAddress?.latitude || 0,
-                longitude: storeAddress?.longitude || 0,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
+            {renderIF(
+              latLng !== null,
+              <MapView
+                ref={mapRef}
+                initialRegion={
+                  latLng
+                    ? {
+                        ...latLng,
+                        ...REGION_OPTIONS,
+                      }
+                    : {
+                        latitude: DEFAULT_LATITUDE,
+                        longitude: DEFAULT_LONGITUDE,
+                        ...REGION_OPTIONS,
+                      }
+                }
+                zoomEnabled={false}
+                pitchEnabled={false}
+                scrollEnabled={false}
+                style={styles.pinPoint}>
+                <Marker
+                  coordinate={
+                    latLng || {
+                      latitude: DEFAULT_LATITUDE,
+                      longitude: DEFAULT_LONGITUDE,
+                    }
+                  }>
+                  <Image
+                    source={require('@image/pin_point.png')}
+                    style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                  />
+                </Marker>
+              </MapView>,
+              <TouchableOpacity
+                onPress={() =>
+                  navigate(MAPS_VIEW_TYPE_2, {
+                    onMapsResult,
+                    action: 'update',
+                    currentLatLng: latLng,
+                  })
+                }
+                style={styles.pinPoint}>
+                <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
+              </TouchableOpacity>,
+            )}
+          </View>
+          <View style={{ padding: 16 }}>
+            <SnbText.H4>{streetName}</SnbText.H4>
+            <View style={{ marginVertical: 4 }} />
+            <SnbText.B1 align="justify" color={color.black60}>
+              {staticAddress}
+            </SnbText.B1>
+          </View>
+          <View style={{ padding: 16 }}>
+            <SnbTextField.Area
+              {...address}
+              mandatory
+              maxLength={200}
+              labelText="Detail Alamat"
+              placeholder="Masukkan detail alamat"
+            />
+          </View>
+          <View style={{ padding: 16 }}>
+            <SnbTextField.Text
+              {...noteAddress}
+              mandatory
+              labelText="Catatan Alamat"
+              placeholder="Masukkan catatan alamat"
+              maxLength={200}
+            />
+          </View>
+          <View style={{ padding: 16 }}>
+            <SnbTextFieldSelect
+              labelText="Akses Jalan"
+              mandatory
+              value={vehicleAccessibility?.name}
+              placeholder="Pilih akses jalan"
+              type="default"
+              onPress={() => {
+                setType('listVehicleAccess');
+                getSelection({ type: 'listVehicleAccess' });
+                if (vehicleAccessibility) {
+                  onSelectedItem({
+                    item: vehicleAccessibility,
+                    type: 'listVehicleAccess',
+                  });
+                }
+                setOpenModalSelection(true);
               }}
-              zoomEnabled={false}
-              pitchEnabled={false}
-              scrollEnabled={false}
-              style={{
-                height: 160,
-                borderWidth: 1,
-                borderStyle: 'dashed',
-                borderRadius: 16,
-                backgroundColor: color.black5,
-                borderColor: color.black40,
-                alignItems: 'center',
-                justifyContent: 'center',
-                overflow: 'hidden',
-              }}>
-              <Marker
-                coordinate={{
-                  latitude:
-                    merchantData?.latitude || storeAddress?.latitude || 0,
-                  longitude:
-                    merchantData?.longitude || storeAddress?.longitude || 0,
-                }}
-              />
-            </MapView>
-            <View style={{ marginVertical: 8 }} />
-            <View style={{ marginBottom: 16 }}>
-              <SnbTextField.Area
-                {...address}
-                labelText="Alamat"
-                placeholder="Masukkan Alamat Toko"
-                mandatory
-                maxLength={200}
-              />
-            </View>
-            <View style={{ marginBottom: 16 }}>
-              <SnbTextField.Area
-                {...noteAddress}
-                labelText="Catatan Alamat"
-                placeholder="Masukkan Catatan Alamat"
-                maxLength={200}
-                mandatory
-              />
-            </View>
+              rightType="icon"
+              rightIcon="chevron_right"
+            />
+          </View>
+          <View style={{ padding: 16 }}>
+            <SnbTextFieldSelect
+              labelText="Jumlah Akses Jalan"
+              mandatory
+              value={
+                vehicleAccessibilityAmount?.value
+                  ? `${vehicleAccessibilityAmount?.value} Kendaraan`
+                  : ''
+              }
+              placeholder="Pilih jumlah akses jalan"
+              type="default"
+              onPress={() => {
+                setType('listVehicleAccessAmount');
+                getSelection({ type: 'listVehicleAccessAmount' });
+                if (vehicleAccessibilityAmount) {
+                  onSelectedItem({
+                    item: vehicleAccessibilityAmount,
+                    type: 'listVehicleAccessAmount',
+                  });
+                }
+                setOpenModalSelection(true);
+              }}
+              rightType="icon"
+              rightIcon="chevron_right"
+            />
           </View>
         </ScrollView>
       </View>
       <View style={{ height: 72 }}>
         <SnbButton.Single
-          disabled={handleDisableButton()}
           title="Simpan"
-          onPress={handleUpdate}
-          loading={stateMerchant.merchantEdit.loading}
+          onPress={() => {}}
           type="primary"
+          loading={false}
+          disabled={handleDisableSaveButton()}
         />
       </View>
+      <ModalSelection
+        type={type}
+        open={openModalSelection}
+        onCloseModalSelection={(result: any) => {
+          if (result) {
+            switch (result.type as models.ITypeList) {
+              case 'listVehicleAccess': {
+                setVehicleAccessibility(result.item);
+                break;
+              }
+              case 'listVehicleAccessAmount': {
+                setVehicleAccessibilityAmount(result.item);
+                break;
+              }
+              default:
+                break;
+            }
+            onSelectedItem(result.item);
+          }
+          setOpenModalSelection(false);
+          resetGetSelection();
+          resetSelectedItem();
+        }}
+      />
+    </View>
+  );
+};
+
+const MerchantEditAddressView: React.FC = () => {
+  const { goBack } = useNavigation();
+
+  return (
+    <SnbContainer color="white">
+      <SnbTopNav.Type3 backAction={goBack} type="red" title="Alamat Toko" />
+      <Content />
     </SnbContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  pinPoint: {
+    height: 160,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 16,
+    backgroundColor: color.black5,
+    borderColor: color.black40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+});
 
 export default MerchantEditAddressView;

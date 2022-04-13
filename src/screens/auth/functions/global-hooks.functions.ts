@@ -158,6 +158,25 @@ export const useCamera = () => {
     navigate('CameraView', params);
   };
 
+  const openCameraWithOCR = (
+    type: 'ktp' | 'npwp',
+    params: models.ICameraWithOcr = {
+      focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
+      title: 'Ambil Foto KTP',
+      subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
+      type: 'ktp',
+      withOcr: true,
+    },
+  ) => {
+    if (type === 'npwp') {
+      params.focusPoints = [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }];
+      params.title = 'Ambil Foto NPWP';
+      params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai';
+      params.type = type;
+    }
+    navigate('CameraWithOCRView', params);
+  };
+
   const saveCapturedImage = (data: any) => {
     dispatch(Actions.saveCapturedImage(data));
   };
@@ -171,6 +190,7 @@ export const useCamera = () => {
     saveCapturedImage,
     capturedImage,
     resetCamera,
+    openCameraWithOCR,
   };
 };
 

@@ -2,31 +2,26 @@ import React, { useState } from 'react';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbTextField,
+  SnbUploadPhotoRules,
   SnbButton,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { View, ScrollView, BackHandler } from 'react-native';
-import Svg from '@svg';
-import { useFocusEffect, useIsFocused } from '@react-navigation/core';
-import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
+import { View, BackHandler, ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
-import { NavigationAction } from '@navigation';
+import { renderIF, useCamera } from '@screen/auth/functions';
+import { OCRResultContent } from '@screen/shared/views/components';
+import * as models from '@models';
 
-const DataDiriStep1View: React.FC = () => {
-  const {
-    updateCompleteData,
-    updateCompleteDataState,
-    completeDataState,
-    resetUpdateCompleteData,
-    backToDataCompleteness,
-    refetchCompleteData,
-  } = useEasyRegistration();
-  const [name, setName] = useState(completeDataState?.data?.userData?.fullName);
-  const [openModalStep, setOpenModalStep] = useState(false);
+interface Props {
+  openModalBack: boolean;
+  onCloseModalBack: (value: boolean) => void;
+}
+
+const Content: React.FC<Props> = (props) => {
   const [openModalBack, setOpenModalBack] = useState(false);
-  const [backHandle, setBackHandle] = useState(false);
-  const isFocused  = useIsFocused();
+  const { openCameraWithOCR } = useCamera();
+  const [value, setValue] = React.useState<models.IOCRResult | null>(null);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
@@ -41,69 +36,89 @@ const DataDiriStep1View: React.FC = () => {
 
   useFocusEffect(handleBackButton);
 
-  React.useEffect(() => {
-    if (updateCompleteDataState.data !== null && isFocused) {
-      resetUpdateCompleteData();
-      refetchCompleteData();
-      if (backHandle) {
-        backToDataCompleteness();
-        resetUpdateCompleteData();
-        setBackHandle(false);
-      } else {
-        NavigationAction.navigate(DATA_DIRI_STEP_2_VIEW);
-        resetUpdateCompleteData();
-      }
-    }
-  }, [updateCompleteDataState, isFocused]);
+  function renderUploadPhotoRules() {
+    return (
+      <View style={{ flex: 1 }}>
+        <SnbUploadPhotoRules
+          rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
+          imgSrc={require('@image/ktp_image.png')}
+          buttonLabel="Ambil Foto"
+          rules={[
+            'Pastikan anda menggunakan KTP sendiri',
+            'Foto KTP tidak silau dan tidak buram',
+            'Pastikan informasi KTP bisa terbaca dengan jelas',
+            'Hindari tangan menutup KTP',
+          ]}
+          action={() => openCameraWithOCR('ktp')}
+          type="vertical"
+          resizeMode="contain"
+          listType="number"
+          blurRadius={3}
+        />
+      </View>
+    );
+  }
+
+  function renderOCRResult() {
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView>
+            <OCRResultContent value={setValue} />
+          </ScrollView>
+        </View>
+        <View style={{ height: 72 }}>
+          <SnbButton.Multiple
+            leftType={'secondary'}
+            rightType={'primary'}
+            leftTitle={'Ubah Foto'}
+            rightTitle={'Lanjutkan'}
+            onPressLeft={() => {}}
+            onPressRight={() => {}}
+            rightDisabled={value?.ktpNumber === '' || value?.nameOnKTP === ''}
+            leftDisabled={false}
+            rightLoading={false}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      {renderIF(true, renderUploadPhotoRules(), renderOCRResult())}
+      <ModalBack
+        open={openModalBack || props.openModalBack}
+        closeModal={() => {
+          setOpenModalBack(false);
+          props.onCloseModalBack(false);
+        }}
+        confirm={() => {}}
+      />
+    </View>
+  );
+};
+
+const DataDiriStep1View: React.FC = () => {
+  const [openModalStep, setOpenModalStep] = React.useState(false);
+  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const { completeDataState } = useEasyRegistration();
 
   return (
     <SnbContainer color="white">
-      <ScrollView style={{ flex: 1 }}>
-        <SnbTopNav.Type3
-          backAction={() => setOpenModalBack(true)}
-          type="white"
-          title="Nama Lengkap"
-        />
-        <Stepper
-          complete={completeDataState?.data?.userProgress?.completed}
-          total={completeDataState?.data?.userProgress?.total}
-          onPress={() => setOpenModalStep(true)}
-        />
-        <View style={{ alignItems: 'center', marginVertical: 16 }}>
-          <Svg name="notification" size={240} />
-        </View>
-        <View style={{ margin: 16 }}>
-          <SnbTextField.Text
-            type={'default'}
-            value={name}
-            onChangeText={(text) => setName(text)}
-            placeholder={'Masukkan Nama Lengkap'}
-            labelText={'Nama Lengkap'}
-            mandatory
-          />
-        </View>
-      </ScrollView>
-      <View style={{ height: 75 }}>
-        <SnbButton.Single
-          title="Lanjut"
-          type="primary"
-          disabled={name || updateCompleteDataState.loading ? false : true}
-          onPress={() => updateCompleteData({ user: { name: name } })}
-          loading={updateCompleteDataState.loading}
-        />
-      </View>
-      <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
-        confirm={() => {
-          setBackHandle(true);
-          if (name && name !== '') {
-            updateCompleteData({ user: { name: name } });
-            resetUpdateCompleteData();
-          } else {
-            backToDataCompleteness();
-          }
-        }}
+      <SnbTopNav.Type3
+        backAction={() => setOpenModalBack(true)}
+        type="white"
+        title="Foto KTP"
+      />
+      <Stepper
+        complete={completeDataState?.data?.userProgress?.completed}
+        total={completeDataState?.data?.userProgress?.total}
+        onPress={() => setOpenModalStep(true)}
+      />
+      <Content
+        openModalBack={openModalBack}
+        onCloseModalBack={setOpenModalBack}
       />
       <ListOfSteps
         open={openModalStep}

@@ -72,7 +72,8 @@ function setImage(type: string) {
 }
 
 const MerchantEditPhotoView = () => {
-  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { openCamera, capturedImage, resetCamera, openCameraWithOCR } =
+    useCamera();
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
   const { editProfile } = MerchantHookFunc.useEditProfile();
@@ -253,7 +254,13 @@ const MerchantEditPhotoView = () => {
                 size="small"
                 type="tertiary"
                 title="Ubah Foto"
-                onPress={() => openCamera(params?.type)}
+                onPress={() => {
+                  if (params?.type !== 'ktp') {
+                    openCamera(params?.type);
+                  } else {
+                    openCameraWithOCR(params?.type);
+                  }
+                }}
                 disabled={false}
               />
             </View>
@@ -285,7 +292,13 @@ const MerchantEditPhotoView = () => {
             rulesTitle={`Pastikan Foto ${setType()} Anda Sesuai Ketentuan`}
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
-            action={() => openCamera(params?.type)}
+            action={() => {
+              if (params?.type !== 'ktp') {
+                openCamera(params?.type);
+              } else {
+                openCameraWithOCR(params?.type);
+              }
+            }}
           />,
         )}
       </View>
