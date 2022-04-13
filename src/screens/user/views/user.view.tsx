@@ -49,7 +49,6 @@ const UserView: FC = ({ start }: any) => {
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] = React.useState(false);
   const isProfileCompletionCart = NavigationAction.useGetNavParams<NavigationParams>()?.params?.isProfileCompletionCart;
-  console.log(isProfileCompletionCart);
 
   useFocusEffect(
     React.useCallback(() => {
