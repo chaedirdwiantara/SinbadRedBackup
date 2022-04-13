@@ -6,3 +6,8 @@ export interface UploadImageDataProps {
   message: string;
   url: string;
 }
+
+export interface IOCRResult {
+  nameOnKTP: string;
+  ktpNumber: string;
+}
