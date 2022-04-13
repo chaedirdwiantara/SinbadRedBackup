@@ -32,6 +32,10 @@ import sinbad_onboard1 from './sinbad-onboard-1.svg';
 import sinbad_onboard2 from './sinbad-onboard-2.svg';
 import sinbad_onboard3 from './sinbad-onboard-3.svg';
 import splash_highlight_text from './splash-highlight-text.svg';
+import ktp from './ktp.svg';
+import location from './location.svg';
+import store from './store.svg';
+import ktp_blue from './ktp-blue.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -62,9 +66,13 @@ export const SvgRegistery = {
   completeness_back,
   sinbad_logo,
   white_sinbad_logo,
+  splash_highlight_text,
+  ktp,
+  location,
+  store,
+  ktp_blue,
   sinbad_onboard,
   sinbad_onboard1,
   sinbad_onboard2,
   sinbad_onboard3,
-  splash_highlight_text
 };

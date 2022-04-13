@@ -1,19 +1,21 @@
 import React, { FC, useEffect } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
   color,
   SnbText,
-  SnbIconHint,
-  SnbListButtonType2,
-  SnbCardMultiButtonType1,
-  SnbCardButtonType2,
-  SnbSvgIcon,
   SnbTextSeeMoreType1,
   SnbButton,
   SnbDialog,
+  SnbIcon,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -28,6 +30,10 @@ import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import { copilotOptions } from '@screen/account/views/shared';
 import { useCoachmark } from '@screen/account/functions';
+import LinearGradient from 'react-native-linear-gradient';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Svg from '@svg';
+import ListButton from '../views/shared/list-button.component';
 
 const CopilotView = walkthroughable(View);
 
@@ -38,13 +44,40 @@ interface NavigationParams {
 
 const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
-  const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
   const { coachmarkState } = useCoachmark();
+  const { width } = Dimensions.get('window');
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [dataHeader] = React.useState([
+    {
+      id: 1,
+      title: 'Foto KTP',
+      subTitle: 'Upload Foto KTP',
+      icon: 'ktp',
+      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'ktp',
+    },
+    {
+      id: 2,
+      title: 'Tambah Nama Toko',
+      subTitle: 'Isi Nama Toko',
+      icon: 'store',
+      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'merchantAccountName',
+    },
+    {
+      id: 3,
+      title: 'Alamat Toko',
+      subTitle: 'Isi Alamat Toko',
+      icon: 'location',
+      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'storeAddress',
+    },
+  ]);
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] = React.useState(false);
@@ -56,11 +89,6 @@ const UserView: FC = ({ start }: any) => {
     }, []),
   );
 
-  /** === FUNCTION FOR HOOK === */
-  const showBadge = (show: boolean) => {
-    action(show);
-  };
-
   //function for start couchmark
   useEffect(() => {
     if (typeof coachmarkState.data?.profileCoachmark === 'boolean') {
@@ -71,21 +99,104 @@ const UserView: FC = ({ start }: any) => {
       }
     }
   }, [coachmarkState?.data?.profileCoachmark]);
+  /** === GO TO PAGE === */
+  const goTo = (data: any) => {
+    const { type, title } = data;
+    switch (type) {
+      case 'ktp': {
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        break;
+      }
+      case 'merchantAccountName':
+        NavigationAction.navigate('MerchantEditView', { title, type });
+        break;
+      case 'storeAddress':
+        NavigationAction.navigate('MerchantDetailAddressView');
+        break;
+      default:
+        break;
+    }
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
     if (stateUser.detail.data) {
-      return (
-        <SnbTopNav.Type2
-          type="red"
-          title="Profil"
-          iconName={'settings'}
-          iconAction={() => NavigationAction.navigate('UserSettingView')}
-        />
-      );
+      return <SnbTopNav.Type1 type="white" title="Profil" />;
     }
     return <SnbTopNav.Type1 type="red" title="Profil" />;
   };
+
+  /** === RENDER SLIDER PAGINATION DOT === */
+  const pagination = () => {
+    return (
+      <View>
+        <Pagination
+          dotsLength={dataHeader.length}
+          activeDotIndex={activeIndex}
+          dotContainerStyle={{ marginHorizontal: 2 }}
+          dotStyle={UserStyles.activeDot}
+          inactiveDotStyle={UserStyles.inactiveDot}
+          inactiveDotOpacity={1}
+          inactiveDotScale={1}
+        />
+      </View>
+    );
+  };
+
+  /** === RENDER HEADER ITEM SLIDE === */
+  const renderItem = (item: any, index: any) => {
+    return (
+      <View key={index}>
+        <View>
+          <View
+            style={[
+              UserStyles.shadowStyle,
+              {
+                backgroundColor: color.white,
+                marginHorizontal: 4,
+                borderRadius: 5,
+              },
+            ]}>
+            <View style={UserStyles.cardBody}>
+              <View style={{ alignSelf: 'center' }}>
+                <Svg name={item.icon} size={40} />
+              </View>
+              <View
+                style={{
+                  marginLeft: 16,
+                  alignSelf: 'center',
+                  width: 185,
+                }}>
+                <SnbText.H4>{item.subTitle}</SnbText.H4>
+                <SnbText.B3 color={'#677A8E'}>{item.message}</SnbText.B3>
+              </View>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: color.red50,
+                  height: 24,
+                  alignSelf: 'center',
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  borderRadius: 4,
+                  paddingBottom: 2,
+                }}
+                onPress={() =>
+                  goTo({
+                    type: item.type,
+                    title: item.title,
+                  })
+                }>
+                <SnbText.B3 color={color.white} align={'center'}>
+                  Lengkapi
+                </SnbText.B3>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
     const source = data?.imageUrl
@@ -93,69 +204,43 @@ const UserView: FC = ({ start }: any) => {
       : require('../../../assets/images/sinbad_image/avatar.png');
     return (
       <View style={UserStyles.headerInformationContainer}>
-        <View style={UserStyles.imageContainer}>
-          <Image source={source} style={UserStyles.image} />
-        </View>
-        <View style={UserStyles.userInfo}>
-          <View style={{ marginLeft: -18 }}>
-            <SnbTextSeeMoreType1 line={1}>
-              <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
-            </SnbTextSeeMoreType1>
+        <LinearGradient
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
+          colors={['#cfd6de', '#f4f5f7']}
+          style={{
+            flex: 1,
+          }}>
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={UserStyles.imageContainer}>
+              <Image source={source} style={UserStyles.image} />
+            </View>
+            <View style={UserStyles.userInfo}>
+              <View style={{ marginLeft: -18 }}>
+                <SnbTextSeeMoreType1 line={1}>
+                  <SnbText.H4 color={'#677A8E'}>{data?.name}</SnbText.H4>
+                </SnbTextSeeMoreType1>
+              </View>
+              <SnbText.B3 color={'#677A8E'}>Akun Basic</SnbText.B3>
+            </View>
           </View>
-          <SnbText.C1 color={color.white}>
-            Kelengkapan profil {countPercentageProfileComplete()}%
-          </SnbText.C1>
-        </View>
-      </View>
-    );
-  };
-  const countPercentageProfileComplete = () => {
-    const progressDone = stateUser.detail.data?.progress.done || 0;
-    const progressTotal = stateUser.detail.data?.progress.total || 0;
-    return Math.floor((progressDone / progressTotal) * 100);
-  };
-  const renderLoyaltiInformation = () => {
-    return (
-      <View>
-        <View style={UserStyles.headerBackground} />
-        <View style={{ marginTop: -40, marginHorizontal: -10 }}>
-          <SnbCardMultiButtonType1
-            buttonList={[
-              {
-                icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
-                title: 'Sinbad Point',
-                subtitle: '1000 Point',
-                onPress: () => console.log('press'),
-              },
-              {
-                icon: (
-                  <SnbIconHint
-                    iconName={'assignment_complete'}
-                    size={24}
-                    badgeColor="yellow"
-                    iconColor={color.red50}
-                  />
-                ),
-                title: 'Quest',
-                subtitle: null,
-                onPress: () => NavigationAction.navigate('QuestListView'),
-              },
-              {
-                icon: (
-                  <SnbIconHint
-                    iconName={'warehouse'}
-                    size={24}
-                    badgeColor="yellow"
-                    iconColor={color.red50}
-                  />
-                ),
-                title: 'Voucher Untukmu',
-                subtitle: null,
-                onPress: () => console.log('pressed'),
-              },
-            ]}
+          <Carousel
+            data={dataHeader}
+            sliderWidth={1 * width}
+            itemWidth={width}
+            renderItem={({ item, index }) => renderItem(item, index)}
+            onSnapToItem={(index) => {
+              setActiveIndex(index);
+            }}
+            slideStyle={{ padding: 10 }}
+            inactiveSlideOpacity={1}
+            inactiveSlideScale={1}
+            activeSlideAlignment={'center'}
+            layout={'default'}
+            removeClippedSubviews={false}
           />
-        </View>
+        </LinearGradient>
+        <View>{pagination()}</View>
       </View>
     );
   };
@@ -173,11 +258,26 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText.B4>Data Pemilik</SnbText.B4>
                 <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
               </View>
-              <SnbListButtonType2
+              <ListButton
+                leftItem={
+                  <SnbIcon name="person" color={color.black40} size={24} />
+                }
                 title={'Data Diri'}
                 onPress={() =>
                   NavigationAction.navigate('MerchantDetailProfileView')
                 }
+                rightItem={
+                  <SnbIcon
+                    name="chevron_right"
+                    color={color.black40}
+                    size={24}
+                  />
+                }
+                badges1
+                leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
+                badgesTitle1={'Upload Foto KTP'}
+                separator
+                pressBadge1={() => goTo({ type: 'ktp', title: 'Foto KTP' })}
               />
             </View>
             <View>
@@ -185,22 +285,66 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText.B4>Data Toko</SnbText.B4>
                 <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
               </View>
-              <TouchableOpacity onPress={() =>
-                  NavigationAction.navigate('MerchantDetailInformationView')} style={UserStyles.appButtonContainer}>
-                <SnbSvgIcon name={'verified_user'} size={20} />
-                <Text style={UserStyles.appButtonText}>{'Informasi Toko'}</Text>
-              </TouchableOpacity>
-              <SnbListButtonType2
+              <ListButton
+                leftItem={
+                  <SnbIcon name="store" color={color.black40} size={24} />
+                }
                 title={'Informasi Toko'}
                 onPress={() =>
                   NavigationAction.navigate('MerchantDetailInformationView')
                 }
+                rightItem={
+                  <SnbIcon
+                    name="chevron_right"
+                    color={color.black40}
+                    size={24}
+                  />
+                }
+                separator
               />
-              <SnbListButtonType2
+              <ListButton
+                leftItem={
+                  <SnbIcon
+                    name="location_store"
+                    color={color.black40}
+                    size={24}
+                  />
+                }
                 title={'Alamat Toko'}
                 onPress={() =>
                   NavigationAction.navigate('MerchantEditAddressView')
                 }
+                rightItem={
+                  <SnbIcon
+                    name="chevron_right"
+                    color={color.black40}
+                    size={24}
+                  />
+                }
+                badges1
+                leftBadgeItem1={
+                  <SnbIcon name={'create'} size={20} color={color.blue50} />
+                }
+                badgesTitle1={'Isi Nama Toko'}
+                badges2
+                leftBadgeItem2={
+                  <SnbIcon
+                    name={'location_store'}
+                    size={20}
+                    color={color.blue50}
+                  />
+                }
+                badgesTitle2={'Isi Alamat Toko'}
+                pressBadge1={() =>
+                  goTo({
+                    type: 'merchantAccountName',
+                    title: 'Tambah Nama Toko',
+                  })
+                }
+                pressBadge2={() =>
+                  NavigationAction.navigate('MerchantDetailAddressView')
+                }
+                separator
               />
             </View>
           </CopilotView>
@@ -211,15 +355,14 @@ const UserView: FC = ({ start }: any) => {
           order={2}
           name="Lihat info supplier">
           <CopilotView>
-            <View style={{ marginTop: 16 }}>
-              <View style={UserStyles.bodyTitleContainer}>
-                <SnbText.B4>Data Supplier</SnbText.B4>
-              </View>
-              <SnbListButtonType2
-                title={'Informasi Supplier'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantSupplierInformationView')
+            <View>
+              <ListButton
+                leftItem={
+                  <SnbIcon name="exit_to_app" color={color.black40} size={24} />
                 }
+                title={'Log Out'}
+                onPress={() => setShowConfirmation(true)}
+                separator={false}
               />
             </View>
           </CopilotView>
@@ -227,28 +370,10 @@ const UserView: FC = ({ start }: any) => {
       </View>
     );
   };
-  const renderBadgeInformation = () => {
-    if (state) {
-      return (
-        <View>
-          <SnbCardButtonType2
-            text={
-              'Lengkapi profile untuk menjadikan Anda User Verified dan dapatkan fasilitas menarik'
-            }
-            leftItem={<SnbSvgIcon name={'verified_user'} size={24} />}
-            rightIcon={'x'}
-            onPress={() => showBadge(!state)}
-          />
-        </View>
-      );
-    }
-  };
   const contentItem = () => {
     return (
       <>
         {renderHeaderInformation()}
-        {renderLoyaltiInformation()}
-        {renderBadgeInformation()}
         {renderUserInformation()}
       </>
     );
@@ -315,7 +440,7 @@ const UserView: FC = ({ start }: any) => {
 
   /** this for main view */
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginBottom: 16 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
       <SnbDialog
         title="Yakin keluar Sinbad ?"
