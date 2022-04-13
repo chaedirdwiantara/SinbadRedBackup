@@ -14,4 +14,6 @@ export interface CartBuyerAddress {
   address: string;
   noteAddress: string;
   locationId: string;
+  imageId: string;
+  isImageIdOcrValidation: boolean;
 }

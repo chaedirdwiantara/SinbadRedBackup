@@ -27,7 +27,10 @@ import notification from './notification.svg';
 import completeness_back from './completeness-back.svg';
 import sinbad_logo from './sinbad-logo.svg';
 import white_sinbad_logo from './white-sinbad-logo.svg';
-import splash_logo from './splash-logo.svg';
+import sinbad_onboard from './sinbad-onboard.svg';
+import sinbad_onboard1 from './sinbad-onboard-1.svg';
+import sinbad_onboard2 from './sinbad-onboard-2.svg';
+import sinbad_onboard3 from './sinbad-onboard-3.svg';
 import splash_highlight_text from './splash-highlight-text.svg';
 import ktp from './ktp.svg';
 import location from './location.svg';
@@ -63,10 +66,13 @@ export const SvgRegistery = {
   completeness_back,
   sinbad_logo,
   white_sinbad_logo,
-  splash_logo,
   splash_highlight_text,
   ktp,
   location,
   store,
-  ktp_blue
+  ktp_blue,
+  sinbad_onboard,
+  sinbad_onboard1,
+  sinbad_onboard2,
+  sinbad_onboard3,
 };

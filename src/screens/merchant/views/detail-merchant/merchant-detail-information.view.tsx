@@ -7,7 +7,7 @@ import {
 import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 
-const MerchantDetailAccountView: FC = () => {
+const MerchantDetailInformationView: FC = () => {
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -64,4 +64,4 @@ const MerchantDetailAccountView: FC = () => {
   );
 };
 
-export default MerchantDetailAccountView;
+export default MerchantDetailInformationView;

@@ -93,7 +93,7 @@ const MapsViewType2: React.FC = () => {
           location: locations.data.id,
           street,
         };
-        if (action === 'edit') {
+        if (action === 'update') {
           onMapsResult(mapResult);
           goBack();
         } else {

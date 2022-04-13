@@ -62,5 +62,21 @@ const UserStyles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: color.black40,
   },
+  appButtonContainer: {
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 18,
+    flexDirection: 'row'
+  },
+  appButtonText: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    // letterSpacing: 1,
+    alignSelf: "flex-start",
+    fontWeight: '500',
+    fontFamily: 'Montserrat',
+    fontStyle: 'normal',
+    color: '#52575C'
+  }
 });
 export default UserStyles;

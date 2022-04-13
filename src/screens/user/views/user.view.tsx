@@ -24,6 +24,7 @@ import UserStyles from '../styles/user.style';
 import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { ModalUserProfileCompletion } from './modal-user-profile-completion.view';
 import LoadingPage from '@core/components/LoadingPage';
 import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
@@ -35,6 +36,11 @@ import Svg from '@svg';
 import ListButton from '../views/shared/list-button.component';
 
 const CopilotView = walkthroughable(View);
+
+/** === INTERFACE === */
+interface NavigationParams {
+  isProfileCompletionCart: boolean;
+}
 
 const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
@@ -72,6 +78,10 @@ const UserView: FC = ({ start }: any) => {
       type: 'storeAddress',
     },
   ]);
+
+  // usage for show modal
+  const [modalUserProfileCompletion, setModalUserProfileCompletion] = React.useState(false);
+  const isProfileCompletionCart = NavigationAction.useGetNavParams<NavigationParams>()?.params?.isProfileCompletionCart;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -302,7 +312,7 @@ const UserView: FC = ({ start }: any) => {
                 }
                 title={'Alamat Toko'}
                 onPress={() =>
-                  NavigationAction.navigate('MerchantDetailAddressView')
+                  NavigationAction.navigate('MerchantEditAddressView')
                 }
                 rightItem={
                   <SnbIcon
@@ -418,6 +428,10 @@ const UserView: FC = ({ start }: any) => {
             showsVerticalScrollIndicator={false}>
             {contentItem()}
           </ScrollView>
+          {/* Modal Profile Completion */}
+          <ModalUserProfileCompletion isOpen={modalUserProfileCompletion} handleNavigateToCart={() => {
+            NavigationAction.navigate('OmsShoppingCartView');
+          }} />
         </View>
       );
     }
