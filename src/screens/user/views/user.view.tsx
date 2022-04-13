@@ -49,21 +49,27 @@ const UserView: FC = ({ start }: any) => {
   const [dataHeader] = React.useState([
     {
       id: 1,
-      title: 'Upload Foto KTP',
+      title: 'Foto KTP',
+      subTitle: 'Upload Foto KTP',
       icon: 'ktp',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'ktp',
     },
     {
       id: 2,
-      title: 'Isi Nama Toko',
+      title: 'Tambah Nama Toko',
+      subTitle: 'Isi Nama Toko',
       icon: 'store',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'merchantAccountName',
     },
     {
       id: 3,
-      title: 'Isi Alamat Toko',
+      title: 'Alamat Toko',
+      subTitle: 'Isi Alamat Toko',
       icon: 'location',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      type: 'storeAddress',
     },
   ]);
 
@@ -83,6 +89,24 @@ const UserView: FC = ({ start }: any) => {
       }
     }
   }, [coachmarkState?.data?.profileCoachmark]);
+  /** === GO TO PAGE === */
+  const goTo = (data: any) => {
+    const { type, title } = data;
+    switch (type) {
+      case 'ktp': {
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        break;
+      }
+      case 'merchantAccountName':
+        NavigationAction.navigate('MerchantEditView', { title, type });
+        break;
+      case 'storeAddress':
+        NavigationAction.navigate('MerchantDetailAddressView');
+        break;
+      default:
+        break;
+    }
+  };
   /** === VIEW === */
   /** => header */
   const header = () => {
@@ -133,7 +157,7 @@ const UserView: FC = ({ start }: any) => {
                   alignSelf: 'center',
                   width: 185,
                 }}>
-                <SnbText.H4>{item.title}</SnbText.H4>
+                <SnbText.H4>{item.subTitle}</SnbText.H4>
                 <SnbText.B3 color={'#677A8E'}>{item.message}</SnbText.B3>
               </View>
               <TouchableOpacity
@@ -145,7 +169,13 @@ const UserView: FC = ({ start }: any) => {
                   paddingVertical: 4,
                   borderRadius: 4,
                   paddingBottom: 2,
-                }}>
+                }}
+                onPress={() =>
+                  goTo({
+                    type: item.type,
+                    title: item.title,
+                  })
+                }>
                 <SnbText.B3 color={color.white} align={'center'}>
                   Lengkapi
                 </SnbText.B3>
@@ -234,7 +264,10 @@ const UserView: FC = ({ start }: any) => {
                   />
                 }
                 badges1
-                leftBadgeItem1={<SnbIcon name={'person'} color={color.blue50} size={18}/>}
+                leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
+                badgesTitle1={'Upload Foto KTP'}
+                separator
+                pressBadge1={() => goTo({ type: 'ktp', title: 'Foto KTP' })}
               />
             </View>
             <View>
@@ -257,6 +290,7 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
+                separator
               />
               <ListButton
                 leftItem={
@@ -277,6 +311,30 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
+                badges1
+                leftBadgeItem1={
+                  <SnbIcon name={'create'} size={20} color={color.blue50} />
+                }
+                badgesTitle1={'Isi Nama Toko'}
+                badges2
+                leftBadgeItem2={
+                  <SnbIcon
+                    name={'location_store'}
+                    size={20}
+                    color={color.blue50}
+                  />
+                }
+                badgesTitle2={'Isi Alamat Toko'}
+                pressBadge1={() =>
+                  goTo({
+                    type: 'merchantAccountName',
+                    title: 'Tambah Nama Toko',
+                  })
+                }
+                pressBadge2={() =>
+                  NavigationAction.navigate('MerchantDetailAddressView')
+                }
+                separator
               />
             </View>
           </CopilotView>
@@ -294,6 +352,7 @@ const UserView: FC = ({ start }: any) => {
                 }
                 title={'Log Out'}
                 onPress={() => setShowConfirmation(true)}
+                separator={false}
               />
             </View>
           </CopilotView>
@@ -367,7 +426,7 @@ const UserView: FC = ({ start }: any) => {
 
   /** this for main view */
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginBottom: 16 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
       <SnbDialog
         title="Yakin keluar Sinbad ?"

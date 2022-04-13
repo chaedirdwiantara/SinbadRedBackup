@@ -32,6 +32,7 @@ import splash_highlight_text from './splash-highlight-text.svg';
 import ktp from './ktp.svg';
 import location from './location.svg';
 import store from './store.svg';
+import ktp_blue from './ktp-blue.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -66,5 +67,6 @@ export const SvgRegistery = {
   splash_highlight_text,
   ktp,
   location,
-  store
+  store,
+  ktp_blue
 };

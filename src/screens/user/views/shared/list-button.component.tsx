@@ -5,7 +5,6 @@ import {
   color as colors,
   SnbText,
   SnbTextSeeMoreType1,
-  SnbIcon,
 } from 'react-native-sinbad-ui';
 /** === INTERFACE === */
 interface Props {
@@ -24,6 +23,9 @@ interface Props {
   badgesTitle2?: string;
   leftBadgeItem1?: React.ReactNode;
   leftBadgeItem2?: React.ReactNode;
+  pressBadge1?: () => void;
+  pressBadge2?: () => void;
+  separator?: boolean;
 }
 /** === COMPONENT === */
 const SnbListButton: FC<Props> = (props) => {
@@ -72,10 +74,19 @@ const SnbListButton: FC<Props> = (props) => {
           flexDirection: 'row',
           margin: 16,
           borderRadius: 8,
+          alignItems: 'center',
+          padding: 16,
+          justifyContent: 'space-between',
         }}>
-        {props.leftBadgeItem1}
-        <SnbText.B3>{props.badgesTitle1}</SnbText.B3>
-        <TouchableOpacity style={{ padding: 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {props.leftBadgeItem1}
+          <View style={{ marginLeft: 16 }}>
+            <SnbText.B3>{props.badgesTitle1}</SnbText.B3>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={props.pressBadge1}
+          style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
           <SnbText.B4 color={colors.blue50}>Lengkapi</SnbText.B4>
         </TouchableOpacity>
       </View>
@@ -83,9 +94,27 @@ const SnbListButton: FC<Props> = (props) => {
   };
   const badgeCompletness2 = () => {
     return (
-      <View style={{ backgroundColor: colors.blue40 }}>
-        <SnbIcon name={'ktp'} color={colors.blue50} />
-        <SnbText.B3>{props.badgesTitle2}</SnbText.B3>
+      <View
+        style={{
+          backgroundColor: colors.blue10,
+          flexDirection: 'row',
+          marginHorizontal: 16,
+          borderRadius: 8,
+          alignItems: 'center',
+          padding: 16,
+          justifyContent: 'space-between',
+        }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {props.leftBadgeItem2}
+          <View style={{ marginLeft: 16 }}>
+            <SnbText.B3>{props.badgesTitle2}</SnbText.B3>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={props.pressBadge2}
+          style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
+          <SnbText.B4 color={colors.blue50}>Lengkapi</SnbText.B4>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -93,19 +122,21 @@ const SnbListButton: FC<Props> = (props) => {
     return <View style={styles.separator} />;
   };
   return (
-    <TouchableOpacity
-      style={{ marginTop: 16, opacity: props.disabled ? 0.5 : 1 }}
-      onPress={props.onPress}
-      disabled={props.disabled}>
-      <View style={styles.mainContainer}>
-        {renderLeft()}
-        {renderMid()}
-        {renderRight()}
-      </View>
+    <View>
+      <TouchableOpacity
+        style={{ marginTop: 16, opacity: props.disabled ? 0.5 : 1 }}
+        onPress={props.onPress}
+        disabled={props.disabled}>
+        <View style={styles.mainContainer}>
+          {renderLeft()}
+          {renderMid()}
+          {renderRight()}
+        </View>
+      </TouchableOpacity>
       {props.badges1 ? badgeCompletness1() : null}
       {props.badges2 ? badgeCompletness2() : null}
-      {renderSeparator()}
-    </TouchableOpacity>
+      {props.separator ? renderSeparator() : null}
+    </View>
   );
 };
 /** === STYLES === */
