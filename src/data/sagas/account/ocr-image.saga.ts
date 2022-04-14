@@ -14,7 +14,6 @@ function* ocrImageProcess(actions: models.IAction<models.IOCRImage>) {
         imageId: response.data.id,
         type: actions.payload.type,
       });
-      console.log({ verifyResult });
     }
   } catch (error) {
     yield put(ActionCreators.ocrImageFailed(error));
