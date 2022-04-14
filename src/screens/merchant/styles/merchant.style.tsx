@@ -41,6 +41,20 @@ const UserStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
+  badgeBox: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    padding: 16,
+    backgroundColor: color.blue10,
+    borderRadius: 4,
+  },
+  separator: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderColor: '#DAE0E7',
+    marginHorizontal: 16,
+    marginTop: 16,
+  }
   // badge: (backgroundColor) => ({
   //   padding: 8,
   //   backgroundColor,

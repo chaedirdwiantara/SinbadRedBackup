@@ -216,10 +216,13 @@ const UserView: FC = ({ start }: any) => {
               <Image source={source} style={UserStyles.image} />
             </View>
             <View style={UserStyles.userInfo}>
-              <View style={{ marginLeft: -18 }}>
+              <View style={{ marginLeft: -18, flexDirection: 'row' }}>
                 <SnbTextSeeMoreType1 line={1}>
                   <SnbText.H4 color={'#677A8E'}>{data?.name}</SnbText.H4>
                 </SnbTextSeeMoreType1>
+                <View style={{ alignSelf: 'center', marginLeft: -18}}>
+                  <SnbIcon name={'shield'} size={16} color={color.black60}/>
+                </View>
               </View>
               <SnbText.B3 color={'#677A8E'}>Akun Basic</SnbText.B3>
             </View>
@@ -425,7 +428,8 @@ const UserView: FC = ({ start }: any) => {
           {header()}
           <ScrollView
             scrollEventThrottle={16}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            style={{marginBottom: 16}}>
             {contentItem()}
           </ScrollView>
           {/* Modal Profile Completion */}
@@ -440,7 +444,7 @@ const UserView: FC = ({ start }: any) => {
 
   /** this for main view */
   return (
-    <View style={{ flex: 1, marginBottom: 16 }}>
+    <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
       <SnbDialog
         title="Yakin keluar Sinbad ?"
