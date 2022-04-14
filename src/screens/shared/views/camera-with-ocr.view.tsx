@@ -6,12 +6,17 @@ import {
   SnbBottomSheet,
   SnbText,
   SnbButton,
+  SnbProgress,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
-import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { contexts } from '@contexts';
-import { renderIF, useCamera } from '@screen/auth/functions';
+import { renderIF } from '@screen/auth/functions';
 import { Dimensions, View } from 'react-native';
+import { useOCR } from '@screen/auth/functions/global-hooks.functions';
+import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
+import { useDataFlagRTDB } from '@core/redux/Data';
+import database from '@react-native-firebase/database';
+import { uniqueId } from '@core/functions/global/device-data';
+import * as models from '@models';
 
 const { height, width: screenWidth } = Dimensions.get('window');
 
@@ -32,12 +37,40 @@ const KtpPhotoFrame = () => (
 
 const CameraWithOCRView = () => {
   const { navigate } = useNavigation();
-  const { save } = useUploadImageAction();
   const { params }: any = useRoute();
-  const { saveCapturedImage, resetCamera } = useCamera();
-  const { dispatchGlobal } = React.useContext(contexts.GlobalContext);
   const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
+  const { processImage } = useOCR();
+  const { ocr } = useDataFlagRTDB() || {};
+  useCheckFlagByTask('ocr');
+  const [isImageProcessed, setIsImageProcessed] = React.useState(false);
+
+  const setFlagOcr = React.useCallback(
+    (status: string = 'none', data?: models.IOCRResult) => {
+      const deviceId = database().ref('sinbadApp');
+      deviceId.child(uniqueId).once('value', () => {
+        deviceId
+          .child(uniqueId)
+          .child('flag')
+          .child('ocr')
+          .set({ ocrStatus: status, ocrData: data });
+      });
+    },
+    [],
+  );
+
+  React.useEffect(() => {
+    setFlagOcr('none');
+  }, []);
+
+  React.useEffect(() => {
+    if (ocr?.ocrStatus === 'failed') {
+      setShowModalError(true);
+    } else if (ocr?.ocrStatus === 'success' && isImageProcessed) {
+      navigate('OCRResultView', { ...ocr.ocrData });
+    }
+  }, [ocr]);
+
   return (
     <View style={{ flex: 1 }}>
       <SnbCamera
@@ -49,6 +82,7 @@ const CameraWithOCRView = () => {
         focusPoints={params?.focusPoints}
         retake={retake}
         onImageCaptured={async (result: any, _) => {
+          setRetake(false);
           const width = result.width - result.width * 0.3;
           const x = result.width * 0.15;
           let offsetFactor = 0;
@@ -67,11 +101,13 @@ const CameraWithOCRView = () => {
             offset: { x, y: result.height * offsetFactor },
             size: { width, height: result.height - result.height * sizeFactor },
           });
-          save(dispatchGlobal, url);
-          saveCapturedImage({
-            url,
-            type: params?.type,
+          // processImage({ imageUrl: url, type: params?.type });
+          setFlagOcr('success', {
+            nameOnKTP: 'Muhammad Ali Mazhuda',
+            idNumber: '3375020801940003',
           });
+          setIsImageProcessed(true);
+          // setFlagOcr('failed');
         }}
       />
       {renderIF(params?.type === 'ktp', <KtpPhotoFrame />)}
@@ -82,6 +118,7 @@ const CameraWithOCRView = () => {
         closeAction={() => {
           setShowModalError(false);
           setRetake(true);
+          setFlagOcr('none');
         }}
         actionIcon="close"
         content={
@@ -99,6 +136,7 @@ const CameraWithOCRView = () => {
                 onPress={() => {
                   setShowModalError(false);
                   setRetake(true);
+                  setFlagOcr();
                 }}
                 disabled={false}
                 type="primary"
@@ -107,6 +145,12 @@ const CameraWithOCRView = () => {
           </View>
         }
       />
+      {renderIF(
+        false,
+        <View style={{ position: 'absolute', bottom: 36, right: 0, left: 0 }}>
+          <SnbProgress size={60} />
+        </View>,
+      )}
     </View>
   );
 };

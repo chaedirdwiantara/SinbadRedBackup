@@ -23,27 +23,27 @@ const OnBoardingView: React.FC<Props> = () => {
     {
       id: 1,
       title: 'Harga Terbaik dari Pemasok',
-      image: 'sinbad_onboard',
+      image: require('@image/onboard/onboard1.png'),
       message:
         'Kami bekerja sama secara langsung dengan pemasok untuk menawarkan Anda harga terbaik di pasar',
     },
     {
       id: 2,
       title: 'Berbagai Produk Asli',
-      image: 'sinbad_onboard1',
+      image: require('@image/onboard/onboard2.png'),
       message: 'Berbagai macam produk asli langsung dari pemasok resmi',
     },
     {
       id: 3,
       title: 'Pengiriman Yang Terpercaya',
-      image: 'sinbad_onboard2',
+      image: require('@image/onboard/onboard3.png'),
       message:
         'Dapat dilacak dan pengiriman tepat waktu untuk melayani kebutuhan pelanggan Anda',
     },
     {
       id: 4,
       title: 'Pembayaran Fleksibel',
-      image: 'sinbad_onboard3',
+      image: require('@image/onboard/onboard4.png'),
       message:
         'Pembayaran tanpa uang tunai untuk transaksi yang mudah dan andal',
     },
@@ -125,7 +125,7 @@ const OnBoardingView: React.FC<Props> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 60
+    marginVertical: 60,
   },
   image: {
     alignSelf: 'center',

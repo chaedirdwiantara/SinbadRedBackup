@@ -174,7 +174,9 @@ export const useCamera = () => {
       params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai';
       params.type = type;
     }
-    navigate('CameraWithOCRView', params);
+    setTimeout(() => {
+      navigate('CameraWithOCRView', params);
+    }, 250);
   };
 
   const saveCapturedImage = (data: any) => {
@@ -326,5 +328,17 @@ export const useMerchant = () => {
     saveUserData,
     resetMerchantData,
     merchantData,
+  };
+};
+
+export const useOCR = () => {
+  const dispatch = useDispatch();
+
+  const processImage = (data: models.IOCRImage) => {
+    dispatch(Actions.ocrImageProcess(data));
+  };
+
+  return {
+    processImage,
   };
 };

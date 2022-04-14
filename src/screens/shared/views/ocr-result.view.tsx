@@ -9,10 +9,15 @@ import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { OCRResultContent } from './components';
 import * as models from '@models';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const Content: React.FC = () => {
-  const [value, setValue] = React.useState<models.IOCRResult | null>(null);
+  const { params } = useRoute();
+  const [value, setValue] = React.useState<models.IOCRResult | any>(null);
+
+  React.useEffect(() => {
+    setValue(params);
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -23,7 +28,10 @@ const Content: React.FC = () => {
           borderTopWidth: 0.5,
         }}>
         <ScrollView>
-          <OCRResultContent value={(result) => setValue(result)} />
+          <OCRResultContent
+            value={value}
+            onChangeValue={(result) => setValue(result)}
+          />
         </ScrollView>
       </View>
       <View style={{ height: 72 }}>
@@ -34,7 +42,7 @@ const Content: React.FC = () => {
           rightTitle={'Simpan'}
           onPressLeft={() => {}}
           onPressRight={() => {}}
-          rightDisabled={value?.ktpNumber === '' || value?.nameOnKTP === ''}
+          rightDisabled={value?.idNumber === '' || value?.nameOnKTP === ''}
           leftDisabled={false}
           rightLoading={false}
         />

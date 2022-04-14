@@ -3,28 +3,43 @@ import { useInput } from '@screen/auth/functions';
 import { color, SnbText, SnbTextField } from '@sinbad/react-native-sinbad-ui';
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
+import * as models from '@models';
 
 interface Props {
-  value: (result: IOCRResult) => void;
+  onChangeValue: (result: IOCRResult) => void;
+  value: models.IOCRResult | null;
 }
 
-const OCRResultContent: React.FC<Props> = ({ value }) => {
+const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
   const nameOnKTP = useInput('');
-  const ktpNumber = useInput('', 'number-only');
+  const idNumber = useInput('', 'number-only');
 
   React.useEffect(() => {
-    if (ktpNumber && nameOnKTP) {
-      value({ ktpNumber: ktpNumber.value, nameOnKTP: nameOnKTP.value });
+    if (value?.nameOnKTP) {
+      nameOnKTP.setValue(value.nameOnKTP);
+      nameOnKTP.setType('default');
+      nameOnKTP.setMessageError('');
+    }
+    if (value?.idNumber) {
+      idNumber.setValue(value.idNumber);
+      idNumber.setType('default');
+      idNumber.setMessageError('');
+    }
+  }, [value]);
+
+  React.useEffect(() => {
+    if (idNumber && nameOnKTP) {
+      onChangeValue({ idNumber: idNumber.value, nameOnKTP: nameOnKTP.value });
     }
     if (!nameOnKTP.value) {
       nameOnKTP.setMessageError('Bagian ini belum diisi');
       nameOnKTP.setType('error');
     }
-    if (!ktpNumber.value) {
-      ktpNumber.setMessageError('Nomor KTP harus 16 Digit');
-      ktpNumber.setType('error');
+    if (!idNumber.value) {
+      idNumber.setMessageError('Nomor KTP harus 16 Digit');
+      idNumber.setType('error');
     }
-  }, [nameOnKTP.value, ktpNumber.value]);
+  }, [nameOnKTP.value, idNumber.value]);
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
@@ -51,24 +66,24 @@ const OCRResultContent: React.FC<Props> = ({ value }) => {
       />
       <View style={{ padding: 16 }} />
       <SnbTextField.Text
-        {...ktpNumber}
+        {...idNumber}
         labelText="NIK pada KTP"
         placeholder="Masukkan NIK pada KTP"
         maxLength={16}
         helpText={
-          ktpNumber.type !== 'error'
+          idNumber.type !== 'error'
             ? 'Abaikan bila sudah sesuai dengan KTP'
             : ''
         }
         keyboardType="number-pad"
         onChangeText={(text) => {
           text = text.replace(/[^0-9]/g, '');
-          ktpNumber.setType('default');
-          ktpNumber.setValue(text);
+          idNumber.setType('default');
+          idNumber.setValue(text);
           if (text.length === 16 || text === '') {
-            ktpNumber.setMessageError('');
+            idNumber.setMessageError('');
           } else {
-            ktpNumber.setMessageError('Nomor KTP harus 16 Digit');
+            idNumber.setMessageError('Nomor KTP harus 16 Digit');
           }
         }}
       />
