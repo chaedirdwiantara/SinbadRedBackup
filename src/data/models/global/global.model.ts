@@ -9,5 +9,5 @@ export interface UploadImageDataProps {
 
 export interface IOCRResult {
   nameOnKTP: string;
-  ktpNumber: string;
+  idNumber: string;
 }

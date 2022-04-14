@@ -75,7 +75,7 @@ const Content: React.FC<Props> = (props) => {
             rightTitle={'Lanjutkan'}
             onPressLeft={() => {}}
             onPressRight={() => {}}
-            rightDisabled={value?.ktpNumber === '' || value?.nameOnKTP === ''}
+            rightDisabled={value?.idNumber === '' || value?.nameOnKTP === ''}
             leftDisabled={false}
             rightLoading={false}
           />
