@@ -89,7 +89,7 @@ const MerchantDetailProfileView: FC = () => {
   const header = () => {
     return (
       <SnbTopNav.Type3
-        type="red"
+        type="white"
         title="Data Diri"
         backAction={() => NavigationAction.back()}
       />
@@ -106,8 +106,7 @@ const MerchantDetailProfileView: FC = () => {
         <Image source={source} style={MerchantStyles.imageProfile} />
         <TouchableOpacity
           style={MerchantStyles.boxEditIcon}
-          onPress={() => goTo({ type: 'merchantOwnerImage' })}
-        >
+          onPress={() => goTo({ type: 'merchantOwnerImage' })}>
           <SnbIcon name={'create'} size={18} />
         </TouchableOpacity>
       </View>
@@ -117,7 +116,16 @@ const MerchantDetailProfileView: FC = () => {
   const renderHeaderImage = () => {
     return (
       <View style={MerchantStyles.headerContainer}>
-        <View style={MerchantStyles.backgroundHeader} />
+        <View style={MerchantStyles.badgeBox}>
+          <View style={{ marginRight: 8 }}>
+            <SnbIcon name={'info'} size={15} color={color.blue50} />
+          </View>
+          <View style={{ width: '95%' }}>
+            <SnbText.B3 color={color.blue50}>
+              Transaksi lebih mudah dan cepat dengan melengkapi data diri.
+            </SnbText.B3>
+          </View>
+        </View>
         <View style={MerchantStyles.boxHeader}>
           {/* {this.props.merchant.loadingEditMerchant
             ? this.renderSkeletonImageUpload()
@@ -129,23 +137,19 @@ const MerchantDetailProfileView: FC = () => {
     );
   };
   /** === label === */
-  const renderLabel = () => {
+  const renderLabel = (data: any) => {
     return (
       <View
         style={{
-          backgroundColor: color.green50,
           alignSelf: 'center',
           marginHorizontal: 8,
-          flexDirection: 'row',
-          paddingHorizontal: 5,
-          paddingVertical: 2,
-          borderRadius: 10,
         }}>
         <View style={{ alignSelf: 'center' }}>
-          <SnbIcon name={'check'} size={10} color={color.white} />
-        </View>
-        <View style={{ marginLeft: 5 }}>
-          <SnbText.C1 color={color.white}>Terverifikasi</SnbText.C1>
+          <SnbIcon
+            name={'shield'}
+            size={16}
+            color={data ? color.green50 : color.black60}
+          />
         </View>
       </View>
     );
@@ -156,31 +160,34 @@ const MerchantDetailProfileView: FC = () => {
       <View style={MerchantStyles.boxContent}>
         <View style={{ width: '85%' }}>
           <View style={{ marginBottom: 6, flexDirection: 'row' }}>
-            <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
-            {data.label ? renderLabel() : null}
+            <SnbText.H4>{data.key}</SnbText.H4>
+            {data.label !== undefined ? renderLabel(data.label) : null}
           </View>
-          <SnbText.B3 color={data.success ? color.green50 : color.black100}>
+          <SnbText.B1 color={data.success ? color.green50 : color.black60}>
             {data.value}
-          </SnbText.B3>
+          </SnbText.B1>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
             <TouchableOpacity
               onPress={() => goTo(data)}
               style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
+              <SnbText.C1 color={color.blue50}>Tambah</SnbText.C1>
             </TouchableOpacity>
           )}
           {data.action === 'ubah' && (
             <TouchableOpacity
               onPress={() => goTo(data)}
               style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
+              <SnbText.C1 color={color.blue50}>Ubah</SnbText.C1>
             </TouchableOpacity>
           )}
         </View>
       </View>
     );
+  };
+  const renderSeparator = () => {
+    return <View style={MerchantStyles.separator} />;
   };
   /** => content */
   const renderContent = () => {
@@ -188,34 +195,67 @@ const MerchantDetailProfileView: FC = () => {
     return (
       <View>
         {renderContentSection({
-          key: 'Nama Lengkap Pemilik',
-          value: ownerData?.profile.name,
-          action: ownerData?.profile.name ? 'ubah' : 'tambah',
-          type: 'merchantOwnerName',
-          title: ownerData?.profile.name
-            ? 'Ubah Nama Pemilik'
-            : 'Tambah Nama Pemilik',
-        })}
-        {renderContentSection({
-          key: 'Email',
-          value: ownerData?.profile.email ? ownerData?.profile.email : '-',
-          action: ownerData?.profile.email ? 'ubah' : 'tambah',
-          type: 'merchantOwnerEmail',
-          title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
-          label: ownerData?.info.isEmailVerified,
-        })}
-        {renderContentSection({
-          key: 'Nomor Handphone',
+          key: 'No Handphone',
           value: ownerData?.profile.mobilePhone,
           action: ownerData?.profile.mobilePhone ? 'ubah' : 'tambah',
           type: 'merchantOwnerPhoneNo',
           title: ownerData?.profile.mobilePhone
-            ? 'Ubah Nomor Handphone'
-            : 'Tambah Nomor Handphone',
+            ? 'Ubah No Handphone'
+            : 'Tambah No Handphone',
           label: ownerData?.info.isMobilePhoneVerified,
         })}
+        {renderSeparator()}
         {renderContentSection({
-          key: 'Nomor Rekening Bank',
+          key: 'Foto KTP',
+          value: ownerData?.profile.idImageUrl ? 'Berhasil Di Upload' : '-',
+          action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.idImageUrl ? true : false,
+          type: 'ktp',
+          title: 'Foto KTP',
+          label: true,
+        })}
+        {renderContentSection({
+          key: 'Nama Lengkap',
+          value: ownerData?.profile.name,
+          type: 'merchantOwnerName',
+          title: ownerData?.profile.name
+            ? 'Ubah Nama Lengkap'
+            : 'Tambah Nama Lengkap',
+        })}
+        {renderContentSection({
+          key: 'Nomor Induk Kependudukan (NIK)',
+          value: ownerData?.profile.idNo,
+          type: 'merchantOwnerIdNo',
+          title: ownerData?.profile.idNo ? 'Ubah KTP' : 'Tambah KTP',
+        })}
+        {renderContentSection({
+          key: 'Foto Selfie + KTP',
+          value: ownerData?.profile.selfieImageUrl ? 'Berhasil Di Upload' : '-',
+          action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.selfieImageUrl ? true : false,
+          type: 'selfie',
+          title: 'Foto Selfie + KTP',
+        })}
+        {renderSeparator()}
+        {renderContentSection({
+          key: 'Foto NPWP',
+          value: ownerData?.profile.taxImageUrl ? 'Berhasil Di Upload' : '-',
+          action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
+          success: ownerData?.profile.taxImageUrl ? true : false,
+          type: 'npwp',
+          title: 'Foto NPWP',
+          label: false,
+        })}
+        {renderContentSection({
+          key: 'Nomor Pokok Wajib Pajak (NPWP)',
+          value: ownerData?.profile.taxNo ? ownerData?.profile.taxNo : '-',
+          action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
+          type: 'merchantOwnerTaxNo',
+          title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
+        })}
+        {renderSeparator()}
+        {renderContentSection({
+          key: 'No Rekening Bank',
           value: ownerData?.profile.bankAccount?.bankAccountNo
             ? ownerData?.profile.bankAccount.bankAccountNo
             : '-',
@@ -226,45 +266,15 @@ const MerchantDetailProfileView: FC = () => {
           title: ownerData?.profile.bankAccount?.bankAccountNo
             ? 'Ubah Rekening Bank'
             : 'Tambah Rekening Bank',
-          label: ownerData?.info.isBankAccountVerified,
         })}
+        {renderSeparator()}
         {renderContentSection({
-          key: 'Nomor Kartu Tanda Penduduk (KTP)',
-          value: ownerData?.profile.idNo,
-          action: ownerData?.profile.idNo ? 'ubah' : 'tambah',
-          type: 'merchantOwnerIdNo',
-          title: ownerData?.profile.idNo ? 'Ubah KTP' : 'Tambah KTP',
-        })}
-        {renderContentSection({
-          key: 'Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxNo ? ownerData?.profile.taxNo : '-',
-          action: ownerData?.profile.taxNo ? 'ubah' : 'tambah',
-          type: 'merchantOwnerTaxNo',
-          title: ownerData?.profile.taxNo ? 'Ubah NPWP' : 'Tambah NPWP',
-        })}
-        {renderContentSection({
-          key: 'Foto Nomor Pokok Wajib Pajak (NPWP)',
-          value: ownerData?.profile.taxImageUrl ? 'Berhasil Di Upload' : '-',
-          action: ownerData?.profile.taxImageUrl ? 'ubah' : 'tambah',
-          success: ownerData?.profile.taxImageUrl ? true : false,
-          type: 'npwp',
-          title: 'Foto NPWP',
-        })}
-        {renderContentSection({
-          key: 'Foto KTP',
-          value: ownerData?.profile.idImageUrl ? 'Berhasil Di Upload' : '-',
-          action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
-          success: ownerData?.profile.idImageUrl ? true : false,
-          type: 'ktp',
-          title: 'Foto KTP',
-        })}
-        {renderContentSection({
-          key: 'Foto Selfie + KTP',
-          value: ownerData?.profile.selfieImageUrl ? 'Berhasil Di Upload' : '-',
-          action: ownerData?.profile.selfieImageUrl ? 'ubah' : 'tambah',
-          success: ownerData?.profile.selfieImageUrl ? true : false,
-          type: 'selfie',
-          title: 'Foto Selfie + KTP',
+          key: 'Email',
+          value: ownerData?.profile.email ? ownerData?.profile.email : '-',
+          action: ownerData?.profile.email ? 'ubah' : 'tambah',
+          type: 'merchantOwnerEmail',
+          title: ownerData?.profile.email ? 'Ubah E-mail' : 'Tambah E-mail',
+          label: ownerData?.info.isEmailVerified,
         })}
       </View>
     );
