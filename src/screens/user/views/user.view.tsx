@@ -80,8 +80,11 @@ const UserView: FC = ({ start }: any) => {
   ]);
 
   // usage for show modal
-  const [modalUserProfileCompletion, setModalUserProfileCompletion] = React.useState(false);
-  const isProfileCompletionCart = NavigationAction.useGetNavParams<NavigationParams>()?.params?.isProfileCompletionCart;
+  const [modalUserProfileCompletion, setModalUserProfileCompletion] =
+    React.useState(false);
+  const isProfileCompletionCart =
+    NavigationAction.useGetNavParams<NavigationParams>()?.params
+      ?.isProfileCompletionCart;
 
   useFocusEffect(
     React.useCallback(() => {
@@ -220,28 +223,35 @@ const UserView: FC = ({ start }: any) => {
                 <SnbTextSeeMoreType1 line={1}>
                   <SnbText.H4 color={'#677A8E'}>{data?.name}</SnbText.H4>
                 </SnbTextSeeMoreType1>
-                <View style={{ alignSelf: 'center', marginLeft: -18}}>
-                  <SnbIcon name={'shield'} size={16} color={color.black60}/>
+                <View style={{ alignSelf: 'center', marginLeft: -18 }}>
+                  <SnbIcon name={'shield'} size={16} color={color.black60} />
                 </View>
               </View>
               <SnbText.B3 color={'#677A8E'}>Akun Basic</SnbText.B3>
             </View>
           </View>
-          <Carousel
-            data={dataHeader}
-            sliderWidth={1 * width}
-            itemWidth={width}
-            renderItem={({ item, index }) => renderItem(item, index)}
-            onSnapToItem={(index) => {
-              setActiveIndex(index);
-            }}
-            slideStyle={{ padding: 10 }}
-            inactiveSlideOpacity={1}
-            inactiveSlideScale={1}
-            activeSlideAlignment={'center'}
-            layout={'default'}
-            removeClippedSubviews={false}
-          />
+          <CopilotStep
+            text="Verifikasi sekarang untuk menggunakan semua fitur utama di Sinbad."
+            order={1}
+            name="Verifikasi Akun Anda">
+            <CopilotView>
+              <Carousel
+                data={dataHeader}
+                sliderWidth={1 * width}
+                itemWidth={width}
+                renderItem={({ item, index }) => renderItem(item, index)}
+                onSnapToItem={(index) => {
+                  setActiveIndex(index);
+                }}
+                slideStyle={{ padding: 10 }}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                activeSlideAlignment={'center'}
+                layout={'default'}
+                removeClippedSubviews={false}
+              />
+            </CopilotView>
+          </CopilotStep>
         </LinearGradient>
         <View>{pagination()}</View>
       </View>
@@ -252,9 +262,9 @@ const UserView: FC = ({ start }: any) => {
     return (
       <View style={{ marginBottom: 90 }}>
         <CopilotStep
-          text="Atur identitas diri dan toko Anda dengan mudah disini."
-          order={1}
-          name="Atur Identitas">
+          text="Lengkapi informasi data diri Anda dengan mudah di sini."
+          order={2}
+          name="Data Diri">
           <CopilotView>
             <View style={{ marginVertical: 16 }}>
               <View style={UserStyles.bodyTitleContainer}>
@@ -283,6 +293,14 @@ const UserView: FC = ({ start }: any) => {
                 pressBadge1={() => goTo({ type: 'ktp', title: 'Foto KTP' })}
               />
             </View>
+          </CopilotView>
+        </CopilotStep>
+
+        <CopilotStep
+          text="Lengkapi informasi data toko Anda dengan mudah di sini."
+          order={3}
+          name="Data Toko">
+          <CopilotView>
             <View>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText.B4>Data Toko</SnbText.B4>
@@ -353,23 +371,16 @@ const UserView: FC = ({ start }: any) => {
           </CopilotView>
         </CopilotStep>
 
-        <CopilotStep
-          text="Informasi lengkap supplier yang terdaftar dengan toko Anda."
-          order={2}
-          name="Lihat info supplier">
-          <CopilotView>
-            <View>
-              <ListButton
-                leftItem={
-                  <SnbIcon name="exit_to_app" color={color.black40} size={24} />
-                }
-                title={'Log Out'}
-                onPress={() => setShowConfirmation(true)}
-                separator={false}
-              />
-            </View>
-          </CopilotView>
-        </CopilotStep>
+        <View>
+          <ListButton
+            leftItem={
+              <SnbIcon name="exit_to_app" color={color.black40} size={24} />
+            }
+            title={'Log Out'}
+            onPress={() => setShowConfirmation(true)}
+            separator={false}
+          />
+        </View>
       </View>
     );
   };
@@ -429,13 +440,16 @@ const UserView: FC = ({ start }: any) => {
           <ScrollView
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
-            style={{marginBottom: 16}}>
+            style={{ marginBottom: 16 }}>
             {contentItem()}
           </ScrollView>
           {/* Modal Profile Completion */}
-          <ModalUserProfileCompletion isOpen={modalUserProfileCompletion} handleNavigateToCart={() => {
-            NavigationAction.navigate('OmsShoppingCartView');
-          }} />
+          <ModalUserProfileCompletion
+            isOpen={modalUserProfileCompletion}
+            handleNavigateToCart={() => {
+              NavigationAction.navigate('OmsShoppingCartView');
+            }}
+          />
         </View>
       );
     }
@@ -465,4 +479,4 @@ const UserView: FC = ({ start }: any) => {
   );
 };
 
-export default copilot(copilotOptions(2, 'profileCoachmark'))(UserView);
+export default copilot(copilotOptions(3, 'profileCoachmark'))(UserView);
