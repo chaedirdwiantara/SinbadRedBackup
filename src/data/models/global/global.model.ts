@@ -8,7 +8,6 @@ export interface UploadImageDataProps {
 }
 
 export interface IOCRResult {
-  nameOnNPWP?: string;
-  nameOnKTP?: string;
+  nameOnKTP: string;
   idNumber: string;
 }
