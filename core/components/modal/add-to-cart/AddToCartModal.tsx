@@ -6,6 +6,7 @@ import { SnbBottomSheet } from 'react-native-sinbad-ui';
 import { AddToCartFooter } from './AddToCartFooter';
 import { AddToCartQuantityModifier } from './AddToCartQuantityModifier';
 import { AddToCartProductData } from './AddToCartProductData';
+import BulkPricingList from '@core/components/product/BulkPricingList';
 /** === IMPORT STYLE ===  */
 import { PromoSection } from '@core/components/product/list/PromoSection';
 /** === TYPE ===  */
@@ -34,6 +35,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
     <View>
       <AddToCartProductData isFromProductDetail={isFromProductDetail} />
       <PromoSection isFromProductDetail={isFromProductDetail} />
+      <BulkPricingList />
       <AddToCartQuantityModifier
         orderQty={orderQty}
         onChangeQty={onChangeQty}

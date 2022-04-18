@@ -78,6 +78,13 @@ export interface ProductImage {
   url: string;
 }
 
+type BulkPrice = {
+  qty: number;
+  label: string;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+};
+
 export interface ProductDetail {
   id: string;
   categoryId: string;
@@ -106,15 +113,17 @@ export interface ProductDetail {
   unit: string;
   tags: Array<string>;
   images: Array<ProductImage>;
-  basePrice: number;
-  finalPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
   isAvailable?: boolean;
   isBundle?: boolean;
   isPriceAfterTax: boolean;
+  hasBulkPrice: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+  bulkPrices: Array<BulkPrice>;
   qtySoldLabel: string;
   qtySoldValue: number;
   sellerCode: string;

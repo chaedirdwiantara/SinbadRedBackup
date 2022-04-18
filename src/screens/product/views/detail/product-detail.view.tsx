@@ -5,6 +5,7 @@ import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
+import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -471,6 +472,7 @@ const ProductDetailView: FC = () => {
             showStock={me.data !== null}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
+          <BulkPricingList />
           {/* <ProductDetailSupplierInfo // Hide temporarily
             logo={supplierDummy.logoUrl}
             name={supplierDummy.name}
