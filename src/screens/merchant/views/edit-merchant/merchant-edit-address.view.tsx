@@ -32,22 +32,18 @@ const Content: React.FC = () => {
   const { coordinate, formattedAddress, location, street }: any =
     useRoute().params || {};
   const { stateUser } = React.useContext(contexts.UserContext);
-  const {
-    storeAddress,
-    storeInformation: { storeDetailCompleteness },
-  }: any = stateUser.detail.data?.storeData || {};
-  const {
-    vehicleAccessibility: currentVehicleAccessibility,
-    vehicleAccessibilityAmount: currentVehicleAccessibilityAmount,
-  } = storeDetailCompleteness;
+  const { buyerAddress } = stateUser.detail.data
+    ?.buyerData as models.IBuyerData;
   const {
     latitude,
     longitude,
     address: currentAddress,
     noteAddress: currentNoteAddress,
-  } = storeAddress;
-  const address = useInput(currentAddress);
-  const noteAddress = useInput(currentNoteAddress);
+    vehicleAccessibility: currentVehicleAccessibility,
+    vehicleAccessibilityAmount: currentVehicleAccessibilityAmount,
+  } = buyerAddress;
+  const address = useInput(currentAddress || '');
+  const noteAddress = useInput(currentNoteAddress || '');
   const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
     useTextFieldSelect();
   const { navigate } = useNavigation();
@@ -71,9 +67,9 @@ const Content: React.FC = () => {
   const isLatLngAvailable = latitude && longitude;
   const [streetName, setStreetName] = React.useState();
   const [staticAddress, setStaticAddress] = React.useState(
-    storeAddress?.address,
+    buyerAddress?.address,
   );
-  const [locationId, setLocationId] = React.useState(storeAddress?.locationId);
+  const [locationId, setLocationId] = React.useState('');
 
   React.useEffect(() => {
     if (formattedAddress) {

@@ -1,14 +1,17 @@
 /** === STORE DETAIL === */
 export interface StoreDetail {
   ownerData: IOwnerData;
-  storeData: IStoreData;
+  buyerData: IBuyerData;
   progress: IProgress;
+  vipStatus: 'review' | 'reject' | 'accept' | 'none';
 }
 interface IOwnerData {
   profile: IOwnerProfile;
   info: IInfo;
+  accountType: 'basic' | 'vip';
 }
 interface IOwnerProfile {
+  imageId: string | null;
   imageUrl: string | null;
   name: string;
   email: string;
@@ -16,7 +19,6 @@ interface IOwnerProfile {
   idNo: string | null;
   taxNo: string | null;
   taxImageUrl: string | null;
-  idImageUrl: string | null;
   selfieImageUrl: string | null;
   bankAccount: IBankAccount | null;
 }
@@ -25,10 +27,11 @@ interface IInfo {
   isMobilePhoneVerified: boolean;
   isEmailVerified: boolean;
   isBankAccountVerified: boolean;
+  isImageIdOcrValidate: boolean;
 }
-interface IStoreData {
-  storeInformation: IStoreInformation;
-  storeAddress: IStoreAddress;
+export interface IBuyerData {
+  buyerInformation: IBuyerInformation;
+  buyerAddress: IBuyerAddress;
 }
 
 interface IBankAccount {
@@ -39,34 +42,26 @@ interface IBankAccount {
   bankAccountNo: string | null;
 }
 
-interface IStoreInformation {
-  storeAccount: IStoreAccount;
-  storeDetailCompleteness: IStoreDetailCompleteness;
+interface IBuyerInformation {
+  buyerAccount: IBuyerAccount;
 }
-interface IStoreAddress {
+interface IBuyerAddress {
   latitude: number;
   longitude: number;
-  province: string | null;
-  city: string | null;
-  district: string | null;
-  urban: string | null;
   zipCode: string | null;
   address: string | null;
   noteAddress: string | null;
+  vehicleAccessibility: IVehicleAccessibility;
+  vehicleAccessibilityAmount: number;
 }
-interface IStoreAccount {
+interface IBuyerAccount {
   code: string;
   name: string;
-  phoneNo: string | null;
-  imageUrl: string | null;
-}
-interface IStoreDetailCompleteness {
-  numberOfEmployee: string | null;
-  largeArea: string | null;
-  topSellingBrand: string | null;
-  mostWantedBrand: string | null;
-  vehicleAccessibility: IVehicleAccessibility | null;
-  vehicleAccessibilityAmount: number;
+  phoneNo: string;
+  imageUrl: string;
+  buyerCategory: string;
+  productCategory: string;
+  largeArea: string;
 }
 interface IVehicleAccessibility {
   id: any;
@@ -76,13 +71,13 @@ interface IProgress {
   done: number;
   total: number;
   ownerProgress: IOwnerProgress;
-  storeProgress: IStoreProgress;
+  buyerProgress: IBuyerProgress;
 }
 interface IOwnerProgress {
   done: number;
   total: number;
 }
-interface IStoreProgress {
+interface IBuyerProgress {
   done: number;
   total: number;
 }
