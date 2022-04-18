@@ -3,6 +3,7 @@ import { set } from 'lodash';
 import apiHost from './apiHost';
 /** === IMPORT MODEL === */
 import { ErrorProps } from '@models';
+import { uniqueId } from '@core/functions/global/device-data';
 /** === FUNCTION === */
 const apiSecureUpload = async <T>(imageUri: string): Promise<T> => {
   /** === SET HEADER === */
@@ -10,6 +11,7 @@ const apiSecureUpload = async <T>(imageUri: string): Promise<T> => {
   set(headers, 'Accept', 'application/json');
   set(headers, 'Content-Type', 'multipart/form-data');
   set(headers, 'X-Platform', 'sinbad-app');
+  set(headers, 'x-device-id', uniqueId);
   /** === SET BODY === */
   var body = new FormData();
   body.append('file', {

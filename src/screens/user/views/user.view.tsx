@@ -304,7 +304,7 @@ const UserView: FC = ({ start }: any) => {
             <View>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText.B4>Data Toko</SnbText.B4>
-                <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
+                <SnbText.B3>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText.B3>
               </View>
               <ListButton
                 leftItem={
