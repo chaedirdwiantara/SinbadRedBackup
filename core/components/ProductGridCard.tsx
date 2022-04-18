@@ -8,6 +8,8 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
+/** === IMPORT COMPONENT === */
+import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
@@ -50,7 +52,7 @@ const ExclusiveTag = () => (
   <View
     style={{
       paddingHorizontal: 12,
-      paddingTop: 8,
+      padding: 5,
     }}>
     <View style={ProductGridCardStyle.exclusiveTagContainer}>
       <SnbIcon
@@ -106,7 +108,13 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             defaultSource={Images.opacityPlaceholder}
           />
         </View>
-        {props.isExclusive && <ExclusiveTag />}
+        {props.isExclusive ? (
+          <ExclusiveTag />
+        ) : (
+          <View>
+            <BluckPricingTag style={{ paddingLeft: 12 }} />
+          </View>
+        )}
         <View style={{ padding: 12 }}>
           <ProductGridCardInfo
             name={props.name}

@@ -8,6 +8,8 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
+/** === IMPORT COMPONENT === */
+import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
@@ -72,7 +74,13 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
       />
       <View style={{ justifyContent: 'space-between', flex: 1 }}>
         <View>
-          {props.isExclusive && <ExclusiveTag />}
+          {props.isExclusive ? (
+            <ExclusiveTag />
+          ) : (
+            <View>
+              <BluckPricingTag style={{ marginHorizontal: 4 }} />
+            </View>
+          )}
           {/* Product Info */}
           <View style={{ marginTop: 8 }}>
             <SnbText.C1 color={color.black100}>{props.name}</SnbText.C1>

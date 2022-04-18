@@ -1,12 +1,12 @@
 /** === IMPORT PACKAGES ===  */
-import React from 'react';
-import { View } from 'react-native';
+import React, { FC } from 'react';
+import { View, ViewProps } from 'react-native';
 import { SnbIcon, SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE ===  */
 import { ProductDetailStyle } from '@screen/product/styles';
 /** === COMPONENT ===  */
-export const ExclusiveTag = () => (
-  <View style={ProductDetailStyle.exclusiveTagContainer}>
+export const ExclusiveTag: FC<ViewProps> = (props) => (
+  <View style={[ProductDetailStyle.exclusiveTagContainer, props.style]}>
     <SnbIcon
       name="stars"
       color={color.yellow50}

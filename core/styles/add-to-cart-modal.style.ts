@@ -16,6 +16,7 @@ export const AddToCartModalStyle = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
     marginBottom: 8,
+    marginRight: 5,
     backgroundColor: color.yellow10,
     borderRadius: 50,
   },

@@ -2,6 +2,8 @@
 import React, { FC, useReducer } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon, SnbToolTips } from 'react-native-sinbad-ui';
+/** === IMPORT COMPONENT ===  */
+import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -38,17 +40,20 @@ export const AddToCartProductData: FC<Props> = ({ isFromProductDetail }) => {
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            {dataProductDetail?.isExclusive && (
-              <View style={AddToCartModalStyle.exclusiveTagContainer}>
-                <SnbIcon
-                  name="stars"
-                  color={color.yellow50}
-                  size={18}
-                  style={{ marginRight: 4 }}
-                />
-                <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-              </View>
-            )}
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              {dataProductDetail?.isExclusive && (
+                <View style={[AddToCartModalStyle.exclusiveTagContainer]}>
+                  <SnbIcon
+                    name="stars"
+                    color={color.yellow50}
+                    size={18}
+                    style={{ marginRight: 4 }}
+                  />
+                  <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
+                </View>
+              )}
+              <BluckPricingTag />
+            </View>
             <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>

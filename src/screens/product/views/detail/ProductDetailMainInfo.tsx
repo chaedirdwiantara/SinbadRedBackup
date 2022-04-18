@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
 import { ExclusiveTag } from './ExclusiveTag';
+import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPE ===  */
@@ -30,7 +31,10 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   qtySoldLabel,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
-    {isExclusive && <ExclusiveTag />}
+    <View style={{ flexDirection: 'row' }}>
+      {isExclusive && <ExclusiveTag style={{ marginRight: 5 }} />}
+      <BluckPricingTag />
+    </View>
     <SnbText.H4>{name}</SnbText.H4>
     <View style={{ marginVertical: 8 }}>
       <SnbText.B2 color={color.red50}>
