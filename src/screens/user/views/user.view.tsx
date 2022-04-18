@@ -202,6 +202,8 @@ const UserView: FC = ({ start }: any) => {
 
   const renderHeaderInformation = () => {
     const data = stateUser.detail.data?.ownerData?.profile;
+    const buyerData = stateUser.detail.data?.buyerData;
+    const ownerData = stateUser.detail.data?.ownerData;
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
@@ -216,18 +218,40 @@ const UserView: FC = ({ start }: any) => {
           }}>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <View style={UserStyles.imageContainer}>
-              <Image source={source} style={UserStyles.image} />
+              {!data?.imageUrl ? (
+                <SnbIcon
+                  name={'person_circle'}
+                  size={52}
+                  color={color.black40}
+                />
+              ) : (
+                <Image source={source} style={UserStyles.image} />
+              )}
             </View>
             <View style={UserStyles.userInfo}>
               <View style={{ marginLeft: -18, flexDirection: 'row' }}>
                 <SnbTextSeeMoreType1 line={1}>
-                  <SnbText.H4 color={'#677A8E'}>{data?.name}</SnbText.H4>
+                  <SnbText.H4 color={'#677A8E'}>
+                    {data?.name
+                      ? data.name
+                      : buyerData?.buyerInformation?.buyerAccount?.code}
+                  </SnbText.H4>
                 </SnbTextSeeMoreType1>
                 <View style={{ alignSelf: 'center', marginLeft: -18 }}>
-                  <SnbIcon name={'shield'} size={16} color={color.black60} />
+                  <SnbIcon
+                    name={'shield'}
+                    size={16}
+                    color={
+                      ownerData?.accountType === 'basic'
+                        ? color.black60
+                        : color.blue50
+                    }
+                  />
                 </View>
               </View>
-              <SnbText.B3 color={'#677A8E'}>Akun Basic</SnbText.B3>
+              <SnbText.B3 color={'#677A8E'}>
+                {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
+              </SnbText.B3>
             </View>
           </View>
           <CopilotStep

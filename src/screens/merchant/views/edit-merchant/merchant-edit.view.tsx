@@ -12,7 +12,6 @@ interface Props {
 }
 
 const MerchantEditView: FC<Props> = (props) => {
-  console.log('props edit view', props);
   /** === HOOK === */
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();

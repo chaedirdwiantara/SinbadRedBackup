@@ -16,15 +16,15 @@ const MerchantDetailAccountView: FC = () => {
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
 
-
   const dummy = {
-    kategori: 'Grosir', 
-    kategoriProduk: 'Makanan dan Perlengkapan Hewan, Mandi dan Perawatan Tubuh, Minuman, Susu, Permen, Kosmetik, Makanan', 
-    name: 'Jaya Makmur Sentosa', 
-    phoneNo: '081122334455', 
-    ukuran: '20', 
-    imageUrl: 'udah aja pokoknya', 
-  }
+    kategori: 'Grosir',
+    kategoriProduk:
+      'Makanan dan Perlengkapan Hewan, Mandi dan Perawatan Tubuh, Minuman, Susu, Permen, Kosmetik, Makanan',
+    name: 'Jaya Makmur Sentosa',
+    phoneNo: '081122334455',
+    ukuran: '20',
+    imageUrl: 'udah aja pokoknya',
+  };
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -84,10 +84,10 @@ const MerchantDetailAccountView: FC = () => {
       <View style={MerchantStyles.boxContent}>
         <View>
           <View style={{ marginBottom: 6 }}>
-            <SnbText.H4 color={color.black100} >{data.key}</SnbText.H4>
+            <SnbText.H4 color={color.black100}>{data.key}</SnbText.H4>
           </View>
           <SnbText.B3 color={data.fontColor ? data.fontColor : color.black60}>
-            {data.value + " m\u00B2"}
+            {data.value + ' m\u00B2'}
           </SnbText.B3>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -111,61 +111,67 @@ const MerchantDetailAccountView: FC = () => {
   };
   /** => content */
   const content = () => {
-    const storeData = stateUser.detail.data?.storeData.storeInformation;
+    const storeData = stateUser.detail.data?.buyerData.buyerInformation;
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View>
           {renderContentSection({
             key: 'ID Toko',
-            value: storeData?.storeAccount.code,
+            value: storeData?.buyerAccount.code,
           })}
-          <View style={{borderBottomColor:'#aaa', borderTopColor:'#aaa', paddingVertical: 10, marginHorizontal: 15, borderBottomWidth: 0.2 }} />
-            {renderContentSection({
-              key: 'Kategori Toko',
-              value: storeData?.storeAccount.code,
-            })}
-            {renderContentSection({
-              key: 'Kategori Produk',
-              value: storeData?.storeAccount.code,
-            })}
-          <View style={{borderBottomColor:'#aaa', borderTopColor:'#aaa', paddingVertical: 10, marginHorizontal: 15, borderBottomWidth: 0.2 }} />
+          <View
+            style={{
+              borderBottomColor: '#aaa',
+              borderTopColor: '#aaa',
+              paddingVertical: 10,
+              marginHorizontal: 15,
+              borderBottomWidth: 0.2,
+            }}
+          />
+          {renderContentSection({
+            key: 'Kategori Toko',
+            value: storeData?.buyerAccount.code,
+          })}
+          {renderContentSection({
+            key: 'Kategori Produk',
+            value: storeData?.buyerAccount.code,
+          })}
+          <View
+            style={{
+              borderBottomColor: '#aaa',
+              borderTopColor: '#aaa',
+              paddingVertical: 10,
+              marginHorizontal: 15,
+              borderBottomWidth: 0.2,
+            }}
+          />
           {renderContentSection({
             key: 'Nama Toko',
             value: dummy.name,
             action: 'ubah',
             type: 'merchantAccountName',
-            title: dummy.name
-              ? 'Ubah Nama Toko'
-              : 'Tambah Nama Toko',
+            title: dummy.name ? 'Ubah Nama Toko' : 'Tambah Nama Toko',
           })}
           {renderContentSection({
             key: 'Nomor Handphone Toko',
-            value: dummy.phoneNo
-              ? dummy.phoneNo
-              : '-',
+            value: dummy.phoneNo ? dummy.phoneNo : '-',
             action: 'ubah',
             type: 'merchantAccountPhoneNo',
             title: dummy.phoneNo
               ? 'Ubah No. Handphone Toko'
               : 'Tambah No. Handphone Toko',
           })}
-         {renderContentSection({
+          {renderContentSection({
             key: 'Ukuran Toko',
             value: dummy.ukuran,
             action: 'ubah',
             type: 'merchantAccountSize',
-            title: dummy.ukuran
-              ? 'Ubah Ukuran Toko'
-              : 'Tambah Ukuran Toko',
+            title: dummy.ukuran ? 'Ubah Ukuran Toko' : 'Tambah Ukuran Toko',
           })}
           {renderContentSection({
             key: 'Foto Toko',
-            fontColor: dummy.imageUrl
-              ? color.green50
-              : color.black100,
-            value: dummy.imageUrl
-              ? 'Berhasil Di Upload'
-              : '-',
+            fontColor: dummy.imageUrl ? color.green50 : color.black100,
+            value: dummy.imageUrl ? 'Berhasil Di Upload' : '-',
             action: 'ubah',
             type: 'merchantAccountImage',
             title: 'Foto Toko',

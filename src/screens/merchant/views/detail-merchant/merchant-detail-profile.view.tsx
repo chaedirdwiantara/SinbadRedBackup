@@ -207,9 +207,9 @@ const MerchantDetailProfileView: FC = () => {
         {renderSeparator()}
         {renderContentSection({
           key: 'Foto KTP',
-          value: ownerData?.profile.idImageUrl ? 'Berhasil Di Upload' : '-',
-          action: ownerData?.profile.idImageUrl ? 'ubah' : 'tambah',
-          success: ownerData?.profile.idImageUrl ? true : false,
+          value: ownerData?.profile.imageId ? 'Berhasil Di Upload' : '-',
+          action: ownerData?.profile.imageId ? 'ubah' : 'tambah',
+          success: ownerData?.profile.imageId ? true : false,
           type: 'ktp',
           title: 'Foto KTP',
           label: true,

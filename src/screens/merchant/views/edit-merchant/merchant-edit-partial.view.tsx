@@ -40,7 +40,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { dispatchUser } = React.useContext(contexts.UserContext);
   const { gotoSelection, selectedItem, resetSelectedItem } =
     useTextFieldSelect();
-  const storeData = stateUser.detail.data?.storeData.storeInformation;
+  const storeData = stateUser.detail.data?.buyerData.buyerInformation;
+  const buyerAddressData = stateUser.detail.data?.buyerData.buyerAddress;
   // USER DATA
   const ownerName = useInput(ownerData?.name || null);
   const ownerEmail = useInput(ownerData?.email || null);
@@ -51,26 +52,24 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const [errorIdNumber, setErrorIdNumber] = useState(false);
   const [errorTaxNumber, setErrorTaxNumber] = useState(false);
   //MERCHANT DATA
-  const merchantName = useInput(storeData?.storeAccount?.name || '');
-  const merchantPhoneNo = useInput(storeData?.storeAccount?.phoneNo || null);
+  const merchantName = useInput(storeData?.buyerAccount?.name || '');
+  const merchantPhoneNo = useInput(storeData?.buyerAccount?.phoneNo || null);
   // COMPLETNESS DATA
-  const numberOfEmployee = useInput(
-    storeData?.storeDetailCompleteness?.numberOfEmployee || null,
-  );
+  // const numberOfEmployee = useInput(
+  //   storeData?.storeDetailCompleteness?.numberOfEmployee || null,
+  // );
   const vehicleAccessibility = useInput(
-    storeData?.storeDetailCompleteness?.vehicleAccessibility || null,
+    buyerAddressData?.vehicleAccessibility || null,
   );
-  const largeArea = useInput(
-    storeData?.storeDetailCompleteness?.largeArea || null,
-  );
-  const topBrand = useInput(
-    storeData?.storeDetailCompleteness?.topSellingBrand || null,
-  );
-  const wantedBrand = useInput(
-    storeData?.storeDetailCompleteness?.mostWantedBrand || null,
-  );
+  const largeArea = useInput(storeData?.buyerAccount?.largeArea || null);
+  // const topBrand = useInput(
+  //   storeData?.storeDetailCompleteness?.topSellingBrand || null,
+  // );
+  // const wantedBrand = useInput(
+  //   storeData?.storeDetailCompleteness?.mostWantedBrand || null,
+  // );
   const vehicleAccessibilityAmount = useInput(
-    storeData?.storeDetailCompleteness?.vehicleAccessibilityAmount || null,
+    buyerAddressData?.vehicleAccessibilityAmount || null,
   );
   // realated quest hook
   const { dispatchQuest } = useQuestContext();
@@ -111,10 +110,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
-      case 'listNumOfEmployee': {
-        numberOfEmployee.setValue(selectedItem.item.amount);
-        break;
-      }
+      // case 'listNumOfEmployee': {
+      //   numberOfEmployee.setValue(selectedItem.item.amount);
+      //   break;
+      // }
       case 'listVehicleAccess': {
         vehicleAccessibility.setValue(selectedItem.item);
         break;
@@ -209,10 +208,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantCompletenessInformation': {
         data = {
-          numberOfEmployee: numberOfEmployee.value,
+          // numberOfEmployee: numberOfEmployee.value,
           largeArea: largeArea.value,
-          topSellingBrand: topBrand.value,
-          mostWantedBrand: wantedBrand.value,
+          // topSellingBrand: topBrand.value,
+          // mostWantedBrand: wantedBrand.value,
           vehicleAccessibilityId: vehicleAccessibility.value.id,
           vehicleAccessibilityAmount: vehicleAccessibilityAmount.value
             ? Number(vehicleAccessibilityAmount.value)
@@ -262,8 +261,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     const dataVehicleAccessibilityAmount = vehicleAccessibilityAmount.value
       ? Number(vehicleAccessibilityAmount.value)
       : null;
-    const dataTopBrand = topBrand.value ? topBrand.value : null;
-    const dataWantedBrand = wantedBrand.value ? wantedBrand.value : null;
+    // const dataTopBrand = topBrand.value ? topBrand.value : null;
+    // const dataWantedBrand = wantedBrand.value ? wantedBrand.value : null;
     const dataLargeArea = largeArea.value ? largeArea.value : null;
     switch (props.type) {
       case 'merchantOwnerName':
@@ -289,24 +288,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         );
       case 'merchantAccountName':
         return (
-          merchantName.value === storeData?.storeAccount.name ||
+          merchantName.value === storeData?.buyerAccount.name ||
           !merchantName.value
         );
       case 'merchantAccountPhoneNo':
-        return merchantPhoneNo.value === storeData?.storeAccount?.phoneNo;
+        return merchantPhoneNo.value === storeData?.buyerAccount?.phoneNo;
       case 'merchantCompletenessInformation':
         return (
-          (dataLargeArea === storeData?.storeDetailCompleteness.largeArea &&
-            dataTopBrand ===
-              storeData?.storeDetailCompleteness.topSellingBrand &&
-            dataWantedBrand ===
-              storeData?.storeDetailCompleteness.mostWantedBrand &&
+          (dataLargeArea === storeData?.buyerAccount.largeArea &&
+            // dataTopBrand ===
+            //   storeData?.storeDetailCompleteness.topSellingBrand &&
+            // dataWantedBrand ===
+            //   storeData?.storeDetailCompleteness.mostWantedBrand &&
             dataVehicleAccessibilityAmount ===
-              storeData?.storeDetailCompleteness.vehicleAccessibilityAmount &&
+              buyerAddressData?.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
-              storeData?.storeDetailCompleteness.vehicleAccessibility?.id &&
-            numberOfEmployee.value ===
-              storeData?.storeDetailCompleteness.numberOfEmployee) ||
+              buyerAddressData?.vehicleAccessibility?.id) ||
+          //   &&
+          // numberOfEmployee.value ===
+          //   storeData?.storeDetailCompleteness.numberOfEmployee
           vehicleAccessibility.value.id === null
         );
       case 'merchantAddress':
@@ -483,7 +483,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const renderCompletenessInformationMerchant = () => {
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <View style={{ marginBottom: 16 }}>
+        {/* <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Jumlah Karyawan'}
             type={'default'}
@@ -495,7 +495,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             rightType={'icon'}
             labelText={'Jumlah Karyawan'}
           />
-        </View>
+        </View> */}
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Ukuran Toko'}
@@ -512,7 +512,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             maxLength={4}
           />
         </View>
-        <View style={{ marginBottom: 16 }}>
+        {/* <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Merk Paling Laku'}
             placeholder={'Masukkan Merk Paling Laku'}
@@ -521,8 +521,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             onChangeText={(text) => topBrand.setValue(text)}
             clearText={() => topBrand.setValue('')}
           />
-        </View>
-        <View style={{ marginBottom: 16 }}>
+        </View> */}
+        {/* <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Merk Paling Diinginkan'}
             placeholder={'Masukkan Merk Paling Diinginkan'}
@@ -531,7 +531,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             onChangeText={(text) => wantedBrand.setValue(text)}
             clearText={() => wantedBrand.setValue('')}
           />
-        </View>
+        </View> */}
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
