@@ -140,7 +140,7 @@ const UserView: FC = ({ start }: any) => {
         NavigationAction.navigate('MerchantEditView', { title, type });
         break;
       case 'storeAddress':
-        NavigationAction.navigate('MerchantDetailAddressView');
+        NavigationAction.navigate('MerchantEditAddressView');
         break;
       default:
         break;
@@ -433,7 +433,7 @@ const UserView: FC = ({ start }: any) => {
                   })
                 }
                 pressBadge2={() =>
-                  NavigationAction.navigate('MerchantDetailAddressView')
+                  NavigationAction.navigate('MerchantEditAddressView')
                 }
                 separator
               />

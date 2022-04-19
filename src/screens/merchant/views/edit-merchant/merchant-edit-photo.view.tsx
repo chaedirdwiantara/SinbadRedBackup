@@ -101,9 +101,7 @@ const MerchantEditPhotoView = () => {
         break;
       }
       case 'ktp': {
-        setImageUrl(
-          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
-        );
+        setImageUrl(stateUser.detail.data?.ownerData?.profile?.imageId || ' ');
         break;
       }
       case 'selfie': {
@@ -114,7 +112,7 @@ const MerchantEditPhotoView = () => {
       }
       case 'store': {
         setImageUrl(
-          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
             ?.imageUrl || ' ',
         );
         break;
@@ -299,6 +297,9 @@ const MerchantEditPhotoView = () => {
                 openCameraWithOCR(params?.type);
               }
             }}
+            type="vertical"
+            resizeMode="contain"
+            blurRadius={2.2}
           />,
         )}
       </View>
