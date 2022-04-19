@@ -34,7 +34,6 @@ export const AddToCartModalStyle = StyleSheet.create({
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8,
   },
   tooltipContainer: {
     maxWidth: 200,

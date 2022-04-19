@@ -33,7 +33,10 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
 
   const renderContent = () => (
     <View>
-      <AddToCartProductData isFromProductDetail={isFromProductDetail} />
+      <AddToCartProductData
+        isFromProductDetail={isFromProductDetail}
+        orderQty={orderQty}
+      />
       <PromoSection isFromProductDetail={isFromProductDetail} />
       <BulkPricingList />
       <AddToCartQuantityModifier

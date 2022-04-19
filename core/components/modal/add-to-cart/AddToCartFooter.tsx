@@ -40,22 +40,20 @@ export const AddToCartFooter: FC<AddToCartFooterProps> = ({
     <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
       <View style={{ marginRight: 16 }}>
         <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <SnbText.B3>Total: </SnbText.B3>
           {isFromProductDetail ? (
-            <SnbText.B4 color={color.red50}>
+            <SnbText.B4>
               {toCurrency((dataProductDetail?.finalPrice ?? 0) * orderQty, {
                 withFraction: false,
               })}
             </SnbText.B4>
           ) : (
-            <SnbText.B4 color={color.red50}>
+            <SnbText.B4>
               {toCurrency((dataProductDetailCart?.finalPrice ?? 0) * orderQty, {
                 withFraction: false,
               })}
             </SnbText.B4>
           )}
         </View>
-        <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
       </View>
       {isFromProductDetail ? (
         <SnbButton.Dynamic
