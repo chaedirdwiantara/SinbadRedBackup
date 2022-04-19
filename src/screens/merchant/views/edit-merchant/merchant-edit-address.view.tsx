@@ -102,7 +102,7 @@ const Content: React.FC = () => {
       goBack();
       reset(dispatchSupplier);
       detail(dispatchUser);
-      SnbToast.show('Alamat berhasil di perbarui', 2000);
+      SnbToast.show('Alamat berhasil diperbarui', 2000);
     }
   }, [stateMerchant.profileEdit]);
 
