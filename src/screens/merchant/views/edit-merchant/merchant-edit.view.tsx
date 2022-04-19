@@ -47,27 +47,14 @@ const MerchantEditView: FC<Props> = (props) => {
   };
   /** THIS FOR SWITCH VIEW */
   const switchView = () => {
-    switch (props.route.params.type) {
-      case 'merchantCompletenessInformation':
-      case 'merchantClassification':
-      case 'merchantOwnerIdNo':
-      case 'merchantOwnerName':
-      case 'merchantOwnerEmail':
-      case 'merchantOwnerTaxNo':
-      case 'merchantOwnerPhoneNo':
-      case 'merchantAccountName':
-      case 'merchantAccountPhoneNo':
-        return (
-          <MerchantEditPartialView
-            type={props.route.params.type}
-            source={props.route.params.source}
-            sourceData={props.route.params.sourceData}
-            showButton
-          />
-        );
-      default:
-        break;
-    }
+    return (
+      <MerchantEditPartialView
+        type={props.route.params.type}
+        source={props.route.params.source}
+        sourceData={props.route.params.sourceData}
+        showButton
+      />
+    );
   };
   /** => content */
   const content = () => {
