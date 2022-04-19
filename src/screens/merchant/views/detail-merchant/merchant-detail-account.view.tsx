@@ -36,11 +36,11 @@ const MerchantDetailAccountView: FC = () => {
    * =======================
    */
   const goTo = (data: any) => {
-    const isPhoto = data.type == 'merchantAccountImage' ?  'MerchantEditPhotoView' : 'MerchantEditView'
+    const isPhoto = data.type == 'store' ?  'MerchantEditPhotoView' : 'MerchantEditView'
 
     NavigationAction.navigate(isPhoto, {
       title: data.title,
-      type:  data.type == 'merchantAccountImage' ? 'store' : data.type,
+      type:  data.type,
     });
    
   };
@@ -156,7 +156,7 @@ const MerchantDetailAccountView: FC = () => {
             fontColor: color.green50,
             value: buyerData?.imageUrl == '' || buyerData?.imageUrl == null ? '-' : 'Sudah diupload',
             action:  buyerData?.imageUrl == '' || buyerData?.imageUrl == null ? 'tambah' : 'ubah',
-            type: 'merchantAccountImage',
+            type: 'store',
             title: 'Foto Toko',
           })}
         </View>
