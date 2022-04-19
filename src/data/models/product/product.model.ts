@@ -89,6 +89,7 @@ export interface ProductDetail {
   id: string;
   categoryId: string;
   supplierCode: string;
+  code: string;
   sellerId: string;
   name: string;
   detail: string;
