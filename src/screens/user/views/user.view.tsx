@@ -79,15 +79,28 @@ const UserView: FC = ({ start }: any) => {
     },
   ]);
 
-  console.log('data:', stateUser);
-  
-
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
     React.useState(false);
   const isProfileCompletionCart =
     NavigationAction.useGetNavParams<NavigationParams>()?.params
       ?.isProfileCompletionCart;
+
+  //show modal if complete data from cart
+  useEffect(() => {
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (stateUser) {
+      if (
+        isProfileCompletionCart === true &&
+        ownerData?.info.isImageIdOcrValidate === true &&
+        buyerData?.buyerInformation.buyerAccount.name !== null &&
+        buyerData?.buyerAddress.address !== null
+      ) {
+        setModalUserProfileCompletion(true);
+      }
+    }
+  }, [stateUser, isProfileCompletionCart]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -371,12 +384,18 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
-                badges1={buyerData?.buyerInformation?.buyerAccount?.name !== null ? false : true}
+                badges1={
+                  buyerData?.buyerInformation?.buyerAccount?.name !== null
+                    ? false
+                    : true
+                }
                 leftBadgeItem1={
                   <SnbIcon name={'create'} size={20} color={color.blue50} />
                 }
                 badgesTitle1={'Isi Nama Toko'}
-                badges2={buyerData?.buyerAddress?.address !== null ? false : true}
+                badges2={
+                  buyerData?.buyerAddress?.address !== null ? false : true
+                }
                 leftBadgeItem2={
                   <SnbIcon
                     name={'location_store'}
