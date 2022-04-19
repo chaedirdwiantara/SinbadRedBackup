@@ -79,6 +79,9 @@ const UserView: FC = ({ start }: any) => {
     },
   ]);
 
+  console.log('data:', stateUser);
+  
+
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
     React.useState(false);
@@ -283,6 +286,8 @@ const UserView: FC = ({ start }: any) => {
   };
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
     return (
       <View style={{ marginBottom: 90 }}>
         <CopilotStep
@@ -310,7 +315,7 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
-                badges1
+                badges1={ownerData?.info.isImageIdOcrValidate ? false : true}
                 leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
                 badgesTitle1={'Upload Foto KTP'}
                 separator
@@ -366,12 +371,12 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
-                badges1
+                badges1={buyerData?.buyerInformation?.buyerAccount?.name !== null ? false : true}
                 leftBadgeItem1={
                   <SnbIcon name={'create'} size={20} color={color.blue50} />
                 }
                 badgesTitle1={'Isi Nama Toko'}
-                badges2
+                badges2={buyerData?.buyerAddress?.address !== null ? false : true}
                 leftBadgeItem2={
                   <SnbIcon
                     name={'location_store'}
