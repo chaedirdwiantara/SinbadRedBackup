@@ -49,7 +49,7 @@ interface IBuyerAddress {
   latitude: number;
   longitude: number;
   zipCode: string | null;
-  address: string | null;
+  address: string;
   noteAddress: string | null;
   vehicleAccessibility: IVehicleAccessibility;
   vehicleAccessibilityAmount: number;

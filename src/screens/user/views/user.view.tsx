@@ -60,6 +60,7 @@ const UserView: FC = ({ start }: any) => {
       icon: 'ktp',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'ktp',
+      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
     },
     {
       id: 2,
@@ -68,6 +69,11 @@ const UserView: FC = ({ start }: any) => {
       icon: 'store',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'merchantAccountName',
+      status:
+        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+          ?.name !== null
+          ? true
+          : false,
     },
     {
       id: 3,
@@ -76,6 +82,10 @@ const UserView: FC = ({ start }: any) => {
       icon: 'location',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'storeAddress',
+      status:
+        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+          ? true
+          : false,
     },
   ]);
 
@@ -85,6 +95,22 @@ const UserView: FC = ({ start }: any) => {
   const isProfileCompletionCart =
     NavigationAction.useGetNavParams<NavigationParams>()?.params
       ?.isProfileCompletionCart;
+
+  //show modal if complete data from cart
+  useEffect(() => {
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (stateUser) {
+      if (
+        isProfileCompletionCart === true &&
+        ownerData?.info.isImageIdOcrValidate === true &&
+        buyerData?.buyerInformation.buyerAccount.name !== null &&
+        buyerData?.buyerAddress.address !== null
+      ) {
+        setModalUserProfileCompletion(true);
+      }
+    }
+  }, [stateUser, isProfileCompletionCart]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -131,10 +157,11 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
         <Pagination
-          dotsLength={dataHeader.length}
+          dotsLength={dataCarousel.length}
           activeDotIndex={activeIndex}
           dotContainerStyle={{ marginHorizontal: 2 }}
           dotStyle={UserStyles.activeDot}
@@ -207,6 +234,7 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
         <LinearGradient
@@ -259,30 +287,42 @@ const UserView: FC = ({ start }: any) => {
             order={1}
             name="Verifikasi Akun Anda">
             <CopilotView>
-              <Carousel
-                data={dataHeader}
-                sliderWidth={1 * width}
-                itemWidth={width}
-                renderItem={({ item, index }) => renderItem(item, index)}
-                onSnapToItem={(index) => {
-                  setActiveIndex(index);
-                }}
-                slideStyle={{ padding: 10 }}
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-                activeSlideAlignment={'center'}
-                layout={'default'}
-                removeClippedSubviews={false}
-              />
+              {!ownerData?.info.isImageIdOcrValidate ||
+              buyerData?.buyerInformation.buyerAccount.name === null ||
+              buyerData?.buyerAddress.address === null ? (
+                <Carousel
+                  data={dataCarousel}
+                  sliderWidth={1 * width}
+                  itemWidth={width}
+                  renderItem={({ item, index }) => renderItem(item, index)}
+                  onSnapToItem={(index) => {
+                    setActiveIndex(index);
+                  }}
+                  slideStyle={{ padding: 10 }}
+                  inactiveSlideOpacity={1}
+                  inactiveSlideScale={1}
+                  activeSlideAlignment={'center'}
+                  layout={'default'}
+                  removeClippedSubviews={false}
+                />
+              ) : null}
             </CopilotView>
           </CopilotStep>
         </LinearGradient>
-        <View>{pagination()}</View>
+        <View>
+          {!ownerData?.info.isImageIdOcrValidate ||
+          buyerData?.buyerInformation.buyerAccount.name === null ||
+          buyerData?.buyerAddress.address === null
+            ? pagination()
+            : null}
+        </View>
       </View>
     );
   };
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
     return (
       <View style={{ marginBottom: 90 }}>
         <CopilotStep
@@ -310,7 +350,7 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
-                badges1
+                badges1={ownerData?.info.isImageIdOcrValidate ? false : true}
                 leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
                 badgesTitle1={'Upload Foto KTP'}
                 separator
@@ -366,12 +406,18 @@ const UserView: FC = ({ start }: any) => {
                     size={24}
                   />
                 }
-                badges1
+                badges1={
+                  buyerData?.buyerInformation?.buyerAccount?.name !== null
+                    ? false
+                    : true
+                }
                 leftBadgeItem1={
                   <SnbIcon name={'create'} size={20} color={color.blue50} />
                 }
                 badgesTitle1={'Isi Nama Toko'}
-                badges2
+                badges2={
+                  buyerData?.buyerAddress?.address !== null ? false : true
+                }
                 leftBadgeItem2={
                   <SnbIcon
                     name={'location_store'}

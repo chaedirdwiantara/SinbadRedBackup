@@ -154,7 +154,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantOwnerIdNo': {
         data = {
-          idNo: noKtp.value,
+          user: {
+            idNo: noKtp.value,
+          },
         };
         editProfileAction.editProfile(dispatchSupplier, {
           data,
@@ -163,7 +165,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantOwnerTaxNo': {
         data = {
-          taxNo: noNPWP.value,
+          user: {
+            taxNo: noNPWP.value,
+          },
         };
         editProfileAction.editProfile(dispatchSupplier, {
           data,
@@ -172,7 +176,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantOwnerName': {
         data = {
-          name: ownerName.value,
+          user: {
+            name: ownerName.value,
+          },
         };
         editProfileAction.editProfile(dispatchSupplier, {
           data,
