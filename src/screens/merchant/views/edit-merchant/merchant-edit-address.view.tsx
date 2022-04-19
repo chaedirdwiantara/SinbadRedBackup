@@ -17,6 +17,7 @@ import {
   color,
   SnbTextField,
   SnbTextFieldSelect,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import {
@@ -27,13 +28,21 @@ import {
 import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
 import { ModalSelection } from '@screen/account/views/shared';
 import { contexts } from '@contexts';
+import { MerchantHookFunc } from '@screen/merchant/function';
+import { UserHookFunc } from '@screen/user/functions';
 
 const Content: React.FC = () => {
+  const { editProfile, reset } = MerchantHookFunc.useEditProfile();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
+  const { detail } = UserHookFunc.useStoreDetailAction();
+
   const { coordinate, formattedAddress, location, street }: any =
     useRoute().params || {};
-  const { stateUser } = React.useContext(contexts.UserContext);
-  const { buyerAddress } = stateUser.detail.data
-    ?.buyerData as models.IBuyerData;
+  const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
+  const { buyerAddress } =
+    (stateUser.detail.data?.buyerData as models.IBuyerData) || {};
   const {
     latitude,
     longitude,
@@ -41,12 +50,12 @@ const Content: React.FC = () => {
     noteAddress: currentNoteAddress,
     vehicleAccessibility: currentVehicleAccessibility,
     vehicleAccessibilityAmount: currentVehicleAccessibilityAmount,
-  } = buyerAddress;
+  } = buyerAddress || {};
   const address = useInput(currentAddress || '');
   const noteAddress = useInput(currentNoteAddress || '');
   const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
     useTextFieldSelect();
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const [vehicleAccessibility, setVehicleAccessibility] = React.useState<any>(
     currentVehicleAccessibility || null,
   );
@@ -87,6 +96,15 @@ const Content: React.FC = () => {
       mapRef.current?.animateToRegion({ ...latLng, ...REGION_OPTIONS });
     }, 10);
   }, [latLng]);
+
+  React.useEffect(() => {
+    if (stateMerchant.profileEdit.data !== null) {
+      goBack();
+      reset(dispatchSupplier);
+      detail(dispatchUser);
+      SnbToast.show('Alamat berhasil diperbarui', 2000);
+    }
+  }, [stateMerchant.profileEdit]);
 
   function onMapsResult(data: any) {
     address.setValue(data.formattedAddress);
@@ -273,10 +291,24 @@ const Content: React.FC = () => {
       <View style={{ height: 72 }}>
         <SnbButton.Single
           title="Simpan"
-          onPress={() => {}}
+          onPress={() => {
+            const data = {
+              buyer: {
+                address: address.value,
+                noteAddress: noteAddress.value,
+                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+                vehicleAccessibilityId: vehicleAccessibility?.id,
+                locationId,
+                ...latLng,
+              },
+            };
+            editProfile(dispatchSupplier, { data });
+          }}
           type="primary"
-          loading={false}
-          disabled={handleDisableSaveButton()}
+          loading={stateMerchant.profileEdit.loading}
+          disabled={
+            handleDisableSaveButton() || stateMerchant.profileEdit.loading
+          }
         />
       </View>
       <ModalSelection

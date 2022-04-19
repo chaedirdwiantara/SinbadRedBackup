@@ -53,7 +53,7 @@ const Content: React.FC<Props> = (props) => {
           type="vertical"
           resizeMode="contain"
           listType="number"
-          blurRadius={2}
+          blurRadius={2.2}
         />
       </View>
     );

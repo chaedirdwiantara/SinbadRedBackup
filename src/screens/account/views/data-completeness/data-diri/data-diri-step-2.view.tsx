@@ -97,7 +97,7 @@ const DataDiriStep2View: React.FC = () => {
             rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
             imgSrc={require('@image/ktp_image.png')}
             buttonLabel="Ambil Foto"
-            blurRadius={2}
+            blurRadius={2.2}
             rules={[
               'Pastikan anda menggunakan KTP sendiri',
               'Foto KTP tidak silau dan tidak buram',
