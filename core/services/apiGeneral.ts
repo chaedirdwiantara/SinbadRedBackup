@@ -103,13 +103,6 @@ const apiGeneral = async <T>(
     };
   };
   /** === MAIN FUNCTION === */
-  console.log(
-    'api:',
-    `${apiHost.base}/${module}/api/${version}/sinbad-app/${
-      access === 'public' ? 'public/' : ''
-    }${path}`,
-  );
-
   return fetch(
     `${apiHost.base}/${module}/api/${version}/sinbad-app/${
       access === 'public' ? 'public/' : ''
