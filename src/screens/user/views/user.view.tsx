@@ -60,6 +60,7 @@ const UserView: FC = ({ start }: any) => {
       icon: 'ktp',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'ktp',
+      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
     },
     {
       id: 2,
@@ -68,6 +69,11 @@ const UserView: FC = ({ start }: any) => {
       icon: 'store',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'merchantAccountName',
+      status:
+        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+          ?.name !== null
+          ? true
+          : false,
     },
     {
       id: 3,
@@ -76,6 +82,10 @@ const UserView: FC = ({ start }: any) => {
       icon: 'location',
       message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
       type: 'storeAddress',
+      status:
+        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+          ? true
+          : false,
     },
   ]);
 
@@ -147,10 +157,11 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
         <Pagination
-          dotsLength={dataHeader.length}
+          dotsLength={dataCarousel.length}
           activeDotIndex={activeIndex}
           dotContainerStyle={{ marginHorizontal: 2 }}
           dotStyle={UserStyles.activeDot}
@@ -223,6 +234,7 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
         <LinearGradient
@@ -275,25 +287,35 @@ const UserView: FC = ({ start }: any) => {
             order={1}
             name="Verifikasi Akun Anda">
             <CopilotView>
-              <Carousel
-                data={dataHeader}
-                sliderWidth={1 * width}
-                itemWidth={width}
-                renderItem={({ item, index }) => renderItem(item, index)}
-                onSnapToItem={(index) => {
-                  setActiveIndex(index);
-                }}
-                slideStyle={{ padding: 10 }}
-                inactiveSlideOpacity={1}
-                inactiveSlideScale={1}
-                activeSlideAlignment={'center'}
-                layout={'default'}
-                removeClippedSubviews={false}
-              />
+              {!ownerData?.info.isImageIdOcrValidate ||
+              buyerData?.buyerInformation.buyerAccount.name === null ||
+              buyerData?.buyerAddress.address === null ? (
+                <Carousel
+                  data={dataCarousel}
+                  sliderWidth={1 * width}
+                  itemWidth={width}
+                  renderItem={({ item, index }) => renderItem(item, index)}
+                  onSnapToItem={(index) => {
+                    setActiveIndex(index);
+                  }}
+                  slideStyle={{ padding: 10 }}
+                  inactiveSlideOpacity={1}
+                  inactiveSlideScale={1}
+                  activeSlideAlignment={'center'}
+                  layout={'default'}
+                  removeClippedSubviews={false}
+                />
+              ) : null}
             </CopilotView>
           </CopilotStep>
         </LinearGradient>
-        <View>{pagination()}</View>
+        <View>
+          {!ownerData?.info.isImageIdOcrValidate ||
+          buyerData?.buyerInformation.buyerAccount.name === null ||
+          buyerData?.buyerAddress.address === null
+            ? pagination()
+            : null}
+        </View>
       </View>
     );
   };

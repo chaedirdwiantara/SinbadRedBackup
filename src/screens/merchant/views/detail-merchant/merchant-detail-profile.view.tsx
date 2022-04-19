@@ -212,7 +212,7 @@ const MerchantDetailProfileView: FC = () => {
           success: ownerData?.profile.imageId ? true : false,
           type: 'ktp',
           title: 'Foto KTP',
-          label: true,
+          label: ownerData?.info.isImageIdOcrValidate,
         })}
         {renderContentSection({
           key: 'Nama Lengkap',
