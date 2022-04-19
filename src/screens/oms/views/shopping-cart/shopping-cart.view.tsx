@@ -9,6 +9,7 @@ import { ShoppingCartAddress } from './shopping-cart-address.view';
 import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
+import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
@@ -27,6 +28,7 @@ import {
   useCancelStockAction,
   useUpdateCartAction,
   useKeyboardFocus,
+  goToProfile
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -55,6 +57,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
+  const [modalCartProfileCompletion, setModalCartProfileCompletion] = useState(false);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
@@ -327,6 +330,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [stateCart.remove]);
 
+  /** => listen something to be executed after page loaded */
+  useEffect(() => {
+    if (!pageLoading) {
+      if (stateCart.buyerAddress.data) {
+        if (!stateCart.buyerAddress.data.buyerName || !stateCart.buyerAddress.data.address || !stateCart.buyerAddress.data.isImageIdOcrValidation) {
+          setModalCartProfileCompletion(true);
+        }
+      }
+    }
+  }, [pageLoading]);
+
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
@@ -383,6 +397,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         okAction={() => handleOkActionRemoveProduct()}
         cancelAction={() => setModalRemoveProduct(false)}
       />
+      {/* Profile Completion Modal */}
+      <ModalCartProfileCompletion isOpen={modalCartProfileCompletion} handleNavigateToProfile={() => {
+        setModalCartProfileCompletion(false);
+        goToProfile();
+      }} />
       {/* Error Modal Check Product, Seller & Stock */}
       <BottomSheetError
         open={errorModal.isOpen}
