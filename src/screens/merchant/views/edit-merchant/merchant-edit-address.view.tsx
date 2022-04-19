@@ -292,17 +292,41 @@ const Content: React.FC = () => {
         <SnbButton.Single
           title="Simpan"
           onPress={() => {
-            const data = {
-              buyer: {
-                address: address.value,
+            let buyer = {};
+            if (address.value !== currentAddress) {
+              Object.assign(buyer, { address: address.value });
+            }
+            if (noteAddress.value !== currentNoteAddress) {
+              Object.assign(buyer, {
                 noteAddress: noteAddress.value,
-                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+              });
+            }
+            if (vehicleAccessibility?.id !== currentVehicleAccessibility?.id) {
+              Object.assign(buyer, {
                 vehicleAccessibilityId: vehicleAccessibility?.id,
+              });
+            }
+            if (
+              vehicleAccessibilityAmount?.value !==
+              currentVehicleAccessibilityAmount
+            ) {
+            }
+            if (latLng?.latitude !== latitude) {
+              Object.assign(buyer, {
+                latitude: latLng?.latitude,
+              });
+            }
+            if (latLng?.longitude !== longitude) {
+              Object.assign(buyer, {
+                longitude: latLng?.longitude,
+              });
+            }
+            if (locationId) {
+              Object.assign(buyer, {
                 locationId,
-                ...latLng,
-              },
-            };
-            editProfile(dispatchSupplier, { data });
+              });
+            }
+            editProfile(dispatchSupplier, { data: { buyer } });
           }}
           type="primary"
           loading={stateMerchant.profileEdit.loading}
