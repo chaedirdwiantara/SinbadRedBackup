@@ -5,6 +5,7 @@ import {
   SnbButton,
   SnbUploadPhotoRules,
   SnbToast,
+  SnbTextField,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
@@ -33,8 +34,14 @@ const DataDiriStep3View: React.FC = () => {
     backToDataCompleteness,
     refetchCompleteData,
   } = useEasyRegistration();
-  const isFocused  = useIsFocused();
+  const isFocused = useIsFocused();
 
+  const [npwp, setNpwp] = React.useState(
+    completeDataState?.data?.userData?.taxNo || '',
+  );
+  const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
+
+  const [isNPWPValid, setIsNPWPValid] = React.useState(true);
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -126,15 +133,19 @@ const DataDiriStep3View: React.FC = () => {
     return (
       <SnbUploadPhotoRules
         rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-        imgSrc={require('../../../../../assets/images/npwp_image.png')}
+        imgSrc={require('@image/npwp_image.png')}
         buttonLabel="Ambil Foto"
         rules={[
-          'Pastikan NPWP sesuai dengan identitas Anda',
-          'NPWP Tidak silau dan tidak buram',
-          'Pastikan NPWP bisa terbaca dengan jelas',
-          'Hindari Tangan Menutupi NPWP',
+          'Pastikan anda menggunakan NPWP sendiri',
+          'Foto NPWP tidak silau dan tidak buram',
+          'Pastikan informasi NPWP bisa terbaca dengan jelas',
+          'Hindari tangan menutup NPWP',
         ]}
         action={() => openCamera('npwp')}
+        type="vertical"
+        resizeMode="contain"
+        listType="number"
+        blurRadius={3}
       />
     );
   };
@@ -149,17 +160,43 @@ const DataDiriStep3View: React.FC = () => {
     }
     return (
       <View style={{ flex: 1, justifyContent: 'space-between'}}>
-        <Image
-          resizeMode="contain"
-          source={{ uri }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 0.6,
-            margin: 16,
-          }}
-        />
+        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370}}>
+          <Image
+            resizeMode="contain"
+            source={{ uri }}
+            borderRadius={4}
+            style={{
+              height: undefined,
+              width: undefined,
+              flex: 1,
+              marginBottom: 10,
+            }}
+          />
+          <SnbTextField.Text
+            type={isNPWPValid ? 'default' : 'error'}
+            value={npwp}
+            maxLength={15}
+            helpText={'Abaikan bila sudah sesuai NPWP'}
+            onChangeText={(text) => {
+              text = text.replace(/[^0-9]/g, '');
+              setNpwp(text);
+              setIsNPWPValid(false);
+              setMessageErrorNPWP('');
+              if (text?.length === 15 || text === '' || text === null) {
+                setMessageErrorNPWP('');
+                setIsNPWPValid(true);
+              } else {
+                setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+                setIsNPWPValid(false);
+              }
+            }}
+            placeholder={'Masukkan Nomor NPWP'}
+            labelText={'Nomor NPWP'}
+            keyboardType={'number-pad'}
+            mandatory
+            valMsgError={messageErrorNPWP}
+          />
+        </View>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1, height: 75 }}>
             <SnbButton.Single
@@ -172,10 +209,15 @@ const DataDiriStep3View: React.FC = () => {
           <View style={{ flex: 1, height: 75 }}>
             <SnbButton.Single
               type={'primary'}
-              disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
-              onPress={() => confirm()}
+              disabled={
+                stateGlobal.uploadImage.loading ||
+                updateCompleteDataState.loading ||
+                !isNPWPValid ||
+                !npwp
+              }
+              onPress={() => updateCompleteData({ user: { taxNo: npwp } })}
             />
           </View>
         </View>
