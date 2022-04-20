@@ -19,7 +19,6 @@ import BottomSheetError from '@core/components/BottomSheetError';
 import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { goToCheckout } from '@core/functions/product';
-import { cloneDeep } from 'lodash';
 import { useIsFocused } from '@react-navigation/native';
 
 /** === INTERFACE === */
