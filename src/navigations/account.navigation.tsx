@@ -15,6 +15,7 @@ import {
   ListLocationView,
   ProductCategoryView,
   MapsViewType2,
+  EmailOtp,
 } from '@screen/account/views';
 
 const AccountNav = {
@@ -65,6 +66,9 @@ const AccountNav = {
   },
   MapsViewType2: {
     component: MapsViewType2,
+  },
+  EmailOtp: {
+    component: EmailOtp,
   },
 };
 

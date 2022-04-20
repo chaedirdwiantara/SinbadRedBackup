@@ -14,6 +14,7 @@ import DataTokoStep2View from './data-completeness/data-toko/data-toko-step-2.vi
 import DataTokoStep3View from './data-completeness/data-toko/data-toko-step-3.view';
 import InputManualLocationModalView from './data-completeness/input-manual-location-modal.view';
 import MapsViewType2 from './maps-type-2.view';
+import EmailOtp from './shared/email-otp.view';
 export {
   ListLocationView,
   BuyerCategoryView,
@@ -31,4 +32,5 @@ export {
   DataTokoStep3View,
   InputManualLocationModalView,
   MapsViewType2,
+  EmailOtp,
 };

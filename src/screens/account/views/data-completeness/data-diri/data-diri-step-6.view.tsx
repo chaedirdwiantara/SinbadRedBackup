@@ -9,10 +9,13 @@ import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
 import Svg from '@svg';
 import { useEasyRegistration } from '@screen/account/functions';
+import { MerchantHookFunc } from '../../../../merchant/function';
+import { contexts } from '@contexts';
+import { NavigationAction } from '@navigation';
 
 const DataDiriStep6View: React.FC = () => {
   const {
-    updateCompleteData,
+    // updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
@@ -25,6 +28,10 @@ const DataDiriStep6View: React.FC = () => {
   const [emailIsNotValid, setEmailIsNotValid] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [backHandle, setBackHandle] = useState(false);
+  const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
 
   // HANDLE BACK DEVICE
   React.useEffect(() => {
@@ -59,7 +66,11 @@ const DataDiriStep6View: React.FC = () => {
   const confirm = () => {
     if (completeDataState?.data?.userData?.email !== email) {
       if (emailIsNotValid === false) {
-        updateCompleteData({ user: { email: email } });
+        // updateCompleteData({ user: { email: email } });
+        const data = {
+          email: email,
+        };
+        changeEmailAction.changeEmail(dispatchSupplier, { data });
       } else {
         setErrorMessage('Pastikan email yang Anda masukkan benar');
       }
@@ -67,6 +78,15 @@ const DataDiriStep6View: React.FC = () => {
       backToDataCompleteness();
     }
   };
+
+  useEffect(() => {
+    if (stateMerchant.changeEmail.data !== null) {
+      NavigationAction.navigate('EmailOtp', {
+        type: 'email',
+        data: email,
+      });
+    }
+  }, [stateMerchant]);
 
   useEffect(() => {
     if (updateCompleteDataState.error) {
@@ -124,13 +144,17 @@ const DataDiriStep6View: React.FC = () => {
           disabled={
             (emailIsNotValid && email) ||
             updateCompleteDataState.loading ||
+            stateMerchant.changeEmail.loading ||
             email === '' ||
             email === null
               ? true
               : false
           }
           onPress={() => confirm()}
-          loading={updateCompleteDataState.loading}
+          loading={
+            updateCompleteDataState.loading ||
+            stateMerchant.changeEmail.loading
+          }
         />
       </View>
       <ModalBack
