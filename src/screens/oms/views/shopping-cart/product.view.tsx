@@ -46,22 +46,27 @@ export const ProductView: FC<ProductViewProps> = ({
     let lastPrice: number = 0;
 
     if (product.priceRules.length > 0) {
-      const priceRulesLastItem =
-        product.priceRules[product.priceRules.length - 1];
-      if (priceRulesLastItem.maxQty <= product.qty) {
-        displayPrice = priceRulesLastItem.price;
+      const priceRulesFirstItem = product.priceRules[0];
+      if (product.qty < priceRulesFirstItem.minQty) {
+        displayPrice = product.priceAfterTax;
       } else {
-        product.priceRules.map((priceRulesItem) => {
-          if (
-            product.qty >= priceRulesItem.minQty &&
-            product.qty <= priceRulesItem.maxQty
-          ) {
-            displayPrice = priceRulesItem.price;
+        for (let x = 0; x < product.priceRules.length; x++) {
+          const isLast = x === product.priceRules.length - 1;
+          if (!isLast) {
+            if (
+              product.qty >= product.priceRules[x].minQty &&
+              product.qty < product.priceRules[x + 1].minQty
+            ) {
+              displayPrice = product.priceRules[x].priceAfterTax;
+              break;
+            }
+          } else {
+            displayPrice = product.priceRules[x].priceAfterTax;
           }
-        });
+        }
       }
     } else {
-      displayPrice = product.price;
+      displayPrice = product.priceAfterTax;
     }
 
     lastPrice = product.lastUsedPrice;
