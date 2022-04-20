@@ -5,31 +5,45 @@
 export interface CheckoutCart<T> {
   sellerId: number;
   sellerName: string;
+  sellerAdminId?: number;
+  sellerAdminName?: string;
+  sellerAdminEmail?: string;
   products: T[];
 }
 
 export interface CheckoutProductPriceRules {
   minQty: number;
-  maxQty: number;
-  price: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  taxPrice: number;
 }
 
 export interface CheckoutCartProduct {
   productId: string;
+  externalProductCode: string;
   warehouseId: number;
   warehouseName: string;
+  externalWarehouseCode: string;
   categoryId: string;
-  productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
+  productImageUrl: string;
   qty: number;
+  minQty: number;
+  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
   isPriceAfterTax: boolean;
   taxPercentage: number;
-  leadTime: number;
   selected: boolean;
+  lastUsedPrice: number;
+  isLastPriceUsedRules: boolean;
+  leadTime: number;
+  priceAfterTax: number;
+  priceBeforeTax: number;
+  taxPrice: number;
+  priceRules: CheckoutProductPriceRules | null;
 }
 
 export interface CheckoutData {
@@ -80,4 +94,9 @@ export interface CheckoutAddressDetail {
   city: string;
   province: string;
   zipCode: string;
+  priceAfterTax: number;
+  priceBeforeTax: number;
+  taxPrice: number;
+  selected: boolean;
+  priceRules: CheckoutProductPriceRules;
 }

@@ -16,8 +16,9 @@ export interface Cart<T> {
 
 export interface ProductPriceRules {
   minQty: number;
-  maxQty: number;
-  price: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  taxPrice: number;
 }
 
 export interface CartProduct {
@@ -25,19 +26,23 @@ export interface CartProduct {
   warehouseId: number;
   warehouseName: string;
   categoryId: string;
-  productImageUrl: string;
   brandId: string;
   brandName: string;
   productName: string;
+  productImageUrl: string;
   qty: number;
-  multipleQty: number;
   minQty: number;
+  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
   isPriceAfterTax: boolean;
   taxPercentage: number;
-  price: number;
   selected: boolean;
+  lastUsedPrice: number;
+  isLastPriceUsedRules: boolean;
+  priceAfterTax: number;
+  priceBeforeTax: number;
+  taxPrice: number;
   priceRules: ProductPriceRules[];
 }
 
