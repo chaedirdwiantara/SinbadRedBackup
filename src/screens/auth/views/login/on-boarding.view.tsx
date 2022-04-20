@@ -51,7 +51,7 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const slideOnBoard = () => {
     return (
-      <View style={{ flex: 1, marginBottom: 10 }}>
+      <View>
         <OnBoardSlider data={data} />
         {button()}
         {skipLogin()}
@@ -61,23 +61,20 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View>
-        <View style={{ flexDirection: 'row' }}>
-          <View />
-          <View style={styles.button}>
-            <SnbButton.Single
-              title={'Masuk'}
-              onPress={() => navigate(LOGIN_PHONE_VIEW)}
-              type={'secondary'}
-            />
-          </View>
-          <View style={styles.button}>
-            <SnbButton.Single
-              title={'Daftar'}
-              onPress={() => navigate(SELF_REGISTRATION_VIEW)}
-              type={'primary'}
-            />
-          </View>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={styles.button}>
+          <SnbButton.Single
+            title={'Masuk'}
+            onPress={() => navigate(LOGIN_PHONE_VIEW)}
+            type={'secondary'}
+          />
+        </View>
+        <View style={styles.button}>
+          <SnbButton.Single
+            title={'Daftar'}
+            onPress={() => navigate(SELF_REGISTRATION_VIEW)}
+            type={'primary'}
+          />
         </View>
       </View>
     );
@@ -85,14 +82,12 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const skipLogin = () => {
     return (
-      <View>
-        <View style={styles.textSkipLogin}>
-          <SnbText.B1>Biarkan saya masuk </SnbText.B1>
-          <TouchableOpacity
-            onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
-            <SnbText.B2 color={color.blue50}>Lewati</SnbText.B2>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.textSkipLogin}>
+        <SnbText.B1>Biarkan saya masuk </SnbText.B1>
+        <TouchableOpacity
+          onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
+          <SnbText.B2 color={color.blue50}>Lewati</SnbText.B2>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -100,12 +95,10 @@ const OnBoardingView: React.FC<Props> = () => {
   const termsNotice = () => {
     return (
       <View style={styles.termsNoticeContainer}>
-        <View style={{ margin: 16, alignItems: 'center' }}>
-          <SnbText.B3 color={color.blue50} align="center">
-            Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
-            Kebijakan Privasi kami
-          </SnbText.B3>
-        </View>
+        <SnbText.B3 color={color.blue50} align="center">
+          Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
+          Kebijakan Privasi kami
+        </SnbText.B3>
       </View>
     );
   };
@@ -113,6 +106,7 @@ const OnBoardingView: React.FC<Props> = () => {
   const content = () => {
     return (
       <View style={styles.container}>
+        <View />
         {slideOnBoard()}
         {termsNotice()}
       </View>
@@ -123,10 +117,7 @@ const OnBoardingView: React.FC<Props> = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginVertical: 60,
-  },
+  container: { flex: 1, justifyContent: 'space-between' },
   image: {
     alignSelf: 'center',
     marginVertical: 32,
@@ -140,22 +131,19 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    marginTop: 32,
     height: 72,
   },
   textSkipLogin: {
-    // flex: 1,
     flexDirection: 'row',
     alignSelf: 'center',
-    // marginTop: 24,
+    marginVertical: 8,
   },
   termsNoticeContainer: {
-    // flex: 1,
     backgroundColor: color.blue10,
-    marginHorizontal: 16,
-    borderRadius: 5,
-    marginBottom: 16,
-    marginTop: 46,
+    borderRadius: 4,
+    padding: 12,
+    margin: 16,
+    marginBottom: 32,
   },
 });
 

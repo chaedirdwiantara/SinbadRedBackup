@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { SnbContainer, SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText, color } from 'react-native-sinbad-ui';
 
 const { width } = Dimensions.get('window');
 
@@ -14,81 +14,67 @@ const OnBoardingView: React.FC<Props> = (props) => {
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
     return (
-      <View>
-        <Pagination
-          dotsLength={props.data.length}
-          activeDotIndex={activeIndex}
-          dotContainerStyle={{ marginHorizontal: 2 }}
-          dotStyle={styles.activeDot}
-          inactiveDotStyle={styles.inactiveDot}
-          inactiveDotOpacity={1}
-          inactiveDotScale={1}
-        />
-      </View>
+      <Pagination
+        dotsLength={props.data.length}
+        activeDotIndex={activeIndex}
+        dotContainerStyle={{ marginHorizontal: 2 }}
+        dotStyle={styles.activeDot}
+        inactiveDotStyle={styles.inactiveDot}
+        inactiveDotOpacity={1}
+        inactiveDotScale={1}
+      />
     );
   };
   /** === RENDER MAIN CONTENT ITEM SLIDE === */
   const renderItem = (item: any, index: any) => {
     return (
-      <View key={index}>
-        <View style={styles.description}>
-          <View style={{ marginVertical: 10 }} />
-          <Image
-            resizeMode="contain"
-            source={item.image}
-            style={{ height: 240 }}
-          />
-          <SnbText.H4 align="center">{item.title}</SnbText.H4>
-          <View style={{ marginVertical: 10 }} />
-          <SnbText.B3 align="center" color={color.black60}>
+      <View key={index} style={styles.description}>
+        <Image
+          resizeMode="contain"
+          source={item.image}
+          style={{ height: 240 }}
+        />
+        <View style={{ marginVertical: 12 }} />
+        <SnbText.H3 align="center">{item.title}</SnbText.H3>
+        <View style={{ marginVertical: 2 }} />
+        <View style={{ paddingHorizontal: 32 }}>
+          <SnbText.B1 align="center" color={color.black60}>
             {item.message}
-          </SnbText.B3>
+          </SnbText.B1>
         </View>
       </View>
     );
   };
-  /** === RENDER MAIN CONTENT SLIDE === */
-  const renderData = () => {
-    return (
-      <View>
-        <Carousel
-          data={props.data}
-          sliderWidth={1 * width}
-          itemWidth={width}
-          renderItem={({ item, index }) => renderItem(item, index)}
-          onSnapToItem={(index) => {
-            setActiveIndex(index);
-          }}
-          enableSnap={true}
-          autoplayInterval={3000}
-          slideStyle={{ padding: 10 }}
-          inactiveSlideOpacity={1}
-          inactiveSlideScale={1}
-          loop
-          enableMomentum={false}
-          lockScrollWhileSnapping={true}
-          loopClonesPerSide={props.data.length}
-          autoplay
-          activeSlideAlignment={'center'}
-        />
-        <View style={styles.boxPage}>{pagination()}</View>
-      </View>
-    );
-  };
-  /** === MAIN ==== */
   return (
-    <SnbContainer color="white">
-      <View style={styles.mainContainer}>
-        <View>{renderData()}</View>
-      </View>
-    </SnbContainer>
+    <View
+      style={{
+        alignItems: 'center',
+      }}>
+      <Carousel
+        data={props.data}
+        sliderWidth={1 * width}
+        itemWidth={width}
+        renderItem={({ item, index }) => renderItem(item, index)}
+        onSnapToItem={(index) => {
+          setActiveIndex(index);
+        }}
+        enableSnap={true}
+        autoplayInterval={3000}
+        inactiveSlideOpacity={1}
+        inactiveSlideScale={1}
+        loop
+        enableMomentum={false}
+        lockScrollWhileSnapping={true}
+        loopClonesPerSide={props.data.length}
+        autoplay
+        activeSlideAlignment={'center'}
+      />
+      {pagination()}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   boxPage: {
     alignItems: 'center',
   },
@@ -107,6 +93,7 @@ const styles = StyleSheet.create({
   },
   description: {
     alignItems: 'center',
+    justifyContent: 'flex-end',
   },
 });
 
