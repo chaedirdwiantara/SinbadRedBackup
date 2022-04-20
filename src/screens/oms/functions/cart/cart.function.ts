@@ -60,9 +60,11 @@ const matchCartWithCheckData = ({
         delete thisCartCheckProduct.isStockAvailable;
         delete thisCartCheckProduct.warehouseName;
         delete thisCartCheckProduct.leadTime;
-        delete thisCartCheckProduct.price;
         delete thisCartCheckProduct.unavailableMessage;
+        delete thisCartCheckProduct.externalWarehouseCode;
+        delete thisCartCheckProduct.externalProductCode;
         delete thisCheckProduct.status;
+        delete thisCheckProduct.externalProductCode;
 
         if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
           result = false;
@@ -91,6 +93,12 @@ const matchCartWithCheckData = ({
 
       // remove unused property for comparation
       delete thisCartSeller.products;
+      delete thisCartSeller.sellerAdminId;
+      delete thisCartSeller.sellerAdminName;
+      delete thisCartSeller.sellerAdminEmail;
+      delete thisCheckSeller.sellerAdminId;
+      delete thisCheckSeller.sellerAdminName;
+      delete thisCheckSeller.sellerAdminEmail;
 
       if (!isEqual(thisCartSeller, thisCheckSeller)) {
         result = false;
