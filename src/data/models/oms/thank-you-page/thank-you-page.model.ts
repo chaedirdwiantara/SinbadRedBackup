@@ -30,7 +30,6 @@ export interface OrderSellerProduct {
   qty: number;
   qtyPerBox: number;
   uomLabel: string;
-  isPriceAfterTax: boolean;
   taxPercentage: number;
   lastUsedPrice: number;
   leadTime: number;

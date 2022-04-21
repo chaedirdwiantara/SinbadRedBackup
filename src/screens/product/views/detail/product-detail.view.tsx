@@ -185,11 +185,40 @@ const ProductDetailView: FC = () => {
       return;
     }
 
+    /** temporary function to determine bulk price calculation */
+    let lastUsedPrice = 0,
+      isLastPriceUsedRules = false;
+    if (dataProduct.bulkPrices.length > 0) {
+      const priceRulesFirstItem = dataProduct.bulkPrices[0];
+      if (orderQty < priceRulesFirstItem.qty) {
+        isLastPriceUsedRules = false;
+        lastUsedPrice = dataProduct.priceAfterTax;
+      } else {
+        for (let x = 0; x < dataProduct.bulkPrices.length; x++) {
+          const isLast = x === dataProduct.bulkPrices.length - 1;
+          if (!isLast) {
+            if (
+              orderQty >= dataProduct.bulkPrices[x].qty &&
+              orderQty < dataProduct.bulkPrices[x + 1].qty
+            ) {
+              isLastPriceUsedRules = true;
+              lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
+              break;
+            }
+          } else {
+            isLastPriceUsedRules = true;
+            lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
+          }
+        }
+      }
+    } else {
+      isLastPriceUsedRules = false;
+      lastUsedPrice = dataProduct.priceAfterTax;
+    }
+
     const params: models.AddToCartPayload = {
       productId: dataProduct.id,
       productName: dataProduct.name,
-      brandId: dataProduct.brandId,
-      brandName: dataProduct.brand,
       categoryId: dataProduct.categoryId,
       productImageUrl: dataProduct?.images[0]?.url ?? '',
       minQty: dataProduct.minQty,
@@ -198,18 +227,15 @@ const ProductDetailView: FC = () => {
       qtyPerBox: dataProduct.packagedQty,
       uomLabel: dataProduct.unit,
       warehouseId: Number(dataProduct.warehouseOriginId),
-      warehouseName: dataStock.warehouseName,
       sellerId: Number(dataProduct.sellerId),
       sellerName: dataProduct.productSeller.name,
-      isPriceAfterTax: dataProduct.isPriceAfterTax,
       taxPercentage: dataProduct.productTax.amount,
-      lastUsedPrice: dataProduct.priceAfterTax,
-      isLastPriceUsedRules: dataProduct.bulkPrices.length !== 0,
+      lastUsedPrice,
+      isLastPriceUsedRules,
       priceAfterTax: dataProduct.priceAfterTax,
       priceBeforeTax: dataProduct.priceBeforeTax,
       taxPrice: dataProduct.taxPrice,
       priceRules: dataProduct.bulkPrices,
-      leadTime: dataStock.leadTime ?? 0,
       selected: true,
     };
 

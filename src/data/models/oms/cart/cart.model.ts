@@ -24,10 +24,7 @@ export interface ProductPriceRules {
 export interface CartProduct {
   productId: string;
   warehouseId: number;
-  warehouseName: string;
   categoryId: string;
-  brandId: string;
-  brandName: string;
   productName: string;
   productImageUrl: string;
   qty: number;
@@ -35,7 +32,6 @@ export interface CartProduct {
   multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
-  isPriceAfterTax: boolean;
   taxPercentage: number;
   selected: boolean;
   lastUsedPrice: number;

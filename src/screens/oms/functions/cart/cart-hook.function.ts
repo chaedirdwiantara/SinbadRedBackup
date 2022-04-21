@@ -102,6 +102,10 @@ const useUpdateCartAction = () => {
             delete productItem.stock;
             delete productItem.isStockAvailable;
             delete productItem.productStatus;
+            delete productItem.warehouseName;
+            delete productItem.brandId;
+            delete productItem.brandName;
+            delete productItem.leadTime;
 
             if (productItem.priceRules.length > 0) {
               const priceRulesFirstItem = productItem.priceRules[0];

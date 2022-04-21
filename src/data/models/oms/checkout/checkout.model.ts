@@ -34,7 +34,6 @@ export interface CheckoutCartProduct {
   multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
-  isPriceAfterTax: boolean;
   taxPercentage: number;
   selected: boolean;
   lastUsedPrice: number;
@@ -73,7 +72,6 @@ export interface CheckoutProducts {
   multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
-  isPriceAfterTax: boolean;
   taxPercentage: number;
   lastUsedPrice: number;
   leadTime: number;

@@ -98,7 +98,6 @@ const useCheckoutAction = () => {
                   multipleQty: product.multipleQty,
                   qtyPerBox: product.qtyPerBox,
                   uomLabel: product.uomLabel,
-                  isPriceAfterTax: product.isPriceAfterTax,
                   taxPercentage: product.taxPercentage,
                   selected: product.selected,
                   lastUsedPrice: price,

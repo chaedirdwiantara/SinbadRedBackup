@@ -33,4 +33,7 @@ export interface CartMasterSellersProducts extends CartProduct {
   leadTime?: number;
   externalProductCode?: string;
   externalWarehouseCode?: string;
+  warehouseName?: string;
+  brandId?: number;
+  brandName?: string;
 }
