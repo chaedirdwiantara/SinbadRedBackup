@@ -1,15 +1,16 @@
 import React, { FC, useState } from 'react';
 import { View } from 'react-native';
-import { SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
+import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits } from '../components';
+import { Benefits, Categories } from '../components';
+import { categories } from '../dummies';
 
 const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: colorV2.bgColor.light }}>
       <SnbTopNav2.Type10
         placeholder="Cari di sinbad"
         icon1Name="cart"
@@ -29,8 +30,9 @@ const HomeView: FC = () => {
           height: 180,
         }}>
         <BannerHomeView />
-        <Benefits />
       </View>
+      <Benefits />
+      <Categories data={categories} />
     </View>
   );
 };
