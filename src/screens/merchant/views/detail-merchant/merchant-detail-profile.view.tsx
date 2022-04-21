@@ -244,7 +244,7 @@ const MerchantDetailProfileView: FC = () => {
           success: ownerData?.profile.taxImageUrl ? true : false,
           type: 'npwp',
           title: 'Foto NPWP',
-          label: false,
+          label: ownerData?.profile.taxImageUrl ? true : false,
         })}
         {renderContentSection({
           key: 'Nomor Pokok Wajib Pajak (NPWP)',
