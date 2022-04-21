@@ -15,6 +15,7 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
 import * as models from '@models';
+import Svg from '@svg';
 
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
@@ -186,21 +187,14 @@ export const ProductView: FC<ProductViewProps> = ({
             removedProducts,
           });
         }}
-        style={{ marginRight: 5 }}>
-        <SnbIcon name="delete_outline" color={color.black80} size={32} />
+        style={{ marginRight: 20 }}>
+        <SnbIcon name="delete" color={color.black60} size={24} />
       </TouchableOpacity>
     );
   };
   /** => RENDER PRICE SECTION */
   const renderPriceSection = () => {
     const { displayPrice, lastPrice, priceDifference } = handleDisplayPrice();
-
-    let arrowIconName: string = 'arrow_drop_down';
-    let arrowIconColor: string = color.green50;
-    if (priceDifference === 'higher') {
-      arrowIconName = 'arrow_drop_up';
-      arrowIconColor = color.red50;
-    }
 
     return (
       <View
@@ -226,11 +220,16 @@ export const ProductView: FC<ProductViewProps> = ({
             })}
           </SnbText.B4>
           {priceDifference !== 'same' ? (
-            <SnbIcon
-              name={arrowIconName}
-              style={{ color: arrowIconColor, marginLeft: 5 }}
-              size={24}
-            />
+            <View style={{ marginLeft: 4 }}>
+              <Svg
+                name={
+                  priceDifference === 'higher'
+                    ? 'price_changes_up'
+                    : 'price_changes_down'
+                }
+                size={16}
+              />
+            </View>
           ) : (
             <View />
           )}
@@ -285,8 +284,8 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
-        {renderRemoveProductIcon()}
-        <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {renderRemoveProductIcon()}
           <SnbNumberCounter
             value={product.qty}
             maxLength={6}
@@ -334,12 +333,12 @@ export const ProductView: FC<ProductViewProps> = ({
             minusDisabled={isDecreaseDisabled}
             plusDisabled={isIncreaseDisabled}
           />
-          <View style={{ alignItems: 'center', marginTop: 8 }}>
-            <SnbText.B4
-              color={
-                color.black60
-              }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
-          </View>
+        </View>
+        <View style={{ alignItems: 'center', marginTop: 8 }}>
+          <SnbText.B4
+            color={
+              color.black60
+            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />
