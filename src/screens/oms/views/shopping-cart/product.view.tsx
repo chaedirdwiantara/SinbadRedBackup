@@ -7,7 +7,6 @@ import {
   SnbIcon,
   color,
   SnbNumberCounter,
-  SnbBadge,
   SnbText,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -159,19 +158,6 @@ export const ProductView: FC<ProductViewProps> = ({
       </View>
     );
   };
-  /** => RENDER PPN BADGE */
-  const renderPPNBadge = () => {
-    if (product.isPriceAfterTax) {
-      return (
-        <View style={{ marginBottom: 5 }}>
-          <SnbBadge.Label
-            type="warning"
-            value={`Termasuk Pajak ${product.taxPercentage}%`}
-          />
-        </View>
-      );
-    }
-  };
   /** => RENDER REMOVE PRODUCT ICON */
   const renderRemoveProductIcon = () => {
     return (
@@ -270,8 +256,7 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
         {renderProductImage()}
         <View style={{ justifyContent: 'center', flex: 1 }}>
-          {renderPPNBadge()}
-          <View style={{ flex: 1 }}>
+          <View>
             <SnbText2.Paragraph.Default
               color={color.black80}
               numberOfLines={1}
