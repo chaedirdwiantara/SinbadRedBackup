@@ -7,8 +7,6 @@ import DataDiriStep1View from './data-completeness/data-diri/data-diri-step-1.vi
 import DataDiriStep2View from './data-completeness/data-diri/data-diri-step-2.view';
 import DataDiriStep3View from './data-completeness/data-diri/data-diri-step-3.view';
 import DataDiriStep4View from './data-completeness/data-diri/data-diri-step-4.view';
-import DataDiriStep5View from './data-completeness/data-diri/data-diri-step-5.view';
-import DataDiriStep6View from './data-completeness/data-diri/data-diri-step-6.view';
 import DataTokoStep1View from './data-completeness/data-toko/data-toko-step-1.view';
 import DataTokoStep2View from './data-completeness/data-toko/data-toko-step-2.view';
 import DataTokoStep3View from './data-completeness/data-toko/data-toko-step-3.view';
@@ -25,8 +23,6 @@ export {
   DataDiriStep2View,
   DataDiriStep3View,
   DataDiriStep4View,
-  DataDiriStep5View,
-  DataDiriStep6View,
   DataTokoStep1View,
   DataTokoStep2View,
   DataTokoStep3View,
