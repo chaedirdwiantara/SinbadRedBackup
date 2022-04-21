@@ -371,7 +371,7 @@ const MerchantEditAddressView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={goBack} type="red" title="Alamat Toko" />
+      <SnbTopNav.Type3 backAction={goBack} type="white" title="Alamat Toko" />
       <Content />
     </SnbContainer>
   );

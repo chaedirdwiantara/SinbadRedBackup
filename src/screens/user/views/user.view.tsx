@@ -140,7 +140,7 @@ const UserView: FC = ({ start }: any) => {
         NavigationAction.navigate('MerchantEditView', { title, type });
         break;
       case 'storeAddress':
-        NavigationAction.navigate('MerchantEditAddressView');
+        handleAddressNavigation();
         break;
       default:
         break;
@@ -153,6 +153,15 @@ const UserView: FC = ({ start }: any) => {
       return <SnbTopNav.Type1 type="white" title="Profil" />;
     }
     return <SnbTopNav.Type1 type="red" title="Profil" />;
+  };
+
+  const handleAddressNavigation = () => {
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (buyerData?.buyerAddress.address !== null) {
+      NavigationAction.navigate('MerchantEditAddressView');
+    } else {
+      NavigationAction.navigate('MapsViewType2', { originFrom: 'profile' });
+    }
   };
 
   /** === RENDER SLIDER PAGINATION DOT === */
@@ -396,9 +405,7 @@ const UserView: FC = ({ start }: any) => {
                   />
                 }
                 title={'Alamat Toko'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantEditAddressView')
-                }
+                onPress={handleAddressNavigation}
                 rightItem={
                   <SnbIcon
                     name="chevron_right"
@@ -432,9 +439,7 @@ const UserView: FC = ({ start }: any) => {
                     title: 'Tambah Nama Toko',
                   })
                 }
-                pressBadge2={() =>
-                  NavigationAction.navigate('MerchantEditAddressView')
-                }
+                pressBadge2={handleAddressNavigation}
                 separator
               />
             </View>
@@ -485,7 +490,7 @@ const UserView: FC = ({ start }: any) => {
             <SnbText.B3 align="center">
               {setErrorMessage(
                 stateUser.detail.error.code,
-                stateUser.detail.error.errorMessage,
+                stateUser.detail.error.message,
               )}
             </SnbText.B3>
             <View style={{ marginVertical: 8 }} />

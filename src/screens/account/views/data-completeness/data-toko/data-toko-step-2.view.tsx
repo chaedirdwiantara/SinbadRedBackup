@@ -110,6 +110,9 @@ const Content: React.FC<Props> = (props) => {
               'Pastikan foto fokus keseluruhan toko',
             ]}
             action={() => openCamera('store')}
+            type="horizontal"
+            resizeMode="stretch"
+            blurRadius={2}
           />
         </View>
       </View>
