@@ -310,6 +310,9 @@ const Content: React.FC = () => {
               vehicleAccessibilityAmount?.value !==
               currentVehicleAccessibilityAmount
             ) {
+              Object.assign(buyer, {
+                vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
+              });
             }
             if (latLng?.latitude !== latitude) {
               Object.assign(buyer, {
