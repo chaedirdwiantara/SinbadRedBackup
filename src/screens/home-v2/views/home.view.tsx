@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
+import { Benefits } from '../components';
 
 const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
@@ -28,6 +29,7 @@ const HomeView: FC = () => {
           height: 180,
         }}>
         <BannerHomeView />
+        <Benefits />
       </View>
     </View>
   );
