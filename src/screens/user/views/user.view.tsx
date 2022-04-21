@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import {
   View,
@@ -88,6 +88,8 @@ const UserView: FC = ({ start }: any) => {
           : false,
     },
   ]);
+  const [loadingCarousel, setLoadingCarousel] = useState(true);
+  const [dataCarousel, setDataCarousel] = useState([] as any);
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -128,6 +130,13 @@ const UserView: FC = ({ start }: any) => {
       }
     }
   }, [coachmarkState?.data?.profileCoachmark]);
+
+  useEffect(()=> {
+    if (loadingCarousel) {
+      setDataCarousel(dataHeader);
+      setLoadingCarousel(false);
+    }
+  }, [loadingCarousel]);
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
     const { type, title } = data;
@@ -166,7 +175,7 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
-    const dataCarousel = dataHeader.filter((item) => item.status === false);
+    // const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
         <Pagination
@@ -243,7 +252,7 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
-    const dataCarousel = dataHeader.filter((item) => item.status === false);
+    // const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
         <LinearGradient
@@ -296,9 +305,6 @@ const UserView: FC = ({ start }: any) => {
             order={1}
             name="Verifikasi Akun Anda">
             <CopilotView>
-              {!ownerData?.info.isImageIdOcrValidate ||
-              buyerData?.buyerInformation.buyerAccount.name === null ||
-              buyerData?.buyerAddress.address === null ? (
                 <Carousel
                   data={dataCarousel}
                   sliderWidth={1 * width}
@@ -314,7 +320,6 @@ const UserView: FC = ({ start }: any) => {
                   layout={'default'}
                   removeClippedSubviews={false}
                 />
-              ) : null}
             </CopilotView>
           </CopilotStep>
         </LinearGradient>

@@ -5,7 +5,6 @@ import {
   SnbButton,
   SnbUploadPhotoRules,
   SnbToast,
-  SnbTextField,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
@@ -34,14 +33,8 @@ const DataDiriStep3View: React.FC = () => {
     backToDataCompleteness,
     refetchCompleteData,
   } = useEasyRegistration();
-  const isFocused = useIsFocused();
+  const isFocused  = useIsFocused();
 
-  const [npwp, setNpwp] = React.useState(
-    completeDataState?.data?.userData?.taxNo || '',
-  );
-  const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
-
-  const [isNPWPValid, setIsNPWPValid] = React.useState(true);
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -67,7 +60,7 @@ const DataDiriStep3View: React.FC = () => {
   React.useEffect(() => {
     if (
       stateGlobal.uploadImage.data !== null &&
-      capturedImage.data?.type === 'npwp'
+      capturedImage.data?.type === 'selfie'
     ) {
       SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
       resetCamera();
@@ -80,20 +73,20 @@ const DataDiriStep3View: React.FC = () => {
 
   //CONFIRM UPLOAD IMAGE
   const confirm = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
+    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
       upload(dispatchGlobal, capturedImage.data.url);
     } else {
-      if (completeDataState?.data?.userData?.taxImageUrl && isFocused) {
+      if (completeDataState?.data?.userData?.selfieImageUrl && isFocused) {
         NavigationAction.navigate(DATA_DIRI_STEP_4_VIEW);
       } else {
-        openCamera('npwp');
+        openCamera('selfie');
       }
     }
   };
 
   //BACK AND SAVE
   const backSave = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
+    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else {
@@ -103,9 +96,9 @@ const DataDiriStep3View: React.FC = () => {
 
   //FOR CHECK IF IMAGE UPLOADED AND HIT API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
-    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
+    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'selfie') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url },
+        user: { selfieImageUrl: stateGlobal.uploadImage?.data?.url },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -132,92 +125,57 @@ const DataDiriStep3View: React.FC = () => {
   const renderUploadPhotoRules = () => {
     return (
       <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
-        imgSrc={require('@image/npwp_image.png')}
+        rulesTitle="Pastikan Foto Diri dengan KTP Sesuai dengan Ketentuan"
+        imgSrc={require('../../../../../assets/images/selfie_image.png')}
         buttonLabel="Ambil Foto"
         rules={[
-          'Pastikan anda menggunakan NPWP sendiri',
-          'Foto NPWP tidak silau dan tidak buram',
-          'Pastikan informasi NPWP bisa terbaca dengan jelas',
-          'Hindari tangan menutup NPWP',
+          'Posisikan KTP di bawah dagu Anda.',
+          'KTP Tidak silau dan tidak buram.',
+          'Pastikan informasi KTP bisa terbaca dengan jelas.',
+          'Hindari Tangan Menutupi KTP.',
         ]}
-        action={() => openCamera('npwp')}
-        type="vertical"
-        resizeMode="contain"
-        listType="number"
-        blurRadius={3}
+        action={() => openCamera('selfie')}
       />
     );
   };
 
   const renderImagePreview = () => {
-    const isImageCaptured = capturedImage?.data?.type === 'npwp';
+    const isImageCaptured = capturedImage?.data?.type === 'selfie';
     let uri: string | undefined = '';
     if (isImageCaptured) {
       uri = capturedImage?.data?.url;
     } else {
-      uri = completeDataState?.data?.userData?.taxImageUrl;
+      uri = completeDataState?.data?.userData?.selfieImageUrl;
     }
     return (
-      <View style={{ flex: 1, justifyContent: 'space-between'}}>
-        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370}}>
-          <Image
-            resizeMode="contain"
-            source={{ uri }}
-            borderRadius={4}
-            style={{
-              height: undefined,
-              width: undefined,
-              flex: 1,
-              marginBottom: 10,
-            }}
-          />
-          <SnbTextField.Text
-            type={isNPWPValid ? 'default' : 'error'}
-            value={npwp}
-            maxLength={15}
-            helpText={'Abaikan bila sudah sesuai NPWP'}
-            onChangeText={(text) => {
-              text = text.replace(/[^0-9]/g, '');
-              setNpwp(text);
-              setIsNPWPValid(false);
-              setMessageErrorNPWP('');
-              if (text?.length === 15 || text === '' || text === null) {
-                setMessageErrorNPWP('');
-                setIsNPWPValid(true);
-              } else {
-                setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
-                setIsNPWPValid(false);
-              }
-            }}
-            placeholder={'Masukkan Nomor NPWP'}
-            labelText={'Nomor NPWP'}
-            keyboardType={'number-pad'}
-            mandatory
-            valMsgError={messageErrorNPWP}
-          />
-        </View>
+      <View style={{ flex: 1 }}>
+        <Image
+          resizeMode="contain"
+          source={{ uri }}
+          borderRadius={4}
+          style={{
+            height: undefined,
+            width: undefined,
+            flex: 1,
+            margin: 16,
+          }}
+        />
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1, height: 75 }}>
             <SnbButton.Single
               type="secondary"
               title="Ulangi"
-              onPress={() => openCamera('npwp')}
+              onPress={() => openCamera('selfie')}
               disabled={false}
             />
           </View>
           <View style={{ flex: 1, height: 75 }}>
             <SnbButton.Single
               type={'primary'}
+              disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
-              disabled={
-                stateGlobal.uploadImage.loading ||
-                updateCompleteDataState.loading ||
-                !isNPWPValid ||
-                !npwp
-              }
-              onPress={() => updateCompleteData({ user: { taxNo: npwp } })}
+              onPress={() => confirm()}
             />
           </View>
         </View>
@@ -226,8 +184,8 @@ const DataDiriStep3View: React.FC = () => {
   };
 
   const isImageAvailable =
-    completeDataState?.data?.userData?.taxImageUrl !== null ||
-    capturedImage.data?.type === 'npwp';
+    completeDataState?.data?.userData?.selfieImageUrl !== null ||
+    capturedImage.data?.type === 'selfie';
 
   return (
     <SnbContainer color="white">
@@ -235,7 +193,7 @@ const DataDiriStep3View: React.FC = () => {
         <SnbTopNav.Type3
           backAction={() => setOpenModalBack(true)}
           type="white"
-          title="Foto NPWP"
+          title="Foto Diri Dengan KTP"
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}

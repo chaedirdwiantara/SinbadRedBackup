@@ -54,6 +54,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //MERCHANT DATA
   const merchantName = useInput(storeData?.buyerAccount?.name || '');
   const merchantPhoneNo = useInput(storeData?.buyerAccount?.phoneNo || null);
+  const merchantSize = useInput(storeData?.buyerAccount?.largeArea || null);
   // COMPLETNESS DATA
   // const numberOfEmployee = useInput(
   //   storeData?.storeDetailCompleteness?.numberOfEmployee || null,
@@ -212,6 +213,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         });
         break;
       }
+      case 'merchantAccountSize': {
+        data = {
+          largeArea: merchantSize.value,
+        };
+        editMerchantAction.editMerchant(dispatchSupplier, {
+          data,
+        });
+        break;
+      }
       case 'merchantCompletenessInformation': {
         data = {
           // numberOfEmployee: numberOfEmployee.value,
@@ -341,6 +351,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderCompletenessInformationMerchant();
       case 'merchantAccountName':
         return renderMerchantAccountName();
+      case 'merchantAccountSize':
+        return renderMerchantAccountSize();
       case 'merchantAccountPhoneNo':
         return renderMerchantAccountPhoneNo();
       default:
@@ -481,6 +493,26 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           clearText={() => merchantPhoneNo.setValue('')}
           maxLength={14}
           keyboardType={'number-pad'}
+        />
+      </View>
+    );
+  };
+  /** === RENDER MERCHANT ACCOUNT SIZE === */
+  const renderMerchantAccountSize = () => {
+    return (
+      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
+        <SnbTextField.Text
+          labelText={'Ukuran Toko'}
+          placeholder={'Masukkan Ukuran Toko (dalam meter)'}
+          type={'default'}
+          keyboardType={'numeric'}
+          value={merchantSize.value}
+          onChangeText={(text) => {
+            text = text.replace(/[^0-9]/g, '');
+            merchantSize.setValue(text);
+          }}
+          clearText={() => merchantName.setValue('')}
+          maxLength={50}
         />
       </View>
     );
