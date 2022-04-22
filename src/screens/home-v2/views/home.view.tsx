@@ -1,16 +1,19 @@
 import React, { FC, useState } from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits, Categories, BannerCard } from '../components';
-import { categories, banners } from '../dummies';
+import { Benefits, Categories, BannerCard, NewProducts } from '../components';
+import { categories, banners, newProducts } from '../dummies';
+
+const chips = ['Popstar', 'Lactamil'];
 
 const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
+  const [activeChip, setActiveChip] = useState('');
 
   return (
-    <View style={{ flex: 1, backgroundColor: colorV2.bgColor.light }}>
+    <ScrollView style={{ flex: 1, backgroundColor: colorV2.bgColor.light }}>
       <SnbTopNav2.Type10
         placeholder="Cari di sinbad"
         icon1Name="cart"
@@ -37,7 +40,15 @@ const HomeView: FC = () => {
         imageUrl={banners[0]}
         onPress={() => console.log('Go to Banner')}
       />
-    </View>
+      <NewProducts
+        data={newProducts}
+        chips={chips.map((chip) => ({
+          text: chip,
+          onPress: (text: string) => setActiveChip(text),
+          active: chip === activeChip,
+        }))}
+      />
+    </ScrollView>
   );
 };
 
