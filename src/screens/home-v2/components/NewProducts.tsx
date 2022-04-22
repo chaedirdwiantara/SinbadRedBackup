@@ -55,9 +55,15 @@ interface NewProductsProps {
   chips: IChip[];
   data: IProduct[];
   loading?: boolean;
+  onTitleActionPress: () => void;
 }
 
-export const NewProducts: FC<NewProductsProps> = ({ chips, data, loading }) => {
+export const NewProducts: FC<NewProductsProps> = ({
+  chips,
+  data,
+  loading,
+  onTitleActionPress,
+}) => {
   return (
     <View
       style={{
@@ -69,7 +75,7 @@ export const NewProducts: FC<NewProductsProps> = ({ chips, data, loading }) => {
         chips={chips}
         title="Produk Terbaru"
         actionText="Lihat Semua"
-        onActionPress={() => console.log('See all new products')}
+        onActionPress={onTitleActionPress}
         loading={loading}
       />
       <View style={{ marginTop: layout.spacing.md }}>
@@ -78,6 +84,7 @@ export const NewProducts: FC<NewProductsProps> = ({ chips, data, loading }) => {
           data={data}
           keyExtractor={(item, index) => `${item.name}-${index}`}
           loading={loading}
+          itemSpaces={layout.spacing.md}
         />
       </View>
     </View>
