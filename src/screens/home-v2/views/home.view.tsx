@@ -3,8 +3,14 @@ import { View, ScrollView } from 'react-native';
 import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits, Categories, BannerCard, NewProducts } from '../components';
-import { categories, banners, newProducts } from '../dummies';
+import {
+  Benefits,
+  Categories,
+  BannerCard,
+  NewProducts,
+  Brands,
+} from '../components';
+import { categories, banners, newProducts, brands } from '../dummies';
 
 const chips = ['Popstar', 'Lactamil'];
 
@@ -47,6 +53,11 @@ const HomeView: FC = () => {
           onPress: (text: string) => setActiveChip(text),
           active: chip === activeChip,
         }))}
+        onTitleActionPress={() => console.log('See all new products')}
+      />
+      <Brands
+        data={brands}
+        onTitleActionPress={() => console.log('See all brands')}
       />
     </ScrollView>
   );
