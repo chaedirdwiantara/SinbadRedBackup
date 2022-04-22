@@ -20,7 +20,8 @@ interface ProductGridCardProps {
   flexOne?: boolean;
   name: string;
   imageUrl: string;
-  finalPrice: number;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
   isBundle?: boolean;
   isPromo?: boolean;
   qtySoldLabel: string;
@@ -32,7 +33,7 @@ interface ProductGridCardProps {
 
 interface ProductGridCardInfoProps {
   name: string;
-  finalPrice: number;
+  priceAfterTax: number;
 }
 /** === COMPONENTS === */
 const PromoTag = () => (
@@ -68,7 +69,7 @@ const ExclusiveTag = () => (
 
 const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
   name,
-  finalPrice,
+  priceAfterTax,
 }) => {
   /** === VIEW === */
   return (
@@ -76,7 +77,7 @@ const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
       <SnbText.C1 color={color.black100}>{name}</SnbText.C1>
       <View style={{ marginTop: 8 }}>
         <SnbText.C1 color={color.red50}>
-          {toCurrency(finalPrice ?? 0, { withFraction: false })}
+          {toCurrency(priceAfterTax ?? 0, { withFraction: false })}
         </SnbText.C1>
       </View>
     </>
@@ -112,13 +113,17 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
           <ExclusiveTag />
         ) : (
           <View>
-            <BluckPricingTag style={{ paddingLeft: 12 }} />
+            {props.hasBulkPrice ? (
+              <BluckPricingTag style={{ paddingLeft: 12 }} />
+            ) : (
+              <View />
+            )}
           </View>
         )}
         <View style={{ padding: 12 }}>
           <ProductGridCardInfo
             name={props.name}
-            finalPrice={props.finalPrice}
+            priceAfterTax={props.priceAfterTax}
           />
           {props.qtySoldLabel !== '0' && (
             <SnbText.C1 color={color.black80}>{`Terjual ${
