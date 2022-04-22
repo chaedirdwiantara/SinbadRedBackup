@@ -3,7 +3,6 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
-import Reactotron from 'reactotron-react-native';
 import { createLogger } from 'redux-logger';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { rootReducer } from '@reducers';
@@ -29,7 +28,6 @@ middleware.push(sagaMiddleware);
 /** === SET LOG IF DEV === */
 if (__DEV__) {
   middleware.push(logger);
-  Reactotron.setAsyncStorageHandler(AsyncStorage).configure().useReactNative().connect();
 }
 /** === SET MIDDLEWARE TO REDUX === */
 const enhancers = [applyMiddleware(...middleware)];
