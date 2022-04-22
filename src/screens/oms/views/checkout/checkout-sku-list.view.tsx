@@ -2,16 +2,11 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { FlatList, Image, View, TouchableOpacity } from 'react-native';
-import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === TYPE === */
-export interface IProductCheckout {
-  // urlImages: string;
-}
 export interface CheckoutSKUListViewProps {
   products: any;
-  // products: IProductCheckout[];
 }
 
 /** === COMPONENT === */
@@ -26,7 +21,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
   return (
     <>
       <View>
-        {showAllProduct == false ? (
+        {showAllProduct === false ? (
           <>
             <View style={CheckoutStyle.productsContainer}>
               <Image
@@ -41,7 +36,9 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                   {products[0].qty} {products[0].uomLabel}
                 </SnbText.B4>
                 <SnbText.B4 color={color.black100}>
-                  {toCurrency(products[0].lastUsedPrice, { withFraction: false })}
+                  {toCurrency(products[0].lastUsedPrice, {
+                    withFraction: false,
+                  })}
                 </SnbText.B4>
               </View>
             </View>
@@ -60,7 +57,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
             <FlatList
               keyExtractor={(_, index) => index.toString()}
               data={products}
-              renderItem={({ item, index }) => (
+              renderItem={({ item }) => (
                 <View style={CheckoutStyle.productsContainer}>
                   <Image
                     source={{ uri: item.productImageUrl }}

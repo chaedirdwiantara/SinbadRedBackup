@@ -24,10 +24,10 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
       </View>
       <SnbText.B3 color={color.black60}>
         {buyerAddress?.address}
-        {buyerAddress?.urban ? `,` : null} {buyerAddress?.urban}
-        {buyerAddress?.district ? `,` : null} {buyerAddress?.district}
-        {buyerAddress?.city ? `,` : null} {buyerAddress?.city}
-        {buyerAddress?.province ? `,` : null} {buyerAddress?.province}
+        {buyerAddress?.urban ? ',' : null} {buyerAddress?.urban}
+        {buyerAddress?.district ? ',' : null} {buyerAddress?.district}
+        {buyerAddress?.city ? ',' : null} {buyerAddress?.city}
+        {buyerAddress?.province ? ',' : null} {buyerAddress?.province}
       </SnbText.B3>
       <SnbText.B3 color={color.black60}>{buyerAddress?.zipCode}</SnbText.B3>
     </View>

@@ -1,9 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useState, useContext, useRef } from 'react';
-import { LogBox, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
-import LoadingPage from '@core/components/LoadingPage';
-import { useFocusEffect } from '@react-navigation/native';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutHeader } from './checkout-header.view';
@@ -40,8 +38,7 @@ import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/use
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
   /** => ACTION */
-  LogBox.ignoreAllLogs();
-  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
+  const { dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
   const paymentMethodList = usePaymentMethodListContent();
