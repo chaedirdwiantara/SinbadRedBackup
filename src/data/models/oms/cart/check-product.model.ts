@@ -21,6 +21,6 @@ export interface CheckProductResponse
   sellerId: number;
   sellerName: string;
   status: string;
-  brandId: number;
+  brandId: string;
   brandName: string;
 }

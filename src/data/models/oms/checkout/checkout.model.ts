@@ -30,19 +30,13 @@ export interface CheckoutCartProduct {
   productName: string;
   productImageUrl: string;
   qty: number;
-  minQty: number;
-  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
   taxPercentage: number;
-  selected: boolean;
-  lastUsedPrice: number;
-  isLastPriceUsedRules: boolean;
   leadTime: number;
   priceAfterTax: number;
   priceBeforeTax: number;
   taxPrice: number;
-  priceRules: CheckoutProductPriceRules | null;
 }
 
 export interface CheckoutData {
@@ -68,8 +62,6 @@ export interface CheckoutProducts {
   productName: string;
   productImageUrl: string;
   qty: number;
-  minQty: number;
-  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
   taxPercentage: number;
