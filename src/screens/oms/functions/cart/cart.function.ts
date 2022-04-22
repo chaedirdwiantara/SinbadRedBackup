@@ -59,12 +59,15 @@ const matchCartWithCheckData = ({
         delete thisCartCheckProduct.status;
         delete thisCartCheckProduct.isStockAvailable;
         delete thisCartCheckProduct.warehouseName;
-        delete thisCartCheckProduct.leadTime;
         delete thisCartCheckProduct.unavailableMessage;
         delete thisCartCheckProduct.externalWarehouseCode;
         delete thisCartCheckProduct.externalProductCode;
+        delete thisCartCheckProduct.isQtyChanged;
+        delete thisCartCheckProduct.leadTime;
         delete thisCheckProduct.status;
         delete thisCheckProduct.externalProductCode;
+
+        console.log('ini produk', thisCartCheckProduct, thisCheckProduct);
 
         if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
           result = false;

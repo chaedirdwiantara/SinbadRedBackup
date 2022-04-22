@@ -76,37 +76,34 @@ const useCheckoutAction = () => {
                   }
                 }
 
-                const price =
-                  priceRules !== null
-                    ? priceRules.priceAfterTax
-                    : product.priceAfterTax;
-                const isLastPriceUsedRules = priceRules !== null ? true : false;
-
                 return {
                   productId: product.productId,
                   externalProductCode: product.externalProductCode || '',
                   warehouseId: product.warehouseId,
-                  warehouseName: product.warehouseName,
+                  warehouseName: product.warehouseName || '',
                   externalWarehouseCode: product.externalWarehouseCode || '',
                   categoryId: product.categoryId,
-                  brandId: product.brandId,
-                  brandName: product.brandName,
+                  brandId: product.brandId || '',
+                  brandName: product.brandName || '',
                   productName: product.productName,
                   productImageUrl: product.productImageUrl,
                   qty: product.qty,
-                  minQty: product.minQty,
-                  multipleQty: product.multipleQty,
                   qtyPerBox: product.qtyPerBox,
                   uomLabel: product.uomLabel,
                   taxPercentage: product.taxPercentage,
-                  selected: product.selected,
-                  lastUsedPrice: price,
-                  isLastPriceUsedRules,
                   leadTime: product.leadTime || 0,
-                  priceAfterTax: product.priceAfterTax,
-                  priceBeforeTax: product.priceBeforeTax,
-                  taxPrice: product.taxPrice,
-                  priceRules,
+                  priceAfterTax:
+                    priceRules !== null
+                      ? priceRules.priceAfterTax
+                      : product.priceAfterTax,
+                  priceBeforeTax:
+                    priceRules !== null
+                      ? priceRules.priceBeforeTax
+                      : product.priceBeforeTax,
+                  taxPrice:
+                    priceRules !== null
+                      ? priceRules.taxPrice
+                      : product.taxPrice,
                 };
               });
             return {
@@ -121,14 +118,7 @@ const useCheckoutAction = () => {
         );
 
         const carts = cartsTemp.filter((cart) => {
-          let isAnyItemSelectedInThisSeller = false;
-          cart.products.some((productItem) => {
-            if (productItem.selected) {
-              isAnyItemSelectedInThisSeller = true;
-            }
-          });
-
-          return isAnyItemSelectedInThisSeller;
+          return cart.products.length > 0;
         });
 
         dispatch(

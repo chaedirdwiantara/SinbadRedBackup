@@ -106,6 +106,7 @@ const useUpdateCartAction = () => {
             delete productItem.brandId;
             delete productItem.brandName;
             delete productItem.leadTime;
+            delete productItem.isQtyChanged;
 
             if (productItem.priceRules.length > 0) {
               const priceRulesFirstItem = productItem.priceRules[0];
@@ -449,6 +450,8 @@ const useCartLocalData = () => {
           thisProduct.qty = newQty ?? thisProduct.minQty;
         }
 
+        thisProduct.isQtyChanged = true;
+
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
       }
@@ -663,7 +666,7 @@ const useCartLocalData = () => {
                   qty,
                   selected,
                   productStatus: item.status,
-                  leadTime: thisProduct.leadTime,
+                  isQtyChanged: false,
                 };
                 /** => move product data to unavailable if inactive */
                 if (item.status === 'inactive') {
