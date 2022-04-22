@@ -188,7 +188,7 @@ export const ProductView: FC<ProductViewProps> = ({
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        {priceDifference !== 'same' ? (
+        {priceDifference !== 'same' && !product.isQtyChanged ? (
           <View style={{ marginRight: 5 }}>
             <SnbText.B4 color={color.black60} textDecorationLine="line-through">
               {toCurrency(lastPrice, {
@@ -205,7 +205,7 @@ export const ProductView: FC<ProductViewProps> = ({
               withFraction: false,
             })}
           </SnbText.B4>
-          {priceDifference !== 'same' ? (
+          {priceDifference !== 'same' && !product.isQtyChanged ? (
             <View style={{ marginLeft: 4 }}>
               <Svg
                 name={

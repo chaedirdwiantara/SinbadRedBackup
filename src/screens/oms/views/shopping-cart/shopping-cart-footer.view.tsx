@@ -93,6 +93,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckProductAction.reset(dispatchCart);
       postCheckSellerAction.reset(dispatchCart);
       postCheckStockAction.reset(dispatchCart);
+      checkoutAction.reset(dispatchCheckout);
     };
   }, []);
 

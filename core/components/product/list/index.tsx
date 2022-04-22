@@ -267,6 +267,15 @@ const ProductList: FC<ProductListProps> = ({
       lastUsedPrice = productDetailState.priceAfterTax;
     }
 
+    const priceRules = productDetailState.bulkPrices.map((item) => {
+      return {
+        minQty: item.qty,
+        priceAfterTax: item.priceAfterTax,
+        priceBeforeTax: item.priceBeforeTax,
+        taxPrice: item.taxPrice,
+      };
+    });
+
     const params: models.AddToCartPayload = {
       productId: productDetailState.id,
       productName: productDetailState.name,
@@ -286,7 +295,7 @@ const ProductList: FC<ProductListProps> = ({
       priceAfterTax: productDetailState.priceAfterTax,
       priceBeforeTax: productDetailState.priceBeforeTax,
       taxPrice: productDetailState.taxPrice,
-      priceRules: productDetailState.bulkPrices,
+      priceRules,
       selected: true,
     };
 
