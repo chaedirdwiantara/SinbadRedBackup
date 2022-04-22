@@ -3,8 +3,8 @@ import { View } from 'react-native';
 import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits, Categories } from '../components';
-import { categories } from '../dummies';
+import { Benefits, Categories, BannerCard } from '../components';
+import { categories, banners } from '../dummies';
 
 const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
@@ -33,6 +33,10 @@ const HomeView: FC = () => {
       </View>
       <Benefits />
       <Categories data={categories} />
+      <BannerCard
+        imageUrl={banners[0]}
+        onPress={() => console.log('Go to Banner')}
+      />
     </View>
   );
 };
