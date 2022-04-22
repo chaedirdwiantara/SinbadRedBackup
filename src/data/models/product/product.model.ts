@@ -7,15 +7,16 @@ export interface ProductList {
   isBundle: boolean;
   isBonus: boolean;
   isExclusive: boolean;
+  hasBulkPrice: boolean;
   isPromo: boolean;
   thumbnail: string;
-  basePrice: number;
-  finalPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
   qtySoldLabel: string;
   warehouseOriginId: string;
 }
 
-export interface ProductListProcessProps extends models.ListProcessProps {
+export interface ProductListProcessProps extends models.ListProcessV3Props {
   keyword?: string;
   tags?: Array<string>;
   brandId?: string;
@@ -23,6 +24,7 @@ export interface ProductListProcessProps extends models.ListProcessProps {
   minPrice?: number;
   maxPrice?: number;
   sellerId?: string;
+  perPage?: number;
 }
 
 export type ProductListQueryOptions = Omit<
@@ -31,15 +33,15 @@ export type ProductListQueryOptions = Omit<
 >;
 
 export interface ProductListItemProps
-  extends models.ListItemProps<Array<ProductList>> {
-  canLoadMore: boolean;
+  extends models.ListItemV3Props<Array<ProductList>> {
+  total: number;
 }
 
 interface ProductListPagination {
-  limit: number;
-  skip: number;
+  page: number;
   total: number;
-  canLoadMore: boolean;
+  perPage: number;
+  totalPage: number;
 }
 
 interface ProductListSuccessProps {
@@ -79,10 +81,11 @@ export interface ProductImage {
 }
 
 type BulkPrice = {
-  qty: number;
   label: string;
-  priceBeforeTax: number;
   priceAfterTax: number;
+  priceBeforeTax: number;
+  qty: number;
+  taxPrice: number;
 };
 
 export interface ProductDetail {
@@ -134,6 +137,6 @@ export interface ProductDetail {
 
 export type ProductSubModule = 'recommendations' | undefined;
 
-export interface ProductListProcessAction extends models.ListProcessAction {
+export interface ProductListProcessAction extends models.ListProcessV3Action {
   subModule?: ProductSubModule;
 }
