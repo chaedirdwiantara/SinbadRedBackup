@@ -390,7 +390,7 @@ const UserView: FC = ({ start }: any) => {
                 }
                 title={'Informasi Toko'}
                 onPress={() =>
-                  NavigationAction.navigate('MerchantDetailInformationView')
+                  NavigationAction.navigate('MerchantDetailAccountView')
                 }
                 rightItem={
                   <SnbIcon
