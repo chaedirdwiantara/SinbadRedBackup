@@ -1,4 +1,4 @@
-import React, { memo, useState, useRef, useCallback } from 'react';
+import React, { memo, useState, useRef, useCallback, FC } from 'react';
 import {
   StyleSheet,
   Animated,
@@ -9,12 +9,14 @@ import {
 import { color, SnbText, SnbBadge } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { useProductContext } from 'src/data/contexts/product/useProductContext';
 
 type BulkPriceData = {
-  qty: number;
   label: string;
-  priceBeforeTax: number;
   priceAfterTax: number;
+  priceBeforeTax: number;
+  qty: number;
+  taxPrice: number;
 };
 
 type ListPriceProps = {
@@ -22,33 +24,18 @@ type ListPriceProps = {
   price: number;
 };
 
-type BulkPriceList = {
-  data: BulkPriceData;
+type BulkPriceListProps = {
+  bulkPrices: Array<BulkPriceData>;
 };
 
-const mockBulkPrices = [
-  {
-    qty: 5,
-    label: '5-9 Kardus',
-    priceBeforeTax: 1000,
-    priceAfterTax: 1100,
-  },
-  {
-    qty: 10,
-    label: '10+ Kardus',
-    priceBeforeTax: 1000,
-    priceAfterTax: 1100,
-  },
-];
-
-const ListPrice = (props: ListPriceProps) => (
+const ListPrice: FC<ListPriceProps> = (props) => (
   <View style={styles.listBulkPrice}>
     <SnbText.B3 color={color.black60}>{props.label}</SnbText.B3>
     <SnbText.B3>{toCurrency(props.price, { withFraction: false })}</SnbText.B3>
   </View>
 );
 
-const EndListPrice = (props: ListPriceProps) => (
+const EndListPrice: FC<ListPriceProps> = (props) => (
   <View style={styles.listBulkPrice}>
     <SnbText.B3 color={color.red70}>{props.label}</SnbText.B3>
     <View style={styles.cheapPrice}>
@@ -62,13 +49,17 @@ const EndListPrice = (props: ListPriceProps) => (
   </View>
 );
 
-const array = Array.from(Array(5).keys());
-
-const BulkPricingList = (props: BulkPriceList) => {
+const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
   const [show, setShow] = useState(true);
   const [fristInitialHeight, setFristInitialHeight] = useState(false);
   const animatedController = useRef(new Animated.Value(1)).current;
   const [bodySectionHeight, setBodySectionHeight] = useState<number>(0);
+
+  // const {
+  //   stateProduct: {
+  //     detail: { data: dataProductDetail },
+  //   },
+  // } = useProductContext();
 
   const bodyHeightAnimate = animatedController.interpolate({
     inputRange: [0, 1],
@@ -139,8 +130,8 @@ const BulkPricingList = (props: BulkPriceList) => {
             <SnbText.B3>Harga Grosir</SnbText.B3>
           </View>
           {/* list */}
-          {mockBulkPrices.map((item, index) =>
-            mockBulkPrices.length !== index + 1 ? (
+          {bulkPrices.map((item, index) =>
+            bulkPrices.length !== index + 1 ? (
               <ListPrice
                 key={item.label + index}
                 label={item.label}

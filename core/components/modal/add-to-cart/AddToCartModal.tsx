@@ -7,6 +7,8 @@ import { AddToCartFooter } from './AddToCartFooter';
 import { AddToCartQuantityModifier } from './AddToCartQuantityModifier';
 import { AddToCartProductData } from './AddToCartProductData';
 import BulkPricingList from '@core/components/product/BulkPricingList';
+/** === IMPORT FUNCTION === */
+import useAddToCart from './add-to-cart.function';
 /** === IMPORT STYLE ===  */
 import { PromoSection } from '@core/components/product/list/PromoSection';
 /** === TYPE ===  */
@@ -31,14 +33,25 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
 }) => {
   const [isFocus, setIsFocus] = useState(false);
 
+  const { bulkPriceAterTax, isPriceGrosir, priceAfterTax, productDetail } =
+    useAddToCart(orderQty, isFromProductDetail);
+
   const renderContent = () => (
     <View>
       <AddToCartProductData
         isFromProductDetail={isFromProductDetail}
         orderQty={orderQty}
+        bulkPriceAterTax={bulkPriceAterTax}
+        priceAfterTax={priceAfterTax}
+        isPriceGrosir={isPriceGrosir}
       />
       <PromoSection isFromProductDetail={isFromProductDetail} />
-      <BulkPricingList />
+      {productDetail?.hasBulkPrice ? (
+        <BulkPricingList bulkPrices={productDetail?.bulkPrices} />
+      ) : (
+        <View />
+      )}
+
       <AddToCartQuantityModifier
         orderQty={orderQty}
         onChangeQty={onChangeQty}
@@ -49,6 +62,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       <AddToCartFooter
         disabled={disabled || isFocus}
         orderQty={orderQty}
+        bulkPriceAterTax={bulkPriceAterTax}
         onAddToCartPress={onAddToCartPress}
         isFromProductDetail={isFromProductDetail}
       />
