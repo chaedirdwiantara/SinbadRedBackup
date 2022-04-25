@@ -4,7 +4,7 @@ import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbText,
   SnbText2,
-  SnbCheckbox,
+  SnbCheckbox2,
   SnbIcon,
   color,
 } from 'react-native-sinbad-ui';
@@ -85,11 +85,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={ShoppingCartStyles.horizontalCardContent}>
         <View style={{ flexDirection: 'row' }}>
           <View style={ShoppingCartStyles.checkboxContainer}>
-            <SnbCheckbox
-              disabled={true}
-              status={'unselect'}
-              onPress={() => {}}
-            />
+            <SnbCheckbox2 disabled={true} checked={false} onChange={() => {}} />
           </View>
           {renderProductImage(unavailableProducts[0].productImageUrl)}
           <View style={{ justifyContent: 'center', flex: 1 }}>
@@ -118,10 +114,10 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
               style={ShoppingCartStyles.horizontalCardContent}>
               <View style={{ flexDirection: 'row' }}>
                 <View style={ShoppingCartStyles.checkboxContainer}>
-                  <SnbCheckbox
+                  <SnbCheckbox2
                     disabled={true}
-                    status={'unselect'}
-                    onPress={() => {}}
+                    checked={false}
+                    onChange={() => {}}
                   />
                 </View>
                 {renderProductImage(item.productImageUrl)}
