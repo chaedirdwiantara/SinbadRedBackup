@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
-import { meReset } from '@core/data/actions';
+import { meReset, meV2Reset } from '@core/data/actions';
 /** === FUNCTION === */
 /** => call auth action */
 const useAuthAction = () => {
@@ -30,6 +30,7 @@ const useAuthAction = () => {
     logout: () => {
       dispatch(Actions.logoutProcess());
       dispatch(meReset());
+      dispatch(meV2Reset());
       dispatch(Actions.getTotalCartReset(dispatchCart));
       dispatch(Actions.notificationTotalReset());
     },

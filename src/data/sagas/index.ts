@@ -19,7 +19,13 @@ import StockSaga from './product/stock.saga';
 import QuestSaga from './quest.saga';
 import CartSaga from './oms/cart/cart.saga';
 import CheckoutSaga from './oms/checkout/checkout.saga';
+import ThankYouPageSaga from './oms/thank-you-page/thank-you-page.saga';
 import OrderHistorySaga from './order-history/order-history.saga';
+import EasyRegistrationSaga from './account/easy-registration.saga';
+import CoachmarkSaga from './account/coachmark.saga';
+import CheckoutTncSaga from './oms/checkout/checkout-tnc.saga';
+import paymentMethodListSaga from './oms/payment-method/payment-method.saga';
+import PaymentHistorySaga from './oms/payment-history/payment-history.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -42,7 +48,13 @@ function* rootSaga() {
   yield all([fork(QuestSaga)]);
   yield all([fork(CartSaga)]);
   yield all([fork(CheckoutSaga)]);
+  yield all([fork(ThankYouPageSaga)]);
   yield all([fork(OrderHistorySaga)]);
+  yield all([fork(EasyRegistrationSaga)]);
+  yield all([fork(CoachmarkSaga)]);
+  yield all([fork(CheckoutTncSaga)]);
+  yield all([fork(paymentMethodListSaga)]);
+  yield all([fork(PaymentHistorySaga)]);
 }
 
 export default rootSaga;

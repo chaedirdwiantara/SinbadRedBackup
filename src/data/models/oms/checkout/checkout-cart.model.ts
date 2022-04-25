@@ -6,7 +6,6 @@ import { CheckoutCart, CheckoutCartProduct } from '.';
 
 export interface CheckoutProductData extends CheckoutCartProduct {
   lastUsedPrice: number;
-  isLastPriceUsedRules: boolean;
 }
 
 export interface CheckoutCartPayload
@@ -31,9 +30,7 @@ export interface CheckoutPayload {
 }
 
 export interface CheckoutCartResponse
-  extends CheckoutCart<
-    Omit<CheckoutProductData, 'lastUsedPrice' | 'isLastPriceUsedRules'>
-  > {}
+  extends CheckoutCart<CheckoutProductData> {}
 
 export interface CheckoutResponse {
   id: string;

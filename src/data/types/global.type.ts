@@ -26,6 +26,10 @@ export const GET_SELECTION_FAILED = 'GetSelectionFailed';
 export const GET_SELECTION_RESET = 'GetSelectionReset';
 export const SELECTED_ITEM = 'SelectedItem';
 
+export const LOAD_MORE_SELECTION_PROCESS = 'LoadMoreSelectionProcess';
+export const LOAD_MORE_SELECTION_SUCCESS = 'LoadMoreSelectionSuccess';
+export const LOAD_MORE_SELECTION_FAILED = 'LoadMoreSelectionFailed';
+
 export const GET_LOCATION_PROCESS = 'GetLocationProcess';
 export const GET_LOCATION_SUCCESS = 'GetLocationSuccess';
 export const GET_LOCATION_FAILED = 'GetLocationFailed';
