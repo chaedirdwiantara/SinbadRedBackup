@@ -49,8 +49,8 @@ const MerchantDetailAccountView: FC = () => {
   const header = () => {
     return (
       <SnbTopNav.Type3
-        type="red"
-        title="Akun Toko"
+        type="white"
+        title="Informasi Toko"
         backAction={() => {
           NavigationAction.back();
           editMerchantAction.reset(dispatchSupplier);
