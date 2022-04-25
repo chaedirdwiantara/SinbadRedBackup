@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "strict": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@core/*": ["core/*"],
