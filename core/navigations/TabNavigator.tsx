@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { enableScreens } from 'react-native-screens';
 import { View, Platform } from 'react-native';
-import { HomeView } from '@screen/home/views';
+import { HomeView } from '@screen/home-v2/views';
 // import { HistoryListView } from '@screen/history/views';
 import { OrderHistoryListView } from '@screen/order-history/views';
 import { HelpView } from '@screen/help/views';
