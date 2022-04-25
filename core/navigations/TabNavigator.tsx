@@ -42,7 +42,7 @@ const TabNavigator = () => {
             <View style={{ paddingTop: 8 }}>
               <View style={{ height: 24 }}>
                 <SnbIconHint2
-                  value={-8}
+                  value={0}
                   iconColor={color}
                   iconName="home"
                   size={24}
@@ -74,7 +74,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={-8}
+                  value={0}
                   iconColor={color}
                   iconName="log_history"
                   size={24}
@@ -95,7 +95,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={-8}
+                  value={0}
                   iconColor={color}
                   iconName="help"
                   size={24}
@@ -126,7 +126,7 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={-8}
+                  value={0}
                   iconColor={color}
                   iconName="person_circle"
                   size={24}
