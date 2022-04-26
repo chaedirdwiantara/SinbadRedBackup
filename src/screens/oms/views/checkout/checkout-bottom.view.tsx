@@ -10,12 +10,13 @@ import {
   useCheckoutAction,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
-/** === TYPE === */
 import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
+/** === TYPE === */
+import * as models from '@models';
 
 interface CheckoutBottomViewProps {
-  data: any;
+  data: models.CheckoutResponse;
   goToPaymentMethod: () => void;
 }
 /** === COMPONENT === */
@@ -25,8 +26,8 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
 }) => {
   const { dispatchCart } = React.useContext(contexts.CartContext);
   const { dispatchCheckout } = React.useContext(contexts.CheckoutContext);
-  const totalPaymentFull = totalPayment(data?.sellers);
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const totalPaymentFull = totalPayment(data.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
@@ -63,7 +64,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
           type={'primary'}
           onPress={pressButton}
           title={'Pilih Pembayaran'}
-          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />
       ) : (
         <SnbButton.Dynamic
@@ -71,7 +71,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
           type={'primary'}
           onPress={goToPaymentMethod}
           title={'Pilih Pembayaran'}
-          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />
       )}
       <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />

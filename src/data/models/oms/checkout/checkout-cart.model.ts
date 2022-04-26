@@ -38,8 +38,18 @@ export interface CheckoutCartResponse
 
 export interface CheckoutResponse {
   id: string;
-  userId: number;
   buyerId: number;
-  buyerAddress: string;
+  userId: number;
+  cartId: string;
+  buyerName: string;
+  buyerCode: string;
+  userFullName: string;
+  userPhoneNumber: string;
+  ownerId: number;
+  ownerFullName: string;
+  ownerPhoneNumber: string;
+  buyerAddress: CheckoutBuyerAddressPayload;
   sellers: CheckoutCartResponse[];
+  createdAt: string;
+  updatedAt: string;
 }

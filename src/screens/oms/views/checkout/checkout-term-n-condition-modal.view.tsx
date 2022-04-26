@@ -25,7 +25,7 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
         <ScrollView
           style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
           showsVerticalScrollIndicator={false}>
-          {data != null && data != undefined && (
+          {data !== null && data !== undefined && (
             <Html value={data.content} fontSize={12} />
           )}
         </ScrollView>

@@ -5,8 +5,9 @@ import { FlatList, Image, View, TouchableOpacity } from 'react-native';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === TYPE === */
+import * as models from '@models';
 export interface CheckoutSKUListViewProps {
-  products: any;
+  products: models.CheckoutCartProduct[];
 }
 
 /** === COMPONENT === */
@@ -36,7 +37,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                   {products[0].qty} {products[0].uomLabel}
                 </SnbText.B4>
                 <SnbText.B4 color={color.black100}>
-                  {toCurrency(products[0].lastUsedPrice, {
+                  {toCurrency(products[0].priceAfterTax, {
                     withFraction: false,
                   })}
                 </SnbText.B4>
@@ -71,7 +72,7 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                       {item.qty} {item.uomLabel}
                     </SnbText.B4>
                     <SnbText.B4 color={color.black100}>
-                      {toCurrency(item.lastUsedPrice, { withFraction: false })}
+                      {toCurrency(item.priceAfterTax, { withFraction: false })}
                     </SnbText.B4>
                   </View>
                 </View>
