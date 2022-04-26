@@ -13,6 +13,7 @@ import { ProductBundleMainInfoSkeleton } from './ProductBundleMainInfoSkeleton';
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */
 import { ProductBundleStyle } from '../../styles';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === TYPE === */
 interface ProductBundleMainInfoProps {
   imageUrl?: string;
@@ -47,17 +48,7 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
         style={ProductBundleStyle.mainInfoImage}
       />
       <View>
-        {props.isExclusive && (
-          <View style={ProductBundleStyle.exclusiveTagContainer}>
-            <SnbIcon
-              name="stars"
-              color={color.yellow50}
-              size={18}
-              style={{ marginRight: 4 }}
-            />
-            <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-          </View>
-        )}
+        {props.isExclusive ? <ExclusiveTag /> : <View />}
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <SnbText.B3>{props.name}</SnbText.B3>

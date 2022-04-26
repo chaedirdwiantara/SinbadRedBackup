@@ -15,6 +15,7 @@ import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '@core/styles';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === TYPES === */
 interface Props {
   isFromProductDetail?: boolean;
@@ -57,18 +58,12 @@ export const AddToCartProductData: FC<Props> = ({
               maxWidth: '80%',
             }}>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {dataProductDetail?.isExclusive && (
-                <View style={[AddToCartModalStyle.exclusiveTagContainer]}>
-                  <SnbIcon
-                    name="stars"
-                    color={color.yellow50}
-                    size={18}
-                    style={{ marginRight: 4 }}
-                  />
-                  <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-                </View>
+              {dataProductDetail?.isExclusive ? <ExclusiveTag /> : <View />}
+              {dataProductDetail?.hasBulkPrice ? (
+                <BluckPricingTag style={{ marginLeft: 4 }} />
+              ) : (
+                <View />
               )}
-              {dataProductDetail?.hasBulkPrice ? <BluckPricingTag /> : <View />}
             </View>
             <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
             {/* harga normal */}
@@ -149,19 +144,9 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            {dataProductDetailCart?.isExclusive && (
-              <View style={AddToCartModalStyle.exclusiveTagContainer}>
-                <SnbIcon
-                  name="stars"
-                  color={color.yellow50}
-                  size={18}
-                  style={{ marginRight: 4 }}
-                />
-                <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-              </View>
-            )}
+            {dataProductDetailCart?.isExclusive ? <ExclusiveTag /> : <View />}
             {dataProductDetailCart?.hasBulkPrice ? (
-              <BluckPricingTag />
+              <BluckPricingTag style={{ marginLeft: 4 }} />
             ) : (
               <View />
             )}

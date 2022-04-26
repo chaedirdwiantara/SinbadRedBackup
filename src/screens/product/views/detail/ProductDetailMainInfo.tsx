@@ -3,8 +3,8 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
-import { ExclusiveTag } from './ExclusiveTag';
 import BluckPricingTag from '@core/components/product/BluckPricingTag';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPE ===  */
@@ -33,8 +33,8 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   hasBulkPrice,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
-    <View style={{ flexDirection: 'row' }}>
-      {isExclusive ? <ExclusiveTag style={{ marginRight: 5 }} /> : <View />}
+    <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+      {isExclusive ? <ExclusiveTag style={{ marginRight: 4 }} /> : <View />}
       {hasBulkPrice ? <BluckPricingTag /> : <View />}
     </View>
     <SnbText.H4>{name}</SnbText.H4>
