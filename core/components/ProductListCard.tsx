@@ -20,7 +20,8 @@ interface ProductListCardProps {
   name: string;
   imageUrl: string;
   qtySoldLabel: string;
-  finalPrice: number;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
   isBundle?: boolean;
   isPromo?: boolean;
   isExclusive?: boolean;
@@ -78,7 +79,11 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             <ExclusiveTag />
           ) : (
             <View>
-              <BluckPricingTag style={{ marginHorizontal: 4 }} />
+              {props.hasBulkPrice ? (
+                <BluckPricingTag style={{ marginHorizontal: 4 }} />
+              ) : (
+                <View />
+              )}
             </View>
           )}
           {/* Product Info */}
@@ -87,7 +92,9 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             {!props.isExclusive && (
               <View style={{ marginTop: 8 }}>
                 <SnbText.C1 color={color.red50}>
-                  {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
+                  {toCurrency(props.priceAfterTax ?? 0, {
+                    withFraction: false,
+                  })}
                 </SnbText.C1>
               </View>
             )}
@@ -102,7 +109,7 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             }}>
             {props.isExclusive && (
               <SnbText.C1 color={color.red50}>
-                {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
+                {toCurrency(props.priceAfterTax ?? 0, { withFraction: false })}
               </SnbText.C1>
             )}
             <TouchableOpacity
