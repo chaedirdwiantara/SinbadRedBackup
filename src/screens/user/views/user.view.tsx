@@ -52,44 +52,7 @@ const UserView: FC = ({ start }: any) => {
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
-  const [dataHeader] = React.useState([
-    {
-      id: 1,
-      title: 'Foto KTP',
-      subTitle: 'Upload Foto KTP',
-      icon: 'ktp',
-      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-      type: 'ktp',
-      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-    },
-    {
-      id: 2,
-      title: 'Tambah Nama Toko',
-      subTitle: 'Isi Nama Toko',
-      icon: 'store',
-      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-      type: 'merchantAccountName',
-      status:
-        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-          ?.name !== null
-          ? true
-          : false,
-    },
-    {
-      id: 3,
-      title: 'Alamat Toko',
-      subTitle: 'Isi Alamat Toko',
-      icon: 'location',
-      message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-      type: 'storeAddress',
-      status:
-        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-          ? true
-          : false,
-    },
-  ]);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
-  const [dataCarousel, setDataCarousel] = useState([] as any);
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -133,7 +96,7 @@ const UserView: FC = ({ start }: any) => {
 
   useEffect(()=> {
     if (loadingCarousel) {
-      setDataCarousel(dataHeader);
+      // setDataCarousel(dataHeader);
       setLoadingCarousel(false);
     }
   }, [loadingCarousel]);
@@ -175,7 +138,43 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
-    // const dataCarousel = dataHeader.filter((item) => item.status === false);
+    const dataHeader = [
+      {
+        id: 1,
+        title: 'Foto KTP',
+        subTitle: 'Upload Foto KTP',
+        icon: 'ktp',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'ktp',
+        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+      },
+      {
+        id: 2,
+        title: 'Tambah Nama Toko',
+        subTitle: 'Isi Nama Toko',
+        icon: 'store',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'merchantAccountName',
+        status:
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+            ?.name !== null
+            ? true
+            : false,
+      },
+      {
+        id: 3,
+        title: 'Alamat Toko',
+        subTitle: 'Isi Alamat Toko',
+        icon: 'location',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'storeAddress',
+        status:
+          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+            ? true
+            : false,
+      },
+    ];
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
         <Pagination
@@ -252,7 +251,43 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
-    // const dataCarousel = dataHeader.filter((item) => item.status === false);
+    const dataHeader = [
+      {
+        id: 1,
+        title: 'Foto KTP',
+        subTitle: 'Upload Foto KTP',
+        icon: 'ktp',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'ktp',
+        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+      },
+      {
+        id: 2,
+        title: 'Tambah Nama Toko',
+        subTitle: 'Isi Nama Toko',
+        icon: 'store',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'merchantAccountName',
+        status:
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+            ?.name !== null
+            ? true
+            : false,
+      },
+      {
+        id: 3,
+        title: 'Alamat Toko',
+        subTitle: 'Isi Alamat Toko',
+        icon: 'location',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'storeAddress',
+        status:
+          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+            ? true
+            : false,
+      },
+    ];
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
         <LinearGradient
