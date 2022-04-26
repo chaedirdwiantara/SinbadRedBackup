@@ -10,7 +10,7 @@ import {
 /** === IMPORT COMPONENTS ===  */
 import { ProductBundleMainInfoSkeleton } from './ProductBundleMainInfoSkeleton';
 import ExclusiveTag from '@core/components/product/ExclusiveTag';
-import BulkPricingTag from '@core/components/product/BluckPricingTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */

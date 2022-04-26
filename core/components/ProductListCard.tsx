@@ -9,7 +9,7 @@ import {
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === IMPORT COMPONENT === */
-import BluckPricingTag from '@core/components/product/BluckPricingTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
 import ExclusiveTag from './product/ExclusiveTag';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -66,7 +66,7 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
         <View>
           <View style={{ marginHorizontal: 4 }}>
             {props.hasBulkPrice ? (
-              <BluckPricingTag />
+              <BulkPricingTag />
             ) : (
               <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
             )}

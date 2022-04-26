@@ -9,7 +9,7 @@ import {
   SnbBadge,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
-import BluckPricingTag from '@core/components/product/BluckPricingTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -60,7 +60,7 @@ export const AddToCartProductData: FC<Props> = ({
             <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
               {dataProductDetail?.isExclusive ? <ExclusiveTag /> : <View />}
               {dataProductDetail?.hasBulkPrice ? (
-                <BluckPricingTag style={{ marginLeft: 4 }} />
+                <BulkPricingTag style={{ marginLeft: 4 }} />
               ) : (
                 <View />
               )}
@@ -145,7 +145,7 @@ export const AddToCartProductData: FC<Props> = ({
               maxWidth: '80%',
             }}>
             {dataProductDetailCart?.hasBulkPrice ? (
-              <BluckPricingTag />
+              <BulkPricingTag />
             ) : (
               <View />
             )}
