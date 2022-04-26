@@ -37,15 +37,6 @@ export const ProductListCardStyle = StyleSheet.create({
     borderRadius: 6,
     marginRight: 16,
   },
-  exclusiveTagContainer: {
-    flexDirection: 'row',
-    width: 88,
-    alignItems: 'center',
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    borderRadius: 50,
-    backgroundColor: color.yellow10,
-  },
   orderButton: {
     justifyContent: 'center',
     alignItems: 'center',
