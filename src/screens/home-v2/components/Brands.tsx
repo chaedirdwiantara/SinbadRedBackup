@@ -47,7 +47,7 @@ export const Brands: FC<BrandsProps> = ({
           data={data}
           keyExtractor={(item, index) => `${item.name}-${index}`}
           loading={loading}
-          itemSpaces={layout.spacing.xl}
+          itemSpaces={layout.spacing.md}
         />
       </View>
     </View>
