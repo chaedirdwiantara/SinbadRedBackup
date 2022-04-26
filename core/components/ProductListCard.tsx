@@ -65,10 +65,10 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
       <View style={{ justifyContent: 'space-between', flex: 1 }}>
         <View>
           <View style={{ marginHorizontal: 4 }}>
-            {props.isExclusive ? (
-              <ExclusiveTag />
+            {props.hasBulkPrice ? (
+              <BluckPricingTag />
             ) : (
-              <View>{props.hasBulkPrice ? <BluckPricingTag /> : <View />}</View>
+              <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
             )}
           </View>
           {/* Product Info */}

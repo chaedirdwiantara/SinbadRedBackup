@@ -144,9 +144,13 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            {dataProductDetailCart?.isExclusive ? <ExclusiveTag /> : <View />}
             {dataProductDetailCart?.hasBulkPrice ? (
-              <BluckPricingTag style={{ marginLeft: 4 }} />
+              <BluckPricingTag />
+            ) : (
+              <View />
+            )}
+            {dataProductDetailCart?.isExclusive ? (
+              <ExclusiveTag style={{ marginLeft: 4 }} />
             ) : (
               <View />
             )}

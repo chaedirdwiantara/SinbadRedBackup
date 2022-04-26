@@ -93,10 +93,10 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
           />
         </View>
         <View style={{ paddingLeft: 12 }}>
-          {props.isExclusive ? (
-            <ExclusiveTag />
+          {props.hasBulkPrice ? (
+            <BluckPricingTag />
           ) : (
-            <View>{props.hasBulkPrice ? <BluckPricingTag /> : <View />}</View>
+            <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
           )}
         </View>
         <View style={{ padding: 12 }}>

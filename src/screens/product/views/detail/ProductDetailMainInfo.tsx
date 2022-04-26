@@ -34,8 +34,8 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
     <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-      {isExclusive ? <ExclusiveTag style={{ marginRight: 4 }} /> : <View />}
       {hasBulkPrice ? <BluckPricingTag /> : <View />}
+      {isExclusive ? <ExclusiveTag style={{ marginLeft: 4 }} /> : <View />}
     </View>
     <SnbText.H4>{name}</SnbText.H4>
     <View style={{ marginVertical: 8 }}>
