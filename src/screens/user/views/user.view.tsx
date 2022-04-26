@@ -96,7 +96,6 @@ const UserView: FC = ({ start }: any) => {
 
   useEffect(()=> {
     if (loadingCarousel) {
-      // setDataCarousel(dataHeader);
       setLoadingCarousel(false);
     }
   }, [loadingCarousel]);
