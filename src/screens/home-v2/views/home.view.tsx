@@ -3,20 +3,11 @@ import { View, ScrollView } from 'react-native';
 import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import {
-  Benefits,
-  Categories,
-  BannerCard,
-  NewProducts,
-  Brands,
-} from '../components';
-import { categories, banners, newProducts, brands } from '../dummies';
-
-const chips = ['Popstar', 'Lactamil'];
+import { Benefits, Categories, Brands } from '../components';
+import { categories, brands } from '../dummies';
 
 const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
-  const [activeChip, setActiveChip] = useState('');
 
   return (
     <ScrollView style={{ flex: 1, backgroundColor: colorV2.bgColor.light }}>
@@ -42,19 +33,6 @@ const HomeView: FC = () => {
       </View>
       <Benefits />
       <Categories data={categories} />
-      <BannerCard
-        imageUrl={banners[0]}
-        onPress={() => console.log('Go to Banner')}
-      />
-      <NewProducts
-        data={newProducts}
-        chips={chips.map((chip) => ({
-          text: chip,
-          onPress: (text: string) => setActiveChip(text),
-          active: chip === activeChip,
-        }))}
-        onTitleActionPress={() => console.log('See all new products')}
-      />
       <Brands
         data={brands}
         onTitleActionPress={() => console.log('See all brands')}
