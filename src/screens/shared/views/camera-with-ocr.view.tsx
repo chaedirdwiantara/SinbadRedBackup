@@ -16,9 +16,23 @@ import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function'
 import { useDataFlagRTDB } from '@core/redux/Data';
 import database from '@react-native-firebase/database';
 import { uniqueId } from '@core/functions/global/device-data';
-import * as models from '@models';
 
+const randomFixedInteger = function (length: number) {
+  return Math.floor(
+    Math.pow(10, length - 1) +
+      Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1),
+  );
+};
 const { height, width: screenWidth } = Dimensions.get('window');
+const names = [
+  'Muhammad Ali Mazhuda',
+  'Rifki Mifathur Sutomo',
+  'Wiguna Pratama',
+  'Naufal Rachmadan',
+  'Dian Prasetyo',
+  'Adi Hermawan',
+];
+const results = ['success', 'failed'];
 
 const KtpPhotoFrame = () => (
   <View
@@ -36,40 +50,63 @@ const KtpPhotoFrame = () => (
 );
 
 const CameraWithOCRView = () => {
-  const { navigate } = useNavigation();
+  const { goBack } = useNavigation();
   const { params }: any = useRoute();
   const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
-  const { processImage } = useOCR();
-  const { ocr } = useDataFlagRTDB() || {};
-  useCheckFlagByTask('ocr');
+  const { processImage, ocrImageState } = useOCR(true);
+  const { ocrStatus } = useDataFlagRTDB() || {};
+  useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
 
-  const setFlagOcr = React.useCallback(
-    (status: string = 'none', data?: models.IOCRResult) => {
-      const deviceId = database().ref('sinbadApp');
-      deviceId.child(uniqueId).once('value', () => {
-        deviceId
-          .child(uniqueId)
-          .child('flag')
-          .child('ocr')
-          .set({ ocrStatus: status, ocrData: data });
-      });
-    },
-    [],
-  );
-
   React.useEffect(() => {
-    setFlagOcr('none');
+    return () => {
+      const ref = database().ref('sinbadApp').child(uniqueId);
+      ref.child('flag').child('ocrStatus').set('none');
+    };
   }, []);
 
   React.useEffect(() => {
-    if (ocr?.ocrStatus === 'failed') {
+    let ocrTimeout: any = null;
+    if (ocrStatus === 'failed') {
       setShowModalError(true);
-    } else if (ocr?.ocrStatus === 'success' && isImageProcessed) {
-      navigate('OCRResultView', { ...ocr.ocrData });
+    } else if (ocrStatus === 'success' && isImageProcessed) {
+      goBack();
+    } else if (ocrStatus === 'processing') {
+      ocrTimeout = setTimeout(() => {
+        const ref = database().ref('sinbadApp').child(uniqueId);
+        ref.once('value', () => {
+          ref
+            .child('ocrData')
+            .child('nameOnKtp')
+            .set(names[Math.floor(Math.random() * names.length)]);
+          ref
+            .child('ocrData')
+            .child('idNumber')
+            .set(randomFixedInteger(16).toString());
+          ref
+            .child('flag')
+            .child('ocrStatus')
+            .set(results[Math.floor(Math.random() * results.length)]);
+        });
+      }, Math.ceil(Math.random() * 10) * 1000);
     }
-  }, [ocr]);
+    return () => {
+      clearTimeout(ocrTimeout);
+    };
+  }, [ocrStatus]);
+
+  React.useEffect(() => {
+    if (ocrImageState.data !== null) {
+      const ref = database().ref('sinbadApp').child(uniqueId);
+      ref.once('value', () => {
+        ref.child('flag').child('ocrStatus').set('processing');
+      });
+    }
+    if (ocrImageState.error !== null) {
+      setShowModalError(true);
+    }
+  }, [ocrImageState]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -101,13 +138,8 @@ const CameraWithOCRView = () => {
             offset: { x, y: result.height * offsetFactor },
             size: { width, height: result.height - result.height * sizeFactor },
           });
-          // processImage({ imageUrl: url, type: params?.type });
-          setFlagOcr('success', {
-            nameOnKTP: 'Muhammad Ali Mazhuda',
-            idNumber: '3375020801940003',
-          });
           setIsImageProcessed(true);
-          // setFlagOcr('failed');
+          processImage({ imageUrl: url, type: params?.type });
         }}
       />
       {renderIF(params?.type === 'ktp', <KtpPhotoFrame />)}
@@ -118,7 +150,6 @@ const CameraWithOCRView = () => {
         closeAction={() => {
           setShowModalError(false);
           setRetake(true);
-          setFlagOcr('none');
         }}
         actionIcon="close"
         content={
@@ -136,7 +167,6 @@ const CameraWithOCRView = () => {
                 onPress={() => {
                   setShowModalError(false);
                   setRetake(true);
-                  setFlagOcr();
                 }}
                 disabled={false}
                 type="primary"
@@ -146,7 +176,7 @@ const CameraWithOCRView = () => {
         }
       />
       {renderIF(
-        false,
+        ocrImageState.loading,
         <View style={{ position: 'absolute', bottom: 36, right: 0, left: 0 }}>
           <SnbProgress size={60} />
         </View>,

@@ -7,11 +7,13 @@ import {
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, BackHandler, ScrollView } from 'react-native';
-import { useFocusEffect } from '@react-navigation/core';
+import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { OCRResultContent } from '@screen/shared/views/components';
 import * as models from '@models';
+import { useOCR } from '@screen/auth/functions/global-hooks.functions';
+import { DATA_DIRI_STEP_2_VIEW } from '@screen/account/functions/screens_name';
 
 interface Props {
   openModalBack: boolean;
@@ -21,7 +23,35 @@ interface Props {
 const Content: React.FC<Props> = (props) => {
   const [openModalBack, setOpenModalBack] = useState(false);
   const { openCameraWithOCR } = useCamera();
-  const [value, setValue] = React.useState<models.IOCRResult | null>(null);
+  const [value, setValue] = React.useState<models.IOCRResult | any>(null);
+  const { ocrImageState, ocrImageReset } = useOCR();
+  const {
+    updateCompleteData,
+    updateCompleteDataState,
+    // completeDataState,
+    resetUpdateCompleteData,
+    refetchCompleteData,
+    backToDataCompleteness,
+  } = useEasyRegistration();
+  const [backHandle, setBackHandle] = React.useState(false);
+  const { navigate } = useNavigation();
+
+  React.useEffect(() => {
+    return ocrImageReset;
+  }, []);
+
+  React.useEffect(() => {
+    if (updateCompleteDataState.data !== null) {
+      refetchCompleteData();
+      resetUpdateCompleteData();
+      ocrImageReset();
+      if (backHandle) {
+        backToDataCompleteness();
+      } else {
+        navigate(DATA_DIRI_STEP_2_VIEW);
+      }
+    }
+  }, [updateCompleteDataState]);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
@@ -35,6 +65,12 @@ const Content: React.FC<Props> = (props) => {
   }, []);
 
   useFocusEffect(handleBackButton);
+
+  function handleSubmit() {
+    updateCompleteData({
+      user: { idNo: value.idNumber, name: value.nameOnKtp },
+    });
+  }
 
   function renderUploadPhotoRules() {
     return (
@@ -64,7 +100,10 @@ const Content: React.FC<Props> = (props) => {
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
           <ScrollView>
-            <OCRResultContent value={setValue} />
+            <OCRResultContent
+              value={value}
+              onChangeValue={(result) => setValue(result)}
+            />
           </ScrollView>
         </View>
         <View style={{ height: 72 }}>
@@ -73,27 +112,44 @@ const Content: React.FC<Props> = (props) => {
             rightType={'primary'}
             leftTitle={'Ubah Foto'}
             rightTitle={'Lanjutkan'}
-            onPressLeft={() => {}}
-            onPressRight={() => {}}
-            rightDisabled={value?.idNumber === '' || value?.nameOnKTP === ''}
+            onPressLeft={() => openCameraWithOCR('ktp')}
+            onPressRight={handleSubmit}
+            rightDisabled={
+              value?.idNumber === '' ||
+              value?.nameOnKtp === '' ||
+              updateCompleteDataState.loading
+            }
             leftDisabled={false}
-            rightLoading={false}
+            rightLoading={updateCompleteDataState.loading}
           />
         </View>
       </View>
     );
   }
+  const isOcrSuccess = ocrImageState.data !== null;
 
   return (
     <View style={{ flex: 1 }}>
-      {renderIF(true, renderUploadPhotoRules(), renderOCRResult())}
+      {renderIF(isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         open={openModalBack || props.openModalBack}
         closeModal={() => {
           setOpenModalBack(false);
           props.onCloseModalBack(false);
         }}
-        confirm={() => {}}
+        confirm={() => {
+          if (value?.idNumber && value?.nameOnKtp) {
+            updateCompleteData({
+              user: {
+                name: value.nameOnKtp,
+                idNo: value.idNo,
+              },
+            });
+            setBackHandle(true);
+          } else {
+            backToDataCompleteness();
+          }
+        }}
       />
     </View>
   );

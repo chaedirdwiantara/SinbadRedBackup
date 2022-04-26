@@ -4,6 +4,8 @@ import { formatter } from './auth-utils.functions';
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
+import database from '@react-native-firebase/database';
+import { uniqueId } from '@core/functions/global/device-data';
 
 const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
   { id: 1, value: 1 },
@@ -174,9 +176,7 @@ export const useCamera = () => {
       params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai';
       params.type = type;
     }
-    setTimeout(() => {
-      navigate('CameraWithOCRView', params);
-    }, 250);
+    navigate('CameraWithOCRView', params);
   };
 
   const saveCapturedImage = (data: any) => {
@@ -331,14 +331,42 @@ export const useMerchant = () => {
   };
 };
 
-export const useOCR = () => {
+export const useOCR = (isRTDBOpenConnection = false) => {
   const dispatch = useDispatch();
+  const { ocrImage } = useSelector((state: any) => state.account);
+  const [ocrImageResult, setOcrImageResult] = React.useState(null);
+
+  React.useEffect(() => {
+    if (isRTDBOpenConnection) {
+      const flag = database()
+        .ref(`sinbadApp/${uniqueId}/ocrData`)
+        .on('value', (data) => {
+          if (data.val()) {
+            setOcrImageResult(data.val());
+          }
+        });
+      return () =>
+        database().ref(`sinbadApp/${uniqueId}/ocrData`).off('value', flag);
+    }
+  }, []);
 
   const processImage = (data: models.IOCRImage) => {
+    const ref = database().ref('sinbadApp').child(uniqueId);
+    ref.once('value', () => {
+      ref.child('ocrData').set(null);
+      ref.child('flag').child('ocrStatus').set('none');
+    });
     dispatch(Actions.ocrImageProcess(data));
+  };
+
+  const ocrImageReset = () => {
+    dispatch(Actions.ocrImageReset());
   };
 
   return {
     processImage,
+    ocrImageState: ocrImage,
+    ocrImageResult,
+    ocrImageReset,
   };
 };

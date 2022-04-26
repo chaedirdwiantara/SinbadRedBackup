@@ -7,7 +7,7 @@ const uploadImage = (data: string) => {
 
 const verifyImage = (data: { imageId: string; type: string }) => {
   const path = 'profile-buyer/image-verification';
-  return apiMapping('public', path, 'account', 'v1', 'UPDATE', data);
+  return apiMapping('auth', path, 'account', 'v1', 'PUT', data);
 };
 
 export const ocrImageApi = {

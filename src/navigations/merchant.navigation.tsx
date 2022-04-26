@@ -12,6 +12,7 @@ import {
   TakeProfilePictureView,
   MerchantEditAddressView,
   MerchantEditPhotoView,
+  UpdatePhotoKTPView,
 } from '@screen/merchant/views/edit-merchant';
 
 const MerchantNav = {
@@ -47,6 +48,9 @@ const MerchantNav = {
   },
   MerchantEditPhotoView: {
     component: MerchantEditPhotoView,
+  },
+  UpdatePhotoKTPView: {
+    component: UpdatePhotoKTPView,
   },
 };
 

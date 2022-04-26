@@ -1,23 +1,18 @@
-import {
-  color,
-  SnbButton,
-  SnbContainer,
-  SnbTopNav,
-} from '@sinbad/react-native-sinbad-ui';
+import { color, SnbButton } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { OCRResultContent } from './components';
 import * as models from '@models';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { MerchantHookFunc } from '@screen/merchant/function';
+import { contexts } from '@contexts';
+import { useCamera } from '@screen/auth/functions';
 
-const Content: React.FC = () => {
-  const { params } = useRoute();
+const OCRResultView: React.FC = () => {
+  const { editProfile } = MerchantHookFunc.useEditProfile();
+  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-
-  React.useEffect(() => {
-    setValue(params);
-  }, []);
+  const { openCameraWithOCR } = useCamera();
 
   return (
     <View style={{ flex: 1 }}>
@@ -40,9 +35,17 @@ const Content: React.FC = () => {
           rightType={'primary'}
           leftTitle={'Ubah Foto'}
           rightTitle={'Simpan'}
-          onPressLeft={() => {}}
-          onPressRight={() => {}}
-          rightDisabled={value?.idNumber === '' || value?.nameOnKTP === ''}
+          onPressLeft={() => {
+            openCameraWithOCR('ktp');
+          }}
+          onPressRight={() => {
+            const user = {
+              name: value.nameOnKtp,
+              idNo: value.idNumber,
+            };
+            editProfile(dispatchSupplier, { data: { user } });
+          }}
+          rightDisabled={value?.idNumber === '' || value?.nameOnKtp === ''}
           leftDisabled={false}
           rightLoading={false}
         />
@@ -50,14 +53,4 @@ const Content: React.FC = () => {
     </View>
   );
 };
-const OCRResultView: React.FC = () => {
-  const { goBack } = useNavigation();
-  return (
-    <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={goBack} title="Foto KTP" type="white" />
-      <Content />
-    </SnbContainer>
-  );
-};
-
 export default OCRResultView;
