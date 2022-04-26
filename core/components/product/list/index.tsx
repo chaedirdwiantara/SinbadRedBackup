@@ -269,7 +269,7 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [productLoading]);
 
-  /** => if product error code 500700000029 "kelurahan kamu tidak dijangkau oleh supplier" */
+  /** => if product error code 500700000029 "Sinbad belum beroperasi di lokasi toko Anda" */
   useEffect(() => {
     if (productError?.code === 500700000029) {
       modalUrbanRef.current?.trigger(true);

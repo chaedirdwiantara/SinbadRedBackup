@@ -9,8 +9,8 @@ import * as models from '@models';
 const callProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
-  skip: number,
-  limit: number,
+  page: number,
+  perPage: number,
   queryOptions?: models.ProductListQueryOptions,
   subModule?: models.ProductSubModule,
 ) => {
@@ -18,8 +18,8 @@ const callProcessAction = (
     contextDispatch,
     {
       loading,
-      skip,
-      limit,
+      page,
+      perPage,
       ...queryOptions,
     },
     subModule,
@@ -28,8 +28,8 @@ const callProcessAction = (
 
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  const limit = 10;
-
+  const perPage = 10;
+  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,
@@ -40,8 +40,8 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         callProcessAction(
           contextDispatch,
           true,
-          0,
-          limit,
+          page,
+          perPage,
           queryOptions,
           subModule,
         ),
@@ -56,8 +56,8 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         callProcessAction(
           contextDispatch,
           true,
-          0,
-          limit,
+          page,
+          perPage,
           queryOptions,
           subModule,
         ),
@@ -65,17 +65,17 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
     },
     loadMore: (
       contextDispatch: (action: any) => any,
-      paginationQueries: { skip: number; canLoadMore: boolean },
+      state: models.ListItemV3Props<Array<models.ProductList>>,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
-      if (paginationQueries.canLoadMore) {
+      if (state.page < state.totalPage) {
         contextDispatch(Actions.productListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
             false,
-            paginationQueries.skip + limit,
-            limit,
+            state.page + 1,
+            perPage,
             queryOptions,
             subModule,
           ),

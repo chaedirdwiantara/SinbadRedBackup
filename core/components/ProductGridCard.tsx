@@ -8,6 +8,8 @@ import {
   color,
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
+/** === IMPORT COMPONENT === */
+import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
@@ -18,7 +20,8 @@ interface ProductGridCardProps {
   flexOne?: boolean;
   name: string;
   imageUrl: string;
-  finalPrice: number;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
   isBundle?: boolean;
   isPromo?: boolean;
   qtySoldLabel: string;
@@ -30,7 +33,7 @@ interface ProductGridCardProps {
 
 interface ProductGridCardInfoProps {
   name: string;
-  finalPrice: number;
+  priceAfterTax: number;
 }
 /** === COMPONENTS === */
 const PromoTag = () => (
@@ -50,7 +53,7 @@ const ExclusiveTag = () => (
   <View
     style={{
       paddingHorizontal: 12,
-      paddingTop: 8,
+      padding: 5,
     }}>
     <View style={ProductGridCardStyle.exclusiveTagContainer}>
       <SnbIcon
@@ -66,7 +69,7 @@ const ExclusiveTag = () => (
 
 const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
   name,
-  finalPrice,
+  priceAfterTax,
 }) => {
   /** === VIEW === */
   return (
@@ -74,7 +77,7 @@ const ProductGridCardInfo: FC<ProductGridCardInfoProps> = ({
       <SnbText.C1 color={color.black100}>{name}</SnbText.C1>
       <View style={{ marginTop: 8 }}>
         <SnbText.C1 color={color.red50}>
-          {toCurrency(finalPrice ?? 0, { withFraction: false })}
+          {toCurrency(priceAfterTax ?? 0, { withFraction: false })}
         </SnbText.C1>
       </View>
     </>
@@ -106,11 +109,21 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             defaultSource={Images.opacityPlaceholder}
           />
         </View>
-        {props.isExclusive && <ExclusiveTag />}
+        {props.isExclusive ? (
+          <ExclusiveTag />
+        ) : (
+          <View>
+            {props.hasBulkPrice ? (
+              <BluckPricingTag style={{ paddingLeft: 12 }} />
+            ) : (
+              <View />
+            )}
+          </View>
+        )}
         <View style={{ padding: 12 }}>
           <ProductGridCardInfo
             name={props.name}
-            finalPrice={props.finalPrice}
+            priceAfterTax={props.priceAfterTax}
           />
           {props.qtySoldLabel !== '0' && (
             <SnbText.C1 color={color.black80}>{`Terjual ${

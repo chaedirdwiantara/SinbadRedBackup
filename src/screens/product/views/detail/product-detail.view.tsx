@@ -1,10 +1,11 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
+import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -50,6 +51,7 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 import { useDataAuth } from '@core/redux/Data';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
+import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
 /** === DUMMY === */
 // const supplierDummy = {
 //   name: 'Depo Berkah Abadi',
@@ -260,6 +262,12 @@ const ProductDetailView: FC = () => {
       });
     }
   };
+
+  const onOpenWhatsApp = useCallback(() => {
+    const message = `Halo Sinbad, saya ingin bertanya tentang produk ${dataProduct?.name} (${dataProduct?.code}) ini dong`;
+    openWhatsApp('+6282260106010', message);
+  }, [dataProduct?.name, dataProduct?.code]);
+
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
@@ -462,15 +470,21 @@ const ProductDetailView: FC = () => {
           <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
-            finalPrice={dataProduct?.finalPrice!}
+            priceAfterTax={dataProduct?.priceAfterTax!}
             qtySoldLabel={dataProduct?.qtySoldLabel!}
             loading={loadingButton}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
             showStock={me.data !== null}
+            hasBulkPrice={dataProduct?.hasBulkPrice!}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
+          {dataProduct?.hasBulkPrice ? (
+            <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+          ) : (
+            <View />
+          )}
           {/* <ProductDetailSupplierInfo // Hide temporarily
             logo={supplierDummy.logoUrl}
             name={supplierDummy.name}
@@ -520,6 +534,7 @@ const ProductDetailView: FC = () => {
         <React.Fragment>
           {isAvailable ? (
             <ActionButton
+              onOpenChat={onOpenWhatsApp}
               loading={loadingButton}
               title={getActionButtonTitle()}
               disabled={
@@ -540,6 +555,7 @@ const ProductDetailView: FC = () => {
         </React.Fragment>
       ) : isAvailable ? (
         <ActionButton
+          onOpenChat={onOpenWhatsApp}
           loading={loadingButton}
           title={'Tambah ke Keranjang'}
           disabled={loadingButton}
