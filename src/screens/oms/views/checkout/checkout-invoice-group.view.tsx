@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
@@ -43,7 +43,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={data?.sellers}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
               <View style={CheckoutStyle.headerSection}>

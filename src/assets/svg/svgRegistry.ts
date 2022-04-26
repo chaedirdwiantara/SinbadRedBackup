@@ -26,6 +26,9 @@ import store_data from './store_data.svg';
 import notification from './notification.svg';
 import completeness_back from './completeness-back.svg';
 import sinbad_logo from './sinbad-logo.svg';
+// cart prices
+import price_changes_down from './price_changes_down.svg';
+import price_changes_up from './price_changes_up.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -55,4 +58,6 @@ export const SvgRegistery = {
   notification,
   completeness_back,
   sinbad_logo,
+  price_changes_down,
+  price_changes_up,
 };

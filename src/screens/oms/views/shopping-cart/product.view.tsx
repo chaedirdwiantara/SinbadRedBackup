@@ -7,7 +7,6 @@ import {
   SnbIcon,
   color,
   SnbNumberCounter,
-  SnbBadge,
   SnbText,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -15,6 +14,7 @@ import { ShoppingCartStyles } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
 import * as models from '@models';
+import Svg from '@svg';
 
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
@@ -46,22 +46,27 @@ export const ProductView: FC<ProductViewProps> = ({
     let lastPrice: number = 0;
 
     if (product.priceRules.length > 0) {
-      const priceRulesLastItem =
-        product.priceRules[product.priceRules.length - 1];
-      if (priceRulesLastItem.maxQty <= product.qty) {
-        displayPrice = priceRulesLastItem.price;
+      const priceRulesFirstItem = product.priceRules[0];
+      if (product.qty < priceRulesFirstItem.minQty) {
+        displayPrice = product.priceAfterTax;
       } else {
-        product.priceRules.map((priceRulesItem) => {
-          if (
-            product.qty >= priceRulesItem.minQty &&
-            product.qty <= priceRulesItem.maxQty
-          ) {
-            displayPrice = priceRulesItem.price;
+        for (let x = 0; x < product.priceRules.length; x++) {
+          const isLast = x === product.priceRules.length - 1;
+          if (!isLast) {
+            if (
+              product.qty >= product.priceRules[x].minQty &&
+              product.qty < product.priceRules[x + 1].minQty
+            ) {
+              displayPrice = product.priceRules[x].priceAfterTax;
+              break;
+            }
+          } else {
+            displayPrice = product.priceRules[x].priceAfterTax;
           }
-        });
+        }
       }
     } else {
-      displayPrice = product.price;
+      displayPrice = product.priceAfterTax;
     }
 
     lastPrice = product.lastUsedPrice;
@@ -153,19 +158,6 @@ export const ProductView: FC<ProductViewProps> = ({
       </View>
     );
   };
-  /** => RENDER PPN BADGE */
-  const renderPPNBadge = () => {
-    if (product.isPriceAfterTax) {
-      return (
-        <View style={{ marginBottom: 5 }}>
-          <SnbBadge.Label
-            type="warning"
-            value={`Termasuk Pajak ${product.taxPercentage}%`}
-          />
-        </View>
-      );
-    }
-  };
   /** => RENDER REMOVE PRODUCT ICON */
   const renderRemoveProductIcon = () => {
     return (
@@ -181,8 +173,8 @@ export const ProductView: FC<ProductViewProps> = ({
             removedProducts,
           });
         }}
-        style={{ marginRight: 5 }}>
-        <SnbIcon name="delete_outline" color={color.black80} size={32} />
+        style={{ marginRight: 20 }}>
+        <SnbIcon name="delete" color={color.black60} size={24} />
       </TouchableOpacity>
     );
   };
@@ -190,20 +182,13 @@ export const ProductView: FC<ProductViewProps> = ({
   const renderPriceSection = () => {
     const { displayPrice, lastPrice, priceDifference } = handleDisplayPrice();
 
-    let arrowIconName: string = 'arrow_drop_down';
-    let arrowIconColor: string = color.green50;
-    if (priceDifference === 'higher') {
-      arrowIconName = 'arrow_drop_up';
-      arrowIconColor = color.red50;
-    }
-
     return (
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
         }}>
-        {priceDifference !== 'same' ? (
+        {priceDifference !== 'same' && !product.isQtyChanged ? (
           <View style={{ marginRight: 5 }}>
             <SnbText.B4 color={color.black60} textDecorationLine="line-through">
               {toCurrency(lastPrice, {
@@ -220,12 +205,17 @@ export const ProductView: FC<ProductViewProps> = ({
               withFraction: false,
             })}
           </SnbText.B4>
-          {priceDifference !== 'same' ? (
-            <SnbIcon
-              name={arrowIconName}
-              style={{ color: arrowIconColor, marginLeft: 5 }}
-              size={24}
-            />
+          {priceDifference !== 'same' && !product.isQtyChanged ? (
+            <View style={{ marginLeft: 4 }}>
+              <Svg
+                name={
+                  priceDifference === 'higher'
+                    ? 'price_changes_up'
+                    : 'price_changes_down'
+                }
+                size={16}
+              />
+            </View>
           ) : (
             <View />
           )}
@@ -266,8 +256,7 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
         {renderProductImage()}
         <View style={{ justifyContent: 'center', flex: 1 }}>
-          {renderPPNBadge()}
-          <View style={{ flex: 1 }}>
+          <View>
             <SnbText2.Paragraph.Default
               color={color.black80}
               numberOfLines={1}
@@ -280,8 +269,8 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
-        {renderRemoveProductIcon()}
-        <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {renderRemoveProductIcon()}
           <SnbNumberCounter
             value={product.qty}
             maxLength={6}
@@ -329,12 +318,12 @@ export const ProductView: FC<ProductViewProps> = ({
             minusDisabled={isDecreaseDisabled}
             plusDisabled={isIncreaseDisabled}
           />
-          <View style={{ alignItems: 'center', marginTop: 8 }}>
-            <SnbText.B4
-              color={
-                color.black60
-              }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
-          </View>
+        </View>
+        <View style={{ alignItems: 'center', marginTop: 8 }}>
+          <SnbText.B4
+            color={
+              color.black60
+            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />

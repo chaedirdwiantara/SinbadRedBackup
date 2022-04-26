@@ -7,9 +7,9 @@ import { SnbText, color } from 'react-native-sinbad-ui';
 interface CheckoutShipmentDetailViewProps {
   leadTime: number;
 }
-export const CheckoutShipmentDetailView: FC<CheckoutShipmentDetailViewProps> = ({
-  leadTime
-}) => {
+export const CheckoutShipmentDetailView: FC<
+  CheckoutShipmentDetailViewProps
+> = ({ leadTime }) => {
   return (
     <View style={{ marginTop: 16 }}>
       <SnbText.H4 color={color.black80}>Detail Pengiriman</SnbText.H4>

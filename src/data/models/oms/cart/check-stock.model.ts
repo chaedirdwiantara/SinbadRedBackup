@@ -5,11 +5,12 @@
 export interface CheckStockResponse {
   productId: string;
   warehouseId: number;
-  warehouseName: string;
   stock: number;
-  leadTime: number;
   isAvailable: boolean;
   isReserved: boolean;
+  warehouseName: string;
+  leadTime: number;
+  externalWarehouseCode: string;
 }
 
 export interface CheckStockPayload {

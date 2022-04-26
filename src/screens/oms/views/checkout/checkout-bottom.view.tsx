@@ -3,7 +3,6 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import { goToPaymentMethod } from '@screen/oms/functions';
 import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
@@ -24,10 +23,8 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
   goToPaymentMethod,
 }) => {
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { stateCheckout, dispatchCheckout } = React.useContext(
-    contexts.CheckoutContext,
-  );
+  const { dispatchCart } = React.useContext(contexts.CartContext);
+  const { dispatchCheckout } = React.useContext(contexts.CheckoutContext);
   const totalPaymentFull = totalPayment(data?.sellers);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
   const updateCartAction = useUpdateCartAction();

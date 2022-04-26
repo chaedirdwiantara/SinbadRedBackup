@@ -12,9 +12,15 @@ export interface CheckProductPayloadCarts {
   warehouseId: number;
 }
 
-export interface CheckProductResponse extends Omit<CartProduct, 'price'> {
+export interface CheckProductResponse
+  extends Omit<
+    CartProduct,
+    'qty, warehouseName, lastUsedPrice, isLastPriceUsedRules, selected'
+  > {
+  externalProductCode: string;
   sellerId: number;
   sellerName: string;
   status: string;
-  finalPrice: number;
+  brandId: string;
+  brandName: string;
 }
