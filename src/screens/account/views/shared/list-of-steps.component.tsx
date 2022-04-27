@@ -31,15 +31,15 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const dataUser = [
     {
       title: 'Foto KTP',
-      value: completeDataState?.data?.user?.isIdImageUrl || true,
+      value: completeDataState?.data?.user?.isIdImageUrl || false,
     },
     {
       title: 'Foto NPWP',
-      value: completeDataState?.data?.user?.isTaxImageUrl || true,
+      value: completeDataState?.data?.user?.isTaxImageUrl || false,
     },
     {
       title: 'Foto Selfie dengan KTP',
-      value: completeDataState?.data?.user?.isSelfieImageUrl || true,
+      value: completeDataState?.data?.user?.isSelfieImageUrl || false,
     },
     {
       title: 'Email',

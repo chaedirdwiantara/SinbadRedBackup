@@ -194,38 +194,17 @@ const UserView: FC = ({ start }: any) => {
     return (
       <View key={index}>
         <View>
-          <View
-            style={[
-              UserStyles.shadowStyle,
-              {
-                backgroundColor: color.white,
-                marginHorizontal: 4,
-                borderRadius: 5,
-              },
-            ]}>
+          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
             <View style={UserStyles.cardBody}>
               <View style={{ alignSelf: 'center' }}>
                 <Svg name={item.icon} size={40} />
               </View>
-              <View
-                style={{
-                  marginLeft: 16,
-                  alignSelf: 'center',
-                  width: 185,
-                }}>
+              <View style={UserStyles.carouselText}>
                 <SnbText.H4>{item.subTitle}</SnbText.H4>
                 <SnbText.B3 color={'#677A8E'}>{item.message}</SnbText.B3>
               </View>
               <TouchableOpacity
-                style={{
-                  backgroundColor: color.red50,
-                  height: 24,
-                  alignSelf: 'center',
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                  borderRadius: 4,
-                  paddingBottom: 2,
-                }}
+                style={UserStyles.carouselButton}
                 onPress={() =>
                   goTo({
                     type: item.type,

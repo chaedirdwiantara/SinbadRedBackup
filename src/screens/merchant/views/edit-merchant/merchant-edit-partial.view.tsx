@@ -55,20 +55,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const merchantName = useInput(storeData?.buyerAccount?.name || '');
   const merchantPhoneNo = useInput(storeData?.buyerAccount?.phoneNo || null);
   const merchantSize = useInput(storeData?.buyerAccount?.largeArea || null);
-  // COMPLETNESS DATA
-  // const numberOfEmployee = useInput(
-  //   storeData?.storeDetailCompleteness?.numberOfEmployee || null,
-  // );
   const vehicleAccessibility = useInput(
     buyerAddressData?.vehicleAccessibility || null,
   );
   const largeArea = useInput(storeData?.buyerAccount?.largeArea || null);
-  // const topBrand = useInput(
-  //   storeData?.storeDetailCompleteness?.topSellingBrand || null,
-  // );
-  // const wantedBrand = useInput(
-  //   storeData?.storeDetailCompleteness?.mostWantedBrand || null,
-  // );
   const vehicleAccessibilityAmount = useInput(
     buyerAddressData?.vehicleAccessibilityAmount || null,
   );
@@ -111,10 +101,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
 
   React.useEffect(() => {
     switch (selectedItem?.type) {
-      // case 'listNumOfEmployee': {
-      //   numberOfEmployee.setValue(selectedItem.item.amount);
-      //   break;
-      // }
       case 'listVehicleAccess': {
         vehicleAccessibility.setValue(selectedItem.item);
         break;
@@ -277,8 +263,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     const dataVehicleAccessibilityAmount = vehicleAccessibilityAmount.value
       ? Number(vehicleAccessibilityAmount.value)
       : null;
-    // const dataTopBrand = topBrand.value ? topBrand.value : null;
-    // const dataWantedBrand = wantedBrand.value ? wantedBrand.value : null;
     const dataLargeArea = largeArea.value ? largeArea.value : null;
     switch (props.type) {
       case 'merchantOwnerName':
@@ -312,17 +296,10 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       case 'merchantCompletenessInformation':
         return (
           (dataLargeArea === storeData?.buyerAccount.largeArea &&
-            // dataTopBrand ===
-            //   storeData?.storeDetailCompleteness.topSellingBrand &&
-            // dataWantedBrand ===
-            //   storeData?.storeDetailCompleteness.mostWantedBrand &&
             dataVehicleAccessibilityAmount ===
               buyerAddressData?.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
               buyerAddressData?.vehicleAccessibility?.id) ||
-          //   &&
-          // numberOfEmployee.value ===
-          //   storeData?.storeDetailCompleteness.numberOfEmployee
           vehicleAccessibility.value.id === null
         );
       case 'merchantAddress':
@@ -521,19 +498,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const renderCompletenessInformationMerchant = () => {
     return (
       <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        {/* <View style={{ marginBottom: 16 }}>
-          <SnbTextFieldSelect
-            placeholder={'Pilih Jumlah Karyawan'}
-            type={'default'}
-            value={numberOfEmployee.value ? numberOfEmployee.value : ''}
-            onPress={() =>
-              gotoSelection({ type: 'listNumOfEmployee', action: 'edit' })
-            }
-            rightIcon={'chevron_right'}
-            rightType={'icon'}
-            labelText={'Jumlah Karyawan'}
-          />
-        </View> */}
         <View style={{ marginBottom: 16 }}>
           <SnbTextField.Text
             labelText={'Ukuran Toko'}
@@ -550,26 +514,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             maxLength={4}
           />
         </View>
-        {/* <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
-            labelText={'Merk Paling Laku'}
-            placeholder={'Masukkan Merk Paling Laku'}
-            type={'default'}
-            value={topBrand.value ? topBrand.value : ''}
-            onChangeText={(text) => topBrand.setValue(text)}
-            clearText={() => topBrand.setValue('')}
-          />
-        </View> */}
-        {/* <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
-            labelText={'Merk Paling Diinginkan'}
-            placeholder={'Masukkan Merk Paling Diinginkan'}
-            type={'default'}
-            value={wantedBrand.value ? wantedBrand.value : ''}
-            onChangeText={(text) => wantedBrand.setValue(text)}
-            clearText={() => wantedBrand.setValue('')}
-          />
-        </View> */}
         <View style={{ marginBottom: 16 }}>
           <SnbTextFieldSelect
             placeholder={'Pilih Akses Jalan'}
