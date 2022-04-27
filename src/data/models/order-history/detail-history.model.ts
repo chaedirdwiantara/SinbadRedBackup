@@ -14,23 +14,23 @@ export interface orderDetailHistory {
   id: string;
   statusValue: string;
   statusLabel: string;
-  orderSellerFailedReason?: string;
   orderSellerCode: string;
   orderedAt: string;
   orderOrigin: string;
   orderDestination: string;
-  estimationDeliveredAt?: string;
+  orderSellerFailedReason?: string;
   estimationShippedAt?: string;
-  shippedAt?: string;
-  cancelledAt?: string;
-  doneAt?: string;
   products: Array<Products>;
   totalOrderProducts: number;
   paymentMethodName: string;
-  totalProductsPrice: number;
-  totalOrderPrice: number;
+  totalSellerPriceAfterTax: number;
+  totalOrderPriceAfterTax: number;
   isCancellable: boolean;
   isOrderAbleToDone: boolean;
+  // WIP
+  // shippedAt?: string;
+  // cancelledAt?: string;
+  // doneAt?: string;
 }
 
 export interface OrderHistoryDetailProcessProps

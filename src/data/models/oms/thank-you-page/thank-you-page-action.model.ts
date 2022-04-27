@@ -6,5 +6,5 @@ export interface PaymentGuideQueryOptions {
 }
 export interface CancelOrderPayload {
   status: string;
-  id: string
+  id: string;
 }

@@ -12,9 +12,9 @@ export interface PaymentMethod {
   code: string;
   displayLabel: string;
   iconUrl: string;
-  serviceFeeDeduct: string;
-  serviceFeeNonDeduct: string;
-  isServiceFeeFree: string;
+  serviceFeeDeduct: number;
+  serviceFeeNonDeduct: number;
+  isServiceFeeFree: boolean;
   isSelected: boolean;
   isActive: boolean;
 }
@@ -37,19 +37,41 @@ export interface PaymentMethodCreateOrderResponse {
 }
 
 export interface PaymentMethodCreateOrderData {
-  id: string;
   userId: number;
   cartId: string;
-  buyerId: number;
   sellers: PaymentMethodSellers[];
+  buyerId: number;
+  buyerCode: string;
+  ownerId: string;
+  ownerFullname: string;
+  ownerPhoneNo: string;
   buyerName: string;
-  buyerAddress: PaymentMethodBuyerAdress;
-  paymentMethod: PaymentMethodChoosen;
+  buyerAddressLatitude: string;
+  buyerAddressLongitude: string;
+  buyerAddressProvince: string;
+  buyerAddressCity: string;
+  buyerAddressDistrict: string;
+  buyerAddressUrban: string;
+  buyerAddressZipCode: string;
+  buyerAddress: string;
+  buyerAddressNoteAddress: string;
+  buyerAddressLocationId: string;
+  paymentMethodId: number;
+  paymentMethodCode: string;
+  paymentMethodServiceFeeDeduct: number;
+  paymentMethodServiceFeeNonDeduct: number;
+  paymentMethodDisplayLabel: string;
+  paymentMethodIsServiceFeeFree: boolean;
+  paymentMethodIconUrl: string;
+  reservedAt: string;
 }
 
 export interface PaymentMethodSellers {
   sellerId: number;
   sellerName: string;
+  sellerAdminEmail: string;
+  sellerAdminId: string;
+  sellerAdminFullname: string;
   products: PaymentMethodProducts[];
 }
 export interface PaymentMethodBuyerAdress {
@@ -64,46 +86,30 @@ export interface PaymentMethodBuyerAdress {
   noteAddress: string;
   locationId: string;
 }
-
-export interface PaymentMethodChoosen {
-  id: number;
-  code: string;
-  serviceFeeDeduct: number;
-  serviceFeeNonDeduct: number;
-  displayLabel: string;
-  isServiceFeeFree: boolean;
-  iconUrl: string;
-}
 export interface PaymentMethodProducts {
   productId: string;
   warehouseId: number;
+  warehouseCode: string;
   warehouseName: string;
   categoryId: string;
   brandId: string;
-  brandName: string;
+  productCode: string;
   productName: string;
   productImageUrl: string;
+  brandName: string;
   qty: number;
-  minQty: number;
-  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
+  productPriceBeforeTax: number;
   taxPercentage: number;
-  lastUsedPrice: number;
+  productTax: number;
+  productPriceAfterTax: number;
+  totalProductPriceAfterTax: number;
   leadTime: number;
-  price: number;
-  priceRules: PaymentMethodPriceRules;
 }
-
-export interface PaymentMethodPriceRules {
-  minQty: number;
-  maxQty: number;
-  price: number;
-}
-
 export interface PaymentMethodCommitCartData {
   checkoutId: string;
-  orderId: number
+  orderId: number;
 }
 
 export interface CommitCart<T> {
@@ -117,5 +123,5 @@ export interface CommitCartResponseData {
   updatedAt: string;
 }
 
-export interface CommitCartResponse extends CommitCart<CommitCartResponseData> {}
-
+export interface CommitCartResponse
+  extends CommitCart<CommitCartResponseData> {}

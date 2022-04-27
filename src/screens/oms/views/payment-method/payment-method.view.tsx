@@ -275,22 +275,83 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
 
   //==> dispatch create order
   React.useEffect(() => {
-    if (createTheOrder == true) {
-      const params: models.PaymentMethodCreateOrderData | any = {
-        ...checkoutContextData,
-        paymentMethod: {
-          id: selectedPaymentMethodData?.id,
-          code: selectedPaymentMethodData?.code,
-          serviceFeeDeduct: Number(selectedPaymentMethodData?.serviceFeeDeduct),
-          serviceFeeNonDeduct: Number(
-            selectedPaymentMethodData?.serviceFeeNonDeduct,
-          ),
-          isServiceFeeFree: Boolean(
-            selectedPaymentMethodData?.isServiceFeeFree,
-          ),
-          displayLabel: selectedPaymentMethodData?.displayLabel,
-          iconUrl: selectedPaymentMethodData?.iconUrl,
+    if (
+      createTheOrder == true &&
+      checkoutContextData &&
+      selectedPaymentMethodData
+    ) {
+      // rename seller attributes
+      const updatedSellerAttributes = checkoutContextData.sellers.map(
+        (sellers) => {
+          // rename products attributes
+          const updatedProductsAttributes = sellers.products.map((products) => {
+            return {
+              productId: products.productId,
+              warehouseId: products.warehouseId,
+              warehouseCode: products.externalWarehouseCode,
+              warehouseName: products.warehouseName,
+              categoryId: products.categoryId,
+              brandId: products.brandId,
+              productCode: products.externalProductCode,
+              productName: products.productName,
+              productImageUrl: products.productImageUrl,
+              brandName: products.brandName,
+              qty: products.qty,
+              qtyPerBox: products.qtyPerBox,
+              uomLabel: products.uomLabel,
+              productPriceBeforeTax: products.priceBeforeTax,
+              taxPercentage: products.taxPercentage,
+              productTax: products.taxPrice,
+              productPriceAfterTax: products.priceAfterTax,
+              totalProductPriceAfterTax:
+                products.priceAfterTax * products.qty +
+                products.taxPrice * products.qty,
+              leadTime: products.leadTime,
+            };
+          });
+
+          return {
+            sellerId: sellers.sellerId,
+            sellerName: sellers.sellerName,
+            sellerAdminEmail: sellers.sellerAdminEmail || '',
+            sellerAdminId: sellers.sellerAdminId?.toString() || '',
+            sellerAdminFullname: sellers.sellerAdminName || '',
+            products: updatedProductsAttributes,
+          };
         },
+      );
+
+      const params: models.PaymentMethodCreateOrderData = {
+        userId: checkoutContextData.userId,
+        cartId: checkoutContextData.cartId,
+        sellers: updatedSellerAttributes,
+        buyerId: checkoutContextData.buyerId,
+        buyerCode: checkoutContextData.buyerCode,
+        ownerId: checkoutContextData.ownerId.toString(),
+        ownerFullname: checkoutContextData.ownerFullName,
+        ownerPhoneNo: checkoutContextData.ownerPhoneNumber,
+        buyerName: checkoutContextData.buyerName,
+        buyerAddressLatitude: checkoutContextData.buyerAddress.latitude,
+        buyerAddressLongitude: checkoutContextData.buyerAddress.longitude,
+        buyerAddressProvince: checkoutContextData.buyerAddress.province,
+        buyerAddressCity: checkoutContextData.buyerAddress.city,
+        buyerAddressDistrict: checkoutContextData.buyerAddress.district,
+        buyerAddressUrban: checkoutContextData.buyerAddress.urban,
+        buyerAddressZipCode: checkoutContextData.buyerAddress.zipCode,
+        buyerAddress: checkoutContextData.buyerAddress.address,
+        buyerAddressNoteAddress: checkoutContextData.buyerAddress.noteAddress,
+        buyerAddressLocationId: checkoutContextData.buyerAddress.locationId,
+        paymentMethodId: selectedPaymentMethodData.id,
+        paymentMethodCode: selectedPaymentMethodData.code,
+        paymentMethodServiceFeeDeduct:
+          selectedPaymentMethodData.serviceFeeDeduct,
+        paymentMethodServiceFeeNonDeduct:
+          selectedPaymentMethodData.serviceFeeNonDeduct,
+        paymentMethodDisplayLabel: selectedPaymentMethodData.displayLabel,
+        paymentMethodIsServiceFeeFree:
+          selectedPaymentMethodData.isServiceFeeFree,
+        paymentMethodIconUrl: selectedPaymentMethodData.iconUrl,
+        reservedAt: checkoutContextData.createdAt,
       };
 
       paymentMethodCreateOrder.fetch(dispatchPaymentMethod, params);
