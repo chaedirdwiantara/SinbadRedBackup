@@ -55,61 +55,64 @@ export const AddToCartProductData: FC<Props> = ({
               maxWidth: '80%',
             }}>
             <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
-            {/* harga normal */}
-            <View style={AddToCartModalStyle.priceContainer}>
-              <View style={{ marginRight: 8 }}>
-                <Text
-                  style={{
-                    textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
-                  }}>
-                  <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black100}>
-                    {toCurrency(priceAfterTax || 0, {
-                      withFraction: false,
-                    })}
-                  </SnbText.B3>
-                </Text>
+            <View style={{ paddingBottom: 5 }}>
+              {/* harga normal */}
+              <View style={AddToCartModalStyle.priceContainer}>
+                <View style={{ marginRight: 8 }}>
+                  <Text
+                    style={{
+                      textDecorationLine: isPriceGrosir
+                        ? 'line-through'
+                        : 'none',
+                    }}>
+                    <SnbText.B3
+                      color={isPriceGrosir ? color.black60 : color.black100}>
+                      {toCurrency(priceAfterTax || 0, {
+                        withFraction: false,
+                      })}
+                    </SnbText.B3>
+                  </Text>
+                </View>
+                {isPriceGrosir ? (
+                  <View />
+                ) : (
+                  <>
+                    <TouchableOpacity onPress={toggleTooltipVisible}>
+                      <SnbIcon name="help" color={color.blue50} size={18} />
+                    </TouchableOpacity>
+                    <View style={AddToCartModalStyle.tooltipContainer}>
+                      <SnbToolTips
+                        show={tooltipVisible}
+                        tips="Bottom"
+                        content={
+                          <SnbText.C3 color={color.white}>
+                            Harga ini mungkin berubah mempertimbangkan lokasi
+                            gudang
+                          </SnbText.C3>
+                        }
+                      />
+                    </View>
+                  </>
+                )}
               </View>
+              {/* harga coret */}
               {isPriceGrosir ? (
-                <View />
-              ) : (
-                <>
-                  <TouchableOpacity onPress={toggleTooltipVisible}>
-                    <SnbIcon name="help" color={color.blue50} size={18} />
-                  </TouchableOpacity>
-                  <View style={AddToCartModalStyle.tooltipContainer}>
-                    <SnbToolTips
-                      show={tooltipVisible}
-                      tips="Bottom"
-                      content={
-                        <SnbText.C3 color={color.white}>
-                          Harga ini mungkin berubah mempertimbangkan lokasi
-                          gudang
-                        </SnbText.C3>
-                      }
-                    />
+                <View style={AddToCartModalStyle.priceContainer}>
+                  <View style={{ marginRight: 8 }}>
+                    <SnbText.B3 color={color.red50}>
+                      {toCurrency(bulkPriceAterTax ?? 0, {
+                        withFraction: false,
+                      })}
+                    </SnbText.B3>
                   </View>
-                </>
+                  <View>
+                    <SnbBadge.Label type="error" value="Harga Grosir" />
+                  </View>
+                </View>
+              ) : (
+                <View />
               )}
             </View>
-            {/* harga coret */}
-            {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.bulkPriceContainer}>
-                <View style={{ marginRight: 8 }}>
-                  <SnbText.B3 color={color.red50}>
-                    {toCurrency(bulkPriceAterTax ?? 0, {
-                      withFraction: false,
-                    })}
-                  </SnbText.B3>
-                </View>
-                <View>
-                  <SnbBadge.Label type="error" value="Harga Grosir" />
-                </View>
-              </View>
-            ) : (
-              <View />
-            )}
-
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
                 Per Dus {`${dataProductDetail?.packagedQty} Pcs`}
@@ -134,60 +137,64 @@ export const AddToCartProductData: FC<Props> = ({
               maxWidth: '80%',
             }}>
             <SnbText.B4>{dataProductDetailCart?.name}</SnbText.B4>
-            {/* harga normal */}
-            <View style={AddToCartModalStyle.priceContainer}>
-              <View style={{ marginRight: 8 }}>
-                <Text
-                  style={{
-                    textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
-                  }}>
-                  <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black100}>
-                    {toCurrency(priceAfterTax || 0, {
-                      withFraction: false,
-                    })}
-                  </SnbText.B3>
-                </Text>
+            <View style={{ paddingBottom: 5 }}>
+              {/* harga normal */}
+              <View style={AddToCartModalStyle.priceContainer}>
+                <View style={{ marginRight: 8 }}>
+                  <Text
+                    style={{
+                      textDecorationLine: isPriceGrosir
+                        ? 'line-through'
+                        : 'none',
+                    }}>
+                    <SnbText.B3
+                      color={isPriceGrosir ? color.black60 : color.black100}>
+                      {toCurrency(priceAfterTax || 0, {
+                        withFraction: false,
+                      })}
+                    </SnbText.B3>
+                  </Text>
+                </View>
+                {isPriceGrosir ? (
+                  <View />
+                ) : (
+                  <>
+                    <TouchableOpacity onPress={toggleTooltipVisible}>
+                      <SnbIcon name="help" color={color.blue50} size={18} />
+                    </TouchableOpacity>
+                    <View style={AddToCartModalStyle.tooltipContainer}>
+                      <SnbToolTips
+                        show={tooltipVisible}
+                        tips="Bottom"
+                        content={
+                          <SnbText.C3 color={color.white}>
+                            Harga ini mungkin berubah mempertimbangkan lokasi
+                            gudang
+                          </SnbText.C3>
+                        }
+                      />
+                    </View>
+                  </>
+                )}
               </View>
+              {/* harga coret */}
               {isPriceGrosir ? (
-                <View />
-              ) : (
-                <>
-                  <TouchableOpacity onPress={toggleTooltipVisible}>
-                    <SnbIcon name="help" color={color.blue50} size={18} />
-                  </TouchableOpacity>
-                  <View style={AddToCartModalStyle.tooltipContainer}>
-                    <SnbToolTips
-                      show={tooltipVisible}
-                      tips="Bottom"
-                      content={
-                        <SnbText.C3 color={color.white}>
-                          Harga ini mungkin berubah mempertimbangkan lokasi
-                          gudang
-                        </SnbText.C3>
-                      }
-                    />
+                <View style={AddToCartModalStyle.priceContainer}>
+                  <View style={{ marginRight: 8 }}>
+                    <SnbText.B3 color={color.red50}>
+                      {toCurrency(bulkPriceAterTax ?? 0, {
+                        withFraction: false,
+                      })}
+                    </SnbText.B3>
                   </View>
-                </>
+                  <View>
+                    <SnbBadge.Label type="error" value="Harga Grosir" />
+                  </View>
+                </View>
+              ) : (
+                <View />
               )}
             </View>
-            {/* harga coret */}
-            {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.bulkPriceContainer}>
-                <View style={{ marginRight: 8 }}>
-                  <SnbText.B3 color={color.red50}>
-                    {toCurrency(bulkPriceAterTax ?? 0, {
-                      withFraction: false,
-                    })}
-                  </SnbText.B3>
-                </View>
-                <View>
-                  <SnbBadge.Label type="error" value="Harga Grosir" />
-                </View>
-              </View>
-            ) : (
-              <View />
-            )}
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
                 Per Dus {`${dataProductDetailCart?.packagedQty} Pcs`}
