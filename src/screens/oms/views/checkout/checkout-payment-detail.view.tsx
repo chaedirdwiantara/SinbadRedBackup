@@ -9,16 +9,14 @@ import {
   subTotalQty,
 } from '../../functions/checkout';
 /** === TYPE === */
-export interface IPaymentDetail {}
+import * as models from '@models';
 
 export interface CheckoutPaymentDetailViewProps {
-  // data: models.IInvoiceCheckout;
-  products: any;
+  products: models.CheckoutCartProduct[];
 }
 
 /** === COMPONENT === */
 export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
-  // data,
   products,
 }) => {
   /** === HOOK === */

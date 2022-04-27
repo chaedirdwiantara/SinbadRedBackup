@@ -110,9 +110,7 @@ function* paymentMethodCommitCart(
   try {
     const response: models.CreateSuccessV3Props<models.CommitCartResponse> =
       yield call(() => {
-        return PaymentMethodListApi.commitCartApi(
-          action.payload,
-        );
+        return PaymentMethodListApi.commitCartApi(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.paymentMethodCommitCartSuccess(response),
@@ -121,14 +119,10 @@ function* paymentMethodCommitCart(
     yield put(ActionCreators.paymentMethodCommitCartSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.paymentMethodCommitCartFailed(
-        error as models.ErrorProps,
-      ),
+      ActionCreators.paymentMethodCommitCartFailed(error as models.ErrorProps),
     );
     yield put(
-      ActionCreators.paymentMethodCommitCartFailed(
-        error as models.ErrorProps,
-      ),
+      ActionCreators.paymentMethodCommitCartFailed(error as models.ErrorProps),
     );
   }
 }
@@ -141,7 +135,10 @@ function* paymentMethodListSaga() {
   );
   yield takeLatest(types.POST_CREATE_ORDER_PROCESS, paymentMethodCreateOrder);
   yield takeLatest(types.PAYMENT_METHOD_SUB_RTDB_PROCESS, paymentMethodSubRtdb);
-  yield takeLatest(types.PAYMENT_METHOD_COMMIT_CART_PROCESS, paymentMethodCommitCart);
+  yield takeLatest(
+    types.PAYMENT_METHOD_COMMIT_CART_PROCESS,
+    paymentMethodCommitCart,
+  );
 }
 
 export default paymentMethodListSaga;
