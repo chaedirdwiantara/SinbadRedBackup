@@ -24,6 +24,11 @@ export const AddToCartModalStyle = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  bulkPriceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 5,
+  },
   tooltipContainer: {
     maxWidth: 200,
     height: 50,

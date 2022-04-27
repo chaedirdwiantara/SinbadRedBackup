@@ -63,7 +63,7 @@ export const AddToCartProductData: FC<Props> = ({
                     textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
                   }}>
                   <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black}>
+                    color={isPriceGrosir ? color.black60 : color.black100}>
                     {toCurrency(priceAfterTax || 0, {
                       withFraction: false,
                     })}
@@ -94,7 +94,7 @@ export const AddToCartProductData: FC<Props> = ({
             </View>
             {/* harga coret */}
             {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.priceContainer}>
+              <View style={AddToCartModalStyle.bulkPriceContainer}>
                 <View style={{ marginRight: 8 }}>
                   <SnbText.B3 color={color.red50}>
                     {toCurrency(bulkPriceAterTax ?? 0, {
@@ -142,7 +142,7 @@ export const AddToCartProductData: FC<Props> = ({
                     textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
                   }}>
                   <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black}>
+                    color={isPriceGrosir ? color.black60 : color.black100}>
                     {toCurrency(priceAfterTax || 0, {
                       withFraction: false,
                     })}
@@ -173,7 +173,7 @@ export const AddToCartProductData: FC<Props> = ({
             </View>
             {/* harga coret */}
             {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.priceContainer}>
+              <View style={AddToCartModalStyle.bulkPriceContainer}>
                 <View style={{ marginRight: 8 }}>
                   <SnbText.B3 color={color.red50}>
                     {toCurrency(bulkPriceAterTax ?? 0, {
