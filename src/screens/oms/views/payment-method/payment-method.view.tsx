@@ -303,9 +303,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
               taxPercentage: products.taxPercentage,
               productTax: products.taxPrice,
               productPriceAfterTax: products.priceAfterTax,
-              totalProductPriceAfterTax:
-                products.priceAfterTax * products.qty +
-                products.taxPrice * products.qty,
+              totalProductPriceAfterTax: products.priceAfterTax * products.qty,
               leadTime: products.leadTime,
             };
           });
