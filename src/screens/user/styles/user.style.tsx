@@ -66,17 +66,35 @@ const UserStyles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 18,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   appButtonText: {
     fontSize: 14,
     paddingHorizontal: 10,
-    // letterSpacing: 1,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     fontWeight: '500',
     fontFamily: 'Montserrat',
     fontStyle: 'normal',
-    color: '#52575C'
+    color: '#52575C',
+  },
+  carouselContainer: {
+    backgroundColor: color.white,
+    marginHorizontal: 4,
+    borderRadius: 5,
+  },
+  carouselText: {
+    marginLeft: 16,
+    alignSelf: 'center',
+    width: 185,
+  },
+  carouselButton: {
+    backgroundColor: color.red50,
+    height: 24,
+    alignSelf: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    paddingBottom: 2,
   }
 });
 export default UserStyles;

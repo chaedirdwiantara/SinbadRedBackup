@@ -36,13 +36,13 @@ const MerchantDetailAccountView: FC = () => {
    * =======================
    */
   const goTo = (data: any) => {
-    const isPhoto = data.type == 'store' ?  'MerchantEditPhotoView' : 'MerchantEditView'
+    const isPhoto =
+      data.type === 'store' ? 'MerchantEditPhotoView' : 'MerchantEditView';
 
     NavigationAction.navigate(isPhoto, {
       title: data.title,
-      type:  data.type,
+      type: data.type,
     });
-   
   };
   /** === VIEW === */
   /** => header */
@@ -68,7 +68,7 @@ const MerchantDetailAccountView: FC = () => {
             <SnbText.H4 color={color.black100}>{data.key}</SnbText.H4>
           </View>
           <SnbText.B3 color={data.fontColor ? data.fontColor : color.black60}>
-            {data.value} {data.key == 'Ukuran Toko' && 'm\u00B2'}
+            {data.value} {data.key === 'Ukuran Toko' && 'm\u00B2'}
           </SnbText.B3>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -90,11 +90,12 @@ const MerchantDetailAccountView: FC = () => {
       </View>
     );
   };
+  const renderSeparator = () => {
+    return <View style={MerchantStyles.separator} />;
+  };
   /** => content */
   const content = () => {
-    // const storeData = stateUser.detail.data?.buyerData.buyerInformation;
     const buyerData = buyerDataState?.buyerInformation.buyerAccount;
-    
     return (
       <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
         <View>
@@ -102,15 +103,7 @@ const MerchantDetailAccountView: FC = () => {
             key: 'ID Toko',
             value: buyerData?.code,
           })}
-          <View
-            style={{
-              borderBottomColor: '#aaa',
-              borderTopColor: '#aaa',
-              paddingVertical: 10,
-              marginHorizontal: 15,
-              borderBottomWidth: 0.2,
-            }}
-          />
+          {renderSeparator()}
           {renderContentSection({
             key: 'Kategori Toko',
             value: buyerData?.buyerCategory,
@@ -119,26 +112,24 @@ const MerchantDetailAccountView: FC = () => {
             key: 'Kategori Produk',
             value: buyerData?.productCategory,
           })}
-          <View
-            style={{
-              borderBottomColor: '#aaa',
-              borderTopColor: '#aaa',
-              paddingVertical: 10,
-              marginHorizontal: 15,
-              borderBottomWidth: 0.2,
-            }}
-          />
+          {renderSeparator()}
           {renderContentSection({
             key: 'Nama Toko',
             value: buyerData?.name,
-            action: buyerData?.name == '' || buyerData?.name == null ? 'tambah' : 'ubah',
+            action:
+              buyerData?.name === '' || buyerData?.name == null
+                ? 'tambah'
+                : 'ubah',
             type: 'merchantAccountName',
             title: buyerData?.name ? 'Ubah Nama Toko' : 'Tambah Nama Toko',
           })}
           {renderContentSection({
             key: 'Nomor Handphone Toko',
             value: buyerData?.phoneNo,
-            action: buyerData?.phoneNo == '' || buyerData?.phoneNo == null ? 'tambah' : 'ubah',
+            action:
+              buyerData?.phoneNo === '' || buyerData?.phoneNo == null
+                ? 'tambah'
+                : 'ubah',
             type: 'merchantAccountPhoneNo',
             title: buyerData?.phoneNo
               ? 'Ubah No. Handphone Toko'
@@ -147,15 +138,27 @@ const MerchantDetailAccountView: FC = () => {
           {renderContentSection({
             key: 'Ukuran Toko',
             value: buyerData?.largeArea || 0,
-            action: buyerData?.largeArea == '' || buyerData?.largeArea == null ? 'tambah' : 'ubah',
+            action:
+              buyerData?.largeArea === '' || buyerData?.largeArea == null
+                ? 'tambah'
+                : 'ubah',
             type: 'merchantAccountSize',
-            title: buyerData?.largeArea == '' || buyerData?.largeArea == null ? 'Ubah Ukuran Toko' : 'Tambah Ukuran Toko',
+            title:
+              buyerData?.largeArea === '' || buyerData?.largeArea == null
+                ? 'Ubah Ukuran Toko'
+                : 'Tambah Ukuran Toko',
           })}
           {renderContentSection({
             key: 'Foto Toko',
             fontColor: color.green50,
-            value: buyerData?.imageUrl == '' || buyerData?.imageUrl == null ? '-' : 'Sudah diupload',
-            action:  buyerData?.imageUrl == '' || buyerData?.imageUrl == null ? 'tambah' : 'ubah',
+            value:
+              buyerData?.imageUrl === '' || buyerData?.imageUrl == null
+                ? '-'
+                : 'Sudah diupload',
+            action:
+              buyerData?.imageUrl === '' || buyerData?.imageUrl == null
+                ? 'tambah'
+                : 'ubah',
             type: 'store',
             title: 'Foto Toko',
           })}

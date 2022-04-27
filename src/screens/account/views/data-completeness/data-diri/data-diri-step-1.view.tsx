@@ -28,7 +28,6 @@ const Content: React.FC<Props> = (props) => {
   const {
     updateCompleteData,
     updateCompleteDataState,
-    // completeDataState,
     resetUpdateCompleteData,
     refetchCompleteData,
     backToDataCompleteness,

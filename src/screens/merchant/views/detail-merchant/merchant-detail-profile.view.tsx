@@ -56,6 +56,14 @@ const MerchantDetailProfileView: FC = () => {
       });
     }
   }, [stateGlobal.uploadImage.error]);
+
+  useEffect(() => {
+    if (stateUser.update.error !== null) {
+      SnbToast.show(stateUser.update.error.message, 2500, {
+        positionValue: 56,
+      });
+    }
+  }, [stateUser.update.error]);
   /** FUNCTION */
   /** === GO TO PAGE === */
   const goTo = (data: any) => {
@@ -103,11 +111,18 @@ const MerchantDetailProfileView: FC = () => {
       : require('../../../../assets/images/sinbad_image/avatar.png');
     return (
       <View>
-        <Image source={source} style={MerchantStyles.imageProfile} />
+        {ownerData?.profile.imageUrl ? (
+          <Image source={source} style={MerchantStyles.imageProfile} />
+        ) : (
+          <SnbIcon name={'person_circle'} size={100} color={color.black40} />
+        )}
         <TouchableOpacity
-          style={MerchantStyles.boxEditIcon}
+          style={MerchantStyles.boxEditIconContainer}
           onPress={() => goTo({ type: 'merchantOwnerImage' })}>
-          <SnbIcon name={'create'} size={18} />
+          <View
+            style={MerchantStyles.boxEditIcon}>
+            <SnbIcon name={'create'} size={10} color={color.white} />
+          </View>
         </TouchableOpacity>
       </View>
     );
@@ -127,11 +142,7 @@ const MerchantDetailProfileView: FC = () => {
           </View>
         </View>
         <View style={MerchantStyles.boxHeader}>
-          {/* {this.props.merchant.loadingEditMerchant
-            ? this.renderSkeletonImageUpload()
-            :  */}
           {renderOwnerImage()}
-          {/* } */}
         </View>
       </View>
     );
