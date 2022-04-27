@@ -16,17 +16,13 @@ interface Props {
 }
 
 const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
-  const { ocrImageResult, ocrImageState }: any = useOCR(true);
+  const { ocrImageResult }: any = useOCR(true);
 
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
   // const [imageUrl] = React.useState(
   //   `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.id}`,
   // );
-
-  React.useEffect(() => {
-    console.log(ocrImageState);
-  }, [ocrImageState]);
 
   React.useEffect(() => {
     if (ocrImageResult) {
