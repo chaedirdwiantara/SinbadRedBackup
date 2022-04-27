@@ -69,15 +69,12 @@ const SnbListButton: FC<Props> = (props) => {
   const badgeCompletness1 = () => {
     return (
       <View
-        style={{
-          backgroundColor: colors.blue10,
-          flexDirection: 'row',
-          margin: 16,
-          borderRadius: 8,
-          alignItems: 'center',
-          padding: 16,
-          justifyContent: 'space-between',
-        }}>
+        style={[
+          styles.badgeContainer,
+          {
+            marginTop: 16,
+          },
+        ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem1}
           <View style={{ marginLeft: 16 }}>
@@ -95,15 +92,12 @@ const SnbListButton: FC<Props> = (props) => {
   const badgeCompletness2 = () => {
     return (
       <View
-        style={{
-          backgroundColor: colors.blue10,
-          flexDirection: 'row',
-          marginHorizontal: 16,
-          borderRadius: 8,
-          alignItems: 'center',
-          padding: 16,
-          justifyContent: 'space-between',
-        }}>
+        style={[
+          styles.badgeContainer,
+          {
+            marginTop: props.badges1 ? 0 : 16,
+          },
+        ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem2}
           <View style={{ marginLeft: 16 }}>
@@ -175,6 +169,15 @@ const styles = StyleSheet.create({
   rightContainer: {
     alignItems: 'center',
     flexDirection: 'row',
+  },
+  badgeContainer: {
+    backgroundColor: colors.blue10,
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    padding: 16,
+    justifyContent: 'space-between',
   },
 });
 /** === EXPORT COMPONENT === */
