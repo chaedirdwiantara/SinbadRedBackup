@@ -112,7 +112,7 @@ export const AddToCartProductData: FC<Props> = ({
 
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus {`${dataProductDetail?.packagedQty} Pcs`}
+                Per Dus {`${dataProductDetail?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
@@ -190,7 +190,7 @@ export const AddToCartProductData: FC<Props> = ({
             )}
             <View style={{ flexDirection: 'row' }}>
               <SnbText.C1>
-                per-Dus {`${dataProductDetailCart?.packagedQty} Pcs`}
+                Per Dus {`${dataProductDetailCart?.packagedQty} Pcs`}
               </SnbText.C1>
               <View style={AddToCartModalStyle.lineSeparator} />
               <SnbText.C1>
