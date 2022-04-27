@@ -144,7 +144,7 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    marginHorizontal: 16,
   },
   containerTitle: {
     flexDirection: 'row',
