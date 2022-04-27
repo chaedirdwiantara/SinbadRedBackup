@@ -114,7 +114,7 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText.C1>Total Pesanan</SnbText.C1>
             <SnbText.C1>
-              {toCurrency(data.totalOrderPriceAfterTax, {
+              {toCurrency(data.totalSellerPriceAfterTax, {
                 withFraction: false,
               })}
             </SnbText.C1>
@@ -265,11 +265,6 @@ const ListCard = () => {
       },
     },
   } = usePaymentHistoryContext();
-
-  // loading view
-  if ([historyListLoading].some((i) => i)) {
-    return <SnbProductListSkeleton />;
-  }
   // function
   const onCancelOrder = useCallback(
     (idOrder: string) => {
@@ -287,6 +282,10 @@ const ListCard = () => {
     },
     [state.keyword, state.orderStatus, state.status],
   );
+  // loading view
+  if ([historyListLoading].some((i) => i)) {
+    return <SnbProductListSkeleton />;
+  }
   // error View
   if ([historyListError].some((i) => i)) {
     return (

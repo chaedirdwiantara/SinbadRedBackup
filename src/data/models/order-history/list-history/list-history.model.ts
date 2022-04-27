@@ -15,12 +15,11 @@ export type OrderListHistory = {
   statusLabel: string;
   product: Product;
   totalOrderProducts: number;
-  totalOrderPriceAfterTax: number;
+  totalSellerPriceAfterTax: number;
   orderedAt: string;
   isCancellable: boolean;
-  isOrderDone: boolean;
-  // WIP
-  // doneAt?: string;
+  isOrderAbleToDone: boolean;
+  doneAt?: string;
 };
 
 export interface OrderListHistoryQueryOptions {

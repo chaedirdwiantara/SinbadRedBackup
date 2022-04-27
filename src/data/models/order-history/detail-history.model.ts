@@ -2,12 +2,17 @@ import * as models from '@models';
 
 export interface Products {
   id: string;
+  code: string;
   image: string;
   name: string;
   qty: string;
   uom: string;
-  price: number;
-  totalPrice: number;
+  productTax: number;
+  totalProductTax: number;
+  productPriceBeforeTax: number;
+  productPriceAfterTax: number;
+  totalProductPriceBeforeTax: number;
+  totalProductPriceAfterTax: number;
 }
 
 export interface orderDetailHistory {
@@ -27,10 +32,9 @@ export interface orderDetailHistory {
   totalOrderPriceAfterTax: number;
   isCancellable: boolean;
   isOrderAbleToDone: boolean;
-  // WIP
-  // shippedAt?: string;
-  // cancelledAt?: string;
-  // doneAt?: string;
+  shippedAt?: string;
+  cancelledAt?: string;
+  doneAt?: string;
 }
 
 export interface OrderHistoryDetailProcessProps
