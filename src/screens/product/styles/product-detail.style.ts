@@ -31,16 +31,6 @@ export const ProductDetailStyle = StyleSheet.create({
     bottom: 0,
     alignSelf: 'center',
   },
-  exclusiveTagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 88,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    marginBottom: 8,
-    backgroundColor: color.yellow10,
-    borderRadius: 50,
-  },
   supplierLogo: {
     width: 48,
     height: 48,

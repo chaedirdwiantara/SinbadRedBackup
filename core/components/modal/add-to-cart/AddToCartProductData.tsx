@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useMemo, useReducer } from 'react';
+import React, { FC, useReducer } from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import {
   SnbText,
@@ -8,8 +8,6 @@ import {
   SnbToolTips,
   SnbBadge,
 } from 'react-native-sinbad-ui';
-/** === IMPORT COMPONENT ===  */
-import BluckPricingTag from '@core/components/product/BluckPricingTag';
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -56,20 +54,6 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {dataProductDetail?.isExclusive && (
-                <View style={[AddToCartModalStyle.exclusiveTagContainer]}>
-                  <SnbIcon
-                    name="stars"
-                    color={color.yellow50}
-                    size={18}
-                    style={{ marginRight: 4 }}
-                  />
-                  <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-                </View>
-              )}
-              {dataProductDetail?.hasBulkPrice ? <BluckPricingTag /> : <View />}
-            </View>
             <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
             {/* harga normal */}
             <View style={AddToCartModalStyle.priceContainer}>
@@ -79,7 +63,7 @@ export const AddToCartProductData: FC<Props> = ({
                     textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
                   }}>
                   <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black}>
+                    color={isPriceGrosir ? color.black60 : color.black100}>
                     {toCurrency(priceAfterTax || 0, {
                       withFraction: false,
                     })}
@@ -110,7 +94,7 @@ export const AddToCartProductData: FC<Props> = ({
             </View>
             {/* harga coret */}
             {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.priceContainer}>
+              <View style={AddToCartModalStyle.bulkPriceContainer}>
                 <View style={{ marginRight: 8 }}>
                   <SnbText.B3 color={color.red50}>
                     {toCurrency(bulkPriceAterTax ?? 0, {
@@ -149,22 +133,6 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            {dataProductDetailCart?.isExclusive && (
-              <View style={AddToCartModalStyle.exclusiveTagContainer}>
-                <SnbIcon
-                  name="stars"
-                  color={color.yellow50}
-                  size={18}
-                  style={{ marginRight: 4 }}
-                />
-                <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-              </View>
-            )}
-            {dataProductDetailCart?.hasBulkPrice ? (
-              <BluckPricingTag />
-            ) : (
-              <View />
-            )}
             <SnbText.B4>{dataProductDetailCart?.name}</SnbText.B4>
             {/* harga normal */}
             <View style={AddToCartModalStyle.priceContainer}>
@@ -174,7 +142,7 @@ export const AddToCartProductData: FC<Props> = ({
                     textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
                   }}>
                   <SnbText.B3
-                    color={isPriceGrosir ? color.black60 : color.black}>
+                    color={isPriceGrosir ? color.black60 : color.black100}>
                     {toCurrency(priceAfterTax || 0, {
                       withFraction: false,
                     })}
@@ -205,7 +173,7 @@ export const AddToCartProductData: FC<Props> = ({
             </View>
             {/* harga coret */}
             {isPriceGrosir ? (
-              <View style={AddToCartModalStyle.priceContainer}>
+              <View style={AddToCartModalStyle.bulkPriceContainer}>
                 <View style={{ marginRight: 8 }}>
                   <SnbText.B3 color={color.red50}>
                     {toCurrency(bulkPriceAterTax ?? 0, {
