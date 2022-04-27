@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useMemo, useReducer } from 'react';
+import React, { FC, useReducer } from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import {
   SnbText,
@@ -8,14 +8,11 @@ import {
   SnbToolTips,
   SnbBadge,
 } from 'react-native-sinbad-ui';
-/** === IMPORT COMPONENT ===  */
-import BulkPricingTag from '@core/components/product/BulkPricingTag';
 /** === IMPORT FUNCTIONS ===  */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '@core/styles';
-import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === TYPES === */
 interface Props {
   isFromProductDetail?: boolean;
@@ -57,14 +54,6 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-              {dataProductDetail?.isExclusive ? <ExclusiveTag /> : <View />}
-              {dataProductDetail?.hasBulkPrice ? (
-                <BulkPricingTag style={{ marginLeft: 4 }} />
-              ) : (
-                <View />
-              )}
-            </View>
             <SnbText.B4>{dataProductDetail?.name}</SnbText.B4>
             {/* harga normal */}
             <View style={AddToCartModalStyle.priceContainer}>
@@ -144,16 +133,6 @@ export const AddToCartProductData: FC<Props> = ({
               marginLeft: 16,
               maxWidth: '80%',
             }}>
-            {dataProductDetailCart?.hasBulkPrice ? (
-              <BulkPricingTag />
-            ) : (
-              <View />
-            )}
-            {dataProductDetailCart?.isExclusive ? (
-              <ExclusiveTag style={{ marginLeft: 4 }} />
-            ) : (
-              <View />
-            )}
             <SnbText.B4>{dataProductDetailCart?.name}</SnbText.B4>
             {/* harga normal */}
             <View style={AddToCartModalStyle.priceContainer}>

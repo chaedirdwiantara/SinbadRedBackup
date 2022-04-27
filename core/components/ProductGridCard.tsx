@@ -92,14 +92,14 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             defaultSource={Images.opacityPlaceholder}
           />
         </View>
-        <View style={{ paddingLeft: 12 }}>
+        <View style={{ paddingLeft: 12, paddingTop: 12, paddingBottom: 4 }}>
           {props.hasBulkPrice ? (
             <BulkPricingTag />
           ) : (
             <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
           )}
         </View>
-        <View style={{ padding: 12 }}>
+        <View style={{ paddingHorizontal: 12, paddingBottom: 12 }}>
           <ProductGridCardInfo
             name={props.name}
             priceAfterTax={props.priceAfterTax}
