@@ -55,3 +55,4 @@ export const RESET_COMPLETE_DATA_CONFIRMATION = 'ResetCompleteDataConfirmation';
 export const OCR_IMAGE_PROCESS = 'OcrImageProcess';
 export const OCR_IMAGE_SUCCESS = 'OcrImageSuccess';
 export const OCR_IMAGE_FAILED = 'OcrImageFailed';
+export const OCR_IMAGE_RESET = 'OcrImageReset';

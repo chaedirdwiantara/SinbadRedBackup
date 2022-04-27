@@ -189,3 +189,12 @@ export interface IOCRImage {
   imageUrl: string;
   type: string;
 }
+
+export interface IImageVerification {
+  data: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}

@@ -94,7 +94,7 @@ const UserView: FC = ({ start }: any) => {
     }
   }, [coachmarkState?.data?.profileCoachmark]);
 
-  useEffect(()=> {
+  useEffect(() => {
     if (loadingCarousel) {
       setLoadingCarousel(false);
     }
@@ -104,7 +104,7 @@ const UserView: FC = ({ start }: any) => {
     const { type, title } = data;
     switch (type) {
       case 'ktp': {
-        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        NavigationAction.navigate('UpdatePhotoKTPView');
         break;
       }
       case 'merchantAccountName':
@@ -339,21 +339,21 @@ const UserView: FC = ({ start }: any) => {
             order={1}
             name="Verifikasi Akun Anda">
             <CopilotView>
-                <Carousel
-                  data={dataCarousel}
-                  sliderWidth={1 * width}
-                  itemWidth={width}
-                  renderItem={({ item, index }) => renderItem(item, index)}
-                  onSnapToItem={(index) => {
-                    setActiveIndex(index);
-                  }}
-                  slideStyle={{ padding: 10 }}
-                  inactiveSlideOpacity={1}
-                  inactiveSlideScale={1}
-                  activeSlideAlignment={'center'}
-                  layout={'default'}
-                  removeClippedSubviews={false}
-                />
+              <Carousel
+                data={dataCarousel}
+                sliderWidth={1 * width}
+                itemWidth={width}
+                renderItem={({ item, index }) => renderItem(item, index)}
+                onSnapToItem={(index) => {
+                  setActiveIndex(index);
+                }}
+                slideStyle={{ padding: 10 }}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                activeSlideAlignment={'center'}
+                layout={'default'}
+                removeClippedSubviews={false}
+              />
             </CopilotView>
           </CopilotStep>
         </LinearGradient>

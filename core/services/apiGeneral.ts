@@ -13,7 +13,7 @@ const apiGeneral = async <T>(
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT',
   params?: object,
 ): Promise<T> => {
   /** === GET COOKIE FROM ASYNCSTORAGE === */
