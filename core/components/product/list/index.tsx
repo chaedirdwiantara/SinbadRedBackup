@@ -240,8 +240,6 @@ const ProductList: FC<ProductListProps> = ({
       return;
     }
 
-    console.log('test', bulkPriceAterTax, isPriceGrosir);
-
     /** function to determine bulk price calculation */
     let lastUsedPrice = 0,
       isLastPriceUsedRules = false;
