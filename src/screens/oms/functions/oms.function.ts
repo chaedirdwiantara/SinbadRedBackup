@@ -14,6 +14,10 @@ const goToCategory = () => {
 const goToCheckout = () => {
   NavigationAction.navigate('OmsCheckoutView');
 };
+/** => go to profile */
+const goToProfile = () => {
+  NavigationAction.navigate('UserView', { isProfileCompletionCart: true });
+};
 /** => Go to Thank You Page */
 const goToThankYouPage = (
   section: string,
@@ -32,4 +36,5 @@ export {
   goToCheckout,
   goToThankYouPage,
   goToPaymentMethod,
+  goToProfile
 };

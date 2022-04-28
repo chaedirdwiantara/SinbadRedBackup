@@ -29,6 +29,7 @@ import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 // import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
@@ -117,6 +118,9 @@ const ProductDetailView: FC = () => {
     dispatchStock,
   } = useStockContext();
 
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, true);
+
   /** => check data supplier and sinbad status */
   const {
     checkUser,
@@ -187,11 +191,29 @@ const ProductDetailView: FC = () => {
       return;
     }
 
+    /** function to determine bulk price calculation */
+    let lastUsedPrice = 0,
+      isLastPriceUsedRules = false;
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
+    } else {
+      isLastPriceUsedRules = false;
+      lastUsedPrice = dataProduct.priceAfterTax;
+    }
+
+    const priceRules = dataProduct.bulkPrices.map((item) => {
+      return {
+        minQty: item.qty,
+        priceAfterTax: item.priceAfterTax,
+        priceBeforeTax: item.priceBeforeTax,
+        taxPrice: item.taxPrice,
+      };
+    });
+
     const params: models.AddToCartPayload = {
       productId: dataProduct.id,
       productName: dataProduct.name,
-      brandId: dataProduct.brandId,
-      brandName: dataProduct.brand,
       categoryId: dataProduct.categoryId,
       productImageUrl: dataProduct?.images[0]?.url ?? '',
       minQty: dataProduct.minQty,
@@ -200,16 +222,15 @@ const ProductDetailView: FC = () => {
       qtyPerBox: dataProduct.packagedQty,
       uomLabel: dataProduct.unit,
       warehouseId: Number(dataProduct.warehouseOriginId),
-      warehouseName: dataStock.warehouseName,
       sellerId: Number(dataProduct.sellerId),
       sellerName: dataProduct.productSeller.name,
-      isPriceAfterTax: dataProduct.isPriceAfterTax,
       taxPercentage: dataProduct.productTax.amount,
-      lastUsedPrice: dataProduct.finalPrice,
-      isLastPriceUsedRules: dataProduct.productPriceRules.length !== 0,
-      price: dataProduct.finalPrice,
-      priceRules: dataProduct.productPriceRules,
-      leadTime: dataStock.leadTime ?? 0,
+      lastUsedPrice,
+      isLastPriceUsedRules,
+      priceAfterTax: dataProduct.priceAfterTax,
+      priceBeforeTax: dataProduct.priceBeforeTax,
+      taxPrice: dataProduct.taxPrice,
+      priceRules,
       selected: true,
     };
 

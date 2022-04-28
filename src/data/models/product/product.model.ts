@@ -133,6 +133,7 @@ export interface ProductDetail {
   sellerCode: string;
   thumbnailImageUrl: string;
   warehouseOriginId?: number | null;
+  taxPrice: number;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;

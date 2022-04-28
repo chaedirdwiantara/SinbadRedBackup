@@ -5,7 +5,7 @@ interface Product {
   name: string;
   qty: string;
   uom: string;
-  totalPrice: number;
+  totalProductPriceAfterTax: number;
 }
 
 export type OrderListHistory = {
@@ -15,11 +15,11 @@ export type OrderListHistory = {
   statusLabel: string;
   product: Product;
   totalOrderProducts: number;
-  totalOrderPrice: number;
+  totalSellerPriceAfterTax: number;
   orderedAt: string;
-  doneAt?: string;
   isCancellable: boolean;
   isOrderAbleToDone: boolean;
+  doneAt?: string;
 };
 
 export interface OrderListHistoryQueryOptions {

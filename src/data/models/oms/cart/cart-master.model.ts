@@ -8,7 +8,6 @@ export interface CartMaster {
   id: string;
   userId: number;
   buyerId: number;
-  buyerName: string;
   totalProducts: number;
   sellers: CartMasterSellers[];
   unavailable: CartMasterUnavailable[];
@@ -16,6 +15,9 @@ export interface CartMaster {
 export interface CartMasterSellers {
   sellerId: number;
   sellerName: string;
+  sellerAdminId?: number;
+  sellerAdminName?: string;
+  sellerAdminEmail?: string;
   products: CartMasterSellersProducts[];
   status?: string;
 }
@@ -25,10 +27,14 @@ export interface CartMasterUnavailable extends CartMasterSellersProducts {
 export interface CartMasterSellersProducts extends CartProduct {
   sellerId?: number;
   sellerName?: string;
-  lastUsedPrice: number;
-  isLastPriceUsedRules: boolean;
   stock?: number;
   productStatus?: string;
   isStockAvailable?: boolean;
   leadTime?: number;
+  externalProductCode?: string;
+  externalWarehouseCode?: string;
+  warehouseName?: string;
+  brandId?: string;
+  brandName?: string;
+  isQtyChanged?: boolean;
 }

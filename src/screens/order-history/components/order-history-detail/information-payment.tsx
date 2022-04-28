@@ -12,12 +12,13 @@ const InformationPayment = () => {
     },
   } = useOrderHistoryContext();
 
-  if (loading)
+  if (loading) {
     return (
       <SkeletonAnimator>
         <View style={styles.skeleton} />
       </SkeletonAnimator>
     );
+  }
   return (
     <View style={styles.main}>
       <Header title="Informasi Pembayaran" />
@@ -29,13 +30,15 @@ const InformationPayment = () => {
         title={`Total Harga (${
           (data?.totalOrderProducts || 0) + 1 || ''
         } Barang)`}
-        value={toCurrency(data?.totalProductsPrice || 0, {
+        value={toCurrency(data?.totalSellerPriceAfterTax || 0, {
           withFraction: false,
         })}
       />
       <Description
         title="Total Belanja"
-        value={toCurrency(data?.totalOrderPrice || 0, { withFraction: false })}
+        value={toCurrency(data?.totalOrderPriceAfterTax || 0, {
+          withFraction: false,
+        })}
       />
     </View>
   );

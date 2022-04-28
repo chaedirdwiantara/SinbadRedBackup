@@ -89,15 +89,60 @@ const useUpdateCartAction = () => {
 
         // rewrite lastUsedPrice
         carts.map((sellerItem) => {
+          // deleting unused attributes for carts
+          delete sellerItem.sellerAdminId;
+          delete sellerItem.sellerAdminName;
+          delete sellerItem.sellerAdminEmail;
+          delete sellerItem.status;
+
           sellerItem.products.map((productItem) => {
-            productItem.lastUsedPrice = productItem.price;
+            // deleting unused attributes for carts
+            delete productItem.externalProductCode;
+            delete productItem.externalWarehouseCode;
+            delete productItem.stock;
+            delete productItem.isStockAvailable;
+            delete productItem.productStatus;
+            delete productItem.warehouseName;
+            delete productItem.brandId;
+            delete productItem.brandName;
+            delete productItem.leadTime;
+            delete productItem.isQtyChanged;
+
+            if (productItem.priceRules.length > 0) {
+              const priceRulesFirstItem = productItem.priceRules[0];
+              if (productItem.qty < priceRulesFirstItem.minQty) {
+                productItem.isLastPriceUsedRules = false;
+                productItem.lastUsedPrice = productItem.priceAfterTax;
+              } else {
+                for (let x = 0; x < productItem.priceRules.length; x++) {
+                  const isLast = x === productItem.priceRules.length - 1;
+                  if (!isLast) {
+                    if (
+                      productItem.qty >= productItem.priceRules[x].minQty &&
+                      productItem.qty < productItem.priceRules[x + 1].minQty
+                    ) {
+                      productItem.isLastPriceUsedRules = true;
+                      productItem.lastUsedPrice =
+                        productItem.priceRules[x].priceAfterTax;
+                      break;
+                    }
+                  } else {
+                    productItem.isLastPriceUsedRules = true;
+                    productItem.lastUsedPrice =
+                      productItem.priceRules[x].priceAfterTax;
+                  }
+                }
+              }
+            } else {
+              productItem.isLastPriceUsedRules = false;
+              productItem.lastUsedPrice = productItem.priceAfterTax;
+            }
           });
         });
 
         dispatch(
           Actions.updateCartProcess(contextDispatch, {
             data: {
-              buyerName: stateCart.buyerAddress.data.buyerName,
               id: cartData.id,
               carts,
             },
@@ -405,6 +450,8 @@ const useCartLocalData = () => {
           thisProduct.qty = newQty ?? thisProduct.minQty;
         }
 
+        thisProduct.isQtyChanged = true;
+
         // save data to local state
         setLocalCartMaster(newLocalCartMaster);
       }
@@ -536,22 +583,32 @@ const useCartLocalData = () => {
               countTotalProduct++;
               // if the product using price rules
               if (productItem.priceRules.length > 0) {
-                const priceRulesLastItem =
-                  productItem.priceRules[productItem.priceRules.length - 1];
-                if (priceRulesLastItem.maxQty <= productItem.qty) {
-                  countTotalPrice += priceRulesLastItem.price * productItem.qty;
+                const priceRulesFirstItem = productItem.priceRules[0];
+                if (productItem.qty < priceRulesFirstItem.minQty) {
+                  countTotalPrice +=
+                    productItem.priceAfterTax * productItem.qty;
                 } else {
-                  productItem.priceRules.map((priceRulesItem) => {
-                    if (
-                      productItem.qty >= priceRulesItem.minQty &&
-                      productItem.qty <= priceRulesItem.maxQty
-                    ) {
-                      countTotalPrice += priceRulesItem.price * productItem.qty;
+                  for (let x = 0; x < productItem.priceRules.length; x++) {
+                    const isLast = x === productItem.priceRules.length - 1;
+                    if (!isLast) {
+                      if (
+                        productItem.qty >= productItem.priceRules[x].minQty &&
+                        productItem.qty < productItem.priceRules[x + 1].minQty
+                      ) {
+                        countTotalPrice +=
+                          productItem.priceRules[x].priceAfterTax *
+                          productItem.qty;
+                        break;
+                      }
+                    } else {
+                      countTotalPrice +=
+                        productItem.priceRules[x].priceAfterTax *
+                        productItem.qty;
                     }
-                  });
+                  }
                 }
               } else {
-                countTotalPrice += productItem.price * productItem.qty;
+                countTotalPrice += productItem.priceAfterTax * productItem.qty;
               }
             }
           });
@@ -609,8 +666,7 @@ const useCartLocalData = () => {
                   qty,
                   selected,
                   productStatus: item.status,
-                  leadTime: thisProduct.leadTime,
-                  price: item.finalPrice,
+                  isQtyChanged: false,
                 };
                 /** => move product data to unavailable if inactive */
                 if (item.status === 'inactive') {
@@ -652,11 +708,17 @@ const useCartLocalData = () => {
           let sellerId: number = resultAfterCheckProduct.sellers[i].sellerId;
           let sellerName: string =
             resultAfterCheckProduct.sellers[i].sellerName;
-          let status: string = '';
+          let sellerAdminId,
+            sellerAdminName,
+            sellerAdminEmail,
+            status = '';
           payload.map((item) => {
             if (resultAfterCheckProduct.sellers[i].sellerId === item.sellerId) {
               sellerId = item.sellerId;
               sellerName = item.sellerName;
+              sellerAdminId = item.sellerAdminId;
+              sellerAdminName = item.sellerAdminName;
+              sellerAdminEmail = item.sellerAdminEmail;
               status = item.status;
               /** => check if the seller status inactive, then all products data will moved to unavailable */
               if (item.status === 'inactive') {
@@ -677,6 +739,9 @@ const useCartLocalData = () => {
           sellers.push({
             sellerId,
             sellerName,
+            sellerAdminId,
+            sellerAdminName,
+            sellerAdminEmail,
             products,
             status,
           });
@@ -742,6 +807,7 @@ const useCartLocalData = () => {
                 isStockAvailable: item.isAvailable,
                 warehouseName: item.warehouseName,
                 leadTime: item.leadTime,
+                externalWarehouseCode: item.externalWarehouseCode,
               };
               /** => move product data to unavailable if not_available */
               if (thisProduct.minQty > item.stock) {

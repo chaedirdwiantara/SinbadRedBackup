@@ -2,6 +2,7 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { View, StatusBar } from 'react-native';
 import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
+import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
@@ -45,6 +46,7 @@ import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import { contexts } from '@contexts';
@@ -188,6 +190,11 @@ const ProductList: FC<ProductListProps> = ({
     }
   };
 
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, false);
+
+  const isFocused = useIsFocused();
+
   /** => action from buttom order */
   const handleOrderPress = (product: models.ProductList) => {
     if (me.data === null) {
@@ -233,11 +240,29 @@ const ProductList: FC<ProductListProps> = ({
       return;
     }
 
+    /** function to determine bulk price calculation */
+    let lastUsedPrice = 0,
+      isLastPriceUsedRules = false;
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
+    } else {
+      isLastPriceUsedRules = false;
+      lastUsedPrice = productDetailState.priceAfterTax;
+    }
+
+    const priceRules = productDetailState.bulkPrices.map((item) => {
+      return {
+        minQty: item.qty,
+        priceAfterTax: item.priceAfterTax,
+        priceBeforeTax: item.priceBeforeTax,
+        taxPrice: item.taxPrice,
+      };
+    });
+
     const params: models.AddToCartPayload = {
       productId: productDetailState.id,
       productName: productDetailState.name,
-      brandId: productDetailState.brandId,
-      brandName: productDetailState.brand,
       categoryId: productDetailState.categoryId,
       productImageUrl: productDetailState?.images[0]?.url ?? '',
       minQty: productDetailState.minQty,
@@ -246,16 +271,15 @@ const ProductList: FC<ProductListProps> = ({
       qtyPerBox: productDetailState.packagedQty,
       uomLabel: productDetailState.unit,
       warehouseId: Number(productDetailState.warehouseOriginId),
-      warehouseName: dataStock.warehouseName,
       sellerId: Number(productDetailState.sellerId),
       sellerName: productDetailState.productSeller.name,
-      isPriceAfterTax: productDetailState.isPriceAfterTax,
       taxPercentage: productDetailState.productTax.amount,
-      lastUsedPrice: productDetailState.finalPrice,
-      isLastPriceUsedRules: productDetailState.productPriceRules.length !== 0,
-      price: productDetailState.finalPrice,
-      priceRules: productDetailState.productPriceRules,
-      leadTime: dataStock.leadTime ?? 0,
+      lastUsedPrice,
+      isLastPriceUsedRules,
+      priceAfterTax: productDetailState.priceAfterTax,
+      priceBeforeTax: productDetailState.priceBeforeTax,
+      taxPrice: productDetailState.taxPrice,
+      priceRules,
       selected: true,
     };
 
@@ -291,7 +315,7 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => Do something when success add to cart */
   useEffect(() => {
-    if (stateCart.create.error !== null) {
+    if (stateCart.create.error !== null && isFocused) {
       setModalErrorAddCart(true);
     }
   }, [stateCart.create.error]);

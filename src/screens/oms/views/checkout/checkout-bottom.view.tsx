@@ -3,7 +3,6 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { View } from 'react-native';
 import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
-import { goToPaymentMethod } from '@screen/oms/functions';
 import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
@@ -11,12 +10,13 @@ import {
   useCheckoutAction,
 } from '../../functions/checkout';
 import { contexts } from '@contexts';
-/** === TYPE === */
 import ModalValidationLimit from './validation-limit-modal';
 import { goToShoppingCart } from '@core/functions/product';
+/** === TYPE === */
+import * as models from '@models';
 
 interface CheckoutBottomViewProps {
-  data: any;
+  data: models.CheckoutResponse;
   goToPaymentMethod: () => void;
 }
 /** === COMPONENT === */
@@ -24,12 +24,10 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
   goToPaymentMethod,
 }) => {
-  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { stateCheckout, dispatchCheckout } = React.useContext(
-    contexts.CheckoutContext,
-  );
-  const totalPaymentFull = totalPayment(data?.sellers);
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
+  const { dispatchCart } = React.useContext(contexts.CartContext);
+  const { dispatchCheckout } = React.useContext(contexts.CheckoutContext);
+  const totalPaymentFull = totalPayment(data.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
@@ -66,7 +64,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
           type={'primary'}
           onPress={pressButton}
           title={'Pilih Pembayaran'}
-          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />
       ) : (
         <SnbButton.Dynamic
@@ -74,7 +71,6 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
           type={'primary'}
           onPress={goToPaymentMethod}
           title={'Pilih Pembayaran'}
-          // loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
         />
       )}
       <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />

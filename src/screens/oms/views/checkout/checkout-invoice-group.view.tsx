@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
@@ -11,10 +11,9 @@ import { CheckoutWarningTime } from './checkout-warning-time';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
 /** === TYPE === */
 import * as models from '@models';
-// import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: models.CheckoutData;
+  data: models.CheckoutResponse;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
@@ -25,7 +24,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal]: any = useState([]);
   //get max lead time from product list
-  const getMaxLeadTime = (products: models.CheckoutProducts[]) => {
+  const getMaxLeadTime = (products: models.CheckoutCartProduct[]) => {
     return Math.max.apply(
       Math,
       products.map(function (o) {
@@ -43,7 +42,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       <FlatList
         keyExtractor={(_, index) => index.toString()}
         data={data?.sellers}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
               <View style={CheckoutStyle.headerSection}>

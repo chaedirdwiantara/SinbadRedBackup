@@ -1,11 +1,6 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMappingV3';
-import React, { useEffect } from 'react';
-import * as ActionCreators from '@actions';
-import apiMappingMock from '@core/services/apiMappingMockV3';
-import { useDispatch } from 'react-redux';
 import * as models from '@models';
-import { uniqueId } from '@core/functions/global/device-data';
 import database from '@react-native-firebase/database';
 /** === FUNCTION === */
 const paymentMethodListApi = (
@@ -39,7 +34,7 @@ const paymentMethodGetWaitingPaymentOrderApi = (
 const paymentMethodCreateOrdertApi = (
   data: models.CreateProcessProps<models.PaymentMethodCreateOrderData>,
 ) => {
-  const path = `orders`;
+  const path = 'orders';
   return apiMapping<models.PaymentMethodCreateOrderResponse>(
     'auth',
     path,
@@ -64,18 +59,18 @@ const useCheckDataOrder = (orderId: any) => {
 };
 /** commit cart endpoint*/
 const commitCartApi = (
-  data : models.CreateProcessProps<models.PaymentMethodCommitCartData>
-  ) => {
-    const path = `carts/commit`;
-    return apiMapping<models.CommitCartResponseData>(
-      'auth',
-      path,
-      'buyer-cart',
-      'v1',
-      'CREATE',
-      data.data,
-    );
-  };
+  data: models.CreateProcessProps<models.PaymentMethodCommitCartData>,
+) => {
+  const path = 'carts/commit';
+  return apiMapping<models.CommitCartResponseData>(
+    'auth',
+    path,
+    'buyer-cart',
+    'v1',
+    'CREATE',
+    data.data,
+  );
+};
 
 /** === EXPORT FUNCTIONS === */
 export const PaymentMethodListApi = {
@@ -83,5 +78,5 @@ export const PaymentMethodListApi = {
   paymentMethodGetWaitingPaymentOrderApi,
   paymentMethodCreateOrdertApi,
   useCheckDataOrder,
-  commitCartApi
+  commitCartApi,
 };

@@ -1,7 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { toCurrency } from '@core/functions/global/currency-format';
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
 import {
@@ -11,16 +10,13 @@ import {
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
-export interface IPaymentDetail {}
 
 export interface CheckoutPaymentDetailViewProps {
-  // data: models.IInvoiceCheckout;
-  products: any;
+  products: models.CheckoutCartProduct[];
 }
 
 /** === COMPONENT === */
 export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
-  // data,
   products,
 }) => {
   /** === HOOK === */
