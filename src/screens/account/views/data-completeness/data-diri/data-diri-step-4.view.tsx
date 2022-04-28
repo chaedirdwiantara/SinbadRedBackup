@@ -15,7 +15,7 @@ import { NavigationAction } from '@navigation';
 
 const DataDiriStep4View: React.FC = () => {
   const {
-    // updateCompleteData,
+    updateCompleteData,
     updateCompleteDataState,
     completeDataState,
     resetUpdateCompleteData,
@@ -64,13 +64,24 @@ const DataDiriStep4View: React.FC = () => {
   };
 
   const confirm = () => {
-    if (completeDataState?.data?.userData?.email !== email) {
+    if (completeDataState?.data?.userData?.email) {
       if (emailIsNotValid === false) {
-        // updateCompleteData({ user: { email: email } });
         const data = {
           email: email,
         };
         changeEmailAction.changeEmail(dispatchSupplier, { data });
+      } else {
+        setErrorMessage('Pastikan email yang Anda masukkan benar');
+      }
+    } else {
+      backToDataCompleteness();
+    }
+  };
+
+  const confirmWithBack = () => {
+    if (completeDataState?.data?.userData?.email !== email) {
+      if (emailIsNotValid === false) {
+        updateCompleteData({ user: { email: email } });
       } else {
         setErrorMessage('Pastikan email yang Anda masukkan benar');
       }
@@ -152,8 +163,7 @@ const DataDiriStep4View: React.FC = () => {
           }
           onPress={() => confirm()}
           loading={
-            updateCompleteDataState.loading ||
-            stateMerchant.changeEmail.loading
+            updateCompleteDataState.loading || stateMerchant.changeEmail.loading
           }
         />
       </View>
@@ -163,7 +173,7 @@ const DataDiriStep4View: React.FC = () => {
         confirm={() => {
           if (email && email !== '' && !emailIsNotValid) {
             setBackHandle(true);
-            confirm();
+            confirmWithBack();
           } else {
             backToDataCompleteness();
           }
