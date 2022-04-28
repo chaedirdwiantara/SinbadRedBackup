@@ -35,7 +35,8 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
         qtySoldLabel={product.qtySoldLabel}
-        finalPrice={product.finalPrice}
+        priceAfterTax={product.priceAfterTax}
+        hasBulkPrice={product.hasBulkPrice}
         isBundle={product.isBundle}
         isPromo={product.isPromo}
         isExclusive={product.isExclusive}
