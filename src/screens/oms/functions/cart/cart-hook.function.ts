@@ -58,98 +58,96 @@ const useUpdateCartAction = () => {
       contextDispatch: (action: any) => any,
       cartData: models.CartMaster,
     ) => {
-      if (cartData.totalProducts !== 0) {
-        const newCartData = cloneDeep(cartData);
-        if (stateCart.buyerAddress.data !== null) {
-          const carts: models.CartMasterSellers[] = [...newCartData.sellers];
-          cartData.unavailable.map((product) => {
-            const sellerFound = cartData.sellers.find(
-              (seller) => seller.sellerId === product.sellerId,
+      const newCartData = cloneDeep(cartData);
+      if (stateCart.buyerAddress.data !== null) {
+        const carts: models.CartMasterSellers[] = [...newCartData.sellers];
+        cartData.unavailable.map((product) => {
+          const sellerFound = cartData.sellers.find(
+            (seller) => seller.sellerId === product.sellerId,
+          );
+
+          if (sellerFound) {
+            const indexCartFound = carts.findIndex(
+              (cart) => cart.sellerId === sellerFound.sellerId,
             );
 
-            if (sellerFound) {
-              const indexCartFound = carts.findIndex(
-                (cart) => cart.sellerId === sellerFound.sellerId,
+            if (indexCartFound !== -1) {
+              const isProductAlreadyExist = carts[indexCartFound].products.some(
+                (prod) => prod.productId === product.productId,
               );
-
-              if (indexCartFound !== -1) {
-                const isProductAlreadyExist = carts[
-                  indexCartFound
-                ].products.some((prod) => prod.productId === product.productId);
-                if (!isProductAlreadyExist) {
-                  carts[indexCartFound].products.push(product);
-                }
-              } else {
-                carts.push({
-                  ...sellerFound,
-                  products: [...sellerFound?.products, product],
-                });
+              if (!isProductAlreadyExist) {
+                carts[indexCartFound].products.push(product);
               }
+            } else {
+              carts.push({
+                ...sellerFound,
+                products: [...sellerFound?.products, product],
+              });
             }
-          });
+          }
+        });
 
-          // rewrite lastUsedPrice
-          carts.map((sellerItem) => {
+        // rewrite lastUsedPrice
+        carts.map((sellerItem) => {
+          // deleting unused attributes for carts
+          delete sellerItem.sellerAdminId;
+          delete sellerItem.sellerAdminName;
+          delete sellerItem.sellerAdminEmail;
+          delete sellerItem.status;
+
+          sellerItem.products.map((productItem) => {
             // deleting unused attributes for carts
-            delete sellerItem.sellerAdminId;
-            delete sellerItem.sellerAdminName;
-            delete sellerItem.sellerAdminEmail;
-            delete sellerItem.status;
+            delete productItem.externalProductCode;
+            delete productItem.externalWarehouseCode;
+            delete productItem.stock;
+            delete productItem.isStockAvailable;
+            delete productItem.productStatus;
+            delete productItem.warehouseName;
+            delete productItem.brandId;
+            delete productItem.brandName;
+            delete productItem.leadTime;
+            delete productItem.isQtyChanged;
 
-            sellerItem.products.map((productItem) => {
-              // deleting unused attributes for carts
-              delete productItem.externalProductCode;
-              delete productItem.externalWarehouseCode;
-              delete productItem.stock;
-              delete productItem.isStockAvailable;
-              delete productItem.productStatus;
-              delete productItem.warehouseName;
-              delete productItem.brandId;
-              delete productItem.brandName;
-              delete productItem.leadTime;
-              delete productItem.isQtyChanged;
-
-              if (productItem.priceRules.length > 0) {
-                const priceRulesFirstItem = productItem.priceRules[0];
-                if (productItem.qty < priceRulesFirstItem.minQty) {
-                  productItem.isLastPriceUsedRules = false;
-                  productItem.lastUsedPrice = productItem.priceAfterTax;
-                } else {
-                  for (let x = 0; x < productItem.priceRules.length; x++) {
-                    const isLast = x === productItem.priceRules.length - 1;
-                    if (!isLast) {
-                      if (
-                        productItem.qty >= productItem.priceRules[x].minQty &&
-                        productItem.qty < productItem.priceRules[x + 1].minQty
-                      ) {
-                        productItem.isLastPriceUsedRules = true;
-                        productItem.lastUsedPrice =
-                          productItem.priceRules[x].priceAfterTax;
-                        break;
-                      }
-                    } else {
+            if (productItem.priceRules.length > 0) {
+              const priceRulesFirstItem = productItem.priceRules[0];
+              if (productItem.qty < priceRulesFirstItem.minQty) {
+                productItem.isLastPriceUsedRules = false;
+                productItem.lastUsedPrice = productItem.priceAfterTax;
+              } else {
+                for (let x = 0; x < productItem.priceRules.length; x++) {
+                  const isLast = x === productItem.priceRules.length - 1;
+                  if (!isLast) {
+                    if (
+                      productItem.qty >= productItem.priceRules[x].minQty &&
+                      productItem.qty < productItem.priceRules[x + 1].minQty
+                    ) {
                       productItem.isLastPriceUsedRules = true;
                       productItem.lastUsedPrice =
                         productItem.priceRules[x].priceAfterTax;
+                      break;
                     }
+                  } else {
+                    productItem.isLastPriceUsedRules = true;
+                    productItem.lastUsedPrice =
+                      productItem.priceRules[x].priceAfterTax;
                   }
                 }
-              } else {
-                productItem.isLastPriceUsedRules = false;
-                productItem.lastUsedPrice = productItem.priceAfterTax;
               }
-            });
+            } else {
+              productItem.isLastPriceUsedRules = false;
+              productItem.lastUsedPrice = productItem.priceAfterTax;
+            }
           });
+        });
 
-          dispatch(
-            Actions.updateCartProcess(contextDispatch, {
-              data: {
-                id: cartData.id,
-                carts,
-              },
-            }),
-          );
-        }
+        dispatch(
+          Actions.updateCartProcess(contextDispatch, {
+            data: {
+              id: cartData.id,
+              carts,
+            },
+          }),
+        );
       }
     },
     reset: (contextDispatch: (action: any) => any) => {
