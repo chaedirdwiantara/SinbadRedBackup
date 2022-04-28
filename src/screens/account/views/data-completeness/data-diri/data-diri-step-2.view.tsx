@@ -105,7 +105,7 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url },
+        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: npwp },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -217,7 +217,9 @@ const DataDiriStep2View: React.FC = () => {
                 !isNPWPValid ||
                 !npwp
               }
-              onPress={() => updateCompleteData({ user: { taxNo: npwp } })}
+              onPress={() => {
+                upload(dispatchGlobal, capturedImage.data.url);
+              }}
             />
           </View>
         </View>
