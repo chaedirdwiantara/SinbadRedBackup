@@ -73,7 +73,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
               removedProducts,
             });
           }}>
-          <SnbIcon name="delete_outline" color={color.black80} size={32} />
+          <SnbIcon name="delete" color={color.black60} size={24} />
         </TouchableOpacity>
       </View>
     );
