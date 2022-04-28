@@ -175,24 +175,24 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: image });
+        Object.assign(data, { user : { taxImageUrl: image } });
         editProfile(dispatchSupplier, { data });
 
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: image });
+        Object.assign(data, { user : { idImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: image });
+        Object.assign(data, { user : { selfieImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: image });
-        editMerchantAction.editMerchant(dispatchSupplier, {
+        Object.assign(data, { buyer : { imageUrl: image } });
+        editProfile(dispatchSupplier, {
           data,
         });
         break;
