@@ -144,6 +144,16 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
     clearInterval(intervalCheckStatus.current);
     setSelectedPaymentMethodData(null);
     clearTimeout(timeRef.current);
+
+    /** fetch commit cart */
+    if (checkoutContextData) {
+      const paramsCommitCart: models.PaymentMethodCommitCartData = {
+        checkoutId: checkoutContextData.id,
+        orderId: Number(dataOrder.id),
+      };
+      paymentMethodCommitCart.fetch(dispatchPaymentMethod, paramsCommitCart);
+    }
+
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     goToThankYouPage('payment', Number(dataOrder?.id));
@@ -171,16 +181,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       if (dataOrder) {
-        if (checkoutContextData) {
-          const paramsCommitCart: models.PaymentMethodCommitCartData = {
-            checkoutId: checkoutContextData.id,
-            orderId: Number(dataOrder.id),
-          };
-          paymentMethodCommitCart.fetch(
-            dispatchPaymentMethod,
-            paramsCommitCart,
-          );
-        }
         PaymentMethodSubRtdb.fetch(dispatchPaymentMethod, dataOrder.id);
       }
     }, [dataOrder]),

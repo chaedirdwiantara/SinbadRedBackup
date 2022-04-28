@@ -29,6 +29,7 @@ import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 // import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
@@ -117,6 +118,9 @@ const ProductDetailView: FC = () => {
     dispatchStock,
   } = useStockContext();
 
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, true);
+
   /** => check data supplier and sinbad status */
   const {
     checkUser,
@@ -187,32 +191,12 @@ const ProductDetailView: FC = () => {
       return;
     }
 
-    /** temporary function to determine bulk price calculation */
+    /** function to determine bulk price calculation */
     let lastUsedPrice = 0,
       isLastPriceUsedRules = false;
-    if (dataProduct.bulkPrices.length > 0) {
-      const priceRulesFirstItem = dataProduct.bulkPrices[0];
-      if (orderQty < priceRulesFirstItem.qty) {
-        isLastPriceUsedRules = false;
-        lastUsedPrice = dataProduct.priceAfterTax;
-      } else {
-        for (let x = 0; x < dataProduct.bulkPrices.length; x++) {
-          const isLast = x === dataProduct.bulkPrices.length - 1;
-          if (!isLast) {
-            if (
-              orderQty >= dataProduct.bulkPrices[x].qty &&
-              orderQty < dataProduct.bulkPrices[x + 1].qty
-            ) {
-              isLastPriceUsedRules = true;
-              lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
-              break;
-            }
-          } else {
-            isLastPriceUsedRules = true;
-            lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
-          }
-        }
-      }
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
     } else {
       isLastPriceUsedRules = false;
       lastUsedPrice = dataProduct.priceAfterTax;
