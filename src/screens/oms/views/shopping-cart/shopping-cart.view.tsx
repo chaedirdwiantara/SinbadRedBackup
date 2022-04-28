@@ -402,7 +402,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       />
       {/* Profile Completion Modal */}
       <ModalCartProfileCompletion
-        isOpen={false}
+        isOpen={modalCartProfileCompletion}
         handleNavigateToProfile={() => {
           setModalCartProfileCompletion(false);
           goToProfile();
