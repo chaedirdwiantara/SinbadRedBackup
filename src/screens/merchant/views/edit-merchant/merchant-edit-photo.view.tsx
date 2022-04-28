@@ -175,9 +175,7 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: image });
-        editProfile(dispatchSupplier, { data });
-
+        editProfile(dispatchSupplier, capturedImage?.data?.url);
         break;
       }
       case 'ktp': {
