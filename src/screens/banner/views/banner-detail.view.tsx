@@ -29,9 +29,11 @@ interface RecommendedProduct {
   imageUrl: string;
   displayPrice: number;
   currentPrice: number;
-  finalPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
   qtySoldLabel: string;
   isBundle: boolean;
+  hasBulkPrice: boolean;
   isPromo: boolean;
   isExclusive: boolean;
 }
@@ -44,7 +46,9 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
     displayPrice: 77891,
     currentPrice: 77891,
-    finalPrice: 77891,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: true,
     qtySoldLabel: '1,7 rb',
@@ -57,7 +61,9 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
     displayPrice: 150000,
     currentPrice: 150000,
-    finalPrice: 150000,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     qtySoldLabel: '1,7 rb',
     isPromo: false,
@@ -71,7 +77,9 @@ const recommendedProducts: Array<RecommendedProduct> = [
     displayPrice: 98782,
     qtySoldLabel: '1,7 rb',
     currentPrice: 98782,
-    finalPrice: 98782,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: true,
     isPromo: true,
     isExclusive: true,
@@ -84,7 +92,9 @@ const recommendedProducts: Array<RecommendedProduct> = [
     displayPrice: 72000,
     qtySoldLabel: '1,7 rb',
     currentPrice: 72000,
-    finalPrice: 72000,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: true,
     isExclusive: false,
@@ -97,7 +107,9 @@ const recommendedProducts: Array<RecommendedProduct> = [
     displayPrice: 77891,
     qtySoldLabel: '1,7 rb',
     currentPrice: 77891,
-    finalPrice: 77891,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: false,
     isExclusive: true,
@@ -276,8 +288,9 @@ const BannerDetailView: React.FC = ({ route }: any) => {
         flexOne={true}
         name={item.name}
         imageUrl={item.imageUrl}
-        finalPrice={item.finalPrice}
         qtySoldLabel={item.qtySoldLabel}
+        priceAfterTax={item.priceAfterTax}
+        hasBulkPrice={item.hasBulkPrice}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

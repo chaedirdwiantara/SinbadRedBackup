@@ -15,9 +15,20 @@ export const ShoppingCartAddress: FC = () => {
       <View style={{ marginBottom: 4 }}>
         <SnbText.B2>{`Toko ${stateCart.buyerAddress.data?.buyerName}`}</SnbText.B2>
       </View>
-      <SnbText.B4 color={color.black60}>
+      <SnbText.B3 color={color.black60}>
         {stateCart.buyerAddress.data?.address}
-      </SnbText.B4>
+        {stateCart.buyerAddress.data?.urban ? ',' : null}{' '}
+        {stateCart.buyerAddress.data?.urban}
+        {stateCart.buyerAddress.data?.district ? ',' : null}{' '}
+        {stateCart.buyerAddress.data?.district}
+        {stateCart.buyerAddress.data?.city ? ',' : null}{' '}
+        {stateCart.buyerAddress.data?.city}
+        {stateCart.buyerAddress.data?.province ? ',' : null}{' '}
+        {stateCart.buyerAddress.data?.province}
+      </SnbText.B3>
+      <SnbText.B3 color={color.black60}>
+        {stateCart.buyerAddress.data?.zipCode}
+      </SnbText.B3>
     </View>
   );
 };

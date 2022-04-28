@@ -25,7 +25,7 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
         setIsOpen((prev) => open ?? !prev);
       },
     }));
-    /** ==> fuction trigger button 'Atur Ulang Alamat' */
+    /** ==> fuction trigger button 'Cek Ulang Alamat' */
     const buttonOnPress = useCallback(() => {
       setIsOpen((prev) => !prev);
       /** ==> timeout for animate close modal */
@@ -46,7 +46,7 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
         errorTitle={'Lokasi tidak terjangkau'}
         errorSubtitle={errorSubtitle}
         errorImage={sinbadCry}
-        buttonTitle={'Atur Ulang Alamat'}
+        buttonTitle={'Cek Ulang Alamat'}
         buttonOnPress={buttonOnPress}
       />
     );

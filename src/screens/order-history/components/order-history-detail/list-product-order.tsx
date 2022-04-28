@@ -29,7 +29,7 @@ const Card: FC<CardProps> = (props) => {
               <SnbText.C1
                 color={color.black60}>{`(${data.qty}) ${data.uom}`}</SnbText.C1>
               <SnbText.C1>
-                {toCurrency(data.price, { withFraction: false })}
+                {toCurrency(data.productPriceAfterTax, { withFraction: false })}
               </SnbText.C1>
             </View>
           </View>
@@ -40,7 +40,9 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText.C1>Total Harga</SnbText.C1>
             <SnbText.C1>
-              {toCurrency(data.totalPrice, { withFraction: false })}
+              {toCurrency(data.totalProductPriceAfterTax, {
+                withFraction: false,
+              })}
             </SnbText.C1>
           </View>
         </View>
@@ -62,12 +64,13 @@ const ListProductOrder = () => {
     () => data?.products || [],
     [data?.products],
   );
-  if (loading)
+  if (loading) {
     return (
       <SkeletonAnimator>
         <View style={styles.skeleton} />
       </SkeletonAnimator>
     );
+  }
 
   return (
     <>

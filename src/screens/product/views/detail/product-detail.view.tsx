@@ -1,10 +1,11 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
+import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -28,6 +29,7 @@ import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 // import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
@@ -50,6 +52,7 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 import { useDataAuth } from '@core/redux/Data';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
+import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
 /** === DUMMY === */
 // const supplierDummy = {
 //   name: 'Depo Berkah Abadi',
@@ -114,6 +117,9 @@ const ProductDetailView: FC = () => {
     },
     dispatchStock,
   } = useStockContext();
+
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, true);
 
   /** => check data supplier and sinbad status */
   const {
@@ -185,32 +191,12 @@ const ProductDetailView: FC = () => {
       return;
     }
 
-    /** temporary function to determine bulk price calculation */
+    /** function to determine bulk price calculation */
     let lastUsedPrice = 0,
       isLastPriceUsedRules = false;
-    if (dataProduct.bulkPrices.length > 0) {
-      const priceRulesFirstItem = dataProduct.bulkPrices[0];
-      if (orderQty < priceRulesFirstItem.qty) {
-        isLastPriceUsedRules = false;
-        lastUsedPrice = dataProduct.priceAfterTax;
-      } else {
-        for (let x = 0; x < dataProduct.bulkPrices.length; x++) {
-          const isLast = x === dataProduct.bulkPrices.length - 1;
-          if (!isLast) {
-            if (
-              orderQty >= dataProduct.bulkPrices[x].qty &&
-              orderQty < dataProduct.bulkPrices[x + 1].qty
-            ) {
-              isLastPriceUsedRules = true;
-              lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
-              break;
-            }
-          } else {
-            isLastPriceUsedRules = true;
-            lastUsedPrice = dataProduct.bulkPrices[x].priceAfterTax;
-          }
-        }
-      }
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
     } else {
       isLastPriceUsedRules = false;
       lastUsedPrice = dataProduct.priceAfterTax;
@@ -297,6 +283,12 @@ const ProductDetailView: FC = () => {
       });
     }
   };
+
+  const onOpenWhatsApp = useCallback(() => {
+    const message = `Halo Sinbad, saya ingin bertanya tentang produk ${dataProduct?.name} (${dataProduct?.code}) ini dong`;
+    openWhatsApp('+6282260106010', message);
+  }, [dataProduct?.name, dataProduct?.code]);
+
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
@@ -499,15 +491,21 @@ const ProductDetailView: FC = () => {
           <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
-            finalPrice={dataProduct?.finalPrice!}
+            priceAfterTax={dataProduct?.priceAfterTax!}
             qtySoldLabel={dataProduct?.qtySoldLabel!}
             loading={loadingButton}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
             showStock={me.data !== null}
+            hasBulkPrice={dataProduct?.hasBulkPrice!}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
+          {dataProduct?.hasBulkPrice ? (
+            <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+          ) : (
+            <View />
+          )}
           {/* <ProductDetailSupplierInfo // Hide temporarily
             logo={supplierDummy.logoUrl}
             name={supplierDummy.name}
@@ -557,6 +555,7 @@ const ProductDetailView: FC = () => {
         <React.Fragment>
           {isAvailable ? (
             <ActionButton
+              onOpenChat={onOpenWhatsApp}
               loading={loadingButton}
               title={getActionButtonTitle()}
               disabled={
@@ -577,6 +576,7 @@ const ProductDetailView: FC = () => {
         </React.Fragment>
       ) : isAvailable ? (
         <ActionButton
+          onOpenChat={onOpenWhatsApp}
           loading={loadingButton}
           title={'Tambah ke Keranjang'}
           disabled={loadingButton}

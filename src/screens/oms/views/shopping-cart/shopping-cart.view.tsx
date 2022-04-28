@@ -348,46 +348,45 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
-    if (localCartMaster) {
-      const isCartEmpty =
-        (!isAnyActiveProduct() && localCartMaster.unavailable.length === 0) ||
-        stateCart.get.error?.code === 20130000008;
-      if (!isCartEmpty) {
-        return (
-          <React.Fragment>
-            <ScrollView ref={scrollRef}>
-              <View style={{ flex: 1 }}>
-                <ShoppingCartAddress />
-                <ShoppingCartProducts
-                  handleRemoveProductModal={handleRemoveProductModal}
-                  unavailableProducts={localCartMaster.unavailable}
-                  availableProducts={localCartMaster.sellers}
-                  handleUpdateQty={updateQty}
-                  handleUpdateSelected={updateSelected}
-                  isAnyActiveProduct={isAnyActiveProduct}
-                  manageCheckboxStatus={manageCheckboxStatus}
-                  manageCheckboxOnPress={manageCheckboxOnPress}
-                  keyboardFocus={keyboardFocus}
-                  handleScrollToBottom={scrollToBottom}
-                />
-              </View>
-            </ScrollView>
-            <ShoppingCartFooter
-              cartData={localCartMaster}
-              countTotalProduct={countTotalProduct}
-              countTotalPrice={countTotalPrice}
-              isCheckoutDisabled={
-                !isAnyActiveProduct() ||
-                countTotalPrice < 100000 ||
-                keyboardFocus.isFocus
-              }
-              handleCartCycle={handleCartCyle}
-            />
-          </React.Fragment>
-        );
-      } else {
-        return <ShoppingCartEmpty navigationParent={navigation} />;
-      }
+    const isCartEmpty =
+      (!isAnyActiveProduct() && localCartMaster?.unavailable.length === 0) ||
+      stateCart.get.data?.totalProducts === 0 ||
+      stateCart.get.error?.code === 20130000008;
+    if (!isCartEmpty && localCartMaster) {
+      return (
+        <React.Fragment>
+          <ScrollView ref={scrollRef}>
+            <View style={{ flex: 1 }}>
+              <ShoppingCartAddress />
+              <ShoppingCartProducts
+                handleRemoveProductModal={handleRemoveProductModal}
+                unavailableProducts={localCartMaster.unavailable}
+                availableProducts={localCartMaster.sellers}
+                handleUpdateQty={updateQty}
+                handleUpdateSelected={updateSelected}
+                isAnyActiveProduct={isAnyActiveProduct}
+                manageCheckboxStatus={manageCheckboxStatus}
+                manageCheckboxOnPress={manageCheckboxOnPress}
+                keyboardFocus={keyboardFocus}
+                handleScrollToBottom={scrollToBottom}
+              />
+            </View>
+          </ScrollView>
+          <ShoppingCartFooter
+            cartData={localCartMaster}
+            countTotalProduct={countTotalProduct}
+            countTotalPrice={countTotalPrice}
+            isCheckoutDisabled={
+              !isAnyActiveProduct() ||
+              countTotalPrice < 100000 ||
+              keyboardFocus.isFocus
+            }
+            handleCartCycle={handleCartCyle}
+          />
+        </React.Fragment>
+      );
+    } else {
+      return <ShoppingCartEmpty navigationParent={navigation} />;
     }
   };
   /** => MAIN */

@@ -16,6 +16,7 @@ export const AddToCartModalStyle = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 4,
     marginBottom: 8,
+    marginRight: 5,
     backgroundColor: color.yellow10,
     borderRadius: 50,
   },
@@ -33,7 +34,6 @@ export const AddToCartModalStyle = StyleSheet.create({
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8,
   },
   tooltipContainer: {
     maxWidth: 200,
