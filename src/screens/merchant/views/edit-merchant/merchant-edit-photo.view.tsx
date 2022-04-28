@@ -192,7 +192,7 @@ const MerchantEditPhotoView = () => {
       }
       case 'store': {
         Object.assign(data, { image: image });
-        editMerchantAction.editMerchant(dispatchSupplier, {
+        editProfile(dispatchSupplier, {
           data,
         });
         break;
