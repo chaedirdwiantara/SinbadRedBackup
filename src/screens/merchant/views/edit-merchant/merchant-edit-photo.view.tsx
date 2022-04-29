@@ -1,6 +1,7 @@
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
@@ -10,7 +11,6 @@ import {
   SnbButton,
   SnbContainer,
   SnbTopNav,
-  SnbUploadPhotoRules,
   SnbToast,
 } from 'react-native-sinbad-ui';
 
@@ -175,24 +175,24 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: image });
+        Object.assign(data, { user : { taxImageUrl: image } });
         editProfile(dispatchSupplier, { data });
 
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: image });
+        Object.assign(data, { user : { idImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: image });
+        Object.assign(data, { user : { selfieImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: image });
-        editMerchantAction.editMerchant(dispatchSupplier, {
+        Object.assign(data, { buyer : { imageUrl: image } });
+        editProfile(dispatchSupplier, {
           data,
         });
         break;
@@ -286,7 +286,7 @@ const MerchantEditPhotoView = () => {
         {renderIF(
           isImageAvailable,
           renderImagePreview(),
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle={`Pastikan Foto ${setType()} Anda Sesuai Ketentuan`}
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
@@ -298,8 +298,8 @@ const MerchantEditPhotoView = () => {
               }
             }}
             type="vertical"
-            resizeMode="contain"
-            blurRadius={2.2}
+            resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
+            isTiltImage={params.type === 'npwp'}
           />,
         )}
       </View>

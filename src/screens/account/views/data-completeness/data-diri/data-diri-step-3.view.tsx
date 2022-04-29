@@ -3,11 +3,15 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbButton,
-  SnbUploadPhotoRules,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
-import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
+import {
+  Stepper,
+  ListOfSteps,
+  ModalBack,
+  UploadPhotoRules,
+} from '../../shared/index';
 import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import { DATA_DIRI_STEP_4_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
@@ -33,7 +37,7 @@ const DataDiriStep3View: React.FC = () => {
     backToDataCompleteness,
     refetchCompleteData,
   } = useEasyRegistration();
-  const isFocused  = useIsFocused();
+  const isFocused = useIsFocused();
 
   React.useEffect(() => {
     return () => {
@@ -124,9 +128,9 @@ const DataDiriStep3View: React.FC = () => {
 
   const renderUploadPhotoRules = () => {
     return (
-      <SnbUploadPhotoRules
+      <UploadPhotoRules
         rulesTitle="Pastikan Foto Diri dengan KTP Sesuai dengan Ketentuan"
-        imgSrc={require('../../../../../assets/images/selfie_image.png')}
+        imgSrc={require('@image/selfie_image.png')}
         buttonLabel="Ambil Foto"
         rules={[
           'Posisikan KTP di bawah dagu Anda.',
@@ -135,6 +139,8 @@ const DataDiriStep3View: React.FC = () => {
           'Hindari Tangan Menutupi KTP.',
         ]}
         action={() => openCamera('selfie')}
+        type="vertical"
+        resizeMode="stretch"
       />
     );
   };

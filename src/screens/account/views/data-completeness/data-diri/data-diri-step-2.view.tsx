@@ -3,12 +3,16 @@ import {
   SnbContainer,
   SnbTopNav,
   SnbButton,
-  SnbUploadPhotoRules,
   SnbToast,
   SnbTextField,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
-import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
+import {
+  Stepper,
+  ListOfSteps,
+  ModalBack,
+  UploadPhotoRules,
+} from '../../shared/index';
 import { useFocusEffect, useIsFocused } from '@react-navigation/core';
 import { DATA_DIRI_STEP_3_VIEW } from '@screen/account/functions/screens_name';
 import { useCamera } from '@screen/account/functions';
@@ -105,7 +109,7 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url },
+        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: npwp },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -131,7 +135,7 @@ const DataDiriStep2View: React.FC = () => {
 
   const renderUploadPhotoRules = () => {
     return (
-      <SnbUploadPhotoRules
+      <UploadPhotoRules
         rulesTitle="Pastikan Foto NPWP Anda Sesuai Ketentuan"
         imgSrc={require('@image/npwp_image.png')}
         buttonLabel="Ambil Foto"
@@ -146,6 +150,7 @@ const DataDiriStep2View: React.FC = () => {
         resizeMode="contain"
         listType="number"
         blurRadius={3}
+        isTiltImage
       />
     );
   };
@@ -159,8 +164,8 @@ const DataDiriStep2View: React.FC = () => {
       uri = completeDataState?.data?.userData?.taxImageUrl;
     }
     return (
-      <View style={{ flex: 1, justifyContent: 'space-between'}}>
-        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370}}>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
           <Image
             resizeMode="contain"
             source={{ uri }}
@@ -217,7 +222,9 @@ const DataDiriStep2View: React.FC = () => {
                 !isNPWPValid ||
                 !npwp
               }
-              onPress={() => updateCompleteData({ user: { taxNo: npwp } })}
+              onPress={() => {
+                upload(dispatchGlobal, capturedImage.data.url);
+              }}
             />
           </View>
         </View>
