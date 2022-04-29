@@ -65,20 +65,18 @@ export const NewProducts: FC<NewProductsProps> = ({
   onTitleActionPress,
 }) => {
   return (
-    <View
-      style={{
-        marginBottom: layout.spacing.xl,
-        paddingHorizontal: layout.spacing.lg,
-      }}>
-      <Content.SearchRecommendation
-        chipsType="choice"
-        chips={chips}
-        title="Produk Terbaru"
-        actionText="Lihat Semua"
-        onActionPress={onTitleActionPress}
-        loading={loading}
-      />
-      <View style={{ marginTop: layout.spacing.md }}>
+    <View style={{ marginBottom: layout.spacing.lg }}>
+      <View style={{ paddingHorizontal: layout.spacing.lg }}>
+        <Content.SearchRecommendation
+          chipsType="choice"
+          chips={chips}
+          title="Produk Terbaru"
+          actionText="Lihat Semua"
+          onActionPress={onTitleActionPress}
+          loading={loading}
+        />
+      </View>
+      <View style={{ marginTop: 10 }}>
         <SnbHorizontalScrollContainer
           ItemComponent={ProductCard.Grid}
           data={data}
