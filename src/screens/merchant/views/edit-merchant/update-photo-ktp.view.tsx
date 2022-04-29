@@ -1,5 +1,6 @@
 import { contexts } from '@contexts';
 import { useNavigation } from '@react-navigation/core';
+import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
@@ -10,7 +11,6 @@ import { Image, View } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbUploadPhotoRules,
   SnbToast,
   SnbButton,
 } from 'react-native-sinbad-ui';
@@ -92,7 +92,7 @@ const Content: React.FC = () => {
         <OCRResultView />,
         renderIF(
           stateUser?.detail?.data?.ownerData?.profile?.imageId === '',
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle={'Pastikan Foto KTP Anda Sesuai Ketentuan'}
             imgSrc={require('../../../../assets/images/ktp_image.png')}
             rules={rules}

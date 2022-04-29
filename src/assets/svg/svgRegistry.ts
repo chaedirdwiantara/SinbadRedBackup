@@ -33,6 +33,8 @@ import ktp from './ktp.svg';
 import location from './location.svg';
 import store from './store.svg';
 import ktp_blue from './ktp-blue.svg';
+import check_circle from './check_circle.svg';
+import x_circle from './x_circle.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -69,4 +71,6 @@ export const SvgRegistery = {
   store,
   ktp_blue,
   sinbad_onboard,
+  check_circle,
+  x_circle,
 };
