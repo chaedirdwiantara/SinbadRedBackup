@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { SnbContainer, SnbTopNav, SnbButton } from 'react-native-sinbad-ui';
 import {
-  SnbContainer,
-  SnbTopNav,
-  SnbUploadPhotoRules,
-  SnbButton,
-} from 'react-native-sinbad-ui';
-import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
+  Stepper,
+  ListOfSteps,
+  ModalBack,
+  UploadPhotoRules,
+} from '../../shared/index';
 import { View, BackHandler, ScrollView } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/core';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -74,7 +74,7 @@ const Content: React.FC<Props> = (props) => {
   function renderUploadPhotoRules() {
     return (
       <View style={{ flex: 1 }}>
-        <SnbUploadPhotoRules
+        <UploadPhotoRules
           rulesTitle="Pastikan Foto KTP Anda Sesuai Ketentuan"
           imgSrc={require('@image/ktp_image.png')}
           buttonLabel="Ambil Foto"
@@ -89,6 +89,7 @@ const Content: React.FC<Props> = (props) => {
           resizeMode="contain"
           listType="number"
           blurRadius={2.2}
+          isTiltImage
         />
       </View>
     );

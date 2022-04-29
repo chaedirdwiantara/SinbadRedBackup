@@ -4,13 +4,17 @@ import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
-  SnbUploadPhotoRules,
   SnbButton,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { ListOfSteps, ModalBack, Stepper } from '../../shared';
+import {
+  ListOfSteps,
+  ModalBack,
+  Stepper,
+  UploadPhotoRules,
+} from '../../shared';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
@@ -100,7 +104,7 @@ const Content: React.FC<Props> = (props) => {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
             imgSrc={require('@image/store_image.png')}
             buttonLabel="Ambil Foto"
@@ -110,7 +114,7 @@ const Content: React.FC<Props> = (props) => {
               'Pastikan foto fokus keseluruhan toko',
             ]}
             action={() => openCamera('store')}
-            type="horizontal"
+            type="vertical"
             resizeMode="stretch"
             blurRadius={2}
           />
