@@ -64,7 +64,7 @@ const DataDiriStep4View: React.FC = () => {
   };
 
   const confirm = () => {
-    if (completeDataState?.data?.userData?.email) {
+    if (completeDataState?.data?.userData?.email || email) {
       if (emailIsNotValid === false) {
         const data = {
           email: email,
