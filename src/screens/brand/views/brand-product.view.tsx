@@ -64,7 +64,7 @@ const BrandProductView: FC = () => {
           onLoadMore={(queryOptions) =>
             loadMore(
               dispatchProduct,
-              { ...queryOptions },
+              Object.assign(queryOptions, productListState),
               { brandId: brand.id, ...queryOptions },
             )
           }
