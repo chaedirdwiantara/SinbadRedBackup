@@ -100,6 +100,11 @@ const DataDiriStep2View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
+    } else if (isNPWPValid){
+      updateCompleteData({
+        user: { taxNo: npwp },
+      });
+      setBackHandle(true);
     } else {
       backToDataCompleteness();
     }
@@ -107,7 +112,7 @@ const DataDiriStep2View: React.FC = () => {
 
   //FOR CHECK IF IMAGE UPLOADED AND HIT API UPDATE COMPLETENESS DATA
   React.useEffect(() => {
-    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
+    if ((stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp')) {
       updateCompleteData({
         user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: npwp },
       });
