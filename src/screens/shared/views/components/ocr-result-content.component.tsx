@@ -39,8 +39,6 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
     }
     if (value?.idNumber) {
       idNumber.setValue(value.idNumber);
-      idNumber.setType('default');
-      idNumber.setMessageError('');
     }
   }, [value]);
 
@@ -51,10 +49,6 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
     if (!nameOnKtp.value) {
       nameOnKtp.setMessageError('Bagian ini belum diisi');
       nameOnKtp.setType('error');
-    }
-    if (!idNumber.value) {
-      idNumber.setMessageError('Nomor KTP harus 16 Digit');
-      idNumber.setType('error');
     }
   }, [nameOnKtp.value, idNumber.value]);
 
@@ -94,13 +88,12 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         keyboardType="number-pad"
         onChangeText={(text) => {
           text = text.replace(/[^0-9]/g, '');
-          idNumber.setType('default');
           idNumber.setValue(text);
-          if (text.length === 16 || text === '') {
-            idNumber.setMessageError('');
-          } else {
-            idNumber.setMessageError('Nomor KTP harus 16 Digit');
-          }
+            if (text.length === 16) {
+              idNumber.setType('default');
+            } else {
+              idNumber.setMessageError('Nomor KTP harus 16 Digit');
+            }
         }}
       />
       <View
