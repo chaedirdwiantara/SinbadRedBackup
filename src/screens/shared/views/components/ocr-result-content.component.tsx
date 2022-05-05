@@ -5,11 +5,8 @@ import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
 import { useOCR } from '@screen/auth/functions/global-hooks.functions';
-// import apiHost from '@core/services/apiHost';
-
-const defaultImage =
-  'https://s3-alpha-sig.figma.com/img/d716/e95a/ec27bf0b7f1c6e49350877d9fbdef7fe?Expires=1652054400&Signature=cTYjBbo7lHGdLyGwMEMzdeXcJbk0Ws875cZRzwxRr7QcgZ2jPnbXNZUKsRMg-qLQKObiaxlMOV-m7lt3Kc8tyyA7IHmE83oYw6N3EuMeem~bxDz4R6X8boIPQyrSNGJ~KCrWKijfvlhJ47vibcO7sEi3IQLngW~1HI1WvbaA5GOE-OPKEcTlmg16VVCVH~RWwlMhRpC26zF1YxoRdqIU-UiCsmgzu~9fuMr5WN5gUftceY~eqAAvVQ5JFLm9c7Y3moZBkj5BfdyATmawsEiBxlzuUHD1fQ5-jHWnkRUJnzjH3ou04eYqPmfKv3UIa4JyYD4zv54dexiNYMfyMLPofQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA';
-
+import apiHost from '@core/services/apiHost';
+import { useEasyRegistration } from '@screen/account/functions';
 interface Props {
   onChangeValue: (result: IOCRResult) => void;
   value: models.IOCRResult | null;
@@ -20,9 +17,16 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
 
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
-  // const [imageUrl] = React.useState(
-  //   `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.id}`,
-  // );
+  const { ocrImageState } = useOCR();
+  const { completeDataState } = useEasyRegistration();
+  const [imageUrl] = React.useState(
+    ocrImageState.data
+      ? {
+          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.id}`,
+          headers: { 'x-platform': 'sinbad-app' },
+        }
+      : { uri: completeDataState.data?.userData?.idImageUrl },
+  );
 
   React.useEffect(() => {
     if (ocrImageResult) {
@@ -63,8 +67,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
       <SnbText.H4>Foto KTP Diupload</SnbText.H4>
       <View style={{ marginVertical: 4 }} />
       <Image
-        // source={{ uri: imageUrl || defaultImage }}
-        source={{ uri: defaultImage }}
+        source={imageUrl}
         resizeMode="contain"
         style={{ height: 200, marginTop: 16 }}
       />
