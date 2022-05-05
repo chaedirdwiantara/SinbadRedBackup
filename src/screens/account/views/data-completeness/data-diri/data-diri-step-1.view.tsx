@@ -31,6 +31,7 @@ const Content: React.FC<Props> = (props) => {
     resetUpdateCompleteData,
     refetchCompleteData,
     backToDataCompleteness,
+    completeDataState,
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
@@ -126,7 +127,9 @@ const Content: React.FC<Props> = (props) => {
       </View>
     );
   }
-  const isOcrSuccess = ocrImageState.data !== null;
+  const isOcrSuccess =
+    ocrImageState.data !== null ||
+    completeDataState.data?.userData?.idImageUrl !== null;
 
   return (
     <View style={{ flex: 1 }}>
