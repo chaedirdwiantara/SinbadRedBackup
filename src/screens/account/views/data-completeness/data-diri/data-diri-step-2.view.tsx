@@ -100,6 +100,11 @@ const DataDiriStep2View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
+    } else if (isNPWPValid){
+      updateCompleteData({
+        user: { taxNo: npwp },
+      });
+      setBackHandle(true);
     } else {
       backToDataCompleteness();
     }
