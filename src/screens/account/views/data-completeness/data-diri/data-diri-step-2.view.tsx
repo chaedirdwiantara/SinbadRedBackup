@@ -82,19 +82,6 @@ const DataDiriStep2View: React.FC = () => {
     }
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
-  //CONFIRM UPLOAD IMAGE
-  // const confirm = () => {
-  //   if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
-  //     upload(dispatchGlobal, capturedImage.data.url);
-  //   } else {
-  //     if (completeDataState?.data?.userData?.taxImageUrl && isFocused) {
-  //       NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
-  //     } else {
-  //       openCamera('npwp');
-  //     }
-  //   }
-  // };
-
   //BACK AND SAVE
   const backSave = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
