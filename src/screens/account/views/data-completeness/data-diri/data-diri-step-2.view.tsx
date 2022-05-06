@@ -83,17 +83,17 @@ const DataDiriStep2View: React.FC = () => {
   }, [stateGlobal.uploadImage, capturedImage.data?.type]);
 
   //CONFIRM UPLOAD IMAGE
-  const confirm = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
-      upload(dispatchGlobal, capturedImage.data.url);
-    } else {
-      if (completeDataState?.data?.userData?.taxImageUrl && isFocused) {
-        NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
-      } else {
-        openCamera('npwp');
-      }
-    }
-  };
+  // const confirm = () => {
+  //   if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
+  //     upload(dispatchGlobal, capturedImage.data.url);
+  //   } else {
+  //     if (completeDataState?.data?.userData?.taxImageUrl && isFocused) {
+  //       NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
+  //     } else {
+  //       openCamera('npwp');
+  //     }
+  //   }
+  // };
 
   //BACK AND SAVE
   const backSave = () => {
@@ -114,7 +114,7 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: npwp },
+        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: isNPWPValid ? npwp : null },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -228,7 +228,13 @@ const DataDiriStep2View: React.FC = () => {
                 !npwp
               }
               onPress={() => {
-                upload(dispatchGlobal, capturedImage.data.url);
+                if(capturedImage.data) {
+                  upload(dispatchGlobal, capturedImage.data.url);
+                } else if(isNPWPValid) {
+                  updateCompleteData({
+                    user: { taxNo: npwp },
+                  });
+                }
               }}
             />
           </View>
