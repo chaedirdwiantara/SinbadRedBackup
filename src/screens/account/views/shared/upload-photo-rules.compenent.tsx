@@ -5,11 +5,11 @@ import {
   ImageSourcePropType,
   View,
   StyleSheet,
+  ScrollView,
+  ImageBackground,
 } from 'react-native';
-import { ScrollView } from 'react-native';
-import { ImageBackground } from 'react-native';
 import { Brightness } from 'react-native-color-matrix-image-filters';
-import { color, SnbButton, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbButton2, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 
 interface Props {
@@ -121,33 +121,34 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
         <View style={{ padding: 16, flex: 1 }}>
           {title && (
             <View style={{ marginVertical: 8 }}>
-              <SnbText.B3>{title}</SnbText.B3>
+              <SnbText2.Headline.Default>{title}</SnbText2.Headline.Default>
             </View>
           )}
           {type === 'horizontal'
             ? renderHorizontalGuidance()
             : renderVerticalGuidance()}
           <View style={{ marginVertical: 16 }}>
-            <SnbText.H4>{rulesTitle}</SnbText.H4>
+            <SnbText2.Headline.Default>{rulesTitle}</SnbText2.Headline.Default>
             <View style={{ marginVertical: 4 }} />
             {rules?.map((el: string, index: number) => {
               return (
                 <View key={index} style={{ marginVertical: 4 }}>
-                  <SnbText.B3>
+                  <SnbText2.Body.Default>
                     {props.listType === 'number' ? `${index + 1}.` : '✔'} {el}
-                  </SnbText.B3>
+                  </SnbText2.Body.Default>
                 </View>
               );
             })}
           </View>
         </View>
       </ScrollView>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
-          title={buttonLabel}
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
+          title={buttonLabel || ''}
           disabled={false}
           onPress={action}
-          type="primary"
+          size="large"
+          full
         />
       </View>
     </View>
