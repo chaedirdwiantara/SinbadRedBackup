@@ -107,11 +107,7 @@ const Content: React.FC<Props> = (props) => {
             />
           </ScrollView>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            padding: 16,
-          }}>
+        <View style={{ flexDirection: 'row', padding: 16 }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Ubah Foto'}
@@ -147,7 +143,7 @@ const Content: React.FC<Props> = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {renderIF(isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
+      {renderIF(!isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         open={openModalBack || props.openModalBack}
         closeModal={() => {

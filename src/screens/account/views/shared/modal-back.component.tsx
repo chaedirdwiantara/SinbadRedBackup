@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import {
-  SnbText,
+  SnbText2,
   color as colors,
   SnbBottomSheet,
-  SnbButton,
+  SnbButton2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import Svg from '@svg';
@@ -25,30 +25,41 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
           <Svg name="completeness_back" size={180} />
         </View>
         <View style={{ alignItems: 'center', marginHorizontal: 24 }}>
-          <SnbText.H3 color={colors.black100}>Yakin Ingin Keluar?</SnbText.H3>
+          <SnbText2.Headline.Default color={colors.black100}>
+            Yakin Ingin Keluar?
+          </SnbText2.Headline.Default>
         </View>
         <View style={{ marginVertical: 16, marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center' }}>
-            <SnbText.B1 color={colors.black60} align="center">
+            <SnbText2.Body.Default color={colors.black60} align="center">
               Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan
-            </SnbText.B1>
+            </SnbText2.Body.Default>
           </View>
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: 16,
+          }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               onPress={() => props.closeModal()}
               title="Batal"
+              disabled={false}
+              size="large"
+              full
+              outline
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="primary"
+          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               onPress={() => props.confirm()}
               title="Ya, Keluar"
               disabled={updateCompleteDataState.loading}
               loading={updateCompleteDataState.loading}
+              size="large"
+              full
             />
           </View>
         </View>
