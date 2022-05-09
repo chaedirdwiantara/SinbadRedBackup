@@ -26,28 +26,26 @@ export const Brands: FC<BrandsProps> = ({
   onTitleActionPress,
 }) => {
   return (
-    <View
-      style={{
-        marginBottom: layout.spacing.xl,
-        paddingHorizontal: layout.spacing.lg,
-      }}>
-      <Text.Title
-        text="Brand Resmi Kami"
-        actionComponent={
-          <SnbButton2.Link
-            title="Lihat Semua"
-            size="medium"
-            onPress={onTitleActionPress}
-          />
-        }
-      />
-      <View style={{ marginTop: layout.spacing.md }}>
+    <View style={{ marginBottom: layout.spacing.lg }}>
+      <View style={{ paddingHorizontal: layout.spacing.lg }}>
+        <Text.Title
+          text="Brand Resmi Kami"
+          actionComponent={
+            <SnbButton2.Link
+              title="Lihat Semua"
+              size="medium"
+              onPress={onTitleActionPress}
+            />
+          }
+        />
+      </View>
+      <View style={{ marginTop: 10 }}>
         <SnbHorizontalScrollContainer
           ItemComponent={Content.NewBrand.Square}
           data={data}
           keyExtractor={(item, index) => `${item.name}-${index}`}
           loading={loading}
-          itemSpaces={layout.spacing.xl}
+          itemSpaces={layout.spacing.md}
         />
       </View>
     </View>
