@@ -1,4 +1,5 @@
 import { contexts } from '@contexts';
+import apiHost from '@core/services/apiHost';
 import { useNavigation } from '@react-navigation/core';
 import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
@@ -21,9 +22,6 @@ const rules = [
   'Pastikan KTP bisa terbaca dengan jelas',
   'Hindari Tangan Menutupi KTP',
 ];
-
-const defaultImage =
-  'https://s3-alpha-sig.figma.com/img/d716/e95a/ec27bf0b7f1c6e49350877d9fbdef7fe?Expires=1652054400&Signature=cTYjBbo7lHGdLyGwMEMzdeXcJbk0Ws875cZRzwxRr7QcgZ2jPnbXNZUKsRMg-qLQKObiaxlMOV-m7lt3Kc8tyyA7IHmE83oYw6N3EuMeem~bxDz4R6X8boIPQyrSNGJ~KCrWKijfvlhJ47vibcO7sEi3IQLngW~1HI1WvbaA5GOE-OPKEcTlmg16VVCVH~RWwlMhRpC26zF1YxoRdqIU-UiCsmgzu~9fuMr5WN5gUftceY~eqAAvVQ5JFLm9c7Y3moZBkj5BfdyATmawsEiBxlzuUHD1fQ5-jHWnkRUJnzjH3ou04eYqPmfKv3UIa4JyYD4zv54dexiNYMfyMLPofQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA';
 
 const Content: React.FC = () => {
   const { goBack } = useNavigation();
@@ -63,7 +61,10 @@ const Content: React.FC = () => {
       <View>
         <Image
           resizeMode="contain"
-          source={{ uri: defaultImage }}
+          source={{
+            uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${stateUser?.detail?.data?.ownerData?.profile?.imageId}`,
+            headers: { 'x-platform': 'sinbad-app' },
+          }}
           borderRadius={4}
           style={{
             height: 240,
