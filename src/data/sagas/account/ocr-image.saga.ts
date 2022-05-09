@@ -10,14 +10,18 @@ function* ocrImageProcess(actions: models.IAction<models.IOCRImage>) {
       ocrImageApi.uploadImage(actions.payload.imageUrl),
     );
     if (response.data.id) {
-      yield put(ActionCreators.ocrImageSuccess(response.data as any));
-      // const verifyResult: models.IImageVerification = yield call(() =>
-      //   ocrImageApi.verifyImage({
-      //     imageId: response.data.id,
-      //     type: actions.payload.type,
-      //   }),
-      // );
-      // yield put(ActionCreators.ocrImageSuccess(verifyResult));
+      const verifyResult: models.IImageVerification = yield call(() =>
+        ocrImageApi.verifyImage({
+          imageId: response.data.id,
+          type: actions.payload.type,
+        }),
+      );
+      yield put(
+        ActionCreators.ocrImageSuccess({
+          imageVericationData: verifyResult,
+          uploadImageData: response,
+        }),
+      );
     } else {
       yield put(ActionCreators.ocrImageFailed(response));
     }

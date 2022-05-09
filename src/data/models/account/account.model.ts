@@ -198,3 +198,8 @@ export interface IImageVerification {
   };
   message: string;
 }
+
+export interface IOCRSuccess {
+  uploadImageData: IUploadSecureImage;
+  imageVericationData: IImageVerification;
+}

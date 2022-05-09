@@ -17,22 +17,7 @@ import { useDataFlagRTDB } from '@core/redux/Data';
 import database from '@react-native-firebase/database';
 import { uniqueId } from '@core/functions/global/device-data';
 
-const randomFixedInteger = function (length: number) {
-  return Math.floor(
-    Math.pow(10, length - 1) +
-      Math.random() * (Math.pow(10, length) - Math.pow(10, length - 1) - 1),
-  );
-};
 const { height, width: screenWidth } = Dimensions.get('window');
-const names = [
-  'Muhammad Ali Mazhuda',
-  'Rifki Mifathur Sutomo',
-  'Wiguna Pratama',
-  'Naufal Rachmadan',
-  'Dian Prasetyo',
-  'Adi Hermawan',
-];
-const results = ['success', 'failed'];
 
 const KtpPhotoFrame = () => (
   <View
@@ -74,22 +59,8 @@ const CameraWithOCRView = () => {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
-        const ref = database().ref('sinbadApp').child(uniqueId);
-        ref.once('value', () => {
-          ref
-            .child('ocrData')
-            .child('nameOnKtp')
-            .set(names[Math.floor(Math.random() * names.length)]);
-          ref
-            .child('ocrData')
-            .child('idNumber')
-            .set(randomFixedInteger(16).toString());
-          ref
-            .child('flag')
-            .child('ocrStatus')
-            .set(results[Math.floor(Math.random() * results.length)]);
-        });
-      }, Math.ceil(Math.random() * 10) * 1000);
+        setShowModalError(true);
+      }, 30 * 1000);
     }
     return () => {
       clearTimeout(ocrTimeout);
@@ -97,12 +68,6 @@ const CameraWithOCRView = () => {
   }, [ocrStatus]);
 
   React.useEffect(() => {
-    if (ocrImageState.data !== null) {
-      const ref = database().ref('sinbadApp').child(uniqueId);
-      ref.once('value', () => {
-        ref.child('flag').child('ocrStatus').set('processing');
-      });
-    }
     if (ocrImageState.error !== null) {
       setShowModalError(true);
     }
