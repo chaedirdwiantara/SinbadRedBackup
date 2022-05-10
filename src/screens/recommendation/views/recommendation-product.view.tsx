@@ -38,14 +38,7 @@ const RecommendationProductView: FC = () => {
           onFetch={(queryOptions) => fetch(dispatchProduct, queryOptions)}
           onRefresh={(queryOptions) => refresh(dispatchProduct, queryOptions)}
           onLoadMore={(queryOptions) =>
-            loadMore(
-              dispatchProduct,
-              {
-                skip: productListState.skip,
-                canLoadMore: productListState.canLoadMore,
-              },
-              queryOptions,
-            )
+            loadMore(dispatchProduct, productListState, queryOptions)
           }
         />
       </View>
