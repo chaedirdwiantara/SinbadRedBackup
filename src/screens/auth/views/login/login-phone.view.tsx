@@ -5,17 +5,18 @@ import {
 } from '@screen/auth/functions';
 import {
   LOGIN_OTP_VIEW,
-  SELF_REGISTRATION_VIEW
+  SELF_REGISTRATION_VIEW,
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
 import { View, ScrollView, BackHandler } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbText,
+  SnbText2,
   SnbTextField,
-  SnbTopNav,
+  // SnbTopNav,
+  SnbTopNav2
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 
@@ -54,39 +55,42 @@ const Content: React.FC = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 16 }}>
-        <SnbText.H1>Masuk</SnbText.H1>
+        <SnbText2.Headline.Large>Masuk</SnbText2.Headline.Large>
       </View>
       <View style={{ height: 84, padding: 16 }}>
         <SnbTextField.Text {...phone} keyboardType="phone-pad" />
       </View>
       <View style={{ marginTop: 32 }} />
-      <SnbButton.Single
-        title="Selanjutnya"
-        onPress={() => {
-          resetRequestOTP();
-          requestOTP({ mobilePhone: phone.value });
-        }}
-        type="primary"
-        loading={requestOTPState.loading}
-        disabled={
-          phone.value === '' ||
-          phone.valMsgError !== '' ||
-          requestOTPState.loading
-        }
-      />
+      <View style={{ marginHorizontal: 16 }}>
+        <SnbButton2.Primary
+          title="Selanjutnya"
+          onPress={() => {
+            resetRequestOTP();
+            requestOTP({ mobilePhone: phone.value });
+          }}
+          loading={requestOTPState.loading}
+          disabled={
+            phone.value === '' ||
+            phone.valMsgError !== '' ||
+            requestOTPState.loading
+          }
+          size={'large'}
+          full
+        />
+      </View>
       <View style={loginPhoneStyles.registerLink}>
-        <View>
-          <SnbText.B3>Belum punya akun Sinbad?</SnbText.B3>
+        <View style={{marginRight: -8}}>
+          <SnbText2.Paragraph.Default>
+            Belum punya akun Sinbad?
+          </SnbText2.Paragraph.Default>
         </View>
-        <SnbButton.Dynamic
+        <SnbButton2.Link
           title="Daftar"
-          size="small"
+          size="medium"
           onPress={() => {
             phone.clearText();
             navigate(SELF_REGISTRATION_VIEW);
           }}
-          type="tertiary"
-          // disabled={true || false}
         />
       </View>
     </ScrollView>
@@ -98,9 +102,9 @@ const LoginPhoneView = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-        type="white"
+        color="white"
         title=""
       />
       <Content />

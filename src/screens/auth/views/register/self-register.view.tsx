@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import {
   SnbContainer,
-  SnbText,
-  SnbTopNav,
+  SnbText2,
+  SnbTopNav2,
   SnbTextField,
-  SnbButton,
+  SnbButton2,
   color,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
@@ -50,9 +50,9 @@ const SelfRegisterView: React.FC = () => {
 
   const header = () => {
     return (
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={() => navigate('OnBoardingView')}
-        type="white"
+        color={'white'}
         title="Daftar"
       />
     );
@@ -77,18 +77,19 @@ const SelfRegisterView: React.FC = () => {
     return (
       <View>
         <View style={styles.button}>
-          <SnbButton.Single
+          <SnbButton2.Primary
             title={'Lanjut'}
             onPress={() =>
               checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
             }
-            type={'primary'}
             disabled={
               phone.value === '' ||
               phone.valMsgError !== '' ||
               checkPhoneV2.loading
             }
             loading={checkPhoneV2.loading}
+            size={'large'}
+            full
           />
         </View>
         <View
@@ -97,9 +98,9 @@ const SelfRegisterView: React.FC = () => {
             marginBottom: 24,
             alignSelf: 'center',
           }}>
-          <SnbText.B4>Sudah punya akun Sinbad? </SnbText.B4>
+          <SnbText2.Paragraph.Default>Sudah punya akun Sinbad? </SnbText2.Paragraph.Default>
           <TouchableOpacity onPress={() => navigate(LOGIN_PHONE_VIEW)}>
-            <SnbText.B4 color={color.blue50}>Masuk</SnbText.B4>
+            <SnbText2.Body.Default color={color.blue50}>Masuk</SnbText2.Body.Default>
           </TouchableOpacity>
         </View>
       </View>
@@ -125,7 +126,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 32,
-    height: 72,
+    marginBottom: 16,
+    marginHorizontal: 16
   },
 });
 

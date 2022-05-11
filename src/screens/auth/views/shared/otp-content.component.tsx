@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbOTPInput,
-  SnbText,
+  SnbText2,
   SnbOTPTimer,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
@@ -45,11 +45,13 @@ const OTPContent: React.FC<Props> = (props) => {
           <Svg name="sinbad_otp" size={220} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
-          <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
+          <SnbText2.Headline.Default>
+            Masukkan kode Verifikasi
+          </SnbText2.Headline.Default>
           <View style={{ marginVertical: 4 }} />
-          <SnbText.B1 align="center">
+          <SnbText2.Paragraph.Default align="center">
             Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ margin: 4 }}>
           <SnbOTPInput
@@ -63,13 +65,16 @@ const OTPContent: React.FC<Props> = (props) => {
         </View>
       </View>
       <View>
-        <SnbButton.Single
-          title="Verifikasi"
-          onPress={() => onVerifyOTP(otp)}
-          loading={loading}
-          type="primary"
-          disabled={otp.length < 5}
-        />
+        <View style={{ marginHorizontal: 16 }}>
+          <SnbButton2.Primary
+            title="Verifikasi"
+            onPress={() => onVerifyOTP(otp)}
+            loading={loading}
+            disabled={otp.length < 5 || loading}
+            size={'large'}
+            full
+          />
+        </View>
         <SnbOTPTimer action={resend} />
       </View>
     </View>

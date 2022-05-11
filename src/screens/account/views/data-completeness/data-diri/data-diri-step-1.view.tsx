@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { SnbContainer, SnbTopNav, SnbButton } from 'react-native-sinbad-ui';
+import { 
+  SnbContainer,
+  SnbTopNav2,
+  SnbButton,
+} from 'react-native-sinbad-ui';
 import {
   Stepper,
   ListOfSteps,
@@ -165,9 +169,9 @@ const DataDiriStep1View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={() => setOpenModalBack(true)}
-        type="white"
+        color="white"
         title="Foto KTP"
       />
       <Stepper

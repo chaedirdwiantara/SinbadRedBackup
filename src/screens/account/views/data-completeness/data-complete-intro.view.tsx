@@ -6,9 +6,9 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {
   color,
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
-  SnbText,
+  SnbTopNav2,
+  SnbButton2,
+  SnbText2,
 } from 'react-native-sinbad-ui';
 import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 
@@ -42,7 +42,7 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ padding: 32 }}>
-            <SnbText.H3 align="center">Sinbad membantu Anda dengan:</SnbText.H3>
+            <SnbText2.Headline.Default align="center">Sinbad membantu Anda dengan:</SnbText2.Headline.Default>
             <View style={{ marginVertical: 8 }} />
             {STATIC_CONTENT.map((el, idx) => (
               <View
@@ -55,21 +55,22 @@ const Content: React.FC = () => {
                 {el.icon()}
                 <View style={{ marginHorizontal: 8 }} />
                 <View style={{ flex: 1 }}>
-                  <SnbText.H3>{el.title}</SnbText.H3>
+                  <SnbText2.Headline.Default>{el.title}</SnbText2.Headline.Default>
                   <View style={{ marginVertical: 4 }} />
-                  <SnbText.B1>{el.text}</SnbText.B1>
+                  <SnbText2.Paragraph.Small>{el.text}</SnbText2.Paragraph.Small>
                 </View>
               </View>
             ))}
           </View>
         </ScrollView>
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
+      <View style={{ marginBottom: 16, marginHorizontal: 16 }}>
+        <SnbButton2.Primary
           title="Lengkapi Data Sekarang"
-          type="primary"
           onPress={() => navigate(DATA_COMPLETENESS_VIEW)}
           disabled={false}
+          size={'medium'}
+          full
         />
       </View>
     </View>
@@ -80,7 +81,7 @@ const DataCompletenessIntroView: React.FC = () => {
   const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 title="Lengkapi Data" type="white" backAction={goBack} />
+      <SnbTopNav2.Type3 title="Lengkapi Data" color="white" backAction={goBack} />
       <Content />
     </SnbContainer>
   );
