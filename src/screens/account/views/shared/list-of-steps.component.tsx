@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import {
-  SnbText,
+  SnbText2,
   color as colors,
   SnbCardButtonType1,
   SnbBottomSheet,
@@ -147,9 +147,9 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
       <ScrollView>
         <View style={{ marginVertical: 16 }}>
           <View style={{ alignItems: 'center' }}>
-            <SnbText.B3 color={colors.black60}>
+            <SnbText2.Paragraph.Default color={colors.black60}>
               Pastikan data yang anda masukkan sudah benar
-            </SnbText.B3>
+            </SnbText2.Paragraph.Default>
           </View>
         </View>
         {props.type === 'user' ? renderContentUser() : renderContentBuyer()}

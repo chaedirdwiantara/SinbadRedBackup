@@ -123,7 +123,7 @@ const Content: React.FC = () => {
               paddingVertical: 12,
               borderRadius: 4,
             }}>
-            <SnbIcon name="verified_user" color={color.blue50} size={24} />
+            <SnbIcon name="shield" color={color.blue50} size={14} />
             <View style={{ flex: 1, marginLeft: 8 }}>
               <SnbText2.Paragraph.Small color={color.blue60}>
                 Kami menjamin keamanan data dan kerahasiaan informasi yang anda

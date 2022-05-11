@@ -40,9 +40,7 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ padding: 32 }}>
-            <SnbText2.Headline.Default align="center">
-              Sinbad membantu Anda dengan:
-            </SnbText2.Headline.Default>
+            <SnbText2.Headline.Default align="center">Sinbad membantu Anda dengan:</SnbText2.Headline.Default>
             <View style={{ marginVertical: 8 }} />
             {STATIC_CONTENT.map((el, idx) => (
               <View

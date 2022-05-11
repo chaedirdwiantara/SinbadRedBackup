@@ -9,8 +9,8 @@ export const ocrImageProcess = (
 });
 
 export const ocrImageSuccess = (
-  data: models.IImageVerification,
-): models.IAction<models.IImageVerification> => ({
+  data: models.IOCRSuccess,
+): models.IAction<models.IOCRSuccess> => ({
   type: types.OCR_IMAGE_SUCCESS,
   payload: data,
 });
