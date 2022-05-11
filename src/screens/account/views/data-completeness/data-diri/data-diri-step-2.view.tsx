@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
   SnbToast,
-  SnbTextField,
+  SnbTextField2,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import {
@@ -87,7 +87,7 @@ const DataDiriStep2View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
-    } else if (isNPWPValid){
+    } else if (isNPWPValid) {
       updateCompleteData({
         user: { taxNo: npwp },
       });
@@ -101,7 +101,10 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: isNPWPValid ? npwp : null },
+        user: {
+          taxImageUrl: stateGlobal.uploadImage?.data?.url,
+          taxNo: isNPWPValid ? npwp : null,
+        },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -169,11 +172,11 @@ const DataDiriStep2View: React.FC = () => {
               marginBottom: 10,
             }}
           />
-          <SnbTextField.Text
+          <SnbTextField2.Text
             type={isNPWPValid ? 'default' : 'error'}
             value={npwp}
             maxLength={15}
-            helpText={'Abaikan bila sudah sesuai NPWP'}
+            helperText={'Abaikan bila sudah sesuai NPWP'}
             onChangeText={(text) => {
               text = text.replace(/[^0-9]/g, '');
               setNpwp(text);
@@ -194,18 +197,20 @@ const DataDiriStep2View: React.FC = () => {
             valMsgError={messageErrorNPWP}
           />
         </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
-              title="Ulangi"
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title="Ubah Foto"
               onPress={() => openCamera('npwp')}
               disabled={false}
+              size="medium"
+              full
+              outline
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type={'primary'}
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
               disabled={
@@ -215,14 +220,16 @@ const DataDiriStep2View: React.FC = () => {
                 !npwp
               }
               onPress={() => {
-                if(capturedImage.data) {
+                if (capturedImage.data) {
                   upload(dispatchGlobal, capturedImage.data.url);
-                } else if(isNPWPValid) {
+                } else if (isNPWPValid) {
                   updateCompleteData({
                     user: { taxNo: npwp },
                   });
                 }
               }}
+              size="medium"
+              full
             />
           </View>
         </View>
@@ -237,9 +244,9 @@ const DataDiriStep2View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Foto NPWP"
         />
         <Stepper

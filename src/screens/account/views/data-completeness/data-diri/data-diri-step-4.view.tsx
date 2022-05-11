@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbTextField,
-  SnbButton,
+  SnbTopNav2,
+  SnbTextField2,
+  SnbButton2,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
@@ -123,9 +123,9 @@ const DataDiriStep4View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Alamat Email"
         />
         <Stepper
@@ -137,7 +137,7 @@ const DataDiriStep4View: React.FC = () => {
           <Svg name="notification" size={240} />
         </View>
         <View style={{ margin: 16 }}>
-          <SnbTextField.Text
+          <SnbTextField2.Text
             type={emailIsNotValid ? 'error' : 'default'}
             value={email}
             onChangeText={(text) => validateEmail(text)}
@@ -148,10 +148,9 @@ const DataDiriStep4View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ height: 75 }}>
-        <SnbButton.Single
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
           title="Simpan"
-          type="primary"
           disabled={
             (emailIsNotValid && email) ||
             updateCompleteDataState.loading ||
@@ -165,6 +164,8 @@ const DataDiriStep4View: React.FC = () => {
           loading={
             updateCompleteDataState.loading || stateMerchant.changeEmail.loading
           }
+          size="medium"
+          full
         />
       </View>
       <ModalBack

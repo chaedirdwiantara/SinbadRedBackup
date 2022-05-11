@@ -61,21 +61,23 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View style={styles.buttonContainer}>
-        <View style={{ marginHorizontal: 8, width: '45%' }}>
+      <View style={{ flexDirection: 'row', padding: 16 }}>
+        <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Masuk'}
             onPress={() => navigate(LOGIN_PHONE_VIEW)}
-            size={'large'}
-            outline
+            size="medium"
             full
+            outline
           />
         </View>
-        <View style={{ marginHorizontal: 8, width: '45%' }}>
+        <View style={{ marginHorizontal: 8 }} />
+        <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Daftar'}
             onPress={() => navigate(SELF_REGISTRATION_VIEW)}
-            size={'large'}
+            disabled={false}
+            size="medium"
             full
           />
         </View>
@@ -104,7 +106,7 @@ const OnBoardingView: React.FC<Props> = () => {
       <View style={styles.termsNoticeContainer}>
         <SnbText2.Paragraph.Small color={color.blue50} align="center">
           Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
-          Kebijakan Privasi kami{' '}
+          Kebijakan Privasi kami
         </SnbText2.Paragraph.Small>
       </View>
     );

@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import { 
-  SnbContainer,
-  SnbTopNav2,
-  SnbButton,
-} from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2, SnbButton2 } from 'react-native-sinbad-ui';
 import {
   Stepper,
   ListOfSteps,
@@ -111,22 +107,32 @@ const Content: React.FC<Props> = (props) => {
             />
           </ScrollView>
         </View>
-        <View style={{ height: 72 }}>
-          <SnbButton.Multiple
-            leftType={'secondary'}
-            rightType={'primary'}
-            leftTitle={'Ubah Foto'}
-            rightTitle={'Lanjutkan'}
-            onPressLeft={() => openCameraWithOCR('ktp')}
-            onPressRight={handleSubmit}
-            rightDisabled={
-              value?.idNumber === '' ||
-              value?.nameOnKtp === '' ||
-              updateCompleteDataState.loading
-            }
-            leftDisabled={false}
-            rightLoading={updateCompleteDataState.loading}
-          />
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title={'Ubah Foto'}
+              onPress={() => openCameraWithOCR('ktp')}
+              disabled={false}
+              size="medium"
+              full
+              outline
+            />
+          </View>
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title={'Simpan'}
+              onPress={handleSubmit}
+              disabled={
+                value?.idNumber === '' ||
+                value?.nameOnKtp === '' ||
+                updateCompleteDataState.loading
+              }
+              loading={updateCompleteDataState.loading}
+              size="medium"
+              full
+            />
+          </View>
         </View>
       </View>
     );
@@ -171,8 +177,8 @@ const DataDiriStep1View: React.FC = () => {
     <SnbContainer color="white">
       <SnbTopNav2.Type3
         backAction={() => setOpenModalBack(true)}
-        color="white"
         title="Foto KTP"
+        color="white"
       />
       <Stepper
         complete={completeDataState?.data?.userProgress?.completed}

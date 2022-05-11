@@ -14,9 +14,8 @@ import {
   SnbButton2,
   SnbContainer,
   SnbText2,
-  SnbTextField,
-  // SnbTopNav,
-  SnbTopNav2
+  SnbTextField2,
+  SnbTopNav2,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 
@@ -58,10 +57,10 @@ const Content: React.FC = () => {
         <SnbText2.Headline.Large>Masuk</SnbText2.Headline.Large>
       </View>
       <View style={{ height: 84, padding: 16 }}>
-        <SnbTextField.Text {...phone} keyboardType="phone-pad" />
+        <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
       </View>
       <View style={{ marginTop: 32 }} />
-      <View style={{ marginHorizontal: 16 }}>
+      <View style={{ paddingHorizontal: 16 }}>
         <SnbButton2.Primary
           title="Selanjutnya"
           onPress={() => {
@@ -74,12 +73,12 @@ const Content: React.FC = () => {
             phone.valMsgError !== '' ||
             requestOTPState.loading
           }
-          size={'large'}
+          size="medium"
           full
         />
       </View>
       <View style={loginPhoneStyles.registerLink}>
-        <View style={{marginRight: -8}}>
+        <View>
           <SnbText2.Paragraph.Default>
             Belum punya akun Sinbad?
           </SnbText2.Paragraph.Default>

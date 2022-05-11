@@ -5,15 +5,11 @@ import {
   ImageSourcePropType,
   View,
   StyleSheet,
+  ScrollView,
+  ImageBackground,
 } from 'react-native';
-import { ScrollView } from 'react-native';
-import { ImageBackground } from 'react-native';
 import { Brightness } from 'react-native-color-matrix-image-filters';
-import {
-  color,
-  SnbButton2,
-  SnbText2,
-} from '@sinbad/react-native-sinbad-ui';
+import { color, SnbButton2, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 
 interface Props {
@@ -146,16 +142,14 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           </View>
         </View>
       </ScrollView>
-      <View style={{ width: '100%', marginBottom: 16 }}>
-        <View style={{ marginHorizontal: 16 }}>
-          <SnbButton2.Primary
-            title={buttonLabel || 'Ambil Foto'}
-            disabled={false}
-            onPress={action}
-            size={'large'}
-            full
-          />
-        </View>
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
+          title={buttonLabel || ''}
+          disabled={false}
+          onPress={action}
+          size="medium"
+          full
+        />
       </View>
     </View>
   );

@@ -42,7 +42,7 @@ const OTPContent: React.FC<Props> = (props) => {
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <View style={{ marginVertical: 24 }}>
         <View style={{ alignSelf: 'center' }}>
-          <Svg name="sinbad_otp" size={220} />
+          <Svg name="sinbad_otp" size={200} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
           <SnbText2.Headline.Default>
@@ -64,17 +64,15 @@ const OTPContent: React.FC<Props> = (props) => {
           />
         </View>
       </View>
-      <View>
-        <View style={{ marginHorizontal: 16 }}>
-          <SnbButton2.Primary
-            title="Verifikasi"
-            onPress={() => onVerifyOTP(otp)}
-            loading={loading}
-            disabled={otp.length < 5 || loading}
-            size={'large'}
-            full
-          />
-        </View>
+      <View style={{ paddingHorizontal: 16 }}>
+        <SnbButton2.Primary
+          title="Verifikasi"
+          onPress={() => onVerifyOTP(otp)}
+          loading={loading}
+          disabled={otp.length < 5}
+          size="medium"
+          full
+        />
         <SnbOTPTimer action={resend} />
       </View>
     </View>

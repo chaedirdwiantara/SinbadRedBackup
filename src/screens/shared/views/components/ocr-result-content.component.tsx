@@ -1,6 +1,6 @@
 import React from 'react';
 import { useInput } from '@screen/auth/functions';
-import { color, SnbText, SnbTextField } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbText2, SnbTextField2 } from '@sinbad/react-native-sinbad-ui';
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
@@ -58,7 +58,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
-      <SnbText.H4>Foto KTP Diupload</SnbText.H4>
+      <SnbText2.Headline.Small>Foto KTP Diupload</SnbText2.Headline.Small>
       <View style={{ marginVertical: 4 }} />
       <Image
         source={imageUrl}
@@ -66,9 +66,9 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         style={{ height: 200, marginTop: 16 }}
       />
       <View style={{ padding: 16 }} />
-      <SnbTextField.Text
+      <SnbTextField2.Text
         {...nameOnKtp}
-        helpText={
+        helperText={
           nameOnKtp.type !== 'error'
             ? 'Abaikan bila sudah sesuai dengan KTP'
             : ''
@@ -78,12 +78,12 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         maxLength={200}
       />
       <View style={{ padding: 16 }} />
-      <SnbTextField.Text
+      <SnbTextField2.Text
         {...idNumber}
         labelText="NIK pada KTP"
         placeholder="Masukkan NIK pada KTP"
         maxLength={16}
-        helpText={
+        helperText={
           idNumber.type !== 'error'
             ? 'Abaikan bila sudah sesuai dengan KTP'
             : ''
@@ -92,11 +92,11 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         onChangeText={(text) => {
           text = text.replace(/[^0-9]/g, '');
           idNumber.setValue(text);
-            if (text.length === 16) {
-              idNumber.setType('default');
-            } else {
-              idNumber.setMessageError('Nomor KTP harus 16 Digit');
-            }
+          if (text.length === 16) {
+            idNumber.setType('default');
+          } else {
+            idNumber.setMessageError('Nomor KTP harus 16 Digit');
+          }
         }}
       />
       <View
@@ -106,10 +106,10 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
           borderRadius: 8,
           marginTop: 16,
         }}>
-        <SnbText.B3 color={color.blue50}>
+        <SnbText2.Paragraph.Small color={color.blue50}>
           Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa
           kembali nama anda bila terjadi kesalahan.
-        </SnbText.B3>
+        </SnbText2.Paragraph.Small>
       </View>
     </View>
   );

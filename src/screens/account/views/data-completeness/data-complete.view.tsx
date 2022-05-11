@@ -84,8 +84,6 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <View
           style={{
-            borderTopWidth: 1,
-            borderTopColor: color.black10,
             flex: 1,
             paddingHorizontal: 16,
             paddingVertical: 32,
@@ -119,20 +117,22 @@ const Content: React.FC = () => {
             style={{
               flexDirection: 'row',
               marginHorizontal: 16,
-              // alignItems: 'center',
+              alignItems: 'center',
               backgroundColor: color.blue10,
-              padding: 12,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderRadius: 4,
             }}>
             <SnbIcon name="shield" color={color.blue50} size={14} />
             <View style={{ flex: 1, marginLeft: 8 }}>
-              <SnbText2.Paragraph.Small color={color.blue50}>
+              <SnbText2.Paragraph.Small color={color.blue60}>
                 Kami menjamin keamanan data dan kerahasiaan informasi yang anda
                 berikan.
               </SnbText2.Paragraph.Small>
             </View>
           </View>
-          <View style={{ width: '100%' }} />
-          <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
+          <View style={{ marginVertical: 16 }} />
+          <View style={{ margin: 16 }}>
             <SnbButton2.Primary
               title="Konfirmasi"
               onPress={() => completeDataConfirmation()}
@@ -142,7 +142,7 @@ const Content: React.FC = () => {
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
-              size={'medium'}
+              size="medium"
               full
             />
           </View>

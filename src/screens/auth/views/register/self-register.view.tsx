@@ -1,23 +1,32 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 import {
   SnbContainer,
   SnbText2,
   SnbTopNav2,
-  SnbTextField,
+  SnbTextField2,
   SnbButton2,
   color,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import { REGISTER_OTP_VIEW, LOGIN_PHONE_VIEW } from '@screen/auth/functions/screens_name';
-import Svg from '@svg';
+import {
+  REGISTER_OTP_VIEW,
+  LOGIN_PHONE_VIEW,
+} from '@screen/auth/functions/screens_name';
 import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
   const phone = useInputPhone();
-  const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } = useCheckPhoneV2();
+  const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
+    useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
 
   React.useEffect(() => {
@@ -52,7 +61,7 @@ const SelfRegisterView: React.FC = () => {
     return (
       <SnbTopNav2.Type3
         backAction={() => navigate('OnBoardingView')}
-        color={'white'}
+        color="white"
         title="Daftar"
       />
     );
@@ -63,10 +72,13 @@ const SelfRegisterView: React.FC = () => {
       <ScrollView style={{ flex: 1 }}>
         <View style={{ flex: 1, marginBottom: 25 }}>
           <View style={styles.image}>
-            <Svg name="registration" size={220} />
+            <Image
+              source={require('@image/sinbad_image/sinbad_register.png')}
+              style={{ height: 240 }}
+            />
           </View>
           <View style={{ height: 84, padding: 16 }}>
-            <SnbTextField.Text {...phone} keyboardType="phone-pad" />
+            <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
           </View>
         </View>
       </ScrollView>
@@ -88,7 +100,7 @@ const SelfRegisterView: React.FC = () => {
               checkPhoneV2.loading
             }
             loading={checkPhoneV2.loading}
-            size={'large'}
+            size="medium"
             full
           />
         </View>
@@ -98,9 +110,13 @@ const SelfRegisterView: React.FC = () => {
             marginBottom: 24,
             alignSelf: 'center',
           }}>
-          <SnbText2.Paragraph.Default>Sudah punya akun Sinbad? </SnbText2.Paragraph.Default>
+          <SnbText2.Paragraph.Default>
+            Sudah punya akun Sinbad?{' '}
+          </SnbText2.Paragraph.Default>
           <TouchableOpacity onPress={() => navigate(LOGIN_PHONE_VIEW)}>
-            <SnbText2.Body.Default color={color.blue50}>Masuk</SnbText2.Body.Default>
+            <SnbText2.Body.Default color={color.blue50}>
+              Masuk
+            </SnbText2.Body.Default>
           </TouchableOpacity>
         </View>
       </View>
@@ -124,11 +140,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginVertical: 32,
   },
-  button: {
-    marginTop: 32,
-    marginBottom: 16,
-    marginHorizontal: 16
-  },
+  button: { padding: 16 },
 });
 
 export default SelfRegisterView;
