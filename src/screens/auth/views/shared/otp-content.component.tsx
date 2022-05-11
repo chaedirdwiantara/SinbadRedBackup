@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbOTPInput,
-  SnbText,
+  SnbText2,
   SnbOTPTimer,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
@@ -42,14 +42,16 @@ const OTPContent: React.FC<Props> = (props) => {
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <View style={{ marginVertical: 24 }}>
         <View style={{ alignSelf: 'center' }}>
-          <Svg name="sinbad_otp" size={220} />
+          <Svg name="sinbad_otp" size={200} />
         </View>
         <View style={loginOTPStyle.titleContainer}>
-          <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
+          <SnbText2.Headline.Large>
+            Masukkan kode Verifikasi
+          </SnbText2.Headline.Large>
           <View style={{ marginVertical: 4 }} />
-          <SnbText.B1 align="center">
+          <SnbText2.Paragraph.Large align="center">
             Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Large>
         </View>
         <View style={{ margin: 4 }}>
           <SnbOTPInput
@@ -62,13 +64,14 @@ const OTPContent: React.FC<Props> = (props) => {
           />
         </View>
       </View>
-      <View>
-        <SnbButton.Single
+      <View style={{ paddingHorizontal: 16 }}>
+        <SnbButton2.Primary
           title="Verifikasi"
           onPress={() => onVerifyOTP(otp)}
           loading={loading}
-          type="primary"
           disabled={otp.length < 5}
+          size="large"
+          full
         />
         <SnbOTPTimer action={resend} />
       </View>

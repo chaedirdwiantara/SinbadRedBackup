@@ -16,7 +16,7 @@ const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
   const [valMsgError, setValMsgError] = useState('');
-  const [type, setType] = useState('default');
+  const [type, setType] = useState<FieldType>('default');
 
   const onChangeText = (text: string) => {
     setType('default');
@@ -27,10 +27,10 @@ export const useInputPhone = () => {
 
     if (text && !numberFormatIsValid && text.slice(0, 2) !== '08') {
       setType('error');
-      setValMsgError('No. HP harus diawali dengan 08');
+      setValMsgError('Harus diawali angka ‘0’');
     } else if (text && !numberCountIsValid) {
       setType('error');
-      setValMsgError('No. HP harus 10-14 digit');
+      setValMsgError('Digit nomor handphone kurang');
     } else {
       setType('default');
       setValMsgError('');

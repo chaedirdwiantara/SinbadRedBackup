@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, color } from 'react-native-sinbad-ui';
 
 const { width } = Dimensions.get('window');
 
@@ -35,12 +35,14 @@ const OnBoardingView: React.FC<Props> = (props) => {
           style={{ height: 240 }}
         />
         <View style={{ marginVertical: 12 }} />
-        <SnbText.H3 align="center">{item.title}</SnbText.H3>
-        <View style={{ marginVertical: 2 }} />
+        <SnbText2.Headline.Large align="center">
+          {item.title}
+        </SnbText2.Headline.Large>
+        <View style={{ marginVertical: 4 }} />
         <View style={{ paddingHorizontal: 32 }}>
-          <SnbText.B1 align="center" color={color.black60}>
+          <SnbText2.Paragraph.Large align="center" color={color.black60}>
             {item.message}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Large>
         </View>
       </View>
     );

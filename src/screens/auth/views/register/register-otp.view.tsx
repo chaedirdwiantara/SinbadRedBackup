@@ -11,10 +11,10 @@ import React from 'react';
 import { ScrollView, View, Image } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
+  SnbTopNav2,
   SnbBottomSheet,
-  SnbText,
-  SnbButton,
+  SnbText2,
+  SnbButton2,
 } from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
@@ -83,7 +83,7 @@ const RegisterOTPView: React.FC = () => {
     return (
       <View>
         <Image
-          source={require('../../../../assets/images/sinbad_cry.png')}
+          source={require('@image/sinbad_cry.png')}
           style={{
             height: 160,
             width: 160,
@@ -92,23 +92,24 @@ const RegisterOTPView: React.FC = () => {
           }}
         />
         <View style={{ margin: 16 }}>
-          <SnbText.B2 align="center">
+          <SnbText2.Headline.Default align="center">
             Data Anda masih sedang tahap proses
-          </SnbText.B2>
+          </SnbText2.Headline.Default>
           <View style={{ marginVertical: 8 }} />
-          <SnbText.B3 align="center">
+          <SnbText2.Body.Default align="center">
             silahkan tunggu atau hubungi customer service Sinbad
-          </SnbText.B3>
+          </SnbText2.Body.Default>
         </View>
-        <View style={{ height: 75 }}>
-          <SnbButton.Single
+        <View style={{ padding: 16 }}>
+          <SnbButton2.Primary
             title="Tutup"
-            type="primary"
             disabled={false}
             onPress={() => {
               setModalError(false);
               setReCheckAutoLogin(0);
             }}
+            size="large"
+            full
           />
         </View>
       </View>
@@ -117,9 +118,9 @@ const RegisterOTPView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={goBack}
-        type="white"
+        color="white"
         title="Kode Verifikasi"
       />
       <ScrollView>
