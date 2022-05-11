@@ -16,11 +16,11 @@ import {
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
+  SnbTextField2,
+  SnbText2,
   color,
-  SnbTextField,
   SnbTextFieldSelect,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, ModalSelection, Stepper } from '../../shared';
@@ -183,10 +183,12 @@ const Content: React.FC<Props> = (props) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText.H4>Titik Lokasi</SnbText.H4>
+              <SnbText2.Headline.Default>
+                Titik Lokasi
+              </SnbText2.Headline.Default>
               {renderIF(
                 latLng !== null,
-                <SnbButton.Dynamic
+                <SnbButton2.Link
                   onPress={() =>
                     navigate(MAPS_VIEW_TYPE_2, {
                       onMapsResult,
@@ -196,8 +198,6 @@ const Content: React.FC<Props> = (props) => {
                   }
                   title="Ubah Titik Lokasi"
                   disabled={false}
-                  type="tertiary"
-                  buttonColor={color.blue50}
                   size="small"
                 />,
               )}
@@ -245,19 +245,21 @@ const Content: React.FC<Props> = (props) => {
                   })
                 }
                 style={styles.pinPoint}>
-                <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
+                <SnbText2.Body.Default color={color.black60}>
+                  Pin Lokasi Toko
+                </SnbText2.Body.Default>
               </TouchableOpacity>,
             )}
           </View>
           <View style={{ padding: 16 }}>
-            <SnbText.H4>{streetName}</SnbText.H4>
+            <SnbText2.Headline.Small>{streetName}</SnbText2.Headline.Small>
             <View style={{ marginVertical: 4 }} />
-            <SnbText.B1 align="justify" color={color.black60}>
+            <SnbText2.Body.Default align="justify" color={color.black60}>
               {staticAddress}
-            </SnbText.B1>
+            </SnbText2.Body.Default>
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextField.Area
+            <SnbTextField2.Area
               {...address}
               mandatory
               maxLength={200}
@@ -266,7 +268,7 @@ const Content: React.FC<Props> = (props) => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextField.Text
+            <SnbTextField2.Text
               {...noteAddress}
               mandatory
               labelText="Catatan Alamat"
@@ -324,8 +326,8 @@ const Content: React.FC<Props> = (props) => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
           title="Simpan"
           onPress={() => {
             updateCompleteData({
@@ -339,11 +341,12 @@ const Content: React.FC<Props> = (props) => {
               },
             });
           }}
-          type="primary"
           loading={updateCompleteDataState.loading}
           disabled={
             handleDisableSaveButton() || updateCompleteDataState.loading
           }
+          full
+          size="large"
         />
       </View>
       <ModalSelection
@@ -416,9 +419,9 @@ const DataTokoStep3View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={() => setOpenModalBack(true)}
-        type="white"
+        color="white"
         title="Alamat Toko"
       />
       <Stepper

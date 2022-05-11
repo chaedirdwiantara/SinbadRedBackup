@@ -143,7 +143,7 @@ const Content: React.FC<Props> = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      {renderIF(!isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
+      {renderIF(isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         open={openModalBack || props.openModalBack}
         closeModal={() => {

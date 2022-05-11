@@ -11,9 +11,9 @@ import { View } from 'react-native';
 import {
   color,
   SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbButton,
+  SnbTopNav2,
+  SnbText2,
+  SnbButton2,
   SnbIcon,
   SnbSkeletonAnimator,
 } from 'react-native-sinbad-ui';
@@ -84,17 +84,17 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <View
           style={{
-            borderTopWidth: 1,
-            borderTopColor: color.black10,
             flex: 1,
             paddingHorizontal: 16,
             paddingVertical: 32,
           }}>
-          <SnbText.H3>Selangkah Lagi Untuk Mengembangkan Toko Anda</SnbText.H3>
+          <SnbText2.Headline.Default>
+            Selangkah Lagi Untuk Mengembangkan Toko Anda
+          </SnbText2.Headline.Default>
           <View style={{ marginVertical: 8 }} />
-          <SnbText.B1>
+          <SnbText2.Body.Default>
             Silakan lengkapi data untuk menjadi anggota VIP
-          </SnbText.B1>
+          </SnbText2.Body.Default>
           <View style={{ marginVertical: 32 }} />
           <SnbCardButtonType3
             title="Data Diri"
@@ -121,24 +121,25 @@ const Content: React.FC = () => {
             }}>
             <SnbIcon name="verified_user" color={color.blue50} size={24} />
             <View style={{ flex: 1, marginLeft: 8 }}>
-              <SnbText.B3 color={color.black40}>
+              <SnbText2.Body.Default color={color.black40}>
                 Kami menjamin keamanan data dan kerahasiaan informasi yang anda
                 berikan.
-              </SnbText.B3>
+              </SnbText2.Body.Default>
             </View>
           </View>
           <View style={{ marginVertical: 16 }} />
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
+          <View style={{ margin: 16 }}>
+            <SnbButton2.Primary
               title="Konfirmasi"
               onPress={() => completeDataConfirmation()}
-              type="primary"
               disabled={
                 !isShowBadgeSuccessBuyer ||
                 !isShowBadgeSuccessUser ||
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
+              size="large"
+              full
             />
           </View>
         </View>
@@ -152,7 +153,11 @@ const DataCompletenessView: React.FC = () => {
   const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 title="Lengkapi Data" type="white" backAction={goBack} />
+      <SnbTopNav2.Type3
+        title="Lengkapi Data"
+        color="white"
+        backAction={goBack}
+      />
       <Content />
     </SnbContainer>
   );
