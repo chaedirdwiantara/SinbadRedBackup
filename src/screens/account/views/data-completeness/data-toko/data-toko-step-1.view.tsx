@@ -2,6 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
+  color,
   SnbButton,
   SnbContainer,
   SnbText,
@@ -73,7 +74,7 @@ const DataTokoStep1View: React.FC = () => {
         />
         <View style={{ margin: 16 }}>
           <SnbText.H4>Sinbad ID</SnbText.H4>
-          <SnbText.B1 color="#aaa">{completeDataState?.data?.buyerData?.buyerCode || '-'}</SnbText.B1>
+          <SnbText.B1 color={color.black80}>{completeDataState?.data?.buyerData?.buyerCode || '-'}</SnbText.B1>
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
