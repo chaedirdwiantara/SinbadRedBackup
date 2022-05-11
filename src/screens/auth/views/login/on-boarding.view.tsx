@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbText,
+  SnbText2,
   color,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
@@ -61,19 +61,22 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.button}>
-          <SnbButton.Single
+      <View style={styles.buttonContainer}>
+        <View style={{ marginHorizontal: 8, width: '45%' }}>
+          <SnbButton2.Primary
             title={'Masuk'}
             onPress={() => navigate(LOGIN_PHONE_VIEW)}
-            type={'secondary'}
+            size={'large'}
+            outline
+            full
           />
         </View>
-        <View style={styles.button}>
-          <SnbButton.Single
+        <View style={{ marginHorizontal: 8, width: '45%' }}>
+          <SnbButton2.Primary
             title={'Daftar'}
             onPress={() => navigate(SELF_REGISTRATION_VIEW)}
-            type={'primary'}
+            size={'large'}
+            full
           />
         </View>
       </View>
@@ -83,10 +86,14 @@ const OnBoardingView: React.FC<Props> = () => {
   const skipLogin = () => {
     return (
       <View style={styles.textSkipLogin}>
-        <SnbText.B1>Biarkan saya masuk </SnbText.B1>
+        <SnbText2.Paragraph.Default>
+          Biarkan saya masuk{' '}
+        </SnbText2.Paragraph.Default>
         <TouchableOpacity
           onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
-          <SnbText.B2 color={color.blue50}>Lewati</SnbText.B2>
+          <SnbText2.Body.Default color={color.blue50}>
+            Lewati
+          </SnbText2.Body.Default>
         </TouchableOpacity>
       </View>
     );
@@ -95,10 +102,10 @@ const OnBoardingView: React.FC<Props> = () => {
   const termsNotice = () => {
     return (
       <View style={styles.termsNoticeContainer}>
-        <SnbText.B3 color={color.blue50} align="center">
+        <SnbText2.Paragraph.Small color={color.blue50} align="center">
           Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
-          Kebijakan Privasi kami
-        </SnbText.B3>
+          Kebijakan Privasi kami{' '}
+        </SnbText2.Paragraph.Small>
       </View>
     );
   };
@@ -128,6 +135,13 @@ const styles = StyleSheet.create({
     width: 240,
     alignSelf: 'center',
     alignItems: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   button: {
     flex: 1,

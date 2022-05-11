@@ -9,7 +9,11 @@ import {
 import { ScrollView } from 'react-native';
 import { ImageBackground } from 'react-native';
 import { Brightness } from 'react-native-color-matrix-image-filters';
-import { color, SnbButton, SnbText } from '@sinbad/react-native-sinbad-ui';
+import {
+  color,
+  SnbButton2,
+  SnbText2,
+} from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 
 interface Props {
@@ -121,34 +125,37 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
         <View style={{ padding: 16, flex: 1 }}>
           {title && (
             <View style={{ marginVertical: 8 }}>
-              <SnbText.B3>{title}</SnbText.B3>
+              <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
             </View>
           )}
           {type === 'horizontal'
             ? renderHorizontalGuidance()
             : renderVerticalGuidance()}
           <View style={{ marginVertical: 16 }}>
-            <SnbText.H4>{rulesTitle}</SnbText.H4>
+            <SnbText2.Headline.Small>{rulesTitle}</SnbText2.Headline.Small>
             <View style={{ marginVertical: 4 }} />
             {rules?.map((el: string, index: number) => {
               return (
                 <View key={index} style={{ marginVertical: 4 }}>
-                  <SnbText.B3>
+                  <SnbText2.Paragraph.Tiny>
                     {props.listType === 'number' ? `${index + 1}.` : '✔'} {el}
-                  </SnbText.B3>
+                  </SnbText2.Paragraph.Tiny>
                 </View>
               );
             })}
           </View>
         </View>
       </ScrollView>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
-          title={buttonLabel}
-          disabled={false}
-          onPress={action}
-          type="primary"
-        />
+      <View style={{ width: '100%', marginBottom: 16 }}>
+        <View style={{ marginHorizontal: 16 }}>
+          <SnbButton2.Primary
+            title={buttonLabel || 'Ambil Foto'}
+            disabled={false}
+            onPress={action}
+            size={'large'}
+            full
+          />
+        </View>
       </View>
     </View>
   );

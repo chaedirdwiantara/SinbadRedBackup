@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { SnbText, color as colors } from '@sinbad/react-native-sinbad-ui';
+import { SnbText2, color as colors } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface StepperProps {
@@ -25,14 +25,14 @@ const Stepper: FC<StepperProps> = (props) => {
         <TouchableOpacity
           style={{ marginHorizontal: 16 }}
           onPress={props.onPress}>
-          <SnbText.C2 color={colors.blue60}>Lihat</SnbText.C2>
+          <SnbText2.Body.Tiny color={colors.blue60}>Lihat</SnbText2.Body.Tiny>
         </TouchableOpacity>
       </View>
       <View>
-        <SnbText.C2
+        <SnbText2.Paragraph.Tiny
           color={
             colors.black60
-          }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText.C2>
+          }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Paragraph.Tiny>
       </View>
     </View>
   );
