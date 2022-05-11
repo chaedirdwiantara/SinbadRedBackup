@@ -73,7 +73,7 @@ const DataTokoStep1View: React.FC = () => {
         />
         <View style={{ margin: 16 }}>
           <SnbText.H4>Sinbad ID</SnbText.H4>
-          <SnbText.B1 color="#aaa">001122334455</SnbText.B1>
+          <SnbText.B1 color="#aaa">{completeDataState?.data?.buyerData?.buyerCode || '-'}</SnbText.B1>
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField.Text
