@@ -184,9 +184,11 @@ const ModalSelection: React.FC<Props> = ({
                       justifyContent: 'space-between',
                     }}>
                     <View style={{ flex: 1 }}>
-                      <SnbText2.Body.Default>{label}</SnbText2.Body.Default>
+                      <SnbText2.Paragraph.Default>
+                        {label}
+                      </SnbText2.Paragraph.Default>
                     </View>
-                    <View style={{ marginHorizontal: 4 }} />
+                    <View style={{ marginHorizontal: 8 }} />
                     <SnbRadioButton
                       onPress={() => setTempSelectedItem({ item, type })}
                       status={status}
@@ -205,7 +207,7 @@ const ModalSelection: React.FC<Props> = ({
                 tempSelectedItem === null || listSelection.data === null
               }
               full
-              size="large"
+              size="medium"
             />
           </View>
         </View>

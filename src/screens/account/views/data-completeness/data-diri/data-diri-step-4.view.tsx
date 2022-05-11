@@ -164,7 +164,7 @@ const DataDiriStep4View: React.FC = () => {
           loading={
             updateCompleteDataState.loading || stateMerchant.changeEmail.loading
           }
-          size="large"
+          size="medium"
           full
         />
       </View>

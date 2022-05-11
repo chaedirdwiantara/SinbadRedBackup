@@ -100,7 +100,7 @@ const SelfRegisterView: React.FC = () => {
               checkPhoneV2.loading
             }
             loading={checkPhoneV2.loading}
-            size="large"
+            size="medium"
             full
           />
         </View>
@@ -110,9 +110,9 @@ const SelfRegisterView: React.FC = () => {
             marginBottom: 24,
             alignSelf: 'center',
           }}>
-          <SnbText2.Body.Default>
+          <SnbText2.Paragraph.Default>
             Sudah punya akun Sinbad?{' '}
-          </SnbText2.Body.Default>
+          </SnbText2.Paragraph.Default>
           <TouchableOpacity onPress={() => navigate(LOGIN_PHONE_VIEW)}>
             <SnbText2.Body.Default color={color.blue50}>
               Masuk

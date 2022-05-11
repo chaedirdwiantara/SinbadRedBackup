@@ -121,21 +121,21 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
         <View style={{ padding: 16, flex: 1 }}>
           {title && (
             <View style={{ marginVertical: 8 }}>
-              <SnbText2.Headline.Default>{title}</SnbText2.Headline.Default>
+              <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
             </View>
           )}
           {type === 'horizontal'
             ? renderHorizontalGuidance()
             : renderVerticalGuidance()}
           <View style={{ marginVertical: 16 }}>
-            <SnbText2.Headline.Default>{rulesTitle}</SnbText2.Headline.Default>
+            <SnbText2.Headline.Small>{rulesTitle}</SnbText2.Headline.Small>
             <View style={{ marginVertical: 4 }} />
             {rules?.map((el: string, index: number) => {
               return (
                 <View key={index} style={{ marginVertical: 4 }}>
-                  <SnbText2.Body.Default>
+                  <SnbText2.Paragraph.Tiny>
                     {props.listType === 'number' ? `${index + 1}.` : '✔'} {el}
-                  </SnbText2.Body.Default>
+                  </SnbText2.Paragraph.Tiny>
                 </View>
               );
             })}
@@ -147,7 +147,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           title={buttonLabel || ''}
           disabled={false}
           onPress={action}
-          size="large"
+          size="medium"
           full
         />
       </View>

@@ -203,12 +203,12 @@ const DataDiriStep2View: React.FC = () => {
               title="Ubah Foto"
               onPress={() => openCamera('npwp')}
               disabled={false}
-              size="large"
+              size="medium"
               full
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               loading={stateGlobal.uploadImage.loading}
@@ -228,7 +228,7 @@ const DataDiriStep2View: React.FC = () => {
                   });
                 }
               }}
-              size="large"
+              size="medium"
               full
             />
           </View>

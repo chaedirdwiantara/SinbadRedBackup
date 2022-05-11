@@ -169,7 +169,7 @@ const CameraWithOCRView = () => {
                   setRetake(true);
                 }}
                 disabled={false}
-                size="large"
+                size="medium"
                 full
               />
             </View>

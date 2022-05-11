@@ -143,12 +143,12 @@ const Content: React.FC<Props> = (props) => {
               title={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
               onPress={() => openCamera('store')}
               disabled={stateGlobal.uploadImage.loading}
-              size="large"
+              size="medium"
               full
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Lanjutkan'}
@@ -167,7 +167,7 @@ const Content: React.FC<Props> = (props) => {
               }}
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
-              size="large"
+              size="medium"
               full
             />
           </View>

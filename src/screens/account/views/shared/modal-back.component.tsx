@@ -31,9 +31,9 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
         </View>
         <View style={{ marginVertical: 16, marginHorizontal: 24 }}>
           <View style={{ alignItems: 'center' }}>
-            <SnbText2.Body.Default color={colors.black60} align="center">
+            <SnbText2.Paragraph.Default color={colors.black60} align="center">
               Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan
-            </SnbText2.Body.Default>
+            </SnbText2.Paragraph.Default>
           </View>
         </View>
         <View
@@ -46,19 +46,19 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
               onPress={() => props.closeModal()}
               title="Batal"
               disabled={false}
-              size="large"
+              size="medium"
               full
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               onPress={() => props.confirm()}
               title="Ya, Keluar"
               disabled={updateCompleteDataState.loading}
               loading={updateCompleteDataState.loading}
-              size="large"
+              size="medium"
               full
             />
           </View>

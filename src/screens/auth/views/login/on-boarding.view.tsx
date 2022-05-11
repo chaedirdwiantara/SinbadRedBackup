@@ -66,7 +66,7 @@ const OnBoardingView: React.FC<Props> = () => {
           <SnbButton2.Primary
             title={'Masuk'}
             onPress={() => navigate(LOGIN_PHONE_VIEW)}
-            size="large"
+            size="medium"
             full
             outline
           />
@@ -77,7 +77,7 @@ const OnBoardingView: React.FC<Props> = () => {
             title={'Daftar'}
             onPress={() => navigate(SELF_REGISTRATION_VIEW)}
             disabled={false}
-            size="large"
+            size="medium"
             full
           />
         </View>
@@ -104,10 +104,10 @@ const OnBoardingView: React.FC<Props> = () => {
   const termsNotice = () => {
     return (
       <View style={styles.termsNoticeContainer}>
-        <SnbText2.Paragraph.Default color={color.blue50} align="center">
+        <SnbText2.Paragraph.Small color={color.blue50} align="center">
           Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
           Kebijakan Privasi kami
-        </SnbText2.Paragraph.Default>
+        </SnbText2.Paragraph.Small>
       </View>
     );
   };

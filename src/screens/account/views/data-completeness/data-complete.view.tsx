@@ -92,9 +92,9 @@ const Content: React.FC = () => {
             Selangkah Lagi Untuk Mengembangkan Toko Anda
           </SnbText2.Headline.Default>
           <View style={{ marginVertical: 8 }} />
-          <SnbText2.Body.Default>
+          <SnbText2.Paragraph.Default>
             Silakan lengkapi data untuk menjadi anggota VIP
-          </SnbText2.Body.Default>
+          </SnbText2.Paragraph.Default>
           <View style={{ marginVertical: 32 }} />
           <SnbCardButtonType3
             title="Data Diri"
@@ -118,13 +118,17 @@ const Content: React.FC = () => {
               flexDirection: 'row',
               marginHorizontal: 16,
               alignItems: 'center',
+              backgroundColor: color.blue10,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderRadius: 4,
             }}>
             <SnbIcon name="verified_user" color={color.blue50} size={24} />
             <View style={{ flex: 1, marginLeft: 8 }}>
-              <SnbText2.Body.Default color={color.black40}>
+              <SnbText2.Paragraph.Small color={color.blue60}>
                 Kami menjamin keamanan data dan kerahasiaan informasi yang anda
                 berikan.
-              </SnbText2.Body.Default>
+              </SnbText2.Paragraph.Small>
             </View>
           </View>
           <View style={{ marginVertical: 16 }} />
@@ -138,7 +142,7 @@ const Content: React.FC = () => {
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
-              size="large"
+              size="medium"
               full
             />
           </View>

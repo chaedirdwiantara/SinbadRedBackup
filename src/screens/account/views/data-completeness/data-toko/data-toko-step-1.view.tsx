@@ -72,10 +72,10 @@ const DataTokoStep1View: React.FC = () => {
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ margin: 16 }}>
-          <SnbText2.Headline.Small>Sinbad ID</SnbText2.Headline.Small>
-          <SnbText2.Body.Small>
+          <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
+          <SnbText2.Paragraph.Default>
             {completeDataState?.data?.buyerData?.buyerCode}
-          </SnbText2.Body.Small>
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ margin: 16 }}>
           <SnbTextField2.Text
@@ -113,7 +113,7 @@ const DataTokoStep1View: React.FC = () => {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } })
           }
           loading={updateCompleteDataState.loading}
-          size="large"
+          size="medium"
           full
         />
       </View>

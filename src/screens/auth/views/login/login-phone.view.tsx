@@ -73,7 +73,7 @@ const Content: React.FC = () => {
             phone.valMsgError !== '' ||
             requestOTPState.loading
           }
-          size="large"
+          size="medium"
           full
         />
       </View>

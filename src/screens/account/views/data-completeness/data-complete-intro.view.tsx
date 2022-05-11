@@ -40,9 +40,9 @@ const Content: React.FC = () => {
       <View style={{ flex: 1 }}>
         <ScrollView>
           <View style={{ padding: 32 }}>
-            <SnbText2.Headline.Large align="center">
+            <SnbText2.Headline.Default align="center">
               Sinbad membantu Anda dengan:
-            </SnbText2.Headline.Large>
+            </SnbText2.Headline.Default>
             <View style={{ marginVertical: 8 }} />
             {STATIC_CONTENT.map((el, idx) => (
               <View
@@ -55,11 +55,13 @@ const Content: React.FC = () => {
                 {el.icon()}
                 <View style={{ marginHorizontal: 8 }} />
                 <View style={{ flex: 1 }}>
-                  <SnbText2.Headline.Large>{el.title}</SnbText2.Headline.Large>
+                  <SnbText2.Headline.Default>
+                    {el.title}
+                  </SnbText2.Headline.Default>
                   <View style={{ marginVertical: 4 }} />
-                  <SnbText2.Body.Default align="justify">
+                  <SnbText2.Paragraph.Small align="justify">
                     {el.text}
-                  </SnbText2.Body.Default>
+                  </SnbText2.Paragraph.Small>
                 </View>
               </View>
             ))}
@@ -71,7 +73,7 @@ const Content: React.FC = () => {
           title="Lengkapi Data Sekarang"
           onPress={() => navigate(DATA_COMPLETENESS_VIEW)}
           disabled={false}
-          size="large"
+          size="medium"
           full
         />
       </View>

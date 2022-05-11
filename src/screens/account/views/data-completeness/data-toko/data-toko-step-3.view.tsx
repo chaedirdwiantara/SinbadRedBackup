@@ -183,9 +183,7 @@ const Content: React.FC<Props> = (props) => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText2.Headline.Default>
-                Titik Lokasi
-              </SnbText2.Headline.Default>
+              <SnbText2.Body.Small>Titik Lokasi</SnbText2.Body.Small>
               {renderIF(
                 latLng !== null,
                 <SnbButton2.Link
@@ -198,7 +196,7 @@ const Content: React.FC<Props> = (props) => {
                   }
                   title="Ubah Titik Lokasi"
                   disabled={false}
-                  size="small"
+                  size="tiny"
                 />,
               )}
             </View>
@@ -252,11 +250,11 @@ const Content: React.FC<Props> = (props) => {
             )}
           </View>
           <View style={{ padding: 16 }}>
-            <SnbText2.Headline.Small>{streetName}</SnbText2.Headline.Small>
+            <SnbText2.Body.Small>{streetName}</SnbText2.Body.Small>
             <View style={{ marginVertical: 4 }} />
-            <SnbText2.Body.Default align="justify" color={color.black60}>
+            <SnbText2.Paragraph.Small align="justify" color={color.black60}>
               {staticAddress}
-            </SnbText2.Body.Default>
+            </SnbText2.Paragraph.Small>
           </View>
           <View style={{ padding: 16 }}>
             <SnbTextField2.Area
@@ -346,7 +344,7 @@ const Content: React.FC<Props> = (props) => {
             handleDisableSaveButton() || updateCompleteDataState.loading
           }
           full
-          size="large"
+          size="medium"
         />
       </View>
       <ModalSelection

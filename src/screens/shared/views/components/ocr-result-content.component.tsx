@@ -106,10 +106,10 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
           borderRadius: 8,
           marginTop: 16,
         }}>
-        <SnbText2.Body.Small color={color.blue50}>
+        <SnbText2.Paragraph.Small color={color.blue50}>
           Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa
           kembali nama anda bila terjadi kesalahan.
-        </SnbText2.Body.Small>
+        </SnbText2.Paragraph.Small>
       </View>
     </View>
   );

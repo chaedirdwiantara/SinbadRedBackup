@@ -113,12 +113,12 @@ const Content: React.FC<Props> = (props) => {
               title={'Ubah Foto'}
               onPress={() => openCameraWithOCR('ktp')}
               disabled={false}
-              size="large"
+              size="medium"
               full
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Simpan'}
@@ -129,7 +129,7 @@ const Content: React.FC<Props> = (props) => {
                 updateCompleteDataState.loading
               }
               loading={updateCompleteDataState.loading}
-              size="large"
+              size="medium"
               full
             />
           </View>

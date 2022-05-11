@@ -172,19 +172,19 @@ const DataDiriStep3View: React.FC = () => {
               title="Ubah Foto"
               onPress={() => openCamera('selfie')}
               disabled={false}
-              size="large"
+              size="medium"
               full
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 4 }} />
+          <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
               onPress={() => confirm()}
-              size="large"
+              size="medium"
               full
             />
           </View>

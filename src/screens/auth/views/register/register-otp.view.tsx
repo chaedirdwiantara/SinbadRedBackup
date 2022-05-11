@@ -108,7 +108,7 @@ const RegisterOTPView: React.FC = () => {
               setModalError(false);
               setReCheckAutoLogin(0);
             }}
-            size="large"
+            size="medium"
             full
           />
         </View>
