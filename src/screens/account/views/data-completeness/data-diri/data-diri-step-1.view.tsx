@@ -35,9 +35,9 @@ const Content: React.FC<Props> = (props) => {
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
+  const userData = completeDataState.data?.userData;
 
   React.useEffect(() => {
-    const userData = completeDataState.data?.userData;
     if (userData) {
       setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
     }
@@ -71,9 +71,16 @@ const Content: React.FC<Props> = (props) => {
   useFocusEffect(handleBackButton);
 
   function handleSubmit() {
-    updateCompleteData({
-      user: { idNo: value.idNumber, name: value.nameOnKtp },
-    });
+    if (
+      value.idNumber !== userData.idNo ||
+      value.nameOnKtp !== userData.fullName
+    ) {
+      updateCompleteData({
+        user: { idNo: value.idNumber, name: value.nameOnKtp },
+      });
+    } else {
+      navigate(DATA_DIRI_STEP_2_VIEW);
+    }
   }
 
   function renderUploadPhotoRules() {
@@ -124,7 +131,7 @@ const Content: React.FC<Props> = (props) => {
               value?.nameOnKtp === '' ||
               updateCompleteDataState.loading
             }
-            leftDisabled={false}
+            leftDisabled={updateCompleteDataState.loading}
             rightLoading={updateCompleteDataState.loading}
           />
         </View>
@@ -145,7 +152,10 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (value?.idNumber && value?.nameOnKtp) {
+          if (
+            value.idNumber !== userData.idNo ||
+            value.nameOnKtp !== userData.fullName
+          ) {
             updateCompleteData({
               user: {
                 name: value.nameOnKtp,
