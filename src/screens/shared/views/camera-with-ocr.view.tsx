@@ -53,9 +53,9 @@ const CameraWithOCRView = () => {
 
   React.useEffect(() => {
     let ocrTimeout: any = null;
-    if (ocrStatus === 'failed') {
+    if (ocrStatus === 'error') {
       setShowModalError(true);
-    } else if (ocrStatus === 'success' && isImageProcessed) {
+    } else if (ocrStatus === 'done' && isImageProcessed) {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {

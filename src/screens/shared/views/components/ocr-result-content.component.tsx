@@ -22,7 +22,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
   const [imageUrl] = React.useState(
     ocrImageState.data
       ? {
-          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.id}`,
+          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.uploadImageData?.data?.id}`,
           headers: { 'x-platform': 'sinbad-app' },
         }
       : { uri: completeDataState.data?.userData?.idImageUrl },
@@ -92,11 +92,11 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         onChangeText={(text) => {
           text = text.replace(/[^0-9]/g, '');
           idNumber.setValue(text);
-            if (text.length === 16) {
-              idNumber.setType('default');
-            } else {
-              idNumber.setMessageError('Nomor KTP harus 16 Digit');
-            }
+          if (text.length === 16) {
+            idNumber.setType('default');
+          } else {
+            idNumber.setMessageError('Nomor KTP harus 16 Digit');
+          }
         }}
       />
       <View
