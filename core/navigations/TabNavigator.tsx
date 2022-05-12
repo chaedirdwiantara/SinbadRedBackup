@@ -6,11 +6,7 @@ import { HomeView } from '@screen/home-v2/views';
 import { OrderHistoryListView } from '@screen/order-history/views';
 import { HelpView } from '@screen/help/views';
 import { UserView } from '@screen/user/views';
-import {
-  SnbIconHint2,
-  SnbText2,
-  colorV2
-} from 'react-native-sinbad-ui';
+import { SnbIconHint2, SnbText2, colorV2 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '../functions/navigation';
 import { useDataAuth } from '@core/redux/Data';
 
@@ -35,7 +31,9 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>Beranda</SnbText2.Caption.Small>
+              <SnbText2.Caption.Small color={color}>
+                Beranda
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
@@ -68,17 +66,19 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>Pesanan</SnbText2.Caption.Small>
+              <SnbText2.Caption.Small color={color}>
+                Pesanan
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={0}
-                  iconColor={color}
-                  iconName="log_history"
-                  size={24}
-                />
+                value={0}
+                iconColor={color}
+                iconName="log_history"
+                size={24}
+              />
             </View>
           ),
         }}
@@ -89,17 +89,19 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>Bantuan</SnbText2.Caption.Small>
+              <SnbText2.Caption.Small color={color}>
+                Bantuan
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={0}
-                  iconColor={color}
-                  iconName="help"
-                  size={24}
-                />
+                value={0}
+                iconColor={color}
+                iconName="help"
+                size={24}
+              />
             </View>
           ),
         }}
@@ -120,17 +122,19 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText2.Caption.Small color={color}>Profil</SnbText2.Caption.Small>
+              <SnbText2.Caption.Small color={color}>
+                Profil
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <SnbIconHint2
-                  value={0}
-                  iconColor={color}
-                  iconName="person_circle"
-                  size={24}
-                />
+                value={0}
+                iconColor={color}
+                iconName="person_circle"
+                size={24}
+              />
             </View>
           ),
         }}
