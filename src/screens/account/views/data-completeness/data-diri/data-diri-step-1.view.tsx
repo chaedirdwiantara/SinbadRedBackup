@@ -37,6 +37,10 @@ const Content: React.FC<Props> = (props) => {
   const { navigate } = useNavigation();
 
   React.useEffect(() => {
+    const userData = completeDataState.data?.userData;
+    if (userData) {
+      setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
+    }
     return ocrImageReset;
   }, []);
 
