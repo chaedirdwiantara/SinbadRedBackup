@@ -10,7 +10,7 @@ const HomeView: FC = () => {
   const [keyword, setKeyword] = useState('');
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: colorV2.bgColor.light }}>
+    <View style={{ flex: 1 }}>
       <SnbTopNav2.Type10
         placeholder="Cari di sinbad"
         icon1Name="cart"
@@ -23,21 +23,23 @@ const HomeView: FC = () => {
         onClearText={() => setKeyword('')}
         onEnter={() => console.log('Searched keyword:', keyword)}
       />
-      <View
+      <ScrollView
         style={{
-          alignItems: 'center',
+          flex: 1,
+          backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
-          height: 180,
         }}>
-        <BannerHomeView />
-      </View>
-      <Benefits />
-      <Categories data={categories} />
-      <Brands
-        data={brands}
-        onTitleActionPress={() => console.log('See all brands')}
-      />
-    </ScrollView>
+        <View style={{ alignItems: 'center', height: 180 }}>
+          <BannerHomeView />
+        </View>
+        <Benefits />
+        <Categories data={categories} />
+        <Brands
+          data={brands}
+          onTitleActionPress={() => console.log('See all brands')}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
