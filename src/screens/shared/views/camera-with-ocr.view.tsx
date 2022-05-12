@@ -1,4 +1,8 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import React from 'react';
 import {
   color,
@@ -10,12 +14,10 @@ import {
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
-import { Dimensions, View } from 'react-native';
+import { BackHandler, Dimensions, View } from 'react-native';
 import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataFlagRTDB } from '@core/redux/Data';
-import database from '@react-native-firebase/database';
-import { uniqueId } from '@core/functions/global/device-data';
 
 const { height, width: screenWidth } = Dimensions.get('window');
 
@@ -39,17 +41,30 @@ const CameraWithOCRView = () => {
   const { params }: any = useRoute();
   const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
-  const { processImage, ocrImageState } = useOCR(true);
+  const { processImage, ocrImageState, resetOcrRtdb, ocrImageReset } =
+    useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
 
   React.useEffect(() => {
-    return () => {
-      const ref = database().ref('sinbadApp').child(uniqueId);
-      ref.child('flag').child('ocrStatus').set('none');
-    };
+    resetOcrRtdb();
+    return resetOcrRtdb;
   }, []);
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        ocrImageReset();
+        goBack();
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     let ocrTimeout: any = null;
@@ -130,6 +145,7 @@ const CameraWithOCRView = () => {
               <SnbButton.Single
                 title="Ulang Foto"
                 onPress={() => {
+                  resetOcrRtdb();
                   setShowModalError(false);
                   setRetake(true);
                 }}
@@ -141,7 +157,7 @@ const CameraWithOCRView = () => {
         }
       />
       {renderIF(
-        ocrImageState.loading,
+        ocrImageState.loading || ocrStatus === 'processing',
         <View style={{ position: 'absolute', bottom: 36, right: 0, left: 0 }}>
           <SnbProgress size={60} />
         </View>,

@@ -334,7 +334,12 @@ export const useMerchant = () => {
 export const useOCR = (isRTDBOpenConnection = false) => {
   const dispatch = useDispatch();
   const { ocrImage } = useSelector((state: any) => state.account);
-  const [ocrImageResult, setOcrImageResult] = React.useState(null);
+  const [ocrImageResult, setOcrImageResult] = React.useState<any>(null);
+
+  const resetOcrRtdb = React.useCallback(() => {
+    const ref = database().ref('sinbadApp').child(uniqueId);
+    ref.child('flag').child('ocrStatus').set('none');
+  }, []);
 
   React.useEffect(() => {
     if (isRTDBOpenConnection) {
@@ -368,5 +373,6 @@ export const useOCR = (isRTDBOpenConnection = false) => {
     ocrImageState: ocrImage,
     ocrImageResult,
     ocrImageReset,
+    resetOcrRtdb,
   };
 };
