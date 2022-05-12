@@ -138,13 +138,13 @@ const Content: React.FC<Props> = (props) => {
       </View>
     );
   }
-  const isOcrSuccess =
+  const isImageAvailable =
     ocrImageState.data !== null ||
-    completeDataState.data?.userData?.idImageUrl !== null;
+    completeDataState.data?.userData?.imageId !== null;
 
   return (
     <View style={{ flex: 1 }}>
-      {renderIF(isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
+      {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         open={openModalBack || props.openModalBack}
         closeModal={() => {
