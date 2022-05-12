@@ -10,7 +10,9 @@ import { useCamera } from '@screen/auth/functions';
 
 const OCRResultView: React.FC = () => {
   const { editProfile } = MerchantHookFunc.useEditProfile();
-  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
+  const { dispatchSupplier, stateMerchant } = React.useContext(
+    contexts.MerchantContext,
+  );
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
   const { openCameraWithOCR } = useCamera();
 
@@ -45,9 +47,13 @@ const OCRResultView: React.FC = () => {
             };
             editProfile(dispatchSupplier, { data: { user } });
           }}
-          rightDisabled={value?.idNumber === '' || value?.nameOnKtp === ''}
-          leftDisabled={false}
-          rightLoading={false}
+          rightDisabled={
+            value?.idNumber?.length !== 16 ||
+            !value?.nameOnKtp ||
+            stateMerchant.profileEdit.loading
+          }
+          leftDisabled={stateMerchant.profileEdit.loading}
+          rightLoading={stateMerchant.profileEdit.loading}
         />
       </View>
     </View>

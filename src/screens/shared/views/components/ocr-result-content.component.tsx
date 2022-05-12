@@ -14,19 +14,9 @@ interface Props {
 
 const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
   const { ocrImageResult }: any = useOCR(true);
-
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
-  const { ocrImageState } = useOCR();
   const { completeDataState } = useEasyRegistration();
-  const [imageUrl] = React.useState(
-    ocrImageState.data
-      ? {
-          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageState.data?.uploadImageData?.data?.id}`,
-          headers: { 'x-platform': 'sinbad-app' },
-        }
-      : { uri: completeDataState.data?.userData?.idImageUrl },
-  );
 
   React.useEffect(() => {
     if (ocrImageResult) {
@@ -61,7 +51,12 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
       <SnbText.H4>Foto KTP Diupload</SnbText.H4>
       <View style={{ marginVertical: 4 }} />
       <Image
-        source={imageUrl}
+        source={{
+          uri: ocrImageResult?.imageUid
+            ? `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageResult?.imageUid}`
+            : completeDataState.data?.userData?.idImageUrl,
+          headers: { 'x-platform': 'sinbad-app' },
+        }}
         resizeMode="contain"
         style={{ height: 200, marginTop: 16 }}
       />
