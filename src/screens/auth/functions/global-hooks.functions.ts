@@ -335,10 +335,14 @@ export const useOCR = (isRTDBOpenConnection = false) => {
   const dispatch = useDispatch();
   const { ocrImage } = useSelector((state: any) => state.account);
   const [ocrImageResult, setOcrImageResult] = React.useState<any>(null);
+  const ref = database().ref('sinbadApp').child(uniqueId);
 
-  const resetOcrRtdb = React.useCallback(() => {
-    const ref = database().ref('sinbadApp').child(uniqueId);
+  const resetOcrStatusRtdb = React.useCallback(() => {
     ref.child('flag').child('ocrStatus').set('none');
+  }, []);
+
+  const resetOcrDataRtdb = React.useCallback(() => {
+    ref.child('ocrData').set(null);
   }, []);
 
   React.useEffect(() => {
@@ -356,10 +360,9 @@ export const useOCR = (isRTDBOpenConnection = false) => {
   }, []);
 
   const processImage = (data: models.IOCRImage) => {
-    const ref = database().ref('sinbadApp').child(uniqueId);
     ref.once('value', () => {
-      ref.child('ocrData').set(null);
-      ref.child('flag').child('ocrStatus').set('none');
+      resetOcrDataRtdb();
+      resetOcrStatusRtdb();
     });
     dispatch(Actions.ocrImageProcess(data));
   };
@@ -373,6 +376,7 @@ export const useOCR = (isRTDBOpenConnection = false) => {
     ocrImageState: ocrImage,
     ocrImageResult,
     ocrImageReset,
-    resetOcrRtdb,
+    resetOcrStatusRtdb,
+    resetOcrDataRtdb,
   };
 };
