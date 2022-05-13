@@ -10,7 +10,9 @@ import { useCamera } from '@screen/auth/functions';
 
 const OCRResultView: React.FC = () => {
   const { editProfile } = MerchantHookFunc.useEditProfile();
-  const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
+  const { dispatchSupplier, stateMerchant } = React.useContext(
+    contexts.MerchantContext,
+  );
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
   const { openCameraWithOCR } = useCamera();
 
@@ -34,7 +36,7 @@ const OCRResultView: React.FC = () => {
           <SnbButton2.Primary
             title={'Ubah Foto'}
             onPress={() => openCameraWithOCR('ktp')}
-            disabled={false}
+            disabled={stateMerchant.profileEdit.loading}
             size="medium"
             full
             outline
@@ -51,10 +53,10 @@ const OCRResultView: React.FC = () => {
               };
               editProfile(dispatchSupplier, { data: { user } });
             }}
-            disabled={value?.idNumber === '' || value?.nameOnKtp === ''}
+            disabled={value?.idNumber === '' || value?.nameOnKtp === '' || stateMerchant.profileEdit.loading}
             size="medium"
             full
-            loading={false}
+            loading={stateMerchant.profileEdit.loading}
           />
         </View>
       </View>

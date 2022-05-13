@@ -86,13 +86,14 @@ const Content: React.FC = () => {
   };
 
   const isOcrSuccess = ocrImageState.data !== null;
+
   return (
     <View style={{ flex: 1 }}>
       {renderIF(
         isOcrSuccess,
         <OCRResultView />,
         renderIF(
-          stateUser?.detail?.data?.ownerData?.profile?.imageId === '',
+          stateUser?.detail?.data?.ownerData?.profile?.imageId === null,
           <UploadPhotoRules
             rulesTitle={'Pastikan Foto KTP Anda Sesuai Ketentuan'}
             imgSrc={require('../../../../assets/images/ktp_image.png')}
@@ -101,6 +102,7 @@ const Content: React.FC = () => {
             type="vertical"
             resizeMode="contain"
             blurRadius={2.2}
+            isTiltImage
           />,
           renderImagePreview(),
         ),

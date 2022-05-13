@@ -82,7 +82,10 @@ const MerchantDetailProfileView: FC = () => {
       case 'merchantOwnerBankAccountNo':
         NavigationAction.navigate('MerchantBankAccountView', { title, type });
         break;
-      case 'ktp':
+      case 'ktp': {
+        NavigationAction.navigate('UpdatePhotoKTPView');
+        break;
+      }
       case 'npwp':
       case 'selfie': {
         navigate('MerchantEditPhotoView', { title, type });
@@ -119,8 +122,7 @@ const MerchantDetailProfileView: FC = () => {
         <TouchableOpacity
           style={MerchantStyles.boxEditIconContainer}
           onPress={() => goTo({ type: 'merchantOwnerImage' })}>
-          <View
-            style={MerchantStyles.boxEditIcon}>
+          <View style={MerchantStyles.boxEditIcon}>
             <SnbIcon name={'create'} size={10} color={color.white} />
           </View>
         </TouchableOpacity>
@@ -141,9 +143,7 @@ const MerchantDetailProfileView: FC = () => {
             </SnbText.B3>
           </View>
         </View>
-        <View style={MerchantStyles.boxHeader}>
-          {renderOwnerImage()}
-        </View>
+        <View style={MerchantStyles.boxHeader}>{renderOwnerImage()}</View>
       </View>
     );
   };

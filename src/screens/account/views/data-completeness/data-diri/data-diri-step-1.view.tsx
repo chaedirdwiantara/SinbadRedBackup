@@ -35,8 +35,12 @@ const Content: React.FC<Props> = (props) => {
   } = useEasyRegistration();
   const [backHandle, setBackHandle] = React.useState(false);
   const { navigate } = useNavigation();
+  const userData = completeDataState.data?.userData;
 
   React.useEffect(() => {
+    if (userData) {
+      setValue({ idNumber: userData?.idNo, nameOnKtp: userData?.fullName });
+    }
     return ocrImageReset;
   }, []);
 
@@ -67,9 +71,16 @@ const Content: React.FC<Props> = (props) => {
   useFocusEffect(handleBackButton);
 
   function handleSubmit() {
-    updateCompleteData({
-      user: { idNo: value.idNumber, name: value.nameOnKtp },
-    });
+    if (
+      value.idNumber !== userData.idNo ||
+      value.nameOnKtp !== userData.fullName
+    ) {
+      updateCompleteData({
+        user: { idNo: value.idNumber, name: value.nameOnKtp },
+      });
+    } else {
+      navigate(DATA_DIRI_STEP_2_VIEW);
+    }
   }
 
   function renderUploadPhotoRules() {
@@ -137,13 +148,13 @@ const Content: React.FC<Props> = (props) => {
       </View>
     );
   }
-  const isOcrSuccess =
+  const isImageAvailable =
     ocrImageState.data !== null ||
-    completeDataState.data?.userData?.idImageUrl !== null;
+    completeDataState.data?.userData?.imageId !== null;
 
   return (
     <View style={{ flex: 1 }}>
-      {renderIF(isOcrSuccess, renderOCRResult(), renderUploadPhotoRules())}
+      {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
         open={openModalBack || props.openModalBack}
         closeModal={() => {
@@ -151,7 +162,10 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (value?.idNumber && value?.nameOnKtp) {
+          if (
+            value.idNumber !== userData.idNo ||
+            value.nameOnKtp !== userData.fullName
+          ) {
             updateCompleteData({
               user: {
                 name: value.nameOnKtp,
