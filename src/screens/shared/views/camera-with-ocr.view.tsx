@@ -41,15 +41,15 @@ const CameraWithOCRView = () => {
   const { params }: any = useRoute();
   const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
-  const { processImage, ocrImageState, resetOcrRtdb, ocrImageReset } =
+  const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
 
   React.useEffect(() => {
-    resetOcrRtdb();
-    return resetOcrRtdb;
+    resetOcrStatusRtdb();
+    return resetOcrStatusRtdb;
   }, []);
 
   const handleBackButton = React.useCallback(() => {
@@ -145,7 +145,7 @@ const CameraWithOCRView = () => {
               <SnbButton.Single
                 title="Ulang Foto"
                 onPress={() => {
-                  resetOcrRtdb();
+                  resetOcrStatusRtdb();
                   setShowModalError(false);
                   setRetake(true);
                 }}

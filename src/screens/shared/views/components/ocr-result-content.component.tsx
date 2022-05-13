@@ -13,7 +13,7 @@ interface Props {
 }
 
 const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
-  const { ocrImageResult }: any = useOCR(true);
+  const { ocrImageResult } = useOCR(true);
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
   const { completeDataState } = useEasyRegistration();
@@ -52,9 +52,10 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
       <View style={{ marginVertical: 4 }} />
       <Image
         source={{
-          uri: ocrImageResult?.imageUid
-            ? `${apiHost.base}/common/api/v1/shared/public/secure-files/${ocrImageResult?.imageUid}`
-            : completeDataState.data?.userData?.idImageUrl,
+          uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${
+            ocrImageResult?.imageUid ||
+            completeDataState.data?.userData?.imageId
+          }`,
           headers: { 'x-platform': 'sinbad-app' },
         }}
         resizeMode="contain"
