@@ -1,6 +1,12 @@
 import React from 'react';
 import { useInput } from '@screen/auth/functions';
-import { color, SnbText2, SnbTextField2 } from '@sinbad/react-native-sinbad-ui';
+import {
+  colorV2,
+  SnbText2,
+  SnbTextField2,
+  spacingV2 as layout,
+  borderV2,
+} from '@sinbad/react-native-sinbad-ui';
 import { View, Image } from 'react-native';
 import { IOCRResult } from '@model/global';
 import * as models from '@models';
@@ -47,9 +53,9 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
   }, [nameOnKtp.value, idNumber.value]);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
+    <View style={{ flex: 1, padding: layout.spacing.lg }}>
       <SnbText2.Headline.Small>Foto KTP Diupload</SnbText2.Headline.Small>
-      <View style={{ marginVertical: 4 }} />
+      <View style={{ marginVertical: layout.spacing.xxsm }} />
       <Image
         source={{
           uri: `${apiHost.base}/common/api/v1/shared/public/secure-files/${
@@ -59,9 +65,13 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
           headers: { 'x-platform': 'sinbad-app' },
         }}
         resizeMode="contain"
-        style={{ height: 200, marginTop: 16 }}
+        style={{
+          height: 200,
+          marginTop: layout.spacing.lg,
+          backgroundColor: colorV2.bgColor.green,
+        }}
       />
-      <View style={{ padding: 16 }} />
+      <View style={{ padding: layout.spacing.lg }} />
       <SnbTextField2.Text
         {...nameOnKtp}
         helperText={
@@ -73,7 +83,7 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
         placeholder="Masukkan nama pada KTP"
         maxLength={200}
       />
-      <View style={{ padding: 16 }} />
+      <View style={{ padding: layout.spacing.lg }} />
       <SnbTextField2.Text
         {...idNumber}
         labelText="NIK pada KTP"
@@ -97,12 +107,12 @@ const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
       />
       <View
         style={{
-          backgroundColor: color.blue10,
-          padding: 12,
-          borderRadius: 8,
-          marginTop: 16,
+          backgroundColor: colorV2.bgColor.blue,
+          padding: layout.spacing.md,
+          borderRadius: borderV2.radius.sm,
+          marginTop: layout.spacing.lg,
         }}>
-        <SnbText2.Paragraph.Small color={color.blue50}>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
           Nama secara otomatis diambil dari foto KTP yang anda upload. Periksa
           kembali nama anda bila terjadi kesalahan.
         </SnbText2.Paragraph.Small>

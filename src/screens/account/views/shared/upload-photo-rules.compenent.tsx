@@ -9,7 +9,13 @@ import {
   ImageBackground,
 } from 'react-native';
 import { Brightness } from 'react-native-color-matrix-image-filters';
-import { color, SnbButton2, SnbText2 } from '@sinbad/react-native-sinbad-ui';
+import {
+  colorV2,
+  SnbButton2,
+  SnbText2,
+  borderV2,
+  spacingV2 as layout,
+} from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 
 interface Props {
@@ -46,26 +52,31 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
       <>
         <View
           style={{
-            backgroundColor: color.green10,
-            padding: isTiltImage ? 24 : 0,
-            borderRadius: 4,
+            backgroundColor: colorV2.bgColor.green,
+            padding: isTiltImage ? layout.spacing.xl : 0,
+            borderRadius: borderV2.radius.sm,
           }}>
           <Image
             source={source}
             resizeMode={resizeMode}
             style={[styles.imageContainer, !isTiltImage && { height: 240 }]}
           />
-          <View style={{ position: 'absolute', right: 8, bottom: 8 }}>
+          <View
+            style={{
+              position: 'absolute',
+              right: layout.spacing.sm,
+              bottom: layout.spacing.sm,
+            }}>
             <Svg name="check_circle" size={24} />
           </View>
         </View>
-        <View style={{ marginVertical: 8 }} />
+        <View style={{ marginVertical: layout.spacing.sm }} />
         <Brightness amount={1.2}>
           <View
             style={{
-              padding: isTiltImage ? 24 : 0,
-              backgroundColor: color.red10,
-              borderRadius: 4,
+              padding: isTiltImage ? layout.spacing.xl : 0,
+              backgroundColor: colorV2.bgColor.red,
+              borderRadius: borderV2.radius.sm,
             }}>
             <Image
               source={source}
@@ -77,7 +88,12 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
                 !isTiltImage && { height: 240 },
               ]}
             />
-            <View style={{ position: 'absolute', right: 8, bottom: 8 }}>
+            <View
+              style={{
+                position: 'absolute',
+                right: layout.spacing.sm,
+                bottom: layout.spacing.sm,
+              }}>
               <Svg name="x_circle" size={24} />
             </View>
           </View>
@@ -93,19 +109,33 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           <ImageBackground
             source={source}
             resizeMode={resizeMode}
-            style={[styles.imageContainer, { backgroundColor: color.green10 }]}>
-            <View style={{ marginRight: 8, marginBottom: 8 }}>
+            style={[
+              styles.imageContainer,
+              { backgroundColor: colorV2.bgColor.green },
+            ]}>
+            <View
+              style={{
+                marginRight: layout.spacing.sm,
+                marginBottom: layout.spacing.sm,
+              }}>
               <Svg name="check_circle" size={24} />
             </View>
           </ImageBackground>
-          <View style={{ marginHorizontal: 16 }} />
+          <View style={{ marginHorizontal: layout.spacing.lg }} />
           <Brightness amount={1.4} style={{ flex: 1 }}>
             <ImageBackground
               source={source}
               resizeMode={resizeMode}
               blurRadius={blurRadius}
-              style={[styles.imageContainer, { backgroundColor: color.red10 }]}>
-              <View style={{ marginRight: 8, marginBottom: 8 }}>
+              style={[
+                styles.imageContainer,
+                { backgroundColor: colorV2.bgColor.red },
+              ]}>
+              <View
+                style={{
+                  marginRight: layout.spacing.sm,
+                  marginBottom: layout.spacing.sm,
+                }}>
                 <Svg name="x_circle" size={24} />
               </View>
             </ImageBackground>
@@ -118,21 +148,21 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView>
-        <View style={{ padding: 16, flex: 1 }}>
+        <View style={{ padding: layout.spacing.lg, flex: 1 }}>
           {title && (
-            <View style={{ marginVertical: 8 }}>
+            <View style={{ marginVertical: layout.spacing.sm }}>
               <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
             </View>
           )}
           {type === 'horizontal'
             ? renderHorizontalGuidance()
             : renderVerticalGuidance()}
-          <View style={{ marginVertical: 16 }}>
+          <View style={{ marginVertical: layout.spacing.lg }}>
             <SnbText2.Headline.Small>{rulesTitle}</SnbText2.Headline.Small>
-            <View style={{ marginVertical: 4 }} />
+            <View style={{ marginVertical: layout.spacing.xxsm }} />
             {rules?.map((el: string, index: number) => {
               return (
-                <View key={index} style={{ marginVertical: 4 }}>
+                <View key={index}>
                   <SnbText2.Paragraph.Tiny>
                     {props.listType === 'number' ? `${index + 1}.` : '✔'} {el}
                   </SnbText2.Paragraph.Tiny>
@@ -142,7 +172,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           </View>
         </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title={buttonLabel || ''}
           disabled={false}
@@ -166,11 +196,11 @@ UploadPhotoRules.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginVertical: 16,
+    marginVertical: layout.spacing.lg,
   },
   imageContainer: {
     flex: 1,
-    borderRadius: 4,
+    borderRadius: borderV2.radius.sm,
     height: 160,
     width: undefined,
     alignItems: 'flex-end',

@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
 import {
   SnbText2,
-  color as colors,
+  colorV2 as colors,
   SnbButton2,
+  spacingV2 as layout,
+  borderV2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet } from 'react-native';
 
@@ -15,9 +17,15 @@ interface StepperProps {
 
 const Stepper: FC<StepperProps> = (props) => {
   return (
-    <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
+    <View
+      style={{
+        margin: layout.spacing.lg,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}>
       <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row' }}>
+        <View
+          style={{ flexDirection: 'row', marginBottom: layout.spacing.xxsm }}>
           <View style={[styles.progressBackground, { width: '100%' }]} />
           <View
             style={[
@@ -26,13 +34,9 @@ const Stepper: FC<StepperProps> = (props) => {
             ]}
           />
         </View>
-        <View style={{ marginVertical: 2 }} />
-        <SnbText2.Caption.Small
-          color={
-            colors.black60
-          }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Caption.Small>
+        <SnbText2.Paragraph.Tiny>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Paragraph.Tiny>
       </View>
-      <View style={{ marginHorizontal: 10 }} />
+      <View style={{ marginHorizontal: layout.spacing.sm }} />
       <SnbButton2.Link title="Lihat" size="tiny" onPress={props.onPress} />
     </View>
   );
@@ -42,13 +46,13 @@ const Stepper: FC<StepperProps> = (props) => {
 const styles = StyleSheet.create({
   progress: {
     height: 8,
-    borderRadius: 40,
-    backgroundColor: colors.red50,
+    borderRadius: borderV2.radius.full,
+    backgroundColor: colors.btnPriColor.default,
   },
   progressBackground: {
     height: 8,
-    borderRadius: 40,
-    backgroundColor: colors.black10,
+    borderRadius: borderV2.radius.full,
+    backgroundColor: colors.btnSecColor.disable,
     position: 'absolute',
   },
 });

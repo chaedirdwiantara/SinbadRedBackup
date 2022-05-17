@@ -5,12 +5,13 @@ import {
 } from '@react-navigation/native';
 import React from 'react';
 import {
-  color,
+  colorV2,
   SnbCamera,
   SnbBottomSheet,
   SnbText2,
   SnbButton2,
   SnbProgress,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -31,7 +32,7 @@ const KtpPhotoFrame = () => (
       position: 'absolute',
       borderWidth: 2,
       borderRadius: 4,
-      borderColor: color.white,
+      borderColor: colorV2.bgColor.light,
     }}
   />
 );
@@ -134,14 +135,14 @@ const CameraWithOCRView = () => {
         actionIcon="close"
         content={
           <View>
-            <View style={{ paddingHorizontal: 24 }}>
-              <SnbText2.Body.Default align="center">
+            <View style={{ paddingHorizontal: layout.spacing.xl }}>
+              <SnbText2.Paragraph.Small align="center">
                 Silahkan upload ulang foto KTP anda kembali. Pastikan jaringan
                 anda tersedia.
-              </SnbText2.Body.Default>
+              </SnbText2.Paragraph.Small>
             </View>
-            <View style={{ marginVertical: 8 }} />
-            <View style={{ padding: 16 }}>
+            <View style={{ marginVertical: layout.spacing.sm }} />
+            <View style={{ padding: layout.spacing.lg }}>
               <SnbButton2.Primary
                 title="Ulang Foto"
                 onPress={() => {
