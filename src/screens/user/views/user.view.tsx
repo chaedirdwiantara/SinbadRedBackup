@@ -1,21 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import {
-  View,
-  ScrollView,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { View, ScrollView, Image, Dimensions } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
+  SnbTopNav2,
   color,
   SnbText,
+  SnbText2,
   SnbTextSeeMoreType1,
   SnbButton,
   SnbDialog,
   SnbIcon,
+  SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -121,9 +118,9 @@ const UserView: FC = ({ start }: any) => {
   /** => header */
   const header = () => {
     if (stateUser.detail.data) {
-      return <SnbTopNav.Type1 type="white" title="Profil" />;
+      return <SnbTopNav2.Type1 color="white" title="Profil" />;
     }
-    return <SnbTopNav.Type1 type="red" title="Profil" />;
+    return <SnbTopNav2.Type1 color="red" title="Profil" />;
   };
 
   const handleAddressNavigation = () => {
@@ -196,25 +193,25 @@ const UserView: FC = ({ start }: any) => {
         <View>
           <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
             <View style={UserStyles.cardBody}>
-              <View style={{ alignSelf: 'center' }}>
+              <View>
                 <Svg name={item.icon} size={40} />
               </View>
-              <View style={UserStyles.carouselText}>
-                <SnbText.H4>{item.subTitle}</SnbText.H4>
-                <SnbText.B3 color={'#677A8E'}>{item.message}</SnbText.B3>
+              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
+                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
+                <SnbText2.Paragraph.Small>
+                  {item.message}
+                </SnbText2.Paragraph.Small>
               </View>
-              <TouchableOpacity
-                style={UserStyles.carouselButton}
-                onPress={() =>
+              <SnbButton2.Primary
+                size="tiny"
+                onPress={() => {
                   goTo({
                     type: item.type,
                     title: item.title,
-                  })
-                }>
-                <SnbText.B3 color={color.white} align={'center'}>
-                  Lengkapi
-                </SnbText.B3>
-              </TouchableOpacity>
+                  });
+                }}
+                title="Lengkapi"
+              />
             </View>
           </View>
         </View>
@@ -320,8 +317,8 @@ const UserView: FC = ({ start }: any) => {
             <CopilotView>
               <Carousel
                 data={dataCarousel}
-                sliderWidth={1 * width}
-                itemWidth={width}
+                sliderWidth={width}
+                itemWidth={width * 0.92}
                 renderItem={({ item, index }) => renderItem(item, index)}
                 onSnapToItem={(index) => {
                   setActiveIndex(index);
@@ -359,8 +356,8 @@ const UserView: FC = ({ start }: any) => {
           <CopilotView>
             <View style={{ marginVertical: 16 }}>
               <View style={UserStyles.bodyTitleContainer}>
-                <SnbText.B4>Data Pemilik</SnbText.B4>
-                <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
+                <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
+                <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
               <ListButton
                 leftItem={
@@ -490,8 +487,8 @@ const UserView: FC = ({ start }: any) => {
     if (stateUser.detail.error && stateUser.detail.error.code !== 401) {
       return (
         <View style={{ flex: 1 }}>
-          <SnbTopNav.Type2
-            type="red"
+          <SnbTopNav2.Type2
+            color="red"
             title="Profil"
             iconName={'exit_to_app'}
             iconAction={() => setShowConfirmation(true)}

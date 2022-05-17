@@ -5,12 +5,13 @@ import {
 } from '@react-navigation/native';
 import React from 'react';
 import {
-  color,
+  colorV2,
   SnbCamera,
   SnbBottomSheet,
-  SnbText,
-  SnbButton,
+  SnbText2,
+  SnbButton2,
   SnbProgress,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -31,7 +32,7 @@ const KtpPhotoFrame = () => (
       position: 'absolute',
       borderWidth: 2,
       borderRadius: 4,
-      borderColor: color.white,
+      borderColor: colorV2.bgColor.light,
     }}
   />
 );
@@ -39,7 +40,7 @@ const KtpPhotoFrame = () => (
 const CameraWithOCRView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [showModalError, setShowModalError] = React.useState<boolean>(false);
+  const [showModalError, setShowModalError] = React.useState<boolean>(true);
   const [retake, setRetake] = React.useState<boolean>(false);
   const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
@@ -134,15 +135,15 @@ const CameraWithOCRView = () => {
         actionIcon="close"
         content={
           <View>
-            <View style={{ paddingHorizontal: 24 }}>
-              <SnbText.B3 align="center">
+            <View style={{ paddingHorizontal: layout.spacing.xl }}>
+              <SnbText2.Paragraph.Small align="center">
                 Silahkan upload ulang foto KTP anda kembali. Pastikan jaringan
                 anda tersedia.
-              </SnbText.B3>
+              </SnbText2.Paragraph.Small>
             </View>
-            <View style={{ marginVertical: 8 }} />
-            <View style={{ height: 72 }}>
-              <SnbButton.Single
+            <View style={{ marginVertical: layout.spacing.sm }} />
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbButton2.Primary
                 title="Ulang Foto"
                 onPress={() => {
                   resetOcrStatusRtdb();
@@ -150,7 +151,8 @@ const CameraWithOCRView = () => {
                   setRetake(true);
                 }}
                 disabled={false}
-                type="primary"
+                size="medium"
+                full
               />
             </View>
           </View>

@@ -3,8 +3,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useCoachmark } from '@screen/account/functions';
 import {
   SnbBottomSheet,
-  SnbButton,
-  SnbText,
+  SnbButton2,
+  SnbText2,
 } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { Image, View } from 'react-native';
@@ -42,30 +42,39 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
       content={
         <View style={{ alignItems: 'center', padding: 12 }}>
           <Image
-            resizeMode="center"
+            resizeMode="contain"
             style={{ height: 180, width: 180 }}
-            source={require('@image/sinbad_image/verified_sinbad.png')}
+            source={require('@image/onboard/onboard1.png')}
           />
           <View style={{ marginVertical: 16 }} />
-          <SnbText.H2>Stok aman, jualan nyaman</SnbText.H2>
+          <SnbText2.Headline.Default>
+            Stok aman, jualan nyaman
+          </SnbText2.Headline.Default>
           <View style={{ marginVertical: 8 }} />
           <View style={{ paddingHorizontal: 16 }}>
-            <SnbText.B1 align="center">
+            <SnbText2.Paragraph.Default align="center">
               Sinbad membantu Anda mendapatkan produk berkualitas dengan harga
               terbaik. Coba sekarang!
-            </SnbText.B1>
+            </SnbText2.Paragraph.Default>
           </View>
           <View style={{ marginVertical: 16 }} />
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
-              title="Mulai Jelajah"
-              onPress={() => {
-                navigate('HomeView');
-                setOpen(false);
-                onStartCoachmark();
-              }}
-              type="primary"
-            />
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 16,
+            }}>
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Primary
+                title="Mulai Jelajah"
+                onPress={() => {
+                  navigate('HomeView');
+                  setOpen(false);
+                  onStartCoachmark();
+                }}
+                size="medium"
+                full
+              />
+            </View>
           </View>
         </View>
       }

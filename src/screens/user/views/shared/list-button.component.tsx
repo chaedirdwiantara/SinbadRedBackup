@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import {
   color as colors,
-  SnbText,
+  SnbText2,
   SnbTextSeeMoreType1,
 } from 'react-native-sinbad-ui';
 /** === INTERFACE === */
@@ -36,18 +36,22 @@ const SnbListButton: FC<Props> = (props) => {
     return (
       <View style={styles.midContainer}>
         <View>
-          <SnbText.B4>{props.title}</SnbText.B4>
+          <SnbText2.Paragraph.Small>{props.title}</SnbText2.Paragraph.Small>
         </View>
         {props.subTitle1 ? (
           <View style={styles.textSubtitle1}>
             <SnbTextSeeMoreType1 line={1}>
-              <SnbText.C1>{props.subTitle1}</SnbText.C1>
+              <SnbText2.Paragraph.Small>
+                {props.subTitle1}
+              </SnbText2.Paragraph.Small>
             </SnbTextSeeMoreType1>
           </View>
         ) : null}
         {props.subTitle2 ? (
           <View style={styles.textSubtitle2}>
-            <SnbText.C1>{props.subTitle2}</SnbText.C1>
+            <SnbText2.Paragraph.Small>
+              {props.subTitle2}
+            </SnbText2.Paragraph.Small>
           </View>
         ) : null}
       </View>
@@ -56,10 +60,10 @@ const SnbListButton: FC<Props> = (props) => {
   const renderRight = () => {
     return (
       <View style={styles.rightContainer}>
-        <SnbText.B4
+        <SnbText2.Paragraph.Small
           color={props.colorTextRight ? props.colorTextRight : colors.black100}>
           {props.textRight}
-        </SnbText.B4>
+        </SnbText2.Paragraph.Small>
         <View style={{ marginLeft: 16 }}>
           {props.rightItem ? props.rightItem : null}
         </View>
@@ -78,13 +82,17 @@ const SnbListButton: FC<Props> = (props) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem1}
           <View style={{ marginLeft: 16 }}>
-            <SnbText.B3>{props.badgesTitle1}</SnbText.B3>
+            <SnbText2.Paragraph.Small>
+              {props.badgesTitle1}
+            </SnbText2.Paragraph.Small>
           </View>
         </View>
         <TouchableOpacity
           onPress={props.pressBadge1}
           style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
-          <SnbText.B4 color={colors.blue50}>Lengkapi</SnbText.B4>
+          <SnbText2.Body.Small color={colors.blue50}>
+            Lengkapi
+          </SnbText2.Body.Small>
         </TouchableOpacity>
       </View>
     );
@@ -95,19 +103,23 @@ const SnbListButton: FC<Props> = (props) => {
         style={[
           styles.badgeContainer,
           {
-            marginTop: !props.badges1 ? 0 : 16,
+            marginTop: 16,
           },
         ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem2}
           <View style={{ marginLeft: 16 }}>
-            <SnbText.B3>{props.badgesTitle2}</SnbText.B3>
+            <SnbText2.Paragraph.Small>
+              {props.badgesTitle2}
+            </SnbText2.Paragraph.Small>
           </View>
         </View>
         <TouchableOpacity
           onPress={props.pressBadge2}
           style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
-          <SnbText.B4 color={colors.blue50}>Lengkapi</SnbText.B4>
+          <SnbText2.Body.Small color={colors.blue50}>
+            Lengkapi
+          </SnbText2.Body.Small>
         </TouchableOpacity>
       </View>
     );
