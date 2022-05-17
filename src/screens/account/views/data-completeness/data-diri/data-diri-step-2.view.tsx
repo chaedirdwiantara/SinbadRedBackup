@@ -45,7 +45,7 @@ const DataDiriStep2View: React.FC = () => {
   );
   const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
 
-  const [isNPWPValid, setIsNPWPValid] = React.useState(true);
+  const [isNPWPValid, setIsNPWPValid] = React.useState(false);
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -53,6 +53,18 @@ const DataDiriStep2View: React.FC = () => {
       resetUpdateCompleteData();
     };
   }, []);
+
+  React.useEffect(() => {
+    if (npwp) {
+      if (npwp?.length === 15 || npwp === '' || npwp === null) {
+        setMessageErrorNPWP('');
+        setIsNPWPValid(true);
+      } else {
+        setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+        setIsNPWPValid(false);
+      }
+    }
+  }, [npwp]);
 
   // HANDLE BACK DEVICE
   const handleBackButton = React.useCallback(() => {
@@ -87,7 +99,7 @@ const DataDiriStep2View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
-    } else if (isNPWPValid){
+    } else if (isNPWPValid) {
       updateCompleteData({
         user: { taxNo: npwp },
       });
@@ -101,7 +113,10 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: isNPWPValid ? npwp : null },
+        user: {
+          taxImageUrl: stateGlobal.uploadImage?.data?.url,
+          taxNo: isNPWPValid ? npwp : null,
+        },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -217,9 +232,9 @@ const DataDiriStep2View: React.FC = () => {
                 !npwp
               }
               onPress={() => {
-                if(capturedImage.data) {
+                if (capturedImage.data) {
                   upload(dispatchGlobal, capturedImage.data.url);
-                } else if(isNPWPValid) {
+                } else if (isNPWPValid) {
                   updateCompleteData({
                     user: { taxNo: npwp },
                   });
