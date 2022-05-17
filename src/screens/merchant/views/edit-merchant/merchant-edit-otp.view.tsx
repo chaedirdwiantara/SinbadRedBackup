@@ -25,6 +25,27 @@ interface Props {
   route: any;
 }
 
+const setLabel = (type: string) => {
+  let title = '';
+  switch (type) {
+    case 'email': {
+      title = 'Email';
+      break;
+    }
+    case 'bankAccount': {
+      title = 'Nomor Rekening';
+      break;
+    }
+    case 'mobilePhone': {
+      title = 'Nomor Handphone';
+      break;
+    }
+    default:
+      break;
+  }
+  return title;
+};
+
 const OTPContent: React.FC<Props> = (props) => {
   /** === HOOK === */
   const { loading, data, type, source, sourceData } = props.route.params;
@@ -241,53 +262,35 @@ const OTPContent: React.FC<Props> = (props) => {
     );
   };
 
-  const modalSuccess = () => {
-    const label =
-      type === 'email'
-        ? 'Email'
-        : type === 'bankAccount'
-        ? 'Nomor Rekening'
-        : type === 'mobilePhone'
-        ? 'Nomor Handphone'
-        : '';
-    return openModalSuccess ? (
-      <View style={{ backgroundColor: 'red' }}>
-        <SnbBottomSheet
-          open={openModalSuccess}
-          content={
-            <View>
-              <View style={{ alignContent: 'center', alignItems: 'center' }}>
-                <Image
-                  source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
-                  style={OtpStyle.image}
-                />
-                <View style={{ marginVertical: 16 }}>
-                  <SnbText.B2>{label} Berhasil Terverifikasi</SnbText.B2>
-                </View>
-              </View>
-              <View style={{ height: 75 }}>
-                <SnbButton.Single
-                  type={'primary'}
-                  disabled={false}
-                  onPress={() => confirm()}
-                  title={'Oke, Saya Mengerti'}
-                />
-              </View>
-            </View>
-          }
-        />
-      </View>
-    ) : (
-      <View />
-    );
-  };
-
   //main
   return (
     <SnbContainer color={'white'}>
       {header()}
       {content()}
-      {modalSuccess()}
+      <SnbBottomSheet
+        open={openModalSuccess}
+        content={
+          <View>
+            <View style={{ alignContent: 'center', alignItems: 'center' }}>
+              <Image
+                source={require('@image/sinbad_image/smile_sinbad.png')}
+                style={OtpStyle.image}
+              />
+              <View style={{ marginVertical: 16 }}>
+                <SnbText.B2>{setLabel(type)} Berhasil Terverifikasi</SnbText.B2>
+              </View>
+            </View>
+            <View style={{ height: 75 }}>
+              <SnbButton.Single
+                type={'primary'}
+                disabled={false}
+                onPress={() => confirm()}
+                title={'Oke, Saya Mengerti'}
+              />
+            </View>
+          </View>
+        }
+      />
     </SnbContainer>
   );
 };

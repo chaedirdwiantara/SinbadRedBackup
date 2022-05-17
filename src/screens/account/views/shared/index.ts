@@ -8,6 +8,7 @@ import Stepper from './stepper.component';
 import ListOfSteps from './list-of-steps.component';
 import ModalBack from './modal-back.component';
 import ModalSelection from './modal-selection.component';
+import UploadPhotoRules from './upload-photo-rules.compenent';
 
 export {
   ErrorContent,
@@ -20,4 +21,5 @@ export {
   ListOfSteps,
   ModalBack,
   ModalSelection,
+  UploadPhotoRules,
 };

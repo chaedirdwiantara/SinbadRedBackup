@@ -30,6 +30,15 @@ import sinbad_logo from './sinbad-logo.svg';
 // cart prices
 import price_changes_down from './price_changes_down.svg';
 import price_changes_up from './price_changes_up.svg';
+import white_sinbad_logo from './white-sinbad-logo.svg';
+import sinbad_onboard from './sinbad-onboard.svg';
+import splash_highlight_text from './splash-highlight-text.svg';
+import ktp from './ktp.svg';
+import location from './location.svg';
+import store from './store.svg';
+import ktp_blue from './ktp-blue.svg';
+import check_circle from './check_circle.svg';
+import x_circle from './x_circle.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -62,4 +71,13 @@ export const SvgRegistery = {
   sinbad_logo,
   price_changes_down,
   price_changes_up,
+  white_sinbad_logo,
+  splash_highlight_text,
+  ktp,
+  location,
+  store,
+  ktp_blue,
+  sinbad_onboard,
+  check_circle,
+  x_circle,
 };

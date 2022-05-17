@@ -190,8 +190,8 @@ const Content: React.FC<Props> = (props) => {
                   onPress={() =>
                     navigate(MAPS_VIEW_TYPE_2, {
                       onMapsResult,
-                      action: 'edit',
-                      existingLatLang: latLng,
+                      action: 'update',
+                      existingLatLng: latLng,
                     })
                   }
                   title="Ubah Titik Lokasi"
@@ -240,8 +240,8 @@ const Content: React.FC<Props> = (props) => {
                 onPress={() =>
                   navigate(MAPS_VIEW_TYPE_2, {
                     onMapsResult,
-                    action: 'edit',
-                    existingLatLang: latLng,
+                    action: 'update',
+                    existingLatLng: latLng,
                   })
                 }
                 style={styles.pinPoint}>
