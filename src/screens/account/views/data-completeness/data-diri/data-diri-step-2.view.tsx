@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
   SnbToast,
-  SnbTextField,
+  SnbTextField2,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler, ScrollView } from 'react-native';
 import {
@@ -185,11 +185,11 @@ const DataDiriStep2View: React.FC = () => {
               }}
             />
             <View style={{ padding: 16 }} />
-            <SnbTextField.Text
+            <SnbTextField2.Text
               type={npwp ? (isNPWPValid ? 'default' : 'error') : 'default'}
               value={npwp}
               maxLength={15}
-              helpText={'Abaikan bila sudah sesuai NPWP'}
+              helperText={'Abaikan bila sudah sesuai NPWP'}
               onChangeText={(text) => {
                 text = text.replace(/[^0-9]/g, '');
                 setNpwp(text);
@@ -211,18 +211,20 @@ const DataDiriStep2View: React.FC = () => {
             />
           </View>
         </ScrollView>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
-              title="Ulangi"
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title="Ubah Foto"
               onPress={() => openCamera('npwp')}
               disabled={false}
+              size="medium"
+              full
+              outline
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type={'primary'}
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
               disabled={
@@ -240,6 +242,8 @@ const DataDiriStep2View: React.FC = () => {
                   });
                 }
               }}
+              size="medium"
+              full
             />
           </View>
         </View>
@@ -254,9 +258,9 @@ const DataDiriStep2View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Foto NPWP"
         />
         <Stepper
