@@ -32,7 +32,8 @@
       "react-native-sinbad-ui": ["node_modules/@sinbad/react-native-sinbad-ui"]
     },
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "metro.config.js", "jest.config.js"]
 }

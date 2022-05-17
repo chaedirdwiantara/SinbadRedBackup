@@ -109,15 +109,17 @@ const SnbListButton: FC<Props> = (props) => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem2}
           <View style={{ marginLeft: 16 }}>
-            <SnbText2.Body.Small>{props.badgesTitle2}</SnbText2.Body.Small>
+            <SnbText2.Paragraph.Small>
+              {props.badgesTitle2}
+            </SnbText2.Paragraph.Small>
           </View>
         </View>
         <TouchableOpacity
           onPress={props.pressBadge2}
           style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
-          <SnbText2.Paragraph.Small color={colors.blue50}>
+          <SnbText2.Body.Small color={colors.blue50}>
             Lengkapi
-          </SnbText2.Paragraph.Small>
+          </SnbText2.Body.Small>
         </TouchableOpacity>
       </View>
     );

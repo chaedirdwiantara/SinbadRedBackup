@@ -12,6 +12,7 @@ import {
   SnbDialog,
   SnbIcon,
   SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -195,7 +196,7 @@ const UserView: FC = ({ start }: any) => {
               <View>
                 <Svg name={item.icon} size={40} />
               </View>
-              <View style={{ flex: 1, marginHorizontal: 16 }}>
+              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
                 <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
                 <SnbText2.Paragraph.Small>
                   {item.message}
@@ -316,8 +317,8 @@ const UserView: FC = ({ start }: any) => {
             <CopilotView>
               <Carousel
                 data={dataCarousel}
-                sliderWidth={1 * width}
-                itemWidth={width}
+                sliderWidth={width}
+                itemWidth={width * 0.92}
                 renderItem={({ item, index }) => renderItem(item, index)}
                 onSnapToItem={(index) => {
                   setActiveIndex(index);
