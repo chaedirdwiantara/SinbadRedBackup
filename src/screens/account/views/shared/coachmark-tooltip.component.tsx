@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+import { SnbText2, SnbButton2, color } from 'react-native-sinbad-ui';
 import { CopilotTooltipProps } from 'react-native-copilot';
 import { useCoachmark } from '@screen/account/functions';
 import * as models from '@models';
@@ -47,9 +47,9 @@ export const copilotOptions: any = (
     }, [meV2]);
     return (
       <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
-        <SnbText.H4>{currentStep.name}</SnbText.H4>
+        <SnbText2.Body.Large>{currentStep.name}</SnbText2.Body.Large>
         <View style={{ marginVertical: 4 }} />
-        <SnbText.B1>{currentStep.text}</SnbText.B1>
+        <SnbText2.Paragraph.Default>{currentStep.text}</SnbText2.Paragraph.Default>
         <View
           style={{
             flexDirection: 'row',
@@ -79,20 +79,17 @@ export const copilotOptions: any = (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             {!isFirstStep && !isLastStep && (
               <>
-                <SnbButton.Dynamic
+                <SnbButton2.Link
                   size="small"
-                  buttonColor={color.blue60}
-                  type="tertiary"
                   title="Kembali"
                   onPress={handlePrev}
                 />
                 <View style={{ marginHorizontal: 2 }} />
               </>
             )}
-            <SnbButton.Dynamic
+            <SnbButton2.Primary
               size="small"
               loading={updateCoachmarkState.loading}
-              type="primary"
               title={isLastStep ? 'Selesai' : 'Lanjut'}
               onPress={() => {
                 if (isLastStep) {
