@@ -73,21 +73,11 @@ const OTPContent: React.FC<Props> = (props) => {
     setOpenModalSuccess(false);
     backToDataCompleteness();
     resetUpdateCompleteData();
-    // NavigationAction.backToPage('MerchantDetailProfileView');
-    // storeDetailAction.detail(dispatchUser);
   };
 
   React.useEffect(() => {
     if (stateMerchant.verificationEmail.data !== null) {
       refetchCompleteData();
-      // if (backHandle) {
-      //   backToDataCompleteness();
-      //   resetUpdateCompleteData();
-      //   setBackHandle(false);
-      // } else {
-      //   backToDataCompleteness();
-      //   resetUpdateCompleteData();
-      // }
     }
   }, [stateMerchant.verificationEmail.data]);
 
@@ -180,53 +170,35 @@ const OTPContent: React.FC<Props> = (props) => {
     );
   };
 
-  const modalSuccess = () => {
-    const label =
-      type === 'email'
-        ? 'Email'
-        : type === 'bankAccount'
-        ? 'Nomor Rekening'
-        : type === 'mobilePhone'
-        ? 'Nomor Handphone'
-        : '';
-    return openModalSuccess ? (
-      <View style={{ backgroundColor: 'red' }}>
-        <SnbBottomSheet
-          open={openModalSuccess}
-          content={
-            <View>
-              <View style={{ alignContent: 'center', alignItems: 'center' }}>
-                <Image
-                  source={require('../../../../assets/images/sinbad_image/smile_sinbad.png')}
-                  style={OtpStyle.image}
-                />
-                <View style={{ marginVertical: 16 }}>
-                  <SnbText.B2>{label} Berhasil Terverifikasi</SnbText.B2>
-                </View>
-              </View>
-              <View style={{ height: 75 }}>
-                <SnbButton.Single
-                  type={'primary'}
-                  disabled={false}
-                  onPress={() => confirm()}
-                  title={'Oke, Saya Mengerti'}
-                />
-              </View>
-            </View>
-          }
-        />
-      </View>
-    ) : (
-      <View />
-    );
-  };
-
   //main
   return (
     <SnbContainer color={'white'}>
       {header()}
       {content()}
-      {modalSuccess()}
+      <SnbBottomSheet
+        open={openModalSuccess}
+        content={
+          <View>
+            <View style={{ alignContent: 'center', alignItems: 'center' }}>
+              <Image
+                source={require('@image/sinbad_image/smile_sinbad.png')}
+                style={OtpStyle.image}
+              />
+              <View style={{ marginVertical: 16 }}>
+                <SnbText.B2>Email Berhasil Terverifikasi</SnbText.B2>
+              </View>
+            </View>
+            <View style={{ height: 75 }}>
+              <SnbButton.Single
+                type={'primary'}
+                disabled={false}
+                onPress={() => confirm()}
+                title={'Oke, Saya Mengerti'}
+              />
+            </View>
+          </View>
+        }
+      />
     </SnbContainer>
   );
 };
