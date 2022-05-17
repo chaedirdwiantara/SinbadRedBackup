@@ -36,7 +36,7 @@ const OCRResultView: React.FC = () => {
           <SnbButton2.Primary
             title={'Ubah Foto'}
             onPress={() => openCameraWithOCR('ktp')}
-            disabled={false}
+            disabled={stateMerchant.profileEdit.loading}
             size="medium"
             full
             outline
@@ -53,10 +53,10 @@ const OCRResultView: React.FC = () => {
               };
               editProfile(dispatchSupplier, { data: { user } });
             }}
-            disabled={value?.idNumber === '' || value?.nameOnKtp === ''}
+            disabled={value?.idNumber === '' || value?.nameOnKtp === '' || stateMerchant.profileEdit.loading}
             size="medium"
             full
-            loading={false}
+            loading={stateMerchant.profileEdit.loading}
           />
         </View>
       </View>
