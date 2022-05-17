@@ -24,7 +24,7 @@ const Content: React.FC<Props> = (props) => {
   const [openModalBack, setOpenModalBack] = useState(false);
   const { openCameraWithOCR } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-  const { ocrImageState, ocrImageReset } = useOCR();
+  const { ocrImageState, ocrImageReset, resetOcrDataRtdb } = useOCR();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -49,6 +49,7 @@ const Content: React.FC<Props> = (props) => {
       refetchCompleteData();
       resetUpdateCompleteData();
       ocrImageReset();
+      resetOcrDataRtdb();
       if (backHandle) {
         backToDataCompleteness();
       } else {
