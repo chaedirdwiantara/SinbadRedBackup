@@ -95,7 +95,7 @@ const SnbListButton: FC<Props> = (props) => {
         style={[
           styles.badgeContainer,
           {
-            marginTop: props.badges1 ? 0 : 16,
+            marginTop: !props.badges1 ? 0 : 16,
           },
         ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
