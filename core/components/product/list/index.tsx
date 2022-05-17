@@ -46,6 +46,7 @@ import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
 import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import { contexts } from '@contexts';
@@ -189,6 +190,9 @@ const ProductList: FC<ProductListProps> = ({
     }
   };
 
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, false);
+
   const isFocused = useIsFocused();
 
   /** => action from buttom order */
@@ -236,32 +240,12 @@ const ProductList: FC<ProductListProps> = ({
       return;
     }
 
-    /** temporary function to determine bulk price calculation */
+    /** function to determine bulk price calculation */
     let lastUsedPrice = 0,
       isLastPriceUsedRules = false;
-    if (productDetailState.bulkPrices.length > 0) {
-      const priceRulesFirstItem = productDetailState.bulkPrices[0];
-      if (orderQty < priceRulesFirstItem.qty) {
-        isLastPriceUsedRules = false;
-        lastUsedPrice = productDetailState.priceAfterTax;
-      } else {
-        for (let x = 0; x < productDetailState.bulkPrices.length; x++) {
-          const isLast = x === productDetailState.bulkPrices.length - 1;
-          if (!isLast) {
-            if (
-              orderQty >= productDetailState.bulkPrices[x].qty &&
-              orderQty < productDetailState.bulkPrices[x + 1].qty
-            ) {
-              isLastPriceUsedRules = true;
-              lastUsedPrice = productDetailState.bulkPrices[x].priceAfterTax;
-              break;
-            }
-          } else {
-            isLastPriceUsedRules = true;
-            lastUsedPrice = productDetailState.bulkPrices[x].priceAfterTax;
-          }
-        }
-      }
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
     } else {
       isLastPriceUsedRules = false;
       lastUsedPrice = productDetailState.priceAfterTax;
@@ -309,7 +293,7 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [productLoading]);
 
-  /** => if product error code 500700000029 "kelurahan kamu tidak dijangkau oleh supplier" */
+  /** => if product error code 500700000029 "Sinbad belum beroperasi di lokasi toko Anda" */
   useEffect(() => {
     if (productError?.code === 500700000029) {
       modalUrbanRef.current?.trigger(true);

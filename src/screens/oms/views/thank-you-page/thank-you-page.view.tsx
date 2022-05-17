@@ -4,17 +4,29 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { ThankYouPageCard } from '@screen/oms/components/thank-you-page-card.component';
 import { useModalThankYouPageOrderDetail } from '@screen/oms/functions/thank-you-page/thank-you-page.function';
-import { useThankYouPageAction, useThankYouPageCancelOrderAction, useThankYouPagePaymentGuideListAction } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import {
+  useThankYouPageAction,
+  useThankYouPageCancelOrderAction,
+  useThankYouPagePaymentGuideListAction,
+} from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
-import { color, SnbBottomSheet, SnbButton, SnbContainer, SnbText, SnbToast, SnbTopNav, styles } from '@sinbad/react-native-sinbad-ui';
+import {
+  color,
+  SnbButton,
+  SnbContainer,
+  SnbText,
+  SnbToast,
+  SnbTopNav,
+  styles,
+} from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
   ScrollView,
   View,
   Image,
   TouchableOpacity,
-  BackHandler
-} from 'react-native'; 
+  BackHandler,
+} from 'react-native';
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import CustomAccordion from '@screen/history/components/CustomAccordion';
@@ -31,7 +43,7 @@ import BottomSheetConfirmation, {
 } from '@core/components/BottomSheetConfirmation';
 
 type ThankYouPageParamList = {
-  Detail: { section: 'orderHistory' | 'payment'; orderId: string; };
+  Detail: { section: 'orderHistory' | 'payment'; orderId: string };
 };
 
 type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
@@ -42,8 +54,9 @@ const OmsThankYouPageView: FC = () => {
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
-  const [paymentMethodId, setPaymentMethodId]= useState('');
-  const thankYouPagePaymentGuideListAction = useThankYouPagePaymentGuideListAction();
+  const [paymentMethodId, setPaymentMethodId] = useState('');
+  const thankYouPagePaymentGuideListAction =
+    useThankYouPagePaymentGuideListAction();
   const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
   const {
     stateThankYouPage: {
@@ -54,12 +67,12 @@ const OmsThankYouPageView: FC = () => {
       },
       paymentGuide: {
         data: thankYouPagePaymentGuidelistData,
-        loading: thankYouPagePaymentGuideListLoading
-      }
+        loading: thankYouPagePaymentGuideListLoading,
+      },
     },
-    dispatchThankYouPage
-  } = useThankYouPageContext()
-  
+    dispatchThankYouPage,
+  } = useThankYouPageContext();
+
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -75,20 +88,25 @@ const OmsThankYouPageView: FC = () => {
 
   /** init thank you page */
   useEffect(() => {
-    thankYouPageAction.thankYoupageOrderDetail(dispatchThankYouPage, params.orderId)
-  }, [])
+    thankYouPageAction.thankYoupageOrderDetail(
+      dispatchThankYouPage,
+      params.orderId,
+    );
+  }, []);
 
   useEffect(() => {
-    if(thankYouPageData != null ){
-      setPaymentMethodId(thankYouPageData.paymentMethodId)
+    if (thankYouPageData != null) {
+      setPaymentMethodId(thankYouPageData.paymentMethodId);
     }
-  }, [thankYouPageData])
+  }, [thankYouPageData]);
 
   useEffect(() => {
-    if(paymentMethodId != '' ){
-      thankYouPagePaymentGuideListAction.fetch(dispatchThankYouPage,{paymentMethodId})
+    if (paymentMethodId != '') {
+      thankYouPagePaymentGuideListAction.fetch(dispatchThankYouPage, {
+        paymentMethodId,
+      });
     }
-  }, [paymentMethodId])
+  }, [paymentMethodId]);
 
   /** => function to copy VA Number */
   const onVACopied = () => {
@@ -98,7 +116,7 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => function to copy Order Amount */
   const onOrderAmountCopied = () => {
-    const orderAmount = thankYouPageData?.totalOrderAmount || '';
+    const orderAmount = thankYouPageData?.totalOrderPriceAfterTax || 0;
     Clipboard.setString(orderAmount.toString());
     SnbToast.show('Copied To Clipboard', 2000);
   };
@@ -108,7 +126,7 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => render countdown */
   const renderCountDown = () => {
-    if(thankYouPageData != null && thankYouPageData != undefined){
+    if (thankYouPageData != null && thankYouPageData != undefined) {
       const expiredPaymentTime = thankYouPageData?.expiredDate;
 
       return moment.utc(new Date()).local() <
@@ -134,151 +152,147 @@ const OmsThankYouPageView: FC = () => {
       ) : (
         <View />
       );
-    } 
-    
+    }
   };
   /** => Payment Total */
   const renderPaymentTotal = () => {
-    if(thankYouPageData === null || thankYouPageData === undefined) {
+    if (thankYouPageData === null || thankYouPageData === undefined) {
       return null;
     }
     return (
-    <ThankYouPageCard 
-    title="Total Pembayaran"
-    headerButton={true}
-    headerButtonTitle="Lihat Detail"
-    headerButtonAction={handleThankYouPageOrderDetail}
-    >
-    <View
-     style={ThankYouPageStyle.defaultContentPadding}
-    >
-      <SnbText.H3 color={color.red50}>{toCurrency(Number(thankYouPageData?.totalOrderAmount)?? 0, { withFraction: false })}</SnbText.H3>
-      <View
-      style={ThankYouPageStyle.defaultContentPadding}
-      >
-        <TouchableOpacity onPress={() => onOrderAmountCopied()}>
-          <SnbText.B1 color={color.blue50}>{'Salin Jumlah'}</SnbText.B1>
-        </TouchableOpacity>
-      </View>
-      
-    </View> 
-    </ThankYouPageCard>
-    )
-  }
+      <ThankYouPageCard
+        title="Total Pembayaran"
+        headerButton={true}
+        headerButtonTitle="Lihat Detail"
+        headerButtonAction={handleThankYouPageOrderDetail}>
+        <View style={ThankYouPageStyle.defaultContentPadding}>
+          <SnbText.H3 color={color.red50}>
+            {toCurrency(
+              Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+              {
+                withFraction: false,
+              },
+            )}
+          </SnbText.H3>
+          <View style={ThankYouPageStyle.defaultContentPadding}>
+            <TouchableOpacity onPress={() => onOrderAmountCopied()}>
+              <SnbText.B1 color={color.blue50}>{'Salin Jumlah'}</SnbText.B1>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ThankYouPageCard>
+    );
+  };
   /** => Payment Detail */
   const renderPaymentDetail = () => {
-    if(thankYouPageData === null || thankYouPageData === undefined) {
+    if (thankYouPageData === null || thankYouPageData === undefined) {
       return null;
     }
     return (
-    <ThankYouPageCard title="Detail Pembayaran">
-      <View
-     style={ThankYouPageStyle.defaultContentPadding}
-    >
-      <View style={styles.shadowForBox5}>
-          <View
-            style={ThankYouPageStyle.paymentDetail}>
-            <Image
-              source={{
-                uri: thankYouPageData?.paymentIconUrl,
-              }}
-              style={ThankYouPageStyle.mediumIcon}
-            />
-            <View style={{ width: '60%' }}>
-              <SnbText.H2>{thankYouPageData?.vaAccountNo}</SnbText.H2>
-              <TouchableOpacity onPress={() => onVACopied()}>
-                <SnbText.B1 color= {color.blue50}>{'Salin no. Virtual Account'}</SnbText.B1>
-              </TouchableOpacity>
+      <ThankYouPageCard title="Detail Pembayaran">
+        <View style={ThankYouPageStyle.defaultContentPadding}>
+          <View style={styles.shadowForBox5}>
+            <View style={ThankYouPageStyle.paymentDetail}>
+              <Image
+                source={{
+                  uri: thankYouPageData?.paymentIconUrl,
+                }}
+                style={ThankYouPageStyle.mediumIcon}
+              />
+              <View style={{ width: '60%' }}>
+                <SnbText.H2>{thankYouPageData?.vaAccountNo}</SnbText.H2>
+                <TouchableOpacity onPress={() => onVACopied()}>
+                  <SnbText.B1 color={color.blue50}>
+                    {'Salin no. Virtual Account'}
+                  </SnbText.B1>
+                </TouchableOpacity>
+              </View>
             </View>
+          </View>
         </View>
-      </View>
-      </View>
-    </ThankYouPageCard>
-    )
-  }
+      </ThankYouPageCard>
+    );
+  };
   const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
-    return data.map ((item : PaymentGuideListItem) => {
-        return {
-          name: item.title,
-          instruction: item.content
-        }
-    })
-  }
+    return data.map((item: PaymentGuideListItem) => {
+      return {
+        name: item.title,
+        instruction: item.content,
+      };
+    });
+  };
   /** => Payment Guide List */
   const renderPaymentGuideList = (data: PaymentGuideListItem[]) => {
-    return (
-        <CustomAccordion data={generatePaymentGuideListData(data)}/>
-    )
-  }
+    return <CustomAccordion data={generatePaymentGuideListData(data)} />;
+  };
   /** => Payment Guide */
   const renderPaymentGuide = () => {
     return (
       <ThankYouPageCard title="Panduan Pembayaran">
         <View style={ThankYouPageStyle.defaultContentPadding}>
           {!thankYouPagePaymentGuideListLoading &&
-            renderPaymentGuideList(thankYouPagePaymentGuidelistData)
-          }
+            renderPaymentGuideList(thankYouPagePaymentGuidelistData)}
         </View>
       </ThankYouPageCard>
-    )
-  }
+    );
+  };
   /** => batalkan pesanan */
   const handleCancelOrder = () => {
-    confirmModalRef.current?.show(params.orderId)
-  }
+    confirmModalRef.current?.show(params.orderId);
+  };
   const handleConfirmationCancelOrder = () => {
     // update order to cancelled and back to history list view
-    thankYouPageCancelOrderAction.fetch(dispatchThankYouPage,{id: params.orderId, status: 'cancelled'})
+    thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
+      id: params.orderId,
+      status: 'cancelled',
+    });
     setTimeout(() => {
       NavigationAction.navigate('HistoryListView');
     }, 1000);
-  }
+  };
   /** => Order Notes */
   const renderOrderNotes = () => {
-    if(thankYouPageData != null){
+    if (thankYouPageData != null) {
       return (
         <ThankYouPageCard title="Catatan Pesanan">
-          <ThankYouPageCardItem 
-            title='Tanggal Pembelian'
+          <ThankYouPageCardItem
+            title="Tanggal Pembelian"
             value={
-              thankYouPageData?.createdAt ? toLocalDateTime(thankYouPageData?.createdAt) : '-'
+              thankYouPageData?.createdAt
+                ? toLocalDateTime(thankYouPageData?.createdAt)
+                : '-'
             }
           />
-          {params.section == 'orderHistory' &&
-            <ThankYouPageCardItem 
-            title='Alamat Pengiriman'
-            value={
-              `${thankYouPageData?.buyerAddress.address} ${thankYouPageData?.buyerAddress.noteAddress} ${thankYouPageData?.buyerAddress.urban} ${thankYouPageData?.buyerAddress.district} ${thankYouPageData?.buyerAddress.city} ${thankYouPageData?.buyerAddress.province}, ${thankYouPageData?.buyerAddress.zipCode}`
-            }
-          />
-          }
+          {params.section == 'orderHistory' && (
+            <ThankYouPageCardItem
+              title="Alamat Pengiriman"
+              value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress} ${thankYouPageData?.buyerAddressUrban} ${thankYouPageData?.buyerAddressDistrict} ${thankYouPageData?.buyerAddressCity} ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
+            />
+          )}
         </ThankYouPageCard>
-      )
+      );
     }
-    
-  }
+  };
   /** => Thank You Page Content */
   const renderThankYouPageContent = () => (
-    <ScrollView
-    >
-    <>
-    {renderCountDown()}
-    {renderPaymentDetail()}
-    {renderPaymentTotal()}
-    {renderPaymentGuide()}
-    {renderOrderNotes()}
-    </>
+    <ScrollView>
+      <>
+        {renderCountDown()}
+        {renderPaymentDetail()}
+        {renderPaymentTotal()}
+        {renderPaymentGuide()}
+        {renderOrderNotes()}
+      </>
     </ScrollView>
   );
   /** => Content */
-  const renderContent = () => 
-  (
+  const renderContent = () => (
     <View style={{ backgroundColor: color.white, flex: 1 }}>
       <View style={ThankYouPageStyle.headerExtension} />
-        {renderThankYouPageContent()}
+      {renderThankYouPageContent()}
     </View>
   );
- /** => ModalOrderDetail */
+  /** => ModalOrderDetail */
   const renderModalOrderDetail = () => {
     return (
       <ModalThankYouPageOrderDetail
@@ -291,75 +305,69 @@ const OmsThankYouPageView: FC = () => {
       />
     );
   };
-  {/* confirmation  batalkan*/}
+  {
+    /* confirmation  batalkan*/
+  }
   const renderModalConfirmationCancelOrder = () => {
     return (
       <BottomSheetConfirmation
-          ref={confirmModalRef}
-          title="Batalkan Pesanan?"
-          desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
-          onSubmit={handleConfirmationCancelOrder}
+        ref={confirmModalRef}
+        title="Batalkan Pesanan?"
+        desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
+        onSubmit={handleConfirmationCancelOrder}
       />
-    )
-  }
-  
+    );
+  };
+
   /** => Footer */
   const renderFooter = () => (
     <>
-    {params.section == 'orderHistory' ?
-    <View style={ThankYouPageStyle.footerCancelOrder}>
-      <View style={ThankYouPageStyle.footerCancelOrderButton}>
-        <SnbButton.Single
-          type="primary"
-          title={'Batalkan Pesanan'}
-          onPress={handleCancelOrder}
-        />
-      </View>
-      
-    </View>
-    :
-    <View style={ThankYouPageStyle.footer}
-    >
-      <SnbButton.Dynamic
-        size="medium"
-        type="secondary"
-        title={'Kembali ke Beranda'}
-        onPress={goToHome}
-      />
-      <SnbButton.Dynamic
-        size="medium"
-        type="primary"
-        title={'Cek Status'}
-        onPress={() =>NavigationAction.navigate('HistoryListView')}
-      />
-  </View>
-    } 
+      {params.section == 'orderHistory' ? (
+        <View style={ThankYouPageStyle.footerCancelOrder}>
+          <View style={ThankYouPageStyle.footerCancelOrderButton}>
+            <SnbButton.Single
+              type="primary"
+              title={'Batalkan Pesanan'}
+              onPress={handleCancelOrder}
+            />
+          </View>
+        </View>
+      ) : (
+        <View style={ThankYouPageStyle.footer}>
+          <SnbButton.Dynamic
+            size="medium"
+            type="secondary"
+            title={'Kembali ke Beranda'}
+            onPress={goToHome}
+          />
+          <SnbButton.Dynamic
+            size="medium"
+            type="primary"
+            title={'Cek Status'}
+            onPress={() => NavigationAction.navigate('HistoryListView')}
+          />
+        </View>
+      )}
     </>
-    
   );
   /** => Main */
   return (
     <SnbContainer color="white">
-      {thankYouPageLoading ?
-      (
-        <LoadingPage/>
-      ):
-      (
-      <>
-      <SnbTopNav.Type1
-        type="white"
-        title={`Menunggu Pembayaran`}
-      />
-      
-      {renderContent()}
-      {renderFooter()}
-      {renderModalOrderDetail()}
-      {renderModalConfirmationCancelOrder()}
-      </>
+      {thankYouPageLoading ? (
+        <LoadingPage />
+      ) : (
+        <>
+          <SnbTopNav.Type1 type="white" title={'Menunggu Pembayaran'} />
+
+          {renderContent()}
+          {renderFooter()}
+          {renderModalOrderDetail()}
+          {renderModalConfirmationCancelOrder()}
+        </>
       )}
     </SnbContainer>
   );
-}
+};
 
 export default OmsThankYouPageView;
 /**

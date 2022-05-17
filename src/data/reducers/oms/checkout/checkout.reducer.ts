@@ -4,11 +4,11 @@ import {
   checkoutCartReducer,
 } from './checkout-cart.reducer';
 
-import { 
-  CheckoutTncInitialProps, 
-  checkoutTncInitialState, 
-  checkoutTncReducer 
-} from './checkout-tnc.reducer'
+import {
+  CheckoutTncInitialProps,
+  checkoutTncInitialState,
+  checkoutTncReducer,
+} from './checkout-tnc.reducer';
 
 export interface CheckoutInitialProps {
   checkout: CheckoutCartInitialProps;
@@ -17,16 +17,13 @@ export interface CheckoutInitialProps {
 /** === INITIAL STATE === */
 export const checkoutInitialState = {
   checkout: checkoutCartInitialState,
-  checkoutTnc: checkoutTncInitialState
+  checkoutTnc: checkoutTncInitialState,
 };
 /** === REDUCER === */
 export const checkoutReducer = (
-  { 
-    checkout, 
-    checkoutTnc 
-  }: CheckoutInitialProps,
+  { checkout, checkoutTnc }: CheckoutInitialProps,
   action: any,
 ) => ({
   checkout: checkoutCartReducer(checkout, action),
-  checkoutTnc: checkoutTncReducer(checkoutTnc, action)
+  checkoutTnc: checkoutTncReducer(checkoutTnc, action),
 });

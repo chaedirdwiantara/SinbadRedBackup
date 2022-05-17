@@ -54,8 +54,8 @@ const OmsCheckoutView: FC = () => {
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
 
-  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers);
-  const totalQtyCheckout = totalQty(data?.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers || []);
+  const totalQtyCheckout = totalQty(data?.sellers || []);
 
   /** => Back handler */
   useCustomBackHardware(() => backToCartModal.setOpen(true));
@@ -64,7 +64,7 @@ const OmsCheckoutView: FC = () => {
   const getTncContent = useGetTncContent();
   const {
     stateCheckout: {
-      checkoutTnc: { data: TncContentData, loading: TncContentLoading },
+      checkoutTnc: { data: TncContentData },
     },
     dispatchCheckout,
   } = useCheckoutContext();
@@ -111,6 +111,10 @@ const OmsCheckoutView: FC = () => {
     goToShoppingCart();
   };
 
+  if (data === null) {
+    return null;
+  }
+
   return (
     <SnbContainer color="grey">
       {/* header view */}
@@ -126,8 +130,8 @@ const OmsCheckoutView: FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* address view */}
         <CheckoutAddressView
-          buyerAddress={data?.buyerAddress}
-          buyerName={data?.buyerName}
+          buyerAddress={data.buyerAddress}
+          buyerName={data.buyerName}
         />
         {/* main body view */}
         <CheckoutInvoiceGroupView data={data} />

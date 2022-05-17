@@ -5,49 +5,32 @@ export interface ThankYouOrderDetailProps {
   expiredDate: string;
   vaAccountNo: string;
   paymentIconUrl: string;
-  totalOrderAmount: string;
+  paymentServiceFeeDeduct: number;
+  paymentIsServiceFeeFree: boolean;
+  totalOrderPriceAfterTax: number;
   sellers: OrderSeller[];
-  buyerAddress: OrderBuyerAddress;
+  buyerAddress: string;
+  buyerAddressProvince: string;
+  buyerAddressCity: string;
+  buyerAddressDistrict: string;
+  buyerAddressUrban: string;
+  buyerAddressZipCode: string;
+  buyerAddressNoteAddress: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface OrderSeller {
-  sellerId: number;
   sellerName: string;
   products: OrderSellerProduct[];
 }
 
 export interface OrderSellerProduct {
-  productId: string;
-  warehouseId: number;
-  warehouseName: string;
-  categoryId: string;
-  brandId: string;
-  brandName: string;
   productName: string;
-  productImageUrl: string;
   qty: number;
-  qtyPerBox: number;
-  uomLabel: string;
-  taxPercentage: number;
-  lastUsedPrice: number;
+  productPriceAfterTax: number;
   leadTime: number;
 }
-
-export interface OrderBuyerAddress {
-  longtitude: string;
-  latitude: string;
-  province: string;
-  city: string;
-  district: string;
-  urban: string;
-  zipCode: string;
-  address: string;
-  noteAddress: string;
-  locationId: string;
-}
-
 export interface PaymentGuideListItem {
   id: number;
   paymentMethodId: string;
@@ -56,11 +39,9 @@ export interface PaymentGuideListItem {
   createdAt: string;
   updatedAt: string;
 }
-
 export interface CancelOrder<T> {
   data: T;
 }
-
 export interface CancelOrderData {
   orderId: string;
   createdAt: string;

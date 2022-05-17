@@ -11,10 +11,9 @@ import { CheckoutWarningTime } from './checkout-warning-time';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
 /** === TYPE === */
 import * as models from '@models';
-// import { CheckoutWarningTime } from './checkout-warning-time';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: models.CheckoutData;
+  data: models.CheckoutResponse;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
@@ -25,7 +24,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal]: any = useState([]);
   //get max lead time from product list
-  const getMaxLeadTime = (products: models.CheckoutProducts[]) => {
+  const getMaxLeadTime = (products: models.CheckoutCartProduct[]) => {
     return Math.max.apply(
       Math,
       products.map(function (o) {

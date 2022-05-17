@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
   SnbText2,
-  SnbCheckbox,
+  SnbCheckbox2,
   SnbIcon,
   color,
   SnbNumberCounter,
@@ -241,9 +241,9 @@ export const ProductView: FC<ProductViewProps> = ({
     <View style={ShoppingCartStyles.horizontalCardContent}>
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
-          <SnbCheckbox
-            status={product.selected ? 'selected' : 'unselect'}
-            onPress={() => {
+          <SnbCheckbox2
+            checked={product.selected}
+            onChange={() => {
               if (product.sellerId) {
                 handleUpdateSelected({
                   productId: product.productId,

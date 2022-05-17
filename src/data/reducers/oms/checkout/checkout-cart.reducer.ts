@@ -3,7 +3,8 @@ import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
 /** === TYPE HERE === */
-export type CheckoutCartInitialProps = models.CreateItemProps;
+export type CheckoutCartInitialProps =
+  models.CreateItemV3Props<models.CheckoutResponse>;
 /** === INITIAL STATE HERE === */
 export const checkoutCartInitialState: CheckoutCartInitialProps = {
   data: null,
