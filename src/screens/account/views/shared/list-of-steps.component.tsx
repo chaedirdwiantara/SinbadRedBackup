@@ -35,7 +35,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     },
     {
       title: 'Foto NPWP',
-      value: completeDataState?.data?.user?.isTaxImageUrl || false,
+      value: completeDataState?.data?.user?.isTaxImageUrl || true,
     },
     {
       title: 'Foto Selfie dengan KTP',
