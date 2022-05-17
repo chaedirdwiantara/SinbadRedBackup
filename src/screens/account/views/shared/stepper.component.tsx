@@ -1,6 +1,10 @@
 import React, { FC } from 'react';
-import { SnbText, color as colors } from '@sinbad/react-native-sinbad-ui';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  SnbText2,
+  color as colors,
+  SnbButton2,
+} from '@sinbad/react-native-sinbad-ui';
+import { View, StyleSheet } from 'react-native';
 
 interface StepperProps {
   complete: number;
@@ -11,9 +15,9 @@ interface StepperProps {
 
 const Stepper: FC<StepperProps> = (props) => {
   return (
-    <View style={{ margin: 16 }}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ flexDirection: 'row', width: '85%' }}>
+    <View style={{ margin: 16, flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flex: 1 }}>
+        <View style={{ flexDirection: 'row' }}>
           <View style={[styles.progressBackground, { width: '100%' }]} />
           <View
             style={[
@@ -22,18 +26,14 @@ const Stepper: FC<StepperProps> = (props) => {
             ]}
           />
         </View>
-        <TouchableOpacity
-          style={{ marginHorizontal: 16 }}
-          onPress={props.onPress}>
-          <SnbText.C2 color={colors.blue60}>Lihat</SnbText.C2>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <SnbText.C2
+        <View style={{ marginVertical: 2 }} />
+        <SnbText2.Caption.Small
           color={
             colors.black60
-          }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText.C2>
+          }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Caption.Small>
       </View>
+      <View style={{ marginHorizontal: 10 }} />
+      <SnbButton2.Link title="Lihat" size="tiny" onPress={props.onPress} />
     </View>
   );
 };

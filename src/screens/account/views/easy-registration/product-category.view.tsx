@@ -2,12 +2,12 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
   color,
-  SnbButton,
+  SnbButton2,
   SnbCheckbox,
   SnbContainer,
   SnbProgress,
-  SnbText,
-  SnbTopNav,
+  SnbText2,
+  SnbTopNav2,
 } from '@sinbad/react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 import React from 'react';
@@ -113,7 +113,7 @@ const ProductCategory: React.FC = () => {
           />
         </View>
         <View style={{ flex: 1, marginHorizontal: 12 }}>
-          <SnbText.B1>{item?.name}</SnbText.B1>
+          <SnbText2.Paragraph.Small>{item?.name}</SnbText2.Paragraph.Small>
         </View>
         <SnbCheckbox
           onPress={() => {
@@ -140,7 +140,7 @@ const ProductCategory: React.FC = () => {
           borderBottomWidth: 0.75,
           borderBottomColor: color.black40,
         }}>
-        <SnbText.H4>Produk apa yang Anda jual?</SnbText.H4>
+        <SnbText2.Headline.Small>Produk apa yang Anda jual?</SnbText2.Headline.Small>
       </View>
       <View style={{ flex: 1 }}>
         <FlatList
@@ -181,7 +181,7 @@ const ProductCategory: React.FC = () => {
                       />
                     </View>
                     <View style={{ flex: 1, marginHorizontal: 12 }}>
-                      <SnbText.H3>Semua Produk</SnbText.H3>
+                      <SnbText2.Body.Default>Semua Produk</SnbText2.Body.Default>
                     </View>
                     <SnbCheckbox
                       status={checkBoxStatus}
@@ -230,13 +230,16 @@ const ProductCategory: React.FC = () => {
           )}
         />
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
-          title="Simpan Kategori Produk"
-          onPress={onHandleSaveProductCategory}
-          type="primary"
-          disabled={disableButton}
-        />
+      <View style={{ width: '100%', marginVertical: 16 }}>
+        <View style={{ marginHorizontal: 16 }}>
+          <SnbButton2.Primary
+            title="Simpan Kategori Produk"
+            onPress={onHandleSaveProductCategory}
+            disabled={disableButton}
+            size={'medium'}
+            full
+          />
+        </View>
       </View>
     </View>
   );
@@ -246,10 +249,10 @@ const ProductCategoryView: React.FC = () => {
   const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={goBack}
         title="Kategori Produk"
-        type="white"
+        color="white"
       />
       <Content />
     </SnbContainer>

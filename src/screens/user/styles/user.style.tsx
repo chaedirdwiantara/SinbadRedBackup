@@ -43,11 +43,9 @@ const UserStyles = StyleSheet.create({
     elevation: 2,
   },
   cardBody: {
-    borderRadius: 5,
-    marginHorizontal: 16,
-    marginVertical: 16,
+    margin: 16,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   /** Pagination */
   activeDot: {
@@ -79,8 +77,7 @@ const UserStyles = StyleSheet.create({
   },
   carouselContainer: {
     backgroundColor: color.white,
-    marginHorizontal: 4,
-    borderRadius: 5,
+    borderRadius: 8,
   },
   carouselText: {
     marginLeft: 16,
@@ -95,6 +92,6 @@ const UserStyles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 4,
     paddingBottom: 2,
-  }
+  },
 });
 export default UserStyles;

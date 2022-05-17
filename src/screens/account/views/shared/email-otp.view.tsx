@@ -107,7 +107,7 @@ const OTPContent: React.FC<Props> = (props) => {
     return (
       <SnbTopNav.Type3
         type="white"
-        title={'Kode Verifikasi'}
+        title={'Kode Verifikasis'}
         backAction={() => backFunc()}
       />
     );
