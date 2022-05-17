@@ -27,7 +27,7 @@ const apiMapping = <T>(
     | 'quests'
     | 'location',
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE',
+  type: 'LIST' | 'DETAIL' | 'CREATE' | 'UPDATE' | 'DELETE' | 'PUT',
   params?: object,
 ) => {
   switch (type) {
@@ -76,13 +76,13 @@ const apiMapping = <T>(
         'DELETE',
         params,
       );
-    case 'DELETE':
-      return apiGeneral<DeleteSuccessProps>(
+    case 'PUT':
+      return apiGeneral<UpdateSuccessProps>(
         access,
         path,
         module,
         version,
-        'DELETE',
+        'PUT',
         params,
       );
     case 'DELETE':

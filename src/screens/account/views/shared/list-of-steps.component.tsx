@@ -11,8 +11,6 @@ import {
   DATA_DIRI_STEP_2_VIEW,
   DATA_DIRI_STEP_3_VIEW,
   DATA_DIRI_STEP_4_VIEW,
-  DATA_DIRI_STEP_5_VIEW,
-  DATA_DIRI_STEP_6_VIEW,
 } from '@screen/account/functions/screens_name';
 import {
   DATA_TOKO_STEP_1_VIEW,
@@ -32,10 +30,6 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const { completeDataState } = useEasyRegistration();
   const dataUser = [
     {
-      title: 'Nama Lengkap',
-      value: completeDataState?.data?.user?.isFullName || false,
-    },
-    {
       title: 'Foto KTP',
       value: completeDataState?.data?.user?.isIdImageUrl || false,
     },
@@ -46,10 +40,6 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     {
       title: 'Foto Selfie dengan KTP',
       value: completeDataState?.data?.user?.isSelfieImageUrl || false,
-    },
-    {
-      title: 'Konfirmasi Kartu Identitas',
-      value: completeDataState?.data?.user?.isValidIdNumber || false,
     },
     {
       title: 'Email',
@@ -99,12 +89,6 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
           break;
         case 3:
           NavigationAction.navigate(DATA_DIRI_STEP_4_VIEW);
-          break;
-        case 4:
-          NavigationAction.navigate(DATA_DIRI_STEP_5_VIEW);
-          break;
-        case 5:
-          NavigationAction.navigate(DATA_DIRI_STEP_6_VIEW);
           break;
         default:
           break;
