@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 /** === IMPORT PACKAGE HERE === */
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
@@ -212,6 +212,14 @@ export const useInput = (initialState: any = '') => {
     setValue,
   };
 };
+
+const useUsersStates = () => {
+  const { users } = useSelector((state: any) => state);
+
+  return {
+    buyerDataState: users.userDetailReducer.data?.buyerData,
+  }
+}
 /** === EXPORT === */
 export const MerchantHookFunc = {
   useSupplierListAction,
@@ -221,6 +229,7 @@ export const MerchantHookFunc = {
   useChangeEmail,
   useChangeMobilePhone,
   useChangeBankAccount,
+  useUsersStates,
 };
 /**
  * ================================================================

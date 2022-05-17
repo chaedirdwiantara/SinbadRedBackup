@@ -41,7 +41,9 @@ const TakeProfilePictureView: FC = () => {
   useEffect(() => {
     if (stateGlobal.uploadImage.data) {
       const data = {
-        imageUrl: stateGlobal.uploadImage.data.url,
+        user: {
+          imageUrl: stateGlobal.uploadImage.data.url,
+        },
       };
       editProfileAction.editProfile(dispatchUser, {
         data,
@@ -56,7 +58,7 @@ const TakeProfilePictureView: FC = () => {
       NavigationAction.back();
       save(dispatchGlobal, '');
     }
-  }, [stateUser.profileEdit]);
+  }, [stateUser.profileEdit.data]);
 
   useEffect(() => {
     if (stateGlobal.uploadImage.error !== null) {

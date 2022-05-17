@@ -38,7 +38,6 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
   return (
     <SnbBottomSheet
       open={open}
-      isSwipeable
       closeAction={() => setOpen(false)}
       content={
         <View style={{ alignItems: 'center', padding: 12 }}>

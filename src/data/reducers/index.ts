@@ -11,6 +11,7 @@ import { global } from './global';
 import { voucher } from './voucher/voucher-local-data.reducer';
 import { notificaitonTotalReducer } from './notification/notification-total.reducer';
 import { account } from './account';
+import { users } from './users';
 
 export const rootReducer = combineReducers({
   permanentCore,
@@ -22,6 +23,7 @@ export const rootReducer = combineReducers({
   voucher,
   notificaitonTotalReducer,
   account,
+  users,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
