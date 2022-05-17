@@ -30,10 +30,18 @@ const UserStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: color.white,
   },
-  boxEditIcon: {
+  boxEditIconContainer: {
     position: 'absolute',
-    right: 0,
-    bottom: 0,
+    right: 2,
+    bottom: 5,
+    padding: 2,
+    backgroundColor: color.white,
+    borderRadius: 20
+  },
+  boxEditIcon: {
+    padding: 5,
+    backgroundColor: color.black40,
+    borderRadius: 20,
   },
   boxContent: {
     paddingHorizontal: 16,
@@ -41,22 +49,19 @@ const UserStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  // badge: (backgroundColor) => ({
-  //   padding: 8,
-  //   backgroundColor,
-  //   borderRadius: 4,
-  //   alignSelf: 'flex-start',
-  // }),
-  // message: (color) => ({
-  //   ...Fonts.type23,
-  //   fontSize: 10,
-  //   color,
-  //   marginTop: 4,
-  // }),
-  // title: (color) => ({
-  //   ...Fonts.type48,
-  //   fontSize: 12,
-  //   color,
-  // }),
+  badgeBox: {
+    flexDirection: 'row',
+    marginHorizontal: 16,
+    padding: 16,
+    backgroundColor: color.blue10,
+    borderRadius: 4,
+  },
+  separator: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderColor: '#DAE0E7',
+    marginHorizontal: 16,
+    marginTop: 16,
+  }
 });
 export default UserStyles;
