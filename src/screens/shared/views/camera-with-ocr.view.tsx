@@ -39,17 +39,17 @@ const KtpPhotoFrame = () => (
 const CameraWithOCRView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [showModalError, setShowModalError] = React.useState<boolean>(false);
+  const [showModalError, setShowModalError] = React.useState<boolean>(true);
   const [retake, setRetake] = React.useState<boolean>(false);
-  const { processImage, ocrImageState, resetOcrRtdb, ocrImageReset } =
+  const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
 
   React.useEffect(() => {
-    resetOcrRtdb();
-    return resetOcrRtdb;
+    resetOcrStatusRtdb();
+    return resetOcrStatusRtdb;
   }, []);
 
   const handleBackButton = React.useCallback(() => {
@@ -145,7 +145,7 @@ const CameraWithOCRView = () => {
               <SnbButton2.Primary
                 title="Ulang Foto"
                 onPress={() => {
-                  resetOcrRtdb();
+                  resetOcrStatusRtdb();
                   setShowModalError(false);
                   setRetake(true);
                 }}
