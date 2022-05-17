@@ -6,7 +6,7 @@ import {
   SnbToast,
   SnbTextField,
 } from 'react-native-sinbad-ui';
-import { View, Image, BackHandler } from 'react-native';
+import { View, Image, BackHandler, ScrollView } from 'react-native';
 import {
   Stepper,
   ListOfSteps,
@@ -157,43 +157,45 @@ const DataDiriStep2View: React.FC = () => {
     }
     return (
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
-          <Image
-            resizeMode="contain"
-            source={{ uri }}
-            borderRadius={4}
-            style={{
-              height: undefined,
-              width: undefined,
-              flex: 1,
-              marginBottom: 10,
-            }}
-          />
-          <SnbTextField.Text
-            type={isNPWPValid ? 'default' : 'error'}
-            value={npwp}
-            maxLength={15}
-            helpText={'Abaikan bila sudah sesuai NPWP'}
-            onChangeText={(text) => {
-              text = text.replace(/[^0-9]/g, '');
-              setNpwp(text);
-              setIsNPWPValid(false);
-              setMessageErrorNPWP('');
-              if (text?.length === 15 || text === '' || text === null) {
-                setMessageErrorNPWP('');
-                setIsNPWPValid(true);
-              } else {
-                setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+        <ScrollView>
+          <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
+            <Image
+              resizeMode="contain"
+              source={{ uri }}
+              borderRadius={4}
+              style={{
+                height: 200,
+                width: undefined,
+                marginBottom: 10,
+              }}
+            />
+            <View style={{ padding: 16 }} />
+            <SnbTextField.Text
+              type={npwp ? (isNPWPValid ? 'default' : 'error') : 'default'}
+              value={npwp}
+              maxLength={15}
+              helpText={'Abaikan bila sudah sesuai NPWP'}
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                setNpwp(text);
                 setIsNPWPValid(false);
-              }
-            }}
-            placeholder={'Masukkan Nomor NPWP'}
-            labelText={'Nomor NPWP'}
-            keyboardType={'number-pad'}
-            mandatory
-            valMsgError={messageErrorNPWP}
-          />
-        </View>
+                setMessageErrorNPWP('');
+                if (text?.length === 15 || text === '' || text === null) {
+                  setMessageErrorNPWP('');
+                  setIsNPWPValid(true);
+                } else {
+                  setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+                  setIsNPWPValid(false);
+                }
+              }}
+              placeholder={'Masukkan Nomor NPWP'}
+              labelText={'Nomor NPWP'}
+              keyboardType={'number-pad'}
+              mandatory
+              valMsgError={messageErrorNPWP}
+            />
+          </View>
+        </ScrollView>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1, height: 75 }}>
             <SnbButton.Single
