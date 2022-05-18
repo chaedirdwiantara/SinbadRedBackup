@@ -18,13 +18,7 @@ const { height } = Dimensions.get('window');
 interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
-  data: models.CheckoutProducts[] | null;
-}
-
-interface ContentListData {
-  name: string;
-  price: number;
-  type: 'normal' | 'green';
+  data: models.CheckoutCartProduct[];
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
@@ -64,8 +58,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     );
   };
 
-  const productList = (data: models.CheckoutProducts[]) => {
-    const products = data;
+  const productList = (products: models.CheckoutCartProduct[]) => {
     return products.map((product) => (
       <>
         <View style={CheckoutStyle.modalDetailItemContainer}>
@@ -76,7 +69,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
           </View>
           <SnbText.B1>
             {' '}
-            {toCurrency(product.lastUsedPrice * product.qty, {
+            {toCurrency(product.priceAfterTax * product.qty, {
               withFraction: false,
             })}
           </SnbText.B1>

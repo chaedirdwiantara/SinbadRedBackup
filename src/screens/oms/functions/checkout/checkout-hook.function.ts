@@ -22,63 +22,116 @@ const useCheckoutAction = () => {
         stateCart.postCheckStock.data !== null &&
         stateCart.buyerAddress.data !== null
       ) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const buyerAddress = (({ buyerId, buyerName, ...rest }) => rest)(
-          stateCart.buyerAddress.data,
-        );
+        const buyerAddress = (({
+          /** typescript disabled for some line @here
+           * because this just to separate the object. */
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerCode,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          userFullName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          userPhoneNumber,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerFullName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerPhoneNumber,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          imageId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          isImageIdOcrValidation,
+          ...rest
+        }) => rest)(stateCart.buyerAddress.data);
 
         const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
           (seller) => {
             const products: models.CheckoutProductData[] = seller.products
               .filter((product) => product.selected)
               .map((product) => {
-                let priceRules: models.ProductPriceRules | {} = {};
-                /** ==> To be continued on bulk pricing sprint */
+                let priceRules: models.ProductPriceRules | null = null;
                 if (product.priceRules.length > 0) {
-                  const priceRulesLastItem =
-                    product.priceRules[product.priceRules.length - 1];
-                  if (priceRulesLastItem.maxQty <= product.qty) {
-                    priceRules = priceRulesLastItem;
+                  const priceRulesFirstItem = product.priceRules[0];
+                  if (product.qty < priceRulesFirstItem.minQty) {
+                    priceRules = null;
                   } else {
-                    product.priceRules.map((priceRulesItem) => {
-                      if (
-                        product.qty >= priceRulesItem.minQty &&
-                        product.qty <= priceRulesItem.maxQty
-                      ) {
-                        priceRules = priceRulesItem;
+                    for (let x = 0; x < product.priceRules.length; x++) {
+                      const isLast = x === product.priceRules.length - 1;
+                      if (!isLast) {
+                        if (
+                          product.qty >= product.priceRules[x].minQty &&
+                          product.qty < product.priceRules[x + 1].minQty
+                        ) {
+                          priceRules = product.priceRules[x];
+                          break;
+                        }
+                      } else {
+                        priceRules = product.priceRules[x];
                       }
-                    });
+                    }
                   }
                 }
+
                 return {
-                  ...product,
-                  lastUsedPrice: product.price,
-                  priceRules,
-                } as models.CheckoutProductData;
+                  productId: product.productId,
+                  externalProductCode: product.externalProductCode || '',
+                  warehouseId: product.warehouseId,
+                  warehouseName: product.warehouseName || '',
+                  externalWarehouseCode: product.externalWarehouseCode || '',
+                  categoryId: product.categoryId,
+                  brandId: product.brandId || '',
+                  brandName: product.brandName || '',
+                  productName: product.productName,
+                  productImageUrl: product.productImageUrl,
+                  qty: product.qty,
+                  qtyPerBox: product.qtyPerBox,
+                  uomLabel: product.uomLabel,
+                  taxPercentage: product.taxPercentage,
+                  leadTime: product.leadTime || 0,
+                  priceAfterTax:
+                    priceRules !== null
+                      ? priceRules.priceAfterTax
+                      : product.priceAfterTax,
+                  priceBeforeTax:
+                    priceRules !== null
+                      ? priceRules.priceBeforeTax
+                      : product.priceBeforeTax,
+                  taxPrice:
+                    priceRules !== null
+                      ? priceRules.taxPrice
+                      : product.taxPrice,
+                };
               });
             return {
-              ...seller,
+              sellerId: seller.sellerId,
+              sellerName: seller.sellerName,
+              sellerAdminId: seller.sellerAdminId,
+              sellerAdminName: seller.sellerAdminName,
+              sellerAdminEmail: seller.sellerAdminEmail,
               products,
             };
           },
         );
 
         const carts = cartsTemp.filter((cart) => {
-          let isAnyItemSelectedInThisSeller = false;
-          cart.products.some((productItem) => {
-            if (productItem.selected) {
-              isAnyItemSelectedInThisSeller = true;
-            }
-          });
-
-          return isAnyItemSelectedInThisSeller;
+          return cart.products.length > 0;
         });
 
         dispatch(
           Actions.checkoutProcess(contextDispatch, {
             data: {
-              buyerName: stateCart.buyerAddress.data.buyerName,
               buyerAddress,
+              buyerName: stateCart.buyerAddress.data.buyerName,
+              buyerCode: stateCart.buyerAddress.data.buyerCode,
+              userFullName: stateCart.buyerAddress.data.userFullName,
+              userPhoneNumber: stateCart.buyerAddress.data.userPhoneNumber,
+              ownerFullName: stateCart.buyerAddress.data.ownerFullName,
+              ownerPhoneNumber: stateCart.buyerAddress.data.ownerPhoneNumber,
+              ownerId: stateCart.buyerAddress.data.ownerId,
               carts,
             },
           }),
@@ -380,17 +433,14 @@ const useErrorWarningModal = () => {
 const useGetTncContent = () => {
   const dispatch = useDispatch();
   return {
-    tncContentGet : (
-      contextDispatch: (action : any) => any,
-      id: string
-    ) => {
-      dispatch(Actions.checkoutTNCProcess(contextDispatch, {id}))
+    tncContentGet: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.checkoutTNCProcess(contextDispatch, { id }));
     },
-    tncContentReset: (contextDispatch: (action:any) => any) => {
+    tncContentReset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.checkoutTNCReset());
-    }
-  }
-}
+    },
+  };
+};
 /** === EXPORT === */
 export {
   useCheckoutAction,
@@ -406,7 +456,7 @@ export {
   useErrorModalBottom,
   useCheckoutFailedFetchState,
   useErrorWarningModal,
-  useGetTncContent
+  useGetTncContent,
 };
 /**
  * ================================================================

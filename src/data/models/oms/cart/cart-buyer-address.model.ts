@@ -4,6 +4,12 @@
 export interface CartBuyerAddress {
   buyerId: number;
   buyerName: string;
+  buyerCode: string;
+  userFullName: string;
+  userPhoneNumber: string;
+  ownerId: number;
+  ownerFullName: string;
+  ownerPhoneNumber: string;
   latitude: string;
   longitude: string;
   province: string;
