@@ -4,7 +4,7 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => store detail */
 const storeDetail = () => {
-  const path = 'stores';
+  const path = 'profile-buyer';
   return apiMapping<models.StoreDetail>(
     'auth',
     path,

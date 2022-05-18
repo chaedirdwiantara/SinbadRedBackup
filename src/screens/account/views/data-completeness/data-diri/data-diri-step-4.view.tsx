@@ -1,30 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
-  SnbUploadPhotoRules,
-  SnbToast,
+  SnbTopNav2,
+  SnbTextField2,
+  SnbButton2,
 } from 'react-native-sinbad-ui';
-import { View, Image, BackHandler } from 'react-native';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { useFocusEffect, useIsFocused } from '@react-navigation/core';
-import { DATA_DIRI_STEP_5_VIEW } from '@screen/account/functions/screens_name';
-import { useCamera } from '@screen/account/functions';
-import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { contexts } from '@contexts';
+import { View, ScrollView, BackHandler } from 'react-native';
+import Svg from '@svg';
 import { useEasyRegistration } from '@screen/account/functions';
+import { MerchantHookFunc } from '../../../../merchant/function';
+import { contexts } from '@contexts';
 import { NavigationAction } from '@navigation';
 
 const DataDiriStep4View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
-  const { openCamera, capturedImage, resetCamera } = useCamera();
-  const { upload, save } = useUploadImageAction();
-  const { stateGlobal, dispatchGlobal } = React.useContext(
-    contexts.GlobalContext,
-  );
-  const [backHandle, setBackHandle] = useState(false);
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -33,179 +22,163 @@ const DataDiriStep4View: React.FC = () => {
     backToDataCompleteness,
     refetchCompleteData,
   } = useEasyRegistration();
-  const isFocused  = useIsFocused();
-
-  React.useEffect(() => {
-    return () => {
-      save(dispatchGlobal, '');
-      resetCamera();
-      resetUpdateCompleteData();
-    };
-  }, []);
+  const [email, setEmail] = useState(completeDataState?.data?.userData?.email);
+  const [openModalStep, setOpenModalStep] = useState(false);
+  const [openModalBack, setOpenModalBack] = useState(false);
+  const [emailIsNotValid, setEmailIsNotValid] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [backHandle, setBackHandle] = useState(false);
+  const changeEmailAction = MerchantHookFunc.useChangeEmail();
+  const { stateMerchant, dispatchSupplier } = React.useContext(
+    contexts.MerchantContext,
+  );
 
   // HANDLE BACK DEVICE
-  const handleBackButton = React.useCallback(() => {
+  React.useEffect(() => {
+    const backAction = () => {
+      setOpenModalBack(true);
+      return true;
+    };
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
+      backAction,
     );
-    return backHandler.remove;
+    return () => backHandler.remove();
   }, []);
 
-  useFocusEffect(handleBackButton);
-
-  React.useEffect(() => {
-    if (
-      stateGlobal.uploadImage.data !== null &&
-      capturedImage.data?.type === 'selfie'
-    ) {
-      SnbToast.show('Foto Berhasil Diupload', 2500, { positionValue: 40 });
-      resetCamera();
-    }
-
-    if (stateGlobal.uploadImage.error !== null) {
-      SnbToast.show('Foto Gagal Diupload', 2500, { positionValue: 40 });
-    }
-  }, [stateGlobal.uploadImage, capturedImage.data?.type]);
-
-  //CONFIRM UPLOAD IMAGE
-  const confirm = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
-      upload(dispatchGlobal, capturedImage.data.url);
+  /** VALIDATE EMAIL */
+  const validateEmail = (textEmail: string) => {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(textEmail)) {
+      setEmailIsNotValid(false);
+      setErrorMessage('');
     } else {
-      if (completeDataState?.data?.userData?.selfieImageUrl && isFocused) {
-        NavigationAction.navigate(DATA_DIRI_STEP_5_VIEW);
-      } else {
-        openCamera('selfie');
-      }
+      setEmailIsNotValid(true);
+      setErrorMessage('Pastikan email yang Anda masukkan benar');
     }
+    if (textEmail === '') {
+      setEmailIsNotValid(false);
+      setErrorMessage('');
+    }
+    setEmail(textEmail);
   };
 
-  //BACK AND SAVE
-  const backSave = () => {
-    if (capturedImage?.data?.url && capturedImage.data?.type === 'selfie') {
-      upload(dispatchGlobal, capturedImage.data.url);
-      setBackHandle(true);
+  const confirm = () => {
+    if (completeDataState?.data?.userData?.email || email) {
+      if (emailIsNotValid === false) {
+        const data = {
+          email: email,
+        };
+        changeEmailAction.changeEmail(dispatchSupplier, { data });
+      } else {
+        setErrorMessage('Pastikan email yang Anda masukkan benar');
+      }
     } else {
       backToDataCompleteness();
     }
   };
 
-  //FOR CHECK IF IMAGE UPLOADED AND HIT API UPDATE COMPLETENESS DATA
-  React.useEffect(() => {
-    if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'selfie') {
-      updateCompleteData({
-        user: { selfieImageUrl: stateGlobal.uploadImage?.data?.url },
+  const confirmWithBack = () => {
+    if (completeDataState?.data?.userData?.email !== email) {
+      if (emailIsNotValid === false) {
+        updateCompleteData({ user: { email: email } });
+      } else {
+        setErrorMessage('Pastikan email yang Anda masukkan benar');
+      }
+    } else {
+      backToDataCompleteness();
+    }
+  };
+
+  useEffect(() => {
+    if (stateMerchant.changeEmail.data !== null) {
+      NavigationAction.navigate('EmailOtp', {
+        type: 'email',
+        data: email,
       });
     }
-  }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
+  }, [stateMerchant]);
 
-  // FOR SAVE URL IMAGE TO DB USING API UPDATE COMPLETENESS DATA
+  useEffect(() => {
+    if (updateCompleteDataState.error) {
+      setEmailIsNotValid(true);
+      setErrorMessage(updateCompleteDataState.error.message);
+    }
+  }, [updateCompleteDataState.error]);
+
   React.useEffect(() => {
-    if (updateCompleteDataState.data !== null && isFocused) {
+    if (updateCompleteDataState.data !== null) {
       refetchCompleteData();
       if (backHandle) {
         backToDataCompleteness();
         resetUpdateCompleteData();
         setBackHandle(false);
-        save(dispatchGlobal, '');
-        resetCamera();
       } else {
-        NavigationAction.navigate(DATA_DIRI_STEP_5_VIEW);
+        backToDataCompleteness();
         resetUpdateCompleteData();
-        save(dispatchGlobal, '');
-        resetCamera();
       }
     }
-  }, [updateCompleteDataState, isFocused]);
-
-  const renderUploadPhotoRules = () => {
-    return (
-      <SnbUploadPhotoRules
-        rulesTitle="Pastikan Foto Diri dengan KTP Sesuai dengan Ketentuan"
-        imgSrc={require('../../../../../assets/images/selfie_image.png')}
-        buttonLabel="Ambil Foto"
-        rules={[
-          'Posisikan KTP di bawah dagu Anda.',
-          'KTP Tidak silau dan tidak buram.',
-          'Pastikan informasi KTP bisa terbaca dengan jelas.',
-          'Hindari Tangan Menutupi KTP.',
-        ]}
-        action={() => openCamera('selfie')}
-      />
-    );
-  };
-
-  const renderImagePreview = () => {
-    const isImageCaptured = capturedImage?.data?.type === 'selfie';
-    let uri: string | undefined = '';
-    if (isImageCaptured) {
-      uri = capturedImage?.data?.url;
-    } else {
-      uri = completeDataState?.data?.userData?.selfieImageUrl;
-    }
-    return (
-      <View style={{ flex: 1 }}>
-        <Image
-          resizeMode="contain"
-          source={{ uri }}
-          borderRadius={4}
-          style={{
-            height: undefined,
-            width: undefined,
-            flex: 1,
-            margin: 16,
-          }}
-        />
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
-              title="Ulangi"
-              onPress={() => openCamera('selfie')}
-              disabled={false}
-            />
-          </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type={'primary'}
-              disabled={stateGlobal.uploadImage.loading}
-              loading={stateGlobal.uploadImage.loading}
-              title={'Lanjutkan'}
-              onPress={() => confirm()}
-            />
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  const isImageAvailable =
-    completeDataState?.data?.userData?.selfieImageUrl !== null ||
-    capturedImage.data?.type === 'selfie';
+  }, [updateCompleteDataState]);
 
   return (
     <SnbContainer color="white">
-      <View>
-        <SnbTopNav.Type3
+      <ScrollView style={{ flex: 1 }}>
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
-          title="Foto Diri Dengan KTP"
+          color="white"
+          title="Alamat Email"
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
+        <View style={{ alignItems: 'center', marginVertical: 16 }}>
+          <Svg name="notification" size={240} />
+        </View>
+        <View style={{ margin: 16 }}>
+          <SnbTextField2.Text
+            type={emailIsNotValid ? 'error' : 'default'}
+            value={email}
+            onChangeText={(text) => validateEmail(text)}
+            placeholder={'Masukkan Email'}
+            labelText={'Email'}
+            mandatory
+            valMsgError={errorMessage}
+          />
+        </View>
+      </ScrollView>
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
+          title="Simpan"
+          disabled={
+            (emailIsNotValid && email) ||
+            updateCompleteDataState.loading ||
+            stateMerchant.changeEmail.loading ||
+            email === '' ||
+            email === null
+              ? true
+              : false
+          }
+          onPress={() => confirm()}
+          loading={
+            updateCompleteDataState.loading || stateMerchant.changeEmail.loading
+          }
+          size="medium"
+          full
+        />
       </View>
-      {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
         open={openModalBack}
         closeModal={() => setOpenModalBack(false)}
-        confirm={() => backSave()}
+        confirm={() => {
+          if (email && email !== '' && !emailIsNotValid) {
+            setBackHandle(true);
+            confirmWithBack();
+          } else {
+            backToDataCompleteness();
+          }
+        }}
       />
       <ListOfSteps
         open={openModalStep}

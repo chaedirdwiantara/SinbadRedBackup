@@ -176,3 +176,30 @@ export type ITypeList =
   | 'listUrbanID'
   | 'listVehicleAccess'
   | 'listBank';
+
+export interface IUploadSecureImage {
+  data: {
+    id: string;
+    filename: string;
+    urlFile: string;
+  };
+}
+
+export interface IOCRImage {
+  imageUrl: string;
+  type: string;
+}
+
+export interface IImageVerification {
+  data: {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
+export interface IOCRSuccess {
+  uploadImageData: IUploadSecureImage;
+  imageVericationData: IImageVerification;
+}

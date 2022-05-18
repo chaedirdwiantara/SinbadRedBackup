@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import {
-  SnbText,
-  color as colors,
+  SnbText2,
   SnbBottomSheet,
-  SnbButton,
+  SnbButton2,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import Svg from '@svg';
@@ -20,35 +20,46 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
 
   const renderContent = () => {
     return (
-      <View>
-        <View style={{ alignItems: 'center', marginVertical: 16 }}>
+      <View style={{ alignItems: 'center' }}>
+        <View style={{ marginVertical: layout.spacing.lg }}>
           <Svg name="completeness_back" size={180} />
         </View>
-        <View style={{ alignItems: 'center', marginHorizontal: 24 }}>
-          <SnbText.H3 color={colors.black100}>Yakin Ingin Keluar?</SnbText.H3>
+        <SnbText2.Headline.Default align="center">
+          Yakin Ingin Keluar?
+        </SnbText2.Headline.Default>
+        <View
+          style={{
+            marginVertical: layout.spacing.lg,
+            marginHorizontal: layout.spacing.xl,
+          }}>
+          <SnbText2.Paragraph.Default align="center">
+            Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan
+          </SnbText2.Paragraph.Default>
         </View>
-        <View style={{ marginVertical: 16, marginHorizontal: 24 }}>
-          <View style={{ alignItems: 'center' }}>
-            <SnbText.B1 color={colors.black60} align="center">
-              Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan
-            </SnbText.B1>
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: layout.spacing.lg,
+          }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               onPress={() => props.closeModal()}
               title="Batal"
+              disabled={false}
+              size="medium"
+              full
+              outline
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="primary"
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               onPress={() => props.confirm()}
               title="Ya, Keluar"
               disabled={updateCompleteDataState.loading}
               loading={updateCompleteDataState.loading}
+              size="medium"
+              full
             />
           </View>
         </View>

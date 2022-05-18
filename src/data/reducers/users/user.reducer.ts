@@ -1,5 +1,4 @@
 /** === IMPORT HERE === */
-import * as models from '@models';
 import {
   userDetailReducer,
   userDetailInitialState,
@@ -13,8 +12,8 @@ import {
   profileEditInitialState,
 } from './profile-edit.reducer';
 /** === TYPE HERE === */
-export type UserInitialProps = models.DetailProps<models.StoreDetail> &
-  models.UpdateProps;
+// export type UserInitialProps = models.DetailProps<models.StoreDetail> &
+//   models.UpdateProps;
 
 /** === INITIAL HERE === */
 export const userInitialState = {

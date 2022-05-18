@@ -1,17 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import {
+  color,
+  borderV2,
+  colorV2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
 
 const UserStyles = StyleSheet.create({
   headerInformationContainer: {
-    backgroundColor: color.red50,
-    flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 22,
+    flex: 1,
   },
   imageContainer: {
     height: 50,
     width: 50,
-    marginRight: 16,
+    margin: 16,
   },
   image: {
     width: 50,
@@ -21,9 +23,9 @@ const UserStyles = StyleSheet.create({
     borderColor: color.white,
   },
   userInfo: {
-    justifyContent: 'space-between',
     paddingVertical: 5,
     width: '80%',
+    alignSelf: 'center',
   },
   bodyTitleContainer: {
     flexDirection: 'row',
@@ -34,6 +36,67 @@ const UserStyles = StyleSheet.create({
     backgroundColor: color.red50,
     height: 30,
     width: '100%',
+  },
+  shadowStyle: {
+    shadowColor: colorV2.bgColor.dark,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 2,
+  },
+  cardBody: {
+    margin: layout.spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  /** Pagination */
+  activeDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: color.red50,
+  },
+  inactiveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 8,
+    backgroundColor: color.black40,
+  },
+  appButtonContainer: {
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+  },
+  appButtonText: {
+    fontSize: 14,
+    paddingHorizontal: 10,
+    alignSelf: 'flex-start',
+    fontWeight: '500',
+    fontFamily: 'Montserrat',
+    fontStyle: 'normal',
+    color: '#52575C',
+  },
+  carouselContainer: {
+    backgroundColor: colorV2.bgColor.light,
+    borderRadius: borderV2.radius.md,
+  },
+  carouselText: {
+    marginLeft: 16,
+    alignSelf: 'center',
+    width: 185,
+  },
+  carouselButton: {
+    backgroundColor: color.red50,
+    height: 24,
+    alignSelf: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    paddingBottom: 2,
   },
 });
 export default UserStyles;

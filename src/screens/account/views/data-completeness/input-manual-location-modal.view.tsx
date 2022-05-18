@@ -33,7 +33,7 @@ const Content = () => {
   }, [type]);
 
   React.useEffect(() => {
-    if (locations.data) {
+    if (locations.data?.id) {
       goBack();
       resetLocation();
     }

@@ -4,9 +4,9 @@ import {
   SnbContainer,
   SnbProgress,
   SnbRadioButton,
-  SnbText,
-  SnbTextField,
-  SnbTopNav,
+  SnbText2,
+  SnbTextField2,
+  SnbTopNav2,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
@@ -64,7 +64,7 @@ const Content: React.FC = () => {
           justifyContent: 'space-between',
         }}>
         <View style={{ flex: 1 }}>
-          <SnbText.B1>{locationName}</SnbText.B1>
+          <SnbText2.Body.Default>{locationName}</SnbText2.Body.Default>
         </View>
         <View style={{ marginHorizontal: 4 }} />
         <SnbRadioButton
@@ -77,7 +77,7 @@ const Content: React.FC = () => {
   return (
     <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
       <View style={{ padding: 16 }}>
-        <SnbTextField.Text
+        <SnbTextField2.Text
           {...search}
           placeholder="Cari Kota/Kabupaten, Kec. dan Kelurahan"
           prefixIconName="search"
@@ -135,10 +135,10 @@ const Content: React.FC = () => {
           padding: 12,
           borderRadius: 8,
         }}>
-        <SnbText.B3 color={color.blue50} align="center">
+        <SnbText2.Paragraph.Small color={color.blue50} align="center">
           Tidak menemukan yang anda cari, gunakan pencarian secara rinci untuk
           lokasi toko anda
-        </SnbText.B3>
+        </SnbText2.Paragraph.Small>
       </View>
     </View>
   );
@@ -147,7 +147,7 @@ const Content: React.FC = () => {
 const ListLocationView: React.FC = () => {
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type1 title="Lokasi Toko" type="white" />
+      <SnbTopNav2.Type1 title="Lokasi Toko" color="white" />
       <Content />
     </SnbContainer>
   );
