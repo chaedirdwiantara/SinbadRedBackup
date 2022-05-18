@@ -6,7 +6,7 @@ import {
   SnbIcon,
   SnbProgress,
   SnbText2,
-  SnbTopNav2
+  SnbTopNav2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   BackHandler,
@@ -63,7 +63,9 @@ const BuyerLocation: React.FC = () => {
         borderColor: color.black40,
       }}>
       <View style={{ flex: 1 }}>
-        <SnbText2.Paragraph.Tiny color={color.black60}>Lokasi Toko</SnbText2.Paragraph.Tiny>
+        <SnbText2.Paragraph.Tiny color={color.black60}>
+          Lokasi Toko
+        </SnbText2.Paragraph.Tiny>
         <View style={{ marginVertical: 4 }} />
         <SnbText2.Body.Small>
           {location
@@ -112,9 +114,9 @@ const BuyerCategory: React.FC = () => {
 
   React.useEffect(() => {
     if (createBasicAccountState.data) {
+      me();
+      meV2();
       if (actionFrom === 'mulai') {
-        me();
-        meV2();
         getCoachmark();
         reset({ index: 0, routes: [{ name: 'Home' }] });
       } else if (actionFrom === 'lengkapi') {
@@ -229,7 +231,7 @@ const BuyerCategory: React.FC = () => {
           ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
         />
       </View>
-      <View style={{width: '100%', marginTop: 16}}>
+      <View style={{ width: '100%', marginTop: 16 }}>
         <View style={{ marginHorizontal: 16 }}>
           <SnbButton2.Primary
             onPress={() => handleOnCreateBasicAccount('mulai')}
