@@ -2,10 +2,10 @@ import React from 'react';
 import {
   color,
   SnbBottomSheet,
-  SnbButton,
+  SnbButton2,
   SnbProgress,
   SnbRadioButton,
-  SnbText,
+  SnbText2,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
@@ -184,9 +184,11 @@ const ModalSelection: React.FC<Props> = ({
                       justifyContent: 'space-between',
                     }}>
                     <View style={{ flex: 1 }}>
-                      <SnbText.B1>{label}</SnbText.B1>
+                      <SnbText2.Paragraph.Default>
+                        {label}
+                      </SnbText2.Paragraph.Default>
                     </View>
-                    <View style={{ marginHorizontal: 4 }} />
+                    <View style={{ marginHorizontal: 8 }} />
                     <SnbRadioButton
                       onPress={() => setTempSelectedItem({ item, type })}
                       status={status}
@@ -197,12 +199,15 @@ const ModalSelection: React.FC<Props> = ({
             />
           </View>
           {listSelection.isLoadMoreLoading && <SnbProgress />}
-          <View style={{ height: 72 }}>
-            <SnbButton.Single
+          <View style={{ padding: 16 }}>
+            <SnbButton2.Primary
               title={setTitle(type)}
               onPress={() => onCloseModalSelection(tempSelectedItem)}
-              disabled={tempSelectedItem === null || listSelection.data === null}
-              type="primary"
+              disabled={
+                tempSelectedItem === null || listSelection.data === null
+              }
+              full
+              size="medium"
             />
           </View>
         </View>

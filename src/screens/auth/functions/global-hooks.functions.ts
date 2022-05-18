@@ -6,6 +6,7 @@ import * as models from '@models';
 import { useNavigation } from '@react-navigation/core';
 import database from '@react-native-firebase/database';
 import { uniqueId } from '@core/functions/global/device-data';
+import { FieldType } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/TextField/types';
 
 const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
   { id: 1, value: 1 },
@@ -15,7 +16,7 @@ const DEFAULT_VEHICLE_ACCESS_AMOUNT = [
 export const useInputPhone = () => {
   const [value, setValue] = useState('');
   const [valMsgError, setValMsgError] = useState('');
-  const [type, setType] = useState('default');
+  const [type, setType] = useState<FieldType>('default');
 
   const onChangeText = (text: string) => {
     setType('default');
@@ -26,10 +27,10 @@ export const useInputPhone = () => {
 
     if (text && !numberFormatIsValid && text.slice(0, 2) !== '08') {
       setType('error');
-      setValMsgError('No. HP harus diawali dengan 08');
+      setValMsgError('Harus diawali angka ‘0’');
     } else if (text && !numberCountIsValid) {
       setType('error');
-      setValMsgError('No. HP harus 10-14 digit');
+      setValMsgError('Digit nomor handphone kurang');
     } else {
       setType('default');
       setValMsgError('');
@@ -67,7 +68,7 @@ export const useInput = (
 ) => {
   const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
-  const [type, setType] = useState('default');
+  const [type, setType] = useState<FieldType>('default');
 
   const onChangeText = (text: string) => {
     setType('default');

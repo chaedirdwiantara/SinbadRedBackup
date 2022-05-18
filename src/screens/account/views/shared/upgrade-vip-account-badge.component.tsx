@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { color, SnbIcon, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbIcon, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
@@ -24,18 +24,21 @@ const UpgradeVIPAccountBadge: React.FC = () => {
           paddingVertical: 12,
           flexDirection: 'row',
           justifyContent: 'space-between',
-          alignItems: 'center',
         }}>
-        <Svg name="info" size={40} />
+        <Svg name="info" size={22} />
         <View style={{ flex: 1, marginHorizontal: 16 }}>
-          <SnbText.H4>Daftar Anggota VIP Sinbad Sekarang!</SnbText.H4>
+          <SnbText2.Body.Small>
+            Daftar Anggota VIP Sinbad Sekarang!
+          </SnbText2.Body.Small>
           <View style={{ marginVertical: 2 }} />
-          <SnbText.B1 color={color.black60}>
+          <SnbText2.Paragraph.Small color={color.black60}>
             Belanja lebih hemat, diskon menarik dan berbagai manfaat lainnya
             menanti Anda.
-          </SnbText.B1>
+          </SnbText2.Paragraph.Small>
         </View>
-        <SnbIcon name="chevron_right" size={24} color={color.yellow50} />
+        <View style={{ alignSelf: 'center' }}>
+          <SnbIcon name="chevron_right" size={24} color={color.yellow50} />
+        </View>
       </TouchableOpacity>
     );
   }

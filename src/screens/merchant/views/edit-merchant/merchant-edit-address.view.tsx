@@ -11,11 +11,11 @@ import {
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbText,
-  SnbButton,
+  SnbTopNav2,
+  SnbText2,
+  SnbButton2,
   color,
-  SnbTextField,
+  SnbTextField2,
   SnbTextFieldSelect,
   SnbToast,
 } from 'react-native-sinbad-ui';
@@ -147,10 +147,10 @@ const Content: React.FC = () => {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <SnbText.H4>Titik Lokasi</SnbText.H4>
+              <SnbText2.Body.Small>Titik Lokasi</SnbText2.Body.Small>
               {renderIF(
                 latLng !== null,
-                <SnbButton.Dynamic
+                <SnbButton2.Link
                   onPress={() =>
                     navigate(MAPS_VIEW_TYPE_2, {
                       onMapsResult,
@@ -160,9 +160,7 @@ const Content: React.FC = () => {
                   }
                   title="Ubah Titik Lokasi"
                   disabled={false}
-                  type="tertiary"
-                  buttonColor={color.blue50}
-                  size="small"
+                  size="tiny"
                 />,
               )}
             </View>
@@ -209,19 +207,21 @@ const Content: React.FC = () => {
                   })
                 }
                 style={styles.pinPoint}>
-                <SnbText.B4 color={color.black60}>Pin Lokasi Toko</SnbText.B4>
+                <SnbText2.Paragraph.Default color={color.black60}>
+                  Pin Lokasi Toko
+                </SnbText2.Paragraph.Default>
               </TouchableOpacity>,
             )}
           </View>
           <View style={{ padding: 16 }}>
-            <SnbText.H4>{streetName}</SnbText.H4>
+            <SnbText2.Body.Small>{streetName}</SnbText2.Body.Small>
             <View style={{ marginVertical: 4 }} />
-            <SnbText.B1 align="justify" color={color.black60}>
+            <SnbText2.Paragraph.Small align="justify" color={color.black60}>
               {staticAddress}
-            </SnbText.B1>
+            </SnbText2.Paragraph.Small>
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextField.Area
+            <SnbTextField2.Area
               {...address}
               mandatory
               maxLength={200}
@@ -230,7 +230,7 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextField.Text
+            <SnbTextField2.Text
               {...noteAddress}
               mandatory
               labelText="Catatan Alamat"
@@ -288,9 +288,10 @@ const Content: React.FC = () => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
           title="Simpan"
+          full
           onPress={() => {
             let buyer = {};
             if (address.value !== currentAddress) {
@@ -331,11 +332,11 @@ const Content: React.FC = () => {
             }
             editProfile(dispatchSupplier, { data: { buyer } });
           }}
-          type="primary"
           loading={stateMerchant.profileEdit.loading}
           disabled={
             handleDisableSaveButton() || stateMerchant.profileEdit.loading
           }
+          size="medium"
         />
       </View>
       <ModalSelection
@@ -371,7 +372,7 @@ const MerchantEditAddressView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={goBack} type="white" title="Alamat Toko" />
+      <SnbTopNav2.Type3 backAction={goBack} color="white" title="Alamat Toko" />
       <Content />
     </SnbContainer>
   );

@@ -62,7 +62,7 @@ export const ModalThankYouPageOrderDetail : FC<ModalThankYouPageOrderDetail> = (
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%'}}>
-                  <SnbText.B1 color={color.black60}>{sellerData.products[0]?.productName} {sellerData.products[1]?.qty}</SnbText.B1>
+                  <SnbText.B1 color={color.black60}>{sellerData.products[0]?.productName} {sellerData.products[0]?.qty}</SnbText.B1>
               </View>
               {/* <View> */}
                 <SnbText.B1 color={color.black60}>

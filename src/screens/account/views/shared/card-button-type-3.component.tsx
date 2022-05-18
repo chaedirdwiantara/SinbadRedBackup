@@ -1,5 +1,5 @@
 import { renderIF } from '@screen/auth/functions';
-import { color, SnbIcon, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { color, SnbIcon, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -36,9 +36,9 @@ const SnbCardButtonType3: React.FC<Props> = ({
         {svgIcon()}
         <View style={{ marginHorizontal: 8 }} />
         <View style={{ flex: 1 }}>
-          <SnbText.H3>{title}</SnbText.H3>
+          <SnbText2.Body.Large>{title}</SnbText2.Body.Large>
           <View style={{ marginVertical: 4 }} />
-          <SnbText.B1>{desc}</SnbText.B1>
+          <SnbText2.Paragraph.Small>{desc}</SnbText2.Paragraph.Small>
         </View>
         <SnbIcon name="chevron_right" size={24} />
       </View>
@@ -60,9 +60,11 @@ const SnbCardButtonType3: React.FC<Props> = ({
               size={16}
               color={color.blue50}
             />
-            <View style={{ marginHorizontal: 4 }} />
+            <View style={{ marginHorizontal: 8 }} />
             <View style={{ flex: 1 }}>
-              <SnbText.B3 color={color.blue50}>Registrasi Selesai</SnbText.B3>
+              <SnbText2.Paragraph.Small color={color.blue50}>
+                Registrasi Selesai
+              </SnbText2.Paragraph.Small>
             </View>
           </View>
         </>,
