@@ -111,7 +111,7 @@ const Content: React.FC = () => {
               desc="1-2 Menit Pengisian"
               onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
               svgIcon={() => <Svg name="personal_data" size={48} />}
-              showBadge={!isShowBadgeSuccessUser}
+              showBadge={isShowBadgeSuccessUser}
             />
             <View style={{ marginVertical: layout.spacing.xsm }} />
             <SnbCardButtonType3
@@ -119,7 +119,7 @@ const Content: React.FC = () => {
               desc="1-2 Menit Pengisian"
               onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
               svgIcon={() => <Svg name="store_data" size={48} />}
-              showBadge={!isShowBadgeSuccessBuyer}
+              showBadge={isShowBadgeSuccessBuyer}
             />
           </ScrollView>
         </View>
