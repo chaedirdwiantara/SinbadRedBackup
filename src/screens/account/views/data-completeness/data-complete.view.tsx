@@ -7,7 +7,7 @@ import {
 } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
-import { Keyboard, View } from 'react-native';
+import { View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   color,
