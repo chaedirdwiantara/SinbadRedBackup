@@ -7,7 +7,8 @@ import {
 } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import {
   color,
   SnbContainer,
@@ -16,20 +17,29 @@ import {
   SnbButton2,
   SnbIcon,
   SnbSkeletonAnimator,
+  spacingV2 as layout,
+  borderV2,
 } from 'react-native-sinbad-ui';
 import { ErrorContent, SnbCardButtonType3 } from '../shared';
 
 const CompleteDataSkeleton: React.FC = () => {
   return (
-    <View style={{ flex: 1, paddingVertical: 32, paddingHorizontal: 16 }}>
+    <View
+      style={{
+        flex: 1,
+        paddingVertical: layout.spacing.xxl,
+        paddingHorizontal: layout.spacing.lg,
+      }}>
       <SnbSkeletonAnimator>
-        <View style={{ height: 40, borderRadius: 4 }} />
-        <View style={{ marginVertical: 8 }} />
-        <View style={{ height: 24, borderRadius: 4, width: 120 }} />
-        <View style={{ marginVertical: 32 }} />
-        <View style={{ height: 84, borderRadius: 8 }} />
-        <View style={{ marginVertical: 6 }} />
-        <View style={{ height: 84, borderRadius: 8 }} />
+        <View style={{ height: 40, borderRadius: borderV2.radius.sm }} />
+        <View style={{ marginVertical: layout.spacing.sm }} />
+        <View
+          style={{ height: 24, borderRadius: borderV2.radius.sm, width: 120 }}
+        />
+        <View style={{ marginVertical: layout.spacing.xxl }} />
+        <View style={{ height: 84, borderRadius: borderV2.radius.md }} />
+        <View style={{ marginVertical: layout.spacing.xsm }} />
+        <View style={{ height: 84, borderRadius: borderV2.radius.md }} />
       </SnbSkeletonAnimator>
     </View>
   );
@@ -85,54 +95,56 @@ const Content: React.FC = () => {
         <View
           style={{
             flex: 1,
-            paddingHorizontal: 16,
-            paddingVertical: 32,
+            paddingHorizontal: layout.spacing.lg,
+            paddingVertical: layout.spacing.xl,
           }}>
           <SnbText2.Headline.Default>
             Selangkah Lagi Untuk Mengembangkan Toko Anda
           </SnbText2.Headline.Default>
-          <View style={{ marginVertical: 8 }} />
+          <View style={{ marginVertical: layout.spacing.sm }} />
           <SnbText2.Paragraph.Default>
             Silakan lengkapi data untuk menjadi anggota VIP
           </SnbText2.Paragraph.Default>
-          <View style={{ marginVertical: 32 }} />
-          <SnbCardButtonType3
-            title="Data Diri"
-            desc="1-2 Menit Pengisian"
-            onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
-            svgIcon={() => <Svg name="personal_data" size={48} />}
-            showBadge={isShowBadgeSuccessUser}
-          />
-          <View style={{ marginVertical: 6 }} />
-          <SnbCardButtonType3
-            title="Data Toko"
-            desc="1-2 Menit Pengisian"
-            onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
-            svgIcon={() => <Svg name="store_data" size={48} />}
-            showBadge={isShowBadgeSuccessBuyer}
-          />
+          <View style={{ marginVertical: layout.spacing.xl }} />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <SnbCardButtonType3
+              title="Data Diri"
+              desc="1-2 Menit Pengisian"
+              onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
+              svgIcon={() => <Svg name="personal_data" size={48} />}
+              showBadge={!isShowBadgeSuccessUser}
+            />
+            <View style={{ marginVertical: layout.spacing.xsm }} />
+            <SnbCardButtonType3
+              title="Data Toko"
+              desc="1-2 Menit Pengisian"
+              onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
+              svgIcon={() => <Svg name="store_data" size={48} />}
+              showBadge={!isShowBadgeSuccessBuyer}
+            />
+          </ScrollView>
         </View>
         <View>
           <View
             style={{
               flexDirection: 'row',
-              marginHorizontal: 16,
+              marginHorizontal: layout.spacing.lg,
               alignItems: 'center',
               backgroundColor: color.blue10,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              borderRadius: 4,
+              paddingHorizontal: layout.spacing.lg,
+              paddingVertical: layout.spacing.md,
+              borderRadius: borderV2.radius.sm,
             }}>
-            <SnbIcon name="shield" color={color.blue50} size={14} />
-            <View style={{ flex: 1, marginLeft: 8 }}>
+            <SnbIcon name="verified_user" color={color.blue50} size={24} />
+            <View style={{ flex: 1, marginLeft: layout.spacing.sm }}>
               <SnbText2.Paragraph.Small color={color.blue60}>
                 Kami menjamin keamanan data dan kerahasiaan informasi yang anda
                 berikan.
               </SnbText2.Paragraph.Small>
             </View>
           </View>
-          <View style={{ marginVertical: 16 }} />
-          <View style={{ margin: 16 }}>
+          <View style={{ padding: layout.spacing.md }} />
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbButton2.Primary
               title="Konfirmasi"
               onPress={() => completeDataConfirmation()}
@@ -142,8 +154,8 @@ const Content: React.FC = () => {
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
-              size="medium"
               full
+              size="medium"
             />
           </View>
         </View>
