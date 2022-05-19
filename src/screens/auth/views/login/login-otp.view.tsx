@@ -8,7 +8,7 @@ import {
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 import { useAuthCoreAction } from '@core/functions/auth';
@@ -56,9 +56,9 @@ const LoginOTPView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type3
+      <SnbTopNav.Type3
         backAction={goBack}
-        color="white"
+        type="white"
         title="Kode Verifikasi"
       />
       <ScrollView>
