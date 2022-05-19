@@ -299,7 +299,7 @@ const Content: React.FC = () => {
                   setChecked(checked === 'selected' ? 'unselect' : 'selected')
                 }
               />
-              <View style={{ marginHorizontal: 4 }} />
+              <View style={{ marginHorizontal: 8 }} />
               <SnbText.B3 color={color.black60}>
                 Saya menyetujui{' '}
                 <SnbText.B3 color={color.red50}> Kebijakan Privasi </SnbText.B3>{' '}

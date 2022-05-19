@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
   SnbToast,
-  SnbTextField,
+  SnbTextField2,
 } from 'react-native-sinbad-ui';
-import { View, Image, BackHandler } from 'react-native';
+import { View, Image, BackHandler, ScrollView } from 'react-native';
 import {
   Stepper,
   ListOfSteps,
@@ -45,7 +45,7 @@ const DataDiriStep2View: React.FC = () => {
   );
   const [messageErrorNPWP, setMessageErrorNPWP] = React.useState('');
 
-  const [isNPWPValid, setIsNPWPValid] = React.useState(true);
+  const [isNPWPValid, setIsNPWPValid] = React.useState(false);
   React.useEffect(() => {
     return () => {
       save(dispatchGlobal, '');
@@ -53,6 +53,18 @@ const DataDiriStep2View: React.FC = () => {
       resetUpdateCompleteData();
     };
   }, []);
+
+  React.useEffect(() => {
+    if (npwp) {
+      if (npwp?.length === 15 || npwp === '' || npwp === null) {
+        setMessageErrorNPWP('');
+        setIsNPWPValid(true);
+      } else {
+        setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+        setIsNPWPValid(false);
+      }
+    }
+  }, [npwp]);
 
   // HANDLE BACK DEVICE
   const handleBackButton = React.useCallback(() => {
@@ -87,7 +99,7 @@ const DataDiriStep2View: React.FC = () => {
     if (capturedImage?.data?.url && capturedImage.data?.type === 'npwp') {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
-    } else if (isNPWPValid){
+    } else if (isNPWPValid) {
       updateCompleteData({
         user: { taxNo: npwp },
       });
@@ -101,7 +113,10 @@ const DataDiriStep2View: React.FC = () => {
   React.useEffect(() => {
     if (stateGlobal.uploadImage.data && capturedImage.data?.type === 'npwp') {
       updateCompleteData({
-        user: { taxImageUrl: stateGlobal.uploadImage?.data?.url, taxNo: isNPWPValid ? npwp : null },
+        user: {
+          taxImageUrl: stateGlobal.uploadImage?.data?.url,
+          taxNo: isNPWPValid ? npwp : null,
+        },
       });
     }
   }, [stateGlobal.uploadImage.data, capturedImage.data?.type]);
@@ -157,55 +172,59 @@ const DataDiriStep2View: React.FC = () => {
     }
     return (
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
-        <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
-          <Image
-            resizeMode="contain"
-            source={{ uri }}
-            borderRadius={4}
-            style={{
-              height: undefined,
-              width: undefined,
-              flex: 1,
-              marginBottom: 10,
-            }}
-          />
-          <SnbTextField.Text
-            type={isNPWPValid ? 'default' : 'error'}
-            value={npwp}
-            maxLength={15}
-            helpText={'Abaikan bila sudah sesuai NPWP'}
-            onChangeText={(text) => {
-              text = text.replace(/[^0-9]/g, '');
-              setNpwp(text);
-              setIsNPWPValid(false);
-              setMessageErrorNPWP('');
-              if (text?.length === 15 || text === '' || text === null) {
-                setMessageErrorNPWP('');
-                setIsNPWPValid(true);
-              } else {
-                setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+        <ScrollView>
+          <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
+            <Image
+              resizeMode="contain"
+              source={{ uri }}
+              borderRadius={4}
+              style={{
+                height: 200,
+                width: undefined,
+                marginBottom: 10,
+              }}
+            />
+            <View style={{ padding: 16 }} />
+            <SnbTextField2.Text
+              type={npwp ? (isNPWPValid ? 'default' : 'error') : 'default'}
+              value={npwp}
+              maxLength={15}
+              helperText={'Abaikan bila sudah sesuai NPWP'}
+              onChangeText={(text) => {
+                text = text.replace(/[^0-9]/g, '');
+                setNpwp(text);
                 setIsNPWPValid(false);
-              }
-            }}
-            placeholder={'Masukkan Nomor NPWP'}
-            labelText={'Nomor NPWP'}
-            keyboardType={'number-pad'}
-            mandatory
-            valMsgError={messageErrorNPWP}
-          />
-        </View>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
-              title="Ulangi"
-              onPress={() => openCamera('npwp')}
-              disabled={false}
+                setMessageErrorNPWP('');
+                if (text?.length === 15 || text === '' || text === null) {
+                  setMessageErrorNPWP('');
+                  setIsNPWPValid(true);
+                } else {
+                  setMessageErrorNPWP('Pastikan Nomor NPWP 15 Digit');
+                  setIsNPWPValid(false);
+                }
+              }}
+              placeholder={'Masukkan Nomor NPWP'}
+              labelText={'Nomor NPWP'}
+              keyboardType={'number-pad'}
+              mandatory
+              valMsgError={messageErrorNPWP}
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type={'primary'}
+        </ScrollView>
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title="Ubah Foto"
+              onPress={() => openCamera('npwp')}
+              disabled={false}
+              size="medium"
+              full
+              outline
+            />
+          </View>
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
               disabled={
@@ -215,14 +234,16 @@ const DataDiriStep2View: React.FC = () => {
                 !npwp
               }
               onPress={() => {
-                if(capturedImage.data) {
+                if (capturedImage.data) {
                   upload(dispatchGlobal, capturedImage.data.url);
-                } else if(isNPWPValid) {
+                } else if (isNPWPValid) {
                   updateCompleteData({
                     user: { taxNo: npwp },
                   });
                 }
               }}
+              size="medium"
+              full
             />
           </View>
         </View>
@@ -237,9 +258,9 @@ const DataDiriStep2View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Foto NPWP"
         />
         <Stepper

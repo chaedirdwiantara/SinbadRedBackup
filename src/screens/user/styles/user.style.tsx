@@ -1,5 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import {
+  color,
+  borderV2,
+  colorV2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
 
 const UserStyles = StyleSheet.create({
   headerInformationContainer: {
@@ -33,7 +38,7 @@ const UserStyles = StyleSheet.create({
     width: '100%',
   },
   shadowStyle: {
-    shadowColor: color.black100,
+    shadowColor: colorV2.bgColor.dark,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -43,11 +48,9 @@ const UserStyles = StyleSheet.create({
     elevation: 2,
   },
   cardBody: {
-    borderRadius: 5,
-    marginHorizontal: 16,
-    marginVertical: 16,
+    margin: layout.spacing.lg,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   /** Pagination */
   activeDot: {
@@ -78,9 +81,8 @@ const UserStyles = StyleSheet.create({
     color: '#52575C',
   },
   carouselContainer: {
-    backgroundColor: color.white,
-    marginHorizontal: 4,
-    borderRadius: 5,
+    backgroundColor: colorV2.bgColor.light,
+    borderRadius: borderV2.radius.md,
   },
   carouselText: {
     marginLeft: 16,
@@ -95,6 +97,6 @@ const UserStyles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 4,
     paddingBottom: 2,
-  }
+  },
 });
 export default UserStyles;

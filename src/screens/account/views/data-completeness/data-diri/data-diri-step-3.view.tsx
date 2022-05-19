@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
@@ -166,22 +166,26 @@ const DataDiriStep3View: React.FC = () => {
             margin: 16,
           }}
         />
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type="secondary"
-              title="Ulangi"
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title="Ubah Foto"
               onPress={() => openCamera('selfie')}
               disabled={false}
+              size="medium"
+              full
+              outline
             />
           </View>
-          <View style={{ flex: 1, height: 75 }}>
-            <SnbButton.Single
-              type={'primary'}
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
               disabled={stateGlobal.uploadImage.loading}
               loading={stateGlobal.uploadImage.loading}
               title={'Lanjutkan'}
               onPress={() => confirm()}
+              size="medium"
+              full
             />
           </View>
         </View>
@@ -196,9 +200,9 @@ const DataDiriStep3View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <View>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Foto Diri Dengan KTP"
         />
         <Stepper
