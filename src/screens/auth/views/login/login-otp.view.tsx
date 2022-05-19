@@ -20,6 +20,7 @@ const LoginOTPView: React.FC = () => {
   const [hide, setHide] = React.useState(true);
   const { meV2 } = useDataAuth();
   const authCoreAction = useAuthCoreAction();
+  const [delayLoading, setDelayLoading] = React.useState(false);
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
@@ -33,6 +34,7 @@ const LoginOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
+      setDelayLoading(true);
       setTimeout(() => {
         if (!meV2.data && !meV2.loading && meV2.error) {
           NavigationAction.resetToIntroSinbad();
@@ -50,6 +52,7 @@ const LoginOTPView: React.FC = () => {
             getLocationPermissions();
           }
         }
+        setDelayLoading(false);
       }, 2000);
     }
   }, [meV2.data, meV2.loading, meV2.error, verifyOTP]);
@@ -77,7 +80,7 @@ const LoginOTPView: React.FC = () => {
           }
           hideIcon={hide}
           otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading}
+          loading={verifyOTP.loading || delayLoading}
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>
