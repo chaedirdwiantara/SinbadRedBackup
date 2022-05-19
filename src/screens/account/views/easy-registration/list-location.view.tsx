@@ -75,7 +75,7 @@ const Content: React.FC = () => {
     );
   }
   return (
-    <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
+    <View style={{ flex: 1 }}>
       <View style={{ padding: 16 }}>
         <SnbTextField2.Text
           {...search}
