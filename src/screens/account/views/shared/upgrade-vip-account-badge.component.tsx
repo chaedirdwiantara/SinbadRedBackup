@@ -25,7 +25,7 @@ const UpgradeVIPAccountBadge: React.FC = () => {
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        <Svg name="info" size={24} />
+        <Svg name="info" size={22} />
         <View style={{ flex: 1, marginHorizontal: 16 }}>
           <SnbText2.Body.Small>
             Daftar Anggota VIP Sinbad Sekarang!
