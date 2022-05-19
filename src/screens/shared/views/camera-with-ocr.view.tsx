@@ -40,7 +40,7 @@ const KtpPhotoFrame = () => (
 const CameraWithOCRView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [showModalError, setShowModalError] = React.useState<boolean>(true);
+  const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
   const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);

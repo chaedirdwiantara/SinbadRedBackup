@@ -69,7 +69,7 @@ const OTPContent: React.FC<Props> = (props) => {
           title="Verifikasi"
           onPress={() => onVerifyOTP(otp)}
           loading={loading}
-          disabled={otp.length < 5}
+          disabled={otp.length < 5 || loading}
           size="medium"
           full
         />
