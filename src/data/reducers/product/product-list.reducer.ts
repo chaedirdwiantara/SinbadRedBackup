@@ -11,9 +11,10 @@ export const productListInitialState: ProductListInitialProps = {
   loadMore: false,
   refresh: false,
   error: null,
+  page: 1,
+  totalPage: 0,
   total: 0,
-  skip: 0,
-  canLoadMore: false,
+  perPage: 10,
 };
 /** === REDUCER === */
 export const productListReducer = simplifyReducer(productListInitialState, {
@@ -41,8 +42,9 @@ export const productListReducer = simplifyReducer(productListInitialState, {
       refresh: false,
       error: null,
       total: payload.meta.total,
-      skip: payload.meta.skip,
-      canLoadMore: payload.meta.canLoadMore,
+      totalPage: payload.meta.totalPage,
+      page: payload.meta.page,
+      perPage: payload.meta.perPage,
     };
   },
   /** => Failed */

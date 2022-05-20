@@ -19,6 +19,7 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '../../../styles';
 import { PromoSection } from './PromoSection';
+import ExclusiveTag from '../ExclusiveTag';
 /** === TYPE ===  */
 interface AddToCartModalProps {
   open: boolean;
@@ -80,19 +81,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   };
   /** => Exclusive Tag */
   const renderExclusiveTag = () => {
-    return (
-      dataProductDetail?.isExclusive && (
-        <View style={AddToCartModalStyle.exclusiveTagContainer}>
-          <SnbIcon
-            name="stars"
-            color={color.yellow50}
-            size={18}
-            style={{ marginRight: 4 }}
-          />
-          <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-        </View>
-      )
-    );
+    return dataProductDetail?.isExclusive ? <ExclusiveTag /> : <View />;
   };
   /** => Product Data */
   const renderProductData = () => (

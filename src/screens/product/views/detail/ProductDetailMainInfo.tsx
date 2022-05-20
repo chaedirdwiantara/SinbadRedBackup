@@ -3,38 +3,44 @@ import React, { FC } from 'react';
 import { View } from 'react-native';
 import { SnbText, color } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
-import { ExclusiveTag } from './ExclusiveTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPE ===  */
 interface ProductDetailMainInfoProps {
   name: string;
-  finalPrice: number;
+  priceAfterTax: number;
   stock: number;
   unit?: string;
   qtySoldLabel: string;
   isExclusive: boolean;
   hasPromo: boolean;
+  hasBulkPrice: boolean;
   loading: boolean;
   showStock?: boolean;
 }
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
-  finalPrice,
+  priceAfterTax,
   stock,
   isExclusive,
   hasPromo,
   loading,
   showStock,
   qtySoldLabel,
+  hasBulkPrice,
 }) => (
   <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
-    {isExclusive && <ExclusiveTag />}
+    <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+      {hasBulkPrice ? <BulkPricingTag /> : <View />}
+      {isExclusive ? <ExclusiveTag style={{ marginLeft: 4 }} /> : <View />}
+    </View>
     <SnbText.H4>{name}</SnbText.H4>
     <View style={{ marginVertical: 8 }}>
       <SnbText.B2 color={color.red50}>
-        {toCurrency(finalPrice ?? 0, { withFraction: false })}
+        {toCurrency(priceAfterTax ?? 0, { withFraction: false })}
       </SnbText.B2>
     </View>
     {showStock && stock < 11 && !loading && (
@@ -47,7 +53,7 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         {hasPromo && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <SnbText.B3 color={color.black40}>
-              {toCurrency(finalPrice ?? 0, {
+              {toCurrency(priceAfterTax ?? 0, {
                 withFraction: false,
               })}
             </SnbText.B3>

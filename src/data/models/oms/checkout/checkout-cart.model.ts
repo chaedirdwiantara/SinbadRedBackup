@@ -4,9 +4,7 @@
 
 import { CheckoutCart, CheckoutCartProduct } from '.';
 
-export interface CheckoutProductData extends CheckoutCartProduct {
-  lastUsedPrice: number;
-}
+export interface CheckoutProductData extends CheckoutCartProduct {}
 
 export interface CheckoutCartPayload
   extends CheckoutCart<CheckoutProductData> {}
@@ -24,8 +22,14 @@ export interface CheckoutBuyerAddressPayload {
   locationId: string;
 }
 export interface CheckoutPayload {
-  buyerName: string;
   buyerAddress: CheckoutBuyerAddressPayload;
+  buyerName: string;
+  buyerCode: string;
+  userFullName: string;
+  userPhoneNumber: string;
+  ownerFullName: string;
+  ownerPhoneNumber: string;
+  ownerId: number;
   carts: CheckoutCartPayload[];
 }
 
@@ -34,8 +38,18 @@ export interface CheckoutCartResponse
 
 export interface CheckoutResponse {
   id: string;
-  userId: number;
   buyerId: number;
-  buyerAddress: string;
+  userId: number;
+  cartId: string;
+  buyerName: string;
+  buyerCode: string;
+  userFullName: string;
+  userPhoneNumber: string;
+  ownerId: number;
+  ownerFullName: string;
+  ownerPhoneNumber: string;
+  buyerAddress: CheckoutBuyerAddressPayload;
   sellers: CheckoutCartResponse[];
+  createdAt: string;
+  updatedAt: string;
 }

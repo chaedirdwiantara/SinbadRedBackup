@@ -2,35 +2,39 @@ import * as models from '@models';
 
 export interface Products {
   id: string;
+  code: string;
   image: string;
   name: string;
   qty: string;
   uom: string;
-  price: number;
-  totalPrice: number;
+  productTax: number;
+  totalProductTax: number;
+  productPriceBeforeTax: number;
+  productPriceAfterTax: number;
+  totalProductPriceBeforeTax: number;
+  totalProductPriceAfterTax: number;
 }
 
 export interface orderDetailHistory {
   id: string;
   statusValue: string;
   statusLabel: string;
-  orderSellerFailedReason?: string;
   orderSellerCode: string;
   orderedAt: string;
   orderOrigin: string;
   orderDestination: string;
-  estimationDeliveredAt?: string;
+  orderSellerFailedReason?: string;
   estimationShippedAt?: string;
-  shippedAt?: string;
-  cancelledAt?: string;
-  doneAt?: string;
   products: Array<Products>;
   totalOrderProducts: number;
   paymentMethodName: string;
-  totalProductsPrice: number;
-  totalOrderPrice: number;
+  totalSellerPriceAfterTax: number;
+  totalOrderPriceAfterTax: number;
   isCancellable: boolean;
   isOrderAbleToDone: boolean;
+  shippedAt?: string;
+  cancelledAt?: string;
+  doneAt?: string;
 }
 
 export interface OrderHistoryDetailProcessProps

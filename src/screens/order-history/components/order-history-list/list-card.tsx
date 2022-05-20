@@ -90,7 +90,9 @@ const Card: FC<CardProps> = (props) => {
                   color.black60
                 }>{`(${data.product.qty}) ${data.product.uom}`}</SnbText.C1>
               <SnbText.C1>
-                {toCurrency(data.product.totalPrice, { withFraction: false })}
+                {toCurrency(data.product.totalProductPriceAfterTax, {
+                  withFraction: false,
+                })}
               </SnbText.C1>
             </View>
           </View>
@@ -112,7 +114,9 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText.C1>Total Pesanan</SnbText.C1>
             <SnbText.C1>
-              {toCurrency(data.totalOrderPrice, { withFraction: false })}
+              {toCurrency(data.totalSellerPriceAfterTax, {
+                withFraction: false,
+              })}
             </SnbText.C1>
           </View>
         </View>
@@ -199,7 +203,7 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
           <View>
             <SnbText.C1>Total Pembayaran:</SnbText.C1>
             <SnbText.H4>
-              {toCurrency(Number(data.totalOrderAmount) ?? 0, {
+              {toCurrency(Number(data.totalOrderPriceAfterTax) ?? 0, {
                 withFraction: false,
               })}
             </SnbText.H4>
@@ -225,7 +229,9 @@ const EmptyImage = () => (
 );
 
 const wordingEmpty = (keyword: string): string => {
-  if (keyword) return 'Pesanan tidak ditemukan';
+  if (keyword) {
+    return 'Pesanan tidak ditemukan';
+  }
   return 'Belum ada pesanan';
 };
 const wordingWaitingForPaymentEmpty = () => {
@@ -259,11 +265,6 @@ const ListCard = () => {
       },
     },
   } = usePaymentHistoryContext();
-
-  // loading view
-  if ([historyListLoading].some((i) => i)) {
-    return <SnbProductListSkeleton />;
-  }
   // function
   const onCancelOrder = useCallback(
     (idOrder: string) => {
@@ -281,6 +282,10 @@ const ListCard = () => {
     },
     [state.keyword, state.orderStatus, state.status],
   );
+  // loading view
+  if ([historyListLoading].some((i) => i)) {
+    return <SnbProductListSkeleton />;
+  }
   // error View
   if ([historyListError].some((i) => i)) {
     return (

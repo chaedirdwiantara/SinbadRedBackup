@@ -1836,7 +1836,7 @@
   resolved "https://registry.yarnpkg.com/@types/react-native-push-notification/-/react-native-push-notification-7.3.3.tgz#76d8cd73e37d5348ba714e8632e98615677961d2"
   integrity sha512-6LmfaZ0cRuk4oEdBZEJVRZ8DoPHz95fqD7wW3jBbcJFy3U23eSE+MeSQall4BCZFBZDGT1KCEGFCwflTxFEZMw==
 
-"@types/react-native-snap-carousel@^3.8.5":
+"@types/react-native-snap-carousel@3.8.5":
   version "3.8.5"
   resolved "https://registry.yarnpkg.com/@types/react-native-snap-carousel/-/react-native-snap-carousel-3.8.5.tgz#5b3cb208119e3599d5537b5fc83653a155c6275d"
   integrity sha512-EMBwQo/om2HZM/J6u8Bvz7i0BEO/v6frrpmlvUQ579CMsgYQPlYzQ1ne4KDdRq08+yDSG8/8AwIi1R+185ROsg==
@@ -7008,7 +7008,7 @@ react-native-snackbar@2.4.0:
   resolved "https://registry.yarnpkg.com/react-native-snackbar/-/react-native-snackbar-2.4.0.tgz#dd9687f5228e379ecd57678a921e546331681bcf"
   integrity sha512-xEDIDxw0ubBHrsvzaMfrZlFoy+ai1WEJZQwyAsG55fqYxUfQM20h+V4v25u+/H/YKY7ZCRMdCZ8zB5JOnbvCQw==
 
-react-native-snap-carousel@3.9.1, react-native-snap-carousel@^3.9.1:
+react-native-snap-carousel@3.9.1:
   version "3.9.1"
   resolved "https://registry.yarnpkg.com/react-native-snap-carousel/-/react-native-snap-carousel-3.9.1.tgz#6fd9bd8839546c2c6043a41d2035afbc6fe0443e"
   integrity sha512-xWEGusacIgK1YaDXLi7Gao2+ISLoGPVEBR8fcMf4tOOJQufutlNwkoLu0l6B8Qgsrre0nTxoVZikRgGRDWlLaQ==

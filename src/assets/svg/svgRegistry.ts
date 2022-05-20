@@ -7,6 +7,7 @@ import otp_icon from './otp.svg';
 import call from './call.svg';
 import whatsapp from './whatsapp.svg';
 import mail from './mail.svg';
+import expand_less from './expand_less.svg';
 // history tracking icon
 import packed from './packed.svg';
 import shiped from './shiped.svg';
@@ -25,6 +26,9 @@ import store_data from './store_data.svg';
 import notification from './notification.svg';
 import completeness_back from './completeness-back.svg';
 import sinbad_logo from './sinbad-logo.svg';
+// cart prices
+import price_changes_down from './price_changes_down.svg';
+import price_changes_up from './price_changes_up.svg';
 import white_sinbad_logo from './white-sinbad-logo.svg';
 import sinbad_onboard from './sinbad-onboard.svg';
 import splash_highlight_text from './splash-highlight-text.svg';
@@ -49,6 +53,7 @@ export const SvgRegistery = {
   shiped,
   delivered,
   done_order,
+  expand_less,
   sinbad_otp,
   onboarding,
   upgrade_vip,
@@ -62,6 +67,8 @@ export const SvgRegistery = {
   notification,
   completeness_back,
   sinbad_logo,
+  price_changes_down,
+  price_changes_up,
   white_sinbad_logo,
   splash_highlight_text,
   ktp,
