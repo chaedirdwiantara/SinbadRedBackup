@@ -1,12 +1,12 @@
 import React from 'react';
 import {
   color,
-  SnbButton,
+  SnbButton2,
   SnbContainer,
   SnbIcon,
   SnbProgress,
-  SnbText,
-  SnbTopNav,
+  SnbText2,
+  SnbTopNav2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   BackHandler,
@@ -63,21 +63,23 @@ const BuyerLocation: React.FC = () => {
         borderColor: color.black40,
       }}>
       <View style={{ flex: 1 }}>
-        <SnbText.B3 color={color.black60}>Lokasi Toko</SnbText.B3>
+        <SnbText2.Paragraph.Tiny color={color.black60}>
+          Lokasi Toko
+        </SnbText2.Paragraph.Tiny>
         <View style={{ marginVertical: 4 }} />
-        <SnbText.B2>
+        <SnbText2.Body.Small>
           {location
             ? `${location.city}, ${location.district}, ${location.urban}`
             : 'Lokasi tidak ditemukan'}
-        </SnbText.B2>
+        </SnbText2.Body.Small>
       </View>
       <View style={{ marginHorizontal: 4 }} />
-      <SnbButton.Dynamic
+      <SnbButton2.Primary
         title="Ubah"
         onPress={() => navigate(LIST_LOCATION_VIEW, { setLocation })}
-        type="secondary"
         disabled={false}
         size="small"
+        outline
       />
     </View>
   );
@@ -112,9 +114,9 @@ const BuyerCategory: React.FC = () => {
 
   React.useEffect(() => {
     if (createBasicAccountState.data) {
+      me();
+      meV2();
       if (actionFrom === 'mulai') {
-        me();
-        meV2();
         getCoachmark();
         reset({ index: 0, routes: [{ name: 'Home' }] });
       } else if (actionFrom === 'lengkapi') {
@@ -161,7 +163,7 @@ const BuyerCategory: React.FC = () => {
           />
           <View style={{ marginHorizontal: 8 }} />
           <View style={{ flex: 1 }}>
-            <SnbText.H3>{item.name}</SnbText.H3>
+            <SnbText2.Headline.Default>{item.name}</SnbText2.Headline.Default>
             <View style={{ marginTop: 4 }}>
               {item.description.map((el: string, idx: number) => (
                 <View
@@ -176,7 +178,7 @@ const BuyerCategory: React.FC = () => {
                     }}
                   />
                   <View style={{ marginHorizontal: 2 }} />
-                  <SnbText.B3>{el}</SnbText.B3>
+                  <SnbText2.Paragraph.Small>{el}</SnbText2.Paragraph.Small>
                 </View>
               ))}
             </View>
@@ -194,9 +196,9 @@ const BuyerCategory: React.FC = () => {
                 paddingVertical: 12,
                 borderRadius: 8,
               }}>
-              <SnbText.B3 color={color.blue80}>
+              <SnbText2.Paragraph.Small color={color.blue80}>
                 {selectedProductCategory.length} kategori produk terpilih
-              </SnbText.B3>
+              </SnbText2.Paragraph.Small>
             </View>
           )}
       </TouchableOpacity>
@@ -229,29 +231,30 @@ const BuyerCategory: React.FC = () => {
           ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
         />
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
-          onPress={() => handleOnCreateBasicAccount('mulai')}
-          title="Mulai Pakai Sinbad"
-          type="primary"
-          loading={createBasicAccountState.loading && actionFrom === 'mulai'}
-          disabled={
-            selectedBuyerCategory === null ||
-            selectedProductCategory.length === 0 ||
-            createBasicAccountState.loading
-          }
-        />
+      <View style={{ width: '100%', marginTop: 16 }}>
+        <View style={{ marginHorizontal: 16 }}>
+          <SnbButton2.Primary
+            onPress={() => handleOnCreateBasicAccount('mulai')}
+            title="Mulai Pakai Sinbad"
+            loading={createBasicAccountState.loading && actionFrom === 'mulai'}
+            disabled={
+              selectedBuyerCategory === null ||
+              selectedProductCategory.length === 0 ||
+              createBasicAccountState.loading
+            }
+            size={'medium'}
+            full
+          />
+        </View>
       </View>
-      <View style={{ marginBottom: 16 }}>
-        <SnbButton.Dynamic
+      <View style={{ marginBottom: 16, alignItems: 'center' }}>
+        <SnbButton2.Link
           size="medium"
           onPress={() => {
             handleOnCreateBasicAccount('lengkapi');
           }}
           title="Lengkapi Akun Saya"
-          buttonColor={color.blue50}
-          type="tertiary"
-          loading={createBasicAccountState.loading && actionFrom === 'lengkapi'}
+          // loading={createBasicAccountState.loading && actionFrom === 'lengkapi'}
           disabled={
             selectedBuyerCategory === null ||
             selectedProductCategory.length === 0 ||
@@ -290,7 +293,7 @@ const BuyerCategoryView: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type1 title="Pilih Kategori Toko" type="white" />
+      <SnbTopNav2.Type1 title="Pilih Kategori Toko" color="white" />
       <Content />
     </SnbContainer>
   );

@@ -14,9 +14,8 @@ import shiped from './shiped.svg';
 import delivered from './delivered.svg';
 import done_order from './done_order.svg';
 import sinbad_otp from './sinbad_OTP.svg';
-import registration from './registration.svg';
 import onboarding from './onboarding.svg';
-import uprade_vip from './upgrade_vip_icon.svg';
+import upgrade_vip from './upgrade_vip_icon.svg';
 import info from './info.svg';
 import murah from './murah.svg';
 import cepat from './cepat.svg';
@@ -30,6 +29,15 @@ import sinbad_logo from './sinbad-logo.svg';
 // cart prices
 import price_changes_down from './price_changes_down.svg';
 import price_changes_up from './price_changes_up.svg';
+import white_sinbad_logo from './white-sinbad-logo.svg';
+import sinbad_onboard from './sinbad-onboard.svg';
+import splash_highlight_text from './splash-highlight-text.svg';
+import ktp from './ktp.svg';
+import location from './location.svg';
+import store from './store.svg';
+import ktp_blue from './ktp-blue.svg';
+import check_circle from './check_circle.svg';
+import x_circle from './x_circle.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -47,9 +55,8 @@ export const SvgRegistery = {
   done_order,
   expand_less,
   sinbad_otp,
-  registration,
   onboarding,
-  uprade_vip,
+  upgrade_vip,
   info,
   murah,
   cepat,
@@ -62,4 +69,13 @@ export const SvgRegistery = {
   sinbad_logo,
   price_changes_down,
   price_changes_up,
+  white_sinbad_logo,
+  splash_highlight_text,
+  ktp,
+  location,
+  store,
+  ktp_blue,
+  sinbad_onboard,
+  check_circle,
+  x_circle,
 };

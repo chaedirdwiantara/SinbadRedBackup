@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "strict": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
       "@core/*": ["core/*"],
@@ -31,7 +32,8 @@
       "react-native-sinbad-ui": ["node_modules/@sinbad/react-native-sinbad-ui"]
     },
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules", "metro.config.js", "jest.config.js"]
 }

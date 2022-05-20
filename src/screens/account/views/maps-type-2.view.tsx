@@ -49,7 +49,8 @@ const MapsViewType2: React.FC = () => {
   const { getLocation, locations, resetLocation } = useLocations();
   const [loadingGetAddress, setLoadingGetAddress] = React.useState(false);
   const { params } = useRoute();
-  const { onMapsResult, action, existingLatLang }: any = params || {};
+  const { onMapsResult, action, existingLatLang, originFrom }: any =
+    params || {};
 
   React.useEffect(() => {
     if (existingLatLang) {
@@ -93,12 +94,18 @@ const MapsViewType2: React.FC = () => {
           location: locations.data.id,
           street,
         };
-        if (action === 'edit') {
+        if (action === 'update') {
           onMapsResult(mapResult);
           goBack();
         } else {
           setTimeout(() => {
-            dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW, mapResult));
+            if (originFrom === 'profile') {
+              dispatch(
+                StackActions.replace('MerchantEditAddressView', mapResult),
+              );
+            } else {
+              dispatch(StackActions.replace(DATA_TOKO_STEP_3_VIEW, mapResult));
+            }
           }, 0);
         }
       } else {

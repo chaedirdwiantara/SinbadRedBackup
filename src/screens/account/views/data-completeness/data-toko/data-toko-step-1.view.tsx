@@ -2,11 +2,11 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbText,
-  SnbTextField,
-  SnbTopNav,
+  SnbText2,
+  SnbTextField2,
+  SnbTopNav2,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -61,9 +61,9 @@ const DataTokoStep1View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
-        <SnbTopNav.Type3
+        <SnbTopNav2.Type3
           backAction={() => setOpenModalBack(true)}
-          type="white"
+          color="white"
           title="Informasi Toko"
         />
         <Stepper
@@ -72,11 +72,13 @@ const DataTokoStep1View: React.FC = () => {
           onPress={() => setOpenModalStep(true)}
         />
         <View style={{ margin: 16 }}>
-          <SnbText.H4>Sinbad ID</SnbText.H4>
-          <SnbText.B1 color="#aaa">001122334455</SnbText.B1>
+          <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
+          <SnbText2.Paragraph.Default>
+            {completeDataState?.data?.buyerData?.buyerCode}
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ margin: 16 }}>
-          <SnbTextField.Text
+          <SnbTextField2.Text
             type={'default'}
             value={name}
             onChangeText={(text) => setName(text)}
@@ -86,7 +88,7 @@ const DataTokoStep1View: React.FC = () => {
           />
         </View>
         <View style={{ margin: 16 }}>
-          <SnbTextField.Text
+          <SnbTextField2.Text
             type={'default'}
             keyboardType={'numeric'}
             value={telp}
@@ -101,15 +103,18 @@ const DataTokoStep1View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ height: 75 }}>
-        <SnbButton.Single
+      <View style={{ padding: 16 }}>
+        <SnbButton2.Primary
           title="Lanjut"
-          type="primary"
-          disabled={name && telp || updateCompleteDataState.loading ? false : true}
+          disabled={
+            (name && telp) || updateCompleteDataState.loading ? false : true
+          }
           onPress={() =>
             updateCompleteData({ buyer: { name: name, phoneNo: telp } })
           }
           loading={updateCompleteDataState.loading}
+          size="medium"
+          full
         />
       </View>
       <ModalBack
@@ -117,7 +122,7 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if (name && name !== '' || telp && telp !== '') {
+          if ((name && name !== '') || (telp && telp !== '')) {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } });
           } else {
             backToDataCompleteness();

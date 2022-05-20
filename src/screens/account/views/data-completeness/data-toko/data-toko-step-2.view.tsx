@@ -3,14 +3,18 @@ import React from 'react';
 import { View, Image, BackHandler } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbUploadPhotoRules,
-  SnbButton,
+  SnbTopNav2,
+  SnbButton2,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
-import { ListOfSteps, ModalBack, Stepper } from '../../shared';
+import {
+  ListOfSteps,
+  ModalBack,
+  Stepper,
+  UploadPhotoRules,
+} from '../../shared';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useEasyRegistration } from '@screen/account/functions';
 import {
@@ -100,7 +104,7 @@ const Content: React.FC<Props> = (props) => {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flex: 1 }}>
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle="Pastikan Foto Toko Anda Sesuai Ketentuan"
             imgSrc={require('@image/store_image.png')}
             buttonLabel="Ambil Foto"
@@ -110,6 +114,9 @@ const Content: React.FC<Props> = (props) => {
               'Pastikan foto fokus keseluruhan toko',
             ]}
             action={() => openCamera('store')}
+            type="vertical"
+            resizeMode="stretch"
+            blurRadius={2}
           />
         </View>
       </View>
@@ -130,41 +137,40 @@ const Content: React.FC<Props> = (props) => {
             margin: 16,
           }}
         />
-        <View style={{ height: 72 }}>
-          {renderIF(
-            capturedImage?.data?.url,
-            <SnbButton.Multiple
-              leftType={'secondary'}
-              rightType={'primary'}
-              leftTitle={'Ulangi'}
-              rightTitle={'Lanjutkan'}
-              onPressLeft={() => openCamera('store')}
-              onPressRight={() =>
-                upload(dispatchGlobal, capturedImage.data.url)
-              }
-              rightDisabled={stateGlobal.uploadImage.loading}
-              leftDisabled={stateGlobal.uploadImage.loading}
-              rightLoading={stateGlobal.uploadImage.loading}
-            />,
-            <SnbButton.Multiple
-              leftType={'secondary'}
-              rightType={'primary'}
-              leftTitle={'Ubah Foto'}
-              rightTitle={'Lanjutkan'}
-              onPressLeft={() => openCamera('store')}
-              onPressRight={() => {
-                const { latitude, longitude } =
-                  completeDataState.data?.buyerData || {};
-                if (latitude !== null && longitude !== null) {
-                  navigate(DATA_TOKO_STEP_3_VIEW);
+        <View style={{ flexDirection: 'row', padding: 16 }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
+              onPress={() => openCamera('store')}
+              disabled={stateGlobal.uploadImage.loading}
+              size="medium"
+              full
+              outline
+            />
+          </View>
+          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title={'Lanjutkan'}
+              onPress={() => {
+                if (capturedImage?.data?.url) {
+                  upload(dispatchGlobal, capturedImage.data.url);
                 } else {
-                  navigate(MAPS_VIEW_TYPE_2);
+                  const { latitude, longitude } =
+                    completeDataState.data?.buyerData || {};
+                  if (latitude !== null && longitude !== null) {
+                    navigate(DATA_TOKO_STEP_3_VIEW);
+                  } else {
+                    navigate(MAPS_VIEW_TYPE_2);
+                  }
                 }
               }}
-              rightDisabled={false}
-              leftDisabled={false}
-            />,
-          )}
+              disabled={stateGlobal.uploadImage.loading}
+              loading={stateGlobal.uploadImage.loading}
+              size="medium"
+              full
+            />
+          </View>
         </View>
       </View>
     );
@@ -206,9 +212,9 @@ const DataTokoStep2View: React.FC = () => {
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={() => setOpenModalBack(true)}
-        type="white"
+        color="white"
         title="Foto Toko"
       />
       <Stepper

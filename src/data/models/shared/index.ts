@@ -10,3 +10,10 @@ export interface ICamera {
   subtitle: string;
   type?: string;
 }
+export interface ICameraWithOcr {
+  focusPoints: IFocusPoint[];
+  title: string;
+  subtitle: string;
+  type?: string;
+  withOcr: boolean;
+}
