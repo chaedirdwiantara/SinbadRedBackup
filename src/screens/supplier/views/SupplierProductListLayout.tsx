@@ -11,7 +11,6 @@ import {
   goToProductDetail,
   useListDisplayState,
 } from '@core/functions/product';
-import { useDataAuth } from '@core/redux/Data';
 /** === IMPORT TYPE === */
 import { SupplierProductLayoutProps } from './types';
 /** === COMPONENT === */
@@ -59,7 +58,8 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
               <ProductListCard
                 name={product.name}
                 imageUrl={product.thumbnail}
-                finalPrice={product.finalPrice}
+                priceAfterTax={product.priceAfterTax}
+                hasBulkPrice={product.hasBulkPrice}
                 qtySoldLabel={product.qtySoldLabel}
                 isBundle={product.isBundle}
                 isPromo={product.isPromo}

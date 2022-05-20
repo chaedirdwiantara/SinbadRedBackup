@@ -9,7 +9,8 @@ import {
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === IMPORT COMPONENT === */
-import BluckPricingTag from '@core/components/product/BluckPricingTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
+import ExclusiveTag from './product/ExclusiveTag';
 /** === IMPORT FUNCTIONS === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
@@ -20,7 +21,8 @@ interface ProductListCardProps {
   name: string;
   imageUrl: string;
   qtySoldLabel: string;
-  finalPrice: number;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
   isBundle?: boolean;
   isPromo?: boolean;
   isExclusive?: boolean;
@@ -39,18 +41,6 @@ const PromoTag = () => (
         <Polygon points="0,0 0,26 13,13" fill={color.green50} />
       </Svg>
     </View>
-  </View>
-);
-
-const ExclusiveTag = () => (
-  <View style={ProductListCardStyle.exclusiveTagContainer}>
-    <SnbIcon
-      name="stars"
-      color={color.yellow50}
-      size={18}
-      style={{ marginRight: 4 }}
-    />
-    <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
   </View>
 );
 
@@ -74,20 +64,22 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
       />
       <View style={{ justifyContent: 'space-between', flex: 1 }}>
         <View>
-          {props.isExclusive ? (
-            <ExclusiveTag />
-          ) : (
-            <View>
-              <BluckPricingTag style={{ marginHorizontal: 4 }} />
-            </View>
-          )}
+          <View style={{ marginHorizontal: 4 }}>
+            {props.hasBulkPrice ? (
+              <BulkPricingTag />
+            ) : (
+              <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
+            )}
+          </View>
           {/* Product Info */}
           <View style={{ marginTop: 8 }}>
             <SnbText.C1 color={color.black100}>{props.name}</SnbText.C1>
             {!props.isExclusive && (
               <View style={{ marginTop: 8 }}>
                 <SnbText.C1 color={color.red50}>
-                  {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
+                  {toCurrency(props.priceAfterTax ?? 0, {
+                    withFraction: false,
+                  })}
                 </SnbText.C1>
               </View>
             )}
@@ -102,7 +94,7 @@ export const ProductListCard: FC<ProductListCardProps> = (props) => (
             }}>
             {props.isExclusive && (
               <SnbText.C1 color={color.red50}>
-                {toCurrency(props.finalPrice ?? 0, { withFraction: false })}
+                {toCurrency(props.priceAfterTax ?? 0, { withFraction: false })}
               </SnbText.C1>
             )}
             <TouchableOpacity

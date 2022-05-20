@@ -9,7 +9,8 @@ import {
 } from 'react-native-sinbad-ui';
 import { Svg, Polygon } from 'react-native-svg';
 /** === IMPORT COMPONENT === */
-import BluckPricingTag from '@core/components/product/BluckPricingTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
+import ExclusiveTag from './product/ExclusiveTag';
 /** === IMPORT FUNCTION === */
 import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
@@ -45,24 +46,6 @@ const PromoTag = () => (
     </View>
     <View style={ProductGridCardStyle.promoTagContent}>
       <SnbText.C1 color={color.white}>Promo</SnbText.C1>
-    </View>
-  </View>
-);
-
-const ExclusiveTag = () => (
-  <View
-    style={{
-      paddingHorizontal: 12,
-      padding: 5,
-    }}>
-    <View style={ProductGridCardStyle.exclusiveTagContainer}>
-      <SnbIcon
-        name="stars"
-        color={color.yellow50}
-        size={18}
-        style={{ marginRight: 4 }}
-      />
-      <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
     </View>
   </View>
 );
@@ -109,18 +92,14 @@ export const ProductGridCard: FC<ProductGridCardProps> = (props) => (
             defaultSource={Images.opacityPlaceholder}
           />
         </View>
-        {props.isExclusive ? (
-          <ExclusiveTag />
-        ) : (
-          <View>
-            {props.hasBulkPrice ? (
-              <BluckPricingTag style={{ paddingLeft: 12 }} />
-            ) : (
-              <View />
-            )}
-          </View>
-        )}
-        <View style={{ padding: 12 }}>
+        <View style={{ paddingLeft: 12, paddingTop: 12, paddingBottom: 4 }}>
+          {props.hasBulkPrice ? (
+            <BulkPricingTag />
+          ) : (
+            <View>{props.isExclusive ? <ExclusiveTag /> : <View />}</View>
+          )}
+        </View>
+        <View style={{ paddingHorizontal: 12, paddingBottom: 12 }}>
           <ProductGridCardInfo
             name={props.name}
             priceAfterTax={props.priceAfterTax}

@@ -32,15 +32,6 @@ export const ProductGridCardStyle = StyleSheet.create({
     borderTopRightRadius: 6,
     borderTopLeftRadius: 6,
   },
-  exclusiveTagContainer: {
-    flexDirection: 'row',
-    alignSelf: 'flex-start',
-    alignItems: 'center',
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    borderRadius: 50,
-    backgroundColor: color.yellow10,
-  },
   orderButton: {
     flex: 1,
     justifyContent: 'center',

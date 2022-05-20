@@ -9,7 +9,6 @@ import {
 import { color, SnbText, SnbBadge } from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useProductContext } from 'src/data/contexts/product/useProductContext';
 
 type BulkPriceData = {
   label: string;
@@ -55,12 +54,6 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
   const animatedController = useRef(new Animated.Value(1)).current;
   const [bodySectionHeight, setBodySectionHeight] = useState<number>(0);
 
-  // const {
-  //   stateProduct: {
-  //     detail: { data: dataProductDetail },
-  //   },
-  // } = useProductContext();
-
   const bodyHeightAnimate = animatedController.interpolate({
     inputRange: [0, 1],
     outputRange: [0, bodySectionHeight],
@@ -81,14 +74,12 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
       Animated.timing(animatedController, {
         duration: 300,
         toValue: 0,
-
         useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(animatedController, {
         duration: 300,
         toValue: 1,
-
         useNativeDriver: false,
       }).start();
     }
@@ -153,13 +144,14 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 16,
+    marginHorizontal: 16,
   },
   containerTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginRight: 5,
+    marginBottom: 12,
   },
   card: {
     borderWidth: 1,

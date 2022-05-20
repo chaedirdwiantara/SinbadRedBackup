@@ -9,17 +9,6 @@ export const AddToCartModalStyle = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 24,
   },
-  exclusiveTagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 88,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    marginBottom: 8,
-    marginRight: 5,
-    backgroundColor: color.yellow10,
-    borderRadius: 50,
-  },
   mainContentContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,

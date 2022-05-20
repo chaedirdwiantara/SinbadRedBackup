@@ -69,14 +69,10 @@ const SearchProductView: FC = () => {
             })
           }
           onLoadMore={(queryOptions) =>
-            loadMore(
-              dispatchProduct,
-              {
-                skip: productListState.skip,
-                canLoadMore: productListState.canLoadMore,
-              },
-              { keyword: localKeyword, ...queryOptions },
-            )
+            loadMore(dispatchProduct, productListState, {
+              keyword: localKeyword,
+              ...queryOptions,
+            })
           }
         />
       </View>
