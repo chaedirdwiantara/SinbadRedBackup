@@ -90,34 +90,34 @@ export function getStreetName(data: any) {
 
 export const setErrorMessage = (code: number, message?: string) => {
   switch (code) {
-    case 10002: {
+    case 40010000002: {
       return 'Email yang Anda masukkan telah terdaftar';
     }
-    case 10003: {
+    case 40010000003: {
       return 'Format email yang Anda masukkan salah';
     }
-    case 10004: {
+    case 40010000004: {
       return 'No. HP harus berupa angka';
     }
-    case 10005: {
+    case 40010000005: {
       return 'No. Hp yang Anda masukkan sudah terdaftar';
     }
-    case 10006: {
+    case 40010000006: {
       return 'No. Hp tidak boleh kosong';
     }
-    case 10007: {
+    case 40010000007: {
       return 'No. Hp yang Anda masukkan tidak terdaftar';
     }
-    case 10008: {
+    case 40010000008: {
       return 'Kode OTP salah/kadaluarsa';
     }
-    case 10009: {
+    case 40010600009: {
       return 'Data user tidak valid';
     }
-    case 10010: {
+    case 40010000010: {
       return 'ID Toko/Password yang Anda masukkan salah';
     }
-    case 12049: {
+    case 40010000049: {
       return 'Toko tidak ditemukan';
     }
     default: {

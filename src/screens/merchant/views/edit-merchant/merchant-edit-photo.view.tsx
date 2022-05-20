@@ -1,6 +1,7 @@
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
@@ -10,7 +11,6 @@ import {
   SnbButton,
   SnbContainer,
   SnbTopNav,
-  SnbUploadPhotoRules,
   SnbToast,
 } from 'react-native-sinbad-ui';
 
@@ -72,7 +72,8 @@ function setImage(type: string) {
 }
 
 const MerchantEditPhotoView = () => {
-  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { openCamera, capturedImage, resetCamera, openCameraWithOCR } =
+    useCamera();
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
   const { editProfile } = MerchantHookFunc.useEditProfile();
@@ -100,9 +101,7 @@ const MerchantEditPhotoView = () => {
         break;
       }
       case 'ktp': {
-        setImageUrl(
-          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
-        );
+        setImageUrl(stateUser.detail.data?.ownerData?.profile?.imageId || ' ');
         break;
       }
       case 'selfie': {
@@ -113,7 +112,7 @@ const MerchantEditPhotoView = () => {
       }
       case 'store': {
         setImageUrl(
-          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
             ?.imageUrl || ' ',
         );
         break;
@@ -176,24 +175,24 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: image });
+        Object.assign(data, { user : { taxImageUrl: image } });
         editProfile(dispatchSupplier, { data });
 
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: image });
+        Object.assign(data, { user : { idImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: image });
+        Object.assign(data, { user : { selfieImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: image });
-        editMerchantAction.editMerchant(dispatchSupplier, {
+        Object.assign(data, { buyer : { imageUrl: image } });
+        editProfile(dispatchSupplier, {
           data,
         });
         break;
@@ -253,7 +252,13 @@ const MerchantEditPhotoView = () => {
                 size="small"
                 type="tertiary"
                 title="Ubah Foto"
-                onPress={() => openCamera(params?.type)}
+                onPress={() => {
+                  if (params?.type !== 'ktp') {
+                    openCamera(params?.type);
+                  } else {
+                    openCameraWithOCR(params?.type);
+                  }
+                }}
                 disabled={false}
               />
             </View>
@@ -281,11 +286,20 @@ const MerchantEditPhotoView = () => {
         {renderIF(
           isImageAvailable,
           renderImagePreview(),
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle={`Pastikan Foto ${setType()} Anda Sesuai Ketentuan`}
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
-            action={() => openCamera(params?.type)}
+            action={() => {
+              if (params?.type !== 'ktp') {
+                openCamera(params?.type);
+              } else {
+                openCameraWithOCR(params?.type);
+              }
+            }}
+            type="vertical"
+            resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
+            isTiltImage={params.type === 'npwp'}
           />,
         )}
       </View>
