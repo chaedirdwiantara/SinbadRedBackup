@@ -8,10 +8,11 @@ import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
 import { Image, View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbTopNav,
+  SnbTopNav2,
   SnbToast,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 
 function setRules(type: string) {
@@ -175,23 +176,23 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { user : { taxImageUrl: image } });
+        Object.assign(data, { user: { taxImageUrl: image } });
         editProfile(dispatchSupplier, { data });
 
         break;
       }
       case 'ktp': {
-        Object.assign(data, { user : { idImageUrl: image } });
+        Object.assign(data, { user: { idImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { user : { selfieImageUrl: image } });
+        Object.assign(data, { user: { selfieImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { buyer : { imageUrl: image } });
+        Object.assign(data, { buyer: { imageUrl: image } });
         editProfile(dispatchSupplier, {
           data,
         });
@@ -247,10 +248,9 @@ const MerchantEditPhotoView = () => {
             }}
           />
           <View style={{ justifyContent: 'space-between' }}>
-            <View style={{ height: 72, marginTop: 12 }}>
-              <SnbButton.Dynamic
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbButton2.Link
                 size="small"
-                type="tertiary"
                 title="Ubah Foto"
                 onPress={() => {
                   if (params?.type !== 'ktp') {
@@ -260,17 +260,19 @@ const MerchantEditPhotoView = () => {
                   }
                 }}
                 disabled={false}
+                full
               />
             </View>
           </View>
         </View>
-        <View style={{ height: 75 }}>
-          <SnbButton.Single
-            type={'primary'}
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
             title={'Simpan'}
             onPress={action}
             loading={stateGlobal.uploadImage.loading}
             disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+            size="medium"
+            full
           />
         </View>
       </View>
@@ -281,7 +283,11 @@ const MerchantEditPhotoView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3 type="red" title={params?.title} backAction={goBack} />
+      <SnbTopNav2.Type3
+        color="white"
+        title={params?.title}
+        backAction={goBack}
+      />
       <View style={{ flex: 1 }}>
         {renderIF(
           isImageAvailable,
