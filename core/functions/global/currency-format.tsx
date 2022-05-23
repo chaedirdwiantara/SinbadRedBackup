@@ -4,7 +4,7 @@ interface ToCurrencyOptions {
   withFraction?: boolean;
 }
 /** === FUNCTION === */
-const toCurrency = (nominal: number, options: ToCurrencyOptions = {}) => {
+const toCurrency = (nominal: number = 0, options: ToCurrencyOptions = {}) => {
   const { withPrefix = true, withFraction = true } = options;
   const prefix = 'Rp';
   let transformed: string;

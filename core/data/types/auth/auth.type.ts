@@ -24,6 +24,11 @@ export const ME_PROCESS = 'MeProcess';
 export const ME_SUCCESS = 'MeSuccess';
 export const ME_FAILED = 'MeFailed';
 export const ME_RESET = 'MeReset';
+/** => me v2*/
+export const ME_V2_PROCESS = 'MeV2Process';
+export const ME_V2_SUCCESS = 'MeV2Success';
+export const ME_V2_FAILED = 'MeV2Failed';
+export const ME_V2_RESET = 'MeV2Reset';
 /**
  * ================================================================
  * NOTES
