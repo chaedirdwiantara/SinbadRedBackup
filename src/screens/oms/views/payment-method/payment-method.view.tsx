@@ -225,7 +225,10 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
       if (thankYouPageData?.orderStatus) {
         if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
           toThankYouPage();
-        } else if (thankYouPageData?.orderStatus != 'waiting_for_payment') {
+        } else if (
+          thankYouPageData?.orderStatus != 'waiting_for_payment' &&
+          handleStatusPayment == true
+        ) {
           if (statePaymentMethod.createOrder.data) {
             thankYouPageCancelOrderAction.fetch(dispatchThankYouPage, {
               id: statePaymentMethod.createOrder.data?.id,

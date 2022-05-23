@@ -85,7 +85,8 @@ const ProductBundleView: FC = () => {
           imageUrl={productDetail?.images[0].url}
           isExclusive={productDetail?.isExclusive!}
           name={productDetail?.name!}
-          finalPrice={productDetail?.finalPrice!}
+          priceAfterTax={productDetail?.priceAfterTax!}
+          hasBulkPrice={productDetail?.hasBulkPrice!}
           packagedQty={productDetail?.packagedQty!}
           unit={productDetail?.unit!}
           minQty={productDetail?.minQty!}
