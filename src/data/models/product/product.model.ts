@@ -29,7 +29,7 @@ export interface ProductListProcessProps extends models.ListProcessV3Props {
 
 export type ProductListQueryOptions = Omit<
   ProductListProcessProps,
-  'loading' | 'skip' | 'limit'
+  'loading' | 'page' | 'perPage'
 >;
 
 export interface ProductListItemProps

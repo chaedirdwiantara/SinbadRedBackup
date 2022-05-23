@@ -129,14 +129,7 @@ const SupplierView: FC = () => {
         onScroll={({ nativeEvent }) => {
           if (scrollHasReachedEnd(nativeEvent)) {
             if (!productListState.loading) {
-              loadMore(
-                dispatchProduct,
-                {
-                  skip: productListState.skip,
-                  canLoadMore: productListState.canLoadMore,
-                },
-                productQueryOptions,
-              );
+              loadMore(dispatchProduct, productListState, productQueryOptions);
             }
           }
         }}

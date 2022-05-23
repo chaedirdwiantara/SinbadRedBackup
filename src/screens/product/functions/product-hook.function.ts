@@ -69,14 +69,20 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
       queryOptions?: models.ProductListQueryOptions,
     ) => {
       if (state.page < state.totalPage) {
+        const query = {
+          ...queryOptions,
+          page: state.page + 1,
+          perPage: state.perPage,
+        };
+
         contextDispatch(Actions.productListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
             false,
-            state.page + 1,
+            query.page,
             perPage,
-            queryOptions,
+            query,
             subModule,
           ),
         );

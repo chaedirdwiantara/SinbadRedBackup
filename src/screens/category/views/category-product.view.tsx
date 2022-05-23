@@ -83,14 +83,10 @@ const CategoryProductView: FC = () => {
             })
           }
           onLoadMore={(queryOptions) =>
-            loadMore(
-              dispatchProduct,
-              {
-                skip: productListState.skip,
-                canLoadMore: productListState.canLoadMore,
-              },
-              { categoryId: category.id, ...queryOptions },
-            )
+            loadMore(dispatchProduct, productListState, {
+              categoryId: category.id,
+              ...queryOptions,
+            })
           }
         />
       </View>

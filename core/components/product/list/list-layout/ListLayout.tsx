@@ -52,7 +52,8 @@ const ListLayout: FC<ProductLayoutProps> = ({
         <ProductListCard
           name={item.name}
           imageUrl={item.thumbnail}
-          finalPrice={item.finalPrice}
+          priceAfterTax={item.priceAfterTax}
+          hasBulkPrice={item.hasBulkPrice}
           isBundle={item.isBundle}
           isPromo={item.isPromo}
           qtySoldLabel={item.qtySoldLabel}
