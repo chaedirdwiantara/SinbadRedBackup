@@ -223,7 +223,6 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
   React.useEffect(() => {
     if (getOrderStatus == true) {
       if (thankYouPageData?.orderStatus) {
-        thankYouPageData.orderStatus = 'order_created';
         if (thankYouPageData?.orderStatus == 'waiting_for_payment') {
           toThankYouPage();
         } else if (
