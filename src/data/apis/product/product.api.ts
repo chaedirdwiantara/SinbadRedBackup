@@ -17,8 +17,8 @@ const getList = (
   subModule?: models.ProductSubModule,
 ) => {
   const qs = serializeQs({
-    skip: payload.skip,
-    limit: payload.limit,
+    page: payload.page,
+    perPage: payload.perPage,
     sort: payload.sort,
     sortBy: payload.sortBy,
     keyword: payload.keyword,

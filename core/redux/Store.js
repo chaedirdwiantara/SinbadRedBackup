@@ -3,7 +3,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 /** === IMPORT EXTERNAL FUNCTION === */
 import { rootReducer } from '@reducers';
 import sagas from '@sagas';
@@ -14,12 +14,12 @@ const config = {
   whitelist: ['permanentCore'],
 };
 /** === SET LOGGER === */
-const logger = createLogger({
-  duration: true,
-  timestamp: true,
-  // diff: true,
-  logErrors: true,
-});
+// const logger = createLogger({
+//   duration: true,
+//   timestamp: true,
+//   // diff: true,
+//   logErrors: true,
+// });
 /** === VARIABLE === */
 const reducers = persistReducer(config, rootReducer);
 const sagaMiddleware = createSagaMiddleware();
@@ -27,7 +27,8 @@ const middleware = [];
 middleware.push(sagaMiddleware);
 /** === SET LOG IF DEV === */
 if (__DEV__) {
-  middleware.push(logger);
+  const createDebugger = require('redux-flipper').default;
+  middleware.push(createDebugger());
 }
 /** === SET MIDDLEWARE TO REDUX === */
 const enhancers = [applyMiddleware(...middleware)];

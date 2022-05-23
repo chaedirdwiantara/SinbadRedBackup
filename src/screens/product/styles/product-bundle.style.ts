@@ -52,16 +52,6 @@ export const ProductBundleStyle = StyleSheet.create({
     borderRadius: 8,
     marginRight: 8,
   },
-  exclusiveTagContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: 88,
-    paddingHorizontal: 6,
-    paddingVertical: 4,
-    marginBottom: 4,
-    backgroundColor: color.yellow10,
-    borderRadius: 50,
-  },
   tooltipContainer: {
     position: 'absolute',
     bottom: 22,
