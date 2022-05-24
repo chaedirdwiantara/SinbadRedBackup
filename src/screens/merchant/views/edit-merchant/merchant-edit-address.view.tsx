@@ -16,7 +16,6 @@ import {
   SnbButton2,
   color,
   SnbTextField2,
-  SnbTextFieldSelect,
   SnbToast,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
@@ -30,6 +29,7 @@ import { ModalSelection } from '@screen/account/views/shared';
 import { contexts } from '@contexts';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
+import { TextFieldSelect } from '@screen/account/views';
 
 const Content: React.FC = () => {
   const { editProfile, reset } = MerchantHookFunc.useEditProfile();
@@ -239,7 +239,7 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+            <TextFieldSelect
               labelText="Akses Jalan"
               mandatory
               value={vehicleAccessibility?.name}
@@ -261,7 +261,7 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+            <TextFieldSelect
               labelText="Jumlah Akses Jalan"
               mandatory
               value={

@@ -7,6 +7,7 @@ import {
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -71,13 +72,13 @@ const DataTokoStep1View: React.FC = () => {
           total={completeDataState?.data?.buyerProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
           <SnbText2.Paragraph.Default>
             {completeDataState?.data?.buyerData?.buyerCode}
           </SnbText2.Paragraph.Default>
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={'default'}
             value={name}
@@ -87,7 +88,7 @@ const DataTokoStep1View: React.FC = () => {
             mandatory
           />
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={'default'}
             keyboardType={'numeric'}
@@ -103,12 +104,10 @@ const DataTokoStep1View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Lanjut"
-          disabled={
-            (name && telp) || updateCompleteDataState.loading ? false : true
-          }
+          disabled={!name || !telp || updateCompleteDataState.loading}
           onPress={() =>
             updateCompleteData({ buyer: { name: name, phoneNo: telp } })
           }
