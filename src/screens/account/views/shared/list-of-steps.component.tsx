@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import {
   SnbText2,
-  color as colors,
   SnbCardButtonType1,
   SnbBottomSheet,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, ScrollView } from 'react-native';
 import {
@@ -115,7 +115,12 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     return dataUser.map((item, index) => {
       const disable = checkContentDisable(item, index);
       return (
-        <View style={{ marginBottom: 16, marginHorizontal: 16 }} key={index}>
+        <View
+          style={{
+            marginBottom: layout.spacing.lg,
+            marginHorizontal: layout.spacing.lg,
+          }}
+          key={index}>
           <SnbCardButtonType1
             type={disable ? 'waiting' : 'goTo'}
             onPress={() => goTo(index)}
@@ -131,7 +136,12 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     return dataBuyer.map((item, index) => {
       const disable = checkContentDisable(item, index);
       return (
-        <View style={{ marginBottom: 16, marginHorizontal: 16 }} key={index}>
+        <View
+          style={{
+            marginBottom: layout.spacing.lg,
+            marginHorizontal: layout.spacing.lg,
+          }}
+          key={index}>
           <SnbCardButtonType1
             type={disable ? 'waiting' : 'goTo'}
             onPress={() => goTo(index)}
@@ -145,9 +155,9 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const renderContent = () => {
     return (
       <ScrollView>
-        <View style={{ marginVertical: 16 }}>
+        <View style={{ marginVertical: layout.spacing.lg }}>
           <View style={{ alignItems: 'center' }}>
-            <SnbText2.Paragraph.Default color={colors.black60}>
+            <SnbText2.Paragraph.Default>
               Pastikan data yang anda masukkan sudah benar
             </SnbText2.Paragraph.Default>
           </View>

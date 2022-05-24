@@ -5,13 +5,13 @@ import { View } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
-  SnbTextFieldSelect,
   SnbTopNav2,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { ModalSelection } from '../shared';
 import * as models from '@models';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
+import TextFieldSelect from '../textfield-select-2.component';
 
 const Content = () => {
   const { resetSelectedItem, resetGetSelection, getSelection, onSelectedItem } =
@@ -46,7 +46,7 @@ const Content = () => {
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <View style={{ flex: 1 }}>
         <View style={{ padding: layout.spacing.lg }}>
-          <SnbTextFieldSelect
+          <TextFieldSelect
             labelText="Provinsi"
             placeholder="Pilih Provinsi"
             mandatory
@@ -61,7 +61,7 @@ const Content = () => {
             rightIcon="chevron_right"
           />
           <View style={{ marginVertical: layout.spacing.md }} />
-          <SnbTextFieldSelect
+          <TextFieldSelect
             labelText="Kota"
             placeholder="Pilih Kota"
             mandatory
@@ -84,7 +84,7 @@ const Content = () => {
             rightIcon="chevron_right"
           />
           <View style={{ marginVertical: layout.spacing.md }} />
-          <SnbTextFieldSelect
+          <TextFieldSelect
             labelText="Kecamatan"
             placeholder="Pilih Kecamatan"
             mandatory
@@ -110,7 +110,7 @@ const Content = () => {
             rightIcon="chevron_right"
           />
           <View style={{ marginVertical: layout.spacing.md }} />
-          <SnbTextFieldSelect
+          <TextFieldSelect
             labelText="Desa/Kelurahan"
             placeholder="Pilih Desa/Kelurahan"
             value={urban?.urban || ''}
@@ -137,7 +137,7 @@ const Content = () => {
             rightIcon="chevron_right"
           />
           <View style={{ marginVertical: layout.spacing.md }} />
-          <SnbTextFieldSelect
+          <TextFieldSelect
             labelText="Kode Pos"
             placeholder="Lihat Kode Pos"
             mandatory

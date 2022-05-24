@@ -3,8 +3,8 @@ import {
   colorV2,
   SnbBottomSheet,
   SnbButton2,
+  SnbIcon,
   SnbProgress,
-  SnbRadioButton,
   SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
@@ -152,7 +152,7 @@ const ModalSelection: React.FC<Props> = ({
                 if (listSelection.loading) {
                   return <SnbProgress />;
                 }
-                if (listSelection.error?.message) {
+                if (listSelection.error) {
                   return (
                     <ErrorContent
                       action={() => getSelection({ type, params })}
@@ -198,9 +198,18 @@ const ModalSelection: React.FC<Props> = ({
                       </SnbText2.Paragraph.Default>
                     </View>
                     <View style={{ marginHorizontal: layout.spacing.sm }} />
-                    <SnbRadioButton
-                      onPress={() => setTempSelectedItem({ item, type })}
-                      status={status}
+                    <SnbIcon
+                      name={
+                        status === 'selected'
+                          ? 'radio_button'
+                          : 'radio_button_outline'
+                      }
+                      size={22}
+                      color={
+                        status === 'selected'
+                          ? colorV2.iconColor.red
+                          : colorV2.iconColor.default
+                      }
                     />
                   </TouchableOpacity>
                 );

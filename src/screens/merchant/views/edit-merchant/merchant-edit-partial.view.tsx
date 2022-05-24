@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
   SnbTextField2,
-  SnbTextFieldSelect,
   SnbButton2,
   SnbToast,
   spacingV2 as layout,
@@ -23,6 +22,7 @@ import { NavigationAction } from '@navigation';
 
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+import { TextFieldSelect } from '@screen/account/views';
 
 interface Props {
   type: any;
@@ -517,7 +517,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           />
         </View>
         <View style={{ marginBottom: layout.spacing.lg }}>
-          <SnbTextFieldSelect
+          <TextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
             value={

@@ -20,8 +20,8 @@ import {
   SnbButton2,
   SnbTextField2,
   SnbText2,
-  color,
-  SnbTextFieldSelect,
+  colorV2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, ModalSelection, Stepper } from '../../shared';
 import * as models from '@models';
@@ -32,6 +32,7 @@ import {
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
 import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
+import TextFieldSelect from '../../textfield-select-2.component';
 
 function removeEmptyValue(data: any) {
   if (!data) {
@@ -69,7 +70,7 @@ const Content: React.FC<Props> = (props) => {
   );
   const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] =
     React.useState<any>(
-      buyerData.vehicleAccessibilityAmount
+      buyerData?.vehicleAccessibilityAmount
         ? {
             id: buyerData.vehicleAccessibilityAmount,
             value: buyerData.vehicleAccessibilityAmount,
@@ -176,7 +177,7 @@ const Content: React.FC<Props> = (props) => {
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ paddingHorizontal: layout.spacing.lg }}>
             <View
               style={{
                 justifyContent: 'space-between',
@@ -200,7 +201,7 @@ const Content: React.FC<Props> = (props) => {
                 />,
               )}
             </View>
-            <View style={{ paddingVertical: 4 }} />
+            <View style={{ paddingVertical: layout.spacing.xxsm }} />
             {renderIF(
               latLng !== null,
               <MapView
@@ -243,20 +244,20 @@ const Content: React.FC<Props> = (props) => {
                   })
                 }
                 style={styles.pinPoint}>
-                <SnbText2.Body.Default color={color.black60}>
+                <SnbText2.Body.Default color={colorV2.textColor.disable}>
                   Pin Lokasi Toko
                 </SnbText2.Body.Default>
               </TouchableOpacity>,
             )}
           </View>
-          <View style={{ padding: 16 }}>
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbText2.Body.Small>{streetName}</SnbText2.Body.Small>
-            <View style={{ marginVertical: 4 }} />
-            <SnbText2.Paragraph.Small align="justify" color={color.black60}>
+            <View style={{ marginVertical: layout.spacing.xxsm }} />
+            <SnbText2.Paragraph.Small align="justify">
               {staticAddress}
             </SnbText2.Paragraph.Small>
           </View>
-          <View style={{ padding: 16 }}>
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbTextField2.Area
               {...address}
               mandatory
@@ -265,7 +266,7 @@ const Content: React.FC<Props> = (props) => {
               placeholder="Masukkan detail alamat"
             />
           </View>
-          <View style={{ padding: 16 }}>
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbTextField2.Text
               {...noteAddress}
               mandatory
@@ -274,8 +275,8 @@ const Content: React.FC<Props> = (props) => {
               maxLength={200}
             />
           </View>
-          <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+          <View style={{ padding: layout.spacing.lg }}>
+            <TextFieldSelect
               labelText="Akses Jalan"
               mandatory
               value={vehicleAccessibility?.name}
@@ -296,8 +297,8 @@ const Content: React.FC<Props> = (props) => {
               rightIcon="chevron_right"
             />
           </View>
-          <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+          <View style={{ padding: layout.spacing.lg }}>
+            <TextFieldSelect
               labelText="Jumlah Akses Jalan"
               mandatory
               value={
@@ -324,7 +325,7 @@ const Content: React.FC<Props> = (props) => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Simpan"
           onPress={() => {
@@ -445,9 +446,9 @@ const styles = StyleSheet.create({
     height: 160,
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderRadius: 16,
-    backgroundColor: color.black5,
-    borderColor: color.black40,
+    borderRadius: layout.spacing.lg,
+    backgroundColor: colorV2.bgColor.neutral,
+    borderColor: colorV2.strokeColor.default,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
