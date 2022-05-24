@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
+import { TextFieldSelect } from '@screen/account/views';
 import {
   useInput,
   useMerchant,
@@ -12,7 +13,6 @@ import {
   SnbContainer,
   SnbText,
   SnbTextField,
-  SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
 import RegisterProgress from '../shared/register-progress.component';
@@ -51,7 +51,7 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+            <TextFieldSelect
               labelText="Jumlah Karyawan"
               placeholder="Masukkan jumlah karyawan"
               value={numOfEmployee?.amount || merchantData.numberOfEmployee}

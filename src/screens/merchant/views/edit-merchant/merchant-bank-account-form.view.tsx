@@ -4,7 +4,6 @@ import {
   SnbTopNav2,
   SnbButton2,
   SnbTextField2,
-  SnbTextFieldSelect,
   SnbBottomSheet,
   SnbContainer,
   colorV2,
@@ -23,6 +22,7 @@ import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { useInput, MerchantHookFunc } from '../../function';
+import { TextFieldSelect } from '@screen/account/views';
 
 interface Props {
   route: any;
@@ -132,7 +132,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           marginHorizontal: layout.spacing.lg,
         }}>
         <View style={{ marginBottom: layout.spacing.lg }}>
-          <SnbTextFieldSelect
+          <TextFieldSelect
             placeholder={'Pilih Nama Bank'}
             type={'default'}
             value={bankName.value}

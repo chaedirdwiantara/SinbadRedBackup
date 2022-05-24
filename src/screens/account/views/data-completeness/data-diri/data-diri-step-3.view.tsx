@@ -4,6 +4,7 @@ import {
   SnbTopNav2,
   SnbButton2,
   SnbToast,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import {
@@ -163,10 +164,10 @@ const DataDiriStep3View: React.FC = () => {
             height: undefined,
             width: undefined,
             flex: 1,
-            margin: 16,
+            margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: 16 }}>
+        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title="Ubah Foto"
@@ -177,7 +178,7 @@ const DataDiriStep3View: React.FC = () => {
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               disabled={stateGlobal.uploadImage.loading}

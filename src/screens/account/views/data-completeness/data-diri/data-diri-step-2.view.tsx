@@ -5,6 +5,7 @@ import {
   SnbButton2,
   SnbToast,
   SnbTextField2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler, ScrollView } from 'react-native';
 import {
@@ -173,7 +174,12 @@ const DataDiriStep2View: React.FC = () => {
     return (
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <ScrollView>
-          <View style={{ flex: 1, paddingHorizontal: 20, maxHeight: 370 }}>
+          <View
+            style={{
+              flex: 1,
+              paddingHorizontal: layout.spacing.xl,
+              maxHeight: 370,
+            }}>
             <Image
               resizeMode="contain"
               source={{ uri }}
@@ -181,7 +187,7 @@ const DataDiriStep2View: React.FC = () => {
               style={{
                 height: 200,
                 width: undefined,
-                marginBottom: 10,
+                marginBottom: layout.spacing.md,
               }}
             />
             <View style={{ padding: 16 }} />
@@ -211,7 +217,7 @@ const DataDiriStep2View: React.FC = () => {
             />
           </View>
         </ScrollView>
-        <View style={{ flexDirection: 'row', padding: 16 }}>
+        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title="Ubah Foto"
@@ -222,7 +228,7 @@ const DataDiriStep2View: React.FC = () => {
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               loading={stateGlobal.uploadImage.loading}

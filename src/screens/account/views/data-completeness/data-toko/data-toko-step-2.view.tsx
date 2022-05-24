@@ -6,6 +6,7 @@ import {
   SnbTopNav2,
   SnbButton2,
   SnbToast,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -134,10 +135,10 @@ const Content: React.FC<Props> = (props) => {
             height: undefined,
             width: undefined,
             flex: 0.75,
-            margin: 16,
+            margin: layout.spacing.lg,
           }}
         />
-        <View style={{ flexDirection: 'row', padding: 16 }}>
+        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={capturedImage?.data?.url ? 'Ulangi' : 'Ubah Foto'}
@@ -148,7 +149,7 @@ const Content: React.FC<Props> = (props) => {
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Lanjutkan'}
