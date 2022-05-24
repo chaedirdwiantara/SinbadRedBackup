@@ -12,6 +12,7 @@ import {
   SnbButton2,
   SnbProgress,
   spacingV2 as layout,
+  borderV2,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -31,7 +32,7 @@ const KtpPhotoFrame = () => (
       width: 84,
       position: 'absolute',
       borderWidth: 2,
-      borderRadius: 4,
+      borderRadius: borderV2.radius.sm,
       borderColor: colorV2.bgColor.light,
     }}
   />
@@ -127,7 +128,6 @@ const CameraWithOCRView = () => {
       <SnbBottomSheet
         open={showModalError}
         title="Terjadi Kesalahan Upload"
-        isSwipeable
         closeAction={() => {
           setShowModalError(false);
           setRetake(true);

@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
 import {
   SnbContainer,
   SnbText2,
   SnbTopNav2,
   SnbTextField2,
   SnbButton2,
-  color,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import {
@@ -70,14 +64,14 @@ const SelfRegisterView: React.FC = () => {
   const content = () => {
     return (
       <ScrollView style={{ flex: 1 }}>
-        <View style={{ flex: 1, marginBottom: 25 }}>
+        <View style={{ flex: 1, marginBottom: layout.spacing.xl }}>
           <View style={styles.image}>
             <Image
               source={require('@image/sinbad_image/sinbad_register.png')}
               style={{ height: 240 }}
             />
           </View>
-          <View style={{ height: 84, padding: 16 }}>
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
           </View>
         </View>
@@ -107,17 +101,23 @@ const SelfRegisterView: React.FC = () => {
         <View
           style={{
             flexDirection: 'row',
-            marginBottom: 24,
-            alignSelf: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: layout.spacing.md,
           }}>
           <SnbText2.Paragraph.Default>
             Sudah punya akun Sinbad?{' '}
           </SnbText2.Paragraph.Default>
-          <TouchableOpacity onPress={() => navigate(LOGIN_PHONE_VIEW)}>
-            <SnbText2.Body.Default color={color.blue50}>
-              Masuk
-            </SnbText2.Body.Default>
-          </TouchableOpacity>
+          <View style={{ marginLeft: -layout.spacing.md }}>
+            <SnbButton2.Link
+              title="Masuk"
+              size="medium"
+              onPress={() => {
+                phone.clearText();
+                navigate(LOGIN_PHONE_VIEW);
+              }}
+            />
+          </View>
         </View>
       </View>
     );
@@ -138,9 +138,9 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: 'center',
-    marginVertical: 32,
+    marginVertical: layout.spacing.xxl,
   },
-  button: { padding: 16 },
+  button: { padding: layout.spacing.lg },
 });
 
 export default SelfRegisterView;

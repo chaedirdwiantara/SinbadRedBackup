@@ -8,6 +8,9 @@ import {
   SnbProgress,
   SnbText2,
   SnbTopNav2,
+  spacingV2 as layout,
+  borderV2,
+  colorV2,
 } from '@sinbad/react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 import React from 'react';
@@ -16,7 +19,7 @@ import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
   return (
-    <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
+    <View style={{ flex: 1 }}>
       <ProductCategory />
     </View>
   );
@@ -99,20 +102,24 @@ const ProductCategory: React.FC = () => {
           });
           setData(newData);
         }}
-        style={{ flexDirection: 'row', padding: 12, alignItems: 'center' }}>
+        style={{
+          flexDirection: 'row',
+          padding: layout.spacing.md,
+          alignItems: 'center',
+        }}>
         <View
           style={{
-            borderRadius: 16,
-            borderWidth: 0.75,
+            borderRadius: borderV2.radius.lg,
+            borderWidth: 1,
             borderColor: color.black40,
-            padding: 8,
+            padding: layout.spacing.sm,
           }}>
           <Image
             source={{ uri: item?.icon || ' ' }}
             style={{ width: 24, height: 24 }}
           />
         </View>
-        <View style={{ flex: 1, marginHorizontal: 12 }}>
+        <View style={{ flex: 1, marginHorizontal: layout.spacing.md }}>
           <SnbText2.Paragraph.Small>{item?.name}</SnbText2.Paragraph.Small>
         </View>
         <SnbCheckbox
@@ -132,15 +139,17 @@ const ProductCategory: React.FC = () => {
   }
 
   return (
-    <View style={{ flex: 1, marginTop: 4 }}>
+    <View style={{ flex: 1, marginTop: layout.spacing.xxsm }}>
       <View
         style={{
-          marginHorizontal: 16,
-          paddingVertical: 12,
-          borderBottomWidth: 0.75,
-          borderBottomColor: color.black40,
+          marginHorizontal: layout.spacing.lg,
+          paddingVertical: layout.spacing.md,
+          borderBottomWidth: 1,
+          borderBottomColor: colorV2.strokeColor.default,
         }}>
-        <SnbText2.Headline.Small>Produk apa yang Anda jual?</SnbText2.Headline.Small>
+        <SnbText2.Headline.Small>
+          Produk apa yang Anda jual?
+        </SnbText2.Headline.Small>
       </View>
       <View style={{ flex: 1 }}>
         <FlatList
@@ -162,15 +171,15 @@ const ProductCategory: React.FC = () => {
                     }}
                     style={{
                       flexDirection: 'row',
-                      padding: 12,
+                      padding: layout.spacing.md,
                       alignItems: 'center',
                     }}>
                     <View
                       style={{
-                        borderRadius: 16,
-                        borderWidth: 0.75,
-                        borderColor: color.black40,
-                        padding: 8,
+                        borderRadius: borderV2.radius.lg,
+                        borderWidth: 1,
+                        borderColor: colorV2.strokeColor.default,
+                        padding: layout.spacing.sm,
                       }}>
                       <Image
                         source={require('@image/all_product.png')}
@@ -180,8 +189,11 @@ const ProductCategory: React.FC = () => {
                         }}
                       />
                     </View>
-                    <View style={{ flex: 1, marginHorizontal: 12 }}>
-                      <SnbText2.Body.Default>Semua Produk</SnbText2.Body.Default>
+                    <View
+                      style={{ flex: 1, marginHorizontal: layout.spacing.md }}>
+                      <SnbText2.Body.Default>
+                        Semua Produk
+                      </SnbText2.Body.Default>
                     </View>
                     <SnbCheckbox
                       status={checkBoxStatus}
@@ -202,11 +214,11 @@ const ProductCategory: React.FC = () => {
           data={data}
           keyExtractor={(_, idx) => idx.toString()}
           renderItem={renderItems}
-          contentContainerStyle={{ paddingHorizontal: 24 }}
+          contentContainerStyle={{ paddingHorizontal: layout.spacing.xl }}
           ListEmptyComponent={() => {
             if (productCategories?.loading) {
               return (
-                <View style={{ padding: 16 }}>
+                <View style={{ padding: layout.spacing.lg }}>
                   <SnbProgress />
                 </View>
               );
@@ -214,7 +226,7 @@ const ProductCategory: React.FC = () => {
 
             if (productCategories?.error) {
               return (
-                <View style={{ padding: 16 }}>
+                <View style={{ padding: layout.spacing.lg }}>
                   <ErrorContent
                     action={getProductCategory}
                     message={productCategories?.error?.message}
@@ -230,8 +242,8 @@ const ProductCategory: React.FC = () => {
           )}
         />
       </View>
-      <View style={{ width: '100%', marginVertical: 16 }}>
-        <View style={{ marginHorizontal: 16 }}>
+      <View style={{ width: '100%', marginVertical: layout.spacing.lg }}>
+        <View style={{ marginHorizontal: layout.spacing.lg }}>
           <SnbButton2.Primary
             title="Simpan Kategori Produk"
             onPress={onHandleSaveProductCategory}
