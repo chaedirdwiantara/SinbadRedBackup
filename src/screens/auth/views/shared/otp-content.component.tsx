@@ -5,6 +5,7 @@ import {
   SnbOTPInput,
   SnbText2,
   SnbOTPTimer,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 import Svg from '@svg';
@@ -40,7 +41,7 @@ const OTPContent: React.FC<Props> = (props) => {
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
-      <View style={{ marginVertical: 24 }}>
+      <View style={{ marginVertical: layout.spacing.xl }}>
         <View style={{ alignSelf: 'center' }}>
           <Svg name="sinbad_otp" size={200} />
         </View>
@@ -48,12 +49,12 @@ const OTPContent: React.FC<Props> = (props) => {
           <SnbText2.Headline.Default>
             Masukkan kode Verifikasi
           </SnbText2.Headline.Default>
-          <View style={{ marginVertical: 4 }} />
+          <View style={{ marginVertical: layout.spacing.xxsm }} />
           <SnbText2.Paragraph.Default align="center">
             Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
           </SnbText2.Paragraph.Default>
         </View>
-        <View style={{ margin: 4 }}>
+        <View style={{ margin: layout.spacing.xxsm }}>
           <SnbOTPInput
             {...props}
             type={error ? 'error' : 'default'}
@@ -64,7 +65,7 @@ const OTPContent: React.FC<Props> = (props) => {
           />
         </View>
       </View>
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={{ paddingHorizontal: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Verifikasi"
           onPress={() => onVerifyOTP(otp)}

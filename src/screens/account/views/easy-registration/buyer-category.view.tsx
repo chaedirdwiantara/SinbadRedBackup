@@ -1,12 +1,14 @@
 import React from 'react';
 import {
-  color,
+  colorV2,
   SnbButton2,
   SnbContainer,
   SnbIcon,
   SnbProgress,
   SnbText2,
   SnbTopNav2,
+  spacingV2 as layout,
+  borderV2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   BackHandler,
@@ -58,22 +60,20 @@ const BuyerLocation: React.FC = () => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 16,
-        borderBottomWidth: 0.5,
-        borderColor: color.black40,
+        padding: layout.spacing.lg,
+        borderBottomWidth: 0.75,
+        borderColor: colorV2.strokeColor.disable,
       }}>
       <View style={{ flex: 1 }}>
-        <SnbText2.Paragraph.Tiny color={color.black60}>
-          Lokasi Toko
-        </SnbText2.Paragraph.Tiny>
-        <View style={{ marginVertical: 4 }} />
+        <SnbText2.Paragraph.Tiny>Lokasi Toko</SnbText2.Paragraph.Tiny>
+        <View style={{ marginVertical: layout.spacing.xxsm }} />
         <SnbText2.Body.Small>
           {location
             ? `${location.city}, ${location.district}, ${location.urban}`
             : 'Lokasi tidak ditemukan'}
         </SnbText2.Body.Small>
       </View>
-      <View style={{ marginHorizontal: 4 }} />
+      <View style={{ marginHorizontal: layout.spacing.xxsm }} />
       <SnbButton2.Primary
         title="Ubah"
         onPress={() => navigate(LIST_LOCATION_VIEW, { setLocation })}
@@ -145,13 +145,13 @@ const BuyerCategory: React.FC = () => {
           });
         }}
         style={{
-          borderRadius: 16,
-          borderWidth: 0.75,
-          borderColor: color.black40,
+          borderRadius: borderV2.radius.md,
+          borderWidth: 1,
+          borderColor: colorV2.strokeColor.default,
         }}>
         <View
           style={{
-            padding: 16,
+            padding: layout.spacing.lg,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -161,10 +161,10 @@ const BuyerCategory: React.FC = () => {
             style={{ height: 40, width: 40, alignSelf: 'flex-start' }}
             resizeMode="contain"
           />
-          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbText2.Headline.Default>{item.name}</SnbText2.Headline.Default>
-            <View style={{ marginTop: 4 }}>
+            <View style={{ marginTop: layout.spacing.xxsm }}>
               {item.description.map((el: string, idx: number) => (
                 <View
                   key={idx}
@@ -173,30 +173,36 @@ const BuyerCategory: React.FC = () => {
                     style={{
                       height: 4,
                       width: 4,
-                      borderRadius: 4,
-                      backgroundColor: color.black80,
+                      borderRadius: borderV2.radius.sm,
+                      backgroundColor: colorV2.textColor.secondary,
                     }}
                   />
-                  <View style={{ marginHorizontal: 2 }} />
-                  <SnbText2.Paragraph.Small>{el}</SnbText2.Paragraph.Small>
+                  <View style={{ marginHorizontal: layout.spacing.xxsm }} />
+                  <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                    {el}
+                  </SnbText2.Paragraph.Small>
                 </View>
               ))}
             </View>
           </View>
-          <SnbIcon name="arrow_forward_ios" color={color.black80} size={16} />
+          <SnbIcon
+            name="chevron_right"
+            color={colorV2.bgColor.dark}
+            size={20}
+          />
         </View>
         {selectedBuyerCategory?.slug === item?.slug &&
           selectedProductCategory.length > 0 && (
             <View
               style={{
-                margin: 16,
+                margin: layout.spacing.lg,
                 marginTop: 0,
-                paddingHorizontal: 16,
-                backgroundColor: color.blue10,
-                paddingVertical: 12,
-                borderRadius: 8,
+                paddingHorizontal: layout.spacing.lg,
+                backgroundColor: colorV2.special.blue10,
+                paddingVertical: layout.spacing.sm,
+                borderRadius: borderV2.radius.sm,
               }}>
-              <SnbText2.Paragraph.Small color={color.blue80}>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
                 {selectedProductCategory.length} kategori produk terpilih
               </SnbText2.Paragraph.Small>
             </View>
@@ -211,7 +217,10 @@ const BuyerCategory: React.FC = () => {
           data={buyerCategories?.data?.data}
           keyExtractor={(item) => item.slug}
           renderItem={renderBuyerCategoryItem}
-          contentContainerStyle={{ padding: 16, marginVertical: 16 }}
+          contentContainerStyle={{
+            padding: layout.spacing.lg,
+            marginVertical: layout.spacing.lg,
+          }}
           ListEmptyComponent={() => {
             if (buyerCategories?.loading) {
               return <SnbProgress />;
@@ -228,11 +237,13 @@ const BuyerCategory: React.FC = () => {
 
             return null;
           }}
-          ItemSeparatorComponent={() => <View style={{ marginVertical: 8 }} />}
+          ItemSeparatorComponent={() => (
+            <View style={{ marginVertical: layout.spacing.sm }} />
+          )}
         />
       </View>
-      <View style={{ width: '100%', marginTop: 16 }}>
-        <View style={{ marginHorizontal: 16 }}>
+      <View style={{ width: '100%', marginTop: layout.spacing.lg }}>
+        <View style={{ marginHorizontal: layout.spacing.lg }}>
           <SnbButton2.Primary
             onPress={() => handleOnCreateBasicAccount('mulai')}
             title="Mulai Pakai Sinbad"
@@ -247,7 +258,7 @@ const BuyerCategory: React.FC = () => {
           />
         </View>
       </View>
-      <View style={{ marginBottom: 16, alignItems: 'center' }}>
+      <View style={{ marginBottom: layout.spacing.lg, alignItems: 'center' }}>
         <SnbButton2.Link
           size="medium"
           onPress={() => {
@@ -268,8 +279,7 @@ const BuyerCategory: React.FC = () => {
 
 const Content: React.FC = () => {
   return (
-    <View
-      style={{ flex: 1, borderTopColor: color.black40, borderTopWidth: 0.5 }}>
+    <View style={{ flex: 1 }}>
       <BuyerLocation />
       <BuyerCategory />
     </View>

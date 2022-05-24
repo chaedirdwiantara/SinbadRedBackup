@@ -1,6 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity, BackHandler } from 'react-native';
+import {
+  SnbContainer,
+  SnbTopNav2,
+  SnbText2,
+  SnbButton2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
+import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
@@ -48,8 +54,8 @@ const MerchantDetailAccountView: FC = () => {
   /** => header */
   const header = () => {
     return (
-      <SnbTopNav.Type3
-        type="white"
+      <SnbTopNav2.Type3
+        color="white"
         title="Informasi Toko"
         backAction={() => {
           NavigationAction.back();
@@ -64,27 +70,30 @@ const MerchantDetailAccountView: FC = () => {
     return (
       <View style={MerchantStyles.boxContent}>
         <View>
-          <View style={{ marginBottom: 6 }}>
-            <SnbText.H4 color={color.black100}>{data.key}</SnbText.H4>
+          <View style={{ marginBottom: layout.spacing.xsm }}>
+            <SnbText2.Body.Default color={color.black100}>
+              {data.key}
+            </SnbText2.Body.Default>
           </View>
-          <SnbText.B3 color={data.fontColor ? data.fontColor : color.black60}>
+          <SnbText2.Paragraph.Default
+            color={data.fontColor ? data.fontColor : color.black60}>
             {data.value} {data.key === 'Ukuran Toko' && 'm\u00B2'}
-          </SnbText.B3>
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity
+            <SnbButton2.Link
               onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.blue60}>Tambah</SnbText.C1>
-            </TouchableOpacity>
+              title="Tambah"
+              size="small"
+            />
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity
+            <SnbButton2.Link
               onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C2 color={color.blue60}>Ubah</SnbText.C2>
-            </TouchableOpacity>
+              title="Ubah"
+              size="small"
+            />
           )}
         </View>
       </View>
@@ -97,7 +106,7 @@ const MerchantDetailAccountView: FC = () => {
   const content = () => {
     const buyerData = buyerDataState?.buyerInformation.buyerAccount;
     return (
-      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: layout.spacing.lg }}>
         <View>
           {renderContentSection({
             key: 'ID Toko',
