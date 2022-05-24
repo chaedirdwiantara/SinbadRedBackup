@@ -49,7 +49,6 @@ const Content: React.FC<Props> = (props) => {
       refetchCompleteData();
       resetUpdateCompleteData();
       ocrImageReset();
-      resetOcrDataRtdb();
       if (backHandle) {
         backToDataCompleteness();
       } else {

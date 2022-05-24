@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import {
-  color,
+  colorV2,
   SnbContainer,
   SnbProgress,
   SnbRadioButton,
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
+  spacingV2 as layout,
+  borderV2,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
@@ -58,7 +60,7 @@ const Content: React.FC = () => {
       <TouchableOpacity
         onPress={() => setSelectedLocation(item)}
         style={{
-          paddingVertical: 16,
+          paddingVertical: layout.spacing.lg,
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -66,7 +68,7 @@ const Content: React.FC = () => {
         <View style={{ flex: 1 }}>
           <SnbText2.Body.Default>{locationName}</SnbText2.Body.Default>
         </View>
-        <View style={{ marginHorizontal: 4 }} />
+        <View style={{ marginHorizontal: layout.spacing.xxsm }} />
         <SnbRadioButton
           onPress={() => setSelectedLocation(item)}
           status={selectedLocation?.id === item.id ? 'selected' : 'unselect'}
@@ -75,8 +77,8 @@ const Content: React.FC = () => {
     );
   }
   return (
-    <View style={{ flex: 1, borderTopWidth: 1, borderColor: color.black10 }}>
-      <View style={{ padding: 16 }}>
+    <View style={{ flex: 1 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text
           {...search}
           placeholder="Cari Kota/Kabupaten, Kec. dan Kelurahan"
@@ -89,7 +91,7 @@ const Content: React.FC = () => {
           <SnbProgress />,
           <FlatList
             data={searchLocationState.data?.data || []}
-            contentContainerStyle={{ paddingHorizontal: 16 }}
+            contentContainerStyle={{ paddingHorizontal: layout.spacing.lg }}
             keyExtractor={(_, idx) => idx.toString()}
             renderItem={renderLocation}
             onEndReached={() => {
@@ -104,7 +106,12 @@ const Content: React.FC = () => {
             }}
             onEndReachedThreshold={0.1}
             ItemSeparatorComponent={() => (
-              <View style={{ height: 1, backgroundColor: color.black10 }} />
+              <View
+                style={{
+                  height: 0.5,
+                  backgroundColor: colorV2.strokeColor.disable,
+                }}
+              />
             )}
             ListEmptyComponent={() => {
               if (searchLocationState?.error) {
@@ -128,16 +135,16 @@ const Content: React.FC = () => {
       </View>
       <View
         style={{
-          marginHorizontal: 16,
-          marginBottom: 12,
-          marginTop: 8,
-          backgroundColor: color.blue10,
-          padding: 12,
-          borderRadius: 8,
+          marginHorizontal: layout.spacing.lg,
+          marginBottom: layout.spacing.md,
+          marginTop: layout.spacing.sm,
+          backgroundColor: colorV2.special.blue10,
+          padding: layout.spacing.md,
+          borderRadius: borderV2.radius.sm,
         }}>
-        <SnbText2.Paragraph.Small color={color.blue50} align="center">
-          Tidak menemukan yang anda cari, gunakan pencarian secara rinci untuk
-          lokasi toko anda
+        <SnbText2.Paragraph.Small color={colorV2.textColor.link} align="center">
+          Gunakan fitur pencarian jika lokasi Anda tidak ada pada daftar di
+          atas.
         </SnbText2.Paragraph.Small>
       </View>
     </View>

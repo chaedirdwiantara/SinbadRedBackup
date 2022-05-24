@@ -37,10 +37,7 @@ export const listSelection = simplifyReducer(INITIAL_STATE, {
     return { ...state, isLoadMoreLoading: true };
   },
 
-  [types.LOAD_MORE_SELECTION_SUCCESS](
-    state: any = INITIAL_STATE,
-    action: any,
-  ) {
+  [types.LOAD_MORE_SELECTION_SUCCESS](state: any = INITIAL_STATE, action: any) {
     const newData = {
       data: [...state.data?.data, ...action.payload.data],
       meta: action.payload.meta,
