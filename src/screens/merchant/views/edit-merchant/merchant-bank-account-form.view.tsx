@@ -9,14 +9,7 @@ import {
   colorV2,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
-import {
-  ScrollView,
-  View,
-  BackHandler,
-  KeyboardAvoidingView,
-} from 'react-native';
-/** === IMPORT STYLE HERE === */
-import MerchantStyles from '../../styles/merchant.style';
+import { ScrollView, View, BackHandler } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
@@ -42,13 +35,18 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
-  const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
   const bankId = useInput(bankData?.bankId || null);
   const bankName = useInput(bankData?.bankName || '');
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
   const bankBranchName = useInput(bankData?.bankBranchName || '');
   const [openModalTNC, setOpenModalTNC] = useState(false);
+
+  useEffect(() => {
+    return resetSelectedItem;
+  }, []);
   useEffect(() => {
     if (selectedItem?.item) {
       bankId.setValue(selectedItem.item.id);
@@ -276,11 +274,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   return (
     <SnbContainer color="white">
       {renderHeader()}
-      <KeyboardAvoidingView behavior={'height'} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
-          {renderContent()}
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <View style={{ flex: 1 }}>
+        <ScrollView>{renderContent()}</ScrollView>
+      </View>
       {renderTNC()}
       {renderButton()}
       {modalTNC()}

@@ -17,6 +17,7 @@ import {
   color,
   SnbTextField2,
   SnbToast,
+  SnbProgress,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import {
@@ -43,42 +44,26 @@ const Content: React.FC = () => {
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
   const { buyerAddress } =
     (stateUser.detail.data?.buyerData as models.IBuyerData) || {};
-  const {
-    latitude,
-    longitude,
-    address: currentAddress,
-    noteAddress: currentNoteAddress,
-    vehicleAccessibility: currentVehicleAccessibility,
-    vehicleAccessibilityAmount: currentVehicleAccessibilityAmount,
-  } = buyerAddress || {};
-  const address = useInput(currentAddress || '');
-  const noteAddress = useInput(currentNoteAddress || '');
+  const address = useInput('');
+  const noteAddress = useInput('');
   const { getSelection, resetGetSelection, resetSelectedItem, onSelectedItem } =
     useTextFieldSelect();
   const { navigate, goBack } = useNavigation();
-  const [vehicleAccessibility, setVehicleAccessibility] = React.useState<any>(
-    currentVehicleAccessibility || null,
-  );
+  const [vehicleAccessibility, setVehicleAccessibility] =
+    React.useState<any>(null);
   const [vehicleAccessibilityAmount, setVehicleAccessibilityAmount] =
-    React.useState<any>(
-      currentVehicleAccessibilityAmount
-        ? {
-            id: currentVehicleAccessibilityAmount,
-            value: currentVehicleAccessibilityAmount,
-          }
-        : null,
-    );
+    React.useState<any>(null);
   let mapRef = React.useRef<MapView>(null);
   const [type, setType] = React.useState<models.ITypeList>('');
   const [openModalSelection, setOpenModalSelection] =
     React.useState<boolean>(false);
   const [latLng, setLatLng] = React.useState<LatLng | any>(null);
-  const isLatLngAvailable = latitude && longitude;
   const [streetName, setStreetName] = React.useState();
   const [staticAddress, setStaticAddress] = React.useState(
     buyerAddress?.address,
   );
   const [locationId, setLocationId] = React.useState('');
+  const isLatLngAvailable = buyerAddress?.latitude && buyerAddress.longitude;
 
   React.useEffect(() => {
     if (formattedAddress) {
@@ -87,9 +72,35 @@ const Content: React.FC = () => {
     }
     street && setStreetName(street);
     coordinate && setLatLng(coordinate);
-    isLatLngAvailable && setLatLng({ longitude, latitude });
+    isLatLngAvailable &&
+      setLatLng({
+        longitude: buyerAddress?.longitude,
+        latitude: buyerAddress?.latitude,
+      });
     location && setLocationId(location);
   }, []);
+
+  React.useEffect(() => {
+    if (!buyerAddress) {
+      detail(dispatchUser);
+    } else {
+      address.setValue(buyerAddress.address);
+      noteAddress.setValue(buyerAddress.noteAddress || '');
+      setVehicleAccessibilityAmount(
+        buyerAddress.vehicleAccessibilityAmount
+          ? {
+              id: buyerAddress.vehicleAccessibilityAmount,
+              value: buyerAddress.vehicleAccessibilityAmount,
+            }
+          : null,
+      );
+      setVehicleAccessibility(buyerAddress.vehicleAccessibility);
+      setLatLng({
+        longitude: buyerAddress?.longitude,
+        latitude: buyerAddress?.latitude,
+      });
+    }
+  }, [buyerAddress]);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -116,12 +127,13 @@ const Content: React.FC = () => {
 
   function handleDisableSaveButton() {
     const dataIsChanged =
-      address.value !== currentAddress ||
-      noteAddress.value !== currentNoteAddress ||
-      vehicleAccessibility?.id !== currentVehicleAccessibility?.id ||
-      vehicleAccessibilityAmount?.value !== currentVehicleAccessibilityAmount ||
-      latLng?.latitude !== latitude ||
-      latLng?.longitude !== longitude;
+      address.value !== buyerAddress?.address ||
+      noteAddress.value !== buyerAddress?.noteAddress ||
+      vehicleAccessibility?.id !== buyerAddress?.vehicleAccessibility?.id ||
+      vehicleAccessibilityAmount?.value !==
+        buyerAddress.vehicleAccessibilityAmount ||
+      latLng?.latitude !== buyerAddress?.latitude ||
+      latLng?.longitude !== buyerAddress?.longitude;
 
     if (
       dataIsChanged &&
@@ -134,6 +146,10 @@ const Content: React.FC = () => {
       return false;
     }
     return true;
+  }
+
+  if (!buyerAddress) {
+    return <SnbProgress />;
   }
 
   return (
@@ -294,33 +310,36 @@ const Content: React.FC = () => {
           full
           onPress={() => {
             let buyer = {};
-            if (address.value !== currentAddress) {
+            if (address.value !== buyerAddress?.address) {
               Object.assign(buyer, { address: address.value });
             }
-            if (noteAddress.value !== currentNoteAddress) {
+            if (noteAddress.value !== buyerAddress?.noteAddress) {
               Object.assign(buyer, {
                 noteAddress: noteAddress.value,
               });
             }
-            if (vehicleAccessibility?.id !== currentVehicleAccessibility?.id) {
+            if (
+              vehicleAccessibility?.id !==
+              buyerAddress?.vehicleAccessibility?.id
+            ) {
               Object.assign(buyer, {
                 vehicleAccessibilityId: vehicleAccessibility?.id,
               });
             }
             if (
               vehicleAccessibilityAmount?.value !==
-              currentVehicleAccessibilityAmount
+              buyerAddress.vehicleAccessibilityAmount
             ) {
               Object.assign(buyer, {
                 vehicleAccessibilityAmount: vehicleAccessibilityAmount?.id,
               });
             }
-            if (latLng?.latitude !== latitude) {
+            if (latLng?.latitude !== buyerAddress.latitude) {
               Object.assign(buyer, {
                 latitude: latLng?.latitude,
               });
             }
-            if (latLng?.longitude !== longitude) {
+            if (latLng?.longitude !== buyerAddress.longitude) {
               Object.assign(buyer, {
                 longitude: latLng?.longitude,
               });
