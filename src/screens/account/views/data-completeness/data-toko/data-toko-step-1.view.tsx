@@ -108,9 +108,15 @@ const DataTokoStep1View: React.FC = () => {
         <SnbButton2.Primary
           title="Lanjut"
           disabled={!name || !telp || updateCompleteDataState.loading}
-          onPress={() =>
-            updateCompleteData({ buyer: { name: name, phoneNo: telp } })
-          }
+          onPress={() => {
+            const { buyerName, buyerPhoneNo } =
+              completeDataState?.data?.buyerData || {};
+            if (name !== buyerName || telp !== buyerPhoneNo) {
+              updateCompleteData({ buyer: { name, phoneNo: telp } });
+            } else {
+              navigate(DATA_TOKO_STEP_2_VIEW);
+            }
+          }}
           loading={updateCompleteDataState.loading}
           size="medium"
           full
@@ -121,7 +127,9 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if ((name && name !== '') || (telp && telp !== '')) {
+          const { buyerName, buyerPhoneNo } =
+            completeDataState?.data?.buyerData || {};
+          if (name && telp && (name !== buyerName || telp !== buyerPhoneNo)) {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } });
           } else {
             backToDataCompleteness();
