@@ -2,9 +2,11 @@
 import React, { FC } from 'react';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import {
-  color as colors,
+  borderV2,
+  colorV2,
   SnbText2,
   SnbTextSeeMoreType1,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 /** === INTERFACE === */
 interface Props {
@@ -61,10 +63,14 @@ const SnbListButton: FC<Props> = (props) => {
     return (
       <View style={styles.rightContainer}>
         <SnbText2.Paragraph.Small
-          color={props.colorTextRight ? props.colorTextRight : colors.black100}>
+          color={
+            props.colorTextRight
+              ? props.colorTextRight
+              : colorV2.textColor.default
+          }>
           {props.textRight}
         </SnbText2.Paragraph.Small>
-        <View style={{ marginLeft: 16 }}>
+        <View style={{ marginLeft: layout.spacing.lg }}>
           {props.rightItem ? props.rightItem : null}
         </View>
       </View>
@@ -76,12 +82,12 @@ const SnbListButton: FC<Props> = (props) => {
         style={[
           styles.badgeContainer,
           {
-            marginTop: 16,
+            marginTop: layout.spacing.lg,
           },
         ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem1}
-          <View style={{ marginLeft: 16 }}>
+          <View style={{ marginLeft: layout.spacing.lg }}>
             <SnbText2.Paragraph.Small>
               {props.badgesTitle1}
             </SnbText2.Paragraph.Small>
@@ -89,8 +95,8 @@ const SnbListButton: FC<Props> = (props) => {
         </View>
         <TouchableOpacity
           onPress={props.pressBadge1}
-          style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
-          <SnbText2.Body.Small color={colors.blue50}>
+          style={{ marginLeft: layout.spacing.lg, justifyContent: 'flex-end' }}>
+          <SnbText2.Body.Small color={colorV2.textColor.link}>
             Lengkapi
           </SnbText2.Body.Small>
         </TouchableOpacity>
@@ -103,12 +109,12 @@ const SnbListButton: FC<Props> = (props) => {
         style={[
           styles.badgeContainer,
           {
-            marginTop: 16,
+            marginTop: layout.spacing.lg,
           },
         ]}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {props.leftBadgeItem2}
-          <View style={{ marginLeft: 16 }}>
+          <View style={{ marginLeft: layout.spacing.lg }}>
             <SnbText2.Paragraph.Small>
               {props.badgesTitle2}
             </SnbText2.Paragraph.Small>
@@ -116,8 +122,8 @@ const SnbListButton: FC<Props> = (props) => {
         </View>
         <TouchableOpacity
           onPress={props.pressBadge2}
-          style={{ marginLeft: 16, justifyContent: 'flex-end' }}>
-          <SnbText2.Body.Small color={colors.blue50}>
+          style={{ marginLeft: layout.spacing.lg, justifyContent: 'flex-end' }}>
+          <SnbText2.Body.Small color={colorV2.textColor.link}>
             Lengkapi
           </SnbText2.Body.Small>
         </TouchableOpacity>
@@ -130,7 +136,10 @@ const SnbListButton: FC<Props> = (props) => {
   return (
     <View>
       <TouchableOpacity
-        style={{ marginTop: 16, opacity: props.disabled ? 0.5 : 1 }}
+        style={{
+          marginTop: layout.spacing.lg,
+          opacity: props.disabled ? 0.5 : 1,
+        }}
         onPress={props.onPress}
         disabled={props.disabled}>
         <View style={styles.mainContainer}>
@@ -148,20 +157,20 @@ const SnbListButton: FC<Props> = (props) => {
 /** === STYLES === */
 const styles = StyleSheet.create({
   mainContainer: {
-    color: colors.white,
+    color: colorV2.bgColor.light,
     flexDirection: 'row',
-    marginHorizontal: 16,
+    marginHorizontal: layout.spacing.lg,
   },
   separator: {
     flex: 1,
     borderTopWidth: 1,
-    borderColor: colors.black10,
-    marginLeft: 16,
-    marginTop: 10,
+    borderColor: colorV2.strokeColor.disable,
+    marginLeft: layout.spacing.lg,
+    marginTop: layout.spacing.md,
   },
   leftContainer: {
     alignContent: 'flex-start',
-    marginRight: 16,
+    marginRight: layout.spacing.lg,
     alignSelf: 'center',
   },
   leftImage: {
@@ -173,22 +182,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textSubtitle1: {
-    marginLeft: -20,
+    marginLeft: -layout.spacing.xl,
   },
   textSubtitle2: {
-    marginBottom: 4,
+    marginBottom: layout.spacing.xxsm,
   },
   rightContainer: {
     alignItems: 'center',
     flexDirection: 'row',
   },
   badgeContainer: {
-    backgroundColor: colors.blue10,
+    backgroundColor: colorV2.bgColor.blue,
     flexDirection: 'row',
-    marginHorizontal: 16,
-    borderRadius: 8,
+    marginHorizontal: layout.spacing.lg,
+    borderRadius: borderV2.radius.md,
     alignItems: 'center',
-    padding: 16,
+    padding: layout.spacing.lg,
     justifyContent: 'space-between',
   },
 });
