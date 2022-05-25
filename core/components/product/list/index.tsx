@@ -1,7 +1,12 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, { FC, useState, useEffect, useRef, useMemo } from 'react';
 import { View, StatusBar } from 'react-native';
-import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbBottomSheet,
+  SnbToast,
+  SnbTopNav2,
+} from 'react-native-sinbad-ui';
 import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
@@ -55,6 +60,8 @@ import {
   CategoryTabsConfig,
   CategoryType,
 } from './product-list-core.type';
+import ProductTagList from './ProductTagList';
+import TitleSection from './TitleSection';
 /** === TYPE === */
 interface ProductListProps {
   products: Array<models.ProductList>;
@@ -72,6 +79,7 @@ interface ProductListProps {
   activeBrandId?: string;
   withBottomAction?: boolean;
   withTags?: boolean;
+  total: number;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -90,6 +98,7 @@ const ProductList: FC<ProductListProps> = ({
   activeBrandId,
   withBottomAction = true,
   withTags = true,
+  total,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -456,6 +465,10 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   };
   const pageLoading = initialLoading ? initialLoading : productLoading;
+  const hasTags = useMemo(
+    () => withTags && tags.length > 0,
+    [withTags, tags.length],
+  );
   /** === VIEW === */
   return (
     <SnbContainer color="white">
@@ -492,9 +505,25 @@ const ProductList: FC<ProductListProps> = ({
           }}
         />
       )}
+      <View>
+        {hasTags ? (
+          <ProductTagList
+            tags={tags}
+            onTagPress={handleTagPress}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+          />
+        ) : null}
+
+        <TitleSection
+          total={total}
+          onChangeLayoutListPress={() => handleActionClick({ type: 'layout' })}
+          onSortPress={() => handleActionClick({ type: 'sort' })}
+        />
+      </View>
       <View style={{ flex: 1 }}>
         {layoutDisplay === 'grid' ? (
           <GridLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
@@ -505,9 +534,15 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         ) : (
           <ListLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
@@ -518,6 +553,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         )}
       </View>
@@ -526,7 +566,8 @@ const ProductList: FC<ProductListProps> = ({
           <LoadingLoadMore />
         </View>
       )}
-      {withBottomAction && (
+      {/* bottom filter pdp list search */}
+      {/* {withBottomAction && (
         <BottomAction
           sort={true}
           filter={true}
@@ -537,7 +578,7 @@ const ProductList: FC<ProductListProps> = ({
           layoutDisplay={layoutDisplay}
           onActionPress={handleActionClick}
         />
-      )}
+      )} */}
       {/* Sort Modal */}
       <SnbBottomSheet
         open={sortModalVisible}
