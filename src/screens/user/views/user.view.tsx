@@ -327,7 +327,10 @@ const UserView: FC = ({ start }: any) => {
                 onSnapToItem={(index) => {
                   setActiveIndex(index);
                 }}
-                slideStyle={{ padding: layout.spacing.md }}
+                slideStyle={{
+                  paddingHorizontal: layout.spacing.xsm,
+                  paddingVertical: layout.spacing.md,
+                }}
                 inactiveSlideOpacity={1}
                 inactiveSlideScale={1}
                 activeSlideAlignment={'center'}
