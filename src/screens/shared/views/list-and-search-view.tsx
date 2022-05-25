@@ -1,20 +1,23 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import React, { useState, useEffect } from 'react';
-import {
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Image,
-} from 'react-native';
+import { FlatList, TouchableOpacity, View, Image } from 'react-native';
 import {
   SnbContainer,
-  SnbText,
-  SnbTopNav,
-  color,
+  SnbText2,
+  SnbTopNav2,
+  colorV2,
   SnbProgress,
 } from 'react-native-sinbad-ui';
+
+function setPlaceholder(type: string) {
+  switch (type) {
+    case 'listBank':
+      return 'Cari Nama Bank';
+    default:
+      return 'Cari di Sinbad';
+  }
+}
 
 const ListAndSearchView = () => {
   const { goBack } = useNavigation();
@@ -71,7 +74,7 @@ const ListAndSearchView = () => {
             justifyContent: 'center',
             marginHorizontal: 16,
           }}>
-          <SnbText.B2>Data tidak ditemukan</SnbText.B2>
+          <SnbText2.Body.Default>Data tidak ditemukan</SnbText2.Body.Default>
         </View>
       </View>
     );
@@ -79,70 +82,56 @@ const ListAndSearchView = () => {
 
   return (
     <SnbContainer color="white">
-      <SafeAreaView style={{ flex: 1 }}>
-        {params.type === 'listNumOfEmployee' ? (
-          <SnbTopNav.Type3
-            type="red"
-            backAction={goBack}
-            title={'Jumlah Karyawan'}
-          />
-        ) : (
-          <SnbTopNav.Type7
-            type="red"
-            placeholder="Pilih jumlah karyawan"
-            enter={() => searchData()}
-            backAction={goBack}
-            clearText={() => {
-              setSearch('');
-              setClearSearch(true);
-            }}
-            onChangeText={(text) => setSearch(text)}
-            value={search}
-          />
-        )}
+      <SnbTopNav2.Type6
+        color="white"
+        placeholder={setPlaceholder(params.type)}
+        onEnter={() => searchData()}
+        backAction={goBack}
+        onClearText={() => {
+          setSearch('');
+          setClearSearch(true);
+        }}
+        onChangeText={(text) => setSearch(text)}
+        inputValue={search}
+      />
 
-        <FlatList
-          data={listSelection.data?.data}
-          keyExtractor={(el, index) => index.toString()}
-          contentContainerStyle={{
-            flexGrow: 1,
-            justifyContent:
-              listSelection.data?.data?.length === 0 || listSelection.error
-                ? 'center'
-                : 'flex-start',
-          }}
-          ListEmptyComponent={() => {
-            const { data, error } = listSelection;
-            if (data?.length === 0 || error) {
-              return renderEmpty();
-            } else {
-              return (
-                <View style={{ marginVertical: 48 }}>
-                  <SnbProgress size={40} />
-                  <View style={{ marginVertical: 8 }} />
-                </View>
-              );
-            }
-          }}
-          renderItem={({ item, index }) => {
-            const backgroundColor =
-              index % 2 === 0 ? color.black5 : color.white;
+      <FlatList
+        data={listSelection.data?.data}
+        keyExtractor={(el, index) => index.toString()}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent:
+            listSelection.data?.data?.length === 0 || listSelection.error
+              ? 'center'
+              : 'flex-start',
+        }}
+        ListEmptyComponent={() => {
+          const { data, error } = listSelection;
+          if (data?.length === 0 || error) {
+            return renderEmpty();
+          } else {
             return (
-              <TouchableOpacity
-                style={{ padding: 16, backgroundColor }}
-                onPress={() => onSelectedItem({ item, type: params?.type })}>
-                <SnbText.B3>
-                  {item?.amount ||
-                    item?.name ||
-                    item?.city ||
-                    item?.district ||
-                    item?.urban}
-                </SnbText.B3>
-              </TouchableOpacity>
+              <View style={{ marginVertical: 48 }}>
+                <SnbProgress size={40} />
+                <View style={{ marginVertical: 8 }} />
+              </View>
             );
-          }}
-        />
-      </SafeAreaView>
+          }
+        }}
+        renderItem={({ item, index }) => {
+          const backgroundColor =
+            index % 2 === 0 ? colorV2.bgColor.light : colorV2.bgColor.neutral;
+          return (
+            <TouchableOpacity
+              style={{ padding: 16, backgroundColor }}
+              onPress={() => onSelectedItem({ item, type: params?.type })}>
+              <SnbText2.Paragraph.Default>
+                {item?.amount || item?.name}
+              </SnbText2.Paragraph.Default>
+            </TouchableOpacity>
+          );
+        }}
+      />
     </SnbContainer>
   );
 };
