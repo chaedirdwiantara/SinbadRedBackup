@@ -12,7 +12,6 @@ import {
   InputManualLocationModalView,
   ListLocationView,
   ProductCategoryView,
-  MapsViewType2,
   EmailOtp,
 } from '@screen/account/views';
 
@@ -55,9 +54,6 @@ const AccountNav = {
   },
   InputManualLocationModalView: {
     component: InputManualLocationModalView,
-  },
-  MapsViewType2: {
-    component: MapsViewType2,
   },
   EmailOtp: {
     component: EmailOtp,

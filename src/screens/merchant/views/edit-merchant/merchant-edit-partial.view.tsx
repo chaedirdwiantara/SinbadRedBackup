@@ -17,12 +17,10 @@ import MerchantStyles from '../../styles/merchant.style';
 import { contexts } from '@contexts';
 import { MerchantHookFunc, useInput } from '../../function';
 import { UserHookFunc } from '../../../user/functions';
-import { useTextFieldSelect } from '@screen/auth/functions';
 import { NavigationAction } from '@navigation';
 
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
-import { TextFieldSelect } from '@screen/account/views';
 
 interface Props {
   type: any;
@@ -44,8 +42,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   );
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { dispatchUser } = React.useContext(contexts.UserContext);
-  const { gotoSelection, selectedItem, resetSelectedItem } =
-    useTextFieldSelect();
   const storeData = stateUser.detail.data?.buyerData.buyerInformation;
   const buyerAddressData = stateUser.detail.data?.buyerData.buyerAddress;
   // USER DATA
@@ -104,18 +100,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       });
     }
   }, [stateMerchant]);
-
-  React.useEffect(() => {
-    switch (selectedItem?.type) {
-      case 'listVehicleAccess': {
-        vehicleAccessibility.setValue(selectedItem.item);
-        break;
-      }
-      default:
-        break;
-    }
-    return resetSelectedItem;
-  }, [selectedItem]);
 
   /** FUNCTION */
   const confirm = () => {
@@ -327,8 +311,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return renderOwnerTaxNo();
       case 'merchantOwnerPhoneNo':
         return renderOwnerPhoneNo();
-      case 'merchantCompletenessInformation':
-        return renderCompletenessInformationMerchant();
       case 'merchantAccountName':
         return renderMerchantAccountName();
       case 'merchantAccountSize':
@@ -494,65 +476,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           onClearText={() => merchantName.setValue('')}
           maxLength={50}
         />
-      </View>
-    );
-  };
-  /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
-  const renderCompletenessInformationMerchant = () => {
-    return (
-      <View style={styles.textFieldContainer}>
-        <View style={{ marginBottom: layout.spacing.lg }}>
-          <SnbTextField2.Text
-            labelText={'Ukuran Toko'}
-            placeholder={'Masukkan Ukuran Toko'}
-            type={'default'}
-            value={largeArea.value ? largeArea.value : ''}
-            onChangeText={(text) => {
-              const cleanNumber = text.replace(/[^0-9]/g, '');
-              largeArea.setValue(cleanNumber);
-            }}
-            onClearText={() => largeArea.setValue('')}
-            keyboardType={'number-pad'}
-            maxLength={4}
-          />
-        </View>
-        <View style={{ marginBottom: layout.spacing.lg }}>
-          <TextFieldSelect
-            placeholder={'Pilih Akses Jalan'}
-            type={'default'}
-            value={
-              vehicleAccessibility.value.name
-                ? vehicleAccessibility.value.name
-                : ''
-            }
-            onPress={() =>
-              gotoSelection({ type: 'listVehicleAccess', action: 'edit' })
-            }
-            rightIcon={'chevron_right'}
-            rightType={'icon'}
-            labelText={'Akses Jalan'}
-            mandatory
-          />
-        </View>
-        <View>
-          <SnbTextField2.Text
-            labelText={'Jumlah Akses Jalan'}
-            placeholder={'Masukkan Jumlah Akses Jalan'}
-            type={'default'}
-            value={
-              vehicleAccessibilityAmount.value
-                ? `${vehicleAccessibilityAmount.value}`
-                : ''
-            }
-            onChangeText={(text) => {
-              const cleanNumber = text.replace(/[^0-9]/g, '');
-              vehicleAccessibilityAmount.setValue(cleanNumber);
-            }}
-            onClearText={() => vehicleAccessibilityAmount.setValue('')}
-            keyboardType={'number-pad'}
-            maxLength={1}
-          />
-        </View>
       </View>
     );
   };
