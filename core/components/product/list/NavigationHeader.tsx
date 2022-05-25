@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES === */
-import React, { FC, useContext } from 'react';
+import React, { FC, useCallback, useContext, memo } from 'react';
 import { View } from 'react-native';
-import { SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbTopNav2 } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import {
   goBack,
@@ -35,21 +35,22 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
 
-  const validateCartVisit = () => {
+  const validateCartVisit = useCallback(() => {
     if (me.data === null) {
       backToLogin();
     } else {
       goToShoppingCart();
     }
-  };
+  }, [me.data]);
 
   return (
     <View>
       {type === 'default' ? (
-        <SnbTopNav.Type6
+        <SnbTopNav2.Type5
+          testID="pdp-list-header"
           title={title}
           backAction={goBack}
-          type="red"
+          color="white"
           icon1Name="search"
           icon1Action={goToSearch}
           icon2Value={stateCart.total.data?.totalProducts}
@@ -57,13 +58,14 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           icon2Action={validateCartVisit}
         />
       ) : (
-        <SnbTopNav.Type10
-          type="red"
+        <SnbTopNav2.Type8
+          testID="pdp-list-header"
           backAction={goBack}
+          color="white"
           placeholder="Cari di Sinbad"
-          value={keyword}
-          clearText={onSearchClear}
-          enter={onSearch}
+          inputValue={keyword}
+          onClearText={onSearchClear}
+          onEnter={onSearch}
           onChangeText={(text) => onKeywordChange(text)}
           icon1Name="home"
           icon1Action={goToHome}
@@ -76,4 +78,4 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   );
 };
 
-export default NavigationHeader;
+export default memo(NavigationHeader);
