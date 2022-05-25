@@ -229,7 +229,7 @@ const OTPContent: React.FC<Props> = (props) => {
                 </SnbText2.Paragraph.Default>
               </View>
             </View>
-            <View style={{ margin: layout.spacing.lg }}>
+            <View style={{ margin: layout.spacing.md }}>
               <SnbOTPInput
                 autoFocusOnLoad
                 code={otp}

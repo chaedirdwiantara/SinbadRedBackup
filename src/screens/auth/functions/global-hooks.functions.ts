@@ -27,7 +27,7 @@ export const useInputPhone = () => {
 
     if (text && !numberFormatIsValid && text.slice(0, 2) !== '08') {
       setType('error');
-      setValMsgError('Harus diawali angka ‘0’');
+      setValMsgError('Harus diawali angka ‘08’');
     } else if (text && !numberCountIsValid) {
       setType('error');
       setValMsgError('Digit nomor handphone kurang');

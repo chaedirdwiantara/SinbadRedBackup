@@ -5,6 +5,7 @@ import {
   SnbBottomSheet,
   SnbButton2,
   SnbText2,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { Image, View } from 'react-native';
@@ -40,28 +41,28 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
       open={open}
       closeAction={() => setOpen(false)}
       content={
-        <View style={{ alignItems: 'center', padding: 12 }}>
+        <View style={{ alignItems: 'center', padding: layout.spacing.md }}>
           <Image
             resizeMode="contain"
             style={{ height: 180, width: 180 }}
             source={require('@image/onboard/onboard1.png')}
           />
-          <View style={{ marginVertical: 16 }} />
+          <View style={{ marginVertical: layout.spacing.lg }} />
           <SnbText2.Headline.Default>
             Stok aman, jualan nyaman
           </SnbText2.Headline.Default>
-          <View style={{ marginVertical: 8 }} />
-          <View style={{ paddingHorizontal: 16 }}>
+          <View style={{ marginVertical: layout.spacing.sm }} />
+          <View style={{ paddingHorizontal: layout.spacing.lg }}>
             <SnbText2.Paragraph.Default align="center">
               Sinbad membantu Anda mendapatkan produk berkualitas dengan harga
               terbaik. Coba sekarang!
             </SnbText2.Paragraph.Default>
           </View>
-          <View style={{ marginVertical: 16 }} />
+          <View style={{ marginVertical: layout.spacing.lg }} />
           <View
             style={{
               flexDirection: 'row',
-              paddingHorizontal: 16,
+              paddingHorizontal: layout.spacing.lg,
             }}>
             <View style={{ flex: 1 }}>
               <SnbButton2.Primary
