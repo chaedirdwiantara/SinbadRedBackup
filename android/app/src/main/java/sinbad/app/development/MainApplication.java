@@ -7,6 +7,7 @@ import android.os.Build;
 import androidx.multidex.MultiDexApplication;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.RNInstallReferrerPackage;
 import com.moengage.react.MoEInitializer;
 import com.moengage.react.MoEReactPackage;
 import com.moengage.core.MoEngage;
