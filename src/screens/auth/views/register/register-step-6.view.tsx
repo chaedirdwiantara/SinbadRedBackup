@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
+import { TextFieldSelect } from '@screen/account/views';
 import {
   renderIF,
   useInput,
@@ -15,7 +16,6 @@ import {
   SnbContainer,
   SnbText,
   SnbTextField,
-  SnbTextFieldSelect,
   SnbTopNav,
 } from 'react-native-sinbad-ui';
 import RegisterProgress from '../shared/register-progress.component';
@@ -130,7 +130,7 @@ const Content: React.FC = () => {
             />
           </View>
           <View style={{ padding: 16 }}>
-            <SnbTextFieldSelect
+            <TextFieldSelect
               labelText="Akses Jalan"
               mandatory
               value={

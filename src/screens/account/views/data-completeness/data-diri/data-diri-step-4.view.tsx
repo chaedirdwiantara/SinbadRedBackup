@@ -4,6 +4,7 @@ import {
   SnbTopNav2,
   SnbTextField2,
   SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler } from 'react-native';
@@ -133,10 +134,11 @@ const DataDiriStep4View: React.FC = () => {
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
-        <View style={{ alignItems: 'center', marginVertical: 16 }}>
+        <View
+          style={{ alignItems: 'center', marginVertical: layout.spacing.lg }}>
           <Svg name="notification" size={240} />
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={emailIsNotValid ? 'error' : 'default'}
             value={email}
@@ -148,7 +150,7 @@ const DataDiriStep4View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Simpan"
           disabled={
