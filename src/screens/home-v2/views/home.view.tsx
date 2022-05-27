@@ -66,13 +66,43 @@ const HomeView: FC = ({ start }: any) => {
         }}>
         {renderIF(
           isBadgeVIPAvailable,
+          <>
+            <CopilotStep
+              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+              order={3}
+              name="Jadi anggota VIP Sinbad">
+              <CopilotView>
+                <UpgradeVIPAccountBadge />
+              </CopilotView>
+            </CopilotStep>
+            <CopilotStep
+              text="Semua pesanan yang telah dibuat tersedia di halaman ini."
+              order={4}
+              name="Lihat Pesanan">
+              <CopilotView
+                style={{
+                  height: 54,
+                  width: width * 0.25,
+                  position: 'absolute',
+                  bottom: -12,
+                  left: width * 0.25,
+                }}
+              />
+            </CopilotStep>
+          </>,
           <CopilotStep
-            text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+            text="Semua pesanan yang telah dibuat tersedia di halaman ini."
             order={3}
-            name="Jadi anggota VIP Sinbad">
-            <CopilotView>
-              <UpgradeVIPAccountBadge />
-            </CopilotView>
+            name="Lihat Pesanan">
+            <CopilotView
+              style={{
+                height: 54,
+                width: width * 0.25,
+                position: 'absolute',
+                bottom: -72,
+                left: width * 0.25,
+              }}
+            />
           </CopilotStep>,
         )}
         <CopilotStep
@@ -93,20 +123,6 @@ const HomeView: FC = ({ start }: any) => {
         />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
-      <CopilotStep
-        text="Semua pesanan yang telah dibuat tersedia di halaman ini."
-        order={isBadgeVIPAvailable ? 4 : 3}
-        name="Lihat Pesanan">
-        <CopilotView
-          style={{
-            height: 54,
-            width: width * 0.25,
-            position: 'absolute',
-            bottom: -56,
-            left: width * 0.25,
-          }}
-        />
-      </CopilotStep>
     </View>
   );
 };
