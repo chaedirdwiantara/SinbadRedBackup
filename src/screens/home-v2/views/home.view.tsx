@@ -57,54 +57,13 @@ const HomeView: FC = ({ start }: any) => {
         onClearText={() => setKeyword('')}
         onEnter={() => console.log('Searched keyword:', keyword)}
       />
-
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
         }}>
-        {renderIF(
-          isBadgeVIPAvailable,
-          <>
-            <CopilotStep
-              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
-              order={3}
-              name="Jadi anggota VIP Sinbad">
-              <CopilotView>
-                <UpgradeVIPAccountBadge />
-              </CopilotView>
-            </CopilotStep>
-            <CopilotStep
-              text="Semua pesanan yang telah dibuat tersedia di halaman ini."
-              order={4}
-              name="Lihat Pesanan">
-              <CopilotView
-                style={{
-                  height: 54,
-                  width: width * 0.25,
-                  position: 'absolute',
-                  bottom: -12,
-                  left: width * 0.25,
-                }}
-              />
-            </CopilotStep>
-          </>,
-          <CopilotStep
-            text="Semua pesanan yang telah dibuat tersedia di halaman ini."
-            order={3}
-            name="Lihat Pesanan">
-            <CopilotView
-              style={{
-                height: 54,
-                width: width * 0.25,
-                position: 'absolute',
-                bottom: -72,
-                left: width * 0.25,
-              }}
-            />
-          </CopilotStep>,
-        )}
+        {renderIF(isBadgeVIPAvailable, <UpgradeVIPAccountBadge />)}
         <CopilotStep
           text="Cek promo terbaik setiap hari biar belanja makin hemat."
           order={2}
@@ -123,6 +82,47 @@ const HomeView: FC = ({ start }: any) => {
         />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
+      {renderIF(
+        isBadgeVIPAvailable,
+        <>
+          <CopilotStep
+            text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+            order={3}
+            name="Jadi anggota VIP Sinbad">
+            <CopilotView
+              style={{ position: 'absolute', top: 84, height: 56, width }}
+            />
+          </CopilotStep>
+          <CopilotStep
+            text="Semua pesanan yang telah dibuat tersedia di halaman ini."
+            order={4}
+            name="Lihat Pesanan">
+            <CopilotView
+              style={{
+                height: 54,
+                width: width * 0.25,
+                position: 'absolute',
+                bottom: -56,
+                left: width * 0.25,
+              }}
+            />
+          </CopilotStep>
+        </>,
+        <CopilotStep
+          text="Semua pesanan yang telah dibuat tersedia di halaman ini."
+          order={3}
+          name="Lihat Pesanan">
+          <CopilotView
+            style={{
+              height: 54,
+              width: width * 0.25,
+              position: 'absolute',
+              bottom: -56,
+              left: width * 0.25,
+            }}
+          />
+        </CopilotStep>,
+      )}
     </View>
   );
 };
