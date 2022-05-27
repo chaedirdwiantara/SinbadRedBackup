@@ -14,3 +14,7 @@ export const setSearchKeywords = (
 ): models.SetSearchKeywordActions => {
   return { type: types.SEARCH_KEYWORDS_PRODUCT, payload };
 };
+/** => APP VERSION */
+export const appVersion = (payload: any): models.AppVersionActions => {
+  return { type: types.SAVE_APP_VERSION, payload };
+};
