@@ -1,6 +1,10 @@
 import React, { FC, useState } from 'react';
 import { View, ScrollView, Dimensions } from 'react-native';
-import { SnbTopNav2, colorV2 } from '@sinbad/react-native-sinbad-ui';
+import {
+  SnbTopNav2,
+  colorV2,
+  spacingV2 as layout,
+} from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands } from '../components';
@@ -37,7 +41,7 @@ const HomeView: FC = ({ start }: any) => {
             height: 56,
             position: 'absolute',
             width: '100%',
-            marginVertical: 12,
+            marginTop: layout.spacing.xl,
           }}
         />
       </CopilotStep>
