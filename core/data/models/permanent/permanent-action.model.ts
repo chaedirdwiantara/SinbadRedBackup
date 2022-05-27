@@ -13,3 +13,8 @@ export interface SetSearchKeywordActions {
   type: string;
   payload: Array<string>;
 }
+/** === APP VERSION === */
+export interface AppVersionActions {
+  type: string;
+  payload: any;
+}

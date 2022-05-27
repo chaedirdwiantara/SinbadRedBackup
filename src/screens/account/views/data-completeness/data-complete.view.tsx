@@ -7,7 +7,7 @@ import {
 } from '@screen/account/functions/screens_name';
 import Svg from '@svg';
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
   colorV2,
   SnbContainer,
@@ -36,9 +36,9 @@ const CompleteDataSkeleton: React.FC = () => {
           style={{ height: 24, borderRadius: borderV2.radius.sm, width: 120 }}
         />
         <View style={{ marginVertical: layout.spacing.xxl }} />
-        <View style={{ height: 84, borderRadius: layout.spacing.sm }} />
+        <View style={{ height: 84, borderRadius: borderV2.radius.md }} />
         <View style={{ marginVertical: layout.spacing.xsm }} />
-        <View style={{ height: 84, borderRadius: layout.spacing.sm }} />
+        <View style={{ height: 84, borderRadius: borderV2.radius.md }} />
       </SnbSkeletonAnimator>
     </View>
   );
@@ -95,7 +95,7 @@ const Content: React.FC = () => {
           style={{
             flex: 1,
             paddingHorizontal: layout.spacing.lg,
-            paddingVertical: layout.spacing.xxl,
+            paddingVertical: layout.spacing.xl,
           }}>
           <SnbText2.Headline.Default>
             Selangkah Lagi Untuk Mengembangkan Toko Anda
@@ -105,21 +105,23 @@ const Content: React.FC = () => {
             Silakan lengkapi data untuk menjadi anggota VIP
           </SnbText2.Paragraph.Default>
           <View style={{ marginVertical: layout.spacing.xl }} />
-          <SnbCardButtonType3
-            title="Data Diri"
-            desc="1-2 Menit Pengisian"
-            onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
-            svgIcon={() => <Svg name="personal_data" size={48} />}
-            showBadge={isShowBadgeSuccessUser}
-          />
-          <View style={{ marginVertical: layout.spacing.xsm }} />
-          <SnbCardButtonType3
-            title="Data Toko"
-            desc="1-2 Menit Pengisian"
-            onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
-            svgIcon={() => <Svg name="store_data" size={48} />}
-            showBadge={isShowBadgeSuccessBuyer}
-          />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <SnbCardButtonType3
+              title="Data Diri"
+              desc="1-2 Menit Pengisian"
+              onPress={() => navigate(DATA_DIRI_STEP_1_VIEW)}
+              svgIcon={() => <Svg name="personal_data" size={48} />}
+              showBadge={isShowBadgeSuccessUser}
+            />
+            <View style={{ marginVertical: layout.spacing.xsm }} />
+            <SnbCardButtonType3
+              title="Data Toko"
+              desc="1-2 Menit Pengisian"
+              onPress={() => navigate(DATA_TOKO_STEP_1_VIEW)}
+              svgIcon={() => <Svg name="store_data" size={48} />}
+              showBadge={isShowBadgeSuccessBuyer}
+            />
+          </ScrollView>
         </View>
         <View>
           <View
@@ -151,8 +153,8 @@ const Content: React.FC = () => {
                 completeDataConfirmationState.loading
               }
               loading={completeDataConfirmationState.loading}
-              size="medium"
               full
+              size="medium"
             />
           </View>
         </View>
