@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   SnbButton2,
-  SnbOTPInput,
   SnbText2,
-  SnbOTPTimer,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 import Svg from '@svg';
 import { useOTP } from '@screen/auth/functions';
+import { OTPInput, OTPTimer } from '@screen/shared/views/components';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
@@ -50,15 +49,17 @@ const OTPContent: React.FC<Props> = (props) => {
             Masukkan kode Verifikasi
           </SnbText2.Headline.Default>
           <View style={{ marginVertical: layout.spacing.xxsm }} />
-          <SnbText2.Paragraph.Default align="center">
-            Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
-          </SnbText2.Paragraph.Default>
+          <View style={{ paddingHorizontal: layout.spacing['3xl'] }}>
+            <SnbText2.Paragraph.Default align="center">
+              Kode verifikasi telah dikirimkan melalui sms ke{' '}
+              <SnbText2.Body.Default>{phoneNo}</SnbText2.Body.Default>
+            </SnbText2.Paragraph.Default>
+          </View>
         </View>
         <View style={{ margin: layout.spacing.xxsm }}>
-          <SnbOTPInput
+          <OTPInput
             {...props}
             type={error ? 'error' : 'default'}
-            hideIcon
             showMessage={error || otpSuccess ? true : false}
             code={otp}
             onCodeChanged={setOtp}
@@ -74,7 +75,7 @@ const OTPContent: React.FC<Props> = (props) => {
           size="medium"
           full
         />
-        <SnbOTPTimer action={resend} />
+        <OTPTimer action={resend} />
       </View>
     </View>
   );
