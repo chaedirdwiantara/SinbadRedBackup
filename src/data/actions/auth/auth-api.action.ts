@@ -2,6 +2,8 @@ import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
 import { setUserFCM } from '@core/functions/firebase/fcm-firestore.function';
+import { globalReportFromAction } from '../../../report/GlobalReport';
+import * as EventName from '../../../report/moengage/event';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
@@ -46,6 +48,8 @@ export const requestOTPFailed = (
 export const verificationOTPProcess = (
   data: models.LoginPhoneNumber,
 ): models.VerificationOTPProcessAction => {
+  console.log('disiniOtp:', data);
+  globalReportFromAction(EventName.LOGIN, data);
   return { type: types.VERIFICATION_OTP_PROCESS, payload: data };
 };
 /** => success */
