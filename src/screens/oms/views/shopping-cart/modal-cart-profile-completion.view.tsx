@@ -2,7 +2,8 @@
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
 import {
-  SnbBottomSheet,
+  SnbBottomSheetPart,
+  SnbBottomSheet2,
   SnbText2,
   color,
   SnbButton2,
@@ -50,5 +51,19 @@ export const ModalCartProfileCompletion: FC<
     );
   };
 
-  return <SnbBottomSheet open={isOpen} content={renderContent()} />;
+  const renderTitle = () => {
+    return <SnbBottomSheetPart.Title />;
+  };
+
+  return (
+    <SnbBottomSheet2
+      name={'cartProfileCompletionModal'}
+      type={'content'}
+      contentHeight={430}
+      snap={false}
+      open={isOpen}
+      title={renderTitle()}
+      content={renderContent()}
+    />
+  );
 };
