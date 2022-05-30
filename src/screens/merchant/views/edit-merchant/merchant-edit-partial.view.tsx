@@ -1,11 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
-  SnbTextField,
-  SnbTextFieldSelect,
-  SnbButton,
+  SnbTextField2,
+  SnbButton2,
   SnbToast,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, KeyboardAvoidingView } from 'react-native';
+import {
+  ScrollView,
+  View,
+  KeyboardAvoidingView,
+  StyleSheet,
+} from 'react-native';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -17,6 +22,7 @@ import { NavigationAction } from '@navigation';
 
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+import { TextFieldSelect } from '@screen/account/views';
 
 interface Props {
   type: any;
@@ -210,10 +216,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       }
       case 'merchantCompletenessInformation': {
         data = {
-          // numberOfEmployee: numberOfEmployee.value,
           largeArea: largeArea.value,
-          // topSellingBrand: topBrand.value,
-          // mostWantedBrand: wantedBrand.value,
           vehicleAccessibilityId: vehicleAccessibility.value.id,
           vehicleAccessibilityAmount: vehicleAccessibilityAmount.value
             ? Number(vehicleAccessibilityAmount.value)
@@ -345,14 +348,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NAME === */
   const renderOwnerName = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nama Lengkap Pemilik'}
           placeholder={'Masukkan Nama Lengkap Pemilik'}
           type={'default'}
           value={ownerName.value ? ownerName.value : ''}
           onChangeText={(text) => ownerName.setValue(text)}
-          clearText={() => ownerName.setValue('')}
+          onClearText={() => ownerName.setValue('')}
           maxLength={64}
         />
       </View>
@@ -361,14 +364,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER EMAIL === */
   const renderOwnerEmail = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'E-mail'}
           placeholder={'Masukkan E-mail'}
           type={emailIsNotValid ? 'error' : 'default'}
           value={ownerEmail.value ? ownerEmail.value : ''}
           onChangeText={(text) => validateEmail(text)}
-          clearText={() => ownerEmail.setValue('')}
+          onClearText={() => ownerEmail.setValue('')}
           valMsgError={'Pastikan email yang Anda masukkan benar'}
         />
       </View>
@@ -377,14 +380,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO HANDPHONE === */
   const renderOwnerPhoneNo = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nomor Handphone'}
           placeholder={'Masukkan nomor handphone Anda'}
           type={'default'}
           value={mobilePhone.value ? mobilePhone.value : ''}
           onChangeText={(text) => mobilePhone.setValue(text)}
-          clearText={() => mobilePhone.setValue('')}
+          onClearText={() => mobilePhone.setValue('')}
           maxLength={14}
           keyboardType={'numeric'}
         />
@@ -394,8 +397,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO KTP === */
   const renderOwnerIdNo = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nomor Kartu Tanda Penduduk (KTP)'}
           placeholder={'Masukkan Nomor KTP maks. 16 Digit'}
           type={errorIdNumber ? 'error' : 'default'}
@@ -404,7 +407,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkIdNoFormat(cleanNumber);
           }}
-          clearText={() => noKtp.setValue('')}
+          onClearText={() => noKtp.setValue('')}
           keyboardType={'numeric'}
           maxLength={16}
           valMsgError={'Pastikan Nomor KTP 16 Digit'}
@@ -415,8 +418,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER OWNER NO NPWP === */
   const renderOwnerTaxNo = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nomor Pokok Wajib Pajak (NPWP) Pemilik'}
           placeholder={'Masukkan Nomor NPWP maks.15 Digit'}
           type={errorTaxNumber ? 'error' : 'default'}
@@ -425,7 +428,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             checkTaxNoFormat(cleanNumber);
           }}
-          clearText={() => noNPWP.setValue('')}
+          onClearText={() => noNPWP.setValue('')}
           valMsgError={'Pastikan Nomor NPWP 15 Digit'}
           maxLength={15}
           keyboardType={'number-pad'}
@@ -441,14 +444,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER MERCHANT ACCOUNT NAME === */
   const renderMerchantAccountName = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nama Toko'}
           placeholder={'Masukkan Nama Toko'}
           type={'default'}
           value={merchantName.value}
           onChangeText={(text) => merchantName.setValue(text)}
-          clearText={() => merchantName.setValue('')}
+          onClearText={() => merchantName.setValue('')}
           maxLength={50}
         />
       </View>
@@ -457,8 +460,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER MERCHANT ACCOUNT PHONE NUMBER === */
   const renderMerchantAccountPhoneNo = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Nomor Handphone Toko'}
           placeholder={'Masukkan Nomor Handphone Toko'}
           type={'default'}
@@ -467,7 +470,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             const cleanNumber = text.replace(/[^0-9]/g, '');
             merchantPhoneNo.setValue(cleanNumber);
           }}
-          clearText={() => merchantPhoneNo.setValue('')}
+          onClearText={() => merchantPhoneNo.setValue('')}
           maxLength={14}
           keyboardType={'number-pad'}
         />
@@ -477,8 +480,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER MERCHANT ACCOUNT SIZE === */
   const renderMerchantAccountSize = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <SnbTextField2.Text
           labelText={'Ukuran Toko'}
           placeholder={'Masukkan Ukuran Toko (dalam meter)'}
           type={'default'}
@@ -488,7 +491,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             text = text.replace(/[^0-9]/g, '');
             merchantSize.setValue(text);
           }}
-          clearText={() => merchantName.setValue('')}
+          onClearText={() => merchantName.setValue('')}
           maxLength={50}
         />
       </View>
@@ -497,9 +500,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** === RENDER COMPLETENESS MERCHANT INFORMATION DETAIL === */
   const renderCompletenessInformationMerchant = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
+      <View style={styles.textFieldContainer}>
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <SnbTextField2.Text
             labelText={'Ukuran Toko'}
             placeholder={'Masukkan Ukuran Toko'}
             type={'default'}
@@ -508,14 +511,13 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
               largeArea.setValue(cleanNumber);
             }}
-            clearText={() => largeArea.setValue('')}
+            onClearText={() => largeArea.setValue('')}
             keyboardType={'number-pad'}
-            rightText={'m²'}
             maxLength={4}
           />
         </View>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextFieldSelect
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <TextFieldSelect
             placeholder={'Pilih Akses Jalan'}
             type={'default'}
             value={
@@ -533,7 +535,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           />
         </View>
         <View>
-          <SnbTextField.Text
+          <SnbTextField2.Text
             labelText={'Jumlah Akses Jalan'}
             placeholder={'Masukkan Jumlah Akses Jalan'}
             type={'default'}
@@ -546,7 +548,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
               vehicleAccessibilityAmount.setValue(cleanNumber);
             }}
-            clearText={() => vehicleAccessibilityAmount.setValue('')}
+            onClearText={() => vehicleAccessibilityAmount.setValue('')}
             keyboardType={'number-pad'}
             maxLength={1}
           />
@@ -561,10 +563,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       props.type === 'merchantOwnerPhoneNo';
 
     return props.showButton ? (
-      <View style={{ height: 75 }}>
-        <SnbButton.Single
+      <View style={{ padding: layout.spacing.lg }}>
+        <SnbButton2.Primary
           title={labelVerify ? 'Verifikasi' : 'Simpan'}
-          type={'primary'}
           onPress={() => confirm()}
           disabled={
             checkButton() ||
@@ -579,6 +580,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             stateMerchant.changeMobilePhone.loading ||
             stateMerchant.changeEmail.loading
           }
+          size="medium"
+          full
         />
       </View>
     ) : (
@@ -598,4 +601,12 @@ const MerchantEditPartialView: FC<Props> = (props) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  textFieldContainer: {
+    flex: 1,
+    marginTop: layout.spacing.lg,
+    marginHorizontal: layout.spacing.lg,
+  },
+});
 export default MerchantEditPartialView;

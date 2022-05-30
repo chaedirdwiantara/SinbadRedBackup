@@ -11,9 +11,10 @@ import React from 'react';
 import { Image, View } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
+  SnbTopNav2,
   SnbToast,
-  SnbButton,
+  SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 
 const rules = [
@@ -69,16 +70,15 @@ const Content: React.FC = () => {
           style={{
             height: 240,
             width: undefined,
-            margin: 16,
+            margin: layout.spacing.lg,
           }}
         />
-        <View style={{ height: 72 }}>
-          <SnbButton.Dynamic
-            size="small"
-            type="tertiary"
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Link
+            size="medium"
             title="Ubah Foto"
+            full
             onPress={() => openCameraWithOCR('ktp')}
-            disabled={false}
           />
         </View>
       </View>
@@ -116,7 +116,7 @@ const UpdatePhotoKTPView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3 type="white" title={'Foto KTP'} backAction={goBack} />
+      <SnbTopNav2.Type3 color="white" title={'Foto KTP'} backAction={goBack} />
       <Content />
     </SnbContainer>
   );

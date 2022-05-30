@@ -3,14 +3,15 @@ import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
 import { View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbTextFieldSelect,
-  SnbTopNav,
+  SnbTopNav2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { ModalSelection } from '../shared';
 import * as models from '@models';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
+import TextFieldSelect from '../textfield-select-2.component';
 
 const Content = () => {
   const { resetSelectedItem, resetGetSelection, getSelection, onSelectedItem } =
@@ -44,8 +45,8 @@ const Content = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <View style={{ flex: 1 }}>
-        <View style={{ padding: 16 }}>
-          <SnbTextFieldSelect
+        <View style={{ padding: layout.spacing.lg }}>
+          <TextFieldSelect
             labelText="Provinsi"
             placeholder="Pilih Provinsi"
             mandatory
@@ -59,8 +60,8 @@ const Content = () => {
             rightType="icon"
             rightIcon="chevron_right"
           />
-          <View style={{ marginVertical: 12 }} />
-          <SnbTextFieldSelect
+          <View style={{ marginVertical: layout.spacing.md }} />
+          <TextFieldSelect
             labelText="Kota"
             placeholder="Pilih Kota"
             mandatory
@@ -82,8 +83,8 @@ const Content = () => {
             rightType="icon"
             rightIcon="chevron_right"
           />
-          <View style={{ marginVertical: 12 }} />
-          <SnbTextFieldSelect
+          <View style={{ marginVertical: layout.spacing.md }} />
+          <TextFieldSelect
             labelText="Kecamatan"
             placeholder="Pilih Kecamatan"
             mandatory
@@ -108,8 +109,8 @@ const Content = () => {
             rightType="icon"
             rightIcon="chevron_right"
           />
-          <View style={{ marginVertical: 12 }} />
-          <SnbTextFieldSelect
+          <View style={{ marginVertical: layout.spacing.md }} />
+          <TextFieldSelect
             labelText="Desa/Kelurahan"
             placeholder="Pilih Desa/Kelurahan"
             value={urban?.urban || ''}
@@ -135,8 +136,8 @@ const Content = () => {
             rightType="icon"
             rightIcon="chevron_right"
           />
-          <View style={{ marginVertical: 12 }} />
-          <SnbTextFieldSelect
+          <View style={{ marginVertical: layout.spacing.md }} />
+          <TextFieldSelect
             labelText="Kode Pos"
             placeholder="Lihat Kode Pos"
             mandatory
@@ -148,8 +149,8 @@ const Content = () => {
           />
         </View>
       </View>
-      <View style={{ height: 72 }}>
-        <SnbButton.Single
+      <View style={{ padding: layout.spacing.lg }}>
+        <SnbButton2.Primary
           title="Simpan Lokasi Manual"
           loading={locations.loading}
           onPress={() => {
@@ -160,7 +161,8 @@ const Content = () => {
           disabled={
             !province || !city || !district || !urban || locations.loading
           }
-          type="primary"
+          size="medium"
+          full
         />
       </View>
       <ModalSelection
@@ -210,7 +212,11 @@ const InputManualLocationModalView = () => {
   const { goBack } = useNavigation();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 backAction={goBack} title="Lokasi Manual" type="white" />
+      <SnbTopNav2.Type3
+        backAction={goBack}
+        title="Lokasi Manual"
+        color="white"
+      />
       <Content />
     </SnbContainer>
   );

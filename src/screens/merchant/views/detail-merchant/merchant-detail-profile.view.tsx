@@ -1,11 +1,13 @@
 import React, { FC, useEffect } from 'react';
 import {
   SnbContainer,
-  SnbTopNav,
-  SnbText,
+  SnbTopNav2,
+  SnbText2,
   SnbIcon,
-  color,
+  colorV2,
   SnbToast,
+  SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import {
   Image,
@@ -99,8 +101,8 @@ const MerchantDetailProfileView: FC = () => {
   /** => header */
   const header = () => {
     return (
-      <SnbTopNav.Type3
-        type="white"
+      <SnbTopNav2.Type3
+        color="white"
         title="Data Diri"
         backAction={() => NavigationAction.back()}
       />
@@ -117,13 +119,21 @@ const MerchantDetailProfileView: FC = () => {
         {ownerData?.profile.imageUrl ? (
           <Image source={source} style={MerchantStyles.imageProfile} />
         ) : (
-          <SnbIcon name={'person_circle'} size={100} color={color.black40} />
+          <SnbIcon
+            name={'person_circle'}
+            size={100}
+            color={colorV2.iconColor.dark}
+          />
         )}
         <TouchableOpacity
           style={MerchantStyles.boxEditIconContainer}
           onPress={() => goTo({ type: 'merchantOwnerImage' })}>
           <View style={MerchantStyles.boxEditIcon}>
-            <SnbIcon name={'create'} size={10} color={color.white} />
+            <SnbIcon
+              name={'create'}
+              size={10}
+              color={colorV2.iconColor.white}
+            />
           </View>
         </TouchableOpacity>
       </View>
@@ -134,13 +144,13 @@ const MerchantDetailProfileView: FC = () => {
     return (
       <View style={MerchantStyles.headerContainer}>
         <View style={MerchantStyles.badgeBox}>
-          <View style={{ marginRight: 8 }}>
-            <SnbIcon name={'info'} size={15} color={color.blue50} />
+          <View style={{ marginRight: layout.spacing.sm }}>
+            <SnbIcon name={'info'} size={16} color={colorV2.iconColor.blue} />
           </View>
-          <View style={{ width: '95%' }}>
-            <SnbText.B3 color={color.blue50}>
+          <View style={{ flex: 1 }}>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
               Transaksi lebih mudah dan cepat dengan melengkapi data diri.
-            </SnbText.B3>
+            </SnbText2.Paragraph.Small>
           </View>
         </View>
         <View style={MerchantStyles.boxHeader}>{renderOwnerImage()}</View>
@@ -153,13 +163,13 @@ const MerchantDetailProfileView: FC = () => {
       <View
         style={{
           alignSelf: 'center',
-          marginHorizontal: 8,
+          marginHorizontal: layout.spacing.sm,
         }}>
         <View style={{ alignSelf: 'center' }}>
           <SnbIcon
             name={'shield'}
             size={16}
-            color={data ? color.green50 : color.black60}
+            color={data ? colorV2.iconColor.green : colorV2.iconColor.dark}
           />
         </View>
       </View>
@@ -169,29 +179,33 @@ const MerchantDetailProfileView: FC = () => {
   const renderContentSection = (data: any) => {
     return (
       <View style={MerchantStyles.boxContent}>
-        <View style={{ width: '85%' }}>
-          <View style={{ marginBottom: 6, flexDirection: 'row' }}>
-            <SnbText.H4>{data.key}</SnbText.H4>
+        <View style={{ flex: 1 }}>
+          <View
+            style={{ marginBottom: layout.spacing.sm, flexDirection: 'row' }}>
+            <SnbText2.Body.Default>{data.key}</SnbText2.Body.Default>
             {data.label !== undefined ? renderLabel(data.label) : null}
           </View>
-          <SnbText.B1 color={data.success ? color.green50 : color.black60}>
+          <SnbText2.Paragraph.Default
+            color={
+              data.success ? colorV2.iconColor.green : colorV2.iconColor.dark
+            }>
             {data.value}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity
+            <SnbButton2.Link
               onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.blue50}>Tambah</SnbText.C1>
-            </TouchableOpacity>
+              title="Tambah"
+              size="small"
+            />
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity
+            <SnbButton2.Link
               onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.blue50}>Ubah</SnbText.C1>
-            </TouchableOpacity>
+              title="Ubah"
+              size="small"
+            />
           )}
         </View>
       </View>
@@ -293,7 +307,7 @@ const MerchantDetailProfileView: FC = () => {
   /** => main content */
   const renderMainContent = () => {
     return (
-      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: layout.spacing.lg }}>
         {renderHeaderImage()}
         {renderContent()}
       </ScrollView>

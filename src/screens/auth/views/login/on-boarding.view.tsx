@@ -4,7 +4,9 @@ import {
   SnbButton2,
   SnbContainer,
   SnbText2,
-  color,
+  colorV2,
+  spacingV2 as layout,
+  borderV2,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {
@@ -12,6 +14,7 @@ import {
   LOGIN_PHONE_VIEW,
 } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
+import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 
 interface Props {
   testID?: string;
@@ -49,6 +52,8 @@ const OnBoardingView: React.FC<Props> = () => {
     },
   ]);
 
+  setFlagByDeviceId();
+
   const slideOnBoard = () => {
     return (
       <View>
@@ -61,7 +66,7 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View style={{ flexDirection: 'row', padding: 16 }}>
+      <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
         <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Masuk'}
@@ -71,7 +76,7 @@ const OnBoardingView: React.FC<Props> = () => {
             outline
           />
         </View>
-        <View style={{ marginHorizontal: 8 }} />
+        <View style={{ marginHorizontal: layout.spacing.sm }} />
         <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Daftar'}
@@ -93,7 +98,7 @@ const OnBoardingView: React.FC<Props> = () => {
         </SnbText2.Paragraph.Default>
         <TouchableOpacity
           onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
-          <SnbText2.Body.Default color={color.blue50}>
+          <SnbText2.Body.Default color={colorV2.textColor.link}>
             Lewati
           </SnbText2.Body.Default>
         </TouchableOpacity>
@@ -104,7 +109,7 @@ const OnBoardingView: React.FC<Props> = () => {
   const termsNotice = () => {
     return (
       <View style={styles.termsNoticeContainer}>
-        <SnbText2.Paragraph.Small color={color.blue50} align="center">
+        <SnbText2.Paragraph.Small color={colorV2.textColor.link} align="center">
           Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
           Kebijakan Privasi kami
         </SnbText2.Paragraph.Small>
@@ -127,39 +132,17 @@ const OnBoardingView: React.FC<Props> = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'space-between' },
-  image: {
-    alignSelf: 'center',
-    marginVertical: 32,
-    aspectRatio: 1,
-  },
-  textSlider: {
-    flex: 1,
-    width: 240,
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  button: {
-    flex: 1,
-    height: 72,
-  },
   textSkipLogin: {
     flexDirection: 'row',
     alignSelf: 'center',
-    marginVertical: 8,
+    marginVertical: layout.spacing.sm,
   },
   termsNoticeContainer: {
-    backgroundColor: color.blue10,
-    borderRadius: 4,
-    padding: 12,
-    margin: 16,
-    marginBottom: 32,
+    backgroundColor: colorV2.special.blue10,
+    borderRadius: borderV2.radius.sm,
+    padding: layout.spacing.md,
+    margin: layout.spacing.lg,
+    marginBottom: layout.spacing.xxl,
   },
 });
 

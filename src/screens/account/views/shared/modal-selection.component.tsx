@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  color,
+  colorV2,
   SnbBottomSheet,
   SnbButton2,
+  SnbIcon,
   SnbProgress,
-  SnbRadioButton,
   SnbText2,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
@@ -151,22 +152,30 @@ const ModalSelection: React.FC<Props> = ({
                 if (listSelection.loading) {
                   return <SnbProgress />;
                 }
-                return (
-                  <ErrorContent
-                    action={() => getSelection({ type, params })}
-                    message={
-                      listSelection.error?.message || 'Terjadi kesalahan'
-                    }
-                  />
-                );
+                if (listSelection.error) {
+                  return (
+                    <ErrorContent
+                      action={() => getSelection({ type, params })}
+                      message={
+                        listSelection.error?.message || 'Terjadi kesalahan'
+                      }
+                    />
+                  );
+                }
+                return null;
               }}
               data={listSelection.data?.data}
               keyExtractor={(_, idx) => idx.toString()}
-              contentContainerStyle={{ paddingHorizontal: 16 }}
+              contentContainerStyle={{ paddingHorizontal: layout.spacing.lg }}
               onEndReached={handleLoadMore}
               onEndReachedThreshold={1}
               ItemSeparatorComponent={() => (
-                <View style={{ height: 1, backgroundColor: color.black10 }} />
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: colorV2.strokeColor.default,
+                  }}
+                />
               )}
               renderItem={({ item }) => {
                 const { label, status } = handleRadioButtonStatus(
@@ -178,7 +187,7 @@ const ModalSelection: React.FC<Props> = ({
                   <TouchableOpacity
                     onPress={() => setTempSelectedItem({ item, type })}
                     style={{
-                      paddingVertical: 16,
+                      paddingVertical: layout.spacing.lg,
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -188,10 +197,19 @@ const ModalSelection: React.FC<Props> = ({
                         {label}
                       </SnbText2.Paragraph.Default>
                     </View>
-                    <View style={{ marginHorizontal: 8 }} />
-                    <SnbRadioButton
-                      onPress={() => setTempSelectedItem({ item, type })}
-                      status={status}
+                    <View style={{ marginHorizontal: layout.spacing.sm }} />
+                    <SnbIcon
+                      name={
+                        status === 'selected'
+                          ? 'radio_button'
+                          : 'radio_button_outline'
+                      }
+                      size={22}
+                      color={
+                        status === 'selected'
+                          ? colorV2.iconColor.red
+                          : colorV2.iconColor.default
+                      }
                     />
                   </TouchableOpacity>
                 );
@@ -199,7 +217,7 @@ const ModalSelection: React.FC<Props> = ({
             />
           </View>
           {listSelection.isLoadMoreLoading && <SnbProgress />}
-          <View style={{ padding: 16 }}>
+          <View style={{ padding: layout.spacing.lg }}>
             <SnbButton2.Primary
               title={setTitle(type)}
               onPress={() => onCloseModalSelection(tempSelectedItem)}

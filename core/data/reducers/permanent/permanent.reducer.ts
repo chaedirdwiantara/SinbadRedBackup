@@ -7,6 +7,7 @@ const initialState: models.Permanent = {
   isFCM: false,
   isIntroSinbad: false,
   searchedKeywords: [],
+  appVersion: null,
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
@@ -35,6 +36,16 @@ export const permanentCore = simplifyReducer(initialState, {
     return {
       ...state,
       searchedKeywords: payload,
+    };
+  },
+  /** => APP VERSION */
+  [types.SAVE_APP_VERSION](
+    state = initialState,
+    { payload }: models.AppVersionActions,
+  ) {
+    return {
+      ...state,
+      appVersion: payload,
     };
   },
 });

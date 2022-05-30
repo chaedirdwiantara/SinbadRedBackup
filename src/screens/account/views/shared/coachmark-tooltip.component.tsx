@@ -1,6 +1,12 @@
 import React from 'react';
 import { Dimensions, View } from 'react-native';
-import { SnbText2, SnbButton2, color } from 'react-native-sinbad-ui';
+import {
+  SnbText2,
+  SnbButton2,
+  colorV2,
+  borderV2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
 import { CopilotTooltipProps } from 'react-native-copilot';
 import { useCoachmark } from '@screen/account/functions';
 import * as models from '@models';
@@ -46,15 +52,22 @@ export const copilotOptions: any = (
       }
     }, [meV2]);
     return (
-      <View style={{ flex: 1, borderRadius: 16, paddingBottom: 16 }}>
+      <View
+        style={{
+          flex: 1,
+          borderRadius: borderV2.radius.lg,
+          paddingBottom: layout.spacing.lg,
+        }}>
         <SnbText2.Body.Large>{currentStep.name}</SnbText2.Body.Large>
-        <View style={{ marginVertical: 4 }} />
-        <SnbText2.Paragraph.Default>{currentStep.text}</SnbText2.Paragraph.Default>
+        <View style={{ marginVertical: layout.spacing.xxsm }} />
+        <SnbText2.Paragraph.Default>
+          {currentStep.text}
+        </SnbText2.Paragraph.Default>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            marginTop: 16,
+            marginTop: layout.spacing.lg,
             alignItems: 'center',
           }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -67,10 +80,10 @@ export const copilotOptions: any = (
                     width: 8,
                     backgroundColor:
                       currentStep?.order - 1 === idx
-                        ? color.red70
-                        : color.black40,
-                    marginRight: 4,
-                    borderRadius: 8,
+                        ? colorV2.iconColor.red
+                        : colorV2.bgColor.neutralAlt,
+                    marginRight: layout.spacing.xxsm,
+                    borderRadius: borderV2.radius.md,
                   }}
                 />
               );
@@ -84,7 +97,7 @@ export const copilotOptions: any = (
                   title="Kembali"
                   onPress={handlePrev}
                 />
-                <View style={{ marginHorizontal: 2 }} />
+                <View style={{ marginHorizontal: layout.spacing.xxsm }} />
               </>
             )}
             <SnbButton2.Primary
@@ -110,7 +123,7 @@ export const copilotOptions: any = (
     overlay: 'view',
     tooltipComponent: Tooltip,
     tooltipStyle: {
-      borderRadius: 12,
+      borderRadius: borderV2.radius.md,
       width: width - 16,
     },
     stepNumberComponent: () => <View />,
