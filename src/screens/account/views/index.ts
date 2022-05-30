@@ -13,6 +13,7 @@ import DataTokoStep3View from './data-completeness/data-toko/data-toko-step-3.vi
 import InputManualLocationModalView from './data-completeness/input-manual-location-modal.view';
 import MapsViewType2 from './maps-type-2.view';
 import EmailOtp from './shared/email-otp.view';
+import TextFieldSelect from './textfield-select-2.component';
 export {
   ListLocationView,
   BuyerCategoryView,
@@ -29,4 +30,5 @@ export {
   InputManualLocationModalView,
   MapsViewType2,
   EmailOtp,
+  TextFieldSelect,
 };

@@ -1,5 +1,11 @@
 import { renderIF } from '@screen/auth/functions';
-import { color, SnbIcon, SnbText2 } from '@sinbad/react-native-sinbad-ui';
+import {
+  borderV2,
+  colorV2,
+  SnbIcon,
+  SnbText2,
+  spacingV2 as layout,
+} from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -23,10 +29,10 @@ const SnbCardButtonType3: React.FC<Props> = ({
       activeOpacity={0.75}
       onPress={onPress}
       style={{
-        padding: 16,
+        padding: layout.spacing.lg,
         borderWidth: 1,
-        borderRadius: 8,
-        borderColor: color.black10,
+        borderRadius: borderV2.radius.md,
+        borderColor: colorV2.neutral.cloud30,
       }}>
       <View
         style={{
@@ -34,10 +40,10 @@ const SnbCardButtonType3: React.FC<Props> = ({
           alignItems: 'center',
         }}>
         {svgIcon()}
-        <View style={{ marginHorizontal: 8 }} />
+        <View style={{ marginHorizontal: layout.spacing.lg }} />
         <View style={{ flex: 1 }}>
           <SnbText2.Body.Large>{title}</SnbText2.Body.Large>
-          <View style={{ marginVertical: 4 }} />
+          <View style={{ marginVertical: layout.spacing.xxsm }} />
           <SnbText2.Paragraph.Small>{desc}</SnbText2.Paragraph.Small>
         </View>
         <SnbIcon name="chevron_right" size={24} />
@@ -45,25 +51,21 @@ const SnbCardButtonType3: React.FC<Props> = ({
       {renderIF(
         showBadge,
         <>
-          <View style={{ marginVertical: 8 }} />
+          <View style={{ marginVertical: layout.spacing.sm }} />
           <View
             style={{
-              paddingVertical: 12,
-              paddingHorizontal: 16,
-              backgroundColor: color.blue10,
-              borderRadius: 4,
+              paddingVertical: layout.spacing.md,
+              paddingHorizontal: layout.spacing.lg,
+              backgroundColor: colorV2.bgColor.blue,
+              borderRadius: borderV2.radius.sm,
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <SnbIcon
-              name="assignment_complete"
-              size={16}
-              color={color.blue50}
-            />
-            <View style={{ marginHorizontal: 8 }} />
+            <SnbIcon name="quest" size={16} color={colorV2.iconColor.blue} />
+            <View style={{ marginHorizontal: layout.spacing.xxsm }} />
             <View style={{ flex: 1 }}>
-              <SnbText2.Paragraph.Small color={color.blue50}>
-                Registrasi Selesai
+              <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
+                Selesai
               </SnbText2.Paragraph.Small>
             </View>
           </View>

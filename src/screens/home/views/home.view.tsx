@@ -26,7 +26,6 @@ import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-acc
 import {
   copilotOptions,
   ModalStartCoachmark,
-  SinbadEngage,
 } from '@screen/account/views/shared';
 import { renderIF } from '@screen/auth/functions';
 
@@ -114,23 +113,7 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
                 <UpgradeVIPAccountBadge />
               </CopilotView>
             </CopilotStep>
-            <CopilotStep
-              text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
-              order={4}
-              name="Kumpulkan poin, makin untung">
-              <CopilotView>
-                <SinbadEngage />
-              </CopilotView>
-            </CopilotStep>
           </>,
-          <CopilotStep
-            text="Dapatkan keuntungan lebih banyak dengan mengumpulkan poin di Sinbad."
-            order={3}
-            name="Kumpulkan poin, makin untung">
-            <CopilotView>
-              <SinbadEngage />
-            </CopilotView>
-          </CopilotStep>,
         )}
         <RecommendationHomeView navigationParent={navigation} />
         <CategoryHomeView />

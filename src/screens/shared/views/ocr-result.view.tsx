@@ -1,7 +1,9 @@
-import { color, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
+import {
+  SnbButton2,
+  spacingV2 as layout,
+} from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
-import { View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, View } from 'react-native';
 import { OCRResultContent } from './components';
 import * as models from '@models';
 import { MerchantHookFunc } from '@screen/merchant/function';
@@ -18,12 +20,7 @@ const OCRResultView: React.FC = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 1,
-          borderTopColor: color.black40,
-          borderTopWidth: 0.5,
-        }}>
+      <View style={{ flex: 1 }}>
         <ScrollView>
           <OCRResultContent
             value={value}
@@ -31,7 +28,7 @@ const OCRResultView: React.FC = () => {
           />
         </ScrollView>
       </View>
-      <View style={{ flexDirection: 'row', padding: 16 }}>
+      <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
         <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Ubah Foto'}
@@ -42,7 +39,7 @@ const OCRResultView: React.FC = () => {
             outline
           />
         </View>
-        <View style={{ marginHorizontal: 8 }} />
+        <View style={{ marginHorizontal: layout.spacing.sm }} />
         <View style={{ flex: 1 }}>
           <SnbButton2.Primary
             title={'Simpan'}
@@ -53,7 +50,11 @@ const OCRResultView: React.FC = () => {
               };
               editProfile(dispatchSupplier, { data: { user } });
             }}
-            disabled={value?.idNumber === '' || value?.nameOnKtp === '' || stateMerchant.profileEdit.loading}
+            disabled={
+              value?.idNumber === '' ||
+              value?.nameOnKtp === '' ||
+              stateMerchant.profileEdit.loading
+            }
             size="medium"
             full
             loading={stateMerchant.profileEdit.loading}
