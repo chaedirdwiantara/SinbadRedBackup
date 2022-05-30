@@ -21,6 +21,11 @@ const LoginOTPView: React.FC = () => {
   const { meV2 } = useDataAuth();
   const authCoreAction = useAuthCoreAction();
   const [delayLoading, setDelayLoading] = React.useState(false);
+  const [mounted, setMounted] = React.useState(true);
+
+  React.useEffect(() => {
+    return () => setMounted(false);
+  }, []);
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
@@ -52,7 +57,7 @@ const LoginOTPView: React.FC = () => {
             getLocationPermissions();
           }
         }
-        setDelayLoading(false);
+        mounted && setDelayLoading(false);
       }, 2000);
     }
   }, [meV2.data, meV2.loading, meV2.error, verifyOTP]);

@@ -25,6 +25,9 @@ const OTPContent: React.FC<Props> = (props) => {
     props;
   const { otp, setOtp } = useOTP();
   const [error, setError] = React.useState(false);
+  const [otpType, setOtpType] = React.useState<'error' | 'default' | 'success'>(
+    'default',
+  );
 
   useEffect(() => {
     if (otp.length < 5) {
@@ -35,8 +38,15 @@ const OTPContent: React.FC<Props> = (props) => {
   useEffect(() => {
     if (errorMessage) {
       setError(true);
+      setOtpType('error');
     }
   }, [errorMessage]);
+
+  useEffect(() => {
+    if (otpSuccess) {
+      setOtpType('success');
+    }
+  }, [otpSuccess]);
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
@@ -59,10 +69,14 @@ const OTPContent: React.FC<Props> = (props) => {
         <View style={{ margin: layout.spacing.xxsm }}>
           <OTPInput
             {...props}
-            type={error ? 'error' : 'default'}
+            type={otpType}
             showMessage={error || otpSuccess ? true : false}
             code={otp}
-            onCodeChanged={setOtp}
+            onCodeChanged={(val) => {
+              setOtp(val);
+              setOtpType('default');
+              setError(false);
+            }}
           />
         </View>
       </View>
