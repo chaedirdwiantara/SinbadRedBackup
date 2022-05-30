@@ -9,6 +9,27 @@ export const toMoengageFromAction = (eventName, data) => {
     case EventName.LOGOUT:
       MoeAction.recordLogout(data);
       break;
+    case EventName.OWNER_DATA_STEP_1:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.OWNER_DATA_STEP_2:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.OWNER_DATA_STEP_3:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.OWNER_DATA_STEP_4:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.STORE_DATA_STEP_1:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.STORE_DATA_STEP_2:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
+    case EventName.STORE_DATA_STEP_3:
+      MoeAction.recordOwnerCompletionData(eventName, data);
+      break;
     default:
       break;
   }
