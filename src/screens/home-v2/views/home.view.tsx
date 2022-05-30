@@ -1,5 +1,12 @@
 import React, { FC, useState } from 'react';
-import { View, ScrollView, Dimensions } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Dimensions,
+  LayoutRectangle,
+  StatusBar,
+  StyleSheet,
+} from 'react-native';
 import {
   SnbTopNav2,
   colorV2,
@@ -18,13 +25,16 @@ import {
 } from '@screen/account/views/shared';
 import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
 const HomeView: FC = ({ start }: any) => {
   const [keyword, setKeyword] = useState('');
   const { meV2 } = useDataAuth();
+  const tabBarHeight = useBottomTabBarHeight();
+  const [vipBadgeLayout, setVipBadgeLayout] = useState<LayoutRectangle>();
 
   const isBadgeVIPAvailable =
     typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
@@ -57,7 +67,6 @@ const HomeView: FC = ({ start }: any) => {
         onClearText={() => setKeyword('')}
         onEnter={() => console.log('Searched keyword:', keyword)}
       />
-
       <ScrollView
         style={{
           flex: 1,
@@ -66,44 +75,7 @@ const HomeView: FC = ({ start }: any) => {
         }}>
         {renderIF(
           isBadgeVIPAvailable,
-          <>
-            <CopilotStep
-              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
-              order={3}
-              name="Jadi anggota VIP Sinbad">
-              <CopilotView>
-                <UpgradeVIPAccountBadge />
-              </CopilotView>
-            </CopilotStep>
-            <CopilotStep
-              text="Semua pesanan yang telah dibuat tersedia di halaman ini."
-              order={4}
-              name="Lihat Pesanan">
-              <CopilotView
-                style={{
-                  height: 54,
-                  width: width * 0.25,
-                  position: 'absolute',
-                  bottom: -12,
-                  left: width * 0.25,
-                }}
-              />
-            </CopilotStep>
-          </>,
-          <CopilotStep
-            text="Semua pesanan yang telah dibuat tersedia di halaman ini."
-            order={3}
-            name="Lihat Pesanan">
-            <CopilotView
-              style={{
-                height: 54,
-                width: width * 0.25,
-                position: 'absolute',
-                bottom: -72,
-                left: width * 0.25,
-              }}
-            />
-          </CopilotStep>,
+          <UpgradeVIPAccountBadge getLayout={setVipBadgeLayout} />,
         )}
         <CopilotStep
           text="Cek promo terbaik setiap hari biar belanja makin hemat."
@@ -123,8 +95,56 @@ const HomeView: FC = ({ start }: any) => {
         />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
+      {renderIF(
+        isBadgeVIPAvailable,
+        <>
+          <CopilotStep
+            text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+            order={3}
+            name="Jadi anggota VIP Sinbad">
+            <CopilotView
+              style={{
+                height: vipBadgeLayout?.height,
+                position: 'absolute',
+                width,
+                top: 60 + (StatusBar?.currentHeight || 0),
+              }}
+            />
+          </CopilotStep>
+          <CopilotStep
+            text="Semua pesanan yang telah dibuat tersedia di halaman ini."
+            order={4}
+            name="Lihat Pesanan">
+            <CopilotView
+              style={[
+                styles.pesananCoachmark,
+                { height: tabBarHeight, top: height - tabBarHeight },
+              ]}
+            />
+          </CopilotStep>
+        </>,
+        <CopilotStep
+          text="Semua pesanan yang telah dibuat tersedia di halaman ini."
+          order={3}
+          name="Lihat Pesanan">
+          <CopilotView
+            style={[
+              styles.pesananCoachmark,
+              { height: tabBarHeight, top: height - tabBarHeight },
+            ]}
+          />
+        </CopilotStep>,
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  pesananCoachmark: {
+    width: width * 0.25,
+    position: 'absolute',
+    left: width * 0.25,
+  },
+});
 
 export default copilot(copilotOptions(4, 'homeCoachmark'))(HomeView);

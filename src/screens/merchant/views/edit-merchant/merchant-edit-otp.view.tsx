@@ -4,7 +4,6 @@ import {
   SnbButton2,
   SnbOTPInput,
   SnbText2,
-  SnbOTPTimer,
   colorV2,
   SnbContainer,
   SnbTopNav2,
@@ -19,6 +18,9 @@ import { NavigationAction } from '@navigation';
 
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+import { OTPTimer } from '@screen/shared/views/components';
+import Svg from '@svg';
+
 interface Props {
   loading: boolean;
   otpSuccess: boolean;
@@ -212,12 +214,11 @@ const OTPContent: React.FC<Props> = (props) => {
         <View style={{ flex: 1 }}>
           <ScrollView>
             <View style={OtpStyle.titleContainer}>
-              <Image
-                source={require('../../../../assets/images/sinbad_image/otp.png')}
-                style={OtpStyle.imageOtp}
-              />
+              <View style={{ alignSelf: 'center' }}>
+                <Svg name="sinbad_otp" size={200} />
+              </View>
               <View
-                style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
+                style={{ padding: layout.spacing.sm, alignItems: 'center' }}>
                 <SnbText2.Headline.Default>
                   Masukkan kode Verifikasi
                 </SnbText2.Headline.Default>
@@ -229,7 +230,7 @@ const OTPContent: React.FC<Props> = (props) => {
                 </SnbText2.Paragraph.Default>
               </View>
             </View>
-            <View style={{ margin: layout.spacing.md }}>
+            <View style={{ margin: layout.spacing.xxsm }}>
               <SnbOTPInput
                 autoFocusOnLoad
                 code={otp}
@@ -273,7 +274,7 @@ const OTPContent: React.FC<Props> = (props) => {
             </View>
           </ScrollView>
         </View>
-        <SnbOTPTimer action={resend} timer={90} />
+        <OTPTimer action={resend} timer={90} />
       </View>
     );
   };
