@@ -27,8 +27,8 @@ const useAuthAction = () => {
     verificationOTP: (data: models.LoginPhoneNumber) => {
       dispatch(Actions.verificationOTPProcess(data));
     },
-    logout: () => {
-      dispatch(Actions.logoutProcess());
+    logout: (data: any) => {
+      dispatch(Actions.logoutProcess(data));
       dispatch(meReset());
       dispatch(meV2Reset());
       dispatch(Actions.getTotalCartReset(dispatchCart));
