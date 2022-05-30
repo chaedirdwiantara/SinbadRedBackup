@@ -108,6 +108,7 @@ const HomeView: FC = ({ start }: any) => {
                 position: 'absolute',
                 width,
                 top: 60 + (StatusBar?.currentHeight || 0),
+                zIndex: -1,
               }}
             />
           </CopilotStep>
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
     width: width * 0.25,
     position: 'absolute',
     left: width * 0.25,
+    zIndex: -1,
   },
 });
 
