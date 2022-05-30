@@ -580,7 +580,9 @@ const UserView: FC = ({ start }: any) => {
         }}
         ok={() => {
           setShowConfirmation(false);
-          logout();
+          logout({
+            mobilePhone: stateUser.detail.data?.ownerData?.profile?.mobilePhone,
+          });
           reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
         }}
         content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
