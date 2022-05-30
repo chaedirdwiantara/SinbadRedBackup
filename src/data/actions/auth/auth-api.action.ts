@@ -48,7 +48,6 @@ export const requestOTPFailed = (
 export const verificationOTPProcess = (
   data: models.LoginPhoneNumber,
 ): models.VerificationOTPProcessAction => {
-  console.log('disiniOtp:', data);
   globalReportFromAction(EventName.LOGIN, data);
   return { type: types.VERIFICATION_OTP_PROCESS, payload: data };
 };
@@ -66,7 +65,8 @@ export const verificationOTPFailed = (
 };
 /** === LOGOUT === */
 /** => process */
-export const logoutProcess = (): models.LogoutProcessAction => {
+export const logoutProcess = (data: any): models.LogoutProcessAction => {
+  globalReportFromAction(EventName.LOGOUT, data);
   return { type: types.LOGOUT_PROCESS };
 };
 /** => success */
