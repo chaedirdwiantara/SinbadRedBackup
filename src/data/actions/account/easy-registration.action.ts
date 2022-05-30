@@ -87,7 +87,7 @@ export const updateCompleteData = (
     } else if (dataUser?.selfieImageUrl) {
       globalReportFromAction(EventName.OWNER_DATA_STEP_3, data);
     } else if (dataUser?.email) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_3, data);
+      globalReportFromAction(EventName.OWNER_DATA_STEP_4, data);
     }
   } else if (data?.buyer) {
     if (dataBuyer?.name && dataBuyer?.phoneNo) {
@@ -99,7 +99,7 @@ export const updateCompleteData = (
       dataBuyer?.vehicleAccessibilityId &&
       dataBuyer?.vehicleAccessibilityAmount
     ) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_2, data);
+      globalReportFromAction(EventName.STORE_DATA_STEP_3, data);
     }
   }
   return {
