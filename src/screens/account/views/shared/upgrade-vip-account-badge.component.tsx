@@ -10,7 +10,11 @@ import { TouchableOpacity, View } from 'react-native';
 import { DATA_COMPLETENESS_INTRO_VIEW } from '@screen/account/functions/screens_name';
 import { useSelector } from 'react-redux';
 
-const UpgradeVIPAccountBadge: React.FC = () => {
+interface Props {
+  getLayout: (result: any) => void;
+}
+
+const UpgradeVIPAccountBadge: React.FC<Props> = ({ getLayout }) => {
   const { navigate } = useNavigation();
   const { meV2 } = useSelector((state: any) => state.authCore);
 
@@ -20,6 +24,7 @@ const UpgradeVIPAccountBadge: React.FC = () => {
   ) {
     return (
       <TouchableOpacity
+        onLayout={(ev) => getLayout(ev.nativeEvent.layout)}
         activeOpacity={0.75}
         onPress={() => navigate(DATA_COMPLETENESS_INTRO_VIEW)}
         style={{
