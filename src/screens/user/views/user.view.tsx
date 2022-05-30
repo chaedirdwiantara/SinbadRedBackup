@@ -1,15 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Image, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
-  color,
-  SnbText,
+  colorV2,
   SnbText2,
   SnbTextSeeMoreType1,
-  SnbButton,
-  SnbDialog,
   SnbIcon,
   SnbButton2,
   spacingV2 as layout,
@@ -23,7 +20,7 @@ import { UserHookFunc } from '../functions';
 import { contexts } from '@contexts';
 import { ModalUserProfileCompletion } from './modal-user-profile-completion.view';
 import LoadingPage from '@core/components/LoadingPage';
-import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
+import { setErrorMessage } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import { copilotOptions } from '@screen/account/views/shared';
 import { useCoachmark } from '@screen/account/functions';
@@ -31,6 +28,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
 import ListButton from '../views/shared/list-button.component';
+import ModalLogout from './shared/modal-logout.component';
 
 const CopilotView = walkthroughable(View);
 
@@ -43,8 +41,6 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const { logout } = useAuthAction();
-  const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
@@ -84,9 +80,7 @@ const UserView: FC = ({ start }: any) => {
   useEffect(() => {
     if (typeof coachmarkState.data?.profileCoachmark === 'boolean') {
       if (coachmarkState?.data?.profileCoachmark === false) {
-        setTimeout(() => {
-          start();
-        }, 100);
+        start();
       }
     }
   }, [coachmarkState?.data?.profileCoachmark]);
@@ -278,36 +272,44 @@ const UserView: FC = ({ start }: any) => {
                 <SnbIcon
                   name={'person_circle'}
                   size={52}
-                  color={color.black40}
+                  color={colorV2.iconColor.default}
                 />
               ) : (
                 <Image source={source} style={UserStyles.image} />
               )}
             </View>
             <View style={UserStyles.userInfo}>
-              <View style={{ marginLeft: -18, flexDirection: 'row' }}>
+              <View
+                style={{
+                  marginLeft: -layout.spacing.lg,
+                  flexDirection: 'row',
+                }}>
                 <SnbTextSeeMoreType1 line={1}>
-                  <SnbText.H4 color={'#677A8E'}>
+                  <SnbText2.Body.Small>
                     {data?.name
                       ? data.name
                       : buyerData?.buyerInformation?.buyerAccount?.code}
-                  </SnbText.H4>
+                  </SnbText2.Body.Small>
                 </SnbTextSeeMoreType1>
-                <View style={{ alignSelf: 'center', marginLeft: -18 }}>
+                <View
+                  style={{
+                    alignSelf: 'center',
+                    marginLeft: -layout.spacing.lg,
+                  }}>
                   <SnbIcon
                     name={'shield'}
                     size={16}
                     color={
                       ownerData?.accountType === 'basic'
-                        ? color.black60
-                        : color.blue50
+                        ? colorV2.iconColor.default
+                        : colorV2.iconColor.blue
                     }
                   />
                 </View>
               </View>
-              <SnbText.B3 color={'#677A8E'}>
+              <SnbText2.Paragraph.Tiny color={'#677A8E'}>
                 {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
-              </SnbText.B3>
+              </SnbText2.Paragraph.Tiny>
             </View>
           </View>
           <CopilotStep
@@ -323,7 +325,10 @@ const UserView: FC = ({ start }: any) => {
                 onSnapToItem={(index) => {
                   setActiveIndex(index);
                 }}
-                slideStyle={{ padding: 10 }}
+                slideStyle={{
+                  paddingHorizontal: layout.spacing.xsm,
+                  paddingVertical: layout.spacing.md,
+                }}
                 inactiveSlideOpacity={1}
                 inactiveSlideScale={1}
                 activeSlideAlignment={'center'}
@@ -354,14 +359,18 @@ const UserView: FC = ({ start }: any) => {
           order={2}
           name="Data Diri">
           <CopilotView>
-            <View style={{ marginVertical: 16 }}>
+            <View style={{ marginVertical: layout.spacing.lg }}>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
                 <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
               <ListButton
                 leftItem={
-                  <SnbIcon name="person" color={color.black40} size={24} />
+                  <SnbIcon
+                    name="person"
+                    color={colorV2.iconColor.default}
+                    size={24}
+                  />
                 }
                 title={'Data Diri'}
                 onPress={() =>
@@ -370,7 +379,7 @@ const UserView: FC = ({ start }: any) => {
                 rightItem={
                   <SnbIcon
                     name="chevron_right"
-                    color={color.black40}
+                    color={colorV2.iconColor.default}
                     size={24}
                   />
                 }
@@ -391,12 +400,16 @@ const UserView: FC = ({ start }: any) => {
           <CopilotView>
             <View>
               <View style={UserStyles.bodyTitleContainer}>
-                <SnbText.B4>Data Toko</SnbText.B4>
-                <SnbText.B3>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText.B3>
+                <SnbText2.Body.Small>Data Toko</SnbText2.Body.Small>
+                <SnbText2.Paragraph.Small>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
               <ListButton
                 leftItem={
-                  <SnbIcon name="store" color={color.black40} size={24} />
+                  <SnbIcon
+                    name="store"
+                    color={colorV2.iconColor.default}
+                    size={24}
+                  />
                 }
                 title={'Informasi Toko'}
                 onPress={() =>
@@ -405,7 +418,7 @@ const UserView: FC = ({ start }: any) => {
                 rightItem={
                   <SnbIcon
                     name="chevron_right"
-                    color={color.black40}
+                    color={colorV2.iconColor.default}
                     size={24}
                   />
                 }
@@ -415,7 +428,7 @@ const UserView: FC = ({ start }: any) => {
                 leftItem={
                   <SnbIcon
                     name="location_store"
-                    color={color.black40}
+                    color={colorV2.iconColor.default}
                     size={24}
                   />
                 }
@@ -424,7 +437,7 @@ const UserView: FC = ({ start }: any) => {
                 rightItem={
                   <SnbIcon
                     name="chevron_right"
-                    color={color.black40}
+                    color={colorV2.iconColor.default}
                     size={24}
                   />
                 }
@@ -434,7 +447,11 @@ const UserView: FC = ({ start }: any) => {
                     : true
                 }
                 leftBadgeItem1={
-                  <SnbIcon name={'create'} size={20} color={color.blue50} />
+                  <SnbIcon
+                    name={'create'}
+                    size={20}
+                    color={colorV2.iconColor.blue}
+                  />
                 }
                 badgesTitle1={'Isi Nama Toko'}
                 badges2={
@@ -444,7 +461,7 @@ const UserView: FC = ({ start }: any) => {
                   <SnbIcon
                     name={'location_store'}
                     size={20}
-                    color={color.blue50}
+                    color={colorV2.iconColor.blue}
                   />
                 }
                 badgesTitle2={'Isi Alamat Toko'}
@@ -464,7 +481,11 @@ const UserView: FC = ({ start }: any) => {
         <View>
           <ListButton
             leftItem={
-              <SnbIcon name="exit_to_app" color={color.black40} size={24} />
+              <SnbIcon
+                name="exit_to_app"
+                color={colorV2.iconColor.default}
+                size={24}
+              />
             }
             title={'Log Out'}
             onPress={() => setShowConfirmation(true)}
@@ -488,7 +509,7 @@ const UserView: FC = ({ start }: any) => {
       return (
         <View style={{ flex: 1 }}>
           <SnbTopNav2.Type2
-            color="red"
+            color="white"
             title="Profil"
             iconName={'exit_to_app'}
             iconAction={() => setShowConfirmation(true)}
@@ -499,23 +520,24 @@ const UserView: FC = ({ start }: any) => {
               source={require('@image/sinbad_image/cry_sinbad.png')}
               style={{ height: 192, aspectRatio: 1 }}
             />
-            <View style={{ alignItems: 'center', marginBottom: 10 }}>
-              <SnbText.H4>Terjadi Kesalahan</SnbText.H4>
+            <View
+              style={{ alignItems: 'center', marginBottom: layout.spacing.md }}>
+              <SnbText2.Headline.Small>
+                Terjadi Kesalahan
+              </SnbText2.Headline.Small>
             </View>
-            <SnbText.B3 align="center">
+            <SnbText2.Paragraph.Small align="center">
               {setErrorMessage(
                 stateUser.detail.error.code,
                 stateUser.detail.error.message,
               )}
-            </SnbText.B3>
-            <View style={{ marginVertical: 8 }} />
-            <SnbButton.Dynamic
+            </SnbText2.Paragraph.Small>
+            <View style={{ marginVertical: layout.spacing.sm }} />
+            <SnbButton2.Link
               iconName="refresh"
-              type="tertiary"
-              size="small"
+              size="medium"
               title="Coba Lagi"
               disabled={false}
-              loading={false}
               onPress={() => storeDetailAction.detail(dispatchUser)}
             />
           </View>
@@ -528,9 +550,8 @@ const UserView: FC = ({ start }: any) => {
         <View>
           {header()}
           <ScrollView
-            scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
-            style={{ marginBottom: 16 }}>
+            style={{ marginBottom: layout.spacing.lg }}>
             {contentItem()}
           </ScrollView>
           {/* Modal Profile Completion */}
@@ -550,21 +571,7 @@ const UserView: FC = ({ start }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <SnbDialog
-        title="Yakin keluar Sinbad ?"
-        open={showConfirmation}
-        okText="Ya"
-        cancelText="Tidak"
-        cancel={() => {
-          setShowConfirmation(false);
-        }}
-        ok={() => {
-          setShowConfirmation(false);
-          logout();
-          reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
-        }}
-        content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
-      />
+      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
     </View>
   );
 };

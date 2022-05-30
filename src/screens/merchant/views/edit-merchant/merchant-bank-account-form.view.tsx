@@ -1,27 +1,21 @@
 import React, { FC, useEffect, useState } from 'react';
 import {
-  SnbText,
-  SnbTopNav,
-  SnbButton,
-  SnbTextField,
-  SnbTextFieldSelect,
-  color,
+  SnbText2,
+  SnbTopNav2,
+  SnbButton2,
+  SnbTextField2,
   SnbBottomSheet,
+  SnbContainer,
+  colorV2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
-import {
-  ScrollView,
-  View,
-  TouchableOpacity,
-  BackHandler,
-  KeyboardAvoidingView,
-} from 'react-native';
-/** === IMPORT STYLE HERE === */
-import MerchantStyles from '../../styles/merchant.style';
+import { ScrollView, View, BackHandler } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { NavigationAction } from '@navigation';
 import { contexts } from '@contexts';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { useInput, MerchantHookFunc } from '../../function';
+import { TextFieldSelect } from '@screen/account/views';
 
 interface Props {
   route: any;
@@ -41,13 +35,18 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const { stateMerchant, dispatchSupplier } = React.useContext(
     contexts.MerchantContext,
   );
-  const { gotoSelection, selectedItem } = useTextFieldSelect();
+  const { gotoSelection, selectedItem, resetSelectedItem } =
+    useTextFieldSelect();
   const bankId = useInput(bankData?.bankId || null);
   const bankName = useInput(bankData?.bankName || '');
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
   const bankBranchName = useInput(bankData?.bankBranchName || '');
   const [openModalTNC, setOpenModalTNC] = useState(false);
+
+  useEffect(() => {
+    return resetSelectedItem;
+  }, []);
   useEffect(() => {
     if (selectedItem?.item) {
       bankId.setValue(selectedItem.item.id);
@@ -113,8 +112,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** header */
   const renderHeader = () => {
     return (
-      <SnbTopNav.Type3
-        type="red"
+      <SnbTopNav2.Type3
+        color="white"
         title={props.route.params.title}
         backAction={() => NavigationAction.back()}
       />
@@ -124,9 +123,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   /** content */
   const renderContent = () => {
     return (
-      <View style={{ flex: 1, marginTop: 16, marginHorizontal: 16 }}>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextFieldSelect
+      <View
+        style={{
+          flex: 1,
+          marginTop: layout.spacing.lg,
+          marginHorizontal: layout.spacing.lg,
+        }}>
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <TextFieldSelect
             placeholder={'Pilih Nama Bank'}
             type={'default'}
             value={bankName.value}
@@ -137,8 +141,8 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             mandatory
           />
         </View>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <SnbTextField2.Text
             labelText={'Nomor Rekening'}
             placeholder={'Masukkan Nomor Rekening'}
             type={'default'}
@@ -147,34 +151,34 @@ const MerchantEditPartialView: FC<Props> = (props) => {
               const cleanNumber = text.replace(/[^0-9]/g, '');
               bankAccountNo.setValue(cleanNumber);
             }}
-            clearText={() => bankAccountNo.setValue('')}
+            onClearText={() => bankAccountNo.setValue('')}
             mandatory
-            helpText={'Pastikan nomor rekening benar'}
+            helperText={'Pastikan nomor rekening benar'}
             maxLength={30}
             keyboardType={'numeric'}
           />
         </View>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <SnbTextField2.Text
             labelText={'Nama Lengkap Pemilik Rekening'}
             placeholder={'Masukkan Nama Lengkap'}
             type={'default'}
             value={bankAccountName.value}
             onChangeText={(text) => bankAccountName.setValue(text)}
-            clearText={() => bankAccountName.setValue('')}
+            onClearText={() => bankAccountName.setValue('')}
             maxLength={50}
             mandatory
           />
         </View>
-        <View style={{ marginBottom: 16 }}>
-          <SnbTextField.Text
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <SnbTextField2.Text
             labelText={'Nama Cabang'}
             placeholder={'Masukkan Nama Cabang'}
             type={'default'}
             value={bankBranchName.value}
             onChangeText={(text) => bankBranchName.setValue(text)}
-            clearText={() => bankBranchName.setValue('')}
-            helpText={'Cabang tempat pembukaan rekening'}
+            onClearText={() => bankBranchName.setValue('')}
+            helperText={'Cabang tempat pembukaan rekening'}
             maxLength={50}
           />
         </View>
@@ -186,13 +190,14 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const renderButton = () => {
     return (
       <View>
-        <View style={{ height: 75 }}>
-          <SnbButton.Single
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
             title={'Verifikasi'}
-            type={'primary'}
             onPress={() => confirm()}
             disabled={checkButton() || stateMerchant.changeBankAccount.loading}
             loading={stateMerchant.changeBankAccount.loading}
+            full
+            size="medium"
           />
         </View>
       </View>
@@ -204,39 +209,44 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         style={{
           alignItems: 'center',
           flexDirection: 'row',
-          paddingHorizontal: 16,
-          backgroundColor: color.white,
-          flexWrap: 'wrap',
           justifyContent: 'center',
         }}>
-        <SnbText.C1 color={color.black40}>
-          Dengan verifikasi, anda menyetujui{' '}
-        </SnbText.C1>
-        <TouchableOpacity
-          style={{ paddingVertical: 8 }}
-          onPress={() => setOpenModalTNC(!openModalTNC)}>
-          <SnbText.C1 color={color.red50}>Syarat dan Ketentuan</SnbText.C1>
-        </TouchableOpacity>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.disable}>
+          Dengan verifikasi, anda menyetujui
+        </SnbText2.Paragraph.Small>
+        <View style={{ marginLeft: -layout.spacing.sm }}>
+          <SnbButton2.Link
+            onPress={() => setOpenModalTNC(!openModalTNC)}
+            title="Syarat dan Ketentuan"
+            size="small"
+          />
+        </View>
       </View>
     );
   };
   //** terms and condition */
   const renderContentTnC = () => {
     return (
-      <View style={{ padding: 16 }}>
-        <View style={{ marginBottom: 8 }}>
-          <SnbText.B3>
+      <View style={{ padding: layout.spacing.lg, paddingTop: 0 }}>
+        <View style={{ marginBottom: layout.spacing.sm }}>
+          <SnbText2.Body.Default>
             Syarat dan Ketentuan Rekening Bank di Sinbad :
-          </SnbText.B3>
+          </SnbText2.Body.Default>
         </View>
         {TNC_CONTENT.map((el, index) => {
           return (
-            <View key={index} style={{ flexDirection: 'row', marginBottom: 8 }}>
-              <View style={{ marginHorizontal: 8 }}>
-                <SnbText.B3>{index + 1}.</SnbText.B3>
+            <View
+              key={index}
+              style={{ flexDirection: 'row', marginBottom: layout.spacing.sm }}>
+              <View style={{ marginHorizontal: layout.spacing.sm }}>
+                <SnbText2.Paragraph.Small>
+                  {index + 1}.
+                </SnbText2.Paragraph.Small>
               </View>
               <View style={{ flex: 1 }}>
-                <SnbText.B3>{el}</SnbText.B3>
+                <SnbText2.Paragraph.Small align="justify">
+                  {el}
+                </SnbText2.Paragraph.Small>
               </View>
             </View>
           );
@@ -247,7 +257,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //** modal TNC */
   const modalTNC = () => {
     return openModalTNC ? (
-      <View style={{ backgroundColor: 'red' }}>
+      <View>
         <SnbBottomSheet
           open={openModalTNC}
           content={renderContentTnC()}
@@ -262,17 +272,15 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   };
   /** this for main view */
   return (
-    <View style={{ flex: 1 }}>
+    <SnbContainer color="white">
       {renderHeader()}
-      <KeyboardAvoidingView behavior={'height'} style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={MerchantStyles.mainContainer}>
-          {renderContent()}
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <View style={{ flex: 1 }}>
+        <ScrollView>{renderContent()}</ScrollView>
+      </View>
       {renderTNC()}
       {renderButton()}
       {modalTNC()}
-    </View>
+    </SnbContainer>
   );
 };
 export default MerchantEditPartialView;
