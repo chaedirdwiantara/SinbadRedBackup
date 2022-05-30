@@ -1,6 +1,11 @@
 import React from 'react';
 import { View, Image } from 'react-native';
-import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
+import {
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  SnbText,
+  FooterButton,
+} from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
 /** === INTERFACE === */
 /** => error props */
@@ -55,17 +60,12 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   /** => button */
   const button = () => {
     return (
-      <View style={ShoppingCartValidationStyles.buttonContainer}>
-        <View style={ShoppingCartValidationStyles.buttonHeight}>
-          <SnbButton.Single
-            title={'Saya Mengerti'}
-            onPress={() => {
-              props?.closeAction && props?.closeAction();
-            }}
-            type={'primary'}
-          />
-        </View>
-      </View>
+      <FooterButton.Single
+        title={'Saya Mengerti'}
+        buttonPress={() => {
+          props?.closeAction && props?.closeAction();
+        }}
+      />
     );
   };
   /** => content */
@@ -73,18 +73,24 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentContainer}>
         {contentItem()}
-        {button()}
       </View>
     );
   };
+  /** => title */
+  const title = () => {
+    return <SnbBottomSheetPart.Title />;
+  };
   /** => main */
   return (
-    <SnbBottomSheet
+    <SnbBottomSheet2
+      name={'cartValidationCheckoutModal'}
+      type={'content'}
+      contentHeight={380}
+      title={title()}
       open={open}
+      snap={false}
       content={content()}
-      size={'halfscreen'}
-      closeAction={props?.closeAction}
-      actionIcon={'close'}
+      button={button()}
     />
   );
 };

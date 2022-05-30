@@ -7,6 +7,7 @@ export const ShoppingCartValidationStyles = StyleSheet.create({
   contentImageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 36,
   },
   buttonContainer: {
     paddingBottom: 16,
@@ -30,7 +31,7 @@ export const ShoppingCartValidationStyles = StyleSheet.create({
     height: 90,
   },
   image: {
-    height: '75%',
-    aspectRatio: 1 / 1,
+    height: 160,
+    aspectRatio: 5 / 3,
   },
 });
