@@ -3,7 +3,8 @@ import { View, Image } from 'react-native';
 import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
-  SnbText,
+  SnbText2,
+  colorV2,
   FooterButton,
 } from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
@@ -32,7 +33,11 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const contentItemTitle = () => {
     return (
       <View style={ShoppingCartValidationStyles.contentTitleContainer}>
-        <SnbText.H4 align={'center'}>Perubahan Produk di Keranjang</SnbText.H4>
+        <SnbText2.Headline.Default
+          color={colorV2.textColor.default}
+          align={'center'}>
+          Perubahan Produk di Keranjang
+        </SnbText2.Headline.Default>
       </View>
     );
   };
@@ -40,10 +45,12 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const contentItemMessage = () => {
     return (
       <View style={ShoppingCartValidationStyles.contentMessageContainer}>
-        <SnbText.B3 align={'center'}>
+        <SnbText2.Paragraph.Default
+          color={colorV2.textColor.secondary}
+          align={'center'}>
           Coba periksa ulang keranjang Anda dikarenakan terdapat perubahan data
           pada produk
-        </SnbText.B3>
+        </SnbText2.Paragraph.Default>
       </View>
     );
   };
