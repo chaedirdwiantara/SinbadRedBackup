@@ -15,7 +15,6 @@ import {
 
 import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands } from '../components';
-import { categories, brands } from '../dummies';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
@@ -88,11 +87,8 @@ const HomeView: FC = ({ start }: any) => {
             <Benefits />
           </CopilotView>
         </CopilotStep>
-        <Categories data={categories} />
-        <Brands
-          data={brands}
-          onTitleActionPress={() => console.log('See all brands')}
-        />
+        <Categories />
+        <Brands />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
       {renderIF(
