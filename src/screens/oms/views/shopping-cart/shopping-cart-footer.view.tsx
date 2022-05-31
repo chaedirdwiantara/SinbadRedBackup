@@ -10,7 +10,7 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
@@ -240,22 +240,23 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }}>
       <View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
-          <SnbText.H4 color={color.red50}>
+          <SnbText2.Body.Default color={colorV2.textColor.secondary}>
+            Total:{' '}
+          </SnbText2.Body.Default>
+          <SnbText2.Headline.Small color={colorV2.textColor.selected}>
             {toCurrency(countTotalPrice, { withFraction: false })}
-          </SnbText.H4>
+          </SnbText2.Headline.Small>
         </View>
-        <SnbText.B4
+        <SnbText2.Caption.Small
           color={
-            color.black60
-          }>{`${countTotalProduct} barang dipilih`}</SnbText.B4>
+            colorV2.textColor.secondary
+          }>{`${countTotalProduct} barang dipilih`}</SnbText2.Caption.Small>
       </View>
       <View>
-        <SnbButton.Dynamic
+        <SnbButton2.Primary
           title="Checkout"
-          type="primary"
           onPress={handleOnPressCheckout}
-          size={'large'}
+          size={'medium'}
           disabled={isCheckoutDisabled}
           loading={isCheckoutBtnLoading}
         />
