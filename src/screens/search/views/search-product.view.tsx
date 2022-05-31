@@ -38,7 +38,7 @@ const SearchProductView: FC = () => {
       fetch(dispatchProduct, { keyword: localKeyword });
 
       return () => clearContents(dispatchProduct);
-    }, [isSearched]),
+    }, []),
   );
   /** === VIEW pdp list search === */
   return (
