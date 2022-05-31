@@ -1,11 +1,13 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useState, useEffect, useRef, useMemo } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, Text } from 'react-native';
 import {
   SnbContainer,
   SnbBottomSheet,
   SnbToast,
-  SnbTopNav2,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
@@ -15,6 +17,7 @@ import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
 import BottomAction from './BottomAction';
+import ActionSheet from '../ActionSheet';
 import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
   RegisterSupplierModal,
@@ -32,6 +35,7 @@ import {
   priceSortOptions,
   useOrderModalVisibility,
   useProductTags,
+  usePriceRangeFilter,
 } from '@core/functions/product';
 import {
   useCheckDataSupplier,
@@ -187,6 +191,16 @@ const ProductList: FC<ProductListProps> = ({
     modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier();
+  // modal filter range state
+  const {
+    minPrice,
+    maxPrice,
+    setMinPrice,
+    setMaxPrice,
+    resetValues,
+    handleSliderChange,
+    handleSliderFinishChange,
+  } = usePriceRangeFilter(filterQuery);
   /** === REF === */
   const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
   /** === FUNCTIONS === */
@@ -566,46 +580,37 @@ const ProductList: FC<ProductListProps> = ({
           <LoadingLoadMore />
         </View>
       )}
-      {/* bottom filter pdp list search */}
-      {/* {withBottomAction && (
-        <BottomAction
-          sort={true}
-          filter={true}
-          layout={true}
-          category={true}
-          sortActive={sortActive}
-          filterActive={filterActive}
-          layoutDisplay={layoutDisplay}
-          onActionPress={handleActionClick}
-        />
-      )} */}
       {/* Sort Modal */}
-      <SnbBottomSheet
+      <ActionSheet
         open={sortModalVisible}
+        name="sort-modal"
         title="Urutkan"
-        actionIcon="close"
-        content={
-          <Action.Sort
-            appliedOptionIndex={sortIndex}
-            options={priceSortOptions}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'sort' })}
-      />
+        contentHeight={220}
+        onClose={() => handleActionClick({ type: 'sort' })}>
+        <Action.Sort
+          appliedOptionIndex={sortIndex}
+          options={priceSortOptions}
+          onButtonPress={handleActionClick}
+        />
+      </ActionSheet>
       {/* Filter Modal */}
-      <SnbBottomSheet
+      <ActionSheet
+        withClear
+        onClearFilter={resetValues}
         open={filterModalVisible}
+        name="filter-modal"
         title="Filter"
-        actionIcon="close"
-        content={
-          <Action.Filter
-            appliedFilterQuery={filterQuery}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'filter' })}
-      />
+        contentHeight={220}
+        onClose={() => handleActionClick({ type: 'filter' })}>
+        <Action.Filter
+          onButtonPress={handleActionClick}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          handleSliderChange={handleSliderChange}
+        />
+      </ActionSheet>
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
         visible={modalRegisterSupplier}

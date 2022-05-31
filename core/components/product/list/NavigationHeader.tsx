@@ -21,7 +21,6 @@ interface NavigationHeaderProps {
   keyword: string;
   onKeywordChange: (keyword: string) => void;
   onSearch: () => void;
-  onSearchClear: () => void;
 }
 /** === COMPONENT === */
 const NavigationHeader: FC<NavigationHeaderProps> = ({
@@ -30,7 +29,6 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   keyword,
   onKeywordChange,
   onSearch,
-  onSearchClear,
 }) => {
   const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
@@ -64,7 +62,6 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           color="white"
           placeholder="Cari di Sinbad"
           inputValue={keyword}
-          onClearText={onSearchClear}
           onEnter={onSearch}
           onChangeText={(text) => onKeywordChange(text)}
           icon1Name="home"
