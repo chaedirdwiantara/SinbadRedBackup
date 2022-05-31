@@ -5,7 +5,7 @@ import {
   SnbBottomSheetPart,
   SnbBottomSheet2,
   SnbText2,
-  color,
+  colorV2,
   SnbButton2,
 } from 'react-native-sinbad-ui';
 import { CartProfileCompletionStyles } from '@screen/oms/styles';
@@ -29,12 +29,14 @@ export const ModalCartProfileCompletion: FC<
           />
         </View>
         <View style={{ marginBottom: 4 }}>
-          <SnbText2.Headline.Default>
+          <SnbText2.Headline.Default color={colorV2.textColor.default}>
             Akun Belum Lengkap
           </SnbText2.Headline.Default>
         </View>
         <View style={{ marginBottom: 16 }}>
-          <SnbText2.Paragraph.Default align="center" color={color.black80}>
+          <SnbText2.Paragraph.Default
+            align="center"
+            color={colorV2.textColor.secondary}>
             Lengkapi akun anda dengan menambahkan foto KTP dan detail lokasi
             toko untuk melanjutkan pembelian
           </SnbText2.Paragraph.Default>
