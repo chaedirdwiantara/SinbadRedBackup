@@ -7,7 +7,12 @@ import {
   StyleSheet,
 } from 'react-native';
 /** === IMPORT COMPONENTS AND UTILS ===  */
-import { SnbIcon, SnbText, color } from '@sinbad/react-native-sinbad-ui';
+import {
+  SnbIcon,
+  SnbText2,
+  colorV2,
+  color,
+} from '@sinbad/react-native-sinbad-ui';
 /** === TYPE === */
 interface UnavailableAccordionProps {
   totalRemaining: number;
@@ -38,13 +43,13 @@ export const UnavailableAccordionView: FC<UnavailableAccordionProps> = ({
           handleScrollToBottom();
         }}>
         <View style={AccordionStyle.panel}>
-          <SnbText.B4 color={color.blue50}>
+          <SnbText2.Caption.Small color={colorV2.textColor.link}>
             {isOpen
               ? 'Sembunyikan'
               : `Tampilkan ${totalRemaining} produk lainnya`}
-          </SnbText.B4>
+          </SnbText2.Caption.Small>
           <SnbIcon
-            color={color.blue50}
+            color={colorV2.textColor.link}
             name={isOpen ? 'expand_less' : 'expand_more'}
             size={30}
           />
