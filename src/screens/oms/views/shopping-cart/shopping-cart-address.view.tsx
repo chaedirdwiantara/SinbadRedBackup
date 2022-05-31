@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbDivider, color } from 'react-native-sinbad-ui';
+import { SnbText2, SnbDivider2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 /** === COMPONENT ===  */
@@ -9,13 +9,23 @@ export const ShoppingCartAddress: FC = () => {
   /** => ACTION */
   const { stateCart } = React.useContext(contexts.CartContext);
   return (
-    <View style={{ backgroundColor: color.white, marginTop: 4, padding: 12 }}>
-      <SnbText.H4>Alamat Pengiriman</SnbText.H4>
-      <SnbDivider style={{ marginVertical: 4 }} />
+    <View
+      style={{
+        backgroundColor: colorV2.bgColor.light,
+        marginTop: 4,
+        padding: 12,
+      }}>
+      <SnbText2.Headline.Small color={colorV2.textColor.default}>
+        Alamat Pengiriman
+      </SnbText2.Headline.Small>
+      <SnbDivider2 />
       <View style={{ marginBottom: 4 }}>
-        <SnbText.B2>{`Toko ${stateCart.buyerAddress.data?.buyerName}`}</SnbText.B2>
+        <SnbText2.Body.Small
+          color={
+            colorV2.textColor.default
+          }>{`Toko ${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
       </View>
-      <SnbText.B3 color={color.black60}>
+      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
         {stateCart.buyerAddress.data?.address}
         {stateCart.buyerAddress.data?.urban ? ',' : null}{' '}
         {stateCart.buyerAddress.data?.urban}
@@ -25,10 +35,10 @@ export const ShoppingCartAddress: FC = () => {
         {stateCart.buyerAddress.data?.city}
         {stateCart.buyerAddress.data?.province ? ',' : null}{' '}
         {stateCart.buyerAddress.data?.province}
-      </SnbText.B3>
-      <SnbText.B3 color={color.black60}>
+      </SnbText2.Paragraph.Tiny>
+      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
         {stateCart.buyerAddress.data?.zipCode}
-      </SnbText.B3>
+      </SnbText2.Paragraph.Tiny>
     </View>
   );
 };
