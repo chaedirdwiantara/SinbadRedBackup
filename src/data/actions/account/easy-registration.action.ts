@@ -89,7 +89,6 @@ export const updateCompleteDataSuccess = (
 ) => {
   const dataUser = payload?.user;
   const dataBuyer = payload?.buyer;
-  console.log({ dataUser }, { dataBuyer });
 
   if (payload?.user) {
     if (dataUser?.idNo && dataUser?.name) {
