@@ -6,7 +6,6 @@ import {
   SnbTopNav2,
   colorV2,
   SnbText2,
-  SnbTextSeeMoreType1,
   SnbIcon,
   SnbButton2,
   spacingV2 as layout,
@@ -266,7 +265,7 @@ const UserView: FC = ({ start }: any) => {
           style={{
             flex: 1,
           }}>
-          <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
             <View style={UserStyles.imageContainer}>
               {!data?.imageUrl ? (
                 <SnbIcon
@@ -278,24 +277,13 @@ const UserView: FC = ({ start }: any) => {
                 <Image source={source} style={UserStyles.image} />
               )}
             </View>
-            <View style={UserStyles.userInfo}>
-              <View
-                style={{
-                  marginLeft: -layout.spacing.lg,
-                  flexDirection: 'row',
-                }}>
-                <SnbTextSeeMoreType1 line={1}>
-                  <SnbText2.Body.Small>
-                    {data?.name
-                      ? data.name
-                      : buyerData?.buyerInformation?.buyerAccount?.code}
-                  </SnbText2.Body.Small>
-                </SnbTextSeeMoreType1>
-                <View
-                  style={{
-                    alignSelf: 'center',
-                    marginLeft: -layout.spacing.lg,
-                  }}>
+            <View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <SnbText2.Body.Small numberOfLines={1}>
+                  {data?.name ||
+                    buyerData?.buyerInformation?.buyerAccount?.code}
+                </SnbText2.Body.Small>
+                <View style={{ marginHorizontal: layout.spacing.xxsm }}>
                   <SnbIcon
                     name={'shield'}
                     size={16}
@@ -307,7 +295,7 @@ const UserView: FC = ({ start }: any) => {
                   />
                 </View>
               </View>
-              <SnbText2.Paragraph.Tiny color={'#677A8E'}>
+              <SnbText2.Paragraph.Tiny>
                 {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
               </SnbText2.Paragraph.Tiny>
             </View>
