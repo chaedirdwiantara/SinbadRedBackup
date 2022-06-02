@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
@@ -219,9 +219,9 @@ const useReserveStockAction = () => {
 const useOrderQuantity = ({ minQty }: { minQty: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
-  const onChangeQty = (value: number) => {
+  const onChangeQty = useCallback((value: number) => {
     setOrderQty(value);
-  };
+  }, []);
 
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);
