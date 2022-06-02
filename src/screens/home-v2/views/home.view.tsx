@@ -26,6 +26,8 @@ import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
+import { NavigationAction } from '@navigation';
+
 const { width, height } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
@@ -59,8 +61,20 @@ const HomeView: FC = ({ start }: any) => {
         icon1Name="cart"
         icon2Name="notification"
         color="red"
-        icon1Action={() => console.log('Cart pressed')}
-        icon2Action={() => console.log('Notifications pressed')}
+        icon1Action={() => {
+          if (meV2.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('OmsShoppingCartView');
+          }
+        }}
+        icon2Action={() => {
+          if (meV2.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('NotificationView');
+          }
+        }}
         inputValue={keyword}
         onChangeText={(text) => setKeyword(text)}
         onClearText={() => setKeyword('')}
