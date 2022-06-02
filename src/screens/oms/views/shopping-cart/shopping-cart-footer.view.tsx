@@ -238,7 +238,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-      <View>
+      <View style={{ flex: 1 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <SnbText2.Body.Default color={colorV2.textColor.secondary}>
             Total:{' '}
@@ -252,13 +252,14 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
             colorV2.textColor.secondary
           }>{`${countTotalProduct} barang dipilih`}</SnbText2.Caption.Small>
       </View>
-      <View>
+      <View style={{ width: '35%' }}>
         <SnbButton2.Primary
           title="Checkout"
           onPress={handleOnPressCheckout}
           size={'medium'}
           disabled={isCheckoutDisabled}
           loading={isCheckoutBtnLoading}
+          full
         />
       </View>
     </View>
