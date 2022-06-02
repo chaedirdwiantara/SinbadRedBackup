@@ -2,14 +2,13 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import {
   SnbButton2,
-  SnbOTPInput,
   SnbText2,
-  SnbOTPTimer,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
 import Svg from '@svg';
 import { useOTP } from '@screen/auth/functions';
+import { OTPInput, OTPTimer } from '@screen/shared/views/components';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
@@ -26,6 +25,9 @@ const OTPContent: React.FC<Props> = (props) => {
     props;
   const { otp, setOtp } = useOTP();
   const [error, setError] = React.useState(false);
+  const [otpType, setOtpType] = React.useState<'error' | 'default' | 'success'>(
+    'default',
+  );
 
   useEffect(() => {
     if (otp.length < 5) {
@@ -36,8 +38,15 @@ const OTPContent: React.FC<Props> = (props) => {
   useEffect(() => {
     if (errorMessage) {
       setError(true);
+      setOtpType('error');
     }
   }, [errorMessage]);
+
+  useEffect(() => {
+    if (otpSuccess) {
+      setOtpType('success');
+    }
+  }, [otpSuccess]);
 
   return (
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
@@ -50,18 +59,24 @@ const OTPContent: React.FC<Props> = (props) => {
             Masukkan kode Verifikasi
           </SnbText2.Headline.Default>
           <View style={{ marginVertical: layout.spacing.xxsm }} />
-          <SnbText2.Paragraph.Default align="center">
-            Kode verifikasi telah dikirimkan melalui sms ke {phoneNo}
-          </SnbText2.Paragraph.Default>
+          <View style={{ paddingHorizontal: layout.spacing['3xl'] }}>
+            <SnbText2.Paragraph.Default align="center">
+              Kode verifikasi telah dikirimkan melalui sms ke{' '}
+              <SnbText2.Body.Default>{phoneNo}</SnbText2.Body.Default>
+            </SnbText2.Paragraph.Default>
+          </View>
         </View>
         <View style={{ margin: layout.spacing.xxsm }}>
-          <SnbOTPInput
+          <OTPInput
             {...props}
-            type={error ? 'error' : 'default'}
-            hideIcon
+            type={otpType}
             showMessage={error || otpSuccess ? true : false}
             code={otp}
-            onCodeChanged={setOtp}
+            onCodeChanged={(val) => {
+              setOtp(val);
+              setOtpType('default');
+              setError(false);
+            }}
           />
         </View>
       </View>
@@ -70,11 +85,11 @@ const OTPContent: React.FC<Props> = (props) => {
           title="Verifikasi"
           onPress={() => onVerifyOTP(otp)}
           loading={loading}
-          disabled={otp.length < 5}
+          disabled={otp.length < 5 || loading}
           size="medium"
           full
         />
-        <SnbOTPTimer action={resend} />
+        <OTPTimer action={resend} />
       </View>
     </View>
   );

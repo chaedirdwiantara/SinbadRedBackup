@@ -3,12 +3,12 @@ import {
   colorV2,
   SnbContainer,
   SnbProgress,
-  SnbRadioButton,
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
   borderV2,
+  SnbIcon,
 } from '@sinbad/react-native-sinbad-ui';
 import { FlatList, TouchableOpacity, View } from 'react-native';
 import { renderIF, useInput } from '@screen/auth/functions';
@@ -69,9 +69,18 @@ const Content: React.FC = () => {
           <SnbText2.Body.Default>{locationName}</SnbText2.Body.Default>
         </View>
         <View style={{ marginHorizontal: layout.spacing.xxsm }} />
-        <SnbRadioButton
-          onPress={() => setSelectedLocation(item)}
-          status={selectedLocation?.id === item.id ? 'selected' : 'unselect'}
+        <SnbIcon
+          name={
+            selectedLocation?.id === item.id
+              ? 'radio_button'
+              : 'radio_button_outline'
+          }
+          size={22}
+          color={
+            selectedLocation?.id === item.id
+              ? colorV2.iconColor.red
+              : colorV2.iconColor.default
+          }
         />
       </TouchableOpacity>
     );

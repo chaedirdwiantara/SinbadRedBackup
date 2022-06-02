@@ -14,6 +14,7 @@ import {
   LOGIN_PHONE_VIEW,
 } from '@screen/auth/functions/screens_name';
 import { useNavigation } from '@react-navigation/core';
+import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 
 interface Props {
   testID?: string;
@@ -50,6 +51,8 @@ const OnBoardingView: React.FC<Props> = () => {
         'Pembayaran tanpa uang tunai untuk transaksi yang mudah dan andal',
     },
   ]);
+
+  setFlagByDeviceId();
 
   const slideOnBoard = () => {
     return (

@@ -7,8 +7,7 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { View, ScrollView, BackHandler } from 'react-native';
-import Svg from '@svg';
+import { View, ScrollView, BackHandler, Image } from 'react-native';
 import { useEasyRegistration } from '@screen/account/functions';
 import { MerchantHookFunc } from '../../../../merchant/function';
 import { contexts } from '@contexts';
@@ -136,7 +135,11 @@ const DataDiriStep4View: React.FC = () => {
         />
         <View
           style={{ alignItems: 'center', marginVertical: layout.spacing.lg }}>
-          <Svg name="notification" size={240} />
+          <Image
+            source={require('@image/sinbad_image/email_ilustration.png')}
+            style={{ height: 240 }}
+            resizeMode="center"
+          />
         </View>
         <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text

@@ -80,8 +80,8 @@ export const copilotOptions: any = (
                     width: 8,
                     backgroundColor:
                       currentStep?.order - 1 === idx
-                        ? colorV2.bgColor.red
-                        : colorV2.strokeColor.disable,
+                        ? colorV2.iconColor.red
+                        : colorV2.bgColor.neutralAlt,
                     marginRight: layout.spacing.xxsm,
                     borderRadius: borderV2.radius.md,
                   }}

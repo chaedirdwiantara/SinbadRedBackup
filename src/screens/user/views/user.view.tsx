@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Image, Dimensions } from 'react-native';
 import {
   SnbContainer,
@@ -7,7 +7,6 @@ import {
   colorV2,
   SnbText2,
   SnbTextSeeMoreType1,
-  SnbDialog,
   SnbIcon,
   SnbButton2,
   spacingV2 as layout,
@@ -21,7 +20,7 @@ import { UserHookFunc } from '../functions';
 import { contexts } from '@contexts';
 import { ModalUserProfileCompletion } from './modal-user-profile-completion.view';
 import LoadingPage from '@core/components/LoadingPage';
-import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
+import { setErrorMessage } from '@screen/auth/functions';
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import { copilotOptions } from '@screen/account/views/shared';
 import { useCoachmark } from '@screen/account/functions';
@@ -29,6 +28,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
 import ListButton from '../views/shared/list-button.component';
+import ModalLogout from './shared/modal-logout.component';
 
 const CopilotView = walkthroughable(View);
 
@@ -41,8 +41,6 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const { logout } = useAuthAction();
-  const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
@@ -327,7 +325,10 @@ const UserView: FC = ({ start }: any) => {
                 onSnapToItem={(index) => {
                   setActiveIndex(index);
                 }}
-                slideStyle={{ padding: layout.spacing.md }}
+                slideStyle={{
+                  paddingHorizontal: layout.spacing.xsm,
+                  paddingVertical: layout.spacing.md,
+                }}
                 inactiveSlideOpacity={1}
                 inactiveSlideScale={1}
                 activeSlideAlignment={'center'}
@@ -570,21 +571,7 @@ const UserView: FC = ({ start }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <SnbDialog
-        title="Yakin keluar Sinbad ?"
-        open={showConfirmation}
-        okText="Ya"
-        cancelText="Tidak"
-        cancel={() => {
-          setShowConfirmation(false);
-        }}
-        ok={() => {
-          setShowConfirmation(false);
-          logout();
-          reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
-        }}
-        content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
-      />
+      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
     </View>
   );
 };

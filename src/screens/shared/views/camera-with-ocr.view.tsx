@@ -6,7 +6,6 @@ import {
 import React from 'react';
 import {
   colorV2,
-  SnbCamera,
   SnbBottomSheet,
   SnbText2,
   SnbButton2,
@@ -20,6 +19,7 @@ import { BackHandler, Dimensions, View } from 'react-native';
 import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataFlagRTDB } from '@core/redux/Data';
+import { Camera } from './components';
 
 const { height, width: screenWidth } = Dimensions.get('window');
 
@@ -41,7 +41,7 @@ const KtpPhotoFrame = () => (
 const CameraWithOCRView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [showModalError, setShowModalError] = React.useState<boolean>(true);
+  const [showModalError, setShowModalError] = React.useState<boolean>(false);
   const [retake, setRetake] = React.useState<boolean>(false);
   const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
@@ -77,7 +77,7 @@ const CameraWithOCRView = () => {
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
         setShowModalError(true);
-      }, 30 * 1000);
+      }, 15 * 1000);
     }
     return () => {
       clearTimeout(ocrTimeout);
@@ -92,7 +92,7 @@ const CameraWithOCRView = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <SnbCamera
+      <Camera
         title={params?.title}
         subtitle={params?.subtitle}
         type={'back'}
@@ -161,7 +161,7 @@ const CameraWithOCRView = () => {
       {renderIF(
         ocrImageState.loading || ocrStatus === 'processing',
         <View style={{ position: 'absolute', bottom: 36, right: 0, left: 0 }}>
-          <SnbProgress size={60} />
+          <SnbProgress size={64} />
         </View>,
       )}
     </View>
