@@ -1,7 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { View } from 'react-native';
 /** === IMPORT COMPONENT ===  */
+import { spacingV2 } from '@sinbad/react-native-sinbad-ui';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 /** === IMPORT FUNCTION ===  */
 import { isTab } from '@core/functions/global/device-data';
@@ -14,6 +15,8 @@ interface GridLayoutCardProps {
   index: number;
   onOrderPress: (item: models.ProductList) => void;
 }
+// var
+const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 const GridLayoutCard: FC<GridLayoutCardProps> = ({
   product,
@@ -21,17 +24,15 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
   onOrderPress,
 }) => {
   const imageKitWidth = isTab ? 300 : 250;
-
   return (
     <View
       key={index}
       style={{
-        marginRight: index % 2 === 0 ? 8 : 16,
-        marginLeft: index % 2 === 0 ? 16 : 0,
-        marginBottom: 4,
+        marginRight: index % 2 === 0 ? spacing.sm : spacing.lg,
+        marginLeft: index % 2 === 0 ? spacing.lg : 0,
+        marginBottom: spacing.lg,
       }}>
       <ProductGridCard
-        flexOne={true}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
         qtySoldLabel={product.qtySoldLabel}
@@ -50,4 +51,4 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
   );
 };
 
-export default GridLayoutCard;
+export default memo(GridLayoutCard);
