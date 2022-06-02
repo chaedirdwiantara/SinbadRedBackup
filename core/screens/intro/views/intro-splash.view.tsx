@@ -30,23 +30,18 @@ const IntroSplashView: React.FC = () => {
     authCoreAction.me();
     authCoreAction.meV2();
   }, []);
+
   React.useEffect(() => {
-    setTimeout(() => {
-      if (!meV2.data && !meV2.loading && meV2.error) {
-        NavigationAction.resetToIntroSinbad();
+    if (meV2.data && !meV2.loading) {
+      if (meV2.data?.data?.isBuyerCategoryCompleted) {
+        NavigationAction.resetToHome();
       } else {
-        if (meV2.data?.data?.isBuyerCategoryCompleted === true && !meV2.error) {
-          NavigationAction.resetToHome();
-        }
-        if (
-          meV2.data?.data?.isBuyerCategoryCompleted === false &&
-          !meV2.error
-        ) {
-          getLocationPermissions();
-        }
+        getLocationPermissions();
       }
-    }, 2000);
-  }, [meV2.data, meV2.loading, meV2.error]);
+    } else if ((!meV2.data || meV2.error) && !meV2.loading) {
+      NavigationAction.resetToIntroSinbad();
+    }
+  }, [meV2]);
   /** === VIEW === */
   /** => main */
   return (

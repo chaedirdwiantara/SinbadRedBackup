@@ -13,7 +13,6 @@ interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
   otpSuccess: boolean;
-  hideIcon: boolean;
   phoneNo: string;
   resend: () => void;
   errorMessage: string;

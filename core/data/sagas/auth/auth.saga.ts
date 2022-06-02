@@ -37,6 +37,7 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
     });
     yield put(ActionCreators.verificationOTPSuccess(response));
     yield put(ActionCreators.meProcess());
+    yield put(ActionCreators.meV2Process());
   } catch (error: any) {
     yield put(ActionCreators.verificationOTPFailed(error));
   }
