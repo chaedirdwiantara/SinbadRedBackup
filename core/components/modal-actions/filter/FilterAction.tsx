@@ -9,6 +9,7 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS */
 import throttle from 'lodash/throttle';
+import debounce from 'lodash/debounce';
 /** === IMPORT TYPE */
 import { BottomActionPressHandlerType } from '@core/components/product/list/BottomAction';
 /** === IMPORT STYLE */
@@ -43,9 +44,9 @@ const FilterAction: FC<FilterActionProps> = ({
   // function
   // function slider event
   const onSlider = useCallback(
-    throttle((val: Array<number>) => {
+    debounce((val: Array<number>) => {
       setValue(val);
-    }, 300),
+    }, 10),
     [],
   );
   // function change input range price

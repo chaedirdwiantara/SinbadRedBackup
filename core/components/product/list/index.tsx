@@ -1,13 +1,19 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useRef, useMemo } from 'react';
-import { View, StatusBar, Text } from 'react-native';
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
+import { View, StatusBar } from 'react-native';
 import {
   SnbContainer,
   SnbBottomSheet,
-  SnbToast,
   SnbBottomSheet2,
   SnbBottomSheetPart,
-  FooterButton,
+  SnbToast2,
 } from 'react-native-sinbad-ui';
 import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
@@ -16,7 +22,6 @@ import NavigationHeader from './NavigationHeader';
 import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
-import BottomAction from './BottomAction';
 import ActionSheet from '../ActionSheet';
 import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
@@ -199,7 +204,6 @@ const ProductList: FC<ProductListProps> = ({
     setMaxPrice,
     resetValues,
     handleSliderChange,
-    handleSliderFinishChange,
   } = usePriceRangeFilter(filterQuery);
   /** === REF === */
   const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
@@ -248,12 +252,15 @@ const ProductList: FC<ProductListProps> = ({
   };
 
   /** => action on change qty */
-  const onHandleChangeQty = (value: number) => {
-    if (!dataStock || !productDetailState) {
-      return;
-    }
-    onChangeQty(value);
-  };
+  const onHandleChangeQty = useCallback(
+    (value: number) => {
+      if (!dataStock || !productDetailState) {
+        return;
+      }
+      onChangeQty(value);
+    },
+    [dataStock, productDetailState, onChangeQty],
+  );
 
   /** => action submit add to cart  */
   const onSubmitAddToCart = () => {
@@ -329,7 +336,7 @@ const ProductList: FC<ProductListProps> = ({
       setProductSelected(null);
       handleCloseModal();
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -348,7 +355,7 @@ const ProductList: FC<ProductListProps> = ({
     if (sendToSupplierData !== null) {
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
+      SnbToast2.show('Berhasil kirim data ke supplier', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -499,11 +506,11 @@ const ProductList: FC<ProductListProps> = ({
           addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
-        onSearchClear={() => {
-          setSearchKeyword('');
-          setKeywordSearched(true);
-          onFetch({ ...derivedQueryOptions, keyword: '' });
-        }}
+        // onSearchClear={() => {
+        //   setSearchKeyword('');
+        //   setKeywordSearched(true);
+        //   onFetch({ ...derivedQueryOptions, keyword: '' });
+        // }}
       />
       {withCategoryTabs && (
         <CategoryTabList
@@ -642,6 +649,7 @@ const ProductList: FC<ProductListProps> = ({
         open={orderModalVisible}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
+        loading={loadingPreparation}
         disabled={
           productDetailState === null ||
           dataStock === null ||
@@ -657,18 +665,18 @@ const ProductList: FC<ProductListProps> = ({
         close={handleCloseModal}
       />
       {/* Modal loading horizontal */}
-      <SnbBottomSheet
+      <SnbBottomSheet2
         open={loadingPreparation}
-        title=" "
+        title={<SnbBottomSheetPart.Title title=" " />}
+        snap={false}
+        name="modal-loading"
+        type="content"
+        contentHeight={20}
         content={
-          <View
-            style={{
-              marginTop: -40,
-            }}>
+          <View>
             <LoadingHorizontal />
           </View>
         }
-        isSwipeable={false}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
