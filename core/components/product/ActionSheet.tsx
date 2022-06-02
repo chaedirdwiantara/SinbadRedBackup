@@ -1,9 +1,5 @@
 import React, { FC, memo, ReactNode } from 'react';
-import {
-  SnbBottomSheet2,
-  SnbBottomSheetPart,
-  FooterButton,
-} from 'react-native-sinbad-ui';
+import { SnbBottomSheet2, SnbBottomSheetPart } from 'react-native-sinbad-ui';
 
 type ActionSheetProps = {
   open: boolean;
@@ -14,11 +10,13 @@ type ActionSheetProps = {
   contentHeight: number;
   onClearFilter?: () => void;
   withClear?: boolean;
+  footer?: ReactNode;
 };
 
 const ActionSheet: FC<ActionSheetProps> = (props) => {
   const {
     children,
+    footer,
     open,
     title,
     onClose,
@@ -34,7 +32,8 @@ const ActionSheet: FC<ActionSheetProps> = (props) => {
       contentHeight={contentHeight}
       closeFromBackdrop
       open={open}
-      // close={onClose}
+      button={footer}
+      close={onClose}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
