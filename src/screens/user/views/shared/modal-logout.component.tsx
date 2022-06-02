@@ -10,6 +10,7 @@ import {
 import { View } from 'react-native';
 import { useAuthAction } from '@screen/auth/functions';
 import { useNavigation } from '@react-navigation/native';
+import { contexts } from '@contexts';
 
 interface Props {
   open: boolean;
@@ -19,6 +20,8 @@ interface Props {
 const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
+  const { stateUser } = React.useContext(contexts.UserContext);
+
   return (
     <Modal
       animationIn={'fadeIn'}
@@ -69,7 +72,10 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
               title={'Ya'}
               onPress={() => {
                 setOpen(false);
-                logout();
+                logout({
+                  mobilePhone:
+                    stateUser.detail.data?.ownerData?.profile?.mobilePhone,
+                });
                 reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
               }}
               disabled={false}

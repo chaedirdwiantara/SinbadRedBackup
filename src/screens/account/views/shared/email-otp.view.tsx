@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import {
   SnbButton2,
-  SnbOTPInput,
   SnbText2,
-  SnbOTPTimer,
-  colorV2,
   SnbContainer,
   SnbTopNav2,
   SnbBottomSheet,
@@ -16,6 +13,9 @@ import { MerchantHookFunc } from '../../../merchant/function';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@navigation';
 import { useEasyRegistration } from '@screen/account/functions';
+import { OTPInput, OTPTimer } from '@screen/shared/views/components';
+import Svg from '@svg';
+
 interface Props {
   loading: boolean;
   otpSuccess: boolean;
@@ -34,7 +34,9 @@ const OTPContent: React.FC<Props> = (props) => {
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successOTP, setSuccessOTP] = useState(false);
-  const [hideIcon, setHideIcon] = useState(true);
+  const [otpType, setOtpType] = useState<'error' | 'default' | 'success'>(
+    'default',
+  );
   const {
     resetUpdateCompleteData,
     backToDataCompleteness,
@@ -56,13 +58,13 @@ const OTPContent: React.FC<Props> = (props) => {
     if (stateMerchant.verificationEmail.data) {
       setOpenModalSuccess(true);
       setSuccessOTP(true);
-      setHideIcon(false);
+      setOtpType('success');
     } else if (stateMerchant.verificationEmail.error) {
       setSuccessOTP(false);
-      setHideIcon(false);
       setErrorMessage(
         'Pastikan nomor atau kode verifikasi yang Anda masukkan benar',
       );
+      setOtpType('error');
     }
   }, [stateMerchant]);
 
@@ -120,10 +122,9 @@ const OTPContent: React.FC<Props> = (props) => {
         <View style={{ flex: 1 }}>
           <ScrollView>
             <View style={OtpStyle.titleContainer}>
-              <Image
-                source={require('../../../../assets/images/sinbad_image/otp.png')}
-                style={OtpStyle.imageOtp}
-              />
+              <View style={{ alignSelf: 'center' }}>
+                <Svg name="sinbad_otp" size={200} />
+              </View>
               <View
                 style={{ padding: layout.spacing.lg, alignItems: 'center' }}>
                 <SnbText2.Headline.Default>
@@ -137,26 +138,20 @@ const OTPContent: React.FC<Props> = (props) => {
                 </SnbText2.Paragraph.Default>
               </View>
             </View>
-            <View style={{ margin: layout.spacing.md }}>
-              <SnbOTPInput
+            <View style={{ margin: layout.spacing.xxsm }}>
+              <OTPInput
                 autoFocusOnLoad
                 code={otp}
-                onCodeChanged={setOtp}
+                onCodeChanged={(val) => {
+                  setOtp(val);
+                  setErrorMessage('');
+                  setOtpType('default');
+                  setSuccessOTP(false);
+                }}
                 otpSuccess={successOTP}
-                hideIcon={hideIcon}
-                type={'default'}
+                type={otpType}
+                showMessage={errorMessage !== '' || successOTP}
               />
-              <View
-                style={{
-                  marginBottom: errorMessage ? layout.spacing.xl : 0,
-                  marginHorizontal: layout.spacing.lg,
-                }}>
-                <SnbText2.Paragraph.Tiny
-                  color={colorV2.textColor.error}
-                  align="center">
-                  {errorMessage}
-                </SnbText2.Paragraph.Tiny>
-              </View>
             </View>
             <View style={{ padding: layout.spacing.lg }}>
               <SnbButton2.Primary
@@ -173,7 +168,7 @@ const OTPContent: React.FC<Props> = (props) => {
               />
             </View>
           </ScrollView>
-          <SnbOTPTimer action={resend} timer={90} />
+          <OTPTimer action={resend} timer={90} />
         </View>
       </View>
     );
