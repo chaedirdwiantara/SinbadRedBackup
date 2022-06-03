@@ -15,6 +15,7 @@ import {
   goToProduct,
   goToBrandList,
 } from 'src/screens/brand/functions';
+import { BrandListItem } from '@model/brand';
 
 export const Brands: FC = () => {
   const {
@@ -45,12 +46,17 @@ export const Brands: FC = () => {
       </View>
       <View style={{ marginTop: 10 }}>
         <SnbHorizontalScrollContainer
-          ItemComponent={Content.NewBrand.Square}
+          ItemComponent={(item: BrandListItem) => (
+            <Content.NewBrand.Square
+              name={item.name}
+              image={item.image}
+              onPress={() => goToProduct(item)}
+            />
+          )}
           data={brandListState.data}
           keyExtractor={(item) => item.id}
           loading={brandListState.loading}
           itemSpaces={layout.spacing.md}
-          onItemPress={(brand) => goToProduct(brand)}
         />
       </View>
     </View>
