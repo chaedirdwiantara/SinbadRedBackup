@@ -1,17 +1,39 @@
 import { useMemo } from 'react';
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
+import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 
 const useAddToCart = (orderQty: number, isFromProductDetail?: boolean) => {
   const {
     stateProduct: {
-      detail: { data: dataProductDetail },
-      cart: { data: dataProductDetailCart },
+      detail: { data: dataProductDetail, loading: loadingProductDetail },
+      cart: { data: dataProductDetailCart, loading: loadingProductDetailCart },
     },
   } = useProductContext();
+  const {
+    stateStock: {
+      validation: { data: dataStockValidation, error: errorStockValidation },
+      detail: { data: dataStockDetail, error: errorStockDetail },
+    },
+  } = useStockContext();
+  const loadingProduct = useMemo(
+    () =>
+      isFromProductDetail ? loadingProductDetail : loadingProductDetailCart,
+    [isFromProductDetail, loadingProductDetail, loadingProductDetailCart],
+  );
   // product data
   const productDetail = useMemo(
     () => (isFromProductDetail ? dataProductDetail : dataProductDetailCart),
     [isFromProductDetail, dataProductDetail, dataProductDetailCart],
+  );
+  // stock data
+  const dataStock = useMemo(
+    () => (isFromProductDetail ? dataStockDetail : dataStockValidation),
+    [dataStockValidation, dataStockDetail, isFromProductDetail],
+  );
+  // stock error
+  const errorStock = useMemo(
+    () => (isFromProductDetail ? errorStockDetail : errorStockValidation),
+    [errorStockValidation, errorStockDetail, isFromProductDetail],
   );
   // set harga produk harga normal dan harga grosir
   const bulkPriceAterTax = useMemo(() => {
@@ -48,7 +70,15 @@ const useAddToCart = (orderQty: number, isFromProductDetail?: boolean) => {
     return qtyMinBulk <= orderQty;
   }, [orderQty, productDetail?.bulkPrices]);
 
-  return { bulkPriceAterTax, isPriceGrosir, priceAfterTax, productDetail };
+  return {
+    bulkPriceAterTax,
+    isPriceGrosir,
+    priceAfterTax,
+    productDetail,
+    dataStock,
+    errorStock,
+    loadingProduct,
+  };
 };
 
 export default useAddToCart;
