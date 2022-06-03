@@ -49,7 +49,7 @@ const LoginOTPView: React.FC = () => {
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
           otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading}
+          loading={verifyOTP.loading || !meV2.loading}
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>
