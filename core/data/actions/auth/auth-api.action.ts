@@ -2,6 +2,8 @@ import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
 import { setUserFCM } from '../../../functions/firebase/fcm-firestore.function';
+import { globalReportFromAction } from '@report/GlobalReport';
+import * as EventName from '@report/moengage/event';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
@@ -59,7 +61,13 @@ export const verificationOTPProcess = (
 /** => success */
 export const verificationOTPSuccess = (
   data: models.LoginSuccess,
+  params: any,
 ): models.VerificationOTPSuccessAction => {
+  const recordData = {
+    ...data,
+    ...params,
+  };
+  globalReportFromAction(EventName.LOGIN, recordData);
   setUserFCM(data.data.user.id);
   return { type: types.VERIFICATION_OTP_SUCCESS, payload: data };
 };
