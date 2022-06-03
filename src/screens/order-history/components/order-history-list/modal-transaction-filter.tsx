@@ -75,7 +75,7 @@ const ModalTransactionFilter = forwardRef<
   const Content = useMemo(() => {
     return (
       <View style={{ paddingHorizontal: 16 }}>
-        <SnbRadioGroup value={select}>
+        <SnbRadioGroup value={select} onChange={setSelect}>
           {transactionFilter.map((i) => (
             <View
               key={i.id}
