@@ -27,17 +27,21 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
     }));
     /** ==> fuction trigger button 'Cek Ulang Alamat' */
     const buttonOnPress = useCallback(() => {
+      // chaining screen to back screen & to edit address
+      const promiseBack = () =>
+        new Promise((resolve) => {
+          NavigationAction.back();
+          resolve('');
+        });
+
       setIsOpen((prev) => !prev);
-      /** ==> timeout for animate close modal */
-      setTimeout(() => {
-        /** ==> flow is back to home, to profile screen (get data address), and to address merchant */
-        NavigationAction.back();
-        setTimeout(() => NavigationAction.navigate('UserView'), 0);
+
+      promiseBack().then(() =>
         setTimeout(
-          () => NavigationAction.navigate('MerchantDetailAddressView'),
-          1000,
-        );
-      }, 500);
+          () => NavigationAction.navigate('MerchantEditAddressView'),
+          300,
+        ),
+      );
     }, []);
 
     return (

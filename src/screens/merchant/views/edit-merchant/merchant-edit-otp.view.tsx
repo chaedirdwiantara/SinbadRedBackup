@@ -22,7 +22,6 @@ import Svg from '@svg';
 interface Props {
   loading: boolean;
   otpSuccess: boolean;
-  hideIcon: boolean;
   route: any;
 }
 

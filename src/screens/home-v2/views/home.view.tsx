@@ -15,19 +15,20 @@ import {
 
 import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands } from '../components';
-import { categories, brands } from '../dummies';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
-import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
   copilotOptions,
   ModalStartCoachmark,
+  RegisterBadge,
+  UpgradeVIPAccountBadge,
 } from '@screen/account/views/shared';
 import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { NavigationAction } from '@navigation';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
 const HomeView: FC = ({ start }: any) => {
@@ -60,8 +61,20 @@ const HomeView: FC = ({ start }: any) => {
         icon1Name="cart"
         icon2Name="notification"
         color="red"
-        icon1Action={() => console.log('Cart pressed')}
-        icon2Action={() => console.log('Notifications pressed')}
+        icon1Action={() => {
+          if (meV2.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('OmsShoppingCartView');
+          }
+        }}
+        icon2Action={() => {
+          if (meV2.data === null) {
+            NavigationAction.navigate('LoginPhoneView');
+          } else {
+            NavigationAction.navigate('NotificationView');
+          }
+        }}
         inputValue={keyword}
         onChangeText={(text) => setKeyword(text)}
         onClearText={() => setKeyword('')}
@@ -73,6 +86,7 @@ const HomeView: FC = ({ start }: any) => {
           backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
         }}>
+        <RegisterBadge />
         {renderIF(
           isBadgeVIPAvailable,
           <UpgradeVIPAccountBadge getLayout={setVipBadgeLayout} />,
@@ -88,11 +102,8 @@ const HomeView: FC = ({ start }: any) => {
             <Benefits />
           </CopilotView>
         </CopilotStep>
-        <Categories data={categories} />
-        <Brands
-          data={brands}
-          onTitleActionPress={() => console.log('See all brands')}
-        />
+        <Categories />
+        <Brands />
       </ScrollView>
       <ModalStartCoachmark onStartCoachmark={start} />
       {renderIF(
@@ -119,7 +130,7 @@ const HomeView: FC = ({ start }: any) => {
             <CopilotView
               style={[
                 styles.pesananCoachmark,
-                { height: tabBarHeight, top: height - tabBarHeight },
+                { height: tabBarHeight, bottom: -tabBarHeight },
               ]}
             />
           </CopilotStep>
@@ -131,7 +142,7 @@ const HomeView: FC = ({ start }: any) => {
           <CopilotView
             style={[
               styles.pesananCoachmark,
-              { height: tabBarHeight, top: height - tabBarHeight },
+              { height: tabBarHeight, bottom: -tabBarHeight },
             ]}
           />
         </CopilotStep>,
