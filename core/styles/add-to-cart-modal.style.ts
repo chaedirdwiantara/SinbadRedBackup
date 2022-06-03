@@ -15,7 +15,7 @@ export const AddToCartModalStyle = StyleSheet.create({
     marginBottom: 24,
   },
   image: {
-    height: 70,
+    height: 80,
     borderRadius: 6,
     aspectRatio: 1,
     resizeMode: 'contain',
