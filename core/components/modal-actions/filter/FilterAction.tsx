@@ -24,9 +24,11 @@ interface FilterActionProps {
   onButtonPress: ({
     type,
     value,
+    show,
   }: {
     type: BottomActionPressHandlerType;
     value: { minPrice: number; maxPrice: number };
+    show: boolean;
   }) => void;
 }
 /** === CONSTANT === */
@@ -64,6 +66,7 @@ const FilterAction: FC<FilterActionProps> = ({
     onButtonPress({
       type: 'applyFilter',
       value: { minPrice: min, maxPrice: max },
+      show: false,
     });
 
     setMinPrice(min);
