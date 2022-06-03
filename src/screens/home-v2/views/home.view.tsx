@@ -27,7 +27,7 @@ import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
 const HomeView: FC = ({ start }: any) => {
@@ -119,7 +119,7 @@ const HomeView: FC = ({ start }: any) => {
             <CopilotView
               style={[
                 styles.pesananCoachmark,
-                { height: tabBarHeight, top: height - tabBarHeight },
+                { height: tabBarHeight, bottom: -tabBarHeight },
               ]}
             />
           </CopilotStep>
@@ -131,7 +131,7 @@ const HomeView: FC = ({ start }: any) => {
           <CopilotView
             style={[
               styles.pesananCoachmark,
-              { height: tabBarHeight, top: height - tabBarHeight },
+              { height: tabBarHeight, bottom: -tabBarHeight },
             ]}
           />
         </CopilotStep>,
