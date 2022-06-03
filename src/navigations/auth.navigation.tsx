@@ -2,6 +2,7 @@ import {
   LoginOTPView,
   LoginPhoneView,
   OnBoardingView,
+  RegisterOTPView,
   SelfRegisterView,
 } from '@screen/auth/views';
 
@@ -17,6 +18,9 @@ const AuthNav = {
   },
   SelfRegisterView: {
     component: SelfRegisterView,
+  },
+  RegisterOTPView: {
+    component: RegisterOTPView,
   },
 };
 
