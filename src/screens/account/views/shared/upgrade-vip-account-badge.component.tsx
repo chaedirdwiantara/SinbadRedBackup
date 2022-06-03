@@ -8,7 +8,7 @@ import {
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { DATA_COMPLETENESS_INTRO_VIEW } from '@screen/account/functions/screens_name';
-import { useSelector } from 'react-redux';
+import { useDataAuth } from '@core/redux/Data';
 
 interface Props {
   getLayout: (result: any) => void;
@@ -16,7 +16,7 @@ interface Props {
 
 const UpgradeVIPAccountBadge: React.FC<Props> = ({ getLayout }) => {
   const { navigate } = useNavigation();
-  const { meV2 } = useSelector((state: any) => state.authCore);
+  const { meV2 } = useDataAuth();
 
   if (
     typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
