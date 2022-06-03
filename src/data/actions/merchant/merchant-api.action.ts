@@ -1,6 +1,5 @@
 import * as types from '@types';
 import * as models from '@models';
-// import { SnbSetAttribute } from '@core/report/moengage/index';
 import ReactMoE from 'react-native-moengage';
 /** === LIST === */
 /** => list supplier process */
