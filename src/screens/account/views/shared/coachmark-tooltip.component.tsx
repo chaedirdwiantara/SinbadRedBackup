@@ -103,6 +103,7 @@ export const copilotOptions: any = (
             <SnbButton2.Primary
               size="small"
               loading={updateCoachmarkState.loading}
+              disabled={updateCoachmarkState.loading}
               title={isLastStep ? 'Selesai' : 'Lanjut'}
               onPress={() => {
                 if (isLastStep) {
