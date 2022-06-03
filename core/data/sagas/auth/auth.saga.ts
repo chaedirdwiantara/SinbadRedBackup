@@ -35,7 +35,7 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
     const response: models.LoginSuccess = yield call(() => {
       return AuthApi.verificationOTP(action.payload);
     });
-    yield put(ActionCreators.verificationOTPSuccess(response));
+    yield put(ActionCreators.verificationOTPSuccess(response, action.payload));
     yield put(ActionCreators.meProcess());
     yield put(ActionCreators.meV2Process());
   } catch (error: any) {
