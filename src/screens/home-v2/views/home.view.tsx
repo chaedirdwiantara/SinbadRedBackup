@@ -17,10 +17,11 @@ import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands } from '../components';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
-import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
   copilotOptions,
   ModalStartCoachmark,
+  RegisterBadge,
+  UpgradeVIPAccountBadge,
 } from '@screen/account/views/shared';
 import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
@@ -85,6 +86,7 @@ const HomeView: FC = ({ start }: any) => {
           backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
         }}>
+        <RegisterBadge />
         {renderIF(
           isBadgeVIPAvailable,
           <UpgradeVIPAccountBadge getLayout={setVipBadgeLayout} />,
