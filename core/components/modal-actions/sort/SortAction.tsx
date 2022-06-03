@@ -1,15 +1,16 @@
 /** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { SnbButton } from 'react-native-sinbad-ui';
-/** === IMPORT COMPONENT */
-import { SortActionOption } from './SortActionOption';
+import { TouchableOpacity, View } from 'react-native';
+import {
+  SnbButton2,
+  Option,
+  SnbRadioGroup,
+  spacingV2,
+} from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTION */
 import { useSortIndex } from '@core/functions/product';
 /** === IMPORT TYPE */
 import { BottomActionPressHandlerType } from '@core/components/product/list/BottomAction';
-/** === IMPORT STYLE */
-import { ModalActionStyle } from '@core/styles';
 /** === TYPES */
 export interface SortOption {
   name: string;
@@ -28,6 +29,8 @@ interface SortActionProps {
     value: number | null;
   }) => void;
 }
+// var
+const { spacing } = spacingV2;
 /** === COMPONENT */
 const SortAction: FC<SortActionProps> = ({
   options,
@@ -38,20 +41,35 @@ const SortAction: FC<SortActionProps> = ({
   const { activeIndex, setActiveSortIndex } = useSortIndex(appliedOptionIndex);
   /** === VIEW === */
   return (
-    <View style={ModalActionStyle.mainContainer}>
-      {options.map((option, optionIndex) => (
-        <SortActionOption
-          key={option.name}
-          option={option}
-          optionIndex={optionIndex}
-          activeIndex={activeIndex}
-          setActiveIndex={setActiveSortIndex}
-        />
-      ))}
-      <View style={{ marginTop: 32, height: 72 }}>
-        <SnbButton.Single
-          type="primary"
-          title="Simpan"
+    <View>
+      <SnbRadioGroup
+        value={activeIndex}
+        onChange={(index) => setActiveSortIndex(index)}>
+        {options.map((option, optionIndex) => (
+          <TouchableOpacity
+            onPress={() =>
+              setActiveSortIndex(
+                activeIndex === optionIndex ? null : optionIndex,
+              )
+            }
+            key={option.name}
+            style={{ marginTop: spacing.lg }}>
+            <Option.Radio
+              value={optionIndex}
+              label={option.name}
+              withDivider={options.length - 1 !== optionIndex}
+            />
+          </TouchableOpacity>
+        ))}
+      </SnbRadioGroup>
+      <View
+        style={{
+          marginTop: spacing.xl,
+        }}>
+        <SnbButton2.Primary
+          size="medium"
+          title="Terapkan"
+          full
           onPress={() =>
             onButtonPress({
               type: 'applySort',
