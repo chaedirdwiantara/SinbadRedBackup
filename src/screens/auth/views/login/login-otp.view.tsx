@@ -11,56 +11,22 @@ import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
-import { useAuthCoreAction } from '@core/functions/auth';
 
 const LoginOTPView: React.FC = () => {
   const { goBack } = useNavigation();
   const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
   const { resetVerifyOTP, mobilePhone, getLocationPermissions } = useOTP();
-  const [hide, setHide] = React.useState(true);
   const { meV2 } = useDataAuth();
-  const authCoreAction = useAuthCoreAction();
-  const [delayLoading, setDelayLoading] = React.useState(false);
-  const [mounted, setMounted] = React.useState(true);
 
   React.useEffect(() => {
-    return () => setMounted(false);
-  }, []);
-
-  React.useEffect(() => {
-    if (verifyOTP.data !== null) {
-      setHide(false);
-      authCoreAction.meV2();
+    if (meV2.data) {
+      if (meV2.data?.data?.isBuyerCategoryCompleted) {
+        NavigationAction.resetToHome();
+      } else {
+        getLocationPermissions();
+      }
     }
-    if (verifyOTP.error !== null) {
-      setHide(false);
-    }
-  }, [verifyOTP]);
-
-  React.useEffect(() => {
-    if (verifyOTP.data !== null) {
-      setDelayLoading(true);
-      setTimeout(() => {
-        if (!meV2.data && !meV2.loading && meV2.error) {
-          NavigationAction.resetToIntroSinbad();
-        } else {
-          if (
-            meV2.data?.data?.isBuyerCategoryCompleted === true &&
-            !meV2.error
-          ) {
-            NavigationAction.resetToHome();
-          }
-          if (
-            meV2.data?.data?.isBuyerCategoryCompleted === false &&
-            !meV2.error
-          ) {
-            getLocationPermissions();
-          }
-        }
-        mounted && setDelayLoading(false);
-      }, 2000);
-    }
-  }, [meV2.data, meV2.loading, meV2.error, verifyOTP]);
+  }, [meV2]);
 
   return (
     <SnbContainer color="white">
@@ -73,7 +39,6 @@ const LoginOTPView: React.FC = () => {
         <OTPContent
           testID="login"
           onVerifyOTP={(otp) => {
-            setHide(true);
             resetVerifyOTP();
             verificationOTP({ mobilePhone, otp });
           }}
@@ -83,9 +48,8 @@ const LoginOTPView: React.FC = () => {
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
-          hideIcon={hide}
           otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading || delayLoading}
+          loading={verifyOTP.loading}
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>

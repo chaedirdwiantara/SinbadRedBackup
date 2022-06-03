@@ -17,18 +17,18 @@ import { BannerHomeView } from '../../banner/views';
 import { Benefits, Categories, Brands } from '../components';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
-import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
   copilotOptions,
   ModalStartCoachmark,
+  RegisterBadge,
+  UpgradeVIPAccountBadge,
 } from '@screen/account/views/shared';
 import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-
 import { NavigationAction } from '@navigation';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
 const HomeView: FC = ({ start }: any) => {
@@ -86,6 +86,7 @@ const HomeView: FC = ({ start }: any) => {
           backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
         }}>
+        <RegisterBadge />
         {renderIF(
           isBadgeVIPAvailable,
           <UpgradeVIPAccountBadge getLayout={setVipBadgeLayout} />,
@@ -129,7 +130,7 @@ const HomeView: FC = ({ start }: any) => {
             <CopilotView
               style={[
                 styles.pesananCoachmark,
-                { height: tabBarHeight, top: height - tabBarHeight },
+                { height: tabBarHeight, bottom: -tabBarHeight },
               ]}
             />
           </CopilotStep>
@@ -141,7 +142,7 @@ const HomeView: FC = ({ start }: any) => {
           <CopilotView
             style={[
               styles.pesananCoachmark,
-              { height: tabBarHeight, top: height - tabBarHeight },
+              { height: tabBarHeight, bottom: -tabBarHeight },
             ]}
           />
         </CopilotStep>,
