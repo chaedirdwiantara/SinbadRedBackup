@@ -90,7 +90,9 @@ function* updateCompleteData(
     const response: models.ICreateBasicAccountData = yield call(() =>
       easyRegistrationApi.updateCompleteData(action.payload),
     );
-    yield put(ActionCreators.updateCompleteDataSuccess(response));
+    yield put(
+      ActionCreators.updateCompleteDataSuccess(response, action.payload),
+    );
   } catch (error) {
     yield put(ActionCreators.updateCompleteDataFailed(error));
   }

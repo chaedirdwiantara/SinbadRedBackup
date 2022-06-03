@@ -77,41 +77,47 @@ export const getCompleteDataFailed = (data: any): models.IAction<any> => ({
 export const updateCompleteData = (
   data: models.IUpdateCompleteData,
 ): models.IAction<models.IUpdateCompleteData> => {
-  const dataUser = data?.user;
-  const dataBuyer = data?.buyer;
-  if (data?.user) {
-    if (dataUser?.idNo && dataUser?.name) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_1, data);
-    } else if (dataUser?.taxImageUrl && dataUser.taxNo) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_2, data);
-    } else if (dataUser?.selfieImageUrl) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_3, data);
-    } else if (dataUser?.email) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_4, data);
-    }
-  } else if (data?.buyer) {
-    if (dataBuyer?.name && dataBuyer?.phoneNo) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_1, data);
-    } else if (dataBuyer?.imageUrl) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_2, data);
-    } else if (
-      dataBuyer?.noteAddress &&
-      dataBuyer?.vehicleAccessibilityId &&
-      dataBuyer?.vehicleAccessibilityAmount
-    ) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_3, data);
-    }
-  }
   return {
     type: types.UPDATE_COMPLETE_DATA_PROCESS,
     payload: data,
   };
 };
 
-export const updateCompleteDataSuccess = (data: any) => ({
-  type: types.UPDATE_COMPLETE_DATA_SUCCESS,
-  payload: data,
-});
+export const updateCompleteDataSuccess = (
+  data: any,
+  payload: models.IUpdateCompleteData,
+) => {
+  const dataUser = payload?.user;
+  const dataBuyer = payload?.buyer;
+
+  if (payload?.user) {
+    if (dataUser?.idNo && dataUser?.name) {
+      globalReportFromAction(EventName.OWNER_DATA_STEP_1, dataUser);
+    } else if (dataUser?.taxImageUrl && dataUser.taxNo) {
+      globalReportFromAction(EventName.OWNER_DATA_STEP_2, dataUser);
+    } else if (dataUser?.selfieImageUrl) {
+      globalReportFromAction(EventName.OWNER_DATA_STEP_3, dataUser);
+    } else if (dataUser?.email) {
+      globalReportFromAction(EventName.OWNER_DATA_STEP_4, dataUser);
+    }
+  } else if (payload?.buyer) {
+    if (dataBuyer?.name && dataBuyer?.phoneNo) {
+      globalReportFromAction(EventName.STORE_DATA_STEP_1, dataBuyer);
+    } else if (dataBuyer?.imageUrl) {
+      globalReportFromAction(EventName.STORE_DATA_STEP_2, dataBuyer);
+    } else if (
+      dataBuyer?.noteAddress &&
+      dataBuyer?.vehicleAccessibilityId &&
+      dataBuyer?.vehicleAccessibilityAmount
+    ) {
+      globalReportFromAction(EventName.STORE_DATA_STEP_3, dataBuyer);
+    }
+  }
+  return {
+    type: types.UPDATE_COMPLETE_DATA_SUCCESS,
+    payload: data,
+  };
+};
 
 export const updateCompleteDataFailed = (data: any) => ({
   type: types.UPDATE_COMPLETE_DATA_FAILED,

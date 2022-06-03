@@ -14,19 +14,21 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits, Categories, Brands } from '../components';
+import { Benefits, Categories, Brands, Header } from '../components';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
-import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
 import {
   copilotOptions,
   ModalStartCoachmark,
+  RegisterBadge,
+  UpgradeVIPAccountBadge,
 } from '@screen/account/views/shared';
 import { useDataAuth } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { NavigationAction } from '@navigation';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
 
 const HomeView: FC = ({ start }: any) => {
@@ -54,24 +56,15 @@ const HomeView: FC = ({ start }: any) => {
           }}
         />
       </CopilotStep>
-      <SnbTopNav2.Type10
-        placeholder="Cari di sinbad"
-        icon1Name="cart"
-        icon2Name="notification"
-        color="red"
-        icon1Action={() => console.log('Cart pressed')}
-        icon2Action={() => console.log('Notifications pressed')}
-        inputValue={keyword}
-        onChangeText={(text) => setKeyword(text)}
-        onClearText={() => setKeyword('')}
-        onEnter={() => console.log('Searched keyword:', keyword)}
-      />
+      {/* header top navigation */}
+      <Header />
       <ScrollView
         style={{
           flex: 1,
           backgroundColor: colorV2.bgColor.light,
           marginTop: -4,
         }}>
+        <RegisterBadge />
         {renderIF(
           isBadgeVIPAvailable,
           <UpgradeVIPAccountBadge getLayout={setVipBadgeLayout} />,
@@ -115,7 +108,7 @@ const HomeView: FC = ({ start }: any) => {
             <CopilotView
               style={[
                 styles.pesananCoachmark,
-                { height: tabBarHeight, top: height - tabBarHeight },
+                { height: tabBarHeight, bottom: -tabBarHeight },
               ]}
             />
           </CopilotStep>
@@ -127,7 +120,7 @@ const HomeView: FC = ({ start }: any) => {
           <CopilotView
             style={[
               styles.pesananCoachmark,
-              { height: tabBarHeight, top: height - tabBarHeight },
+              { height: tabBarHeight, bottom: -tabBarHeight },
             ]}
           />
         </CopilotStep>,

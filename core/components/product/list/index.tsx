@@ -531,14 +531,18 @@ const ProductList: FC<ProductListProps> = ({
           <ProductTagList
             tags={tags}
             onTagPress={handleTagPress}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onFilterPress={() =>
+              handleActionClick({ type: 'filter', show: true })
+            }
           />
         ) : null}
 
         <TitleSection
           total={total}
-          onChangeLayoutListPress={() => handleActionClick({ type: 'layout' })}
-          onSortPress={() => handleActionClick({ type: 'sort' })}
+          onChangeLayoutListPress={() =>
+            handleActionClick({ type: 'layout', show: true })
+          }
+          onSortPress={() => handleActionClick({ type: 'sort', show: true })}
         />
       </View>
       <View style={{ flex: 1 }}>
@@ -555,11 +559,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
             onChangeLayoutListPress={() =>
               handleActionClick({ type: 'layout' })
             }
-            onSortPress={() => handleActionClick({ type: 'sort' })}
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         ) : (
           <ListLayout
@@ -574,11 +578,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
             onChangeLayoutListPress={() =>
               handleActionClick({ type: 'layout' })
             }
-            onSortPress={() => handleActionClick({ type: 'sort' })}
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         )}
       </View>
@@ -593,7 +597,7 @@ const ProductList: FC<ProductListProps> = ({
         name="sort-modal"
         title="Urutkan"
         contentHeight={220}
-        onClose={() => handleActionClick({ type: 'sort' })}>
+        onClose={() => handleActionClick({ type: 'sort', show: false })}>
         <Action.Sort
           appliedOptionIndex={sortIndex}
           options={priceSortOptions}
@@ -608,7 +612,7 @@ const ProductList: FC<ProductListProps> = ({
         name="filter-modal"
         title="Filter"
         contentHeight={220}
-        onClose={() => handleActionClick({ type: 'filter' })}>
+        onClose={() => handleActionClick({ type: 'filter', show: false })}>
         <Action.Filter
           onButtonPress={handleActionClick}
           minPrice={minPrice}

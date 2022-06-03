@@ -27,7 +27,6 @@ const RegisterOTPView: React.FC = () => {
     hashOtp,
   } = useOTP();
   const { goBack }: any = useNavigation();
-  const [hide, setHide] = React.useState(true);
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
   const { checkPhone } = useCheckPhoneV2();
@@ -38,13 +37,9 @@ const RegisterOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
-      setHide(false);
       checkAutoLogin(verifyOTP.data);
       setReCheckAutoLogin(0);
       setLoadingCheckAutoLogin(true);
-    }
-    if (verifyOTP.error !== null) {
-      setHide(false);
     }
   }, [verifyOTP]);
 
@@ -128,7 +123,6 @@ const RegisterOTPView: React.FC = () => {
         <OTPContent
           testID="register"
           onVerifyOTP={(otp) => {
-            setHide(true);
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
               otp: Number(otp),
@@ -141,7 +135,6 @@ const RegisterOTPView: React.FC = () => {
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
           otpSuccess={verifyOTP.data !== null}
-          hideIcon={hide}
           loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
         />
