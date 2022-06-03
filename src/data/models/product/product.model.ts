@@ -13,6 +13,7 @@ export interface ProductList {
   priceBeforeTax: number;
   priceAfterTax: number;
   qtySoldLabel: string;
+  qtySoldValue: number;
   warehouseOriginId: string;
 }
 
