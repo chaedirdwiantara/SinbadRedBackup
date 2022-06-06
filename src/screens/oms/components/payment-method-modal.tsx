@@ -66,8 +66,8 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
             <FooterButton.Dual
               title1={footerButtonTitle}
               title2={footerButtonTitle2}
-              button1Press={() => onPressLeft()}
-              button2Press={() => onPressRight()}
+              button1Press={() => onPressRight()}
+              button2Press={() => onPressLeft()}
             />
           ) : null}
         </>

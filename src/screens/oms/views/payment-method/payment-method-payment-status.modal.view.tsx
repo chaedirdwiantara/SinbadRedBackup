@@ -72,7 +72,7 @@ export const PaymentStatusModal: FC<PaymentStatusModal> = ({
   return (
     // <SnbBottomSheet open={isOpen} content={content()} size={'normal'} />
     <PaymentMethodModal
-      buttonType="single"
+      buttonType="dual"
       open={isOpen}
       close={() => handleNoAction()}
       name="modal-payment-status"
