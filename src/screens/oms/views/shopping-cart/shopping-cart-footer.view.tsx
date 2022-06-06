@@ -10,19 +10,12 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import {
-  SnbText2,
-  SnbButton2,
-  colorV2,
-  FooterButton,
-} from 'react-native-sinbad-ui';
+import { FooterButton } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
 import BottomSheetError from '@core/components/BottomSheetError';
-import { ShoppingCartStyles } from '@screen/oms/styles';
-import { toCurrency } from '@core/functions/global/currency-format';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
 
