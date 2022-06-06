@@ -34,7 +34,6 @@ const ProductGrid: FC<ProductGridCardProps> = (props) => {
       };
     return undefined;
   }, [props.isExclusive, props.hasBulkPrice]);
-
   return (
     <ProductCard.Grid
       testID={`list-product-${props.name}`}
@@ -43,7 +42,7 @@ const ProductGrid: FC<ProductGridCardProps> = (props) => {
       currentPrice={toCurrency(props.priceAfterTax, {
         withFraction: false,
       })}
-      soldBy={isNaN(Number(props.qtySoldLabel)) ? props.qtySoldLabel : ''}
+      soldBy={props.qtySoldLabel}
       badgeProps={badge}
       buttonText={props.withOrderButton ? 'Pesan' : undefined}
       onCardPress={props.onCardPress}
