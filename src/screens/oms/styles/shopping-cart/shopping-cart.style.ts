@@ -35,8 +35,8 @@ export const ShoppingCartStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   productImg: {
-    width: 65,
-    height: 65,
+    width: 80,
+    height: 80,
     marginRight: 5,
   },
   actionContainer: {
@@ -50,11 +50,5 @@ export const ShoppingCartStyles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 12,
-  },
-  footerContainer: {
-    padding: 16,
-    backgroundColor: color.white,
-    justifyContent: 'flex-end',
-    elevation: 10,
   },
 });

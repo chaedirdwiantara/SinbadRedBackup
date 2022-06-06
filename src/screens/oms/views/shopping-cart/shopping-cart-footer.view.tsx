@@ -10,7 +10,12 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
+import {
+  SnbText2,
+  SnbButton2,
+  colorV2,
+  FooterButton,
+} from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
@@ -232,37 +237,14 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** === VIEWS === */
   /** ==> content */
   const renderFooterContent = () => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-      <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbText2.Body.Default color={colorV2.textColor.secondary}>
-            Total:{' '}
-          </SnbText2.Body.Default>
-          <SnbText2.Headline.Small color={colorV2.textColor.selected}>
-            {toCurrency(countTotalPrice, { withFraction: false })}
-          </SnbText2.Headline.Small>
-        </View>
-        <SnbText2.Caption.Small
-          color={
-            colorV2.textColor.secondary
-          }>{`${countTotalProduct} barang dipilih`}</SnbText2.Caption.Small>
-      </View>
-      <View style={{ width: '35%' }}>
-        <SnbButton2.Primary
-          title="Checkout"
-          onPress={handleOnPressCheckout}
-          size={'medium'}
-          disabled={isCheckoutDisabled}
-          loading={isCheckoutBtnLoading}
-          full
-        />
-      </View>
-    </View>
+    <FooterButton.AddToCart
+      titleButton="Checkout"
+      loadingButton={isCheckoutBtnLoading}
+      disabled={isCheckoutDisabled}
+      total={countTotalPrice}
+      description={`${countTotalProduct} barang dipilih`}
+      buttonPress={handleOnPressCheckout}
+    />
   );
 
   /** ==> Error Business Modal */
@@ -272,7 +254,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Main */
   return (
-    <View style={ShoppingCartStyles.footerContainer}>
+    <View>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
       <BottomSheetError
