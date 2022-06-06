@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useRef, useState, useMemo } from 'react';
 import { View, Dimensions, Image } from 'react-native';
-import { SnbCarousel, SnbCarouselIndicator } from 'react-native-sinbad-ui';
+import { SnbCarousel, SnbCarouselIndicator2 } from 'react-native-sinbad-ui';
 /** === IMPORT TYPE ===  */
 import * as models from '@models';
 /** === IMPORT STYLE ===  */
@@ -44,7 +44,7 @@ export const ProductDetailCarousel: FC<ProductDetailCarouselProps> = ({
         />
       </View>
       <View style={ProductDetailStyle.carouselIndicatorContainer}>
-        <SnbCarouselIndicator
+        <SnbCarouselIndicator2
           carouselRef={carouselRef}
           dotsLength={images.length}
           activeDotIndex={activeImageIndex}
