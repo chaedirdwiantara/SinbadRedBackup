@@ -11,17 +11,6 @@ export const PaymentMethodErrorModal: FC<PaymentMethodErrorProps> = ({
   close,
 }) => {
   return (
-    // <BottomModalError
-    //   isOpen={isOpen}
-    //   errorTitle={'Terjadi Kesalahan'}
-    //   errorSubtitle={'Sepertinya terdapat sedikit gangguan pada server sinbad'}
-    //   errorImage={require('../../../../assets/images/sinbad/no-connection.png')}
-    //   buttonTitle={'Kembali ke Keranjang'}
-    //   buttonOnPress={() => {
-    //     close();
-    //   }}
-    // />
-
     <PaymentMethodModal
       buttonType="single"
       open={isOpen}
