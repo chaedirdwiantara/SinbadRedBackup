@@ -12,8 +12,12 @@ interface PaymentMethodExpiredTimeModalProps {
   snbButtonTitle: string;
   illustrationTitle: string;
   footerButtonTitle: string;
+  footerButtonTitle2: string;
   image: string;
   description: string;
+  buttonType: string;
+  onPressLeft: void | any;
+  onPressRight: void | any;
 }
 /** === COMPONENT === */
 
@@ -26,6 +30,10 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
   footerButtonTitle,
   image,
   description,
+  buttonType,
+  footerButtonTitle2,
+  onPressLeft,
+  onPressRight,
 }) => {
   return (
     <SnbBottomSheet2
@@ -49,10 +57,19 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
             title={illustrationTitle}
             description={description}
           />
-          <FooterButton.Single
-            title={footerButtonTitle}
-            buttonPress={() => close()}
-          />
+          {buttonType == 'single' ? (
+            <FooterButton.Single
+              title={footerButtonTitle}
+              buttonPress={() => close()}
+            />
+          ) : buttonType == 'dual' ? (
+            <FooterButton.Dual
+              title1={footerButtonTitle}
+              title2={footerButtonTitle2}
+              button1Press={() => onPressLeft()}
+              button2Press={() => onPressRight()}
+            />
+          ) : null}
         </>
       }
     />
