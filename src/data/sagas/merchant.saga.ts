@@ -68,7 +68,7 @@ function* verificationEmail(action: models.CreateProcessAction) {
       return MerchantApi.verificationEmail(action.payload);
     });
     yield action.contextDispatch(
-      ActionCreators.verificationEmailSuccess(response),
+      ActionCreators.verificationEmailSuccess(response, action.payload),
     );
     yield put(ActionCreators.verificationEmailSuccess(response));
   } catch (error: any) {
