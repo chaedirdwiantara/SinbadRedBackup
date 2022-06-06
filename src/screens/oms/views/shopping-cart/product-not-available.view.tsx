@@ -58,9 +58,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
             };
             goToProduct(category);
           }}>
-          <SnbText2.Caption.Default color={colorV2.textColor.link}>
+          <SnbText2.Body.Tiny color={colorV2.textColor.link}>
             Cari Produk Sejenis
-          </SnbText2.Caption.Default>
+          </SnbText2.Body.Tiny>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -101,7 +101,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                 ellipsizeMode={'tail'}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
-              <SnbText2.Paragraph.Tiny color={colorV2.strokeColor.active}>
+              <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
                 {unavailableProducts[0].unavailableMessage}
               </SnbText2.Paragraph.Tiny>
             </View>
@@ -134,7 +134,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                       ellipsizeMode={'tail'}>
                       {item.productName}
                     </SnbText2.Paragraph.Default>
-                    <SnbText2.Paragraph.Tiny color={colorV2.strokeColor.active}>
+                    <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
                       {item.unavailableMessage}
                     </SnbText2.Paragraph.Tiny>
                   </View>

@@ -77,9 +77,9 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
               }}
             />
           </View>
-          <SnbText2.Headline.Small color={colorV2.textColor.default}>
+          <SnbText2.Body.Small color={colorV2.textColor.default}>
             Pilih Semua
-          </SnbText2.Headline.Small>
+          </SnbText2.Body.Small>
         </View>
       ) : (
         <View />

@@ -43,11 +43,11 @@ export const UnavailableAccordionView: FC<UnavailableAccordionProps> = ({
           handleScrollToBottom();
         }}>
         <View style={AccordionStyle.panel}>
-          <SnbText2.Caption.Small color={colorV2.textColor.link}>
+          <SnbText2.Body.Tiny color={colorV2.textColor.link}>
             {isOpen
               ? 'Sembunyikan'
               : `Tampilkan ${totalRemaining} produk lainnya`}
-          </SnbText2.Caption.Small>
+          </SnbText2.Body.Tiny>
           <SnbIcon
             color={colorV2.textColor.link}
             name={isOpen ? 'expand_less' : 'expand_more'}

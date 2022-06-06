@@ -35,8 +35,7 @@ export const ShoppingCartAddress: FC = () => {
         {stateCart.buyerAddress.data?.city}
         {stateCart.buyerAddress.data?.province ? ',' : null}{' '}
         {stateCart.buyerAddress.data?.province}
-      </SnbText2.Paragraph.Tiny>
-      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+        {stateCart.buyerAddress.data?.zipCode ? ' ' : null}
         {stateCart.buyerAddress.data?.zipCode}
       </SnbText2.Paragraph.Tiny>
     </View>
