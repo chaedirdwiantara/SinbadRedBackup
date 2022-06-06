@@ -1,10 +1,12 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, useMemo, memo } from 'react';
 import { View, FlatList, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
+import { spacingV2 } from '@sinbad/react-native-sinbad-ui';
 import { EmptyState } from '@core/components/EmptyState';
 import { ProductListCard } from '@core/components/ProductListCard';
 import ProductTagList from '../ProductTagList';
+import TitleSection from '../TitleSection';
 import { ListSkeleton } from './ListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import {
@@ -14,6 +16,10 @@ import {
 /** === IMPORT TYPES === */
 import * as models from '@models';
 import { ProductLayoutProps } from '../product-list-core.type';
+
+// var
+const { spacing } = spacingV2;
+
 /** === COMPONENT === */
 const ListLayout: FC<ProductLayoutProps> = ({
   products,
@@ -26,6 +32,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
   onLoadMore,
   loading,
   error,
+  total,
+  onChangeLayoutListPress,
+  onFilterPress,
+  onSortPress,
 }) => {
   /** === HOOK ===  */
   const displayState = useListDisplayState({
@@ -33,11 +43,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
     error,
     dataLength: products.length,
   });
-  /** === DERIVED === */
-  const hasTags = withTags && tags.length > 0;
-  const tagList = hasTags ? (
-    <ProductTagList tags={tags} onTagPress={onTagPress} />
-  ) : null;
   /** === VIEW === */
   /** => List Card */
   const renderListCard = ({
@@ -48,14 +53,18 @@ const ListLayout: FC<ProductLayoutProps> = ({
     index: number;
   }) => {
     return (
-      <View key={index} style={{ minHeight: 100, marginHorizontal: 16 }}>
+      <View
+        key={index}
+        style={{
+          minHeight: 100,
+          marginHorizontal: spacing.lg,
+          marginBottom: spacing.xl,
+        }}>
         <ProductListCard
           name={item.name}
           imageUrl={item.thumbnail}
           priceAfterTax={item.priceAfterTax}
           hasBulkPrice={item.hasBulkPrice}
-          isBundle={item.isBundle}
-          isPromo={item.isPromo}
           qtySoldLabel={item.qtySoldLabel}
           isExclusive={item.isExclusive}
           onCardPress={() => {
@@ -97,7 +106,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }>
-          {tagList}
           <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
         </ScrollView>
       </View>
@@ -111,7 +119,6 @@ const ListLayout: FC<ProductLayoutProps> = ({
           paddingBottom: 24,
           paddingTop: !withTags ? 14 : 0,
         }}
-        ListHeaderComponent={tagList}
         data={products}
         renderItem={renderListCard}
         keyExtractor={(item) => item.id}
@@ -125,4 +132,4 @@ const ListLayout: FC<ProductLayoutProps> = ({
   );
 };
 
-export default ListLayout;
+export default memo(ListLayout);

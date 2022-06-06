@@ -38,14 +38,15 @@ const SearchProductView: FC = () => {
       fetch(dispatchProduct, { keyword: localKeyword });
 
       return () => clearContents(dispatchProduct);
-    }, [isSearched]),
+    }, []),
   );
-  /** === VIEW === */
+  /** === VIEW pdp list search === */
   return (
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
         <ProductList
           products={productListState.data}
+          total={productListState.total}
           headerType="search"
           activeKeyword={localKeyword}
           onActiveKeywordChange={(text: string) => setLocalKeyword(text)}

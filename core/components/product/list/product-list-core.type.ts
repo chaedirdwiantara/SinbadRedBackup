@@ -11,6 +11,10 @@ export interface ProductLayoutProps {
   onLoadMore: () => void;
   loading: boolean;
   error: models.ErrorProps | null;
+  total: number;
+  onChangeLayoutListPress?: (layout: 'list' | 'grid') => void;
+  onSortPress?: () => void;
+  onFilterPress: () => void;
 }
 
 export type ProductHeaderType = 'default' | 'search';

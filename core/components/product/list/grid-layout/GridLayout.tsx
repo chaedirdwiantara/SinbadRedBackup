@@ -6,6 +6,7 @@ import { EmptyState } from '@core/components/EmptyState';
 import ProductTagList from '../ProductTagList';
 import GridLayoutCard from './GridLayoutCard';
 import { GridSkeleton } from './GridSkeleton';
+import TitleSection from '../TitleSection';
 /** === IMPORT FUNCTIONS === */
 import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
 import { useListDisplayState } from '@core/functions/product';
@@ -23,6 +24,10 @@ const GridLayout: FC<ProductLayoutProps> = ({
   onLoadMore,
   loading,
   error,
+  total,
+  onFilterPress,
+  onChangeLayoutListPress,
+  onSortPress,
 }) => {
   /** === HOOK ===  */
   const displayState = useListDisplayState({
@@ -55,8 +60,6 @@ const GridLayout: FC<ProductLayoutProps> = ({
           }
         }}
         scrollEventThrottle={10}>
-        {(displayState === 'success' || displayState === 'empty') &&
-          hasTags && <ProductTagList tags={tags} onTagPress={onTagPress} />}
         {displayState === 'error' && (
           <EmptyState
             title="Terjadi Kesalahan"

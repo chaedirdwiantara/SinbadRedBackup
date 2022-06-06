@@ -14,7 +14,7 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 
 import { BannerHomeView } from '../../banner/views';
-import { Benefits, Categories, Brands } from '../components';
+import { Benefits, Categories, Brands, Header } from '../components';
 
 import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import {
@@ -56,30 +56,8 @@ const HomeView: FC = ({ start }: any) => {
           }}
         />
       </CopilotStep>
-      <SnbTopNav2.Type10
-        placeholder="Cari di sinbad"
-        icon1Name="cart"
-        icon2Name="notification"
-        color="red"
-        icon1Action={() => {
-          if (meV2.data === null) {
-            NavigationAction.navigate('LoginPhoneView');
-          } else {
-            NavigationAction.navigate('OmsShoppingCartView');
-          }
-        }}
-        icon2Action={() => {
-          if (meV2.data === null) {
-            NavigationAction.navigate('LoginPhoneView');
-          } else {
-            NavigationAction.navigate('NotificationView');
-          }
-        }}
-        inputValue={keyword}
-        onChangeText={(text) => setKeyword(text)}
-        onClearText={() => setKeyword('')}
-        onEnter={() => console.log('Searched keyword:', keyword)}
-      />
+      {/* header top navigation */}
+      <Header />
       <ScrollView
         style={{
           flex: 1,
