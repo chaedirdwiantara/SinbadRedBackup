@@ -69,7 +69,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       open={open}
       name="modal-add-to-cart"
       onClose={closeAction}
-      title="Masukan Jumlah"
+      title="Masukkan Jumlah"
       footer={
         <AddToCartFooter
           errorStock={errorStock}
