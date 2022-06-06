@@ -30,6 +30,7 @@ export type BottomActionPressHandler = ({
 }: {
   type: BottomActionPressHandlerType;
   value?: SortIndex | PriceRange;
+  show: boolean;
 }) => void;
 
 interface BottomActionProps {
