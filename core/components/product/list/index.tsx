@@ -647,7 +647,7 @@ const ProductList: FC<ProductListProps> = ({
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
-        open={orderModalVisible}
+        open={orderModalVisible && !modalErrorAddCart}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         loading={loadingPreparation}
