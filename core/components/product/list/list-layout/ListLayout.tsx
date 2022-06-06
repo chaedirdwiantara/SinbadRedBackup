@@ -62,7 +62,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           imageUrl={item.thumbnail}
           priceAfterTax={item.priceAfterTax}
           hasBulkPrice={item.hasBulkPrice}
-          qtySoldLabel={item.qtySoldLabel}
+          qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
           isExclusive={item.isExclusive}
           onCardPress={() => {
             goToProductDetail(`${item.id}_${item.warehouseOriginId}`);
