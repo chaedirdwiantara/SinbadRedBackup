@@ -30,7 +30,7 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
         label="Biaya Layanan"
         value={
           dataChoose != null
-            ? toCurrency(dataFromCheckout.totalPaymentNumber, {
+            ? toCurrency(dataChoose.serviceFeeDeduct, {
                 withFraction: false,
               })
             : isSelected != [] && isSelected[0] && dataChoose == null
