@@ -1,7 +1,20 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect, useRef } from 'react';
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import { View, StatusBar } from 'react-native';
-import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbBottomSheet,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  SnbToast2,
+} from 'react-native-sinbad-ui';
 import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
@@ -9,7 +22,7 @@ import NavigationHeader from './NavigationHeader';
 import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
-import BottomAction from './BottomAction';
+import ActionSheet from '../ActionSheet';
 import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
   RegisterSupplierModal,
@@ -27,6 +40,7 @@ import {
   priceSortOptions,
   useOrderModalVisibility,
   useProductTags,
+  usePriceRangeFilter,
 } from '@core/functions/product';
 import {
   useCheckDataSupplier,
@@ -55,6 +69,8 @@ import {
   CategoryTabsConfig,
   CategoryType,
 } from './product-list-core.type';
+import ProductTagList from './ProductTagList';
+import TitleSection from './TitleSection';
 /** === TYPE === */
 interface ProductListProps {
   products: Array<models.ProductList>;
@@ -72,6 +88,7 @@ interface ProductListProps {
   activeBrandId?: string;
   withBottomAction?: boolean;
   withTags?: boolean;
+  total: number;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -90,6 +107,7 @@ const ProductList: FC<ProductListProps> = ({
   activeBrandId,
   withBottomAction = true,
   withTags = true,
+  total,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -178,6 +196,15 @@ const ProductList: FC<ProductListProps> = ({
     modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier();
+  // modal filter range state
+  const {
+    minPrice,
+    maxPrice,
+    setMinPrice,
+    setMaxPrice,
+    resetValues,
+    handleSliderChange,
+  } = usePriceRangeFilter(filterQuery);
   /** === REF === */
   const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
   /** === FUNCTIONS === */
@@ -225,12 +252,15 @@ const ProductList: FC<ProductListProps> = ({
   };
 
   /** => action on change qty */
-  const onHandleChangeQty = (value: number) => {
-    if (!dataStock || !productDetailState) {
-      return;
-    }
-    onChangeQty(value);
-  };
+  const onHandleChangeQty = useCallback(
+    (value: number) => {
+      if (!dataStock || !productDetailState) {
+        return;
+      }
+      onChangeQty(value);
+    },
+    [dataStock, productDetailState, onChangeQty],
+  );
 
   /** => action submit add to cart  */
   const onSubmitAddToCart = () => {
@@ -306,7 +336,7 @@ const ProductList: FC<ProductListProps> = ({
       setProductSelected(null);
       handleCloseModal();
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -325,7 +355,7 @@ const ProductList: FC<ProductListProps> = ({
     if (sendToSupplierData !== null) {
       onFunctionActions({ type: 'close' });
       sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
+      SnbToast2.show('Berhasil kirim data ke supplier', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -456,6 +486,10 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   };
   const pageLoading = initialLoading ? initialLoading : productLoading;
+  const hasTags = useMemo(
+    () => withTags && tags.length > 0,
+    [withTags, tags.length],
+  );
   /** === VIEW === */
   return (
     <SnbContainer color="white">
@@ -472,11 +506,11 @@ const ProductList: FC<ProductListProps> = ({
           addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
-        onSearchClear={() => {
-          setSearchKeyword('');
-          setKeywordSearched(true);
-          onFetch({ ...derivedQueryOptions, keyword: '' });
-        }}
+        // onSearchClear={() => {
+        //   setSearchKeyword('');
+        //   setKeywordSearched(true);
+        //   onFetch({ ...derivedQueryOptions, keyword: '' });
+        // }}
       />
       {withCategoryTabs && (
         <CategoryTabList
@@ -492,9 +526,25 @@ const ProductList: FC<ProductListProps> = ({
           }}
         />
       )}
+      <View>
+        {hasTags ? (
+          <ProductTagList
+            tags={tags}
+            onTagPress={handleTagPress}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+          />
+        ) : null}
+
+        <TitleSection
+          total={total}
+          onChangeLayoutListPress={() => handleActionClick({ type: 'layout' })}
+          onSortPress={() => handleActionClick({ type: 'sort' })}
+        />
+      </View>
       <View style={{ flex: 1 }}>
         {layoutDisplay === 'grid' ? (
           <GridLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
@@ -505,9 +555,15 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         ) : (
           <ListLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
@@ -518,6 +574,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         )}
       </View>
@@ -526,45 +587,37 @@ const ProductList: FC<ProductListProps> = ({
           <LoadingLoadMore />
         </View>
       )}
-      {withBottomAction && (
-        <BottomAction
-          sort={true}
-          filter={true}
-          layout={true}
-          category={true}
-          sortActive={sortActive}
-          filterActive={filterActive}
-          layoutDisplay={layoutDisplay}
-          onActionPress={handleActionClick}
-        />
-      )}
       {/* Sort Modal */}
-      <SnbBottomSheet
+      <ActionSheet
         open={sortModalVisible}
+        name="sort-modal"
         title="Urutkan"
-        actionIcon="close"
-        content={
-          <Action.Sort
-            appliedOptionIndex={sortIndex}
-            options={priceSortOptions}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'sort' })}
-      />
+        contentHeight={220}
+        onClose={() => handleActionClick({ type: 'sort' })}>
+        <Action.Sort
+          appliedOptionIndex={sortIndex}
+          options={priceSortOptions}
+          onButtonPress={handleActionClick}
+        />
+      </ActionSheet>
       {/* Filter Modal */}
-      <SnbBottomSheet
+      <ActionSheet
+        withClear
+        onClearFilter={resetValues}
         open={filterModalVisible}
+        name="filter-modal"
         title="Filter"
-        actionIcon="close"
-        content={
-          <Action.Filter
-            appliedFilterQuery={filterQuery}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'filter' })}
-      />
+        contentHeight={220}
+        onClose={() => handleActionClick({ type: 'filter' })}>
+        <Action.Filter
+          onButtonPress={handleActionClick}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          handleSliderChange={handleSliderChange}
+        />
+      </ActionSheet>
       {/* Register Supplier Modal */}
       <RegisterSupplierModal
         visible={modalRegisterSupplier}
@@ -596,6 +649,7 @@ const ProductList: FC<ProductListProps> = ({
         open={orderModalVisible}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
+        loading={loadingPreparation}
         disabled={
           productDetailState === null ||
           dataStock === null ||
@@ -611,18 +665,18 @@ const ProductList: FC<ProductListProps> = ({
         close={handleCloseModal}
       />
       {/* Modal loading horizontal */}
-      <SnbBottomSheet
+      <SnbBottomSheet2
         open={loadingPreparation}
-        title=" "
+        title={<SnbBottomSheetPart.Title title=" " />}
+        snap={false}
+        name="modal-loading"
+        type="content"
+        contentHeight={20}
         content={
-          <View
-            style={{
-              marginTop: -40,
-            }}>
+          <View>
             <LoadingHorizontal />
           </View>
         }
-        isSwipeable={false}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
