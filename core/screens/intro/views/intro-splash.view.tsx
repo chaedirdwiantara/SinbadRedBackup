@@ -32,14 +32,16 @@ const IntroSplashView: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    if (meV2.data) {
+    if (meV2.data && !meV2.loading) {
       if (meV2.data?.data?.isBuyerCategoryCompleted) {
         NavigationAction.resetToHome();
       } else {
         getLocationPermissions();
       }
-    } else if (meV2.error) {
-      NavigationAction.resetToIntroSinbad();
+    } else if ((!meV2.data || meV2.error) && !meV2.loading) {
+      setTimeout(() => {
+        NavigationAction.resetToIntroSinbad();
+      }, 100);
     }
   }, [meV2]);
   /** === VIEW === */
