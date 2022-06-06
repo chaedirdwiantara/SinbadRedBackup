@@ -12,9 +12,11 @@ import {
 import { ThankYouPageStyle } from '@screen/oms/styles/thank-you-page/thank-you-page.style';
 import {
   color,
+  colorV2,
   SnbButton,
   SnbContainer,
   SnbText,
+  SnbText2,
   SnbToast,
   SnbTopNav,
   styles,
@@ -35,7 +37,7 @@ import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-ite
 import { toLocalDateTime } from '@core/functions/global/date-format';
 import { goToHome } from '@core/functions/product';
 import moment from 'moment';
-import { CountDownTimer } from '@screen/history/components';
+import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BottomSheetConfirmation, {
@@ -72,6 +74,9 @@ const OmsThankYouPageView: FC = () => {
     },
     dispatchThankYouPage,
   } = useThankYouPageContext();
+  // const thankYouPageDataDummy = {
+  //       "expiredDate": "2022-06-06T19:19:15Z",
+  //   }
 
   //hardware back handler
   useEffect(() => {
@@ -127,27 +132,28 @@ const OmsThankYouPageView: FC = () => {
   /** => render countdown */
   const renderCountDown = () => {
     if (thankYouPageData != null && thankYouPageData != undefined) {
-      const expiredPaymentTime = thankYouPageData?.expiredDate;
+      const expiredPaymentTime = thankYouPageDataDummy?.expiredDate;
 
       return moment.utc(new Date()).local() <
         moment.utc(expiredPaymentTime).local() &&
         expiredPaymentTime !== null ? (
         <View style={styles.shadowForBox10}>
+          <View style={{ height: 5, backgroundColor: colorV2.bgColor.neutral }} />
           <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
-            <SnbText.H4 align="center">
+            <SnbText2.Headline.Default align="center" color={colorV2.textColor.default}>
               Silahkan lakukan pembayaran dalam waktu
-            </SnbText.H4>
+            </SnbText2.Headline.Default>
             <View style={{ alignItems: 'center', marginVertical: 8 }}>
               <CountDownTimer
                 type={'big'}
-                expiredTime={thankYouPageData!.expiredDate}
+                expiredTime={thankYouPageDataDummy!.expiredDate}
               />
             </View>
-            <SnbText.B3 color={color.black60} align="center">
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align="center">
               {`Sebelum ${moment(expiredPaymentTime).format('LLLL')} WIB`}
-            </SnbText.B3>
+            </SnbText2.Paragraph.Small>
           </View>
-          <View style={{ height: 10, backgroundColor: color.black10 }} />
+          <View style={{ height: 10, backgroundColor: colorV2.bgColor.neutral }} />
         </View>
       ) : (
         <View />
