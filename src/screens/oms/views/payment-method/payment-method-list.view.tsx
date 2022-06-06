@@ -4,6 +4,7 @@ import {
   color,
   SnbListButtonType1,
   SnbText,
+  colorV2,
 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import * as models from '@models';
@@ -37,7 +38,10 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
           <TouchableOpacity
             style={[
               PaymentMethodStyle.listContainer,
-              { borderColor: color.black100 },
+              {
+                borderColor: colorV2.strokeColor.primary,
+                backgroundColor: colorV2.bgColor.red,
+              },
             ]}
             onPress={() => {
               handleOnpress(index, item);
@@ -47,7 +51,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>
-              <SnbText.B2 color={color.black100}>
+              <SnbText.B2 color={colorV2.textColor.default}>
                 {item.displayLabel}
               </SnbText.B2>
             </View>
@@ -57,8 +61,11 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
             style={[
               PaymentMethodStyle.listContainer,
               selectMethod == index
-                ? { borderColor: color.black100 }
-                : { borderColor: color.black40 },
+                ? {
+                    borderColor: colorV2.strokeColor.primary,
+                    backgroundColor: colorV2.bgColor.red,
+                  }
+                : { borderColor: colorV2.strokeColor.default },
             ]}
             onPress={() => {
               handleOnpress(index, item);
@@ -68,7 +75,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>
-              <SnbText.B2 color={color.black100}>
+              <SnbText.B2 color={colorV2.textColor.default}>
                 {item.displayLabel}
               </SnbText.B2>
             </View>

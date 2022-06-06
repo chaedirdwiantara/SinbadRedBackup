@@ -1,13 +1,6 @@
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
 import React, { FC, useEffect, useState } from 'react';
-import {
-  color,
-  SnbDivider,
-  SnbListButtonType1,
-  SnbText,
-  Text,
-  SnbDivider2,
-} from '@sinbad/react-native-sinbad-ui';
+import { Text, SnbDivider2 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';
