@@ -10,7 +10,6 @@ import React, {
 import { View, StatusBar } from 'react-native';
 import {
   SnbContainer,
-  SnbBottomSheet,
   SnbBottomSheet2,
   SnbBottomSheetPart,
   SnbToast2,
