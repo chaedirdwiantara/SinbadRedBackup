@@ -2,30 +2,6 @@ import { StyleSheet } from 'react-native';
 import { color } from 'react-native-sinbad-ui';
 
 export const ProductDetailStyle = StyleSheet.create({
-  headerNavigationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    position: 'absolute',
-    top: 32,
-    width: '100%',
-    paddingHorizontal: 16,
-    zIndex: 1,
-  },
-  navigationButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(37, 40, 43, 0.5)',
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  cartBadge: {
-    position: 'absolute',
-    top: -3,
-    right: -3,
-    zIndex: 2,
-  },
   carouselIndicatorContainer: {
     position: 'absolute',
     bottom: 0,
@@ -62,7 +38,7 @@ export const ProductDetailStyle = StyleSheet.create({
     marginBottom: 8,
   },
   sectionSeparator: {
-    marginLeft: 16,
+    marginHorizontal: 16,
     marginBottom: 8,
     borderTopWidth: 1,
     borderColor: color.black10,
