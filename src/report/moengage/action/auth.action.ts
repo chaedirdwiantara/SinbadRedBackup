@@ -1,7 +1,8 @@
 import * as EventName from '../event';
-import * as Auth from '../record/AuthRecords';
+import * as Auth from '../record/auth.records';
+import { TrackLogin } from '../models';
 
-function recordLogin(data) {
+function recordLogin(data: TrackLogin) {
   const props = {
     eventName: EventName.LOGIN,
     data,
@@ -10,7 +11,7 @@ function recordLogin(data) {
   Auth.trackUserLogin(props);
 }
 
-function recordLogout(data) {
+function recordLogout(data: TrackLogin) {
   const props = {
     eventName: EventName.LOGOUT,
     data,
