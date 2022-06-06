@@ -132,7 +132,7 @@ const OmsThankYouPageView: FC = () => {
   /** => render countdown */
   const renderCountDown = () => {
     if (thankYouPageData != null && thankYouPageData != undefined) {
-      const expiredPaymentTime = thankYouPageDataDummy?.expiredDate;
+      const expiredPaymentTime = thankYouPageData?.expiredDate;
 
       return moment.utc(new Date()).local() <
         moment.utc(expiredPaymentTime).local() &&
@@ -146,7 +146,7 @@ const OmsThankYouPageView: FC = () => {
             <View style={{ alignItems: 'center', marginVertical: 8 }}>
               <CountDownTimer
                 type={'big'}
-                expiredTime={thankYouPageDataDummy!.expiredDate}
+                expiredTime={thankYouPageData!.expiredDate}
               />
             </View>
             <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align="center">
