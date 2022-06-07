@@ -1,8 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { Image, View } from 'react-native';
-import { SnbBottomSheet, SnbText, SnbButton } from 'react-native-sinbad-ui';
-import { PaymentMethodStyle } from '@screen/oms/styles';
 import PaymentMethodModal from '@screen/oms/components/payment-method-modal';
 
 interface PaymentStatusModal {

@@ -1,11 +1,5 @@
 import PaymentMethodModal from '@screen/oms/components/payment-method-modal';
 import React, { FC } from 'react';
-import {
-  SnbBottomSheet2,
-  SnbBottomSheetPart,
-  Content,
-  FooterButton,
-} from 'react-native-sinbad-ui';
 interface PaymentMethodExpiredTimeModalProps {
   isOpen: boolean;
   close: () => void;

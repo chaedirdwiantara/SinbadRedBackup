@@ -1,8 +1,7 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import React, { FC } from 'react';
-import { SnbButton, FooterButton } from '@sinbad/react-native-sinbad-ui';
-import { CheckoutStyle, PaymentMethodStyle } from '@screen/oms/styles';
-import { findIsSelected } from '@screen/oms/functions/payment-method/payment-method.function';
+import { FooterButton } from '@sinbad/react-native-sinbad-ui';
+import { PaymentMethodStyle } from '@screen/oms/styles';
 
 interface PaymentMethodBottomProps {
   choice: any;
