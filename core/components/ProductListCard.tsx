@@ -46,7 +46,7 @@ const ProductList: FC<ProductListCardProps> = (props) => {
       currentPrice={toCurrency(props.priceAfterTax, {
         withFraction: false,
       })}
-      soldBy={isNaN(Number(props.qtySoldLabel)) ? props.qtySoldLabel : ''}
+      soldBy={props.qtySoldLabel}
       badgeProps={badge}
       buttonText={props.withOrderButton ? 'Pesan' : undefined}
       onCardPress={props.onCardPress}

@@ -1,6 +1,6 @@
 import React, { memo, useEffect } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 import {
   StatusOrder,
   InformationInvoice,
@@ -32,9 +32,9 @@ const OrderHistoryDetail = () => {
   }, []);
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
-        type="red"
+      <SnbTopNav2.Type3
         title="Detail Pesanan"
+        color="white"
         backAction={NavigationAction.back}
       />
       <ScrollView

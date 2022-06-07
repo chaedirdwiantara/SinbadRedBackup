@@ -39,7 +39,9 @@ const IntroSplashView: React.FC = () => {
         getLocationPermissions();
       }
     } else if ((!meV2.data || meV2.error) && !meV2.loading) {
-      NavigationAction.resetToIntroSinbad();
+      setTimeout(() => {
+        NavigationAction.resetToIntroSinbad();
+      }, 100);
     }
   }, [meV2]);
   /** === VIEW === */
