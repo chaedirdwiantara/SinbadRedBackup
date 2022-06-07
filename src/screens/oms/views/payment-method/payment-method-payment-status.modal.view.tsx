@@ -20,7 +20,7 @@ export const PaymentStatusModal: FC<PaymentStatusModal> = ({
       close={() => handleNoAction()}
       name="modal-payment-status"
       snbButtonTitle="payment-status"
-      illustrationTitle="Transaksi sebelumnya belum dibayar"
+      illustrationTitle="Transaksi Sebelumnya Belum Dibayar"
       footerButtonTitle="Lanjutkan"
       footerButtonTitle2="Ganti Metode"
       image={require('../../../../assets/images/pending-payment.png')}

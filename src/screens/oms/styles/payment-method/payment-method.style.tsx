@@ -45,6 +45,10 @@ export const PaymentMethodStyle = StyleSheet.create({
     right: 0,
     left: 0,
   },
+  modalComponentStyle: {
+    marginBottom: 8,
+    marginTop: -40,
+  },
 });
 
 export default PaymentMethodStyle;
