@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
@@ -71,7 +71,7 @@ const OnBoardingView: React.FC<Props> = () => {
           <SnbButton2.Primary
             title={'Masuk'}
             onPress={() => navigate(LOGIN_PHONE_VIEW)}
-            size="medium"
+            size="large"
             full
             outline
           />
@@ -82,7 +82,7 @@ const OnBoardingView: React.FC<Props> = () => {
             title={'Daftar'}
             onPress={() => navigate(SELF_REGISTRATION_VIEW)}
             disabled={false}
-            size="medium"
+            size="large"
             full
           />
         </View>
@@ -96,12 +96,13 @@ const OnBoardingView: React.FC<Props> = () => {
         <SnbText2.Paragraph.Default>
           Biarkan saya masuk{' '}
         </SnbText2.Paragraph.Default>
-        <TouchableOpacity
-          onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}>
-          <SnbText2.Body.Default color={colorV2.textColor.link}>
-            Lewati
-          </SnbText2.Body.Default>
-        </TouchableOpacity>
+        <View style={{ marginLeft: -layout.spacing.lg }}>
+          <SnbButton2.Link
+            title="Lewati"
+            size="medium"
+            onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+          />
+        </View>
       </View>
     );
   };
@@ -134,7 +135,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'space-between' },
   textSkipLogin: {
     flexDirection: 'row',
-    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginVertical: layout.spacing.sm,
   },
   termsNoticeContainer: {
