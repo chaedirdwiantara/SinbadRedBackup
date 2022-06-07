@@ -14,6 +14,7 @@ import {
   color,
   colorV2,
   SnbButton,
+  SnbButton2,
   SnbContainer,
   SnbText,
   SnbText2,
@@ -40,9 +41,9 @@ import moment from 'moment';
 import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
-import BottomSheetConfirmation, {
+import BottomSheetConfirmationV2, {
   BottomSheetTransactionRef,
-} from '@core/components/BottomSheetConfirmation';
+} from '@core/components/BottomSheetConfirmationV2';
 import ThankYouPageCustomAccordion from '@screen/oms/components/thank-you-page-custom-accordion.component';
 
 type ThankYouPageParamList = {
@@ -391,7 +392,7 @@ const OmsThankYouPageView: FC = () => {
   }
   const renderModalConfirmationCancelOrder = () => {
     return (
-      <BottomSheetConfirmation
+      <BottomSheetConfirmationV2
         ref={confirmModalRef}
         title="Batalkan Pesanan?"
         desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
@@ -406,28 +407,25 @@ const OmsThankYouPageView: FC = () => {
       {params.section == 'orderHistory' ? (
         <View style={ThankYouPageStyle.footerCancelOrder}>
           <View style={ThankYouPageStyle.footerCancelOrderButton}>
-            <SnbButton.Single
+            {/* <SnbButton.Single
               type="primary"
+              title={'Batalkan Pesanan'}
+              onPress={handleCancelOrder}
+            /> */}
+            <SnbButton2.Secondary
+              full={true}
+              outline={true}
+              size="large"
               title={'Batalkan Pesanan'}
               onPress={handleCancelOrder}
             />
           </View>
         </View>
+        // <FooterButton.Single
+        //   title={'Batalkan Pesanan'}
+        //   buttonPress={handleCancelOrder}
+        // />
       ) : (
-        // <View style={ThankYouPageStyle.footer}>
-        //   <SnbButton.Dynamic
-        //     size="medium"
-        //     type="secondary"
-        //     title={'Kembali ke Beranda'}
-        //     onPress={goToHome}
-        //   />
-        //   <SnbButton.Dynamic
-        //     size="medium"
-        //     type="primary"
-        //     title={'Cek Status'}
-        //     onPress={() => NavigationAction.navigate('HistoryListView')}
-        //   />
-        // </View>
         <FooterButton.Dual
           title1={'Kembali ke Beranda'}
           button1Press={goToHome}
