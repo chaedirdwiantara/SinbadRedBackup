@@ -325,21 +325,25 @@ const OmsThankYouPageView: FC = () => {
   const renderOrderNotes = () => {
     if (thankYouPageData != null) {
       return (
-        <ThankYouPageCard title="Catatan Pesanan">
+        <ThankYouPageCard title="Informasi Pengiriman">
           <ThankYouPageCardItem
-            title="Tanggal Pembelian"
+            title="Tanggal Pemesanan"
             value={
               thankYouPageData?.createdAt
                 ? toLocalDateTime(thankYouPageData?.createdAt)
                 : '-'
             }
           />
-          {params.section == 'orderHistory' && (
+          <ThankYouPageCardItem
+              title="Alamat Pengiriman"
+              value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress}, ${thankYouPageData?.buyerAddressUrban}, ${thankYouPageData?.buyerAddressDistrict}, ${thankYouPageData?.buyerAddressCity}, ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
+          />
+          {/* {params.section == 'orderHistory' && (
             <ThankYouPageCardItem
               title="Alamat Pengiriman"
               value={`${thankYouPageData?.buyerAddress} ${thankYouPageData?.buyerAddressNoteAddress} ${thankYouPageData?.buyerAddressUrban} ${thankYouPageData?.buyerAddressDistrict} ${thankYouPageData?.buyerAddressCity} ${thankYouPageData?.buyerAddressProvince}, ${thankYouPageData?.buyerAddressZipCode}`}
             />
-          )}
+          )} */}
         </ThankYouPageCard>
       );
     }
