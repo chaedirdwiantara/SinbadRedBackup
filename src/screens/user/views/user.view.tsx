@@ -546,6 +546,7 @@ const UserView: FC = ({ start }: any) => {
           <ModalUserProfileCompletion
             isOpen={modalUserProfileCompletion}
             handleNavigateToCart={() => {
+              setModalUserProfileCompletion(false);
               NavigationAction.navigate('OmsShoppingCartView');
             }}
           />
