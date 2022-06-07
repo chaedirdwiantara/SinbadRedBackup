@@ -1,11 +1,6 @@
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
-import React, { FC, useEffect, useState } from 'react';
-import {
-  color,
-  SnbListButtonType1,
-  SnbText,
-  colorV2,
-} from '@sinbad/react-native-sinbad-ui';
+import React, { FC, useState } from 'react';
+import { SnbText2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import * as models from '@models';
 interface PaymentMethodListProps {
@@ -51,9 +46,9 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>
-              <SnbText.B2 color={colorV2.textColor.default}>
+              <SnbText2.Headline.Default>
                 {item.displayLabel}
-              </SnbText.B2>
+              </SnbText2.Headline.Default>
             </View>
           </TouchableOpacity>
         ) : (
@@ -75,9 +70,9 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
               style={PaymentMethodStyle.listImage}
             />
             <View style={PaymentMethodStyle.listName}>
-              <SnbText.B2 color={colorV2.textColor.default}>
+              <SnbText2.Headline.Default>
                 {item.displayLabel}
-              </SnbText.B2>
+              </SnbText2.Headline.Default>
             </View>
           </TouchableOpacity>
         )
