@@ -1,10 +1,14 @@
 import React, { FC } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
   Content,
   FooterButton,
+  SnbText2,
+  colorV2,
 } from 'react-native-sinbad-ui';
+import { PaymentMethodStyle } from '../styles';
 interface PaymentMethodExpiredTimeModalProps {
   open: boolean;
   close: () => void;
@@ -39,7 +43,7 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
     <SnbBottomSheet2
       name={name}
       type={'content'}
-      contentHeight={410}
+      contentHeight={430}
       open={open}
       navigation={
         <SnbBottomSheetPart.Navigation
@@ -52,11 +56,18 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
       title={<SnbBottomSheetPart.Title title={snbButtonTitle} />}
       content={
         <>
-          <Content.Illustration
-            image={image}
-            title={illustrationTitle}
-            description={description}
-          />
+          <Content.Illustration image={image} title="" description="" />
+          <View style={PaymentMethodStyle.modalComponentStyle}>
+            <SnbText2.Headline.Default align="center">
+              {illustrationTitle}
+            </SnbText2.Headline.Default>
+          </View>
+
+          <SnbText2.Paragraph.Default
+            align="center"
+            color={colorV2.textColor.secondary}>
+            {description}
+          </SnbText2.Paragraph.Default>
           {buttonType == 'single' ? (
             <FooterButton.Single
               title={footerButtonTitle}

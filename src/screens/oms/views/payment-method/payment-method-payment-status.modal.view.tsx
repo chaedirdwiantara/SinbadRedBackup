@@ -1,8 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { Image, View } from 'react-native';
-import { SnbBottomSheet, SnbText, SnbButton } from 'react-native-sinbad-ui';
-import { PaymentMethodStyle } from '@screen/oms/styles';
 import PaymentMethodModal from '@screen/oms/components/payment-method-modal';
 
 interface PaymentStatusModal {
@@ -23,7 +20,7 @@ export const PaymentStatusModal: FC<PaymentStatusModal> = ({
       close={() => handleNoAction()}
       name="modal-payment-status"
       snbButtonTitle="payment-status"
-      illustrationTitle="Transaksi sebelumnya belum dibayar"
+      illustrationTitle="Transaksi Sebelumnya Belum Dibayar"
       footerButtonTitle="Lanjutkan"
       footerButtonTitle2="Ganti Metode"
       image={require('../../../../assets/images/pending-payment.png')}

@@ -17,7 +17,7 @@ export const PaymentMethodErrorModal: FC<PaymentMethodErrorProps> = ({
       close={() => close()}
       name="modal-error"
       snbButtonTitle="modal-error"
-      illustrationTitle="Terjadi Kesalahan di Sinbad"
+      illustrationTitle="Terjadi Kendala di Sinbad"
       footerButtonTitle="Coba Lagi"
       footerButtonTitle2=""
       image={require('../../../../assets/images/sinbad/no-connection.png')}
