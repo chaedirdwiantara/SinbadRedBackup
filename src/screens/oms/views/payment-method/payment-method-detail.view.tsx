@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import React, { FC } from 'react';
-import { Text, SnbDivider2 } from '@sinbad/react-native-sinbad-ui';
+import { Text, SnbDivider2, SnbText2 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import * as models from '@models';
@@ -43,23 +43,25 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
       <View style={{ marginVertical: 8 }}>
         <SnbDivider2 type="solid" />
       </View>
-      <Text.DetailPrice
-        type="total"
-        bold={true}
-        value={
-          dataChoose != null
-            ? toCurrency(dataFromCheckout.totalPaymentNumber, {
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <SnbText2.Headline.Small>Total Pembayaran</SnbText2.Headline.Small>
+        {dataChoose != null ? (
+          <SnbText2.Headline.Small>
+            {toCurrency(
+              dataFromCheckout.totalPaymentNumber + dataChoose.serviceFeeDeduct,
+              {
                 withFraction: false,
-              })
-            : toCurrency(
-                dataFromCheckout.totalPaymentNumber,
-
-                {
-                  withFraction: false,
-                },
-              )
-        }
-      />
+              },
+            )}
+          </SnbText2.Headline.Small>
+        ) : (
+          <SnbText2.Headline.Small>
+            {toCurrency(dataFromCheckout.totalPaymentNumber, {
+              withFraction: false,
+            })}
+          </SnbText2.Headline.Small>
+        )}
+      </View>
     </View>
   );
 };
