@@ -7,6 +7,7 @@ import {
   SnbTopNav2,
   SnbButton2,
   SnbText2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { DATA_COMPLETENESS_VIEW } from '@screen/account/functions/screens_name';
 
@@ -39,19 +40,21 @@ const Content: React.FC = () => {
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <ScrollView>
-          <View style={{ padding: 32 }}>
-            <SnbText2.Headline.Default align="center">Sinbad membantu Anda dengan:</SnbText2.Headline.Default>
-            <View style={{ marginVertical: 8 }} />
+          <View style={{ padding: layout.spacing.xxl }}>
+            <SnbText2.Headline.Default align="center">
+              Sinbad membantu Anda dengan:
+            </SnbText2.Headline.Default>
+            <View style={{ marginVertical: layout.spacing.sm }} />
             {STATIC_CONTENT.map((el, idx) => (
               <View
                 key={idx}
                 style={{
-                  marginVertical: 16,
+                  marginVertical: layout.spacing.lg,
                   flexDirection: 'row',
                   alignItems: 'center',
                 }}>
                 {el.icon()}
-                <View style={{ marginHorizontal: 8 }} />
+                <View style={{ marginHorizontal: layout.spacing.sm }} />
                 <View style={{ flex: 1 }}>
                   <SnbText2.Headline.Default>
                     {el.title}
@@ -66,7 +69,7 @@ const Content: React.FC = () => {
           </View>
         </ScrollView>
       </View>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Lengkapi Data Sekarang"
           onPress={() => navigate(DATA_COMPLETENESS_VIEW)}

@@ -1,5 +1,6 @@
 import * as types from '@types';
 import * as models from '@models';
+import ReactMoE from 'react-native-moengage';
 /** === LIST === */
 /** => list supplier process */
 export const supplierListProcess = (
@@ -148,7 +149,9 @@ export const verificationEmailProcess = (
 /** => success */
 export const verificationEmailSuccess = (
   data: models.CreateSuccessProps,
+  params: any,
 ): models.CreateSuccessAction => {
+  ReactMoE.setUserEmailID(params.email);
   return { type: types.VERIFICATION_EMAIL_SUCCESS, payload: data };
 };
 /** => failed */

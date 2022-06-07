@@ -1,9 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import ProductTagList from '../ProductTagList';
 import GridLayoutCard from './GridLayoutCard';
 import { GridSkeleton } from './GridSkeleton';
 /** === IMPORT FUNCTIONS === */
@@ -16,7 +15,6 @@ const GridLayout: FC<ProductLayoutProps> = ({
   products,
   withTags = true,
   tags,
-  onTagPress,
   onOrderPress,
   isRefreshing,
   onRefresh,
@@ -55,8 +53,6 @@ const GridLayout: FC<ProductLayoutProps> = ({
           }
         }}
         scrollEventThrottle={10}>
-        {(displayState === 'success' || displayState === 'empty') &&
-          hasTags && <ProductTagList tags={tags} onTagPress={onTagPress} />}
         {displayState === 'error' && (
           <EmptyState
             title="Terjadi Kesalahan"
@@ -101,4 +97,4 @@ const GridLayout: FC<ProductLayoutProps> = ({
   );
 };
 
-export default GridLayout;
+export default memo(GridLayout);

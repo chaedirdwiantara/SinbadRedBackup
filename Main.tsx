@@ -8,6 +8,7 @@ import MainNavigator from './core/navigations/MainNavigator';
 import SentryCore from './core/report/sentry/SentryCore';
 import Toast from './core/components/Toast';
 import { BottomSheetModalProvider } from '@sinbad/react-native-sinbad-ui/src/utils/thirdParty';
+import MoengageCore from '@core/report/moengage/MoengageCore';
 
 const Main = () => {
   return (
@@ -19,6 +20,7 @@ const Main = () => {
             {/* <PushNotification /> */}
             <MainNavigator />
             <Toast />
+            <MoengageCore />
           </PersistGate>
         </Provider>
       </BottomSheetModalProvider>

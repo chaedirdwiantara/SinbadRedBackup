@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-  color,
+  borderV2,
+  colorV2,
   SnbBottomSheet,
-  SnbButton,
+  SnbButton2,
   SnbContainer,
   SnbSkeletonAnimator,
-  SnbText,
+  SnbText2,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
@@ -210,13 +212,11 @@ const MapsViewType2: React.FC = () => {
           )}
         </MapView>
         <View style={{ ...styles.floatingButton }}>
-          <SnbButton.Floating
-            type="primary"
-            contentColor={color.black80}
-            iconName="arrow_back"
-            buttonColor={color.white}
+          <SnbButton2.Icon
             onPress={goBack}
             disabled={false}
+            size="medium"
+            iconName="arrow_back"
           />
         </View>
         <View
@@ -224,22 +224,22 @@ const MapsViewType2: React.FC = () => {
             ...styles.floatingButton,
             right: 0,
           }}>
-          <SnbButton.Floating
-            type="primary"
-            iconName="my_location"
-            contentColor={color.blue40}
-            buttonColor={color.white}
+          <SnbButton2.Icon
+            size="medium"
             onPress={getLocationPermissions}
             disabled={false}
+            iconName="location"
           />
         </View>
       </View>
       <View style={styles.addressContainer}>
         <View style={styles.addresInfo}>
-          <SnbText.H3>Cari Alamat Toko</SnbText.H3>
+          <SnbText2.Body.Large align="center">
+            Cari Alamat Toko
+          </SnbText2.Body.Large>
           <View
             style={{
-              marginTop: 12,
+              marginTop: layout.spacing.md,
               justifyContent: 'space-between',
               flexDirection: 'row',
               alignItems: 'center',
@@ -248,47 +248,62 @@ const MapsViewType2: React.FC = () => {
               {renderIF(
                 loadingGetAddress,
                 <SnbSkeletonAnimator>
-                  <View style={{ height: 20, width: 120, borderRadius: 4 }} />
+                  <View
+                    style={{
+                      height: 20,
+                      width: 120,
+                      borderRadius: borderV2.radius.sm,
+                    }}
+                  />
                 </SnbSkeletonAnimator>,
                 renderIF(
                   addressResult.length > 0,
-                  <SnbText.B2>
+                  <SnbText2.Body.Small>
                     {getStreetName(addressResult[0]?.address_components)}
-                  </SnbText.B2>,
-                  <SnbText.B2>Jalan tidak diketahui</SnbText.B2>,
+                  </SnbText2.Body.Small>,
+                  <SnbText2.Body.Small>
+                    Jalan tidak diketahui
+                  </SnbText2.Body.Small>,
                 ),
               )}
             </View>
-            <SnbButton.Dynamic
-              title="Cari Lokasi"
-              onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
-              disabled={false}
-              type="tertiary"
-              buttonColor={color.blue50}
-              size="small"
-            />
+            <View style={{ marginRight: -layout.spacing.md }}>
+              <SnbButton2.Link
+                title="Cari Lokasi"
+                onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
+                disabled={false}
+                size="small"
+              />
+            </View>
           </View>
           {renderIF(
             loadingGetAddress,
             <SnbSkeletonAnimator>
-              <View style={{ height: 20, width: 240, borderRadius: 4 }} />
+              <View
+                style={{
+                  height: 20,
+                  width: 240,
+                  borderRadius: borderV2.radius.sm,
+                }}
+              />
             </SnbSkeletonAnimator>,
             renderIF(
               addressResult.length > 0,
-              <SnbText.B1 align="justify" color={color.black60}>
+              <SnbText2.Paragraph.Small
+                align="justify"
+                color={colorV2.textColor.secondary}>
                 {addressResult[0]?.formatted_address}
-              </SnbText.B1>,
-              <SnbText.B1 color={color.black60}>
+              </SnbText2.Paragraph.Small>,
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
                 Alamat tidak ditemukan
-              </SnbText.B1>,
+              </SnbText2.Paragraph.Small>,
             ),
           )}
         </View>
-        <View style={{ height: 72 }}>
-          <SnbButton.Single
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
             title="Pilih Lokasi ini"
             disabled={loadingGetAddress || locations.loading}
-            type="primary"
             loading={locations.loading}
             onPress={() => {
               if (addressResult.length === 0) {
@@ -302,6 +317,8 @@ const MapsViewType2: React.FC = () => {
                 });
               }
             }}
+            full
+            size="medium"
           />
         </View>
       </View>
@@ -319,28 +336,38 @@ const MapsViewType2: React.FC = () => {
                 height: 180,
                 width: 180,
                 resizeMode: 'contain',
-                marginVertical: 16,
+                marginVertical: layout.spacing.lg,
               }}
             />
-            <View style={{ padding: 16 }}>
-              <SnbText.H3 align="center">Area Tidak Ditemukan</SnbText.H3>
-              <View style={{ marginVertical: 8 }} />
-              <SnbText.B1 align="center" color={color.black60}>
+            <View
+              style={{
+                paddingHorizontal: layout.spacing['3xl'],
+                paddingVertical: layout.spacing.sm,
+              }}>
+              <SnbText2.Headline.Default align="center">
+                Area Tidak Ditemukan
+              </SnbText2.Headline.Default>
+              <View style={{ marginVertical: layout.spacing.sm }} />
+              <SnbText2.Paragraph.Default
+                align="center"
+                color={colorV2.textColor.secondary}>
                 Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
                 manual.
-              </SnbText.B1>
+              </SnbText2.Paragraph.Default>
             </View>
-            <View style={{ marginVertical: 12 }} />
-            <View style={{ height: 72 }}>
-              <SnbButton.Single
-                onPress={() => {
-                  setShowModalAreaNotFound(false);
-                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-                }}
-                title="Masukkan Lokasi Manual"
-                disabled={false}
-                type="primary"
-              />
+            <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
+              <View style={{ flex: 1 }}>
+                <SnbButton2.Primary
+                  onPress={() => {
+                    setShowModalAreaNotFound(false);
+                    navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
+                  }}
+                  title="Masukkan Lokasi Manual"
+                  disabled={false}
+                  full
+                  size="medium"
+                />
+              </View>
             </View>
           </View>
         }
@@ -355,21 +382,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     bottom: 32,
-    width: 88,
-    height: 78,
+    margin: layout.spacing.lg,
   },
   addressContainer: {
     flex: 0.3,
-    backgroundColor: color.white,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    backgroundColor: colorV2.bgColor.light,
+    borderTopLeftRadius: borderV2.radius.lg,
+    borderTopRightRadius: borderV2.radius.lg,
     elevation: 4,
-    marginTop: -32,
+    marginTop: -layout.spacing.xxl,
     justifyContent: 'space-between',
   },
   addresInfo: {
-    paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingHorizontal: layout.spacing.lg,
+    paddingTop: layout.spacing.xl,
     paddingBottom: 0,
   },
 });

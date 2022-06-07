@@ -19,10 +19,14 @@ interface Props {
 }
 
 const OCRResultContent: React.FC<Props> = ({ onChangeValue, value }) => {
-  const { ocrImageResult } = useOCR(true);
+  const { ocrImageResult, resetOcrDataRtdb } = useOCR(true);
   const nameOnKtp = useInput('');
   const idNumber = useInput('', 'number-only');
   const { completeDataState } = useEasyRegistration();
+
+  React.useEffect(() => {
+    return resetOcrDataRtdb;
+  }, []);
 
   React.useEffect(() => {
     if (ocrImageResult) {

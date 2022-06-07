@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 /** === IMPORT FUNCTIONS ===  */
 import { goToCategory } from '@screen/category/functions';
 import { useTagContext } from 'src/data/contexts/product';
@@ -82,10 +82,14 @@ export const useBottomAction = (
     return queryOptions;
   };
 
-  const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
+  const handleActionClick: BottomActionPressHandler = ({
+    type,
+    value,
+    show,
+  }) => {
     switch (type) {
       case 'sort':
-        setSortModalVisible((prev) => !prev);
+        setSortModalVisible(show);
         break;
       case 'applySort':
         setSortIndex(value as SortIndex);
@@ -105,7 +109,7 @@ export const useBottomAction = (
         });
         break;
       case 'filter':
-        setFilterModalVisible((prev) => !prev);
+        setFilterModalVisible(show);
         break;
       case 'applyFilter':
         const filterValue = value as PriceRange;
@@ -166,7 +170,10 @@ export const useSortIndex = (initialIndex: number | null) => {
 };
 
 export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
-  const filterIsApplied = appliedFilterQuery !== null;
+  const filterIsApplied = useMemo(
+    () => appliedFilterQuery !== null,
+    [appliedFilterQuery],
+  );
   const [minPrice, setMinPrice] = useState(
     filterIsApplied ? appliedFilterQuery.minPrice : 0,
   );
@@ -174,20 +181,20 @@ export const usePriceRangeFilter = (appliedFilterQuery: PriceRange | null) => {
     filterIsApplied ? appliedFilterQuery.maxPrice : 0,
   );
 
-  const resetValues = () => {
+  const resetValues = useCallback(() => {
     setMinPrice(0);
     setMaxPrice(0);
-  };
+  }, []);
 
-  const handleSliderChange = (values: Array<number>) => {
+  const handleSliderChange = useCallback((values: Array<number>) => {
     setMinPrice(values[0]);
     setMaxPrice(values[1]);
-  };
+  }, []);
 
-  const handleSliderFinishChange = (values: Array<number>) => {
+  const handleSliderFinishChange = useCallback((values: Array<number>) => {
     setMinPrice(values[0]);
     setMaxPrice(values[1]);
-  };
+  }, []);
 
   return {
     minPrice,

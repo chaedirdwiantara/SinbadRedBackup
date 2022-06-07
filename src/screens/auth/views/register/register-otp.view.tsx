@@ -15,6 +15,7 @@ import {
   SnbBottomSheet,
   SnbText2,
   SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 
 const RegisterOTPView: React.FC = () => {
@@ -26,7 +27,6 @@ const RegisterOTPView: React.FC = () => {
     hashOtp,
   } = useOTP();
   const { goBack }: any = useNavigation();
-  const [hide, setHide] = React.useState(true);
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
   const { checkPhone } = useCheckPhoneV2();
@@ -37,13 +37,9 @@ const RegisterOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
-      setHide(false);
       checkAutoLogin(verifyOTP.data);
       setReCheckAutoLogin(0);
       setLoadingCheckAutoLogin(true);
-    }
-    if (verifyOTP.error !== null) {
-      setHide(false);
     }
   }, [verifyOTP]);
 
@@ -88,19 +84,19 @@ const RegisterOTPView: React.FC = () => {
             height: 160,
             width: 160,
             alignSelf: 'center',
-            marginVertical: 16,
+            marginVertical: layout.spacing.lg,
           }}
         />
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Headline.Default align="center">
             Data Anda masih sedang tahap proses
           </SnbText2.Headline.Default>
-          <View style={{ marginVertical: 8 }} />
+          <View style={{ marginVertical: layout.spacing.sm }} />
           <SnbText2.Body.Default align="center">
             silahkan tunggu atau hubungi customer service Sinbad
           </SnbText2.Body.Default>
         </View>
-        <View style={{ padding: 16 }}>
+        <View style={{ padding: layout.spacing.lg }}>
           <SnbButton2.Primary
             title="Tutup"
             disabled={false}
@@ -127,7 +123,6 @@ const RegisterOTPView: React.FC = () => {
         <OTPContent
           testID="register"
           onVerifyOTP={(otp) => {
-            setHide(true);
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
               otp: Number(otp),
@@ -140,7 +135,6 @@ const RegisterOTPView: React.FC = () => {
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
           otpSuccess={verifyOTP.data !== null}
-          hideIcon={hide}
           loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
         />

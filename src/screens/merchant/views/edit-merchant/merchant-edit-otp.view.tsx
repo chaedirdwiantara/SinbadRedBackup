@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Image, View } from 'react-native';
+import { Image, ScrollView, View } from 'react-native';
 import {
-  SnbButton,
-  SnbOTPInput,
-  SnbText,
-  SnbOTPTimer,
-  color,
+  SnbButton2,
+  SnbText2,
   SnbContainer,
-  SnbTopNav,
+  SnbTopNav2,
   SnbBottomSheet,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import OtpStyle from '../../styles/otp.style';
 import { MerchantHookFunc } from '../../function';
@@ -18,10 +16,12 @@ import { NavigationAction } from '@navigation';
 
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
+import { OTPInput, OTPTimer } from '@screen/shared/views/components';
+import Svg from '@svg';
+
 interface Props {
   loading: boolean;
   otpSuccess: boolean;
-  hideIcon: boolean;
   route: any;
 }
 
@@ -61,7 +61,9 @@ const OTPContent: React.FC<Props> = (props) => {
   const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successOTP, setSuccessOTP] = useState(false);
-  const [hideIcon, setHideIcon] = useState(true);
+  const [otpType, setOtpType] = useState<'error' | 'default' | 'success'>(
+    'default',
+  );
   // related Quest hook
   const { dispatchQuest } = useQuestContext();
   const { update } = useQuestTaskAction();
@@ -102,7 +104,7 @@ const OTPContent: React.FC<Props> = (props) => {
     ) {
       setOpenModalSuccess(true);
       setSuccessOTP(true);
-      setHideIcon(false);
+      setOtpType('success');
       // if source Quest, update quest task status
       if (source === 'Quest') {
         const data = {
@@ -118,10 +120,10 @@ const OTPContent: React.FC<Props> = (props) => {
       stateMerchant.verificationBankAccount.error
     ) {
       setSuccessOTP(false);
-      setHideIcon(false);
       setErrorMessage(
         'Pastikan nomor atau kode verifikasi yang Anda masukkan benar',
       );
+      setOtpType('error');
     }
   }, [stateMerchant]);
 
@@ -197,8 +199,8 @@ const OTPContent: React.FC<Props> = (props) => {
   /** === VIEW === */
   const header = () => {
     return (
-      <SnbTopNav.Type3
-        type="white"
+      <SnbTopNav2.Type3
+        color="white"
         title={'Kode Verifikasi'}
         backAction={() => backFunc()}
       />
@@ -207,57 +209,65 @@ const OTPContent: React.FC<Props> = (props) => {
 
   const content = () => {
     return (
-      <View style={{ justifyContent: 'space-between' }}>
-        <View>
-          <Image
-            source={require('../../../../assets/images/sinbad_image/otp.png')}
-            style={OtpStyle.imageOtp}
-          />
-          <View style={OtpStyle.titleContainer}>
-            <SnbText.H2>Masukkan kode Verifikasi</SnbText.H2>
-            <View style={{ marginVertical: 4 }} />
-            <SnbText.B1 align="center">
-              Kode verifikasi telah dikirimkan melalui{' '}
-              {props.route.params.type === 'email' ? 'email' : 'sms'} ke {data}
-            </SnbText.B1>
-          </View>
-          <View style={{ margin: 4 }}>
-            <SnbOTPInput
-              autoFocusOnLoad
-              code={otp}
-              onCodeChanged={setOtp}
-              otpSuccess={successOTP}
-              hideIcon={hideIcon}
-              type={'default'}
-            />
-          </View>
-          <View
-            style={{
-              marginBottom: errorMessage ? 28 : 0,
-              marginHorizontal: 16,
-            }}>
-            <SnbText.B4 color={color.red70} align="center">
-              {errorMessage}
-            </SnbText.B4>
-          </View>
+      <View style={{ flex: 1, justifyContent: 'space-between' }}>
+        <View style={{ flex: 1 }}>
+          <ScrollView>
+            <View style={OtpStyle.titleContainer}>
+              <View style={{ alignSelf: 'center' }}>
+                <Svg name="sinbad_otp" size={200} />
+              </View>
+              <View
+                style={{ padding: layout.spacing.sm, alignItems: 'center' }}>
+                <SnbText2.Headline.Default>
+                  Masukkan kode Verifikasi
+                </SnbText2.Headline.Default>
+                <View style={{ marginVertical: layout.spacing.xxsm }} />
+                <SnbText2.Paragraph.Default align="center">
+                  Kode verifikasi telah dikirimkan melalui{' '}
+                  {props.route.params.type === 'email' ? 'email' : 'sms'} ke{' '}
+                  {data}
+                </SnbText2.Paragraph.Default>
+              </View>
+            </View>
+            <View style={{ margin: layout.spacing.xxsm }}>
+              <OTPInput
+                autoFocusOnLoad
+                code={otp}
+                onCodeChanged={(val) => {
+                  setOtp(val);
+                  setErrorMessage('');
+                  setOtpType('default');
+                  setSuccessOTP(false);
+                }}
+                otpSuccess={successOTP}
+                type={otpType}
+                showMessage={errorMessage !== '' || successOTP}
+              />
+            </View>
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbButton2.Primary
+                title="Verifikasi"
+                onPress={() => verifyOtp()}
+                loading={
+                  loading ||
+                  stateMerchant.verificationBankAccount.loading ||
+                  stateMerchant.verificationEmail.loading ||
+                  stateMerchant.verificationMobilePhone.loading
+                }
+                disabled={
+                  otp.length < 5 ||
+                  loading ||
+                  stateMerchant.verificationBankAccount.loading ||
+                  stateMerchant.verificationEmail.loading ||
+                  stateMerchant.verificationMobilePhone.loading
+                }
+                full
+                size="medium"
+              />
+            </View>
+          </ScrollView>
         </View>
-        <View>
-          <View style={{ height: 72, marginTop: -28, marginBottom: -20 }}>
-            <SnbButton.Single
-              title="Verifikasi"
-              onPress={() => verifyOtp()}
-              loading={
-                loading ||
-                stateMerchant.verificationBankAccount.loading ||
-                stateMerchant.verificationEmail.loading ||
-                stateMerchant.verificationMobilePhone.loading
-              }
-              type="primary"
-              disabled={otp.length < 5}
-            />
-          </View>
-          <SnbOTPTimer action={resend} timer={90} />
-        </View>
+        <OTPTimer action={resend} timer={90} />
       </View>
     );
   };
@@ -276,16 +286,19 @@ const OTPContent: React.FC<Props> = (props) => {
                 source={require('@image/sinbad_image/smile_sinbad.png')}
                 style={OtpStyle.image}
               />
-              <View style={{ marginVertical: 16 }}>
-                <SnbText.B2>{setLabel(type)} Berhasil Terverifikasi</SnbText.B2>
+              <View style={{ marginVertical: layout.spacing.lg }}>
+                <SnbText2.Paragraph.Tiny>
+                  {setLabel(type)} Berhasil Terverifikasi
+                </SnbText2.Paragraph.Tiny>
               </View>
             </View>
-            <View style={{ height: 75 }}>
-              <SnbButton.Single
-                type={'primary'}
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbButton2.Primary
                 disabled={false}
                 onPress={() => confirm()}
                 title={'Oke, Saya Mengerti'}
+                full
+                size="medium"
               />
             </View>
           </View>
