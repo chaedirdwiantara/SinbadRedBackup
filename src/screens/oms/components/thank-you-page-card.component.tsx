@@ -1,4 +1,4 @@
-import { styles, SnbText, color } from "react-native-sinbad-ui";
+import { styles, SnbText2, colorV2 } from "react-native-sinbad-ui";
 import React, { FC } from "react";
 import { View, TouchableOpacity } from "react-native";
 import { ThankYouPageCardDivider } from "./thank-you-page-card-divider.component";
@@ -24,10 +24,10 @@ export const ThankYouPageCard: FC<ThankYouPageCardProps> = ({
   <View>
     <View style={gutter ? styles.shadowForBox10 : {}}>
       <View style={ThankYouPageStyle.cardHeader}>
-        <SnbText.H4>{title}</SnbText.H4>
+        <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
         {headerButton && (
         <TouchableOpacity onPress={()=> headerButtonAction()}>
-          <SnbText.B3 color={color.blue50}>{headerButtonTitle}</SnbText.B3>
+          <SnbText2.Body.Small color={colorV2.textColor.link}>{headerButtonTitle}</SnbText2.Body.Small>
         </TouchableOpacity>
         )}
       </View>
@@ -43,6 +43,6 @@ export const ThankYouPageCard: FC<ThankYouPageCardProps> = ({
         {children}
       </View>
     </View>
-    {gutter && <View style={{ height: 10, backgroundColor: color.black5 }} />}
+    {gutter && <View style={{ height: 10, backgroundColor: colorV2.bgColor.neutral }} />}
   </View>
 )

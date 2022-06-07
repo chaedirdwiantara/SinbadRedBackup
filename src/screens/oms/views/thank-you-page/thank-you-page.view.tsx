@@ -51,6 +51,7 @@ type ThankYouPageParamList = {
 type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 
 const OmsThankYouPageView: FC = () => {
+  const virtualAccount = ['BCA', 'BNI', 'BRI', 'Mandiri']
   const { params } = useRoute<ThankYouPageRouteProp>();
   const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
@@ -166,6 +167,9 @@ const OmsThankYouPageView: FC = () => {
       return null;
     }
     return (
+      <View>
+
+      
       <ThankYouPageCard
         title="Total Pembayaran"
         headerButton={true}
@@ -187,6 +191,7 @@ const OmsThankYouPageView: FC = () => {
           </View>
         </View>
       </ThankYouPageCard>
+      </View>
     );
   };
   /** => Payment Detail */
@@ -219,6 +224,66 @@ const OmsThankYouPageView: FC = () => {
       </ThankYouPageCard>
     );
   };
+
+  /** => Payment Detail v2 */
+  const renderPaymentDetailV2 = () => {
+    if (thankYouPageData === null || thankYouPageData === undefined) {
+      return null;
+    }
+    return (
+    <ThankYouPageCard
+        title="Detail Pembayaran"
+        headerButton={true}
+        headerButtonTitle="Lihat Detail"
+        headerButtonAction={handleThankYouPageOrderDetail}>
+      <View style={ThankYouPageStyle.paymentDetail}>
+        <Image
+          source={{
+            uri: thankYouPageData?.paymentIconUrl,
+          }}
+          style={ThankYouPageStyle.mediumIcon}
+        />
+        <View style={{ width: '60%' }}>
+          <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>Metode Pembayaran</SnbText2.Paragraph.Small>
+          <SnbText2.Body.Default color={colorV2.textColor.default}>
+            {virtualAccount[Number(thankYouPageData?.paymentMethodId)-1]+' Virtual Account'}
+          </SnbText2.Body.Default>
+        </View>
+      </View>
+      <View style={{paddingHorizontal: 16}}>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
+          {"Nomor Virtual Account"}
+        </SnbText2.Paragraph.Small>
+        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+          <SnbText2.Body.Default color={colorV2.textColor.default} align={'left'}>
+            {thankYouPageData?.vaAccountNo}
+          </SnbText2.Body.Default>
+          <TouchableOpacity onPress={() => onVACopied()}>
+            <SnbText2.Body.Small color={colorV2.textColor.link} align={'center'}>{'Salin'}</SnbText2.Body.Small>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={{paddingTop: 16, paddingHorizontal: 16}}>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
+          {"Total"}
+        </SnbText2.Paragraph.Small>
+        <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+          <SnbText2.Body.Default color={colorV2.textColor.error} align={'left'}>
+            {toCurrency(
+              Number(thankYouPageData?.totalOrderPriceAfterTax) ?? 0,
+              {
+                withFraction: false,
+              },
+            )}
+          </SnbText2.Body.Default>
+          <TouchableOpacity onPress={() => onOrderAmountCopied()}>
+            <SnbText2.Body.Small color={colorV2.textColor.link} align={'center'}>{'Salin'}</SnbText2.Body.Small>
+          </TouchableOpacity>
+        </View>
+      </View>  
+    </ThankYouPageCard>
+    )
+  }
   const generatePaymentGuideListData = (data: PaymentGuideListItem[]) => {
     return data.map((item: PaymentGuideListItem) => {
       return {
@@ -284,8 +349,9 @@ const OmsThankYouPageView: FC = () => {
     <ScrollView>
       <>
         {renderCountDown()}
-        {renderPaymentDetail()}
-        {renderPaymentTotal()}
+        {renderPaymentDetailV2()}
+        {/* {renderPaymentDetail()}
+        {renderPaymentTotal()} */}
         {renderPaymentGuide()}
         {renderOrderNotes()}
       </>
