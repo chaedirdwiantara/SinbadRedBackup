@@ -5,6 +5,7 @@ export * from './cart/cart.function';
 export * from './checkout';
 export * from './checkout/checkout-hook.function';
 export * from './payment-method/payment-method-hook.function';
+export * from './thank-you-page/thank-you-page.function'
 /**
  * ================================================================
  * NOTES

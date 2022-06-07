@@ -61,6 +61,14 @@ export const ThankYouPageStyle = StyleSheet.create({
   },
   footerCancelOrderButton: {
     height: 70
-  }
+  },
+  cardTimeBlock: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 18,
+    height: 18,
+    backgroundColor: color.red50,
+    borderRadius: 2,
+  },
 })
 
