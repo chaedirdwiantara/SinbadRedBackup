@@ -100,7 +100,7 @@ export const CountDownTimer: FC<CountDownTimerProps> = ({
   );
   const timerWaitingPaymentCard = () => (
     <View>
-        <SnbText.B4 color={color.red50}>{`${hours} :${minutes} :${seconds}`}</SnbText.B4>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.selected}>{`${hours} :${minutes} :${seconds}`}</SnbText2.Paragraph.Small>
     </View>
   );
 
