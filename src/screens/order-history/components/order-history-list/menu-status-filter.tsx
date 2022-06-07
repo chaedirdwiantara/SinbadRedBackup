@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useContext } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { color, SnbChips2 } from 'react-native-sinbad-ui';
+import { SnbChips2 } from 'react-native-sinbad-ui';
 import { Context } from './context';
 
 const menuList = [
@@ -63,14 +63,6 @@ const styles = StyleSheet.create({
   main: {
     marginRight: 8,
     marginVertical: 16,
-  },
-  activeMain: {
-    backgroundColor: color.red10,
-    borderColor: color.red40,
-  },
-  deactivateMain: {
-    backgroundColor: color.white,
-    borderColor: color.black40,
   },
 });
 export default memo(MenuStatusFilter);
