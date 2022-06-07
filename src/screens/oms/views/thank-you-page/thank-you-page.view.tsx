@@ -31,7 +31,6 @@ import {
 } from 'react-native';
 import { ModalThankYouPageOrderDetail } from './thank-you-page-order-detail-modal.view';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
-import CustomAccordion from '@screen/history/components/CustomAccordion';
 import { PaymentGuideListItem } from '@model/oms';
 import ThankYouPageCardItem from '@screen/oms/components/thank-you-page-card-item';
 import { toLocalDateTime } from '@core/functions/global/date-format';
@@ -43,6 +42,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import BottomSheetConfirmation, {
   BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmation';
+import ThankYouPageCustomAccordion from '@screen/oms/components/thank-you-page-custom-accordion.component';
 
 type ThankYouPageParamList = {
   Detail: { section: 'orderHistory' | 'payment'; orderId: string };
@@ -236,7 +236,11 @@ const OmsThankYouPageView: FC = () => {
         headerButton={true}
         headerButtonTitle="Lihat Detail"
         headerButtonAction={handleThankYouPageOrderDetail}>
-      <View style={ThankYouPageStyle.paymentDetail}>
+      <View style={{
+        flexDirection: 'row',
+        paddingVertical: 16,
+        paddingHorizontal: 0
+      }}>
         <Image
           source={{
             uri: thankYouPageData?.paymentIconUrl,
@@ -250,7 +254,7 @@ const OmsThankYouPageView: FC = () => {
           </SnbText2.Body.Default>
         </View>
       </View>
-      <View style={{paddingHorizontal: 16}}>
+      <View style={{paddingHorizontal: 0}}>
         <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
           {"Nomor Virtual Account"}
         </SnbText2.Paragraph.Small>
@@ -263,7 +267,7 @@ const OmsThankYouPageView: FC = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{paddingTop: 16, paddingHorizontal: 16}}>
+      <View style={{paddingTop: 16, paddingHorizontal: 0}}>
         <SnbText2.Paragraph.Small color={colorV2.textColor.secondary} align={'left'}>
           {"Total"}
         </SnbText2.Paragraph.Small>
@@ -294,7 +298,7 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => Payment Guide List */
   const renderPaymentGuideList = (data: PaymentGuideListItem[]) => {
-    return <CustomAccordion data={generatePaymentGuideListData(data)} />;
+    return <ThankYouPageCustomAccordion data={generatePaymentGuideListData(data)} />;
   };
   /** => Payment Guide */
   const renderPaymentGuide = () => {
