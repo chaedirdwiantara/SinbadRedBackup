@@ -5,6 +5,8 @@ import {
   SnbDivider,
   SnbListButtonType1,
   SnbText,
+  Text,
+  SnbDivider2,
 } from '@sinbad/react-native-sinbad-ui';
 import { PaymentMethodStyle } from '@screen/oms/styles';
 import { toCurrency } from '@core/functions/global/currency-format';
@@ -23,66 +25,48 @@ const PaymentMethodDetail: FC<PaymentMethodDetailProps> = ({
 }) => {
   return (
     <View style={PaymentMethodStyle.detailContainer}>
-      <View style={PaymentMethodStyle.detailRow}>
-        <SnbText.B2 color={color.black80}>
-          Total Produk {`(${dataFromCheckout.totalQtyCheckout})`}
-        </SnbText.B2>
-        <SnbText.B2 color={color.black80}>
-          {toCurrency(dataFromCheckout.totalPaymentNumber, {
-            withFraction: false,
-          })}
-        </SnbText.B2>
-      </View>
-      <View style={PaymentMethodStyle.detailRow}>
-        <SnbText.B2 color={color.black80}>Biaya Layanan</SnbText.B2>
-        {dataChoose != null ? (
-          <SnbText.B2
-            color={
-              dataChoose.serviceFeeDeduct == 0 ? color.green80 : color.black80
-            }>
-            {toCurrency(dataChoose.serviceFeeDeduct, {
-              withFraction: false,
-            })}
-          </SnbText.B2>
-        ) : isSelected != [] && isSelected[0] && dataChoose == null ? (
-          <SnbText.B2
-            color={
-              isSelected[0]?.serviceFeeDeduct == 0
-                ? color.green80
-                : color.black80
-            }>
-            {toCurrency(isSelected[0].serviceFeeDeduct, {
-              withFraction: false,
-            })}
-          </SnbText.B2>
-        ) : (
-          <SnbText.B2 color={color.black80}>Rp-</SnbText.B2>
-        )}
-      </View>
-      <SnbDivider style={{ marginVertical: 1 }} />
-      <View style={PaymentMethodStyle.detailRow}>
-        <SnbText.B2 color={color.black100}>Total Pembayaran</SnbText.B2>
-        {dataChoose != null ? (
-          <SnbText.B2 color={color.black100}>
-            {toCurrency(
-              dataFromCheckout.totalPaymentNumber + dataChoose.serviceFeeDeduct,
-              {
+      <Text.DetailPrice
+        type="item"
+        label={`Total Produk (${dataFromCheckout.totalQtyCheckout})`}
+        value={toCurrency(dataFromCheckout.totalPaymentNumber, {
+          withFraction: false,
+        })}
+      />
+      <Text.DetailPrice
+        type="item"
+        label="Biaya Layanan"
+        value={
+          dataChoose != null
+            ? toCurrency(dataFromCheckout.totalPaymentNumber, {
                 withFraction: false,
-              },
-            )}
-          </SnbText.B2>
-        ) : (
-          <SnbText.B2 color={color.black100}>
-            {toCurrency(
-              dataFromCheckout.totalPaymentNumber,
+              })
+            : isSelected != [] && isSelected[0] && dataChoose == null
+            ? toCurrency(isSelected[0].serviceFeeDeduct, {
+                withFraction: false,
+              })
+            : 'Rp -'
+        }
+      />
+      <View style={{ marginVertical: 8 }}>
+        <SnbDivider2 type="solid" />
+      </View>
+      <Text.DetailPrice
+        type="total"
+        bold={true}
+        value={
+          dataChoose != null
+            ? toCurrency(dataFromCheckout.totalPaymentNumber, {
+                withFraction: false,
+              })
+            : toCurrency(
+                dataFromCheckout.totalPaymentNumber,
 
-              {
-                withFraction: false,
-              },
-            )}
-          </SnbText.B2>
-        )}
-      </View>
+                {
+                  withFraction: false,
+                },
+              )
+        }
+      />
     </View>
   );
 };

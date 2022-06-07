@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native';
 import React, { FC } from 'react';
-import { SnbButton } from '@sinbad/react-native-sinbad-ui';
+import { SnbButton, FooterButton } from '@sinbad/react-native-sinbad-ui';
 import { CheckoutStyle } from '@screen/oms/styles';
 import { findIsSelected } from '@screen/oms/functions/payment-method/payment-method.function';
 
@@ -16,14 +16,12 @@ export const PaymentMethodBottom: FC<PaymentMethodBottomProps> = ({
   isSelected,
 }) => {
   return (
-    <View style={{ height: 75 }}>
-      <SnbButton.Single
-        type={'primary'}
-        onPress={onCreateOrder}
-        title={'Buat Pesanan'}
+    <View>
+      <FooterButton.Single
+        title={'Buat Pesanan Sekarang'}
+        buttonPress={onCreateOrder}
         disabled={choice == null && isSelected.length == 0 ? true : false}
       />
-      {/* add modal validation status */}
     </View>
   );
 };

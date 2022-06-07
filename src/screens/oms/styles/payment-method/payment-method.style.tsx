@@ -25,8 +25,8 @@ export const PaymentMethodStyle = StyleSheet.create({
   },
   detailContainer: {
     backgroundColor: color.white,
-    marginTop: 12,
-    marginBottom: 20,
+    marginTop: 16,
+    marginBottom: 16,
     padding: 16,
   },
   detailRow: {
