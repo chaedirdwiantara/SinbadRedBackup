@@ -8,6 +8,7 @@ import {
   FooterButton,
 } from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
+import { Images } from 'src/assets';
 /** === INTERFACE === */
 /** => error props */
 interface ShoppingCartValidationProps {
@@ -22,10 +23,12 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   /** ======================================================================= */
   /** => content item image */
   const contentItemImage = () => {
-    const src = require('@image/sinbad_image/cry_sinbad.png');
     return (
       <View style={ShoppingCartValidationStyles.contentImageContainer}>
-        <Image source={src} style={ShoppingCartValidationStyles.image} />
+        <Image
+          source={Images.reminder}
+          style={ShoppingCartValidationStyles.image}
+        />
       </View>
     );
   };
@@ -48,8 +51,8 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
         <SnbText2.Paragraph.Default
           color={colorV2.textColor.secondary}
           align={'center'}>
-          Coba periksa ulang keranjang Anda dikarenakan terdapat perubahan data
-          pada produk
+          Cek ulang keranjang Anda untuk mengetahui produk yang mengalami
+          perubahan.
         </SnbText2.Paragraph.Default>
       </View>
     );
@@ -77,11 +80,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   };
   /** => content */
   const content = () => {
-    return (
-      <View style={ShoppingCartValidationStyles.contentContainer}>
-        {contentItem()}
-      </View>
-    );
+    return <View>{contentItem()}</View>;
   };
   /** => title */
   const title = () => {
@@ -92,9 +91,9 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
     <SnbBottomSheet2
       name={'cartValidationCheckoutModal'}
       type={'content'}
-      contentHeight={380}
+      contentHeight={400}
       title={title()}
-      open={open}
+      open={true}
       snap={false}
       content={content()}
       button={button()}
