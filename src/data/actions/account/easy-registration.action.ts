@@ -1,6 +1,6 @@
 import * as models from '@models';
 import * as types from '@types';
-import { globalReportFromAction } from '../../../report/GlobalReport';
+import { globalReportFromAction } from '../../../report/global-report';
 import * as EventName from '../../../report/moengage/event';
 
 export const createBasicAccount = (

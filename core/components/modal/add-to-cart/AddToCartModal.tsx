@@ -69,7 +69,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       open={open}
       name="modal-add-to-cart"
       onClose={closeAction}
-      title="Masukan Jumlah"
+      title="Masukkan Jumlah"
       footer={
         <AddToCartFooter
           errorStock={errorStock}
@@ -77,6 +77,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
           orderQty={orderQty}
           bulkPriceAterTax={bulkPriceAterTax}
           onAddToCartPress={onAddToCartPress}
+          loading={loadingProduct}
         />
       }>
       {/* content */}
@@ -89,7 +90,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         isPriceGrosir={isPriceGrosir}
         product={productDetail}
       />
-      {productDetail?.hasBulkPrice ? (
+      {productDetail?.hasBulkPrice && !loadingProduct ? (
         <BulkPricingList
           bulkPrices={productDetail?.bulkPrices}
           onExpand={setIsBulkPriceExpand}
@@ -97,14 +98,16 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       ) : (
         <View />
       )}
-      <AddToCartQuantityModifier
-        orderQty={orderQty}
-        onChangeQty={onChangeQty}
-        setIsFocus={setIsFocus}
-        isFocus={isFocus}
-        dataStock={dataStock}
-        product={productDetail}
-      />
+      {!loadingProduct && (
+        <AddToCartQuantityModifier
+          orderQty={orderQty}
+          onChangeQty={onChangeQty}
+          setIsFocus={setIsFocus}
+          isFocus={isFocus}
+          dataStock={dataStock}
+          product={productDetail}
+        />
+      )}
     </ActionSheet>
   );
 };

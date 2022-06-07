@@ -11,6 +11,7 @@ import {
   SnbImageCompressor,
   SnbButton,
   SnbButton2,
+  SnbDivider2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   View,
@@ -70,7 +71,8 @@ const Card: FC<CardProps> = (props) => {
       <View style={{ margin: 16 }}>
         {/* title */}
         <View style={styles.title}>
-          <SnbText.B2>{data.sellerName}</SnbText.B2>
+          {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
+          <SnbText2.Body.Small>{data.sellerName}</SnbText2.Body.Small>
           <SnbBadge.Label
             value={data.statusLabel}
             type={labelStatus[data.statusValue] || 'error'}
@@ -87,57 +89,72 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.product}>
             <SnbImageCompressor style={styles.image} uri={data.product.image} />
             <View style={styles.descProduct}>
-              <SnbText.C1 color={color.black60}>{data.product.name}</SnbText.C1>
-              <SnbText.C1
-                color={
-                  color.black60
-                }>{`(${data.product.qty}) ${data.product.uom}`}</SnbText.C1>
-              <SnbText.C1>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                {data.product.name}
+              </SnbText2.Paragraph.Default>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                {`(${data.product.qty}) ${data.product.uom}`}
+              </SnbText2.Paragraph.Small>
+              <SnbText2.Body.Default>
                 {toCurrency(data.product.totalProductPriceAfterTax, {
                   withFraction: false,
                 })}
-              </SnbText.C1>
+              </SnbText2.Body.Default>
             </View>
           </View>
+
           {data.totalOrderProducts > 0 && (
-            <SnbText.C1 color={color.black60} align="center">
+            <SnbText2.Paragraph.Small
+              color={colorV2.textColor.secondary}
+              align="center">
               + {data.totalOrderProducts} produk lainnya
-            </SnbText.C1>
+            </SnbText2.Paragraph.Small>
           )}
-          <View style={styles.div} />
+          <View style={{ marginVertical: 16 }}>
+            <SnbDivider2 type="solid" />
+          </View>
         </View>
         {/* inform */}
         <View>
           <View style={styles.information}>
-            <SnbText.C1 color={color.black60}>Tanggal Pemesanan</SnbText.C1>
-            <SnbText.C1 color={color.black60}>
+            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
+              Tanggal Pemesanan
+            </SnbText2.Body.Small>
+            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
               {moment(data.orderedAt).format('DD MMM YYYY')}
-            </SnbText.C1>
+            </SnbText2.Body.Small>
           </View>
           <View style={styles.information}>
-            <SnbText.C1>Total Pesanan</SnbText.C1>
-            <SnbText.C1>
+            <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
+            <SnbText2.Body.Small>
               {toCurrency(data.totalSellerPriceAfterTax, {
                 withFraction: false,
               })}
-            </SnbText.C1>
+            </SnbText2.Body.Small>
           </View>
         </View>
         {/* action */}
         <View style={styles.buttonContainer}>
           {/* if process */}
           {data.isCancellable ? (
-            <TouchableOpacity style={styles.cancel} onPress={onCancelOrder}>
-              <SnbText.C1 color={color.white}>Batalkan</SnbText.C1>
-            </TouchableOpacity>
+            <SnbButton2.Secondary
+              title="Batalkan"
+              size="small"
+              onPress={onCancelOrder}
+              outline={true}
+              full={true}
+            />
           ) : (
             <View />
           )}
           {/* if delivered */}
           {data.isOrderAbleToDone ? (
-            <TouchableOpacity style={styles.delivered} onPress={onConFirmOrder}>
-              <SnbText.C1 color={color.white}>Pesanan Diterima</SnbText.C1>
-            </TouchableOpacity>
+            <SnbButton2.Primary
+              title="Pesanan Diterima"
+              size="small"
+              onPress={onConFirmOrder}
+              full={true}
+            />
           ) : (
             <View />
           )}
@@ -446,7 +463,7 @@ const styles = StyleSheet.create({
   },
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
-  buttonContainer: { flexDirection: 'row-reverse', marginTop: 8 },
+  buttonContainer: { marginTop: 8 },
   waitingForPaymentEmpty: { marginTop: 60, marginHorizontal: 60 },
   contentContainerStyle: { paddingBottom: 50, paddingTop: 30 },
 });

@@ -1,7 +1,11 @@
 import * as EventName from '../event';
 import * as MoERecord from '../record';
+import { TrackCompletionData } from '../models';
 
-function recordOwnerCompletionData(eventname, data) {
+function recordOwnerCompletionData(
+  eventname: string,
+  data: TrackCompletionData,
+) {
   switch (eventname) {
     case 'OwnerDataStep1':
       MoERecord.trackCompletionData({
@@ -32,7 +36,10 @@ function recordOwnerCompletionData(eventname, data) {
   }
 }
 
-function recordStoreCompletionData(eventname, data) {
+function recordStoreCompletionData(
+  eventname: string,
+  data: TrackCompletionData,
+) {
   switch (eventname) {
     case 'StoreDataStep1':
       MoERecord.trackCompletionData({
