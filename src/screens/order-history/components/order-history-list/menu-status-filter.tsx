@@ -1,6 +1,6 @@
 import React, { memo, useCallback, useContext } from 'react';
-import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { color, SnbChips2 } from 'react-native-sinbad-ui';
 import { Context } from './context';
 
 const menuList = [
@@ -37,16 +37,6 @@ const MenuStatusFilter = () => {
     [state.status],
   );
 
-  // ui flatten
-  const mainStyle = useCallback(
-    (id) =>
-      StyleSheet.flatten([
-        styles.main,
-        id === state.status ? styles.activeMain : styles.deactivateMain,
-      ]),
-    [state.status],
-  );
-
   return (
     <View>
       <ScrollView
@@ -55,16 +45,14 @@ const MenuStatusFilter = () => {
         contentContainerStyle={{ paddingHorizontal: 12 }}
         showsVerticalScrollIndicator={false}>
         {menuList.map((i) => (
-          <TouchableOpacity
-            key={i.id}
-            disabled={i.id === state.status}
-            style={mainStyle(i.id)}
-            onPress={() => onSelectFilter(i.id)}>
-            <SnbText.C2
-              color={i.id === state.status ? color.red70 : color.black100}>
-              {i.label}
-            </SnbText.C2>
-          </TouchableOpacity>
+          <View style={styles.main}>
+            <SnbChips2.Choice
+              key={i.id}
+              text={i.label}
+              active={i.id === state.status ? true : false}
+              onPress={() => onSelectFilter(i.id)}
+            />
+          </View>
         ))}
       </ScrollView>
     </View>
@@ -73,12 +61,8 @@ const MenuStatusFilter = () => {
 
 const styles = StyleSheet.create({
   main: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    marginHorizontal: 4,
+    marginRight: 8,
     marginVertical: 16,
-    borderWidth: 1,
-    borderRadius: 4,
   },
   activeMain: {
     backgroundColor: color.red10,
