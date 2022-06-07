@@ -20,6 +20,7 @@ import {
   SnbToast,
   SnbTopNav,
   styles,
+  FooterButton
 } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
@@ -413,20 +414,28 @@ const OmsThankYouPageView: FC = () => {
           </View>
         </View>
       ) : (
-        <View style={ThankYouPageStyle.footer}>
-          <SnbButton.Dynamic
-            size="medium"
-            type="secondary"
-            title={'Kembali ke Beranda'}
-            onPress={goToHome}
-          />
-          <SnbButton.Dynamic
-            size="medium"
-            type="primary"
-            title={'Cek Status'}
-            onPress={() => NavigationAction.navigate('HistoryListView')}
-          />
-        </View>
+        // <View style={ThankYouPageStyle.footer}>
+        //   <SnbButton.Dynamic
+        //     size="medium"
+        //     type="secondary"
+        //     title={'Kembali ke Beranda'}
+        //     onPress={goToHome}
+        //   />
+        //   <SnbButton.Dynamic
+        //     size="medium"
+        //     type="primary"
+        //     title={'Cek Status'}
+        //     onPress={() => NavigationAction.navigate('HistoryListView')}
+        //   />
+        // </View>
+        <FooterButton.Dual
+          title1={'Kembali ke Beranda'}
+          button1Press={goToHome}
+          title2={'Cek Status'}
+          button2Press={() => NavigationAction.navigate('HistoryListView')}
+        />
+
+        
       )}
     </>
   );
