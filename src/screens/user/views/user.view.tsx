@@ -45,6 +45,7 @@ const UserView: FC = ({ start }: any) => {
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
+  const [clickFromCart, setClickFromCart] = useState(false);
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -62,7 +63,8 @@ const UserView: FC = ({ start }: any) => {
         isProfileCompletionCart === true &&
         ownerData?.info.isImageIdOcrValidate === true &&
         buyerData?.buyerInformation.buyerAccount.name !== null &&
-        buyerData?.buyerAddress.address !== null
+        buyerData?.buyerAddress.address !== null &&
+        !clickFromCart
       ) {
         setModalUserProfileCompletion(true);
       }
@@ -546,6 +548,7 @@ const UserView: FC = ({ start }: any) => {
           <ModalUserProfileCompletion
             isOpen={modalUserProfileCompletion}
             handleNavigateToCart={() => {
+              setClickFromCart(true);
               setModalUserProfileCompletion(false);
               NavigationAction.navigate('OmsShoppingCartView');
             }}
