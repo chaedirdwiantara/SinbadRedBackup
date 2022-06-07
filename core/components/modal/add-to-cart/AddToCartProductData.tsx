@@ -77,26 +77,24 @@ export const AddToCartProductData: FC<Props> = ({
             {/* harga normal */}
             <View style={AddToCartModalStyle.priceContainer}>
               <View style={{ marginRight: 8 }}>
-                <Text
+                <SkeletonText
+                  loading={loading}
                   style={{
-                    textDecorationLine: isPriceGrosir ? 'line-through' : 'none',
+                    height: spacing.lg,
+                    width: 100,
                   }}>
-                  <SkeletonText
-                    loading={loading}
-                    style={{
-                      height: spacing.lg,
-                      width: 100,
-                    }}>
-                    <SnbText2.Body.Default
-                      color={
-                        isPriceGrosir ? textColor.secondary : textColor.default
-                      }>
-                      {toCurrency(priceAfterTax || 0, {
-                        withFraction: false,
-                      })}
-                    </SnbText2.Body.Default>
-                  </SkeletonText>
-                </Text>
+                  <SnbText2.Body.Default
+                    textDecorationLine={
+                      isPriceGrosir ? 'line-through' : undefined
+                    }
+                    color={
+                      isPriceGrosir ? textColor.secondary : textColor.default
+                    }>
+                    {toCurrency(priceAfterTax || 0, {
+                      withFraction: false,
+                    })}
+                  </SnbText2.Body.Default>
+                </SkeletonText>
               </View>
             </View>
             {/* harga coret */}

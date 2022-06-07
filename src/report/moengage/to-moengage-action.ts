@@ -1,7 +1,7 @@
 import * as EventName from './event';
 import * as MoeAction from './action';
 
-export const toMoengageFromAction = (eventName, data) => {
+export const toMoengageFromAction = (eventName: string, data: any) => {
   switch (eventName) {
     case EventName.LOGIN:
       MoeAction.recordLogin(data);
