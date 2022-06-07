@@ -138,7 +138,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText2.Paragraph.Tiny
             color={
               colorV2.strokeColor.primary
-            }>{`Tersisa ${product.stock} ${product.uomLabel}`}</SnbText2.Paragraph.Tiny>
+            }>{`Sisa ${product.stock} ${product.uomLabel}`}</SnbText2.Paragraph.Tiny>
         </View>
       );
     }
