@@ -49,6 +49,11 @@ export const PaymentMethodStyle = StyleSheet.create({
     marginBottom: 8,
     marginTop: -40,
   },
+  loadList: {
+    backgroundColor: colorV2.bgColor.neutral,
+    height: 24,
+    marginRight: 8,
+  },
 });
 
 export default PaymentMethodStyle;

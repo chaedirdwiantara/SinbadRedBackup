@@ -24,7 +24,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
     setPressed(true);
   };
 
-  return (
+  return payMethod ? (
     <FlatList
       keyExtractor={(_, index) => index.toString()}
       data={payMethod}
@@ -78,6 +78,19 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
         )
       }
     />
+  ) : (
+    <View
+      style={[
+        PaymentMethodStyle.listContainer,
+        { borderColor: colorV2.strokeColor.default },
+      ]}>
+      <View
+        style={[
+          PaymentMethodStyle.loadList,
+          { flex: 1, marginRight: 8 },
+        ]}></View>
+      <View style={[PaymentMethodStyle.loadList, { flex: 5 }]}></View>
+    </View>
   );
 };
 
