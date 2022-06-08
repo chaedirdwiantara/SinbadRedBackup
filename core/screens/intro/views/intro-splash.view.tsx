@@ -34,7 +34,9 @@ const IntroSplashView: React.FC = () => {
   React.useEffect(() => {
     if (meV2.data && !meV2.loading) {
       if (meV2.data?.data?.isBuyerCategoryCompleted) {
-        NavigationAction.resetToHome();
+        setTimeout(() => {
+          NavigationAction.resetToHome();
+        }, 100);
       } else {
         getLocationPermissions();
       }
