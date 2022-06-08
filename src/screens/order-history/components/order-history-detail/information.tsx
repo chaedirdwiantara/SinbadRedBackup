@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  color,
-  colorV2,
-  SnbText2,
-  SnbDivider2,
-} from '@sinbad/react-native-sinbad-ui';
+import { colorV2, SnbText2, SnbDivider2 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet } from 'react-native';
 
 type HeaderProps = {
@@ -37,7 +32,7 @@ export const Description = (props: DescProps) => {
           {title}
         </SnbText2.Paragraph.Default>
       </View>
-      <View style={styles.text}>
+      <View style={[styles.text, { alignItems: 'flex-end' }]}>
         <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
           {value}
         </SnbText2.Paragraph.Default>
@@ -56,6 +51,6 @@ const styles = StyleSheet.create({
   },
   div: {
     height: 8,
-    backgroundColor: color.black10,
+    backgroundColor: colorV2.bgColor.neutral,
   },
 });
