@@ -258,10 +258,7 @@ export const ProductView: FC<ProductViewProps> = ({
         {renderProductImage()}
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <View>
-            <SnbText2.Paragraph.Default
-              color={colorV2.textColor.secondary}
-              numberOfLines={1}
-              ellipsizeMode={'tail'}>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               {product.productName}
             </SnbText2.Paragraph.Default>
           </View>
@@ -270,6 +267,12 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
+        <View>
+          <SnbText2.Caption.Default
+            color={
+              colorV2.textColor.secondary
+            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText2.Caption.Default>
+        </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {renderRemoveProductIcon()}
           <SnbNumberCounter2
@@ -319,12 +322,6 @@ export const ProductView: FC<ProductViewProps> = ({
             minusDisabled={isDecreaseDisabled}
             plusDisabled={isIncreaseDisabled}
           />
-        </View>
-        <View style={{ alignItems: 'center', marginTop: 8 }}>
-          <SnbText2.Paragraph.Tiny
-            color={
-              colorV2.textColor.secondary
-            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText2.Paragraph.Tiny>
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />

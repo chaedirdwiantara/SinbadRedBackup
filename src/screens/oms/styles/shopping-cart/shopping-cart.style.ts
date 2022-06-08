@@ -40,7 +40,9 @@ export const ShoppingCartStyles = StyleSheet.create({
     marginRight: 5,
   },
   actionContainer: {
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%',
     marginTop: 12,
   },
