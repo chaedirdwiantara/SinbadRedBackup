@@ -5,15 +5,20 @@ import * as EventName from '../../../report/moengage/event';
 
 export const createBasicAccount = (
   data: models.ICreateBasicAccount,
+  params: any,
 ): models.IAction<models.ICreateBasicAccount> => ({
   type: types.CREATE_BASIC_ACCOUNT_PROCESS,
   payload: data,
+  params: params,
 });
 
-export const createBasicAccountSuccess = (data: any) => ({
-  type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
-  payload: data,
-});
+export const createBasicAccountSuccess = (data: any, params: any) => {
+  console.log('action params:', params);
+  // return {
+  //   type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
+  //   payload: data,
+  // };
+};
 
 export const createBasicAccountFailed = (data: any) => ({
   type: types.CREATE_BASIC_ACCOUNT_FAILED,
