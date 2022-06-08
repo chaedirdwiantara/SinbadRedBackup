@@ -71,7 +71,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const button = () => {
     return (
       <FooterButton.Single
-        title={'Saya Mengerti'}
+        title={'Kembali Ke Keranjang'}
         buttonPress={() => {
           props?.closeAction && props?.closeAction();
         }}
