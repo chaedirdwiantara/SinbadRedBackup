@@ -29,6 +29,7 @@ import { LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
+import debounce from 'lodash/debounce';
 import {
   useBottomAction,
   priceSortOptions,
@@ -550,7 +551,7 @@ const ProductList: FC<ProductListProps> = ({
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -569,7 +570,7 @@ const ProductList: FC<ProductListProps> = ({
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}

@@ -74,7 +74,7 @@ const HomeView: FC = ({ start }: any) => {
           order={2}
           name="Promo terbaik Sinbad">
           <CopilotView>
-            <View style={{ alignItems: 'center', height: 180 }}>
+            <View style={{ alignItems: 'center', height: 308 }}>
               <BannerHomeView />
             </View>
             <Benefits />
