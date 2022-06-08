@@ -144,7 +144,7 @@ const OmsThankYouPageView: FC = () => {
           <View style={{ height: 5, backgroundColor: colorV2.bgColor.neutral }} />
           <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
             <SnbText2.Headline.Default align="center" color={colorV2.textColor.default}>
-              Silahkan lakukan pembayaran dalam waktu
+              Silahkan Lakukan Pembayaran dalam Waktu
             </SnbText2.Headline.Default>
             <View style={{ alignItems: 'center', marginVertical: 8 }}>
               <CountDownTimer
