@@ -1,8 +1,15 @@
-import React, { FC } from 'react';
+import React, { useCallback,
+  memo,
+  ReactNode,
+  forwardRef,
+  useRef,
+  useImperativeHandle,
+  useEffect, } from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
   Content,
   FooterButton,
   SnbText2,
@@ -11,7 +18,7 @@ import {
 import { PaymentMethodStyle } from '../styles';
 interface PaymentMethodExpiredTimeModalProps {
   open: boolean;
-  close: () => void;
+  onClose?: () => void;
   name: string;
   snbButtonTitle: string;
   illustrationTitle: string;
@@ -25,31 +32,54 @@ interface PaymentMethodExpiredTimeModalProps {
 }
 /** === COMPONENT === */
 
-export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
-  open,
-  close,
-  name,
-  snbButtonTitle,
-  illustrationTitle,
-  footerButtonTitle,
-  image,
-  description,
-  buttonType,
-  footerButtonTitle2,
-  onPressLeft,
-  onPressRight,
-}) => {
+export const PaymentMethodModal = forwardRef<SnbBottomSheet2Ref, PaymentMethodExpiredTimeModalProps>(props, ref) => {
+  const {
+    open,
+    onClose,
+    name,
+    snbButtonTitle,
+    illustrationTitle,
+    footerButtonTitle,
+    image,
+    description,
+    buttonType,
+    footerButtonTitle2,
+    onPressLeft,
+    onPressRight,
+  } = props;
+  // ref
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
+  // register ref
+  useImperativeHandle(ref, () => ({
+    open: () => modalRef.current?.open(),
+    close: () => modalRef.current?.close(),
+  }));
+  // Function
+  const onCloseModal = useCallback(() => {
+    onClose && onClose();
+    onPressLeft && onPressLeft();
+    modalRef.current?.close();
+  }, [modalRef.current]);
+  // State Effect
+  useEffect(() => {
+    if (open) {
+      modalRef.current?.open();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [open]);
+  // Render
   return (
     <SnbBottomSheet2
+    ref={modalRef}
       name={name}
       type={'content'}
       contentHeight={430}
-      open={open}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
           onRight1Action={() => {
-            close();
+            onCloseModal
           }}
         />
       }
@@ -71,7 +101,7 @@ export const PaymentMethodModal: FC<PaymentMethodExpiredTimeModalProps> = ({
           {buttonType == 'single' ? (
             <FooterButton.Single
               title={footerButtonTitle}
-              buttonPress={() => close()}
+              buttonPress={onCloseModal}
             />
           ) : buttonType == 'dual' ? (
             <FooterButton.Dual
