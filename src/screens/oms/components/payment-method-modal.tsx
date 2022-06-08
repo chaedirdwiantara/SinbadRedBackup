@@ -1,10 +1,12 @@
-import React, { useCallback,
+import React, {
+  useCallback,
   memo,
   ReactNode,
   forwardRef,
   useRef,
   useImperativeHandle,
-  useEffect, } from 'react';
+  useEffect,
+} from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
   SnbBottomSheet2,
@@ -32,7 +34,10 @@ interface PaymentMethodExpiredTimeModalProps {
 }
 /** === COMPONENT === */
 
-export const PaymentMethodModal = forwardRef<SnbBottomSheet2Ref, PaymentMethodExpiredTimeModalProps>(props, ref) => {
+const PaymentMethodModal = forwardRef<
+  SnbBottomSheet2Ref,
+  PaymentMethodExpiredTimeModalProps
+>((props, ref) => {
   const {
     open,
     onClose,
@@ -71,16 +76,15 @@ export const PaymentMethodModal = forwardRef<SnbBottomSheet2Ref, PaymentMethodEx
   // Render
   return (
     <SnbBottomSheet2
-    ref={modalRef}
+      ref={modalRef}
       name={name}
       type={'content'}
       contentHeight={430}
+      close={onCloseModal}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={() => {
-            onCloseModal
-          }}
+          onRight1Action={onCloseModal}
         />
       }
       title={<SnbBottomSheetPart.Title title={snbButtonTitle} />}
@@ -115,6 +119,6 @@ export const PaymentMethodModal = forwardRef<SnbBottomSheet2Ref, PaymentMethodEx
       }
     />
   );
-};
+});
 
 export default PaymentMethodModal;
