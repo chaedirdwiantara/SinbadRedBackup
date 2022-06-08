@@ -47,6 +47,8 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
         title={<SnbBottomSheetPart.Title title="" />}
         name="modal-back-profile-completion"
         type="content"
+        snap={false}
+        close={props.closeModal}
         contentHeight={contentHeight + 100}
         button={
           <View
