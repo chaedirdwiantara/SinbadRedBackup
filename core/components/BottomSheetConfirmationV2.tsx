@@ -92,7 +92,7 @@ const BottomSheetConfirmationV2 = forwardRef<
       }
       title={
         <SnbBottomSheetPart.Title
-          swipeIndicator
+          swipeIndicator={false}
         />
       }
       name="bottom-sheet-confirmation-v2"
