@@ -8,13 +8,7 @@ import React, {
   useCallback,
 } from 'react';
 import { View, StatusBar } from 'react-native';
-import {
-  SnbContainer,
-  SnbBottomSheet,
-  SnbBottomSheet2,
-  SnbBottomSheetPart,
-  SnbToast2,
-} from 'react-native-sinbad-ui';
+import { SnbContainer, SnbToast2 } from 'react-native-sinbad-ui';
 import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
@@ -31,7 +25,7 @@ import {
   ProductNotCoverageModal,
   AddToCartModal,
 } from '@core/components/modal';
-import { LoadingHorizontal, LoadingLoadMore } from '@core/components/Loading';
+import { LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
@@ -223,19 +217,22 @@ const ProductList: FC<ProductListProps> = ({
   const isFocused = useIsFocused();
 
   /** => action from buttom order */
-  const handleOrderPress = (product: models.ProductList) => {
-    if (me.data === null) {
-      setModalNeedToLogin(true);
-    } else {
-      setLoadingPreparation(true);
-      setProductSelected(product);
-      // supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-      productDetailActions.fetch(
-        dispatchProduct,
-        `${product.id}_${product.warehouseOriginId}`,
-      );
-    }
-  };
+  const handleOrderPress = useCallback(
+    (product: models.ProductList) => {
+      if (me.data === null) {
+        setModalNeedToLogin(true);
+      } else {
+        setOrderModalVisible(true);
+        setProductSelected(product);
+        // supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+        productDetailActions.fetch(
+          dispatchProduct,
+          `${product.id}_${product.warehouseOriginId}`,
+        );
+      }
+    },
+    [me.data],
+  );
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
@@ -531,14 +528,18 @@ const ProductList: FC<ProductListProps> = ({
           <ProductTagList
             tags={tags}
             onTagPress={handleTagPress}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onFilterPress={() =>
+              handleActionClick({ type: 'filter', show: true })
+            }
           />
         ) : null}
 
         <TitleSection
           total={total}
-          onChangeLayoutListPress={() => handleActionClick({ type: 'layout' })}
-          onSortPress={() => handleActionClick({ type: 'sort' })}
+          onChangeLayoutListPress={() =>
+            handleActionClick({ type: 'layout', show: true })
+          }
+          onSortPress={() => handleActionClick({ type: 'sort', show: true })}
         />
       </View>
       <View style={{ flex: 1 }}>
@@ -555,11 +556,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
             onChangeLayoutListPress={() =>
               handleActionClick({ type: 'layout' })
             }
-            onSortPress={() => handleActionClick({ type: 'sort' })}
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         ) : (
           <ListLayout
@@ -574,11 +575,11 @@ const ProductList: FC<ProductListProps> = ({
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
-            onFilterPress={() => handleActionClick({ type: 'filter' })}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
             onChangeLayoutListPress={() =>
               handleActionClick({ type: 'layout' })
             }
-            onSortPress={() => handleActionClick({ type: 'sort' })}
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         )}
       </View>
@@ -593,7 +594,7 @@ const ProductList: FC<ProductListProps> = ({
         name="sort-modal"
         title="Urutkan"
         contentHeight={220}
-        onClose={() => handleActionClick({ type: 'sort' })}>
+        onClose={() => handleActionClick({ type: 'sort', show: false })}>
         <Action.Sort
           appliedOptionIndex={sortIndex}
           options={priceSortOptions}
@@ -608,7 +609,7 @@ const ProductList: FC<ProductListProps> = ({
         name="filter-modal"
         title="Filter"
         contentHeight={220}
-        onClose={() => handleActionClick({ type: 'filter' })}>
+        onClose={() => handleActionClick({ type: 'filter', show: false })}>
         <Action.Filter
           onButtonPress={handleActionClick}
           minPrice={minPrice}
@@ -646,7 +647,7 @@ const ProductList: FC<ProductListProps> = ({
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
-        open={orderModalVisible}
+        open={orderModalVisible && !modalErrorAddCart}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         loading={loadingPreparation}
@@ -663,20 +664,6 @@ const ProductList: FC<ProductListProps> = ({
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}
         close={handleCloseModal}
-      />
-      {/* Modal loading horizontal */}
-      <SnbBottomSheet2
-        open={loadingPreparation}
-        title={<SnbBottomSheetPart.Title title=" " />}
-        snap={false}
-        name="modal-loading"
-        type="content"
-        contentHeight={20}
-        content={
-          <View>
-            <LoadingHorizontal />
-          </View>
-        }
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError

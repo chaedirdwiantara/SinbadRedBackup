@@ -1,12 +1,10 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useMemo, memo } from 'react';
+import React, { FC, memo } from 'react';
 import { View, FlatList, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
 import { spacingV2 } from '@sinbad/react-native-sinbad-ui';
 import { EmptyState } from '@core/components/EmptyState';
 import { ProductListCard } from '@core/components/ProductListCard';
-import ProductTagList from '../ProductTagList';
-import TitleSection from '../TitleSection';
 import { ListSkeleton } from './ListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import {
@@ -56,8 +54,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
       <View
         key={index}
         style={{
-          minHeight: 100,
-          marginHorizontal: spacing.lg,
+          alignItems: 'center',
           marginBottom: spacing.xl,
         }}>
         <ProductListCard
@@ -65,7 +62,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           imageUrl={item.thumbnail}
           priceAfterTax={item.priceAfterTax}
           hasBulkPrice={item.hasBulkPrice}
-          qtySoldLabel={item.qtySoldLabel}
+          qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
           isExclusive={item.isExclusive}
           onCardPress={() => {
             goToProductDetail(`${item.id}_${item.warehouseOriginId}`);

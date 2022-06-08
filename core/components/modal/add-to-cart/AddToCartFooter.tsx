@@ -22,6 +22,7 @@ interface AddToCartFooterProps {
   isFromProductDetail?: boolean;
   bulkPriceAterTax: number;
   errorStock: models.ErrorProps | null;
+  loading: boolean;
 }
 // VAR
 const { spacing } = spacingV2;
@@ -32,6 +33,7 @@ const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
   disabled,
   bulkPriceAterTax,
   errorStock,
+  loading,
 }) => {
   const totalPrice = useMemo(
     () => bulkPriceAterTax * orderQty,
@@ -44,17 +46,22 @@ const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
       <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
         <View style={{ marginRight: spacing.lg }}>
           <View style={{ flexDirection: 'row' }}>
-            <SnbText2.Body.Default>
-              {toCurrency(totalPrice, {
-                withFraction: false,
-              })}
-            </SnbText2.Body.Default>
+            {!loading ? (
+              <SnbText2.Body.Default>
+                {toCurrency(totalPrice, {
+                  withFraction: false,
+                })}
+              </SnbText2.Body.Default>
+            ) : (
+              <View />
+            )}
           </View>
         </View>
         <SnbButton2.Primary
-          disabled={disabled}
+          disabled={disabled || loading}
           size="medium"
-          // testID="action-add-to-cart"
+          loading={loading}
+          testID="action-add-to-cart"
           title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
           onPress={onAddToCartPress}
         />

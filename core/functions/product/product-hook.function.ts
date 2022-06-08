@@ -82,10 +82,14 @@ export const useBottomAction = (
     return queryOptions;
   };
 
-  const handleActionClick: BottomActionPressHandler = ({ type, value }) => {
+  const handleActionClick: BottomActionPressHandler = ({
+    type,
+    value,
+    show,
+  }) => {
     switch (type) {
       case 'sort':
-        setSortModalVisible((prev) => !prev);
+        setSortModalVisible(show);
         break;
       case 'applySort':
         setSortIndex(value as SortIndex);
@@ -105,7 +109,7 @@ export const useBottomAction = (
         });
         break;
       case 'filter':
-        setFilterModalVisible((prev) => !prev);
+        setFilterModalVisible(show);
         break;
       case 'applyFilter':
         const filterValue = value as PriceRange;

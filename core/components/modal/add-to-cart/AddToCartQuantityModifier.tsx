@@ -37,9 +37,10 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   product,
   dataStock,
 }) => {
+  // STATE
   const [counter, setCounter] = useState(orderQty);
   /** === HOOKS ===  */
-
+  // FUNCTION
   const onChangeQtyDebounce = useCallback(
     debounce((qty) => {
       onChangeQty(qty);
@@ -91,7 +92,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
     },
     [onChangeQty],
   );
-
+  // VARIABLE
   const minusDisabled = useMemo(
     () =>
       counter <= (product?.minQty || 0) ||
@@ -107,6 +108,17 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
       isFocus,
     [counter, dataStock?.stock, product?.multipleQty, isFocus],
   );
+
+  const leftStockLabel = useMemo(() => {
+    // validasi apakah dataStock dan product ada
+    if (dataStock?.stock && product?.minQty) {
+      // ketika stock 0 atau jumlah stock lebih kecil dari minimal pembelian return produk habis
+      if (dataStock?.stock === 0 || dataStock?.stock < product?.minQty)
+        return 'Produk Habis';
+      // menampilkan jumlah stock tersisa
+      return `Tersisa ${dataStock?.stock}`;
+    }
+  }, [dataStock?.stock, product?.minQty]);
   // EFFECT
   useEffect(() => {
     onChangeQtyDebounce(counter);
@@ -122,9 +134,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
         <React.Fragment>
           {(dataStock.stock < 11 || orderQty > dataStock.stock) && (
             <SnbText2.Body.Default color={textColor.selected}>
-              {dataStock.stock === 0
-                ? 'Produk Habis'
-                : `Tersisa ${dataStock.stock}`}
+              {leftStockLabel}
             </SnbText2.Body.Default>
           )}
           <SnbNumberCounter2

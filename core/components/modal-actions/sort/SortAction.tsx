@@ -24,9 +24,11 @@ interface SortActionProps {
   onButtonPress: ({
     type,
     value,
+    show,
   }: {
     type: BottomActionPressHandlerType;
     value: number | null;
+    show: boolean;
   }) => void;
 }
 // var
@@ -74,6 +76,7 @@ const SortAction: FC<SortActionProps> = ({
             onButtonPress({
               type: 'applySort',
               value: activeIndex,
+              show: false,
             })
           }
           disabled={activeIndex === appliedOptionIndex}
