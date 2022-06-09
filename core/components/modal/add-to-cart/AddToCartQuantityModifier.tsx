@@ -19,6 +19,9 @@ import { AddToCartModalStyle } from '@core/styles';
 /** === TYPE ===  */
 import { IStockValidaitonSuccess, ProductDetail } from '@model/product';
 interface AddToCartQuantityModifierProps {
+  loading: boolean;
+  disabled: boolean;
+  isStockEmpty: boolean;
   orderQty: number;
   onChangeQty: (val: number) => void;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +33,9 @@ interface AddToCartQuantityModifierProps {
 const { textColor } = colorV2;
 /** === COMPONENT ===  */
 const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
+  loading,
+  disabled,
+  isStockEmpty,
   orderQty,
   onChangeQty,
   setIsFocus,
@@ -38,7 +44,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   dataStock,
 }) => {
   // STATE
-  const [counter, setCounter] = useState(orderQty);
+  const [counter, setCounter] = useState(0);
   /** === HOOKS ===  */
   // FUNCTION
   const onChangeQtyDebounce = useCallback(
@@ -110,19 +116,20 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   );
 
   const leftStockLabel = useMemo(() => {
-    // validasi apakah dataStock dan product ada
-    if (dataStock?.stock && product?.minQty) {
-      // ketika stock 0 atau jumlah stock lebih kecil dari minimal pembelian return produk habis
-      if (dataStock?.stock === 0 || dataStock?.stock < product?.minQty)
-        return 'Produk Habis';
-      // menampilkan jumlah stock tersisa
-      return `Tersisa ${dataStock?.stock}`;
-    }
-  }, [dataStock?.stock, product?.minQty]);
+    if (isStockEmpty) return 'Stock Habis';
+    // menampilkan jumlah stock tersisa
+    return `Tersisa ${dataStock?.stock}`;
+  }, [dataStock?.stock, isStockEmpty]);
   // EFFECT
   useEffect(() => {
     onChangeQtyDebounce(counter);
   }, [counter]);
+  // reset counter if loading
+  useEffect(() => {
+    if (!loading && product?.minQty) {
+      setCounter(product?.minQty || 0);
+    }
+  }, [product?.minQty, loading]);
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
@@ -138,6 +145,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
             </SnbText2.Body.Default>
           )}
           <SnbNumberCounter2
+            disabled={disabled}
             value={counter}
             onChange={handleChange}
             onIncrease={onPlusPres}
