@@ -56,15 +56,15 @@ const SnbCardButtonType3: React.FC<Props> = ({
             style={{
               paddingVertical: layout.spacing.md,
               paddingHorizontal: layout.spacing.lg,
-              backgroundColor: colorV2.bgColor.blue,
+              backgroundColor: colorV2.bgColor.green,
               borderRadius: borderV2.radius.sm,
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <SnbIcon name="quest" size={16} color={colorV2.iconColor.blue} />
+            <SnbIcon name="quest" size={16} color={colorV2.iconColor.green} />
             <View style={{ marginHorizontal: layout.spacing.xxsm }} />
             <View style={{ flex: 1 }}>
-              <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.success}>
                 Selesai
               </SnbText2.Paragraph.Small>
             </View>
