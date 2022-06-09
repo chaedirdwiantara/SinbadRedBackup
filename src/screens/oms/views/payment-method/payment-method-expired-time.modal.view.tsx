@@ -13,7 +13,7 @@ export const PaymentMethodExpiredTimeModal: FC<
     <PaymentMethodModal
       buttonType="single"
       open={isOpen}
-      close={() => close()}
+      onClose={() => close()}
       name="modal-expired-time"
       snbButtonTitle="expired-time"
       illustrationTitle="Batas Waktu Pemesanan Habis"

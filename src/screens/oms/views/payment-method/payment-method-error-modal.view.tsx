@@ -14,7 +14,7 @@ export const PaymentMethodErrorModal: FC<PaymentMethodErrorProps> = ({
     <PaymentMethodModal
       buttonType="single"
       open={isOpen}
-      close={() => close()}
+      onClose={() => close()}
       name="modal-error"
       snbButtonTitle="modal-error"
       illustrationTitle="Terjadi Kendala di Sinbad"

@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useRef, useState, useContext } from 'react';
-import { SnbIcon, SnbTextField2 } from 'react-native-sinbad-ui';
+import {
+  SnbIcon,
+  SnbTextField2,
+  SnbBottomSheet2Ref,
+} from 'react-native-sinbad-ui';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import ModalTransactionFilter, {
-  ModalTransactionRef,
-} from './modal-transaction-filter';
+import ModalTransactionFilter from './modal-transaction-filter';
 import { Context } from './context';
 import { useMemo } from 'react';
 import { useEffect } from 'react';
@@ -11,7 +13,7 @@ import { useEffect } from 'react';
 const SearchInputFilter = () => {
   const [search, setSearch] = useState('');
   const [state, setState] = useContext(Context);
-  const filterModalRef = useRef<ModalTransactionRef>(null);
+  const filterModalRef = useRef<SnbBottomSheet2Ref>(null);
 
   const onClear = useCallback(() => {
     setSearch('');
@@ -22,9 +24,13 @@ const SearchInputFilter = () => {
     setState((prev) => ({ ...prev, keyword: search }));
   }, [search]);
 
-  const onSubmitOrderStatus = useCallback((orderStatus) => {
-    setState((prev) => ({ ...prev, orderStatus }));
-  }, []);
+  const onSubmitOrderStatus = useCallback(
+    (orderStatus) => {
+      setState((prev) => ({ ...prev, orderStatus }));
+      filterModalRef.current?.close();
+    },
+    [filterModalRef.current],
+  );
 
   const isShowFilterOrderStatus = useMemo(
     () => state.status === 'ongoing',
@@ -59,12 +65,13 @@ const SearchInputFilter = () => {
         <>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => filterModalRef.current?.trigger()}>
+            onPress={() => filterModalRef.current?.open()}>
             <SnbIcon name="filter_list" size={24} />
           </TouchableOpacity>
           <ModalTransactionFilter
             ref={filterModalRef}
             onSubmit={onSubmitOrderStatus}
+            onClose={() => filterModalRef.current?.close()}
           />
         </>
       )}

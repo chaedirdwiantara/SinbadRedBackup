@@ -17,7 +17,7 @@ export const PaymentStatusModal: FC<PaymentStatusModal> = ({
     <PaymentMethodModal
       buttonType="dual"
       open={isOpen}
-      close={() => handleNoAction()}
+      onClose={() => handleNoAction()}
       name="modal-payment-status"
       snbButtonTitle="payment-status"
       illustrationTitle="Transaksi Sebelumnya Belum Dibayar"
