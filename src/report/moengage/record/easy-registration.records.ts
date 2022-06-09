@@ -1,5 +1,6 @@
 import { SnbRecord } from '../../../../core/report/moengage/index';
 import { MoengageRecord, TrackCompletionData } from '../models';
+import ReactMoE from 'react-native-moengage';
 
 export function trackCompletionData(
   props: MoengageRecord<TrackCompletionData>,
@@ -9,6 +10,9 @@ export function trackCompletionData(
   var neededData = [];
   switch (eventName) {
     case 'OwnerDataStep1':
+      if (data?.dataUser?.name) {
+        ReactMoE.setUserName(data?.dataUser?.name);
+      }
       neededData.push({
         owner_name: data?.dataUser?.name,
         owner_ktp: data.dataUser.idNo,

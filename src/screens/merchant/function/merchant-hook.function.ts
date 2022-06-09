@@ -218,8 +218,8 @@ const useUsersStates = () => {
 
   return {
     buyerDataState: users.userDetailReducer.data?.buyerData,
-  }
-}
+  };
+};
 /** === EXPORT === */
 export const MerchantHookFunc = {
   useSupplierListAction,
