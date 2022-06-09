@@ -17,6 +17,7 @@ import * as models from '@models';
 /** === TYPE ===  */
 interface AddToCartFooterProps {
   onAddToCartPress: () => void;
+  isStockEmpty: boolean;
   orderQty: number;
   disabled: boolean;
   isFromProductDetail?: boolean;
@@ -28,6 +29,7 @@ interface AddToCartFooterProps {
 const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
+  isStockEmpty,
   onAddToCartPress,
   orderQty,
   disabled,
@@ -35,11 +37,17 @@ const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
   errorStock,
   loading,
 }) => {
+  // kalkulasi harga total
   const totalPrice = useMemo(
     () => bulkPriceAterTax * orderQty,
     [bulkPriceAterTax, orderQty],
   );
-
+  // label button
+  const titleButton = useMemo(
+    () => (errorStock || isStockEmpty ? 'Stock Habis' : 'Tambah ke Keranjang'),
+    [isStockEmpty, errorStock],
+  );
+  // render
   return (
     <SnbContainer color="white">
       <SnbDivider2 />
@@ -62,7 +70,7 @@ const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
           size="medium"
           loading={loading}
           testID="action-add-to-cart"
-          title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
+          title={titleButton}
           onPress={onAddToCartPress}
         />
       </View>

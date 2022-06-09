@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, memo, useMemo, useState } from 'react';
+import React, { FC, memo, useMemo, useState, useCallback } from 'react';
 import { View } from 'react-native';
 /** === IMPORT COMPONENT === */
 import { AddToCartFooter } from './AddToCartFooter';
@@ -15,6 +15,7 @@ interface AddToCartModalProps {
   closeAction: () => void;
   onAddToCartPress: () => void;
   orderQty: number;
+  onBlur: () => void;
   onChangeQty: (val: number) => void;
   disabled: boolean;
   isFromProductDetail?: boolean;
@@ -25,6 +26,7 @@ interface AddToCartModalProps {
 const AddToCartModal: FC<AddToCartModalProps> = ({
   open,
   closeAction,
+  onBlur,
   onAddToCartPress,
   orderQty,
   onChangeQty,
@@ -42,7 +44,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
     errorStock,
     loadingProduct,
   } = useAddToCart(orderQty, isFromProductDetail);
-
+  // variable
   const contentHeight = useMemo(() => {
     // size height tiap masing jumlah baris bulk pricing data
     const sizeHeight: { [id: number]: number } = {
@@ -62,16 +64,33 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
     isBulkPriceExpand,
     productDetail?.bulkPrices,
   ]);
+  // validasi stock habis
+  const isStockEmpty = useMemo(() => {
+    if (dataStock?.stock && productDetail?.minQty) {
+      // ketika stock 0 atau jumlah stock lebih kecil dari minimal pembelian return produk habis
+      if (dataStock?.stock <= 0 || dataStock?.stock < productDetail?.minQty)
+        return true;
+    }
+    return false;
+  }, [dataStock?.stock, productDetail?.minQty]);
+  // function
+  const onCloseModal = useCallback(() => {
+    closeAction();
+    onChangeQty(productDetail?.minQty || 0);
+  }, [productDetail?.minQty]);
 
+  // render
   return (
     <ActionSheet
       contentHeight={contentHeight}
       open={open}
       name="modal-add-to-cart"
-      onClose={closeAction}
+      onClose={onCloseModal}
+      onBlur={onBlur}
       title="Masukkan Jumlah"
       footer={
         <AddToCartFooter
+          isStockEmpty={isStockEmpty}
           errorStock={errorStock}
           disabled={disabled || isFocus}
           orderQty={orderQty}
@@ -98,16 +117,17 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       ) : (
         <View />
       )}
-      {!loadingProduct && (
-        <AddToCartQuantityModifier
-          orderQty={orderQty}
-          onChangeQty={onChangeQty}
-          setIsFocus={setIsFocus}
-          isFocus={isFocus}
-          dataStock={dataStock}
-          product={productDetail}
-        />
-      )}
+      <AddToCartQuantityModifier
+        isStockEmpty={isStockEmpty}
+        loading={loadingProduct}
+        disabled={disabled}
+        orderQty={orderQty}
+        onChangeQty={onChangeQty}
+        setIsFocus={setIsFocus}
+        isFocus={isFocus}
+        dataStock={dataStock}
+        product={productDetail}
+      />
     </ActionSheet>
   );
 };

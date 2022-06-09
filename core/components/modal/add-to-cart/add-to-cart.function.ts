@@ -11,14 +11,31 @@ const useAddToCart = (orderQty: number, isFromProductDetail?: boolean) => {
   } = useProductContext();
   const {
     stateStock: {
-      validation: { data: dataStockValidation, error: errorStockValidation },
-      detail: { data: dataStockDetail, error: errorStockDetail },
+      validation: {
+        data: dataStockValidation,
+        error: errorStockValidation,
+        loading: loadingStockValidation,
+      },
+      detail: {
+        data: dataStockDetail,
+        error: errorStockDetail,
+        loading: loadingStockDetail,
+      },
     },
   } = useStockContext();
+  // loading get product & stock
   const loadingProduct = useMemo(
     () =>
-      isFromProductDetail ? loadingProductDetail : loadingProductDetailCart,
-    [isFromProductDetail, loadingProductDetail, loadingProductDetailCart],
+      isFromProductDetail
+        ? [loadingProductDetail, loadingStockDetail].some((i) => i)
+        : [loadingProductDetailCart, loadingStockValidation].some((i) => i),
+    [
+      isFromProductDetail,
+      loadingProductDetail,
+      loadingProductDetailCart,
+      loadingStockDetail,
+      loadingStockValidation,
+    ],
   );
   // product data
   const productDetail = useMemo(

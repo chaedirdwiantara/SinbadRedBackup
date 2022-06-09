@@ -19,6 +19,7 @@ type ActionSheetProps = {
   title: string;
   name: string;
   onClose?: () => void;
+  onBlur: () => void;
   contentHeight: number;
   onClearFilter?: () => void;
   withClear?: boolean;
@@ -32,6 +33,7 @@ const ActionSheet = forwardRef<SnbBottomSheet2Ref, ActionSheetProps>(
       footer,
       title,
       onClose,
+      onBlur,
       open,
       name,
       contentHeight,
@@ -67,7 +69,7 @@ const ActionSheet = forwardRef<SnbBottomSheet2Ref, ActionSheetProps>(
         contentHeight={contentHeight}
         closeFromBackdrop
         button={footer}
-        close={onCloseModal}
+        close={onBlur}
         navigation={
           <SnbBottomSheetPart.Navigation
             iconRight1Name="x"
