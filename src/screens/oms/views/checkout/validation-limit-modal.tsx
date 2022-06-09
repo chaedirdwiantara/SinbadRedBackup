@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { Image, View } from 'react-native';
 import {
   SnbText2,
@@ -6,16 +6,17 @@ import {
   FooterButton,
   SnbBottomSheet2,
   SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { Images } from 'src/assets';
 import { CheckoutStyle } from '../../styles';
 interface CheckoutBottomErrorModalProps {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
 }
 /** === COMPONENT === */
 export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
-  isOpen,
+  parentRef,
   close,
 }) => {
   /** => content item image */
@@ -81,11 +82,11 @@ export const ModalValidationLimit: FC<CheckoutBottomErrorModalProps> = ({
 
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'checkoutValidationLimitModal'}
       type={'content'}
       contentHeight={410}
       title={title()}
-      open={isOpen}
       snap={false}
       content={content()}
       button={button()}

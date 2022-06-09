@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Ref } from 'react';
 import { View, Image } from 'react-native';
 import {
   SnbBottomSheet2,
@@ -6,18 +6,19 @@ import {
   SnbText2,
   colorV2,
   FooterButton,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
 import { Images } from 'src/assets';
 /** === INTERFACE === */
 /** => error props */
 interface ShoppingCartValidationProps {
-  open: boolean;
   closeAction?: () => void;
+  parentRef: Ref<SnbBottomSheet2Ref>;
 }
 /** === COMPONENT === */
 const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
-  open,
+  parentRef,
   ...props
 }) => {
   /** ======================================================================= */
@@ -89,11 +90,11 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   /** => main */
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'cartValidationCheckoutModal'}
       type={'content'}
       contentHeight={400}
       title={title()}
-      open={open}
       snap={false}
       content={content()}
       button={button()}

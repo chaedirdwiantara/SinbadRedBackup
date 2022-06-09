@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useState } from 'react';
-import { FooterButton } from 'react-native-sinbad-ui';
+import React, { FC } from 'react';
+import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
@@ -29,20 +29,21 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
-  const [reachLimit, setReachLimit] = useState(false);
-
   const handleBackToCart = () => {
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
-    setReachLimit(false);
+    refValidationLimitModal.current?.close();
     goToShoppingCart();
   };
 
   // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
 
   const pressButton = () => {
-    setReachLimit(true);
+    refValidationLimitModal.current?.open();
   };
+
+  /** => MODAL REF */
+  const refValidationLimitModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   return (
     <React.Fragment>
@@ -53,7 +54,10 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
           totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
         }
       />
-      <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />
+      <ModalValidationLimit
+        parentRef={refValidationLimitModal}
+        close={handleBackToCart}
+      />
     </React.Fragment>
   );
 };

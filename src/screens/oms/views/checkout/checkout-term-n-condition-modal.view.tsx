@@ -1,25 +1,26 @@
 import Html from '@core/components/Html';
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { Dimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
   colorV2,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 const { height } = Dimensions.get('window');
 
 /** === INTERFACE === */
 interface ModalCheckoutTNCProps {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
   data: models.CheckoutTnc | null;
 }
 
 /** === COMPONENT === */
 export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
-  isOpen,
+  parentRef,
   close,
   data,
 }) => {
@@ -63,11 +64,11 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
 
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'checkoutTermsConditionModal'}
       type={'content'}
       contentHeight={250}
       title={title()}
-      open={isOpen}
       snap={true}
       content={content()}
       navigation={navigation()}

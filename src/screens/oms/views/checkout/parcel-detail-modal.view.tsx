@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { View, Dimensions } from 'react-native';
 import {
   SnbText2,
@@ -8,6 +8,7 @@ import {
   colorV2,
   SnbBottomSheet2,
   SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -17,14 +18,14 @@ import { toCurrency } from '@core/functions/global/currency-format';
 const { height } = Dimensions.get('window');
 
 interface ModalParcelDetail {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
   data: models.CheckoutCartProduct[];
   sellerName: string;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
-  isOpen,
+  parentRef,
   close,
   data,
   sellerName,
@@ -131,11 +132,11 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   return data !== null ? (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'checkoutParcelDetailModal'}
       type={'content'}
       contentHeight={250}
       title={title()}
-      open={isOpen}
       snap={true}
       content={content()}
       navigation={navigation()}

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { Image, View } from 'react-native';
 import {
   SnbText2,
@@ -7,18 +7,19 @@ import {
   SnbBottomSheetPart,
   SnbBottomSheet2,
   colorV2,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { Images } from 'src/assets';
 import { CheckoutStyle } from '../../styles';
 
 interface BackToCartModalProps {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   handleOkAction: () => void;
   handleNoAction: () => void;
 }
 /** === COMPONENT === */
 export const BackToCartModal: FC<BackToCartModalProps> = ({
-  isOpen,
+  parentRef,
   handleOkAction,
   handleNoAction,
 }) => {
@@ -99,11 +100,11 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
 
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'checkoutBackToCartModal'}
       type={'content'}
       contentHeight={410}
       title={title()}
-      open={isOpen}
       snap={true}
       content={content()}
       button={button()}

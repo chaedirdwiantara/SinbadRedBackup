@@ -10,7 +10,7 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { FooterButton } from 'react-native-sinbad-ui';
+import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
@@ -54,6 +54,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+
+  /** => MODAL REF */
+  const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -242,7 +245,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Error Business Modal */
   const renderBusinessErrorModal = () => (
-    <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
+    <ShoppingCartValidation
+      closeAction={handleClose}
+      parentRef={refCartValidationModal}
+    />
   );
 
   /** ==> Main */

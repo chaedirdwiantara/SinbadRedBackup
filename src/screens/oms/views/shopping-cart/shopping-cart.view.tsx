@@ -421,10 +421,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         open={errorModal.isOpen}
         error={errorModal.errorData}
         closeAction={() => {
+          console.log('error clos');
           errorModal.closeAction();
           errorModal.setOpen(false);
         }}
         retryAction={() => {
+          console.log('error ret');
           errorModal.closeAction();
           errorModal.setOpen(false);
         }}
