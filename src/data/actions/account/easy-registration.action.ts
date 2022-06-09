@@ -14,10 +14,10 @@ export const createBasicAccount = (
 
 export const createBasicAccountSuccess = (data: any, params: any) => {
   globalReportFromAction(EventName.REGISTRATION_SUCCESS, params);
-  // return {
-  //   type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
-  //   payload: data,
-  // };
+  return {
+    type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
+    payload: data,
+  };
 };
 
 export const createBasicAccountFailed = (data: any) => ({
