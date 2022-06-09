@@ -63,8 +63,16 @@ const GridLayout: FC<ProductLayoutProps> = ({
           <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
         )}
         {displayState === 'success' && (
-          <View style={{ flexDirection: 'row', paddingTop: !hasTags ? 14 : 0 }}>
-            <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingTop: !hasTags ? 14 : 0,
+            }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+              }}>
               {products.map(
                 (product, productIndex) =>
                   productIndex % 2 === 0 && (
@@ -77,7 +85,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   ),
               )}
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               {products.map(
                 (product, productIndex) =>
                   productIndex % 2 === 1 && (

@@ -67,8 +67,8 @@ const SelfRegisterView: React.FC = () => {
         <View style={{ flex: 1, marginBottom: layout.spacing.xl }}>
           <View style={styles.image}>
             <Image
-              source={require('@image/sinbad_image/sinbad_register.png')}
-              style={{ height: 240 }}
+              source={require('@image/sinbad_image/login_register.png')}
+              style={{ height: 220, resizeMode: 'contain' }}
             />
           </View>
           <View style={{ padding: layout.spacing.lg }}>

@@ -64,11 +64,11 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
           inputValue={keyword}
           onEnter={onSearch}
           onChangeText={(text) => onKeywordChange(text)}
-          icon1Name="home"
-          icon1Action={goToHome}
-          icon2Value={stateCart.total.data?.totalProducts}
-          icon2Name="cart"
-          icon2Action={validateCartVisit}
+          icon2Name="home"
+          icon2Action={goToHome}
+          icon1Value={stateCart.total.data?.totalProducts}
+          icon1Name="cart"
+          icon1Action={validateCartVisit}
         />
       )}
     </View>
