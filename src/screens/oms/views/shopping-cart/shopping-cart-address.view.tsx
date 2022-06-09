@@ -18,7 +18,9 @@ export const ShoppingCartAddress: FC = () => {
       <SnbText2.Headline.Small color={colorV2.textColor.default}>
         Alamat Pengiriman
       </SnbText2.Headline.Small>
-      <SnbDivider2 />
+      <View style={{ marginVertical: 4 }}>
+        <SnbDivider2 />
+      </View>
       <View style={{ marginBottom: 4 }}>
         <SnbText2.Body.Small
           color={

@@ -230,11 +230,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** === VIEWS === */
   /** ==> content */
   const renderFooterContent = () => (
-    <FooterButton.AddToCart
+    <FooterButton.Order
       titleButton="Checkout"
       loadingButton={isCheckoutBtnLoading}
       disabled={isCheckoutDisabled}
-      total={countTotalPrice}
+      value={countTotalPrice}
       description={`${countTotalProduct} barang dipilih`}
       buttonPress={handleOnPressCheckout}
     />
@@ -247,7 +247,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Main */
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
       <BottomSheetError
