@@ -42,7 +42,7 @@ import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down
 import { NavigationAction } from '@core/functions/navigation';
 import { RouteProp, useRoute } from '@react-navigation/native';
 import BottomSheetConfirmationV2, {
-  BottomSheetTransactionRef,
+  // BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmationV2';
 import ThankYouPageCustomAccordion from '@screen/oms/components/thank-you-page-custom-accordion.component';
 
@@ -55,7 +55,8 @@ type ThankYouPageRouteProp = RouteProp<ThankYouPageParamList, 'Detail'>;
 const OmsThankYouPageView: FC = () => {
   const virtualAccount = ['BCA', 'BNI', 'BRI', 'Mandiri']
   const { params } = useRoute<ThankYouPageRouteProp>();
-  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  // const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const modalThankYouPageOrderDetail = useModalThankYouPageOrderDetail();
   /** => Get Order Detail */
   const thankYouPageAction = useThankYouPageAction();
@@ -315,7 +316,8 @@ const OmsThankYouPageView: FC = () => {
   };
   /** => batalkan pesanan */
   const handleCancelOrder = () => {
-    confirmModalRef.current?.show(params.orderId);
+    // confirmModalRef.current?.show(params.orderId);
+    setConfirmationOpen(true)
   };
   const handleConfirmationCancelOrder = () => {
     // update order to cancelled and back to history list view
@@ -323,6 +325,7 @@ const OmsThankYouPageView: FC = () => {
       id: params.orderId,
       status: 'cancelled',
     });
+    // setConfirmationOpen(false);
     setTimeout(() => {
       NavigationAction.navigate('HistoryListView');
     }, 1000);
@@ -393,10 +396,13 @@ const OmsThankYouPageView: FC = () => {
   const renderModalConfirmationCancelOrder = () => {
     return (
       <BottomSheetConfirmationV2
-        ref={confirmModalRef}
+        isOpen={confirmationOpen}
         title="Batalkan Pesanan?"
         desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
-        onSubmit={handleConfirmationCancelOrder}
+        onSubmit={() => {
+          handleConfirmationCancelOrder
+        }}
+        onCancel={() => setConfirmationOpen(false)}
       />
     );
   };

@@ -5,10 +5,13 @@ import React, {
   useImperativeHandle,
   useMemo,
   useState,
+  useRef,
+  useEffect
 } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import {
   SnbBottomSheet2,
+  SnbBottomSheet2Ref,
   SnbBottomSheetPart,
   SnbText2,
   SnbButton,
@@ -16,27 +19,51 @@ import {
 } from 'react-native-sinbad-ui';
 
 interface BottomSheetTransactionProps {
-  onSubmit: (id: string) => void;
+  onSubmit: () => void;
   title: string;
   desc: string;
+  isOpen: boolean;
+  onCancel: () => void;
 }
-export interface BottomSheetTransactionRef {
-  show: (id: string) => void;
-  close: () => void;
-}
+// export interface BottomSheetTransactionRef {
+//   show: (id: string) => void;
+//   close: () => void;
+// }
 
 const BottomSheetConfirmationV2 = forwardRef<
-  BottomSheetTransactionRef,
+  SnbBottomSheet2Ref,
   BottomSheetTransactionProps
 >((props, ref) => {
-  const { desc, onSubmit, title } = props;
-  const [show, setShow] = useState(false);
-  const [dataId, setDataId] = useState('');
+  const { desc, onSubmit, title, isOpen, onCancel } = props;
 
+  // ref
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
+  // custom ref
+  useImperativeHandle(ref, () => ({
+    open: () => modalRef.current?.open(),
+    close: () => modalRef.current?.close(),
+  }));
+
+  // const [show, setShow] = useState(false);
+
+  const onClose = useCallback(() => {
+    // onSubmit && onSubmit();
+    onCancel && onCancel();
+    modalRef.current?.close();
+  }, [modalRef.current]);
   const onConfirm = useCallback(() => {
-    onSubmit(dataId);
-    setShow(false);
-  }, [dataId]);
+    onSubmit && onSubmit();
+    // onCancel && onCancel();
+    modalRef.current?.close();
+  }, [modalRef.current]);
+  // State Effect
+  useEffect(() => {
+    if (isOpen) {
+      modalRef.current?.open();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [isOpen]);
 
   const Content = useMemo(
     () => (
@@ -54,40 +81,24 @@ const BottomSheetConfirmationV2 = forwardRef<
             leftType="secondary"
             rightType="primary"
             onPressLeft={onConfirm}
-            onPressRight={() => setShow(false)}
+            onPressRight={onClose}
             leftTitle="Ya"
             rightTitle="Tidak"
           />
         </View>
       </>
     ),
-    [desc, title, dataId],
+    [desc, title],
   );
 
-  // custom ref
-  useImperativeHandle(
-    ref,
-    () => ({
-      show: (id: string) => {
-        setShow(true);
-        setDataId(id);
-      },
-      close: () => setShow(false),
-    }),
-    [],
-  );
+
   return (
-    // <SnbBottomSheet
-    //   content={Content}
-    //   open={show}
-    //   closeAction={() => setShow(false)}
-    // />
     <SnbBottomSheet2
       content={Content}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={() => setShow(false)}
+          onRight1Action={onClose}
         />
       }
       title={
@@ -98,9 +109,9 @@ const BottomSheetConfirmationV2 = forwardRef<
       name="bottom-sheet-confirmation-v2"
       type="content"
       contentHeight={180}
-      open={show}
+      ref={modalRef}
       snap
-      close={() => setShow(false)}
+      close={onClose}
     />
   );
 });

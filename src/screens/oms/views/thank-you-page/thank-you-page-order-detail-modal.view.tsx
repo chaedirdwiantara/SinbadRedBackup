@@ -1,8 +1,8 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect,forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
 import { View, Dimensions, TouchableOpacity } from 'react-native';
-import { SnbText2, colorV2, SnbBottomSheet2, SnbBottomSheetPart } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, SnbBottomSheet2, SnbBottomSheet2Ref, SnbBottomSheetPart } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ThankYouPageCardDivider } from '@screen/oms/components/thank-you-page-card-divider.component';
@@ -17,11 +17,35 @@ interface ModalThankYouPageOrderDetail {
   data: models.ThankYouOrderDetailProps | null;
 }
 /** === COMPONENT === */
-export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
-  isOpen,
-  close,
-  data,
-}) => {
+export const ModalThankYouPageOrderDetail = forwardRef<
+  SnbBottomSheet2Ref,
+  ModalThankYouPageOrderDetail
+>((props, ref) => {
+  const {
+    isOpen,
+    close,
+    data,
+  } = props;
+  //ref
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
+  // register ref
+  useImperativeHandle(ref, () => ({
+    open: () => modalRef.current?.open(),
+    close: () => modalRef.current?.close(),
+  }));
+  // Function
+  const onCloseModal = useCallback(() => {
+    close && close();
+    modalRef.current?.close();
+  }, [modalRef.current]);
+  // State Effect
+  useEffect(() => {
+    if (isOpen) {
+      modalRef.current?.open();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [isOpen]);
   const [expandableLabelItemCount, setExpandableLabelItemCount] = useState(0);
   let count = -2;
   if (data != null) {
@@ -255,15 +279,15 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   };
   return (
     <SnbBottomSheet2
+      ref={modalRef}
       name="thank-you-order-detail"
       type="content"
       contentHeight={modalHeight}
-      open={isOpen}
       content={content()}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={close}
+          onRight1Action={onCloseModal}
         />
       }
       title={
@@ -273,7 +297,7 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
           titleType="center"
         />
       }
-      close={close}
+      close={onCloseModal}
     />
   );
   // return data !== null ? (
@@ -287,4 +311,4 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   // ): (
   //   <View/>
   // )
-};
+});
