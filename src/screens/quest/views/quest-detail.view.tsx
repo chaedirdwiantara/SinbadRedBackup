@@ -219,7 +219,7 @@ const QuestDetailView: FC = ({ route }: any) => {
     return (
       <View>
         <SnbImageCompressor
-          defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
+          defaultSource={require('../../../assets/images/banner/sinbad-default-banner.png')}
           uri={questDetailState.data?.imageUrl}
           style={{ aspectRatio: 5 / 2 }}
           res={500}
