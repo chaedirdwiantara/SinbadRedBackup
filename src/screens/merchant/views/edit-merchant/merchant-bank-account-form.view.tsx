@@ -1,13 +1,15 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
   SnbText2,
   SnbTopNav2,
   SnbButton2,
   SnbTextField2,
-  SnbBottomSheet,
+  SnbBottomSheet2,
   SnbContainer,
   colorV2,
   spacingV2 as layout,
+  SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, BackHandler } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -42,7 +44,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   const bankAccountNo = useInput(bankData?.bankAccountNo || '');
   const bankAccountName = useInput(bankData?.bankAccountName || '');
   const bankBranchName = useInput(bankData?.bankBranchName || '');
-  const [openModalTNC, setOpenModalTNC] = useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
 
   useEffect(() => {
     return resetSelectedItem;
@@ -216,7 +218,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         </SnbText2.Paragraph.Small>
         <View style={{ marginLeft: -layout.spacing.sm }}>
           <SnbButton2.Link
-            onPress={() => setOpenModalTNC(!openModalTNC)}
+            onPress={() => bottomSheetRef.current?.open()}
             title="Syarat dan Ketentuan"
             size="small"
           />
@@ -227,7 +229,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
   //** terms and condition */
   const renderContentTnC = () => {
     return (
-      <View style={{ padding: layout.spacing.lg, paddingTop: 0 }}>
+      <View>
         <View style={{ marginBottom: layout.spacing.sm }}>
           <SnbText2.Body.Default>
             Syarat dan Ketentuan Rekening Bank di Sinbad :
@@ -254,22 +256,6 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
     );
   };
-  //** modal TNC */
-  const modalTNC = () => {
-    return openModalTNC ? (
-      <View>
-        <SnbBottomSheet
-          open={openModalTNC}
-          content={renderContentTnC()}
-          title={'Syarat dan Ketentuan'}
-          actionIcon={'close'}
-          closeAction={() => setOpenModalTNC(false)}
-        />
-      </View>
-    ) : (
-      <View />
-    );
-  };
   /** this for main view */
   return (
     <SnbContainer color="white">
@@ -279,7 +265,25 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       </View>
       {renderTNC()}
       {renderButton()}
-      {modalTNC()}
+      <SnbBottomSheet2
+        type="m-l"
+        ref={bottomSheetRef}
+        content={renderContentTnC()}
+        title={
+          <SnbBottomSheetPart.Title
+            swipeIndicator
+            title="Syarat dan Ketentuan"
+            titleType="center"
+          />
+        }
+        name="modal-tnc-bank"
+        navigation={
+          <SnbBottomSheetPart.Navigation
+            iconRight1Name="x"
+            onRight1Action={() => bottomSheetRef.current?.close()}
+          />
+        }
+      />
     </SnbContainer>
   );
 };

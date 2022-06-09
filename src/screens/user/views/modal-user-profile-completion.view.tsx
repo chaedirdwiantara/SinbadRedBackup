@@ -1,11 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 import {
-  SnbBottomSheet,
-  SnbText2,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
   SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
+  Content,
 } from 'react-native-sinbad-ui';
 import { UserProfileCompletionStyles } from '../styles/user-profile-completion.style';
 import { Images } from 'src/assets';
@@ -18,30 +20,35 @@ interface ModalUserProfileCompletionProps {
 export const ModalUserProfileCompletion: FC<
   ModalUserProfileCompletionProps
 > = ({ handleNavigateToCart, isOpen }) => {
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    isOpen ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
+  }, [isOpen]);
+
   const renderContent = () => {
     return (
-      <View style={UserProfileCompletionStyles.modalContentContainer}>
-        <Image
-          source={Images.registrationComplete}
-          style={UserProfileCompletionStyles.modalImage}
+      <View onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+        <Content.Illustration
+          image={Images.registrationComplete}
+          imageStyle={UserProfileCompletionStyles.modalImage}
+          title="Profil Lengkap"
+          description="Selamat, profil Anda sudah lengkap. Silahkan lanjutkan transaksi"
         />
-        <View
-          style={{
-            marginHorizontal: layout.spacing.xl,
-            marginVertical: layout.spacing.md,
-            alignItems: 'center',
-          }}>
-          <SnbText2.Headline.Default>Profil Lengkap</SnbText2.Headline.Default>
-          <View
-            style={{
-              marginHorizontal: layout.spacing.xl,
-              marginVertical: layout.spacing.sm,
-            }}>
-            <SnbText2.Paragraph.Default align="center">
-              Selamat, profil Anda sudah lengkap. Silahkan lanjutkan transaksi
-            </SnbText2.Paragraph.Default>
-          </View>
-        </View>
+      </View>
+    );
+  };
+
+  return (
+    <SnbBottomSheet2
+      ref={bottomSheetRef}
+      content={renderContent()}
+      title={<SnbBottomSheetPart.Title title="" />}
+      name="modal-profile-completion"
+      type="content"
+      contentHeight={contentHeight + 100}
+      button={
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1, padding: layout.spacing.lg }}>
             <SnbButton2.Primary
@@ -52,9 +59,7 @@ export const ModalUserProfileCompletion: FC<
             />
           </View>
         </View>
-      </View>
-    );
-  };
-
-  return <SnbBottomSheet open={isOpen} content={renderContent()} />;
+      }
+    />
+  );
 };

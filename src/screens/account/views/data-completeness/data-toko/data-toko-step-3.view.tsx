@@ -101,7 +101,6 @@ const Content: React.FC<Props> = (props) => {
     refetchCompleteData,
     backToDataCompleteness,
   } = useEasyRegistration();
-  const [openModalBack, setOpenModalBack] = React.useState(false);
 
   React.useEffect(() => {
     resetUpdateCompleteData();
@@ -114,19 +113,6 @@ const Content: React.FC<Props> = (props) => {
     isLatLngAvailable && setLatLng({ longitude, latitude });
     location && setLocationId(location);
   }, []);
-
-  const handleBackButton = React.useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
-    return backHandler.remove;
-  }, []);
-
-  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -373,9 +359,8 @@ const Content: React.FC<Props> = (props) => {
         }}
       />
       <ModalBack
-        open={openModalBack || props.openModalBack}
+        open={props.openModalBack}
         closeModal={() => {
-          setOpenModalBack(false);
           props.onCloseModalBack(false);
         }}
         confirm={() => {
@@ -415,6 +400,19 @@ const DataTokoStep3View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const { completeDataState } = useEasyRegistration();
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">

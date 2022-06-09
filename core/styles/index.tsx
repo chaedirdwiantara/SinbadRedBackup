@@ -1,5 +1,4 @@
 export * from './product-card.style';
-export * from './tag-list.style';
 export * from './brand-card.style';
 export * from './add-to-cart-modal.style';
 export * from './product-skeleton.style';
