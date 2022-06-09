@@ -60,14 +60,19 @@ export const useEasyRegistration = () => {
       buyerCategoryId: buyerCategory.id,
       productCategoryIds,
     };
+
     const params = {
-      ...location,
-      ...buyerCategory,
-      ...productCategory,
-      uniqueId: uniqueId,
-      ownerId: meV2Data?.data?.data?.user?.id,
-      storeId: meV2Data?.data?.data?.buyerId,
+      unique_id: uniqueId,
+      owner_id: meV2Data?.data?.data?.user?.id,
       owner_mobile_numer: meV2Data?.data?.data?.user?.name,
+      store_id: meV2Data?.data?.data?.buyerId,
+      store_category: buyerCategory.name,
+      product_category: productCategory
+        .map((v) => {
+          return v.name;
+        })
+        .join(', '),
+      location: `${location?.city}, ${location?.district}, ${location?.urban}`,
     };
     dispatch(Actions.createBasicAccount(data, params));
   };

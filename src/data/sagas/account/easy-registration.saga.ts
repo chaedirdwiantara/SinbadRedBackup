@@ -28,13 +28,14 @@ function* loadMoreSearchLocation(
 
 function* createBasicAccount(
   action: models.IAction<models.ICreateBasicAccount>,
-  params: any,
 ) {
   try {
     const response: models.ICreateBasicAccountData = yield call(() =>
       easyRegistrationApi.createBasicAccount(action.payload),
     );
-    yield put(ActionCreators.createBasicAccountSuccess(response, params));
+    yield put(
+      ActionCreators.createBasicAccountSuccess(response, action.params),
+    );
   } catch (error) {
     yield put(ActionCreators.createBasicAccountFailed(error));
   }

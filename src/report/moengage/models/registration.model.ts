@@ -6,4 +6,5 @@ export interface TrackRegistrationSuccessData {
   store_status: string;
   store_category: string;
   product_category: string;
+  location: string;
 }
