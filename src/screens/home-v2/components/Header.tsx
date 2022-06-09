@@ -1,12 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React, {
-  FC,
-  memo,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { FC, memo, useCallback, useContext, useMemo } from 'react';
 import { SnbTopNav2 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 import { useNotificationTotalActions } from '@screen/notification/functions';
@@ -20,7 +13,6 @@ interface HeaderProps {}
 
 /** === COMPONENT === */
 const Header: FC<HeaderProps> = () => {
-  const [keyword, setKeyword] = useState('');
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const totalCartActions = useGetTotalCartAction();
   const totalCartState: number = useMemo(
@@ -37,17 +29,6 @@ const Header: FC<HeaderProps> = () => {
       }
     }, [me.data]),
   );
-
-  const handleClearText = useCallback(() => {
-    setKeyword('');
-  }, []);
-
-  const handleEnter = useCallback(() => {
-    // jika keyword kosong, tidak navigasi
-    if (/^\s*$/.test(keyword)) return setKeyword('');
-
-    NavigationAction.navigate('SearchProductView', { keyword });
-  }, [keyword]);
 
   const onClickCart = useCallback(() => {
     if (me.data === null) {
@@ -77,10 +58,7 @@ const Header: FC<HeaderProps> = () => {
       icon1Value={totalCartState}
       icon2Action={onCLickNotification}
       icon2Value={totalNotification.data}
-      inputValue={keyword}
-      onChangeText={setKeyword}
-      onClearText={handleClearText}
-      onEnter={handleEnter}
+      onSearch={() => NavigationAction.navigate('SearchView')}
     />
   );
 };
