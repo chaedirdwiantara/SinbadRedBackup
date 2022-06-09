@@ -9,7 +9,7 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler } from 'react-native';
+import { View, ScrollView, BackHandler, Image } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
@@ -54,9 +54,15 @@ const Content: React.FC = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbText2.Headline.Large>Masuk</SnbText2.Headline.Large>
-      </View>
+      <Image
+        source={require('@image/sinbad_image/login_register.png')}
+        style={{
+          height: 220,
+          alignSelf: 'center',
+          marginVertical: layout.spacing.xxl,
+          resizeMode: 'contain',
+        }}
+      />
       <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
       </View>
@@ -105,7 +111,7 @@ const LoginPhoneView = () => {
       <SnbTopNav2.Type3
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         color="white"
-        title=""
+        title="Masuk"
       />
       <Content />
     </SnbContainer>
