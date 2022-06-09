@@ -3,10 +3,11 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, Dimensions } from 'react-native';
 import {
-  SnbText,
-  SnbDivider,
-  color,
-  SnbBottomSheet,
+  SnbText2,
+  SnbDivider2,
+  colorV2,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,12 +20,14 @@ interface ModalParcelDetail {
   isOpen: boolean;
   close: () => void;
   data: models.CheckoutCartProduct[];
+  sellerName: string;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   isOpen,
   close,
   data,
+  sellerName,
 }) => {
   /** === HOOK === */
   const deliveryFee = 0;
@@ -37,22 +40,38 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
     return (
       <View style={{ paddingBottom: 16 }}>
-        <SnbText.H4 color={color.black80}>Produk</SnbText.H4>
-        <SnbDivider style={{ marginVertical: 8 }} />
-        {productList(data)}
-        <SnbDivider style={{ marginVertical: 8 }} />
-        <View style={CheckoutStyle.modalDetailTotalContainer}>
-          <View style={{ width: '50%' }}>
-            <SnbText.B1 color={color.black80}>Total Pengiriman</SnbText.B1>
-          </View>
-          <SnbText.B1 color={color.green50}>Rp {deliveryFee}</SnbText.B1>
+        <SnbText2.Body.Default color={colorV2.textColor.secondary}>
+          {sellerName}
+        </SnbText2.Body.Default>
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
         </View>
-        <SnbDivider style={{ marginVertical: 8 }} />
+        {productList(data)}
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
+        </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText.H4 color={color.black100}>Total</SnbText.H4>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              Total Pengiriman
+            </SnbText2.Paragraph.Default>
           </View>
-          <SnbText.B2 color={color.black100}>{totalProductsPrice}</SnbText.B2>
+          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+            Rp {deliveryFee}
+          </SnbText2.Paragraph.Default>
+        </View>
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
+        </View>
+        <View style={CheckoutStyle.modalDetailTotalContainer}>
+          <View style={{ width: '50%' }}>
+            <SnbText2.Headline.Small color={colorV2.textColor.default}>
+              Total
+            </SnbText2.Headline.Small>
+          </View>
+          <SnbText2.Headline.Small color={colorV2.textColor.default}>
+            {totalProductsPrice}
+          </SnbText2.Headline.Small>
         </View>
       </View>
     );
@@ -63,16 +82,16 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       <>
         <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText.B1>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               {product.productName} {product.qty}
-            </SnbText.B1>
+            </SnbText2.Paragraph.Default>
           </View>
-          <SnbText.B1>
+          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
             {' '}
             {toCurrency(product.priceAfterTax * product.qty, {
               withFraction: false,
             })}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Default>
         </View>
       </>
     ));
@@ -80,22 +99,46 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View>
         <ScrollView
-          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          style={{ maxHeight: height * 0.6 }}
           showsVerticalScrollIndicator={false}>
           {productDetail()}
         </ScrollView>
       </View>
     );
   };
+
+  /** => title */
+  const title = () => {
+    return (
+      <SnbBottomSheetPart.Title
+        title="Detail Pesanan"
+        titleType="center"
+        swipeIndicator
+      />
+    );
+  };
+  /** => navigation */
+  const navigation = () => {
+    return (
+      <SnbBottomSheetPart.Navigation
+        iconRight1Name="x"
+        onRight1Action={close}
+      />
+    );
+  };
+
   return data !== null ? (
-    <SnbBottomSheet
+    <SnbBottomSheet2
+      name={'checkoutParcelDetailModal'}
+      type={'content'}
+      contentHeight={250}
+      title={title()}
       open={isOpen}
+      snap={true}
       content={content()}
-      title={'Detail Pesanan'}
-      closeAction={close}
-      actionIcon={'close'}
+      navigation={navigation()}
     />
   ) : (
     <View />
