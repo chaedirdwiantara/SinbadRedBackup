@@ -178,7 +178,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const renderBanner = () => {
     return (
       <SnbImageCompressor
-        defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
+        defaultSource={require('../../../assets/images/banner/sinbad-default-banner.png')}
         uri={bannerDetailState.data?.imageUrl!}
         style={{
           height: 180,
