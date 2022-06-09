@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { View, Image } from 'react-native';
 import {
   SnbBottomSheetPart,
@@ -7,18 +7,19 @@ import {
   SnbText2,
   colorV2,
   SnbButton2,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { CartProfileCompletionStyles } from '@screen/oms/styles';
 import { Images } from 'src/assets';
 /** === INTERFACE ===  */
 interface ModalCartProfileCompletionProps {
   handleNavigateToProfile: () => void;
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
 }
 /** === COMPONENT ===  */
 export const ModalCartProfileCompletion: FC<
   ModalCartProfileCompletionProps
-> = ({ handleNavigateToProfile, isOpen }) => {
+> = ({ handleNavigateToProfile, parentRef }) => {
   const renderContent = () => {
     return (
       <View style={CartProfileCompletionStyles.modalContentContainer}>
@@ -59,11 +60,11 @@ export const ModalCartProfileCompletion: FC<
 
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'cartProfileCompletionModal'}
       type={'content'}
       contentHeight={430}
       snap={false}
-      open={isOpen}
       title={renderTitle()}
       content={renderContent()}
     />

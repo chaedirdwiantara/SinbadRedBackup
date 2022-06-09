@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { Image, View } from 'react-native';
 import {
   colorV2,
@@ -7,6 +7,7 @@ import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
   FooterButton,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
@@ -15,13 +16,13 @@ import { Images } from 'src/assets';
 interface ModalRemoveProductProps {
   okAction: () => void;
   cancelAction: () => void;
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
 }
 /** === COMPONENT ===  */
 export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
   okAction,
   cancelAction,
-  isOpen,
+  parentRef,
 }) => {
   const { stateCart } = React.useContext(contexts.CartContext);
   /** => content item image */
@@ -100,11 +101,11 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
   };
   return (
     <SnbBottomSheet2
+      ref={parentRef}
       name={'cartRemoveProductModal'}
       type={'content'}
       contentHeight={400}
       title={title()}
-      open={isOpen}
       snap={false}
       content={content()}
       button={button()}

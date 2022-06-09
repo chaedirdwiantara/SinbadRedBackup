@@ -1,7 +1,11 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
-import { SnbContainer, SnbToast } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbToast,
+  SnbBottomSheet2Ref,
+} from 'react-native-sinbad-ui';
 // import { cloneDeep, isEqual } from 'lodash';
 /** === IMPORT INTERNAL COMPONENT HERE === */
 import { ShoppingCartHeader } from './shopping-cart-header.view';
@@ -56,9 +60,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setInitialLocalData,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
-  const [modalRemoveProduct, setModalRemoveProduct] = useState(false);
-  const [modalCartProfileCompletion, setModalCartProfileCompletion] =
-    useState(false);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
@@ -81,11 +82,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
 
+  /** => MODAL REF */
+  const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
+
   /** === FUNCTIONS === */
   /** => handle remove product modal */
   const handleRemoveProductModal = (selected: models.HandleRemoveProduct) => {
     setSelectRemoveProduct(selected);
-    setModalRemoveProduct(true);
+    refRemoveProductModal.current?.open();
   };
 
   /** => handle ok action remove product */
@@ -318,7 +323,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
-      setModalRemoveProduct(false);
+      refRemoveProductModal.current?.close();
     }
     /** error */
     if (stateCart.remove.error !== null) {
@@ -326,7 +331,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
-      setModalRemoveProduct(false);
+      refRemoveProductModal.current?.close();
     }
   }, [stateCart.remove]);
 
@@ -339,7 +344,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           !stateCart.buyerAddress.data.address ||
           !stateCart.buyerAddress.data.isImageIdOcrValidation
         ) {
-          setModalCartProfileCompletion(true);
+          refCartValidationModal.current?.open();
         }
       }
     }
@@ -396,15 +401,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       {!pageLoading ? renderContent() : <LoadingPage />}
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
-        isOpen={modalRemoveProduct}
+        parentRef={refRemoveProductModal}
         okAction={() => handleOkActionRemoveProduct()}
-        cancelAction={() => setModalRemoveProduct(false)}
+        cancelAction={() => refRemoveProductModal.current?.close()}
       />
       {/* Profile Completion Modal */}
       <ModalCartProfileCompletion
-        isOpen={modalCartProfileCompletion}
+        parentRef={refCartValidationModal}
         handleNavigateToProfile={() => {
-          setModalCartProfileCompletion(false);
+          refCartValidationModal.current?.close();
           goToProfile();
         }}
       />
