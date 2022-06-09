@@ -29,6 +29,7 @@ import { LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
+import debounce from 'lodash/debounce';
 import {
   useBottomAction,
   priceSortOptions,
@@ -235,18 +236,19 @@ const ProductList: FC<ProductListProps> = ({
   );
 
   /** => action close modal add to cart */
-  const handleCloseModal = () => {
-    stockValidationActions.reset(dispatchStock);
-    productDetailActions.reset(dispatchProduct);
-    // supplierSegmentationAction.reset(dispatchSupplier);
-    addToCartActions.reset(dispatchCart);
-    sendDataToSupplierActions.reset(dispatchSupplier);
+  const handleCloseModal = useCallback((isReset?: boolean) => {
+    if (isReset) {
+      stockValidationActions.reset(dispatchStock);
+      productDetailActions.reset(dispatchProduct);
+      addToCartActions.reset(dispatchCart);
+      sendDataToSupplierActions.reset(dispatchSupplier);
+    }
     setModalErrorAddCart(false);
     setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
     onFunctionActions({ type: 'close' });
-  };
+  }, []);
 
   /** => action on change qty */
   const onHandleChangeQty = useCallback(
@@ -343,7 +345,8 @@ const ProductList: FC<ProductListProps> = ({
   /** => Do something when success add to cart */
   useEffect(() => {
     if (stateCart.create.error !== null && isFocused) {
-      setModalErrorAddCart(true);
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorAddCart(true), 500);
     }
   }, [stateCart.create.error]);
 
@@ -550,7 +553,7 @@ const ProductList: FC<ProductListProps> = ({
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -569,7 +572,7 @@ const ProductList: FC<ProductListProps> = ({
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
@@ -594,6 +597,7 @@ const ProductList: FC<ProductListProps> = ({
         name="sort-modal"
         title="Urutkan"
         contentHeight={220}
+        onBlur={() => handleActionClick({ type: 'filter', show: false })}
         onClose={() => handleActionClick({ type: 'sort', show: false })}>
         <Action.Sort
           appliedOptionIndex={sortIndex}
@@ -609,6 +613,7 @@ const ProductList: FC<ProductListProps> = ({
         name="filter-modal"
         title="Filter"
         contentHeight={220}
+        onBlur={() => handleActionClick({ type: 'filter', show: false })}
         onClose={() => handleActionClick({ type: 'filter', show: false })}>
         <Action.Filter
           onButtonPress={handleActionClick}
@@ -647,7 +652,8 @@ const ProductList: FC<ProductListProps> = ({
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
-        open={orderModalVisible && !modalErrorAddCart}
+        open={orderModalVisible}
+        onBlur={() => setOrderModalVisible(false)}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         loading={loadingPreparation}
@@ -663,19 +669,20 @@ const ProductList: FC<ProductListProps> = ({
       {/* Product not coverage modal */}
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}
-        close={handleCloseModal}
+        close={() => handleCloseModal(true)}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
         open={modalErrorAddCart}
         error={stateCart.create.error}
-        closeAction={handleCloseModal}
+        closeAction={() => handleCloseModal(true)}
         retryAction={() => {
           if (productSelected) {
             setModalErrorAddCart(false);
+            console.log({ productSelected });
             handleOrderPress(productSelected);
           } else {
-            handleCloseModal();
+            handleCloseModal(true);
           }
         }}
       />
@@ -683,19 +690,19 @@ const ProductList: FC<ProductListProps> = ({
       <BottomSheetError
         open={modalErrorSendDataSupplier}
         error={sendToSupplierError}
-        closeAction={handleCloseModal}
+        closeAction={() => handleCloseModal(true)}
       />
       {/* Modal Bottom Sheet product detail */}
       <BottomSheetError
         open={modalErrorProductDetail}
         error={productDetailError}
-        closeAction={handleCloseModal}
+        closeAction={() => handleCloseModal(true)}
         retryAction={() => {
           if (productSelected) {
             setModalErrorProductDetail(false);
             handleOrderPress(productSelected);
           } else {
-            handleCloseModal();
+            handleCloseModal(true);
           }
         }}
       />
@@ -704,11 +711,11 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorStock}
         error={errorStock}
         closeAction={() => {
-          handleCloseModal();
+          handleCloseModal(true);
           setModalErrorStock(false);
         }}
         retryAction={() => {
-          handleCloseModal();
+          handleCloseModal(true);
           setModalErrorStock(false);
         }}
       />

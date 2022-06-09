@@ -11,6 +11,7 @@ import {
   SnbText,
   color,
   SnbBottomSheet2,
+  SnbBottomSheet2Ref,
   SnbBottomSheetPart,
   SnbButton2,
   SnbRadioGroup,
@@ -19,9 +20,7 @@ import {
 
 interface ModalTransactionProps {
   onSubmit: (orderStatus: string) => void;
-}
-export interface ModalTransactionRef {
-  trigger: (isShow?: boolean) => void;
+  onClose: () => void;
 }
 
 //orderStatus
@@ -49,28 +48,15 @@ const transactionFilter = [
 ];
 
 const ModalTransactionFilter = forwardRef<
-  ModalTransactionRef,
+  SnbBottomSheet2Ref,
   ModalTransactionProps
 >((props, ref) => {
   const { onSubmit } = props;
   const [select, setSelect] = useState('');
-  const [show, setShow] = useState(false);
 
   const onSubmitFilter = useCallback(() => {
-    setShow(false);
     onSubmit(select);
   }, [select]);
-
-  // custom ref
-  useImperativeHandle(
-    ref,
-    () => ({
-      trigger: (open) => {
-        setShow((prev) => open ?? !prev);
-      },
-    }),
-    [],
-  );
 
   const Content = useMemo(() => {
     return (
@@ -116,11 +102,12 @@ const ModalTransactionFilter = forwardRef<
 
   return (
     <SnbBottomSheet2
+      ref={ref}
       content={Content}
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={() => setShow(false)}
+          onRight1Action={props.onClose}
         />
       }
       title={
@@ -133,9 +120,8 @@ const ModalTransactionFilter = forwardRef<
       name="filter-order-history"
       type="content"
       contentHeight={350}
-      open={show}
       snap
-      close={() => setShow(false)}
+      close={props.onClose}
     />
   );
 });
