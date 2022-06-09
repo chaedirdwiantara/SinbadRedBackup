@@ -2,7 +2,10 @@ import React from 'react';
 import {
   borderV2,
   colorV2,
-  SnbBottomSheet,
+  Content,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
   SnbButton2,
   SnbContainer,
   SnbSkeletonAnimator,
@@ -44,8 +47,8 @@ const MapsViewType2: React.FC = () => {
   });
   const refMaps = React.useRef<MapView>(null);
   const { navigate, goBack, dispatch } = useNavigation();
-  const [showModalAreaNotFound, setShowModalAreaNotFound] =
-    React.useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
   const [addressResult, setAddressResult] = React.useState<any[]>([]);
   const [isMounted, setIsMounted] = React.useState(true);
   const { getLocation, locations, resetLocation } = useLocations();
@@ -111,12 +114,12 @@ const MapsViewType2: React.FC = () => {
           }, 0);
         }
       } else {
-        setShowModalAreaNotFound(true);
+        bottomSheetRef.current?.open();
       }
     }
 
     if (locations.error) {
-      setShowModalAreaNotFound(true);
+      bottomSheetRef.current?.open();
     }
   }, [locations]);
 
@@ -143,7 +146,7 @@ const MapsViewType2: React.FC = () => {
         if (error?.code === 3) {
           getUserLocation();
         } else {
-          setShowModalAreaNotFound(true);
+          bottomSheetRef.current?.open();
         }
       },
       {
@@ -167,7 +170,7 @@ const MapsViewType2: React.FC = () => {
         if (requestLocationPermissionResult === 'granted') {
           getUserLocation();
         } else {
-          setShowModalAreaNotFound(true);
+          bottomSheetRef.current?.open();
         }
       } else {
         getUserLocation();
@@ -307,7 +310,7 @@ const MapsViewType2: React.FC = () => {
             loading={locations.loading}
             onPress={() => {
               if (addressResult.length === 0) {
-                setShowModalAreaNotFound(true);
+                bottomSheetRef.current?.open();
               } else {
                 const address = extractAddress(
                   addressResult[0]?.address_components,
@@ -322,52 +325,42 @@ const MapsViewType2: React.FC = () => {
           />
         </View>
       </View>
-      <SnbBottomSheet
-        closeAction={() => {
-          setShowModalAreaNotFound(false);
-        }}
-        isSwipeable
-        open={showModalAreaNotFound}
+      <SnbBottomSheet2
+        ref={bottomSheetRef}
+        name="modal-area-not-found"
+        title={<SnbBottomSheetPart.Title title="" swipeIndicator />}
+        type="content"
+        contentHeight={contentHeight + 100}
         content={
-          <View style={{ alignItems: 'center' }}>
-            <Image
-              source={require('@image/sinbad_image/address_not_found.png')}
-              style={{
+          <View
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+            <Content.Illustration
+              image={require('@image/sinbad_image/address_not_found.png')}
+              imageStyle={{
                 height: 180,
                 width: 180,
                 resizeMode: 'contain',
                 marginVertical: layout.spacing.lg,
               }}
+              title="Area Tidak Ditemukan"
+              description="Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
+              manual."
             />
-            <View
-              style={{
-                paddingHorizontal: layout.spacing['3xl'],
-                paddingVertical: layout.spacing.sm,
-              }}>
-              <SnbText2.Headline.Default align="center">
-                Area Tidak Ditemukan
-              </SnbText2.Headline.Default>
-              <View style={{ marginVertical: layout.spacing.sm }} />
-              <SnbText2.Paragraph.Default
-                align="center"
-                color={colorV2.textColor.secondary}>
-                Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
-                manual.
-              </SnbText2.Paragraph.Default>
-            </View>
-            <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-              <View style={{ flex: 1 }}>
-                <SnbButton2.Primary
-                  onPress={() => {
-                    setShowModalAreaNotFound(false);
-                    navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-                  }}
-                  title="Masukkan Lokasi Manual"
-                  disabled={false}
-                  full
-                  size="medium"
-                />
-              </View>
+          </View>
+        }
+        button={
+          <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Primary
+                onPress={() => {
+                  bottomSheetRef.current?.close();
+                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
+                }}
+                title="Masukkan Lokasi Manual"
+                disabled={false}
+                full
+                size="medium"
+              />
             </View>
           </View>
         }

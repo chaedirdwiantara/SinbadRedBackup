@@ -1,11 +1,11 @@
 import React from 'react';
-import Modal from 'react-native-modal';
 import {
-  colorV2,
   SnbText2,
   SnbButton2,
   spacingV2 as layout,
-  borderV2,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { View } from 'react-native';
 import { useAuthAction } from '@screen/auth/functions';
@@ -21,45 +21,59 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
   const { stateUser } = React.useContext(contexts.UserContext);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
+  React.useEffect(() => {
+    open ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
+  }, [open]);
 
   return (
-    <Modal
-      animationIn={'fadeIn'}
-      animationOut={'fadeOut'}
-      useNativeDriver
-      statusBarTranslucent
-      isVisible={open}
-      hasBackdrop={true}
-      coverScreen={true}
-      backdropOpacity={0.4}>
-      <View
-        style={{
-          backgroundColor: colorV2.bgColor.light,
-          margin: layout.spacing.xl,
-          padding: layout.spacing.lg,
-          paddingTop: layout.spacing.xl,
-          borderRadius: borderV2.radius.sm,
-        }}>
-        <SnbText2.Headline.Default align="center">
-          Yakin keluar Sinbad ?
-        </SnbText2.Headline.Default>
-        <View style={{ marginVertical: layout.spacing.xsm }} />
+    <SnbBottomSheet2
+      ref={bottomSheetRef}
+      close={() => setOpen(false)}
+      contentHeight={contentHeight + 100}
+      title={
+        <SnbBottomSheetPart.Title
+          title="Yakin Keluar dari Sinbad?"
+          titleType="center"
+          swipeIndicator
+        />
+      }
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={bottomSheetRef.current?.close}
+        />
+      }
+      name="modal-logout"
+      type="content"
+      content={
         <View
-          style={{
-            paddingHorizontal: layout.spacing.xl,
-            paddingVertical: layout.spacing.sm,
-          }}>
+          onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}
+          style={{ padding: layout.spacing.lg }}>
           <SnbText2.Paragraph.Default align="center">
             Apakah anda yakin ingin keluar Aplikasi{' '}
             <SnbText2.Body.Default>SINBAD</SnbText2.Body.Default>?
           </SnbText2.Paragraph.Default>
         </View>
-        <View style={{ marginVertical: layout.spacing.sm }} />
-        <View style={{ flexDirection: 'row' }}>
+      }
+      button={
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: layout.spacing.lg,
+          }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              title={'Tidak'}
-              onPress={() => setOpen(false)}
+              onPress={() => {
+                bottomSheetRef.current?.close();
+                logout({
+                  mobilePhone:
+                    stateUser.detail.data?.ownerData?.profile?.mobilePhone,
+                });
+                reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
+              }}
+              title="Keluar Sinbad"
               disabled={false}
               size="medium"
               full
@@ -69,23 +83,16 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
           <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              title={'Ya'}
-              onPress={() => {
-                setOpen(false);
-                logout({
-                  mobilePhone:
-                    stateUser.detail.data?.ownerData?.profile?.mobilePhone,
-                });
-                reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
-              }}
+              onPress={() => bottomSheetRef.current?.close()}
+              title="Batalkan"
               disabled={false}
               size="medium"
               full
             />
           </View>
         </View>
-      </View>
-    </Modal>
+      }
+    />
   );
 };
 

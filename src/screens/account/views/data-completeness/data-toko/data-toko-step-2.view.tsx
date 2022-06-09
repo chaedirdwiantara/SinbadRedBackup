@@ -44,7 +44,6 @@ const Content: React.FC<Props> = (props) => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const { imageUrl } = completeDataState.data?.buyerData || {};
-  const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
@@ -54,19 +53,6 @@ const Content: React.FC<Props> = (props) => {
       resetCamera();
     };
   }, []);
-
-  const handleBackButton = React.useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
-    return backHandler.remove;
-  }, []);
-
-  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (
@@ -188,9 +174,8 @@ const Content: React.FC<Props> = (props) => {
         renderUploadPhotoRules(),
       )}
       <ModalBack
-        open={openModalBack || props.openModalBack}
+        open={props.openModalBack}
         closeModal={() => {
-          setOpenModalBack(false);
           props.onCloseModalBack(false);
         }}
         confirm={() => {
@@ -210,6 +195,19 @@ const DataTokoStep2View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const { completeDataState } = useEasyRegistration();
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">
