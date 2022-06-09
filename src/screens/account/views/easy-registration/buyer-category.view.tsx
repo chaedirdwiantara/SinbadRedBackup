@@ -32,6 +32,7 @@ import {
 } from '@screen/account/functions/screens_name';
 import { useCoachmark, useEasyRegistration } from '@screen/account/functions';
 import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth } from '@core/redux/Data';
 
 const setIcon = (slug: string) => {
   switch (slug) {
@@ -105,11 +106,13 @@ const BuyerCategory: React.FC = () => {
   );
   const { getCoachmark } = useCoachmark();
   const { meV2, me } = useAuthCoreAction();
+  const { meV2: meV2Data } = useDataAuth();
 
   React.useEffect(() => {
     if (buyerCategories.data.length === 0) {
       getBuyerCategory();
     }
+    meV2();
   }, []);
 
   React.useEffect(() => {
@@ -131,6 +134,7 @@ const BuyerCategory: React.FC = () => {
       location,
       selectedBuyerCategory,
       selectedProductCategory,
+      meV2Data,
     );
   }
 
