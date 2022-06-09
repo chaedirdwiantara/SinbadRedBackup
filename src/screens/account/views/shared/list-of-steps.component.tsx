@@ -2,8 +2,10 @@ import React, { FC } from 'react';
 import {
   SnbText2,
   SnbCardButtonType1,
-  SnbBottomSheet,
+  SnbBottomSheet2,
   spacingV2 as layout,
+  SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, ScrollView } from 'react-native';
 import {
@@ -28,6 +30,7 @@ interface ListOfStepsProps {
 
 const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   const { completeDataState } = useEasyRegistration();
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const dataUser = [
     {
       title: 'Foto KTP',
@@ -60,6 +63,12 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
       value: completeDataState?.data?.buyer?.isAddress || false,
     },
   ];
+
+  React.useEffect(() => {
+    props.open
+      ? bottomSheetRef.current?.open()
+      : bottomSheetRef.current?.close();
+  }, [props.open]);
 
   const checkContentDisable = (item: any, index: number) => {
     if (
@@ -115,12 +124,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     return dataUser.map((item, index) => {
       const disable = checkContentDisable(item, index);
       return (
-        <View
-          style={{
-            marginBottom: layout.spacing.lg,
-            marginHorizontal: layout.spacing.lg,
-          }}
-          key={index}>
+        <View style={{ marginBottom: layout.spacing.lg }} key={index}>
           <SnbCardButtonType1
             type={disable ? 'waiting' : 'goTo'}
             onPress={() => goTo(index)}
@@ -136,12 +140,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     return dataBuyer.map((item, index) => {
       const disable = checkContentDisable(item, index);
       return (
-        <View
-          style={{
-            marginBottom: layout.spacing.lg,
-            marginHorizontal: layout.spacing.lg,
-          }}
-          key={index}>
+        <View style={{ marginBottom: layout.spacing.lg }} key={index}>
           <SnbCardButtonType1
             type={disable ? 'waiting' : 'goTo'}
             onPress={() => goTo(index)}
@@ -167,19 +166,30 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     );
   };
   return (
-    <View>
-      <SnbBottomSheet
-        title={
-          props.type === 'user'
-            ? 'Konfirmasi Data Diri'
-            : 'Konfirmasi Data Toko'
-        }
-        open={props.open}
-        content={renderContent()}
-        closeAction={props.closeModal}
-        actionIcon="close"
-      />
-    </View>
+    <SnbBottomSheet2
+      title={
+        <SnbBottomSheetPart.Title
+          title={
+            props.type === 'user'
+              ? 'Konfirmasi Data Diri'
+              : 'Konfirmasi Data Toko'
+          }
+          titleType="center"
+          swipeIndicator
+        />
+      }
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={() => bottomSheetRef.current?.close()}
+        />
+      }
+      ref={bottomSheetRef}
+      content={renderContent()}
+      close={props.closeModal}
+      name="modal-list-of-step"
+      type="m-l"
+    />
   );
 };
 

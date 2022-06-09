@@ -19,6 +19,9 @@ import { AddToCartModalStyle } from '@core/styles';
 /** === TYPE ===  */
 import { IStockValidaitonSuccess, ProductDetail } from '@model/product';
 interface AddToCartQuantityModifierProps {
+  loading: boolean;
+  disabled: boolean;
+  isStockEmpty: boolean;
   orderQty: number;
   onChangeQty: (val: number) => void;
   setIsFocus: Dispatch<SetStateAction<boolean>>;
@@ -30,6 +33,9 @@ interface AddToCartQuantityModifierProps {
 const { textColor } = colorV2;
 /** === COMPONENT ===  */
 const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
+  loading,
+  disabled,
+  isStockEmpty,
   orderQty,
   onChangeQty,
   setIsFocus,
@@ -37,9 +43,10 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   product,
   dataStock,
 }) => {
-  const [counter, setCounter] = useState(orderQty);
+  // STATE
+  const [counter, setCounter] = useState(0);
   /** === HOOKS ===  */
-
+  // FUNCTION
   const onChangeQtyDebounce = useCallback(
     debounce((qty) => {
       onChangeQty(qty);
@@ -91,7 +98,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
     },
     [onChangeQty],
   );
-
+  // VARIABLE
   const minusDisabled = useMemo(
     () =>
       counter <= (product?.minQty || 0) ||
@@ -107,10 +114,22 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
       isFocus,
     [counter, dataStock?.stock, product?.multipleQty, isFocus],
   );
+
+  const leftStockLabel = useMemo(() => {
+    if (isStockEmpty) return 'Stock Habis';
+    // menampilkan jumlah stock tersisa
+    return `Tersisa ${dataStock?.stock}`;
+  }, [dataStock?.stock, isStockEmpty]);
   // EFFECT
   useEffect(() => {
     onChangeQtyDebounce(counter);
   }, [counter]);
+  // reset counter if loading
+  useEffect(() => {
+    if (!loading && product?.minQty) {
+      setCounter(product?.minQty || 0);
+    }
+  }, [product?.minQty, loading]);
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
@@ -122,12 +141,11 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
         <React.Fragment>
           {(dataStock.stock < 11 || orderQty > dataStock.stock) && (
             <SnbText2.Body.Default color={textColor.selected}>
-              {dataStock.stock === 0
-                ? 'Produk Habis'
-                : `Tersisa ${dataStock.stock}`}
+              {leftStockLabel}
             </SnbText2.Body.Default>
           )}
           <SnbNumberCounter2
+            disabled={disabled}
             value={counter}
             onChange={handleChange}
             onIncrease={onPlusPres}

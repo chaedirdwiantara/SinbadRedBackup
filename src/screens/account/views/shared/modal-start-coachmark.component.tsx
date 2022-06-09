@@ -2,25 +2,28 @@ import { useDataAuth } from '@core/redux/Data';
 import { useNavigation } from '@react-navigation/native';
 import { useCoachmark } from '@screen/account/functions';
 import {
-  SnbBottomSheet,
+  Content,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
   SnbButton2,
-  SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 
 interface Props {
   onStartCoachmark: () => void;
 }
 
 const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
-  const [open, setOpen] = React.useState<boolean>(false);
   const { coachmarkState } = useCoachmark();
   const { getCoachmark } = useCoachmark();
   const { me } = useDataAuth();
   const [mounted, setMounted] = React.useState(true);
   const { navigate } = useNavigation();
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
     return () => setMounted(false);
@@ -31,52 +34,51 @@ const ModalStartCoachmark: React.FC<Props> = ({ onStartCoachmark }) => {
   }, [me.data]);
 
   React.useEffect(() => {
-    if (typeof coachmarkState.data?.homeCoachmark === 'boolean' && mounted) {
-      setOpen(!coachmarkState.data?.homeCoachmark);
+    if (
+      typeof coachmarkState.data?.homeCoachmark === 'boolean' &&
+      !coachmarkState.data?.homeCoachmark &&
+      mounted
+    ) {
+      bottomSheetRef.current?.open();
     }
   }, [coachmarkState.data]);
 
   return (
-    <SnbBottomSheet
-      open={open}
-      closeAction={() => setOpen(false)}
+    <SnbBottomSheet2
+      title={<SnbBottomSheetPart.Title title="" />}
+      name="modal-start-coachmark"
+      type="content"
+      ref={bottomSheetRef}
+      contentHeight={contentHeight + 100}
+      button={
+        <View
+          style={{
+            flexDirection: 'row',
+            padding: layout.spacing.lg,
+          }}>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Primary
+              title="Mulai Jelajah"
+              onPress={() => {
+                navigate('HomeView');
+                onStartCoachmark();
+                bottomSheetRef.current?.close();
+              }}
+              size="medium"
+              full
+            />
+          </View>
+        </View>
+      }
       content={
-        <View style={{ alignItems: 'center', padding: layout.spacing.md }}>
-          <Image
-            resizeMode="contain"
-            style={{ height: 180, width: 180 }}
-            source={require('@image/onboard/onboard1.png')}
+        <View onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+          <Content.Illustration
+            image={require('@image/onboard/onboard1.png')}
+            imageStyle={{ height: 180, width: 180, resizeMode: 'contain' }}
+            title="Stok aman, jualan nyaman"
+            description="Sinbad membantu Anda mendapatkan produk berkualitas dengan harga
+            terbaik. Coba sekarang!"
           />
-          <View style={{ marginVertical: layout.spacing.lg }} />
-          <SnbText2.Headline.Default>
-            Stok aman, jualan nyaman
-          </SnbText2.Headline.Default>
-          <View style={{ marginVertical: layout.spacing.sm }} />
-          <View style={{ paddingHorizontal: layout.spacing.lg }}>
-            <SnbText2.Paragraph.Default align="center">
-              Sinbad membantu Anda mendapatkan produk berkualitas dengan harga
-              terbaik. Coba sekarang!
-            </SnbText2.Paragraph.Default>
-          </View>
-          <View style={{ marginVertical: layout.spacing.lg }} />
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingHorizontal: layout.spacing.lg,
-            }}>
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Primary
-                title="Mulai Jelajah"
-                onPress={() => {
-                  navigate('HomeView');
-                  setOpen(false);
-                  onStartCoachmark();
-                }}
-                size="medium"
-                full
-              />
-            </View>
-          </View>
         </View>
       }
     />

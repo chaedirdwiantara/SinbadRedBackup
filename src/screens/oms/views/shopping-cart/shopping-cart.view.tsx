@@ -227,9 +227,12 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => if get cart failed */
   useEffect(() => {
     if (stateCart.get.error !== null) {
-      errorModal.setCloseAction(() => handleGoBack);
-      errorModal.setErrorData(stateCart.get.error);
-      errorModal.setOpen(true);
+      setPageLoading(false);
+      if (stateCart.get.error.code !== 20130000008) {
+        errorModal.setCloseAction(() => handleGoBack);
+        errorModal.setErrorData(stateCart.get.error);
+        errorModal.setOpen(true);
+      }
     }
   }, [stateCart.get.error]);
 
