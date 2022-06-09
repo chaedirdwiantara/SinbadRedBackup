@@ -64,7 +64,7 @@ export const useEasyRegistration = () => {
     const params = {
       unique_id: uniqueId,
       owner_id: meV2Data?.data?.data?.user?.id,
-      owner_mobile_numer: meV2Data?.data?.data?.user?.name,
+      owner_mobile_number: meV2Data?.data?.data?.user?.name,
       store_id: meV2Data?.data?.data?.buyerId,
       store_category: buyerCategory.name,
       product_category: productCategory
