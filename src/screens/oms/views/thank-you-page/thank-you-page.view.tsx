@@ -399,9 +399,7 @@ const OmsThankYouPageView: FC = () => {
         isOpen={confirmationOpen}
         title="Batalkan Pesanan?"
         desc="Anda tidak perlu melakukan pembayaran setelah membatalkan pesanan"
-        onSubmit={() => {
-          handleConfirmationCancelOrder
-        }}
+        onSubmit={handleConfirmationCancelOrder}
         onCancel={() => setConfirmationOpen(false)}
       />
     );
