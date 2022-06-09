@@ -72,6 +72,7 @@ const OTPContent: React.FC<Props> = (props) => {
     if (type === 'email') {
       // eslint-disable-next-line no-shadow
       const data = {
+        screen: 'profile',
         email: props.route.params.data,
         code: otp,
       };
