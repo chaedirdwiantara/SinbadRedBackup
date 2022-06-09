@@ -20,7 +20,9 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
       <SnbText2.Headline.Small color={colorV2.textColor.default}>
         Alamat Pengiriman
       </SnbText2.Headline.Small>
-      <SnbDivider2 />
+      <View style={{ marginVertical: 4 }}>
+        <SnbDivider2 />
+      </View>
       <View style={{ marginBottom: 6 }}>
         <SnbText2.Body.Small color={colorV2.textColor.default}>
           {buyerName}
@@ -32,9 +34,8 @@ export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
         {buyerAddress.district ? ',' : null} {buyerAddress.district}
         {buyerAddress.city ? ',' : null} {buyerAddress.city}
         {buyerAddress.province ? ',' : null} {buyerAddress.province}
-      </SnbText2.Paragraph.Tiny>
-      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
-        {buyerAddress?.zipCode}
+        {buyerAddress.zipCode ? ' ' : null}
+        {buyerAddress.zipCode}
       </SnbText2.Paragraph.Tiny>
     </View>
   );

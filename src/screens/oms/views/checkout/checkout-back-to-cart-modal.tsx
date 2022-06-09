@@ -1,7 +1,15 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { Image, View } from 'react-native';
-import { SnbBottomSheet, SnbText, SnbButton } from 'react-native-sinbad-ui';
+import {
+  SnbText2,
+  FooterButton,
+  SnbBottomSheetPart,
+  SnbBottomSheet2,
+  colorV2,
+} from 'react-native-sinbad-ui';
+import { Images } from 'src/assets';
+import { CheckoutStyle } from '../../styles';
 
 interface BackToCartModalProps {
   isOpen: boolean;
@@ -14,47 +22,94 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
   handleOkAction,
   handleNoAction,
 }) => {
-  /** => ACTION */
-  const button = () => {
+  /** => content item image */
+  const contentItemImage = () => {
     return (
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-        }}>
-        <SnbButton.Multiple
-          rightTitle={'Tidak'}
-          leftTitle={'Ya'}
-          leftType={'secondary'}
-          rightType={'primary'}
-          onPressLeft={handleOkAction}
-          onPressRight={handleNoAction}
+      <View style={CheckoutStyle.contentImageContainer}>
+        <Image
+          source={Images.emptySinbad}
+          style={CheckoutStyle.image}
+          resizeMode={'contain'}
         />
       </View>
     );
   };
-
-  const content = () => {
+  /** => content item title */
+  const contentItemTitle = () => {
     return (
-      <>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            paddingBottom: 60,
-          }}>
-          <View style={{ marginBottom: 16, alignItems: 'center' }}>
-            <Image source={require('../../../../assets/images/cancel.png')} />
-            <SnbText.H3>Batalkan Pesanan</SnbText.H3>
-            <SnbText.B1>Apakah anda ingin membatalkan pesanan?</SnbText.B1>
-          </View>
-        </View>
-        {button()}
-      </>
+      <View style={CheckoutStyle.contentTitleContainer}>
+        <SnbText2.Headline.Default
+          color={colorV2.textColor.default}
+          align={'center'}>
+          Keluar dari Halaman Checkout
+        </SnbText2.Headline.Default>
+      </View>
+    );
+  };
+  /** => content item message */
+  const contentItemMessage = () => {
+    return (
+      <View style={CheckoutStyle.contentMessageContainer}>
+        <SnbText2.Paragraph.Default
+          color={colorV2.textColor.secondary}
+          align={'center'}>
+          Dengan keluar dari halaman ini, pesanan Anda tidak akan diproses.
+        </SnbText2.Paragraph.Default>
+      </View>
+    );
+  };
+  /** => content item */
+  const contentItem = () => {
+    return (
+      <View style={CheckoutStyle.contentItemContainer}>
+        {contentItemImage()}
+        {contentItemTitle()}
+        {contentItemMessage()}
+      </View>
+    );
+  };
+  /** => button */
+  const button = () => {
+    return (
+      <FooterButton.Dual
+        title1={'Lanjut Bayar'}
+        title2={'Keluar'}
+        button1Press={handleNoAction}
+        button2Press={handleOkAction}
+      />
+    );
+  };
+  /** => content */
+  const content = () => {
+    return <View>{contentItem()}</View>;
+  };
+  /** => title */
+  const title = () => {
+    return <SnbBottomSheetPart.Title />;
+  };
+  /** => navigation */
+  const navigation = () => {
+    return (
+      <SnbBottomSheetPart.Navigation
+        iconRight1Name="x"
+        onRight1Action={handleNoAction}
+      />
     );
   };
 
-  return <SnbBottomSheet open={isOpen} content={content()} size={'normal'} />;
+  return (
+    <SnbBottomSheet2
+      name={'checkoutBackToCartModal'}
+      type={'content'}
+      contentHeight={410}
+      title={title()}
+      open={isOpen}
+      snap={true}
+      content={content()}
+      button={button()}
+      navigation={navigation()}
+    />
+  );
 };
 
 /**

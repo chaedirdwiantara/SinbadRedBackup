@@ -3,7 +3,7 @@ import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { FlatList, Image, View, TouchableOpacity } from 'react-native';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2 } from 'react-native-sinbad-ui';
 /** === TYPE === */
 import * as models from '@models';
 export interface CheckoutSKUListViewProps {
@@ -30,26 +30,26 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                 style={CheckoutStyle.skuImage}
               />
               <View style={CheckoutStyle.productsDescription}>
-                <SnbText.B4 color={color.black60}>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                   {products[0].productName}
-                </SnbText.B4>
-                <SnbText.B4 color={color.black60}>
+                </SnbText2.Paragraph.Default>
+                <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
                   {products[0].qty} {products[0].uomLabel}
-                </SnbText.B4>
-                <SnbText.B4 color={color.black100}>
+                </SnbText2.Paragraph.Small>
+                <SnbText2.Body.Default color={colorV2.textColor.default}>
                   {toCurrency(products[0].priceAfterTax, {
                     withFraction: false,
                   })}
-                </SnbText.B4>
+                </SnbText2.Body.Default>
               </View>
             </View>
             {productLength > 1 ? (
               <TouchableOpacity
                 onPress={() => setShowAllProduct(true)}
                 style={CheckoutStyle.showMoreProduct}>
-                <SnbText.B2 color={color.blue50}>
+                <SnbText2.Body.Tiny color={colorV2.textColor.link}>
                   Lihat {productLength - 1} produk lainnya
-                </SnbText.B2>
+                </SnbText2.Body.Tiny>
               </TouchableOpacity>
             ) : null}
           </>
@@ -65,15 +65,17 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
                     style={CheckoutStyle.skuImage}
                   />
                   <View style={CheckoutStyle.productsDescription}>
-                    <SnbText.B4 color={color.black60}>
+                    <SnbText2.Paragraph.Default
+                      color={colorV2.textColor.secondary}>
                       {item.productName}
-                    </SnbText.B4>
-                    <SnbText.B4 color={color.black60}>
+                    </SnbText2.Paragraph.Default>
+                    <SnbText2.Paragraph.Small
+                      color={colorV2.textColor.secondary}>
                       {item.qty} {item.uomLabel}
-                    </SnbText.B4>
-                    <SnbText.B4 color={color.black100}>
+                    </SnbText2.Paragraph.Small>
+                    <SnbText2.Body.Default color={colorV2.textColor.default}>
                       {toCurrency(item.priceAfterTax, { withFraction: false })}
-                    </SnbText.B4>
+                    </SnbText2.Body.Default>
                   </View>
                 </View>
               )}
@@ -81,9 +83,9 @@ export const CheckoutSKUListView: FC<CheckoutSKUListViewProps> = ({
             <TouchableOpacity
               onPress={() => setShowAllProduct(false)}
               style={CheckoutStyle.showMoreProduct}>
-              <SnbText.B2 color={color.blue50}>
+              <SnbText2.Body.Tiny color={colorV2.textColor.link}>
                 Sembunyikan {productLength - 1} produk lainnya
-              </SnbText.B2>
+              </SnbText2.Body.Tiny>
             </TouchableOpacity>
           </>
         )}

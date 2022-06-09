@@ -1,8 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
-import { View } from 'react-native';
-import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
+import { FooterButton } from 'react-native-sinbad-ui';
 import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
@@ -46,35 +44,17 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
     setReachLimit(true);
   };
 
-  const content = () => {
-    return (
-      <View style={CheckoutStyle.bottomContentContainer}>
-        <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>{totalPaymentFull}</SnbText.H4>
-      </View>
-    );
-  };
-
   return (
-    <View style={CheckoutStyle.bottomContainer}>
-      {content()}
-      {totalPaymentNumber > 999999999 ? (
-        <SnbButton.Dynamic
-          size="small"
-          type={'primary'}
-          onPress={pressButton}
-          title={'Pilih Pembayaran'}
-        />
-      ) : (
-        <SnbButton.Dynamic
-          size="small"
-          type={'primary'}
-          onPress={goToPaymentMethod}
-          title={'Pilih Pembayaran'}
-        />
-      )}
+    <React.Fragment>
+      <FooterButton.Order
+        titleButton="Pilih Pembayaran"
+        value={totalPaymentFull}
+        buttonPress={
+          totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
+        }
+      />
       <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />
-    </View>
+    </React.Fragment>
   );
 };
 
