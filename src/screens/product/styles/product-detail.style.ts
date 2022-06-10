@@ -32,17 +32,6 @@ export const ProductDetailStyle = StyleSheet.create({
     paddingVertical: 8,
     backgroundColor: color.yellow10,
   },
-  sectionTitle: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    marginBottom: 8,
-  },
-  sectionSeparator: {
-    marginHorizontal: 16,
-    marginBottom: 8,
-    borderTopWidth: 1,
-    borderColor: color.black10,
-  },
   sectionSeparatorSkeleton: {
     marginLeft: 16,
     marginTop: 16,
