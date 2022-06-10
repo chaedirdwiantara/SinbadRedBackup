@@ -28,7 +28,7 @@ interface ModalTransactionProps {
 const transactionFilter = [
   {
     id: '',
-    label: 'Semua Transaksi Berlangsung',
+    label: 'Semua status transaksi',
   },
   {
     id: 'created',
@@ -61,7 +61,7 @@ const ModalTransactionFilter = forwardRef<
 
   const Content = useMemo(() => {
     return (
-      <View style={{ paddingHorizontal: 8 }}>
+      <View>
         <SnbRadioGroup value={select} onChange={setSelect}>
           {transactionFilter.map((i) => (
             <View

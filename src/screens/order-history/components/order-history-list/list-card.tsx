@@ -449,12 +449,6 @@ const styles = StyleSheet.create({
     backgroundColor: color.black40,
     marginVertical: 14,
   },
-  cancel: {
-    backgroundColor: '#677A8E',
-    borderRadius: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
   delivered: {
     backgroundColor: color.red50,
     borderRadius: 4,
