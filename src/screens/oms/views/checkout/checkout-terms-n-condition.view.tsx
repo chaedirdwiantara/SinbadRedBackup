@@ -14,7 +14,7 @@ export const CheckoutTNCView: FC<CheckoutTNCViewProps> = ({ clickAction }) => {
         <SnbText2.Body.Small align="center" color={colorV2.textColor.default}>
           Dengan melanjutkan pembayaran, berarti Anda setuju dengan{' '}
           <SnbText2.Body.Small align="center" color={colorV2.textColor.link}>
-            syarat dan ketentuan Sinbad.
+            Syarat dan Ketentuan Sinbad.
           </SnbText2.Body.Small>
         </SnbText2.Body.Small>
       </TouchableOpacity>

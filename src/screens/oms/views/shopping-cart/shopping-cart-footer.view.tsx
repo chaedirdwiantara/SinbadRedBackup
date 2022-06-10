@@ -123,7 +123,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         setErrorShown(true);
-        setCheckoutBtnLoading(false);
+        refCartValidationModal.current?.open();
       }
     }
   }, [
@@ -234,7 +234,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** ==> content */
   const renderFooterContent = () => (
     <FooterButton.Order
-      titleButton="Checkout"
+      titleButton="Checkout Sekarang"
       loadingButton={isCheckoutBtnLoading}
       disabled={isCheckoutDisabled}
       value={countTotalPrice}
@@ -253,7 +253,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Main */
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
       <BottomSheetError

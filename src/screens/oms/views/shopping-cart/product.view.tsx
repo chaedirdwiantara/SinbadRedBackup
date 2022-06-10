@@ -271,7 +271,7 @@ export const ProductView: FC<ProductViewProps> = ({
           <SnbText2.Caption.Default
             color={
               colorV2.textColor.secondary
-            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText2.Caption.Default>
+            }>{`${product.qtyPerBox} Pcs dalam 1 ${product.uomLabel}`}</SnbText2.Caption.Default>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {renderRemoveProductIcon()}
