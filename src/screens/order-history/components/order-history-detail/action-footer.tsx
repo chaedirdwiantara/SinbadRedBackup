@@ -1,11 +1,12 @@
 import React, { useCallback, useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { color, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { colorV2, SnbText2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import BottomSheetConfirmation, {
   BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
+import Svg from '@svg';
 
 const ActionFooter = () => {
   const {
@@ -55,15 +56,26 @@ const ActionFooter = () => {
   return (
     <>
       <View style={styles.main}>
-        <TouchableOpacity onPress={onOpenWhatsapp}>
-          <SnbText.B2 color={color.blue60}>Butuh Bantuan?</SnbText.B2>
+        <TouchableOpacity
+          onPress={onOpenWhatsapp}
+          style={styles.footerIconText}>
+          <View style={styles.icon}>
+            <Svg size={24} name="whatsapp" />
+          </View>
+          <SnbText2.Body.Default color={colorV2.textColor.link}>
+            Butuh Bantuan?
+          </SnbText2.Body.Default>
         </TouchableOpacity>
         {data?.isCancellable || data?.isOrderAbleToDone ? (
-          <TouchableOpacity style={styles.button} onPress={onPressAction}>
-            <SnbText.B3 color={color.white}>
-              {data?.isCancellable ? 'Batalkan' : 'Pesanan Diterima'}
-            </SnbText.B3>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <SnbButton2.Secondary
+              title={data?.isCancellable ? 'Batalkan' : 'Pesanan Diterima'}
+              size="medium"
+              onPress={onPressAction}
+              outline={true}
+              full={true}
+            />
+          </View>
         ) : (
           <View />
         )}
@@ -81,20 +93,18 @@ const ActionFooter = () => {
 
 const styles = StyleSheet.create({
   main: {
-    height: 76,
-    backgroundColor: color.white,
+    height: 84,
+    backgroundColor: colorV2.bgColor.light,
     elevation: 10,
     padding: 16,
+    paddingBottom: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: color.red50,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 4,
-  },
+  icon: { marginRight: 8, marginTop: -2 },
+  footerIconText: { flexDirection: 'row', marginLeft: 24 },
+  buttonContainer: { width: 156 },
 });
 
 export default ActionFooter;

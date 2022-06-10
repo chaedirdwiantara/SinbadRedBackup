@@ -4,6 +4,7 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { StackActions, useNavigation } from '@react-navigation/native';
 import { DATA_COMPLETENESS_VIEW } from './screens_name';
+import { uniqueId } from '@core/functions/global/device-data';
 
 export const useEasyRegistration = () => {
   const dispatch = useDispatch();
@@ -50,6 +51,7 @@ export const useEasyRegistration = () => {
     location: models.ISearchLocationsData | null,
     buyerCategory: models.IBuyerCategory,
     productCategory: any[],
+    meV2Data: any,
   ) => {
     let productCategoryIds: string[] = [];
     productCategory.forEach((el) => productCategoryIds.push(el.id));
@@ -58,7 +60,21 @@ export const useEasyRegistration = () => {
       buyerCategoryId: buyerCategory.id,
       productCategoryIds,
     };
-    dispatch(Actions.createBasicAccount(data));
+
+    const params = {
+      unique_id: uniqueId,
+      owner_id: meV2Data?.data?.data?.user?.id,
+      owner_mobile_number: meV2Data?.data?.data?.user?.name,
+      store_id: meV2Data?.data?.data?.buyerId,
+      store_category: buyerCategory.name,
+      product_category: productCategory
+        .map((v) => {
+          return v.name;
+        })
+        .join(', '),
+      location: `${location?.city}, ${location?.district}, ${location?.urban}`,
+    };
+    dispatch(Actions.createBasicAccount(data, params));
   };
 
   const getCompleteData = React.useCallback(() => {

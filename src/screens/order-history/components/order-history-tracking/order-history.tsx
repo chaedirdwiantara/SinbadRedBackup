@@ -22,12 +22,13 @@ const OrderHistory = () => {
   return (
     <View style={styles.main}>
       <Header title="Riwayat Pesanan" />
-      {data?.orderHistoryLogs.map((i) => (
+      {data?.orderHistoryLogs.map((i, index) => (
         <Stepper
           key={i.id}
           label={i.logLabel}
           status="done"
           timeStamp={i.logCreatedAt}
+          isEnd={Object.keys(data?.orderHistoryLogs).length === index + 1}
         />
       ))}
     </View>
