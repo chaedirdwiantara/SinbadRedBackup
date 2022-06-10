@@ -58,7 +58,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
             </SnbText2.Paragraph.Default>
           </View>
           <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-            Rp {deliveryFee}
+            {toCurrency(deliveryFee, { withFraction: false })}
           </SnbText2.Paragraph.Default>
         </View>
         <View style={{ marginVertical: 8 }}>
