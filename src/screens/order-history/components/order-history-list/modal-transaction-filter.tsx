@@ -66,7 +66,7 @@ const ModalTransactionFilter = forwardRef<
             <View
               key={i.id}
               style={{
-                marginTop: 0,
+                marginTop: 8,
               }}>
               <TouchableOpacity
                 style={{
@@ -82,7 +82,7 @@ const ModalTransactionFilter = forwardRef<
                     <SnbText.B1>{i.label}</SnbText.B1>
                   )}
                 </View>
-                <SnbRadio value={i.id} style={{ top: 10 }} />
+                <SnbRadio value={i.id} style={{ top: 8 }} />
               </TouchableOpacity>
               <View style={styles.div} />
             </View>
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   div: {
     height: 1,
     backgroundColor: color.black40,
-    marginTop: 14,
+    marginTop: 8,
   },
 });
 

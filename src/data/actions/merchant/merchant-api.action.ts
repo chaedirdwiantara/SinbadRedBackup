@@ -1,6 +1,8 @@
 import * as types from '@types';
 import * as models from '@models';
 import ReactMoE from 'react-native-moengage';
+import { globalReportFromAction } from '@report/global-report';
+import * as EventName from '@report/moengage/event';
 /** === LIST === */
 /** => list supplier process */
 export const supplierListProcess = (
@@ -152,6 +154,12 @@ export const verificationEmailSuccess = (
   params: any,
 ): models.CreateSuccessAction => {
   ReactMoE.setUserEmailID(params.email);
+  const dataUser = {
+    email: params.email,
+  };
+  if (params.screen === 'completion') {
+    globalReportFromAction(EventName.OWNER_DATA_STEP_4, { dataUser });
+  }
   return { type: types.VERIFICATION_EMAIL_SUCCESS, payload: data };
 };
 /** => failed */

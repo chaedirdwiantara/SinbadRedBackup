@@ -1,6 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { SnbText, SnbBadge, color } from '@sinbad/react-native-sinbad-ui';
+import { StyleSheet, View } from 'react-native';
+import {
+  SnbBadge2,
+  colorV2,
+  SnbButton2,
+  SnbText2,
+} from '@sinbad/react-native-sinbad-ui';
 import { NavigationAction } from '@core/functions/navigation';
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 import ConfirmationTime from '../confirmation-time';
@@ -25,11 +30,11 @@ const StatusOrder = () => {
       <View style={{ margin: 16 }}>
         <View style={styles.main}>
           <View>
-            <SnbText.B2>Status Pesanan:</SnbText.B2>
+            <SnbText2.Body.Default>Status Pesanan:</SnbText2.Body.Default>
             <View style={{ marginTop: 4 }}>
-              <SnbBadge.Label
+              <SnbBadge2
                 type={labelStatus[data?.statusValue || ''] || 'error'}
-                value={data?.statusLabel || ''}
+                title={data?.statusLabel || ''}
               />
             </View>
           </View>
@@ -37,15 +42,16 @@ const StatusOrder = () => {
             style={{
               justifyContent: 'center',
             }}>
-            <TouchableOpacity
-              style={styles.button}
+            <SnbButton2.Primary
+              title="Lacak"
+              size="tiny"
+              outline
               onPress={() =>
                 NavigationAction.navigate('HistoryTrackingView', {
                   id: data?.id,
                 })
-              }>
-              <SnbText.B2 color={color.red70}>Lacak</SnbText.B2>
-            </TouchableOpacity>
+              }
+            />
           </View>
         </View>
         {/* time ticking delivered */}
@@ -57,9 +63,9 @@ const StatusOrder = () => {
         {/* reason canceled */}
         {data?.orderSellerFailedReason ? (
           <View style={styles.reason}>
-            <SnbText.C1 color={color.red70}>
+            <SnbText2.Paragraph.Tiny color={colorV2.textColor.error}>
               {data?.orderSellerFailedReason}
-            </SnbText.C1>
+            </SnbText2.Paragraph.Tiny>
           </View>
         ) : (
           <View />
@@ -72,23 +78,16 @@ const StatusOrder = () => {
 
 const styles = StyleSheet.create({
   main: { flexDirection: 'row', justifyContent: 'space-between' },
-  button: {
-    borderColor: color.red70,
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingVertical: 4,
-    paddingHorizontal: 7.5,
-  },
   skeleton: {
     flex: 1,
     height: 80,
     marginBottom: 10,
   },
   reason: {
-    marginTop: 12,
-    backgroundColor: color.red10,
+    marginTop: 8,
+    backgroundColor: colorV2.bgColor.red,
     borderRadius: 4,
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 16,
   },
 });

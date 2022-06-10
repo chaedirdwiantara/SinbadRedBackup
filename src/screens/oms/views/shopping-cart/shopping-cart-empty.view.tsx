@@ -1,10 +1,10 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View, Image } from 'react-native';
-import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE ===  */
-import { goToCategory } from '../../functions';
+import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
 import { Images } from 'src/assets';
+import { goToCategory } from '../../functions';
 
 /** === COMPONENT ===  */
 export const ShoppingCartEmpty: FC = () => (

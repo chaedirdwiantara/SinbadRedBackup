@@ -20,6 +20,9 @@ export const toMoengageFromAction = (eventName: string, data: any) => {
     case EventName.STORE_DATA_STEP_3:
       MoeAction.recordStoreCompletionData(eventName, data);
       break;
+    case EventName.REGISTRATION_SUCCESS:
+      MoeAction.recordRegistrationSuccessData(eventName, data);
+      break;
     default:
       break;
   }

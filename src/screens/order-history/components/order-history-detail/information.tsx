@@ -1,5 +1,5 @@
 import React from 'react';
-import { color, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { colorV2, SnbText2, SnbDivider2 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet } from 'react-native';
 
 type HeaderProps = {
@@ -10,8 +10,10 @@ export const Header = (props: HeaderProps) => {
   const { title } = props;
   return (
     <>
-      <SnbText.B2>{title}</SnbText.B2>
-      <View style={styles.divHeader} />
+      <SnbText2.Headline.Small>{title}</SnbText2.Headline.Small>
+      <View style={{ marginVertical: 8 }}>
+        <SnbDivider2 type="solid" />
+      </View>
     </>
   );
 };
@@ -26,14 +28,14 @@ export const Description = (props: DescProps) => {
   return (
     <View style={styles.desc}>
       <View style={styles.text}>
-        <SnbText.B3 color={color.black60} align="left">
+        <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
           {title}
-        </SnbText.B3>
+        </SnbText2.Paragraph.Default>
       </View>
-      <View style={styles.text}>
-        <SnbText.B3 color={color.black60} align="right">
+      <View style={[styles.text, { alignItems: 'flex-end' }]}>
+        <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
           {value}
-        </SnbText.B3>
+        </SnbText2.Paragraph.Default>
       </View>
     </View>
   );
@@ -42,18 +44,13 @@ export const Description = (props: DescProps) => {
 export const Divider = () => <View style={styles.div} />;
 
 const styles = StyleSheet.create({
-  divHeader: {
-    backgroundColor: color.black10,
-    height: 1,
-    marginVertical: 8,
-  },
   text: { flex: 1 },
   desc: {
     flexDirection: 'row',
     marginTop: 8,
   },
   div: {
-    height: 10,
-    backgroundColor: color.black10,
+    height: 8,
+    backgroundColor: colorV2.bgColor.neutral,
   },
 });
