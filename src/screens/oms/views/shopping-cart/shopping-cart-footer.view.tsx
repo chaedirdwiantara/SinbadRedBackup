@@ -81,7 +81,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** ==> Run cart validation cycle after business error modal dismissed */
   const handleClose = () => {
     handleCartCycle();
-    setErrorShown(false);
+    refCartValidationModal.current?.close();
   };
 
   /** === HOOKS === */
