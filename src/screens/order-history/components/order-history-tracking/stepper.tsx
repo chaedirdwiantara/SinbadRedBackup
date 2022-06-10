@@ -1,5 +1,10 @@
 import { toLocalDateTime } from '@core/functions/global/date-format';
-import { color, SnbText } from '@sinbad/react-native-sinbad-ui';
+import {
+  color,
+  colorV2,
+  SnbText,
+  SnbText2,
+} from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import React, { useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -63,12 +68,12 @@ const Stepper = (props: StepperProps) => {
             </View>
           )}
           <View style={styles.status}>
-            <SnbText.B2>{label}</SnbText.B2>
+            <SnbText2.Body.Small>{label}</SnbText2.Body.Small>
             {timeStamp && (
               <View style={styles.timestamp}>
-                <SnbText.C1 color={color.black60}>
+                <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
                   {toLocalDateTime(timeStamp)}
-                </SnbText.C1>
+                </SnbText2.Paragraph.Tiny>
               </View>
             )}
           </View>
@@ -79,40 +84,40 @@ const Stepper = (props: StepperProps) => {
 };
 
 const styles = StyleSheet.create({
-  main: { flexDirection: 'row', marginBottom: 6 },
-  indicator: { alignItems: 'center' },
+  main: { flexDirection: 'row', marginBottom: 4 },
+  indicator: { alignItems: 'center', paddingTop: 4 },
   circle: {
-    height: 18,
-    width: 18,
+    height: 16,
+    width: 16,
     borderRadius: 18,
-    borderWidth: 1,
-    marginBottom: 2,
+    borderWidth: 2,
+    marginBottom: 8,
   },
   circleDone: {
-    backgroundColor: color.red50,
-    borderColor: color.red50,
+    backgroundColor: colorV2.strokeColor.primary,
+    borderColor: colorV2.strokeColor.primary,
   },
   circleProcess: {
-    borderColor: color.red50,
+    borderColor: colorV2.strokeColor.primary,
     backgroundColor: color.red10,
   },
   circleWaiting: {
-    backgroundColor: color.black10,
-    borderColor: color.black40,
+    backgroundColor: colorV2.bgColor.light,
+    borderColor: colorV2.strokeColor.default,
   },
   line: {
     height: 30,
     width: 1,
     borderWidth: 1,
   },
-  lineProcess: { borderColor: color.black40 },
-  lineDone: { borderColor: color.red50 },
+  lineProcess: { borderColor: colorV2.strokeColor.default },
+  lineDone: { borderColor: colorV2.strokeColor.primary },
   tracking: {
     flexDirection: 'row',
   },
   icon: { marginLeft: 16 },
   trackingWaiting: { opacity: 0.5 },
-  status: { justifyContent: 'center', marginLeft: 16 },
+  status: { justifyContent: 'center', marginLeft: 8 },
   timestamp: { marginTop: 4 },
 });
 

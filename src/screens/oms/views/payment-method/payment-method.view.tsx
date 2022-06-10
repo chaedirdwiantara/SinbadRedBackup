@@ -487,6 +487,7 @@ const OmsPaymentMethod: FC<PaymentMethodInterface> = (props) => {
               setPaymentStatusSession(false);
             }}
             handleOkAction={() => {
+              setPaymentStatusSession(false);
               setCreateTheOrder(true);
             }}
           />
