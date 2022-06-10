@@ -95,7 +95,7 @@ const BannerListView: React.FC = () => {
         {/* Image */}
         <View>
           <SnbImageCompressor
-            defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
+            defaultSource={require('../../../assets/images/banner/sinbad-default-banner.png')}
             uri={item.imageUrl}
             style={BannerStyles.imageCard}
             res={500}

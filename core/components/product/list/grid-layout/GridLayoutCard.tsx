@@ -35,7 +35,9 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
       <ProductGridCard
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
-        qtySoldLabel={product.qtySoldLabel}
+        qtySoldLabel={
+          product.qtySoldValue ? `Terjual ${product.qtySoldLabel}` : ''
+        }
         priceAfterTax={product.priceAfterTax}
         hasBulkPrice={product.hasBulkPrice}
         isBundle={product.isBundle}

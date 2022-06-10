@@ -1,12 +1,10 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { View, ScrollView, RefreshControl } from 'react-native';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import ProductTagList from '../ProductTagList';
 import GridLayoutCard from './GridLayoutCard';
 import { GridSkeleton } from './GridSkeleton';
-import TitleSection from '../TitleSection';
 /** === IMPORT FUNCTIONS === */
 import { scrollHasReachedEnd } from '@core/functions/global/scroll-position';
 import { useListDisplayState } from '@core/functions/product';
@@ -17,17 +15,12 @@ const GridLayout: FC<ProductLayoutProps> = ({
   products,
   withTags = true,
   tags,
-  onTagPress,
   onOrderPress,
   isRefreshing,
   onRefresh,
   onLoadMore,
   loading,
   error,
-  total,
-  onFilterPress,
-  onChangeLayoutListPress,
-  onSortPress,
 }) => {
   /** === HOOK ===  */
   const displayState = useListDisplayState({
@@ -70,8 +63,16 @@ const GridLayout: FC<ProductLayoutProps> = ({
           <EmptyState title="Produk Kosong" description="Maaf Produk Kosong" />
         )}
         {displayState === 'success' && (
-          <View style={{ flexDirection: 'row', paddingTop: !hasTags ? 14 : 0 }}>
-            <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingTop: !hasTags ? 14 : 0,
+            }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+              }}>
               {products.map(
                 (product, productIndex) =>
                   productIndex % 2 === 0 && (
@@ -84,7 +85,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                   ),
               )}
             </View>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, alignItems: 'center' }}>
               {products.map(
                 (product, productIndex) =>
                   productIndex % 2 === 1 && (
@@ -104,4 +105,4 @@ const GridLayout: FC<ProductLayoutProps> = ({
   );
 };
 
-export default GridLayout;
+export default memo(GridLayout);

@@ -26,7 +26,6 @@ interface Props {
 }
 
 const Content: React.FC<Props> = (props) => {
-  const [openModalBack, setOpenModalBack] = useState(false);
   const { openCameraWithOCR } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
   const { ocrImageState, ocrImageReset } = useOCR();
@@ -61,19 +60,6 @@ const Content: React.FC<Props> = (props) => {
       }
     }
   }, [updateCompleteDataState]);
-
-  const handleBackButton = React.useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
-    return backHandler.remove;
-  }, []);
-
-  useFocusEffect(handleBackButton);
 
   function handleSubmit() {
     if (
@@ -161,9 +147,8 @@ const Content: React.FC<Props> = (props) => {
     <View style={{ flex: 1 }}>
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
-        open={openModalBack || props.openModalBack}
+        open={props.openModalBack}
         closeModal={() => {
-          setOpenModalBack(false);
           props.onCloseModalBack(false);
         }}
         confirm={() => {
@@ -191,6 +176,19 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const { completeDataState } = useEasyRegistration();
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">
