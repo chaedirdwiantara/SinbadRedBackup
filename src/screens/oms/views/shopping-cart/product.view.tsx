@@ -5,9 +5,8 @@ import {
   SnbText2,
   SnbCheckbox2,
   SnbIcon,
-  color,
-  SnbNumberCounter,
-  SnbText,
+  SnbNumberCounter2,
+  colorV2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
@@ -136,10 +135,10 @@ export const ProductView: FC<ProductViewProps> = ({
     if (Number(product.stock) < 11) {
       return (
         <View>
-          <SnbText.B4
+          <SnbText2.Paragraph.Tiny
             color={
-              color.red70
-            }>{`Tersisa ${product.stock} ${product.uomLabel}`}</SnbText.B4>
+              colorV2.strokeColor.primary
+            }>{`Sisa ${product.stock} ${product.uomLabel}`}</SnbText2.Paragraph.Tiny>
         </View>
       );
     }
@@ -174,7 +173,7 @@ export const ProductView: FC<ProductViewProps> = ({
           });
         }}
         style={{ marginRight: 20 }}>
-        <SnbIcon name="delete" color={color.black60} size={24} />
+        <SnbIcon name="delete" color={colorV2.btnSecColor.default} size={24} />
       </TouchableOpacity>
     );
   };
@@ -190,21 +189,23 @@ export const ProductView: FC<ProductViewProps> = ({
         }}>
         {priceDifference !== 'same' && !product.isQtyChanged ? (
           <View style={{ marginRight: 5 }}>
-            <SnbText.B4 color={color.black60} textDecorationLine="line-through">
+            <SnbText2.Paragraph.Small
+              color={colorV2.textColor.disable}
+              textDecorationLine="line-through">
               {toCurrency(lastPrice, {
                 withFraction: false,
               })}
-            </SnbText.B4>
+            </SnbText2.Paragraph.Small>
           </View>
         ) : (
           <View />
         )}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbText.B4 color={color.black100}>
+          <SnbText2.Body.Small color={colorV2.textColor.default}>
             {toCurrency(displayPrice, {
               withFraction: false,
             })}
-          </SnbText.B4>
+          </SnbText2.Body.Small>
           {priceDifference !== 'same' && !product.isQtyChanged ? (
             <View style={{ marginLeft: 4 }}>
               <Svg
@@ -257,10 +258,7 @@ export const ProductView: FC<ProductViewProps> = ({
         {renderProductImage()}
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <View>
-            <SnbText2.Paragraph.Default
-              color={color.black80}
-              numberOfLines={1}
-              ellipsizeMode={'tail'}>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               {product.productName}
             </SnbText2.Paragraph.Default>
           </View>
@@ -269,9 +267,15 @@ export const ProductView: FC<ProductViewProps> = ({
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
+        <View>
+          <SnbText2.Caption.Default
+            color={
+              colorV2.textColor.secondary
+            }>{`${product.qtyPerBox} Pcs dalam 1 ${product.uomLabel}`}</SnbText2.Caption.Default>
+        </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {renderRemoveProductIcon()}
-          <SnbNumberCounter
+          <SnbNumberCounter2
             value={product.qty}
             maxLength={6}
             onBlur={() => {
@@ -318,12 +322,6 @@ export const ProductView: FC<ProductViewProps> = ({
             minusDisabled={isDecreaseDisabled}
             plusDisabled={isIncreaseDisabled}
           />
-        </View>
-        <View style={{ alignItems: 'center', marginTop: 8 }}>
-          <SnbText.B4
-            color={
-              color.black60
-            }>{`${product.qtyPerBox}pcs dalam 1 ${product.uomLabel}`}</SnbText.B4>
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer} />

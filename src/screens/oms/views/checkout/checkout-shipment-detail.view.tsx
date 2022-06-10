@@ -2,7 +2,7 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { Image, View } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2 } from 'react-native-sinbad-ui';
 /** === COMPONENT === */
 interface CheckoutShipmentDetailViewProps {
   leadTime: number;
@@ -12,7 +12,6 @@ export const CheckoutShipmentDetailView: FC<
 > = ({ leadTime }) => {
   return (
     <View style={{ marginTop: 16 }}>
-      <SnbText.H4 color={color.black80}>Detail Pengiriman</SnbText.H4>
       <View style={CheckoutStyle.shipmentDetail}>
         <View style={CheckoutStyle.shipmentIcon}>
           <Image
@@ -20,14 +19,18 @@ export const CheckoutShipmentDetailView: FC<
             style={CheckoutStyle.deliveryIcon}
           />
           <View style={{ marginLeft: 6 }}>
-            <SnbText.B3 color={color.black80}>Pengiriman</SnbText.B3>
-            <SnbText.B4 color={color.black100}>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              Pengiriman
+            </SnbText2.Paragraph.Small>
+            <SnbText2.Body.Small color={colorV2.textColor.default}>
               {`Pengiriman Supplier (${leadTime} hari)`}
-            </SnbText.B4>
+            </SnbText2.Body.Small>
           </View>
         </View>
         <View style={CheckoutStyle.shipmentTxt}>
-          <SnbText.B3 color={color.black80}>Bebas Ongkir</SnbText.B3>
+          <SnbText2.Caption.Small color={colorV2.textColor.secondary}>
+            Bebas Ongkir
+          </SnbText2.Caption.Small>
         </View>
       </View>
     </View>
