@@ -208,8 +208,12 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
             }}
           />
           <View>
-            <SnbText2.Body.Default color={colorV2.textColor.default}>{data.paymentDisplayLabel}</SnbText2.Body.Default>
-            <SnbText2.Paragraph.Small color={colorV2.neutral.cloud50}>{data.vaAccountNo}</SnbText2.Paragraph.Small>
+            <SnbText2.Body.Default color={colorV2.textColor.default}>
+              {data.paymentDisplayLabel}
+            </SnbText2.Body.Default>
+            <SnbText2.Paragraph.Small color={colorV2.neutral.cloud50}>
+              {data.vaAccountNo}
+            </SnbText2.Paragraph.Small>
           </View>
         </View>
         {/* button action and total*/}
@@ -221,7 +225,9 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
             paddingHorizontal: 0,
           }}>
           <View>
-            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>Total Pembayaran:</SnbText2.Paragraph.Small>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              Total Pembayaran:
+            </SnbText2.Paragraph.Small>
             <SnbText2.Body.Small color={colorV2.textColor.default}>
               {toCurrency(Number(data.totalOrderPriceAfterTax) ?? 0, {
                 withFraction: false,
@@ -244,18 +250,18 @@ const EmptyImage = () => (
   <Image
     source={require('../../../../assets/images/empty_sinbad.png')}
     resizeMode="contain"
-    style={{ height: W * 0.7, aspectRatio: 1 }}
+    style={{ height: W * 0.6, aspectRatio: 1 }}
   />
 );
 
 const wordingEmpty = (keyword: string): string => {
   if (keyword) {
-    return 'Pesanan tidak ditemukan';
+    return 'Pencarian Pesanan Tidak Ditemukan';
   }
-  return 'Belum ada pesanan';
+  return 'Belum Ada Pesanan';
 };
 const wordingWaitingForPaymentEmpty = () => {
-  return 'Belum ada pesanan';
+  return 'Belum Ada Pesanan';
 };
 
 const ListCard = () => {
@@ -312,7 +318,7 @@ const ListCard = () => {
       <SnbEmptyData
         image={<EmptyImage />}
         subtitle=""
-        title={'Terjadi gangguan pada jaringan'}
+        title={'Terjadi Gangguan Pada Jaringan'}
       />
     );
   }
@@ -327,7 +333,7 @@ const ListCard = () => {
           <SnbEmptyData
             image={<EmptyImage />}
             subtitle=""
-            title={'Terjadi gangguan pada jaringan'}
+            title={'Terjadi Gangguan Pada Jaringan'}
           />
         ) : (
           <FlatList
@@ -409,7 +415,7 @@ const ListCard = () => {
       <BottomSheetConfirmation
         ref={confirmModalRef}
         title="Konfirmasi"
-        desc="Yakin ingin membatalkan pesanan?"
+        desc="Yakin Ingin Membatalkan Pesanan?"
         onSubmit={(idOrder) => onCancelOrder(idOrder)}
       />
     </>

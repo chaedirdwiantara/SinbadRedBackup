@@ -16,6 +16,7 @@ import {
   SnbButton2,
   SnbRadioGroup,
   SnbRadio,
+  SnbText2,
 } from 'react-native-sinbad-ui';
 
 interface ModalTransactionProps {
@@ -60,7 +61,7 @@ const ModalTransactionFilter = forwardRef<
 
   const Content = useMemo(() => {
     return (
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={{ paddingHorizontal: 8 }}>
         <SnbRadioGroup value={select} onChange={setSelect}>
           {transactionFilter.map((i) => (
             <View
@@ -77,9 +78,11 @@ const ModalTransactionFilter = forwardRef<
                 onPress={() => setSelect(i.id)}>
                 <View style={{ flex: 1 }}>
                   {select === i.id ? (
-                    <SnbText.H4>{i.label}</SnbText.H4>
+                    <SnbText2.Body.Default>{i.label}</SnbText2.Body.Default>
                   ) : (
-                    <SnbText.B1>{i.label}</SnbText.B1>
+                    <SnbText2.Paragraph.Default>
+                      {i.label}
+                    </SnbText2.Paragraph.Default>
                   )}
                 </View>
                 <SnbRadio value={i.id} style={{ top: 8 }} />
@@ -90,7 +93,7 @@ const ModalTransactionFilter = forwardRef<
         </SnbRadioGroup>
         <View style={{ marginVertical: 14 }}>
           <SnbButton2.Primary
-            size="large"
+            size="medium"
             full
             title="Tampilkan"
             onPress={onSubmitFilter}
