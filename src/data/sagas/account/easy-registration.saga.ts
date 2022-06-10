@@ -33,7 +33,9 @@ function* createBasicAccount(
     const response: models.ICreateBasicAccountData = yield call(() =>
       easyRegistrationApi.createBasicAccount(action.payload),
     );
-    yield put(ActionCreators.createBasicAccountSuccess(response));
+    yield put(
+      ActionCreators.createBasicAccountSuccess(response, action.params),
+    );
   } catch (error) {
     yield put(ActionCreators.createBasicAccountFailed(error));
   }
