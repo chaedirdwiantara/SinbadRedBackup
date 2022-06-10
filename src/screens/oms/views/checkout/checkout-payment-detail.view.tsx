@@ -10,6 +10,7 @@ import {
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 export interface CheckoutPaymentDetailViewProps {
   products: models.CheckoutCartProduct[];
@@ -43,7 +44,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
               Total Pengiriman
             </SnbText2.Paragraph.Default>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              Rp. {deliveryFee}
+              {toCurrency(deliveryFee, { withFraction: false })}
             </SnbText2.Paragraph.Default>
           </View>
         </View>

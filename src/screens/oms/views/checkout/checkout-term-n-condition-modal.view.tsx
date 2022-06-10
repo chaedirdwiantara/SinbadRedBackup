@@ -33,6 +33,7 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
             paddingHorizontal: 16,
             maxHeight: height * 0.6,
             backgroundColor: colorV2.bgColor.neutral,
+            marginHorizontal: -16,
           }}
           showsVerticalScrollIndicator={false}>
           {data !== null && data !== undefined && (
@@ -67,7 +68,7 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
       ref={parentRef}
       name={'checkoutTermsConditionModal'}
       type={'content'}
-      contentHeight={250}
+      contentHeight={210}
       title={title()}
       snap={true}
       content={content()}
