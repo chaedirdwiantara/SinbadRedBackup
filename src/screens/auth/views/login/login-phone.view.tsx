@@ -9,13 +9,14 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler } from 'react-native';
+import { View, ScrollView, BackHandler, Image } from 'react-native';
 import {
   SnbButton2,
   SnbContainer,
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 
@@ -53,14 +54,20 @@ const Content: React.FC = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{ padding: 16 }}>
-        <SnbText2.Headline.Large>Masuk</SnbText2.Headline.Large>
-      </View>
-      <View style={{ height: 84, padding: 16 }}>
+      <Image
+        source={require('@image/sinbad_image/login_register.png')}
+        style={{
+          height: 220,
+          alignSelf: 'center',
+          marginVertical: layout.spacing.xxl,
+          resizeMode: 'contain',
+        }}
+      />
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
       </View>
-      <View style={{ marginTop: 32 }} />
-      <View style={{ paddingHorizontal: 16 }}>
+      <View style={{ marginTop: layout.spacing.lg }} />
+      <View style={{ paddingHorizontal: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Selanjutnya"
           onPress={() => {
@@ -78,19 +85,19 @@ const Content: React.FC = () => {
         />
       </View>
       <View style={loginPhoneStyles.registerLink}>
-        <View>
-          <SnbText2.Paragraph.Default>
-            Belum punya akun Sinbad?
-          </SnbText2.Paragraph.Default>
+        <SnbText2.Paragraph.Default>
+          Belum punya akun Sinbad?
+        </SnbText2.Paragraph.Default>
+        <View style={{ marginLeft: -layout.spacing.sm }}>
+          <SnbButton2.Link
+            title="Daftar"
+            size="medium"
+            onPress={() => {
+              phone.clearText();
+              navigate(SELF_REGISTRATION_VIEW);
+            }}
+          />
         </View>
-        <SnbButton2.Link
-          title="Daftar"
-          size="medium"
-          onPress={() => {
-            phone.clearText();
-            navigate(SELF_REGISTRATION_VIEW);
-          }}
-        />
       </View>
     </ScrollView>
   );
@@ -104,7 +111,7 @@ const LoginPhoneView = () => {
       <SnbTopNav2.Type3
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         color="white"
-        title=""
+        title="Masuk"
       />
       <Content />
     </SnbContainer>

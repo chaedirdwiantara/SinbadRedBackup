@@ -1,7 +1,12 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
-import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbStatusBar,
+  SnbToast,
+  SnbText2,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
@@ -62,6 +67,7 @@ import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
+  // bentukan data productWhId
   // productId_warehouseOriginId
   const {
     params: { id: productWhId },
@@ -542,8 +548,11 @@ const ProductDetailView: FC = () => {
             />
           </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <Html value={dataProduct?.detail ?? '-'} fontSize={12} />
+            <SnbText2.Paragraph.Small>
+              {dataProduct?.detail ?? '-'}
+            </SnbText2.Paragraph.Small>
           </ProductDetailSection>
+          {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
             <Html value={dataProduct?.description ?? '-'} fontSize={12} />
           </ProductDetailSection>
@@ -619,7 +628,7 @@ const ProductDetailView: FC = () => {
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
-        open={orderModalVisible}
+        open={orderModalVisible && !modalErrorAddCart}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         disabled={

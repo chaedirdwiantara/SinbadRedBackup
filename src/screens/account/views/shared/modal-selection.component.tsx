@@ -1,18 +1,22 @@
 import React from 'react';
 import {
-  color,
-  SnbBottomSheet,
+  colorV2,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
   SnbButton2,
+  SnbIcon,
   SnbProgress,
-  SnbRadioButton,
   SnbText2,
+  spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { IRadioButton } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/RadioButtonTypes';
 import ErrorContent from './error-content.component';
 
+const { height } = Dimensions.get('screen');
 interface Props {
   open: boolean;
   type: models.ITypeList;
@@ -116,6 +120,11 @@ const ModalSelection: React.FC<Props> = ({
   const { listSelection, selectedItem, loadMoreSelection, getSelection } =
     useTextFieldSelect();
   const [tempSelectedItem, setTempSelectedItem] = React.useState<any>(null);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+
+  React.useEffect(() => {
+    open ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
+  }, [open]);
 
   React.useEffect(() => {
     setTempSelectedItem(selectedItem);
@@ -136,37 +145,67 @@ const ModalSelection: React.FC<Props> = ({
   }
 
   return (
-    <SnbBottomSheet
-      isSwipeable
-      open={open}
-      title={setTitle(type)}
-      closeAction={() => onCloseModalSelection()}
-      actionIcon="close"
-      size="halfscreen"
+    <SnbBottomSheet2
+      ref={bottomSheetRef}
+      type="m-l"
+      snap={false}
+      name={`modal-selection-${type}`}
+      title={
+        <SnbBottomSheetPart.Title title={setTitle(type)} titleType="center" />
+      }
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={() => onCloseModalSelection()}
+        />
+      }
+      close={() => onCloseModalSelection()}
+      button={
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
+            title={setTitle(type)}
+            onPress={() => onCloseModalSelection(tempSelectedItem)}
+            disabled={tempSelectedItem === null || listSelection.data === null}
+            full
+            size="medium"
+          />
+        </View>
+      }
       content={
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <FlatList
               ListEmptyComponent={() => {
                 if (listSelection.loading) {
-                  return <SnbProgress />;
+                  return (
+                    <View style={{ padding: layout.spacing.lg }}>
+                      <SnbProgress />
+                    </View>
+                  );
                 }
-                return (
-                  <ErrorContent
-                    action={() => getSelection({ type, params })}
-                    message={
-                      listSelection.error?.message || 'Terjadi kesalahan'
-                    }
-                  />
-                );
+                if (listSelection.error) {
+                  return (
+                    <ErrorContent
+                      action={() => getSelection({ type, params })}
+                      message={
+                        listSelection.error?.message || 'Terjadi kesalahan'
+                      }
+                    />
+                  );
+                }
+                return null;
               }}
               data={listSelection.data?.data}
               keyExtractor={(_, idx) => idx.toString()}
-              contentContainerStyle={{ paddingHorizontal: 16 }}
               onEndReached={handleLoadMore}
               onEndReachedThreshold={1}
               ItemSeparatorComponent={() => (
-                <View style={{ height: 1, backgroundColor: color.black10 }} />
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: colorV2.strokeColor.default,
+                  }}
+                />
               )}
               renderItem={({ item }) => {
                 const { label, status } = handleRadioButtonStatus(
@@ -178,7 +217,7 @@ const ModalSelection: React.FC<Props> = ({
                   <TouchableOpacity
                     onPress={() => setTempSelectedItem({ item, type })}
                     style={{
-                      paddingVertical: 16,
+                      paddingVertical: layout.spacing.lg,
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'space-between',
@@ -188,10 +227,19 @@ const ModalSelection: React.FC<Props> = ({
                         {label}
                       </SnbText2.Paragraph.Default>
                     </View>
-                    <View style={{ marginHorizontal: 8 }} />
-                    <SnbRadioButton
-                      onPress={() => setTempSelectedItem({ item, type })}
-                      status={status}
+                    <View style={{ marginHorizontal: layout.spacing.sm }} />
+                    <SnbIcon
+                      name={
+                        status === 'selected'
+                          ? 'radio_button'
+                          : 'radio_button_outline'
+                      }
+                      size={22}
+                      color={
+                        status === 'selected'
+                          ? colorV2.iconColor.red
+                          : colorV2.iconColor.default
+                      }
                     />
                   </TouchableOpacity>
                 );
@@ -199,17 +247,6 @@ const ModalSelection: React.FC<Props> = ({
             />
           </View>
           {listSelection.isLoadMoreLoading && <SnbProgress />}
-          <View style={{ padding: 16 }}>
-            <SnbButton2.Primary
-              title={setTitle(type)}
-              onPress={() => onCloseModalSelection(tempSelectedItem)}
-              disabled={
-                tempSelectedItem === null || listSelection.data === null
-              }
-              full
-              size="medium"
-            />
-          </View>
         </View>
       }
     />

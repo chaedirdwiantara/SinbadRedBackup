@@ -3,8 +3,7 @@ import { color } from 'react-native-sinbad-ui';
 
 export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
-    marginTop: 8,
-    backgroundColor: color.white,
+    marginVertical: 8,
   },
   invoiceGroupListField: {
     marginBottom: 8,
@@ -51,6 +50,7 @@ export const CheckoutStyle = StyleSheet.create({
     width: 35,
   },
   productsDescription: {
+    flex: 1,
     paddingLeft: 15,
   },
   bottomContentContainer: {
@@ -126,11 +126,39 @@ export const CheckoutStyle = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  tncLabelSection : {
+  tncLabelSection: {
     padding: 16,
     alignItems: 'center',
-    backgroundColor: color.white
-  }
+    backgroundColor: color.white,
+  },
+  contentImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  buttonContainer: {
+    paddingBottom: 16,
+  },
+  contentTitleContainer: {
+    paddingHorizontal: '10%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentMessageContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentItemContainer: {
+    flex: 1,
+  },
+  buttonHeight: {
+    height: 90,
+  },
+  image: {
+    width: 240,
+    height: 240,
+  },
 });
 
 export default CheckoutStyle;

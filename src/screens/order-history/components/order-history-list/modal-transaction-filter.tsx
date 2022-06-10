@@ -3,22 +3,24 @@ import React, {
   memo,
   useCallback,
   useImperativeHandle,
+  useMemo,
   useState,
 } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
-  SnbBottomSheet,
   SnbText,
-  SnbButton,
   color,
-  SnbRadioButton,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
+  SnbButton2,
+  SnbRadioGroup,
+  SnbRadio,
 } from 'react-native-sinbad-ui';
 
 interface ModalTransactionProps {
   onSubmit: (orderStatus: string) => void;
-}
-export interface ModalTransactionRef {
-  trigger: (isShow?: boolean) => void;
+  onClose: () => void;
 }
 
 //orderStatus
@@ -46,55 +48,50 @@ const transactionFilter = [
 ];
 
 const ModalTransactionFilter = forwardRef<
-  ModalTransactionRef,
+  SnbBottomSheet2Ref,
   ModalTransactionProps
 >((props, ref) => {
   const { onSubmit } = props;
   const [select, setSelect] = useState('');
-  const [show, setShow] = useState(false);
 
   const onSubmitFilter = useCallback(() => {
-    setShow(false);
     onSubmit(select);
   }, [select]);
 
-  // custom ref
-  useImperativeHandle(
-    ref,
-    () => ({
-      trigger: (open) => {
-        setShow((prev) => open ?? !prev);
-      },
-    }),
-    [],
-  );
-
-  const Content = useCallback(() => {
+  const Content = useMemo(() => {
     return (
       <View style={{ paddingHorizontal: 16 }}>
-        {transactionFilter.map((i) => (
-          <View key={i.id} style={{ marginTop: 14 }}>
-            <TouchableOpacity
-              style={{ flexDirection: 'row' }}
-              onPress={() => setSelect(i.id)}>
-              <View style={{ flex: 1 }}>
-                {i.id === '' ? (
-                  <SnbText.H4>{i.label}</SnbText.H4>
-                ) : (
-                  <SnbText.B1>{i.label}</SnbText.B1>
-                )}
-              </View>
-              <SnbRadioButton
-                status={select === i.id ? 'selected' : 'unselect'}
-                onPress={() => setSelect(i.id)}
-              />
-            </TouchableOpacity>
-            <View style={styles.div} />
-          </View>
-        ))}
-        <View style={{ height: 72 }}>
-          <SnbButton.Single
-            type="primary"
+        <SnbRadioGroup value={select} onChange={setSelect}>
+          {transactionFilter.map((i) => (
+            <View
+              key={i.id}
+              style={{
+                marginTop: 0,
+              }}>
+              <TouchableOpacity
+                style={{
+                  flexDirection: 'row',
+
+                  alignItems: 'center',
+                }}
+                onPress={() => setSelect(i.id)}>
+                <View style={{ flex: 1 }}>
+                  {select === i.id ? (
+                    <SnbText.H4>{i.label}</SnbText.H4>
+                  ) : (
+                    <SnbText.B1>{i.label}</SnbText.B1>
+                  )}
+                </View>
+                <SnbRadio value={i.id} style={{ top: 10 }} />
+              </TouchableOpacity>
+              <View style={styles.div} />
+            </View>
+          ))}
+        </SnbRadioGroup>
+        <View style={{ marginVertical: 14 }}>
+          <SnbButton2.Primary
+            size="large"
+            full
             title="Tampilkan"
             onPress={onSubmitFilter}
           />
@@ -104,16 +101,28 @@ const ModalTransactionFilter = forwardRef<
   }, [select]);
 
   return (
-    <View>
-      <SnbBottomSheet
-        content={Content()}
-        open={show}
-        actionIcon="close"
-        closeAction={() => setShow(false)}
-        isSwipeable={true}
-        title="Filter"
-      />
-    </View>
+    <SnbBottomSheet2
+      ref={ref}
+      content={Content}
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={props.onClose}
+        />
+      }
+      title={
+        <SnbBottomSheetPart.Title
+          swipeIndicator
+          title="Filter"
+          titleType="center"
+        />
+      }
+      name="filter-order-history"
+      type="content"
+      contentHeight={350}
+      snap
+      close={props.onClose}
+    />
   );
 });
 

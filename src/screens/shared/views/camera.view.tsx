@@ -1,11 +1,12 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React from 'react';
-import { color, SnbCamera } from 'react-native-sinbad-ui';
+import { color } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { contexts } from '@contexts';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { Dimensions, View } from 'react-native';
+import { Camera } from './components';
 
 const { height, width: screenWidth } = Dimensions.get('window');
 
@@ -32,7 +33,7 @@ const CameraView = () => {
   const { dispatchGlobal } = React.useContext(contexts.GlobalContext);
   return (
     <View style={{ flex: 1 }}>
-      <SnbCamera
+      <Camera
         title={params?.title}
         subtitle={params?.subtitle}
         showFlipCameraButton={params?.type === 'selfie'}

@@ -4,10 +4,10 @@ import {
   SnbTopNav2,
   SnbTextField2,
   SnbButton2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
-import { View, ScrollView, BackHandler } from 'react-native';
-import Svg from '@svg';
+import { View, ScrollView, BackHandler, Image } from 'react-native';
 import { useEasyRegistration } from '@screen/account/functions';
 import { MerchantHookFunc } from '../../../../merchant/function';
 import { contexts } from '@contexts';
@@ -133,10 +133,15 @@ const DataDiriStep4View: React.FC = () => {
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
-        <View style={{ alignItems: 'center', marginVertical: 16 }}>
-          <Svg name="notification" size={240} />
+        <View
+          style={{ alignItems: 'center', marginVertical: layout.spacing.lg }}>
+          <Image
+            source={require('@image/sinbad_image/email_ilustration.png')}
+            style={{ height: 240 }}
+            resizeMode="center"
+          />
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={emailIsNotValid ? 'error' : 'default'}
             value={email}
@@ -148,7 +153,7 @@ const DataDiriStep4View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Simpan"
           disabled={

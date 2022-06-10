@@ -6,12 +6,14 @@ import {
 import React from 'react';
 import {
   colorV2,
-  SnbCamera,
-  SnbBottomSheet,
+  SnbBottomSheet2,
   SnbText2,
   SnbButton2,
   SnbProgress,
   spacingV2 as layout,
+  borderV2,
+  SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import ImageEditor from '@sinbad/image-editor';
 import { renderIF } from '@screen/auth/functions';
@@ -19,6 +21,7 @@ import { BackHandler, Dimensions, View } from 'react-native';
 import { useOCR } from '@screen/auth/functions/global-hooks.functions';
 import { useCheckFlagByTask } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataFlagRTDB } from '@core/redux/Data';
+import { Camera } from './components';
 
 const { height, width: screenWidth } = Dimensions.get('window');
 
@@ -31,7 +34,7 @@ const KtpPhotoFrame = () => (
       width: 84,
       position: 'absolute',
       borderWidth: 2,
-      borderRadius: 4,
+      borderRadius: borderV2.radius.sm,
       borderColor: colorV2.bgColor.light,
     }}
   />
@@ -40,13 +43,14 @@ const KtpPhotoFrame = () => (
 const CameraWithOCRView = () => {
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
-  const [showModalError, setShowModalError] = React.useState<boolean>(true);
   const [retake, setRetake] = React.useState<boolean>(false);
   const { processImage, ocrImageState, resetOcrStatusRtdb, ocrImageReset } =
     useOCR(true);
   const { ocrStatus } = useDataFlagRTDB() || {};
   useCheckFlagByTask('ocrStatus');
   const [isImageProcessed, setIsImageProcessed] = React.useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
     resetOcrStatusRtdb();
@@ -70,13 +74,13 @@ const CameraWithOCRView = () => {
   React.useEffect(() => {
     let ocrTimeout: any = null;
     if (ocrStatus === 'error') {
-      setShowModalError(true);
+      bottomSheetRef.current?.open();
     } else if (ocrStatus === 'done' && isImageProcessed) {
       goBack();
     } else if (ocrStatus === 'processing') {
       ocrTimeout = setTimeout(() => {
-        setShowModalError(true);
-      }, 30 * 1000);
+        bottomSheetRef.current?.open();
+      }, 15 * 1000);
     }
     return () => {
       clearTimeout(ocrTimeout);
@@ -85,13 +89,13 @@ const CameraWithOCRView = () => {
 
   React.useEffect(() => {
     if (ocrImageState.error !== null) {
-      setShowModalError(true);
+      bottomSheetRef.current?.open();
     }
   }, [ocrImageState]);
 
   return (
     <View style={{ flex: 1 }}>
-      <SnbCamera
+      <Camera
         title={params?.title}
         subtitle={params?.subtitle}
         type={'back'}
@@ -124,44 +128,49 @@ const CameraWithOCRView = () => {
         }}
       />
       {renderIF(params?.type === 'ktp', <KtpPhotoFrame />)}
-      <SnbBottomSheet
-        open={showModalError}
-        title="Terjadi Kesalahan Upload"
-        isSwipeable
-        closeAction={() => {
-          setShowModalError(false);
-          setRetake(true);
-        }}
-        actionIcon="close"
+      <SnbBottomSheet2
+        ref={bottomSheetRef}
+        name="modal-ocr-failed"
+        type="content"
+        contentHeight={contentHeight + 100}
+        title={
+          <SnbBottomSheetPart.Title
+            title="Kesalahan Pengambilan Foto"
+            titleType="center"
+            swipeIndicator
+          />
+        }
+        close={() => setRetake(true)}
         content={
-          <View>
-            <View style={{ paddingHorizontal: layout.spacing.xl }}>
-              <SnbText2.Paragraph.Small align="center">
-                Silahkan upload ulang foto KTP anda kembali. Pastikan jaringan
-                anda tersedia.
-              </SnbText2.Paragraph.Small>
-            </View>
-            <View style={{ marginVertical: layout.spacing.sm }} />
-            <View style={{ padding: layout.spacing.lg }}>
-              <SnbButton2.Primary
-                title="Ulang Foto"
-                onPress={() => {
-                  resetOcrStatusRtdb();
-                  setShowModalError(false);
-                  setRetake(true);
-                }}
-                disabled={false}
-                size="medium"
-                full
-              />
-            </View>
+          <View
+            style={{ paddingHorizontal: layout.spacing.xl }}
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+            <SnbText2.Paragraph.Small align="center">
+              Pastikan foto tidak buram serta ambil foto di ruangan dengan
+              pencahayaan yang memadai.
+            </SnbText2.Paragraph.Small>
+          </View>
+        }
+        button={
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              title="Saya Mengerti"
+              onPress={() => {
+                resetOcrStatusRtdb();
+                bottomSheetRef.current?.close();
+                setRetake(true);
+              }}
+              disabled={false}
+              size="medium"
+              full
+            />
           </View>
         }
       />
       {renderIF(
         ocrImageState.loading || ocrStatus === 'processing',
         <View style={{ position: 'absolute', bottom: 36, right: 0, left: 0 }}>
-          <SnbProgress size={60} />
+          <SnbProgress size={64} />
         </View>,
       )}
     </View>

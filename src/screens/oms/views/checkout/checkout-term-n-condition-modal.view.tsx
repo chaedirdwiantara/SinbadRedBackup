@@ -1,29 +1,39 @@
 import Html from '@core/components/Html';
-import React, { FC } from 'react';
+import React, { FC, Ref } from 'react';
 import { Dimensions, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { SnbBottomSheet } from 'react-native-sinbad-ui';
+import {
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  colorV2,
+  SnbBottomSheet2Ref,
+} from 'react-native-sinbad-ui';
 import * as models from '@models';
 const { height } = Dimensions.get('window');
 
 /** === INTERFACE === */
 interface ModalCheckoutTNCProps {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
   data: models.CheckoutTnc | null;
 }
 
 /** === COMPONENT === */
 export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
-  isOpen,
+  parentRef,
   close,
   data,
 }) => {
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View>
         <ScrollView
-          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          style={{
+            paddingVertical: 16,
+            paddingHorizontal: 16,
+            maxHeight: height * 0.6,
+            backgroundColor: colorV2.bgColor.neutral,
+          }}
           showsVerticalScrollIndicator={false}>
           {data !== null && data !== undefined && (
             <Html value={data.content} fontSize={12} />
@@ -32,13 +42,36 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
       </View>
     );
   };
+  /** => title */
+  const title = () => {
+    return (
+      <SnbBottomSheetPart.Title
+        title="Syarat dan Ketentuan"
+        titleType="center"
+        swipeIndicator
+      />
+    );
+  };
+  /** => navigation */
+  const navigation = () => {
+    return (
+      <SnbBottomSheetPart.Navigation
+        iconRight1Name="x"
+        onRight1Action={close}
+      />
+    );
+  };
+
   return (
-    <SnbBottomSheet
-      open={isOpen}
+    <SnbBottomSheet2
+      ref={parentRef}
+      name={'checkoutTermsConditionModal'}
+      type={'content'}
+      contentHeight={250}
+      title={title()}
+      snap={true}
       content={content()}
-      title={'Syarat dan Ketentuan'}
-      closeAction={close}
-      actionIcon={'close'}
+      navigation={navigation()}
     />
   );
 };

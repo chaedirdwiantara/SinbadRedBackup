@@ -7,6 +7,7 @@ import {
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, Stepper } from '../../shared';
 import { useEasyRegistration } from '@screen/account/functions';
@@ -71,13 +72,13 @@ const DataTokoStep1View: React.FC = () => {
           total={completeDataState?.data?.buyerProgress?.total}
           onPress={() => setOpenModalStep(true)}
         />
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
           <SnbText2.Paragraph.Default>
             {completeDataState?.data?.buyerData?.buyerCode}
           </SnbText2.Paragraph.Default>
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={'default'}
             value={name}
@@ -87,7 +88,7 @@ const DataTokoStep1View: React.FC = () => {
             mandatory
           />
         </View>
-        <View style={{ margin: 16 }}>
+        <View style={{ margin: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={'default'}
             keyboardType={'numeric'}
@@ -103,15 +104,19 @@ const DataTokoStep1View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: 16 }}>
+      <View style={{ padding: layout.spacing.lg }}>
         <SnbButton2.Primary
           title="Lanjut"
-          disabled={
-            (name && telp) || updateCompleteDataState.loading ? false : true
-          }
-          onPress={() =>
-            updateCompleteData({ buyer: { name: name, phoneNo: telp } })
-          }
+          disabled={!name || !telp || updateCompleteDataState.loading}
+          onPress={() => {
+            const { buyerName, buyerPhoneNo } =
+              completeDataState?.data?.buyerData || {};
+            if (name !== buyerName || telp !== buyerPhoneNo) {
+              updateCompleteData({ buyer: { name, phoneNo: telp } });
+            } else {
+              navigate(DATA_TOKO_STEP_2_VIEW);
+            }
+          }}
           loading={updateCompleteDataState.loading}
           size="medium"
           full
@@ -122,7 +127,9 @@ const DataTokoStep1View: React.FC = () => {
         closeModal={() => setOpenModalBack(false)}
         confirm={() => {
           setBackHandle(true);
-          if ((name && name !== '') || (telp && telp !== '')) {
+          const { buyerName, buyerPhoneNo } =
+            completeDataState?.data?.buyerData || {};
+          if (name && telp && (name !== buyerName || telp !== buyerPhoneNo)) {
             updateCompleteData({ buyer: { name: name, phoneNo: telp } });
           } else {
             backToDataCompleteness();

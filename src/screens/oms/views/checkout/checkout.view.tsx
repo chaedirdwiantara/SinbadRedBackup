@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState, useContext, useRef } from 'react';
+import React, { FC, useEffect, useContext, useRef } from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutHeader } from './checkout-header.view';
@@ -27,7 +27,6 @@ import { useUpdateCartAction, useCheckoutAction } from '../../functions';
 import { goToShoppingCart } from '@core/functions/product';
 import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
-import { useBackToCartModal } from '@screen/oms/functions/checkout/checkout-hook.function';
 import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
 import {
   useThankYouPageAction,
@@ -48,17 +47,19 @@ const OmsCheckoutView: FC = () => {
   const thankYouPageAction = useThankYouPageAction();
 
   /** === HOOK === */
-  const backToCartModal = useBackToCartModal();
-  const [isExpiredSession, setExpiredSession] = useState(false);
-  const [isModalTNCOpen, setModalTNCOpen] = useState(false);
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
 
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers || []);
   const totalQtyCheckout = totalQty(data?.sellers || []);
 
+  /** => MODAL REF */
+  const refExpiredTimeModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refTermConditionModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refBackToCartModal = React.useRef<SnbBottomSheet2Ref>(null);
+
   /** => Back handler */
-  useCustomBackHardware(() => backToCartModal.setOpen(true));
+  useCustomBackHardware(() => refBackToCartModal.current?.open());
 
   /** => Get TNC Contents  */
   const getTncContent = useGetTncContent();
@@ -74,7 +75,7 @@ const OmsCheckoutView: FC = () => {
   /** handle term n condition */
   const handleOpenTNCModal = () => {
     getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
-    setModalTNCOpen(true);
+    refTermConditionModal.current?.open();
   };
 
   /** => set expired time  */
@@ -85,7 +86,7 @@ const OmsCheckoutView: FC = () => {
   const timeRef = useRef<any>(null);
   useEffect(() => {
     timeRef.current = setTimeout(() => {
-      setExpiredSession(true);
+      refExpiredTimeModal.current?.open();
     }, timeToExpired);
   }, []);
 
@@ -105,8 +106,8 @@ const OmsCheckoutView: FC = () => {
   const handleBackToCart = () => {
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
-    setExpiredSession(false);
-    backToCartModal.setOpen(false);
+    refExpiredTimeModal.current?.close();
+    refBackToCartModal.current?.close();
     clearTimeout(timeRef.current);
     goToShoppingCart();
   };
@@ -120,7 +121,7 @@ const OmsCheckoutView: FC = () => {
       {/* header view */}
       <CheckoutHeader
         backAction={() => {
-          backToCartModal.setOpen(true);
+          refBackToCartModal.current?.open();
         }}
       />
       {/* {checkoutLoading ? (
@@ -144,22 +145,22 @@ const OmsCheckoutView: FC = () => {
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime
-        isOpen={isExpiredSession}
+        parentRef={refExpiredTimeModal}
         close={handleBackToCart}
       />
 
       {/* modal Term and Condition */}
       <ModalCheckoutTNC
-        isOpen={isModalTNCOpen}
-        close={() => setModalTNCOpen(false)}
+        parentRef={refTermConditionModal}
+        close={() => refTermConditionModal.current?.close()}
         data={TncContentData}
       />
 
       {/* modal back to cart */}
       <BackToCartModal
-        isOpen={backToCartModal.isOpen}
+        parentRef={refBackToCartModal}
         handleNoAction={() => {
-          backToCartModal.setOpen(false);
+          refBackToCartModal.current?.close();
         }}
         handleOkAction={handleBackToCart}
       />

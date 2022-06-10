@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import { spacingV2 as layout } from '@sinbad/react-native-sinbad-ui';
 
 const loginPhoneStyles = StyleSheet.create({
   choosenText: {
-    marginVertical: 32,
+    marginVertical: layout.spacing['3xl'],
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 16,
+    marginHorizontal: layout.spacing.lg,
   },
   line: {
     height: 1,
@@ -16,7 +17,7 @@ const loginPhoneStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 24,
+    marginVertical: layout.spacing.xl,
   },
 });
 

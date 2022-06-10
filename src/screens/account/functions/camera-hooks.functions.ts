@@ -19,7 +19,7 @@ export const useCamera = () => {
       case 'npwp': {
         params.focusPoints = [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }];
         params.title = 'Ambil Foto NPWP';
-        params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai';
+        params.subtitle = 'Posisikan NPWP Anda tepat berada di dalam bingkai.';
         break;
       }
       case 'selfie': {
@@ -27,15 +27,15 @@ export const useCamera = () => {
           { focusPointHeight: 0.32, focusPointWidth: 0.9, marginBottom: 24 },
           { focusPointHeight: 0.18, focusPointWidth: 0.6 },
         ];
-        params.title = 'Ambil Foto Selfie dengan KTP';
+        params.title = 'Ambil Foto Diri dengan KTP';
         params.subtitle =
-          'Posisikan Foto Selfie dan KTP Anda tepat berada di dalam bingkai';
+          'Posisikan foto diri dan KTP Anda tepat berada dalam bingkai.';
         break;
       }
       case 'store': {
         params.title = 'Ambil Foto Depan Toko';
         params.subtitle =
-          'Posisikan depan toko Anda tepat berada di dalam bingkai';
+          'Posisikan depan toko Anda tepat berada di dalam bingkai.';
         params.focusPoints = [{ focusPointHeight: 0.4, focusPointWidth: 0.9 }];
         break;
       }

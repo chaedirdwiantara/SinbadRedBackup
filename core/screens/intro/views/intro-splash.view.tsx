@@ -4,7 +4,8 @@ import { View } from 'react-native';
 import {
   SnbContainer,
   SnbProgress,
-  color,
+  colorV2,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import Svg from '@svg';
 import LinearGradient from 'react-native-linear-gradient';
@@ -29,51 +30,42 @@ const IntroSplashView: React.FC = () => {
     authCoreAction.me();
     authCoreAction.meV2();
   }, []);
+
   React.useEffect(() => {
-    setTimeout(() => {
-      if (!meV2.data && !meV2.loading && meV2.error) {
-        NavigationAction.resetToIntroSinbad();
-      } else {
-        if (meV2.data?.data?.isBuyerCategoryCompleted === true && !meV2.error) {
+    if (meV2.data && !meV2.loading) {
+      if (meV2.data?.data?.isBuyerCategoryCompleted) {
+        setTimeout(() => {
           NavigationAction.resetToHome();
-        }
-        if (
-          meV2.data?.data?.isBuyerCategoryCompleted === false &&
-          !meV2.error
-        ) {
-          getLocationPermissions();
-        }
+        }, 100);
+      } else {
+        getLocationPermissions();
       }
-    }, 2000);
-  }, [meV2.data, meV2.loading, meV2.error]);
+    } else if ((!meV2.data || meV2.error) && !meV2.loading) {
+      setTimeout(() => {
+        NavigationAction.resetToIntroSinbad();
+      }, 100);
+    }
+  }, [meV2]);
   /** === VIEW === */
   /** => main */
   return (
     <SnbContainer color="white">
-      <View style={{ flex: 1 }}>
-        <LinearGradient
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0 }}
-          colors={['#870100', '#d43238']}
-          style={{
-            paddingLeft: 10,
-            paddingVertical: 5,
-            borderTopLeftRadius: 5,
-            borderBottomLeftRadius: 2,
-            flex: 1,
-          }}>
-          <View style={IntroStyle.sinbadLogo}>
-            <Svg name={'white_sinbad_logo'} size={100} />
-            <View style={{ marginBottom: -50 }}>
-              <Svg name={'splash_highlight_text'} size={200} />
-            </View>
-            <Svg name={'sinbad_onboard'} size={240} />
+      <LinearGradient
+        start={{ x: 0, y: 1 }}
+        end={{ x: 1, y: 0 }}
+        colors={['#870100', '#d43238']}
+        style={{ flex: 1 }}>
+        <View style={IntroStyle.sinbadLogo}>
+          <Svg name={'white_sinbad_logo'} size={100} />
+          <View style={{ marginBottom: -layout.spacing.xxl }}>
+            <Svg name={'splash_highlight_text'} size={200} />
           </View>
-          <View style={{ marginBottom: 16 }}>
-            <SnbProgress color={color.white} size={50} />
-          </View>
-        </LinearGradient>
-      </View>
+          <Svg name={'sinbad_onboard'} size={240} />
+        </View>
+        <View style={{ marginBottom: layout.spacing.lg }}>
+          <SnbProgress color={colorV2.bgColor.light} size={50} />
+        </View>
+      </LinearGradient>
     </SnbContainer>
   );
 };

@@ -2,18 +2,24 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbDivider, color, SnbIcon } from 'react-native-sinbad-ui';
+import {
+  SnbText2,
+  SnbDivider2,
+  colorV2,
+  SnbIcon,
+} from 'react-native-sinbad-ui';
 /** === COMPONENT === */
 export const CheckoutWarningTime: FC = () => {
   return (
     <View style={CheckoutStyle.warningTimer}>
       <View style={CheckoutStyle.warningTextContainer}>
-        <SnbIcon name="info" color={color.yellow50} size={24} />
-        <SnbText.B2 color={color.yellow50}>
+        <View style={{ marginRight: 16 }}>
+          <SnbIcon name="info" color={colorV2.textColor.warning} size={16} />
+        </View>
+        <SnbText2.Paragraph.Small color={colorV2.textColor.warning}>
           Anda memiliki waktu 5 menit untuk menyelesaikan checkout.
-        </SnbText.B2>
+        </SnbText2.Paragraph.Small>
       </View>
-      <SnbDivider style={{ marginVertical: 8 }} />
     </View>
   );
 };

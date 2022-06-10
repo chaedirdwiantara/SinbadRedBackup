@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { Ref } from 'react';
 import { View, Image } from 'react-native';
-import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
+import {
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  SnbText2,
+  colorV2,
+  FooterButton,
+  SnbBottomSheet2Ref,
+} from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
+import { Images } from 'src/assets';
 /** === INTERFACE === */
 /** => error props */
 interface ShoppingCartValidationProps {
-  open: boolean;
   closeAction?: () => void;
+  parentRef: Ref<SnbBottomSheet2Ref>;
 }
 /** === COMPONENT === */
 const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
-  open,
+  parentRef,
   ...props
 }) => {
   /** ======================================================================= */
   /** => content item image */
   const contentItemImage = () => {
-    const src = require('@image/sinbad_image/cry_sinbad.png');
     return (
       <View style={ShoppingCartValidationStyles.contentImageContainer}>
-        <Image source={src} style={ShoppingCartValidationStyles.image} />
+        <Image
+          source={Images.reminder}
+          style={ShoppingCartValidationStyles.image}
+        />
       </View>
     );
   };
@@ -27,7 +37,11 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const contentItemTitle = () => {
     return (
       <View style={ShoppingCartValidationStyles.contentTitleContainer}>
-        <SnbText.H4 align={'center'}>Perubahan Produk di Keranjang</SnbText.H4>
+        <SnbText2.Headline.Default
+          color={colorV2.textColor.default}
+          align={'center'}>
+          Perubahan Produk di Keranjang
+        </SnbText2.Headline.Default>
       </View>
     );
   };
@@ -35,10 +49,12 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const contentItemMessage = () => {
     return (
       <View style={ShoppingCartValidationStyles.contentMessageContainer}>
-        <SnbText.B3 align={'center'}>
-          Coba periksa ulang keranjang Anda dikarenakan terdapat perubahan data
-          pada produk
-        </SnbText.B3>
+        <SnbText2.Paragraph.Default
+          color={colorV2.textColor.secondary}
+          align={'center'}>
+          Cek ulang keranjang Anda untuk mengetahui produk yang mengalami
+          perubahan.
+        </SnbText2.Paragraph.Default>
       </View>
     );
   };
@@ -55,36 +71,33 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   /** => button */
   const button = () => {
     return (
-      <View style={ShoppingCartValidationStyles.buttonContainer}>
-        <View style={ShoppingCartValidationStyles.buttonHeight}>
-          <SnbButton.Single
-            title={'Saya Mengerti'}
-            onPress={() => {
-              props?.closeAction && props?.closeAction();
-            }}
-            type={'primary'}
-          />
-        </View>
-      </View>
+      <FooterButton.Single
+        title={'Kembali Ke Keranjang'}
+        buttonPress={() => {
+          props?.closeAction && props?.closeAction();
+        }}
+      />
     );
   };
   /** => content */
   const content = () => {
-    return (
-      <View style={ShoppingCartValidationStyles.contentContainer}>
-        {contentItem()}
-        {button()}
-      </View>
-    );
+    return <View>{contentItem()}</View>;
+  };
+  /** => title */
+  const title = () => {
+    return <SnbBottomSheetPart.Title />;
   };
   /** => main */
   return (
-    <SnbBottomSheet
-      open={open}
+    <SnbBottomSheet2
+      ref={parentRef}
+      name={'cartValidationCheckoutModal'}
+      type={'content'}
+      contentHeight={400}
+      title={title()}
+      snap={false}
       content={content()}
-      size={'halfscreen'}
-      closeAction={props?.closeAction}
-      actionIcon={'close'}
+      button={button()}
     />
   );
 };

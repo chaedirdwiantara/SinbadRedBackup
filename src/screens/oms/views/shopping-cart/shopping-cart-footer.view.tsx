@@ -10,14 +10,12 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbButton, color } from 'react-native-sinbad-ui';
+import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
 import BottomSheetError from '@core/components/BottomSheetError';
-import { ShoppingCartStyles } from '@screen/oms/styles';
-import { toCurrency } from '@core/functions/global/currency-format';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -56,6 +54,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+
+  /** => MODAL REF */
+  const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -232,45 +233,27 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** === VIEWS === */
   /** ==> content */
   const renderFooterContent = () => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      }}>
-      <View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbText.B2 color={color.black60}>Total: </SnbText.B2>
-          <SnbText.H4 color={color.red50}>
-            {toCurrency(countTotalPrice, { withFraction: false })}
-          </SnbText.H4>
-        </View>
-        <SnbText.B4
-          color={
-            color.black60
-          }>{`${countTotalProduct} barang dipilih`}</SnbText.B4>
-      </View>
-      <View>
-        <SnbButton.Dynamic
-          title="Checkout"
-          type="primary"
-          onPress={handleOnPressCheckout}
-          size={'large'}
-          disabled={isCheckoutDisabled}
-          loading={isCheckoutBtnLoading}
-        />
-      </View>
-    </View>
+    <FooterButton.Order
+      titleButton="Checkout"
+      loadingButton={isCheckoutBtnLoading}
+      disabled={isCheckoutDisabled}
+      value={countTotalPrice}
+      description={`${countTotalProduct} barang dipilih`}
+      buttonPress={handleOnPressCheckout}
+    />
   );
 
   /** ==> Error Business Modal */
   const renderBusinessErrorModal = () => (
-    <ShoppingCartValidation open={isErrorShown} closeAction={handleClose} />
+    <ShoppingCartValidation
+      closeAction={handleClose}
+      parentRef={refCartValidationModal}
+    />
   );
 
   /** ==> Main */
   return (
-    <View style={ShoppingCartStyles.footerContainer}>
+    <View style={{ flex: 1 }}>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
       <BottomSheetError

@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { SnbContainer, SnbTopNav2, SnbButton2 } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbTopNav2,
+  SnbButton2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
 import {
   Stepper,
   ListOfSteps,
@@ -21,10 +26,9 @@ interface Props {
 }
 
 const Content: React.FC<Props> = (props) => {
-  const [openModalBack, setOpenModalBack] = useState(false);
   const { openCameraWithOCR } = useCamera();
   const [value, setValue] = React.useState<models.IOCRResult | any>(null);
-  const { ocrImageState, ocrImageReset, resetOcrDataRtdb } = useOCR();
+  const { ocrImageState, ocrImageReset } = useOCR();
   const {
     updateCompleteData,
     updateCompleteDataState,
@@ -49,7 +53,6 @@ const Content: React.FC<Props> = (props) => {
       refetchCompleteData();
       resetUpdateCompleteData();
       ocrImageReset();
-      resetOcrDataRtdb();
       if (backHandle) {
         backToDataCompleteness();
       } else {
@@ -57,19 +60,6 @@ const Content: React.FC<Props> = (props) => {
       }
     }
   }, [updateCompleteDataState]);
-
-  const handleBackButton = React.useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
-    return backHandler.remove;
-  }, []);
-
-  useFocusEffect(handleBackButton);
 
   function handleSubmit() {
     if (
@@ -119,7 +109,7 @@ const Content: React.FC<Props> = (props) => {
             />
           </ScrollView>
         </View>
-        <View style={{ flexDirection: 'row', padding: 16 }}>
+        <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Ubah Foto'}
@@ -130,7 +120,7 @@ const Content: React.FC<Props> = (props) => {
               outline
             />
           </View>
-          <View style={{ marginHorizontal: 8 }} />
+          <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               title={'Simpan'}
@@ -157,9 +147,8 @@ const Content: React.FC<Props> = (props) => {
     <View style={{ flex: 1 }}>
       {renderIF(isImageAvailable, renderOCRResult(), renderUploadPhotoRules())}
       <ModalBack
-        open={openModalBack || props.openModalBack}
+        open={props.openModalBack}
         closeModal={() => {
-          setOpenModalBack(false);
           props.onCloseModalBack(false);
         }}
         confirm={() => {
@@ -187,6 +176,19 @@ const DataDiriStep1View: React.FC = () => {
   const [openModalStep, setOpenModalStep] = React.useState(false);
   const [openModalBack, setOpenModalBack] = React.useState(false);
   const { completeDataState } = useEasyRegistration();
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        setOpenModalBack(true);
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">

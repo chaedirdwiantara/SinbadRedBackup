@@ -5,32 +5,67 @@ import {
   DATA_DIRI_STEP_1_VIEW,
   DATA_TOKO_STEP_1_VIEW,
 } from '@screen/account/functions/screens_name';
+import { renderIF } from '@screen/auth/functions';
 import Svg from '@svg';
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
-  color,
+  colorV2,
   SnbContainer,
   SnbTopNav2,
   SnbText2,
   SnbButton2,
   SnbIcon,
   SnbSkeletonAnimator,
+  spacingV2 as layout,
+  borderV2,
+  styles,
 } from 'react-native-sinbad-ui';
 import { ErrorContent, SnbCardButtonType3 } from '../shared';
 
 const CompleteDataSkeleton: React.FC = () => {
   return (
-    <View style={{ flex: 1, paddingVertical: 32, paddingHorizontal: 16 }}>
-      <SnbSkeletonAnimator>
-        <View style={{ height: 40, borderRadius: 4 }} />
-        <View style={{ marginVertical: 8 }} />
-        <View style={{ height: 24, borderRadius: 4, width: 120 }} />
-        <View style={{ marginVertical: 32 }} />
-        <View style={{ height: 84, borderRadius: 8 }} />
-        <View style={{ marginVertical: 6 }} />
-        <View style={{ height: 84, borderRadius: 8 }} />
-      </SnbSkeletonAnimator>
+    <View style={{ marginVertical: layout.spacing.xxl }}>
+      {[0, 1].map((el) => {
+        return (
+          <View
+            style={{
+              borderRadius: borderV2.radius.md,
+              borderColor: colorV2.strokeColor.disable,
+              padding: layout.spacing.lg,
+              ...styles.shadowForBox5,
+              marginBottom: layout.spacing.lg,
+            }}>
+            <SnbSkeletonAnimator backgroundColor={colorV2.bgColor.neutral}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View
+                  style={{
+                    height: 40,
+                    width: 40,
+                    borderRadius: borderV2.radius.full,
+                  }}
+                />
+                <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
+                  <View
+                    style={{ height: 16, marginRight: layout.spacing.xl }}
+                  />
+                  <View style={{ marginVertical: layout.spacing.xxsm }} />
+                  <View
+                    style={{ height: 16, marginRight: layout.spacing['3xl'] }}
+                  />
+                </View>
+                <View
+                  style={{
+                    height: 24,
+                    width: 24,
+                    borderRadius: borderV2.radius.full,
+                  }}
+                />
+              </View>
+            </SnbSkeletonAnimator>
+          </View>
+        );
+      })}
     </View>
   );
 };
@@ -60,10 +95,6 @@ const Content: React.FC = () => {
     }
   }, [completeDataConfirmationState]);
 
-  if (completeDataState.loading) {
-    return <CompleteDataSkeleton />;
-  }
-
   if (completeDataState.error) {
     return (
       <ErrorContent
@@ -73,29 +104,17 @@ const Content: React.FC = () => {
     );
   }
 
-  if (completeDataState.data) {
-    const { userProgress, buyerProgress } = completeDataState.data || {};
-    const isShowBadgeSuccessUser =
-      userProgress.completed === userProgress.total;
-    const isShowBadgeSuccessBuyer =
-      buyerProgress.completed === buyerProgress.total;
+  const { userProgress, buyerProgress } = completeDataState.data || {};
+  const isShowBadgeSuccessUser =
+    userProgress?.completed === userProgress?.total;
+  const isShowBadgeSuccessBuyer =
+    buyerProgress?.completed === buyerProgress?.total;
 
+  function renderListCompletion() {
     return (
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-            flex: 1,
-            paddingHorizontal: 16,
-            paddingVertical: 32,
-          }}>
-          <SnbText2.Headline.Default>
-            Selangkah Lagi Untuk Mengembangkan Toko Anda
-          </SnbText2.Headline.Default>
-          <View style={{ marginVertical: 8 }} />
-          <SnbText2.Paragraph.Default>
-            Silakan lengkapi data untuk menjadi anggota VIP
-          </SnbText2.Paragraph.Default>
-          <View style={{ marginVertical: 32 }} />
+      <>
+        <View style={{ marginVertical: layout.spacing.xl }} />
+        <ScrollView showsVerticalScrollIndicator={false}>
           <SnbCardButtonType3
             title="Data Diri"
             desc="1-2 Menit Pengisian"
@@ -103,7 +122,7 @@ const Content: React.FC = () => {
             svgIcon={() => <Svg name="personal_data" size={48} />}
             showBadge={isShowBadgeSuccessUser}
           />
-          <View style={{ marginVertical: 6 }} />
+          <View style={{ marginVertical: layout.spacing.xsm }} />
           <SnbCardButtonType3
             title="Data Toko"
             desc="1-2 Menit Pengisian"
@@ -111,46 +130,70 @@ const Content: React.FC = () => {
             svgIcon={() => <Svg name="store_data" size={48} />}
             showBadge={isShowBadgeSuccessBuyer}
           />
-        </View>
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              marginHorizontal: 16,
-              alignItems: 'center',
-              backgroundColor: color.blue10,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              borderRadius: 4,
-            }}>
-            <SnbIcon name="shield" color={color.blue50} size={14} />
-            <View style={{ flex: 1, marginLeft: 8 }}>
-              <SnbText2.Paragraph.Small color={color.blue60}>
-                Kami menjamin keamanan data dan kerahasiaan informasi yang anda
-                berikan.
-              </SnbText2.Paragraph.Small>
-            </View>
-          </View>
-          <View style={{ marginVertical: 16 }} />
-          <View style={{ margin: 16 }}>
-            <SnbButton2.Primary
-              title="Konfirmasi"
-              onPress={() => completeDataConfirmation()}
-              disabled={
-                !isShowBadgeSuccessBuyer ||
-                !isShowBadgeSuccessUser ||
-                completeDataConfirmationState.loading
-              }
-              loading={completeDataConfirmationState.loading}
-              size="medium"
-              full
-            />
-          </View>
-        </View>
-      </View>
+        </ScrollView>
+      </>
     );
   }
-  return null;
+
+  return (
+    <View style={{ flex: 1 }}>
+      <View
+        style={{
+          flex: 1,
+          paddingHorizontal: layout.spacing.lg,
+          paddingVertical: layout.spacing.xl,
+        }}>
+        <SnbText2.Headline.Default>
+          Selangkah Lagi Untuk Mengembangkan Toko Anda
+        </SnbText2.Headline.Default>
+        <View style={{ marginVertical: layout.spacing.sm }} />
+        <SnbText2.Paragraph.Default>
+          Silakan lengkapi data untuk menjadi anggota VIP
+        </SnbText2.Paragraph.Default>
+        {renderIF(
+          completeDataState?.data,
+          renderListCompletion(),
+          <CompleteDataSkeleton />,
+        )}
+      </View>
+      <View>
+        <View
+          style={{
+            flexDirection: 'row',
+            marginHorizontal: layout.spacing.lg,
+            alignItems: 'center',
+            backgroundColor: colorV2.bgColor.blue,
+            paddingHorizontal: layout.spacing.lg,
+            paddingVertical: layout.spacing.md,
+            borderRadius: borderV2.radius.sm,
+          }}>
+          <SnbIcon name="shield" color={colorV2.iconColor.blue} size={14} />
+          <View style={{ flex: 1, marginLeft: layout.spacing.sm }}>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
+              Kami menjamin keamanan data dan kerahasiaan informasi yang anda
+              berikan.
+            </SnbText2.Paragraph.Small>
+          </View>
+        </View>
+        <View style={{ marginVertical: layout.spacing.sm }} />
+        <View style={{ margin: layout.spacing.lg }}>
+          <SnbButton2.Primary
+            title="Konfirmasi"
+            onPress={() => completeDataConfirmation()}
+            disabled={
+              !isShowBadgeSuccessBuyer ||
+              !isShowBadgeSuccessUser ||
+              completeDataConfirmationState.loading ||
+              completeDataState.loading
+            }
+            loading={completeDataConfirmationState.loading}
+            full
+            size="medium"
+          />
+        </View>
+      </View>
+    </View>
+  );
 };
 
 const DataCompletenessView: React.FC = () => {

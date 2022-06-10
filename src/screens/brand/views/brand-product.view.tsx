@@ -45,6 +45,7 @@ const BrandProductView: FC = () => {
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
         <ProductList
+          total={productListState.total}
           products={productListState.data}
           headerTitle={brand.name}
           activeBrandId={brand.id}
