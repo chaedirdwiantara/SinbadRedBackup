@@ -1,15 +1,6 @@
-import React, {
-  forwardRef,
-  memo,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import React, { forwardRef, memo, useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
-  SnbText,
-  color,
   SnbBottomSheet2,
   SnbBottomSheet2Ref,
   SnbBottomSheetPart,
@@ -17,6 +8,7 @@ import {
   SnbRadioGroup,
   SnbRadio,
   SnbText2,
+  colorV2,
 } from 'react-native-sinbad-ui';
 
 interface ModalTransactionProps {
@@ -132,7 +124,7 @@ const ModalTransactionFilter = forwardRef<
 const styles = StyleSheet.create({
   div: {
     height: 1,
-    backgroundColor: color.black40,
+    backgroundColor: colorV2.strokeColor.default,
     marginTop: 8,
   },
 });
