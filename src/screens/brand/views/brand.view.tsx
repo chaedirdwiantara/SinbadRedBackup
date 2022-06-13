@@ -1,9 +1,8 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect } from 'react';
-import { View, FlatList, Dimensions } from 'react-native';
+import React, { FC, useEffect, useState, useMemo } from 'react';
+import { View, FlatList } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
   SnbTopNav2,
   Content,
   spacingV2,
@@ -21,6 +20,7 @@ const { spacing } = spacingV2;
 /** === COMPONENT === */
 const BrandView: FC = () => {
   /** === HOOKS === */
+  const [isGrid, setIsGrid] = useState(true);
   const {
     stateBrand: { list: brandListState },
     dispatchBrand,
@@ -32,6 +32,11 @@ const BrandView: FC = () => {
     dataLength: brandListState.data.length,
   });
 
+  const BrandContent = useMemo(
+    () => (isGrid ? Content.NewBrand.Square : Content.NewBrand.Stretched),
+    [isGrid],
+  );
+
   useEffect(() => {
     fetch(dispatchBrand);
   }, []);
@@ -40,8 +45,8 @@ const BrandView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type4
-        iconName=""
-        iconAction={() => {}}
+        iconName={isGrid ? 'view_list' : 'view_module'}
+        iconAction={() => setIsGrid((prev) => !prev)}
         title="Brand Resmi"
         backAction={goBack}
         color="white"
@@ -63,16 +68,22 @@ const BrandView: FC = () => {
         {displayState === 'success' && (
           <View>
             <FlatList
+              key={String(isGrid)}
               contentContainerStyle={{
                 paddingTop: spacing.sm,
                 paddingBottom: spacing.lg,
                 paddingHorizontal: spacing.md,
               }}
-              columnWrapperStyle={{ justifyContent: 'space-between' }}
+              columnWrapperStyle={isGrid && { justifyContent: 'space-between' }}
               data={brandListState.data}
               renderItem={({ item }) => (
-                <View style={{ padding: spacing.lg }}>
-                  <Content.NewBrand.Square
+                <View
+                  style={
+                    isGrid
+                      ? { padding: spacing.lg }
+                      : { paddingTop: spacing.md }
+                  }>
+                  <BrandContent
                     image={item.image}
                     name={item.name}
                     onPress={() => goToProduct(item)}
@@ -80,7 +91,7 @@ const BrandView: FC = () => {
                 </View>
               )}
               keyExtractor={(item) => item.id}
-              numColumns={3}
+              numColumns={isGrid ? 3 : 1}
               onEndReachedThreshold={0.1}
               onEndReached={() => loadMore(dispatchBrand, brandListState)}
               refreshing={brandListState.refresh}
