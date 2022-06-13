@@ -38,6 +38,8 @@ import store from './store.svg';
 import ktp_blue from './ktp-blue.svg';
 import check_circle from './check_circle.svg';
 import x_circle from './x_circle.svg';
+// product no in urban
+import kategori_toko from './kategori_toko.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -78,4 +80,5 @@ export const SvgRegistery = {
   sinbad_onboard,
   check_circle,
   x_circle,
+  kategori_toko,
 };
