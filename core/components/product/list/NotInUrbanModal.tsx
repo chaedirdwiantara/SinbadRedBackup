@@ -4,8 +4,11 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
+import { View } from 'react-native';
+import { spacingV2 } from '@sinbad/react-native-sinbad-ui';
 import BottomModalError from '@core/components/BottomModalError';
 import { NavigationAction } from '@navigation';
+import Svg from '@svg';
 const sinbadCry = require('@image/sinbad_image/cry_sinbad.png');
 
 interface NotInUrbanModalProps {
@@ -14,6 +17,9 @@ interface NotInUrbanModalProps {
 export interface NotInUrbanModalRef {
   trigger: (isShow?: boolean) => void;
 }
+
+const { spacing } = spacingV2;
+
 /** === COMPONENT === */
 const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
   (props, ref) => {
@@ -50,7 +56,13 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
         isOpen={isOpen}
         errorTitle={'Lokasi tidak terjangkau'}
         errorSubtitle={errorSubtitle}
+        contentHeight={375}
         errorImage={sinbadCry}
+        errorImageSvg={
+          <View style={{ marginBottom: spacing.xxl }}>
+            <Svg name="kategori_toko" size={180} />
+          </View>
+        }
         buttonTitle={'Cek Ulang Alamat'}
         buttonOnPress={buttonOnPress}
       />
