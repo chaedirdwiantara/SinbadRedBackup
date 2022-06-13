@@ -43,7 +43,11 @@ const StatusOrder = () => {
               justifyContent: 'center',
             }}>
             <SnbButton2.Primary
-              title="Lihat Detail"
+              title={
+                data?.statusLabel == 'Pengiriman Gagal'
+                  ? 'Lihat Detail'
+                  : 'Lacak'
+              }
               size="tiny"
               outline
               onPress={() =>
