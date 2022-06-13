@@ -253,7 +253,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Main */
   return (
-    <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+    <View style={{ justifyContent: 'flex-end' }}>
       {renderFooterContent()}
       {renderBusinessErrorModal()}
       <BottomSheetError

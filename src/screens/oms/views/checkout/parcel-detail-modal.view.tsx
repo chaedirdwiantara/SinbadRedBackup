@@ -84,7 +84,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
         <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              {product.productName} {product.qty}
+              {product.productName}
             </SnbText2.Paragraph.Default>
           </View>
           <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
