@@ -157,7 +157,8 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
         <View style={{ marginVertical: layout.spacing.lg }}>
           <View style={{ alignItems: 'center' }}>
             <SnbText2.Paragraph.Default>
-              Pastikan data yang anda masukkan sudah benar
+              Pastikan data {props.type === 'user' ? 'diri' : 'toko'} yang
+              tertulis sudah benar
             </SnbText2.Paragraph.Default>
           </View>
         </View>

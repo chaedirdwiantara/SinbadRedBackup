@@ -47,23 +47,19 @@ const MerchantDetailProfileView: FC = () => {
       stateMerchant.profileEdit.data !== null ||
       stateMerchant.merchantEdit.data !== null
     ) {
-      SnbToast.show('Data Berhasil Diperbaharui', 2500, { positionValue: 56 });
+      SnbToast.show('Data Berhasil Diperbaharui', 2500);
     }
   }, [stateMerchant]);
 
   useEffect(() => {
     if (stateGlobal.uploadImage.error !== null) {
-      SnbToast.show(stateGlobal.uploadImage.error.message, 2500, {
-        positionValue: 56,
-      });
+      SnbToast.show(stateGlobal.uploadImage.error.message, 2500);
     }
   }, [stateGlobal.uploadImage.error]);
 
   useEffect(() => {
     if (stateUser.update.error !== null) {
-      SnbToast.show(stateUser.update.error.message, 2500, {
-        positionValue: 56,
-      });
+      SnbToast.show(stateUser.update.error.message, 2500);
     }
   }, [stateUser.update.error]);
   /** FUNCTION */
@@ -122,7 +118,7 @@ const MerchantDetailProfileView: FC = () => {
           <SnbIcon
             name={'person_circle'}
             size={100}
-            color={colorV2.iconColor.dark}
+            color={colorV2.iconColor.default}
           />
         )}
         <TouchableOpacity

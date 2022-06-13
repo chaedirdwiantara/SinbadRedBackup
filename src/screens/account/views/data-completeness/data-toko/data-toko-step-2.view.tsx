@@ -104,6 +104,7 @@ const Content: React.FC<Props> = (props) => {
             type="vertical"
             resizeMode="stretch"
             blurRadius={2}
+            listType="number"
           />
         </View>
       </View>
