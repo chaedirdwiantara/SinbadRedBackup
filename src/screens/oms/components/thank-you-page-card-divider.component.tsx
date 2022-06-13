@@ -15,7 +15,7 @@ export const ThankYouPageCardDivider: FC<ThankYouPageCardDividerProps> = ({
   <View
     style={{
       borderTopWidth: 1,
-      borderColor: colorV2.bgColor.neutral,
+      borderColor: colorV2.strokeColor.default,
       marginTop: topSpaces,
       marginHorizontal: horizontalSpaces,
     }}
