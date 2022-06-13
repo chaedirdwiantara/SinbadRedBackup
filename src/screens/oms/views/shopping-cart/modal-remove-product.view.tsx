@@ -55,7 +55,7 @@ export const ModalRemoveProduct: FC<ModalRemoveProductProps> = ({
         <SnbText2.Paragraph.Default
           color={colorV2.textColor.secondary}
           align={'center'}>
-          Apakah Anda yakin untuk menghapus barang ini dari keranjang.
+          Apakah Anda yakin untuk menghapus barang ini dari keranjang?
         </SnbText2.Paragraph.Default>
       </View>
     );
