@@ -55,12 +55,10 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
           <TouchableOpacity
             style={[
               PaymentMethodStyle.listContainer,
-              selectMethod == index
-                ? {
-                    borderColor: colorV2.strokeColor.primary,
-                    backgroundColor: colorV2.bgColor.red,
-                  }
-                : { borderColor: colorV2.strokeColor.default },
+              selectMethod == index && {
+                borderColor: colorV2.strokeColor.primary,
+                backgroundColor: colorV2.bgColor.red,
+              },
             ]}
             onPress={() => {
               handleOnpress(index, item);
@@ -79,11 +77,7 @@ const PaymentMethodListView: FC<PaymentMethodListProps> = ({
       }
     />
   ) : (
-    <View
-      style={[
-        PaymentMethodStyle.listContainer,
-        { borderColor: colorV2.strokeColor.default },
-      ]}>
+    <View style={PaymentMethodStyle.listContainer}>
       <View
         style={[
           PaymentMethodStyle.loadList,
