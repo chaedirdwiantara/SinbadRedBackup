@@ -14,8 +14,8 @@ const InformationDelivery = () => {
 
   const titleDateShipment = useMemo(() => {
     const title: { [key: string]: string } = {
-      created: 'Estimasi Tanggal Pengiriman',
-      packed: 'Estimasi Tanggal Pengiriman',
+      created: 'Estimasi Pengiriman',
+      packed: 'Estimasi Pengiriman',
 
       shipped: 'Tanggal Pengiriman',
       delivered: 'Tanggal Pengiriman',
