@@ -44,7 +44,10 @@ const StatusOrder = () => {
             }}>
             <SnbButton2.Primary
               title={
-                data?.statusLabel == 'Dibatalkan' ? 'Lihat Detail' : 'Lacak'
+                data?.statusLabel == 'Dibatalkan' ||
+                data?.statusLabel == 'Pengiriman Gagal'
+                  ? 'Lihat Detail'
+                  : 'Lacak'
               }
               size="tiny"
               outline
