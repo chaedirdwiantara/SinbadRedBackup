@@ -43,7 +43,7 @@ const StatusOrder = () => {
               justifyContent: 'center',
             }}>
             <SnbButton2.Primary
-              title="Lacak"
+              title="Lihat Detail"
               size="tiny"
               outline
               onPress={() =>
