@@ -19,9 +19,9 @@ import ListLayout from './list-layout/ListLayout';
 import ActionSheet from '../ActionSheet';
 import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
-  RegisterSupplierModal,
-  RejectApprovalModal,
-  WaitingApprovalModal,
+  // RegisterSupplierModal,
+  // RejectApprovalModal,
+  // WaitingApprovalModal,
   ProductNotCoverageModal,
   AddToCartModal,
 } from '@core/components/modal';
@@ -37,11 +37,11 @@ import {
   useProductTags,
   usePriceRangeFilter,
 } from '@core/functions/product';
-import {
-  useCheckDataSupplier,
-  // useSupplierSegmentationAction,
-  useSendDataToSupplierActions,
-} from '@core/functions/supplier';
+// import {
+//   useCheckDataSupplier,
+//   useSupplierSegmentationAction,
+//   useSendDataToSupplierActions,
+// } from '@core/functions/supplier';
 import { useDataAuth } from '@core/redux/Data';
 import {
   useTagListActions,
@@ -53,7 +53,7 @@ import { useRecentSearch } from '@screen/search/functions';
 import { useAddToCartAction } from '@screen/oms/functions';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
-import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+// import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 /** === IMPORT TYPES === */
@@ -121,9 +121,6 @@ const ProductList: FC<ProductListProps> = ({
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
-  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
-    useState(false);
-  // const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
   const [modalErrorStock, setModalErrorStock] = useState(false);
@@ -150,8 +147,6 @@ const ProductList: FC<ProductListProps> = ({
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
   const addToCartActions = useAddToCartAction();
-  // const supplierSegmentationAction = useSupplierSegmentationAction();
-  const sendDataToSupplierActions = useSendDataToSupplierActions();
   const stockValidationActions = useStockValidationAction();
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const {
@@ -176,21 +171,6 @@ const ProductList: FC<ProductListProps> = ({
     dispatchStock,
   } = useStockContext();
   const { me } = useDataAuth();
-  const {
-    stateSupplier: {
-      // segmentation: { data: dataSegmentation, error: errorSegmentation },
-      create: { data: sendToSupplierData, error: sendToSupplierError },
-    },
-    dispatchSupplier,
-  } = useSupplierContext();
-  /** => check data supplier and sinbad status */
-  const {
-    checkUser,
-    modalRejectApproval,
-    modalWaitingApproval,
-    modalRegisterSupplier,
-    onFunctionActions,
-  } = useCheckDataSupplier();
   // modal filter range state
   const {
     minPrice,
@@ -203,15 +183,6 @@ const ProductList: FC<ProductListProps> = ({
   /** === REF === */
   const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
   /** === FUNCTIONS === */
-  /** => action send data to supplier */
-  const onSendDataSupplier = () => {
-    if (productSelected !== null) {
-      sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: productSelected.sellerId,
-      });
-    }
-  };
-
   /** => for bulk price */
   const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, false);
 
@@ -241,13 +212,12 @@ const ProductList: FC<ProductListProps> = ({
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
       addToCartActions.reset(dispatchCart);
-      sendDataToSupplierActions.reset(dispatchSupplier);
+      // sendDataToSupplierActions.reset(dispatchSupplier);
     }
     setModalErrorAddCart(false);
-    setModalErrorSendDataSupplier(false);
+    // setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
-    onFunctionActions({ type: 'close' });
   }, []);
 
   /** => action on change qty */
@@ -350,25 +320,6 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [stateCart.create.error]);
 
-  /** => Do something when success send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierData !== null) {
-      onFunctionActions({ type: 'close' });
-      sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast2.show('Berhasil kirim data ke supplier', 2000, {
-        position: 'top',
-        positionValue: StatusBar.currentHeight,
-      });
-    }
-  }, [sendToSupplierData]);
-
-  /** => Do something when error send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierError !== null) {
-      setModalErrorSendDataSupplier(true);
-    }
-  }, [sendToSupplierError]);
-
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
     if (productDetailState) {
@@ -382,24 +333,17 @@ const ProductList: FC<ProductListProps> = ({
 
   /** => Listen error segmentation and error product detail */
   useEffect(() => {
-    if (modalErrorProductDetail !== null) {
-      if (productDetailError !== null) {
-        setLoadingPreparation(false);
-        setModalErrorProductDetail(true);
-      }
+    if (productDetailError?.message) {
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorProductDetail(true), 500);
     }
-  }, [modalErrorProductDetail, productDetailError]);
+  }, [productDetailError, setOrderModalVisible, setModalErrorProductDetail]);
 
   /** Listen Data Stock */
   useEffect(() => {
     if (dataStock && productDetailState) {
       setLoadingPreparation(false);
-      if (
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false &&
-        modalNotCoverage === false
-      ) {
+      if (modalNotCoverage === false) {
         setOrderModalVisible(true);
       }
     }
@@ -408,23 +352,16 @@ const ProductList: FC<ProductListProps> = ({
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && productDetailState) {
-      if (
-        errorStock.code === 50080000026 &&
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false &&
-        modalNotCoverage === false
-      ) {
+      if (errorStock.code === 50080000026 && modalNotCoverage === false) {
         setOrderModalVisible(true);
       } else if (
-        (errorStock.code === 50080000025 || errorStock.code === 50080000036) &&
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false
+        errorStock.code === 50080000025 ||
+        errorStock.code === 50080000036
       ) {
         setModalNotCoverage(true);
       } else {
-        setModalErrorStock(true);
+        setOrderModalVisible(false);
+        setTimeout(() => setModalErrorStock(true), 500);
       }
       setLoadingPreparation(false);
     }
@@ -444,15 +381,7 @@ const ProductList: FC<ProductListProps> = ({
     if (me.data !== null) {
       if (me.data.approvalStatus === 'verified') {
         setLoadingPreparation(false);
-        checkUser({
-          sinbadStatus: me.data.approvalStatus,
-          supplierStatus: 'verified',
-        });
       } else {
-        // checkUser({
-        //   sinbadStatus: me.data.approvalStatus,
-        //   supplierStatus: null,
-        // });
         setModalNotCoverage(true);
         setLoadingPreparation(false);
       }
@@ -460,18 +389,10 @@ const ProductList: FC<ProductListProps> = ({
   }, []);
 
   useEffect(() => {
-    if (modalRegisterSupplier) {
-      setLoadingPreparation(false);
-    }
-  }, [modalRegisterSupplier]);
-
-  useEffect(() => {
     return () => {
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
-      // supplierSegmentationAction.reset(dispatchSupplier);
       addToCartActions.reset(dispatchCart);
-      sendDataToSupplierActions.reset(dispatchSupplier);
     };
   }, []);
 
@@ -506,11 +427,6 @@ const ProductList: FC<ProductListProps> = ({
           addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
-        // onSearchClear={() => {
-        //   setSearchKeyword('');
-        //   setKeywordSearched(true);
-        //   onFetch({ ...derivedQueryOptions, keyword: '' });
-        // }}
       />
       {withCategoryTabs && (
         <CategoryTabList
@@ -624,29 +540,6 @@ const ProductList: FC<ProductListProps> = ({
           handleSliderChange={handleSliderChange}
         />
       </ActionSheet>
-      {/* Register Supplier Modal */}
-      <RegisterSupplierModal
-        visible={modalRegisterSupplier}
-        onSubmit={() =>
-          onFunctionActions({
-            type: 'sendDataToSupplier',
-            onSendDataSupplier: onSendDataSupplier,
-          })
-        }
-        onClose={handleCloseModal}
-      />
-      {/* Waiting Approval Modal */}
-      <WaitingApprovalModal
-        visible={modalWaitingApproval}
-        onSubmit={handleCloseModal}
-        onClose={handleCloseModal}
-      />
-      {/* Reject Approval Modal */}
-      <RejectApprovalModal
-        visible={modalRejectApproval}
-        onClose={handleCloseModal}
-        isCallCS={true}
-      />
       {/* Add to Cart Modal */}
 
       <AddToCartModal
@@ -679,24 +572,20 @@ const ProductList: FC<ProductListProps> = ({
         retryAction={() => {
           if (productSelected) {
             setModalErrorAddCart(false);
-            console.log({ productSelected });
             handleOrderPress(productSelected);
           } else {
             handleCloseModal(true);
           }
         }}
       />
-      {/* Modal Bottom Sheet Error Send data to supplier */}
-      <BottomSheetError
-        open={modalErrorSendDataSupplier}
-        error={sendToSupplierError}
-        closeAction={() => handleCloseModal(true)}
-      />
       {/* Modal Bottom Sheet product detail */}
       <BottomSheetError
         open={modalErrorProductDetail}
         error={productDetailError}
-        closeAction={() => handleCloseModal(true)}
+        closeAction={() => {
+          setModalErrorProductDetail(false);
+          handleCloseModal(true);
+        }}
         retryAction={() => {
           if (productSelected) {
             setModalErrorProductDetail(false);
@@ -711,6 +600,7 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorStock}
         error={errorStock}
         closeAction={() => {
+          setModalErrorStock(false);
           handleCloseModal(true);
           setModalErrorStock(false);
         }}

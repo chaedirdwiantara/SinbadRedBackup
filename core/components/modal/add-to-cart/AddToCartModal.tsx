@@ -76,6 +76,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   // function
   const onCloseModal = useCallback(() => {
     closeAction();
+    setIsBulkPriceExpand(true);
     onChangeQty(productDetail?.minQty || 0);
   }, [productDetail?.minQty]);
 

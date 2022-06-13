@@ -389,7 +389,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         </React.Fragment>
       );
     } else {
-      return <ShoppingCartEmpty navigationParent={navigation} />;
+      return <ShoppingCartEmpty />;
     }
   };
   /** => MAIN */
