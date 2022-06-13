@@ -23,10 +23,10 @@ const RecentSearch: FC<RecentSearchProps> = ({
   <View style={{ padding: 16 }}>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
       <SnbText2.Headline.Small>Pencarian Terakhir</SnbText2.Headline.Small>
-      <TouchableOpacity onPress={onAllDelete}>
-        <SnbText2.Headline.Small color={textColor.selected}>
+      <TouchableOpacity onPress={onAllDelete} testID="clear-search-history">
+        <SnbText2.Body.Small color={textColor.link}>
           Hapus Semua
-        </SnbText2.Headline.Small>
+        </SnbText2.Body.Small>
       </TouchableOpacity>
     </View>
     <TagListType1
