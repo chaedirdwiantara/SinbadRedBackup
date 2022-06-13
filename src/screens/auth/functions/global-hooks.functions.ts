@@ -351,7 +351,7 @@ export const useOCR = (isRTDBOpenConnection = false) => {
       const flag = database()
         .ref(`sinbadApp/${uniqueId}/ocrData`)
         .on('value', (data) => {
-          if (data.val()) {
+          if (data.val()?.idNumber) {
             setOcrImageResult(data.val());
           }
         });
