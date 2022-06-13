@@ -100,7 +100,11 @@ const UserView: FC = ({ start }: any) => {
         break;
       }
       case 'merchantAccountName':
-        NavigationAction.navigate('MerchantEditView', { title, type });
+        NavigationAction.navigate('MerchantEditView', {
+          title,
+          type,
+          originFrom: 'profile',
+        });
         break;
       case 'storeAddress':
         handleAddressNavigation();
