@@ -307,7 +307,7 @@ const OmsThankYouPageView: FC = () => {
   const renderPaymentGuide = () => {
     return (
       <ThankYouPageCard title="Panduan Pembayaran">
-        <View style={ThankYouPageStyle.defaultContentPadding}>
+        <View>
           {!thankYouPagePaymentGuideListLoading &&
             renderPaymentGuideList(thankYouPagePaymentGuidelistData)}
         </View>
