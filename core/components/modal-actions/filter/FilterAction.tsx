@@ -101,7 +101,7 @@ const FilterAction: FC<FilterActionProps> = ({
         <SnbButton2.Primary
           full
           size="medium"
-          title="Simpan"
+          title="Terapkan"
           onPress={onSubmit}
           disabled={false}
         />
