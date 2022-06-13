@@ -77,6 +77,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.data !== null ||
       stateMerchant.merchantEdit.data !== null
     ) {
+      SnbToast.show('Data Berhasil Diperbaharui', 2500);
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
@@ -85,7 +86,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      SnbToast.show('Data Gagal Diperbaharui', 2500, { positionValue: 56 });
+      SnbToast.show('Data Gagal Diperbaharui', 2500);
     }
   }, [stateMerchant]);
 
@@ -491,7 +492,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             text = text.replace(/[^0-9]/g, '');
             merchantSize.setValue(text);
           }}
-          onClearText={() => merchantName.setValue('')}
+          onClearText={() => merchantSize.setValue('')}
           maxLength={50}
         />
       </View>

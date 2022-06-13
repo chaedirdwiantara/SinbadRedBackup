@@ -40,7 +40,7 @@ const UserStyles = StyleSheet.create({
   },
   boxEditIcon: {
     padding: layout.spacing.xxsm,
-    backgroundColor: colorV2.iconColor.dark,
+    backgroundColor: colorV2.iconColor.default,
     borderRadius: borderV2.radius.lg,
   },
   boxContent: {
