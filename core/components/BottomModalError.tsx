@@ -1,5 +1,12 @@
 /** === IMPORT LIB HERE === */
-import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { Image, View, ImageSourcePropType } from 'react-native';
 import {
   SnbText2,
@@ -16,6 +23,8 @@ interface Props {
   errorTitle: string;
   errorSubtitle: string;
   errorImage: ImageSourcePropType;
+  errorImageSvg?: ReactNode;
+  contentHeight?: number;
   buttonTitle: string;
   buttonOnPress: () => void;
   isOpen: boolean;
@@ -36,28 +45,35 @@ const BottomModalError: FC<Props> = (props) => {
   const content = useMemo(
     () => (
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Image
-          source={props.errorImage}
-          style={{
-            height: 148,
-            width: '100%',
-            resizeMode: 'contain',
-            marginBottom: spacing.lg,
-          }}
-        />
+        {props.errorImageSvg ? (
+          props.errorImageSvg
+        ) : (
+          <Image
+            source={props.errorImage}
+            style={{
+              height: 148,
+              width: '100%',
+              resizeMode: 'contain',
+              marginBottom: spacing.lg,
+            }}
+          />
+        )}
         <View style={{ alignItems: 'center', marginHorizontal: spacing.lg }}>
           <SnbText2.Headline.Default>
             {props.errorTitle}
           </SnbText2.Headline.Default>
-          <SnbText2.Paragraph.Default
-            align="center"
-            color={colorV2.textColor.secondary}>
-            {props.errorSubtitle}
-          </SnbText2.Paragraph.Default>
+          <View style={{ marginTop: spacing.lg }}>
+            <SnbText2.Paragraph.Default
+              align="center"
+              color={colorV2.textColor.secondary}>
+              {props.errorSubtitle} Maaf, Sinbad belum beroperasi di lokasi toko
+              Anda.
+            </SnbText2.Paragraph.Default>
+          </View>
         </View>
       </View>
     ),
-    [props.errorTitle, props.errorImage],
+    [props.errorTitle, props.errorImage, props.errorImageSvg],
   );
 
   useEffect(() => {
@@ -72,7 +88,7 @@ const BottomModalError: FC<Props> = (props) => {
         snap={false}
         close={props.onDismis}
         type="content"
-        contentHeight={350}
+        contentHeight={props.contentHeight}
         closeFromBackdrop={false}
         ref={modalRef}
         content={content}
@@ -99,6 +115,7 @@ const BottomModalError: FC<Props> = (props) => {
 /** === DEFAULT PROPS === */
 BottomModalError.defaultProps = {
   testID: '',
+  contentHeight: 350,
 };
 /** === EXPORT COMPONENT === */
 export default BottomModalError;
