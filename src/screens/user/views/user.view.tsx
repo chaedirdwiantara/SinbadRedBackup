@@ -9,6 +9,7 @@ import {
   SnbIcon,
   SnbButton2,
   spacingV2 as layout,
+  Content,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -26,7 +27,6 @@ import { useCoachmark } from '@screen/account/functions';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
-import ListButton from '../views/shared/list-button.component';
 import ModalLogout from './shared/modal-logout.component';
 
 const CopilotView = walkthroughable(View);
@@ -178,6 +178,19 @@ const UserView: FC = ({ start }: any) => {
           inactiveDotScale={1}
         />
       </View>
+    );
+  };
+
+  const renderSeparator = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          borderTopWidth: 1,
+          borderColor: colorV2.strokeColor.default,
+          marginTop: layout.spacing.sm,
+        }}
+      />
     );
   };
 
@@ -354,31 +367,46 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
                 <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="person"
-                    color={colorV2.iconColor.default}
-                    size={24}
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Data Diri"
+                  iconComponent={
+                    <SnbIcon
+                      name="person"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailProfileView')
+                  }
+                />
+                {!ownerData?.info.isImageIdOcrValidate && (
+                  <Content.MenuList
+                    title="Upload Foto KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
                   />
-                }
-                title={'Data Diri'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantDetailProfileView')
-                }
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
-                  />
-                }
-                badges1={ownerData?.info.isImageIdOcrValidate ? false : true}
-                leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
-                badgesTitle1={'Upload Foto KTP'}
-                separator
-                pressBadge1={() => goTo({ type: 'ktp', title: 'Foto KTP' })}
-              />
+                )}
+                {renderSeparator()}
+              </View>
             </View>
           </CopilotView>
         </CopilotStep>
@@ -393,93 +421,97 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText2.Body.Small>Data Toko</SnbText2.Body.Small>
                 <SnbText2.Paragraph.Small>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="store"
-                    color={colorV2.iconColor.default}
-                    size={24}
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Informasi Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailAccountView')
+                  }
+                />
+                <Content.MenuList
+                  title="Alamat Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="location_store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={handleAddressNavigation}
+                />
+                {!buyerData?.buyerInformation?.buyerAccount?.name && (
+                  <Content.MenuList
+                    title="Isi Nama Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="create"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({
+                        type: 'merchantAccountName',
+                        title: 'Tambah Nama Toko',
+                      })
+                    }
+                    background
                   />
-                }
-                title={'Informasi Toko'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantDetailAccountView')
-                }
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
+                )}
+                {!buyerData?.buyerAddress?.address && (
+                  <Content.MenuList
+                    title="Isi Alamat Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="location_store"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={handleAddressNavigation}
+                    background
                   />
-                }
-                separator
-              />
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="location_store"
-                    color={colorV2.iconColor.default}
-                    size={24}
-                  />
-                }
-                title={'Alamat Toko'}
-                onPress={handleAddressNavigation}
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
-                  />
-                }
-                badges1={
-                  buyerData?.buyerInformation?.buyerAccount?.name !== null
-                    ? false
-                    : true
-                }
-                leftBadgeItem1={
-                  <SnbIcon
-                    name={'create'}
-                    size={20}
-                    color={colorV2.iconColor.blue}
-                  />
-                }
-                badgesTitle1={'Isi Nama Toko'}
-                badges2={
-                  buyerData?.buyerAddress?.address !== null ? false : true
-                }
-                leftBadgeItem2={
-                  <SnbIcon
-                    name={'location_store'}
-                    size={20}
-                    color={colorV2.iconColor.blue}
-                  />
-                }
-                badgesTitle2={'Isi Alamat Toko'}
-                pressBadge1={() =>
-                  goTo({
-                    type: 'merchantAccountName',
-                    title: 'Tambah Nama Toko',
-                  })
-                }
-                pressBadge2={handleAddressNavigation}
-                separator
-              />
+                )}
+                {renderSeparator()}
+              </View>
             </View>
           </CopilotView>
         </CopilotStep>
 
-        <View>
-          <ListButton
-            leftItem={
+        <View
+          style={{
+            marginHorizontal: layout.spacing.lg,
+            marginTop: layout.spacing.md,
+          }}>
+          <Content.MenuList
+            title="Log Out"
+            iconComponent={
               <SnbIcon
                 name="exit_to_app"
                 color={colorV2.iconColor.default}
                 size={24}
               />
             }
-            title={'Log Out'}
-            onPress={() => setShowConfirmation(true)}
-            separator={false}
+            onActionPress={() => setShowConfirmation(true)}
           />
         </View>
       </View>
