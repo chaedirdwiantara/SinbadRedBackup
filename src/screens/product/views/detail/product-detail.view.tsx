@@ -1,11 +1,14 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import {
   SnbContainer,
   SnbStatusBar,
-  SnbToast,
+  SnbToast2,
   SnbText2,
+  spacingV2,
+  FooterButton,
+  colorV2,
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
@@ -18,14 +21,14 @@ import { ProductDetailMainInfo } from './ProductDetailMainInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
-import { ActionButton } from './ActionButton';
+// import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
-import { PromoModal } from './PromoModal';
+// import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
-import { BundleSection } from './BundleSection';
+// import { BundleSection } from './BundleSection';
 import {
-  RegisterSupplierModal,
-  RejectApprovalModal,
+  // RegisterSupplierModal,
+  // RejectApprovalModal,
   WaitingApprovalModal,
   AddToCartModal,
 } from '@core/components/modal';
@@ -40,8 +43,8 @@ import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
   useCheckDataSupplier,
-  useSupplierSegmentationDetailAction,
-  useRegisterSupplierActions,
+  // useSupplierSegmentationDetailAction,
+  // useRegisterSupplierActions,
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
@@ -52,18 +55,13 @@ import {
 import { useAddToCartAction } from '@screen/oms/functions/cart/cart-hook.function';
 import { useOrderModalVisibility } from '@core/functions/product';
 import { useProductContext } from 'src/data/contexts/product';
-import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+// import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useDataAuth } from '@core/redux/Data';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
 import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
-/** === DUMMY === */
-// const supplierDummy = {
-//   name: 'Depo Berkah Abadi',
-//   urbanCity: 'Jakarta Barat',
-//   logoUrl: '',
-// };
+
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
@@ -72,28 +70,19 @@ const ProductDetailView: FC = () => {
   const {
     params: { id: productWhId },
   } = NavigationAction.useGetNavParams();
-  const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const [loadingButton, setLoadingButton] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(true);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
-  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
-    useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** => actions */
-  // const addToCartActions = useAddToCartDetailActions();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
-  const supplierSegmentationAction = useSupplierSegmentationDetailAction();
-  const sendDataToSupplierActions = useRegisterSupplierActions();
   const addToCartAction = useAddToCartAction();
   const totalCartActions = useGetTotalCartAction();
   const { me } = useDataAuth();
-
-  /**=> variable */
-  const productId = useMemo(() => productWhId.split('_')[0], [productWhId]);
 
   /** => context */
   const {
@@ -112,12 +101,6 @@ const ProductDetailView: FC = () => {
     minQty: dataProduct?.minQty ?? 1,
   });
   const {
-    stateSupplier: {
-      register: { data: sendToSupplierData, error: sendToSupplierError },
-    },
-    dispatchSupplier,
-  } = useSupplierContext();
-  const {
     stateStock: {
       detail: { data: dataStock, error: errorStock },
     },
@@ -130,53 +113,34 @@ const ProductDetailView: FC = () => {
   /** => check data supplier and sinbad status */
   const {
     checkUser,
-    modalRejectApproval,
+    // modalRejectApproval,
     modalWaitingApproval,
-    modalRegisterSupplier,
+    // modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier(setOrderModalVisible);
 
   /** => action from button order */
-  const handleOrderPress = () => {
+  const handleOrderPress = useCallback(() => {
     if (me.data !== null) {
-      if (me.data.approvalStatus !== 'verified') {
-        // setIsAvailable(false);
-      } else {
+      if (me.data.approvalStatus === 'verified') {
         checkUser({
           sinbadStatus: me.data.approvalStatus,
           supplierStatus: 'verified',
         });
       }
     } else {
-      // checkUser({
-      //   sinbadStatus: me.data.approvalStatus,
-      //   supplierStatus: null,
-      // });
-      // setIsAvailable(false);
       setModalNeedToLogin(true);
     }
-    // else {
-    //   setModalNeedToLogin(true);
-    // }
-  };
-
-  /** => action send data to supplier */
-  const onSendDataSupplier = () => {
-    if (dataProduct !== null) {
-      sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: dataProduct.sellerId,
-      });
-    }
-  };
+  }, [me.data]);
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
     // addToCartActions.reset(dispatchShopingCart);
-    sendDataToSupplierActions.reset(dispatchSupplier);
+    // sendDataToSupplierActions.reset(dispatchSupplier);
     setLoadingButton(false);
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
-    setModalErrorSendDataSupplier(false);
+    // setModalErrorSendDataSupplier(false);
     setModalErrorProductDetail(false);
     onFunctionActions({ type: 'close' });
   };
@@ -250,8 +214,6 @@ const ProductDetailView: FC = () => {
   const {
     statePromo: { potentialPromoProduct: potentialPromoProduct },
   } = React.useContext(contexts.PromoContext);
-  const potentialPromoProductList = potentialPromoProduct.detail;
-  // const potentialPromoProductAction = usePotentialPromoProductAction();
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -305,12 +267,6 @@ const ProductDetailView: FC = () => {
   /** => Listen data product success */
   useEffect(() => {
     if (dataProduct !== null && me.data !== null) {
-      /** => supplier segmentation effect */
-      // supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
-      /** => potential promo product effect */
-      // potentialPromoProductAction.reset(dispatchPromo);
-      // potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
-      /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
     } else if (me.data === null) {
       setTimeout(() => {
@@ -385,38 +341,12 @@ const ProductDetailView: FC = () => {
     }
   }, [errorStock && dataProduct]);
 
-  /** => Do something when success send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierData !== null) {
-      if (dataProduct) {
-        supplierSegmentationAction.fetch(
-          dispatchSupplier,
-          dataProduct.sellerId,
-        );
-      }
-      onFunctionActions({ type: 'close' });
-      sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast.show('Berhasil kirim data ke supplier', 2500, {
-        position: 'top',
-        positionValue: StatusBar.currentHeight,
-      });
-    }
-  }, [sendToSupplierData]);
-
-  /** => Do something when error send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierError !== null) {
-      setIsAvailable(false);
-      setModalErrorSendDataSupplier(true);
-    }
-  }, [sendToSupplierError]);
-
   // /** => Do something when success add to cart */
   useEffect(() => {
     if (stateCart.create.data !== null) {
       handleCloseModal();
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -426,16 +356,17 @@ const ProductDetailView: FC = () => {
   // /** => Do something when error add to cart */
   useEffect(() => {
     if (stateCart.create.error !== null) {
-      setModalErrorAddCart(true);
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorAddCart(true), 500);
     }
-  }, [stateCart.create.error]);
+  }, [stateCart.create.error, setOrderModalVisible]);
 
   /** => Did Unmount */
   useEffect(() => {
     return () => {
       setModalErrorProductDetail(false);
       productDetailActions.reset(dispatchProduct);
-      supplierSegmentationAction.reset(dispatchSupplier);
+      // supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
       addToCartAction.reset(dispatchCart);
     };
@@ -508,30 +439,12 @@ const ProductDetailView: FC = () => {
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
           {dataProduct?.hasBulkPrice ? (
-            <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+            <View style={{ paddingBottom: spacingV2.spacing.lg }}>
+              <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+            </View>
           ) : (
             <View />
           )}
-          {/* <ProductDetailSupplierInfo // Hide temporarily
-            logo={supplierDummy.logoUrl}
-            name={supplierDummy.name}
-            urbanCity={supplierDummy.urbanCity}
-          /> */}
-          {potentialPromoProductList.data !== null &&
-            potentialPromoProductList.data.flexiCombo.length > 0 && (
-              <PromoSection
-                description={
-                  potentialPromoProductList.data.flexiCombo[0].shortDescription
-                }
-                onPress={() => setPromoModalVisible(true)}
-              />
-            )}
-          {potentialPromoProductList.data !== null &&
-            potentialPromoProductList.data.crossSelling.length > 0 && (
-              <BundleSection
-                bundleList={potentialPromoProductList.data.crossSelling}
-              />
-            )}
           <ProductDetailSection title="Informasi Produk">
             <ProductDetailSectionItem
               name="Minimal Pembelian"
@@ -547,8 +460,14 @@ const ProductDetailView: FC = () => {
               bottomSpaces={0}
             />
           </ProductDetailSection>
+          <ProductDetailSection title="Nama Supplier" separator={false}>
+            <ProductDetailSectionItem
+              name={dataProduct?.productSeller.name ?? '-'}
+              value=""
+            />
+          </ProductDetailSection>
           <ProductDetailSection title="Detail Produk">
-            <SnbText2.Paragraph.Small>
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
               {dataProduct?.detail ?? '-'}
             </SnbText2.Paragraph.Small>
           </ProductDetailSection>
@@ -559,76 +478,37 @@ const ProductDetailView: FC = () => {
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {(dataProduct !== null || errorProduct !== null) &&
-      (dataStock !== null || errorStock !== null) ? (
-        <React.Fragment>
-          {isAvailable ? (
-            <ActionButton
-              onOpenChat={onOpenWhatsApp}
-              loading={loadingButton}
-              title={getActionButtonTitle()}
-              disabled={
-                me.data !== null &&
-                defaultProperties.stock < (dataProduct?.minQty ?? 1)
-              }
-              onPress={() => {
-                if (defaultProperties.isBundle) {
-                  goToBundle(productId);
-                } else {
-                  handleOrderPress();
-                }
-              }}
-            />
-          ) : (
-            <UnavailableSkuFlag />
-          )}
-        </React.Fragment>
-      ) : isAvailable ? (
-        <ActionButton
-          onOpenChat={onOpenWhatsApp}
-          loading={loadingButton}
-          title={'Tambah ke Keranjang'}
-          disabled={loadingButton}
-          onPress={() => {
-            handleOrderPress();
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
-      )}
-      <PromoModal
-        visible={promoModalVisible}
-        onClose={() => setPromoModalVisible(false)}
-        promoList={potentialPromoProductList.data?.flexiCombo || []}
-      />
-      {/* Register Supplier Modal */}
-      <RegisterSupplierModal
-        visible={modalRegisterSupplier}
-        onSubmit={() =>
-          onFunctionActions({
-            type: 'sendDataToSupplier',
-            onSendDataSupplier: onSendDataSupplier,
-          })
-        }
-        onClose={handleCloseModal}
-      />
+      <React.Fragment>
+        {isAvailable ? (
+          <FooterButton.Dual
+            title1={getActionButtonTitle()}
+            title2=""
+            shadow={false}
+            loading={loadingButton}
+            loadingButton={loadingButton}
+            disabled={
+              me.data !== null &&
+              defaultProperties.stock < (dataProduct?.minQty ?? 1)
+            }
+            button1Press={handleOrderPress}
+            button2Press={onOpenWhatsApp}
+            iconButton="chat"
+          />
+        ) : (
+          <UnavailableSkuFlag />
+        )}
+      </React.Fragment>
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
         onSubmit={handleCloseModal}
         onClose={handleCloseModal}
       />
-      {/* Reject Approval Modal */}
-      <RejectApprovalModal
-        visible={modalRejectApproval}
-        onClose={handleCloseModal}
-        isCallCS={true}
-      />
       {/* Add to Cart Modal */}
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
-        open={orderModalVisible && !modalErrorAddCart}
+        open={orderModalVisible}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
         disabled={
@@ -649,13 +529,6 @@ const ProductDetailView: FC = () => {
           setModalErrorAddCart(false);
           onSubmitAddToCart();
         }}
-      />
-      {/* Modal Bottom Sheet Error Send data to supplier */}
-      <BottomSheetError
-        open={modalErrorSendDataSupplier}
-        error={sendToSupplierError}
-        closeAction={handleCloseModal}
-        retryAction={onSendDataSupplier}
       />
       {/* Modal Bottom Sheet Error product detail */}
       <BottomSheetError
