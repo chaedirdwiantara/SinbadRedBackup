@@ -39,21 +39,6 @@ const SearchView: FC = () => {
   /** === VIEW === */
   return (
     <SnbContainer color="white">
-      {/* <View>
-        <SnbTopNav.Type7
-          type="red"
-          placeholder="Cari disini"
-          value={inputText}
-          backAction={goBack}
-          onChangeText={handleTextChange}
-          clearText={clearText}
-          enter={() => {
-            clearText();
-            addKeyword(inputText);
-            goToProduct(inputText);
-          }}
-        />
-      </View> */}
       <SnbTopNav2.Type8
         icon1Name="cart"
         icon1Value={stateCart.total.data?.totalProducts}
@@ -61,7 +46,7 @@ const SearchView: FC = () => {
         icon2Name="home"
         icon2Action={goToHome}
         color="white"
-        placeholder="Cari disini"
+        placeholder="Cari di sinbad"
         inputValue={inputText}
         backAction={goBack}
         onChangeText={handleTextChange}

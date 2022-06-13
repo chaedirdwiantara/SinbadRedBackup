@@ -133,10 +133,6 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   /** => Main */
   return (
     <View style={AddToCartModalStyle.quantityModifierContainer}>
-      <SnbText2.Paragraph.Tiny color={textColor.secondary}>
-        Jumlah/
-        {product?.unit}{' '}
-      </SnbText2.Paragraph.Tiny>
       {dataStock && product && (
         <React.Fragment>
           {(dataStock.stock < 11 || orderQty > dataStock.stock) && (
