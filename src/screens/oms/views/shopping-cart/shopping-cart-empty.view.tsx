@@ -1,19 +1,13 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View, Image, ScrollView } from 'react-native';
+import { View, Image } from 'react-native';
 import { SnbText, SnbButton } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE ===  */
-import { RecommendationHomeView } from '@screen/recommendation/views';
 /** === IMPORT EXTERNAL FUNCTION HERE ===  */
 import { goToCategory } from '../../functions';
-interface ShoppingCartEmptyProps {
-  navigationParent: any;
-}
+
 /** === COMPONENT ===  */
-export const ShoppingCartEmpty: FC<ShoppingCartEmptyProps> = ({
-  navigationParent,
-}) => (
-  <ScrollView>
+export const ShoppingCartEmpty: FC = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <View
       style={{
         padding: 16,
@@ -40,8 +34,5 @@ export const ShoppingCartEmpty: FC<ShoppingCartEmptyProps> = ({
         onPress={goToCategory}
       />
     </View>
-    <View>
-      <RecommendationHomeView navigationParent={navigationParent} />
-    </View>
-  </ScrollView>
+  </View>
 );
