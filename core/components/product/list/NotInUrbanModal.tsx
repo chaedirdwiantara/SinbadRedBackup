@@ -46,6 +46,7 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
 
     return (
       <BottomModalError
+        onDismis={() => setIsOpen(false)}
         isOpen={isOpen}
         errorTitle={'Lokasi tidak terjangkau'}
         errorSubtitle={errorSubtitle}
