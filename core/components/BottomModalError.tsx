@@ -66,8 +66,7 @@ const BottomModalError: FC<Props> = (props) => {
             <SnbText2.Paragraph.Default
               align="center"
               color={colorV2.textColor.secondary}>
-              {props.errorSubtitle} Maaf, Sinbad belum beroperasi di lokasi toko
-              Anda.
+              {props.errorSubtitle}
             </SnbText2.Paragraph.Default>
           </View>
         </View>
