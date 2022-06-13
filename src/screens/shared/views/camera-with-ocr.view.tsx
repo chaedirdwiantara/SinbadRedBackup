@@ -140,7 +140,10 @@ const CameraWithOCRView = () => {
             swipeIndicator
           />
         }
-        close={() => setRetake(true)}
+        close={() => {
+          resetOcrStatusRtdb();
+          setRetake(true);
+        }}
         content={
           <View
             style={{ paddingHorizontal: layout.spacing.xl }}
@@ -157,8 +160,8 @@ const CameraWithOCRView = () => {
               title="Saya Mengerti"
               onPress={() => {
                 resetOcrStatusRtdb();
-                bottomSheetRef.current?.close();
                 setRetake(true);
+                bottomSheetRef.current?.close();
               }}
               disabled={false}
               size="medium"

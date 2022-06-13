@@ -103,6 +103,7 @@ const Content: React.FC = () => {
             resizeMode="contain"
             blurRadius={2.2}
             isTiltImage
+            listType="number"
           />,
           renderImagePreview(),
         ),

@@ -179,11 +179,19 @@ const useChangeBankAccount = () => {
     },
   };
 };
+type TField =
+  | 'default'
+  | 'error'
+  | 'success'
+  | 'information'
+  | 'disabled'
+  | 'readonly'
+  | undefined;
 /** => useInput */
 export const useInput = (initialState: any = '') => {
   const [value, setValue] = useState(initialState);
   const [valMsgError, setValMsgError] = useState('');
-  const [type, setType] = useState('default');
+  const [type, setType] = useState<TField>('default');
 
   const onChangeText = (text: string) => {
     setType('default');
