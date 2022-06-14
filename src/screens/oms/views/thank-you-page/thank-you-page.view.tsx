@@ -431,7 +431,7 @@ const OmsThankYouPageView: FC = () => {
         // />
       ) : (
         <FooterButton.Dual
-          title2={'Kembali ke Beranda'}
+          title2={'Ke Beranda'}
           button2Press={goToHome}
           title1={'Cek Status'}
           button1Press={() => NavigationAction.navigate('HistoryListView')}
