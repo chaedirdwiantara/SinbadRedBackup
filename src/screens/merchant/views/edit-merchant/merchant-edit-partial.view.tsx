@@ -23,12 +23,14 @@ import { NavigationAction } from '@navigation';
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { TextFieldSelect } from '@screen/account/views';
+import { toastOptions } from '@screen/auth/functions/auth-utils.functions';
 
 interface Props {
   type: any;
   showButton: boolean;
   source: string;
   sourceData: any;
+  originFrom: string | undefined;
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {
@@ -77,6 +79,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.data !== null ||
       stateMerchant.merchantEdit.data !== null
     ) {
+      if (props.originFrom === 'profile') {
+        SnbToast.show('Nama Toko berhasil ditambahkan', 2500, toastOptions);
+      } else {
+        SnbToast.show('Data Berhasil Diperbarui', 2500, toastOptions);
+      }
       NavigationAction.back();
       editMerchantAction.reset(dispatchSupplier);
       editProfileAction.reset(dispatchSupplier);
@@ -85,7 +92,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
       stateMerchant.profileEdit.error ||
       stateMerchant.merchantEdit.error
     ) {
-      SnbToast.show('Data Gagal Diperbaharui', 2500, { positionValue: 56 });
+      SnbToast.show('Data Gagal Diperbarui', 2500, toastOptions);
     }
   }, [stateMerchant]);
 
@@ -491,7 +498,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             text = text.replace(/[^0-9]/g, '');
             merchantSize.setValue(text);
           }}
-          onClearText={() => merchantName.setValue('')}
+          onClearText={() => merchantSize.setValue('')}
           maxLength={50}
         />
       </View>

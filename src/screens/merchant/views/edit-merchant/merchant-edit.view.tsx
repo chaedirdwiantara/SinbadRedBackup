@@ -53,6 +53,7 @@ const MerchantEditView: FC<Props> = (props) => {
         source={props.route.params.source}
         sourceData={props.route.params.sourceData}
         showButton
+        originFrom={props.route.params?.originFrom}
       />
     );
   };

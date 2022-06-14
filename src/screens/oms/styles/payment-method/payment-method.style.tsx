@@ -7,12 +7,15 @@ export const PaymentMethodStyle = StyleSheet.create({
     padding: 16,
   },
   listContainer: {
+    backgroundColor: colorV2.bgColor.light,
+    borderColor: colorV2.strokeColor.default,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
+    marginVertical: 8,
     padding: 16,
     borderWidth: 1,
     borderRadius: 5,
+    elevation: 4,
   },
   listImage: {
     height: 25,

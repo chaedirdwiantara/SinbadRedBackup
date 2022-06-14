@@ -93,8 +93,9 @@ const ListProductOrder = () => {
         {data?.totalOrderProducts ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
             <SnbText2.Body.Tiny color={colorV2.textColor.link} align="center">
-              {showMore ? 'Sembunyikan' : 'Lihat'} {data.totalOrderProducts}{' '}
-              produk lainnya
+              {showMore ? 'Sembunyikan' : 'Lihat'}{' '}
+              {showMore ? null : data.totalOrderProducts}{' '}
+              {showMore ? 'produk' : 'produk lainnya'}
             </SnbText2.Body.Tiny>
           </TouchableOpacity>
         ) : (

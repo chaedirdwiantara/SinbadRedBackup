@@ -24,6 +24,7 @@ import {
   DEFAULT_LATITUDE,
   DEFAULT_LONGITUDE,
   REGION_OPTIONS,
+  toastOptions,
 } from '@screen/auth/functions/auth-utils.functions';
 import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
 import { ModalSelection } from '@screen/account/views/shared';
@@ -113,7 +114,7 @@ const Content: React.FC = () => {
       goBack();
       reset(dispatchSupplier);
       detail(dispatchUser);
-      SnbToast.show('Alamat berhasil diperbarui', 2000);
+      SnbToast.show('Alamat berhasil ditambahkan', 2000, toastOptions);
     }
   }, [stateMerchant.profileEdit]);
 
