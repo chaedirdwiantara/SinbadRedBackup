@@ -543,6 +543,7 @@ const ProductDetailView: FC = () => {
         visible={modalNeedToLogin}
         onClose={() => setModalNeedToLogin(false)}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };
