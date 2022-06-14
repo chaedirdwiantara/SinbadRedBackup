@@ -343,9 +343,6 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (dataStock && productDetailState) {
       setLoadingPreparation(false);
-      if (modalNotCoverage === false) {
-        setOrderModalVisible(true);
-      }
     }
   }, [dataStock, productDetailState]);
 
