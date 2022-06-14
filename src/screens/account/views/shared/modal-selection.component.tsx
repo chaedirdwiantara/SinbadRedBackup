@@ -156,15 +156,24 @@ const ModalSelection: React.FC<Props> = ({
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={() => onCloseModalSelection()}
+          onRight1Action={() => {
+            onCloseModalSelection();
+            setTempSelectedItem(null);
+          }}
         />
       }
-      close={() => onCloseModalSelection()}
+      close={() => {
+        onCloseModalSelection();
+        setTempSelectedItem(null);
+      }}
       button={
         <View style={{ padding: layout.spacing.lg }}>
           <SnbButton2.Primary
             title={setTitle(type)}
-            onPress={() => onCloseModalSelection(tempSelectedItem)}
+            onPress={() => {
+              onCloseModalSelection(tempSelectedItem);
+              setTempSelectedItem(null);
+            }}
             disabled={tempSelectedItem === null || listSelection.data === null}
             full
             size="medium"

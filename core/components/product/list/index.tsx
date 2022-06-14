@@ -343,9 +343,6 @@ const ProductList: FC<ProductListProps> = ({
   useEffect(() => {
     if (dataStock && productDetailState) {
       setLoadingPreparation(false);
-      if (modalNotCoverage === false) {
-        setOrderModalVisible(true);
-      }
     }
   }, [dataStock, productDetailState]);
 
@@ -619,6 +616,7 @@ const ProductList: FC<ProductListProps> = ({
         visible={modalNeedToLogin}
         onClose={() => setModalNeedToLogin(false)}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };

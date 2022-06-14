@@ -134,25 +134,20 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500);
     }
   }, [stateGlobal.uploadImage]);
 
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
+      SnbToast.show('Data Berhasil Diperbaharui', 2500);
       goBack();
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser);
     }
 
     if (stateMerchant.profileEdit.error !== null) {
-      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500);
     }
   }, [stateMerchant.profileEdit]);
 
@@ -164,10 +159,7 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
-      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500);
     }
   }, [stateMerchant.merchantEdit]);
 
@@ -306,6 +298,9 @@ const MerchantEditPhotoView = () => {
             type="vertical"
             resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
             isTiltImage={params.type === 'npwp'}
+            listType="number"
+            blurRadius={2}
+            brightnessAmount={params.type === 'store' ? 2 : 1.5}
           />,
         )}
       </View>

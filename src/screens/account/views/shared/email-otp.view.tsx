@@ -14,7 +14,6 @@ import { contexts } from '@contexts';
 import { NavigationAction } from '@navigation';
 import { useEasyRegistration } from '@screen/account/functions';
 import { OTPInput, OTPTimer } from '@screen/shared/views/components';
-import Svg from '@svg';
 
 interface Props {
   loading: boolean;
@@ -46,6 +45,7 @@ const OTPContent: React.FC<Props> = (props) => {
     if (type === 'email') {
       // eslint-disable-next-line no-shadow
       const data = {
+        screen: 'completion',
         email: props.route.params.data,
         code: otp,
       };
@@ -122,7 +122,10 @@ const OTPContent: React.FC<Props> = (props) => {
           <ScrollView>
             <View style={OtpStyle.titleContainer}>
               <View style={{ alignSelf: 'center' }}>
-                <Svg name="sinbad_otp" size={200} />
+                <Image
+                  source={require('@image/sinbad_image/sinbad_otp.png')}
+                  style={{ height: 200, resizeMode: 'contain' }}
+                />
               </View>
               <View
                 style={{ padding: layout.spacing.lg, alignItems: 'center' }}>

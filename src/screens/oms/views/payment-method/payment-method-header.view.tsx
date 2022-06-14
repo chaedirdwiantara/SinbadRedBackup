@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbTopNav2 } from 'react-native-sinbad-ui';
 /** === INTERFACES === */
 interface PaymentMethodHeaderProps {
   backAction: () => void;
@@ -9,9 +9,9 @@ interface PaymentMethodHeaderProps {
 export const PaymentMethodHeader: FC<PaymentMethodHeaderProps> = ({
   backAction,
 }) => (
-  <SnbTopNav.Type3
-    type="white"
-    title={'Pilih Pembayaran'}
+  <SnbTopNav2.Type3
+    title="Pilih Pembayaran"
+    color="white"
     backAction={backAction}
   />
 );

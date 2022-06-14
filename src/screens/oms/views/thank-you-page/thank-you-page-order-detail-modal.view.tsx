@@ -1,8 +1,8 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect,forwardRef, useRef, useCallback, useImperativeHandle } from 'react';
 import { View, Dimensions, TouchableOpacity } from 'react-native';
-import { SnbText, color, SnbBottomSheet } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, SnbBottomSheet2, SnbBottomSheet2Ref, SnbBottomSheetPart } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ThankYouPageCardDivider } from '@screen/oms/components/thank-you-page-card-divider.component';
@@ -17,11 +17,35 @@ interface ModalThankYouPageOrderDetail {
   data: models.ThankYouOrderDetailProps | null;
 }
 /** === COMPONENT === */
-export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
-  isOpen,
-  close,
-  data,
-}) => {
+export const ModalThankYouPageOrderDetail = forwardRef<
+  SnbBottomSheet2Ref,
+  ModalThankYouPageOrderDetail
+>((props, ref) => {
+  const {
+    isOpen,
+    close,
+    data,
+  } = props;
+  //ref
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
+  // register ref
+  useImperativeHandle(ref, () => ({
+    open: () => modalRef.current?.open(),
+    close: () => modalRef.current?.close(),
+  }));
+  // Function
+  const onCloseModal = useCallback(() => {
+    close && close();
+    modalRef.current?.close();
+  }, [modalRef.current]);
+  // State Effect
+  useEffect(() => {
+    if (isOpen) {
+      modalRef.current?.open();
+    } else {
+      modalRef.current?.close();
+    }
+  }, [isOpen]);
   const [expandableLabelItemCount, setExpandableLabelItemCount] = useState(0);
   let count = -2;
   if (data != null) {
@@ -32,6 +56,15 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   // setExpandableLabelItemCount(count - 2)
 
   const [expanded, setExpanded] = useState(false);
+  const [modalHeight, setModalHeight] = useState(275)
+  useEffect(() => {
+    if(expanded){
+      setModalHeight(424)
+    }
+    else{
+      setModalHeight(275)
+    }
+  },[expanded])
   const productPerSellerList = (sellerData: models.OrderSeller) => {
     if (expanded) {
       return sellerData.products.map((product) => (
@@ -39,16 +72,16 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
-                <SnbText.B1 color={color.black60}>
-                  {product.productName} {product.qty}
-                </SnbText.B1>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  {product.productName}
+                </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
-              <SnbText.B1 color={color.black60}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                 {toCurrency(product.productPriceAfterTax * product?.qty, {
                   withFraction: false,
                 })}
-              </SnbText.B1>
+              </SnbText2.Paragraph.Default>
               {/* </View> */}
             </View>
           </View>
@@ -60,19 +93,18 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
           <View>
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
-                <SnbText.B1 color={color.black60}>
-                  {sellerData.products[0]?.productName}{' '}
-                  {sellerData.products[0]?.qty}
-                </SnbText.B1>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  {sellerData.products[0]?.productName}
+                </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
-              <SnbText.B1 color={color.black60}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                 {toCurrency(
                   sellerData.products[0]?.productPriceAfterTax *
                     sellerData.products[0]?.qty,
                   { withFraction: false },
                 )}
-              </SnbText.B1>
+              </SnbText2.Paragraph.Default>
               {/* </View> */}
             </View>
           </View>
@@ -80,19 +112,18 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
             <View>
               <View style={ThankYouPageStyle.OrderDetailItem}>
                 <View style={{ width: '50%' }}>
-                  <SnbText.B1 color={color.black60}>
-                    {sellerData.products[1]?.productName}{' '}
-                    {sellerData.products[1]?.qty}
-                  </SnbText.B1>
+                  <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                    {sellerData.products[1]?.productName}
+                  </SnbText2.Paragraph.Default>
                 </View>
                 {/* <View> */}
-                <SnbText.B1 color={color.black60}>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                   {toCurrency(
                     sellerData.products[1]?.productPriceAfterTax *
                       sellerData.products[1]?.qty,
                     { withFraction: false },
                   )}
-                </SnbText.B1>
+                </SnbText2.Paragraph.Default>
                 {/* </View> */}
               </View>
             </View>
@@ -107,9 +138,9 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
         <>
           <View>
             <View style={{ marginVertical: 6 }}>
-              <SnbText.H4 color={color.black60}>
+              <SnbText2.Body.Default color={colorV2.textColor.secondary}>
                 {dataSeller.sellerName}
-              </SnbText.H4>
+              </SnbText2.Body.Default>
             </View>
             {productPerSellerList(dataSeller)}
           </View>
@@ -122,9 +153,9 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
             <>
               <View>
                 <View style={{ marginVertical: 6 }}>
-                  <SnbText.H4 color={color.black60}>
+                  <SnbText2.Body.Default color={colorV2.textColor.secondary}>
                     {data?.sellers[0].sellerName}
-                  </SnbText.H4>
+                  </SnbText2.Body.Default>
                 </View>
                 {productPerSellerList(data.sellers[0])}
               </View>
@@ -135,9 +166,9 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
             <>
               <View>
                 <View style={{ marginVertical: 6 }}>
-                  <SnbText.H4 color={color.black60}>
+                  <SnbText2.Body.Default color={colorV2.textColor.secondary}>
                     {dataSeller.sellerName}
-                  </SnbText.H4>
+                  </SnbText2.Body.Default>
                 </View>
                 {productPerSellerList(dataSeller)}
               </View>
@@ -155,19 +186,18 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
             <TouchableOpacity onPress={() => setExpanded(!expanded)}>
               <View style={ThankYouPageStyle.expandableButton}>
                 {expanded ? (
-                  <SnbText.B3
+                  <SnbText2.Body.Small
                     color={
-                      color.blue50
-                    }>{`Sembunyikan ${count} Produk`}</SnbText.B3>
+                      colorV2.textColor.link
+                    }>{`Sembunyikan ${count} Produk Lainnya`}</SnbText2.Body.Small>
                 ) : (
-                  <SnbText.B3
+                  <SnbText2.Body.Small
                     color={
-                      color.blue50
-                    }>{`Tampilkan ${count} Produk Lainnya`}</SnbText.B3>
+                      colorV2.textColor.link
+                    }>{`Tampilkan ${count} Produk Lainnya`}</SnbText2.Body.Small>
                 )}
               </View>
             </TouchableOpacity>
-            <ThankYouPageCardDivider />
           </>
         )}
       </>
@@ -176,27 +206,28 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   const deliveryAndOtherCost = () => {
     return (
       <>
+      <ThankYouPageCardDivider />
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText.B1 color={color.black60}>Total Pengiriman</SnbText.B1>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>Biaya Pengiriman</SnbText2.Paragraph.Default>
             </View>
             <View>
-              <SnbText.B1 color={color.green50}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.success}>
                 {toCurrency(0, { withFraction: false })}
-              </SnbText.B1>
+              </SnbText2.Paragraph.Default>
             </View>
           </View>
         </View>
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText.B1 color={color.black60}>Biaya Layanan</SnbText.B1>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>Biaya Layanan</SnbText2.Paragraph.Default>
             </View>
             <View>
-              <SnbText.B1 color={color.green50}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                 {toCurrency(0, { withFraction: false })}
-              </SnbText.B1>
+              </SnbText2.Paragraph.Default>
             </View>
           </View>
         </View>
@@ -210,14 +241,14 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
-              <SnbText.H4 color={color.black100}>Total</SnbText.H4>
+              <SnbText2.Headline.Small color={colorV2.textColor.default}>Total</SnbText2.Headline.Small>
             </View>
             <View>
-              <SnbText.B2 color={color.black100}>
+              <SnbText2.Headline.Small color={colorV2.textColor.default}>
                 {toCurrency(Number(data?.totalOrderPriceAfterTax), {
                   withFraction: false,
                 })}
-              </SnbText.B2>
+              </SnbText2.Headline.Small>
             </View>
           </View>
         </View>
@@ -236,9 +267,9 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   };
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View style={{ marginBottom: 16 }}>
         <ScrollView
-          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          style={{ paddingTop: 16, maxHeight: height * 2 }}
           showsVerticalScrollIndicator={false}>
           {orderDetail()}
         </ScrollView>
@@ -246,12 +277,26 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
     );
   };
   return (
-    <SnbBottomSheet
-      open={isOpen}
+    <SnbBottomSheet2
+      ref={modalRef}
+      name="thank-you-order-detail"
+      type="content"
+      contentHeight={modalHeight}
       content={content()}
-      title={'Detail Pesanan'}
-      closeAction={close}
-      actionIcon={'close'}
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={onCloseModal}
+        />
+      }
+      title={
+        <SnbBottomSheetPart.Title
+          swipeIndicator
+          title="Detail Pesanan"
+          titleType="center"
+        />
+      }
+      close={onCloseModal}
     />
   );
   // return data !== null ? (
@@ -265,4 +310,4 @@ export const ModalThankYouPageOrderDetail: FC<ModalThankYouPageOrderDetail> = ({
   // ): (
   //   <View/>
   // )
-};
+});

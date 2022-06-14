@@ -64,7 +64,11 @@ const Content: React.FC = () => {
         }}
       />
       <View style={{ padding: layout.spacing.lg }}>
-        <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
+        <SnbTextField2.Text
+          {...phone}
+          labelText="Nomer Handphone"
+          keyboardType="phone-pad"
+        />
       </View>
       <View style={{ marginTop: layout.spacing.lg }} />
       <View style={{ paddingHorizontal: layout.spacing.lg }}>

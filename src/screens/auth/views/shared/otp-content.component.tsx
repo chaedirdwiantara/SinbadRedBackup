@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import {
   SnbButton2,
   SnbText2,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
-import Svg from '@svg';
 import { useOTP } from '@screen/auth/functions';
 import { OTPInput, OTPTimer } from '@screen/shared/views/components';
 interface Props {
@@ -51,7 +50,10 @@ const OTPContent: React.FC<Props> = (props) => {
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <View style={{ marginVertical: layout.spacing.xl }}>
         <View style={{ alignSelf: 'center' }}>
-          <Svg name="sinbad_otp" size={200} />
+          <Image
+            source={require('@image/sinbad_image/sinbad_otp.png')}
+            style={{ height: 200, resizeMode: 'contain' }}
+          />
         </View>
         <View style={loginOTPStyle.titleContainer}>
           <SnbText2.Headline.Default>

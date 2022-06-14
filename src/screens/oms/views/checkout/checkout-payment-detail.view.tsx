@@ -2,7 +2,7 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { SnbText, color, SnbIcon } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, SnbIcon } from 'react-native-sinbad-ui';
 import {
   usePaymentDetailAccorrdion,
   totalBarangPrice,
@@ -10,6 +10,7 @@ import {
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 export interface CheckoutPaymentDetailViewProps {
   products: models.CheckoutCartProduct[];
@@ -31,14 +32,20 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
       {isActive ? (
         <View>
           <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.black60}>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               {`Total Barang (${subQty})`}
-            </SnbText.B3>
-            <SnbText.B3 color={color.black60}>{totalProductsPrice}</SnbText.B3>
+            </SnbText2.Paragraph.Default>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              {totalProductsPrice}
+            </SnbText2.Paragraph.Default>
           </View>
           <View style={CheckoutStyle.detailItemContainer}>
-            <SnbText.B3 color={color.black60}>Total Pengiriman</SnbText.B3>
-            <SnbText.B3 color={color.green60}>Rp. {deliveryFee}</SnbText.B3>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              Total Pengiriman
+            </SnbText2.Paragraph.Default>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              {toCurrency(deliveryFee, { withFraction: false })}
+            </SnbText2.Paragraph.Default>
           </View>
         </View>
       ) : (
@@ -47,17 +54,21 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
       <TouchableOpacity
         onPress={() => paymentAccordion.changeActive(1)}
         style={CheckoutStyle.detailExpandButton}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <SnbIcon
             name={isActive ? 'expand_less' : 'expand_more'}
             size={24}
-            color={color.black100}
+            color={colorV2.textColor.default}
           />
           <View style={{ marginLeft: 8 }}>
-            <SnbText.H4>Sub Total</SnbText.H4>
+            <SnbText2.Headline.Small color={colorV2.textColor.default}>
+              Sub Total
+            </SnbText2.Headline.Small>
           </View>
         </View>
-        <SnbText.H4>{totalProductsPrice}</SnbText.H4>
+        <SnbText2.Headline.Small color={colorV2.textColor.default}>
+          {totalProductsPrice}
+        </SnbText2.Headline.Small>
       </TouchableOpacity>
     </View>
   );

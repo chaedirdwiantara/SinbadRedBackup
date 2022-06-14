@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, spacingV2 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
 import BulkPricingTag from '@core/components/product/BulkPricingTag';
 import ExclusiveTag from '@core/components/product/ExclusiveTag';
@@ -20,6 +20,9 @@ interface ProductDetailMainInfoProps {
   loading: boolean;
   showStock?: boolean;
 }
+// VAR
+const { textColor } = colorV2;
+const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
@@ -32,16 +35,18 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   qtySoldLabel,
   hasBulkPrice,
 }) => (
-  <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
-    <View style={{ flexDirection: 'row', marginBottom: 8 }}>
+  <View style={{ padding: spacing.lg }}>
+    <View style={{ flexDirection: 'row', marginBottom: spacing.xxsm }}>
       {hasBulkPrice ? <BulkPricingTag /> : <View />}
       {isExclusive ? <ExclusiveTag style={{ marginLeft: 4 }} /> : <View />}
     </View>
-    <SnbText.H4>{name}</SnbText.H4>
-    <View style={{ marginVertical: 8 }}>
-      <SnbText.B2 color={color.red50}>
+    <SnbText2.Paragraph.Large color={textColor.secondary}>
+      {name}
+    </SnbText2.Paragraph.Large>
+    <View style={{ marginVertical: spacing.xxsm }}>
+      <SnbText2.Headline.Default>
         {toCurrency(priceAfterTax ?? 0, { withFraction: false })}
-      </SnbText.B2>
+      </SnbText2.Headline.Default>
     </View>
     {showStock && stock < 11 && !loading && (
       <View
@@ -52,20 +57,22 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         }}>
         {hasPromo && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbText.B3 color={color.black40}>
+            <SnbText2.Headline.Default>
               {toCurrency(priceAfterTax ?? 0, {
                 withFraction: false,
               })}
-            </SnbText.B3>
+            </SnbText2.Headline.Default>
           </View>
         )}
-        <SnbText.B3 color={color.red50}>
+        <SnbText2.Paragraph.Tiny color={textColor.secondary}>
           {stock === 0 ? 'Produk Habis' : `Tersisa ${stock}`}
-        </SnbText.B3>
+        </SnbText2.Paragraph.Tiny>
       </View>
     )}
     {qtySoldLabel !== '0' && (
-      <SnbText.B3>{`Terjual ${qtySoldLabel ?? ''}`}</SnbText.B3>
+      <SnbText2.Paragraph.Tiny color={textColor.secondary}>{`Terjual ${
+        qtySoldLabel ?? ''
+      }`}</SnbText2.Paragraph.Tiny>
     )}
   </View>
 );

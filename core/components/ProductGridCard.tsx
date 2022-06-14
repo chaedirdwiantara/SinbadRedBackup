@@ -42,6 +42,7 @@ const ProductGrid: FC<ProductGridCardProps> = (props) => {
       currentPrice={toCurrency(props.priceAfterTax, {
         withFraction: false,
       })}
+      type="normal"
       soldBy={props.qtySoldLabel}
       badgeProps={badge}
       buttonText={props.withOrderButton ? 'Pesan' : undefined}

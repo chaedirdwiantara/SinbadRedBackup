@@ -1,5 +1,5 @@
 import { CheckoutStyle } from '@screen/oms/styles';
-import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
+import { SnbText2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
@@ -11,12 +11,12 @@ export const CheckoutTNCView: FC<CheckoutTNCViewProps> = ({ clickAction }) => {
   return (
     <View style={CheckoutStyle.tncLabelSection}>
       <TouchableOpacity onPress={clickAction}>
-        <SnbText.B3 align="center">
+        <SnbText2.Body.Small align="center" color={colorV2.textColor.default}>
           Dengan melanjutkan pembayaran, berarti Anda setuju dengan{' '}
-          <SnbText.B3 color={color.blue50}>
-            syarat dan ketentuan Sinbad.
-          </SnbText.B3>
-        </SnbText.B3>
+          <SnbText2.Body.Small align="center" color={colorV2.textColor.link}>
+            Syarat dan Ketentuan Sinbad.
+          </SnbText2.Body.Small>
+        </SnbText2.Body.Small>
       </TouchableOpacity>
     </View>
   );

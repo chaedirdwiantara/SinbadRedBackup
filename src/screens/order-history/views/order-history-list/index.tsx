@@ -1,5 +1,5 @@
 import React from 'react';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import {
   MenuStatusFilter,
   SearchInputFilter,
@@ -11,6 +11,11 @@ import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
 import { copilotOptions } from '@screen/account/views/shared';
 import { View } from 'react-native';
 import { useCoachmark } from '@screen/account/functions';
+import { NavigationAction } from '@navigation';
+
+const goBack = () => {
+  NavigationAction.back();
+};
 
 const CopilotView = walkthroughable(View);
 
@@ -21,7 +26,10 @@ const OrderHistoryList = ({ start }: any) => {
   const { coachmarkState } = useCoachmark();
 
   React.useEffect(() => {
-    if (typeof coachmarkState.data?.orderCoachmark === 'boolean' && coachmarkState.data?.orderCoachmark == false) {
+    if (
+      typeof coachmarkState.data?.orderCoachmark === 'boolean' &&
+      coachmarkState.data?.orderCoachmark == false
+    ) {
       start();
     }
   }, [coachmarkState.data]);
@@ -29,15 +37,19 @@ const OrderHistoryList = ({ start }: any) => {
   useInitialGetList();
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type1 type="red" title="Pesanan" />
+      <SnbTopNav2.Type3
+        title="Pesanan"
+        color="white"
+        backAction={() => goBack()}
+      />
       <View>
         <CopilotStep
-            text="Cek status pesanan yang Anda telah buat dibagian ini"
-            order={1}
-            name="Status Pesanan">
-            <CopilotView>
-              <MenuStatusFilter />
-            </CopilotView>
+          text="Cek status pesanan yang Anda telah buat dibagian ini"
+          order={1}
+          name="Status Pesanan">
+          <CopilotView>
+            <MenuStatusFilter />
+          </CopilotView>
         </CopilotStep>
       </View>
       <SearchInputFilter />
@@ -47,4 +59,6 @@ const OrderHistoryList = ({ start }: any) => {
 };
 
 // wrap provider history list context
-export const OrderHistoryListView = copilot(copilotOptions(0, 'orderCoachmark'))(Provider(OrderHistoryList));;
+export const OrderHistoryListView = copilot(
+  copilotOptions(0, 'orderCoachmark'),
+)(Provider(OrderHistoryList));

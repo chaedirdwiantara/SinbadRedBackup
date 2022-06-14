@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useRef, useState, useContext } from 'react';
 import {
   SnbIcon,
-  SnbTextField,
+  SnbTextField2,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -48,12 +48,12 @@ const SearchInputFilter = () => {
   return (
     <View style={styles.main}>
       <View style={styles.input}>
-        <SnbTextField.Text
+        <SnbTextField2.Text
           placeholder="Cari Transaksi"
           type="default"
           onChangeText={setSearch}
-          clearText={onClear}
-          enter={onEnter}
+          onClearText={onClear}
+          onEnter={onEnter}
           value={search}
           prefixIconName="search"
           autoCapitalize="none"

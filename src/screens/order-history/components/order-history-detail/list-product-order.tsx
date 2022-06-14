@@ -1,8 +1,11 @@
 import React, { FC, useMemo, useState } from 'react';
 import {
   SnbText,
+  SnbText2,
   color,
+  colorV2,
   SnbImageCompressor,
+  SnbDivider2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Header, Divider } from './information';
@@ -25,25 +28,30 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.product}>
             <SnbImageCompressor style={styles.image} uri={data.image} />
             <View style={styles.descProduct}>
-              <SnbText.C1 color={color.black60}>{data.name}</SnbText.C1>
-              <SnbText.C1
-                color={color.black60}>{`(${data.qty}) ${data.uom}`}</SnbText.C1>
-              <SnbText.C1>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                {data.name}
+              </SnbText2.Paragraph.Default>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                {`(${data.qty}) ${data.uom}`}
+              </SnbText2.Paragraph.Small>
+              <SnbText2.Body.Default>
                 {toCurrency(data.productPriceAfterTax, { withFraction: false })}
-              </SnbText.C1>
+              </SnbText2.Body.Default>
             </View>
           </View>
-          <View style={styles.div} />
+          <View style={{ marginVertical: 16 }}>
+            <SnbDivider2 type="solid" />
+          </View>
         </View>
         {/* inform */}
         <View>
           <View style={styles.information}>
-            <SnbText.C1>Total Harga</SnbText.C1>
-            <SnbText.C1>
+            <SnbText2.Body.Small>Total Harga</SnbText2.Body.Small>
+            <SnbText2.Body.Small>
               {toCurrency(data.totalProductPriceAfterTax, {
                 withFraction: false,
               })}
-            </SnbText.C1>
+            </SnbText2.Body.Small>
           </View>
         </View>
       </View>
@@ -84,10 +92,11 @@ const ListProductOrder = () => {
         )}
         {data?.totalOrderProducts ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
-            <SnbText.B3 color={color.blue60} align="center">
-              {showMore ? 'Sembunyikan' : 'Lihat'} {data.totalOrderProducts}{' '}
-              produk lainnya
-            </SnbText.B3>
+            <SnbText2.Body.Tiny color={colorV2.textColor.link} align="center">
+              {showMore ? 'Sembunyikan' : 'Lihat'}{' '}
+              {showMore ? null : data.totalOrderProducts}{' '}
+              {showMore ? 'produk' : 'produk lainnya'}
+            </SnbText2.Body.Tiny>
           </TouchableOpacity>
         ) : (
           <View />
@@ -101,10 +110,10 @@ const ListProductOrder = () => {
 const styles = StyleSheet.create({
   main: { margin: 16 },
   card: {
-    marginHorizontal: 16,
-    marginVertical: 8,
+    marginTop: 8,
+    marginBottom: 20,
     elevation: 6,
-    backgroundColor: 'white',
+    backgroundColor: colorV2.bgColor.light,
     borderRadius: 8,
     overflow: 'hidden',
   },
@@ -118,25 +127,8 @@ const styles = StyleSheet.create({
   },
   descProduct: {
     marginLeft: 16,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: '70%',
-  },
-  div: {
-    height: 1,
-    backgroundColor: color.black40,
-    marginVertical: 14,
-  },
-  cancel: {
-    backgroundColor: '#677A8E',
-    borderRadius: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
-  delivered: {
-    backgroundColor: color.red50,
-    borderRadius: 4,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
   },
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },

@@ -1,3 +1,6 @@
+import { IToastShowOptions } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/Toast/types';
+import { StatusBar } from 'react-native';
+
 //** RENDER IF */
 export const renderIF = (
   params: boolean,
@@ -106,7 +109,7 @@ export const setErrorMessage = (code: number, message?: string) => {
       return 'No. Hp tidak boleh kosong';
     }
     case 40010000007: {
-      return 'No. Hp yang Anda masukkan tidak terdaftar';
+      return 'Nomor belum terdaftar';
     }
     case 40010000008: {
       return 'Kode OTP salah/kadaluarsa';
@@ -124,4 +127,9 @@ export const setErrorMessage = (code: number, message?: string) => {
       return message || 'Terjadi kesalahan';
     }
   }
+};
+
+export const toastOptions: IToastShowOptions = {
+  position: 'top',
+  positionValue: (StatusBar.currentHeight || 0) + 56,
 };
