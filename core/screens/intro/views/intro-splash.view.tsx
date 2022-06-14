@@ -15,9 +15,6 @@ const IntroSplashView: React.FC = () => {
   // usePageAfterIntro();
   const authCoreAction = useAuthCoreAction();
   /** === EFFECT === */
-  React.useEffect(() => {
-    SplashScreen.hide();
-  }, []);
   /** => get auth me */
   React.useEffect(() => {
     authCoreAction.me();

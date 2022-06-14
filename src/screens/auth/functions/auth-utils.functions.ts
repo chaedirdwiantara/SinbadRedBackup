@@ -109,7 +109,7 @@ export const setErrorMessage = (code: number, message?: string) => {
       return 'No. Hp tidak boleh kosong';
     }
     case 40010000007: {
-      return 'No. Hp yang Anda masukkan tidak terdaftar';
+      return 'Nomor belum terdaftar';
     }
     case 40010000008: {
       return 'Kode OTP salah/kadaluarsa';

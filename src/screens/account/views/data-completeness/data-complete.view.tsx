@@ -26,9 +26,10 @@ import { ErrorContent, SnbCardButtonType3 } from '../shared';
 const CompleteDataSkeleton: React.FC = () => {
   return (
     <View style={{ marginVertical: layout.spacing.xxl }}>
-      {[0, 1].map((el) => {
+      {[0, 1].map((el, idx) => {
         return (
           <View
+            key={idx}
             style={{
               borderRadius: borderV2.radius.md,
               borderColor: colorV2.strokeColor.disable,
