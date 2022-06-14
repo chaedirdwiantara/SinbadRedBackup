@@ -368,6 +368,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
       title={title()}
       content={content()}
       button={button()}
+      isBackDisable
     />
   );
 };
