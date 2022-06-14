@@ -34,6 +34,7 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
           title="Yakin Ingin Keluar?"
           image={require('@image/sinbad_image/back_completeness.png')}
           description="Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan"
+          imageStyle={{ height: 180, resizeMode: 'contain' }}
         />
       </View>
     );
