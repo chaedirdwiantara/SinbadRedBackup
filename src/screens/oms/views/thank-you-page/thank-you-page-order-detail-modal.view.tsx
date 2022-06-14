@@ -200,7 +200,6 @@ export const ModalThankYouPageOrderDetail = forwardRef<
                 )}
               </View>
             </TouchableOpacity>
-            <ThankYouPageCardDivider />
           </>
         )}
       </>
@@ -209,6 +208,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   const deliveryAndOtherCost = () => {
     return (
       <>
+      <ThankYouPageCardDivider />
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
@@ -271,7 +271,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
     return (
       <View style={{ marginBottom: 16 }}>
         <ScrollView
-          style={{ paddingTop: 16, paddingBottom:24, maxHeight: height * 0.6 }}
+          style={{ paddingTop: 16, maxHeight: height * 2 }}
           showsVerticalScrollIndicator={false}>
           {orderDetail()}
         </ScrollView>
