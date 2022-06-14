@@ -4,14 +4,14 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:orientation="vertical"
-  android:background="#ffffff"
+  android:background="@layout/background_screen"
 >
   <ImageView 
     android:src="@mipmap/splash"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:scaleType="centerCrop"
+    android:scaleType="fitCenter"
   >
   </ImageView>
 </FrameLayout>
