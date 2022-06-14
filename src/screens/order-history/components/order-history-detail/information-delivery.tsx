@@ -61,7 +61,6 @@ const InformationDelivery = () => {
           title="Alamat Pengiriman"
           value={data?.orderDestination || ''}
         />
-        <Description title="Dikirim Dari" value={data?.orderOrigin || ''} />
         <Description
           title={titleDateShipment}
           value={moment(dateShipment || '').format('DD MMM YYYY')}

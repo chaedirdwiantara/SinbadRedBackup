@@ -307,7 +307,7 @@ const OmsThankYouPageView: FC = () => {
   const renderPaymentGuide = () => {
     return (
       <ThankYouPageCard title="Panduan Pembayaran">
-        <View style={ThankYouPageStyle.defaultContentPadding}>
+        <View>
           {!thankYouPagePaymentGuideListLoading &&
             renderPaymentGuideList(thankYouPagePaymentGuidelistData)}
         </View>
@@ -431,10 +431,10 @@ const OmsThankYouPageView: FC = () => {
         // />
       ) : (
         <FooterButton.Dual
-          title1={'Kembali ke Beranda'}
-          button1Press={goToHome}
-          title2={'Cek Status'}
-          button2Press={() => NavigationAction.navigate('HistoryListView')}
+          title2={'Ke Beranda'}
+          button2Press={goToHome}
+          title1={'Cek Status'}
+          button1Press={() => NavigationAction.navigate('HistoryListView')}
         />
 
         

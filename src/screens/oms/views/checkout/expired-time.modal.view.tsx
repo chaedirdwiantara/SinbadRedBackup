@@ -90,6 +90,7 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
       snap={false}
       content={content()}
       button={button()}
+      isBackDisable
     />
   );
 };

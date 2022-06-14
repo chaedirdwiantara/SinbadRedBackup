@@ -28,7 +28,7 @@ export const ShoppingCartEmpty: FC = () => (
         <SnbText2.Paragraph.Default
           align={'center'}
           color={colorV2.textColor.secondary}>
-          Yuk isi keranjang Anda dengan produk - produk di Sinbad
+          Yuk isi keranjang Anda dengan produk-produk di Sinbad
         </SnbText2.Paragraph.Default>
       </View>
     </View>
