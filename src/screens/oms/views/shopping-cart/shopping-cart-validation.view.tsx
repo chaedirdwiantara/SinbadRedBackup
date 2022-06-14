@@ -98,6 +98,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
       snap={false}
       content={content()}
       button={button()}
+      isBackDisable
     />
   );
 };
