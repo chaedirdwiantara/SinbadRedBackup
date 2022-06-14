@@ -34,9 +34,11 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
       }}>
       <View>
         <View style={ShoppingCartStyles.unavailableHeaderContainer}>
-          <SnbText2.Headline.Small color={colorV2.textColor.default}>
-            Tidak bisa diproses
-          </SnbText2.Headline.Small>
+          <View style={{ flex: 1 }}>
+            <SnbText2.Headline.Small color={colorV2.textColor.default}>
+              Belum Dapat Diproses
+            </SnbText2.Headline.Small>
+          </View>
           <View>
             <TouchableOpacity
               onPress={() => {

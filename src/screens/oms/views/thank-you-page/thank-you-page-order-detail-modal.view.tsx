@@ -56,12 +56,13 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   // setExpandableLabelItemCount(count - 2)
 
   const [expanded, setExpanded] = useState(false);
-  const [modalHeight, setModalHeight] = useState(350)
+  const [modalHeight, setModalHeight] = useState(275)
   useEffect(() => {
     if(expanded){
-      setModalHeight(500)
-    }else{
-      setModalHeight(350)
+      setModalHeight(424)
+    }
+    else{
+      setModalHeight(275)
     }
   },[expanded])
   const productPerSellerList = (sellerData: models.OrderSeller) => {
@@ -190,7 +191,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
                   <SnbText2.Body.Small
                     color={
                       colorV2.textColor.link
-                    }>{`Sembunyikan ${count} Produk`}</SnbText2.Body.Small>
+                    }>{`Sembunyikan ${count} Produk Lainnya`}</SnbText2.Body.Small>
                 ) : (
                   <SnbText2.Body.Small
                     color={
@@ -268,9 +269,9 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   };
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View style={{ marginBottom: 16 }}>
         <ScrollView
-          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          style={{ paddingTop: 16, paddingBottom:24, maxHeight: height * 0.6 }}
           showsVerticalScrollIndicator={false}>
           {orderDetail()}
         </ScrollView>

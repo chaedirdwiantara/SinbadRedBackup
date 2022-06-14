@@ -67,6 +67,7 @@ export const ModalCartProfileCompletion: FC<
       snap={false}
       title={renderTitle()}
       content={renderContent()}
+      isBackDisable
     />
   );
 };

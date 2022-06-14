@@ -25,7 +25,7 @@ export const ShoppingCartAddress: FC = () => {
         <SnbText2.Body.Small
           color={
             colorV2.textColor.default
-          }>{`Toko ${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
+          }>{`${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
       </View>
       <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
         {stateCart.buyerAddress.data?.address}

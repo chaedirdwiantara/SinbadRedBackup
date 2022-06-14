@@ -1607,10 +1607,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.65":
-  version "1.0.65"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.65.tgz#2aef4e7e5c47db816188511d83473fb08450940f"
-  integrity sha512-XHMbc1r/mi6aM4NwutXw4OS3gxG/b1m9fMXkKx3Yvrut/2+mbNEtLv1I/9N7MJrzPRUB8c0hIfnn0OOxtAGsxA==
+"@sinbad/react-native-sinbad-ui@1.0.67":
+  version "1.0.67"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.67.tgz#22d83fe67cab693130de6aee73a11dc59f642681"
+  integrity sha512-5zBJWJ0Vdok+Ecl2gzJoX5KTpVuYDCWCcg/SydoP2JZFTFJJf8vo4Es3X//HBUcnilJM84U4jBIEgYl7AAFPEA==
   dependencies:
     "@gorhom/bottom-sheet" "4.1.5"
     "@sinbad/design-token" "0.0.1"
@@ -7113,6 +7113,11 @@ react-native-snap-carousel@3.9.1:
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
+
+react-native-splash-screen@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz#3af71ed17afe50fee69590a45aec399d071ead02"
+  integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
 
 react-native-svg-transformer@0.14.3:
   version "0.14.3"
