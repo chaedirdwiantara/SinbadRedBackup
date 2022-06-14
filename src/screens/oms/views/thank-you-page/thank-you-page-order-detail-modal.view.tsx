@@ -73,7 +73,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
                 <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                  {product.productName} {product.qty}
+                  {product.productName}
                 </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
@@ -94,8 +94,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
                 <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                  {sellerData.products[0]?.productName}{' '}
-                  {sellerData.products[0]?.qty}
+                  {sellerData.products[0]?.productName}
                 </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
@@ -114,8 +113,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
               <View style={ThankYouPageStyle.OrderDetailItem}>
                 <View style={{ width: '50%' }}>
                   <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                    {sellerData.products[1]?.productName}{' '}
-                    {sellerData.products[1]?.qty}
+                    {sellerData.products[1]?.productName}
                   </SnbText2.Paragraph.Default>
                 </View>
                 {/* <View> */}
