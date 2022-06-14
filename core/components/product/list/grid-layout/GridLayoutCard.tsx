@@ -31,6 +31,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         marginRight: index % 2 === 0 ? spacing.sm : spacing.lg,
         marginLeft: index % 2 === 0 ? spacing.lg : 0,
         marginBottom: spacing.lg,
+        flex: 1,
       }}>
       <ProductGridCard
         name={product.name}
