@@ -1,6 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import {
   SnbContainer,
   SnbProgress,
@@ -57,10 +57,13 @@ const IntroSplashView: React.FC = () => {
         style={{ flex: 1 }}>
         <View style={IntroStyle.sinbadLogo}>
           <Svg name={'white_sinbad_logo'} size={100} />
-          <View style={{ marginBottom: -layout.spacing.xxl }}>
+          <View style={{ marginBottom: -layout.spacing.lg }}>
             <Svg name={'splash_highlight_text'} size={200} />
           </View>
-          <Svg name={'sinbad_onboard'} size={240} />
+          <Image
+            source={require('@image/onboard/onboard1.png')}
+            style={{ height: 240, resizeMode: 'contain' }}
+          />
         </View>
         <View style={{ marginBottom: layout.spacing.lg }}>
           <SnbProgress color={colorV2.bgColor.light} size={50} />

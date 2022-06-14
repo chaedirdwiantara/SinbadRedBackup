@@ -13,8 +13,6 @@ import packed from './packed.svg';
 import shiped from './shiped.svg';
 import delivered from './delivered.svg';
 import done_order from './done_order.svg';
-import sinbad_otp from './sinbad_OTP.svg';
-import onboarding from './onboarding.svg';
 import upgrade_vip from './upgrade_vip_icon.svg';
 import info from './info.svg';
 import murah from './murah.svg';
@@ -24,13 +22,11 @@ import flexibel from './flexibel.svg';
 import personal_data from './personal_data.svg';
 import store_data from './store_data.svg';
 import notification from './notification.svg';
-import completeness_back from './completeness-back.svg';
 import sinbad_logo from './sinbad-logo.svg';
 // cart prices
 import price_changes_down from './price_changes_down.svg';
 import price_changes_up from './price_changes_up.svg';
 import white_sinbad_logo from './white-sinbad-logo.svg';
-import sinbad_onboard from './sinbad-onboard.svg';
 import splash_highlight_text from './splash-highlight-text.svg';
 import ktp from './ktp.svg';
 import location from './location.svg';
@@ -54,8 +50,6 @@ export const SvgRegistery = {
   delivered,
   done_order,
   expand_less,
-  sinbad_otp,
-  onboarding,
   upgrade_vip,
   info,
   murah,
@@ -65,7 +59,6 @@ export const SvgRegistery = {
   personal_data,
   store_data,
   notification,
-  completeness_back,
   sinbad_logo,
   price_changes_down,
   price_changes_up,
@@ -75,7 +68,6 @@ export const SvgRegistery = {
   location,
   store,
   ktp_blue,
-  sinbad_onboard,
   check_circle,
   x_circle,
 };
