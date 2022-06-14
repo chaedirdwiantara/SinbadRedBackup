@@ -9,6 +9,7 @@ import {
 } from 'react-native-sinbad-ui';
 import Svg from '@svg';
 import LinearGradient from 'react-native-linear-gradient';
+import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
 // import { usePageAfterIntro } from '../functions';
 import { useAuthCoreAction } from '@core/functions/auth';
@@ -25,6 +26,9 @@ const IntroSplashView: React.FC = () => {
   // usePageAfterIntro();
   const authCoreAction = useAuthCoreAction();
   /** === EFFECT === */
+  React.useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   /** => get auth me */
   React.useEffect(() => {
     authCoreAction.me();
