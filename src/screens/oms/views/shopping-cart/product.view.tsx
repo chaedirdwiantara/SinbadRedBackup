@@ -130,11 +130,25 @@ export const ProductView: FC<ProductViewProps> = ({
 
     keyboardFocus.setFocus(false);
   };
+  /** => RENDER UOM INFORMAATION */
+  const renderUOMInformation = () => {
+    return (
+      <View style={{ flexDirection: 'row' }}>
+        <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+          {product.uomLabel}
+        </SnbText2.Paragraph.Tiny>
+        {renderRemainingStock()}
+      </View>
+    );
+  };
   /** => RENDER REMAINING STOCK */
   const renderRemainingStock = () => {
     if (Number(product.stock) < 11) {
       return (
-        <View>
+        <View style={{ flexDirection: 'row' }}>
+          <SnbText2.Paragraph.Tiny color={colorV2.strokeColor.default}>
+            {'  |  '}
+          </SnbText2.Paragraph.Tiny>
           <SnbText2.Paragraph.Tiny
             color={
               colorV2.strokeColor.primary
@@ -263,7 +277,7 @@ export const ProductView: FC<ProductViewProps> = ({
             </SnbText2.Paragraph.Default>
           </View>
           {renderPriceSection()}
-          {renderRemainingStock()}
+          {renderUOMInformation()}
         </View>
       </View>
       <View style={ShoppingCartStyles.actionContainer}>
