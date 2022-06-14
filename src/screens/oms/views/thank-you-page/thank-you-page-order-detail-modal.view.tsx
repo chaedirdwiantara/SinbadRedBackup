@@ -271,7 +271,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
     return (
       <View style={{ marginBottom: 16 }}>
         <ScrollView
-          style={{ paddingTop: 16, paddingBottom:24, maxHeight: height * 2 }}
+          style={{ paddingTop: 16, maxHeight: height * 2 }}
           showsVerticalScrollIndicator={false}>
           {orderDetail()}
         </ScrollView>
