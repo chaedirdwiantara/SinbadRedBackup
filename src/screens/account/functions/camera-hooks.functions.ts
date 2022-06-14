@@ -12,7 +12,7 @@ export const useCamera = () => {
     params: models.ICamera = {
       focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
       title: 'Ambil Foto E-KTP',
-      subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
+      subtitle: 'Posisikan e-KTP Anda tepat berada di dalam bingkai',
     },
   ) => {
     switch (type) {
