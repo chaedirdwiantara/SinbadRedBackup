@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, color } from '@sinbad/react-native-sinbad-ui';
+import { SnbText2, colorV2 } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT STYLE === */
 import { ThankYouPageStyle } from '../styles/thank-you-page/thank-you-page.style';
 /** === TYPE === */
@@ -16,32 +16,32 @@ export const ThankYouPageCardItem: FC<ThankYouPageCardItemProps> = ({
   value,
   type = 'normal',
 }) => {
-  const notBoldColor = type === 'normal' ? color.black60 : color.green50;
+  const notBoldColor = type === 'normal' ? colorV2.textColor.secondary : colorV2.textColor.success;
 
   return (
     <View key={`${title}-${value}`} style={ThankYouPageStyle.cardItem}>
       {type !== 'bold' ? (
         <>
           <View style={{ flex: 1 }}>
-            <SnbText.B3 color={notBoldColor}>{title}</SnbText.B3>
+            <SnbText2.Paragraph.Default color={notBoldColor} align={'left'}>{title}</SnbText2.Paragraph.Default>
           </View>
           <View style={{ width: 16 }} />
           <View style={{ flex: 1 }}>
-            <SnbText.B3 color={notBoldColor} align="right">
+            <SnbText2.Paragraph.Default color={notBoldColor} align={"right"}>
               {value}
-            </SnbText.B3>
+            </SnbText2.Paragraph.Default>
           </View>
         </>
       ) : (
         <>
           <View style={{ flex: 1 }}>
-            <SnbText.B4 color={color.black100}>{title}</SnbText.B4>
+            <SnbText2.Headline.Small color={colorV2.textColor.default} align={'left'}>{title}</SnbText2.Headline.Small>
           </View>
           <View style={{ width: 16 }} />
           <View style={{ flex: 1 }}>
-            <SnbText.B4 color={color.black100} align="right">
+            <SnbText2.Headline.Small color={colorV2.textColor.default} align="right">
               {value}
-            </SnbText.B4>
+            </SnbText2.Headline.Small>
           </View>
         </>
       )}

@@ -21,7 +21,7 @@ const toCurrency = (nominal: number = 0, options: ToCurrencyOptions = {}) => {
   }`;
 
   if (withPrefix) {
-    return `${prefix} ${converted}`;
+    return `${prefix}${converted}`;
   }
 
   return converted;

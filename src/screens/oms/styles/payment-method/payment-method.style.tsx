@@ -1,19 +1,21 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import { colorV2 } from 'react-native-sinbad-ui';
 
 export const PaymentMethodStyle = StyleSheet.create({
   mainBodyContainer: {
-    flex: 1,
-    backgroundColor: color.white,
+    backgroundColor: colorV2.neutral.cloud10,
     padding: 16,
   },
   listContainer: {
+    backgroundColor: colorV2.bgColor.light,
+    borderColor: colorV2.strokeColor.default,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
+    marginVertical: 8,
     padding: 16,
     borderWidth: 1,
     borderRadius: 5,
+    elevation: 4,
   },
   listImage: {
     height: 25,
@@ -24,9 +26,9 @@ export const PaymentMethodStyle = StyleSheet.create({
     marginLeft: 16,
   },
   detailContainer: {
-    backgroundColor: color.white,
-    marginTop: 12,
-    marginBottom: 20,
+    backgroundColor: colorV2.neutral.cloud10,
+    marginTop: 16,
+    marginBottom: 16,
     padding: 16,
   },
   detailRow: {
@@ -39,6 +41,21 @@ export const PaymentMethodStyle = StyleSheet.create({
     marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonFooter: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  modalComponentStyle: {
+    marginBottom: 8,
+    marginTop: -40,
+  },
+  loadList: {
+    backgroundColor: colorV2.bgColor.neutral,
+    height: 24,
+    marginRight: 8,
   },
 });
 

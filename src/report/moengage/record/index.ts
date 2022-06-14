@@ -1,3 +1,3 @@
 export * from './auth.records';
 export * from './easy-registration.records';
-export * from './RegistartionRecords';
+export * from './registration.records';

@@ -1,21 +1,14 @@
-import React, {
-  forwardRef,
-  memo,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react';
+import React, { forwardRef, memo, useCallback, useMemo, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import {
-  SnbText,
-  color,
   SnbBottomSheet2,
   SnbBottomSheet2Ref,
   SnbBottomSheetPart,
   SnbButton2,
   SnbRadioGroup,
   SnbRadio,
+  SnbText2,
+  colorV2,
 } from 'react-native-sinbad-ui';
 
 interface ModalTransactionProps {
@@ -27,7 +20,7 @@ interface ModalTransactionProps {
 const transactionFilter = [
   {
     id: '',
-    label: 'Semua Transaksi Berlangsung',
+    label: 'Semua status transaksi',
   },
   {
     id: 'created',
@@ -60,13 +53,13 @@ const ModalTransactionFilter = forwardRef<
 
   const Content = useMemo(() => {
     return (
-      <View style={{ paddingHorizontal: 16 }}>
+      <View>
         <SnbRadioGroup value={select} onChange={setSelect}>
           {transactionFilter.map((i) => (
             <View
               key={i.id}
               style={{
-                marginTop: 0,
+                marginTop: 8,
               }}>
               <TouchableOpacity
                 style={{
@@ -77,12 +70,14 @@ const ModalTransactionFilter = forwardRef<
                 onPress={() => setSelect(i.id)}>
                 <View style={{ flex: 1 }}>
                   {select === i.id ? (
-                    <SnbText.H4>{i.label}</SnbText.H4>
+                    <SnbText2.Body.Default>{i.label}</SnbText2.Body.Default>
                   ) : (
-                    <SnbText.B1>{i.label}</SnbText.B1>
+                    <SnbText2.Paragraph.Default>
+                      {i.label}
+                    </SnbText2.Paragraph.Default>
                   )}
                 </View>
-                <SnbRadio value={i.id} style={{ top: 10 }} />
+                <SnbRadio value={i.id} style={{ top: 8 }} />
               </TouchableOpacity>
               <View style={styles.div} />
             </View>
@@ -90,7 +85,7 @@ const ModalTransactionFilter = forwardRef<
         </SnbRadioGroup>
         <View style={{ marginVertical: 14 }}>
           <SnbButton2.Primary
-            size="large"
+            size="medium"
             full
             title="Tampilkan"
             onPress={onSubmitFilter}
@@ -129,8 +124,8 @@ const ModalTransactionFilter = forwardRef<
 const styles = StyleSheet.create({
   div: {
     height: 1,
-    backgroundColor: color.black40,
-    marginTop: 14,
+    backgroundColor: colorV2.strokeColor.default,
+    marginTop: 8,
   },
 });
 

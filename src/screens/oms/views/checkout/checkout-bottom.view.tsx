@@ -1,8 +1,6 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC, useState } from 'react';
-import { View } from 'react-native';
-import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
+import React, { FC } from 'react';
+import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import { useUpdateCartAction } from '../../functions';
 import {
   totalPayment,
@@ -31,50 +29,36 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
 
-  const [reachLimit, setReachLimit] = useState(false);
-
   const handleBackToCart = () => {
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
-    setReachLimit(false);
+    refValidationLimitModal.current?.close();
     goToShoppingCart();
   };
 
   // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
 
   const pressButton = () => {
-    setReachLimit(true);
+    refValidationLimitModal.current?.open();
   };
 
-  const content = () => {
-    return (
-      <View style={CheckoutStyle.bottomContentContainer}>
-        <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>{totalPaymentFull}</SnbText.H4>
-      </View>
-    );
-  };
+  /** => MODAL REF */
+  const refValidationLimitModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   return (
-    <View style={CheckoutStyle.bottomContainer}>
-      {content()}
-      {totalPaymentNumber > 999999999 ? (
-        <SnbButton.Dynamic
-          size="small"
-          type={'primary'}
-          onPress={pressButton}
-          title={'Pilih Pembayaran'}
-        />
-      ) : (
-        <SnbButton.Dynamic
-          size="small"
-          type={'primary'}
-          onPress={goToPaymentMethod}
-          title={'Pilih Pembayaran'}
-        />
-      )}
-      <ModalValidationLimit isOpen={reachLimit} close={handleBackToCart} />
-    </View>
+    <React.Fragment>
+      <FooterButton.Order
+        titleButton="Pilih Pembayaran"
+        value={totalPaymentFull}
+        buttonPress={
+          totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
+        }
+      />
+      <ModalValidationLimit
+        parentRef={refValidationLimitModal}
+        close={handleBackToCart}
+      />
+    </React.Fragment>
   );
 };
 

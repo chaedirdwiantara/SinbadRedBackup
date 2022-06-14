@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbCheckbox2, SnbText, color } from 'react-native-sinbad-ui';
+import { SnbCheckbox2, SnbText2 } from 'react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ProductView } from './product.view';
@@ -70,9 +70,9 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                     }}
                   />
                 </View>
-                <SnbText.B4 color={color.black100}>
+                <SnbText2.Headline.Small>
                   {item.sellerName}
-                </SnbText.B4>
+                </SnbText2.Headline.Small>
               </View>
               {item.products.map((product) => (
                 <View

@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES === */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import { colorV2 } from 'react-native-sinbad-ui';
 /** === TYPE === */
 interface ThankYouPageCardDividerProps {
   horizontalSpaces?: number;
@@ -15,7 +15,7 @@ export const ThankYouPageCardDivider: FC<ThankYouPageCardDividerProps> = ({
   <View
     style={{
       borderTopWidth: 1,
-      borderColor: color.black10,
+      borderColor: colorV2.strokeColor.default,
       marginTop: topSpaces,
       marginHorizontal: horizontalSpaces,
     }}

@@ -142,6 +142,7 @@ const DataDiriStep3View: React.FC = () => {
         action={() => openCamera('selfie')}
         type="vertical"
         resizeMode="stretch"
+        listType="number"
       />
     );
   };

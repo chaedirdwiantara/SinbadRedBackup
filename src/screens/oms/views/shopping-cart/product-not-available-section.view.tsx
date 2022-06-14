@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ProductUnavailableView } from './product-not-available.view';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -34,7 +34,9 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
       }}>
       <View>
         <View style={ShoppingCartStyles.unavailableHeaderContainer}>
-          <SnbText.B4 color={color.black100}>Tidak bisa diproses</SnbText.B4>
+          <SnbText2.Headline.Small color={colorV2.textColor.default}>
+            Belum Dapat Diproses
+          </SnbText2.Headline.Small>
           <View>
             <TouchableOpacity
               onPress={() => {
@@ -53,7 +55,9 @@ export const ProductNotAvailableSection: FC<ProductNotAvailableSection> = ({
               style={{
                 width: '100%',
               }}>
-              <SnbText.B4 color={color.blue50}>Hapus</SnbText.B4>
+              <SnbText2.Body.Small color={colorV2.textColor.link}>
+                Hapus
+              </SnbText2.Body.Small>
             </TouchableOpacity>
           </View>
         </View>

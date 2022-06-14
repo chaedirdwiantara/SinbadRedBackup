@@ -11,7 +11,7 @@ export const useCamera = () => {
     type: 'ktp' | 'npwp' | 'selfie' | 'store' | 'custom',
     params: models.ICamera = {
       focusPoints: [{ focusPointHeight: 0.32, focusPointWidth: 0.9 }],
-      title: 'Ambil Foto KTP',
+      title: 'Ambil Foto E-KTP',
       subtitle: 'Posisikan KTP Anda tepat berada di dalam bingkai',
     },
   ) => {
