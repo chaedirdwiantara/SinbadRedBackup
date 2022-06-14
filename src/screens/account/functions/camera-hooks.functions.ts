@@ -27,7 +27,7 @@ export const useCamera = () => {
           { focusPointHeight: 0.32, focusPointWidth: 0.9, marginBottom: 24 },
           { focusPointHeight: 0.18, focusPointWidth: 0.6 },
         ];
-        params.title = 'Ambil Foto Diri dengan KTP';
+        params.title = 'Ambil Foto Diri dengan E-KTP';
         params.subtitle =
           'Posisikan foto diri dan KTP Anda tepat berada dalam bingkai.';
         break;
