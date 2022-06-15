@@ -347,7 +347,7 @@ ${SINBAD_URI_DOWNLOAD}/${SINBAD_ENV}/${SINBAD_REPO}-latest.tar.gz
                             }else if(SINBAD_ENV == 'production') {
                                 sh '''
                                     cd android && \
-                                    fastlane production
+                                    fastlane beta
                                 '''
                             }
                         }
