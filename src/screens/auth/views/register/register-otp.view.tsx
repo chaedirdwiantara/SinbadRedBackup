@@ -118,7 +118,7 @@ const RegisterOTPView: React.FC = () => {
                 width: 160,
               }}
               title="Data Anda masih sedang tahap proses"
-              description="silahkan tunggu atau hubungi customer service Sinbad"
+              description="Silakan tunggu atau hubungi customer service Sinbad"
             />
           </View>
         }
