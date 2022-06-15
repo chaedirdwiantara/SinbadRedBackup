@@ -34,7 +34,7 @@ export const ModalUserProfileCompletion: FC<
           image={Images.registrationComplete}
           imageStyle={UserProfileCompletionStyles.modalImage}
           title="Profil Lengkap"
-          description="Selamat, profil Anda sudah lengkap. Silahkan lanjutkan transaksi"
+          description="Selamat, profil Anda sudah lengkap. Silakan lanjutkan transaksi"
         />
       </View>
     );
