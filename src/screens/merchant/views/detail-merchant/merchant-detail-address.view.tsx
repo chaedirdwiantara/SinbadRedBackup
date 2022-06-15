@@ -7,7 +7,7 @@ import {
   SnbText,
   SnbToast,
 } from 'react-native-sinbad-ui';
-import { ScrollView, View, BackHandler } from 'react-native';
+import { ScrollView, View, BackHandler, Image, StyleSheet } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
@@ -60,10 +60,10 @@ const MerchantDetailAddressView: FC = () => {
         title="Alamat Toko"
         backAction={() => NavigationAction.back()}
         buttonTitle="Ubah"
-        // buttonAction={() => {
-        //   resetMerchantData();
-        //   NavigationAction.navigate('MerchantEditAddressView');
-        // }}
+        buttonAction={() => {
+          resetMerchantData();
+          NavigationAction.navigate('MerchantEditAddressView');
+        }}
       />
     );
   };
@@ -85,23 +85,17 @@ const MerchantDetailAddressView: FC = () => {
           zoomEnabled={false}
           pitchEnabled={false}
           scrollEnabled={false}
-          style={{
-            height: 160,
-            borderWidth: 1,
-            borderStyle: 'dashed',
-            borderRadius: 16,
-            backgroundColor: color.black5,
-            borderColor: color.black40,
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}>
+          style={styles.mapStyle}>
           <Marker
             coordinate={{
               latitude: storeAddress?.latitude || 0,
               longitude: storeAddress?.longitude || 0,
-            }}
-          />
+            }}>
+            <Image
+              source={require('@image/pin_point.png')}
+              style={{ height: 44, width: 44, resizeMode: 'contain' }}
+            />
+          </Marker>
         </MapView>
       </View>
     );
@@ -200,4 +194,19 @@ const MerchantDetailAddressView: FC = () => {
     </SnbContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  mapStyle: {
+    height: 160,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderRadius: 16,
+    backgroundColor: color.black5,
+    borderColor: color.black40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+});
+
 export default MerchantDetailAddressView;

@@ -1,6 +1,12 @@
 import React, { FC, useEffect } from 'react';
-import { SnbContainer, SnbTopNav, SnbText } from 'react-native-sinbad-ui';
-import { ScrollView, View, TouchableOpacity, BackHandler } from 'react-native';
+import {
+  SnbContainer,
+  SnbTopNav2,
+  SnbText2,
+  SnbButton2,
+  spacingV2 as layout,
+} from 'react-native-sinbad-ui';
+import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 import { color } from 'react-native-sinbad-ui';
 /** === IMPORT STYLE HERE === */
@@ -11,10 +17,11 @@ import { MerchantHookFunc } from '../../function';
 
 const MerchantDetailAccountView: FC = () => {
   /** === HOOK === */
-  const { stateUser } = React.useContext(contexts.UserContext);
+  const { buyerDataState } = MerchantHookFunc.useUsersStates();
   const editMerchantAction = MerchantHookFunc.useEditMerchant();
   const editProfileAction = MerchantHookFunc.useEditProfile();
   const { dispatchSupplier } = React.useContext(contexts.MerchantContext);
+
   //hardware back handler
   useEffect(() => {
     const backAction = () => {
@@ -35,31 +42,21 @@ const MerchantDetailAccountView: FC = () => {
    * =======================
    */
   const goTo = (data: any) => {
-    switch (data.type) {
-      case 'merchantAccountName':
-      case 'merchantAccountPhoneNo':
-        NavigationAction.navigate('MerchantEditView', {
-          title: data.title,
-          type: data.type,
-        });
-        break;
-      case 'merchantAccountImage':
-        NavigationAction.navigate('MerchantEditPhotoView', {
-          title: data.title,
-          type: 'store',
-        });
-        break;
-      default:
-        break;
-    }
+    const isPhoto =
+      data.type === 'store' ? 'MerchantEditPhotoView' : 'MerchantEditView';
+
+    NavigationAction.navigate(isPhoto, {
+      title: data.title,
+      type: data.type,
+    });
   };
   /** === VIEW === */
   /** => header */
   const header = () => {
     return (
-      <SnbTopNav.Type3
-        type="red"
-        title="Akun Toko"
+      <SnbTopNav2.Type3
+        color="white"
+        title="Informasi Toko"
         backAction={() => {
           NavigationAction.back();
           editMerchantAction.reset(dispatchSupplier);
@@ -73,72 +70,105 @@ const MerchantDetailAccountView: FC = () => {
     return (
       <View style={MerchantStyles.boxContent}>
         <View>
-          <View style={{ marginBottom: 6 }}>
-            <SnbText.B3 color={color.black60}>{data.key}</SnbText.B3>
+          <View style={{ marginBottom: layout.spacing.xsm }}>
+            <SnbText2.Body.Default color={color.black100}>
+              {data.key}
+            </SnbText2.Body.Default>
           </View>
-          <SnbText.B3 color={data.fontColor ? data.fontColor : color.black100}>
-            {data.value}
-          </SnbText.B3>
+          <SnbText2.Paragraph.Default
+            color={data.fontColor ? data.fontColor : color.black60}>
+            {data.value} {data.key === 'Ukuran Toko' && 'm\u00B2'}
+          </SnbText2.Paragraph.Default>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {data.action === 'tambah' && (
-            <TouchableOpacity
-              // onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.red50}>Tambah</SnbText.C1>
-            </TouchableOpacity>
+            <SnbButton2.Link
+              onPress={() => goTo(data)}
+              title="Tambah"
+              size="small"
+            />
           )}
           {data.action === 'ubah' && (
-            <TouchableOpacity
-              // onPress={() => goTo(data)}
-              style={{ paddingVertical: 10 }}>
-              <SnbText.C1 color={color.red50}>Ubah</SnbText.C1>
-            </TouchableOpacity>
+            <SnbButton2.Link
+              onPress={() => goTo(data)}
+              title="Ubah"
+              size="small"
+            />
           )}
         </View>
       </View>
     );
   };
+  const renderSeparator = () => {
+    return <View style={MerchantStyles.separator} />;
+  };
   /** => content */
   const content = () => {
-    const storeData = stateUser.detail.data?.storeData.storeInformation;
+    const buyerData = buyerDataState?.buyerInformation.buyerAccount;
     return (
-      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: layout.spacing.lg }}>
         <View>
           {renderContentSection({
-            key: 'Sinbad ID',
-            value: storeData?.storeAccount.code,
+            key: 'ID Toko',
+            value: buyerData?.code,
           })}
+          {renderSeparator()}
+          {renderContentSection({
+            key: 'Kategori Toko',
+            value: buyerData?.buyerCategory,
+          })}
+          {renderContentSection({
+            key: 'Kategori Produk',
+            value: buyerData?.productCategory,
+          })}
+          {renderSeparator()}
           {renderContentSection({
             key: 'Nama Toko',
-            value: storeData?.storeAccount.name,
-            action: storeData?.storeAccount.name ? 'ubah' : 'tambah',
+            value: buyerData?.name,
+            action:
+              buyerData?.name === '' || buyerData?.name == null
+                ? 'tambah'
+                : 'ubah',
             type: 'merchantAccountName',
-            title: storeData?.storeAccount.name
-              ? 'Ubah Nama Toko'
-              : 'Tambah Nama Toko',
+            title: buyerData?.name ? 'Ubah Nama Toko' : 'Tambah Nama Toko',
           })}
           {renderContentSection({
-            key: 'Nomor Handphone',
-            value: storeData?.storeAccount.phoneNo
-              ? storeData?.storeAccount.phoneNo
-              : '-',
-            action: storeData?.storeAccount.phoneNo ? 'ubah' : 'tambah',
+            key: 'Nomor Handphone Toko',
+            value: buyerData?.phoneNo,
+            action:
+              buyerData?.phoneNo === '' || buyerData?.phoneNo == null
+                ? 'tambah'
+                : 'ubah',
             type: 'merchantAccountPhoneNo',
-            title: storeData?.storeAccount.phoneNo
+            title: buyerData?.phoneNo
               ? 'Ubah No. Handphone Toko'
               : 'Tambah No. Handphone Toko',
           })}
           {renderContentSection({
+            key: 'Ukuran Toko',
+            value: buyerData?.largeArea || 0,
+            action:
+              buyerData?.largeArea === '' || buyerData?.largeArea == null
+                ? 'tambah'
+                : 'ubah',
+            type: 'merchantAccountSize',
+            title:
+              buyerData?.largeArea === '' || buyerData?.largeArea == null
+                ? 'Ubah Ukuran Toko'
+                : 'Tambah Ukuran Toko',
+          })}
+          {renderContentSection({
             key: 'Foto Toko',
-            fontColor: storeData?.storeAccount.imageUrl
-              ? color.green50
-              : color.black100,
-            value: storeData?.storeAccount.imageUrl
-              ? 'Berhasil Di Upload'
-              : '-',
-            action: storeData?.storeAccount.imageUrl ? 'ubah' : 'tambah',
-            type: 'merchantAccountImage',
+            fontColor: color.green50,
+            value:
+              buyerData?.imageUrl === '' || buyerData?.imageUrl == null
+                ? '-'
+                : 'Sudah diupload',
+            action:
+              buyerData?.imageUrl === '' || buyerData?.imageUrl == null
+                ? 'tambah'
+                : 'ubah',
+            type: 'store',
             title: 'Foto Toko',
           })}
         </View>

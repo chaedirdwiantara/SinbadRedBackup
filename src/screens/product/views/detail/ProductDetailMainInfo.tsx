@@ -1,42 +1,54 @@
 /** === IMPORT PACKAGES ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, spacingV2 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT ===  */
-import { ExclusiveTag } from './ExclusiveTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPE ===  */
 interface ProductDetailMainInfoProps {
   name: string;
-  originalPrice: number;
-  currentPrice: number;
+  priceAfterTax: number;
   stock: number;
-  minQty: number;
-  unit: string;
+  unit?: string;
+  qtySoldLabel: string;
   isExclusive: boolean;
   hasPromo: boolean;
+  hasBulkPrice: boolean;
+  loading: boolean;
+  showStock?: boolean;
 }
+// VAR
+const { textColor } = colorV2;
+const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
   name,
-  originalPrice,
-  currentPrice,
+  priceAfterTax,
   stock,
-  minQty,
-  unit,
   isExclusive,
   hasPromo,
+  loading,
+  showStock,
+  qtySoldLabel,
+  hasBulkPrice,
 }) => (
-  <View style={{ paddingHorizontal: 16, paddingVertical: 14 }}>
-    {isExclusive && <ExclusiveTag />}
-    <SnbText.H4>{name}</SnbText.H4>
-    <View style={{ marginVertical: 8 }}>
-      <SnbText.B2 color={color.red50}>
-        {toCurrency(currentPrice ?? 0, { withFraction: false })}
-      </SnbText.B2>
+  <View style={{ padding: spacing.lg }}>
+    <View style={{ flexDirection: 'row', marginBottom: spacing.xxsm }}>
+      {hasBulkPrice ? <BulkPricingTag /> : <View />}
+      {isExclusive ? <ExclusiveTag style={{ marginLeft: 4 }} /> : <View />}
     </View>
-    {stock >= minQty && (
+    <SnbText2.Paragraph.Large color={textColor.secondary}>
+      {name}
+    </SnbText2.Paragraph.Large>
+    <View style={{ marginVertical: spacing.xxsm }}>
+      <SnbText2.Headline.Default>
+        {toCurrency(priceAfterTax ?? 0, { withFraction: false })}
+      </SnbText2.Headline.Default>
+    </View>
+    {showStock && stock < 11 && !loading && (
       <View
         style={{
           flexDirection: 'row',
@@ -45,16 +57,22 @@ export const ProductDetailMainInfo: FC<ProductDetailMainInfoProps> = ({
         }}>
         {hasPromo && (
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbText.B3 color={color.black40}>
-              {toCurrency(originalPrice ?? 0, {
+            <SnbText2.Headline.Default>
+              {toCurrency(priceAfterTax ?? 0, {
                 withFraction: false,
               })}
-            </SnbText.B3>
+            </SnbText2.Headline.Default>
           </View>
         )}
-        <SnbText.B3
-          color={color.red50}>{`Tersisa ${stock} ${unit}`}</SnbText.B3>
+        <SnbText2.Paragraph.Tiny color={textColor.secondary}>
+          {stock === 0 ? 'Produk Habis' : `Tersisa ${stock}`}
+        </SnbText2.Paragraph.Tiny>
       </View>
+    )}
+    {qtySoldLabel !== '0' && (
+      <SnbText2.Paragraph.Tiny color={textColor.secondary}>{`Terjual ${
+        qtySoldLabel ?? ''
+      }`}</SnbText2.Paragraph.Tiny>
     )}
   </View>
 );

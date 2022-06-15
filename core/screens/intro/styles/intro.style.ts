@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import { colorV2, spacingV2 as layout, borderV2 } from 'react-native-sinbad-ui';
 const { width } = Dimensions.get('window');
 
 const IntroStyles = StyleSheet.create({
@@ -14,12 +14,12 @@ const IntroStyles = StyleSheet.create({
     width,
   },
   introSinbadPagination: {
-    paddingHorizontal: 16,
+    paddingHorizontal: layout.spacing.lg,
     width,
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
-    marginBottom: 35,
+    marginBottom: layout.spacing.xxl,
     zIndex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -27,14 +27,14 @@ const IntroStyles = StyleSheet.create({
   dot: {
     width: 8,
     height: 8,
-    borderRadius: 16,
-    backgroundColor: color.black10,
+    borderRadius: borderV2.radius.lg,
+    backgroundColor: colorV2.bgColor.dark,
   },
   dotActive: {
     width: 16,
     height: 8,
-    borderRadius: 16,
-    backgroundColor: color.white,
+    borderRadius: borderV2.radius.lg,
+    backgroundColor: colorV2.bgColor.light,
   },
 });
 

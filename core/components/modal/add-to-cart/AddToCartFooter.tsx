@@ -1,92 +1,81 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { SnbText, color, SnbButton, styles } from 'react-native-sinbad-ui';
+import {
+  SnbDivider2,
+  SnbText2,
+  SnbButton2,
+  spacingV2,
+  SnbContainer,
+  styles,
+} from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
-import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
-import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '@core/styles';
+import * as models from '@models';
 /** === TYPE ===  */
 interface AddToCartFooterProps {
   onAddToCartPress: () => void;
+  isStockEmpty: boolean;
   orderQty: number;
   disabled: boolean;
   isFromProductDetail?: boolean;
+  bulkPriceAterTax: number;
+  errorStock: models.ErrorProps | null;
+  loading: boolean;
 }
+// VAR
+const { spacing } = spacingV2;
 /** === COMPONENT ===  */
-export const AddToCartFooter: FC<AddToCartFooterProps> = ({
+const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
+  isStockEmpty,
   onAddToCartPress,
   orderQty,
   disabled,
-  isFromProductDetail,
+  bulkPriceAterTax,
+  errorStock,
+  loading,
 }) => {
-  /** === HOOKS ===  */
-  const {
-    stateProduct: {
-      detail: { data: dataProductDetail },
-      cart: { data: dataProductDetailCart },
-    },
-  } = useProductContext();
-  const {
-    stateShopingCart: {
-      create: { loading: addToCartLoading },
-    },
-  } = useShopingCartContext();
-  const {
-    stateStock: {
-      validation: { error: errorStock },
-      detail: { error: errorStockDetail },
-    },
-  } = useStockContext();
-
+  // kalkulasi harga total
+  const totalPrice = useMemo(
+    () => bulkPriceAterTax * orderQty,
+    [bulkPriceAterTax, orderQty],
+  );
+  // label button
+  const titleButton = useMemo(
+    () => (errorStock || isStockEmpty ? 'Stock Habis' : 'Tambah ke Keranjang'),
+    [isStockEmpty, errorStock],
+  );
+  // render
   return (
-    <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
-      <View style={{ marginRight: 16 }}>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <SnbText.B3>Total: </SnbText.B3>
-          {isFromProductDetail ? (
-            <SnbText.B4 color={color.red50}>
-              {toCurrency((dataProductDetail?.currentPrice ?? 0) * orderQty, {
-                withFraction: false,
-              })}
-            </SnbText.B4>
-          ) : (
-            <SnbText.B4 color={color.red50}>
-              {toCurrency(
-                (dataProductDetailCart?.currentPrice ?? 0) * orderQty,
-                {
+    <SnbContainer color="white">
+      <SnbDivider2 />
+      <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
+        <View style={{ marginRight: spacing.lg }}>
+          <View style={{ flexDirection: 'row' }}>
+            {!loading ? (
+              <SnbText2.Body.Default>
+                {toCurrency(totalPrice, {
                   withFraction: false,
-                },
-              )}
-            </SnbText.B4>
-          )}
+                })}
+              </SnbText2.Body.Default>
+            ) : (
+              <View />
+            )}
+          </View>
         </View>
-        <SnbText.C1 color={color.yellow40}>Belum termasuk PPN 10%</SnbText.C1>
+        <SnbButton2.Primary
+          disabled={disabled || loading}
+          size="medium"
+          loading={loading}
+          testID="action-add-to-cart"
+          title={titleButton}
+          onPress={onAddToCartPress}
+        />
       </View>
-      {isFromProductDetail ? (
-        <SnbButton.Dynamic
-          loading={addToCartLoading}
-          disabled={disabled}
-          size="small"
-          type="primary"
-          title={errorStockDetail ? 'Stock Habis' : 'Tambah ke Keranjang'}
-          radius={6}
-          onPress={onAddToCartPress}
-        />
-      ) : (
-        <SnbButton.Dynamic
-          loading={addToCartLoading}
-          disabled={disabled}
-          size="small"
-          type="primary"
-          title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
-          radius={6}
-          onPress={onAddToCartPress}
-        />
-      )}
-    </View>
+    </SnbContainer>
   );
 };
+
+export const AddToCartFooter = memo(AddToCartFooterMemo);

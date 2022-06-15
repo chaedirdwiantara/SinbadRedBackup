@@ -30,6 +30,7 @@ const RecommendationProductView: FC = () => {
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
         <ProductList
+          total={productListState.total}
           products={productListState.data}
           withTags={false}
           withBottomAction={false}
@@ -38,14 +39,7 @@ const RecommendationProductView: FC = () => {
           onFetch={(queryOptions) => fetch(dispatchProduct, queryOptions)}
           onRefresh={(queryOptions) => refresh(dispatchProduct, queryOptions)}
           onLoadMore={(queryOptions) =>
-            loadMore(
-              dispatchProduct,
-              {
-                skip: productListState.skip,
-                canLoadMore: productListState.canLoadMore,
-              },
-              queryOptions,
-            )
+            loadMore(dispatchProduct, productListState, queryOptions)
           }
         />
       </View>

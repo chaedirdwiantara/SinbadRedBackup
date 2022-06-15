@@ -1,17 +1,18 @@
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { UploadPhotoRules } from '@screen/account/views/shared';
 import { renderIF, useCamera } from '@screen/auth/functions';
 import { MerchantHookFunc } from '@screen/merchant/function';
 import { UserHookFunc } from '@screen/user/functions';
 import React from 'react';
 import { Image, View } from 'react-native';
 import {
-  SnbButton,
+  SnbButton2,
   SnbContainer,
-  SnbTopNav,
-  SnbUploadPhotoRules,
+  SnbTopNav2,
   SnbToast,
+  spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 
 function setRules(type: string) {
@@ -72,7 +73,8 @@ function setImage(type: string) {
 }
 
 const MerchantEditPhotoView = () => {
-  const { openCamera, capturedImage, resetCamera } = useCamera();
+  const { openCamera, capturedImage, resetCamera, openCameraWithOCR } =
+    useCamera();
   const { goBack } = useNavigation();
   const { params }: any = useRoute();
   const { editProfile } = MerchantHookFunc.useEditProfile();
@@ -100,9 +102,7 @@ const MerchantEditPhotoView = () => {
         break;
       }
       case 'ktp': {
-        setImageUrl(
-          stateUser.detail.data?.ownerData?.profile?.idImageUrl || ' ',
-        );
+        setImageUrl(stateUser.detail.data?.ownerData?.profile?.imageId || ' ');
         break;
       }
       case 'selfie': {
@@ -113,7 +113,7 @@ const MerchantEditPhotoView = () => {
       }
       case 'store': {
         setImageUrl(
-          stateUser.detail.data?.storeData?.storeInformation?.storeAccount
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
             ?.imageUrl || ' ',
         );
         break;
@@ -134,25 +134,20 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateGlobal.uploadImage.error !== null) {
-      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Upload Foto ${setType()} Gagal`, 2500);
     }
   }, [stateGlobal.uploadImage]);
 
   React.useEffect(() => {
     if (stateMerchant.profileEdit.data !== null) {
+      SnbToast.show('Data Berhasil Diperbaharui', 2500);
       goBack();
       editProfileAction.reset(dispatchSupplier);
       detail(dispatchUser);
     }
 
     if (stateMerchant.profileEdit.error !== null) {
-      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500);
     }
   }, [stateMerchant.profileEdit]);
 
@@ -164,10 +159,7 @@ const MerchantEditPhotoView = () => {
     }
 
     if (stateMerchant.merchantEdit.error !== null) {
-      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500, {
-        position: 'bottom',
-        positionValue: 72,
-      });
+      SnbToast.show(`Update Foto ${setType()} Gagal`, 2500);
     }
   }, [stateMerchant.merchantEdit]);
 
@@ -176,24 +168,24 @@ const MerchantEditPhotoView = () => {
     const data = {};
     switch (params.type) {
       case 'npwp': {
-        Object.assign(data, { taxImageUrl: image });
+        Object.assign(data, { user: { taxImageUrl: image } });
         editProfile(dispatchSupplier, { data });
 
         break;
       }
       case 'ktp': {
-        Object.assign(data, { idImageUrl: image });
+        Object.assign(data, { user: { idImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'selfie': {
-        Object.assign(data, { selfieImageUrl: image });
+        Object.assign(data, { user: { selfieImageUrl: image } });
         editProfile(dispatchSupplier, { data });
         break;
       }
       case 'store': {
-        Object.assign(data, { image: image });
-        editMerchantAction.editMerchant(dispatchSupplier, {
+        Object.assign(data, { buyer: { imageUrl: image } });
+        editProfile(dispatchSupplier, {
           data,
         });
         break;
@@ -248,24 +240,31 @@ const MerchantEditPhotoView = () => {
             }}
           />
           <View style={{ justifyContent: 'space-between' }}>
-            <View style={{ height: 72, marginTop: 12 }}>
-              <SnbButton.Dynamic
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbButton2.Link
                 size="small"
-                type="tertiary"
                 title="Ubah Foto"
-                onPress={() => openCamera(params?.type)}
+                onPress={() => {
+                  if (params?.type !== 'ktp') {
+                    openCamera(params?.type);
+                  } else {
+                    openCameraWithOCR(params?.type);
+                  }
+                }}
                 disabled={false}
+                full
               />
             </View>
           </View>
         </View>
-        <View style={{ height: 75 }}>
-          <SnbButton.Single
-            type={'primary'}
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
             title={'Simpan'}
             onPress={action}
             loading={stateGlobal.uploadImage.loading}
             disabled={stateGlobal.uploadImage.loading || !isImageCaptured}
+            size="medium"
+            full
           />
         </View>
       </View>
@@ -276,16 +275,32 @@ const MerchantEditPhotoView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav.Type3 type="red" title={params?.title} backAction={goBack} />
+      <SnbTopNav2.Type3
+        color="white"
+        title={params?.title}
+        backAction={goBack}
+      />
       <View style={{ flex: 1 }}>
         {renderIF(
           isImageAvailable,
           renderImagePreview(),
-          <SnbUploadPhotoRules
+          <UploadPhotoRules
             rulesTitle={`Pastikan Foto ${setType()} Anda Sesuai Ketentuan`}
             imgSrc={setImage(params.type)}
             rules={setRules(params.type)}
-            action={() => openCamera(params?.type)}
+            action={() => {
+              if (params?.type !== 'ktp') {
+                openCamera(params?.type);
+              } else {
+                openCameraWithOCR(params?.type);
+              }
+            }}
+            type="vertical"
+            resizeMode={params.type === 'npwp' ? 'contain' : 'cover'}
+            isTiltImage={params.type === 'npwp'}
+            listType="number"
+            blurRadius={2}
+            brightnessAmount={params.type === 'store' ? 2 : 1.5}
           />,
         )}
       </View>

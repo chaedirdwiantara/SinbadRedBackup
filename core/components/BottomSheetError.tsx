@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
-  Image,
   BackHandler,
   TouchableOpacity,
   Linking,
   Platform,
 } from 'react-native';
-import { SnbBottomSheet, SnbButton, SnbText } from 'react-native-sinbad-ui';
+import {
+  SnbText,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
+  FooterButton,
+  Content,
+} from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 import Svg from '@svg';
 /** === DATA === */
@@ -88,6 +94,8 @@ interface ErrorProps {
 }
 /** === COMPONENT === */
 const BottomSheetError: React.FC<ErrorProps> = (props) => {
+  /** => ref */
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
   /** => error code to service name */
   const errorCode = (code: number) => {
     const digit = code.toString();
@@ -157,42 +165,35 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   /** => button back to home */
   const buttonBackToHome = () => {
     return (
-      <SnbButton.Single
-        title={'Kembali ke Beranda'}
-        onPress={() => {
+      <FooterButton.Single
+        title="Kembali ke Beranda"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={() => {
           props.closeAction ? props.closeAction() : null;
           NavigationAction.resetToHome();
         }}
-        type={'primary'}
       />
     );
   };
   /** => button relogin */
   const buttonToReLogin = () => {
     return (
-      <SnbButton.Single
-        title={'Login Ulang'}
-        onPress={() => {
+      <FooterButton.Single
+        title="Login Ulang"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={() => {
           props.closeAction ? props.closeAction() : null;
           NavigationAction.navigate('LoginPhoneView');
         }}
-        type={'primary'}
       />
     );
   };
-  /** => button login */
-  // const buttonToLogin = () => {
-  //   return (
-  //     <SnbButton.Single
-  //       title={'Login'}
-  //       onPress={() => {
-  //         props.closeAction ? props.closeAction() : null;
-  //         NavigationAction.navigate('LoginPhoneView');
-  //       }}
-  //       type={'primary'}
-  //     />
-  //   );
-  // };
   /** => button call support */
   const buttonCallSupport = () => {
     return (
@@ -251,125 +252,123 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
   /** => button retry */
   const buttonRetry = () => {
     return (
-      <SnbButton.Single
-        title={'Coba Lagi'}
-        onPress={() => (props.retryAction ? props.retryAction() : null)}
-        type={'primary'}
+      <FooterButton.Single
+        title="Coba Lagi"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={() => (props.retryAction ? props.retryAction() : null)}
       />
     );
   };
   /** => button close app */
   const buttonCloseApp = () => {
     return (
-      <SnbButton.Single
-        title={'Tutup Aplikasi'}
-        onPress={() => BackHandler.exitApp()}
-        type={'primary'}
+      <FooterButton.Single
+        title="Tutup Aplikasi"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={() => BackHandler.exitApp()}
       />
     );
   };
   /** => button back */
   const buttonBack = () => {
     return (
-      <SnbButton.Single
-        title={'Kembali'}
-        onPress={() => (props.backAction ? props.backAction() : null)}
-        type={'primary'}
+      <FooterButton.Single
+        title="Kembali"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={() => (props.backAction ? props.backAction() : null)}
       />
     );
   };
   /** => button close */
   const buttonClose = () => {
     return (
-      <SnbButton.Single
-        title={'Tutup'}
-        onPress={() => (props.closeAction ? props.closeAction() : null)}
-        type={'primary'}
+      <FooterButton.Single
+        title="Tutup"
+        shadow={false}
+        loading={false}
+        loadingButton={false}
+        disabled={false}
+        buttonPress={onClose}
       />
     );
   };
   /** ======================================================================= */
-  /** => content item image */
-  const contentItemImage = () => {
+  /** => content item */
+  const contentItem = () => {
     const src =
       props.error?.code !== undefined
         ? require('@image/sinbad/error-global.png')
         : require('@image/sinbad/no-connection.png');
     return (
-      <View style={styles.contentImageContainer}>
-        <Image source={src} style={styles.image} />
-        <View style={styles.contentErrorContainer}>
-          <View style={styles.errorBox}>
-            <SnbText.C3>
-              {props.error !== null ? props.error?.code : ''}
-            </SnbText.C3>
-          </View>
-        </View>
-      </View>
-    );
-  };
-  /** => content item title */
-  const contentItemTitle = () => {
-    return props.error !== null ? (
-      <View style={styles.contentTitleContainer}>
-        <SnbText.H4 align={'center'}>
-          {`Terjadi Kendala di ${serviceName()}`}
-        </SnbText.H4>
-      </View>
-    ) : null;
-  };
-  /** => content item message */
-  const contentItemMessage = () => {
-    return (
-      <View style={styles.contentMessageContainer}>
-        <SnbText.B3 align={'center'}>
-          {props.error !== null ? message(props.error) : ''}
-        </SnbText.B3>
-      </View>
-    );
-  };
-  /** => content item */
-  const contentItem = () => {
-    return (
-      <View style={styles.contentItemContainer}>
-        {contentItemImage()}
-        {contentItemTitle()}
-        {contentItemMessage()}
-      </View>
+      <Content.Illustration
+        image={src}
+        title={`Terjadi Kendala di ${serviceName()}`}
+        description={props.error !== null ? message(props.error) : ''}
+      />
     );
   };
   /** => button */
   const button = () => {
-    return (
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonHeight}>
-          {props.error !== null
-            ? buttonCallToAction(props.error.code)
-            : buttonClose()}
-        </View>
-      </View>
-    );
+    return props.error !== null
+      ? buttonCallToAction(props.error.code)
+      : buttonClose();
   };
   /** => content */
   const content = () => {
+    return <View style={styles.contentContainer}>{contentItem()}</View>;
+  };
+  /** => title */
+  const title = () => {
     return (
-      <View style={styles.contentContainer}>
-        {contentItem()}
-        {button()}
-      </View>
+      <SnbBottomSheetPart.Title swipeIndicator swipeIndicatorColor="white" />
     );
   };
+  /** => navigation */
+  const navigation = () => {
+    return (
+      <SnbBottomSheetPart.Navigation
+        iconRight1Name="x"
+        onRight1Action={() => {
+          props?.closeAction && props?.closeAction();
+          modalRef.current?.close();
+        }}
+      />
+    );
+  };
+  // state Effect
+  useEffect(() => {
+    if (props.open && props.error?.code !== 401 && props.error !== null) {
+      modalRef.current?.open();
+    }
+  }, [modalRef.current, props.open, props.error]);
+
+  const onClose = useCallback(() => {
+    props?.closeAction && props.closeAction();
+    modalRef.current?.close();
+  }, [modalRef.current]);
   /** => main */
   return (
-    <SnbBottomSheet
-      open={props.open && props.error?.code !== 401 && props.error !== null}
+    <SnbBottomSheet2
+      ref={modalRef}
+      name={'globalError'}
+      type="content"
+      contentHeight={400}
+      snap={false}
+      close={() => {}}
+      navigation={props.isCloseable ? navigation() : null}
+      title={title()}
       content={content()}
-      size={'halfscreen'}
-      closeAction={() =>
-        props.closeAction && props.isCloseable ? props.closeAction() : null
-      }
-      actionIcon={props.isCloseable ? 'close' : undefined}
-      title={props.isCloseable ? ' ' : undefined}
+      button={button()}
+      isBackDisable
     />
   );
 };
@@ -425,7 +424,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   image: {
-    height: '75%',
+    height: '20%',
     aspectRatio: 1 / 1,
   },
 });

@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, RefreshControl, View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
@@ -12,23 +12,34 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
-import { useCartTotalProductActions } from '@screen/oms/functions';
-import { useDataTotalProductCart, useDataAuth } from '@core/redux/Data';
-import { useCheckoutMaster } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
+import { useDataAuth } from '@core/redux/Data';
+// import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
+import PushNotification from '@core/components/PushNotification';
+import { contexts } from '@contexts';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import HomeStyles from '../styles/home.style';
+const CopilotView = walkthroughable(View);
+import UpgradeVIPAccountBadge from '@screen/account/views/shared/upgrade-vip-account-badge.component';
+import {
+  copilotOptions,
+  ModalStartCoachmark,
+} from '@screen/account/views/shared';
+import { renderIF } from '@screen/auth/functions';
+
 /** === COMPONENT === */
-const HomeView: React.FC = ({ navigation }: any) => {
+const HomeView: React.FC = ({ navigation, start }: any) => {
   /** === STATE === */
+  const { dispatchCart } = useContext(contexts.CartContext);
   const [modalError, setModalError] = React.useState(false);
   /** === HOOK === */
   const { stateHeaderChange, actionHeaderChange } = useHeaderChange();
   const { stateRefresh, actionRefresh } = useRefresh();
-  const { data } = useDataTotalProductCart();
-  const { setCartId } = useCheckoutMaster();
-  const cartTotalProductActions = useCartTotalProductActions();
+  const totalCartActions = useGetTotalCartAction();
   const notificationTotalActions = useNotificationTotalActions();
-  const { me } = useDataAuth();
+  const { me, meV2 } = useDataAuth();
   useGetTokenNotLogin();
   setFlagByDeviceId();
   /** === FUNCTION FOR HOOK === */
@@ -39,7 +50,7 @@ const HomeView: React.FC = ({ navigation }: any) => {
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       if (me.data !== null) {
-        cartTotalProductActions.fetch();
+        totalCartActions.fetch(dispatchCart);
         notificationTotalActions.fetch();
       }
     });
@@ -49,17 +60,10 @@ const HomeView: React.FC = ({ navigation }: any) => {
 
   React.useEffect(() => {
     if (me.data !== null) {
-      cartTotalProductActions.fetch();
+      totalCartActions.fetch(dispatchCart);
       notificationTotalActions.fetch();
     }
   }, [me.data]);
-
-  /** => listen changes data cart id */
-  React.useEffect(() => {
-    if (data && data.cartId) {
-      setCartId({ cartId: data.cartId });
-    }
-  }, [data.cartId]);
 
   React.useEffect(() => {
     if (me.error !== null && me.error.code === undefined) {
@@ -68,15 +72,51 @@ const HomeView: React.FC = ({ navigation }: any) => {
   }, [me.error]);
   /** => header */
   const header = () => {
-    return <HomeHeaderView headerChange={stateHeaderChange} />;
+    return (
+      <View style={HomeStyles.topNavContainer}>
+        <CopilotStep
+          text="Cari dan temukan produk terbaik untuk stok toko Anda."
+          order={1}
+          name="Temukan Produk yang Anda inginkan">
+          <CopilotView>
+            <HomeHeaderView headerChange={stateHeaderChange} />
+          </CopilotView>
+        </CopilotStep>
+      </View>
+    );
   };
   /** => content item */
   const contentItem = () => {
+    const isBadgeVIPAvailable =
+      typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
+      meV2.data?.data?.isDataCompleted === false;
+
     return (
       <>
-        <BannerHomeView />
-        <CategoryHomeView />
+        <PushNotification />
+        <CopilotStep
+          text="Cek promo terbaik setiap hari biar belanja makin hemat."
+          order={2}
+          name="Promo terbaik Sinbad">
+          <CopilotView>
+            <BannerHomeView />
+          </CopilotView>
+        </CopilotStep>
+        {renderIF(
+          isBadgeVIPAvailable,
+          <>
+            <CopilotStep
+              text="Dapatkan berbagai manfaat dan kemudahan dalam berbelanja."
+              order={3}
+              name="Jadi anggota VIP Sinbad">
+              <CopilotView>
+                <UpgradeVIPAccountBadge />
+              </CopilotView>
+            </CopilotStep>
+          </>,
+        )}
         <RecommendationHomeView navigationParent={navigation} />
+        <CategoryHomeView />
         <BrandHomeView />
         <View style={{ paddingBottom: 100 }} />
       </>
@@ -112,17 +152,19 @@ const HomeView: React.FC = ({ navigation }: any) => {
       />
     );
   };
+
   /** => main */
   return (
     <SnbContainer color="white">
       {header()}
       {content()}
       {bottomSheetError()}
+      <ModalStartCoachmark onStartCoachmark={start} />
     </SnbContainer>
   );
 };
 
-export default HomeView;
+export default copilot(copilotOptions(4, 'homeCoachmark'))(HomeView);
 
 /**
  * ================================================================

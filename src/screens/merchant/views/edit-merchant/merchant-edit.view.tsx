@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import { ScrollView, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** MODULE PAGE */
@@ -34,8 +34,8 @@ const MerchantEditView: FC<Props> = (props) => {
   /** => header */
   const header = () => {
     return (
-      <SnbTopNav.Type3
-        type="red"
+      <SnbTopNav2.Type3
+        color="white"
         title={props.route.params.title}
         backAction={() => {
           NavigationAction.back();
@@ -47,22 +47,15 @@ const MerchantEditView: FC<Props> = (props) => {
   };
   /** THIS FOR SWITCH VIEW */
   const switchView = () => {
-    switch (props.route.params.type) {
-      case 'merchantCompletenessInformation':
-      case 'merchantClassification':
-      case 'merchantOwnerIdNo':
-      case 'merchantOwnerName':
-      case 'merchantOwnerEmail':
-      case 'merchantOwnerTaxNo':
-      case 'merchantOwnerPhoneNo':
-      case 'merchantAccountName':
-      case 'merchantAccountPhoneNo':
-        return (
-          <MerchantEditPartialView type={props.route.params.type} showButton />
-        );
-      default:
-        break;
-    }
+    return (
+      <MerchantEditPartialView
+        type={props.route.params.type}
+        source={props.route.params.source}
+        sourceData={props.route.params.sourceData}
+        showButton
+        originFrom={props.route.params?.originFrom}
+      />
+    );
   };
   /** => content */
   const content = () => {

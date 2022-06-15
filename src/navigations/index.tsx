@@ -1,4 +1,3 @@
-import OmsNav from './oms.navigation';
 import AuthNav from './auth.navigation';
 import SharedNav from './shared.navigation';
 import UserNav from './user.navigation';
@@ -15,9 +14,12 @@ import HelpNav from './help.navigation';
 import NotificationNav from './notification.navigations';
 import SupplierNav from './supplier.navigation';
 import RecommendationNav from './recommendation.navigation';
+import QuestNav from './quest.navigation';
+import OmsNav from './oms.navigation';
+import OrderHistoryNav from './order-history.navigation';
+import AccountNav from './account.navigation';
 
 const index = {
-  ...OmsNav,
   ...AuthNav,
   ...SharedNav,
   ...UserNav,
@@ -34,6 +36,10 @@ const index = {
   ...NotificationNav,
   ...SupplierNav,
   ...RecommendationNav,
+  ...QuestNav,
+  ...OmsNav,
+  ...OrderHistoryNav,
+  ...AccountNav,
 };
 
 export default index;

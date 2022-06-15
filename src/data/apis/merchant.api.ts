@@ -20,7 +20,7 @@ const editMerchant = (data: object) => {
 };
 /** => profile edit */
 const editProfile = (data: object) => {
-  const path = 'completed-data/profile-account-type';
+  const path = 'profile-buyer';
   return apiMapping('auth', path, 'account', 'v1', 'UPDATE', data);
 };
 /** => change email */

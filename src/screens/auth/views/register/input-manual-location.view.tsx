@@ -1,14 +1,10 @@
 import { useNavigation } from '@react-navigation/core';
+import { TextFieldSelect } from '@screen/account/views';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { useLocations } from '@screen/auth/functions/global-hooks.functions';
 import React from 'react';
 import { View } from 'react-native';
-import {
-  SnbButton,
-  SnbContainer,
-  SnbTextFieldSelect,
-  SnbTopNav,
-} from 'react-native-sinbad-ui';
+import { SnbButton, SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
 
 const Content = () => {
   const { gotoSelection, selectedItem, resetSelectedItem } =
@@ -59,7 +55,7 @@ const Content = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'space-between' }}>
       <View style={{ padding: 16 }}>
-        <SnbTextFieldSelect
+        <TextFieldSelect
           labelText="Provinsi"
           placeholder="Pilih Provinsi"
           value={province?.name || ''}
@@ -71,7 +67,7 @@ const Content = () => {
           rightIcon="arrow_drop_down"
         />
         <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
+        <TextFieldSelect
           labelText="Kota"
           placeholder="Pilih Kota"
           value={city?.city || ''}
@@ -81,9 +77,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listCity',
                 params: `provinceId=${province.id}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}
@@ -91,7 +84,7 @@ const Content = () => {
           rightIcon="arrow_drop_down"
         />
         <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
+        <TextFieldSelect
           labelText="Kecamatan"
           placeholder="Pilih Kecamatan"
           value={district?.district || ''}
@@ -101,9 +94,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listDistrict',
                 params: `city=${city.city}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}
@@ -111,7 +101,7 @@ const Content = () => {
           rightIcon="arrow_drop_down"
         />
         <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
+        <TextFieldSelect
           labelText="Desa/Kelurahan"
           placeholder="Pilih Desa/Kelurahan"
           value={urban?.urban || ''}
@@ -121,9 +111,6 @@ const Content = () => {
               gotoSelection({
                 type: 'listUrban',
                 params: `district=${district.district}`,
-                meta: {
-                  limit: 100,
-                },
               });
             }
           }}
@@ -131,7 +118,7 @@ const Content = () => {
           rightIcon="arrow_drop_down"
         />
         <View style={{ marginVertical: 12 }} />
-        <SnbTextFieldSelect
+        <TextFieldSelect
           labelText="Kode Pos"
           placeholder="Lihat Kode Pos"
           value={urban?.zipCode || ''}
@@ -148,10 +135,6 @@ const Content = () => {
           onPress={() => {
             getLocation({
               params: `province=${province.name}&city=${city.city}&district=${district.district}&urban=${urban.urban}`,
-              meta: {
-                limit: 10,
-                skip: 0,
-              },
             });
           }}
           disabled={!province || !city || !district || !urban}

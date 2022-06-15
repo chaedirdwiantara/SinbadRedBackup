@@ -1,47 +1,43 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View, Image, ScrollView } from 'react-native';
-import { SnbText, SnbButton } from 'react-native-sinbad-ui';
-/** === IMPORT EXTERNAL COMPONENT HERE ===  */
-import { RecommendationHomeView } from '@screen/recommendation/views';
+import { View, Image } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE ===  */
+import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
+import { Images } from 'src/assets';
 import { goToCategory } from '../../functions';
-interface ShoppingCartEmptyProps {
-  navigationParent: any;
-}
+
 /** === COMPONENT ===  */
-export const ShoppingCartEmpty: FC<ShoppingCartEmptyProps> = ({
-  navigationParent,
-}) => (
-  <ScrollView>
+export const ShoppingCartEmpty: FC = () => (
+  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <View
       style={{
         padding: 16,
         alignItems: 'center',
-        marginBottom: 24,
       }}>
       <Image
-        source={require('../../../../assets/images/oms_empty_cart.png')}
+        source={Images.cartNotFound}
         width={180}
         style={{ marginTop: 24, marginBottom: 16 }}
       />
-      <View style={{ marginBottom: 4 }}>
-        <SnbText.H4>Keranjang Kosong</SnbText.H4>
+      <View style={{ marginBottom: 8 }}>
+        <SnbText2.Headline.Default color={colorV2.textColor.default}>
+          Keranjang Kosong
+        </SnbText2.Headline.Default>
       </View>
-      <SnbText.B3 align={'center'}>
-        Yuk, Isi keranjang kamu dengan produk - produk di Sinbad
-      </SnbText.B3>
+      <View style={{ width: '80%' }}>
+        <SnbText2.Paragraph.Default
+          align={'center'}
+          color={colorV2.textColor.secondary}>
+          Yuk isi keranjang Anda dengan produk-produk di Sinbad
+        </SnbText2.Paragraph.Default>
+      </View>
     </View>
-    <View style={{ height: 80, borderStyle: 'dashed' }}>
-      <SnbButton.Single
-        type="primary"
+    <View style={{ alignItems: 'center', marginBottom: 40 }}>
+      <SnbButton2.Primary
+        size="medium"
         title="Tambah Produk"
-        disabled={false}
         onPress={goToCategory}
       />
     </View>
-    <View>
-      <RecommendationHomeView navigationParent={navigationParent} />
-    </View>
-  </ScrollView>
+  </View>
 );

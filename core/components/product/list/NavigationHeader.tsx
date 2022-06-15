@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGES === */
-import React, { FC } from 'react';
+import React, { FC, useCallback, useContext, memo } from 'react';
 import { View } from 'react-native';
-import { SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbTopNav2 } from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS === */
 import {
   goBack,
@@ -11,9 +11,9 @@ import {
   backToLogin,
 } from '@core/functions/product';
 import { useDataAuth } from '@core/redux/Data';
-import { useCartTotalProductActions } from '@screen/oms/functions';
 /** === IMPORT TYPE === */
 import { ProductHeaderType } from './product-list-core.type';
+import { contexts } from '@contexts';
 /** === TYPE === */
 interface NavigationHeaderProps {
   type?: ProductHeaderType;
@@ -21,7 +21,6 @@ interface NavigationHeaderProps {
   keyword: string;
   onKeywordChange: (keyword: string) => void;
   onSearch: () => void;
-  onSearchClear: () => void;
 }
 /** === COMPONENT === */
 const NavigationHeader: FC<NavigationHeaderProps> = ({
@@ -30,50 +29,50 @@ const NavigationHeader: FC<NavigationHeaderProps> = ({
   keyword,
   onKeywordChange,
   onSearch,
-  onSearchClear,
 }) => {
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  const { stateCart } = useContext(contexts.CartContext);
   const { me } = useDataAuth();
 
-  const validateCartVisit = () => {
+  const validateCartVisit = useCallback(() => {
     if (me.data === null) {
       backToLogin();
     } else {
       goToShoppingCart();
     }
-  };
+  }, [me.data]);
 
   return (
     <View>
       {type === 'default' ? (
-        <SnbTopNav.Type6
+        <SnbTopNav2.Type5
+          testID="pdp-list-header"
           title={title}
           backAction={goBack}
-          type="red"
+          color="white"
           icon1Name="search"
           icon1Action={goToSearch}
-          icon2Value={dataTotalProductCart.totalProduct}
+          icon2Value={stateCart.total.data?.totalProducts}
           icon2Name="cart"
           icon2Action={validateCartVisit}
         />
       ) : (
-        <SnbTopNav.Type10
-          type="red"
+        <SnbTopNav2.Type8
+          testID="pdp-list-header"
           backAction={goBack}
+          color="white"
           placeholder="Cari di Sinbad"
-          value={keyword}
-          clearText={onSearchClear}
-          enter={onSearch}
+          inputValue={keyword}
+          onEnter={onSearch}
           onChangeText={(text) => onKeywordChange(text)}
-          icon1Name="home"
-          icon1Action={goToHome}
-          icon2Value={dataTotalProductCart.totalProduct}
-          icon2Name="cart"
-          icon2Action={validateCartVisit}
+          icon2Name="home"
+          icon2Action={goToHome}
+          icon1Value={stateCart.total.data?.totalProducts}
+          icon1Name="cart"
+          icon1Action={validateCartVisit}
         />
       )}
     </View>
   );
 };
 
-export default NavigationHeader;
+export default memo(NavigationHeader);

@@ -1,30 +1,29 @@
-/** === IMPORT INTERNAL === */
 import {
-  checkoutViewInitialState,
-  CheckoutViewInitialProps,
-  checkoutViewReducer,
-} from './checkout-detail.reducer';
+  CheckoutCartInitialProps,
+  checkoutCartInitialState,
+  checkoutCartReducer,
+} from './checkout-cart.reducer';
 
 import {
-  CreateOrderInitialProps,
-  createOrderInitialState,
-  createOrderReducer,
-} from './create-orders.reducer';
+  CheckoutTncInitialProps,
+  checkoutTncInitialState,
+  checkoutTncReducer,
+} from './checkout-tnc.reducer';
 
-export interface CheckoutState {
-  checkout: CheckoutViewInitialProps;
-  create: CreateOrderInitialProps;
+export interface CheckoutInitialProps {
+  checkout: CheckoutCartInitialProps;
+  checkoutTnc: CheckoutTncInitialProps;
 }
 /** === INITIAL STATE === */
 export const checkoutInitialState = {
-  checkout: checkoutViewInitialState,
-  create: createOrderInitialState,
+  checkout: checkoutCartInitialState,
+  checkoutTnc: checkoutTncInitialState,
 };
 /** === REDUCER === */
 export const checkoutReducer = (
-  { checkout, create }: CheckoutState,
+  { checkout, checkoutTnc }: CheckoutInitialProps,
   action: any,
 ) => ({
-  checkout: checkoutViewReducer(checkout, action),
-  create: createOrderReducer(create, action),
+  checkout: checkoutCartReducer(checkout, action),
+  checkoutTnc: checkoutTncReducer(checkoutTnc, action),
 });

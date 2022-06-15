@@ -1,19 +1,15 @@
-import React, { FC } from 'react';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { View, ScrollView, Image } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
+import { View, ScrollView, Image, Dimensions } from 'react-native';
 import {
   SnbContainer,
-  SnbTopNav,
-  color,
-  SnbText,
-  SnbIconHint,
-  SnbListButtonType2,
-  SnbCardMultiButtonType1,
-  SnbCardButtonType2,
-  SnbSvgIcon,
-  SnbTextSeeMoreType1,
-  SnbButton,
-  SnbDialog,
+  SnbTopNav2,
+  colorV2,
+  SnbText2,
+  SnbIcon,
+  SnbButton2,
+  spacingV2 as layout,
+  Content,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -22,17 +18,58 @@ import UserStyles from '../styles/user.style';
 import { UserHookFunc } from '../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { contexts } from '@contexts';
+import { ModalUserProfileCompletion } from './modal-user-profile-completion.view';
 import LoadingPage from '@core/components/LoadingPage';
-import { setErrorMessage, useAuthAction } from '@screen/auth/functions';
+import { setErrorMessage } from '@screen/auth/functions';
+import { copilot, CopilotStep, walkthroughable } from 'react-native-copilot';
+import { copilotOptions } from '@screen/account/views/shared';
+import { useCoachmark } from '@screen/account/functions';
+import LinearGradient from 'react-native-linear-gradient';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Svg from '@svg';
+import ModalLogout from './shared/modal-logout.component';
 
-const UserView: FC = () => {
+const CopilotView = walkthroughable(View);
+
+/** === INTERFACE === */
+interface NavigationParams {
+  isProfileCompletionCart: boolean;
+}
+
+const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
-  const { action, state } = UserHookFunc.useBadgeInformation();
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const { logout } = useAuthAction();
-  const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const { coachmarkState } = useCoachmark();
+  const { width } = Dimensions.get('window');
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [loadingCarousel, setLoadingCarousel] = useState(true);
+  const [clickFromCart, setClickFromCart] = useState(false);
+
+  // usage for show modal
+  const [modalUserProfileCompletion, setModalUserProfileCompletion] =
+    React.useState(false);
+  const isProfileCompletionCart =
+    NavigationAction.useGetNavParams<NavigationParams>()?.params
+      ?.isProfileCompletionCart;
+
+  //show modal if complete data from cart
+  useEffect(() => {
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (stateUser) {
+      if (
+        isProfileCompletionCart === true &&
+        ownerData?.info.isImageIdOcrValidate === true &&
+        buyerData?.buyerInformation.buyerAccount.name !== null &&
+        buyerData?.buyerAddress.address !== null &&
+        !clickFromCart
+      ) {
+        setModalUserProfileCompletion(true);
+      }
+    }
+  }, [stateUser, isProfileCompletionCart]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,156 +77,454 @@ const UserView: FC = () => {
     }, []),
   );
 
-  /** === FUNCTION FOR HOOK === */
-  const showBadge = (show: boolean) => {
-    action(show);
+  //function for start couchmark
+  useEffect(() => {
+    if (typeof coachmarkState.data?.profileCoachmark === 'boolean') {
+      if (coachmarkState?.data?.profileCoachmark === false) {
+        start();
+      }
+    }
+  }, [coachmarkState?.data?.profileCoachmark]);
+
+  useEffect(() => {
+    if (loadingCarousel) {
+      setLoadingCarousel(false);
+    }
+  }, [loadingCarousel]);
+  /** === GO TO PAGE === */
+  const goTo = (data: any) => {
+    const { type, title } = data;
+    switch (type) {
+      case 'ktp': {
+        NavigationAction.navigate('UpdatePhotoKTPView');
+        break;
+      }
+      case 'merchantAccountName':
+        NavigationAction.navigate('MerchantEditView', {
+          title,
+          type,
+          originFrom: 'profile',
+        });
+        break;
+      case 'storeAddress':
+        handleAddressNavigation();
+        break;
+      default:
+        break;
+    }
   };
   /** === VIEW === */
   /** => header */
   const header = () => {
     if (stateUser.detail.data) {
-      return (
-        <SnbTopNav.Type2
-          type="red"
-          title="Profil"
-          iconName={'settings'}
-          iconAction={() => NavigationAction.navigate('UserSettingView')}
-        />
-      );
+      return <SnbTopNav2.Type1 color="white" title="Profil" />;
     }
-    return <SnbTopNav.Type1 type="red" title="Profil" />;
+    return <SnbTopNav2.Type1 color="red" title="Profil" />;
   };
-  const renderHeaderInformation = () => {
-    const data = stateUser.detail.data?.ownerData?.profile;
-    const source = data?.imageUrl
-      ? { uri: data?.imageUrl }
-      : require('../../../assets/images/sinbad_image/avatar.png');
+
+  const handleAddressNavigation = () => {
+    const buyerData = stateUser.detail.data?.buyerData;
+    if (buyerData?.buyerAddress.address !== null) {
+      NavigationAction.navigate('MerchantEditAddressView');
+    } else {
+      NavigationAction.navigate('MapsViewType2', { originFrom: 'profile' });
+    }
+  };
+
+  /** === RENDER SLIDER PAGINATION DOT === */
+  const pagination = () => {
+    const dataHeader = [
+      {
+        id: 1,
+        title: 'Foto KTP',
+        subTitle: 'Upload Foto KTP',
+        icon: 'ktp',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'ktp',
+        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+      },
+      {
+        id: 2,
+        title: 'Tambah Nama Toko',
+        subTitle: 'Isi Nama Toko',
+        icon: 'store',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'merchantAccountName',
+        status:
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+            ?.name !== null
+            ? true
+            : false,
+      },
+      {
+        id: 3,
+        title: 'Alamat Toko',
+        subTitle: 'Isi Alamat Toko',
+        icon: 'location',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'storeAddress',
+        status:
+          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+            ? true
+            : false,
+      },
+    ];
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
-      <View style={UserStyles.headerInformationContainer}>
-        <View style={UserStyles.imageContainer}>
-          <Image source={source} style={UserStyles.image} />
-        </View>
-        <View style={UserStyles.userInfo}>
-          <View style={{ marginLeft: -18 }}>
-            <SnbTextSeeMoreType1 line={1}>
-              <SnbText.B4 color={color.white}>{data?.name}</SnbText.B4>
-            </SnbTextSeeMoreType1>
+      <View>
+        <Pagination
+          dotsLength={dataCarousel.length}
+          activeDotIndex={activeIndex}
+          dotContainerStyle={{ marginHorizontal: 2 }}
+          dotStyle={UserStyles.activeDot}
+          inactiveDotStyle={UserStyles.inactiveDot}
+          inactiveDotOpacity={1}
+          inactiveDotScale={1}
+        />
+      </View>
+    );
+  };
+
+  const renderSeparator = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          borderTopWidth: 1,
+          borderColor: colorV2.strokeColor.default,
+          marginTop: layout.spacing.sm,
+        }}
+      />
+    );
+  };
+
+  /** === RENDER HEADER ITEM SLIDE === */
+  const renderItem = (item: any, index: any) => {
+    return (
+      <View key={index}>
+        <View>
+          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
+            <View style={UserStyles.cardBody}>
+              <View>
+                <Svg name={item.icon} size={40} />
+              </View>
+              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
+                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
+                <SnbText2.Paragraph.Small>
+                  {item.message}
+                </SnbText2.Paragraph.Small>
+              </View>
+              <SnbButton2.Primary
+                size="tiny"
+                onPress={() => {
+                  goTo({
+                    type: item.type,
+                    title: item.title,
+                  });
+                }}
+                title="Lengkapi"
+              />
+            </View>
           </View>
-          <SnbText.C1 color={color.white}>
-            Kelengkapan profil {countPercentageProfileComplete()}%
-          </SnbText.C1>
         </View>
       </View>
     );
   };
-  const countPercentageProfileComplete = () => {
-    const progressDone = stateUser.detail.data?.progress.done || 0;
-    const progressTotal = stateUser.detail.data?.progress.total || 0;
-    return Math.floor((progressDone / progressTotal) * 100);
-  };
-  const renderLoyaltiInformation = () => {
+
+  const renderHeaderInformation = () => {
+    const data = stateUser.detail.data?.ownerData?.profile;
+    const buyerData = stateUser.detail.data?.buyerData;
+    const ownerData = stateUser.detail.data?.ownerData;
+    const source = data?.imageUrl
+      ? { uri: data?.imageUrl }
+      : require('../../../assets/images/sinbad_image/avatar.png');
+    const dataHeader = [
+      {
+        id: 1,
+        title: 'Foto KTP',
+        subTitle: 'Upload Foto KTP',
+        icon: 'ktp',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'ktp',
+        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+      },
+      {
+        id: 2,
+        title: 'Tambah Nama Toko',
+        subTitle: 'Isi Nama Toko',
+        icon: 'store',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'merchantAccountName',
+        status:
+          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+            ?.name !== null
+            ? true
+            : false,
+      },
+      {
+        id: 3,
+        title: 'Alamat Toko',
+        subTitle: 'Isi Alamat Toko',
+        icon: 'location',
+        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+        type: 'storeAddress',
+        status:
+          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+            ? true
+            : false,
+      },
+    ];
+    const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
-      <View>
-        <View style={UserStyles.headerBackground} />
-        <View style={{ marginTop: -40, marginHorizontal: -10 }}>
-          <SnbCardMultiButtonType1
-            buttonList={[
-              {
-                icon: <SnbSvgIcon name={'sinbad_coin'} size={24} />,
-                title: 'Sinbad Point',
-                subtitle: '1000 Point',
-                onPress: () => console.log('press'),
-              },
-              {
-                icon: (
-                  <SnbIconHint
-                    iconName={'warehouse'}
-                    size={24}
-                    badgeColor="yellow"
-                    iconColor={color.red50}
+      <View style={UserStyles.headerInformationContainer}>
+        <LinearGradient
+          start={{ x: 0, y: 1 }}
+          end={{ x: 0, y: 0 }}
+          colors={['#cfd6de', '#f4f5f7']}
+          style={{
+            flex: 1,
+          }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={UserStyles.imageContainer}>
+              {!data?.imageUrl ? (
+                <SnbIcon
+                  name={'person_circle'}
+                  size={52}
+                  color={colorV2.iconColor.default}
+                />
+              ) : (
+                <Image source={source} style={UserStyles.image} />
+              )}
+            </View>
+            <View>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <SnbText2.Body.Small numberOfLines={1}>
+                  {data?.name ||
+                    buyerData?.buyerInformation?.buyerAccount?.code}
+                </SnbText2.Body.Small>
+                <View style={{ marginHorizontal: layout.spacing.xxsm }}>
+                  <SnbIcon
+                    name={'shield'}
+                    size={16}
+                    color={
+                      ownerData?.accountType === 'basic'
+                        ? colorV2.iconColor.default
+                        : colorV2.iconColor.blue
+                    }
                   />
-                ),
-                title: 'Voucher Untukmu',
-                subtitle: null,
-                onPress: () => console.log('pressed'),
-              },
-            ]}
-          />
+                </View>
+              </View>
+              <SnbText2.Paragraph.Tiny>
+                {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
+              </SnbText2.Paragraph.Tiny>
+            </View>
+          </View>
+          <CopilotStep
+            text="Verifikasi sekarang untuk menggunakan semua fitur utama di Sinbad."
+            order={1}
+            name="Verifikasi Akun Anda">
+            <CopilotView>
+              <Carousel
+                data={dataCarousel}
+                sliderWidth={width}
+                itemWidth={width * 0.92}
+                renderItem={({ item, index }) => renderItem(item, index)}
+                onSnapToItem={(index) => {
+                  setActiveIndex(index);
+                }}
+                slideStyle={{
+                  paddingHorizontal: layout.spacing.xsm,
+                  paddingVertical: layout.spacing.md,
+                }}
+                inactiveSlideOpacity={1}
+                inactiveSlideScale={1}
+                activeSlideAlignment={'center'}
+                layout={'default'}
+                removeClippedSubviews={false}
+              />
+            </CopilotView>
+          </CopilotStep>
+        </LinearGradient>
+        <View>
+          {!ownerData?.info.isImageIdOcrValidate ||
+          buyerData?.buyerInformation.buyerAccount.name === null ||
+          buyerData?.buyerAddress.address === null
+            ? pagination()
+            : null}
         </View>
       </View>
     );
   };
   const renderUserInformation = () => {
     const data = stateUser.detail.data?.progress;
+    const ownerData = stateUser.detail.data?.ownerData;
+    const buyerData = stateUser.detail.data?.buyerData;
     return (
-      <View>
-        <View style={{ marginVertical: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Pemilik</SnbText.B4>
-            <SnbText.B3>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText.B3>
-          </View>
-          <SnbListButtonType2
-            title={'Data Diri'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailProfileView')
+      <View style={{ marginBottom: 90 }}>
+        <CopilotStep
+          text="Lengkapi informasi data diri Anda dengan mudah di sini."
+          order={2}
+          name="Data Diri">
+          <CopilotView>
+            <View style={{ marginVertical: layout.spacing.lg }}>
+              <View style={UserStyles.bodyTitleContainer}>
+                <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
+                <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
+              </View>
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Data Diri"
+                  iconComponent={
+                    <SnbIcon
+                      name="person"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailProfileView')
+                  }
+                />
+                {!ownerData?.info.isImageIdOcrValidate && (
+                  <Content.MenuList
+                    title="Upload Foto KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
+                  />
+                )}
+                {renderSeparator()}
+              </View>
+            </View>
+          </CopilotView>
+        </CopilotStep>
+
+        <CopilotStep
+          text="Lengkapi informasi data toko Anda dengan mudah di sini."
+          order={3}
+          name="Data Toko">
+          <CopilotView>
+            <View>
+              <View style={UserStyles.bodyTitleContainer}>
+                <SnbText2.Body.Small>Data Toko</SnbText2.Body.Small>
+                <SnbText2.Paragraph.Small>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
+              </View>
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Informasi Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailAccountView')
+                  }
+                />
+                <Content.MenuList
+                  title="Alamat Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="location_store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={handleAddressNavigation}
+                />
+                {!buyerData?.buyerInformation?.buyerAccount?.name && (
+                  <Content.MenuList
+                    title="Isi Nama Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="create"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({
+                        type: 'merchantAccountName',
+                        title: 'Tambah Nama Toko',
+                      })
+                    }
+                    background
+                  />
+                )}
+                {!buyerData?.buyerAddress?.address && (
+                  <Content.MenuList
+                    title="Isi Alamat Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="location_store"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={handleAddressNavigation}
+                    background
+                  />
+                )}
+                {renderSeparator()}
+              </View>
+            </View>
+          </CopilotView>
+        </CopilotStep>
+
+        <View
+          style={{
+            marginHorizontal: layout.spacing.lg,
+            marginTop: layout.spacing.md,
+          }}>
+          <Content.MenuList
+            title="Log Out"
+            iconComponent={
+              <SnbIcon
+                name="exit_to_app"
+                color={colorV2.iconColor.default}
+                size={24}
+              />
             }
-          />
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Toko</SnbText.B4>
-            <SnbText.B3>{`${data?.storeProgress.done}/${data?.storeProgress.total} Selesai`}</SnbText.B3>
-          </View>
-          <SnbListButtonType2
-            title={'Informasi Toko'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailInformationView')
-            }
-          />
-          <SnbListButtonType2
-            title={'Alamat Toko'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantDetailAddressView')
-            }
-          />
-        </View>
-        <View style={{ marginBottom: 16 }}>
-          <View style={UserStyles.bodyTitleContainer}>
-            <SnbText.B4>Data Supplier</SnbText.B4>
-          </View>
-          <SnbListButtonType2
-            title={'Informasi Supplier'}
-            onPress={() =>
-              NavigationAction.navigate('MerchantSupplierInformationView')
-            }
+            onActionPress={() => setShowConfirmation(true)}
           />
         </View>
       </View>
     );
   };
-  const renderBadgeInformation = () => {
-    if (state) {
-      return (
-        <View>
-          <SnbCardButtonType2
-            text={
-              'Lengkapi profile untuk menjadikan Anda User Verified dan dapatkan fasilitas menarik'
-            }
-            leftItem={<SnbSvgIcon name={'verified_user'} size={24} />}
-            rightIcon={'x'}
-            onPress={() => showBadge(!state)}
-          />
-        </View>
-      );
-    }
-  };
   const contentItem = () => {
     return (
       <>
         {renderHeaderInformation()}
-        {/* HIDE SEMENTARA */
-        /* {renderLoyaltiInformation()} */}
-        {renderBadgeInformation()}
         {renderUserInformation()}
       </>
     );
@@ -199,8 +534,8 @@ const UserView: FC = () => {
     if (stateUser.detail.error && stateUser.detail.error.code !== 401) {
       return (
         <View style={{ flex: 1 }}>
-          <SnbTopNav.Type2
-            type="red"
+          <SnbTopNav2.Type2
+            color="white"
             title="Profil"
             iconName={'exit_to_app'}
             iconAction={() => setShowConfirmation(true)}
@@ -211,23 +546,24 @@ const UserView: FC = () => {
               source={require('@image/sinbad_image/cry_sinbad.png')}
               style={{ height: 192, aspectRatio: 1 }}
             />
-            <View style={{ alignItems: 'center', marginBottom: 10 }}>
-              <SnbText.H4>Terjadi Kesalahan</SnbText.H4>
+            <View
+              style={{ alignItems: 'center', marginBottom: layout.spacing.md }}>
+              <SnbText2.Headline.Small>
+                Terjadi Kesalahan
+              </SnbText2.Headline.Small>
             </View>
-            <SnbText.B3 align="center">
+            <SnbText2.Paragraph.Small align="center">
               {setErrorMessage(
                 stateUser.detail.error.code,
-                stateUser.detail.error.errorMessage,
+                stateUser.detail.error.message,
               )}
-            </SnbText.B3>
-            <View style={{ marginVertical: 8 }} />
-            <SnbButton.Dynamic
+            </SnbText2.Paragraph.Small>
+            <View style={{ marginVertical: layout.spacing.sm }} />
+            <SnbButton2.Link
               iconName="refresh"
-              type="tertiary"
-              size="small"
+              size="medium"
               title="Coba Lagi"
               disabled={false}
-              loading={false}
               onPress={() => storeDetailAction.detail(dispatchUser)}
             />
           </View>
@@ -240,10 +576,19 @@ const UserView: FC = () => {
         <View>
           {header()}
           <ScrollView
-            scrollEventThrottle={16}
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            style={{ marginBottom: layout.spacing.lg }}>
             {contentItem()}
           </ScrollView>
+          {/* Modal Profile Completion */}
+          <ModalUserProfileCompletion
+            isOpen={modalUserProfileCompletion}
+            handleNavigateToCart={() => {
+              setClickFromCart(true);
+              setModalUserProfileCompletion(false);
+              NavigationAction.navigate('OmsShoppingCartView');
+            }}
+          />
         </View>
       );
     }
@@ -254,23 +599,9 @@ const UserView: FC = () => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <SnbDialog
-        title="Yakin keluar Sinbad ?"
-        open={showConfirmation}
-        okText="Ya"
-        cancelText="Tidak"
-        cancel={() => {
-          setShowConfirmation(false);
-        }}
-        ok={() => {
-          setShowConfirmation(false);
-          logout();
-          reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
-        }}
-        content="Apakah anda yakin ingin keluar Aplikasi SINBAD ?"
-      />
+      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
     </View>
   );
 };
 
-export default UserView;
+export default copilot(copilotOptions(3, 'profileCoachmark'))(UserView);

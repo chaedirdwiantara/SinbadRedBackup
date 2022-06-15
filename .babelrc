@@ -24,11 +24,13 @@
           "@svg": ["./src/assets/svg/Svg.tsx"],
           "@image": ["./src/assets/images"],
           "@assets": ["./scr/assets/index"],
+          "@report": ["./src/report"],
           "react-native-sinbad-ui": [
             "./node_modules/@sinbad/react-native-sinbad-ui"
           ]
         }
       }
-    ]
+    ],
+    "react-native-reanimated/plugin"
   ]
 }

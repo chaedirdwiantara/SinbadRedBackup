@@ -1,4 +1,8 @@
 rootProject.name = 'sinbad-red'
+include ':react-native-install-referrer'
+project(':react-native-install-referrer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-install-referrer/android')
+include ':react-native-moengage'
+project(':react-native-moengage').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-moengage/android')
 // THIS PACKAGE FOR ENV
 include ':react-native-config'
 project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
@@ -23,6 +27,11 @@ include ':@react-native-firebase_database'
 project(':@react-native-firebase_database').projectDir = new File(rootProject.projectDir, './../node_modules/@react-native-firebase/database/android')
 include ':react-native-push-notification'
 project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, './../node_modules/react-native-push-notification/android')
+include ':react-native-linear-gradient'
+project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
+// THIS PACKAGE FOR SPLASH SCREEN
+include ':react-native-splash-screen'   
+project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
 
 // REACT NATIVE
 apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)

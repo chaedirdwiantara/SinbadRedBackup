@@ -9,6 +9,8 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT COMPONENTS ===  */
 import { ProductBundleMainInfoSkeleton } from './ProductBundleMainInfoSkeleton';
+import ExclusiveTag from '@core/components/product/ExclusiveTag';
+import BulkPricingTag from '@core/components/product/BulkPricingTag';
 /** === IMPORT FUNCTION ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === IMPORT STYLE ===  */
@@ -18,11 +20,13 @@ interface ProductBundleMainInfoProps {
   imageUrl?: string;
   isExclusive: boolean;
   name: string;
-  currentPrice: number;
+  priceAfterTax: number;
+  hasBulkPrice: boolean;
   packagedQty: number;
   minQty: number;
   minQtyType: string;
   loading: boolean;
+  unit: string;
 }
 /** === COMPONENT === */
 export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
@@ -46,17 +50,14 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
         style={ProductBundleStyle.mainInfoImage}
       />
       <View>
-        {props.isExclusive && (
-          <View style={ProductBundleStyle.exclusiveTagContainer}>
-            <SnbIcon
-              name="stars"
-              color={color.yellow50}
-              size={18}
-              style={{ marginRight: 4 }}
-            />
-            <SnbText.C1 color={color.yellow50}>Exclusive</SnbText.C1>
-          </View>
-        )}
+        <View>
+          {props.hasBulkPrice ? <BulkPricingTag /> : <View />}
+          {props.isExclusive ? (
+            <ExclusiveTag style={{ marginLeft: 4 }} />
+          ) : (
+            <View />
+          )}
+        </View>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }}>
             <SnbText.B3>{props.name}</SnbText.B3>
@@ -69,7 +70,7 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
             alignItems: 'center',
           }}>
           <SnbText.B2 color={color.red50}>
-            {toCurrency(props.currentPrice ?? 0, {
+            {toCurrency(props.priceAfterTax ?? 0, {
               withFraction: false,
             })}
           </SnbText.B2>
@@ -95,9 +96,9 @@ export const ProductBundleMainInfo: FC<ProductBundleMainInfoProps> = (
             flexDirection: 'row',
             alignItems: 'center',
           }}>
-          <SnbText.C1>{`per-Dus ${props.packagedQty} ${props.minQtyType}`}</SnbText.C1>
+          <SnbText.C1>{`per-Dus ${props.packagedQty} Pcs`}</SnbText.C1>
           <View style={ProductBundleStyle.textHorizontalDivider} />
-          <SnbText.C1>{`min.pembelian ${props.minQty} ${props.minQtyType}`}</SnbText.C1>
+          <SnbText.C1>{`min.pembelian ${props.minQty} ${props.unit}`}</SnbText.C1>
         </View>
       </View>
     </View>

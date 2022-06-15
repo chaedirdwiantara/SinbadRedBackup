@@ -3,7 +3,6 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { AuthApi } from '../../apis/auth/auth.api';
 import * as ActionCreators from '../../actions';
-import { cartTotalProductProcess } from 'src/data/actions';
 import * as types from '@types';
 import * as models from '@models';
 /** === FUNCTION === */
@@ -36,8 +35,9 @@ function* verificationOTP(action: models.VerificationOTPProcessAction) {
     const response: models.LoginSuccess = yield call(() => {
       return AuthApi.verificationOTP(action.payload);
     });
-    yield put(ActionCreators.verificationOTPSuccess(response));
+    yield put(ActionCreators.verificationOTPSuccess(response, action.payload));
     yield put(ActionCreators.meProcess());
+    yield put(ActionCreators.meV2Process());
   } catch (error: any) {
     yield put(ActionCreators.verificationOTPFailed(error));
   }
@@ -49,7 +49,6 @@ function* me() {
       return AuthApi.me();
     });
     yield put(ActionCreators.meSuccess(response));
-    yield put(cartTotalProductProcess());
   } catch (error: any) {
     yield put(ActionCreators.meFailed(error));
   }
@@ -65,6 +64,17 @@ function* logout() {
     yield put(ActionCreators.logoutFailed(error));
   }
 }
+/** => me V2 */
+function* meV2() {
+  try {
+    const response: models.LoginSuccess = yield call(() => {
+      return AuthApi.meV2();
+    });
+    yield put(ActionCreators.meV2Success(response));
+  } catch (error: any) {
+    yield put(ActionCreators.meV2Failed(error));
+  }
+}
 
 /** === LISTEN FUNCTION === */
 function* AuthCoreSaga() {
@@ -73,6 +83,7 @@ function* AuthCoreSaga() {
   yield takeLatest(types.VERIFICATION_OTP_PROCESS, verificationOTP);
   yield takeLatest(types.ME_PROCESS, me);
   yield takeLatest(types.LOGOUT_PROCESS, logout);
+  yield takeLatest(types.ME_V2_PROCESS, meV2);
 }
 
 export default AuthCoreSaga;

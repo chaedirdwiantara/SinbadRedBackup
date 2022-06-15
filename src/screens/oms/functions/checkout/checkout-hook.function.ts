@@ -1,12 +1,149 @@
 /** === IMPORT PACKAGE HERE === */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDataCheckout, useDataPaymentChannels } from '@core/redux/Data';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
+import { useContext } from 'react';
 /** === FUNCTION === */
-/** => master data checkout */
+/** => checkout action */
+const useCheckoutAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      cartMaster: models.CartMaster,
+    ) => {
+      if (
+        stateCart.postCheckProduct.data !== null &&
+        stateCart.postCheckSeller.data !== null &&
+        stateCart.postCheckStock.data !== null &&
+        stateCart.buyerAddress.data !== null
+      ) {
+        const buyerAddress = (({
+          /** typescript disabled for some line @here
+           * because this just to separate the object. */
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          buyerCode,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          userFullName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          userPhoneNumber,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerFullName,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerPhoneNumber,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          ownerId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          imageId,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          isImageIdOcrValidation,
+          ...rest
+        }) => rest)(stateCart.buyerAddress.data);
+
+        const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
+          (seller) => {
+            const products: models.CheckoutProductData[] = seller.products
+              .filter((product) => product.selected)
+              .map((product) => {
+                let priceRules: models.ProductPriceRules | null = null;
+                if (product.priceRules.length > 0) {
+                  const priceRulesFirstItem = product.priceRules[0];
+                  if (product.qty < priceRulesFirstItem.minQty) {
+                    priceRules = null;
+                  } else {
+                    for (let x = 0; x < product.priceRules.length; x++) {
+                      const isLast = x === product.priceRules.length - 1;
+                      if (!isLast) {
+                        if (
+                          product.qty >= product.priceRules[x].minQty &&
+                          product.qty < product.priceRules[x + 1].minQty
+                        ) {
+                          priceRules = product.priceRules[x];
+                          break;
+                        }
+                      } else {
+                        priceRules = product.priceRules[x];
+                      }
+                    }
+                  }
+                }
+
+                return {
+                  productId: product.productId,
+                  externalProductCode: product.externalProductCode || '',
+                  warehouseId: product.warehouseId,
+                  warehouseName: product.warehouseName || '',
+                  externalWarehouseCode: product.externalWarehouseCode || '',
+                  categoryId: product.categoryId,
+                  brandId: product.brandId || '',
+                  brandName: product.brandName || '',
+                  productName: product.productName,
+                  productImageUrl: product.productImageUrl,
+                  qty: product.qty,
+                  qtyPerBox: product.qtyPerBox,
+                  uomLabel: product.uomLabel,
+                  taxPercentage: product.taxPercentage,
+                  leadTime: product.leadTime || 0,
+                  priceAfterTax:
+                    priceRules !== null
+                      ? priceRules.priceAfterTax
+                      : product.priceAfterTax,
+                  priceBeforeTax:
+                    priceRules !== null
+                      ? priceRules.priceBeforeTax
+                      : product.priceBeforeTax,
+                  taxPrice:
+                    priceRules !== null
+                      ? priceRules.taxPrice
+                      : product.taxPrice,
+                };
+              });
+            return {
+              sellerId: seller.sellerId,
+              sellerName: seller.sellerName,
+              sellerAdminId: seller.sellerAdminId,
+              sellerAdminName: seller.sellerAdminName,
+              sellerAdminEmail: seller.sellerAdminEmail,
+              products,
+            };
+          },
+        );
+
+        const carts = cartsTemp.filter((cart) => {
+          return cart.products.length > 0;
+        });
+
+        dispatch(
+          Actions.checkoutProcess(contextDispatch, {
+            data: {
+              buyerAddress,
+              buyerName: stateCart.buyerAddress.data.buyerName,
+              buyerCode: stateCart.buyerAddress.data.buyerCode,
+              userFullName: stateCart.buyerAddress.data.userFullName,
+              userPhoneNumber: stateCart.buyerAddress.data.userPhoneNumber,
+              ownerFullName: stateCart.buyerAddress.data.ownerFullName,
+              ownerPhoneNumber: stateCart.buyerAddress.data.ownerPhoneNumber,
+              ownerId: stateCart.buyerAddress.data.ownerId,
+              carts,
+            },
+          }),
+        );
+      }
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkoutReset(contextDispatch));
+    },
+  };
+};
+
 const useCheckoutMaster = () => {
   const dataCheckout: models.CheckoutDataMaster = useDataCheckout();
   const dispatch = useDispatch();
@@ -292,8 +429,21 @@ const useErrorWarningModal = () => {
   };
 };
 
+/** => get TNC content */
+const useGetTncContent = () => {
+  const dispatch = useDispatch();
+  return {
+    tncContentGet: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.checkoutTNCProcess(contextDispatch, { id }));
+    },
+    tncContentReset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.checkoutTNCReset());
+    },
+  };
+};
 /** === EXPORT === */
 export {
+  useCheckoutAction,
   useCheckoutMaster,
   usePaymentDetailAccorrdion,
   useTermsAndConditionsModal,
@@ -306,13 +456,14 @@ export {
   useErrorModalBottom,
   useCheckoutFailedFetchState,
   useErrorWarningModal,
+  useGetTncContent,
 };
 /**
  * ================================================================
  * NOTES
  * ================================================================
- * createdBy: ryan (team)
- * createDate: 07102021
+ * createdBy: eryz (team)
+ * createDate: 16022022
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

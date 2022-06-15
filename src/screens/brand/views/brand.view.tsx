@@ -1,22 +1,26 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect } from 'react';
-import { View, FlatList, Dimensions } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import React, { FC, useEffect, useState, useMemo } from 'react';
+import { View, FlatList } from 'react-native';
+import {
+  SnbContainer,
+  SnbTopNav2,
+  Content,
+  spacingV2,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
-import { BrandCard } from '@core/components/BrandCard';
+// import { BrandCard } from '@core/components/BrandCard';
 import { EmptyState } from '@core/components/EmptyState';
 import { BrandListSkeleton } from './BrandListSkeleton';
 /** === IMPORT FUNCTIONS === */
 import { useListDisplayState } from '@core/functions/product';
 import { useBrandContext } from 'src/data/contexts/brand/useBrandContext';
 import { goBack, goToProduct, useBrandListAction } from '../functions';
-/** === IMPORT TYPE === */
-import * as models from '@models';
 /** === CONSTANT === */
-const { width } = Dimensions.get('window');
+const { spacing } = spacingV2;
 /** === COMPONENT === */
 const BrandView: FC = () => {
   /** === HOOKS === */
+  const [isGrid, setIsGrid] = useState(true);
   const {
     stateBrand: { list: brandListState },
     dispatchBrand,
@@ -28,37 +32,25 @@ const BrandView: FC = () => {
     dataLength: brandListState.data.length,
   });
 
+  const BrandContent = useMemo(
+    () => (isGrid ? Content.NewBrand.Square : Content.NewBrand.Stretched),
+    [isGrid],
+  );
+
   useEffect(() => {
     fetch(dispatchBrand);
   }, []);
   /** === VIEW === */
-  /** => Brand Item */
-  const renderBrandItem = ({
-    item,
-    index,
-  }: {
-    item: models.BrandListItem;
-    index: number;
-  }) => (
-    <View
-      key={index}
-      style={{
-        marginRight: index + (1 % 4) === 0 ? 0 : 8,
-        marginVertical: 4,
-      }}>
-      <BrandCard
-        id={item.id}
-        imageUrl={item.image}
-        height={0.25 * width}
-        width={0.21 * width}
-        onCardPress={() => goToProduct(item)}
-      />
-    </View>
-  );
   /** => Main */
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3 type="red" title="Brand Kami" backAction={goBack} />
+      <SnbTopNav2.Type4
+        iconName={isGrid ? 'view_list' : 'view_module'}
+        iconAction={() => setIsGrid((prev) => !prev)}
+        title="Brand Resmi"
+        backAction={goBack}
+        color="white"
+      />
       <View style={{ flex: 1 }}>
         {displayState === 'loading' && <BrandListSkeleton />}
         {displayState === 'error' && (
@@ -76,15 +68,30 @@ const BrandView: FC = () => {
         {displayState === 'success' && (
           <View>
             <FlatList
+              key={String(isGrid)}
               contentContainerStyle={{
-                paddingTop: 8,
-                paddingBottom: 16,
-                paddingHorizontal: 12,
+                paddingTop: spacing.sm,
+                paddingBottom: spacing.lg,
+                paddingHorizontal: spacing.md,
               }}
+              columnWrapperStyle={isGrid && { justifyContent: 'space-between' }}
               data={brandListState.data}
-              renderItem={renderBrandItem}
+              renderItem={({ item }) => (
+                <View
+                  style={
+                    isGrid
+                      ? { padding: spacing.lg }
+                      : { paddingTop: spacing.md }
+                  }>
+                  <BrandContent
+                    image={item.image}
+                    name={item.name}
+                    onPress={() => goToProduct(item)}
+                  />
+                </View>
+              )}
               keyExtractor={(item) => item.id}
-              numColumns={4}
+              numColumns={isGrid ? 3 : 1}
               onEndReachedThreshold={0.1}
               onEndReached={() => loadMore(dispatchBrand, brandListState)}
               refreshing={brandListState.refresh}

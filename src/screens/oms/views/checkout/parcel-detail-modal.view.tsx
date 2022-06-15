@@ -1,44 +1,38 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { toCurrency } from '@core/functions/global/currency-format';
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC } from 'react';
-import { View, TouchableOpacity, Dimensions } from 'react-native';
+import React, { FC, Ref } from 'react';
+import { View, Dimensions } from 'react-native';
 import {
-  SnbText,
-  SnbDivider,
-  color,
-  SnbIcon,
-  SnbBottomSheet,
+  SnbText2,
+  SnbDivider2,
+  colorV2,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
-import {
-  handleSubTotalPrice,
-  handleTransformProductBrands,
-  useParcelDetailModal,
-} from '../../functions/checkout';
 import * as models from '@models';
 import { ScrollView } from 'react-native-gesture-handler';
+import { totalBarangPrice } from '../../functions/checkout';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 const { height } = Dimensions.get('window');
 
 interface ModalParcelDetail {
-  isOpen: boolean;
+  parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
-  data: models.IInvoiceCheckout | null;
-}
-
-interface ContentListData {
-  name: string;
-  price: number;
-  type: 'normal' | 'green';
+  data: models.CheckoutCartProduct[];
+  sellerName: string;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
-  isOpen,
+  parentRef,
   close,
   data,
+  sellerName,
 }) => {
   /** === HOOK === */
-  const parcelDetailModal = useParcelDetailModal();
+  const deliveryFee = 0;
+  const totalProductsPrice = totalBarangPrice(data);
 
   const productDetail = () => {
     if (data === null) {
@@ -47,238 +41,105 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
 
     return (
       <View style={{ paddingBottom: 16 }}>
-        <SnbText.H4>Produk</SnbText.H4>
-        <SnbDivider style={{ marginVertical: 8 }} />
-        {productList(data.brands)}
+        <SnbText2.Body.Default color={colorV2.textColor.secondary}>
+          {sellerName}
+        </SnbText2.Body.Default>
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
+        </View>
+        {productList(data)}
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
+        </View>
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText.H4 color={color.black80}>Total Order</SnbText.H4>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              Biaya Pengiriman
+            </SnbText2.Paragraph.Default>
           </View>
-          <SnbText.B2 color={color.black80}>
-            {toCurrency(data.totalPriceBeforeTax, {
-              withFraction: false,
-            })}
-          </SnbText.B2>
+          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+            {toCurrency(deliveryFee, { withFraction: false })}
+          </SnbText2.Paragraph.Default>
+        </View>
+        <View style={{ marginVertical: 8 }}>
+          <SnbDivider2 />
+        </View>
+        <View style={CheckoutStyle.modalDetailTotalContainer}>
+          <View style={{ width: '50%' }}>
+            <SnbText2.Headline.Small color={colorV2.textColor.default}>
+              Total
+            </SnbText2.Headline.Small>
+          </View>
+          <SnbText2.Headline.Small color={colorV2.textColor.default}>
+            {totalProductsPrice}
+          </SnbText2.Headline.Small>
         </View>
       </View>
     );
   };
 
-  const productList = (brands: models.BrandCheckout[]) => {
-    const products = handleTransformProductBrands(brands);
+  const productList = (products: models.CheckoutCartProduct[]) => {
     return products.map((product) => (
       <>
         <View style={CheckoutStyle.modalDetailItemContainer}>
           <View style={{ width: '50%' }}>
-            <SnbText.B1>
-              {product.productName} ({product.qty}
-              {product.uom})
-            </SnbText.B1>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              {product.productName}
+            </SnbText2.Paragraph.Default>
           </View>
-          <SnbText.B1>
-            {toCurrency(product.displayPrice * product.qty, {
+          <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+            {' '}
+            {toCurrency(product.priceAfterTax * product.qty, {
               withFraction: false,
             })}
-          </SnbText.B1>
+          </SnbText2.Paragraph.Default>
         </View>
       </>
     ));
   };
-  const discountDetail = () => {
-    if (
-      (data && data.voucherSeller !== null) ||
-      (data && data.promoSellers && data.promoSellers.length > 0)
-    ) {
-      return (
-        <View style={{ paddingBottom: 16 }}>
-          <SnbText.H4>Potongan Harga</SnbText.H4>
-          <SnbDivider style={{ marginVertical: 8 }} />
-          <View style={{ marginBottom: 8 }}>
-            {data.voucherSeller ? (
-              discountVoucherList(data.voucherSeller)
-            ) : (
-              <View />
-            )}
-            {data.promoSellers && data.promoSellers.length > 0 ? (
-              discountPromoList(data.promoSellers)
-            ) : (
-              <View />
-            )}
-          </View>
-          {data.totalPromoSellerAndVoucher !== 0 && (
-            <View style={CheckoutStyle.modalDetailTotalContainer}>
-              <View style={{ width: '50%' }}>
-                <SnbText.H4 color={color.black80}>Total Potongan</SnbText.H4>
-              </View>
-              <SnbText.B2 color={color.black80}>
-                -{' '}
-                {toCurrency(data?.totalPromoSellerAndVoucher as number, {
-                  withFraction: false,
-                })}
-              </SnbText.B2>
-            </View>
-          )}
-        </View>
-      );
-    }
-  };
 
-  const discountVoucherList = (voucherData: models.ReserveDiscountVouchers) => {
-    return (
-      <View style={CheckoutStyle.modalDetailItemContainer}>
-        <View style={{ width: '50%' }}>
-          <SnbText.B3 color={color.green50}>
-            Voucher '{voucherData.name}'
-          </SnbText.B3>
-        </View>
-        <SnbText.B3 color={color.green50}>
-          -{' '}
-          {toCurrency(voucherData.amount, {
-            withFraction: false,
-          })}
-        </SnbText.B3>
-      </View>
-    );
-  };
-
-  const discountPromoList = (
-    promoData: models.ReserveDiscountPromoSellers[],
-  ) => {
-    return promoData.map((detailPromo) => {
-      return detailPromo.benefitType === 'amount' ||
-        detailPromo.benefitType === 'percent'
-        ? contentListData(
-            detailPromo.name,
-            detailPromo.amount as number,
-            'benefit',
-          )
-        : contentListData(
-            `${detailPromo.productName} x${detailPromo.bonusQty}`,
-            0,
-            'benefit',
-          );
-    });
-  };
-
-  const totalDiscountList = (price: number) => {
-    return (
-      <View style={CheckoutStyle.detailItemContainer}>
-        <SnbText.B3 color={color.green50}>{'Total Potongan Harga'}</SnbText.B3>
-        <SnbText.B3 color={color.green50}>
-          {'- '}
-          {toCurrency(price, {
-            withFraction: false,
-          })}
-        </SnbText.B3>
-      </View>
-    );
-  };
-
-  const contentListData = (
-    name: string,
-    price: number,
-    type: 'normal' | 'benefit',
-  ) => {
-    return (
-      <View style={CheckoutStyle.detailItemContainer}>
-        <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
-          {name}
-        </SnbText.B3>
-        <SnbText.B3 color={type === 'normal' ? color.black100 : color.green50}>
-          {type === 'benefit' && price !== 0 ? '- ' : ''}
-          {price !== 0
-            ? toCurrency(price, {
-                withFraction: false,
-              })
-            : 'Free'}
-        </SnbText.B3>
-      </View>
-    );
-  };
-  const total = () => {
-    if (data === null) {
-      return null;
-    }
-    const products = handleTransformProductBrands(data.brands);
-    return (
-      <View>
-        {parcelDetailModal.isDetailOpen ? (
-          <View style={{ marginLeft: 32 }}>
-            {contentListData(
-              `Total Produk (${products.length})`,
-              data.totalPriceBeforeTax,
-              'normal',
-            )}
-            {data.totalPromoSellerAndVoucher !== 0
-              ? totalDiscountList(data.totalPromoSellerAndVoucher as number)
-              : null}
-            {contentListData(
-              `PPN ${data.tax}%`,
-              data.totalPriceAfterTax - data.totalPriceBeforeTax,
-              'normal',
-            )}
-            {data.totalPromoPayment !== 0 && data.totalPromoPayment !== null
-              ? contentListData(
-                  'Promo Pembayaran',
-                  data.totalPromoPayment as number,
-                  'benefit',
-                )
-              : null}
-            {data.totalFee !== 0
-              ? contentListData(
-                  'Layanan Pembayaran',
-                  data.totalFee as number,
-                  'normal',
-                )
-              : null}
-          </View>
-        ) : (
-          <View />
-        )}
-        <TouchableOpacity
-          onPress={() => {
-            parcelDetailModal.toggleDetail();
-          }}
-          style={CheckoutStyle.detailExpandButton}>
-          <View style={{ flexDirection: 'row' }}>
-            <SnbIcon
-              name={
-                parcelDetailModal.isDetailOpen ? 'expand_less' : 'expand_more'
-              }
-              size={24}
-              color={color.black100}
-            />
-            <View style={{ marginLeft: 8 }}>
-              <SnbText.H4>Total</SnbText.H4>
-            </View>
-          </View>
-          <SnbText.H4>
-            {handleSubTotalPrice(data, { withFraction: false })}
-          </SnbText.H4>
-        </TouchableOpacity>
-      </View>
-    );
-  };
   const content = () => {
     return (
-      <View style={{ paddingHorizontal: 16, marginBottom: 16 }}>
+      <View>
         <ScrollView
-          style={{ paddingVertical: 16, maxHeight: height * 0.6 }}
+          style={{ maxHeight: height * 0.6 }}
           showsVerticalScrollIndicator={false}>
           {productDetail()}
-          {discountDetail()}
-          {total()}
         </ScrollView>
       </View>
     );
   };
+
+  /** => title */
+  const title = () => {
+    return (
+      <SnbBottomSheetPart.Title
+        title="Detail Pesanan"
+        titleType="center"
+        swipeIndicator
+      />
+    );
+  };
+  /** => navigation */
+  const navigation = () => {
+    return (
+      <SnbBottomSheetPart.Navigation
+        iconRight1Name="x"
+        onRight1Action={close}
+      />
+    );
+  };
+
   return data !== null ? (
-    <SnbBottomSheet
-      open={isOpen}
+    <SnbBottomSheet2
+      ref={parentRef}
+      name={'checkoutParcelDetailModal'}
+      type={'content'}
+      contentHeight={250}
+      title={title()}
+      snap={true}
       content={content()}
-      title={'Detail Pesanan'}
-      closeAction={close}
-      actionIcon={'close'}
+      navigation={navigation()}
     />
   ) : (
     <View />
@@ -291,8 +152,8 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
  * ================================================================
  * createdBy: Maulana Ghozi (pyramid)
  * createDate: 25112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (valkyrie)
+ * updatedDate: 08032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

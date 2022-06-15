@@ -3,9 +3,12 @@ import { color } from 'react-native-sinbad-ui';
 
 export const CheckoutStyle = StyleSheet.create({
   invoiceGroupListContainer: {
-    padding: 16,
-    marginTop: 8,
+    marginVertical: 8,
+  },
+  invoiceGroupListField: {
+    marginBottom: 8,
     backgroundColor: color.white,
+    padding: 16,
   },
   headerSection: {
     flexDirection: 'row',
@@ -16,15 +19,51 @@ export const CheckoutStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 9,
+    marginTop: 8,
+    borderWidth: 2,
+    borderColor: color.black10,
+    borderRadius: 5,
+  },
+  shipmentTxt: {
+    padding: 5,
+    backgroundColor: color.black10,
+    borderRadius: 5,
+  },
+  productsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  shipmentIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   skuImage: {
     height: 60,
     width: 60,
   },
+  deliveryIcon: {
+    height: 35,
+    width: 35,
+  },
+  productsDescription: {
+    flex: 1,
+    paddingLeft: 15,
+  },
   bottomContentContainer: {
     flexDirection: 'row',
     flex: 1,
     alignItems: 'center',
+  },
+  bottomContainer: {
+    flexDirection: 'row',
+    height: 75,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: color.white,
   },
   addessSection: {
     padding: 16,
@@ -71,6 +110,54 @@ export const CheckoutStyle = StyleSheet.create({
   modalDetailTotalContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  warningTimer: {
+    backgroundColor: color.white,
+  },
+  warningTextContainer: {
+    flexDirection: 'row',
+    margin: 16,
+    padding: 16,
+    backgroundColor: color.yellow10,
+    borderRadius: 5,
+    justifyContent: 'space-around',
+  },
+  showMoreProduct: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tncLabelSection: {
+    padding: 16,
+    alignItems: 'center',
+    backgroundColor: color.white,
+  },
+  contentImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  buttonContainer: {
+    paddingBottom: 16,
+  },
+  contentTitleContainer: {
+    paddingHorizontal: '10%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentMessageContainer: {
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  contentItemContainer: {
+    flex: 1,
+  },
+  buttonHeight: {
+    height: 90,
+  },
+  image: {
+    width: 240,
+    height: 240,
   },
 });
 

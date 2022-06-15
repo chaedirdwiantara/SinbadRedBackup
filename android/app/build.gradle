@@ -26,8 +26,8 @@ android {
         applicationId 'sinbad.app.development'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName '1.0'
+        versionCode 5
+        versionName '0.1.0'
         missingDimensionStrategy 'react-native-camera', 'general', 'mlkit'
         multiDexEnabled true
     }
@@ -91,6 +91,27 @@ dependencies {
     implementation project(':@react-native-firebase_firestore')
     implementation project(':@react-native-firebase_database')
     implementation project(':react-native-push-notification')
+    implementation project(':react-native-linear-gradient')
+    implementation project(':react-native-splash-screen')
+    // DEBUG FLIPPER
+    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+      exclude group:'com.facebook.fbjni'
+    }
+    // Moengage Dependency
+    implementation project(':react-native-moengage')
+    implementation("com.moengage:moe-android-sdk:11.6.01")
+    implementation("androidx.core:core:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.2.0")
+
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+        exclude group:'com.squareup.okhttp3', module:'okhttp'
+    }
+
+    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+        exclude group:'com.facebook.flipper'
+    }
     // CHECK FOR HERMES
     if (enableHermes) {
         def hermesPath = '../../node_modules/hermes-engine/android/';

@@ -1,10 +1,19 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
-import { SnbContainer, SnbStatusBar, SnbToast } from 'react-native-sinbad-ui';
+import {
+  SnbContainer,
+  SnbStatusBar,
+  SnbToast2,
+  SnbText2,
+  spacingV2,
+  FooterButton,
+  colorV2,
+} from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
 import Html from '@core/components/Html';
+import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
 import { ProductDetailMainInfo } from './ProductDetailMainInfo';
@@ -12,14 +21,14 @@ import { ProductDetailMainInfo } from './ProductDetailMainInfo';
 import { PromoSection } from './PromoSection';
 import { ProductDetailSection } from './ProductDetailSection';
 import { ProductDetailSectionItem } from './ProductDetailSectionItem';
-import { ActionButton } from './ActionButton';
+// import { ActionButton } from './ActionButton';
 import { UnavailableSkuFlag } from './UnavailableSkuFlag';
-import { PromoModal } from './PromoModal';
+// import { PromoModal } from './PromoModal';
 import { ProductDetailSkeleton } from './ProductDetailSkeleton';
-import { BundleSection } from './BundleSection';
+// import { BundleSection } from './BundleSection';
 import {
-  RegisterSupplierModal,
-  RejectApprovalModal,
+  // RegisterSupplierModal,
+  // RejectApprovalModal,
   WaitingApprovalModal,
   AddToCartModal,
 } from '@core/components/modal';
@@ -28,58 +37,51 @@ import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
 import { NavigationAction } from '@core/functions/navigation';
 import { contexts } from '@contexts';
-import { usePotentialPromoProductAction } from '@screen/promo/functions';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
+// import { usePotentialPromoProductAction } from '@screen/promo/functions';
 import { goToBundle, goBack } from '../../functions';
 /** === IMPORT HOOKS === */
 import {
   useCheckDataSupplier,
-  useSupplierSegmentationDetailAction,
-  useRegisterSupplierActions,
+  // useSupplierSegmentationDetailAction,
+  // useRegisterSupplierActions,
 } from '@core/functions/supplier';
 import {
   useProductDetailAction,
-  useAddToCartDetailActions,
+  // useAddToCartDetailActions,
   useStockValidationDetailAction,
   useOrderQuantity,
 } from '@screen/product/functions';
+import { useAddToCartAction } from '@screen/oms/functions/cart/cart-hook.function';
 import { useOrderModalVisibility } from '@core/functions/product';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import { useProductContext } from 'src/data/contexts/product';
-import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+// import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 import { useDataAuth } from '@core/redux/Data';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
-/** === DUMMY === */
-// const supplierDummy = {
-//   name: 'Depo Berkah Abadi',
-//   urbanCity: 'Jakarta Barat',
-//   logoUrl: '',
-// };
+import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
+
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
+  // bentukan data productWhId
+  // productId_warehouseOriginId
   const {
-    params: { id: productId },
+    params: { id: productWhId },
   } = NavigationAction.useGetNavParams();
-  const [promoModalVisible, setPromoModalVisible] = useState(false);
   const [isAvailable, setIsAvailable] = useState(true);
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const [loadingButton, setLoadingButton] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(true);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
-  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
-    useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
 
   /** => actions */
-  const addToCartActions = useAddToCartDetailActions();
   const stockValidationActions = useStockValidationDetailAction();
   const productDetailActions = useProductDetailAction();
-  const supplierSegmentationAction = useSupplierSegmentationDetailAction();
-  const sendDataToSupplierActions = useRegisterSupplierActions();
-  const cartTotalProductActions = useCartTotalProductActions();
-  const { dataTotalProductCart } = useCartTotalProductActions();
+  const addToCartAction = useAddToCartAction();
+  const totalCartActions = useGetTotalCartAction();
   const { me } = useDataAuth();
 
   /** => context */
@@ -94,22 +96,10 @@ const ProductDetailView: FC = () => {
     },
     dispatchProduct,
   } = useProductContext();
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const { orderQty, onChangeQty } = useOrderQuantity({
     minQty: dataProduct?.minQty ?? 1,
   });
-  const {
-    stateShopingCart: {
-      add: { data: addToCartData, error: addToCartError },
-    },
-    dispatchShopingCart,
-  } = useShopingCartContext();
-  const {
-    stateSupplier: {
-      detail: { data: dataSegmentation, error: errorSegmentation },
-      register: { data: sendToSupplierData, error: sendToSupplierError },
-    },
-    dispatchSupplier,
-  } = useSupplierContext();
   const {
     stateStock: {
       detail: { data: dataStock, error: errorStock },
@@ -117,59 +107,40 @@ const ProductDetailView: FC = () => {
     dispatchStock,
   } = useStockContext();
 
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, true);
+
   /** => check data supplier and sinbad status */
   const {
     checkUser,
-    modalRejectApproval,
+    // modalRejectApproval,
     modalWaitingApproval,
-    modalRegisterSupplier,
+    // modalRegisterSupplier,
     onFunctionActions,
   } = useCheckDataSupplier(setOrderModalVisible);
 
   /** => action from button order */
-  const handleOrderPress = () => {
-    if (me.data !== null && dataSegmentation !== null) {
-      if (dataSegmentation.dataSuppliers !== null) {
-        if (
-          me.data.approvalStatus === 'verified' &&
-          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-        ) {
-          setIsAvailable(false);
-        } else {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-          });
-        }
-      } else {
-        // checkUser({
-        //   sinbadStatus: me.data.approvalStatus,
-        //   supplierStatus: null,
-        // });
-        setIsAvailable(false);
+  const handleOrderPress = useCallback(() => {
+    if (me.data !== null) {
+      if (me.data.approvalStatus === 'verified') {
+        checkUser({
+          sinbadStatus: me.data.approvalStatus,
+          supplierStatus: 'verified',
+        });
       }
     } else {
       setModalNeedToLogin(true);
     }
-  };
-
-  /** => action send data to supplier */
-  const onSendDataSupplier = () => {
-    if (dataProduct !== null) {
-      sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: dataProduct.sellerId,
-      });
-    }
-  };
+  }, [me.data]);
 
   /** => action close modal add to cart */
   const handleCloseModal = () => {
-    addToCartActions.reset(dispatchShopingCart);
-    sendDataToSupplierActions.reset(dispatchSupplier);
+    // addToCartActions.reset(dispatchShopingCart);
+    // sendDataToSupplierActions.reset(dispatchSupplier);
     setLoadingButton(false);
     setOrderModalVisible(false);
     setModalErrorAddCart(false);
-    setModalErrorSendDataSupplier(false);
+    // setModalErrorSendDataSupplier(false);
     setModalErrorProductDetail(false);
     onFunctionActions({ type: 'close' });
   };
@@ -184,42 +155,56 @@ const ProductDetailView: FC = () => {
   };
 
   const onSubmitAddToCart = () => {
-    if (
-      dataProduct === null ||
-      dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null ||
-      dataStock === null
-    ) {
+    if (dataProduct === null || dataStock === null) {
       /** => DO SOMETHING */
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
       return;
     }
 
+    /** function to determine bulk price calculation */
+    let lastUsedPrice = 0,
+      isLastPriceUsedRules = false;
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
+    } else {
+      isLastPriceUsedRules = false;
+      lastUsedPrice = dataProduct.priceAfterTax;
+    }
+
+    const priceRules = dataProduct.bulkPrices.map((item) => {
+      return {
+        minQty: item.qty,
+        priceAfterTax: item.priceAfterTax,
+        priceBeforeTax: item.priceBeforeTax,
+        taxPrice: item.taxPrice,
+      };
+    });
+
     const params: models.AddToCartPayload = {
-      isActiveStore: dataSegmentation.isActiveStore,
-      selected: true,
-      stock: dataStock.stock,
       productId: dataProduct.id,
       productName: dataProduct.name,
-      brandId: dataProduct.brandId,
-      urlImages: dataProduct?.images[0]?.url ?? '',
+      categoryId: dataProduct.categoryId,
+      productImageUrl: dataProduct?.images[0]?.url ?? '',
       minQty: dataProduct.minQty,
       qty: orderQty,
-      displayPrice: dataProduct.originalPrice,
-      priceBeforeTax: dataProduct.currentPrice ?? dataProduct.originalPrice,
-      priceAfterTax:
-        dataProduct.currentPriceAfterTax ?? dataProduct.originalPrice,
-      uom: dataProduct.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-      sellerId: Number(dataProduct.sellerId),
-      channelId: dataSegmentation.dataSuppliers.channelId,
-      groupId: dataSegmentation.dataSuppliers.groupId,
-      typeId: dataSegmentation.dataSuppliers.typeId,
-      clusterId: dataSegmentation.dataSuppliers.clusterId,
       multipleQty: dataProduct.multipleQty,
+      qtyPerBox: dataProduct.packagedQty,
+      uomLabel: dataProduct.unit,
+      warehouseId: Number(dataProduct.warehouseOriginId),
+      sellerId: Number(dataProduct.sellerId),
+      sellerName: dataProduct.productSeller.name,
+      taxPercentage: dataProduct.productTax.amount,
+      lastUsedPrice,
+      isLastPriceUsedRules,
+      priceAfterTax: dataProduct.priceAfterTax,
+      priceBeforeTax: dataProduct.priceBeforeTax,
+      taxPrice: dataProduct.taxPrice,
+      priceRules,
+      selected: true,
     };
 
-    addToCartActions.fetch(dispatchShopingCart, params);
+    addToCartAction.fetch(dispatchCart, params);
   };
 
   /**
@@ -228,10 +213,7 @@ const ProductDetailView: FC = () => {
    */
   const {
     statePromo: { potentialPromoProduct: potentialPromoProduct },
-    dispatchPromo,
   } = React.useContext(contexts.PromoContext);
-  const potentialPromoProductList = potentialPromoProduct.detail;
-  const potentialPromoProductAction = usePotentialPromoProductAction();
 
   /** === DERIVED === */
   const defaultProperties = {
@@ -260,25 +242,31 @@ const ProductDetailView: FC = () => {
     setLoadingButton(true);
     productDetailActions.reset(dispatchProduct);
     stockValidationActions.reset(dispatchStock);
-    supplierSegmentationAction.reset(dispatchSupplier);
-    productDetailActions.fetch(dispatchProduct, productId);
+    // supplierSegmentationAction.reset(dispatchSupplier);
+    productDetailActions.fetch(dispatchProduct, productWhId);
+    if (dataProduct && me.data) {
+      stockValidationActions.fetch(dispatchStock, {
+        warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
+        productId: dataProduct.id,
+      });
+    }
   };
+
+  const onOpenWhatsApp = useCallback(() => {
+    const message = `Halo Sinbad, saya ingin bertanya tentang produk ${dataProduct?.name} (${dataProduct?.code}) ini dong`;
+    openWhatsApp('+6282260106010', message);
+  }, [dataProduct?.name, dataProduct?.code]);
+
   /** === EFFECT LISTENER === */
   /** => Did Mounted */
   useEffect(() => {
     setLoadingButton(true);
-    productDetailActions.fetch(dispatchProduct, productId);
-  }, [productId]);
+    productDetailActions.fetch(dispatchProduct, productWhId);
+  }, [productWhId]);
 
   /** => Listen data product success */
   useEffect(() => {
     if (dataProduct !== null && me.data !== null) {
-      /** => supplier segmentation effect */
-      supplierSegmentationAction.fetch(dispatchSupplier, dataProduct.sellerId);
-      /** => potential promo product effect */
-      potentialPromoProductAction.reset(dispatchPromo);
-      potentialPromoProductAction.detail(dispatchPromo, dataProduct.id);
-      /** => on change initial order qty with min qty */
       onChangeQty(dataProduct.minQty);
     } else if (me.data === null) {
       setTimeout(() => {
@@ -300,66 +288,42 @@ const ProductDetailView: FC = () => {
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (dataSegmentation !== null && dataProduct !== null) {
-      if (dataSegmentation.dataSuppliers) {
-        stockValidationActions.fetch(dispatchStock, {
-          warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
-          productId: dataProduct.id,
-        });
-      } else {
-        if (me.data) {
-          // checkUser({
-          //   sinbadStatus: me.data.approvalStatus,
-          //   supplierStatus: null,
-          // });
-          setTimeout(() => {
-            setLoadingButton(false);
-          }, 1500);
-          setIsAvailable(false);
-        } else {
-          stockValidationActions.fetch(dispatchStock, {
-            warehouseId: null,
-            productId: dataProduct.id,
-          });
-        }
-      }
-    }
-  }, [dataSegmentation, dataProduct]);
+    if (dataProduct !== null) {
+      if (!me.data) {
+        // checkUser({
+        //   sinbadStatus: me.data.approvalStatus,
+        //   supplierStatus: null,
+        // });
 
-  /** => Listen error segmentation and product detail to fetch validation stock */
-  useEffect(() => {
-    if (errorSegmentation !== null && dataProduct !== null) {
-      if (me.data) {
+        setTimeout(() => {
+          setLoadingButton(false);
+        }, 1500);
         setIsAvailable(false);
       } else {
         stockValidationActions.fetch(dispatchStock, {
-          warehouseId: null,
+          warehouseId: Number(dataProduct.warehouseOriginId) ?? null,
           productId: dataProduct.id,
         });
+        setIsAvailable(true);
       }
     }
-  }, [errorSegmentation, dataProduct]);
+  }, [dataProduct]);
+
+  /** => Listen error segmentation and product detail to fetch validation stock */
+  useEffect(() => {
+    if (dataProduct !== null) {
+      if (!me.data) {
+        setIsAvailable(true);
+      }
+    }
+  }, [dataProduct, me]);
 
   /** Listen success get stock */
   useEffect(() => {
     if (dataStock !== null) {
-      if (
-        me &&
-        me.data &&
-        me.data.approvalStatus === 'verified' &&
-        dataSegmentation &&
-        dataSegmentation.dataSuppliers &&
-        dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-      ) {
-        setIsAvailable(false);
-        setTimeout(() => {
-          setLoadingButton(false);
-        }, 1500);
-      } else {
-        setTimeout(() => {
-          setLoadingButton(false);
-        }, 1500);
-      }
+      setTimeout(() => {
+        setLoadingButton(false);
+      }, 1500);
     }
   }, [dataStock]);
 
@@ -377,59 +341,34 @@ const ProductDetailView: FC = () => {
     }
   }, [errorStock && dataProduct]);
 
-  /** => Do something when success send data to supplier */
+  // /** => Do something when success add to cart */
   useEffect(() => {
-    if (sendToSupplierData !== null) {
-      if (dataProduct) {
-        supplierSegmentationAction.fetch(
-          dispatchSupplier,
-          dataProduct.sellerId,
-        );
-      }
-      onFunctionActions({ type: 'close' });
-      sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast.show('Berhasil kirim data ke supplier', 2500, {
-        position: 'top',
-        positionValue: StatusBar.currentHeight,
-      });
-    }
-  }, [sendToSupplierData]);
-
-  /** => Do something when error send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierError !== null) {
-      setIsAvailable(false);
-      setModalErrorSendDataSupplier(true);
-    }
-  }, [sendToSupplierError]);
-
-  /** => Do something when success add to cart */
-  useEffect(() => {
-    if (addToCartData !== null) {
+    if (stateCart.create.data !== null) {
       handleCloseModal();
-      cartTotalProductActions.fetch();
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+      totalCartActions.fetch(dispatchCart);
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
     }
-  }, [addToCartData]);
+  }, [stateCart.create.data]);
 
-  /** => Do something when error add to cart */
+  // /** => Do something when error add to cart */
   useEffect(() => {
-    if (addToCartError !== null) {
-      setModalErrorAddCart(true);
+    if (stateCart.create.error !== null) {
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorAddCart(true), 500);
     }
-  }, [addToCartError]);
+  }, [stateCart.create.error, setOrderModalVisible]);
 
   /** => Did Unmount */
   useEffect(() => {
     return () => {
       setModalErrorProductDetail(false);
       productDetailActions.reset(dispatchProduct);
-      supplierSegmentationAction.reset(dispatchSupplier);
+      // supplierSegmentationAction.reset(dispatchSupplier);
       stockValidationActions.reset(dispatchStock);
-      addToCartActions.reset(dispatchShopingCart);
+      addToCartAction.reset(dispatchCart);
     };
   }, []);
 
@@ -439,7 +378,9 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+        <ProductDetailHeader
+          cartBadge={stateCart.total.data?.totalProducts ?? 0}
+        />
         <ProductDetailSkeleton />
       </SnbContainer>
     );
@@ -449,7 +390,9 @@ const ProductDetailView: FC = () => {
     return (
       <SnbContainer color="white">
         <SnbStatusBar type="transparent1" />
-        <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+        <ProductDetailHeader
+          cartBadge={stateCart.total.data?.totalProducts ?? 0}
+        />
         <ScrollView
           contentContainerStyle={{ flex: 1 }}
           refreshControl={
@@ -470,7 +413,9 @@ const ProductDetailView: FC = () => {
   return (
     <SnbContainer color="white">
       <SnbStatusBar type="transparent1" />
-      <ProductDetailHeader cartBadge={dataTotalProductCart.totalProduct} />
+      <ProductDetailHeader
+        cartBadge={stateCart.total.data?.totalProducts ?? 0}
+      />
       {/* Content */}
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -483,34 +428,23 @@ const ProductDetailView: FC = () => {
           <ProductDetailCarousel images={dataProduct?.images!} />
           <ProductDetailMainInfo
             name={dataProduct?.name!}
-            originalPrice={dataProduct?.originalPrice!}
-            currentPrice={dataProduct?.currentPrice!}
-            minQty={dataProduct?.minQty!}
+            priceAfterTax={dataProduct?.priceAfterTax!}
+            qtySoldLabel={dataProduct?.qtySoldLabel!}
+            loading={loadingButton}
             unit={dataProduct?.unit!}
             isExclusive={dataProduct?.isExclusive!}
             stock={defaultProperties.stock}
+            showStock={me.data !== null}
+            hasBulkPrice={dataProduct?.hasBulkPrice!}
             hasPromo={false} // When promoList.length > 0 set to true, for now it'll be set to false (waiting for promo integration)
           />
-          {/* <ProductDetailSupplierInfo // Hide temporarily
-            logo={supplierDummy.logoUrl}
-            name={supplierDummy.name}
-            urbanCity={supplierDummy.urbanCity}
-          /> */}
-          {potentialPromoProductList.data !== null &&
-            potentialPromoProductList.data.flexiCombo.length > 0 && (
-              <PromoSection
-                description={
-                  potentialPromoProductList.data.flexiCombo[0].shortDescription
-                }
-                onPress={() => setPromoModalVisible(true)}
-              />
-            )}
-          {potentialPromoProductList.data !== null &&
-            potentialPromoProductList.data.crossSelling.length > 0 && (
-              <BundleSection
-                bundleList={potentialPromoProductList.data.crossSelling}
-              />
-            )}
+          {dataProduct?.hasBulkPrice ? (
+            <View style={{ paddingBottom: spacingV2.spacing.lg }}>
+              <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+            </View>
+          ) : (
+            <View />
+          )}
           <ProductDetailSection title="Informasi Produk">
             <ProductDetailSectionItem
               name="Minimal Pembelian"
@@ -518,7 +452,7 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Jumlah per-Dus"
-              value={`${dataProduct?.packagedQty} ${dataProduct?.unit}`}
+              value={`${dataProduct?.packagedQty} Pcs`}
             />
             <ProductDetailSectionItem
               name="Berat"
@@ -526,77 +460,49 @@ const ProductDetailView: FC = () => {
               bottomSpaces={0}
             />
           </ProductDetailSection>
-          <ProductDetailSection title="Detail Produk">
-            <Html value={dataProduct?.detail ?? '-'} fontSize={12} />
+          <ProductDetailSection title="Nama Supplier" separator={false}>
+            <ProductDetailSectionItem
+              name={dataProduct?.productSeller.name ?? '-'}
+              value=""
+            />
           </ProductDetailSection>
+          <ProductDetailSection title="Detail Produk">
+            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              {dataProduct?.detail ?? '-'}
+            </SnbText2.Paragraph.Small>
+          </ProductDetailSection>
+          {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
             <Html value={dataProduct?.description ?? '-'} fontSize={12} />
           </ProductDetailSection>
           <View style={{ height: 10 }} />
         </ScrollView>
       </View>
-      {(dataProduct !== null || errorProduct !== null) &&
-      (dataStock !== null || errorStock !== null) ? (
-        <React.Fragment>
-          {isAvailable ? (
-            <ActionButton
-              loading={loadingButton}
-              title={getActionButtonTitle()}
-              disabled={
-                me.data !== null &&
-                defaultProperties.stock < (dataProduct?.minQty ?? 1)
-              }
-              onPress={() => {
-                if (defaultProperties.isBundle) {
-                  goToBundle(productId);
-                } else {
-                  handleOrderPress();
-                }
-              }}
-            />
-          ) : (
-            <UnavailableSkuFlag />
-          )}
-        </React.Fragment>
-      ) : isAvailable ? (
-        <ActionButton
-          loading={loadingButton}
-          title={'Tambah ke Keranjang'}
-          disabled={loadingButton}
-          onPress={() => {
-            handleOrderPress();
-          }}
-        />
-      ) : (
-        <UnavailableSkuFlag />
-      )}
-      <PromoModal
-        visible={promoModalVisible}
-        onClose={() => setPromoModalVisible(false)}
-        promoList={potentialPromoProductList.data?.flexiCombo || []}
-      />
-      {/* Register Supplier Modal */}
-      <RegisterSupplierModal
-        visible={modalRegisterSupplier}
-        onSubmit={() =>
-          onFunctionActions({
-            type: 'sendDataToSupplier',
-            onSendDataSupplier: onSendDataSupplier,
-          })
-        }
-        onClose={handleCloseModal}
-      />
+      <React.Fragment>
+        {isAvailable ? (
+          <FooterButton.Dual
+            title1={getActionButtonTitle()}
+            title2=""
+            shadow={false}
+            loading={loadingButton}
+            loadingButton={loadingButton}
+            disabled={
+              me.data !== null &&
+              defaultProperties.stock < (dataProduct?.minQty ?? 1)
+            }
+            button1Press={handleOrderPress}
+            button2Press={onOpenWhatsApp}
+            iconButton="chat"
+          />
+        ) : (
+          <UnavailableSkuFlag />
+        )}
+      </React.Fragment>
       {/* Waiting Approval Modal */}
       <WaitingApprovalModal
         visible={modalWaitingApproval}
         onSubmit={handleCloseModal}
         onClose={handleCloseModal}
-      />
-      {/* Reject Approval Modal */}
-      <RejectApprovalModal
-        visible={modalRejectApproval}
-        onClose={handleCloseModal}
-        isCallCS={true}
       />
       {/* Add to Cart Modal */}
       <AddToCartModal
@@ -609,26 +515,20 @@ const ProductDetailView: FC = () => {
           dataProduct === null ||
           dataStock === null ||
           orderQty > dataStock.stock ||
-          orderQty < dataProduct?.minQty
+          orderQty < dataProduct?.minQty ||
+          dataProduct.minQty > dataStock.stock
         }
         isFromProductDetail={true}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
         open={modalErrorAddCart}
-        error={addToCartError}
+        error={stateCart.create.error}
         closeAction={handleCloseModal}
         retryAction={() => {
           setModalErrorAddCart(false);
           onSubmitAddToCart();
         }}
-      />
-      {/* Modal Bottom Sheet Error Send data to supplier */}
-      <BottomSheetError
-        open={modalErrorSendDataSupplier}
-        error={sendToSupplierError}
-        closeAction={handleCloseModal}
-        retryAction={onSendDataSupplier}
       />
       {/* Modal Bottom Sheet Error product detail */}
       <BottomSheetError
@@ -643,6 +543,7 @@ const ProductDetailView: FC = () => {
         visible={modalNeedToLogin}
         onClose={() => setModalNeedToLogin(false)}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };

@@ -1,6 +1,6 @@
 import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { contexts } from '@contexts';
 
 interface ToCurrencyOptions {
@@ -8,79 +8,7 @@ interface ToCurrencyOptions {
   withFraction?: boolean;
 }
 
-/** => calculate total price */
-const handleTotalPrice = (
-  data: models.IInvoiceCheckout[],
-  options?: ToCurrencyOptions,
-) => {
-  let total = 0;
-
-  data.forEach((invoice) => {
-    let subTotal = 0;
-    if (invoice.totalPriceBeforeTax) {
-      subTotal += invoice.totalPriceBeforeTax;
-    }
-
-    if (invoice.totalPriceAfterTax && invoice.totalPriceBeforeTax) {
-      subTotal += invoice.totalPriceAfterTax - invoice.totalPriceBeforeTax;
-    }
-
-    if (invoice.totalFee) {
-      subTotal += invoice.totalFee;
-    }
-
-    if (invoice.totalPromoSellerAndVoucher) {
-      subTotal -= invoice.totalPromoSellerAndVoucher;
-    }
-
-    if (invoice.totalPromoPayment) {
-      subTotal -= invoice.totalPromoPayment;
-    }
-
-    total += subTotal;
-  });
-
-  return toCurrency(total, options);
-};
-
-/** => calculate sub total price */
-const handleSubTotalPrice = (
-  data: models.IInvoiceCheckout,
-  options?: ToCurrencyOptions,
-) => {
-  let total = 0;
-  if (data.totalPriceBeforeTax) {
-    total += data.totalPriceBeforeTax;
-  }
-
-  if (data.totalPriceAfterTax && data.totalPriceBeforeTax) {
-    total += data.totalPriceAfterTax - data.totalPriceBeforeTax;
-  }
-
-  if (data.totalFee) {
-    total += data.totalFee;
-  }
-
-  if (data.totalPromoSellerAndVoucher) {
-    total -= data.totalPromoSellerAndVoucher;
-  }
-
-  if (data.totalPromoPayment) {
-    total -= data.totalPromoPayment;
-  }
-
-  return toCurrency(total, options);
-};
-
-const handleTransformProductBrands = (data: models.BrandCheckout[]) => {
-  let products: models.ProductCheckout[] = [];
-  data.map((brands: models.BrandCheckout) => {
-    products = [...products, ...brands.products];
-  });
-  return products;
-};
-
-const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
+const useHandleDiscountInvoiceGroups = (invoiceGroupId: string) => {
   const { statePromo } = useContext(contexts.PromoContext);
 
   const reservePromo =
@@ -107,47 +35,66 @@ const handleDiscountInvoiceGroups = (invoiceGroupId: string) => {
   return { vouchersSeller, promosSeller };
 };
 
-const useModalParcelDetail = () => {
-  const [isOpen, setOpen] = useState(false);
-  const [data, setData] = useState<models.IInvoiceCheckout | null>(null);
-
-  return {
-    isOpen,
-    data,
-    setData: (value: models.IInvoiceCheckout | null) => {
-      setData(value);
-      if (value !== null) {
-        setOpen(true);
-      } else {
-        setOpen(false);
-      }
-    },
-  };
+const totalBarangPrice = (products: models.CheckoutCartProduct[]) => {
+  let total = 0;
+  for (let i = 0; i < products.length; i++) {
+    total = total + products[i].qty * products[i].priceAfterTax;
+  }
+  return toCurrency(total, { withFraction: false });
 };
 
-const useModalProductList = () => {
-  const [isOpen, setOpen] = useState(false);
-  const [data, setData] = useState<models.ProductCheckout[] | null>(null);
+const subTotalQty = (products: models.CheckoutCartProduct[]) => {
+  let total = 0;
+  for (let i = 0; i < products.length; i++) {
+    total = total + products[i].qty;
+  }
+  return total;
+};
 
-  return {
-    isOpen,
-    data,
-    setData: (value: models.ProductCheckout[] | null) => {
-      setData(value);
-      if (value !== null) {
-        setOpen(true);
-      } else {
-        setOpen(false);
+const totalQty = (sellers: models.CheckoutCartResponse[]) => {
+  let total = 0;
+  if (sellers) {
+    for (let i = 0; i < sellers.length; i++) {
+      for (let a = 0; a < sellers[i].products.length; a++) {
+        total = total + sellers[i].products[a].qty;
       }
-    },
-  };
+    }
+  }
+
+  return total;
+};
+
+const totalPayment = (sellers: models.CheckoutCartResponse[]) => {
+  let total = 0;
+  for (let i = 0; i < sellers.length; i++) {
+    for (let a = 0; a < sellers[i].products.length; a++) {
+      total =
+        total +
+        sellers[i].products[a].qty * sellers[i].products[a].priceAfterTax;
+    }
+  }
+  return total;
+};
+
+const totalPaymentWithoutCurrency = (
+  sellers: models.CheckoutCartResponse[],
+) => {
+  let total = 0;
+  for (let i = 0; i < sellers.length; i++) {
+    for (let a = 0; a < sellers[i].products.length; a++) {
+      total =
+        total +
+        sellers[i].products[a].qty * sellers[i].products[a].priceAfterTax;
+    }
+  }
+  return total;
 };
 
 export {
-  handleTotalPrice,
-  handleSubTotalPrice,
-  handleTransformProductBrands,
-  handleDiscountInvoiceGroups,
-  useModalParcelDetail,
-  useModalProductList,
+  useHandleDiscountInvoiceGroups,
+  totalBarangPrice,
+  subTotalQty,
+  totalQty,
+  totalPayment,
+  totalPaymentWithoutCurrency,
 };

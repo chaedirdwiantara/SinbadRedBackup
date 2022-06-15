@@ -1,22 +1,22 @@
 import {
   OmsShoppingCartView,
-  OmsVerificationOrderView,
   OmsCheckoutView,
-  OmsCheckoutSuccessView,
+  OmsThankYouPageView,
+  OmsPaymentMethod,
 } from '@screen/oms/views';
 
 const OmsNav = {
   OmsShoppingCartView: {
     component: OmsShoppingCartView,
   },
-  OmsVerificationOrderView: {
-    component: OmsVerificationOrderView,
-  },
   OmsCheckoutView: {
     component: OmsCheckoutView,
   },
-  OmsCheckoutSuccessView: {
-    component: OmsCheckoutSuccessView,
+  OmsThankYouPageView: {
+    component: OmsThankYouPageView,
+  },
+  OmsPaymentMethod: {
+    component: OmsPaymentMethod,
   },
 };
 

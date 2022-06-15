@@ -1,97 +1,64 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { SnbText, color, SnbButton } from 'react-native-sinbad-ui';
+import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
+import { useUpdateCartAction } from '../../functions';
 import {
-  usePaymentAction,
-  handleTotalPrice,
-  useCheckoutMaster,
-  useExpiredTime,
-} from '@screen/oms/functions';
+  totalPayment,
+  totalPaymentWithoutCurrency,
+  useCheckoutAction,
+} from '../../functions/checkout';
 import { contexts } from '@contexts';
+import ModalValidationLimit from './validation-limit-modal';
+import { goToShoppingCart } from '@core/functions/product';
 /** === TYPE === */
 import * as models from '@models';
 
 interface CheckoutBottomViewProps {
-  data: models.IInvoiceCheckout[];
-  openTCModal: () => void;
-  openErrorWarning: () => void;
-  closeErrorWarning: () => void;
-  checkExpiredTime: any;
+  data: models.CheckoutResponse;
+  goToPaymentMethod: () => void;
 }
 /** === COMPONENT === */
 export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
   data,
-  openErrorWarning,
-  closeErrorWarning,
-  checkExpiredTime,
+  goToPaymentMethod,
 }) => {
-  /** === HOOK === */
-  const paymentAction = usePaymentAction();
-  const { checkoutMaster } = useCheckoutMaster();
-  const expiredTime = useExpiredTime();
-  const { dispatchPayment, statePayment } = React.useContext(
-    contexts.PaymentContext,
-  );
-  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const loadingTCCreate = statePayment.paymentTCCreate?.loading;
-  const loadingTCDetail = statePayment.paymentTCDetail?.loading;
-  const loadingCreateOrders = stateCheckout.create?.loading;
+  const { dispatchCart } = React.useContext(contexts.CartContext);
+  const { dispatchCheckout } = React.useContext(contexts.CheckoutContext);
+  const totalPaymentFull = totalPayment(data.sellers);
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data.sellers);
+  const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
 
-  /** => main */
-  const dataPostTC = {
-    data: {
-      orderParcels: data.map((invoiceGroup) => {
-        return {
-          invoiceGroupId: invoiceGroup.invoiceGroupId,
-          paymentTypeId: invoiceGroup.paymentType?.id ?? null,
-          paymentChannelId: invoiceGroup.paymentChannel?.id ?? null,
-        };
-      }),
-    },
+  const handleBackToCart = () => {
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    refValidationLimitModal.current?.close();
+    goToShoppingCart();
   };
+
+  // const dataToPaymentMethod = { totalPaymentNumber, expiredTime };
 
   const pressButton = () => {
-    const selectedInvoiceChannel = statePayment.invoiceChannelList.data;
-    const totalCartInvoices = checkoutMaster.invoices;
-    if (selectedInvoiceChannel.length === totalCartInvoices.length) {
-      if (!checkExpiredTime()) {
-        paymentAction.tCCreate(dispatchPayment, dataPostTC);
-      } else {
-        expiredTime.setOpen(true);
-      }
-    } else {
-      openErrorWarning();
-      setTimeout(() => {
-        closeErrorWarning();
-      }, 2000);
-    }
+    refValidationLimitModal.current?.open();
   };
 
-  const content = () => {
-    return (
-      <View style={CheckoutStyle.bottomContentContainer}>
-        <SnbText.H4 color={color.black40}>Total: </SnbText.H4>
-        <SnbText.H4 color={color.red50}>
-          {handleTotalPrice(data, {
-            withFraction: false,
-          })}
-        </SnbText.H4>
-      </View>
-    );
-  };
+  /** => MODAL REF */
+  const refValidationLimitModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   return (
-    <View style={{ height: 75 }}>
-      <SnbButton.Content
-        type={'primary'}
-        onPress={pressButton}
-        content={content()}
-        title={'Buat Pesanan'}
-        loading={loadingTCCreate || loadingTCDetail || loadingCreateOrders}
+    <React.Fragment>
+      <FooterButton.Order
+        titleButton="Pilih Pembayaran"
+        value={totalPaymentFull}
+        buttonPress={
+          totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
+        }
       />
-    </View>
+      <ModalValidationLimit
+        parentRef={refValidationLimitModal}
+        close={handleBackToCart}
+      />
+    </React.Fragment>
   );
 };
 

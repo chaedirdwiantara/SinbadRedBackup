@@ -78,3 +78,44 @@ export interface ListSuccessV2Props<T> {
   meta: PaginationV2;
   data: T;
 }
+/**
+ * ==============================
+ * VERSION 3
+ * ==============================
+ */
+/** === FETCH ITEM === */
+export interface ListItemV3Props<T> {
+  loading: boolean;
+  loadMore: boolean;
+  refresh: boolean;
+  page: number;
+  perPage: number;
+  totalPage: number;
+  data: T;
+  error: ErrorProps | null;
+}
+/** === FETCH DATA === */
+export interface ListV3Props<T> {
+  list: ListItemV3Props<T>;
+}
+/** === THIS FOR PROCESS FETCH DATA === */
+export interface ListProcessDefaultV3Props {
+  loading: boolean;
+  page: number;
+  sort?: 'asc' | 'desc';
+  sortBy?: string;
+  keyword?: string;
+}
+
+export type ListProcessV3Props<T = object> = ListProcessDefaultV3Props & T;
+/** === THIS FOR PAGINATION === */
+export interface PaginationV3 {
+  page: number;
+  perPage: number;
+  totalPage: number;
+}
+/** === THIS FOR SUCCESS FETCH DATA === */
+export interface ListSuccessV3Props<T> {
+  meta: PaginationV3;
+  data: T;
+}

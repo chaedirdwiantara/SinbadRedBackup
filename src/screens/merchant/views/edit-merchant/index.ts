@@ -5,6 +5,7 @@ import MerchantOtpView from './merchant-edit-otp.view';
 import TakeProfilePictureView from './take-profile-picture.view';
 import MerchantEditAddressView from './merchant-edit-address.view';
 import MerchantEditPhotoView from './merchant-edit-photo.view';
+import UpdatePhotoKTPView from './update-photo-ktp.view';
 /** === IMPORT ALL MODULE'S FUNCTION HERE === */
 /** === IMPORT ALL MODULE'S STYLE HERE === */
 /** === IMPORT ALL MODULE'S TEST HERE === */
@@ -16,6 +17,7 @@ export {
   TakeProfilePictureView,
   MerchantEditAddressView,
   MerchantEditPhotoView,
+  UpdatePhotoKTPView,
 };
 /**
  * ================================================================

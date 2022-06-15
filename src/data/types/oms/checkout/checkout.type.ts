@@ -1,12 +1,12 @@
-/** => Get Checkout */
-export const GET_CHECKOUT_PROCESS = 'GetCheckoutProcess';
-export const GET_CHECKOUT_SUCCESS = 'GetCheckoutSuccess';
-export const GET_CHECKOUT_FAILED = 'GetCheckoutFailed';
-export const GET_CHECKOUT_REFRESH = 'GetCheckoutRefresh';
-export const GET_CHECKOUT_RESET = 'GetCheckoutReset';
+/** => CHECKOUT CART */
+export const CHECKOUT_PROCESS = 'CheckoutProcess';
+export const CHECKOUT_SUCCESS = 'CheckoutSuccess';
+export const CHECKOUT_FAILED = 'CheckoutFailed';
+export const CHECKOUT_RESET = 'CheckoutReset';
 
-/** => Create Order */
-export const CREATE_ORDER_PROCESS = 'CreateOrderProcess';
-export const CREATE_ORDER_SUCCESS = 'CreateOrderSuccess';
-export const CREATE_ORDER_FAILED = 'CreateOrderFailed';
-export const CREATE_ORDER_RESET = 'CreateOrderReset';
+/** => CHECKOUT TNC */
+export const CHECKOUT_TNC_PROCESS = 'CheckoutTncProcess';
+export const CHECKOUT_TNC_SUCCESS = 'CheckoutTncSuccess';
+export const CHECKOUT_TNC_FAILED = 'CheckoutTncFailed';
+export const CHECKOUT_TNC_RESET = 'CheckoutTncReset';
+export const CHECKOUT_TNC_LOADING = 'CheckoutTncLoading';

@@ -1,5 +1,4 @@
 import { useContext } from 'react';
-
 import { CheckoutContext } from './checkout.context';
 
 export const useCheckoutContext = () => {
@@ -7,7 +6,7 @@ export const useCheckoutContext = () => {
 
   if (context === undefined) {
     throw new Error(
-      'useCheckoutContext was used outside of ShopingCartProvider',
+      'useCheckoutContext was used outside of CheckoutProvider',
     );
   }
 

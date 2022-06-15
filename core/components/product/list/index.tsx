@@ -1,57 +1,71 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useState, useEffect } from 'react';
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+} from 'react';
 import { View, StatusBar } from 'react-native';
-import { SnbContainer, SnbBottomSheet, SnbToast } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbToast2 } from 'react-native-sinbad-ui';
+import { useIsFocused } from '@react-navigation/native';
 /** === IMPORT COMPONENTS === */
 import Action from '@core/components/modal-actions';
 import NavigationHeader from './NavigationHeader';
 import CategoryTabList from './CategoryTabList';
 import GridLayout from './grid-layout/GridLayout';
 import ListLayout from './list-layout/ListLayout';
-import BottomAction from './BottomAction';
+import ActionSheet from '../ActionSheet';
+import NotInUrbanModal, { NotInUrbanModalRef } from './NotInUrbanModal';
 import {
-  RegisterSupplierModal,
-  RejectApprovalModal,
-  WaitingApprovalModal,
+  // RegisterSupplierModal,
+  // RejectApprovalModal,
+  // WaitingApprovalModal,
   ProductNotCoverageModal,
   AddToCartModal,
 } from '@core/components/modal';
-import { LoadingHorizontal, LoadingLoadMore } from '@core/components/Loading';
+import { LoadingLoadMore } from '@core/components/Loading';
 import BottomSheetError from '@core/components/BottomSheetError';
 import NeedLoginModal from '@core/components/modal/need-login/NeedLoginModal';
 /** === IMPORT FUNCTIONS === */
+import debounce from 'lodash/debounce';
 import {
   useBottomAction,
   priceSortOptions,
   useOrderModalVisibility,
   useProductTags,
+  usePriceRangeFilter,
 } from '@core/functions/product';
-import {
-  useCheckDataSupplier,
-  useSupplierSegmentationAction,
-  useSendDataToSupplierActions,
-} from '@core/functions/supplier';
+// import {
+//   useCheckDataSupplier,
+//   useSupplierSegmentationAction,
+//   useSendDataToSupplierActions,
+// } from '@core/functions/supplier';
 import { useDataAuth } from '@core/redux/Data';
 import {
   useTagListActions,
   useProductDetailCartAction,
-  useAddToCart,
   useStockValidationAction,
   useOrderQuantity,
 } from '@screen/product/functions';
 import { useRecentSearch } from '@screen/search/functions';
-import { useCartTotalProductActions } from '@screen/oms/functions';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
+import { useAddToCartAction } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useProductContext, useTagContext } from 'src/data/contexts/product';
-import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
+// import { useSupplierContext } from 'src/data/contexts/supplier/useSupplierContext';
 import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
+import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 /** === IMPORT TYPES === */
 import * as models from '@models';
+import { contexts } from '@contexts';
 import {
   ProductHeaderType,
   CategoryTabsConfig,
   CategoryType,
 } from './product-list-core.type';
+import ProductTagList from './ProductTagList';
+import TitleSection from './TitleSection';
 /** === TYPE === */
 interface ProductListProps {
   products: Array<models.ProductList>;
@@ -69,6 +83,7 @@ interface ProductListProps {
   activeBrandId?: string;
   withBottomAction?: boolean;
   withTags?: boolean;
+  total: number;
 }
 /** === COMPONENT === */
 const ProductList: FC<ProductListProps> = ({
@@ -87,6 +102,7 @@ const ProductList: FC<ProductListProps> = ({
   activeBrandId,
   withBottomAction = true,
   withTags = true,
+  total,
 }) => {
   /** === HOOKS === */
   const [searchKeyword, setSearchKeyword] = useState(activeKeyword);
@@ -105,9 +121,6 @@ const ProductList: FC<ProductListProps> = ({
   const [modalNotCoverage, setModalNotCoverage] = useState(false);
   const [loadingPreparation, setLoadingPreparation] = useState(false);
   const [modalErrorAddCart, setModalErrorAddCart] = useState(false);
-  const [modalErrorSendDataSupplier, setModalErrorSendDataSupplier] =
-    useState(false);
-  const [modalErrorSegmentation, setModalErrorSegmentation] = useState(false);
   const [modalErrorProductDetail, setModalErrorProductDetail] = useState(false);
   const [modalNeedToLogin, setModalNeedToLogin] = useState(false);
   const [modalErrorStock, setModalErrorStock] = useState(false);
@@ -130,13 +143,12 @@ const ProductList: FC<ProductListProps> = ({
   });
   const { addKeyword } = useRecentSearch();
   const { orderModalVisible, setOrderModalVisible } = useOrderModalVisibility();
-  const cartTotalProductActions = useCartTotalProductActions();
+  const totalCartActions = useGetTotalCartAction();
   const tagActions = useTagListActions();
   const productDetailActions = useProductDetailCartAction();
-  const addToCartActions = useAddToCart();
-  const supplierSegmentationAction = useSupplierSegmentationAction();
-  const sendDataToSupplierActions = useSendDataToSupplierActions();
+  const addToCartActions = useAddToCartAction();
   const stockValidationActions = useStockValidationAction();
+  const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
   const {
     stateProduct: {
       list: {
@@ -151,12 +163,6 @@ const ProductList: FC<ProductListProps> = ({
   const { orderQty, onChangeQty } = useOrderQuantity({
     minQty: productDetailState?.minQty ?? 1,
   });
-  const {
-    stateShopingCart: {
-      create: { data: addToCartData, error: addToCartError },
-    },
-    dispatchShopingCart,
-  } = useShopingCartContext();
   const { dispatchTag } = useTagContext();
   const {
     stateStock: {
@@ -165,105 +171,118 @@ const ProductList: FC<ProductListProps> = ({
     dispatchStock,
   } = useStockContext();
   const { me } = useDataAuth();
+  // modal filter range state
   const {
-    stateSupplier: {
-      segmentation: { data: dataSegmentation, error: errorSegmentation },
-      create: { data: sendToSupplierData, error: sendToSupplierError },
-    },
-    dispatchSupplier,
-  } = useSupplierContext();
-  /** => check data supplier and sinbad status */
-  const {
-    checkUser,
-    modalRejectApproval,
-    modalWaitingApproval,
-    modalRegisterSupplier,
-    onFunctionActions,
-  } = useCheckDataSupplier();
+    minPrice,
+    maxPrice,
+    setMinPrice,
+    setMaxPrice,
+    resetValues,
+    handleSliderChange,
+  } = usePriceRangeFilter(filterQuery);
+  /** === REF === */
+  const modalUrbanRef = useRef<NotInUrbanModalRef>(null);
   /** === FUNCTIONS === */
-  /** => action send data to supplier */
-  const onSendDataSupplier = () => {
-    if (productSelected !== null) {
-      sendDataToSupplierActions.fetch(dispatchSupplier, {
-        supplierId: productSelected.sellerId,
-      });
-    }
-  };
+  /** => for bulk price */
+  const { bulkPriceAterTax, isPriceGrosir } = useAddToCart(orderQty, false);
+
+  const isFocused = useIsFocused();
 
   /** => action from buttom order */
-  const handleOrderPress = (product: models.ProductList) => {
-    if (me.data === null) {
-      setModalNeedToLogin(true);
-    } else {
-      setLoadingPreparation(true);
-      setProductSelected(product);
-      supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
-      productDetailActions.fetch(dispatchProduct, product.id);
-    }
-  };
+  const handleOrderPress = useCallback(
+    (product: models.ProductList) => {
+      if (me.data === null) {
+        setModalNeedToLogin(true);
+      } else {
+        setOrderModalVisible(true);
+        setProductSelected(product);
+        // supplierSegmentationAction.fetch(dispatchSupplier, product.sellerId);
+        productDetailActions.fetch(
+          dispatchProduct,
+          `${product.id}_${product.warehouseOriginId}`,
+        );
+      }
+    },
+    [me.data],
+  );
 
   /** => action close modal add to cart */
-  const handleCloseModal = () => {
-    stockValidationActions.reset(dispatchStock);
-    productDetailActions.reset(dispatchProduct);
-    supplierSegmentationAction.reset(dispatchSupplier);
-    addToCartActions.reset(dispatchShopingCart);
-    sendDataToSupplierActions.reset(dispatchSupplier);
+  const handleCloseModal = useCallback((isReset?: boolean) => {
+    if (isReset) {
+      stockValidationActions.reset(dispatchStock);
+      productDetailActions.reset(dispatchProduct);
+      addToCartActions.reset(dispatchCart);
+      // sendDataToSupplierActions.reset(dispatchSupplier);
+    }
     setModalErrorAddCart(false);
-    setModalErrorSendDataSupplier(false);
+    // setModalErrorSendDataSupplier(false);
     setModalNotCoverage(false);
     setOrderModalVisible(false);
-    onFunctionActions({ type: 'close' });
-  };
+  }, []);
 
   /** => action on change qty */
-  const onHandleChangeQty = (value: number) => {
-    if (!dataStock || !productDetailState) {
-      return;
-    }
-    onChangeQty(value);
-  };
+  const onHandleChangeQty = useCallback(
+    (value: number) => {
+      if (!dataStock || !productDetailState) {
+        return;
+      }
+      onChangeQty(value);
+    },
+    [dataStock, productDetailState, onChangeQty],
+  );
 
   /** => action submit add to cart  */
   const onSubmitAddToCart = () => {
-    if (
-      productDetailState === null ||
-      dataSegmentation === null ||
-      dataSegmentation.dataSuppliers === null ||
-      dataStock === null
-    ) {
+    if (productDetailState === null || dataStock === null) {
       /** => DO SOMETHING */
       /** => SHOW MODAL ERROR SOMETHING WRONG OR RETRY  */
       return;
     }
 
+    /** function to determine bulk price calculation */
+    let lastUsedPrice = 0,
+      isLastPriceUsedRules = false;
+    if (isPriceGrosir) {
+      isLastPriceUsedRules = true;
+      lastUsedPrice = bulkPriceAterTax;
+    } else {
+      isLastPriceUsedRules = false;
+      lastUsedPrice = productDetailState.priceAfterTax;
+    }
+
+    const priceRules = productDetailState.bulkPrices.map((item) => {
+      return {
+        minQty: item.qty,
+        priceAfterTax: item.priceAfterTax,
+        priceBeforeTax: item.priceBeforeTax,
+        taxPrice: item.taxPrice,
+      };
+    });
+
     const params: models.AddToCartPayload = {
-      isActiveStore: dataSegmentation.isActiveStore,
-      selected: true,
-      stock: dataStock.stock,
       productId: productDetailState.id,
       productName: productDetailState.name,
-      brandId: productDetailState.brandId,
-      urlImages: productDetailState?.images[0]?.url ?? '',
-      qty: orderQty,
+      categoryId: productDetailState.categoryId,
+      productImageUrl: productDetailState?.images[0]?.url ?? '',
       minQty: productDetailState.minQty,
-      displayPrice: productDetailState.originalPrice,
-      priceBeforeTax:
-        productDetailState.currentPrice ?? productDetailState.originalPrice,
-      priceAfterTax:
-        productDetailState.currentPriceAfterTax ??
-        productDetailState.originalPrice,
-      uom: productDetailState.unit,
-      warehouseId: dataSegmentation.dataSuppliers.warehouseId,
-      sellerId: Number(productDetailState.sellerId),
-      channelId: dataSegmentation.dataSuppliers.channelId,
-      groupId: dataSegmentation.dataSuppliers.groupId,
-      typeId: dataSegmentation.dataSuppliers.typeId,
-      clusterId: dataSegmentation.dataSuppliers.clusterId,
+      qty: orderQty,
       multipleQty: productDetailState.multipleQty,
+      qtyPerBox: productDetailState.packagedQty,
+      uomLabel: productDetailState.unit,
+      warehouseId: Number(productDetailState.warehouseOriginId),
+      sellerId: Number(productDetailState.sellerId),
+      sellerName: productDetailState.productSeller.name,
+      taxPercentage: productDetailState.productTax.amount,
+      lastUsedPrice,
+      isLastPriceUsedRules,
+      priceAfterTax: productDetailState.priceAfterTax,
+      priceBeforeTax: productDetailState.priceBeforeTax,
+      taxPrice: productDetailState.taxPrice,
+      priceRules,
+      selected: true,
     };
 
-    addToCartActions.fetch(dispatchShopingCart, params);
+    addToCartActions.fetch(dispatchCart, params);
   };
   /** === EFFECT HOOKS === */
   useEffect(() => {
@@ -273,108 +292,73 @@ const ProductList: FC<ProductListProps> = ({
     }
   }, [productLoading]);
 
+  /** => if product error code 500700000029 "Sinbad belum beroperasi di lokasi toko Anda" */
+  useEffect(() => {
+    if (productError?.code === 500700000029) {
+      modalUrbanRef.current?.trigger(true);
+    }
+  }, [productError?.code, modalUrbanRef]);
+
   /** => Do something when success add to cart */
   useEffect(() => {
-    if (addToCartData !== null) {
+    if (stateCart.create.data !== null) {
       setProductSelected(null);
       handleCloseModal();
-      cartTotalProductActions.fetch();
-      SnbToast.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+      totalCartActions.fetch(dispatchCart);
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
     }
-  }, [addToCartData]);
+  }, [stateCart.create.data]);
 
   /** => Do something when success add to cart */
   useEffect(() => {
-    if (addToCartError !== null) {
-      setModalErrorAddCart(true);
+    if (stateCart.create.error !== null && isFocused) {
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorAddCart(true), 500);
     }
-  }, [addToCartError]);
-
-  /** => Do something when success send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierData !== null) {
-      onFunctionActions({ type: 'close' });
-      sendDataToSupplierActions.reset(dispatchSupplier);
-      SnbToast.show('Berhasil kirim data ke supplier', 2000, {
-        position: 'top',
-        positionValue: StatusBar.currentHeight,
-      });
-    }
-  }, [sendToSupplierData]);
-
-  /** => Do something when error send data to supplier */
-  useEffect(() => {
-    if (sendToSupplierError !== null) {
-      setModalErrorSendDataSupplier(true);
-    }
-  }, [sendToSupplierError]);
+  }, [stateCart.create.error]);
 
   /** => Listen data segmentation and product detail to fetch validation stock */
   useEffect(() => {
-    if (
-      dataSegmentation &&
-      dataSegmentation.dataSuppliers &&
-      productDetailState
-    ) {
+    if (productDetailState) {
       onChangeQty(productDetailState.minQty);
       stockValidationActions.fetch(dispatchStock, {
-        warehouseId: dataSegmentation.dataSuppliers.warehouseId ?? null,
+        warehouseId: Number(productDetailState.warehouseOriginId) ?? null,
         productId: productDetailState.id,
       });
     }
-  }, [dataSegmentation, productDetailState]);
+  }, [productDetailState]);
 
   /** => Listen error segmentation and error product detail */
   useEffect(() => {
-    if (modalErrorProductDetail !== null && modalErrorSegmentation !== null) {
-      if (errorSegmentation !== null) {
-        setLoadingPreparation(false);
-        setModalErrorSegmentation(true);
-      } else if (productDetailError !== null) {
-        setLoadingPreparation(false);
-        setModalErrorProductDetail(true);
-      }
+    if (productDetailError?.message) {
+      setOrderModalVisible(false);
+      setTimeout(() => setModalErrorProductDetail(true), 500);
     }
-  }, [errorSegmentation, productDetailError]);
+  }, [productDetailError, setOrderModalVisible, setModalErrorProductDetail]);
 
   /** Listen Data Stock */
   useEffect(() => {
     if (dataStock && productDetailState) {
       setLoadingPreparation(false);
-      if (
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false &&
-        modalNotCoverage === false
-      ) {
-        setOrderModalVisible(true);
-      }
     }
   }, [dataStock, productDetailState]);
 
   /** Listen Error Stock */
   useEffect(() => {
     if (errorStock && productDetailState) {
-      if (
-        errorStock.code === 50080000026 &&
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false &&
-        modalNotCoverage === false
-      ) {
+      if (errorStock.code === 50080000026 && modalNotCoverage === false) {
         setOrderModalVisible(true);
       } else if (
-        (errorStock.code === 50080000025 || errorStock.code === 50080000036) &&
-        modalRejectApproval === false &&
-        modalWaitingApproval === false &&
-        modalRegisterSupplier === false
+        errorStock.code === 50080000025 ||
+        errorStock.code === 50080000036
       ) {
         setModalNotCoverage(true);
       } else {
-        setModalErrorStock(true);
+        setOrderModalVisible(false);
+        setTimeout(() => setModalErrorStock(true), 500);
       }
       setLoadingPreparation(false);
     }
@@ -391,44 +375,21 @@ const ProductList: FC<ProductListProps> = ({
   }, [selectedCategory, keywordSearched, withTags]);
 
   useEffect(() => {
-    if (me.data !== null && dataSegmentation !== null) {
-      if (dataSegmentation.dataSuppliers !== null) {
-        if (
-          me.data.approvalStatus === 'verified' &&
-          dataSegmentation.dataSuppliers.approvalStatus === 'guest'
-        ) {
-          setModalNotCoverage(true);
-          setLoadingPreparation(false);
-        } else {
-          checkUser({
-            sinbadStatus: me.data.approvalStatus,
-            supplierStatus: dataSegmentation?.dataSuppliers?.approvalStatus,
-          });
-        }
+    if (me.data !== null) {
+      if (me.data.approvalStatus === 'verified') {
+        setLoadingPreparation(false);
       } else {
-        // checkUser({
-        //   sinbadStatus: me.data.approvalStatus,
-        //   supplierStatus: null,
-        // });
         setModalNotCoverage(true);
         setLoadingPreparation(false);
       }
     }
-  }, [dataSegmentation]);
-
-  useEffect(() => {
-    if (modalRegisterSupplier) {
-      setLoadingPreparation(false);
-    }
-  }, [modalRegisterSupplier]);
+  }, []);
 
   useEffect(() => {
     return () => {
       stockValidationActions.reset(dispatchStock);
       productDetailActions.reset(dispatchProduct);
-      supplierSegmentationAction.reset(dispatchSupplier);
-      addToCartActions.reset(dispatchShopingCart);
-      sendDataToSupplierActions.reset(dispatchSupplier);
+      addToCartActions.reset(dispatchCart);
     };
   }, []);
 
@@ -443,6 +404,10 @@ const ProductList: FC<ProductListProps> = ({
     tags: selectedTags,
   };
   const pageLoading = initialLoading ? initialLoading : productLoading;
+  const hasTags = useMemo(
+    () => withTags && tags.length > 0,
+    [withTags, tags.length],
+  );
   /** === VIEW === */
   return (
     <SnbContainer color="white">
@@ -459,11 +424,6 @@ const ProductList: FC<ProductListProps> = ({
           addKeyword(searchKeyword);
           onFetch({ ...derivedQueryOptions, keyword: searchKeyword });
         }}
-        onSearchClear={() => {
-          setSearchKeyword('');
-          setKeywordSearched(true);
-          onFetch({ ...derivedQueryOptions, keyword: '' });
-        }}
       />
       {withCategoryTabs && (
         <CategoryTabList
@@ -479,32 +439,63 @@ const ProductList: FC<ProductListProps> = ({
           }}
         />
       )}
+      <View>
+        {hasTags ? (
+          <ProductTagList
+            tags={tags}
+            onTagPress={handleTagPress}
+            onFilterPress={() =>
+              handleActionClick({ type: 'filter', show: true })
+            }
+          />
+        ) : null}
+
+        <TitleSection
+          total={total}
+          onChangeLayoutListPress={() =>
+            handleActionClick({ type: 'layout', show: true })
+          }
+          onSortPress={() => handleActionClick({ type: 'sort', show: true })}
+        />
+      </View>
       <View style={{ flex: 1 }}>
         {layoutDisplay === 'grid' ? (
           <GridLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         ) : (
           <ListLayout
+            total={total}
             products={products}
             withTags={withTags}
             tags={tags}
             onTagPress={handleTagPress}
-            onOrderPress={(product) => handleOrderPress(product)}
+            onOrderPress={debounce((product) => handleOrderPress(product), 300)}
             isRefreshing={isRefreshing}
             onRefresh={() => onRefresh(derivedQueryOptions)}
             onLoadMore={() => onLoadMore(derivedQueryOptions)}
             loading={pageLoading}
             error={productError}
+            // onFilterPress={() => handleActionClick({ type: 'filter' })}
+            onChangeLayoutListPress={() =>
+              handleActionClick({ type: 'layout' })
+            }
+            // onSortPress={() => handleActionClick({ type: 'sort' })}
           />
         )}
       </View>
@@ -513,138 +504,74 @@ const ProductList: FC<ProductListProps> = ({
           <LoadingLoadMore />
         </View>
       )}
-      {withBottomAction && (
-        <BottomAction
-          sort={true}
-          filter={true}
-          layout={true}
-          category={true}
-          sortActive={sortActive}
-          filterActive={filterActive}
-          layoutDisplay={layoutDisplay}
-          onActionPress={handleActionClick}
-        />
-      )}
       {/* Sort Modal */}
-      <SnbBottomSheet
+      <ActionSheet
         open={sortModalVisible}
+        name="sort-modal"
         title="Urutkan"
-        actionIcon="close"
-        content={
-          <Action.Sort
-            appliedOptionIndex={sortIndex}
-            options={priceSortOptions}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'sort' })}
-      />
+        contentHeight={220}
+        onBlur={() => handleActionClick({ type: 'filter', show: false })}
+        onClose={() => handleActionClick({ type: 'sort', show: false })}>
+        <Action.Sort
+          appliedOptionIndex={sortIndex}
+          options={priceSortOptions}
+          onButtonPress={handleActionClick}
+        />
+      </ActionSheet>
       {/* Filter Modal */}
-      <SnbBottomSheet
+      <ActionSheet
+        withClear
+        onClearFilter={resetValues}
         open={filterModalVisible}
+        name="filter-modal"
         title="Filter"
-        actionIcon="close"
-        content={
-          <Action.Filter
-            appliedFilterQuery={filterQuery}
-            onButtonPress={handleActionClick}
-          />
-        }
-        closeAction={() => handleActionClick({ type: 'filter' })}
-      />
-      {/* Register Supplier Modal */}
-      <RegisterSupplierModal
-        visible={modalRegisterSupplier}
-        onSubmit={() =>
-          onFunctionActions({
-            type: 'sendDataToSupplier',
-            onSendDataSupplier: onSendDataSupplier,
-          })
-        }
-        onClose={handleCloseModal}
-      />
-      {/* Waiting Approval Modal */}
-      <WaitingApprovalModal
-        visible={modalWaitingApproval}
-        onSubmit={handleCloseModal}
-        onClose={handleCloseModal}
-      />
-      {/* Reject Approval Modal */}
-      <RejectApprovalModal
-        visible={modalRejectApproval}
-        onClose={handleCloseModal}
-        isCallCS={true}
-      />
+        contentHeight={220}
+        onBlur={() => handleActionClick({ type: 'filter', show: false })}
+        onClose={() => handleActionClick({ type: 'filter', show: false })}>
+        <Action.Filter
+          onButtonPress={handleActionClick}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          setMinPrice={setMinPrice}
+          setMaxPrice={setMaxPrice}
+          handleSliderChange={handleSliderChange}
+        />
+      </ActionSheet>
       {/* Add to Cart Modal */}
 
       <AddToCartModal
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
         open={orderModalVisible}
+        onBlur={() => setOrderModalVisible(false)}
         closeAction={handleCloseModal}
         onAddToCartPress={onSubmitAddToCart}
+        loading={loadingPreparation}
         disabled={
           productDetailState === null ||
           dataStock === null ||
           orderQty > dataStock.stock ||
-          orderQty < productDetailState?.minQty
+          orderQty < productDetailState?.minQty ||
+          productDetailState.minQty > dataStock.stock
         }
       />
 
       {/* Product not coverage modal */}
       <ProductNotCoverageModal
         isOpen={modalNotCoverage}
-        close={handleCloseModal}
-      />
-      {/* Modal loading horizontal */}
-      <SnbBottomSheet
-        open={loadingPreparation}
-        title=" "
-        content={
-          <View
-            style={{
-              marginTop: -40,
-            }}>
-            <LoadingHorizontal />
-          </View>
-        }
-        isSwipeable={false}
+        close={() => handleCloseModal(true)}
       />
       {/* Modal Bottom Sheet Error Add to Cart */}
       <BottomSheetError
         open={modalErrorAddCart}
-        error={addToCartError}
-        closeAction={handleCloseModal}
+        error={stateCart.create.error}
+        closeAction={() => handleCloseModal(true)}
         retryAction={() => {
           if (productSelected) {
             setModalErrorAddCart(false);
             handleOrderPress(productSelected);
           } else {
-            handleCloseModal();
-          }
-        }}
-      />
-      {/* Modal Bottom Sheet Error Send data to supplier */}
-      <BottomSheetError
-        open={modalErrorSendDataSupplier}
-        error={sendToSupplierError}
-        closeAction={handleCloseModal}
-      />
-      {/* Modal Bottom Sheet segmentation */}
-      <BottomSheetError
-        open={
-          modalErrorSegmentation &&
-          errorSegmentation !== null &&
-          errorSegmentation.code !== 401
-        }
-        error={errorSegmentation}
-        closeAction={handleCloseModal}
-        retryAction={() => {
-          if (productSelected) {
-            setModalErrorSegmentation(false);
-            handleOrderPress(productSelected);
-          } else {
-            handleCloseModal();
+            handleCloseModal(true);
           }
         }}
       />
@@ -652,13 +579,16 @@ const ProductList: FC<ProductListProps> = ({
       <BottomSheetError
         open={modalErrorProductDetail}
         error={productDetailError}
-        closeAction={handleCloseModal}
+        closeAction={() => {
+          setModalErrorProductDetail(false);
+          handleCloseModal(true);
+        }}
         retryAction={() => {
           if (productSelected) {
             setModalErrorProductDetail(false);
             handleOrderPress(productSelected);
           } else {
-            handleCloseModal();
+            handleCloseModal(true);
           }
         }}
       />
@@ -667,19 +597,26 @@ const ProductList: FC<ProductListProps> = ({
         open={modalErrorStock}
         error={errorStock}
         closeAction={() => {
-          handleCloseModal();
+          setModalErrorStock(false);
+          handleCloseModal(true);
           setModalErrorStock(false);
         }}
         retryAction={() => {
-          handleCloseModal();
+          handleCloseModal(true);
           setModalErrorStock(false);
         }}
+      />
+      {/* Modal Bottom Sheet error if not in urban */}
+      <NotInUrbanModal
+        ref={modalUrbanRef}
+        errorSubtitle={productError?.message ?? ''}
       />
       {/* Modal Bottom Sheet Need to Login */}
       <NeedLoginModal
         visible={modalNeedToLogin}
         onClose={() => setModalNeedToLogin(false)}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };

@@ -13,7 +13,7 @@ import {
   SnbHtml,
   SnbImageCompressor,
 } from 'react-native-sinbad-ui';
-import { useCartTotalProductActions } from '@screen/oms/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 import SnbTextSeeMore from '@core/components/TextSeeMore';
 import { ProductGridCard } from '@core/components/ProductGridCard';
 import { goBack, useBannerAction } from '../functions';
@@ -29,7 +29,11 @@ interface RecommendedProduct {
   imageUrl: string;
   displayPrice: number;
   currentPrice: number;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  qtySoldLabel: string;
   isBundle: boolean;
+  hasBulkPrice: boolean;
   isPromo: boolean;
   isExclusive: boolean;
 }
@@ -42,8 +46,12 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400566.png',
     displayPrice: 77891,
     currentPrice: 77891,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: true,
+    qtySoldLabel: '1,7 rb',
     isExclusive: true,
   },
   {
@@ -53,7 +61,11 @@ const recommendedProducts: Array<RecommendedProduct> = [
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67201003.png',
     displayPrice: 150000,
     currentPrice: 150000,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
+    qtySoldLabel: '1,7 rb',
     isPromo: false,
     isExclusive: false,
   },
@@ -63,7 +75,11 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67145109.png',
     displayPrice: 98782,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 98782,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: true,
     isPromo: true,
     isExclusive: true,
@@ -74,7 +90,11 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/21158106.png',
     displayPrice: 72000,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 72000,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: true,
     isExclusive: false,
@@ -85,7 +105,11 @@ const recommendedProducts: Array<RecommendedProduct> = [
     imageUrl:
       'https://sinbad-website.s3.amazonaws.com/odoo_img/product/67400582.png',
     displayPrice: 77891,
+    qtySoldLabel: '1,7 rb',
     currentPrice: 77891,
+    priceAfterTax: 77891,
+    priceBeforeTax: 77891,
+    hasBulkPrice: true,
     isBundle: false,
     isPromo: false,
     isExclusive: true,
@@ -106,15 +130,24 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   /** === STATE === */
   const [modalTnCVisible, setModalTnCVisible] = React.useState<boolean>(false);
   const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const bannerAction = useBannerAction();
+  const totalCartAction = useGetTotalCartAction();
   const { me } = useDataAuth();
   const bannerDetailState = stateBanner.bannerGeneral.detail;
+  const totalCartState = stateCart.total.data;
   /** === HOOK === */
-  const { dataTotalProductCart } = useCartTotalProductActions();
   React.useEffect(() => {
     bannerAction.detail(dispatchBanner, route.params.bannerId);
     return () => {
       bannerAction.resetDetail(dispatchBanner);
+    };
+  }, []);
+
+  React.useEffect(() => {
+    totalCartAction.fetch(dispatchCart);
+    return () => {
+      totalCartAction.reset(dispatchCart);
     };
   }, []);
   /** === VIEW === */
@@ -135,7 +168,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
             }
           }}
           iconName={'cart'}
-          iconValue={dataTotalProductCart.totalProduct}
+          iconValue={totalCartState?.totalProducts}
         />
       </View>
     );
@@ -145,7 +178,7 @@ const BannerDetailView: React.FC = ({ route }: any) => {
   const renderBanner = () => {
     return (
       <SnbImageCompressor
-        defaultSource={require('../../../assets/images/banner/sinbad-loading-image-banner.png')}
+        defaultSource={require('../../../assets/images/banner/sinbad-default-banner.png')}
         uri={bannerDetailState.data?.imageUrl!}
         style={{
           height: 180,
@@ -255,8 +288,9 @@ const BannerDetailView: React.FC = ({ route }: any) => {
         flexOne={true}
         name={item.name}
         imageUrl={item.imageUrl}
-        originalPrice={item.displayPrice}
-        currentPrice={item.currentPrice}
+        qtySoldLabel={item.qtySoldLabel}
+        priceAfterTax={item.priceAfterTax}
+        hasBulkPrice={item.hasBulkPrice}
         isBundle={item.isBundle}
         isPromo={item.isPromo}
         isExclusive={item.isExclusive}

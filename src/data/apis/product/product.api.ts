@@ -17,8 +17,8 @@ const getList = (
   subModule?: models.ProductSubModule,
 ) => {
   const qs = serializeQs({
-    skip: payload.skip,
-    limit: payload.limit,
+    page: payload.page,
+    perPage: payload.perPage,
     sort: payload.sort,
     sortBy: payload.sortBy,
     keyword: payload.keyword,
@@ -43,9 +43,13 @@ const getList = (
 };
 
 const getDetail = (payload: models.DetailProcessProps) => {
+  const [productId, warehouseId] = payload.id.split('_');
+  const qs = serializeQs({
+    warehouseId,
+  });
   return apiMapping<models.ProductDetail>(
     'public',
-    `products/${payload.id}`,
+    `products/${productId}?${qs}`,
     'product',
     'v1',
     'DETAIL',

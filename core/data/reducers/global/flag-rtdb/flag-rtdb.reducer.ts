@@ -7,12 +7,13 @@ const initialState: models.FlagRTDB = {
   isCheckoutLoading: false,
   isInitiateCheckoutLoading: false,
   confirmOrderLoading: 'true',
+  ocrStatus: 'none',
 };
 /** === FUNCTION HERE === */
 export const flagRTDB = simplifyReducer(initialState, {
   [types.CHANGE_FLAG_RTDB](
     state = initialState,
-    action: models.isFlagChangeAction,
+    action: models.isFlagRTDBChangeAction,
   ) {
     return {
       ...state,

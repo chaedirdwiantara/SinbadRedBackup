@@ -2,6 +2,8 @@ import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
 import { setUserFCM } from '../../../functions/firebase/fcm-firestore.function';
+import { globalReportFromAction } from '@report/global-report';
+import * as EventName from '@report/moengage/event';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
@@ -59,7 +61,14 @@ export const verificationOTPProcess = (
 /** => success */
 export const verificationOTPSuccess = (
   data: models.LoginSuccess,
+  params: any,
 ): models.VerificationOTPSuccessAction => {
+  const recordData = {
+    userId: data.data.user.id,
+    userName: data.data.user.name,
+    mobilePhone: params.mobilePhone,
+  };
+  globalReportFromAction(EventName.LOGIN, recordData);
   setUserFCM(data.data.user.id);
   return { type: types.VERIFICATION_OTP_SUCCESS, payload: data };
 };
@@ -113,4 +122,23 @@ export const logoutFailed = (
 /** => reset */
 export const logoutReset = () => {
   return { type: types.LOGOUT_RESET };
+};
+/** === ME 2 === */
+/** => process */
+export const meV2Process = (): models.MeProcessAction => {
+  return { type: types.ME_V2_PROCESS };
+};
+/** => success */
+export const meV2Success = (
+  data: models.LoginSuccess,
+): models.MeSuccessAction => {
+  return { type: types.ME_V2_SUCCESS, payload: data };
+};
+/** => failed */
+export const meV2Failed = (data: models.ErrorProps): models.MeFailedAction => {
+  return { type: types.ME_V2_FAILED, payload: data };
+};
+/** => reset */
+export const meV2Reset = () => {
+  return { type: types.ME_V2_RESET };
 };

@@ -13,7 +13,7 @@ const apiGeneral = async <T>(
   path: string,
   module: string,
   version: 'v1' | 'v2' | 'v3' | 'v4' | 'v5' | 'v6' | 'v7',
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'PUT',
   params?: object,
 ): Promise<T> => {
   /** === GET COOKIE FROM ASYNCSTORAGE === */
@@ -76,7 +76,7 @@ const apiGeneral = async <T>(
   const throwError = (response: any) => {
     throw {
       message: response.statusText,
-      errorMessage: response.statusText,
+      data: response.statusText,
       type: response.type,
       code: response.status,
     };
@@ -97,7 +97,7 @@ const apiGeneral = async <T>(
     });
     throw {
       message: error.message,
-      errorMessage: error.errorMessage ? error.errorMessage : error.message,
+      data: error.data ? error.data : error.data,
       type: error.type ? error.type : error.error,
       code: error.code ? error.code : error.statusCode,
     };

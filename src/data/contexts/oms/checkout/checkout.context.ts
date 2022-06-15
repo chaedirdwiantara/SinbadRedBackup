@@ -1,14 +1,13 @@
-import { createContext, Dispatch } from 'react';
-
+import React from 'react';
 import {
-  CheckoutState,
-  checkoutInitialState,
+  CheckoutInitialProps,
   checkoutReducer,
+  checkoutInitialState,
 } from '@reducer/oms/checkout/checkout.reducer';
 
-const CheckoutContext = createContext<{
-  stateCheckout: CheckoutState;
-  dispatchCheckout: Dispatch<any>;
+const CheckoutContext = React.createContext<{
+  stateCheckout: CheckoutInitialProps;
+  dispatchCheckout: React.Dispatch<any>;
 }>({
   stateCheckout: checkoutInitialState,
   dispatchCheckout: () => null,

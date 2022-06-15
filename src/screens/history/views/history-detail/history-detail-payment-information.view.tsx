@@ -44,7 +44,7 @@ const HistoryDetailPaymentInformation: FC<PaymentInformationProps> = ({
         qty: dataOrder.invoicedParcelQty,
         grossPrice: dataOrder.invoicedParcelGrossPrice,
         taxes: dataOrder.invoicedParcelTaxes,
-        finalPrice: dataOrder.invoicedParcelFinalPrice,
+        finalPrice: dataOrder.invoicedParcelFinalPriceBuyer + dataPayment?.paymentFee!,
         // voucher: dataOrder.invoiced,
         promo: dataOrder.invoicedParcelPromo,
         parcelFinal: dataOrder.invoicedParcelFinalPrice,

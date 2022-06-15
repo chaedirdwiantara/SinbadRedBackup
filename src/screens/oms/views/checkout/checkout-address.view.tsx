@@ -2,24 +2,41 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbDivider } from 'react-native-sinbad-ui';
-import { contexts } from '@contexts';
-/** === COMPONENT === */
-export const CheckoutAddressView: FC = () => {
-  const {
-    stateUser: {
-      detail: { data: storeDetail },
-    },
-  } = React.useContext(contexts.UserContext);
+import { SnbText2, SnbDivider2, colorV2 } from 'react-native-sinbad-ui';
+import * as models from '@models';
 
+export interface CheckoutAddressProps {
+  buyerName: string;
+  buyerAddress: models.CheckoutBuyerAddressPayload;
+}
+
+/** === COMPONENT === */
+export const CheckoutAddressView: FC<CheckoutAddressProps> = ({
+  buyerAddress,
+  buyerName,
+}) => {
   return (
     <View style={CheckoutStyle.addessSection}>
-      <SnbText.B2>Alamat Pengiriman</SnbText.B2>
-      <SnbDivider style={{ marginVertical: 8 }} />
-      <View style={{ marginBottom: 6 }}>
-        <SnbText.B4>{storeDetail?.ownerData?.profile?.name}</SnbText.B4>
+      <SnbText2.Headline.Small color={colorV2.textColor.default}>
+        Alamat Pengiriman
+      </SnbText2.Headline.Small>
+      <View style={{ marginVertical: 4 }}>
+        <SnbDivider2 />
       </View>
-      <SnbText.B1>{storeDetail?.storeData?.storeAddress?.address}</SnbText.B1>
+      <View style={{ marginBottom: 6 }}>
+        <SnbText2.Body.Small color={colorV2.textColor.default}>
+          {buyerName}
+        </SnbText2.Body.Small>
+      </View>
+      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+        {buyerAddress.address}
+        {buyerAddress.urban ? ',' : null} {buyerAddress.urban}
+        {buyerAddress.district ? ',' : null} {buyerAddress.district}
+        {buyerAddress.city ? ',' : null} {buyerAddress.city}
+        {buyerAddress.province ? ',' : null} {buyerAddress.province}
+        {buyerAddress.zipCode ? ' ' : null}
+        {buyerAddress.zipCode}
+      </SnbText2.Paragraph.Tiny>
     </View>
   );
 };
@@ -30,8 +47,8 @@ export const CheckoutAddressView: FC = () => {
  * ================================================================
  * createdBy: Maulana Ghozi (pyramid)
  * createDate: 25112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (valkyrie)
+ * updatedDate: 08032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

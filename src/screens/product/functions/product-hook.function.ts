@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
@@ -9,8 +9,8 @@ import * as models from '@models';
 const callProcessAction = (
   contextDispatch: (action: any) => any,
   loading: boolean,
-  skip: number,
-  limit: number,
+  page: number,
+  perPage: number,
   queryOptions?: models.ProductListQueryOptions,
   subModule?: models.ProductSubModule,
 ) => {
@@ -18,8 +18,8 @@ const callProcessAction = (
     contextDispatch,
     {
       loading,
-      skip,
-      limit,
+      page,
+      perPage,
       ...queryOptions,
     },
     subModule,
@@ -28,8 +28,8 @@ const callProcessAction = (
 
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  const limit = 10;
-
+  const perPage = 10;
+  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,
@@ -40,8 +40,8 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         callProcessAction(
           contextDispatch,
           true,
-          0,
-          limit,
+          page,
+          perPage,
           queryOptions,
           subModule,
         ),
@@ -56,8 +56,8 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
         callProcessAction(
           contextDispatch,
           true,
-          0,
-          limit,
+          page,
+          perPage,
           queryOptions,
           subModule,
         ),
@@ -65,18 +65,24 @@ const useProductListActions = (subModule?: models.ProductSubModule) => {
     },
     loadMore: (
       contextDispatch: (action: any) => any,
-      paginationQueries: { skip: number; canLoadMore: boolean },
+      state: models.ListItemV3Props<Array<models.ProductList>>,
       queryOptions?: models.ProductListQueryOptions,
     ) => {
-      if (paginationQueries.canLoadMore) {
+      if (state.page < state.totalPage) {
+        const query = {
+          ...queryOptions,
+          page: state.page + 1,
+          perPage: state.perPage,
+        };
+
         contextDispatch(Actions.productListLoadMore());
         dispatch(
           callProcessAction(
             contextDispatch,
             false,
-            paginationQueries.skip + limit,
-            limit,
-            queryOptions,
+            query.page,
+            perPage,
+            query,
             subModule,
           ),
         );
@@ -213,9 +219,9 @@ const useReserveStockAction = () => {
 const useOrderQuantity = ({ minQty }: { minQty: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
-  const onChangeQty = (value: number) => {
+  const onChangeQty = useCallback((value: number) => {
     setOrderQty(value);
-  };
+  }, []);
 
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);

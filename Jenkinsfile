@@ -171,9 +171,8 @@ pipeline {
                                         while read file
                                         do
                                             sed -i 's/sinbad.app.development/sinbad.app/g' $file
-                                            sed -i 's/ic_launcher_pink/ic_launcher/g' $file
-                                            sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
-                                            sed -i 's/Sinbad Development/Sinbad/g' $file
+                                            sed -i 's/ic_dev/ic_live/g' $file
+                                            sed -i 's/ic_dev_round/ic_live_round/g' $file
                                         done
                                     '''
                                 }else{
@@ -182,9 +181,8 @@ pipeline {
                                         while read file
                                         do
                                             sed -i 's/sinbad.app.development/sinbad.app/g' $file
-                                            sed -i 's/ic_launcher_pink/ic_launcher_pink/g' $file
-                                            sed -i 's/ic_launcher_round_pink/ic_launcher_round_pink/g' $file
-                                            sed -i 's/Sinbad Development/Sinbad Testing/g' $file
+                                            sed -i 's/ic_dev/ic_dev/g' $file
+                                            sed -i 's/ic_dev_round/ic_dev_round/g' $file
                                         done
                                     '''
                                 }
@@ -196,9 +194,8 @@ pipeline {
                                             while read file
                                             do
                                                 sed -i 's/sinbad.app.development/sinbad.app.staging/g' $file
-                                                sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
-                                                sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
-                                                sed -i 's/Sinbad Development/Sinbad Staging/g' $file
+                                                sed -i 's/ic_dev/ic_staging/g' $file
+                                                sed -i 's/ic_dev_round/ic_staging_round/g' $file
                                             done
                                         '''
                                     } else if(SINBAD_ENV == 'sandbox') {
@@ -207,9 +204,8 @@ pipeline {
                                             while read file
                                             do
                                                 sed -i 's/sinbad.app.development/sinbad.app.sandbox/g' $file
-                                                sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
-                                                sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
-                                                sed -i 's/Sinbad Development/Sinbad Sandbox/g' $file
+                                                sed -i 's/ic_dev/ic_sandbox/g' $file
+                                                sed -i 's/ic_dev_round/ic_sandbox_round/g' $file
                                             done
                                         '''
                                     } else if(SINBAD_ENV == 'demo') {
@@ -218,9 +214,8 @@ pipeline {
                                             while read file
                                             do
                                                 sed -i 's/sinbad.app.development/sinbad.app.demo/g' $file
-                                                sed -i 's/ic_launcher_pink/ic_launcher_green/g' $file
-                                                sed -i 's/ic_launcher_round_pink/ic_launcher_round_green/g' $file
-                                                sed -i 's/Sinbad Development/Sinbad Demo/g' $file
+                                                sed -i 's/ic_dev/ic_live/g' $file
+                                                sed -i 's/ic_dev_round/ic_live_round/g' $file
                                             done
                                         '''
                                     } else if(SINBAD_ENV == 'production') {
@@ -229,9 +224,8 @@ pipeline {
                                             while read file
                                             do
                                                 sed -i 's/sinbad.app.development/sinbad.app/g' $file
-                                                sed -i 's/ic_launcher_pink/ic_launcher/g' $file
-                                                sed -i 's/ic_launcher_round_pink/ic_launcher_round/g' $file
-                                                sed -i 's/Sinbad Development/Sinbad/g' $file
+                                                sed -i 's/ic_dev/ic_live/g' $file
+                                                sed -i 's/ic_dev_round/ic_live_round/g' $file
                                             done
                                         '''
                                     }
@@ -353,27 +347,27 @@ ${SINBAD_URI_DOWNLOAD}/${SINBAD_ENV}/${SINBAD_REPO}-latest.tar.gz
                             }else if(SINBAD_ENV == 'production') {
                                 sh '''
                                     cd android && \
-                                    fastlane production
+                                    fastlane beta
                                 '''
                             }
                         }
                     }
                 }
-                stage("CodePush") {
-                    when { expression { params.CI_IS_CODEPUSH == "Yes" } }
-                    steps {
-                        script {
-                            withCredentials([usernamePassword(credentialsId: 'appcenter', usernameVariable: 'USERID', passwordVariable: 'USERTOKEN')]){
-                                sh "appcenter login --token ${USERTOKEN}"
-                                if(SINBAD_ENV == 'demo' || SINBAD_ENV == 'sandbox') {
-                                    sh "appcenter codepush release-react -a sinbad-app/Sinbad --description '${params.CI_CODEPUSH_MESSAGE}' -m -d Staging"
-                                }else if(SINBAD_ENV == 'production') {
-                                    sh "appcenter codepush release-react -a sinbad-app/Sinbad --description '${params.CI_CODEPUSH_MESSAGE}' -m -d Production"
-                                }
-                            }
-                        }
-                    }
-                }
+                // stage("CodePush") {
+                //     when { expression { params.CI_IS_CODEPUSH == "Yes" } }
+                //     steps {
+                //         script {
+                //             withCredentials([usernamePassword(credentialsId: 'appcenter', usernameVariable: 'USERID', passwordVariable: 'USERTOKEN')]){
+                //                 sh "appcenter login --token ${USERTOKEN}"
+                //                 if(SINBAD_ENV == 'demo' || SINBAD_ENV == 'sandbox') {
+                //                     sh "appcenter codepush release-react -a sinbad-app/Sinbad --description '${params.CI_CODEPUSH_MESSAGE}' -m -d Staging"
+                //                 }else if(SINBAD_ENV == 'production') {
+                //                     sh "appcenter codepush release-react -a sinbad-app/Sinbad --description '${params.CI_CODEPUSH_MESSAGE}' -m -d Production"
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
             }
         }
         stage('Code Analysis') {

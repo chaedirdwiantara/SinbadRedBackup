@@ -1,567 +1,171 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useContext, useRef } from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
-import { usePaymentAction } from '../../functions/checkout';
-import LoadingPage from '@core/components/LoadingPage';
+import { SnbContainer, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutHeader } from './checkout-header.view';
-import { ModalPaymentType } from './payment-type-modal.view';
-import { ModalPaymentChannels } from './payment-channels-modal.view';
-import { ModalParcelDetail } from './parcel-detail-modal.view';
-import { ModalProductList } from './product-list-modal.view';
-import { ModalTermAndCondition } from './term-and-condition-modal.view';
-import { CheckoutBottomView } from './checkout-bottom.view';
 import { CheckoutAddressView } from './checkout-address.view';
 import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
-import * as models from '@models';
-/** === IMPORT EXTERNAL FUNCTION === */
+import { CheckoutTNCView } from './checkout-terms-n-condition.view';
+import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import {
-  useCheckoutViewActions,
-  useCheckoutMaster,
-  usePaymentTypeModal,
-  usePaymentChannelModal,
-  usePaymentChannelsData,
-  useTermsAndConditionsModal,
-  useBackToCartModal,
-  useErrorModalBottom,
-  useCheckoutFailedFetchState,
-  useErrorWarningModal,
-} from '@screen/oms/functions/checkout/checkout-hook.function';
-import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
-import { BackToCartModal } from './checkout-back-to-cart-modal';
-import { useDispatch } from 'react-redux';
-import * as Actions from '@actions';
-import {
-  backToCart,
-  goToCheckoutSuccess,
-  useExpiredTime,
-  useCreateOrders,
-  useCartCheckedoutActions,
-  useModalParcelDetail,
-  useModalProductList,
+  goToPaymentMethod,
+  totalPaymentWithoutCurrency,
+  totalQty,
+  useGetTncContent,
 } from '@screen/oms/functions';
-import { useShopingCartContext } from 'src/data/contexts/oms/shoping-cart/useShopingCartContext';
 import {
-  useCheckPromoPaymentAction,
-  useCheckAllPromoPaymentAction,
-} from '@screen/promo/functions';
-import ModalBottomErrorCheckout from './checkout-error-bottom-modal.view';
-import ModalErrorWarning from '@screen/oms/components/modal-error-warning.component';
-import { ErrorFetchModal } from './checkout-error-fetch-modal';
-import BottomSheetError from '@core/components/BottomSheetError';
-import { usePrevious } from '@core/functions/hook/prev-value';
+  usePaymentMethodListContent,
+  usePaymentMethodCreateOrder,
+  usePaymentMethodSubRtdb,
+} from '@screen/oms/functions/payment-method/payment-method-hook.function';
+import { useCheckoutContext } from 'src/data/contexts/oms/checkout/useCheckoutContext';
+import { CheckoutBottomView } from './checkout-bottom.view';
+import { useUpdateCartAction, useCheckoutAction } from '../../functions';
+import { goToShoppingCart } from '@core/functions/product';
+import { BackToCartModal } from './checkout-back-to-cart-modal';
 import { useCustomBackHardware } from '@core/functions/navigation/navigation-hook.function';
+import { usePaymentMethodContext } from 'src/data/contexts/oms/payment-method/usePaymentMethodContext';
+import {
+  useThankYouPageAction,
+  useThankYouPageCancelOrderAction,
+} from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
+import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
+  /** => ACTION */
+  const { dispatchCart } = useContext(contexts.CartContext);
+  const updateCartAction = useUpdateCartAction();
+  const checkoutAction = useCheckoutAction();
+  const paymentMethodList = usePaymentMethodListContent();
+  const paymentMethodCreateOrder = usePaymentMethodCreateOrder();
+  const PaymentMethodSubRtdb = usePaymentMethodSubRtdb();
+  const thankYouPageCancelOrderAction = useThankYouPageCancelOrderAction();
+  const thankYouPageAction = useThankYouPageAction();
+
   /** === HOOK === */
-  const backToCartModal = useBackToCartModal();
-  /** => used for reset voucher */
-  const dispatch = useDispatch();
-  useCustomBackHardware(() => backToCartModal.setOpen(true));
+  const { stateCheckout } = useContext(contexts.CheckoutContext);
+  const data = stateCheckout.checkout.data;
 
-  /** => this for payment channel modal */
-  const checkPromoPaymentAction = useCheckPromoPaymentAction();
-  /** => this for last payment channel */
-  const checkAllPromoPaymentAction = useCheckAllPromoPaymentAction();
+  const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers || []);
+  const totalQtyCheckout = totalQty(data?.sellers || []);
 
-  const checkoutViewActions = useCheckoutViewActions();
-  const paymentTypeModal = usePaymentTypeModal();
-  const paymentChannelsModal = usePaymentChannelModal();
-  const paymentChannelData = usePaymentChannelsData();
-  const paymentTCModal = useTermsAndConditionsModal();
-  const errorBottomModal = useErrorModalBottom();
-  const expiredTime = useExpiredTime();
-  const errorFetchModal = useCheckoutFailedFetchState();
-  const errorWarningModal = useErrorWarningModal();
-  const createOrders = useCreateOrders();
-  const cartCheckedoutActions = useCartCheckedoutActions();
-  const modalParcelDetail = useModalParcelDetail();
-  const modalProductList = useModalProductList();
+  /** => MODAL REF */
+  const refExpiredTimeModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refTermConditionModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refBackToCartModal = React.useRef<SnbBottomSheet2Ref>(null);
+
+  /** => Back handler */
+  useCustomBackHardware(() => refBackToCartModal.current?.open());
+
+  /** => Get TNC Contents  */
+  const getTncContent = useGetTncContent();
   const {
     stateCheckout: {
-      checkout: {
-        data: checkoutData,
-        loading: checkoutLoading,
-        error: checkoutError,
-      },
+      checkoutTnc: { data: TncContentData },
     },
     dispatchCheckout,
   } = useCheckoutContext();
-  const { dispatchShopingCart } = useShopingCartContext();
-  const {
-    setInvoiceBrand,
-    checkoutMaster,
-    setReserveDiscount,
-    setPaymentChannel,
-    setPromoPayment,
-    resetCheckoutMasterData,
-  } = useCheckoutMaster();
-  const paymentAction = usePaymentAction();
-  const { statePayment, dispatchPayment } = React.useContext(
-    contexts.PaymentContext,
-  );
-  const {
-    paymentChannelsList,
-    paymentLastChannelDetail,
-    paymentTypesList,
-    paymentTCCreate,
-    paymentTCDetail,
-  } = statePayment;
-  const { statePromo, dispatchPromo } = React.useContext(contexts.PromoContext);
-  const { stateCheckout } = React.useContext(contexts.CheckoutContext);
-  const [isExpiredSession, setExpiredSession] = useState(false);
-  const [modalErrorCheckout, setModalErrorCheckout] = useState(false);
+  const { dispatchPaymentMethod } = usePaymentMethodContext();
+  const { dispatchThankYouPage } = useThankYouPageContext();
 
-  const handleRetryCreateOrder = () => {
-    cartCheckedoutActions.fetch(dispatchShopingCart);
-    createOrders.create(dispatchCheckout);
+  /** handle term n condition */
+  const handleOpenTNCModal = () => {
+    getTncContent.tncContentGet(dispatchCheckout, 'termAndConditions');
+    refTermConditionModal.current?.open();
   };
 
-  /** Set Loading Page */
+  /** => set expired time  */
+  const dateCurrent = new Date();
+  const timeNow = dateCurrent.getTime() / 1000;
+  const addTime = dateCurrent.getTime() / 1000 + 300000;
+  const timeToExpired = addTime - timeNow;
+  const timeRef = useRef<any>(null);
   useEffect(() => {
-    checkoutViewActions.fetch(dispatchCheckout);
-
-    return () => {
-      /** => reset get checkout data */
-      checkoutViewActions.reset(dispatchCheckout);
-      /** => reset checkout master data */
-      resetCheckoutMasterData();
-      /** => reset local voucher data */
-      dispatch(Actions.saveSelectedVouchers(null));
-      /** => reset check-all-promo-payment context data */
-      checkAllPromoPaymentAction.reset(dispatchPromo);
-      /** => reset payment last channel context data */
-      paymentAction.resetLastChannel(dispatchPayment);
-      /** => reset payment types list context data */
-      paymentAction.resetTypesList(dispatchPayment);
-      /** => reset list invoice channels */
-      paymentAction.resetInvoicChannelList(dispatchPayment);
-      /** => reset create orders */
-      createOrders.reset(dispatchCheckout);
-    };
+    timeRef.current = setTimeout(() => {
+      refExpiredTimeModal.current?.open();
+    }, timeToExpired);
   }, []);
 
-  /** Error Handler */
-  const [errorCreateOrders, setErrorCreateOrders] = React.useState(false);
-  const prevDataErrorCreateOrders = usePrevious(stateCheckout.create.error);
-  React.useEffect(() => {
-    /** Error Handling Create Orders */
-    if (
-      stateCheckout.create.error !== null &&
-      prevDataErrorCreateOrders === null
-    ) {
-      setErrorCreateOrders(true);
-    }
-  }, [stateCheckout.create.error]);
-  /** Payment Modal */
-  useEffect(() => {
-    if (
-      paymentTypesList.error ||
-      paymentChannelsList.error ||
-      paymentTCCreate.error ||
-      paymentTCDetail.error
-    ) {
-      paymentTypeModal.setOpen(false);
-      paymentChannelsModal.setOpen(false);
-      paymentTCModal.setOpen(false);
-      errorBottomModal.setOpen(true);
-    }
-  }, [
-    paymentTypesList.error,
-    paymentChannelsList.error,
-    paymentTCCreate.error,
-    paymentTCDetail.error,
-  ]);
-  useEffect(() => {
-    if (checkoutData) {
-      setInvoiceBrand(checkoutData);
-    }
-  }, [checkoutData]);
-
-  useEffect(() => {
-    /** => merge data reserve */
-    if (
-      Array.isArray(checkoutMaster.invoices) &&
-      checkoutMaster.invoices.length > 0 &&
-      statePromo.reserveDiscount.detail.data !== null
-    ) {
-      setReserveDiscount(statePromo.reserveDiscount.detail.data.promoMatch);
-    }
-  }, [checkoutMaster.invoices.length]);
-
-  useEffect(() => {
-    if (checkoutError !== null) {
-      setModalErrorCheckout(true);
-    }
-  }, [checkoutError]);
-  /** for post last payment channel */
-  React.useEffect(() => {
-    const invoices = checkoutMaster.invoices;
-
-    if (invoices.length > 0 && !paymentLastChannelDetail.data) {
-      const cartParcels: models.ILastChannelCreateProps[] = invoices.map(
-        (item) => {
-          return {
-            invoiceGroupId: item.invoiceGroupId,
-            totalCartParcel:
-              item.totalPriceAfterTax - (item?.totalPromoSellerAndVoucher ?? 0),
-          };
-        },
-      );
-      const dataLastChannel = {
-        data: {
-          cartParcels,
-        },
-      };
-
-      paymentAction.lastChannelCreate(dispatchPayment, dataLastChannel);
-    }
-  }, [checkoutMaster.invoices.length]);
-  /** => Create orders if there is no payment TC */
-  useEffect(() => {
-    const detailTC = statePayment?.paymentTCDetail?.data;
-    if (detailTC) {
-      if (detailTC?.paymentTypes && detailTC?.paymentChannels) {
-        paymentTCModal.setOpen(true);
-      } else {
-        cartCheckedoutActions.fetch(dispatchShopingCart);
-        createOrders.create(dispatchCheckout);
-      }
-    }
-  }, [statePayment?.paymentTCDetail?.data]);
-  /** => navigate to Checkout Success if Create Orders Success */
-  useEffect(() => {
-    const data = stateCheckout.create.data;
-    if (data !== null) {
-      goToCheckoutSuccess();
-    }
-  }, [stateCheckout.create.data]);
-  /** => get payment terms and conditions detail on success post TC  */
-  React.useEffect(() => {
-    const dataTC = statePayment?.paymentTCCreate?.data;
-    if (dataTC) {
-      paymentAction.tCDetail(dispatchPayment, dataTC.id);
-    }
-  }, [statePayment?.paymentTCCreate.data]);
-  /** => get mongo data last type channels */
-  React.useEffect(() => {
-    const lastChannelId = statePayment?.paymentLastChannelCreate?.data?.id;
-    if (lastChannelId) {
-      paymentAction.lastChannelDetail(dispatchPayment, lastChannelId);
-    }
-  }, [statePayment.paymentLastChannelCreate]);
-  /** => insert data payment channel to payment channel modal master */
-  useEffect(() => {
-    if (paymentChannelsList) {
-      paymentChannelData.setPaymentChannels(paymentChannelsList.data);
-    }
-  }, [paymentChannelsList]);
-  /** => insert data last payment channel to checkout master */
-  useEffect(() => {
-    const dataLastPaymentChannel =
-      paymentLastChannelDetail?.data?.paymentTypeChannels;
-
-    if (dataLastPaymentChannel) {
-      dataLastPaymentChannel.map((item: any) =>
-        paymentAction.invoiceChannelList(dispatchPayment, item.invoiceGroupId),
-      );
-
-      setPaymentChannel(dataLastPaymentChannel);
-
-      // paymentAction.invoiceChannelList(dataLastPaymentChannel)
-      /** => fetch promo payment channel */
-      const checkAllPromoPaymentParams = dataLastPaymentChannel.map(
-        (item: any) => {
-          return {
-            invoiceGroupId: item.invoiceGroupId,
-            paymentTypeId: item.paymentType.id,
-            paymentChannelId: item.paymentChannel.id,
-            parcelPrice: item.totalPayment - item.totalFee,
-          };
-        },
-      );
-      checkAllPromoPaymentAction.create(
-        dispatchPromo,
-        checkAllPromoPaymentParams,
-      );
-    }
-  }, [paymentLastChannelDetail]);
-  /** => post promo payment that match last payment channel */
-  useEffect(() => {
-    if (statePromo.checkAllPromoPayment.create.data !== null) {
-      checkAllPromoPaymentAction.list(
-        dispatchPromo,
-        statePromo.checkAllPromoPayment.create.data.id,
-      );
-    }
-  }, [statePromo.checkAllPromoPayment.create]);
-
-  /** => post promo payment that match last payment channel */
-  useEffect(() => {
-    if (statePromo.checkAllPromoPayment.list.data.length > 0) {
-      const promoPaymentLastChannel =
-        statePromo.checkAllPromoPayment.list.data.map((item) => {
-          return {
-            invoiceGroupId: item.invoiceGroupId,
-            totalPromoPayment: item.promoPaymentAmount,
-          };
-        });
-      setPromoPayment(promoPaymentLastChannel);
-    }
-  }, [statePromo.checkAllPromoPayment.list]);
-  /** => get promo payment list that match payment channel list */
-  useEffect(() => {
-    if (
-      paymentChannelData.paymentChannels.length > 0 &&
-      statePromo.checkPromoPayment.list.data.length === 0
-    ) {
-      const paymentChannelId: Array<number> = [];
-      paymentChannelData.paymentChannels.map(
-        (paymentChannel: models.IPaymentChannels) => {
-          paymentChannel.type.map((paymentChannelType) => {
-            paymentChannelId.push(paymentChannelType.id);
-          });
-        },
-      );
-      const checkPromoPaymentParams = {
-        paymentTypeId: paymentChannelData.paymentType.id,
-        paymentChannelId,
-        parcelPrice: paymentChannelData.totalCartParcel,
-        invoiceGroupId: paymentChannelData.invoiceGroupId,
-      };
-      /** => fetch promo payment */
-      checkPromoPaymentAction.list(dispatchPromo, checkPromoPaymentParams);
-    }
-  }, [paymentChannelData.paymentChannels]);
-  /** => insert data promo payment to channel modal master */
-  useEffect(() => {
-    if (statePromo.checkPromoPayment.list.data.length > 0) {
-      const payload = statePromo.checkPromoPayment.list.data.map((item) => {
-        return {
-          paymentChannelId: item.paymentChannelId,
-          promPaymentDescription: item.promoPaymentDescription,
-          promoPaymentAmount: item.promoPaymentAmount,
-          promoPaymentAvailable: item.promoPaymentAvailable,
-        };
-      });
-      paymentChannelData.updatePromoPaymentChannel(payload);
-    }
-    // if error
-    if (statePromo.checkPromoPayment.list.error !== null) {
-      const action = () => {
-        const paymentChannelId: Array<number> = [];
-        paymentChannelData.paymentChannels.map(
-          (item: models.IPaymentChannels) => {
-            paymentChannelId.push(item.id);
-          },
-        );
-        const checkPromoPaymentParams = {
-          paymentTypeId: paymentChannelData.paymentType.id,
-          paymentChannelId,
-          parcelPrice: paymentChannelData.totalCartParcel,
-          invoiceGroupId: paymentChannelData.invoiceGroupId,
-        };
-        checkPromoPaymentAction.list(dispatchPromo, checkPromoPaymentParams);
-      };
-      errorFetchModal.setOpen(true);
-      errorFetchModal.setErrorAction(() => action);
-      errorFetchModal.setErrorText('Ulangi');
-    }
-  }, [statePromo.checkPromoPayment.list]);
-
-  /** => function after select payment type */
-  const selectedPaymentType = (item: any) => {
-    const invoiceGroupId = paymentChannelData?.invoiceGroupId;
-    const totalCartParcel = paymentChannelData?.totalCartParcel;
-    const paymentTypeId = item?.id;
-    paymentTypeModal.setOpen(false);
-    paymentChannelsModal.setOpen(true);
-    if (invoiceGroupId && paymentTypeId) {
-      paymentAction.channelsList(
-        dispatchPayment,
-        invoiceGroupId,
-        totalCartParcel,
-        paymentTypeId,
-      );
-    }
+  /** => to Payment Method Page  */
+  const dataToPaymentMethod = { totalPaymentNumber, addTime, totalQtyCheckout };
+  const toPaymentMethod = () => {
+    paymentMethodList.reset(dispatchPaymentMethod);
+    paymentMethodCreateOrder.reset(dispatchPaymentMethod);
+    PaymentMethodSubRtdb.reset(dispatchPaymentMethod);
+    thankYouPageCancelOrderAction.reset(dispatchThankYouPage);
+    thankYouPageAction.thankYouPageReset(dispatchThankYouPage);
+    clearTimeout(timeRef.current);
+    goToPaymentMethod(dataToPaymentMethod);
   };
-  /** => for close payment channel modal */
-  const closePaymentChannel = () => {
-    paymentChannelsModal.setOpen(false);
-    /** => reset payment channel list context data */
-    paymentAction.resetChannelList(dispatchPayment);
-    /** => reset check-promo-payment context data */
-    checkPromoPaymentAction.reset(dispatchPromo);
-    /** => reset payment modal master data (payment channel) */
-    paymentChannelData.resetPaymentModalMasterData();
-  };
-  /** for back from payment channel modal */
-  const backModalPaymentChannel = () => {
-    closePaymentChannel();
-    paymentTypeModal.setOpen(true);
-  };
+
   /** handle back to cart */
   const handleBackToCart = () => {
-    createOrders.reset(dispatchCheckout);
-    paymentAction.resetTCCreate(dispatchPayment);
-    paymentAction.resetTCDetail(dispatchPayment);
-    checkoutViewActions.reset(dispatchCheckout);
-    setModalErrorCheckout(false);
-    backToCartModal.setOpen(false);
-    expiredTime.setOpen(false);
-    backToCart();
-  };
-  /** close modal terms and condition */
-  const closeModalTC = () => {
-    paymentTCModal.setOpen(false);
-    paymentAction.resetTCCreate(dispatchPayment);
-    paymentAction.resetTCDetail(dispatchPayment);
+    updateCartAction.reset(dispatchCart);
+    checkoutAction.reset(dispatchCheckout);
+    refExpiredTimeModal.current?.close();
+    refBackToCartModal.current?.close();
+    clearTimeout(timeRef.current);
+    goToShoppingCart();
   };
 
-  const handleParcelDetail = (data: models.IInvoiceCheckout | null) => {
-    modalParcelDetail.setData(data);
-  };
-
-  const handleProductList = (data: models.ProductCheckout[] | null) => {
-    modalProductList.setData(data);
-  };
-
-  const handleCheckExpiredSession = () => {
-    if (!expiredTime.check()) {
-      return false;
-    } else {
-      setExpiredSession(true);
-      return true;
-    }
-  };
-
-  /** === VIEW === */
-  const ModalErrorCreateOrders = () => {
-    return (
-      <BottomSheetError
-        open={errorCreateOrders}
-        error={stateCheckout.create.error}
-        closeAction={() => handleBackToCart()}
-        retryAction={() => {
-          setErrorCreateOrders(false);
-          handleRetryCreateOrder();
-        }}
-      />
-    );
-  };
-
-  const ModalInvoiceParcelDetail = () => {
-    return (
-      <ModalParcelDetail
-        isOpen={modalParcelDetail.isOpen}
-        close={() => {
-          modalParcelDetail.setData(null);
-        }}
-        data={modalParcelDetail.data}
-      />
-    );
-  };
-
-  const renderModalProductList = () => {
-    return (
-      <ModalProductList
-        isOpen={modalProductList.isOpen}
-        close={() => {
-          modalProductList.setData(null);
-        }}
-        data={modalProductList.data}
-      />
-    );
-  };
+  if (data === null) {
+    return null;
+  }
 
   return (
     <SnbContainer color="grey">
+      {/* header view */}
       <CheckoutHeader
         backAction={() => {
-          backToCartModal.setOpen(true);
+          refBackToCartModal.current?.open();
         }}
       />
-      {checkoutLoading ? (
+      {/* {checkoutLoading ? (
         <LoadingPage />
-      ) : (
-        <>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <CheckoutAddressView />
-            {Array.isArray(checkoutMaster.invoices) &&
-              checkoutMaster.invoices.length > 0 &&
-              checkoutMaster.invoices.map((invoiceGroup, index) => (
-                <CheckoutInvoiceGroupView
-                  key={invoiceGroup.invoiceGroupId}
-                  data={invoiceGroup}
-                  openModalPaymentType={() => paymentTypeModal.setOpen(true)}
-                  openModalParcelDetail={handleParcelDetail}
-                  openModalProductList={handleProductList}
-                  index={index}
-                />
-              ))}
-          </ScrollView>
-          <CheckoutBottomView
-            data={checkoutMaster.invoices}
-            openTCModal={() => paymentTCModal.setOpen(true)}
-            openErrorWarning={() => errorWarningModal.setOpen(true)}
-            closeErrorWarning={() => errorWarningModal.setOpen(false)}
-            checkExpiredTime={handleCheckExpiredSession}
-          />
-          <ModalPaymentType
-            isOpen={paymentTypeModal.isOpen}
-            close={paymentTypeModal.close}
-            openModalPaymentChannels={selectedPaymentType}
-          />
-          <ModalPaymentChannels
-            isOpen={paymentChannelsModal.isOpen && !errorFetchModal.isOpen}
-            back={backModalPaymentChannel}
-            close={closePaymentChannel}
-          />
+      ) : ( */}
 
-          <ModalTermAndCondition
-            isOpen={paymentTCModal.isOpen}
-            close={() => closeModalTC()}
-          />
-          <ModalErrorWarning
-            open={errorWarningModal.isOpen}
-            content={'Anda belum memilih metode pembayaran'}
-          />
-          <BackToCartModal
-            isOpen={backToCartModal.isOpen}
-            handleNoAction={() => {
-              backToCartModal.setOpen(false);
-            }}
-            handleOkAction={handleBackToCart}
-          />
-          <ModalBottomErrorCheckout
-            isOpen={errorBottomModal.isOpen}
-            close={() => errorBottomModal.setOpen(false)}
-          />
-          <ErrorFetchModal
-            visible={errorFetchModal.isOpen}
-            onPress={() => {
-              errorFetchModal.setOpen(false);
-              errorFetchModal.errorAction();
-            }}
-            buttonText={errorFetchModal.errorText}
-          />
-          <ModalBottomErrorExpiredTime
-            isOpen={isExpiredSession}
-            close={handleBackToCart}
-          />
-          <BottomSheetError
-            open={modalErrorCheckout}
-            error={checkoutError}
-            closeAction={handleBackToCart}
-          />
-          {ModalErrorCreateOrders()}
-          {ModalInvoiceParcelDetail()}
-          {renderModalProductList()}
-        </>
-      )}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* address view */}
+        <CheckoutAddressView
+          buyerAddress={data.buyerAddress}
+          buyerName={data.buyerName}
+        />
+        {/* main body view */}
+        <CheckoutInvoiceGroupView data={data} />
+        {/* term and condition view */}
+        <CheckoutTNCView clickAction={handleOpenTNCModal} />
+      </ScrollView>
+
+      {/* bottom view */}
+      <CheckoutBottomView data={data} goToPaymentMethod={toPaymentMethod} />
+
+      {/* modal expired time */}
+      <ModalBottomErrorExpiredTime
+        parentRef={refExpiredTimeModal}
+        close={handleBackToCart}
+      />
+
+      {/* modal Term and Condition */}
+      <ModalCheckoutTNC
+        parentRef={refTermConditionModal}
+        close={() => refTermConditionModal.current?.close()}
+        data={TncContentData}
+      />
+
+      {/* modal back to cart */}
+      <BackToCartModal
+        parentRef={refBackToCartModal}
+        handleNoAction={() => {
+          refBackToCartModal.current?.close();
+        }}
+        handleOkAction={handleBackToCart}
+      />
+
+      {/* )} */}
     </SnbContainer>
   );
 };
@@ -573,8 +177,8 @@ export default OmsCheckoutView;
  * ================================================================
  * createdBy: ryan (voyager)
  * createDate: 10092021
- * updatedBy: Maulana Ghozi (pyramid)
- * updatedDate: 25112021
+ * updatedBy: Andi Chaedir Dwiantara (valkyrie)
+ * updatedDate: 08032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)

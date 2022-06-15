@@ -1,17 +1,16 @@
-import React, { FC, useReducer, useMemo } from 'react';
-
+import React from 'react';
 import {
   CheckoutContext,
   checkoutInitialState,
   checkoutReducer,
 } from './checkout.context';
 
-const CheckoutProvider: FC = ({ children }) => {
-  const [stateCheckout, dispatchCheckout] = useReducer(
+const CheckoutProvider: React.FC = ({ children }) => {
+  const [stateCheckout, dispatchCheckout] = React.useReducer(
     checkoutReducer,
     checkoutInitialState,
   );
-  const contextValue = useMemo(
+  const valueProvider = React.useMemo(
     () => ({
       stateCheckout,
       dispatchCheckout,
@@ -19,7 +18,7 @@ const CheckoutProvider: FC = ({ children }) => {
     [stateCheckout, dispatchCheckout],
   );
   return (
-    <CheckoutContext.Provider value={contextValue}>
+    <CheckoutContext.Provider value={valueProvider}>
       {children}
     </CheckoutContext.Provider>
   );

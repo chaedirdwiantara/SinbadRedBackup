@@ -1,24 +1,24 @@
 import { StyleSheet } from 'react-native';
-import { color } from 'react-native-sinbad-ui';
+import { colorV2, spacingV2 as layout, borderV2 } from 'react-native-sinbad-ui';
 
 const UserStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: color.white,
+    backgroundColor: colorV2.bgColor.light,
   },
   headerContainer: {
     alignItems: 'center',
   },
   backgroundHeader: {
     position: 'absolute',
-    backgroundColor: color.red50,
+    backgroundColor: colorV2.bgColor.red,
     top: 0,
     width: '100%',
     height: '50%',
     zIndex: 0,
   },
   boxHeader: {
-    marginVertical: 16,
+    marginVertical: layout.spacing.lg,
     height: 100,
     width: 100,
   },
@@ -26,37 +26,42 @@ const UserStyles = StyleSheet.create({
     height: 100,
     width: undefined,
     aspectRatio: 1 / 1,
-    borderRadius: 100,
+    borderRadius: borderV2.radius.full,
     borderWidth: 2,
-    borderColor: color.white,
+    borderColor: colorV2.bgColor.light,
+  },
+  boxEditIconContainer: {
+    position: 'absolute',
+    right: 4,
+    bottom: 4,
+    padding: layout.spacing.xxsm,
+    backgroundColor: colorV2.bgColor.light,
+    borderRadius: borderV2.radius.lg,
   },
   boxEditIcon: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
+    padding: layout.spacing.xxsm,
+    backgroundColor: colorV2.iconColor.default,
+    borderRadius: borderV2.radius.lg,
   },
   boxContent: {
-    paddingHorizontal: 16,
-    paddingTop: 20,
+    paddingHorizontal: layout.spacing.lg,
+    paddingTop: layout.spacing.xl,
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  // badge: (backgroundColor) => ({
-  //   padding: 8,
-  //   backgroundColor,
-  //   borderRadius: 4,
-  //   alignSelf: 'flex-start',
-  // }),
-  // message: (color) => ({
-  //   ...Fonts.type23,
-  //   fontSize: 10,
-  //   color,
-  //   marginTop: 4,
-  // }),
-  // title: (color) => ({
-  //   ...Fonts.type48,
-  //   fontSize: 12,
-  //   color,
-  // }),
+  badgeBox: {
+    flexDirection: 'row',
+    margin: layout.spacing.lg,
+    padding: layout.spacing.lg,
+    backgroundColor: colorV2.special.blue10,
+    borderRadius: borderV2.radius.sm,
+  },
+  separator: {
+    flex: 1,
+    borderTopWidth: 1,
+    borderColor: '#DAE0E7',
+    marginHorizontal: layout.spacing.lg,
+    marginTop: layout.spacing.lg,
+  },
 });
 export default UserStyles;

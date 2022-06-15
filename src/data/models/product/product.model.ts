@@ -4,16 +4,20 @@ export interface ProductList {
   id: string;
   name: string;
   sellerId: string;
-  originalPrice: number;
-  currentPrice: number;
   isBundle: boolean;
   isBonus: boolean;
   isExclusive: boolean;
+  hasBulkPrice: boolean;
   isPromo: boolean;
   thumbnail: string;
+  priceBeforeTax: number;
+  priceAfterTax: number;
+  qtySoldLabel: string;
+  qtySoldValue: number;
+  warehouseOriginId: string;
 }
 
-export interface ProductListProcessProps extends models.ListProcessProps {
+export interface ProductListProcessProps extends models.ListProcessV3Props {
   keyword?: string;
   tags?: Array<string>;
   brandId?: string;
@@ -21,23 +25,24 @@ export interface ProductListProcessProps extends models.ListProcessProps {
   minPrice?: number;
   maxPrice?: number;
   sellerId?: string;
+  perPage?: number;
 }
 
 export type ProductListQueryOptions = Omit<
   ProductListProcessProps,
-  'loading' | 'skip' | 'limit'
+  'loading' | 'page' | 'perPage'
 >;
 
 export interface ProductListItemProps
-  extends models.ListItemProps<Array<ProductList>> {
-  canLoadMore: boolean;
+  extends models.ListItemV3Props<Array<ProductList>> {
+  total: number;
 }
 
 interface ProductListPagination {
-  limit: number;
-  skip: number;
+  page: number;
   total: number;
-  canLoadMore: boolean;
+  perPage: number;
+  totalPage: number;
 }
 
 interface ProductListSuccessProps {
@@ -45,6 +50,28 @@ interface ProductListSuccessProps {
   data: Array<ProductList>;
 }
 
+interface ProductBrnd {
+  id: string;
+  name: string;
+}
+
+interface productPriceRules {
+  maxQty: number;
+  minQty: number;
+  price: number;
+}
+
+interface productTax {
+  amount: number;
+  calculate: string;
+  name: string;
+  typeAmount: string;
+}
+
+interface productSeller {
+  id: string;
+  name: string;
+}
 export interface ProductListSuccessAction {
   type: string;
   payload: ProductListSuccessProps;
@@ -54,15 +81,29 @@ export interface ProductImage {
   url: string;
 }
 
+type BulkPrice = {
+  label: string;
+  priceAfterTax: number;
+  priceBeforeTax: number;
+  qty: number;
+  taxPrice: number;
+};
+
 export interface ProductDetail {
   id: string;
+  categoryId: string;
   supplierCode: string;
+  code: string;
   sellerId: string;
   name: string;
   detail: string;
   description: string;
   productWeight: number;
   productDimension: number;
+  productBrand: ProductBrnd;
+  productPriceRules: Array<productPriceRules>;
+  productSeller: productSeller;
+  productTax: productTax;
   packagedWeight: number;
   packagedDimension: number;
   minQty: number;
@@ -77,19 +118,27 @@ export interface ProductDetail {
   unit: string;
   tags: Array<string>;
   images: Array<ProductImage>;
-  originalPrice: number;
-  currentPrice: number | null;
-  currentPriceAfterTax: number | null;
+  priceBeforeTax: number;
+  priceAfterTax: number;
   isBonus: boolean;
   isExclusive: boolean;
   isPromo: boolean;
   isAvailable?: boolean;
   isBundle?: boolean;
+  isPriceAfterTax: boolean;
+  hasBulkPrice: boolean;
   promoList: Array<models.PotentialPromoProductProps>;
+  bulkPrices: Array<BulkPrice>;
+  qtySoldLabel: string;
+  qtySoldValue: number;
+  sellerCode: string;
+  thumbnailImageUrl: string;
+  warehouseOriginId?: number | null;
+  taxPrice: number;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;
 
-export interface ProductListProcessAction extends models.ListProcessAction {
+export interface ProductListProcessAction extends models.ListProcessV3Action {
   subModule?: ProductSubModule;
 }

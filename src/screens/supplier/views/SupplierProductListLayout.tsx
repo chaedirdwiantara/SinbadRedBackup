@@ -58,12 +58,16 @@ export const SupplierProductListLayout: FC<SupplierProductLayoutProps> = ({
               <ProductListCard
                 name={product.name}
                 imageUrl={product.thumbnail}
-                currentPrice={product.currentPrice}
+                priceAfterTax={product.priceAfterTax}
+                hasBulkPrice={product.hasBulkPrice}
+                qtySoldLabel={product.qtySoldLabel}
                 isBundle={product.isBundle}
                 isPromo={product.isPromo}
                 isExclusive={product.isExclusive}
                 onCardPress={() => {
-                  goToProductDetail(product.id);
+                  goToProductDetail(
+                    `${product.id}_${product.warehouseOriginId}`,
+                  );
                 }}
                 withOrderButton={true}
                 onOrderPress={() => onOrderPress(product)}

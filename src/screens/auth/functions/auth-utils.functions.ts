@@ -1,3 +1,6 @@
+import { IToastShowOptions } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/Toast/types';
+import { StatusBar } from 'react-native';
+
 //** RENDER IF */
 export const renderIF = (
   params: boolean,
@@ -71,40 +74,62 @@ export const extractAddress = (data: any) => {
   return dataAddress;
 };
 
+export const DEFAULT_LATITUDE = -6.2;
+export const DEFAULT_LONGITUDE = 106.816666;
+export const REGION_OPTIONS = {
+  latitudeDelta: 0.02,
+  longitudeDelta: 0.02,
+};
+
+export function getStreetName(data: any) {
+  let streetName = 'Jalan tidak diketahui';
+  data?.map((item: any) => {
+    if (item.types.indexOf('route') > -1) {
+      streetName = item.long_name;
+    }
+  });
+  return streetName;
+}
+
 export const setErrorMessage = (code: number, message?: string) => {
   switch (code) {
-    case 10002: {
+    case 40010000002: {
       return 'Email yang Anda masukkan telah terdaftar';
     }
-    case 10003: {
+    case 40010000003: {
       return 'Format email yang Anda masukkan salah';
     }
-    case 10004: {
+    case 40010000004: {
       return 'No. HP harus berupa angka';
     }
-    case 10005: {
+    case 40010000005: {
       return 'No. Hp yang Anda masukkan sudah terdaftar';
     }
-    case 10006: {
+    case 40010000006: {
       return 'No. Hp tidak boleh kosong';
     }
-    case 10007: {
-      return 'No. Hp yang Anda masukkan tidak terdaftar';
+    case 40010000007: {
+      return 'Nomor belum terdaftar';
     }
-    case 10008: {
+    case 40010000008: {
       return 'Kode OTP salah/kadaluarsa';
     }
-    case 10009: {
+    case 40010600009: {
       return 'Data user tidak valid';
     }
-    case 10010: {
+    case 40010000010: {
       return 'ID Toko/Password yang Anda masukkan salah';
     }
-    case 12049: {
+    case 40010000049: {
       return 'Toko tidak ditemukan';
     }
     default: {
       return message || 'Terjadi kesalahan';
     }
   }
+};
+
+export const toastOptions: IToastShowOptions = {
+  position: 'top',
+  positionValue: (StatusBar.currentHeight || 0) + 56,
 };

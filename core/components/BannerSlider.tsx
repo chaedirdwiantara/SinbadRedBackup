@@ -3,12 +3,15 @@ import {
   Image,
   StyleSheet,
   View,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { color, SnbText, SnbImageCompressor } from 'react-native-sinbad-ui';
+import {
+  color,
+  SnbImageCompressor,
+  SnbCarouselIndicator2,
+} from 'react-native-sinbad-ui';
 const { width } = Dimensions.get('window');
 import * as models from '@models';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -33,6 +36,7 @@ const BannerSlider: React.FC<PropsData> = (props) => {
   const [useScroll, setUseScroll] = React.useState(false);
   /** == HOOK === */
   const prevOffsetWidth = usePrevious(contentOffsetWidth);
+  const carouselRef = React.useRef();
   const scrollViewRef = React.useRef<ScrollView>(null);
   const autoScrollTime: any = React.useRef(null);
   const endDragTime: any = React.useRef(null);
@@ -128,32 +132,6 @@ const BannerSlider: React.FC<PropsData> = (props) => {
     });
   };
   /** === VIEW === */
-  /** => pagination */
-  const pagination = () => {
-    return (
-      <View style={styles.pagination}>
-        {staticData.map((data, index) => {
-          return (
-            <View key={index} style={{ marginRight: 4 }}>
-              {page === index + 1 ? (
-                <View style={styles.dotActive} />
-              ) : (
-                <View style={styles.dot} />
-              )}
-            </View>
-          );
-        })}
-      </View>
-    );
-  };
-  /** => see more */
-  const seeMore = () => {
-    return (
-      <TouchableOpacity onPress={props.seeAll} style={styles.buttonSeeMore}>
-        <SnbText.B1>Lihat semua</SnbText.B1>
-      </TouchableOpacity>
-    );
-  };
   /** => content item more */
   const contentMoreItem = () => {
     return (
@@ -198,8 +176,13 @@ const BannerSlider: React.FC<PropsData> = (props) => {
   const bottomAction = () => {
     return (
       <View style={styles.bottomAction}>
-        {pagination()}
-        {seeMore()}
+        <SnbCarouselIndicator2
+          carouselRef={carouselRef}
+          dotsLength={staticData.length}
+          activeDotIndex={page - 1}
+          buttonTitle="Lihat Semua"
+          onPressButton={props.seeAll}
+        />
       </View>
     );
   };
@@ -213,7 +196,7 @@ const BannerSlider: React.FC<PropsData> = (props) => {
         <TouchableWithoutFeedback onPress={() => props.goToDetail(data)}>
           <View>
             <SnbImageCompressor
-              defaultSource={require('../../src/assets/images/banner/sinbad-loading-image-banner.png')}
+              defaultSource={require('../../src/assets/images/banner/sinbad-default-banner.png')}
               uri={data?.imageUrl}
               style={styles.imageBanner}
               res={500}
@@ -259,50 +242,20 @@ const BannerSlider: React.FC<PropsData> = (props) => {
       : contentOne();
   };
   /** => main */
-  return <View style={styles.container}>{process()}</View>;
+  return <>{process()}</>;
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: color.white,
-  },
   bottomAction: {
     width: '100%',
-    alignItems: 'center',
     position: 'absolute',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     bottom: 0,
-    padding: 16,
-  },
-  pagination: {
-    flexDirection: 'row',
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 16,
-    backgroundColor: color.black10,
-  },
-  dotActive: {
-    width: 16,
-    height: 8,
-    borderRadius: 16,
-    backgroundColor: color.white,
-  },
-  buttonSeeMore: {
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: color.white,
+    paddingHorizontal: 16,
   },
   imageBanner: {
     height: undefined,
     width: '100%',
-    aspectRatio: 8 / 6,
+    aspectRatio: 2 / 1,
   },
 });
 

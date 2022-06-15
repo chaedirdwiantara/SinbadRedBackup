@@ -8,37 +8,43 @@ import {
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
+import { useDataAuth } from '@core/redux/Data';
+import { NavigationAction } from '@navigation';
 
 const LoginOTPView: React.FC = () => {
-  const { goBack, reset } = useNavigation();
+  const { goBack } = useNavigation();
   const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
-  const { resetVerifyOTP, mobilePhone } = useOTP();
-  const [hide, setHide] = React.useState(true);
+  const { resetVerifyOTP, mobilePhone, getLocationPermissions } = useOTP();
+  const { meV2 } = useDataAuth();
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if (verifyOTP.data !== null) {
-      setHide(false);
-      setTimeout(() => {
-        reset({ index: 0, routes: [{ name: 'Home' }] });
-      }, 250);
-    }
-    if (verifyOTP.error !== null) {
-      setHide(false);
-    }
+    verifyOTP.data !== null && setLoading(true);
   }, [verifyOTP]);
+
+  React.useEffect(() => {
+    if (meV2.data) {
+      if (meV2.data?.data?.isBuyerCategoryCompleted) {
+        NavigationAction.resetToHome();
+      } else {
+        getLocationPermissions();
+      }
+    }
+    meV2.error && setLoading(false);
+  }, [meV2]);
 
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
+      <SnbTopNav2.Type3
         backAction={goBack}
-        type="white"
+        color="white"
         title="Kode Verifikasi"
       />
       <ScrollView>
         <OTPContent
+          testID="login"
           onVerifyOTP={(otp) => {
-            setHide(true);
             resetVerifyOTP();
             verificationOTP({ mobilePhone, otp });
           }}
@@ -48,9 +54,8 @@ const LoginOTPView: React.FC = () => {
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
-          hideIcon={hide}
           otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading}
+          loading={verifyOTP.loading || loading}
           phoneNo={maskPhone(mobilePhone)}
         />
       </ScrollView>

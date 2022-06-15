@@ -2,17 +2,11 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { enableScreens } from 'react-native-screens';
 import { View, Platform } from 'react-native';
-import { HomeView } from '@screen/home/views';
-import { HistoryListView } from '@screen/history/views';
+import { HomeView } from '@screen/home-v2/views';
+import { OrderHistoryListView } from '@screen/order-history/views';
 import { HelpView } from '@screen/help/views';
 import { UserView } from '@screen/user/views';
-import FastOrderView from '../components/FastOrderView';
-import {
-  color as colors,
-  SnbText,
-  SnbIconHint,
-  SnbSvgIcon,
-} from 'react-native-sinbad-ui';
+import { SnbIconHint2, SnbText2, colorV2 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '../functions/navigation';
 import { useDataAuth } from '@core/redux/Data';
 
@@ -27,9 +21,9 @@ const TabNavigator = () => {
       detachInactiveScreens
       tabBarOptions={{
         allowFontScaling: true,
-        activeTintColor: colors.red50,
-        inactiveTintColor: colors.black40,
-        style: { height: Platform.OS === 'ios' ? '10%' : 54 },
+        activeTintColor: colorV2.iconColor.dark,
+        inactiveTintColor: colorV2.iconColor.default,
+        style: { height: Platform.OS === 'ios' ? '10%' : 58 },
       }}>
       <Screen
         name="HomeView"
@@ -37,18 +31,19 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText.C1 color={color}>Beranda</SnbText.C1>
+              <SnbText2.Caption.Small color={color}>
+                Beranda
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
               <View style={{ height: 24 }}>
-                <SnbIconHint
-                  badgeColor="red"
-                  iconName="beranda"
-                  size={24}
+                <SnbIconHint2
+                  value={0}
                   iconColor={color}
-                  dotShow={false}
+                  iconName="home"
+                  size={24}
                 />
               </View>
             </View>
@@ -57,7 +52,7 @@ const TabNavigator = () => {
       />
       <Screen
         name="HistoryListView"
-        component={HistoryListView}
+        component={OrderHistoryListView}
         listeners={() => ({
           tabPress: (e) => {
             e.preventDefault();
@@ -71,45 +66,19 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText.C1 color={color}>Pesanan</SnbText.C1>
+              <SnbText2.Caption.Small color={color}>
+                Pesanan
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
-              <SnbIconHint
-                badgeColor="red"
-                iconName="pesanan"
-                size={24}
+              <SnbIconHint2
+                value={0}
                 iconColor={color}
-                dotShow={false}
+                iconName="log_history"
+                size={24}
               />
-            </View>
-          ),
-        }}
-      />
-      <Screen
-        name="FastOrderView"
-        component={FastOrderView}
-        listeners={() => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            if (me.data === null) {
-              NavigationAction.navigate('LoginPhoneView');
-            } else {
-              NavigationAction.navigate('OmsShoppingCartView');
-            }
-          },
-        })}
-        options={{
-          tabBarLabel: () => (
-            <View style={{ alignItems: 'center', paddingBottom: 8 }}>
-              <SnbText.C2 color={colors.black80}>Langsung</SnbText.C2>
-              <SnbText.C2 color={colors.black80}>Pesan</SnbText.C2>
-            </View>
-          ),
-          tabBarIcon: () => (
-            <View style={{ paddingBottom: 30 }}>
-              <SnbSvgIcon name="sinbad" size={40} />
             </View>
           ),
         }}
@@ -120,17 +89,18 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText.C1 color={color}>Bantuan</SnbText.C1>
+              <SnbText2.Caption.Small color={color}>
+                Bantuan
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
-              <SnbIconHint
-                badgeColor="red"
-                iconName="bantuan"
-                size={24}
+              <SnbIconHint2
+                value={0}
                 iconColor={color}
-                dotShow={false}
+                iconName="help"
+                size={24}
               />
             </View>
           ),
@@ -143,7 +113,7 @@ const TabNavigator = () => {
           tabPress: (e) => {
             e.preventDefault();
             if (me.data === null) {
-              NavigationAction.navigate('LoginPhoneView');
+              NavigationAction.navigate('OnBoardingView');
             } else {
               NavigationAction.navigate('UserView');
             }
@@ -152,17 +122,18 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: ({ color }) => (
             <View style={{ paddingBottom: 8 }}>
-              <SnbText.C1 color={color}>Profil</SnbText.C1>
+              <SnbText2.Caption.Small color={color}>
+                Profil
+              </SnbText2.Caption.Small>
             </View>
           ),
           tabBarIcon: ({ color }) => (
             <View style={{ paddingTop: 8 }}>
-              <SnbIconHint
-                badgeColor="red"
-                iconName="profil"
-                size={24}
+              <SnbIconHint2
+                value={0}
                 iconColor={color}
-                dotShow={false}
+                iconName="person_circle"
+                size={24}
               />
             </View>
           ),

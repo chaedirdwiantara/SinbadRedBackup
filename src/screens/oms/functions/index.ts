@@ -1,20 +1,17 @@
 /** === EXPORT ALL === */
 export * from './oms.function';
-export * from './oms-hook.function';
-export * from './shopping-cart/shopping-cart.function';
-export * from './checkout-success/checkout-success.function';
-export * from './shopping-cart/shopping-cart-hook.function';
+export * from './cart/cart-hook.function';
+export * from './cart/cart.function';
 export * from './checkout';
-export * from './verification-order/verification-order-hook.function';
-export * from './checkout/create-orders-hook.function';
-export * from './checkout-success/checkout-success.hooks.function';
-export * from './checkout-success/data';
+export * from './checkout/checkout-hook.function';
+export * from './payment-method/payment-method-hook.function';
+export * from './thank-you-page/thank-you-page.function'
 /**
  * ================================================================
  * NOTES
  * ================================================================
- * createdBy: hasapu (team)
- * createDate: 01022021
+ * createdBy: ryan (team)
+ * createDate: 31082021
  * updatedBy: -
  * updatedDate: -
  * updatedFunction/Component:

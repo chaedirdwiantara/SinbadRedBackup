@@ -56,6 +56,7 @@ const CategoryProductView: FC = () => {
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
         <ProductList
+          total={productListState.total}
           products={productListState.data}
           activeCategory={category}
           withCategoryTabs={categoryFirstLevelIndex !== undefined} // Only for 2nd and 3rd level categories
@@ -83,14 +84,10 @@ const CategoryProductView: FC = () => {
             })
           }
           onLoadMore={(queryOptions) =>
-            loadMore(
-              dispatchProduct,
-              {
-                skip: productListState.skip,
-                canLoadMore: productListState.canLoadMore,
-              },
-              { categoryId: category.id, ...queryOptions },
-            )
+            loadMore(dispatchProduct, productListState, {
+              categoryId: category.id,
+              ...queryOptions,
+            })
           }
         />
       </View>

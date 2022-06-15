@@ -21,9 +21,29 @@ export const getSelectionFailed = (data: any) => {
     payload: data,
   };
 };
+export const loadMoreSelectionProcess = (data: any) => {
+  return {
+    type: types.LOAD_MORE_SELECTION_PROCESS,
+    payload: data,
+  };
+};
+
+export const loadMoreSelectionSuccess = (data: any) => {
+  return {
+    type: types.LOAD_MORE_SELECTION_SUCCESS,
+    payload: data,
+  };
+};
+
+export const loadMoreSelectionFailed = (data: any) => {
+  return {
+    type: types.LOAD_MORE_SELECTION_FAILED,
+    payload: data,
+  };
+};
 
 export const getLocationProcess = (
-  data: models.IUrbanID,
+  data: models.ILocationSearch,
 ): models.IRegisterAction<any> => {
   return {
     type: types.GET_LOCATION_PROCESS,

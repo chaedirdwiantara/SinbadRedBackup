@@ -1,56 +1,84 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { CheckoutStyle } from '@screen/oms/styles';
-import React, { FC } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
-import { handleTransformProductBrands } from '@screen/oms/functions';
+import React, { FC, useState } from 'react';
+import { View, TouchableOpacity, FlatList } from 'react-native';
+import { SnbText2, colorV2, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
-import { CheckoutPaymentTypeView } from './checkout-payment-type.view';
 import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
+import { CheckoutWarningTime } from './checkout-warning-time';
+import { ModalParcelDetail } from './parcel-detail-modal.view';
 /** === TYPE === */
 import * as models from '@models';
 
 interface CheckoutInvoiceGroupViewProps {
-  data: models.IInvoiceCheckout;
-  openModalPaymentType: (value: boolean) => void;
-  openModalParcelDetail: any;
-  openModalProductList: (data: models.ProductCheckout[]) => void;
-  index: number;
+  data: models.CheckoutResponse;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
-  openModalPaymentType,
-  openModalParcelDetail,
-  openModalProductList,
-  index,
 }) => {
   /** === HOOK === */
 
+  const [dataModal, setDataModal]: any = useState([]);
+  //get max lead time from product list
+  const getMaxLeadTime = (products: models.CheckoutCartProduct[]) => {
+    return Math.max.apply(
+      Math,
+      products.map(function (o) {
+        return o.leadTime;
+      }),
+    );
+  };
+
+  /** => MODAL REF */
+  const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
+
   return (
-    <View style={CheckoutStyle.invoiceGroupListContainer}>
-      <View>
-        <View style={CheckoutStyle.headerSection}>
-          <SnbText.H4>{data.invoiceGroupName}</SnbText.H4>
-          <TouchableOpacity onPress={() => openModalParcelDetail(data as any)}>
-            <SnbText.B2 color={color.red50}>Lihat Lebih</SnbText.B2>
-          </TouchableOpacity>
-        </View>
-        <CheckoutSKUListView
-          products={handleTransformProductBrands(data.brands)}
-          openModalProduct={openModalProductList}
-        />
+    <>
+      <View style={CheckoutStyle.invoiceGroupListContainer}>
+        <CheckoutWarningTime />
       </View>
-      <CheckoutShipmentDetailView />
-      <CheckoutPaymentTypeView
-        data={data}
-        openModalPaymentType={openModalPaymentType}
-        index={index}
+
+      <FlatList
+        keyExtractor={(_, index) => index.toString()}
+        data={data?.sellers}
+        renderItem={({ item }) => (
+          <>
+            <View style={CheckoutStyle.invoiceGroupListField}>
+              <View style={CheckoutStyle.headerSection}>
+                <SnbText2.Headline.Small color={colorV2.textColor.default}>
+                  {item.sellerName}
+                </SnbText2.Headline.Small>
+                <TouchableOpacity
+                  onPress={() => {
+                    refParcelDetailModal.current?.open();
+                    setDataModal(item.products);
+                  }}>
+                  <SnbText2.Body.Small color={colorV2.textColor.link}>
+                    Lihat Detail
+                  </SnbText2.Body.Small>
+                </TouchableOpacity>
+              </View>
+              <CheckoutSKUListView products={item.products} />
+              <CheckoutShipmentDetailView
+                leadTime={getMaxLeadTime(item.products)}
+              />
+              <CheckoutPaymentDetailView products={item.products} />
+            </View>
+            <ModalParcelDetail
+              parentRef={refParcelDetailModal}
+              close={() => {
+                refParcelDetailModal.current?.close();
+              }}
+              data={dataModal}
+              sellerName={item.sellerName}
+            />
+          </>
+        )}
       />
-      <CheckoutPaymentDetailView data={data} />
-    </View>
+    </>
   );
 };
 
@@ -60,8 +88,8 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
  * ================================================================
  * createdBy: Maulana Ghozi (pyramid)
  * createDate: 25112021
- * updatedBy: -
- * updatedDate: -
+ * updatedBy: Andi Chaedir Dwiantara (Valkyrie)
+ * updatedDate: 08032022
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
