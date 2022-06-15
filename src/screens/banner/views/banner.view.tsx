@@ -111,10 +111,10 @@ const BannerListView: React.FC = () => {
         {/* Foter */}
         <View style={BannerStyles.footerCardBanner}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <SnbIcon name={'calender'} color={color.black60} size={16} />
+            {/* <SnbIcon name={'calender'} color={color.black60} size={16} /> */}
             <View style={{ marginLeft: 7 }}>
               <SnbText.C1 color={color.black60}>
-                Berlaku sampai {moment(item.activeTo).format('DD MMM YYYY')}
+                {/* Berlaku sampai {moment(item.activeTo).format('DD MMM YYYY')} */}
               </SnbText.C1>
             </View>
           </View>
