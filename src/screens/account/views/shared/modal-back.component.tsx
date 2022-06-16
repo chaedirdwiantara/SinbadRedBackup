@@ -32,8 +32,9 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
       <View onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
         <Content.Illustration
           title="Yakin Ingin Keluar?"
-          image={require('@image/onboard/onboard1.png')}
+          image={require('@image/sinbad_image/back_completeness.png')}
           description="Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan"
+          imageStyle={{ height: 180, resizeMode: 'contain' }}
         />
       </View>
     );

@@ -73,7 +73,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
                 <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                  {product.productName} {product.qty}
+                  {product.productName}
                 </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
@@ -94,8 +94,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
             <View style={ThankYouPageStyle.OrderDetailItem}>
               <View style={{ width: '50%' }}>
                 <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                  {sellerData.products[0]?.productName}{' '}
-                  {sellerData.products[0]?.qty}
+                  {sellerData.products[0]?.productName}
                 </SnbText2.Paragraph.Default>
               </View>
               {/* <View> */}
@@ -114,8 +113,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
               <View style={ThankYouPageStyle.OrderDetailItem}>
                 <View style={{ width: '50%' }}>
                   <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                    {sellerData.products[1]?.productName}{' '}
-                    {sellerData.products[1]?.qty}
+                    {sellerData.products[1]?.productName}
                   </SnbText2.Paragraph.Default>
                 </View>
                 {/* <View> */}
@@ -200,7 +198,6 @@ export const ModalThankYouPageOrderDetail = forwardRef<
                 )}
               </View>
             </TouchableOpacity>
-            <ThankYouPageCardDivider />
           </>
         )}
       </>
@@ -209,6 +206,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   const deliveryAndOtherCost = () => {
     return (
       <>
+      <ThankYouPageCardDivider />
         <View>
           <View style={ThankYouPageStyle.OrderDetailItem}>
             <View>
@@ -271,7 +269,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
     return (
       <View style={{ marginBottom: 16 }}>
         <ScrollView
-          style={{ paddingTop: 16, paddingBottom:24, maxHeight: height * 0.6 }}
+          style={{ paddingTop: 16, maxHeight: height * 2 }}
           showsVerticalScrollIndicator={false}>
           {orderDetail()}
         </ScrollView>
