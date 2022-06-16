@@ -95,10 +95,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           {renderProductImage(unavailableProducts[0].productImageUrl)}
           <View style={{ justifyContent: 'center', flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <SnbText2.Paragraph.Default
-                color={colorV2.textColor.disable}
-                numberOfLines={1}
-                ellipsizeMode={'tail'}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.disable}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
               <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
@@ -129,9 +126,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                 <View style={{ flex: 1 }}>
                   <View style={{ flex: 1 }}>
                     <SnbText2.Paragraph.Default
-                      color={colorV2.textColor.disable}
-                      numberOfLines={1}
-                      ellipsizeMode={'tail'}>
+                      color={colorV2.textColor.disable}>
                       {item.productName}
                     </SnbText2.Paragraph.Default>
                     <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
