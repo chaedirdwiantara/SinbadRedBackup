@@ -236,7 +236,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     <FooterButton.Order
       titleButton="Checkout Sekarang"
       loadingButton={isCheckoutBtnLoading}
-      disabled={isCheckoutDisabled}
+      disabled={isCheckoutDisabled || isCheckoutBtnLoading}
       value={countTotalPrice}
       description={`${countTotalProduct} barang dipilih`}
       buttonPress={handleOnPressCheckout}
