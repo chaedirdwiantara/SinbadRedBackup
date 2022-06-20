@@ -6,6 +6,7 @@ import {
   SnbCheckbox2,
   SnbIcon,
   colorV2,
+  SnbGrayscaleImage,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
@@ -32,15 +33,16 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: 0.5,
         }}>
-        <Image
-          source={{
-            uri: imageUrl,
-          }}
-          defaultSource={Images.opacityPlaceholder}
-          style={ShoppingCartStyles.productImg}
-        />
+        <SnbGrayscaleImage grayscaleAmount={1} brightnessAmount={1}>
+          <Image
+            source={{
+              uri: imageUrl,
+            }}
+            defaultSource={Images.opacityPlaceholder}
+            style={ShoppingCartStyles.productImg}
+          />
+        </SnbGrayscaleImage>
       </View>
     );
   };
