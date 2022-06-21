@@ -93,7 +93,7 @@ const DataTokoStep1View: React.FC = () => {
             type={'default'}
             keyboardType={'numeric'}
             value={telp}
-            maxLength={11}
+            maxLength={14}
             onChangeText={(text) => {
               text = text.replace(/[^0-9]/g, '');
               setTelp(text);
