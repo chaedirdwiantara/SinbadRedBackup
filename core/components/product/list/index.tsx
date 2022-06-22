@@ -510,7 +510,7 @@ const ProductList: FC<ProductListProps> = ({
         name="sort-modal"
         title="Urutkan"
         contentHeight={220}
-        onBlur={() => handleActionClick({ type: 'filter', show: false })}
+        onBlur={() => handleActionClick({ type: 'sort', show: false })}
         onClose={() => handleActionClick({ type: 'sort', show: false })}>
         <Action.Sort
           appliedOptionIndex={sortIndex}
