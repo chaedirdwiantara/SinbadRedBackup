@@ -82,7 +82,7 @@ const HelpFaqView: FC = () => {
           question:
             'Mengapa pesanan saya belum tiba dan sudah melebihi estimasi pengiriman?',
           answer:
-            'Tidak perlu khawatir kemungkinan pesanan Anda masih dalam proses pengiriman dan sudah dimuat pada jadwal pengiriman. Silakan hubungi Customer Service kami agar dibantu pengecekan lebih lanjut',
+            'Tidak perlu khawatir kemungkinan pesanan Anda masih dalam proses pengiriman dan sudah dimuat pada jadwal pengiriman. Silakan hubungi Customer Service kami agar dibantu pengecekan lebih lanjut.',
         },
       ],
     },
