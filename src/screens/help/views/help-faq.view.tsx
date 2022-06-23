@@ -13,6 +13,8 @@ import {
   SnbTextField,
   color,
   SnbCarousel,
+  SnbText2,
+  colorV2,
 } from 'react-native-sinbad-ui';
 import { goBack } from '../functions';
 /** === IMPORT STYLE HERE === */
@@ -46,7 +48,7 @@ const HelpFaqView: FC = () => {
         },
         {
           question: 'Bagaimana caranya pesan barang?',
-          answer: 'Anda bisa melakukan langkah-langkah berikut:',
+          answer: '',
           list: [
             'Cari produk yang Anda inginkan lalu ketuk tombol Pesan',
             'Pilih kuantitas barang dan ketuk tombol Tambah ke Keranjang',
@@ -119,7 +121,7 @@ const HelpFaqView: FC = () => {
       ],
     },
     {
-      title: 'Seputar Pembayaran',
+      title: 'Seputar Pembayaran dan Refund',
       content: [
         {
           question: 'Pembayaran apa saja yang tersedia di Sinbad?',
@@ -203,11 +205,11 @@ const HelpFaqView: FC = () => {
   };
   /** === RENDER MENU CONTENT ITEM === */
   const renderItem = ({ item, index }: any) => {
-    let bgColor = '#f5a623';
-    if (index % 2 === 0) {
-      bgColor = '#f5a623';
+    let bgColor = color.black60;
+    if (index === 0) {
+      bgColor = color.black60;
     } else {
-      bgColor = '#6fcf97';
+      bgColor = color.yellow50;
     }
 
     return (
@@ -221,18 +223,30 @@ const HelpFaqView: FC = () => {
         <View style={[HelpFaqStyle.boxContentItem, HelpFaqStyle.shadowForBox]}>
           <View
             style={[HelpFaqStyle.headerContent, { backgroundColor: bgColor }]}>
-            <SnbText.B1>{item.title}</SnbText.B1>
+            <SnbText.B1 color={color.white}>{item.title}</SnbText.B1>
           </View>
           {item.content.map((obj: any, i: number) => {
             return (
               <View style={{ padding: 20 }} key={i}>
                 <SnbText.H4>{obj.question}</SnbText.H4>
-                <SnbText.B3>{obj.answer}</SnbText.B3>
+                {obj.answer !== '' ? (
+                  <SnbText.B3>{obj.answer}</SnbText.B3>
+                ) : (
+                  <View />
+                )}
                 {obj.list !== undefined
                   ? obj.list.map((itemList: any, indexList: number) => {
                       return (
-                        <View key={indexList}>
-                          <SnbText.B3>- {itemList}</SnbText.B3>
+                        <View key={indexList} style={{ flexDirection: 'row' }}>
+                          <View
+                            style={{
+                              minWidth: 16,
+                            }}>
+                            <SnbText.B3>{indexList + 1}.</SnbText.B3>
+                          </View>
+                          <View>
+                            <SnbText.B3>{itemList}</SnbText.B3>
+                          </View>
                         </View>
                       );
                     })
