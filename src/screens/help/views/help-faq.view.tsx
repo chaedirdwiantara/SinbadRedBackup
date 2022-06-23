@@ -40,20 +40,24 @@ const HelpFaqView: FC = () => {
       title: 'Pertanyaan Umum',
       content: [
         {
-          question: 'Bagaimana caranya mendaftar sebagai merchant?',
+          question: 'Bagaimana cara saya mendaftarkan akun Toko di Sinbad',
           answer:
-            'Hubungi CS kami, dan kirimkan Nama Toko, Nama Merchant dan Photo via WA CS Sinbad untuk login details.',
+            'Pilih menu "Register" di halaman awal atau halaman profil aplikasi, lalu ikuti langkah-langkah pendaftaran. Mohon cantumkan nomor handphone yang bisa menerima SMS.',
         },
         {
           question: 'Bagaimana caranya pesan barang?',
-          answer:
-            'Ketuk tombol Langsung Pesan. Atau cari produk melalui kategori,rekomendasi, promo, brand.',
+          answer: 'Anda bisa melakukan langkah-langkah berikut:',
+          list: [
+            'Cari produk yang Anda inginkan lalu ketuk tombol Pesan',
+            'Pilih kuantitas barang dan ketuk tombol Tambah ke Keranjang',
+            'Di kiri atas Anda terdapat lambang keranjang untuk melihat daftar pesanan Anda',
+            'Jika pesanan Anda sudah sesuai, ketuk tombol Checkout Sekarang lalu Pilih Pembayaran',
+          ],
         },
         {
-          question:
-            'Jika saya lupa login / password, bagaimana cara masuk aplikasi Sinbad?',
+          question: 'Bagaimana cara masuk ke aplikasi Sinbad?',
           answer:
-            'Hubungi CS atau Salesmen kami untuk minta username, atau reset password dari halaman pertama aplikasi.',
+            'Pada halaman Masuk, silakan masukan nomor handphone yang terdaftar dan nantinya akan menerima SMS kode OTP untuk masuk ke akun Sinbad Anda.',
         },
       ],
     },
@@ -68,12 +72,23 @@ const HelpFaqView: FC = () => {
         {
           question: 'Mengapa pesanan saya di batalkan?',
           answer:
-            'Ada dua kemungkinan pesanan Merchant dibatalkan: Toko sudah mencapai Credit Limit dan tagihan belum lunas, atau, Stock di gudang habis',
+            'Pesanan dibatalkan dapat dikarenakan produk yang Anda pesan tidak tersedia atau stok produk kosong. Jangan khawatir jika pesanan dibatalkan maka dana akan dikembalikan ke rekening Anda.',
         },
         {
-          question: 'Mengapa pesanan saya belum tiba diatas 2x 24 jam?',
+          question: 'Apakah saya akan dikenakan ongkos pengiriman?',
           answer:
-            'Dikarenakan ada schedule dari gudang, pesanan Merchant masih dalam proses pengiriman dan sudah di muat di schedule pengiriman.',
+            'Saat ini di Sinbad tidak ada biaya pengiriman atau free delivery.',
+        },
+        {
+          question: 'Berapa lama waktu pengiriman pesanan?',
+          answer:
+            'Masing-masing Supplier memiliki estimasi pengiriman yang berbeda. Untuk estimasi pengiriman dapat dilihat pada menu Pesanan di aplikasi Sinbad Anda.',
+        },
+        {
+          question:
+            'Mengapa pesanan saya belum tiba dan sudah melebihi estimasi pengiriman?',
+          answer:
+            'Tidak perlu khawatir kemungkinan pesanan Anda masih dalam proses pengiriman dan sudah dimuat pada jadwal pengiriman. Silakan hubungi Customer Service kami agar dibantu pengecekan lebih lanjut',
         },
       ],
     },
@@ -81,51 +96,45 @@ const HelpFaqView: FC = () => {
       title: 'Seputar Akun',
       content: [
         {
-          question: 'Bagaimana caranya retur barang?',
-          answer: 'lihat Fitur retur barang ada di bagian Bantuan.',
-        },
-        {
           question:
             'Kesulitan untuk menggunakan aplikasi Sinbad, kemana saya harus mencari bantuan?',
           answer:
-            'Merchant dapat menelfon Customer Service Sinbad atau WhatsApp 08988386606. Atau, merchant dapat minta bantuan dari Salesmen regular toko merchant.',
+            'Anda dapat menghubungi Whatsapp Customer Service Sinbad 0822-6010-6010 atau email help@sinbad.co.id',
         },
         {
-          question: 'Aplikasi saya bermasalah, bagaimana cara memperbaikinya?',
-          answer: 'Anda bisa melakukan langkah-langkah berikut:',
-          list: [
-            'Pastikan versi aplikasi Sinbad adalah versi sudah diperbarui',
-            'Clear cache/hapus data aplikasi sementara',
-            'Cek memori Android anda, hapus data jika sudah terlalu penuh',
-            'Kontak CS untuk melaporkan kendala',
-          ],
+          question: 'Apakah saya harus upgrade account Sinbad?',
+          answer:
+            'Iya, karena Anda akan mendapatkan keuntungan lebih dalam berbelanja melalui akun VIP.',
+        },
+        {
+          question: 'Dimana saya harus melengkapi Profil?',
+          answer:
+            'Silakan ketuk menu Profil pada pojok kanan bawah dan pastikan Data Diri serta Informasi Toko sudah selesai dilengkapi.',
+        },
+        {
+          question:
+            'Saya tidak bisa masuk ke aplikasi Sinbad karena nomor handphone saya sudah tidak aktif.',
+          answer: 'Hubungi Customer Service kami untuk dibantu lebih lanjut.',
         },
       ],
     },
     {
-      title: 'Seputar Retur',
+      title: 'Seputar Pembayaran',
       content: [
         {
-          question: 'Mengapa saya kesulitan membuka aplikasi Sinbad?',
+          question: 'Pembayaran apa saja yang tersedia di Sinbad?',
           answer:
-            'Hubungi CS atau Salesmen dan beri Informasi yang diperlukan supaya dapat dicari asal usul masalah aplikasi:',
-          list: [
-            'Sampaikan versi pada Android anda (Android versi 8.1, android versi 9, dll)',
-            'Sampaikan merk dagang Android Anda (Xiaomi A2 lite etc)',
-            'Sampaikan kendala anda secara detail',
-            'Tunggu jawaban dari CS / salesman',
-          ],
+            'Saat ini pembayaran di Sinbad hanya dapat melalui Transfer Virtual Account dari Bank: BCA, Mandiri, BRI, BNI',
         },
         {
-          question:
-            'Mengapa aplikasi saya mengeluarkan saya saat saya mencari barang?',
+          question: 'Bagaimana proses pengembalian dana?',
           answer:
-            'Check signal provider anda dan update ulang dari Google Play Store.',
+            'Jika pesanan dibatalkan maka proses pengembalian dana akan dikembalikan ke rekening Anda. Pastikan Anda sudah mengisi data rekening dengan benar pada menu Profil agar mempermudah proses pengembalian dana.',
         },
         {
-          question: 'Mengapa aplikasi selalu minta di-update?',
+          question: 'Berapa lama proses pengembalian dana?',
           answer:
-            'Untuk memberi pelayanan yg terbaik, kami selalu memperbarui aplikasi dengan bertahap.',
+            'Proses pengembalian dana maksimal 14 hari kerja, namun tidak perlu khawatir hal tersebut hanya estimasi dan bisa lebih cepat.',
         },
       ],
     },
