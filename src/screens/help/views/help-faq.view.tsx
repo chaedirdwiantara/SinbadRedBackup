@@ -1,11 +1,5 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import {
-  View,
-  Image,
-  ScrollView,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Image, ScrollView, Dimensions } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav,
@@ -13,8 +7,6 @@ import {
   SnbTextField,
   color,
   SnbCarousel,
-  SnbText2,
-  colorV2,
 } from 'react-native-sinbad-ui';
 import { goBack } from '../functions';
 /** === IMPORT STYLE HERE === */
