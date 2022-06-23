@@ -1,2 +1,2 @@
 Sinbad versi 0.1.2
-Updated content on FAQ about Pertanyaan Umum, Order, Account, Payment & Refund
+Pembaharuan konten FAQ Pertanyaan Umum, Order, Akun, Pembayaran & Refund
