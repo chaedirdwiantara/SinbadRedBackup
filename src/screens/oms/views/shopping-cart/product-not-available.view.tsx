@@ -6,6 +6,7 @@ import {
   SnbCheckbox2,
   SnbIcon,
   colorV2,
+  SnbGrayscaleImage,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
@@ -32,15 +33,16 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: 0.5,
         }}>
-        <Image
-          source={{
-            uri: imageUrl,
-          }}
-          defaultSource={Images.opacityPlaceholder}
-          style={ShoppingCartStyles.productImg}
-        />
+        <SnbGrayscaleImage grayscaleAmount={1} brightnessAmount={1}>
+          <Image
+            source={{
+              uri: imageUrl,
+            }}
+            defaultSource={Images.opacityPlaceholder}
+            style={ShoppingCartStyles.productImg}
+          />
+        </SnbGrayscaleImage>
       </View>
     );
   };
@@ -95,10 +97,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           {renderProductImage(unavailableProducts[0].productImageUrl)}
           <View style={{ justifyContent: 'center', flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <SnbText2.Paragraph.Default
-                color={colorV2.textColor.disable}
-                numberOfLines={1}
-                ellipsizeMode={'tail'}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.disable}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
               <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
@@ -129,9 +128,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                 <View style={{ flex: 1 }}>
                   <View style={{ flex: 1 }}>
                     <SnbText2.Paragraph.Default
-                      color={colorV2.textColor.disable}
-                      numberOfLines={1}
-                      ellipsizeMode={'tail'}>
+                      color={colorV2.textColor.disable}>
                       {item.productName}
                     </SnbText2.Paragraph.Default>
                     <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
