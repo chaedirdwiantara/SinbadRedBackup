@@ -27,7 +27,7 @@
     "@react-navigation/stack": "5.14.4",
     "@sentry/react-native": "3.2.10",
     "@sinbad/image-editor": "2.3.1",
-    "@sinbad/react-native-sinbad-ui": "1.0.70",
+    "@sinbad/react-native-sinbad-ui": "1.0.71",
     "fbjs": "0.8.18",
     "moment": "2.29.1",
     "react": "16.13.1",
