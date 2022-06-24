@@ -35,7 +35,6 @@ const HelpFaqStyles = StyleSheet.create({
     borderTopRightRadius: 15,
     justifyContent: 'center',
     paddingLeft: 20,
-    paddingRight: '60%',
   },
   tag: {
     paddingHorizontal: 12,
