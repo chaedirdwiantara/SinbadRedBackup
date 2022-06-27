@@ -1,0 +1,3 @@
+Sinbad versi 0.1.3
+Pembaharuan konten FAQ Pertanyaan Umum, Order, Akun, Pembayaran & Refund
+bug fixing product list page
