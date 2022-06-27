@@ -17,19 +17,19 @@ const callProcessAction = (
   return Actions.productListProcess(
     contextDispatch,
     {
+      ...queryOptions,
       loading,
       page,
       perPage,
-      ...queryOptions,
     },
     subModule,
   );
 };
 
+const perPage = 10;
+const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  const perPage = 10;
-  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,

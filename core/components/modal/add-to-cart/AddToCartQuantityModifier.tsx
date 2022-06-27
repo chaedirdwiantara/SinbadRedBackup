@@ -50,7 +50,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   const onChangeQtyDebounce = useCallback(
     debounce((qty) => {
       onChangeQty(qty);
-    }, 500),
+    }, 300),
     [onChangeQty],
   );
 
@@ -58,6 +58,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
     const multipleQty = product?.multipleQty || 1;
     // onChangeQty(orderQty + multipleQty);
     setCounter(counter + multipleQty);
+    onChangeQtyDebounce(counter + multipleQty);
     // onChangeQtyDebounce(counter);
   }, [counter, product?.multipleQty]);
 
@@ -65,6 +66,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
     const multipleQty = product?.multipleQty || 1;
     // onChangeQty(orderQty - multipleQty);
     setCounter(counter - multipleQty);
+    onChangeQtyDebounce(counter - multipleQty);
     // onChangeQtyDebounce(counter);
   }, [counter, product?.multipleQty]);
 
@@ -77,12 +79,15 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
       Math.floor(valueAfterMinimum / multipleQty) * multipleQty + minQty;
     if (counter < minQty) {
       setCounter(minQty);
+      onChangeQty(minQty);
     } else if (counter > stock) {
       const maxQtyAfterMinimum = stock - minQty;
       qty = Math.floor(maxQtyAfterMinimum / multipleQty) * multipleQty + minQty;
       setCounter(qty);
+      onChangeQty(qty);
     } else {
       setCounter(qty);
+      onChangeQty(qty);
     }
     setIsFocus(false);
   }, [counter, product?.minQty, dataStock?.stock, product?.multipleQty]);
@@ -93,6 +98,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
         const qtyString = qty.toString();
         if (qtyString.length <= 6) {
           setCounter(qty);
+          onChangeQty(qty);
         }
       }
     },
@@ -120,10 +126,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
     // menampilkan jumlah stock tersisa
     return `Tersisa ${dataStock?.stock}`;
   }, [dataStock?.stock, isStockEmpty]);
-  // EFFECT
-  useEffect(() => {
-    onChangeQtyDebounce(counter);
-  }, [counter]);
+
   // reset counter if loading
   useEffect(() => {
     if (!loading && product?.minQty) {
@@ -142,7 +145,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
             </SnbText2.Body.Default>
           )}
           <SnbNumberCounter2
-            disabled={disabled}
+            disabled={false}
             value={counter}
             onChange={handleChange}
             onIncrease={onPlusPres}
