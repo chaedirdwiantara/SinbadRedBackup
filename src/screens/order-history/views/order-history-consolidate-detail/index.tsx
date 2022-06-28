@@ -13,6 +13,7 @@ import {
 import { NavigationAction } from '@core/functions/navigation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
+import { InvoiceInformation } from '@screen/order-history/components/order-history-consolidate-detail';
 
 const OrderHistoryConsolidateDetail = () => {
   /** Dummy Data */
@@ -45,9 +46,7 @@ const OrderHistoryConsolidateDetail = () => {
       //   <RefreshControl refreshing={loading} onRefresh={get} />
       // }
       >
-        <View>
-          <Text>Consolidate Order Page</Text>
-        </View>
+        <InvoiceInformation />
       </ScrollView>
       <ActionFooter />
     </SnbContainer>
