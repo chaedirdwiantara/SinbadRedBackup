@@ -51,10 +51,12 @@ const StatusOrder = () => {
               }
               size="tiny"
               outline
-              onPress={() =>
-                NavigationAction.navigate('HistoryTrackingView', {
-                  id: data?.id,
-                })
+              onPress={
+                () =>
+                  NavigationAction.navigate('HistoryTrackingView', {
+                    id: data?.id,
+                  })
+                // NavigationAction.navigate('OrderHistoryConsolidateDetailView')
               }
             />
           </View>

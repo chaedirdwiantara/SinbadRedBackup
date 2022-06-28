@@ -1,5 +1,5 @@
 import React, { memo, useEffect } from 'react';
-import { RefreshControl, ScrollView } from 'react-native';
+import { RefreshControl, ScrollView, View, Text } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 import {
   StatusOrder,
@@ -15,21 +15,21 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 import { useDetailHistoryOrder } from '../../functions/history-detail';
 
 const OrderHistoryConsolidateDetail = () => {
-  const {
-    stateOrderHistory: {
-      detail: { loading },
-    },
-  } = useOrderHistoryContext();
+  // const {
+  //   stateOrderHistory: {
+  //     detail: { loading },
+  //   },
+  // } = useOrderHistoryContext();
 
   const { get, clear } = useDetailHistoryOrder();
   // get detail data history
-  useEffect(() => {
-    get();
+  // useEffect(() => {
+  //   get();
 
-    return () => {
-      clear();
-    };
-  }, []);
+  //   return () => {
+  //     clear();
+  //   };
+  // }, []);
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
@@ -38,10 +38,15 @@ const OrderHistoryConsolidateDetail = () => {
         backAction={NavigationAction.back}
       />
       <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={get} />
-        }></ScrollView>
-      // <ActionFooter />
+      // refreshControl={
+      //   <RefreshControl refreshing={loading} onRefresh={get} />
+      // }
+      >
+        <View>
+          <Text>Consolidate Order Page</Text>
+        </View>
+      </ScrollView>
+      <ActionFooter />
     </SnbContainer>
   );
 };
