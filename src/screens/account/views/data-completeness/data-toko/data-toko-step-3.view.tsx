@@ -178,7 +178,7 @@ const Content: React.FC<Props> = (props) => {
                     navigate(MAPS_VIEW_TYPE_2, {
                       onMapsResult,
                       action: 'update',
-                      existingLatLng: latLng,
+                      currentLatLng: latLng,
                     })
                   }
                   title="Ubah Titik Lokasi"
@@ -226,7 +226,7 @@ const Content: React.FC<Props> = (props) => {
                   navigate(MAPS_VIEW_TYPE_2, {
                     onMapsResult,
                     action: 'update',
-                    existingLatLng: latLng,
+                    currentLatLng: latLng,
                   })
                 }
                 style={styles.pinPoint}>
