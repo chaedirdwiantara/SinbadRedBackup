@@ -61,6 +61,8 @@ const Content: React.FC<Props> = (props) => {
     }
   }, [updateCompleteDataState]);
 
+  console.log('data:', updateCompleteDataState);
+
   function handleSubmit() {
     if (
       value.idNumber !== userData.idNo ||
@@ -152,7 +154,9 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (value.idNumber !== '' || value.nameOnKtp !== '') {
+          if (value.idNumber === '' || value.nameOnKtp === '') {
+            backToDataCompleteness();
+          } else {
             if (
               value.idNumber !== userData.idNo ||
               value.nameOnKtp !== userData.fullName
@@ -167,8 +171,6 @@ const Content: React.FC<Props> = (props) => {
             } else {
               backToDataCompleteness();
             }
-          } else {
-            backToDataCompleteness();
           }
         }}
       />
