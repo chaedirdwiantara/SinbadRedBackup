@@ -61,8 +61,6 @@ const Content: React.FC<Props> = (props) => {
     }
   }, [updateCompleteDataState]);
 
-  console.log('data:', updateCompleteDataState);
-
   function handleSubmit() {
     if (
       value.idNumber !== userData.idNo ||
