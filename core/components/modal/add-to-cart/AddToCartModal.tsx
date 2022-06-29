@@ -77,7 +77,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   const onCloseModal = useCallback(() => {
     closeAction();
     setIsBulkPriceExpand(true);
-    onChangeQty(productDetail?.minQty || 0);
+    onChangeQty(productDetail?.minQty ?? 1);
   }, [productDetail?.minQty]);
 
   // render
@@ -121,7 +121,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       <AddToCartQuantityModifier
         isStockEmpty={isStockEmpty}
         loading={loadingProduct}
-        disabled={disabled}
+        disabled={false}
         orderQty={orderQty}
         onChangeQty={onChangeQty}
         setIsFocus={setIsFocus}
