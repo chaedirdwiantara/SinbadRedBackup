@@ -152,17 +152,21 @@ const Content: React.FC<Props> = (props) => {
           props.onCloseModalBack(false);
         }}
         confirm={() => {
-          if (
-            value.idNumber !== userData.idNo ||
-            value.nameOnKtp !== userData.fullName
-          ) {
-            updateCompleteData({
-              user: {
-                name: value.nameOnKtp,
-                idNo: value.idNo,
-              },
-            });
-            setBackHandle(true);
+          if (value.idNumber !== '' || value.nameOnKtp !== '') {
+            if (
+              value.idNumber !== userData.idNo ||
+              value.nameOnKtp !== userData.fullName
+            ) {
+              updateCompleteData({
+                user: {
+                  name: value.nameOnKtp,
+                  idNo: value.idNo,
+                },
+              });
+              setBackHandle(true);
+            } else {
+              backToDataCompleteness();
+            }
           } else {
             backToDataCompleteness();
           }
