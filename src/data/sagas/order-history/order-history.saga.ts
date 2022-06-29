@@ -31,6 +31,38 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
     );
   }
 }
+/** Get Consolidate History Detail */
+function* OrderConsolidateHistoryDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.orderDetailHistory> =
+      yield call(() => {
+        return OrderHistoryApi.getOrderConsolidateHistoryDetail(
+          action.payload as models.OrderHistoryDetailProcessProps,
+        );
+      });
+
+    yield action.contextDispatch(
+      ActionCreators.orderConsolidateHistoryDetailSuccess(response),
+    );
+
+    yield put(ActionCreators.orderConsolidateHistoryDetailSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.orderConsolidateHistoryDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    yield put(
+      ActionCreators.orderConsolidateHistoryDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    SnbToast.show(error.message, 3000, { positionValue: 50 });
+    NavigationAction.back();
+  }
+}
 /** Get History Detail */
 function* OrderHistoryDetail(action: models.DetailProcessAction) {
   try {
@@ -197,6 +229,10 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
+  yield takeLatest(
+    types.ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS,
+    OrderConsolidateHistoryDetail,
+  );
   yield takeLatest(types.ORDER_HISTORY_DETAIL_PROCESS, OrderHistoryDetail);
   yield takeLatest(
     types.ORDER_HISTORY_TRACKING_DETAIL_PROCESS,
