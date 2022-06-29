@@ -13,7 +13,11 @@ import {
 import { NavigationAction } from '@core/functions/navigation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
-import { InvoiceInformation } from '@screen/order-history/components/order-history-consolidate-detail';
+import {
+  ConsolidateListOrderDetail,
+  InvoiceInformation,
+  PaymentInformation,
+} from '@screen/order-history/components/order-history-consolidate-detail';
 
 const OrderHistoryConsolidateDetail = () => {
   /** Dummy Data */
@@ -47,6 +51,8 @@ const OrderHistoryConsolidateDetail = () => {
       // }
       >
         <InvoiceInformation />
+        <PaymentInformation />
+        <ConsolidateListOrderDetail />
       </ScrollView>
       <ActionFooter />
     </SnbContainer>
