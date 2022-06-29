@@ -114,7 +114,7 @@ const ConsolidateListOrderDetail = () => {
 
   const {
     stateOrderHistory: {
-      detail: { loading, data },
+      consolidateDetail: { loading, data },
     },
   } = useOrderHistoryContext();
 
