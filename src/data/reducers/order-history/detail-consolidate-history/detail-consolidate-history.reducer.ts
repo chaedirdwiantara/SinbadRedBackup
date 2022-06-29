@@ -3,15 +3,16 @@ import simplifyReducer from '@core/redux/simplifyReducer';
 import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
-export type DetailHistoryProps =
+export type DetailConsolidateHistoryProps =
   models.DetailItemProps<models.orderDetailHistory>;
 /** === INITIAL STATE === */
-export const detailConsolidateHistoryInitialState: DetailHistoryProps = {
-  data: null,
-  loading: true,
-  refresh: false,
-  error: null,
-};
+export const detailConsolidateHistoryInitialState: DetailConsolidateHistoryProps =
+  {
+    data: null,
+    loading: true,
+    refresh: false,
+    error: null,
+  };
 /** === REDUCER === */
 export const detailConsolidateHistoryReducer = simplifyReducer(
   detailConsolidateHistoryInitialState,
