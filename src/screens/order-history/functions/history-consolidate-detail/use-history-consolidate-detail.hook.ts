@@ -8,7 +8,7 @@ const callProcessAction = (
   contextDispatch: (action: any) => any,
   payload: models.OrderHistoryDetailProcessProps,
 ) => {
-  return Actions.orderHistoryDetailProcess(contextDispatch, {
+  return Actions.orderConsolidateHistoryDetailProcess(contextDispatch, {
     ...payload,
   });
 };
@@ -29,25 +29,25 @@ const callDoneAction = (
   });
 };
 
-export const useHistoryDetailActions = () => {
+export const useHistoryConsolidateDetailActions = () => {
   const dispatch = useDispatch();
   return {
     fetch: (
       contextDispatch: (action: any) => any,
       payload: models.OrderHistoryDetailProcessProps,
     ) => {
-      contextDispatch(Actions.orderHistoryDetailReset(dispatch));
+      contextDispatch(Actions.orderConsolidateHistoryDetailReset(dispatch));
       dispatch(callProcessAction(contextDispatch, payload));
     },
     refresh: (
       contextDispatch: (action: any) => any,
       payload: models.OrderHistoryDetailProcessProps,
     ) => {
-      contextDispatch(Actions.orderHistoryDetailRefresh());
+      contextDispatch(Actions.orderConsolidateHistoryDetailRefresh());
       dispatch(callProcessAction(contextDispatch, payload));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.orderHistoryDetailReset(dispatch));
+      contextDispatch(Actions.orderConsolidateHistoryDetailReset(dispatch));
     },
     done: (
       contextDispatch: (action: any) => any,

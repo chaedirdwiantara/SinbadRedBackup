@@ -12,7 +12,7 @@ import {
 //function
 import { NavigationAction } from '@core/functions/navigation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
-import { useDetailHistoryOrder } from '../../functions/history-detail';
+import { useConsolidateDetailHistoryOrder } from '../../functions/history-consolidate-detail';
 import {
   ConsolidateListOrderDetail,
   InvoiceInformation,
@@ -29,7 +29,7 @@ const OrderHistoryConsolidateDetail = () => {
   //   },
   // } = useOrderHistoryContext();
 
-  const { get, clear } = useDetailHistoryOrder();
+  const { get, clear } = useConsolidateDetailHistoryOrder();
   // get detail data history
   // useEffect(() => {
   //   get();

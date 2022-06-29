@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
-import { useHistoryDetailActions } from './use-history-consolidate-detail.hook';
+import { useHistoryConsolidateDetailActions } from './use-history-consolidate-detail.hook';
 import { useGetNavParams } from '@core/functions/navigation/navigation-hook.function';
 
 type UpdateOrder = {
@@ -11,10 +11,10 @@ type UpdateOrder = {
   orderStatus?: string;
 };
 
-export const useDetailHistoryOrder = () => {
+export const useConsolidateDetailHistoryOrder = () => {
   const { params } = useGetNavParams();
   const { dispatchOrderHistory } = useOrderHistoryContext();
-  const { fetch, cancel, done, reset } = useHistoryDetailActions();
+  const { fetch, cancel, done, reset } = useHistoryConsolidateDetailActions();
 
   const get = useCallback(() => {
     fetch(dispatchOrderHistory, { id: params?.id });
