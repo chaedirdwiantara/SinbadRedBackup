@@ -34,6 +34,14 @@ const Card: FC<CardProps> = (props) => {
             text="SUPPLIER NAME"
             actionComponent={<SnbBadge2 type="success" title="Status here" />}
           />
+          {/* timer */}
+          {data.statusValue === 'delivered' ? null : (
+            // <ConfirmationTime doneAt={data?.doneAt || ''} />
+            <ConfirmationTime doneAt={data?.doneAt || ''} />
+          )}
+          <View style={{ marginVertical: 16 }}>
+            <SnbDivider2 type="solid" />
+          </View>
         </View>
       </View>
     </View>
