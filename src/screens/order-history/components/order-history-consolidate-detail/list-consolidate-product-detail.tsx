@@ -59,7 +59,16 @@ const Card: FC<CardProps> = (props) => {
               </SnbText2.Body.Default>
             </View>
           </View>
-          <View style={{ marginVertical: 16 }}>
+          {/* more product */}
+          {data.moreProduct > 0 ? (
+            <View style={styles.moreProduct}>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                {`+ ${data?.moreProducts} produk lainnya`}
+              </SnbText2.Paragraph.Small>
+            </View>
+          ) : null}
+
+          <View style={{ marginVertical: 8 }}>
             <SnbDivider2 type="solid" />
           </View>
         </View>
@@ -149,7 +158,7 @@ const ConsolidateListOrderDetail = () => {
         <Header title="Daftar Pesanan" />
         {fristProduct ? <Card data={fristProduct} id={data?.id} /> : <View />}
         {showMore ? (
-          listProduct.map((i) => <Card key={i.id} data={i} id={data?.id} />)
+          listProduct.map((i) => <Card key={i.id} data={i} id={i?.id} />)
         ) : (
           <View />
         )}
@@ -186,7 +195,7 @@ const styles = StyleSheet.create({
   },
   product: {
     flexDirection: 'row',
-    marginVertical: 10,
+    marginTop: 8,
   },
   descProduct: {
     marginLeft: 16,
@@ -207,6 +216,7 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: 10,
   },
+  moreProduct: { alignItems: 'center', marginVertical: 8 },
 });
 
 export default ConsolidateListOrderDetail;
