@@ -26,7 +26,7 @@ type CardProps = {
 
 const Card: FC<CardProps> = (props) => {
   const { data, id } = props;
-
+  const products = data.products[0];
   return (
     <TouchableOpacity
       style={styles.card}
@@ -39,35 +39,38 @@ const Card: FC<CardProps> = (props) => {
         {/* product */}
         <View>
           <Text.Subtitle
-            text="SUPPLIER NAME"
-            actionComponent={<SnbBadge2 type="success" title="Status here" />}
+            text={data.sellerName}
+            actionComponent={
+              <SnbBadge2 type="success" title={data.statusLabel} />
+            }
           />
           {/* timer */}
           {data.statusValue === 'delivered' ? null : (
-            // <ConfirmationTime doneAt={data?.doneAt || ''} />
             <ConfirmationTime doneAt={data?.doneAt || ''} />
           )}
           <View style={styles.product}>
-            <SnbImageCompressor style={styles.image} uri={data.image} />
+            <SnbImageCompressor style={styles.image} uri={products.image} />
             <View style={styles.descProduct}>
               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                {data.name}
+                {products.name}
               </SnbText2.Paragraph.Default>
               <SnbText2.Body.Default>
-                {`(${data.qty}) ${data.uom}`} x{' '}
-                {toCurrency(data.productPriceAfterTax, { withFraction: false })}
+                {`(${products.qty}) ${products.uom}`} x{' '}
+                {toCurrency(products.totalPriceAfterTax, {
+                  withFraction: false,
+                })}
               </SnbText2.Body.Default>
             </View>
           </View>
           {/* more product */}
-          {data.moreProduct > 0 ? (
+          {data.moreProducts > 0 ? (
             <View style={styles.moreProduct}>
               <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
                 {`+ ${data?.moreProducts} produk lainnya`}
               </SnbText2.Paragraph.Small>
             </View>
           ) : null}
-
+          {/* divider */}
           <View style={{ marginVertical: 8 }}>
             <SnbDivider2 type="solid" />
           </View>
@@ -77,7 +80,7 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
             <SnbText2.Body.Small>
-              {toCurrency(data.totalProductPriceAfterTax, {
+              {toCurrency(products.totalPriceAfterTax, {
                 withFraction: false,
               })}
             </SnbText2.Body.Small>
@@ -86,43 +89,46 @@ const Card: FC<CardProps> = (props) => {
         {/* action */}
         <View style={styles.buttonContainer}>
           {/* if process */}
-          {/* {data.isTrackable && data.isOrderAbleToDone ? ( */}
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Link
-              title="Lacak"
-              size="small"
-              onPress={() =>
-                NavigationAction.navigate('HistoryTrackingView', {
-                  id: id,
-                })
-              }
-              full={true}
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <SnbButton2.Secondary
-              title="Diterima"
-              size="small"
-              // onPress={onConFirmOrder}
-              onPress={() => {}}
-              outline={true}
-              full={true}
-            />
-          </View>
-          {/* ) : // if delivered
-          data.isTrackable && data.isOrderAbleToDone == false ? ( */}
-          {/* <View style={{ flex: 1 }}>
-            <SnbButton2.Secondary
-              title="Lacak"
-              size="small"
-              // onPress={onConFirmOrder}
-              onPress={() => {}}
-              outline={true}
-              full={true}
-            />
-          </View> */}
-
-          {/* ) : null} */}
+          {data.isDisplayTrack && data.isDisplayDelivered ? (
+            <>
+              <View style={{ flex: 1 }}>
+                <SnbButton2.Link
+                  title="Lacak"
+                  size="small"
+                  onPress={() =>
+                    NavigationAction.navigate('HistoryTrackingView', {
+                      id: id,
+                    })
+                  }
+                  full={true}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <SnbButton2.Secondary
+                  title="Diterima"
+                  size="small"
+                  // onPress={onConFirmOrder}
+                  onPress={() => {}}
+                  outline={true}
+                  full={true}
+                />
+              </View>
+            </>
+          ) : data.isDisplayTrack && data.isDisplayDelivered == false ? (
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Secondary
+                title="Lacak"
+                size="small"
+                onPress={() =>
+                  NavigationAction.navigate('HistoryTrackingView', {
+                    id: id,
+                  })
+                }
+                outline={true}
+                full={true}
+              />
+            </View>
+          ) : null}
         </View>
       </View>
     </TouchableOpacity>
@@ -139,8 +145,8 @@ const ConsolidateListOrderDetail = () => {
   } = useOrderHistoryContext();
 
   const [fristProduct, ...listProduct] = useMemo(
-    () => data?.products || [],
-    [data?.products],
+    () => data?.orderParcels || [],
+    [data?.orderParcels],
   );
   if (loading) {
     return (
@@ -150,13 +156,17 @@ const ConsolidateListOrderDetail = () => {
     );
   }
 
-  // console.log(fristProduct, 'FIRST PRODUCT');
+  console.log(data?.orderParcels, 'DATA PRODUCT');
 
   return (
     <>
       <View style={styles.main}>
         <Header title="Daftar Pesanan" />
-        {fristProduct ? <Card data={fristProduct} id={data?.id} /> : <View />}
+        {fristProduct ? (
+          <Card data={fristProduct} id={fristProduct?.id} />
+        ) : (
+          <View />
+        )}
         {showMore ? (
           listProduct.map((i) => <Card key={i.id} data={i} id={i?.id} />)
         ) : (
