@@ -1,8 +1,6 @@
 import React, { FC, useMemo, useState } from 'react';
 import {
-  SnbText,
   SnbText2,
-  color,
   colorV2,
   SnbImageCompressor,
   SnbDivider2,
