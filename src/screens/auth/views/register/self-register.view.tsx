@@ -7,6 +7,7 @@ import {
   SnbTextField2,
   SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import {
@@ -15,6 +16,7 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
+import { ModalOTPMethod } from '../shared';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
@@ -22,14 +24,16 @@ const SelfRegisterView: React.FC = () => {
   const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
     useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
       if (checkPhoneV2.data.isAvailable) {
-        phone.clearText();
+        bottomSheetRef.current?.open()
         resetCheckPhone();
         checkPhoneV2Reset();
-        navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+        // navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
       } else {
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
@@ -44,6 +48,7 @@ const SelfRegisterView: React.FC = () => {
     resetCheckPhone();
     phone.setMessageError('');
     phone.setType('default');
+    return phone.clearText
   }, []);
 
   React.useEffect(() => {
@@ -128,6 +133,7 @@ const SelfRegisterView: React.FC = () => {
       {header()}
       {content()}
       {buttonRegister()}
+      <ModalOTPMethod ref={bottomSheetRef} phone={phone.value} action='register' />
     </SnbContainer>
   );
 };

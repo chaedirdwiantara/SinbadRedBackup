@@ -8,7 +8,7 @@ import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-const useOTP = () => {
+const useOTP = (action = '') => {
   const dispatch = useDispatch();
   const { reset } = useNavigation();
   const { params }: any = useRoute();
@@ -18,11 +18,13 @@ const useOTP = () => {
   const [hashOtp, setHashOtp] = React.useState('');
 
   React.useEffect(() => {
-    startListeningForOtp();
+    if (action === 'listeningToHash') {
+      startListeningForOtp();
+    }
     return RNOtpVerify.removeListener;
   }, []);
 
-  const startListeningForOtp = () => {
+  const startListeningForOtp = () => {    
     RNOtpVerify.getOtp().then(() => {
       RNOtpVerify.addListener((message: string) => {
         const result = /(\d{5})/g.exec(message);
