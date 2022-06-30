@@ -137,13 +137,14 @@ const Card: FC<CardProps> = (props) => {
         <View style={styles.buttonContainer}>
           {/* if process */}
           {data.isCancellable ? (
-            <SnbButton2.Secondary
-              title="Batalkan"
-              size="small"
-              onPress={onCancelOrder}
-              outline={true}
-              full={true}
-            />
+            // <SnbButton2.Secondary
+            //   title="Batalkan"
+            //   size="small"
+            //   onPress={onCancelOrder}
+            //   outline={true}
+            //   full={true}
+            // />
+            <View />
           ) : (
             <View />
           )}

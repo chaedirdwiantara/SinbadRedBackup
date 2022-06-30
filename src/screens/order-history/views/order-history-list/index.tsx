@@ -2,6 +2,7 @@ import React from 'react';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import {
   MenuStatusFilter,
+  MenuSubStatusFilter,
   SearchInputFilter,
   ListCard,
   HistoryListContext,
@@ -53,6 +54,7 @@ const OrderHistoryList = ({ start }: any) => {
         </CopilotStep>
       </View>
       <SearchInputFilter />
+      <MenuSubStatusFilter />
       <ListCard />
     </SnbContainer>
   );

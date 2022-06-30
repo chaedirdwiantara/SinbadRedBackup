@@ -3,24 +3,42 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { SnbChips2 } from 'react-native-sinbad-ui';
 import { Context } from './context';
 
-const menuList = [
+// const menuList = [
+//   {
+//     id: 'waiting_for_payment',
+//     label: 'Menunggu Pembayaran',
+//   },
+//   {
+//     id: 'ongoing',
+//     label: 'Pesanan Berlangsung',
+//   },
+//   {
+//     id: 'done',
+//     label: 'Pesanan Selesai',
+//   },
+//   {
+//     id: 'failed',
+//     label: 'Pesanan Gagal',
+//   },
+// ];
+const menuDynamicData = [
   {
-    id: 'waiting_for_payment',
-    label: 'Menunggu Pembayaran',
+    id: "1",
+    code: "waiting_for_payment",
+    label: "Menunggu Pembayaran"
   },
   {
-    id: 'ongoing',
-    label: 'Pesanan Berlangsung',
+    id: "2",
+    code: "ongoing",
+    label: "Pesanan Berlangsung"
   },
   {
-    id: 'done',
-    label: 'Pesanan Selesai',
-  },
-  {
-    id: 'failed',
-    label: 'Pesanan Gagal',
-  },
-];
+    id: "3",
+    code: "completed",
+    label: "Pesanan Selesai"
+  }
+
+]
 
 const MenuStatusFilter = () => {
   const [state, setState] = useContext(Context);
@@ -31,6 +49,7 @@ const MenuStatusFilter = () => {
         ...prev,
         status: id,
         orderStatus: '',
+        subOrderStatus: '',
         keyword: '',
       }));
     },
@@ -44,13 +63,14 @@ const MenuStatusFilter = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12 }}
         showsVerticalScrollIndicator={false}>
-        {menuList.map((i) => (
+        {menuDynamicData.map((i) => (
           <View style={styles.main}>
             <SnbChips2.Choice
-              key={i.id}
+              testID={'01'}
+              key={i.code}
               text={i.label}
-              active={i.id === state.status ? true : false}
-              onPress={() => onSelectFilter(i.id)}
+              active={i.code === state.status ? true : false}
+              onPress={() => onSelectFilter(i.code)}
             />
           </View>
         ))}
