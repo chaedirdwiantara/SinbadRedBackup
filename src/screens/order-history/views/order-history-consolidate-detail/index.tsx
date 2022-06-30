@@ -23,21 +23,21 @@ const OrderHistoryConsolidateDetail = () => {
   /** Dummy Data */
   const dummyData = { name: 'SNE-DUMMY-00123' };
 
-  // const {
-  //   stateOrderHistory: {
-  //     detail: { loading },
-  //   },
-  // } = useOrderHistoryContext();
+  const {
+    stateOrderHistory: {
+      detail: { loading },
+    },
+  } = useOrderHistoryContext();
 
   const { get, clear } = useDetailHistoryOrder();
   // get detail data history
-  // useEffect(() => {
-  //   get();
+  useEffect(() => {
+    get();
 
-  //   return () => {
-  //     clear();
-  //   };
-  // }, []);
+    return () => {
+      clear();
+    };
+  }, []);
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
@@ -46,10 +46,9 @@ const OrderHistoryConsolidateDetail = () => {
         backAction={NavigationAction.back}
       />
       <ScrollView
-      // refreshControl={
-      //   <RefreshControl refreshing={loading} onRefresh={get} />
-      // }
-      >
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={get} />
+        }>
         <InvoiceInformation />
         <PaymentInformation />
         <ConsolidateListOrderDetail />

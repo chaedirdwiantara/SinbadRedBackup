@@ -130,9 +130,6 @@ const ConsolidateListOrderDetail = () => {
     );
   }
 
-  console.log(fristProduct, 'FIRST PRODUCT');
-  console.log(data, 'DATA PRODUCT');
-
   return (
     <>
       <View style={styles.main}>
