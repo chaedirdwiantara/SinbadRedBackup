@@ -18,7 +18,7 @@ const OrderHistoryConsolidateDetail = () => {
 
   const {
     stateOrderHistory: {
-      consolidateDetail: { loading },
+      consolidateDetail: { loading, data },
     },
   } = useOrderHistoryContext();
 
@@ -34,7 +34,7 @@ const OrderHistoryConsolidateDetail = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        title={dummyData.name}
+        title={data?.orderId}
         color="white"
         backAction={NavigationAction.back}
       />

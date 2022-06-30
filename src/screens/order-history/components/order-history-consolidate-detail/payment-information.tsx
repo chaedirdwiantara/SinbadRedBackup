@@ -24,7 +24,7 @@ const PaymentInformation = () => {
       <Header title="Informasi Pembayaran" />
       <Description
         title="Metode Pembayaran"
-        value={data?.paymentMethodName || ''}
+        value={data?.paymentMethod || ''}
       />
       <Description
         title={`Total Harga (${
