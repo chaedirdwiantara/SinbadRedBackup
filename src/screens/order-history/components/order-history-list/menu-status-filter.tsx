@@ -3,24 +3,24 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { SnbChips2 } from 'react-native-sinbad-ui';
 import { Context } from './context';
 
-const menuList = [
-  {
-    id: 'waiting_for_payment',
-    label: 'Menunggu Pembayaran',
-  },
-  {
-    id: 'ongoing',
-    label: 'Pesanan Berlangsung',
-  },
-  {
-    id: 'done',
-    label: 'Pesanan Selesai',
-  },
-  {
-    id: 'failed',
-    label: 'Pesanan Gagal',
-  },
-];
+// const menuList = [
+//   {
+//     id: 'waiting_for_payment',
+//     label: 'Menunggu Pembayaran',
+//   },
+//   {
+//     id: 'ongoing',
+//     label: 'Pesanan Berlangsung',
+//   },
+//   {
+//     id: 'done',
+//     label: 'Pesanan Selesai',
+//   },
+//   {
+//     id: 'failed',
+//     label: 'Pesanan Gagal',
+//   },
+// ];
 const menuDynamicData = [
   {
     id: "1",
