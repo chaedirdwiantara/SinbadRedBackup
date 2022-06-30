@@ -17,16 +17,24 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Products } from '@model/order-history/detail-history.model';
 import ConfirmationTime from '../confirmation-time';
+import { NavigationAction } from '@core/functions/navigation';
 
 type CardProps = {
   data: Products;
+  id: string;
 };
 
 const Card: FC<CardProps> = (props) => {
-  const { data } = props;
+  const { data, id } = props;
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => {
+        NavigationAction.navigate('OrderHistoryDetailView', {
+          id: id,
+        });
+      }}>
       <View style={{ margin: 16 }}>
         {/* product */}
         <View>
@@ -105,7 +113,7 @@ const Card: FC<CardProps> = (props) => {
           {/* ) : null} */}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -134,9 +142,9 @@ const ConsolidateListOrderDetail = () => {
     <>
       <View style={styles.main}>
         <Header title="Daftar Pesanan" />
-        {fristProduct ? <Card data={fristProduct} /> : <View />}
+        {fristProduct ? <Card data={fristProduct} id={data?.id} /> : <View />}
         {showMore ? (
-          listProduct.map((i) => <Card key={i.id} data={i} />)
+          listProduct.map((i) => <Card key={i.id} data={i} id={i.id} />)
         ) : (
           <View />
         )}
