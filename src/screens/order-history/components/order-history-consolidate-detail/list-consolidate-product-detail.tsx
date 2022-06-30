@@ -39,8 +39,17 @@ const Card: FC<CardProps> = (props) => {
             // <ConfirmationTime doneAt={data?.doneAt || ''} />
             <ConfirmationTime doneAt={data?.doneAt || ''} />
           )}
-          <View style={{ marginVertical: 16 }}>
-            <SnbDivider2 type="solid" />
+          <View style={styles.product}>
+            <SnbImageCompressor style={styles.image} uri={data.image} />
+            <View style={styles.descProduct}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                {data.name}
+              </SnbText2.Paragraph.Default>
+              <SnbText2.Body.Default>
+                {`(${data.qty}) ${data.uom}`} x{' '}
+                {toCurrency(data.productPriceAfterTax, { withFraction: false })}
+              </SnbText2.Body.Default>
+            </View>
           </View>
         </View>
       </View>
