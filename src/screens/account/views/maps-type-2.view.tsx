@@ -77,9 +77,9 @@ const MapsViewType2: React.FC = () => {
   }, []);
 
   const handleOnChangeRegionComplete = useCallback(
-    debounce((latLang) => {
-      setLatLng(latLang)
-      getAddress(latLang)
+    debounce(({ latitude, longitude }) => {
+      setLatLng({ latitude, longitude })
+      getAddress({ latitude, longitude })
     }, 750)
     , [latLng])
 
