@@ -17,4 +17,5 @@ export const Images = {
   cartNotFound: require('./cart_not_found.png'),
   emptySinbad: require('./empty_sinbad.png'),
   pendingPayment: require('./pending-payment.png'),
+  loginSuccess: require('./login_success.png'),
 };
