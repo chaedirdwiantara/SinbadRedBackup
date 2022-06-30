@@ -19,6 +19,7 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
+// import { ForceRegisterModal } from '../shared/force-registration-modal.component';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
@@ -118,6 +119,28 @@ const LoginPhoneView = () => {
         title="Masuk"
       />
       <Content />
+      {/* <ForceRegisterModal
+        open={true}
+        closeModal={() => {
+          props.onCloseModalBack(false);
+        }}
+        confirm={() => {
+          if (
+            value.idNumber !== userData.idNo ||
+            value.nameOnKtp !== userData.fullName
+          ) {
+            updateCompleteData({
+              user: {
+                name: value.nameOnKtp,
+                idNo: value.idNo,
+              },
+            });
+            setBackHandle(true);
+          } else {
+            backToDataCompleteness();
+          }
+        }}
+      /> */}
     </SnbContainer>
   );
 };
