@@ -11,8 +11,14 @@ import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
 import { View, ScrollView, BackHandler, Image } from 'react-native';
 import {
+  colorV2,
+  Option,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
   SnbButton2,
   SnbContainer,
+  SnbIcon,
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
@@ -25,8 +31,11 @@ const Content: React.FC = () => {
   const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
   const phone = useInputPhone();
   const { reset } = useNavigation();
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
 
   React.useEffect(() => {
+    bottomSheetRef.current?.open()
     return resetRequestOTP;
   }, []);
 
@@ -103,6 +112,58 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
+      <SnbBottomSheet2
+        ref={bottomSheetRef}
+        contentHeight={contentHeight + 100}
+        title={
+          <SnbBottomSheetPart.Title
+            title="Pilih Metode Verifikasi"
+            titleType="center"
+            swipeIndicator
+          />
+        }
+        navigation={
+          <SnbBottomSheetPart.Navigation
+            iconRight1Name="x"
+            onRight1Action={bottomSheetRef.current?.close}
+          />
+        }
+        name="modal-logout"
+        type="content"
+        content={
+          <View
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}
+          >
+            <View style={{ padding: layout.spacing.lg }}>
+              <SnbText2.Paragraph.Default align="center">
+                Kami akan mengirimkan kode verifikasi ke nomor handphone Anda
+              </SnbText2.Paragraph.Default>
+            </View>
+            <Option.Radio
+              iconComponent={<SnbIcon name="chat" size={24} color={colorV2.iconColor.default} />}
+              label='SMS'
+              value={"Test"}
+            />
+            <Option.Radio
+              iconComponent={<SnbIcon name="whatsapp" size={24} color={colorV2.iconColor.green} />}
+              label='SMS'
+              value={"Test"}
+              disabled
+            />
+          </View>
+        }
+        button={
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              onPress={() => { }}
+              title="Terapkan"
+              disabled={false}
+              size="medium"
+              full
+            />
+          </View>
+        }
+      />
     </ScrollView>
   );
 };
