@@ -64,7 +64,7 @@ const Card: FC<CardProps> = (props) => {
       style={styles.card}
       android_ripple={{ color: color.black40 }}
       onPress={() =>
-        NavigationAction.navigate('OrderHistoryDetailView', {
+        NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
           id: data.id,
         })
       }>
