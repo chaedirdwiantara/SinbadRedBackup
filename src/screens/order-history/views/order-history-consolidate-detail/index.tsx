@@ -13,9 +13,6 @@ import {
 } from '@screen/order-history/components/order-history-consolidate-detail';
 
 const OrderHistoryConsolidateDetail = () => {
-  /** Dummy Data */
-  const dummyData = { name: 'SNE-DUMMY-00123' };
-
   const {
     stateOrderHistory: {
       consolidateDetail: { loading, data },

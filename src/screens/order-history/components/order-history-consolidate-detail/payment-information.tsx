@@ -30,7 +30,7 @@ const PaymentInformation = () => {
         title={`Total Harga (${
           (data?.totalOrderProducts || 0) + 1 || ''
         } Barang)`}
-        value={toCurrency(data?.totalSellerPriceAfterTax || 0, {
+        value={toCurrency(data?.totalOrderParcelsAfterTax || 0, {
           withFraction: false,
         })}
       />

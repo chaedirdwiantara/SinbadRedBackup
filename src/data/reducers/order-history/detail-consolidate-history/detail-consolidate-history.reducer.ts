@@ -4,7 +4,7 @@ import * as models from '@models';
 import * as types from '@types';
 /** === TYPE === */
 export type DetailConsolidateHistoryProps =
-  models.DetailItemProps<models.orderDetailHistory>;
+  models.DetailItemProps<models.orderConsolidateDetailHistory>;
 /** === INITIAL STATE === */
 export const detailConsolidateHistoryInitialState: DetailConsolidateHistoryProps =
   {

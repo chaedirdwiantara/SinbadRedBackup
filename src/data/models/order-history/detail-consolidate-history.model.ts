@@ -2,39 +2,34 @@ import * as models from '@models';
 
 export interface ConsolidateProducts {
   id: string;
-  code: string;
   image: string;
   name: string;
-  qty: string;
+  qty: number;
   uom: string;
-  productTax: number;
-  totalProductTax: number;
-  productPriceBeforeTax: number;
-  productPriceAfterTax: number;
-  totalProductPriceBeforeTax: number;
-  totalProductPriceAfterTax: number;
+  totalPriceAfterTax: number;
+}
+
+export interface OrderParcels {
+  id: string;
+  sellerName: string;
+  statusValue: string;
+  statusLabel: string;
+  isDisplayTrack: boolean;
+  isDisplayDelivered: boolean;
+  doneAt: string;
+  moreProducts: number;
+  products: Array<ConsolidateProducts>;
 }
 
 export interface orderConsolidateDetailHistory {
-  id: string;
-  statusValue: string;
-  statusLabel: string;
-  orderSellerCode: string;
+  orderId: string;
   orderedAt: string;
-  orderOrigin: string;
-  orderDestination: string;
-  orderSellerFailedReason?: string;
-  estimationShippedAt?: string;
-  products: Array<ConsolidateProducts>;
-  totalOrderProducts: number;
-  paymentMethodName: string;
-  totalSellerPriceAfterTax: number;
+  fulfilment: string;
+  totalSupplier: number;
+  paymentMethod: string;
+  totalOrderParcelsAfterTax: number;
   totalOrderPriceAfterTax: number;
-  isCancellable: boolean;
-  isOrderAbleToDone: boolean;
-  shippedAt?: string;
-  cancelledAt?: string;
-  doneAt?: string;
+  orderParcels: Array<OrderParcels>;
 }
 
 export interface OrderConsolidateHistoryDetailProcessProps

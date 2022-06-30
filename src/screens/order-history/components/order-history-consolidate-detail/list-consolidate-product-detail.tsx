@@ -15,12 +15,12 @@ import { Header, Divider } from './information';
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
-import { Products } from '@model/order-history/detail-history.model';
 import ConfirmationTime from '../confirmation-time';
 import { NavigationAction } from '@core/functions/navigation';
+import { OrderParcels } from '@model/order-history';
 
 type CardProps = {
-  data: Products;
+  data: OrderParcels;
   id: string;
 };
 
