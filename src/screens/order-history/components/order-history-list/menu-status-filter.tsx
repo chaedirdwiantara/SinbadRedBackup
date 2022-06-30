@@ -21,6 +21,24 @@ const menuList = [
     label: 'Pesanan Gagal',
   },
 ];
+const menuDynamicData = [
+  {
+    id: "1",
+    code: "waiting_for_payment",
+    label: "Menunggu Pembayaran"
+  },
+  {
+    id: "2",
+    code: "ongoing",
+    label: "Pesanan Berlangsung"
+  },
+  {
+    id: "3",
+    code: "completed",
+    label: "Pesanan Selesai"
+  }
+
+]
 
 const MenuStatusFilter = () => {
   const [state, setState] = useContext(Context);
@@ -44,13 +62,14 @@ const MenuStatusFilter = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12 }}
         showsVerticalScrollIndicator={false}>
-        {menuList.map((i) => (
+        {menuDynamicData.map((i) => (
           <View style={styles.main}>
             <SnbChips2.Choice
-              key={i.id}
+              testID={'01'}
+              key={i.code}
               text={i.label}
-              active={i.id === state.status ? true : false}
-              onPress={() => onSelectFilter(i.id)}
+              active={i.code === state.status ? true : false}
+              onPress={() => onSelectFilter(i.code)}
             />
           </View>
         ))}
