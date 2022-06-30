@@ -73,11 +73,6 @@ const Content: React.FC = () => {
     }
     street && setStreetName(street);
     coordinate && setLatLng(coordinate);
-    isLatLngAvailable &&
-      setLatLng({
-        longitude: buyerAddress?.longitude,
-        latitude: buyerAddress?.latitude,
-      });
     location && setLocationId(location);
   }, []);
 
@@ -96,7 +91,7 @@ const Content: React.FC = () => {
           : null,
       );
       setVehicleAccessibility(buyerAddress.vehicleAccessibility);
-      setLatLng({
+      isLatLngAvailable && setLatLng({
         longitude: buyerAddress?.longitude,
         latitude: buyerAddress?.latitude,
       });
