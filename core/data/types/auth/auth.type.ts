@@ -29,6 +29,8 @@ export const ME_V2_PROCESS = 'MeV2Process';
 export const ME_V2_SUCCESS = 'MeV2Success';
 export const ME_V2_FAILED = 'MeV2Failed';
 export const ME_V2_RESET = 'MeV2Reset';
+/** => save adsID */
+export const SAVE_ADS_ID = 'SaveAdsID';
 /**
  * ================================================================
  * NOTES

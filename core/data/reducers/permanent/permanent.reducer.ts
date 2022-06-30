@@ -8,6 +8,7 @@ const initialState: models.Permanent = {
   isIntroSinbad: false,
   searchedKeywords: [],
   appVersion: null,
+  advertisingId: '',
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
@@ -46,6 +47,16 @@ export const permanentCore = simplifyReducer(initialState, {
     return {
       ...state,
       appVersion: payload,
+    };
+  },
+  /** => SAVE ADS ID */
+  [types.SAVE_ADS_ID](
+    state = initialState,
+    { payload }: models.SaveAdsIDAction,
+  ) {
+    return {
+      ...state,
+      advertisingId: payload,
     };
   },
 });

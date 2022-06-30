@@ -24,8 +24,6 @@ import java.util.List;
 // FOR REANIMATE
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
-// FOR SPLASH SCREEN
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
@@ -41,7 +39,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
-          // packages.add(new SplashScreenReactPackage());
           return packages;
         }
 
