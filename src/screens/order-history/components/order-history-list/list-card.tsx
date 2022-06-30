@@ -64,9 +64,6 @@ const Card: FC<CardProps> = (props) => {
       style={styles.card}
       android_ripple={{ color: color.black40 }}
       onPress={() =>
-        // NavigationAction.navigate('OrderHistoryDetailView', {
-        //   id: data.id,
-        // })
         NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
           id: data.id,
         })
@@ -140,13 +137,14 @@ const Card: FC<CardProps> = (props) => {
         <View style={styles.buttonContainer}>
           {/* if process */}
           {data.isCancellable ? (
-            <SnbButton2.Secondary
-              title="Batalkan"
-              size="small"
-              onPress={onCancelOrder}
-              outline={true}
-              full={true}
-            />
+            // <SnbButton2.Secondary
+            //   title="Batalkan"
+            //   size="small"
+            //   onPress={onCancelOrder}
+            //   outline={true}
+            //   full={true}
+            // />
+            <View />
           ) : (
             <View />
           )}

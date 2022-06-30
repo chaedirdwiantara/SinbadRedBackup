@@ -30,10 +30,10 @@ const ActionFooter = () => {
       // cant action same true
       return void 0;
     }
-    if (data?.isCancellable) {
-      // action cancel order
-      confirmModalRef.current?.show(data.id);
-    }
+    // if (data?.isCancellable) {
+    //   // action cancel order
+    //   confirmModalRef.current?.show(data.id);
+    // }
     if (data?.isOrderAbleToDone) {
       // action done order
       doneOrder(payload);
@@ -66,10 +66,10 @@ const ActionFooter = () => {
             Butuh Bantuan?
           </SnbText2.Body.Default>
         </TouchableOpacity>
-        {data?.isCancellable || data?.isOrderAbleToDone ? (
+        { data?.isOrderAbleToDone ? (
           <View style={styles.buttonContainer}>
             <SnbButton2.Secondary
-              title={data?.isCancellable ? 'Batalkan' : 'Pesanan Diterima'}
+              title={'Pesanan Diterima'}
               size="medium"
               onPress={onPressAction}
               outline={true}

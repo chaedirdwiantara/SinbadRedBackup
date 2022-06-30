@@ -44,7 +44,6 @@ const OrderHistoryConsolidateDetail = () => {
         }>
         <InvoiceInformation />
         <PaymentInformation />
-        <ConsolidateListOrderDetail />
       </ScrollView>
       <ActionFooter />
     </SnbContainer>

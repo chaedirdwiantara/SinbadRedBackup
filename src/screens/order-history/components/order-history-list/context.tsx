@@ -8,6 +8,7 @@ import React, {
 export type State = {
   status: string;
   orderStatus: string;
+  subOrderStatus: string;
   keyword: string;
 };
 type HistoryListCTX = [state: State, setState: Dispatch<SetStateAction<State>>];
@@ -15,6 +16,7 @@ type HistoryListCTX = [state: State, setState: Dispatch<SetStateAction<State>>];
 const defaultValue = {
   status: 'waiting_for_payment',
   orderStatus: '',
+  subOrderStatus: '',
   keyword: '',
 };
 
