@@ -8,7 +8,7 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 const PaymentInformation = () => {
   const {
     stateOrderHistory: {
-      detail: { loading, data },
+      consolidateDetail: { loading, data },
     },
   } = useOrderHistoryContext();
 

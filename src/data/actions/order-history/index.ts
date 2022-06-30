@@ -3,3 +3,4 @@ export * from './detail-history';
 export * from './detail-tracking-history';
 export * from './done-order-history';
 export * from './cancel-order-history';
+export * from './consolidate-detail-history';
