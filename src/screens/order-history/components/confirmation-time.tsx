@@ -71,7 +71,7 @@ const ConfirmationTime: FC<Props> = (props) => {
   return (
     <View style={styles.timer}>
       <SnbText.C1 color={color.yellow80}>
-        Batas waktu konfirmasi:{' '}
+        Pesanan Selesai Otomatis dalam:{' '}
         <SnbText.B4 color={color.yellow80}>{time}</SnbText.B4>
       </SnbText.C1>
     </View>

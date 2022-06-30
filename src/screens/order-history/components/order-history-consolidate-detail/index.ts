@@ -1,3 +1,4 @@
 import InvoiceInformation from './invoice-information';
+import PaymentInformation from './payment-information';
 
-export { InvoiceInformation };
+export { InvoiceInformation, PaymentInformation };

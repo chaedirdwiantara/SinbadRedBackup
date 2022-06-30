@@ -12,8 +12,6 @@ const InvoiceInformation = () => {
     },
   } = useOrderHistoryContext();
 
-  console.log(data, 'DATA INVOICE-INFORMATION');
-
   if (loading)
     return (
       <SkeletonAnimator>
