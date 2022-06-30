@@ -7,6 +7,7 @@ import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
+import { DATA_VERIFICATION_VIEW } from '@screen/account/functions/screens_name';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
   const { meV2 } = useDataAuth();
@@ -32,7 +33,8 @@ const IntroSplashView: React.FC = () => {
           SplashScreen.hide();
         }, 100);
       } else {
-        getLocationPermissions();
+        NavigationAction.navigate(DATA_VERIFICATION_VIEW);
+        // getLocationPermissions();
         setTimeout(() => {
           SplashScreen.hide();
         }, 100);
