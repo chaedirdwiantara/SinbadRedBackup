@@ -18,13 +18,14 @@ const useOTP = (action = '') => {
   const [hashOtp, setHashOtp] = React.useState('');
 
   React.useEffect(() => {
+    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
     if (action === 'listeningToHash') {
       startListeningForOtp();
     }
     return RNOtpVerify.removeListener;
   }, []);
 
-  const startListeningForOtp = () => {    
+  const startListeningForOtp = () => {
     RNOtpVerify.getOtp().then(() => {
       RNOtpVerify.addListener((message: string) => {
         const result = /(\d{5})/g.exec(message);
@@ -40,6 +41,12 @@ const useOTP = (action = '') => {
   const resetVerifyOTP = () => {
     dispatch(Actions.resetVerifyOTP());
   };
+
+  const sendOtp = (data: models.ISendOTP) => {
+    console.log(data);
+
+    // dispatch(Actions.sendOtpProcess(data))
+  }
 
   const getLocationPermissions = () => {
     switch (Platform.OS) {

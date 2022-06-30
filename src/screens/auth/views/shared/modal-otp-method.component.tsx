@@ -65,10 +65,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, ico
   )
 }
 
-const ModalOTPMethod: React.FC<Props> = React.forwardRef((_, ref: any) => {
+const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone }, ref: any) => {
   const [contentHeight, setContentHeight] = React.useState(0);
   const [otpMethod, setOtpMethod] = React.useState('')
-  const { } = useOTP()
+  const { sendOtp, hashOtp } = useOTP()
 
   return (
     <SnbBottomSheet2
@@ -117,6 +117,8 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef((_, ref: any) => {
         <View style={{ padding: layout.spacing.lg }}>
           <SnbButton2.Primary
             onPress={() => {
+              const data = { mobilePhone: phone, otpHash: hashOtp, type: otpMethod }
+              sendOtp(data)
             }}
             title="Terapkan"
             size="medium"
