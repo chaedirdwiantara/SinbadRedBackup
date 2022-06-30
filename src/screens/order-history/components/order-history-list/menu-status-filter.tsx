@@ -31,6 +31,7 @@ const MenuStatusFilter = () => {
         ...prev,
         status: id,
         orderStatus: '',
+        subOrderStatus: '',
         keyword: '',
       }));
     },
