@@ -66,6 +66,44 @@ const Card: FC<CardProps> = (props) => {
             </SnbText2.Body.Small>
           </View>
         </View>
+        {/* action */}
+        <View style={styles.buttonContainer}>
+          {/* if process */}
+          {/* {data.isTrackable && data.isOrderAbleToDone ? ( */}
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Link
+              title="Lacak"
+              size="small"
+              // onPress={onCancelOrder}
+              onPress={() => {}}
+              full={true}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <SnbButton2.Secondary
+              title="Diterima"
+              size="small"
+              // onPress={onCancelOrder}
+              onPress={() => {}}
+              outline={true}
+              full={true}
+            />
+          </View>
+          {/* ) : // if delivered
+          data.isTrackable && data.isOrderAbleToDone == false ? ( */}
+          {/* <View style={{ flex: 1 }}>
+            <SnbButton2.Secondary
+              title="Lacak"
+              size="small"
+              // onPress={onConFirmOrder}
+              onPress={() => {}}
+              outline={true}
+              full={true}
+            />
+          </View> */}
+
+          {/* ) : null} */}
+        </View>
       </View>
     </View>
   );
