@@ -389,8 +389,8 @@ const styles = StyleSheet.create({
     top: '50%'
   },
   marker: {
-    height: 48,
-    width: 48,
+    height: 64,
+    width: 64,
     resizeMode: 'contain'
   },
 });

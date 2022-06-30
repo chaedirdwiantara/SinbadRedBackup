@@ -217,7 +217,7 @@ const Content: React.FC<Props> = (props) => {
                   }>
                   <Image
                     source={require('@image/pin_point.png')}
-                    style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                    style={{ height: 56, width: 56, resizeMode: 'contain' }}
                   />
                 </Marker>
               </MapView>,
