@@ -44,7 +44,6 @@ const Card: FC<CardProps> = (props) => {
           />
           {/* timer */}
           {data.statusValue === 'delivered' ? null : (
-            // <ConfirmationTime doneAt={data?.doneAt || ''} />
             <ConfirmationTime doneAt={data?.doneAt || ''} />
           )}
           <View style={styles.product}>
@@ -150,7 +149,7 @@ const ConsolidateListOrderDetail = () => {
     );
   }
 
-  // console.log(fristProduct, 'FIRST PRODUCT');
+  console.log(data, 'DATA PRODUCT');
 
   return (
     <>
