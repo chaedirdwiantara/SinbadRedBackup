@@ -3,4 +3,5 @@ export interface Permanent {
   isIntroSinbad: boolean;
   searchedKeywords: Array<string>;
   appVersion: any;
+  advertisingId: string;
 }

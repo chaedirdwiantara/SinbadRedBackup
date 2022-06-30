@@ -3,7 +3,7 @@ import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
 // import { usePageAfterIntro } from '../functions';
-import { useAuthCoreAction } from '@core/functions/auth';
+import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
@@ -14,9 +14,12 @@ const IntroSplashView: React.FC = () => {
   /** === HOOK === */
   // usePageAfterIntro();
   const authCoreAction = useAuthCoreAction();
+  // this for google ads ID
+  const useAdsIDAction = useAdsID();
   /** === EFFECT === */
   /** => get auth me */
   React.useEffect(() => {
+    useAdsIDAction.saveAdsID();
     authCoreAction.me();
     authCoreAction.meV2();
   }, []);

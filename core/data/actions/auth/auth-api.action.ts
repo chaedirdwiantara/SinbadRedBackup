@@ -142,3 +142,7 @@ export const meV2Failed = (data: models.ErrorProps): models.MeFailedAction => {
 export const meV2Reset = () => {
   return { type: types.ME_V2_RESET };
 };
+/** === SAVE ADS ID === */
+export const saveAdsID = (data: string): models.SaveAdsIDAction => {
+  return { type: types.SAVE_ADS_ID, payload: data };
+};
