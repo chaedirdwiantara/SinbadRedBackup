@@ -156,8 +156,6 @@ const ConsolidateListOrderDetail = () => {
     );
   }
 
-  console.log(data?.orderParcels, 'DATA PRODUCT');
-
   return (
     <>
       <View style={styles.main}>
