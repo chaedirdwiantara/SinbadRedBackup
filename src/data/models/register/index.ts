@@ -119,6 +119,20 @@ export interface ICheckAutoLoginSuccess {
   };
 }
 
+export interface ICheckPhoneV3Process {
+  mobilePhone: string | undefined;
+  identifierDeviceId: string | undefined;
+}
+
+export interface ICheckPhoneV3Success {
+  data: {
+    phoneNumberAvailable: boolean;
+    isUserMedea: boolean;
+    isUserAgent: boolean;
+  };
+  message: string;
+}
+
 // FAILED MODEL
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}

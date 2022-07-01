@@ -175,3 +175,35 @@ export const checkAutoLoginFailed = (
 export const checkAutoLoginReset = () => {
   return { type: types.CHECK_AUTO_LOGIN_RESET };
 };
+
+// CHECK PHONE NO AVAILABILITY V3
+export const checkPhoneRegistrationV3Process = (
+  data: models.ICheckPhoneV3Process,
+): models.IRegisterAction<models.ICheckPhoneV3Process> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_PROCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Success = (
+  data: models.ICheckPhoneV3Success,
+): models.IRegisterAction<models.ICheckPhoneV3Success> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_SUCCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Failed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.ICheckPhoneNoAvailabilityFailed | unknown> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_FAILED,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Reset = () => {
+  return { type: types.CHECK_PHONE_REGISTRATION_V3_RESET };
+};

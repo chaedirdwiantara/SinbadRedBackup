@@ -61,6 +61,22 @@ export const useCheckAutoLogin = () => {
   };
 };
 
+export const useCheckPhoneRegistrationV3 = () => {
+  const dispatch = useDispatch();
+  const { checkPhoneRegistrationState } = useSelector(
+    (state: any) => state.auth,
+  );
+  return {
+    checkPhoneRegistration: (data: models.ICheckPhoneV3Process) => {
+      dispatch(Actions.checkPhoneRegistrationV3Process(data));
+    },
+    checkPhoneRegistrationReset: () => {
+      dispatch(Actions.checkPhoneRegistrationV3Reset());
+    },
+    checkPhoneRegistrationState,
+  };
+};
+
 export const useRegister = () => {
   const state = useSelector((state: any) => state.auth);
   const registerState = state.register;

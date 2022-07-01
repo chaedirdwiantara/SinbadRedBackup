@@ -13,7 +13,11 @@ import {
   REGISTER_OTP_VIEW,
   LOGIN_PHONE_VIEW,
 } from '@screen/auth/functions/screens_name';
-import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
+import {
+  useInputPhone,
+  useCheckPhoneV2,
+  useCheckPhoneRegistrationV3,
+} from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
 
 const SelfRegisterView: React.FC = () => {
@@ -22,6 +26,11 @@ const SelfRegisterView: React.FC = () => {
   const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
     useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
+  const {
+    checkPhoneRegistration,
+    checkPhoneRegistrationReset,
+    checkPhoneRegistrationState,
+  } = useCheckPhoneRegistrationV3();
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
@@ -79,6 +88,8 @@ const SelfRegisterView: React.FC = () => {
     );
   };
 
+  console.log('check:', checkPhoneRegistrationState);
+
   const buttonRegister = () => {
     return (
       <View>
@@ -86,7 +97,11 @@ const SelfRegisterView: React.FC = () => {
           <SnbButton2.Primary
             title={'Lanjut'}
             onPress={() =>
-              checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
+              // checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
+              checkPhoneRegistration({
+                mobilePhone: '081111222533',
+                identifierDeviceId: '6e65a32e-d9b5-4ca8-b0d2-5e1ada6892c1',
+              })
             }
             disabled={
               phone.value === '' ||
