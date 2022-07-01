@@ -18,6 +18,7 @@ export interface OrderParcels {
   isDisplayDelivered: boolean;
   doneAt: string;
   moreProducts: number;
+  totalOrderParcelsAfterTax: number;
   products: Array<ConsolidateProducts>;
 }
 
@@ -29,6 +30,7 @@ export interface orderConsolidateDetailHistory {
   paymentMethod: string;
   totalOrderParcelsAfterTax: number;
   totalOrderPriceAfterTax: number;
+  totalSku: number;
   orderParcels: Array<OrderParcels>;
 }
 

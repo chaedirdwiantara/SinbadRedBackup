@@ -78,7 +78,7 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
             <SnbText2.Body.Small>
-              {toCurrency(products.totalPriceAfterTax, {
+              {toCurrency(data.totalOrderParcelsAfterTax, {
                 withFraction: false,
               })}
             </SnbText2.Body.Small>
@@ -168,7 +168,7 @@ const ConsolidateListOrderDetail = () => {
         ) : (
           <View />
         )}
-        {data?.totalOrderProducts ? (
+        {data?.orderParcels.length > 2 ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
             <SnbText2.Body.Tiny color={colorV2.textColor.link} align="center">
               {showMore ? 'Sembunyikan' : 'Lihat'}{' '}
