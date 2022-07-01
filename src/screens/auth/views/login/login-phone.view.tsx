@@ -21,8 +21,8 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { ModalOTPMethod } from '../shared';
-import { useAuthCoreAction } from '@core/functions/auth';
-import { useDataAuth } from '@core/redux/Data';
+import { useAdsID, useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
@@ -31,6 +31,7 @@ const Content: React.FC = () => {
   const phone = useInputPhone();
   const { reset } = useNavigation();
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const { advertisingId } = useDataPermanent()
 
   React.useEffect(() => {
     return () => {
@@ -85,7 +86,7 @@ const Content: React.FC = () => {
           title="Selanjutnya"
           onPress={() => {
             resetCheckLoginPhone();
-            checkPhoneLogin({ mobilePhoneNo: phone.value, identifierDeviceId: 'idbro' });
+            checkPhoneLogin({ mobilePhoneNo: phone.value, identifierDeviceId: advertisingId });
           }}
           loading={checkPhoneLoginState.loading}
           disabled={
