@@ -47,7 +47,7 @@ const ForceRegistrationModal: FC<dataProps> = (props) => {
         ref={bottomSheetRef}
         content={renderContent()}
         title={<SnbBottomSheetPart.Title title="" />}
-        name="modal-back-profile-completion"
+        name="modal-force-registration"
         type="content"
         snap={false}
         contentHeight={contentHeight + 100}
