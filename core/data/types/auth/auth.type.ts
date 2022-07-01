@@ -35,6 +35,10 @@ export const CHECK_PHONE_LOGIN_PROCESS = 'CheckPhoneProcess'
 export const CHECK_PHONE_LOGIN_SUCCESS = 'CheckPhoneSuccess'
 export const CHECK_PHONE_LOGIN_FAILED = 'CheckPhoneFailed'
 export const CHECK_PHONE_LOGIN_RESET = 'CheckPhoneReset'
+
+/** => save adsID */
+export const SAVE_ADS_ID = 'SaveAdsID';
+
 /**
  * ================================================================
  * NOTES

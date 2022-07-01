@@ -165,3 +165,7 @@ export const checkPhoneLoginFailed = (
 export const checkPhoneLoginReset = () => {
   return { type: types.CHECK_PHONE_LOGIN_RESET }
 }
+/** === SAVE ADS ID === */
+export const saveAdsID = (data: string): models.SaveAdsIDAction => {
+  return { type: types.SAVE_ADS_ID, payload: data };
+};
