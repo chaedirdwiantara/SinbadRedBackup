@@ -86,8 +86,21 @@ const Card: FC<CardProps> = (props) => {
         </View>
         {/* action */}
         <View style={styles.buttonContainer}>
-          {/* if process */}
-          {data.isDisplayTrack && data.isDisplayDelivered ? (
+          {data.isDisplayTrack ? (
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Link
+                title="Lacak"
+                size="small"
+                onPress={() =>
+                  NavigationAction.navigate('HistoryTrackingView', {
+                    id: id,
+                  })
+                }
+                full={true}
+              />
+            </View>
+          ) : null}
+          {data.isDisplayDelivered ? (
             <>
               <View style={{ flex: 1 }}>
                 <SnbButton2.Link
@@ -112,20 +125,6 @@ const Card: FC<CardProps> = (props) => {
                 />
               </View>
             </>
-          ) : data.isDisplayTrack && data.isDisplayDelivered == false ? (
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Secondary
-                title="Lacak"
-                size="small"
-                onPress={() =>
-                  NavigationAction.navigate('HistoryTrackingView', {
-                    id: id,
-                  })
-                }
-                outline={true}
-                full={true}
-              />
-            </View>
           ) : null}
         </View>
       </View>
