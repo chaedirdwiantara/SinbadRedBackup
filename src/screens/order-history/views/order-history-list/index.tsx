@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import {
   MenuStatusFilter,
@@ -17,7 +17,6 @@ import { NavigationAction } from '@navigation';
 const goBack = () => {
   NavigationAction.back();
 };
-
 const CopilotView = walkthroughable(View);
 
 // context state history list
@@ -34,6 +33,8 @@ const OrderHistoryList = ({ start }: any) => {
       start();
     }
   }, [coachmarkState.data]);
+  
+
   // frist get & get by filter history list
   useInitialGetList();
   return (
