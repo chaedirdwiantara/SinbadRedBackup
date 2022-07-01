@@ -21,8 +21,9 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { ModalOTPMethod } from '../shared';
-import { useAdsID, useAuthCoreAction } from '@core/functions/auth';
+import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
+import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
@@ -119,7 +120,9 @@ const Content: React.FC = () => {
 };
 
 const LoginPhoneView = () => {
-  const { reset } = useNavigation();
+  const { reset, navigate } = useNavigation();
+  const [openModalForceRegister, setOpenModalForceRegister] =
+    React.useState(true);
 
   return (
     <SnbContainer color="white">
@@ -129,6 +132,15 @@ const LoginPhoneView = () => {
         title="Masuk"
       />
       <Content />
+      <View style={{ flex: 1 }}>
+        <ForceRegistrationModal
+          open={openModalForceRegister}
+          confirm={() => {
+            navigate(SELF_REGISTRATION_VIEW);
+            setOpenModalForceRegister(false);
+          }}
+        />
+      </View>
     </SnbContainer>
   );
 };
