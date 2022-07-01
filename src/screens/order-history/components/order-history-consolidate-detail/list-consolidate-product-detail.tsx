@@ -168,13 +168,11 @@ const ConsolidateListOrderDetail = () => {
         ) : (
           <View />
         )}
-        {data?.orderParcels.length > 2 ? (
+        {data?.orderParcels.length < 2 ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
-            <SnbText2.Body.Tiny color={colorV2.textColor.link} align="center">
-              {showMore ? 'Sembunyikan' : 'Lihat'}{' '}
-              {showMore ? null : data.totalOrderProducts}{' '}
-              {showMore ? 'produk' : 'produk lainnya'}
-            </SnbText2.Body.Tiny>
+            <SnbText2.Body.Small color={colorV2.textColor.link} align="center">
+              {showMore ? 'Sembunyikan Supplier' : 'Lihat Supplier Lainnya'}
+            </SnbText2.Body.Small>
           </TouchableOpacity>
         ) : (
           <View />
