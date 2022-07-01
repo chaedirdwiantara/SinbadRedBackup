@@ -11,10 +11,21 @@ export interface LoginPhoneNumber {
 /** === REQUEST OTP === */
 export interface OtpRequest {
   mobilePhone: string;
+  otpHash: string;
+  type: 'sms' | 'wa' | string;
 }
 /** === OTP DATA === */
 export interface OtpData {
   message: string;
+}
+/** ==> check phone login */
+export interface ICheckPhoneLoginSuccess{
+  message: string;
+  data: {
+    phoneNumberAvailable: boolean;
+    isUserMedea: boolean;
+    isUserAgent: boolean;
+  }
 }
 /** === SUCCESS GET OTP === */
 export interface OtpGetSuccess {
@@ -68,4 +79,10 @@ export interface AuthMeV2DataProps {
 
 export interface AuthMeSuccess {
   data: AuthMeDataProps;
+}
+
+//check phone login
+export interface ICheckPhoneLogin {
+  mobilePhoneNo: string;
+  identifierDeviceId: string;
 }

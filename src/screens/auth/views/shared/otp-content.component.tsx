@@ -21,7 +21,7 @@ interface Props {
 const OTPContent: React.FC<Props> = (props) => {
   const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess } =
     props;
-  const { otp, setOtp } = useOTP();
+  const { otp, setOtp } = useOTP('listeningToHash');
   const [error, setError] = React.useState(false);
   const [otpType, setOtpType] = React.useState<'error' | 'default' | 'success'>(
     'default',
