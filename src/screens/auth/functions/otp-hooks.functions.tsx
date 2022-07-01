@@ -69,14 +69,14 @@ const useOTP = (action = '') => {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       ).then(handleRequestPermissionResult);
     } else {
-      // reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
-      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+      // reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
     }
   };
 
   const handleRequestPermissionResult = () => {
-    // reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
-    reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+    // reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
   };
 
   React.useEffect(() => {
