@@ -29,7 +29,7 @@ export const authCheckPhoneLoginReducer = simplifyReducer(
     ) {
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
       };
     },

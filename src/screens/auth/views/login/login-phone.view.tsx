@@ -44,11 +44,17 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (checkPhoneLoginState.data !== null) {
-      refModalOTP.current?.open()
+      const { isUserAgent, isUserMedea } = checkPhoneLoginState.data.data || {}
+      if (isUserAgent) {
+        refModalSalesman.current?.open();
+      } else if (isUserMedea) {
+
+      } else {
+        refModalOTP.current?.open();
+      }
     }
     if (checkPhoneLoginState.error !== null) {
-      refModalOTP.current?.open()
-      // phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
+      phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
     }
   }, [checkPhoneLoginState]);
 
@@ -89,7 +95,7 @@ const Content: React.FC = () => {
           onPress={() => {
             Keyboard.dismiss()
             resetCheckLoginPhone();
-            checkPhoneLogin({ mobilePhoneNo: phone.value, identifierDeviceId: advertisingId });
+            checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
           }}
           loading={checkPhoneLoginState.loading}
           disabled={
