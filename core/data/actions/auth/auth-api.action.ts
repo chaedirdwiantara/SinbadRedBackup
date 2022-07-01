@@ -142,3 +142,26 @@ export const meV2Failed = (data: models.ErrorProps): models.MeFailedAction => {
 export const meV2Reset = () => {
   return { type: types.ME_V2_RESET };
 };
+/** === CHECK PHONE === */
+/** PROCESS */
+export const checkPhoneLogin = (
+  data: models.ICheckPhoneLogin
+): models.IAction<any> => {
+  return { type: types.CHECK_PHONE_LOGIN_PROCESS, payload: data }
+}
+/** PROCESS */
+export const checkPhoneLoginSuccess = (
+  data: models.ICheckPhoneLoginSuccess
+): models.IAction<models.ICheckPhoneLoginSuccess> => {
+  return { type: types.CHECK_PHONE_LOGIN_SUCCESS, payload: data }
+}
+/** FAILED */
+export const checkPhoneLoginFailed = (
+  data: models.ErrorProps
+): models.IAction<any> => {
+  return { type: types.CHECK_PHONE_LOGIN_FAILED, payload: data }
+}
+/** RESET */
+export const checkPhoneLoginReset = () => {
+  return { type: types.CHECK_PHONE_LOGIN_RESET }
+}

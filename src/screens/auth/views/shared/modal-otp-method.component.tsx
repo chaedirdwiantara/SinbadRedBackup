@@ -12,7 +12,9 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import { useOTP } from '@screen/auth/functions';
+import { useAuthAction, useOTP } from '@screen/auth/functions';
+import { useDataAuth } from '@core/redux/Data';
+import { LOGIN_OTP_VIEW, REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
 
 interface Props {
   ref: any,
@@ -65,10 +67,30 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, ico
   )
 }
 
-const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone }, ref: any) => {
+const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref: any) => {
   const [contentHeight, setContentHeight] = React.useState(0);
   const [otpMethod, setOtpMethod] = React.useState('')
-  const { sendOtp, hashOtp } = useOTP()
+  const { requestOTP, resetRequestOTP } = useAuthAction()
+  const { hashOtp } = useOTP()
+  const { requestOTP: requestOTPState } = useDataAuth()
+  const { navigate } = useNavigation()
+
+  React.useEffect(() => {
+    return resetRequestOTP
+  }, [])
+
+  React.useEffect(() => {
+    if (requestOTPState.data !== null) {
+      ref.current?.close()
+      let navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
+      navigate(navigateTo, { phoneNo: phone });
+    }
+  }, [requestOTPState])
+
+  function handleOnGetOTP() {
+    const data = { mobilePhone: phone, otpHash: hashOtp, type: otpMethod }
+    requestOTP(data)
+  }
 
   return (
     <SnbBottomSheet2
@@ -116,13 +138,12 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone }, ref: any) =
       button={
         <View style={{ padding: layout.spacing.lg }}>
           <SnbButton2.Primary
-            onPress={() => {
-              const data = { mobilePhone: phone, otpHash: hashOtp, type: otpMethod }
-              sendOtp(data)
-            }}
+            onPress={handleOnGetOTP}
             title="Terapkan"
             size="medium"
             full
+            loading={requestOTPState.loading}
+            disabled={otpMethod === '' || requestOTPState.loading}
           />
         </View>
       }

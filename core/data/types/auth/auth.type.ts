@@ -29,6 +29,12 @@ export const ME_V2_PROCESS = 'MeV2Process';
 export const ME_V2_SUCCESS = 'MeV2Success';
 export const ME_V2_FAILED = 'MeV2Failed';
 export const ME_V2_RESET = 'MeV2Reset';
+
+/** => check phone */
+export const CHECK_PHONE_LOGIN_PROCESS = 'CheckPhoneProcess'
+export const CHECK_PHONE_LOGIN_SUCCESS = 'CheckPhoneSuccess'
+export const CHECK_PHONE_LOGIN_FAILED = 'CheckPhoneFailed'
+export const CHECK_PHONE_LOGIN_RESET = 'CheckPhoneReset'
 /**
  * ================================================================
  * NOTES
