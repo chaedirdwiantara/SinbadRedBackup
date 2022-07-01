@@ -83,6 +83,6 @@ export interface AuthMeSuccess {
 
 //check phone login
 export interface ICheckPhoneLogin {
-  mobilePhoneNo: string;
+  mobilePhone: string;
   identifierDeviceId: string;
 }
