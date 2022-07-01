@@ -42,12 +42,6 @@ const useOTP = (action = '') => {
     dispatch(Actions.resetVerifyOTP());
   };
 
-  const sendOtp = (data: models.ISendOTP) => {
-    console.log(data);
-
-    // dispatch(Actions.sendOtpProcess(data))
-  }
-
   const getLocationPermissions = () => {
     switch (Platform.OS) {
       case 'android': {
