@@ -63,9 +63,7 @@ export const useCheckAutoLogin = () => {
 
 export const useCheckPhoneRegistrationV3 = () => {
   const dispatch = useDispatch();
-  const { checkPhoneRegistrationState } = useSelector(
-    (state: any) => state.auth,
-  );
+  const { checkPhoneRegisterV3 } = useSelector((state: any) => state.auth);
   return {
     checkPhoneRegistration: (data: models.ICheckPhoneV3Process) => {
       dispatch(Actions.checkPhoneRegistrationV3Process(data));
@@ -73,7 +71,7 @@ export const useCheckPhoneRegistrationV3 = () => {
     checkPhoneRegistrationReset: () => {
       dispatch(Actions.checkPhoneRegistrationV3Reset());
     },
-    checkPhoneRegistrationState,
+    checkPhoneRegisterV3,
   };
 };
 

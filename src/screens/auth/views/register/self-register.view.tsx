@@ -15,42 +15,67 @@ import {
 } from '@screen/auth/functions/screens_name';
 import {
   useInputPhone,
-  useCheckPhoneV2,
+  // useCheckPhoneV2,
   useCheckPhoneRegistrationV3,
 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
+import { useDataPermanent } from '@core/redux/Data';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
   const phone = useInputPhone();
-  const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
-    useCheckPhoneV2();
+  // const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
+  //   useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
   const {
     checkPhoneRegistration,
     checkPhoneRegistrationReset,
-    checkPhoneRegistrationState,
+    checkPhoneRegisterV3: checkPhoneRegistrationState,
   } = useCheckPhoneRegistrationV3();
+  const { advertisingId } = useDataPermanent();
+
+  // React.useEffect(() => {
+  //   if (checkPhoneV2.data !== null) {
+  //     if (checkPhoneV2.data.isAvailable) {
+  //       phone.clearText();
+  //       resetCheckPhone();
+  //       checkPhoneV2Reset();
+  //       navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+  //     } else {
+  //       phone.setMessageError('Nomor telah terdaftar');
+  //       phone.setType('error');
+  //     }
+  //   }
+  //   if (checkPhoneV2.error !== null) {
+  //     phone.setMessageError(checkPhoneV2.error.message);
+  //   }
+  // }, [checkPhoneV2]);
 
   React.useEffect(() => {
-    if (checkPhoneV2.data !== null) {
-      if (checkPhoneV2.data.isAvailable) {
-        phone.clearText();
-        resetCheckPhone();
-        checkPhoneV2Reset();
-        navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
+    if (checkPhoneRegistrationState?.data !== null) {
+      if (checkPhoneRegistrationState?.data?.phoneNumberAvailable) {
+        if (checkPhoneRegistrationState?.data?.isUserAgent) {
+          phone.clearText();
+          checkPhoneRegistrationReset();
+          // SHOW MODAL SALESMAN DISINI
+        } else {
+          phone.clearText();
+          checkPhoneRegistrationReset();
+          //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP
+        }
       } else {
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
       }
     }
-    if (checkPhoneV2.error !== null) {
+    if (checkPhoneRegistrationState.error !== null) {
       phone.setMessageError(checkPhoneV2.error.message);
     }
-  }, [checkPhoneV2]);
+  }, [checkPhoneRegistrationState]);
 
   React.useEffect(() => {
-    resetCheckPhone();
+    // resetCheckPhone();
+    checkPhoneRegistrationReset();
     phone.setMessageError('');
     phone.setType('default');
   }, []);
@@ -88,7 +113,8 @@ const SelfRegisterView: React.FC = () => {
     );
   };
 
-  console.log('check:', checkPhoneRegistrationState);
+  console.log('data:', checkPhoneRegistrationState?.data?.isUserAgent);
+  console.log('ini:', advertisingId);
 
   const buttonRegister = () => {
     return (
@@ -99,16 +125,16 @@ const SelfRegisterView: React.FC = () => {
             onPress={() =>
               // checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
               checkPhoneRegistration({
-                mobilePhone: '081111222533',
-                identifierDeviceId: '6e65a32e-d9b5-4ca8-b0d2-5e1ada6892c1',
+                mobilePhone: phone.value,
+                identifierDeviceId: advertisingId,
               })
             }
             disabled={
               phone.value === '' ||
               phone.valMsgError !== '' ||
-              checkPhoneV2.loading
+              checkPhoneRegistrationState.loading
             }
-            loading={checkPhoneV2.loading}
+            loading={checkPhoneRegistrationState.loading}
             size="medium"
             full
           />
