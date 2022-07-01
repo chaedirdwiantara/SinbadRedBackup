@@ -8,16 +8,14 @@ import {
   SnbBottomSheetPart,
 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
-import { useEasyRegistration } from '@screen/account/functions';
+import { ImagesSinbad } from '@image/sinbad_image/index';
 
-interface ListOfStepsProps {
-  closeModal: () => void;
+interface dataProps {
   open: boolean;
   confirm: () => void;
 }
 
-const ForceRegistrationModal: FC<ListOfStepsProps> = (props) => {
-  const { updateCompleteDataState } = useEasyRegistration();
+const ForceRegistrationModal: FC<dataProps> = (props) => {
   const [contentHeight, setContentHeight] = React.useState(0);
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
 
@@ -31,10 +29,13 @@ const ForceRegistrationModal: FC<ListOfStepsProps> = (props) => {
     return (
       <View onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
         <Content.Illustration
-          title="Yakin Ingin Keluar?"
-          image={require('@image/sinbad_image/back_completeness.png')}
-          description="Jangan khawatir, data yang telah Anda masukkan otomatis tersimpan"
-          imageStyle={{ height: 180, resizeMode: 'contain' }}
+          title="Selamat Datang Kembali"
+          image={ImagesSinbad.forceRegister}
+          description={
+            'Silakan lakukan daftar ulang untuk menggunakan aplikasi sinbad'
+          }
+          imageStyle={{ height: 240, resizeMode: 'contain' }}
+          imageContainerStyle={{ flex: 1 }}
         />
       </View>
     );
@@ -49,39 +50,16 @@ const ForceRegistrationModal: FC<ListOfStepsProps> = (props) => {
         name="modal-back-profile-completion"
         type="content"
         snap={false}
-        close={props.closeModal}
         contentHeight={contentHeight + 100}
         button={
-          <View
-            style={{
-              flexDirection: 'row',
-              padding: layout.spacing.lg,
-            }}>
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Primary
-                onPress={() => {
-                  props.closeModal();
-                }}
-                title="Batal"
-                disabled={false}
-                size="medium"
-                full
-                outline
-              />
-            </View>
-            <View style={{ marginHorizontal: layout.spacing.sm }} />
-            <View style={{ flex: 1 }}>
-              <SnbButton2.Primary
-                onPress={() => {
-                  props.confirm();
-                }}
-                title="Ya, Keluar"
-                disabled={updateCompleteDataState.loading}
-                loading={updateCompleteDataState.loading}
-                size="medium"
-                full
-              />
-            </View>
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              disabled={false}
+              onPress={() => props.confirm()}
+              title={'Daftar'}
+              full
+              size="medium"
+            />
           </View>
         }
       />

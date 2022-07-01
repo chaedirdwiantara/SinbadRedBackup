@@ -19,7 +19,7 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-// import { ForceRegisterModal } from '../shared/force-registration-modal.component';
+import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
   const { navigate } = useNavigation();
@@ -109,7 +109,9 @@ const Content: React.FC = () => {
 };
 
 const LoginPhoneView = () => {
-  const { reset } = useNavigation();
+  const { reset, navigate } = useNavigation();
+  const [openModalForceRegister, setOpenModalForceRegister] =
+    React.useState(true);
 
   return (
     <SnbContainer color="white">
@@ -119,28 +121,15 @@ const LoginPhoneView = () => {
         title="Masuk"
       />
       <Content />
-      {/* <ForceRegisterModal
-        open={true}
-        closeModal={() => {
-          props.onCloseModalBack(false);
-        }}
-        confirm={() => {
-          if (
-            value.idNumber !== userData.idNo ||
-            value.nameOnKtp !== userData.fullName
-          ) {
-            updateCompleteData({
-              user: {
-                name: value.nameOnKtp,
-                idNo: value.idNo,
-              },
-            });
-            setBackHandle(true);
-          } else {
-            backToDataCompleteness();
-          }
-        }}
-      /> */}
+      <View style={{ flex: 1 }}>
+        <ForceRegistrationModal
+          open={openModalForceRegister}
+          confirm={() => {
+            navigate(SELF_REGISTRATION_VIEW);
+            setOpenModalForceRegister(false);
+          }}
+        />
+      </View>
     </SnbContainer>
   );
 };
