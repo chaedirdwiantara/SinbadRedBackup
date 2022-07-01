@@ -24,13 +24,11 @@ const PaymentInformation = () => {
       <Header title="Informasi Pembayaran" />
       <Description
         title="Metode Pembayaran"
-        value={data?.paymentMethodName || ''}
+        value={data?.paymentMethod || ''}
       />
       <Description
-        title={`Total Harga (${
-          (data?.totalOrderProducts || 0) + 1 || ''
-        } Barang)`}
-        value={toCurrency(data?.totalSellerPriceAfterTax || 0, {
+        title={`Total Harga (${data?.totalSku || 0} Barang)`}
+        value={toCurrency(data?.totalOrderParcelsAfterTax || 0, {
           withFraction: false,
         })}
       />

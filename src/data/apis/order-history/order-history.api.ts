@@ -32,8 +32,7 @@ export const getOrderHistoryList = (
 export const getOrderConsolidateHistoryDetail = ({ id }: { id: string }) => {
   return apiMappingV3<Array<models.OrderListHistory>>(
     'auth',
-    // `${historyOrderPath}/consolidate/${id}`,
-    `${historyOrderPath}/${id}`,
+    `${historyOrderPath}/consolidate/${id}`,
     'buyer-order',
     'v1',
     'DETAIL',

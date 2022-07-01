@@ -13,12 +13,9 @@ import {
 } from '@screen/order-history/components/order-history-consolidate-detail';
 
 const OrderHistoryConsolidateDetail = () => {
-  /** Dummy Data */
-  const dummyData = { name: 'SNE-DUMMY-00123' };
-
   const {
     stateOrderHistory: {
-      consolidateDetail: { loading },
+      consolidateDetail: { loading, data },
     },
   } = useOrderHistoryContext();
 
@@ -34,7 +31,7 @@ const OrderHistoryConsolidateDetail = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        title={dummyData.name}
+        title={data?.orderId}
         color="white"
         backAction={NavigationAction.back}
       />

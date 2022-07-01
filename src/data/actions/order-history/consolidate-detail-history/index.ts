@@ -5,8 +5,8 @@ import * as types from '@types';
 /** => Process */
 export const orderConsolidateHistoryDetailProcess = (
   contextDispatch: (action: any) => any,
-  payload: models.OrderHistoryDetailProcessProps,
-): models.OrderHistoryDetailProcessAction => {
+  payload: models.OrderConsolidateHistoryDetailProcessProps,
+): models.OrderConsolidateHistoryDetailProcessAction => {
   contextDispatch({
     type: types.ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS,
     payload,
@@ -19,8 +19,8 @@ export const orderConsolidateHistoryDetailProcess = (
 };
 /** => Succeeded */
 export const orderConsolidateHistoryDetailSuccess = (
-  payload: models.DetailSuccessProps<models.orderDetailHistory>,
-): models.DetailSuccessAction<models.orderDetailHistory> => {
+  payload: models.DetailSuccessProps<models.orderConsolidateDetailHistory>,
+): models.DetailSuccessAction<models.orderConsolidateDetailHistory> => {
   return { type: types.ORDER_CONSOLIDATE_HISTORY_DETAIL_SUCCESS, payload };
 };
 /** => Failed */
