@@ -168,7 +168,7 @@ const ConsolidateListOrderDetail = () => {
         ) : (
           <View />
         )}
-        {data?.orderParcels.length < 2 ? (
+        {data?.orderParcels.length > 2 ? (
           <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
             <SnbText2.Body.Small color={colorV2.textColor.link} align="center">
               {showMore ? 'Sembunyikan Supplier' : 'Lihat Supplier Lainnya'}
