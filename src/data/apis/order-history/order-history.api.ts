@@ -28,6 +28,16 @@ export const getOrderHistoryList = (
     'LIST',
   );
 };
+// get consolidate order history
+export const getOrderConsolidateHistoryDetail = ({ id }: { id: string }) => {
+  return apiMappingV3<Array<models.OrderListHistory>>(
+    'auth',
+    `${historyOrderPath}/consolidate/${id}`,
+    'buyer-order',
+    'v1',
+    'DETAIL',
+  );
+};
 // get detail order history
 export const getOrderHistoryDetail = ({ id }: { id: string }) => {
   return apiMappingV3<Array<models.OrderListHistory>>(
