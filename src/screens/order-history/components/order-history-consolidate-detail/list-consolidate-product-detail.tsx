@@ -142,10 +142,6 @@ const ConsolidateListOrderDetail = () => {
     },
   } = useOrderHistoryContext();
 
-  const [fristProduct, ...listProduct] = useMemo(
-    () => data?.orderParcels || [],
-    [data?.orderParcels],
-  );
   if (loading) {
     return (
       <SkeletonAnimator>
@@ -158,13 +154,15 @@ const ConsolidateListOrderDetail = () => {
     <>
       <View style={styles.main}>
         <Header title="Daftar Pesanan" />
-        {fristProduct ? (
-          <Card data={fristProduct} id={fristProduct?.id} />
+        {showMore === false ? (
+          data?.orderParcels
+            .slice(0, 2)
+            .map((i) => <Card key={i.id} data={i} id={i?.id} />)
         ) : (
           <View />
         )}
         {showMore ? (
-          listProduct.map((i) => <Card key={i.id} data={i} id={i?.id} />)
+          data?.orderParcels.map((i) => <Card key={i.id} data={i} id={i?.id} />)
         ) : (
           <View />
         )}
