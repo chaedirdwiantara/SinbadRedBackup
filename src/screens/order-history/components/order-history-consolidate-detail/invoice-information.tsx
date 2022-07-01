@@ -23,7 +23,7 @@ const InvoiceInformation = () => {
       <View style={styles.main}>
         <DescriptionBadge
           title="Rangkuman Pesanan"
-          value={data?.orderSellerCode || ''}
+          value={data?.fulfilment || ''}
         />
         <Description
           title="Tanggal Pemesanan"
@@ -31,7 +31,7 @@ const InvoiceInformation = () => {
         />
         <Description
           title="Jumlah Supplier"
-          value={data?.orderSellerCode || ''}
+          value={data?.totalSupplier || ''}
         />
       </View>
       <Divider />

@@ -34,10 +34,10 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
 /** Get Consolidate History Detail */
 function* OrderConsolidateHistoryDetail(action: models.DetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.orderDetailHistory> =
+    const response: models.DetailSuccessProps<models.orderConsolidateDetailHistory> =
       yield call(() => {
         return OrderHistoryApi.getOrderConsolidateHistoryDetail(
-          action.payload as models.OrderHistoryDetailProcessProps,
+          action.payload as models.OrderConsolidateHistoryDetailProcessProps,
         );
       });
 
