@@ -12,8 +12,9 @@ const ActionFooter = () => {
   } = useOrderHistoryContext();
 
   const onOpenWhatsapp = useCallback(() => {
-    const text = `
-    Halo, nomor pesanan saya ${data?.orderId || ''}, saya butuh bantuan.`;
+    const text = `Halo, nomor pesanan saya ${
+      data?.orderId || ''
+    }, saya butuh bantuan.`;
     Linking.openURL(`whatsapp://send?phone=+6282260106010&text=${text}`).catch(
       (err) =>
         err ? Linking.openURL('market://details?id=com.whatsapp') : null,
