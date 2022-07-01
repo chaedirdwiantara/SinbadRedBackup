@@ -9,7 +9,7 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image } from 'react-native';
+import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
   SnbBottomSheet2Ref,
   SnbButton2,
@@ -20,7 +20,7 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import { ModalOTPMethod } from '../shared';
+import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
@@ -31,7 +31,8 @@ const Content: React.FC = () => {
   const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
   const phone = useInputPhone();
   const { reset } = useNavigation();
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent()
 
   React.useEffect(() => {
@@ -43,10 +44,10 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (checkPhoneLoginState.data !== null) {
-      bottomSheetRef.current?.open()
+      refModalOTP.current?.open()
     }
     if (checkPhoneLoginState.error !== null) {
-      bottomSheetRef.current?.open()
+      refModalOTP.current?.open()
       // phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
     }
   }, [checkPhoneLoginState]);
@@ -86,6 +87,7 @@ const Content: React.FC = () => {
         <SnbButton2.Primary
           title="Selanjutnya"
           onPress={() => {
+            Keyboard.dismiss()
             resetCheckLoginPhone();
             checkPhoneLogin({ mobilePhoneNo: phone.value, identifierDeviceId: advertisingId });
           }}
@@ -114,7 +116,8 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
-      <ModalOTPMethod ref={bottomSheetRef} phone={phone.value} action='login' />
+      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action='login' />
+      <ModalSalesman ref={refModalSalesman} />
     </ScrollView>
   );
 };

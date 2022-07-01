@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
   SnbText2,
@@ -16,7 +16,7 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { useInputPhone, useCheckPhoneV2 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
-import { ModalOTPMethod } from '../shared';
+import { ModalOTPMethod, ModalSalesman } from '../shared';
 
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
@@ -24,17 +24,19 @@ const SelfRegisterView: React.FC = () => {
   const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
     useCheckPhoneV2();
   const [hashOtp, setHashOtp] = useState('');
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
 
 
   React.useEffect(() => {
     if (checkPhoneV2.data !== null) {
       if (checkPhoneV2.data.isAvailable) {
-        bottomSheetRef.current?.open()
+        refModalOTP.current?.open()
         resetCheckPhone();
         checkPhoneV2Reset();
         // navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
       } else {
+        refModalSalesman.current?.open()
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
       }
@@ -48,7 +50,10 @@ const SelfRegisterView: React.FC = () => {
     resetCheckPhone();
     phone.setMessageError('');
     phone.setType('default');
-    return phone.clearText
+    return () => {
+      checkPhoneV2Reset();
+      phone.clearText()
+    }
   }, []);
 
   React.useEffect(() => {
@@ -90,9 +95,10 @@ const SelfRegisterView: React.FC = () => {
         <View style={styles.button}>
           <SnbButton2.Primary
             title={'Lanjut'}
-            onPress={() =>
+            onPress={() => {
+              Keyboard.dismiss()
               checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
-            }
+            }}
             disabled={
               phone.value === '' ||
               phone.valMsgError !== '' ||
@@ -133,7 +139,8 @@ const SelfRegisterView: React.FC = () => {
       {header()}
       {content()}
       {buttonRegister()}
-      <ModalOTPMethod ref={bottomSheetRef} phone={phone.value} action='register' />
+      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action='register' />
+      <ModalSalesman ref={refModalSalesman} />
     </SnbContainer>
   );
 };
