@@ -88,7 +88,7 @@ const Card: FC<CardProps> = (props) => {
         <View style={styles.buttonContainer}>
           {data.isDisplayTrack ? (
             <View style={{ flex: 1 }}>
-              <SnbButton2.Link
+              <SnbButton2.Secondary
                 title="Lacak"
                 size="small"
                 onPress={() =>
@@ -96,6 +96,7 @@ const Card: FC<CardProps> = (props) => {
                     id: id,
                   })
                 }
+                outline={true}
                 full={true}
               />
             </View>
