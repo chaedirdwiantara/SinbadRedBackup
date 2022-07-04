@@ -20,6 +20,7 @@ export interface orderDetailHistory {
   statusValue: string;
   statusLabel: string;
   orderSellerCode: string;
+  orderCode: string;
   orderedAt: string;
   orderOrigin: string;
   orderDestination: string;

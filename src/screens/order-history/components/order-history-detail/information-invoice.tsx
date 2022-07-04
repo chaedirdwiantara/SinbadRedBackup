@@ -22,7 +22,7 @@ const InformationInfoice = () => {
     <>
       <View style={styles.main}>
         <Header title="Informasi Invoice" />
-        <Description title="Order ID" value={data?.orderSellerCode || ''} />
+        <Description title="Order ID" value={data?.orderCode || ''} />
         <Description
           title="Tanggal Pemesanan"
           value={toLocalDateTime(data?.orderedAt || '')}
