@@ -9,8 +9,9 @@ import {
 } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image } from 'react-native';
+import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
+  SnbBottomSheet2Ref,
   SnbButton2,
   SnbContainer,
   SnbText2,
@@ -19,26 +20,44 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
+import { ModalOTPMethod, ModalSalesman } from '../shared';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth, useDataPermanent } from '@core/redux/Data';
+import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
-  const { navigate } = useNavigation();
-  const { requestOTP, requestOTPState, resetRequestOTP } = useAuthAction();
+  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
+  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
   const phone = useInputPhone();
-  const { reset } = useNavigation();
+  const { reset, navigate } = useNavigation();
+  const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
+  const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
+  const { advertisingId } = useDataPermanent()
+  const [openModalForceRegister, setOpenModalForceRegister] =
+    React.useState(false);
 
   React.useEffect(() => {
-    return resetRequestOTP;
+    return () => {
+      resetCheckLoginPhone()
+      resetRequestOTP()
+    };
   }, []);
 
   React.useEffect(() => {
-    if (requestOTPState.data !== null) {
-      phone.clearText();
-      navigate(LOGIN_OTP_VIEW, { phoneNo: phone.value });
+    if (checkPhoneLoginState.data !== null) {
+      const { isUserAgent, isUserMedea } = checkPhoneLoginState.data.data || {}
+      if (isUserAgent) {
+        refModalSalesman.current?.open();
+      } else if (isUserMedea) {
+        setOpenModalForceRegister(true);
+      } else {
+        refModalOTP.current?.open();
+      }
     }
-    if (requestOTPState.error !== null) {
-      phone.setMessageError(setErrorMessage(requestOTPState.error.code));
+    if (checkPhoneLoginState.error !== null) {
+      phone.setMessageError(setErrorMessage(checkPhoneLoginState.error.code));
     }
-  }, [requestOTPState]);
+  }, [checkPhoneLoginState]);
 
   useEffect(() => {
     const backAction = () => {
@@ -75,14 +94,15 @@ const Content: React.FC = () => {
         <SnbButton2.Primary
           title="Selanjutnya"
           onPress={() => {
-            resetRequestOTP();
-            requestOTP({ mobilePhone: phone.value });
+            Keyboard.dismiss()
+            resetCheckLoginPhone();
+            checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
           }}
-          loading={requestOTPState.loading}
+          loading={checkPhoneLoginState.loading}
           disabled={
             phone.value === '' ||
             phone.valMsgError !== '' ||
-            requestOTPState.loading
+            checkPhoneLoginState.loading
           }
           size="medium"
           full
@@ -102,6 +122,17 @@ const Content: React.FC = () => {
             }}
           />
         </View>
+      </View>
+      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action='login' />
+      <ModalSalesman ref={refModalSalesman} />
+      <View style={{flex: 1}}>
+      <ForceRegistrationModal
+        open={openModalForceRegister}
+        confirm={() => {
+          navigate(SELF_REGISTRATION_VIEW);
+          setOpenModalForceRegister(false);
+        }}
+      />
       </View>
     </ScrollView>
   );
