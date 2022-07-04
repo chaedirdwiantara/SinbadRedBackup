@@ -1,6 +1,7 @@
 import {
   OrderHistoryDetailView,
   HistoryTrackingView,
+  OrderHistoryConsolidateDetailView,
 } from '@screen/order-history/views';
 
 const OrderHistoryNav = {
@@ -9,6 +10,9 @@ const OrderHistoryNav = {
   },
   HistoryTrackingView: {
     component: HistoryTrackingView,
+  },
+  OrderHistoryConsolidateDetailView: {
+    component: OrderHistoryConsolidateDetailView,
   },
 };
 

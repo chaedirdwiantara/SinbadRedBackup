@@ -5,6 +5,11 @@ import {
   listHistoryReducer,
 } from './list-history/list-history.reducer';
 import {
+  DetailConsolidateHistoryProps,
+  detailConsolidateHistoryInitialState,
+  detailConsolidateHistoryReducer,
+} from './detail-consolidate-history/detail-consolidate-history.reducer';
+import {
   DetailHistoryProps,
   detailHistoryInitialState,
   detailHistoryReducer,
@@ -18,6 +23,7 @@ import { listMenuStatusInitialState, ListMenuStatusProps, listMenuStatusReducer 
 /** === TYPE === */
 export interface OrderHistoryState {
   list: ListHistoryProps;
+  consolidateDetail: DetailConsolidateHistoryProps;
   detail: DetailHistoryProps;
   tracking: DetailTrackingHistoryProps;
   menuStatus: ListMenuStatusProps
@@ -25,16 +31,18 @@ export interface OrderHistoryState {
 /** === INITIAL STATE === */
 export const orderHistoryInitialState = {
   list: listHistoryInitialState,
+  consolidateDetail: detailConsolidateHistoryInitialState,
   detail: detailHistoryInitialState,
   tracking: detailTrackingHistoryInitialState,
   menuStatus: listMenuStatusInitialState,
 };
 /** === REDUCER === */
 export const orderHistoryReducer = (
-  { list, detail, tracking, menuStatus }: OrderHistoryState,
+  { list, consolidateDetail, detail, tracking, menuStatus }: OrderHistoryState,
   action: any,
 ) => ({
   list: listHistoryReducer(list, action),
+  consolidateDetail: detailConsolidateHistoryReducer(consolidateDetail, action),
   detail: detailHistoryReducer(detail, action),
   tracking: detailTrackingHistoryReducer(tracking, action),
   menuStatus: listMenuStatusReducer(menuStatus, action)
