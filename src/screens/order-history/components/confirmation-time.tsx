@@ -25,7 +25,7 @@ const counter = (time1: CounterProp, time2: CounterProp) => {
   const duration = moment.duration(diff, 'milliseconds');
   const seconds = duration.asSeconds();
   const ss = joinZero(duration.seconds());
-  const hh = joinZero(duration.hours());
+  const hh = duration.days() > 0 ? 24  * duration.days() + duration.hours() : joinZero(duration.hours());
   const mm = joinZero(duration.minutes());
 
   if (Number(seconds) <= 0) return '00:00:00';

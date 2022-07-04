@@ -60,30 +60,77 @@ const dataDummyList =  [
   {
       "orderId": "SNE-111222333",
       "orderedAt": "2022-04-12T01:30:34Z",
-      "fulfilment": "1/3 Selesai",
+      "fulfilment": "2/3 Selesai",
       "totalOrderPrice": 20000000,
       "moreSuppliers": 2,
       "orderParcels": [
           {
               "id": "4640",
               "sellerName": "PT. Tigaraksa Satria Tbk",
-              "statusValue": "created",
-              "statusLabel": "Diproses",
+              "statusValue": "delivered",
+              "statusLabel": "Tiba di Tujuan",
               "doneAt": "2022-04-12T01:30:34Z",
               "moreProducts": 2,
-              "products": [
-                  {
-                      "id": "4695",
-                      "image": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-                      "name": "SGM ANANDA 1 400 GR GA edit",
-                      "qty": 1,
-                      "uom": "Kardus",
-                      "totalPriceAfterTax": 110002
-                  }
-              ]
-          }
+              "productId": "4695",
+              "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
+              "productName": "SGM ANANDA 1 400 GR GA edit",
+              "productQty": 1,
+              "productUom": "Kardus",
+              "productTotalPriceAfterTax": 110002
+          },
+          {
+            "id": "4641",
+            "sellerName": "PT. Tigaraksa Satria Tbk2",
+            "statusValue": "created",
+            "statusLabel": "Diproses",
+            "doneAt": "2022-04-12T01:30:34Z",
+            "moreProducts": 3,
+            "productId": "4696",
+            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
+            "productName": "SGM ANANDA 2 400 GR GA edit",
+            "productQty": 3,
+            "productUom": "Kardus",
+            "productTotalPriceAfterTax": 110002
+        }
       ]
-  }
+  },
+  {
+    "orderId": "SNE-111222334",
+    "orderedAt": "2022-04-12T01:30:34Z",
+    "fulfilment": "2/3 Selesai",
+    "totalOrderPrice": 20000000,
+    "moreSuppliers": 2,
+    "orderParcels": [
+        {
+            "id": "4640",
+            "sellerName": "PT. Tigaraksa Satria Tbk",
+            "statusValue": "delivered",
+            "statusLabel": "Tiba di Tujuan",
+            "doneAt": "2022-04-12T01:30:34Z",
+            "moreProducts": 2,
+            "productId": "4695",
+            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
+            "productName": "SGM ANANDA 1 400 GR GA edit",
+            "productQty": 1,
+            "productUom": "Kardus",
+            "productTotalPriceAfterTax": 110002
+        },
+        {
+          "id": "4641",
+          "sellerName": "PT. Tigaraksa Satria Tbk2",
+          "statusValue": "created",
+          "statusLabel": "Diproses",
+          "doneAt": "2022-04-12T01:30:34Z",
+          "moreProducts": 3,
+          "productId": "4696",
+          "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
+          "productName": "SGM ANANDA 2 400 GR GA edit",
+          "productQty": 3,
+          "productUom": "Kardus",
+          "productTotalPriceAfterTax": 110002
+      }
+    ]
+}
 ]
 
 type CardWaitingForPaymentProps = {
@@ -117,18 +164,104 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
             title={data.fulfilment}
           />
         </View>
-        {/* mid section */}
-
+      </View>
+      <SnbDivider2></SnbDivider2>
+      {/* mid section */}
+      <View style={{marginHorizontal : 16, marginTop: 16}}>
+        {ParcelConsolidation(data.orderParcels, () => onConfirmOrder)}
+      </View>
+      {/* bottom section */}
+      <View style={{marginBottom : 8, marginHorizontal: 16}}>
+        <View style={styles.information}>
+          <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
+          <SnbText2.Body.Small>
+            {toCurrency(data.totalOrderPrice, {
+              withFraction: false,
+            })}
+          </SnbText2.Body.Small>
+        </View>
+      </View>
+      <View style={{marginBottom : 16, marginHorizontal: 16}}>
+        <TouchableOpacity onPress={() => console.log('to detail')}>
+          <View style={styles.toDetailFooter}>
+              <SnbText2.Body.Small
+                color={
+                  colorV2.textColor.link
+                }>{`Lihat ${data.moreSuppliers} Supplier Lainnya`}</SnbText2.Body.Small>
+          </View>
+        </TouchableOpacity>
       </View>
     </Pressable>
   )
 }
-const ParcelConsolidation = (dataParcel: any) => {
-  return (
-  <View>
-    
+const ParcelConsolidation = (dataParcels: any[], confirmOrder: () => void) => {
+  return dataParcels?.map((dataParcel) => (
+  <>
+  {/* title */}
+  <View style={styles.title}>
+    {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
+    <SnbText2.Body.Small>{dataParcel.sellerName}</SnbText2.Body.Small>
+    <SnbBadge2
+      testID = {'03'}
+      title={dataParcel.statusLabel}
+      type={labelStatus[dataParcel.statusValue] || 'error'}
+    />
   </View>
-)}
+  {/* Timer */}
+  {dataParcel.statusValue === 'delivered' ? (
+    <ConfirmationTime doneAt={dataParcel?.doneAt || ''} />
+  ) : (
+    <View />
+  )}
+  {/* product */}
+  <View>
+    <View style={styles.product}>
+      <SnbImageCompressor style={styles.image} uri={dataParcel.productImage} />
+      <View style={styles.descProduct}>
+        <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+          {dataParcel.productName}
+        </SnbText2.Paragraph.Default>
+        <SnbText2.Body.Default>
+        {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}{toCurrency(dataParcel.productTotalPriceAfterTax, {
+            withFraction: false,
+          })}
+        </SnbText2.Body.Default>
+      </View>
+    </View>
+
+    {dataParcel.moreProducts > 0 && (
+      <SnbText2.Paragraph.Small
+        color={colorV2.textColor.secondary}
+        align="center">
+        + {dataParcel.moreProducts} produk lainnya
+      </SnbText2.Paragraph.Small>
+    )}
+    {/* confirmation button */}
+    <>
+    <View style={{ marginVertical: 16 }}>
+      <SnbDivider2 type="solid" />
+    </View>
+    <View>
+    {/* if delivered */}
+    {dataParcel.statusValue == 'delivered' ? (
+      <View style={{ marginBottom: 8}}>
+            <SnbButton2.Secondary
+              outline={true}
+              title="Pesanan Diterima"
+              size="small"
+              onPress={confirmOrder}
+              full={true}
+            />
+      </View>      
+          ) : (
+            <View />
+          )}
+    </View>
+    </>
+  </View>
+
+</>
+))}
 const Card: FC<CardProps> = (props) => {
   const { data, onCancelOrder, onConFirmOrder } = props;
   return (
@@ -554,6 +687,10 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     width: '70%',
     justifyContent: 'center',
+  },
+  toDetailFooter: {
+    alignItems: 'center', 
+    marginVertical: 6
   },
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
