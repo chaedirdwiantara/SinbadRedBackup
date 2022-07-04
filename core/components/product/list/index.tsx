@@ -366,6 +366,7 @@ const ProductList: FC<ProductListProps> = ({
 
   useEffect(() => {
     if (withTags) {
+      console.log('tag actions');
       tagActions.fetch(dispatchTag, {
         categoryId: selectedCategory?.id,
         keyword: searchKeyword,

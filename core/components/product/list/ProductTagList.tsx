@@ -18,27 +18,29 @@ const ProductTagList: FC<ProductTagListProps> = ({
   onTagPress,
   onFilterPress,
 }) => (
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={styles.container}>
-    <View style={styles.gap}>
-      <SnbChips2.Action
-        icon="filter_list"
-        text="Filter"
-        onPress={onFilterPress}
-      />
-    </View>
-    {tags.map((item, index) => (
-      <View key={item.value} style={styles.gap}>
-        <SnbChips2.Choice
-          text={item.value}
-          active={item.selected}
-          onPress={() => onTagPress(index, item)}
+  <View>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.container}>
+      <View style={styles.gap}>
+        <SnbChips2.Action
+          icon="filter_list"
+          text="Filter"
+          onPress={onFilterPress}
         />
       </View>
-    ))}
-  </ScrollView>
+      {tags.map((item, index) => (
+        <View key={item.value} style={styles.gap}>
+          <SnbChips2.Choice
+            text={item.value}
+            active={item.selected}
+            onPress={() => onTagPress(index, item)}
+          />
+        </View>
+      ))}
+    </ScrollView>
+  </View>
 );
 
 const styles = StyleSheet.create({

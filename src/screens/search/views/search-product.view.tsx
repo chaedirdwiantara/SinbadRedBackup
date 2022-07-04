@@ -1,10 +1,26 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, useState } from 'react';
-import { View } from 'react-native';
-import { SnbContainer } from 'react-native-sinbad-ui';
+import React, { FC, memo, useCallback, useEffect, useState } from 'react';
+import { View, StatusBar } from 'react-native';
+import { SnbContainer, SnbToast2 } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
 import ProductList from '@core/components/product/list';
+import {
+  ProductListView,
+  TagListView,
+  CountProductList,
+  ModalSortView,
+  ModalAddToCartView,
+  ModalNeedLoginView,
+  ModalFilterView,
+  ModalNotInUrbanView,
+  ModalErrorStockView,
+  ModalErrorProductDetailView,
+  ProductListProvider,
+  useProductListContext,
+  useProductListFunction,
+} from '@core/components/product/product-list';
+import { Header } from '../components';
 /** === IMPORT FUNCTIONS === */
 import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListActions } from '@screen/product/functions';
@@ -22,29 +38,62 @@ type SearchProductRouteProps = RouteProp<
 /** === COMPONENT === */
 const SearchProductView: FC = () => {
   /** === HOOKS === */
+  const { stateCart, onSuccessAddToCart } = useProductListFunction();
   const {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();
-  const [localKeyword, setLocalKeyword] = useState(keyword);
-  const [isSearched, setIsSearched] = useState(0);
+  const { setSearch, state } = useProductListContext();
+  // const [localKeyword, setLocalKeyword] = useState(keyword);
+  // const [isSearched, setIsSearched] = useState(0);
   const { fetch, refresh, loadMore, clearContents } = useProductListActions();
   const {
     stateProduct: { list: productListState },
     dispatchProduct,
   } = useProductContext();
 
-  useFocusEffect(
-    useCallback(() => {
-      fetch(dispatchProduct, { keyword: localKeyword });
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetch(dispatchProduct, { keyword: keyword });
 
-      return () => clearContents(dispatchProduct);
-    }, []),
-  );
+  //     return () => clearContents(dispatchProduct);
+  //   }, []),
+  // );
+
+  // initial fetch
+  useEffect(() => {
+    fetch(dispatchProduct, { keyword });
+    setSearch(keyword);
+    return () => {
+      clearContents(dispatchProduct);
+    };
+  }, []);
+  // listener when success add to cart
+  useEffect(() => {
+    if (stateCart.create.data !== null) {
+      onSuccessAddToCart();
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
+    }
+  }, [stateCart.create.data]);
   /** === VIEW pdp list search === */
   return (
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
-        <ProductList
+        <Header onFetch={(params) => fetch(dispatchProduct, params)} />
+        <TagListView onFetch={(params) => fetch(dispatchProduct, params)} />
+        <CountProductList />
+        <ProductListView />
+        <ModalSortView onFetch={(params) => fetch(dispatchProduct, params)} />
+        <ModalFilterView onFetch={(params) => fetch(dispatchProduct, params)} />
+        <ModalAddToCartView />
+        <ModalNeedLoginView />
+        <ModalNotInUrbanView />
+        <ModalErrorStockView />
+        <ModalErrorProductDetailView />
+        <SnbToast2 />
+        {/* <ProductList
           products={productListState.data}
           total={productListState.total}
           headerType="search"
@@ -75,10 +124,15 @@ const SearchProductView: FC = () => {
               ...queryOptions,
             })
           }
-        />
+        /> */}
       </View>
     </SnbContainer>
   );
 };
 
-export default SearchProductView;
+// wrap context state global for product list
+export default memo(() => (
+  <ProductListProvider>
+    <SearchProductView />
+  </ProductListProvider>
+));
