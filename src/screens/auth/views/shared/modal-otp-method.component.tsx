@@ -3,12 +3,12 @@ import { View, TouchableOpacity } from 'react-native';
 import {
   colorV2,
   SnbBottomSheet2,
-  SnbBottomSheet2Ref,
   SnbBottomSheetPart,
   SnbButton2,
   SnbDivider2,
   SnbIcon,
   SnbText2,
+  SnbToast,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
@@ -71,7 +71,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
   const [contentHeight, setContentHeight] = React.useState(0);
   const [otpMethod, setOtpMethod] = React.useState('')
   const { requestOTP, resetRequestOTP } = useAuthAction()
-  const { hashOtp } = useOTP()
+  const { otpHash } = useOTP()
   const { requestOTP: requestOTPState } = useDataAuth()
   const { navigate } = useNavigation()
 
@@ -82,13 +82,18 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
   React.useEffect(() => {
     if (requestOTPState.data !== null) {
       ref.current?.close()
-      let navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
-      navigate(navigateTo, { phoneNo: phone });
+      const navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
+      const params = { mobilePhone: phone, otpHash, type: otpMethod }
+      navigate(navigateTo, params);
+    }
+    if (requestOTPState.error?.message) {
+      ref.current?.close()
+      SnbToast.show(requestOTPState.error.message, 2500)
     }
   }, [requestOTPState])
 
   function handleOnGetOTP() {
-    const data = { mobilePhone: phone, otpHash: hashOtp, type: otpMethod }
+    const data = { mobilePhone: phone, otpHash, type: otpMethod }
     requestOTP(data)
   }
 

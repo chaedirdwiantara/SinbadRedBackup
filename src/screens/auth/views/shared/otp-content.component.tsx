@@ -16,10 +16,11 @@ interface Props {
   resend: () => void;
   errorMessage: string;
   testID: string;
+  otpMethod: 'sms' | 'wa' | string
 }
 
 const OTPContent: React.FC<Props> = (props) => {
-  const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess } =
+  const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess, otpMethod } =
     props;
   const { otp, setOtp } = useOTP('listeningToHash');
   const [error, setError] = React.useState(false);
@@ -62,7 +63,7 @@ const OTPContent: React.FC<Props> = (props) => {
           <View style={{ marginVertical: layout.spacing.xxsm }} />
           <View style={{ paddingHorizontal: layout.spacing['3xl'] }}>
             <SnbText2.Paragraph.Default align="center">
-              Kode verifikasi telah dikirimkan melalui sms ke{' '}
+              Kode verifikasi telah dikirimkan melalui {otpMethod === 'sms' ? 'sms' : 'Whatsapp'} ke{' '}
               <SnbText2.Body.Default>{phoneNo}</SnbText2.Body.Default>
             </SnbText2.Paragraph.Default>
           </View>

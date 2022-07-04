@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
@@ -11,7 +11,6 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import {
-  REGISTER_OTP_VIEW,
   LOGIN_PHONE_VIEW,
 } from '@screen/auth/functions/screens_name';
 import {
@@ -20,7 +19,6 @@ import {
   useCheckPhoneRegistrationV3,
   setErrorMessage,
 } from '@screen/auth/functions';
-import RNOtpVerify from 'react-native-otp-verify';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
 
@@ -29,7 +27,6 @@ const SelfRegisterView: React.FC = () => {
   const phone = useInputPhone();
   // const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
   //   useCheckPhoneV2();
-  const [hashOtp, setHashOtp] = useState('');
   const {
     checkPhoneRegistration,
     checkPhoneRegistrationReset,
@@ -89,12 +86,6 @@ const SelfRegisterView: React.FC = () => {
       phone.clearText();
     };
   }, []);
-
-  React.useEffect(() => {
-    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
-    return RNOtpVerify.removeListener;
-  }, []);
-
   const header = () => {
     return (
       <SnbTopNav2.Type3
