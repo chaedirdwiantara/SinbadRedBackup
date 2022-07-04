@@ -12,6 +12,7 @@ import {
   SnbButton,
   SnbButton2,
   SnbDivider2,
+  SnbBadge2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   View,
@@ -50,12 +51,75 @@ type CardProps = {
   onConFirmOrder?: () => void;
 };
 
+type CardPropsConsolidate = {
+  data: any;
+  onConfirmOrder? : () => void;
+}
+
+const dataDummyList =  [
+  {
+      "orderId": "SNE-111222333",
+      "orderedAt": "2022-04-12T01:30:34Z",
+      "fulfilment": "1/3 Selesai",
+      "totalOrderPrice": 20000000,
+      "moreSuppliers": 2,
+      "orderParcels": [
+          {
+              "id": "4640",
+              "sellerName": "PT. Tigaraksa Satria Tbk",
+              "statusValue": "created",
+              "statusLabel": "Diproses",
+              "doneAt": "2022-04-12T01:30:34Z",
+              "moreProducts": 2,
+              "products": [
+                  {
+                      "id": "4695",
+                      "image": "https://images.sinbad.co.id/odoo_img/product/115810.png",
+                      "name": "SGM ANANDA 1 400 GR GA edit",
+                      "qty": 1,
+                      "uom": "Kardus",
+                      "totalPriceAfterTax": 110002
+                  }
+              ]
+          }
+      ]
+  }
+]
+
 type CardWaitingForPaymentProps = {
   data: models.WaitingPaymentListHistory;
   onDetailOrder?: () => void;
 };
 
 const { width: W } = Dimensions.get('screen');
+
+const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
+  const { data, onConfirmOrder} = props;
+  return (
+    <Pressable
+      style={styles.card}
+      android_ripple={{color: color.black40}}
+      onPress={() => console.log('to detail')}>
+      <View style={{ margin: 16 }}>
+        {/* top section */}
+        <View style={styles.titleConsolidate}>
+          {/* order identity section*/}
+          <View>
+
+          </View>
+          {/* fulfillment status section */}
+          <SnbBadge2 
+            testID = {'03'}
+            type= {'neutral'}
+            title={data.fulfilment}
+          />
+        </View>
+        {/* mid section */}
+
+      </View>
+    </Pressable>
+  )
+}
 
 const Card: FC<CardProps> = (props) => {
   const { data, onCancelOrder, onConFirmOrder } = props;
@@ -382,44 +446,77 @@ const ListCard = () => {
     <>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
-        data={historyListData}
-        keyExtractor={(i) => i.id}
-        renderItem={({ item }) => (
-          <Card
-            data={item}
-            onCancelOrder={() => confirmModalRef.current?.show(item.id)}
-            onConFirmOrder={() => onDoneOrder(item.id)}
-          />
-        )}
-        onEndReached={onLoadMore}
-        ListEmptyComponent={() =>
-          !historyListLoading ? (
-            <SnbEmptyData
-              image={<EmptyImage />}
-              subtitle=""
-              title={wordingEmpty(state.keyword)}
-            />
-          ) : (
-            <View />
-          )
-        }
-        refreshControl={
-          <RefreshControl
-            onRefresh={() => onRefresh()}
-            refreshing={[historyListLoading, historyListLoadMore].some(
-              (i) => i,
+            data={dataDummyList}
+            keyExtractor={(i) => i.orderId}
+            renderItem={({ item }) => (
+              <CardConsolidation
+                data={item}
+                // onConfirmOrder={() => onDoneOrder(item.orderId)}
+                onConfirmOrder= {()=> console.log('confirm')}
+              />
             )}
-          />
-        }
-      />
-      {/* confirmation  batalkan*/}
-      <BottomSheetConfirmation
-        ref={confirmModalRef}
-        title="Konfirmasi"
-        desc="Yakin Ingin Membatalkan Pesanan?"
-        onSubmit={(idOrder) => onCancelOrder(idOrder)}
-      />
+            ListEmptyComponent={() =>
+              dataDummyList.length == 0 ? (
+                <SnbEmptyData
+                  image={<EmptyImage />}
+                  subtitle=""
+                  title={wordingEmpty(state.keyword)}
+                />
+              ) : (
+                <View />
+              )
+            }
+            // refreshControl={
+            //   <RefreshControl
+            //     onRefresh={() => onRefresh()}
+            //     refreshing={[historyListLoading, historyListLoadMore].some(
+            //       (i) => i,
+            //     )}
+            //   />
+            // }
+        />
     </>
+    // <>
+    //   <FlatList
+    //     contentContainerStyle={styles.contentContainerStyle}
+    //     data={historyListData}
+    //     keyExtractor={(i) => i.id}
+    //     renderItem={({ item }) => (
+    //       <Card
+    //         data={item}
+    //         onCancelOrder={() => confirmModalRef.current?.show(item.id)}
+    //         onConFirmOrder={() => onDoneOrder(item.id)}
+    //       />
+    //     )}
+    //     onEndReached={onLoadMore}
+    //     ListEmptyComponent={() =>
+    //       !historyListLoading ? (
+    //         <SnbEmptyData
+    //           image={<EmptyImage />}
+    //           subtitle=""
+    //           title={wordingEmpty(state.keyword)}
+    //         />
+    //       ) : (
+    //         <View />
+    //       )
+    //     }
+    //     refreshControl={
+    //       <RefreshControl
+    //         onRefresh={() => onRefresh()}
+    //         refreshing={[historyListLoading, historyListLoadMore].some(
+    //           (i) => i,
+    //         )}
+    //       />
+    //     }
+    //   />
+    //   {/* confirmation  batalkan*/}
+    //   <BottomSheetConfirmation
+    //     ref={confirmModalRef}
+    //     title="Konfirmasi"
+    //     desc="Yakin Ingin Membatalkan Pesanan?"
+    //     onSubmit={(idOrder) => onCancelOrder(idOrder)}
+    //   />
+    // </>
   );
 };
 
@@ -435,6 +532,11 @@ const styles = StyleSheet.create({
   title: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  titleConsolidate: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: colorV2.strokeColor.default
   },
   product: {
     flexDirection: 'row',
