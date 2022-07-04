@@ -117,7 +117,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       />
       {productDetail?.hasBulkPrice && !loadingProduct ? (
         <BulkPricingList
-          testID={'bulk-price.'testID}
+          testID={'bulk-price.' + testID}
           bulkPrices={productDetail?.bulkPrices}
           onExpand={setIsBulkPriceExpand}
         />
