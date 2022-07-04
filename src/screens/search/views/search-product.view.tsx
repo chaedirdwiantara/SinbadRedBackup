@@ -4,13 +4,9 @@ import { View } from 'react-native';
 import { SnbContainer } from 'react-native-sinbad-ui';
 import { RouteProp, useRoute } from '@react-navigation/native';
 /** === IMPORT COMPONENT === */
-// import ProductList from '@core/components/product/list';
 import {
   ProductListView,
-  // taglist deprecated deleted asap
-  // TagListView,
   CountProductList,
-  ModalSortView,
   ModalAddToCartView,
   ModalNeedLoginView,
   ModalFilterView,
@@ -44,19 +40,8 @@ const SearchProductView: FC = () => {
     params: { keyword },
   } = useRoute<SearchProductRouteProps>();
   const { setSearch } = useProductListContext();
-  // const [localKeyword, setLocalKeyword] = useState(keyword);
-  // const [isSearched, setIsSearched] = useState(0);
   const { fetch, clearContents } = useProductListActions();
   const { dispatchProduct } = useProductContext();
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     fetch(dispatchProduct, { keyword: keyword });
-
-  //     return () => clearContents(dispatchProduct);
-  //   }, []),
-  // );
-
   // initial fetch
   useEffect(() => {
     fetch(dispatchProduct, { keyword });
@@ -75,10 +60,6 @@ const SearchProductView: FC = () => {
         />
         <CountProductList testID={testID} />
         <ProductListView testID={testID} />
-        <ModalSortView
-          testID={testID}
-          onFetch={(params) => fetch(dispatchProduct, params)}
-        />
         <ModalFilterView
           testID={testID}
           onFetch={(params) => fetch(dispatchProduct, params)}
