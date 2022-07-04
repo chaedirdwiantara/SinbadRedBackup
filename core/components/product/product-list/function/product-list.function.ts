@@ -57,6 +57,24 @@ const useProductListContext = () => {
     });
   }, []);
 
+  const setCategory = useCallback(
+    (
+      payload?:
+        | models.CategoryLevel
+        | models.CategoryLevel2
+        | models.CategoryLevel3,
+    ) => {
+      setState((prev) => {
+        const value = { ...prev };
+        const category = payload;
+        value.category = category;
+
+        return value;
+      });
+    },
+    [],
+  );
+
   const onChangeLayout = useCallback((layout: 'list' | 'grid') => {
     setState((prev) => {
       const value = { ...prev };
@@ -79,6 +97,7 @@ const useProductListContext = () => {
     setSearch,
     onChangeLayout,
     setQuery,
+    setCategory,
     setSelectProduct,
   };
 };

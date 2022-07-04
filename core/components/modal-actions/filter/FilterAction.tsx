@@ -21,8 +21,8 @@ interface FilterActionProps {
   idSortFilter?: string;
   minPrice: number;
   maxPrice: number;
-  setMinPrice: (val: number) => void;
-  setMaxPrice: (val: number) => void;
+  setMinPrice: (val?: number) => void;
+  setMaxPrice: (val?: number) => void;
   handleSliderChange: (val: Array<number>) => void;
   onButtonPress: ({
     type,
@@ -31,8 +31,8 @@ interface FilterActionProps {
   }: {
     type: BottomActionPressHandlerType;
     value: {
-      minPrice: number;
-      maxPrice: number;
+      minPrice?: number;
+      maxPrice?: number;
       sortBy?: string;
       sort?: string;
     };
@@ -84,8 +84,8 @@ const FilterAction: FC<FilterActionProps> = ({
   }, []);
   // function submit button
   const onSubmit = useCallback(() => {
-    const min = value[0];
-    const max = value[1];
+    const min = value[0] || undefined;
+    const max = value[1] || undefined;
 
     Keyboard.dismiss();
 

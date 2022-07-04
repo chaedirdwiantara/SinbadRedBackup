@@ -28,6 +28,10 @@ type PropValue = {
   layout: 'grid' | 'list';
   productSelected: string;
   query: models.ProductListQueryOptions;
+  category?:
+    | models.CategoryLevel
+    | models.CategoryLevel2
+    | models.CategoryLevel3;
 };
 
 type PropContext = {
@@ -47,14 +51,17 @@ const defaultValue: PropValue = {
   productSelected: '',
   layout: 'grid',
   query: {
-    keyword: '',
-    categoryId: '',
+    brandId: undefined,
+    sellerId: undefined,
+    keyword: undefined,
+    categoryId: undefined,
     sort: undefined,
-    sortBy: '',
+    sortBy: undefined,
     minPrice: undefined,
     maxPrice: undefined,
     tags: [],
   },
+  category: undefined,
 };
 /** Context */
 export const ProductListContext = createContext<PropContext>({
