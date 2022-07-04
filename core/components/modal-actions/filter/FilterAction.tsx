@@ -135,10 +135,9 @@ const FilterAction: FC<FilterActionProps> = ({
       </View>
       <View style={{ flexDirection: 'row', marginBottom: spacing.xl }}>
         {filterPrice.map((i) => (
-          <View style={{ marginRight: spacing.sm }}>
+          <View style={{ marginRight: spacing.sm }} key={i.id}>
             <SnbChips2.Choice
               onPress={() => onSetSortPrice(i)}
-              key={i.id}
               testID={i.id + '.' + testID}
               active={i.id === priceSort?.id}
               text={i.label}
