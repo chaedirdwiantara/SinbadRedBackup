@@ -18,6 +18,7 @@ import {
   useInputPhone,
   // useCheckPhoneV2,
   useCheckPhoneRegistrationV3,
+  setErrorMessage,
 } from '@screen/auth/functions';
 import RNOtpVerify from 'react-native-otp-verify';
 import { useDataPermanent } from '@core/redux/Data';
@@ -63,19 +64,18 @@ const SelfRegisterView: React.FC = () => {
           phone.clearText();
           checkPhoneRegistrationReset();
           // SHOW MODAL SALESMAN DISINI
+          refModalSalesman.current?.open();
         } else {
-          phone.clearText();
-          checkPhoneRegistrationReset();
           //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
+          refModalOTP.current?.open();
         }
       } else {
-        refModalSalesman.current?.open();
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
       }
     }
     if (checkPhoneRegistrationState.error !== null) {
-      phone.setMessageError(checkPhoneRegistrationState.error.message);
+      phone.setMessageError(setErrorMessage(checkPhoneRegistrationState.error.code));
     }
   }, [checkPhoneRegistrationState]);
 
