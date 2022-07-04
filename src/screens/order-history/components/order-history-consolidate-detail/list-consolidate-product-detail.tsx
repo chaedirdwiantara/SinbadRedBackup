@@ -24,7 +24,7 @@ type CardProps = {
 
 const Card: FC<CardProps> = (props) => {
   const { data, id } = props;
-  const products = data.products[0];
+  const products = data.products;
   return (
     <TouchableOpacity
       style={styles.card}

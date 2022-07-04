@@ -19,7 +19,7 @@ export interface OrderParcels {
   doneAt: string;
   moreProducts: number;
   totalOrderParcelsAfterTax: number;
-  products: Array<ConsolidateProducts>;
+  products: ConsolidateProducts;
 }
 
 export interface orderConsolidateDetailHistory {
