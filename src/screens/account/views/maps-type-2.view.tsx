@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   borderV2,
   colorV2,
@@ -39,6 +39,7 @@ import {
   getStreetName,
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
+import { debounce } from 'lodash';
 
 const MapsViewType2: React.FC = () => {
   const [latLng, setLatLng] = React.useState<LatLng>({
@@ -54,12 +55,18 @@ const MapsViewType2: React.FC = () => {
   const { getLocation, locations, resetLocation } = useLocations();
   const [loadingGetAddress, setLoadingGetAddress] = React.useState(false);
   const { params } = useRoute();
-  const { onMapsResult, action, existingLatLang, originFrom }: any =
+  const { onMapsResult, action, currentLatLng, originFrom }: any =
     params || {};
 
   React.useEffect(() => {
-    if (existingLatLang) {
-      setLatLng(existingLatLang);
+    if (currentLatLng) {
+      setLatLng(currentLatLng);
+      setTimeout(() => {
+        refMaps.current?.animateToRegion({
+          ...currentLatLng,
+          ...REGION_OPTIONS,
+        });
+      }, 10)
     } else {
       getLocationPermissions();
     }
@@ -69,20 +76,12 @@ const MapsViewType2: React.FC = () => {
     };
   }, []);
 
-  React.useEffect(() => {
-    if (
-      latLng.latitude !== DEFAULT_LATITUDE &&
-      latLng.longitude !== DEFAULT_LONGITUDE
-    ) {
-      setTimeout(() => {
-        refMaps.current?.animateToRegion({
-          ...latLng,
-          ...REGION_OPTIONS,
-        });
-      }, 10);
-      getAddress(latLng);
-    }
-  }, [latLng]);
+  const handleOnChangeRegionComplete = useCallback(
+    debounce(({ latitude, longitude }) => {
+      setLatLng({ latitude, longitude })
+      getAddress({ latitude, longitude })
+    }, 750)
+    , [latLng])
 
   React.useEffect(() => {
     if (locations.data) {
@@ -141,6 +140,14 @@ const MapsViewType2: React.FC = () => {
     Geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         setLatLng({ latitude, longitude });
+        getAddress({ latitude, longitude })
+        setTimeout(() => {
+          refMaps.current?.animateToRegion({
+            latitude,
+            longitude,
+            ...REGION_OPTIONS,
+          });
+        }, 10)
       },
       (error: any) => {
         if (error?.code === 3) {
@@ -188,32 +195,15 @@ const MapsViewType2: React.FC = () => {
         <MapView
           initialRegion={{
             ...latLng,
-            latitudeDelta: 16,
-            longitudeDelta: 16,
+            ...REGION_OPTIONS
           }}
           showsMyLocationButton={false}
           ref={refMaps}
-          style={{ flex: 1 }}>
-          {renderIF(
-            latLng.latitude !== DEFAULT_LATITUDE &&
-              latLng.longitude !== DEFAULT_LONGITUDE,
-            <Marker
-              coordinate={latLng}
-              draggable
-              onDragEnd={({ nativeEvent: { coordinate } }: any) => {
-                setLatLng(coordinate);
-                refMaps.current?.animateToRegion({
-                  ...coordinate,
-                  ...REGION_OPTIONS,
-                });
-              }}>
-              <Image
-                source={require('@image/pin_point.png')}
-                style={{ height: 44, width: 44, resizeMode: 'contain' }}
-              />
-            </Marker>,
-          )}
-        </MapView>
+          onRegionChangeComplete={handleOnChangeRegionComplete}
+          style={{ flex: 1 }} />
+        <View style={styles.markerFixed}>
+          <Image style={styles.marker} source={require('@image/pin_point.png')} />
+        </View>
         <View style={{ ...styles.floatingButton }}>
           <SnbButton2.Icon
             onPress={goBack}
@@ -390,6 +380,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.spacing.lg,
     paddingTop: layout.spacing.xl,
     paddingBottom: 0,
+  },
+  markerFixed: {
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%'
+  },
+  marker: {
+    height: 64,
+    width: 64,
+    resizeMode: 'contain'
   },
 });
 export default MapsViewType2;
