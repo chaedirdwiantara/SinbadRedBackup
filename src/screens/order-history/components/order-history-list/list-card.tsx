@@ -105,8 +105,8 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         <View style={styles.titleConsolidate}>
           {/* order identity section*/}
           <View>
-            <SnbText2.Body.Small>{data.orderId}</SnbText2.Body.Small>
-            <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+            <SnbText2.Body.Small testID={'03'}>{data.orderId}</SnbText2.Body.Small>
+            <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary} testID={'03'}>
             {moment(data.orderedAt).format('DD MMM YYYY')}
             </SnbText2.Paragraph.Tiny>
           </View>
@@ -123,7 +123,12 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
     </Pressable>
   )
 }
-
+const ParcelConsolidation = (dataParcel: any) => {
+  return (
+  <View>
+    
+  </View>
+)}
 const Card: FC<CardProps> = (props) => {
   const { data, onCancelOrder, onConFirmOrder } = props;
   return (
