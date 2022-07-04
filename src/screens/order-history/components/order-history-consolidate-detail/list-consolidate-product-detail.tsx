@@ -19,18 +19,16 @@ import { OrderParcels } from '@model/order-history';
 
 type CardProps = {
   data: OrderParcels;
-  id: string;
 };
 
 const Card: FC<CardProps> = (props) => {
-  const { data, id } = props;
-  const products = data.products;
+  const { data } = props;
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => {
         NavigationAction.navigate('OrderHistoryDetailView', {
-          id: id,
+          id: data.id,
         });
       }}>
       <View style={{ margin: 16 }}>
@@ -47,14 +45,14 @@ const Card: FC<CardProps> = (props) => {
             <ConfirmationTime doneAt={data?.doneAt || ''} />
           )}
           <View style={styles.product}>
-            <SnbImageCompressor style={styles.image} uri={products.image} />
+            <SnbImageCompressor style={styles.image} uri={data.productImage} />
             <View style={styles.descProduct}>
               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                {products.name}
+                {data.productName}
               </SnbText2.Paragraph.Default>
               <SnbText2.Body.Default>
-                {`(${products.qty}) ${products.uom}`} x{' '}
-                {toCurrency(products.totalPriceAfterTax, {
+                {`(${data.productQty}) ${data.productUom}`} x{' '}
+                {toCurrency(data.productTotalPriceAfterTax, {
                   withFraction: false,
                 })}
               </SnbText2.Body.Default>
@@ -93,7 +91,7 @@ const Card: FC<CardProps> = (props) => {
                 size="small"
                 onPress={() =>
                   NavigationAction.navigate('HistoryTrackingView', {
-                    id: id,
+                    id: data.id,
                   })
                 }
                 outline={true}
@@ -109,7 +107,7 @@ const Card: FC<CardProps> = (props) => {
                   size="small"
                   onPress={() =>
                     NavigationAction.navigate('HistoryTrackingView', {
-                      id: id,
+                      id: data.id,
                     })
                   }
                   full={true}
@@ -157,12 +155,12 @@ const ConsolidateListOrderDetail = () => {
         {showMore === false ? (
           data?.orderParcels
             .slice(0, 2)
-            .map((i) => <Card key={i.id} data={i} id={i?.id} />)
+            .map((i) => <Card key={i.id} data={i} />)
         ) : (
           <View />
         )}
         {showMore ? (
-          data?.orderParcels.map((i) => <Card key={i.id} data={i} id={i?.id} />)
+          data?.orderParcels.map((i) => <Card key={i.id} data={i} />)
         ) : (
           <View />
         )}
