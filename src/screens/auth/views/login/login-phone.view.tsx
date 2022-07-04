@@ -26,14 +26,15 @@ import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
-  const { navigate } = useNavigation();
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
   const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
   const phone = useInputPhone();
-  const { reset } = useNavigation();
+  const { reset, navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent()
+  const [openModalForceRegister, setOpenModalForceRegister] =
+    React.useState(false);
 
   React.useEffect(() => {
     return () => {
@@ -48,7 +49,7 @@ const Content: React.FC = () => {
       if (isUserAgent) {
         refModalSalesman.current?.open();
       } else if (isUserMedea) {
-
+        setOpenModalForceRegister(true);
       } else {
         refModalOTP.current?.open();
       }
@@ -124,14 +125,21 @@ const Content: React.FC = () => {
       </View>
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action='login' />
       <ModalSalesman ref={refModalSalesman} />
+      <View style={{flex: 1}}>
+      <ForceRegistrationModal
+        open={openModalForceRegister}
+        confirm={() => {
+          navigate(SELF_REGISTRATION_VIEW);
+          setOpenModalForceRegister(false);
+        }}
+      />
+      </View>
     </ScrollView>
   );
 };
 
 const LoginPhoneView = () => {
-  const { reset, navigate } = useNavigation();
-  const [openModalForceRegister, setOpenModalForceRegister] =
-    React.useState(true);
+  const { reset } = useNavigation();
 
   return (
     <SnbContainer color="white">
@@ -141,15 +149,6 @@ const LoginPhoneView = () => {
         title="Masuk"
       />
       <Content />
-      <View style={{ flex: 1 }}>
-        <ForceRegistrationModal
-          open={openModalForceRegister}
-          confirm={() => {
-            navigate(SELF_REGISTRATION_VIEW);
-            setOpenModalForceRegister(false);
-          }}
-        />
-      </View>
     </SnbContainer>
   );
 };

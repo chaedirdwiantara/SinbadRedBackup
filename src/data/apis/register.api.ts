@@ -40,6 +40,11 @@ const checkAutoLogin = (data: models.ICheckAutoLoginProcess) => {
   return apiAuth(path, 'v2', 'GET');
 };
 
+const checkPhoneRegistrationV3 = (data: models.ICheckPhoneV3Process) => {
+  const path = 'registration/check-phone';
+  return apiAuth(path, 'v3', 'POST', data);
+};
+
 export const registerApi = {
   checkPhoneNoAvailability,
   registerMerchant,
@@ -48,4 +53,5 @@ export const registerApi = {
   registermerchantDetail,
   checkPhoneV2,
   checkAutoLogin,
+  checkPhoneRegistrationV3,
 };

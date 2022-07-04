@@ -33,3 +33,13 @@ export const CHECK_AUTO_LOGIN_PROCESS = 'CheckAutoLoginProcess';
 export const CHECK_AUTO_LOGIN_SUCCESS = 'CheckAutoLoginSuccess';
 export const CHECK_AUTO_LOGIN_FAILED = 'CheckAutoLoginFailed';
 export const CHECK_AUTO_LOGIN_RESET = 'CheckAutoLoginReset';
+
+// CHECK PHONE V3
+export const CHECK_PHONE_REGISTRATION_V3_PROCESS =
+  'CheckPhoneRegistrationV3Process';
+export const CHECK_PHONE_REGISTRATION_V3_SUCCESS =
+  'CheckPhoneRegistrationV3Success';
+export const CHECK_PHONE_REGISTRATION_V3_FAILED =
+  'CheckPhoneRegistrationV3Failed';
+export const CHECK_PHONE_REGISTRATION_V3_RESET =
+  'CheckPhoneRegistrationV3Reset';
