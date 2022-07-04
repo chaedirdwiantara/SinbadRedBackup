@@ -8,6 +8,7 @@ export * from './modal-filter.view';
 export * from './modal-not-in-urban.view';
 export * from './modal-error-stock.view';
 export * from './modal-error-product-detail.view';
+export * from './category-tab-list.view';
 
 export * from './product-list.context';
 export * from './function/product-list.function';
