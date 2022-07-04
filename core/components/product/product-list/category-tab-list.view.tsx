@@ -171,7 +171,7 @@ const App: FC<CategoryTabListProps> = ({ onFetch }) => {
       const query = { ...state.query, categoryId: activeCategory.id };
       onFetch(query);
     },
-    [state.query],
+    [state.query, parentCategory, categoryLevelList],
   );
 
   /** === VIEW === */
