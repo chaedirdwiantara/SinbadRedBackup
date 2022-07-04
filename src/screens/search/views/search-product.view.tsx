@@ -7,7 +7,8 @@ import { RouteProp, useRoute, useFocusEffect } from '@react-navigation/native';
 import ProductList from '@core/components/product/list';
 import {
   ProductListView,
-  TagListView,
+  // taglist deprecated deleted asap
+  // TagListView,
   CountProductList,
   ModalSortView,
   ModalAddToCartView,
@@ -35,6 +36,8 @@ type SearchProductRouteProps = RouteProp<
   SearchProductRouteParams,
   'SearchProduct'
 >;
+/** == CONSTANT */
+const testID = 'search-product';
 /** === COMPONENT === */
 const SearchProductView: FC = () => {
   /** === HOOKS === */
@@ -81,17 +84,25 @@ const SearchProductView: FC = () => {
   return (
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
-        <Header onFetch={(params) => fetch(dispatchProduct, params)} />
-        <TagListView onFetch={(params) => fetch(dispatchProduct, params)} />
-        <CountProductList />
-        <ProductListView />
-        <ModalSortView onFetch={(params) => fetch(dispatchProduct, params)} />
-        <ModalFilterView onFetch={(params) => fetch(dispatchProduct, params)} />
-        <ModalAddToCartView />
-        <ModalNeedLoginView />
-        <ModalNotInUrbanView />
-        <ModalErrorStockView />
-        <ModalErrorProductDetailView />
+        <Header
+          testID={testID}
+          onFetch={(params) => fetch(dispatchProduct, params)}
+        />
+        <CountProductList testID={testID} />
+        <ProductListView testID={testID} />
+        <ModalSortView
+          testID={testID}
+          onFetch={(params) => fetch(dispatchProduct, params)}
+        />
+        <ModalFilterView
+          testID={testID}
+          onFetch={(params) => fetch(dispatchProduct, params)}
+        />
+        <ModalAddToCartView testID={testID} />
+        <ModalNeedLoginView testID={testID} />
+        <ModalNotInUrbanView testID={testID} />
+        <ModalErrorStockView testID={testID} />
+        <ModalErrorProductDetailView testID={testID} />
         <SnbToast2 />
         {/* <ProductList
           products={productListState.data}

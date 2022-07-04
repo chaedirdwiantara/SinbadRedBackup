@@ -49,8 +49,8 @@ const App: FC<TitleSectionProps> = () => {
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity
               style={{ marginRight: spacing.lg }}
-              onPress={() => trigerModal('sort', true)}>
-              <SnbIcon name="sort" size={24} />
+              onPress={() => trigerModal('filter', true)}>
+              <SnbIcon name="filter_list" size={24} />
             </TouchableOpacity>
             <TouchableOpacity onPress={onPressLayout}>
               <SnbIcon name={iconLayout} size={24} />

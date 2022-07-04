@@ -14,6 +14,7 @@ import {
 } from 'react-native-sinbad-ui';
 
 type ActionSheetProps = {
+  testID: string;
   open: boolean;
   children: ReactNode;
   title: string;
@@ -39,6 +40,7 @@ const ActionSheet = forwardRef<SnbBottomSheet2Ref, ActionSheetProps>(
       contentHeight,
       onClearFilter,
       withClear,
+      testID,
     } = props;
     // ref
     const modalRef = useRef<SnbBottomSheet2Ref>(null);
@@ -63,6 +65,7 @@ const ActionSheet = forwardRef<SnbBottomSheet2Ref, ActionSheetProps>(
     // Render
     return (
       <SnbBottomSheet2
+        testID={testID}
         ref={modalRef}
         name={name}
         type="content"
@@ -72,12 +75,14 @@ const ActionSheet = forwardRef<SnbBottomSheet2Ref, ActionSheetProps>(
         close={onBlur}
         navigation={
           <SnbBottomSheetPart.Navigation
+            testID={testID}
             iconRight1Name="x"
             onRight1Action={onCloseModal}
           />
         }
         title={
           <SnbBottomSheetPart.Title
+            testID={testID}
             swipeIndicator
             title={title}
             rightButton={withClear ? 'Reset' : ''}
