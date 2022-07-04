@@ -1,8 +1,11 @@
-import React, { memo, useRef, useEffect, useMemo } from 'react';
+import React, { memo, useRef, useEffect, useMemo, FC } from 'react';
 import NotInUrbanModal, { NotInUrbanModalRef } from '../list/NotInUrbanModal';
 import { useProductListFunction } from './function/product-list.function';
 
-const Main = () => {
+type Props = {
+  testID: string;
+};
+const Main: FC<Props> = ({ testID }) => {
   // hooks
   const { productError } = useProductListFunction();
 
@@ -18,7 +21,13 @@ const Main = () => {
     }
   }, [errorCode, modalUrbanRef]);
   // render
-  return <NotInUrbanModal ref={modalUrbanRef} errorSubtitle={message ?? ''} />;
+  return (
+    <NotInUrbanModal
+      ref={modalUrbanRef}
+      errorSubtitle={message ?? ''}
+      testID={'modal-not-in-urban.' + testID}
+    />
+  );
 };
 
 export const ModalNotInUrbanView = memo(Main);

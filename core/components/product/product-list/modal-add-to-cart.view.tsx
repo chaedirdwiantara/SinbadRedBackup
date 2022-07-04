@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useEffect } from 'react';
+import React, { memo, useCallback, useMemo, useEffect, FC } from 'react';
 import { StatusBar } from 'react-native';
 import { SnbToast2 } from 'react-native-sinbad-ui';
 import { AddToCartModal } from '@core/components/modal';
@@ -12,7 +12,11 @@ import { useStockContext } from 'src/data/contexts/product/stock/useStockContext
 import useAddToCart from '@core/components/modal/add-to-cart/add-to-cart.function';
 import { useProductListContext, useProductListFunction } from './';
 
-const App = () => {
+type Props = {
+  testID: string;
+};
+
+const App: FC<Props> = ({ testID }) => {
   const { state, trigerModal } = useProductListContext();
   const {
     // function
@@ -81,6 +85,7 @@ const App = () => {
   return (
     <>
       <AddToCartModal
+        testID={'add-to-cart-modal.' + testID}
         orderQty={orderQty}
         onChangeQty={onHandleChangeQty}
         open={modalVisible}

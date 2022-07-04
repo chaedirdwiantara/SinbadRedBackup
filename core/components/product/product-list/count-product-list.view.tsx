@@ -7,11 +7,13 @@ import { useProductContext } from 'src/data/contexts/product/useProductContext';
 import { useProductListContext } from './';
 
 // types
-type TitleSectionProps = {};
+type TitleSectionProps = {
+  testID: string;
+};
 
 // var
 const { spacing } = spacingV2;
-const App: FC<TitleSectionProps> = () => {
+const App: FC<TitleSectionProps> = ({ testID }) => {
   const [isGrid, setIsGrid] = useState(true);
 
   const { stateProduct } = useProductContext();
@@ -44,15 +46,19 @@ const App: FC<TitleSectionProps> = () => {
         marginTop: spacing.lg,
       }}>
       <Text.Title
+        testID={'count-product.' + testID}
         text={`${total ?? ''} Produk`}
         actionComponent={
           <View style={{ flexDirection: 'row' }}>
             <TouchableOpacity
+              testID={'btn-show-filter.count-product.' + testID}
               style={{ marginRight: spacing.lg }}
               onPress={() => trigerModal('filter', true)}>
               <SnbIcon name="filter_list" size={24} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={onPressLayout}>
+            <TouchableOpacity
+              testID={'btn-change-layout.count-product.' + testID}
+              onPress={onPressLayout}>
               <SnbIcon name={iconLayout} size={24} />
             </TouchableOpacity>
           </View>

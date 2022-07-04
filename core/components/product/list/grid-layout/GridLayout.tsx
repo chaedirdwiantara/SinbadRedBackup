@@ -12,6 +12,7 @@ import { useListDisplayState } from '@core/functions/product';
 import { ProductLayoutProps } from '../product-list-core.type';
 /** === COMPONENT === */
 const GridLayout: FC<ProductLayoutProps> = ({
+  testID,
   products,
   withTags = true,
   tags,
@@ -77,6 +78,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                 (product, productIndex) =>
                   productIndex % 2 === 0 && (
                     <GridLayoutCard
+                      testID={testID}
                       key={product.id}
                       product={product}
                       index={productIndex}
@@ -90,6 +92,7 @@ const GridLayout: FC<ProductLayoutProps> = ({
                 (product, productIndex) =>
                   productIndex % 2 === 1 && (
                     <GridLayoutCard
+                      testID={testID}
                       key={product.id}
                       product={product}
                       index={productIndex}

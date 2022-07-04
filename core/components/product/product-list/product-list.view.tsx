@@ -23,10 +23,10 @@ import type * as models from '@models';
 
 /** => INTERFACE */
 type Props = {
-  // onFetch: (params: { keyword: string; tags: string[] }) => void;
+  testID: string;
 };
 
-const Main: FC<Props> = () => {
+const Main: FC<Props> = ({ testID }) => {
   const { state, trigerModal, setSelectProduct } = useProductListContext();
   const { me } = useDataAuth();
   const { fetch, refresh, loadMore, clearContents } = useProductListActions();
@@ -59,6 +59,7 @@ const Main: FC<Props> = () => {
   return (
     <View style={{ flex: 1 }}>
       <ProductCard
+        testID={testID}
         total={productListState.total}
         products={productListState.data}
         //  withTags={withTags}

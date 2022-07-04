@@ -7,6 +7,7 @@ import { ProductCard } from '@sinbad/react-native-sinbad-ui';
 import { toCurrency } from '@core/functions/global/currency-format';
 /** === TYPES === */
 interface ProductGridCardProps {
+  testID: string;
   name: string;
   imageUrl: string;
   priceAfterTax: number;
@@ -36,7 +37,7 @@ const ProductGrid: FC<ProductGridCardProps> = (props) => {
   }, [props.isExclusive, props.hasBulkPrice]);
   return (
     <ProductCard.Grid
-      testID={`list-product-${props.name}`}
+      testID={`list-product-${props.name}.${props.testID}`}
       name={props.name}
       imageUrl={props.imageUrl}
       currentPrice={toCurrency(props.priceAfterTax, {

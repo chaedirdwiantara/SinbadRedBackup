@@ -1,11 +1,15 @@
-import React, { memo, useEffect, useMemo } from 'react';
+import React, { FC, memo, useEffect, useMemo } from 'react';
 import BottomSheetError from '@core/components/BottomSheetError';
 import {
   useProductListContext,
   useProductListFunction,
 } from './function/product-list.function';
 
-const Main = () => {
+type Props = {
+  testID: string;
+};
+
+const Main: FC<Props> = ({ testID }) => {
   // hooks
   const { state, trigerModal } = useProductListContext();
   const { errorStock, onReset } = useProductListFunction();
@@ -27,6 +31,7 @@ const Main = () => {
 
   return (
     <BottomSheetError
+      testID={'modal-error-stock.' + testID}
       open={visibleModal}
       error={errorStock}
       closeAction={() => {

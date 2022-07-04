@@ -54,10 +54,7 @@ const SearchProductView: FC = () => {
   return (
     <SnbContainer color="white">
       <View style={{ flex: 1 }}>
-        <Header
-          testID={testID}
-          onFetch={(params) => fetch(dispatchProduct, params)}
-        />
+        <Header onFetch={(params) => fetch(dispatchProduct, params)} />
         <CountProductList testID={testID} />
         <ProductListView testID={testID} />
         <ModalFilterView
