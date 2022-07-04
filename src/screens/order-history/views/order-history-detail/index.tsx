@@ -45,7 +45,6 @@ const OrderHistoryDetail = () => {
         <InformationInvoice />
         <InformationDelivery />
         <ListProductOrder />
-        <InformationPayment />
       </ScrollView>
       <ActionFooter />
     </SnbContainer>
