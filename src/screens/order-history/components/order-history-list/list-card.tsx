@@ -105,7 +105,10 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         <View style={styles.titleConsolidate}>
           {/* order identity section*/}
           <View>
-
+            <SnbText2.Body.Small>{data.orderId}</SnbText2.Body.Small>
+            <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+            {moment(data.orderedAt).format('DD MMM YYYY')}
+            </SnbText2.Paragraph.Tiny>
           </View>
           {/* fulfillment status section */}
           <SnbBadge2 
