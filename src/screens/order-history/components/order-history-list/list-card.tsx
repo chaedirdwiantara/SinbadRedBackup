@@ -42,7 +42,7 @@ import {
 } from '../../functions/history-list';
 import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
-import { NavigationAction } from '@core/functions/navigation';
+import { NavigationAction } from '@navigation';
 // type
 import * as models from '@models';
 import { labelStatus } from '../../types';
@@ -63,7 +63,7 @@ type CardPropsConsolidate = {
 
 const dataDummyList =  [
   {
-      "orderId": "SNE-111222333",
+      "orderId": "SNE-2121182635172",
       "orderedAt": "2022-04-12T01:30:34Z",
       "fulfilment": "2/3 Selesai",
       "totalOrderPrice": 20000000,
@@ -100,7 +100,7 @@ const dataDummyList =  [
       ]
   },
   {
-    "orderId": "SNE-111222334",
+    "orderId": "SNE-2121182635173",
     "orderedAt": "2022-04-12T01:30:34Z",
     "fulfilment": "2/3 Selesai",
     "totalOrderPrice": 20000000,
@@ -152,9 +152,10 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       style={styles.card}
       android_ripple={{color: color.black40}}
       onPress={() =>
-                NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-                  id: data.orderId,
-                })
+                // NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+                //   id: data.orderId,
+                // })
+                console.log(data.orderId)
       }>
       <View style={{ margin: 16 }}>
         {/* top section */}
@@ -191,9 +192,13 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         </View>
       </View>
       <View style={{marginBottom : 16, marginHorizontal: 16}}>
-        <TouchableOpacity onPress={() => NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-                  id: data.orderId,
-                })}>
+        <TouchableOpacity onPress={() => 
+        console.log(data.orderId)
+        //  NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+        //           id: data.orderId,
+        //         })
+              }
+        >
           <View style={styles.toDetailFooter}>
               <SnbText2.Body.Small
                 color={
