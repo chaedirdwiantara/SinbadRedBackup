@@ -146,7 +146,11 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
     <Pressable
       style={styles.card}
       android_ripple={{color: color.black40}}
-      onPress={() => console.log('to detail')}>
+      onPress={() =>
+                NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+                  id: data.orderId,
+                })
+      }>
       <View style={{ margin: 16 }}>
         {/* top section */}
         <View style={styles.titleConsolidate}>
@@ -182,7 +186,9 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         </View>
       </View>
       <View style={{marginBottom : 16, marginHorizontal: 16}}>
-        <TouchableOpacity onPress={() => console.log('to detail')}>
+        <TouchableOpacity onPress={() => NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+                  id: data.orderId,
+                })}>
           <View style={styles.toDetailFooter}>
               <SnbText2.Body.Small
                 color={
@@ -262,113 +268,113 @@ const ParcelConsolidation = (dataParcels: any[], confirmOrder: () => void) => {
 
 </>
 ))}
-const Card: FC<CardProps> = (props) => {
-  const { data, onCancelOrder, onConFirmOrder } = props;
-  return (
-    <Pressable
-      style={styles.card}
-      android_ripple={{ color: color.black40 }}
-      onPress={() =>
-        NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-          id: data.id,
-        })
-      }>
-      <View style={{ margin: 16 }}>
-        {/* title */}
-        <View style={styles.title}>
-          {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
-          <SnbText2.Body.Small>{data.sellerName}</SnbText2.Body.Small>
-          <SnbBadge.Label
-            value={data.statusLabel}
-            type={labelStatus[data.statusValue] || 'error'}
-          />
-        </View>
-        {/* Timer */}
-        {data.statusValue === 'delivered' ? (
-          <ConfirmationTime doneAt={data?.doneAt || ''} />
-        ) : (
-          <View />
-        )}
-        {/* product */}
-        <View>
-          <View style={styles.product}>
-            <SnbImageCompressor style={styles.image} uri={data.product.image} />
-            <View style={styles.descProduct}>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                {data.product.name}
-              </SnbText2.Paragraph.Default>
-              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                {`(${data.product.qty}) ${data.product.uom}`}
-              </SnbText2.Paragraph.Small>
-              <SnbText2.Body.Default>
-                {toCurrency(data.product.totalProductPriceAfterTax, {
-                  withFraction: false,
-                })}
-              </SnbText2.Body.Default>
-            </View>
-          </View>
+// const Card: FC<CardProps> = (props) => {
+//   const { data, onCancelOrder, onConFirmOrder } = props;
+//   return (
+//     <Pressable
+//       style={styles.card}
+//       android_ripple={{ color: color.black40 }}
+//       onPress={() =>
+//         NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+//           id: data.id,
+//         })
+//       }>
+//       <View style={{ margin: 16 }}>
+//         {/* title */}
+//         <View style={styles.title}>
+//           {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
+//           <SnbText2.Body.Small>{data.sellerName}</SnbText2.Body.Small>
+//           <SnbBadge.Label
+//             value={data.statusLabel}
+//             type={labelStatus[data.statusValue] || 'error'}
+//           />
+//         </View>
+//         {/* Timer */}
+//         {data.statusValue === 'delivered' ? (
+//           <ConfirmationTime doneAt={data?.doneAt || ''} />
+//         ) : (
+//           <View />
+//         )}
+//         {/* product */}
+//         <View>
+//           <View style={styles.product}>
+//             <SnbImageCompressor style={styles.image} uri={data.product.image} />
+//             <View style={styles.descProduct}>
+//               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+//                 {data.product.name}
+//               </SnbText2.Paragraph.Default>
+//               <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+//                 {`(${data.product.qty}) ${data.product.uom}`}
+//               </SnbText2.Paragraph.Small>
+//               <SnbText2.Body.Default>
+//                 {toCurrency(data.product.totalProductPriceAfterTax, {
+//                   withFraction: false,
+//                 })}
+//               </SnbText2.Body.Default>
+//             </View>
+//           </View>
 
-          {data.totalOrderProducts > 0 && (
-            <SnbText2.Paragraph.Small
-              color={colorV2.textColor.secondary}
-              align="center">
-              + {data.totalOrderProducts} produk lainnya
-            </SnbText2.Paragraph.Small>
-          )}
-          <View style={{ marginVertical: 16 }}>
-            <SnbDivider2 type="solid" />
-          </View>
-        </View>
-        {/* inform */}
-        <View>
-          <View style={styles.information}>
-            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
-              Tanggal Pemesanan
-            </SnbText2.Body.Small>
-            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
-              {moment(data.orderedAt).format('DD MMM YYYY')}
-            </SnbText2.Body.Small>
-          </View>
-          <View style={styles.information}>
-            <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
-            <SnbText2.Body.Small>
-              {toCurrency(data.totalSellerPriceAfterTax, {
-                withFraction: false,
-              })}
-            </SnbText2.Body.Small>
-          </View>
-        </View>
-        {/* action */}
-        <View style={styles.buttonContainer}>
-          {/* if process */}
-          {data.isCancellable ? (
-            // <SnbButton2.Secondary
-            //   title="Batalkan"
-            //   size="small"
-            //   onPress={onCancelOrder}
-            //   outline={true}
-            //   full={true}
-            // />
-            <View />
-          ) : (
-            <View />
-          )}
-          {/* if delivered */}
-          {data.isOrderAbleToDone ? (
-            <SnbButton2.Primary
-              title="Pesanan Diterima"
-              size="small"
-              onPress={onConFirmOrder}
-              full={true}
-            />
-          ) : (
-            <View />
-          )}
-        </View>
-      </View>
-    </Pressable>
-  );
-};
+//           {data.totalOrderProducts > 0 && (
+//             <SnbText2.Paragraph.Small
+//               color={colorV2.textColor.secondary}
+//               align="center">
+//               + {data.totalOrderProducts} produk lainnya
+//             </SnbText2.Paragraph.Small>
+//           )}
+//           <View style={{ marginVertical: 16 }}>
+//             <SnbDivider2 type="solid" />
+//           </View>
+//         </View>
+//         {/* inform */}
+//         <View>
+//           <View style={styles.information}>
+//             <SnbText2.Body.Small color={colorV2.textColor.secondary}>
+//               Tanggal Pemesanan
+//             </SnbText2.Body.Small>
+//             <SnbText2.Body.Small color={colorV2.textColor.secondary}>
+//               {moment(data.orderedAt).format('DD MMM YYYY')}
+//             </SnbText2.Body.Small>
+//           </View>
+//           <View style={styles.information}>
+//             <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
+//             <SnbText2.Body.Small>
+//               {toCurrency(data.totalSellerPriceAfterTax, {
+//                 withFraction: false,
+//               })}
+//             </SnbText2.Body.Small>
+//           </View>
+//         </View>
+//         {/* action */}
+//         <View style={styles.buttonContainer}>
+//           {/* if process */}
+//           {data.isCancellable ? (
+//             // <SnbButton2.Secondary
+//             //   title="Batalkan"
+//             //   size="small"
+//             //   onPress={onCancelOrder}
+//             //   outline={true}
+//             //   full={true}
+//             // />
+//             <View />
+//           ) : (
+//             <View />
+//           )}
+//           {/* if delivered */}
+//           {data.isOrderAbleToDone ? (
+//             <SnbButton2.Primary
+//               title="Pesanan Diterima"
+//               size="small"
+//               onPress={onConFirmOrder}
+//               full={true}
+//             />
+//           ) : (
+//             <View />
+//           )}
+//         </View>
+//       </View>
+//     </Pressable>
+//   );
+// };
 
 const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
   const { data, onDetailOrder } = props;
@@ -498,14 +504,14 @@ const ListCard = () => {
     },
   } = usePaymentHistoryContext();
   // function
-  const onCancelOrder = useCallback(
-    (idOrder: string) => {
-      const { keyword, orderStatus, status } = state;
-      const payload = { keyword, orderStatus, status, id: idOrder };
-      cancelOrder({ ...payload, type: 'list' });
-    },
-    [state.keyword, state.orderStatus, state.status],
-  );
+  // const onCancelOrder = useCallback(
+  //   (idOrder: string) => {
+  //     const { keyword, orderStatus, status } = state;
+  //     const payload = { keyword, orderStatus, status, id: idOrder };
+  //     cancelOrder({ ...payload, type: 'list' });
+  //   },
+  //   [state.keyword, state.orderStatus, state.status],
+  // );
   const onDoneOrder = useCallback(
     (idOrder: string) => {
       const { keyword, orderStatus, status } = state;
@@ -592,8 +598,7 @@ const ListCard = () => {
             renderItem={({ item }) => (
               <CardConsolidation
                 data={item}
-                // onConfirmOrder={() => onDoneOrder(item.orderId)}
-                onConfirmOrder= {()=> console.log('confirm')}
+                onConfirmOrder= {()=>  onDoneOrder(item.orderId)}
               />
             )}
             ListEmptyComponent={() =>

@@ -39,10 +39,9 @@ const OrderHistoryList = ({ start }: any) => {
   useInitialGetList();
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type3
+      <SnbTopNav2.Type1
         title="Pesanan"
         color="white"
-        backAction={() => goBack()}
       />
       <View>
         <CopilotStep
