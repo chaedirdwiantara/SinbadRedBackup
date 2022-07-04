@@ -1,14 +1,5 @@
 import * as models from '@models';
 
-export interface ConsolidateProducts {
-  id: string;
-  image: string;
-  name: string;
-  qty: number;
-  uom: string;
-  totalPriceAfterTax: number;
-}
-
 export interface OrderParcels {
   id: string;
   sellerName: string;
@@ -19,7 +10,12 @@ export interface OrderParcels {
   doneAt: string;
   moreProducts: number;
   totalOrderParcelsAfterTax: number;
-  products: Array<ConsolidateProducts>;
+  productId: string;
+  productImage: string;
+  productName: string;
+  productQty: number;
+  productUom: string;
+  productTotalPriceAfterTax: number;
 }
 
 export interface orderConsolidateDetailHistory {

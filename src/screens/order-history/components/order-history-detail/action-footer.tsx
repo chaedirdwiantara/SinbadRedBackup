@@ -66,7 +66,7 @@ const ActionFooter = () => {
             Butuh Bantuan?
           </SnbText2.Body.Default>
         </TouchableOpacity>
-        { data?.isOrderAbleToDone ? (
+        {data?.isOrderAbleToDone ? (
           <View style={styles.buttonContainer}>
             <SnbButton2.Secondary
               title={'Pesanan Diterima'}
@@ -93,7 +93,7 @@ const ActionFooter = () => {
 
 const styles = StyleSheet.create({
   main: {
-    height: 84,
+    height: 76,
     backgroundColor: colorV2.bgColor.light,
     elevation: 10,
     padding: 16,
