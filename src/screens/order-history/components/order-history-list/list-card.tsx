@@ -251,7 +251,7 @@ const EmptyImage = () => (
   <Image
     source={require('../../../../assets/images/empty_sinbad.png')}
     resizeMode="contain"
-    style={{ height: W * 0.6, aspectRatio: 1 }}
+    style={{ height: W * 0.6, aspectRatio: 1, marginTop: 100 }}
   />
 );
 
