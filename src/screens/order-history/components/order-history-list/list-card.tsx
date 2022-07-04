@@ -107,8 +107,8 @@ const dataDummyList =  [
     "moreSuppliers": 2,
     "orderParcels": [
         {
-            "id": "4640",
-            "sellerName": "PT. Tigaraksa Satria Tbk",
+            "id": "4642",
+            "sellerName": "PT. Tigaraksa Satria3 Tbk",
             "statusValue": "delivered",
             "statusLabel": "Tiba di Tujuan",
             "doneAt": "2022-04-12T01:30:34Z",
@@ -121,8 +121,8 @@ const dataDummyList =  [
             "productTotalPriceAfterTax": 110002
         },
         {
-          "id": "4641",
-          "sellerName": "PT. Tigaraksa Satria Tbk2",
+          "id": "4643",
+          "sellerName": "PT. Tigaraksa Satria4 Tbk2",
           "statusValue": "created",
           "statusLabel": "Diproses",
           "doneAt": "2022-04-12T01:30:34Z",
@@ -177,7 +177,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       <SnbDivider2></SnbDivider2>
       {/* mid section */}
       <View style={{marginHorizontal : 16, marginTop: 16}}>
-        {ParcelConsolidation(data.orderParcels, onConfirmOrder)}
+        {ParcelConsolidation(data.orderParcels)}
       </View>
       {/* bottom section */}
       <View style={{marginBottom : 8, marginHorizontal: 16}}>
@@ -205,7 +205,37 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
     </Pressable>
   )
 }
-const ParcelConsolidation = (dataParcels: any[], confirmOrder: () => void) => {
+const ParcelConsolidation = (dataParcels: any[]) => {
+  const [state] = useContext(Context);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [confirmationOrderId, setConfirmationOrderId] = useState('');
+  const { doneOrder } = useDetailHistoryOrder();
+  const onDoneOrder = useCallback(
+    (idOrder: string) => {
+      const { keyword, orderStatus, status } = state;
+      const payload = { keyword, orderStatus, status, id: idOrder };
+      doneOrder({ ...payload, type: 'list' });
+    },
+    [state.keyword, state.orderStatus, state.status],
+  );
+  //render modal confirmation done order
+  const renderModalConfirmationDoneOrder = () => {
+    if(confirmationOrderId != '')
+    return (
+      <ConfirmationDoneSheet
+        open={confirmationOpen}
+        title="Pesanan diterima?"
+        desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+        // onConfirm={() => onDoneOrder(confirmationOrderId)}
+        onConfirm={() => {
+          setConfirmationOpen(false)
+          console.log(confirmationOrderId)
+        }}
+        contentHeight={175}
+        onClose={() => setConfirmationOpen(false)}
+      />
+    );
+  };
   return dataParcels?.map((dataParcel) => (
   <>
   {/* title */}
@@ -257,10 +287,14 @@ const ParcelConsolidation = (dataParcels: any[], confirmOrder: () => void) => {
     {dataParcel.statusValue == 'delivered' ? (
       <View style={{ marginBottom: 8}}>
             <SnbButton2.Secondary
+              key={dataParcel.id}
               outline={true}
               title="Pesanan Diterima"
               size="small"
-              onPress={confirmOrder}
+              onPress={() => {
+                setConfirmationOrderId(dataParcel.id);
+                setConfirmationOpen(true)
+              }}
               full={true}
             />
       </View>      
@@ -269,6 +303,8 @@ const ParcelConsolidation = (dataParcels: any[], confirmOrder: () => void) => {
           )}
     </View>
     </>
+    {/* confirmation  done*/}
+    {renderModalConfirmationDoneOrder()}
   </View>
 
 </>
@@ -348,7 +384,7 @@ const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
             size="small"
             full
             title={'Detail pesanan'}
-            onPress={onDetailOrder}
+            onPress={(onDetailOrder)}
           />
         </View>
       </View>
@@ -376,12 +412,12 @@ const wordingWaitingForPaymentEmpty = () => {
 
 const ListCard = () => {
   const [state] = useContext(Context);
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [confirmationOrderId, setConfirmationOrderId] = useState('');
+  // const [confirmationOpen, setConfirmationOpen] = useState(false);
+  // const [confirmationOrderId, setConfirmationOrderId] = useState('');
+  // const { doneOrder } = useDetailHistoryOrder();
   const { onLoadMorePayment, onRefreshPayment } =
     useHistoryListPaymentFunction();
   const { onLoadMore, onRefresh } = useHistoryListFunction();
-  const { doneOrder } = useDetailHistoryOrder();
   const {
     stateOrderHistory: {
       list: {
@@ -403,14 +439,14 @@ const ListCard = () => {
     },
   } = usePaymentHistoryContext();
   // function
-  const onDoneOrder = useCallback(
-    (idOrder: string) => {
-      const { keyword, orderStatus, status } = state;
-      const payload = { keyword, orderStatus, status, id: idOrder };
-      doneOrder({ ...payload, type: 'list' });
-    },
-    [state.keyword, state.orderStatus, state.status],
-  );
+  // const onDoneOrder = useCallback(
+  //   (idOrder: string) => {
+  //     const { keyword, orderStatus, status } = state;
+  //     const payload = { keyword, orderStatus, status, id: idOrder };
+  //     doneOrder({ ...payload, type: 'list' });
+  //   },
+  //   [state.keyword, state.orderStatus, state.status],
+  // );
   // loading view
   if ([historyListLoading].some((i) => i)) {
     return <SnbProductListSkeleton />;
@@ -479,20 +515,20 @@ const ListCard = () => {
       </>
     );
   }
-  //render modal confirmation done order
-  const renderModalConfirmationDoneOrder = () => {
-    if(confirmationOrderId != '')
-    return (
-      <ConfirmationDoneSheet
-        open={confirmationOpen}
-        title="Pesanan diterima?"
-        desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
-        onConfirm={() => onDoneOrder(confirmationOrderId)}
-        contentHeight={175}
-        onClose={() => setConfirmationOpen(false)}
-      />
-    );
-  };
+  // //render modal confirmation done order
+  // const renderModalConfirmationDoneOrder = () => {
+  //   if(confirmationOrderId != '')
+  //   return (
+  //     <ConfirmationDoneSheet
+  //       open={confirmationOpen}
+  //       title="Pesanan diterima?"
+  //       desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+  //       onConfirm={() => onDoneOrder(confirmationOrderId)}
+  //       contentHeight={175}
+  //       onClose={() => setConfirmationOpen(false)}
+  //     />
+  //   );
+  // };
   // render order history list
   return (
     <>
@@ -505,8 +541,8 @@ const ListCard = () => {
                 data={item}
                 // onConfirmOrder= {()=>  console.log('irpan')}
                 onConfirmOrder = {() => {
-                  setConfirmationOrderId(item.orderId);
-                  setConfirmationOpen(true)
+                  // setConfirmationOrderId(item.orderId);
+                  // setConfirmationOpen(true)
                 }}
               />
             )}
@@ -530,8 +566,8 @@ const ListCard = () => {
             //   />
             // }
         />
-      {/* confirmation  done*/}
-      {renderModalConfirmationDoneOrder()}
+      {/* confirmation  done
+      {renderModalConfirmationDoneOrder()} */}
       </>
     
   );
