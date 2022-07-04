@@ -33,7 +33,16 @@ const callProcessActionPayment = (
     ...queryOptions,
   });
 };
-
+export const useMenuStatusListAction = () => {
+  const dispatch = useDispatch();
+  return {
+    menuStatusList: (
+      contextDispatch: (action: any) => any,
+    ) => {
+      dispatch(Actions.menuStatusListProcess(contextDispatch))
+    }
+  }
+}
 export const useHistoryListActions = () => {
   const dispatch = useDispatch();
   const perPage = 10;

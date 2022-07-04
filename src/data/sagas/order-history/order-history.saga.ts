@@ -3,6 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { SnbToast } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT INTERNAL === */
 import * as OrderHistoryApi from 'src/data/apis/order-history/order-history.api';
+import * as OrderHistoryConsolidateApi from 'src/data/apis/order-history/order-history-consolidate.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
@@ -225,6 +226,26 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
     SnbToast.show(error.message, 3000, { positionValue: 50 });
   }
 }
+/** Get Menu Status List */
+function* MenuStatusList(action: models.ListProcessV3Action){
+  try {
+    const response: models.ListSuccessV3Props<Array<models.MenuStatusList>> =
+      yield call(() => {
+        return OrderHistoryConsolidateApi.getMenuStatusList();
+      });
+    yield action.contextDispatch(
+      ActionCreators.menuStatusListSuccess(response),
+    );
+    yield put(ActionCreators.menuStatusListSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.menuStatusListFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.menuStatusListFailed(error as models.ErrorProps),
+    );
+  }
+}
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
@@ -240,6 +261,7 @@ function* OrderHistorySaga() {
   );
   yield takeLatest(types.DONE_ORDER_HISTORY_PROCESS, DoneOrderHistory);
   yield takeLatest(types.CANCEL_ORDER_HISTORY_PROCESS, CancelOrderHistory);
+  yield takeLatest(types.MENU_STATUS_LIST_PROCESS, MenuStatusList);
 }
 
 export default OrderHistorySaga;

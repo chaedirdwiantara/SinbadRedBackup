@@ -1,46 +1,23 @@
-import React, { memo, useCallback, useContext } from 'react';
+import { useMenuStatusListAction } from '@screen/order-history/functions/history-list/use-history-list.hook';
+import React, { memo, useCallback, useContext, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { SnbChips2 } from 'react-native-sinbad-ui';
+import { SnbChips2, SnbText2 } from 'react-native-sinbad-ui';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 
-// const menuList = [
-//   {
-//     id: 'waiting_for_payment',
-//     label: 'Menunggu Pembayaran',
-//   },
-//   {
-//     id: 'ongoing',
-//     label: 'Pesanan Berlangsung',
-//   },
-//   {
-//     id: 'done',
-//     label: 'Pesanan Selesai',
-//   },
-//   {
-//     id: 'failed',
-//     label: 'Pesanan Gagal',
-//   },
-// ];
-const menuDynamicData = [
-  {
-    id: "1",
-    code: "waiting_for_payment",
-    label: "Menunggu Pembayaran"
-  },
-  {
-    id: "2",
-    code: "ongoing",
-    label: "Pesanan Berlangsung"
-  },
-  {
-    id: "3",
-    code: "completed",
-    label: "Pesanan Selesai"
-  }
-
-]
-
 const MenuStatusFilter = () => {
+  const menuStatusListAction = useMenuStatusListAction();
+  const {
+    stateOrderHistory: {
+      menuStatus: { loading, data },
+    },
+    dispatchOrderHistory
+  } = useOrderHistoryContext();
+  useEffect(() => {
+    menuStatusListAction.menuStatusList(
+      dispatchOrderHistory,
+    );
+  }, []);
   const [state, setState] = useContext(Context);
 
   const onSelectFilter = useCallback(
@@ -63,7 +40,7 @@ const MenuStatusFilter = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12 }}
         showsVerticalScrollIndicator={false}>
-        {menuDynamicData.map((i) => (
+        {data?.map((i) => (
           <View style={styles.main}>
             <SnbChips2.Choice
               testID={'01'}
