@@ -61,7 +61,7 @@ const SelfRegisterView: React.FC = () => {
         } else {
           phone.clearText();
           checkPhoneRegistrationReset();
-          //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP
+          //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
         }
       } else {
         phone.setMessageError('Nomor telah terdaftar');
@@ -69,7 +69,7 @@ const SelfRegisterView: React.FC = () => {
       }
     }
     if (checkPhoneRegistrationState.error !== null) {
-      phone.setMessageError(checkPhoneV2.error.message);
+      phone.setMessageError(checkPhoneRegistrationState.error.message);
     }
   }, [checkPhoneRegistrationState]);
 
