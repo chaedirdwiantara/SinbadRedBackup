@@ -1,5 +1,6 @@
 import React, { memo, useCallback, useMemo, useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { StatusBar } from 'react-native';
+import { SnbToast2 } from 'react-native-sinbad-ui';
 import { AddToCartModal } from '@core/components/modal';
 
 // function
@@ -17,7 +18,9 @@ const App = () => {
     // function
     onReset,
     onSubmitAddToCart,
+    onSuccessAddToCart,
     // variable
+    stateCart,
     dataStock,
     productDetailState: productDetail,
   } = useProductListFunction();
@@ -65,24 +68,36 @@ const App = () => {
       });
     }
   }, [productDetail]);
-
+  // listener when success add to cart
+  useEffect(() => {
+    if (stateCart.create.data !== null) {
+      onSuccessAddToCart();
+      SnbToast2.show('Produk berhasil ditambahkan ke keranjang', 2000, {
+        position: 'top',
+        positionValue: StatusBar.currentHeight,
+      });
+    }
+  }, [stateCart.create.data]);
   return (
-    <AddToCartModal
-      orderQty={orderQty}
-      onChangeQty={onHandleChangeQty}
-      open={modalVisible}
-      onBlur={onCloseModal}
-      closeAction={onCloseModal}
-      onAddToCartPress={onAddToCartPress}
-      loading={loadingProduct}
-      disabled={
-        productDetail === null ||
-        dataStock === null ||
-        orderQty > dataStock.stock ||
-        orderQty < productDetail?.minQty ||
-        productDetail.minQty > dataStock.stock
-      }
-    />
+    <>
+      <AddToCartModal
+        orderQty={orderQty}
+        onChangeQty={onHandleChangeQty}
+        open={modalVisible}
+        onBlur={onCloseModal}
+        closeAction={onCloseModal}
+        onAddToCartPress={onAddToCartPress}
+        loading={loadingProduct}
+        disabled={
+          productDetail === null ||
+          dataStock === null ||
+          orderQty > dataStock.stock ||
+          orderQty < productDetail?.minQty ||
+          productDetail.minQty > dataStock.stock
+        }
+      />
+      <SnbToast2 />
+    </>
   );
 };
 
