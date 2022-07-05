@@ -97,6 +97,32 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
     requestOTP(data)
   }
 
+  const renderContent = () => {
+    return (
+      <View
+        onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}
+      >
+        <View style={{ paddingHorizontal: layout.spacing.lg, paddingTop: layout.spacing.lg }}>
+          <SnbText2.Paragraph.Default align="center">
+            Kami akan mengirimkan kode verifikasi ke nomor handphone Anda
+          </SnbText2.Paragraph.Default>
+        </View>
+        <RadioButton
+          label='SMS'
+          onPress={() => setOtpMethod('sms')}
+          selected={otpMethod === 'sms'}
+          icon={<SnbIcon name="chat" size={24} color={colorV2.iconColor.default} />} />
+        <SnbDivider2 />
+        <RadioButton
+          label='Whatsapp'
+          onPress={() => setOtpMethod('wa')}
+          selected={otpMethod === 'wa'}
+          icon={<SnbIcon name="whatsapp" size={24} color={colorV2.iconColor.green} />} />
+        <SnbDivider2 />
+      </View>
+    )
+  }
+
   return (
     <SnbBottomSheet2
       close={() => setOtpMethod('')}
@@ -117,29 +143,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
       }
       name="modal-pilih-metode-otp"
       type="content"
-      content={
-        <View
-          onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}
-        >
-          <View style={{ paddingHorizontal: layout.spacing.lg, paddingTop: layout.spacing.lg }}>
-            <SnbText2.Paragraph.Default align="center">
-              Kami akan mengirimkan kode verifikasi ke nomor handphone Anda
-            </SnbText2.Paragraph.Default>
-          </View>
-          <RadioButton
-            label='SMS'
-            onPress={() => setOtpMethod('sms')}
-            selected={otpMethod === 'sms'}
-            icon={<SnbIcon name="chat" size={24} color={colorV2.iconColor.default} />} />
-          <SnbDivider2 />
-          <RadioButton
-            label='Whatsapp'
-            onPress={() => setOtpMethod('wa')}
-            selected={otpMethod === 'wa'}
-            icon={<SnbIcon name="whatsapp" size={24} color={colorV2.iconColor.green} />} />
-          <SnbDivider2 />
-        </View>
-      }
+      content={renderContent()}
       button={
         <View style={{ padding: layout.spacing.lg }}>
           <SnbButton2.Primary
