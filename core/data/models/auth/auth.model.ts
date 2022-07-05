@@ -74,6 +74,7 @@ export interface AuthMeV2DataProps {
     user: UserAuthData;
     isBuyerCategoryCompleted: boolean;
     isDataCompleted: boolean;
+    isRegisteredOnNG: boolean;
   };
 }
 
