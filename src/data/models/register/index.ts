@@ -73,7 +73,7 @@ export interface ICheckPhoneNoAvailabilitySuccess {
 
 export interface IVerifyOTPRegister {
   mobilePhoneNo: string | undefined;
-  otp: number;
+  otp: string;
 }
 
 export interface ISendOTP {
