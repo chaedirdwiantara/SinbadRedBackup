@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import {
   SnbText2,
   colorV2,
@@ -16,6 +16,8 @@ import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrder
 import ConfirmationTime from '../confirmation-time';
 import { NavigationAction } from '@core/functions/navigation';
 import { OrderParcels } from '@model/order-history';
+import { useDetailHistoryOrder } from '@screen/order-history/functions/history-detail';
+import { ConfirmationDoneSheet } from '../order-history-list';
 
 type CardProps = {
   data: OrderParcels;
@@ -23,6 +25,38 @@ type CardProps = {
 
 const Card: FC<CardProps> = (props) => {
   const { data } = props;
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const { doneOrder } = useDetailHistoryOrder();
+  const onPressAction = useCallback(() => {
+    const payload: {id: string, type: 'detail'} = {
+      type: 'detail',
+      id: String(data?.id)
+    };
+    if(data?.isDisplayDelivered) {
+      return void 0;
+    }
+    if(data?.isDisplayDelivered){
+      doneOrder(payload);
+    }
+  }, [data?.isDisplayDelivered, data?.id])
+  //render modal confirmation done order
+  const renderModalConfirmationDoneOrder = () => {
+    return (
+      <ConfirmationDoneSheet
+        open={confirmationOpen}
+        title="Pesanan diterima?"
+        desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+        // onConfirm={() => onDoneOrder(confirmationOrderId)}
+        onConfirm={() => {
+          // onPressAction;
+          console.log(data?.id)
+          setConfirmationOpen(false)
+        }}
+        contentHeight={175}
+        onClose={() => setConfirmationOpen(false)}
+      />
+    );
+  };
   return (
     <TouchableOpacity
       style={styles.card}
@@ -117,8 +151,9 @@ const Card: FC<CardProps> = (props) => {
                 <SnbButton2.Secondary
                   title="Diterima"
                   size="small"
+                  key={data.id}
                   // onPress={onConFirmOrder}
-                  onPress={() => {}}
+                  onPress={() => setConfirmationOpen(true)}
                   outline={true}
                   full={true}
                 />
@@ -127,6 +162,7 @@ const Card: FC<CardProps> = (props) => {
           ) : null}
         </View>
       </View>
+      {renderModalConfirmationDoneOrder()}
     </TouchableOpacity>
   );
 };
