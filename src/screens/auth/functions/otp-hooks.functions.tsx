@@ -18,10 +18,11 @@ const useOTP = (action = '') => {
   const { verifyOTP } = useSelector((state: any) => state.auth);
   const [mobilePhone, setMobilePhone] = React.useState('');
   const [otp, setOtp] = React.useState('');
-  const [hashOtp, setHashOtp] = React.useState('');
+  const [otpHash, setOtpHash] = React.useState('');
+  const [type, setType] = React.useState('')
 
   React.useEffect(() => {
-    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
+    RNOtpVerify.getHash().then((value) => setOtpHash(value[0]));
     if (action === 'listeningToHash') {
       startListeningForOtp();
     }
@@ -80,8 +81,9 @@ const useOTP = (action = '') => {
   };
 
   React.useEffect(() => {
-    setMobilePhone(params?.phoneNo);
-    setHashOtp(params?.hashOtp);
+    setMobilePhone(params?.mobilePhone);
+    setOtpHash(params?.otpHash);
+    setType(params?.type)
     return resetVerifyOTP;
   }, []);
 
@@ -93,7 +95,8 @@ const useOTP = (action = '') => {
     otp,
     setOtp,
     getLocationPermissions,
-    hashOtp,
+    otpHash,
+    type
   };
 };
 

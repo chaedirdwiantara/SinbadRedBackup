@@ -1,10 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   maskPhone,
   useOTP,
   setErrorMessage,
   useCheckPhoneV2,
   useCheckAutoLogin,
+  useAuthAction,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
@@ -26,12 +27,13 @@ const RegisterOTPView: React.FC = () => {
     verifyOTP,
     mobilePhone,
     getLocationPermissions,
-    hashOtp,
+    otpHash,
+    type
   } = useOTP();
   const { goBack }: any = useNavigation();
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
-  const { checkPhone } = useCheckPhoneV2();
+  const { requestOTP } = useAuthAction();
   const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
   const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
     React.useState(false);
@@ -95,7 +97,7 @@ const RegisterOTPView: React.FC = () => {
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhoneNo: mobilePhone, otpHash: hashOtp });
+            requestOTP({ mobilePhone, otpHash, type });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
@@ -103,6 +105,7 @@ const RegisterOTPView: React.FC = () => {
           otpSuccess={verifyOTP.data !== null}
           loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
+          otpMethod={type}
         />
       </ScrollView>
       <SnbBottomSheet2

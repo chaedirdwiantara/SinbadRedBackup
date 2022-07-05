@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
@@ -11,15 +11,14 @@ import {
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import {
-  REGISTER_OTP_VIEW,
   LOGIN_PHONE_VIEW,
 } from '@screen/auth/functions/screens_name';
 import {
   useInputPhone,
   // useCheckPhoneV2,
   useCheckPhoneRegistrationV3,
+  setErrorMessage,
 } from '@screen/auth/functions';
-import RNOtpVerify from 'react-native-otp-verify';
 import { useDataPermanent } from '@core/redux/Data';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
 
@@ -28,7 +27,6 @@ const SelfRegisterView: React.FC = () => {
   const phone = useInputPhone();
   // const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
   //   useCheckPhoneV2();
-  const [hashOtp, setHashOtp] = useState('');
   const {
     checkPhoneRegistration,
     checkPhoneRegistrationReset,
@@ -63,19 +61,18 @@ const SelfRegisterView: React.FC = () => {
           phone.clearText();
           checkPhoneRegistrationReset();
           // SHOW MODAL SALESMAN DISINI
+          refModalSalesman.current?.open();
         } else {
-          phone.clearText();
-          checkPhoneRegistrationReset();
           //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
+          refModalOTP.current?.open();
         }
       } else {
-        refModalSalesman.current?.open();
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
       }
     }
     if (checkPhoneRegistrationState.error !== null) {
-      phone.setMessageError(checkPhoneRegistrationState.error.message);
+      phone.setMessageError(setErrorMessage(checkPhoneRegistrationState.error.code));
     }
   }, [checkPhoneRegistrationState]);
 
@@ -89,12 +86,6 @@ const SelfRegisterView: React.FC = () => {
       phone.clearText();
     };
   }, []);
-
-  React.useEffect(() => {
-    RNOtpVerify.getHash().then((value) => setHashOtp(value[0]));
-    return RNOtpVerify.removeListener;
-  }, []);
-
   const header = () => {
     return (
       <SnbTopNav2.Type3
