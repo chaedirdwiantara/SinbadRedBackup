@@ -6,4 +6,6 @@ export const labelStatus: {
   packed: 'information',
   shipped: 'information',
   done: 'success',
+  cancelled: 'error',
+  failedDelivery: 'error',
 };

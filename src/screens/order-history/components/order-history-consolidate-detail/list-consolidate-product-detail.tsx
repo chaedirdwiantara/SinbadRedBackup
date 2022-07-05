@@ -18,6 +18,7 @@ import { NavigationAction } from '@core/functions/navigation';
 import { OrderParcels } from '@model/order-history';
 import { useDetailHistoryOrder } from '@screen/order-history/functions/history-detail';
 import { ConfirmationDoneSheet } from '../order-history-list';
+import { labelStatus } from '@screen/order-history/types';
 
 type CardProps = {
   data: OrderParcels;
@@ -28,17 +29,17 @@ const Card: FC<CardProps> = (props) => {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const { doneOrder } = useDetailHistoryOrder();
   const onPressAction = useCallback(() => {
-    const payload: {id: string, type: 'detail'} = {
+    const payload: { id: string; type: 'detail' } = {
       type: 'detail',
-      id: String(data?.id)
+      id: String(data?.id),
     };
-    if(data?.isDisplayDelivered) {
+    if (data?.isDisplayDelivered) {
       return void 0;
     }
-    if(data?.isDisplayDelivered){
+    if (data?.isDisplayDelivered) {
       doneOrder(payload);
     }
-  }, [data?.isDisplayDelivered, data?.id])
+  }, [data?.isDisplayDelivered, data?.id]);
   //render modal confirmation done order
   const renderModalConfirmationDoneOrder = () => {
     return (
@@ -49,8 +50,8 @@ const Card: FC<CardProps> = (props) => {
         // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
           // onPressAction;
-          console.log(data?.id)
-          setConfirmationOpen(false)
+          console.log(data?.id);
+          setConfirmationOpen(false);
         }}
         contentHeight={175}
         onClose={() => setConfirmationOpen(false)}
@@ -71,7 +72,10 @@ const Card: FC<CardProps> = (props) => {
           <Text.Subtitle
             text={data.sellerName}
             actionComponent={
-              <SnbBadge2 type="success" title={data.statusLabel} />
+              <SnbBadge2
+                type={labelStatus[data?.statusValue || ''] || 'error'}
+                title={data.statusLabel}
+              />
             }
           />
           {/* timer */}
