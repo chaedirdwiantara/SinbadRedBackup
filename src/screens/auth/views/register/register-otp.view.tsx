@@ -1,15 +1,14 @@
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
   maskPhone,
   useOTP,
   setErrorMessage,
-  useCheckPhoneV2,
   useCheckAutoLogin,
   useAuthAction,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
-import { ScrollView, View, Image } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
@@ -20,6 +19,8 @@ import {
   Content,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
+import { useDataAuth } from '@core/redux/Data';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const RegisterOTPView: React.FC = () => {
   const {
@@ -28,7 +29,7 @@ const RegisterOTPView: React.FC = () => {
     mobilePhone,
     getLocationPermissions,
     otpHash,
-    type
+    type,
   } = useOTP();
   const { goBack }: any = useNavigation();
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
@@ -39,6 +40,8 @@ const RegisterOTPView: React.FC = () => {
     React.useState(false);
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
+  const authCoreAction = useAuthCoreAction();
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
@@ -50,10 +53,18 @@ const RegisterOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (checkAutoLoginData?.data?.message === 'Success') {
-      getLocationPermissions();
-      resetCheckAutoLogin();
+      authCoreAction.meV2();
     }
   }, [checkAutoLoginData]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData?.data?.message === 'Success') {
+      if (meV2.data) {
+        getLocationPermissions();
+        resetCheckAutoLogin();
+      }
+    }
+  }, [meV2.data]);
 
   React.useEffect(() => {
     if (

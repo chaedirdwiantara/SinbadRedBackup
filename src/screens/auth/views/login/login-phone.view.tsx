@@ -3,10 +3,7 @@ import {
   useAuthAction,
   useInputPhone,
 } from '@screen/auth/functions';
-import {
-  LOGIN_OTP_VIEW,
-  SELF_REGISTRATION_VIEW,
-} from '@screen/auth/functions/screens_name';
+import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
 import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
@@ -32,9 +29,8 @@ const Content: React.FC = () => {
   const { reset, navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
-  const { advertisingId } = useDataPermanent()
-  const [openModalForceRegister, setOpenModalForceRegister] =
-    React.useState(false);
+  const { advertisingId } = useDataPermanent();
+  const refModalForceRegist = React.useRef<SnbBottomSheet2Ref>(null);
 
   React.useEffect(() => {
     return () => {
@@ -45,13 +41,16 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     if (checkPhoneLoginState.data !== null) {
-      const { isUserAgent, isUserMedea } = checkPhoneLoginState.data.data || {}
-      if (isUserAgent) {
-        refModalSalesman.current?.open();
-      } else if (isUserMedea) {
-        setOpenModalForceRegister(true);
-      } else {
+      const { isUserAgent, isUserMedea, phoneNumberAvailable } =
+        checkPhoneLoginState.data.data || {};
+      if (phoneNumberAvailable) {
         refModalOTP.current?.open();
+      } else {
+        if (isUserAgent) {
+          refModalSalesman.current?.open();
+        } else if (isUserMedea) {
+          refModalForceRegist.current?.open();
+        }
       }
     }
     if (checkPhoneLoginState.error !== null) {
@@ -123,16 +122,16 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action='login' />
+      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
-      <View style={{flex: 1}}>
-      <ForceRegistrationModal
-        open={openModalForceRegister}
-        confirm={() => {
-          navigate(SELF_REGISTRATION_VIEW);
-          setOpenModalForceRegister(false);
-        }}
-      />
+      <View style={{ flex: 1 }}>
+        <ForceRegistrationModal
+          ref={refModalForceRegist}
+          confirm={() => {
+            navigate(SELF_REGISTRATION_VIEW);
+            refModalForceRegist.current?.close();
+          }}
+        />
       </View>
     </ScrollView>
   );

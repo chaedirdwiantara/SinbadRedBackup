@@ -10,12 +10,9 @@ import {
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
-import {
-  LOGIN_PHONE_VIEW,
-} from '@screen/auth/functions/screens_name';
+import { LOGIN_PHONE_VIEW } from '@screen/auth/functions/screens_name';
 import {
   useInputPhone,
-  // useCheckPhoneV2,
   useCheckPhoneRegistrationV3,
   setErrorMessage,
 } from '@screen/auth/functions';
@@ -25,8 +22,6 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 const SelfRegisterView: React.FC = () => {
   const { navigate } = useNavigation();
   const phone = useInputPhone();
-  // const { checkPhone, resetCheckPhone, checkPhoneV2, checkPhoneV2Reset } =
-  //   useCheckPhoneV2();
   const {
     checkPhoneRegistration,
     checkPhoneRegistrationReset,
@@ -36,23 +31,6 @@ const SelfRegisterView: React.FC = () => {
 
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
-
-  // React.useEffect(() => {
-  //   if (checkPhoneV2.data !== null) {
-  //     if (checkPhoneV2.data.isAvailable) {
-  //       phone.clearText();
-  //       resetCheckPhone();
-  //       checkPhoneV2Reset();
-  //       navigate(REGISTER_OTP_VIEW, { phoneNo: phone.value, hashOtp: hashOtp });
-  //     } else {
-  //       phone.setMessageError('Nomor telah terdaftar');
-  //       phone.setType('error');
-  //     }
-  //   }
-  //   if (checkPhoneV2.error !== null) {
-  //     phone.setMessageError(checkPhoneV2.error.message);
-  //   }
-  // }, [checkPhoneV2]);
 
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
@@ -72,12 +50,13 @@ const SelfRegisterView: React.FC = () => {
       }
     }
     if (checkPhoneRegistrationState.error !== null) {
-      phone.setMessageError(setErrorMessage(checkPhoneRegistrationState.error.code));
+      phone.setMessageError(
+        setErrorMessage(checkPhoneRegistrationState.error.code),
+      );
     }
   }, [checkPhoneRegistrationState]);
 
   React.useEffect(() => {
-    // resetCheckPhone();
     checkPhoneRegistrationReset();
     phone.setMessageError('');
     phone.setType('default');
@@ -121,7 +100,6 @@ const SelfRegisterView: React.FC = () => {
           <SnbButton2.Primary
             title={'Lanjut'}
             onPress={() => {
-              // checkPhone({ mobilePhoneNo: phone.value, otpHash: hashOtp })
               Keyboard.dismiss();
               checkPhoneRegistration({
                 mobilePhone: phone.value,

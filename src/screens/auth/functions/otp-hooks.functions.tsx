@@ -10,6 +10,7 @@ import { PermissionsAndroid, Platform } from 'react-native';
 import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useDataAuth } from '@core/redux/Data';
 
 const useOTP = (action = '') => {
   const dispatch = useDispatch();
@@ -19,7 +20,8 @@ const useOTP = (action = '') => {
   const [mobilePhone, setMobilePhone] = React.useState('');
   const [otp, setOtp] = React.useState('');
   const [otpHash, setOtpHash] = React.useState('');
-  const [type, setType] = React.useState('')
+  const [type, setType] = React.useState('');
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
     RNOtpVerify.getHash().then((value) => setOtpHash(value[0]));
@@ -70,20 +72,26 @@ const useOTP = (action = '') => {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       ).then(handleRequestPermissionResult);
     } else {
-      reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
-      // reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      if (meV2.data?.data?.isRegisteredOnNG === false) {
+        reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+      } else if (meV2.data?.data?.isRegisteredOnNG === true) {
+        reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      }
     }
   };
 
   const handleRequestPermissionResult = () => {
-    reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
-    // reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    if (meV2.data?.data?.isRegisteredOnNG === false) {
+      reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+    } else if (meV2.data?.data?.isRegisteredOnNG === true) {
+      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    }
   };
 
   React.useEffect(() => {
     setMobilePhone(params?.mobilePhone);
     setOtpHash(params?.otpHash);
-    setType(params?.type)
+    setType(params?.type);
     return resetVerifyOTP;
   }, []);
 
@@ -96,7 +104,7 @@ const useOTP = (action = '') => {
     setOtp,
     getLocationPermissions,
     otpHash,
-    type
+    type,
   };
 };
 
