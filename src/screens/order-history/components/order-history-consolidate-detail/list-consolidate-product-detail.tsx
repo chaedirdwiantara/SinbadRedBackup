@@ -79,8 +79,10 @@ const Card: FC<CardProps> = (props) => {
             }
           />
           {/* timer */}
-          {data.statusValue === 'delivered' ? null : (
+          {data.statusValue === 'delivered' ? (
             <ConfirmationTime doneAt={data.doneAt || ''} />
+          ) : (
+            <View />
           )}
           <View style={styles.product}>
             <SnbImageCompressor style={styles.image} uri={data.productImage} />
