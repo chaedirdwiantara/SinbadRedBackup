@@ -93,7 +93,7 @@ const RegisterOTPView: React.FC = () => {
           onVerifyOTP={(otp) => {
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
-              otp: Number(otp),
+              otp,
             });
           }}
           resend={() => {
