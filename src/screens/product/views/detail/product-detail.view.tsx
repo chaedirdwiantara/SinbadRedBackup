@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import {
   SnbContainer,
@@ -12,7 +12,7 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import Html from '@core/components/Html';
+import Html from '@core/components/HtmlV2';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
@@ -221,6 +221,22 @@ const ProductDetailView: FC = () => {
     isBundle: dataProduct?.isBundle ?? false,
     stock: dataStock?.stock ?? 0,
   };
+  // information dimension of product
+  const dimensionProduct = useMemo(() => {
+    const [unit, length, width, height] = [
+      dataProduct?.dimensionType,
+      dataProduct?.dimensionLength,
+      dataProduct?.dimensionWidth,
+      dataProduct?.dimensionHeight,
+    ];
+    // length x width x height
+    return `${length}${unit} X ${width}${unit} X ${height}${unit}`;
+  }, [
+    dataProduct?.dimensionType,
+    dataProduct?.dimensionLength,
+    dataProduct?.dimensionWidth,
+    dataProduct?.dimensionHeight,
+  ]);
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
     if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
@@ -456,7 +472,12 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Berat"
-              value={`${dataProduct?.productWeight} gr`}
+              // unit will be dynamic
+              value={`${dataProduct?.productWeight} ${dataProduct?.weightType}`}
+            />
+            <ProductDetailSectionItem
+              name="Dimensi per-Dus"
+              value={dimensionProduct}
               bottomSpaces={0}
             />
           </ProductDetailSection>
@@ -465,11 +486,6 @@ const ProductDetailView: FC = () => {
               name={dataProduct?.productSeller.name ?? '-'}
               value=""
             />
-          </ProductDetailSection>
-          <ProductDetailSection title="Detail Produk">
-            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-              {dataProduct?.detail ?? '-'}
-            </SnbText2.Paragraph.Small>
           </ProductDetailSection>
           {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
