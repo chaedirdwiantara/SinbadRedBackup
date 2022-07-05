@@ -63,7 +63,7 @@ type CardPropsConsolidate = {
 
 const dataDummyList =  [
   {
-      "orderId": "SNE-2121182635172",
+      "orderId": "SNE-2121182635204",
       "orderedAt": "2022-04-12T01:30:34Z",
       "fulfilment": "2/3 Selesai",
       "totalOrderPrice": 20000000,
@@ -100,7 +100,7 @@ const dataDummyList =  [
       ]
   },
   {
-    "orderId": "SNE-2121182635173",
+    "orderId": "SNE-2121182635204",
     "orderedAt": "2022-04-12T01:30:34Z",
     "fulfilment": "2/3 Selesai",
     "totalOrderPrice": 20000000,
@@ -152,10 +152,10 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       style={styles.card}
       android_ripple={{color: color.black40}}
       onPress={() =>
-                // NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-                //   id: data.orderId,
-                // })
-                console.log(data.orderId)
+                NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+                  id: data.orderId,
+                })
+                // console.log(data.orderId)
       }>
       <View style={{ margin: 16 }}>
         {/* top section */}
@@ -193,10 +193,10 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       </View>
       <View style={{marginBottom : 16, marginHorizontal: 16}}>
         <TouchableOpacity onPress={() => 
-        console.log(data.orderId)
-        //  NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-        //           id: data.orderId,
-        //         })
+        // console.log(data.orderId)
+         NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+                  id: data.orderId,
+                })
               }
         >
           <View style={styles.toDetailFooter}>
@@ -233,8 +233,9 @@ const ParcelConsolidation = (dataParcels: any[]) => {
         desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
         // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
-          setConfirmationOpen(false)
-          console.log(confirmationOrderId)
+          // onDoneOrder(confirmationOrderId);
+          setConfirmationOpen(false);
+          // console.log(confirmationOrderId);
         }}
         contentHeight={175}
         onClose={() => setConfirmationOpen(false)}
