@@ -73,14 +73,14 @@ const Card: FC<CardProps> = (props) => {
             text={data.sellerName}
             actionComponent={
               <SnbBadge2
-                type={labelStatus[data?.statusValue || ''] || 'error'}
+                type={labelStatus[data.statusValue || ''] || 'error'}
                 title={data.statusLabel}
               />
             }
           />
           {/* timer */}
           {data.statusValue === 'delivered' ? null : (
-            <ConfirmationTime doneAt={data?.doneAt || ''} />
+            <ConfirmationTime doneAt={data.doneAt || ''} />
           )}
           <View style={styles.product}>
             <SnbImageCompressor style={styles.image} uri={data.productImage} />

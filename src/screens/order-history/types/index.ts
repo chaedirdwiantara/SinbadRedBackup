@@ -7,5 +7,5 @@ export const labelStatus: {
   shipped: 'information',
   done: 'success',
   cancelled: 'error',
-  failedDelivery: 'error',
+  delivery_failed: 'error',
 };
