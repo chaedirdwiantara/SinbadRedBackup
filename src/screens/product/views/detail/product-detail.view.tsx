@@ -62,6 +62,9 @@ import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
 import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
 
+/** == CONSTANT */
+const testID = 'product-detail';
+
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
   /** === HOOKS === */
@@ -456,7 +459,10 @@ const ProductDetailView: FC = () => {
           />
           {dataProduct?.hasBulkPrice ? (
             <View style={{ paddingBottom: spacingV2.spacing.lg }}>
-              <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+              <BulkPricingList
+                bulkPrices={dataProduct.bulkPrices}
+                testID={testID}
+              />
             </View>
           ) : (
             <View />
@@ -497,6 +503,7 @@ const ProductDetailView: FC = () => {
       <React.Fragment>
         {isAvailable ? (
           <FooterButton.Dual
+            testID={testID}
             title1={getActionButtonTitle()}
             title2=""
             shadow={false}
@@ -522,7 +529,9 @@ const ProductDetailView: FC = () => {
       />
       {/* Add to Cart Modal */}
       <AddToCartModal
+        testID={testID}
         orderQty={orderQty}
+        onBlur={handleCloseModal}
         onChangeQty={onHandleChangeQty}
         open={orderModalVisible}
         closeAction={handleCloseModal}
