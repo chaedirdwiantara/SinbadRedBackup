@@ -11,6 +11,9 @@ import {
 import { View, Image, ScrollView } from 'react-native';
 import { Images } from 'src/assets';
 import { useOTP } from '@screen/auth/functions';
+import { useDataPermanent } from '@core/redux/Data';
+import { useEasyRegistration } from '@screen/account/functions';
+import LoadingPage from '@core/components/LoadingPage';
 
 const DataVerificationView: React.FC = () => {
   const [storeName, setStoreName] = useState('');
@@ -19,8 +22,25 @@ const DataVerificationView: React.FC = () => {
   const [errorIdNumber, setErrorIdNumber] = useState(false);
   const [address, setAddress] = useState('');
   const { getLocationPermissions } = useOTP();
+  const { useGetUserMedea } = useEasyRegistration();
+  const { getUserMedea, userMedeaData } = useGetUserMedea();
+  const { advertisingId } = useDataPermanent();
 
   //FUNCTION
+
+  React.useEffect(() => {
+    getUserMedea({ identifierDeviceId: advertisingId });
+  }, []);
+
+  React.useEffect(() => {
+    if (userMedeaData?.data) {
+      setStoreName(userMedeaData?.data?.buyerName);
+      setOwnerName(userMedeaData?.data?.ownerName);
+      setIdNumber(userMedeaData?.data?.idNo);
+      setAddress(userMedeaData?.data?.address);
+    }
+  }, [userMedeaData]);
+
   /** === CHECK ID NUMBER FORMAT === */
   const checkIdNoFormat = (idNumber: any) => {
     setIdNumber(idNumber);
@@ -41,7 +61,7 @@ const DataVerificationView: React.FC = () => {
         <View style={{ marginBottom: layout.spacing.lg }}>
           <SnbTextField2.Text
             type={'disabled'}
-            value={'082288360129'}
+            value={userMedeaData?.data?.ownerPhoneNumber}
             labelText={'Nomor Handphone'}
             keyboardType={'default'}
             mandatory
@@ -123,14 +143,17 @@ const DataVerificationView: React.FC = () => {
       </View>
     );
   };
-  return (
+  return userMedeaData?.data ? (
     <SnbContainer color="white">
       <View>
         <SnbTopNav2.Type1 color="white" title="Verifikasi Data" />
       </View>
       <ScrollView>
         <View
-          style={{ alignItems: 'center', marginVertical: layout.spacing.xl }}>
+          style={{
+            alignItems: 'center',
+            marginVertical: layout.spacing.xl,
+          }}>
           <Image
             source={Images.loginSuccess}
             style={{ height: 220, width: 220 }}
@@ -149,6 +172,8 @@ const DataVerificationView: React.FC = () => {
       </ScrollView>
       {buttonConfirm()}
     </SnbContainer>
+  ) : (
+    <LoadingPage />
   );
 };
 
