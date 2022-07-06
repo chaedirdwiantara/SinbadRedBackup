@@ -117,7 +117,7 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
         Map attributes = new HashMap();
         attributes.put("Screen", screen);
         attributes.put("duration", elapsedtime);
-        NewRelic.recordCustomEvent("RNInteraction", attributes);
+        NewRelic.recordCustomEvent("SinbadEcomInteraction", attributes);
     }
 
     @ReactMethod
@@ -144,6 +144,6 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
 
         localMap.put("logLevel", loglevel);
         localMap.put("platform", "android");
-        NewRelic.recordCustomEvent("RNError", localMap);
+        NewRelic.recordCustomEvent("SinbadEcomError", localMap);
     }
 }
