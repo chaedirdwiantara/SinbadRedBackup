@@ -22,7 +22,7 @@ const registerMerchant = (data: models.IMerchantData) => {
 
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
   const path = 'validate-otp';
-  return apiAuth(path, 'v2', 'POST', data);
+  return apiAuth(path, 'v3', 'POST', data);
 };
 
 const registermerchantDetail = (data: models.IRegisterMerchantSuccess) => {
