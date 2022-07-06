@@ -207,3 +207,35 @@ export const checkPhoneRegistrationV3Failed = (
 export const checkPhoneRegistrationV3Reset = () => {
   return { type: types.CHECK_PHONE_REGISTRATION_V3_RESET };
 };
+
+// GET USER MEDEA
+export const getUserMedeaProcess = (
+  data: models.IUserMedeaProcess,
+): models.IRegisterAction<models.IUserMedeaProcess> => {
+  return {
+    type: types.GET_USER_MEDEA_PROCESS,
+    payload: data,
+  };
+};
+
+export const getUserMedeaSuccess = (
+  data: models.IUserMedea,
+): models.IRegisterAction<models.IUserMedea> => {
+  return {
+    type: types.GET_USER_MEDEA_SUCCESS,
+    payload: data,
+  };
+};
+
+export const getUserMedeaFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.IUserMedeaFailed | unknown> => {
+  return {
+    type: types.GET_USER_MEDEA_FAILED,
+    payload: data,
+  };
+};
+
+export const getUserMedeaReset = () => {
+  return { type: types.GET_USER_MEDEA_RESET };
+};

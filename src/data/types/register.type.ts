@@ -43,3 +43,9 @@ export const CHECK_PHONE_REGISTRATION_V3_FAILED =
   'CheckPhoneRegistrationV3Failed';
 export const CHECK_PHONE_REGISTRATION_V3_RESET =
   'CheckPhoneRegistrationV3Reset';
+
+//GET VERIFICATION USER MEDEA
+export const GET_USER_MEDEA_PROCESS = 'GetUserMedeaProcess';
+export const GET_USER_MEDEA_SUCCESS = 'GetUserMedeaSuccess';
+export const GET_USER_MEDEA_FAILED = 'GetUserMedeaFailed';
+export const GET_USER_MEDEA_RESET = 'GetUserMedeaReset';

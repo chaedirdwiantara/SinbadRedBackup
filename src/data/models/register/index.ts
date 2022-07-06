@@ -139,7 +139,22 @@ export interface ICheckPhoneV3Success {
   message: string;
 }
 
+export interface IUserMedeaProcess {
+  identifierDeviceId: string;
+}
+export interface IUserMedea {
+  data: {
+    ownerName: string;
+    buyerName: string;
+    idNo: string;
+    ownerPhoneNumber: string;
+    address: string;
+  };
+  message: string;
+}
+
 // FAILED MODEL
+export interface IUserMedeaFailed { }
 export interface ICheckPhoneNoAvailabilityFailed { }
 export interface IRegisterMerchantFailed { }
 export interface ICheckEmailAvailabilityFailed { }

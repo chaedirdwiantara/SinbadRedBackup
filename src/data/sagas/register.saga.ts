@@ -127,6 +127,20 @@ function* checkPhoneRegistrationV3(
   }
 }
 
+/** get user medea */
+function* getUserMedea(
+  action: models.IRegisterAction<models.IUserMedeaProcess>,
+) {
+  try {
+    const response: models.IUserMedea = yield call(() =>
+      registerApi.getUserMedea(action.payload),
+    );
+    yield put(ActionCreators.getUserMedeaSuccess(response));
+  } catch (error) {
+    yield put(ActionCreators.getUserMedeaFailed(error));
+  }
+}
+
 function* RegisterSaga() {
   yield takeLatest(types.REGISTER_MERCHANT_PROCESS, registerMerchant);
   yield takeLatest(types.VERIFY_OTP_REGISTER_PROCESS, verifyOTPRegister);
@@ -144,6 +158,7 @@ function* RegisterSaga() {
     types.CHECK_PHONE_REGISTRATION_V3_PROCESS,
     checkPhoneRegistrationV3,
   );
+  yield takeLatest(types.GET_USER_MEDEA_PROCESS, getUserMedea);
 }
 
 export default RegisterSaga;
