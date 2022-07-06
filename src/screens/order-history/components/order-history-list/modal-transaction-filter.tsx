@@ -27,16 +27,24 @@ const transactionFilter = [
     label: 'Diproses',
   },
   {
-    id: 'packed',
-    label: 'Dikemas',
-  },
-  {
     id: 'shipped',
     label: 'Dikirim',
   },
   {
+    id: 'packed',
+    label: 'Dikemas',
+  },
+  {
     id: 'delivered',
     label: 'Tiba di tujuan',
+  },
+  {
+    id: 'cancelled',
+    label: 'Dibatalkan',
+  },
+  {
+    id: 'failed_delivery',
+    label: 'Pengiriman Gagal',
   },
 ];
 
@@ -114,7 +122,7 @@ const ModalTransactionFilter = forwardRef<
       }
       name="filter-order-history"
       type="content"
-      contentHeight={350}
+      contentHeight={450}
       snap
       close={props.onClose}
     />
