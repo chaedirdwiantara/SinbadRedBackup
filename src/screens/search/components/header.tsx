@@ -67,6 +67,10 @@ const header: FC<NavigationHeaderProps> = (props) => {
   }, [me.data]);
 
   const onSearch = useCallback(() => {
+    if (/^\s*$/.test(localKeyword)) {
+      setLocalKeyword('');
+      return void 0;
+    }
     addKeyword(localKeyword);
     // onFetch({ ...derivedQueryOptions, keyword: localKeyword });
     onFetch({ keyword: localKeyword });
