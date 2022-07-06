@@ -102,7 +102,7 @@ const Card: FC<CardProps> = (props) => {
           {data.moreProducts > 0 ? (
             <View style={styles.moreProduct}>
               <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                {`+ ${data?.moreProducts} produk lainnya`}
+                {`+ ${data.moreProducts} produk lainnya`}
               </SnbText2.Paragraph.Small>
             </View>
           ) : null}
@@ -158,7 +158,6 @@ const Card: FC<CardProps> = (props) => {
                   title="Diterima"
                   size="small"
                   key={data.id}
-                  // onPress={onConFirmOrder}
                   onPress={() => setConfirmationOpen(true)}
                   outline={true}
                   full={true}
