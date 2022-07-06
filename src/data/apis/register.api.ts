@@ -48,7 +48,6 @@ const checkPhoneRegistrationV3 = (data: models.ICheckPhoneV3Process) => {
 
 const getUserMedea = (data: models.IUserMedeaProcess) => {
   const path = `user-medea?identifierDeviceId=${data.identifierDeviceId}`;
-  // return apiGeneral(path, 'v1', 'GET');
   return apiGeneral<models.IUserMedea>('auth', path, 'auth', 'v1', 'GET');
 };
 
