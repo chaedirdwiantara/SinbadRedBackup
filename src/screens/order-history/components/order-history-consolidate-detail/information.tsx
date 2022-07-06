@@ -25,7 +25,7 @@ export const Header = (props: HeaderProps) => {
 
 type DescProps = {
   title: string;
-  value: string;
+  value: string | number;
 };
 
 export const Description = (props: DescProps) => {

@@ -18,6 +18,7 @@ import { NavigationAction } from '@core/functions/navigation';
 import { OrderParcels } from '@model/order-history';
 import { useDetailHistoryOrder } from '@screen/order-history/functions/history-detail';
 import { ConfirmationDoneSheet } from '../order-history-list';
+import { labelStatus } from '@screen/order-history/types';
 
 type CardProps = {
   data: OrderParcels;
@@ -28,17 +29,17 @@ const Card: FC<CardProps> = (props) => {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const { doneOrder } = useDetailHistoryOrder();
   const onPressAction = useCallback(() => {
-    const payload: {id: string, type: 'detail'} = {
+    const payload: { id: string; type: 'detail' } = {
       type: 'detail',
-      id: String(data?.id)
+      id: String(data?.id),
     };
-    if(data?.isDisplayDelivered) {
+    if (data?.isDisplayDelivered) {
       return void 0;
     }
-    if(data?.isDisplayDelivered){
+    if (data?.isDisplayDelivered) {
       doneOrder(payload);
     }
-  }, [data?.isDisplayDelivered, data?.id])
+  }, [data?.isDisplayDelivered, data?.id]);
   //render modal confirmation done order
   const renderModalConfirmationDoneOrder = () => {
     return (
@@ -49,8 +50,8 @@ const Card: FC<CardProps> = (props) => {
         // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
           // onPressAction;
-          console.log(data?.id)
-          setConfirmationOpen(false)
+          console.log(data?.id);
+          setConfirmationOpen(false);
         }}
         contentHeight={175}
         onClose={() => setConfirmationOpen(false)}
@@ -71,12 +72,17 @@ const Card: FC<CardProps> = (props) => {
           <Text.Subtitle
             text={data.sellerName}
             actionComponent={
-              <SnbBadge2 type="success" title={data.statusLabel} />
+              <SnbBadge2
+                type={labelStatus[data.statusValue || ''] || 'error'}
+                title={data.statusLabel}
+              />
             }
           />
           {/* timer */}
-          {data.statusValue === 'delivered' ? null : (
-            <ConfirmationTime doneAt={data?.doneAt || ''} />
+          {data.statusValue === 'delivered' ? (
+            <ConfirmationTime doneAt={data.doneAt || ''} />
+          ) : (
+            <View />
           )}
           <View style={styles.product}>
             <SnbImageCompressor style={styles.image} uri={data.productImage} />
@@ -96,7 +102,7 @@ const Card: FC<CardProps> = (props) => {
           {data.moreProducts > 0 ? (
             <View style={styles.moreProduct}>
               <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                {`+ ${data?.moreProducts} produk lainnya`}
+                {`+ ${data.moreProducts} produk lainnya`}
               </SnbText2.Paragraph.Small>
             </View>
           ) : null}
@@ -110,7 +116,7 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
             <SnbText2.Body.Small>
-              {toCurrency(data.totalOrderParcelsAfterTax, {
+              {toCurrency(data.totalOrderParcelAfterTax, {
                 withFraction: false,
               })}
             </SnbText2.Body.Small>
@@ -152,7 +158,6 @@ const Card: FC<CardProps> = (props) => {
                   title="Diterima"
                   size="small"
                   key={data.id}
-                  // onPress={onConFirmOrder}
                   onPress={() => setConfirmationOpen(true)}
                   outline={true}
                   full={true}
@@ -201,7 +206,9 @@ const ConsolidateListOrderDetail = () => {
           <View />
         )}
         {data?.orderParcels.length > 2 ? (
-          <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
+          <TouchableOpacity
+            onPress={() => setShowMore((prev) => !prev)}
+            style={{ marginTop: 16 }}>
             <SnbText2.Body.Small color={colorV2.textColor.link} align="center">
               {showMore ? 'Sembunyikan Supplier' : 'Lihat Supplier Lainnya'}
             </SnbText2.Body.Small>
@@ -219,8 +226,8 @@ const styles = StyleSheet.create({
   main: { margin: 16 },
   card: {
     marginTop: 8,
-    marginBottom: 20,
-    elevation: 6,
+    marginBottom: 8,
+    elevation: 3,
     backgroundColor: colorV2.bgColor.light,
     borderRadius: 8,
     overflow: 'hidden',

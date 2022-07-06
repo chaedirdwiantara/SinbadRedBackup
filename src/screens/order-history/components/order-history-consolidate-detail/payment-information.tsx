@@ -27,7 +27,7 @@ const PaymentInformation = () => {
         value={data?.paymentMethod || ''}
       />
       <Description
-        title={`Total Harga (${data?.totalSku || 0} Barang)`}
+        title={`Total Harga (${data?.totalQty || 0} Barang)`}
         value={toCurrency(data?.totalOrderParcelsAfterTax || 0, {
           withFraction: false,
         })}
