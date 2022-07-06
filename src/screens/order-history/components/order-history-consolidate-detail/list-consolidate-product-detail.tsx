@@ -206,7 +206,9 @@ const ConsolidateListOrderDetail = () => {
           <View />
         )}
         {data?.orderParcels.length > 2 ? (
-          <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
+          <TouchableOpacity
+            onPress={() => setShowMore((prev) => !prev)}
+            style={{ marginTop: 16 }}>
             <SnbText2.Body.Small color={colorV2.textColor.link} align="center">
               {showMore ? 'Sembunyikan Supplier' : 'Lihat Supplier Lainnya'}
             </SnbText2.Body.Small>
@@ -224,8 +226,8 @@ const styles = StyleSheet.create({
   main: { margin: 16 },
   card: {
     marginTop: 8,
-    marginBottom: 20,
-    elevation: 6,
+    marginBottom: 8,
+    elevation: 3,
     backgroundColor: colorV2.bgColor.light,
     borderRadius: 8,
     overflow: 'hidden',

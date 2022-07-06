@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   card: {
     marginTop: 8,
     marginBottom: 8,
-    elevation: 6,
+    elevation: 3,
     backgroundColor: colorV2.bgColor.light,
     borderRadius: 8,
     overflow: 'hidden',
