@@ -9,7 +9,7 @@ export interface OrderParcels {
   isDisplayDelivered: boolean;
   doneAt: string;
   moreProducts: number;
-  totalOrderParcelsAfterTax: number;
+  totalOrderParcelAfterTax: number;
   productId: string;
   productImage: string;
   productName: string;

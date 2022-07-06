@@ -116,7 +116,7 @@ const Card: FC<CardProps> = (props) => {
           <View style={styles.information}>
             <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
             <SnbText2.Body.Small>
-              {toCurrency(data.totalOrderParcelsAfterTax, {
+              {toCurrency(data.totalOrderParcelAfterTax, {
                 withFraction: false,
               })}
             </SnbText2.Body.Small>
