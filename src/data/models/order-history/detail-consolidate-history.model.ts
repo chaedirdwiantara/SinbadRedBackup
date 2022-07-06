@@ -26,7 +26,7 @@ export interface orderConsolidateDetailHistory {
   paymentMethod: string;
   totalOrderParcelsAfterTax: number;
   totalOrderPriceAfterTax: number;
-  totalSku: number;
+  totalQty: number;
   orderParcels: Array<OrderParcels>;
 }
 
