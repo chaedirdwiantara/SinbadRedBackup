@@ -74,7 +74,7 @@ const dataDummyList =  [
               "sellerName": "PT. Tigaraksa Satria Tbk",
               "statusValue": "delivered",
               "statusLabel": "Tiba di Tujuan",
-              "doneAt": "2022-04-12T01:30:34Z",
+              "doneAt": "2022-07-08T01:30:34Z",
               "moreProducts": 2,
               "productId": "4695",
               "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",

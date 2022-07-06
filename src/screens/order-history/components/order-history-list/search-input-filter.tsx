@@ -49,6 +49,7 @@ const SearchInputFilter = () => {
     <View style={styles.main}>
       <View style={styles.input}>
         <SnbTextField2.Text
+          testID={'03'}
           placeholder="Cari Transaksi"
           type="default"
           onChangeText={setSearch}
