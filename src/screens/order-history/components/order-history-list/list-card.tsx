@@ -36,7 +36,7 @@ import ConfirmationTime from '../confirmation-time';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 import {
-  useHistoryListFunction,
+  useConsolidateHistoryListFunction,
   goToWaitingPaymentHistoryDetail,
   useHistoryListPaymentFunction,
 } from '../../functions/history-list';
@@ -217,11 +217,11 @@ const ParcelConsolidation = (dataParcels: any[]) => {
   const { doneOrder } = useDetailHistoryOrder();
   const onDoneOrder = useCallback(
     (idOrder: string) => {
-      const { keyword, orderStatus, status } = state;
-      const payload = { keyword, orderStatus, status, id: idOrder };
+      const { keyword, orderGroupStatus, subOrderGroupStatus, status } = state;
+      const payload = { keyword, orderGroupStatus, subOrderGroupStatus, status, id: idOrder };
       doneOrder({ ...payload, type: 'list' });
     },
-    [state.keyword, state.orderStatus, state.status],
+    [state.keyword, state.orderGroupStatus, state.subOrderGroupStatus, state.status],
   );
   //render modal confirmation done order
   const renderModalConfirmationDoneOrder = () => {
@@ -423,7 +423,7 @@ const ListCard = () => {
   // const { doneOrder } = useDetailHistoryOrder();
   const { onLoadMorePayment, onRefreshPayment } =
     useHistoryListPaymentFunction();
-  const { onLoadMore, onRefresh } = useHistoryListFunction();
+  const { onLoadMore, onRefresh } = useConsolidateHistoryListFunction();
   const {
     stateOrderHistory: {
       list: {
@@ -469,7 +469,7 @@ const ListCard = () => {
   }
 
   // render list waiting paymment
-  if (state.status === 'waiting_for_payment') {
+  if (state.orderGroupStatus === 'waiting_for_payment') {
     return (
       <>
         {[historyListPaymentLoading].some((i) => i) ? (

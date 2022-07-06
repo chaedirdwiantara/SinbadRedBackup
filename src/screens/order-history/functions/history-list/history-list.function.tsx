@@ -2,7 +2,7 @@ import { useEffect, useContext, useCallback, useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { HistoryListContext } from '../../components/order-history-list';
-import { useHistoryListActions, useHistoryListPaymentActions } from './use-history-list.hook';
+import { useHistoryListActions, useHistoryListPaymentActions, useConsolidateHistoryListActions } from './use-history-list.hook';
 import { NavigationAction } from '@navigation';
 // type
 import * as models from '@models';
@@ -12,30 +12,28 @@ export const useInitialGetList = () => {
   const [state] = useContext(HistoryListContext.Context);
   const { dispatchOrderHistory } = useOrderHistoryContext();
   const { dispatchPaymentHistory } = usePaymentHistoryContext();
-  const { fetch, reset } = useHistoryListActions();
+  const { fetch, reset } = useConsolidateHistoryListActions();
   const { fetchWaitingPayment, resetWaitingPayment } = useHistoryListPaymentActions();
 
   useFocusEffect(
     useCallback(() => {
       // list history
       // get & reload by filter
-      const { keyword, orderStatus, status } = state;
-      if (status === 'waiting_for_payment') {
+      const { keyword, orderGroupStatus, subOrderGroupStatus, status } = state;
+      if (orderGroupStatus === 'waiting_for_payment') {
         fetchWaitingPayment(dispatchPaymentHistory, 
           { 
-            orderStatus: '', 
-            status, 
-            keyword: '',
             sort: 'desc',
             sortBy: 'id'
           });
       } else {
-        fetch(dispatchOrderHistory, { orderStatus, status, keyword });
+        fetch(dispatchOrderHistory, { subOrderGroupStatus, orderGroupStatus, status, keyword });
       }
-    }, [state.keyword, state.orderStatus, state.status]),
+    }, [state.keyword, state.orderGroupStatus, state.subOrderGroupStatus, state.status]),
   );
 };
 
+//deprecated
 export const useHistoryListFunction = () => {
   const [state] = useContext(HistoryListContext.Context);
   const {
@@ -56,6 +54,35 @@ export const useHistoryListFunction = () => {
   const onLoadMore = useCallback(() => {
     loadMore(dispatchOrderHistory, list, derivedQueryOptions);
   }, [derivedQueryOptions, list]);
+
+  const onRefresh = useCallback(() => {
+    refresh(dispatchOrderHistory, derivedQueryOptions);
+  }, [derivedQueryOptions]);
+
+  return { onLoadMore, refresh, onRefresh };
+};
+
+export const useConsolidateHistoryListFunction = () => {
+  const [state] = useContext(HistoryListContext.Context);
+  const {
+    dispatchOrderHistory,
+    stateOrderHistory: { consolidateList },
+  } = useOrderHistoryContext();
+  const { loadMore, refresh } = useConsolidateHistoryListActions();
+
+  const derivedQueryOptions = useMemo<models.ConsolidateOrderListHistoryQueryOptions>(
+    () => ({
+      keyword: state.keyword,
+      orderGroupStatus: state.orderGroupStatus,
+      subOrderGroupStatus: state.subOrderGroupStatus,
+      status: state.status,
+    }),
+    [state.keyword, state.orderGroupStatus, state.subOrderGroupStatus, state.status],
+  );
+
+  const onLoadMore = useCallback(() => {
+    loadMore(dispatchOrderHistory, consolidateList, derivedQueryOptions);
+  }, [derivedQueryOptions, consolidateList]);
 
   const onRefresh = useCallback(() => {
     refresh(dispatchOrderHistory, derivedQueryOptions);

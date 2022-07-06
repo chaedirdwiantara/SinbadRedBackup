@@ -9,7 +9,7 @@ const MenuStatusFilter = () => {
   const menuStatusListAction = useMenuStatusListAction();
   const {
     stateOrderHistory: {
-      menuStatus: { loading, data },
+      menuStatus: { data },
     },
     dispatchOrderHistory
   } = useOrderHistoryContext();
@@ -24,13 +24,13 @@ const MenuStatusFilter = () => {
     (id: string) => {
       setState((prev) => ({
         ...prev,
-        status: id,
-        orderStatus: '',
-        subOrderStatus: '',
+        status: '',
+        orderGroupStatus: id,
+        subOrderGroupStatus: '',
         keyword: '',
       }));
     },
-    [state.status],
+    [state.orderGroupStatus],
   );
 
   return (
@@ -46,7 +46,7 @@ const MenuStatusFilter = () => {
               testID={'01'}
               key={i.code}
               text={i.label}
-              active={i.code === state.status ? true : false}
+              active={i.code === state.orderGroupStatus ? true : false}
               onPress={() => onSelectFilter(i.code)}
             />
           </View>

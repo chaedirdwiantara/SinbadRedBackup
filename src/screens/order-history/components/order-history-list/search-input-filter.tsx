@@ -25,25 +25,25 @@ const SearchInputFilter = () => {
   }, [search]);
 
   const onSubmitOrderStatus = useCallback(
-    (orderStatus) => {
-      setState((prev) => ({ ...prev, orderStatus }));
+    (status: string) => {
+      setState((prev) => ({ ...prev, status }));
       filterModalRef.current?.close();
     },
     [filterModalRef.current],
   );
 
   const isShowFilterOrderStatus = useMemo(
-    () => state.status === 'ongoing',
-    [state.status],
+    () => state.orderGroupStatus === 'ongoing',
+    [state.orderGroupStatus],
   );
 
   // clear if change status menu
   useEffect(() => {
     setSearch('');
-  }, [state.status]);
+  }, [state.orderGroupStatus]);
 
   // hide search
-  if (state.status === 'waiting_for_payment') return <View />;
+  if (state.orderGroupStatus === 'waiting_for_payment') return <View />;
 
   return (
     <View style={styles.main}>

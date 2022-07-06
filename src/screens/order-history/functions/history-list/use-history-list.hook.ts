@@ -18,6 +18,20 @@ const callProcessAction = (
     ...queryOptions,
   });
 };
+const callProcessActionConsolidate = (
+  contextDispatch: (action: any) => any,
+  loading: boolean,
+  page: number,
+  perPage: number,
+  queryOptions?: models.ConsolidateOrderListHistoryQueryOptions,
+) => {
+  return Actions.orderHistoryListProcess(contextDispatch, {
+    loading,
+    page,
+    perPage,
+    ...queryOptions,
+  });
+};
 
 const callProcessActionPayment = (
   contextDispatch: (action: any) => any,
@@ -43,6 +57,52 @@ export const useMenuStatusListAction = () => {
     }
   }
 }
+export const useConsolidateHistoryListActions = () => {
+  const dispatch = useDispatch();
+  const perPage = 10;
+  const page = 1;
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.ConsolidateOrderListHistoryQueryOptions,
+    ) => {
+      contextDispatch(Actions.consolidateOrderHistoryListReset());
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
+    },
+    refresh: (
+      contextDispatch: (action: any) => any,
+      queryOptions?: models.ConsolidateOrderListHistoryQueryOptions,
+    ) => {
+      contextDispatch(Actions.consolidateOrderHistoryListRefresh());
+      dispatch(
+        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+      );
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      contextDispatch(Actions.consolidateOrderHistoryListReset());
+    },
+    loadMore: (
+      contextDispatch: (action: any) => any,
+      state: models.ListItemV3Props<Array<models.ConsolidateOrderListHistory>>,
+      queryOptions?: models.ConsolidateOrderListHistoryQueryOptions,
+    ) => {
+      if (state.page < state.totalPage) {
+        contextDispatch(Actions.consolidateOrderHistoryListLoadMore());
+        dispatch(
+          callProcessAction(
+            contextDispatch,
+            false,
+            state.page + 1,
+            perPage,
+            queryOptions,
+          ),
+        );
+      }
+    },
+  };
+};
 export const useHistoryListActions = () => {
   const dispatch = useDispatch();
   const perPage = 10;
