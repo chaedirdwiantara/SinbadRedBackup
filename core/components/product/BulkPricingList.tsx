@@ -29,6 +29,7 @@ type ListPriceProps = {
 };
 
 type BulkPriceListProps = {
+  testID: string;
   bulkPrices: Array<BulkPriceData>;
   onExpand?: (isExpand: boolean) => void;
 };
@@ -63,7 +64,11 @@ const EndListPrice: FC<ListPriceProps> = (props) => (
   </View>
 );
 
-const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices, onExpand }) => {
+const BulkPricingList: FC<BulkPriceListProps> = ({
+  bulkPrices,
+  onExpand,
+  testID,
+}) => {
   const [show, setShow] = useState(true);
   const [fristInitialHeight, setFristInitialHeight] = useState(false);
   const animatedController = useRef(new Animated.Value(1)).current;
@@ -120,7 +125,7 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices, onExpand }) => {
         style={styles.containerTitle}
         onPress={toggleShow}
         activeOpacity={1}
-        testID="collapse_bulk_pricing_list">
+        testID={'collapse_bulk_pricing_list.' + testID}>
         <SnbText2.Body.Default>Harga Grosir</SnbText2.Body.Default>
         <Animated.View style={{ transform: [{ rotateZ: arrowAngleAnimate }] }}>
           <Svg name="expand_less" size={15} />

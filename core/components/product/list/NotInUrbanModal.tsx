@@ -13,6 +13,7 @@ const sinbadCry = require('@image/sinbad_image/cry_sinbad.png');
 
 interface NotInUrbanModalProps {
   errorSubtitle: string;
+  testID: string;
 }
 export interface NotInUrbanModalRef {
   trigger: (isShow?: boolean) => void;
@@ -52,6 +53,7 @@ const NotInUrbanModal = forwardRef<NotInUrbanModalRef, NotInUrbanModalProps>(
 
     return (
       <BottomModalError
+        testID={props.testID}
         onDismis={() => setIsOpen(false)}
         isOpen={isOpen}
         errorTitle={'Lokasi tidak terjangkau'}

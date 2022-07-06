@@ -11,6 +11,7 @@ import ActionSheet from '@core/components/product/ActionSheet';
 import useAddToCart from './add-to-cart.function';
 /** === TYPE ===  */
 interface AddToCartModalProps {
+  testID: string;
   open: boolean;
   closeAction: () => void;
   onAddToCartPress: () => void;
@@ -24,6 +25,7 @@ interface AddToCartModalProps {
 
 /** === COMPONENT ===  */
 const AddToCartModal: FC<AddToCartModalProps> = ({
+  testID,
   open,
   closeAction,
   onBlur,
@@ -83,6 +85,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
   // render
   return (
     <ActionSheet
+      testID={testID}
       contentHeight={contentHeight}
       open={open}
       name="modal-add-to-cart"
@@ -91,6 +94,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       title="Masukkan Jumlah"
       footer={
         <AddToCartFooter
+          testID={'footer-add-to-cart.' + testID}
           isStockEmpty={isStockEmpty}
           errorStock={errorStock}
           disabled={disabled || isFocus}
@@ -102,6 +106,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       }>
       {/* content */}
       <AddToCartProductData
+        testID={'content.' + testID}
         loading={loadingProduct}
         isFromProductDetail={isFromProductDetail}
         orderQty={orderQty}
@@ -112,6 +117,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
       />
       {productDetail?.hasBulkPrice && !loadingProduct ? (
         <BulkPricingList
+          testID={'bulk-price.' + testID}
           bulkPrices={productDetail?.bulkPrices}
           onExpand={setIsBulkPriceExpand}
         />
@@ -119,6 +125,7 @@ const AddToCartModal: FC<AddToCartModalProps> = ({
         <View />
       )}
       <AddToCartQuantityModifier
+        testID={'quantity-modifier.' + testID}
         isStockEmpty={isStockEmpty}
         loading={loadingProduct}
         disabled={false}

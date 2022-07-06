@@ -20,6 +20,7 @@ const { spacing } = spacingV2;
 
 /** === COMPONENT === */
 const ListLayout: FC<ProductLayoutProps> = ({
+  testID,
   products,
   withTags = true,
   tags,
@@ -58,6 +59,7 @@ const ListLayout: FC<ProductLayoutProps> = ({
           marginBottom: spacing.xl,
         }}>
         <ProductListCard
+          testID={testID}
           name={item.name}
           imageUrl={item.thumbnail}
           priceAfterTax={item.priceAfterTax}

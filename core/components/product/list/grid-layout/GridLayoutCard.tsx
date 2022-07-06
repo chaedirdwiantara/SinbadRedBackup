@@ -11,6 +11,7 @@ import { goToProductDetail } from '@core/functions/product';
 import * as models from '@models';
 /** === TYPE ===  */
 interface GridLayoutCardProps {
+  testID: string;
   product: models.ProductList;
   index: number;
   onOrderPress: (item: models.ProductList) => void;
@@ -19,6 +20,7 @@ interface GridLayoutCardProps {
 const { spacing } = spacingV2;
 /** === COMPONENT ===  */
 const GridLayoutCard: FC<GridLayoutCardProps> = ({
+  testID,
   product,
   index,
   onOrderPress,
@@ -33,6 +35,7 @@ const GridLayoutCard: FC<GridLayoutCardProps> = ({
         marginBottom: spacing.lg,
       }}>
       <ProductGridCard
+        testID={testID}
         name={product.name}
         imageUrl={`${product.thumbnail}?tr=w-${imageKitWidth}`}
         qtySoldLabel={
