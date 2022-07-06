@@ -25,7 +25,7 @@ const callProcessActionConsolidate = (
   perPage: number,
   queryOptions?: models.ConsolidateOrderListHistoryQueryOptions,
 ) => {
-  return Actions.orderHistoryListProcess(contextDispatch, {
+  return Actions.consolidateOrderHistoryListProcess(contextDispatch, {
     loading,
     page,
     perPage,
@@ -68,7 +68,7 @@ export const useConsolidateHistoryListActions = () => {
     ) => {
       contextDispatch(Actions.consolidateOrderHistoryListReset());
       dispatch(
-        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+        callProcessActionConsolidate(contextDispatch, true, page, perPage, queryOptions),
       );
     },
     refresh: (
@@ -77,7 +77,7 @@ export const useConsolidateHistoryListActions = () => {
     ) => {
       contextDispatch(Actions.consolidateOrderHistoryListRefresh());
       dispatch(
-        callProcessAction(contextDispatch, true, page, perPage, queryOptions),
+        callProcessActionConsolidate(contextDispatch, true, page, perPage, queryOptions),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {

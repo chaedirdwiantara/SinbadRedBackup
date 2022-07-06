@@ -57,7 +57,7 @@ type CardProps = {
 };
 
 type CardPropsConsolidate = {
-  data: any;
+  data: models.ConsolidateOrderListHistory;
   onConfirmOrder? : () => void;
 }
 
@@ -426,7 +426,7 @@ const ListCard = () => {
   const { onLoadMore, onRefresh } = useConsolidateHistoryListFunction();
   const {
     stateOrderHistory: {
-      list: {
+      consolidateList: {
         loading: historyListLoading,
         data: historyListData,
         error: historyListError,
@@ -552,6 +552,7 @@ const ListCard = () => {
                 }}
               />
             )}
+            onEndReached={onLoadMore}
             ListEmptyComponent={() =>
               dataDummyList.length == 0 ? (
                 <SnbEmptyData
@@ -563,14 +564,14 @@ const ListCard = () => {
                 <View />
               )
             }
-            // refreshControl={
-            //   <RefreshControl
-            //     onRefresh={() => onRefresh()}
-            //     refreshing={[historyListLoading, historyListLoadMore].some(
-            //       (i) => i,
-            //     )}
-            //   />
-            // }
+            refreshControl={
+              <RefreshControl
+                onRefresh={() => onRefresh()}
+                refreshing={[historyListLoading, historyListLoadMore].some(
+                  (i) => i,
+                )}
+              />
+            }
         />
       {/* confirmation  done
       {renderModalConfirmationDoneOrder()} */}

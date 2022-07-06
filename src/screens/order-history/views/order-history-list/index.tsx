@@ -35,7 +35,7 @@ const OrderHistoryList = ({ start }: any) => {
   }, [coachmarkState.data]);
   
 
-  // frist get & get by filter history list
+  // first get & get by filter history list
   useInitialGetList();
   return (
     <SnbContainer color="white">

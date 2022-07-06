@@ -22,6 +22,7 @@ const MenuStatusFilter = () => {
 
   const onSelectFilter = useCallback(
     (id: string) => {
+      console.log('irpan',id)
       setState((prev) => ({
         ...prev,
         status: '',

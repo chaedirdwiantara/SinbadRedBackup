@@ -34,33 +34,33 @@ export const useInitialGetList = () => {
 };
 
 //deprecated
-export const useHistoryListFunction = () => {
-  const [state] = useContext(HistoryListContext.Context);
-  const {
-    dispatchOrderHistory,
-    stateOrderHistory: { list },
-  } = useOrderHistoryContext();
-  const { loadMore, refresh } = useHistoryListActions();
+// export const useHistoryListFunction = () => {
+//   const [state] = useContext(HistoryListContext.Context);
+//   const {
+//     dispatchOrderHistory,
+//     stateOrderHistory: { list },
+//   } = useOrderHistoryContext();
+//   const { loadMore, refresh } = useHistoryListActions();
 
-  const derivedQueryOptions = useMemo<models.OrderListHistoryQueryOptions>(
-    () => ({
-      keyword: state.keyword,
-      orderStatus: state.orderStatus,
-      status: state.status,
-    }),
-    [state.keyword, state.orderStatus, state.status],
-  );
+//   const derivedQueryOptions = useMemo<models.OrderListHistoryQueryOptions>(
+//     () => ({
+//       keyword: state.keyword,
+//       orderStatus: state.orderStatus,
+//       status: state.status,
+//     }),
+//     [state.keyword, state.orderStatus, state.status],
+//   );
 
-  const onLoadMore = useCallback(() => {
-    loadMore(dispatchOrderHistory, list, derivedQueryOptions);
-  }, [derivedQueryOptions, list]);
+//   const onLoadMore = useCallback(() => {
+//     loadMore(dispatchOrderHistory, list, derivedQueryOptions);
+//   }, [derivedQueryOptions, list]);
 
-  const onRefresh = useCallback(() => {
-    refresh(dispatchOrderHistory, derivedQueryOptions);
-  }, [derivedQueryOptions]);
+//   const onRefresh = useCallback(() => {
+//     refresh(dispatchOrderHistory, derivedQueryOptions);
+//   }, [derivedQueryOptions]);
 
-  return { onLoadMore, refresh, onRefresh };
-};
+//   return { onLoadMore, refresh, onRefresh };
+// };
 
 export const useConsolidateHistoryListFunction = () => {
   const [state] = useContext(HistoryListContext.Context);
