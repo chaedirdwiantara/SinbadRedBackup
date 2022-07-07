@@ -62,7 +62,7 @@ export interface IRegisterMerchantDetail {
 }
 
 // SUCCESS MODEL
-export interface ICheckEmailAvailabilitySuccess { }
+export interface ICheckEmailAvailabilitySuccess {}
 export interface ICheckPhoneNoAvailabilitySuccess {
   data: {
     message: string;
@@ -77,9 +77,9 @@ export interface IVerifyOTPRegister {
 }
 
 export interface ISendOTP {
-  mobilePhone: string,
-  type: 'sms' | 'wa'
-  otpHash?: string,
+  mobilePhone: string;
+  type: 'sms' | 'wa';
+  otpHash?: string;
 }
 export interface IVerifyOTPSuccess {
   data: {
@@ -153,9 +153,26 @@ export interface IUserMedea {
   message: string;
 }
 
+export interface IUpdateUserMedeaProcess {
+  ownerName: string;
+  buyerName: string;
+  idNo: string;
+  address: string;
+  ownerPhoneNumber: string;
+}
+
+export interface IUpdateUserMedeaSuccess {
+  data: {
+    id: Number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
 // FAILED MODEL
-export interface IUserMedeaFailed { }
-export interface ICheckPhoneNoAvailabilityFailed { }
-export interface IRegisterMerchantFailed { }
-export interface ICheckEmailAvailabilityFailed { }
-export interface ICheckAutoLoginFailed { }
+export interface IUserMedeaFailed {}
+export interface ICheckPhoneNoAvailabilityFailed {}
+export interface IRegisterMerchantFailed {}
+export interface ICheckEmailAvailabilityFailed {}
+export interface ICheckAutoLoginFailed {}
