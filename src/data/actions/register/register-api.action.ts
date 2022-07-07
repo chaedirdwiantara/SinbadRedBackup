@@ -239,3 +239,35 @@ export const getUserMedeaFailed = (
 export const getUserMedeaReset = () => {
   return { type: types.GET_USER_MEDEA_RESET };
 };
+
+// UPDATE USER MEDEA
+export const updateUserMedeaProcess = (
+  data: models.IUpdateUserMedeaProcess,
+): models.IRegisterAction<models.IUpdateUserMedeaProcess> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_PROCESS,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaSuccess = (
+  data: models.IUpdateUserMedeaSuccess,
+): models.IRegisterAction<models.IUpdateUserMedeaSuccess> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_SUCCESS,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.IUserMedeaFailed | unknown> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_FAILED,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaReset = () => {
+  return { type: types.UPDATE_USER_MEDEA_RESET };
+};
