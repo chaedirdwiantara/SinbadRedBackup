@@ -93,6 +93,18 @@ const CameraWithOCRView = () => {
     }
   }, [ocrImageState]);
 
+  function renderContent() {
+    return (
+      <View
+        style={{ paddingHorizontal: layout.spacing.xl }}
+        onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+        <SnbText2.Paragraph.Small align="center">
+          Harap menggunakan E-KTP asli dan jelas, difoto di dalam bingkai dengan pencahayaan yang memadai dan tidak buram.
+        </SnbText2.Paragraph.Small>
+      </View>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <Camera
@@ -135,7 +147,7 @@ const CameraWithOCRView = () => {
         contentHeight={contentHeight + 100}
         title={
           <SnbBottomSheetPart.Title
-            title="Kesalahan Pengambilan Foto"
+            title="Pastikan Foto Sesuai Ketentuan"
             titleType="center"
             swipeIndicator
           />
@@ -144,16 +156,7 @@ const CameraWithOCRView = () => {
           resetOcrStatusRtdb();
           setRetake(true);
         }}
-        content={
-          <View
-            style={{ paddingHorizontal: layout.spacing.xl }}
-            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
-            <SnbText2.Paragraph.Small align="center">
-              Pastikan foto tidak buram serta ambil foto di ruangan dengan
-              pencahayaan yang memadai.
-            </SnbText2.Paragraph.Small>
-          </View>
-        }
+        content={renderContent()}
         button={
           <View style={{ padding: layout.spacing.lg }}>
             <SnbButton2.Primary
