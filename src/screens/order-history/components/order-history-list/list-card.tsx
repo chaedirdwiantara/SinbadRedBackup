@@ -185,7 +185,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         <View style={styles.information}>
           <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
           <SnbText2.Body.Small>
-            {toCurrency(data.totalOrderPrice, {
+            {toCurrency(data.totalOrderParcelsAfterTax, {
               withFraction: false,
             })}
           </SnbText2.Body.Small>
@@ -203,7 +203,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
               <SnbText2.Body.Small
                 color={
                   colorV2.textColor.link
-                }>{`Lihat ${data.moreSuppliers} Supplier Lainnya`}</SnbText2.Body.Small>
+                }>{`Lihat ${data.totalSupplier} Supplier Lainnya`}</SnbText2.Body.Small>
           </View>
         </TouchableOpacity>
       </View>
@@ -233,7 +233,7 @@ const ParcelConsolidation = (dataParcels: any[]) => {
         desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
         // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
-          // onDoneOrder(confirmationOrderId);
+          onDoneOrder(confirmationOrderId);
           setConfirmationOpen(false);
           // console.log(confirmationOrderId);
         }}
@@ -269,7 +269,7 @@ const ParcelConsolidation = (dataParcels: any[]) => {
           {dataParcel.productName}
         </SnbText2.Paragraph.Default>
         <SnbText2.Body.Default>
-        {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}{toCurrency(dataParcel.productTotalPriceAfterTax, {
+        {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}{toCurrency(dataParcel.totalOrderParcelAfterTax, {
             withFraction: false,
           })}
         </SnbText2.Body.Default>
