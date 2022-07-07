@@ -53,8 +53,9 @@ const MenuSubStatusFilter = () => {
 }
 const styles = StyleSheet.create({
   main: {
+    marginLeft: 4,
     marginRight: 16,
-    marginTop: 16,
+    marginTop: 8,
     marginBottom: 8,
   }
 })

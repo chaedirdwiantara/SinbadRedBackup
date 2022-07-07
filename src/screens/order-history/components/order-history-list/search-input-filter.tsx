@@ -83,6 +83,7 @@ const SearchInputFilter = () => {
 const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 16,
+    paddingBottom: 12,
     flexDirection: 'row',
   },
   input: {

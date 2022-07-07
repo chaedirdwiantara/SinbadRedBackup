@@ -14,9 +14,9 @@ const MenuStatusFilter = () => {
     dispatchOrderHistory
   } = useOrderHistoryContext();
   useEffect(() => {
-    menuStatusListAction.menuStatusList(
-      dispatchOrderHistory,
-    );
+      menuStatusListAction.menuStatusList(
+        dispatchOrderHistory,
+      );
   }, []);
   const [state, setState] = useContext(Context);
 

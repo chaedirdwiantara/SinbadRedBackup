@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { Description, Header } from './information';
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
+import { Divider } from '../order-history-detail/information';
 
 const PaymentInformation = () => {
   const {
@@ -20,6 +21,7 @@ const PaymentInformation = () => {
     );
   }
   return (
+    <>
     <View style={styles.main}>
       <Header title="Informasi Pembayaran" />
       <Description
@@ -39,6 +41,8 @@ const PaymentInformation = () => {
         })}
       />
     </View>
+    <Divider />
+    </>
   );
 };
 
