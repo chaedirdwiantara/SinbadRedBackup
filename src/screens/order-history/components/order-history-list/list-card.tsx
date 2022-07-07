@@ -65,77 +65,30 @@ const dataDummyList =  [
   {
       "orderId": "SNE-2121182635204",
       "orderedAt": "2022-04-12T01:30:34Z",
-      "fulfilment": "2/3 Selesai",
+      "fulfilment": "1/3 Selesai",
       "totalOrderPrice": 20000000,
-      "moreSuppliers": 2,
+      "totalSupplier": 2,
+      "totalOrderParcelsAfterTax": 0,
+      "totalOrderPriceAfterTax": 0,
+      "totalQty": 0,
       "orderParcels": [
           {
               "id": "4640",
               "sellerName": "PT. Tigaraksa Satria Tbk",
-              "statusValue": "delivered",
-              "statusLabel": "Tiba di Tujuan",
-              "doneAt": "2022-07-08T01:30:34Z",
+              "statusValue": "created",
+              "statusLabel": "Diproses",
+              "doneAt": "2022-04-12T01:30:34Z",
               "moreProducts": 2,
+              "totalOrderParcelAfterTax": 110002,
               "productId": "4695",
               "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
               "productName": "SGM ANANDA 1 400 GR GA edit",
               "productQty": 1,
               "productUom": "Kardus",
-              "productTotalPriceAfterTax": 110002
-          },
-          {
-            "id": "4641",
-            "sellerName": "PT. Tigaraksa Satria Tbk2",
-            "statusValue": "created",
-            "statusLabel": "Diproses",
-            "doneAt": "2022-04-12T01:30:34Z",
-            "moreProducts": 3,
-            "productId": "4696",
-            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-            "productName": "SGM ANANDA 2 400 GR GA edit",
-            "productQty": 3,
-            "productUom": "Kardus",
-            "productTotalPriceAfterTax": 110002
-        }
+              "productTotalPriceAfterTax": 0
+          }
       ]
-  },
-  {
-    "orderId": "SNE-2121182635204",
-    "orderedAt": "2022-04-12T01:30:34Z",
-    "fulfilment": "2/3 Selesai",
-    "totalOrderPrice": 20000000,
-    "moreSuppliers": 2,
-    "orderParcels": [
-        {
-            "id": "4642",
-            "sellerName": "PT. Tigaraksa Satria3 Tbk",
-            "statusValue": "delivered",
-            "statusLabel": "Tiba di Tujuan",
-            "doneAt": "2022-04-12T01:30:34Z",
-            "moreProducts": 2,
-            "productId": "4695",
-            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-            "productName": "SGM ANANDA 1 400 GR GA edit",
-            "productQty": 1,
-            "productUom": "Kardus",
-            "productTotalPriceAfterTax": 110002
-        },
-        {
-          "id": "4643",
-          "sellerName": "PT. Tigaraksa Satria4 Tbk2",
-          "statusValue": "created",
-          "statusLabel": "Diproses",
-          "doneAt": "2022-04-12T01:30:34Z",
-          "moreProducts": 3,
-          "productId": "4696",
-          "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-          "productName": "SGM ANANDA 2 400 GR GA edit",
-          "productQty": 3,
-          "productUom": "Kardus",
-          "productTotalPriceAfterTax": 110002
-      }
-    ]
-}
+  }
 ]
 
 type CardWaitingForPaymentProps = {
@@ -185,7 +138,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
         <View style={styles.information}>
           <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
           <SnbText2.Body.Small>
-            {toCurrency(data.totalOrderPrice, {
+            {toCurrency(data.totalOrderParcelsAfterTax, {
               withFraction: false,
             })}
           </SnbText2.Body.Small>
@@ -203,7 +156,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
               <SnbText2.Body.Small
                 color={
                   colorV2.textColor.link
-                }>{`Lihat ${data.moreSuppliers} Supplier Lainnya`}</SnbText2.Body.Small>
+                }>{`Lihat ${data.totalSupplier} Supplier Lainnya`}</SnbText2.Body.Small>
           </View>
         </TouchableOpacity>
       </View>
@@ -233,7 +186,7 @@ const ParcelConsolidation = (dataParcels: any[]) => {
         desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
         // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
-          // onDoneOrder(confirmationOrderId);
+          onDoneOrder(confirmationOrderId);
           setConfirmationOpen(false);
           // console.log(confirmationOrderId);
         }}
@@ -269,7 +222,7 @@ const ParcelConsolidation = (dataParcels: any[]) => {
           {dataParcel.productName}
         </SnbText2.Paragraph.Default>
         <SnbText2.Body.Default>
-        {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}{toCurrency(dataParcel.productTotalPriceAfterTax, {
+        {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}{toCurrency(dataParcel.totalOrderParcelAfterTax, {
             withFraction: false,
           })}
         </SnbText2.Body.Default>
@@ -540,7 +493,7 @@ const ListCard = () => {
     <>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
-            data={dataDummyList}
+            data={historyListData}
             keyExtractor={(i) => i.orderId}
             renderItem={({ item }) => (
               <CardConsolidation
@@ -554,7 +507,7 @@ const ListCard = () => {
             )}
             onEndReached={onLoadMore}
             ListEmptyComponent={() =>
-              dataDummyList.length == 0 ? (
+              historyListData.length == 0 ? (
                 <SnbEmptyData
                   image={<EmptyImage />}
                   subtitle=""
@@ -573,8 +526,6 @@ const ListCard = () => {
               />
             }
         />
-      {/* confirmation  done
-      {renderModalConfirmationDoneOrder()} */}
       </>
     
   );

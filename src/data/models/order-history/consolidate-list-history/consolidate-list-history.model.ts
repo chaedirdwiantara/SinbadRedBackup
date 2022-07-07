@@ -19,7 +19,8 @@ interface ConsolidateOrderParcel {
   productName: string;
   productQty: number;
   productUom: string;
-  productTotalPriceAfterTax: number;
+  // productTotalPriceAfterTax: number;
+  totalOrderParcelAfterTax: number;
 }
 
 export type ConsolidateOrderListHistory = {
@@ -27,7 +28,10 @@ export type ConsolidateOrderListHistory = {
   orderedAt: string;
   fulfilment: string;
   totalOrderPrice: number;
-  moreSuppliers: number;
+  totalOrderParcelsAfterTax: number;
+  totalOrderPriceAfterTax: number;
+  totalSupplier: number;
+  totalQty: number;
   orderParcels: ConsolidateOrderParcel[];
 };
 
