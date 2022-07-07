@@ -135,12 +135,16 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
               id: data.orderId,
             })
           }>
+          {data.totalSupplier > 1 &&
           <View style={styles.toDetailFooter}>
+            
             <SnbText2.Body.Small
               color={
                 colorV2.textColor.link
-              }>{`Lihat ${data.totalSupplier} Supplier Lainnya`}</SnbText2.Body.Small>
+              }>{`Lihat ${data.totalSupplier} Supplier Lainnya`}
+              </SnbText2.Body.Small>  
           </View>
+          }
         </TouchableOpacity>
       </View>
     </Pressable>
