@@ -30,6 +30,8 @@ const OrderHistoryConsolidateDetail = () => {
   }, []);
   return (
     <SnbContainer color="white">
+      {data != null &&
+      <>
       <SnbTopNav2.Type3
         title={data?.orderId}
         color="white"
@@ -44,6 +46,8 @@ const OrderHistoryConsolidateDetail = () => {
         <ConsolidateListOrderDetail />
       </ScrollView>
       <ActionFooter />
+      </>
+      }
     </SnbContainer>
   );
 };
