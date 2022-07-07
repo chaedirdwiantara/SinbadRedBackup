@@ -35,7 +35,7 @@ export const listMenuStatusReducer = simplifyReducer(listMenuStatusInitialState,
   ) {
     return {
       ... state,
-      data: [...state.data, ...payload.data],
+      data: payload.data,
       loading: false,
       loadMore: false,
       refresh: false,
