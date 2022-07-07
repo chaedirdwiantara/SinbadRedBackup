@@ -96,7 +96,7 @@ const CameraWithOCRView = () => {
   function renderContent() {
     return (
       <View
-        style={{ paddingHorizontal: layout.spacing.xl }}
+        style={{ paddingHorizontal: layout.spacing.xl, paddingTop: layout.spacing.md }}
         onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
         <SnbText2.Paragraph.Small align="center">
           Harap menggunakan E-KTP asli dan jelas, difoto di dalam bingkai dengan pencahayaan yang memadai dan tidak buram.
@@ -144,7 +144,7 @@ const CameraWithOCRView = () => {
         ref={bottomSheetRef}
         name="modal-ocr-failed"
         type="content"
-        contentHeight={contentHeight + 100}
+        contentHeight={contentHeight + 120}
         title={
           <SnbBottomSheetPart.Title
             title="Pastikan Foto Sesuai Ketentuan"
