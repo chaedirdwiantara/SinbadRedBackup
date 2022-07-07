@@ -50,7 +50,7 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
     public void addUserId(String userId) {
         Map localMap = new HashMap<>();
         localMap.put("UserId", userId);
-        NewRelic.recordCustomEvent("RnUserId", localMap);
+        NewRelic.recordCustomEvent("UserId", localMap);
     }
 
     @ReactMethod
@@ -65,7 +65,7 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
         try {
             mainObject = new JSONObject(inJson);
             int recLength = mainObject.length();
-            if (recLength > 0) {
+            if (recLength > 0) {a
 
                 JSONArray jsonArray = mainObject.names();
                 for (int i = 0; i < mainObject.length(); i++) {

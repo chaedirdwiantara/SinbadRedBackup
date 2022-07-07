@@ -1,3 +1,5 @@
 import { NativeModules } from 'react-native';
 
-module.exports = NativeModules.NewRelic;
+export default function NewRelic() {
+  return NativeModules.NewRelic;
+}

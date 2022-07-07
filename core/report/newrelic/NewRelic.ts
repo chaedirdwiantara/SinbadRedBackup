@@ -13,7 +13,6 @@ export function recordMetric(inEventType, inJson) {
 }
 
 export function interaction(screen) {
-  console.log(screen);
   NewRelic.interaction(screen);
 }
 
