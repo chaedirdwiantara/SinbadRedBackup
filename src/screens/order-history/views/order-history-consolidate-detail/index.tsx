@@ -30,20 +30,24 @@ const OrderHistoryConsolidateDetail = () => {
   }, []);
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type3
-        title={data?.orderId}
-        color="white"
-        backAction={NavigationAction.back}
-      />
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={get} />
-        }>
-        <InvoiceInformation />
-        <PaymentInformation />
-        <ConsolidateListOrderDetail />
-      </ScrollView>
-      <ActionFooter />
+      {data != null && (
+        <>
+          <SnbTopNav2.Type3
+            title={data?.orderId}
+            color="white"
+            backAction={NavigationAction.back}
+          />
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={get} />
+            }>
+            <InvoiceInformation />
+            <PaymentInformation />
+            <ConsolidateListOrderDetail />
+          </ScrollView>
+          <ActionFooter />
+        </>
+      )}
     </SnbContainer>
   );
 };

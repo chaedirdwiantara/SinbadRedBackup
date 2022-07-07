@@ -34,9 +34,6 @@ const Card: FC<CardProps> = (props) => {
       id: String(data?.id),
     };
     if (data?.isDisplayDelivered) {
-      return void 0;
-    }
-    if (data?.isDisplayDelivered) {
       doneOrder(payload);
     }
   }, [data?.isDisplayDelivered, data?.id]);
@@ -47,10 +44,8 @@ const Card: FC<CardProps> = (props) => {
         open={confirmationOpen}
         title="Pesanan diterima?"
         desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
-        // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
-          // onPressAction;
-          console.log(data?.id);
+          onPressAction();
           setConfirmationOpen(false);
         }}
         contentHeight={175}
@@ -189,23 +184,88 @@ const ConsolidateListOrderDetail = () => {
     );
   }
 
+  //DUMMY CONSOLIDATE ORDER DETAIL
+  const dataX = {
+    orderId: 'SNE-111222333',
+    orderedAt: '2022-04-12T01:30:34Z',
+    fulfilment: '1/3 Selesai',
+    totalSupplier: 2,
+    paymentMethod: 'BCA Virtual Account',
+    totalOrderParcelsAfterTax: 18000,
+    totalOrderPriceAfterTax: 20000,
+    totalSku: 1,
+    orderParcels: [
+      {
+        id: '4640',
+        sellerName: 'PT. Tigaraksa Satria Tbk',
+        statusValue: 'created',
+        statusLabel: 'Diproses',
+        isDisplayTrack: false,
+        isDisplayDelivered: true,
+        doneAt: '2022-04-12T01:30:34Z',
+        moreProducts: 2,
+        totalOrderParcelsAfterTax: 18000,
+        productId: '4695',
+        productImage: 'https://images.sinbad.co.id/odoo_img/product/115810.png',
+        productName: 'SGM ANANDA 1 400 GR GA edit',
+        productQty: 1,
+        productUom: 'Kardus',
+        productTotalPriceAfterTax: 110002,
+      },
+      {
+        id: '4641',
+        sellerName: 'PT. Tigaraksa Satria Tbk',
+        statusValue: 'created',
+        statusLabel: 'Diproses',
+        isDisplayTrack: true,
+        isDisplayDelivered: false,
+        doneAt: '2022-04-12T01:30:34Z',
+        moreProducts: 2,
+        totalOrderParcelsAfterTax: 18000,
+        productId: '4695',
+        productImage: 'https://images.sinbad.co.id/odoo_img/product/115810.png',
+        productName: 'SGM ANANDA 1 400 GR GA edit',
+        productQty: 1,
+        productUom: 'Kardus',
+        productTotalPriceAfterTax: 110002,
+      },
+      {
+        id: '4642',
+        sellerName: 'PT. Tigaraksa Satria Tbk',
+        statusValue: 'created',
+        statusLabel: 'Diproses',
+        isDisplayTrack: false,
+        isDisplayDelivered: false,
+        doneAt: '2022-04-12T01:30:34Z',
+        moreProducts: 2,
+        totalOrderParcelsAfterTax: 18000,
+        productId: '4695',
+        productImage: 'https://images.sinbad.co.id/odoo_img/product/115810.png',
+        productName: 'SGM ANANDA 1 400 GR GA edit',
+        productQty: 1,
+        productUom: 'Kardus',
+        productTotalPriceAfterTax: 110002,
+      },
+    ],
+  };
+
   return (
     <>
       <View style={styles.main}>
         <Header title="Daftar Pesanan" />
         {showMore === false ? (
-          data?.orderParcels
+          dataX?.orderParcels
             .slice(0, 2)
             .map((i) => <Card key={i.id} data={i} />)
         ) : (
           <View />
         )}
         {showMore ? (
-          data?.orderParcels.map((i) => <Card key={i.id} data={i} />)
+          dataX?.orderParcels.map((i) => <Card key={i.id} data={i} />)
         ) : (
           <View />
         )}
-        {data?.orderParcels.length > 2 ? (
+        {dataX?.orderParcels.length > 2 ? (
           <TouchableOpacity
             onPress={() => setShowMore((prev) => !prev)}
             style={{ marginTop: 16 }}>
