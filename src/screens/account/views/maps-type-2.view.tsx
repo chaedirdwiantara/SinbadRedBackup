@@ -8,6 +8,7 @@ import {
   SnbBottomSheetPart,
   SnbButton2,
   SnbContainer,
+  SnbIcon,
   SnbSkeletonAnimator,
   SnbText2,
   spacingV2 as layout,
@@ -15,9 +16,9 @@ import {
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
   Image,
-  LogBox,
   PermissionsAndroid,
   StyleSheet,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import {
@@ -40,6 +41,34 @@ import {
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
 import { debounce } from 'lodash';
+
+interface IconButtonProps {
+  icon: string;
+  onPress: () => void;
+}
+
+const IconButton: React.FC<IconButtonProps> = ({ icon, onPress }) => {
+  return (
+    <TouchableHighlight
+      style={{
+        backgroundColor: colorV2.bgColor.light,
+        paddingVertical: 12.8,
+        paddingHorizontal: 12.8,
+        borderRadius: borderV2.radius.full,
+        alignItems: 'center'
+      }}
+      underlayColor={colorV2.bgColor.neutral}
+      onPress={onPress}>
+      <View style={{ alignItems: 'center' }}>
+        <SnbIcon
+          name={icon}
+          size={18.3}
+          color={colorV2.iconColor.dark}
+        />
+      </View>
+    </TouchableHighlight>
+  )
+}
 
 const MapsViewType2: React.FC = () => {
   const [latLng, setLatLng] = React.useState<LatLng>({
@@ -185,9 +214,6 @@ const MapsViewType2: React.FC = () => {
     } catch (error) {}
   }
 
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
 
   return (
     <SnbContainer color="white">
@@ -205,23 +231,15 @@ const MapsViewType2: React.FC = () => {
           <Image style={styles.marker} source={require('@image/pin_point.png')} />
         </View>
         <View style={{ ...styles.floatingButton }}>
-          <SnbButton2.Icon
+          <IconButton
+            icon='arrow_back'
             onPress={goBack}
-            disabled={false}
-            size="medium"
-            iconName="arrow_back"
           />
         </View>
-        <View
-          style={{
-            ...styles.floatingButton,
-            right: 0,
-          }}>
-          <SnbButton2.Icon
-            size="medium"
+        <View style={{ ...styles.floatingButton, right: 0 }}>
+          <IconButton
+            icon='location'
             onPress={getLocationPermissions}
-            disabled={false}
-            iconName="location"
           />
         </View>
       </View>
