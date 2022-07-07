@@ -162,7 +162,7 @@ const MapsViewType2: React.FC = () => {
         setLoadingGetAddress(false);
         setAddressResult(results);
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async function getUserLocation() {
@@ -211,7 +211,7 @@ const MapsViewType2: React.FC = () => {
       } else {
         getUserLocation();
       }
-    } catch (error) { }
+    } catch (error) {}
   }
 
 
