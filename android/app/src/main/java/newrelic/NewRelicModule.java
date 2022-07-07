@@ -41,7 +41,7 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void nrInit(String FirstScreen) {
+    public void init(String FirstScreen) {
         timerDate = new Date();
         LastScreen = FirstScreen;
     }
@@ -97,16 +97,6 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
 
             NewRelic.recordHandledException(e);
         }
-    }
-    @ReactMethod
-    public void nrRecordMetricNumber(String name, String catagory,double inValue){
-        NewRelic.recordMetric("Custom Metric Name","MyCategory", 1.0);
-        NewRelic.recordMetric(name,catagory,inValue);
-        Log.i("newrelic", String.valueOf(inValue));
-    }
-    @ReactMethod
-    public void applicationVersion(String appversion){
-        //NewRelic.withApplicationVersion(appversion);
     }
 
     @ReactMethod
