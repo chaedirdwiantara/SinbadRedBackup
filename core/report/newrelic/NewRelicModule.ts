@@ -1,5 +1,9 @@
 import { NativeModules } from 'react-native';
 
-export default function NewRelic() {
+function NewRelic(): Promise<{
+  init: string;
+}> {
   return NativeModules.NewRelic;
 }
+
+export default NewRelic;
