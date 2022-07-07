@@ -1,9 +1,9 @@
 import { NativeModules } from 'react-native';
 
-function NewRelic(): Promise<{
-  init: string;
-}> {
+type NewRelicProps = {
+  init: (firstScreen: string) => void;
+};
+
+export function NewRelic(): NewRelicProps {
   return NativeModules.NewRelic;
 }
-
-export default NewRelic;
