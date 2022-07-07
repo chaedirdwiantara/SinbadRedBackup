@@ -570,7 +570,7 @@ const styles = StyleSheet.create({
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { marginTop: 8 },
   waitingForPaymentEmpty: { marginTop: 60, marginHorizontal: 60 },
-  contentContainerStyle: { paddingBottom: 50, paddingTop: 8 },
+  contentContainerStyle: { paddingBottom: 16, paddingTop: 8 },
 });
 
 export default memo(ListCard);
