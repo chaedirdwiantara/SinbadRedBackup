@@ -65,8 +65,7 @@ public class NewRelicModule extends ReactContextBaseJavaModule {
         try {
             mainObject = new JSONObject(inJson);
             int recLength = mainObject.length();
-            if (recLength > 0) {a
-
+            if (recLength > 0) {
                 JSONArray jsonArray = mainObject.names();
                 for (int i = 0; i < mainObject.length(); i++) {
 
