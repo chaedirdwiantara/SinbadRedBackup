@@ -432,6 +432,7 @@ const ListCard = () => {
         ) : (
           <FlatList
             contentContainerStyle={{ paddingBottom: 50 }}
+            style={styles.main}
             data={historyListPaymentData}
             keyExtractor={(i) => String(i.id)}
             renderItem={({ item }) => (
@@ -489,6 +490,7 @@ const ListCard = () => {
     <>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
+        style={styles.main}
         data={historyListData}
         keyExtractor={(i) => i.orderId}
         renderItem={({ item }) => (
@@ -527,6 +529,9 @@ const ListCard = () => {
 };
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: colorV2.bgColor.neutral,
+  },
   card: {
     marginHorizontal: 16,
     marginVertical: 8,
@@ -561,7 +566,7 @@ const styles = StyleSheet.create({
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { marginTop: 8 },
   waitingForPaymentEmpty: { marginTop: 60, marginHorizontal: 60 },
-  contentContainerStyle: { paddingBottom: 50, paddingTop: 30 },
+  contentContainerStyle: { paddingBottom: 50, paddingTop: 8 },
 });
 
 export default memo(ListCard);
