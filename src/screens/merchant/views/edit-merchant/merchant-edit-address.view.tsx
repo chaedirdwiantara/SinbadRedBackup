@@ -80,7 +80,7 @@ const Content: React.FC = () => {
     if (!buyerAddress) {
       detail(dispatchUser);
     } else {
-      address.setValue(buyerAddress.address);
+      buyerAddress.address && address.setValue(buyerAddress.address);
       noteAddress.setValue(buyerAddress.noteAddress || '');
       setVehicleAccessibilityAmount(
         buyerAddress.vehicleAccessibilityAmount
