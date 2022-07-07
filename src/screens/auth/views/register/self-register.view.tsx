@@ -88,6 +88,7 @@ const SelfRegisterView: React.FC = () => {
           <View style={{ padding: layout.spacing.lg }}>
             <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
           </View>
+          <SnbText2.Body.Default>{advertisingId}</SnbText2.Body.Default>
         </View>
       </ScrollView>
     );

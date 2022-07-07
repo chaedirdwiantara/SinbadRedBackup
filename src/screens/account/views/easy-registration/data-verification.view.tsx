@@ -25,7 +25,8 @@ const DataVerificationView: React.FC = () => {
   const [address, setAddress] = useState('');
   const { useGetUserMedea, useUpdateUserMedea } = useEasyRegistration();
   const { getUserMedea, userMedeaData } = useGetUserMedea();
-  const { updateUserMedea, updateUserMedeaData } = useUpdateUserMedea();
+  const { updateUserMedea, updateUserMedeaData, updateUserMedeaReset } =
+    useUpdateUserMedea();
   const { advertisingId } = useDataPermanent();
   const { reset } = useNavigation();
   const [openModalError, setOpenModalError] = useState(false);
@@ -47,6 +48,7 @@ const DataVerificationView: React.FC = () => {
   React.useEffect(() => {
     if (updateUserMedeaData.data) {
       reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      updateUserMedeaReset();
     }
     if (updateUserMedeaData.error) {
       setOpenModalError(true);
@@ -64,7 +66,6 @@ const DataVerificationView: React.FC = () => {
   };
   //HANDLE SUBMIT
   const handleSubmit = () => {
-    console.log('test');
     const update = {
       ownerName: ownerName,
       buyerName: storeName,
@@ -74,8 +75,6 @@ const DataVerificationView: React.FC = () => {
     };
     updateUserMedea(update);
   };
-
-  console.log('data:', updateUserMedeaData);
 
   //VIEW
   const dataForm = () => {
@@ -158,9 +157,17 @@ const DataVerificationView: React.FC = () => {
           <SnbButton2.Primary
             title={'Lanjut'}
             onPress={() => handleSubmit()}
-            // disabled={!storeName || !ownerName || !idNumber || !address}
+            disabled={
+              !storeName ||
+              !ownerName ||
+              !idNumber ||
+              !address ||
+              errorIdNumber ||
+              updateUserMedeaData.loading
+            }
             size="medium"
             full
+            loading={updateUserMedeaData.loading}
           />
         </View>
       </View>
@@ -197,6 +204,7 @@ const DataVerificationView: React.FC = () => {
       <BottomSheetError
         open={openModalError}
         error={updateUserMedeaData.error}
+        closeAction={() => setOpenModalError(false)}
       />
     </SnbContainer>
   ) : (
