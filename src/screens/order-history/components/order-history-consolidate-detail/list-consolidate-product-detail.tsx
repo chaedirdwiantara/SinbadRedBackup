@@ -34,9 +34,6 @@ const Card: FC<CardProps> = (props) => {
       id: String(data?.id),
     };
     if (data?.isDisplayDelivered) {
-      return void 0;
-    }
-    if (data?.isDisplayDelivered) {
       doneOrder(payload);
     }
   }, [data?.isDisplayDelivered, data?.id]);
@@ -47,10 +44,8 @@ const Card: FC<CardProps> = (props) => {
         open={confirmationOpen}
         title="Pesanan diterima?"
         desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
-        // onConfirm={() => onDoneOrder(confirmationOrderId)}
         onConfirm={() => {
-          // onPressAction;
-          console.log(data?.id);
+          onPressAction();
           setConfirmationOpen(false);
         }}
         contentHeight={175}
