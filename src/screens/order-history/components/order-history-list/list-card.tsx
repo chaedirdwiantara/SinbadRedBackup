@@ -65,77 +65,30 @@ const dataDummyList =  [
   {
       "orderId": "SNE-2121182635204",
       "orderedAt": "2022-04-12T01:30:34Z",
-      "fulfilment": "2/3 Selesai",
+      "fulfilment": "1/3 Selesai",
       "totalOrderPrice": 20000000,
-      "moreSuppliers": 2,
+      "totalSupplier": 2,
+      "totalOrderParcelsAfterTax": 0,
+      "totalOrderPriceAfterTax": 0,
+      "totalQty": 0,
       "orderParcels": [
           {
               "id": "4640",
               "sellerName": "PT. Tigaraksa Satria Tbk",
-              "statusValue": "delivered",
-              "statusLabel": "Tiba di Tujuan",
-              "doneAt": "2022-07-08T01:30:34Z",
+              "statusValue": "created",
+              "statusLabel": "Diproses",
+              "doneAt": "2022-04-12T01:30:34Z",
               "moreProducts": 2,
+              "totalOrderParcelAfterTax": 110002,
               "productId": "4695",
               "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
               "productName": "SGM ANANDA 1 400 GR GA edit",
               "productQty": 1,
               "productUom": "Kardus",
-              "productTotalPriceAfterTax": 110002
-          },
-          {
-            "id": "4641",
-            "sellerName": "PT. Tigaraksa Satria Tbk2",
-            "statusValue": "created",
-            "statusLabel": "Diproses",
-            "doneAt": "2022-04-12T01:30:34Z",
-            "moreProducts": 3,
-            "productId": "4696",
-            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-            "productName": "SGM ANANDA 2 400 GR GA edit",
-            "productQty": 3,
-            "productUom": "Kardus",
-            "productTotalPriceAfterTax": 110002
-        }
+              "productTotalPriceAfterTax": 0
+          }
       ]
-  },
-  {
-    "orderId": "SNE-2121182635204",
-    "orderedAt": "2022-04-12T01:30:34Z",
-    "fulfilment": "2/3 Selesai",
-    "totalOrderPrice": 20000000,
-    "moreSuppliers": 2,
-    "orderParcels": [
-        {
-            "id": "4642",
-            "sellerName": "PT. Tigaraksa Satria3 Tbk",
-            "statusValue": "delivered",
-            "statusLabel": "Tiba di Tujuan",
-            "doneAt": "2022-04-12T01:30:34Z",
-            "moreProducts": 2,
-            "productId": "4695",
-            "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-            "productName": "SGM ANANDA 1 400 GR GA edit",
-            "productQty": 1,
-            "productUom": "Kardus",
-            "productTotalPriceAfterTax": 110002
-        },
-        {
-          "id": "4643",
-          "sellerName": "PT. Tigaraksa Satria4 Tbk2",
-          "statusValue": "created",
-          "statusLabel": "Diproses",
-          "doneAt": "2022-04-12T01:30:34Z",
-          "moreProducts": 3,
-          "productId": "4696",
-          "productImage": "https://images.sinbad.co.id/odoo_img/product/115810.png",
-          "productName": "SGM ANANDA 2 400 GR GA edit",
-          "productQty": 3,
-          "productUom": "Kardus",
-          "productTotalPriceAfterTax": 110002
-      }
-    ]
-}
+  }
 ]
 
 type CardWaitingForPaymentProps = {
@@ -540,7 +493,7 @@ const ListCard = () => {
     <>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
-            data={dataDummyList}
+            data={historyListData}
             keyExtractor={(i) => i.orderId}
             renderItem={({ item }) => (
               <CardConsolidation
@@ -554,7 +507,7 @@ const ListCard = () => {
             )}
             onEndReached={onLoadMore}
             ListEmptyComponent={() =>
-              dataDummyList.length == 0 ? (
+              historyListData.length == 0 ? (
                 <SnbEmptyData
                   image={<EmptyImage />}
                   subtitle=""
@@ -573,8 +526,6 @@ const ListCard = () => {
               />
             }
         />
-      {/* confirmation  done
-      {renderModalConfirmationDoneOrder()} */}
       </>
     
   );
