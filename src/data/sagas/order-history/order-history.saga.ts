@@ -32,6 +32,28 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
     );
   }
 }
+/** Get Consolidate History List */
+function* ConsolidateOrderHistoryList(action: models.ListProcessV3Action) {
+  try {
+    const response: models.ListSuccessV3Props<Array<models.ConsolidateOrderListHistory>> =
+      yield call(() => {
+        return OrderHistoryConsolidateApi.getConsolidateOrderHistoryList(
+          action.payload as models.ConsolidateOrderListHistoryProcessProps,
+        );
+      });
+    yield action.contextDispatch(
+      ActionCreators.consolidateOrderHistoryListSuccess(response),
+    );
+    yield put(ActionCreators.consolidateOrderHistoryListSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.consolidateOrderHistoryListFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.consolidateOrderHistoryListFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** Get Consolidate History Detail */
 function* OrderConsolidateHistoryDetail(action: models.DetailProcessAction) {
   try {
@@ -250,6 +272,7 @@ function* MenuStatusList(action: models.ListProcessV3Action){
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
+  yield takeLatest(types.CONSOLIDATE_ORDER_HISTORY_LIST_PROCESS, ConsolidateOrderHistoryList);
   yield takeLatest(
     types.ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS,
     OrderConsolidateHistoryDetail,

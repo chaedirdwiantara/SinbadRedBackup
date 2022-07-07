@@ -4,7 +4,7 @@ import apiMappingV3 from '@core/services/apiMappingV3';
 import * as models from '@models';
 
 /** === CONSTANT === */
-const historyOrderPath = 'order-histories';
+const historyOrderPath = 'order-historiesasdasdasdasdasdasd';
 const orderSellerPath = 'order-sellers';
 
 /** === FUNCTIONS === */

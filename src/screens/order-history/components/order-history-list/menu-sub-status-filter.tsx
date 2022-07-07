@@ -22,13 +22,13 @@ const MenuSubStatusFilter = () => {
   const [state, setState] = useContext(Context);
   const [subFilter, setSubFilter] = useState('')
   const onSelectSubFilter = useCallback(() => {
-    setState((prev) => ({ ...prev, subOrderStatus: subFilter }));
+    setState((prev) => ({ ...prev, subOrderGroupStatus: subFilter }));
   }, [subFilter])
   useEffect(() => {
     onSelectSubFilter();
   }, [subFilter]);
 
-  if(state.status === "waiting_for_payment" || state.status === "ongoing") return <View />;
+  if(state.orderGroupStatus === "waiting_for_payment" || state.orderGroupStatus === "ongoing") return <View />;
   return (
     <View>
         <ScrollView
@@ -42,7 +42,7 @@ const MenuSubStatusFilter = () => {
               testID={'08'}
               key={i.code}
               text={i.label}
-              active= {i.code === state.subOrderStatus ? true : false }
+              active= {i.code === state.subOrderGroupStatus ? true : false }
               onPress={() => setSubFilter(i.code)}
             />
           </View>
