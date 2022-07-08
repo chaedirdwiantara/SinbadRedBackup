@@ -11,11 +11,14 @@ import {
   PaymentInformation,
   ActionFooter,
 } from '@screen/order-history/components/order-history-consolidate-detail';
+import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 
-const OrderHistoryConsolidateDetail = () => {
+const OrderHistoryConsolidateDetail = (props: any) => {
+  const { id } = props?.route.params || '';
+
   const {
     stateOrderHistory: {
-      consolidateDetail: { loading, data },
+      consolidateDetail: { loading },
     },
   } = useOrderHistoryContext();
 
@@ -28,26 +31,23 @@ const OrderHistoryConsolidateDetail = () => {
       clear();
     };
   }, []);
+
   return (
     <SnbContainer color="white">
-      {data != null && (
-        <>
-          <SnbTopNav2.Type3
-            title={data?.orderId}
-            color="white"
-            backAction={NavigationAction.back}
-          />
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={loading} onRefresh={get} />
-            }>
-            <InvoiceInformation />
-            <PaymentInformation />
-            <ConsolidateListOrderDetail />
-          </ScrollView>
-          <ActionFooter />
-        </>
-      )}
+      <SnbTopNav2.Type3
+        title={id}
+        color="white"
+        backAction={NavigationAction.back}
+      />
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={get} />
+        }>
+        <InvoiceInformation />
+        <PaymentInformation />
+        <ConsolidateListOrderDetail />
+      </ScrollView>
+      <ActionFooter />
     </SnbContainer>
   );
 };
