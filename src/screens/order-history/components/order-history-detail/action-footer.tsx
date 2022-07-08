@@ -32,7 +32,7 @@ const ActionFooter = () => {
     }
   }, [data?.isCancellable, data?.isOrderAbleToDone, data?.id]);
 
-    //render modal confirmation done order
+  //render modal confirmation done order
   const renderModalConfirmationDoneOrder = () => {
     return (
       <ConfirmationDoneSheet
@@ -77,11 +77,10 @@ const ActionFooter = () => {
         </TouchableOpacity>
         {data?.isOrderAbleToDone ? (
           <View style={styles.buttonContainer}>
-            <SnbButton2.Secondary
-              title={'Pesanan Diterima'}
+            <SnbButton2.Primary
+              title={'Diterima'}
               size="medium"
               onPress={() => setConfirmationOpen(true)}
-              outline={true}
               full={true}
             />
           </View>
@@ -101,14 +100,13 @@ const styles = StyleSheet.create({
     backgroundColor: colorV2.bgColor.light,
     elevation: 10,
     padding: 16,
-    paddingBottom: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
   icon: { marginRight: 8, marginTop: -2 },
   footerIconText: { flexDirection: 'row', marginLeft: 24 },
-  buttonContainer: { width: 156 },
+  buttonContainer: { width: 156, height: 44, marginTop: 16, marginBottom: 16 },
 });
 
 export default ActionFooter;
