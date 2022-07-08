@@ -11,18 +11,15 @@ const MenuStatusFilter = () => {
     stateOrderHistory: {
       menuStatus: { data },
     },
-    dispatchOrderHistory
+    dispatchOrderHistory,
   } = useOrderHistoryContext();
   useEffect(() => {
-      menuStatusListAction.menuStatusList(
-        dispatchOrderHistory,
-      );
+    menuStatusListAction.menuStatusList(dispatchOrderHistory);
   }, []);
   const [state, setState] = useContext(Context);
 
   const onSelectFilter = useCallback(
     (id: string) => {
-      console.log('irpan',id)
       setState((prev) => ({
         ...prev,
         status: '',
