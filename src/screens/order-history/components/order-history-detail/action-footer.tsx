@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { colorV2, SnbText2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import BottomSheetConfirmation, {
@@ -7,6 +7,7 @@ import BottomSheetConfirmation, {
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
 import Svg from '@svg';
+import { ConfirmationDoneSheet } from '../order-history-list';
 
 const ActionFooter = () => {
   const {
@@ -14,31 +15,39 @@ const ActionFooter = () => {
       detail: { data, loading },
     },
   } = useOrderHistoryContext();
-  const { cancelOrder, doneOrder } = useDetailHistoryOrder();
-  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
+  const { doneOrder } = useDetailHistoryOrder();
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
 
-  const onCancelOrder = useCallback(() => {
-    cancelOrder({ type: 'detail', id: String(data?.id) });
-  }, [data?.id]);
-
+  // const onCancelOrder = useCallback(() => {
+  //   cancelOrder({ type: 'detail', id: String(data?.id) });
+  // }, [data?.id]);
   const onPressAction = useCallback(() => {
     const payload: { id: string; type: 'detail' } = {
       type: 'detail',
       id: String(data?.id),
     };
-    if (data?.isCancellable && data?.isOrderAbleToDone) {
-      // cant action same true
-      return void 0;
-    }
-    // if (data?.isCancellable) {
-    //   // action cancel order
-    //   confirmModalRef.current?.show(data.id);
-    // }
     if (data?.isOrderAbleToDone) {
       // action done order
       doneOrder(payload);
     }
   }, [data?.isCancellable, data?.isOrderAbleToDone, data?.id]);
+
+    //render modal confirmation done order
+  const renderModalConfirmationDoneOrder = () => {
+    return (
+      <ConfirmationDoneSheet
+        open={confirmationOpen}
+        title="Pesanan diterima?"
+        desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+        onConfirm={() => {
+          onPressAction();
+          setConfirmationOpen(false);
+        }}
+        contentHeight={175}
+        onClose={() => setConfirmationOpen(false)}
+      />
+    );
+  };
 
   const onOpenWhatsapp = useCallback(() => {
     const text = `
@@ -71,7 +80,7 @@ const ActionFooter = () => {
             <SnbButton2.Secondary
               title={'Pesanan Diterima'}
               size="medium"
-              onPress={onPressAction}
+              onPress={() => setConfirmationOpen(true)}
               outline={true}
               full={true}
             />
@@ -80,13 +89,8 @@ const ActionFooter = () => {
           <View />
         )}
       </View>
-      {/* confirmation  batalkan*/}
-      <BottomSheetConfirmation
-        ref={confirmModalRef}
-        title="Konfirmasi"
-        desc="Yakin ingin membatalkan pesanan?"
-        onSubmit={onCancelOrder}
-      />
+      {/* confirmation  done*/}
+      {renderModalConfirmationDoneOrder()}
     </>
   );
 };
