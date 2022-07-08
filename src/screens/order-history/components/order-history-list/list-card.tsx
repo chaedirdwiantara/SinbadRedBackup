@@ -65,12 +65,10 @@ import ConfirmationDoneSheet from './confirmation-done-sheet';
 type CardProps = {
   data: models.OrderListHistory;
   onCancelOrder?: () => void;
-  onConFirmOrder?: () => void;
 };
 
 type CardPropsConsolidate = {
   data: models.ConsolidateOrderListHistory;
-  onConfirmOrder?: () => void;
 };
 
 type CardWaitingForPaymentProps = {
@@ -81,17 +79,15 @@ type CardWaitingForPaymentProps = {
 const { width: W } = Dimensions.get('screen');
 
 const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
-  const { data, onConfirmOrder } = props;
+  const { data } = props;
   return (
     <Pressable
       style={styles.card}
       android_ripple={{ color: color.black40 }}
-      onPress={
-        () =>
-          NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
-            id: data.orderId,
-          })
-        // console.log(data.orderId)
+      onPress={() =>
+        NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+          id: data.orderId,
+        })
       }>
       <View style={{ margin: 16 }}>
         {/* top section */}
@@ -130,21 +126,17 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       <View style={{ marginBottom: 16, marginHorizontal: 16 }}>
         <TouchableOpacity
           onPress={() =>
-            // console.log(data.orderId)
             NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
               id: data.orderId,
             })
           }>
-          {data.totalSupplier > 1 &&
-          <View style={styles.toDetailFooter}>
-            
-            <SnbText2.Body.Small
-              color={
-                colorV2.textColor.link
-              }>{`Lihat ${data.totalSupplier} Supplier Lainnya`}
-              </SnbText2.Body.Small>  
-          </View>
-          }
+          {data.totalSupplier > 1 && (
+            <View style={styles.toDetailFooter}>
+              <SnbText2.Body.Small color={colorV2.textColor.link}>
+                {`Lihat ${data.totalSupplier} Supplier Lainnya`}
+              </SnbText2.Body.Small>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </Pressable>
@@ -497,16 +489,7 @@ const ListCard = () => {
         style={styles.main}
         data={historyListData}
         keyExtractor={(i) => i.orderId}
-        renderItem={({ item }) => (
-          <CardConsolidation
-            data={item}
-            // onConfirmOrder= {()=>  console.log('irpan')}
-            onConfirmOrder={() => {
-              // setConfirmationOrderId(item.orderId);
-              // setConfirmationOpen(true)
-            }}
-          />
-        )}
+        renderItem={({ item }) => <CardConsolidation data={item} />}
         onEndReached={onLoadMore}
         ListEmptyComponent={() =>
           historyListData.length == 0 ? (
