@@ -75,7 +75,7 @@ const ActionFooter = () => {
             Butuh Bantuan?
           </SnbText2.Body.Default>
         </TouchableOpacity>
-        {data?.isOrderAbleToDone == false ? (
+        {data?.isOrderAbleToDone ? (
           <View style={styles.buttonContainer}>
             <SnbButton2.Primary
               title={'Diterima'}
