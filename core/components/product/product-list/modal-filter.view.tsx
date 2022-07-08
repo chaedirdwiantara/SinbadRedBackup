@@ -1,4 +1,4 @@
-import React, { FC, memo, useCallback, useMemo, useState } from 'react';
+import React, { FC, memo, useCallback, useMemo, useRef, useState } from 'react';
 import Action from '@core/components/modal-actions';
 import ActionSheet from '../ActionSheet';
 import { useProductListContext } from './';
@@ -9,6 +9,7 @@ type Props = {
 };
 
 const Main: FC<Props> = ({ onFetch, testID }) => {
+  const filterRef = useRef<{ reset: () => void }>(null);
   const [idSortFilter, setIdSortFilter] = useState<string | undefined>('');
   const { state, trigerModal, setQuery } = useProductListContext();
   const visibleModal = useMemo(() => state.modal.filter, [state.modal.filter]);
@@ -24,7 +25,8 @@ const Main: FC<Props> = ({ onFetch, testID }) => {
   const onClearFilter = useCallback(() => {
     setQuery({ maxPrice: 0, minPrice: 0, sortBy: undefined, sort: undefined });
     setIdSortFilter('');
-  }, []);
+    filterRef.current?.reset();
+  }, [filterRef.current?.reset]);
 
   const onButtonPress = useCallback(
     (params: { value: typeof state.query; idSort?: string }) => {
@@ -57,10 +59,11 @@ const Main: FC<Props> = ({ onFetch, testID }) => {
       open={visibleModal}
       name="filter-modal"
       title="Filter"
-      contentHeight={320}
+      contentHeight={340}
       onBlur={() => trigerModal('filter', false)}
       onClose={() => trigerModal('filter', false)}>
       <Action.Filter
+        ref={filterRef}
         testID={'modal-filter.' + testID}
         idSortFilter={idSortFilter}
         onButtonPress={onButtonPress}
