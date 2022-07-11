@@ -14,6 +14,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
+import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
@@ -85,6 +86,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refCartBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -389,7 +391,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               countTotalPrice < 100000 ||
               keyboardFocus.isFocus
             }
-            handleCartCycle={handleCartCyle}
+            handleOpenErrorBusinessModal={() => {
+              refCartBusinessErrorModal.current?.open();
+            }}
+            handleErrorGlobalModalData={errorModal}
           />
         </React.Fragment>
       );
@@ -402,6 +407,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={handleGoBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
+      {/* Business Error Modal When Checkout */}
+      <ShoppingCartValidation
+        closeAction={() => {
+          handleCartCyle();
+          refCartBusinessErrorModal.current?.close();
+        }}
+        parentRef={refCartBusinessErrorModal}
+      />
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
         parentRef={refRemoveProductModal}
