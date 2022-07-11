@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import {
   SnbContainer,
-  SnbToast,
+  SnbToast2,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 // import { cloneDeep, isEqual } from 'lodash';
@@ -14,6 +14,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
+import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
 import LoadingPage from '@core/components/LoadingPage';
@@ -85,6 +86,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refCartBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -322,7 +324,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
       removeProduct(selectRemoveProduct);
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk berhasil dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -330,7 +332,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
     /** error */
     if (stateCart.remove.error !== null) {
-      SnbToast.show('Produk gagal dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk gagal dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -389,7 +391,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               countTotalPrice < 100000 ||
               keyboardFocus.isFocus
             }
-            handleCartCycle={handleCartCyle}
+            handleOpenErrorBusinessModal={() => {
+              refCartBusinessErrorModal.current?.open();
+            }}
+            handleErrorGlobalModalData={errorModal}
           />
         </React.Fragment>
       );
@@ -402,6 +407,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     <SnbContainer color="grey">
       <ShoppingCartHeader goBack={handleGoBack} />
       {!pageLoading ? renderContent() : <LoadingPage />}
+      {/* Business Error Modal When Checkout */}
+      <ShoppingCartValidation
+        closeAction={() => {
+          handleCartCyle();
+          refCartBusinessErrorModal.current?.close();
+        }}
+        parentRef={refCartBusinessErrorModal}
+      />
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
         parentRef={refRemoveProductModal}
@@ -429,6 +442,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };

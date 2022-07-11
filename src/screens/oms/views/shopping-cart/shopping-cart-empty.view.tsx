@@ -1,43 +1,31 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
 /** === IMPORT EXTERNAL FUNCTION HERE ===  */
-import { SnbText2, SnbButton2, colorV2 } from 'react-native-sinbad-ui';
+import { SnbButton2, Content, colorV2 } from 'react-native-sinbad-ui';
 import { Images } from 'src/assets';
 import { goToCategory } from '../../functions';
 
 /** === COMPONENT ===  */
 export const ShoppingCartEmpty: FC = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <View
-      style={{
-        padding: 16,
-        alignItems: 'center',
-      }}>
-      <Image
-        source={Images.cartNotFound}
-        width={180}
-        style={{ marginTop: 24, marginBottom: 16 }}
-      />
-      <View style={{ marginBottom: 8 }}>
-        <SnbText2.Headline.Default color={colorV2.textColor.default}>
-          Keranjang Kosong
-        </SnbText2.Headline.Default>
-      </View>
-      <View style={{ width: '80%' }}>
-        <SnbText2.Paragraph.Default
-          align={'center'}
-          color={colorV2.textColor.secondary}>
-          Yuk isi keranjang Anda dengan produk-produk di Sinbad
-        </SnbText2.Paragraph.Default>
-      </View>
-    </View>
-    <View style={{ alignItems: 'center', marginBottom: 40 }}>
-      <SnbButton2.Primary
-        size="medium"
-        title="Tambah Produk"
-        onPress={goToCategory}
-      />
-    </View>
+  <View
+    style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: colorV2.bgColor.neutral,
+    }}>
+    <Content.Illustration
+      image={Images.cartNotFound}
+      title="Keranjang Kosong"
+      description="Yuk isi keranjang Anda dengan produk-produk di Sinbad"
+      caption={
+        <SnbButton2.Primary
+          title="Tambah Produk"
+          size="medium"
+          onPress={goToCategory}
+        />
+      }
+    />
   </View>
 );

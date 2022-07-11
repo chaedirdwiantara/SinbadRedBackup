@@ -10,6 +10,7 @@ import { CheckoutInvoiceGroupView } from './checkout-invoice-group.view';
 import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
+import { ModalParcelDetail } from './parcel-detail-modal.view';
 import {
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
@@ -33,9 +34,16 @@ import {
   useThankYouPageCancelOrderAction,
 } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
-
+import * as models from '@models';
+/** === INTERFACE === */
+interface ParcelDetailData {
+  data: models.CheckoutCartProduct[];
+  sellerName: string;
+}
 /** === COMPONENT === */
 const OmsCheckoutView: FC = () => {
+  const [parcelDetailData, setParcelDetailData] =
+    React.useState<ParcelDetailData>();
   /** => ACTION */
   const { dispatchCart } = useContext(contexts.CartContext);
   const updateCartAction = useUpdateCartAction();
@@ -57,6 +65,7 @@ const OmsCheckoutView: FC = () => {
   const refExpiredTimeModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refTermConditionModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refBackToCartModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** => Back handler */
   useCustomBackHardware(() => refBackToCartModal.current?.open());
@@ -112,6 +121,22 @@ const OmsCheckoutView: FC = () => {
     goToShoppingCart();
   };
 
+  /** handle set parcel detail data */
+  const handleSetParcelDetailData = (
+    params: models.CheckoutCartProduct[],
+    sellerName: string,
+  ) => {
+    setParcelDetailData({
+      data: params,
+      sellerName,
+    });
+  };
+
+  /** handle open modal parcel detail */
+  const handleOpenModalParcelDetail = () => {
+    refParcelDetailModal.current?.open();
+  };
+
   if (data === null) {
     return null;
   }
@@ -135,7 +160,11 @@ const OmsCheckoutView: FC = () => {
           buyerName={data.buyerName}
         />
         {/* main body view */}
-        <CheckoutInvoiceGroupView data={data} />
+        <CheckoutInvoiceGroupView
+          data={data}
+          handleSetParcelDetailData={handleSetParcelDetailData}
+          handleOpenModalParcelDetail={handleOpenModalParcelDetail}
+        />
         {/* term and condition view */}
         <CheckoutTNCView clickAction={handleOpenTNCModal} />
       </ScrollView>
@@ -163,6 +192,16 @@ const OmsCheckoutView: FC = () => {
           refBackToCartModal.current?.close();
         }}
         handleOkAction={handleBackToCart}
+      />
+
+      {/* modal parcel detail */}
+      <ModalParcelDetail
+        parentRef={refParcelDetailModal}
+        close={() => {
+          refParcelDetailModal.current?.close();
+        }}
+        data={parcelDetailData?.data}
+        sellerName={parcelDetailData?.sellerName}
       />
 
       {/* )} */}

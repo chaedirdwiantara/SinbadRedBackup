@@ -2,7 +2,6 @@
 import {
   matchCartWithCheckData,
   useCheckoutAction,
-  useOmsGeneralFailedState,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
@@ -10,12 +9,10 @@ import {
 } from '@screen/oms/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { FooterButton, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
-import ShoppingCartValidation from './shopping-cart-validation.view';
+import { FooterButton } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
 import * as models from '@models';
-import BottomSheetError from '@core/components/BottomSheetError';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -25,7 +22,8 @@ interface FooterProps {
   countTotalProduct: number;
   countTotalPrice: number;
   isCheckoutDisabled: boolean;
-  handleCartCycle: () => void;
+  handleOpenErrorBusinessModal: () => void;
+  handleErrorGlobalModalData: any;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -33,7 +31,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   countTotalPrice,
   countTotalProduct,
   isCheckoutDisabled,
-  handleCartCycle,
+  handleOpenErrorBusinessModal,
+  handleErrorGlobalModalData,
 }) => {
   /** === STATES === */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
@@ -45,7 +44,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
   const [isCheckoutBtnLoading, setCheckoutBtnLoading] = useState(false);
   const [isUpdateError, setUpdateError] = useState(false);
-  const errorModal = useOmsGeneralFailedState();
   const isFocused = useIsFocused();
 
   /** === ACTIONS === */
@@ -54,9 +52,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
-
-  /** => MODAL REF */
-  const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -76,12 +71,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       setCheckoutPressed(false);
       setCheckoutBtnLoading(true);
     }
-  };
-
-  /** ==> Run cart validation cycle after business error modal dismissed */
-  const handleClose = () => {
-    handleCartCycle();
-    refCartValidationModal.current?.close();
   };
 
   /** === HOOKS === */
@@ -123,7 +112,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         setErrorShown(true);
-        refCartValidationModal.current?.open();
+        handleOpenErrorBusinessModal();
       }
     }
   }, [
@@ -146,7 +135,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       const isErrorCheckStock = stateCart.postCheckStock.error !== null;
 
       const action = () => {
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
       // determine the error data
       let errorData = null;
@@ -159,9 +148,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       }
       // show the modal and the data
       if (isErrorCheckProduct || isErrorCheckSeller || isErrorCheckStock) {
-        errorModal.setCloseAction(() => action);
-        errorModal.setErrorData(errorData);
-        errorModal.setOpen(true);
+        handleErrorGlobalModalData.setCloseAction(() => action);
+        handleErrorGlobalModalData.setErrorData(errorData);
+        handleErrorGlobalModalData.setOpen(true);
         setCheckoutBtnLoading(false);
       }
     }
@@ -197,15 +186,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     // wait all fetch done first
     if (stateCheckout.checkout.error !== null) {
       const action = () => {
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
       // determine the error data
       let errorData = stateCheckout.checkout.error;
       // show the modal and the data
       errorData = stateCheckout.checkout.error;
-      errorModal.setCloseAction(() => action);
-      errorModal.setErrorData(errorData);
-      errorModal.setOpen(true);
+      handleErrorGlobalModalData.setCloseAction(() => action);
+      handleErrorGlobalModalData.setErrorData(errorData);
+      handleErrorGlobalModalData.setOpen(true);
       setCheckoutBtnLoading(false);
     }
   }, [stateCheckout.checkout.error]);
@@ -221,11 +210,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (isUpdateError && stateCart.update.error) {
       const action = () => {
         setUpdateError(false);
-        errorModal.setOpen(false);
+        handleErrorGlobalModalData.setOpen(false);
       };
-      errorModal.setCloseAction(() => action);
-      errorModal.setErrorData(stateCart.update.error);
-      errorModal.setOpen(true);
+      handleErrorGlobalModalData.setCloseAction(() => action);
+      handleErrorGlobalModalData.setErrorData(stateCart.update.error);
+      handleErrorGlobalModalData.setOpen(true);
       setCheckoutBtnLoading(false);
     }
   }, [isUpdateError]);
@@ -235,37 +224,22 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const renderFooterContent = () => (
     <FooterButton.Order
       titleButton="Checkout Sekarang"
+      loading={false}
       loadingButton={isCheckoutBtnLoading}
       disabled={isCheckoutDisabled || isCheckoutBtnLoading}
       value={countTotalPrice}
-      description={`${countTotalProduct} barang dipilih`}
+      description={
+        countTotalProduct > 0
+          ? `(${countTotalProduct}) barang dipilih`
+          : undefined
+      }
       buttonPress={handleOnPressCheckout}
-    />
-  );
-
-  /** ==> Error Business Modal */
-  const renderBusinessErrorModal = () => (
-    <ShoppingCartValidation
-      closeAction={handleClose}
-      parentRef={refCartValidationModal}
+      type={'cart'}
     />
   );
 
   /** ==> Main */
   return (
-    <View style={{ justifyContent: 'flex-end' }}>
-      {renderFooterContent()}
-      {renderBusinessErrorModal()}
-      <BottomSheetError
-        open={errorModal.isOpen}
-        error={errorModal.errorData}
-        closeAction={() => {
-          errorModal.closeAction();
-        }}
-        retryAction={() => {
-          errorModal.closeAction();
-        }}
-      />
-    </View>
+    <View style={{ justifyContent: 'flex-end' }}>{renderFooterContent()}</View>
   );
 };
