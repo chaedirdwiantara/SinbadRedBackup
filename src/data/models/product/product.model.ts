@@ -135,11 +135,11 @@ export interface ProductDetail {
   thumbnailImageUrl: string;
   warehouseOriginId?: number | null;
   taxPrice: number;
-  weightType: string;
-  dimensionLength: number;
-  dimensionWidth: number;
-  dimensionHeight: number;
-  dimensionType: string;
+  packagedWeightLabel: string;
+  packagedDimensionLength: number;
+  packagedDimensionWidth: number;
+  packagedDimensionHeight: number;
+  packagedDimensionLabel: string;
 }
 
 export type ProductSubModule = 'recommendations' | undefined;

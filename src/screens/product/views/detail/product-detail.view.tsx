@@ -227,19 +227,14 @@ const ProductDetailView: FC = () => {
   // information dimension of product
   const dimensionProduct = useMemo(() => {
     const [unit, length, width, height] = [
-      dataProduct?.dimensionType,
-      dataProduct?.dimensionLength,
-      dataProduct?.dimensionWidth,
-      dataProduct?.dimensionHeight,
+      dataProduct?.packagedDimensionLabel ?? 'cm',
+      dataProduct?.packagedDimensionLength ?? 0,
+      dataProduct?.packagedDimensionWidth ?? 0,
+      dataProduct?.packagedDimensionHeight ?? 0,
     ];
     // length x width x height
     return `${length}${unit} X ${width}${unit} X ${height}${unit}`;
-  }, [
-    dataProduct?.dimensionType,
-    dataProduct?.dimensionLength,
-    dataProduct?.dimensionWidth,
-    dataProduct?.dimensionHeight,
-  ]);
+  }, [dataProduct]);
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
     if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
@@ -479,7 +474,7 @@ const ProductDetailView: FC = () => {
             <ProductDetailSectionItem
               name="Berat"
               // unit will be dynamic
-              value={`${dataProduct?.productWeight} ${dataProduct?.weightType}`}
+              value={`${dataProduct?.productWeight} ${dataProduct?.packagedWeightLabel}`}
             />
             <ProductDetailSectionItem
               name="Dimensi per-Dus"
@@ -489,7 +484,7 @@ const ProductDetailView: FC = () => {
           </ProductDetailSection>
           <ProductDetailSection title="Nama Supplier" separator={false}>
             <ProductDetailSectionItem
-              name={dataProduct?.productSeller.name ?? '-'}
+              name={dataProduct?.productSeller?.name ?? '-'}
               value=""
             />
           </ProductDetailSection>
