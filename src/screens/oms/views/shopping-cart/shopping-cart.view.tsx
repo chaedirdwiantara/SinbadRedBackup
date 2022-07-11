@@ -3,7 +3,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { View, ScrollView, StatusBar } from 'react-native';
 import {
   SnbContainer,
-  SnbToast,
+  SnbToast2,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 // import { cloneDeep, isEqual } from 'lodash';
@@ -322,7 +322,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (stateCart.remove.data !== null && selectRemoveProduct !== null) {
       removeProduct(selectRemoveProduct);
       totalCartActions.fetch(dispatchCart);
-      SnbToast.show('Produk berhasil dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk berhasil dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -330,7 +330,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
     /** error */
     if (stateCart.remove.error !== null) {
-      SnbToast.show('Produk gagal dihapus dari keranjang', 2000, {
+      SnbToast2.show('Produk gagal dihapus dari keranjang', 2000, {
         position: 'top',
         positionValue: StatusBar.currentHeight,
       });
@@ -429,6 +429,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
+      <SnbToast2 />
     </SnbContainer>
   );
 };
