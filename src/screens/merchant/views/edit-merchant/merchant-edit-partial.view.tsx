@@ -499,7 +499,7 @@ const MerchantEditPartialView: FC<Props> = (props) => {
             merchantSize.setValue(text);
           }}
           onClearText={() => merchantSize.setValue('')}
-          maxLength={50}
+          maxLength={4}
         />
       </View>
     );
