@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
-import { RefreshControl, ScrollView, View, Text } from 'react-native';
+import { RefreshControl, ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 //function
 import { NavigationAction } from '@core/functions/navigation';
@@ -11,7 +11,6 @@ import {
   PaymentInformation,
   ActionFooter,
 } from '@screen/order-history/components/order-history-consolidate-detail';
-import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
 import { useFocusEffect } from '@react-navigation/native';
 
 const OrderHistoryConsolidateDetail = (props: any) => {
@@ -19,21 +18,21 @@ const OrderHistoryConsolidateDetail = (props: any) => {
 
   const {
     stateOrderHistory: {
-      consolidateDetail: { loading, data },
+      consolidateDetail: { loading },
     },
   } = useOrderHistoryContext();
 
-  const [refresh, setRefresh] = useState(false);
-
   const { get, clear } = useConsolidateDetailHistoryOrder();
   // get consolidate detail data history
-  useEffect(() => {
-    get();
+  useFocusEffect(
+    useCallback(() => {
+      get();
 
-    return () => {
-      clear();
-    };
-  }, []);
+      return () => {
+        clear();
+      };
+    }, []),
+  );
 
   // When Button Diterima OnPress
   useCallback(() => {
@@ -43,13 +42,6 @@ const OrderHistoryConsolidateDetail = (props: any) => {
       clear();
     };
   }, [loading]);
-
-  // When navigate back to this page
-  useFocusEffect(
-    useCallback(() => {
-      get();
-    }, []),
-  );
 
   return (
     <SnbContainer color="white">

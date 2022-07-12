@@ -6,14 +6,12 @@ import {
   InformationInvoice,
   InformationDelivery,
   ListProductOrder,
-  InformationPayment,
   ActionFooter,
 } from '@screen/order-history/components/order-history-detail';
 //function
 import { NavigationAction } from '@core/functions/navigation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
-import { useFocusEffect } from '@react-navigation/native';
 
 const OrderHistoryDetail = () => {
   const {
