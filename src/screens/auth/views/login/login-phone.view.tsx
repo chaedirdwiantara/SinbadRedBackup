@@ -1,5 +1,6 @@
 import {
   setErrorMessage,
+  useAuthAction,
   useInputPhone,
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
