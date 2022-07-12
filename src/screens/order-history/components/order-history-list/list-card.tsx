@@ -53,17 +53,19 @@ type CardProps = {
 
 type CardPropsConsolidate = {
   data: models.ConsolidateOrderListHistory;
+  onRefreshAction: () => void;
 };
 
 type CardWaitingForPaymentProps = {
   data: models.WaitingPaymentListHistory;
-  onDetailOrder?: () => void;
+  onDetailOrder: () => void;
 };
 
 const { width: W } = Dimensions.get('screen');
 
 const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
-  const { data } = props;
+  const { data, onRefreshAction } = props;
+
   return (
     <Pressable
       style={styles.card}
@@ -94,7 +96,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
       <SnbDivider2></SnbDivider2>
       {/* mid section */}
       <View style={{ marginHorizontal: 16, marginTop: 16 }}>
-        {ParcelConsolidation(data.orderParcels)}
+        {ParcelConsolidation(data.orderParcels, onRefreshAction)}
       </View>
       {/* bottom section */}
       <View style={{ marginBottom: 8, marginHorizontal: 16 }}>
@@ -126,7 +128,7 @@ const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
     </Pressable>
   );
 };
-const ParcelConsolidation = (dataParcels: any[]) => {
+const ParcelConsolidation = (dataParcels: any[], refresh: ()=> void) => {
   const [state] = useContext(Context);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [confirmationOrderId, setConfirmationOrderId] = useState('');
@@ -161,6 +163,7 @@ const ParcelConsolidation = (dataParcels: any[]) => {
           onConfirm={() => {
             onDoneOrder(confirmationOrderId);
             setConfirmationOpen(false);
+            refresh();
           }}
           contentHeight={175}
           onClose={() => setConfirmationOpen(false)}
@@ -447,7 +450,11 @@ const ListCard = () => {
         style={styles.main}
         data={historyListData}
         keyExtractor={(i) => i.orderId}
-        renderItem={({ item }) => <CardConsolidation data={item} />}
+        renderItem={({ item }) => 
+        <CardConsolidation 
+          data={item} 
+          onRefreshAction={() => onRefresh()} 
+        />}
         onEndReached={onLoadMore}
         ListEmptyComponent={() =>
           historyListData.length == 0 ? (
