@@ -6,11 +6,13 @@ import {
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
+import { View, ScrollView, BackHandler, Image, Keyboard, TouchableOpacity } from 'react-native';
 import {
+  colorV2,
   SnbBottomSheet2Ref,
   SnbButton2,
   SnbContainer,
+  SnbText,
   SnbText2,
   SnbTextField2,
   SnbTopNav2,
@@ -21,6 +23,7 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
@@ -122,6 +125,9 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
+      <TouchableOpacity onPress={() => Clipboard.setString(advertisingId)}>
+        <SnbText.B1 align='center' color={colorV2.textColor.link}>{advertisingId}</SnbText.B1>
+      </TouchableOpacity>
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
