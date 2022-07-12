@@ -24,7 +24,6 @@ const OrderHistoryDetail = () => {
 
   const { get, clear } = useDetailHistoryOrder();
   // get detail data history
-
   useEffect(() => {
     get();
 
@@ -33,6 +32,7 @@ const OrderHistoryDetail = () => {
     };
   }, []);
 
+  // handle when Button Diterima OnPress
   useCallback(() => {
     loading == true ? get() : null;
 

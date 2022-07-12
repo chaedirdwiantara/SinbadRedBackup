@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { RefreshControl, ScrollView, View, Text } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 //function
@@ -19,9 +19,11 @@ const OrderHistoryConsolidateDetail = (props: any) => {
 
   const {
     stateOrderHistory: {
-      consolidateDetail: { loading },
+      consolidateDetail: { loading, data },
     },
   } = useOrderHistoryContext();
+
+  const [refresh, setRefresh] = useState(false);
 
   const { get, clear } = useConsolidateDetailHistoryOrder();
   // get consolidate detail data history
@@ -33,6 +35,7 @@ const OrderHistoryConsolidateDetail = (props: any) => {
     };
   }, []);
 
+  // When Button Diterima OnPress
   useCallback(() => {
     loading == true ? get() : null;
 
@@ -40,6 +43,13 @@ const OrderHistoryConsolidateDetail = (props: any) => {
       clear();
     };
   }, [loading]);
+
+  // When navigate back to this page
+  useFocusEffect(
+    useCallback(() => {
+      get();
+    }, []),
+  );
 
   return (
     <SnbContainer color="white">
