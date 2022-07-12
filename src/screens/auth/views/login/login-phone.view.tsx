@@ -1,20 +1,18 @@
 import {
   setErrorMessage,
-  useAuthAction,
   useInputPhone,
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image, Keyboard, TouchableOpacity } from 'react-native';
+import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
-  colorV2,
   SnbBottomSheet2Ref,
   SnbButton2,
   SnbContainer,
-  SnbText,
   SnbText2,
   SnbTextField2,
+  SnbToast,
   SnbTopNav2,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
@@ -125,9 +123,14 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
-      <TouchableOpacity onPress={() => Clipboard.setString(advertisingId)}>
-        <SnbText.B1 align='center' color={colorV2.textColor.link}>{advertisingId}</SnbText.B1>
-      </TouchableOpacity>
+      <SnbButton2.Link
+        title={advertisingId}
+        onPress={() => {
+          Clipboard.setString(advertisingId)
+          SnbToast.show('Copied', 2500)
+        }}
+        size="medium"
+      />
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
