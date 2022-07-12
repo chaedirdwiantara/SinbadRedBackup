@@ -249,7 +249,7 @@ pipeline {
             }
         }
         stage('Source Map') {
-            when { expression { SINBAD_ENV != 'development' && SINBAD_ENV != 'staging' } }
+            when { expression { SINBAD_ENV != 'staging' } }
             steps {
                 script{
                     // Get Version Name
