@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { RefreshControl, ScrollView, View, Text } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 //function
@@ -12,6 +12,7 @@ import {
   ActionFooter,
 } from '@screen/order-history/components/order-history-consolidate-detail';
 import { SkeletonAnimator } from '@core/components/SkeletonAnimator';
+import { useFocusEffect } from '@react-navigation/native';
 
 const OrderHistoryConsolidateDetail = (props: any) => {
   const { id } = props?.route.params || '';
@@ -31,6 +32,14 @@ const OrderHistoryConsolidateDetail = (props: any) => {
       clear();
     };
   }, []);
+
+  useCallback(() => {
+    loading == true ? get() : null;
+
+    return () => {
+      clear();
+    };
+  }, [loading]);
 
   return (
     <SnbContainer color="white">
