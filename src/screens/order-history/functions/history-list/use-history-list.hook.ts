@@ -91,7 +91,7 @@ export const useConsolidateHistoryListActions = () => {
       if (state.page < state.totalPage) {
         contextDispatch(Actions.consolidateOrderHistoryListLoadMore());
         dispatch(
-          callProcessAction(
+          callProcessActionConsolidate(
             contextDispatch,
             false,
             state.page + 1,

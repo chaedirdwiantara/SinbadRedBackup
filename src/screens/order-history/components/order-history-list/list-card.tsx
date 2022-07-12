@@ -1,33 +1,21 @@
 import React, {
   FC,
-  forwardRef,
   memo,
-  ReactNode,
   useCallback,
   useContext,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
   useState,
 } from 'react';
 import { toCurrency } from '@core/functions/global/currency-format';
 import {
-  SnbText,
   SnbText2,
-  SnbBadge,
   color,
   colorV2,
   SnbProductListSkeleton,
   SnbEmptyData,
   SnbImageCompressor,
-  SnbButton,
   SnbButton2,
   SnbDivider2,
   SnbBadge2,
-  SnbBottomSheet2,
-  SnbBottomSheet2Ref,
-  SnbBottomSheetPart,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   View,
@@ -40,9 +28,6 @@ import {
   RefreshControl,
 } from 'react-native';
 import moment from 'moment';
-import BottomSheetConfirmation, {
-  BottomSheetTransactionRef,
-} from '@core/components/BottomSheetConfirmation';
 import ConfirmationTime from '../confirmation-time';
 // function
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
@@ -59,7 +44,6 @@ import { NavigationAction } from '@navigation';
 import * as models from '@models';
 import { labelStatus } from '../../types';
 import { usePaymentHistoryContext } from 'src/data/contexts/oms/payment-history/usePaymentHistoryContext';
-import SnbBottomAction from '@sinbad/react-native-sinbad-ui/lib/typescript/components/BottomAction/BottomAction';
 import ConfirmationDoneSheet from './confirmation-done-sheet';
 
 type CardProps = {
@@ -363,9 +347,6 @@ const wordingWaitingForPaymentEmpty = () => {
 
 const ListCard = () => {
   const [state] = useContext(Context);
-  // const [confirmationOpen, setConfirmationOpen] = useState(false);
-  // const [confirmationOrderId, setConfirmationOrderId] = useState('');
-  // const { doneOrder } = useDetailHistoryOrder();
   const { onLoadMorePayment, onRefreshPayment } =
     useHistoryListPaymentFunction();
   const { onLoadMore, onRefresh } = useConsolidateHistoryListFunction();
@@ -389,15 +370,6 @@ const ListCard = () => {
       },
     },
   } = usePaymentHistoryContext();
-  // function
-  // const onDoneOrder = useCallback(
-  //   (idOrder: string) => {
-  //     const { keyword, orderStatus, status } = state;
-  //     const payload = { keyword, orderStatus, status, id: idOrder };
-  //     doneOrder({ ...payload, type: 'list' });
-  //   },
-  //   [state.keyword, state.orderStatus, state.status],
-  // );
   // loading view
   if ([historyListLoading].some((i) => i)) {
     return <SnbProductListSkeleton />;
@@ -467,20 +439,6 @@ const ListCard = () => {
       </>
     );
   }
-  // //render modal confirmation done order
-  // const renderModalConfirmationDoneOrder = () => {
-  //   if(confirmationOrderId != '')
-  //   return (
-  //     <ConfirmationDoneSheet
-  //       open={confirmationOpen}
-  //       title="Pesanan diterima?"
-  //       desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
-  //       onConfirm={() => onDoneOrder(confirmationOrderId)}
-  //       contentHeight={175}
-  //       onClose={() => setConfirmationOpen(false)}
-  //     />
-  //   );
-  // };
   // render order history list
   return (
     <>
