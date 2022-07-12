@@ -10,10 +10,12 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, ScrollView } from 'react-native';
 import { Images } from 'src/assets';
-import { useOTP } from '@screen/auth/functions';
 import { useDataPermanent } from '@core/redux/Data';
 import { useEasyRegistration } from '@screen/account/functions';
 import LoadingPage from '@core/components/LoadingPage';
+import { LIST_LOCATION_VIEW } from '@screen/account/functions/screens_name';
+import { useNavigation } from '@react-navigation/core';
+import BottomSheetError from '@core/components/BottomSheetError';
 
 const DataVerificationView: React.FC = () => {
   const [storeName, setStoreName] = useState('');
@@ -21,13 +23,15 @@ const DataVerificationView: React.FC = () => {
   const [idNumber, setIdNumber] = useState('');
   const [errorIdNumber, setErrorIdNumber] = useState(false);
   const [address, setAddress] = useState('');
-  const { getLocationPermissions } = useOTP();
-  const { useGetUserMedea } = useEasyRegistration();
+  const { useGetUserMedea, useUpdateUserMedea } = useEasyRegistration();
   const { getUserMedea, userMedeaData } = useGetUserMedea();
+  const { updateUserMedea, updateUserMedeaData, updateUserMedeaReset } =
+    useUpdateUserMedea();
   const { advertisingId } = useDataPermanent();
+  const { reset } = useNavigation();
+  const [openModalError, setOpenModalError] = useState(false);
 
   //FUNCTION
-
   React.useEffect(() => {
     getUserMedea({ identifierDeviceId: advertisingId });
   }, []);
@@ -41,6 +45,16 @@ const DataVerificationView: React.FC = () => {
     }
   }, [userMedeaData]);
 
+  React.useEffect(() => {
+    if (updateUserMedeaData.data) {
+      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      updateUserMedeaReset();
+    }
+    if (updateUserMedeaData.error) {
+      setOpenModalError(true);
+    }
+  }, [updateUserMedeaData]);
+
   /** === CHECK ID NUMBER FORMAT === */
   const checkIdNoFormat = (idNumber: any) => {
     setIdNumber(idNumber);
@@ -50,8 +64,16 @@ const DataVerificationView: React.FC = () => {
       setErrorIdNumber(true);
     }
   };
+  //HANDLE SUBMIT
   const handleSubmit = () => {
-    getLocationPermissions();
+    const update = {
+      ownerName: ownerName,
+      buyerName: storeName,
+      idNo: idNumber,
+      address: address,
+      ownerPhoneNumber: userMedeaData?.data?.ownerPhoneNumber,
+    };
+    updateUserMedea(update);
   };
 
   //VIEW
@@ -135,9 +157,17 @@ const DataVerificationView: React.FC = () => {
           <SnbButton2.Primary
             title={'Lanjut'}
             onPress={() => handleSubmit()}
-            disabled={!storeName || !ownerName || !idNumber || !address}
+            disabled={
+              !storeName ||
+              !ownerName ||
+              !idNumber ||
+              !address ||
+              errorIdNumber ||
+              updateUserMedeaData.loading
+            }
             size="medium"
             full
+            loading={updateUserMedeaData.loading}
           />
         </View>
       </View>
@@ -171,6 +201,11 @@ const DataVerificationView: React.FC = () => {
         {dataForm()}
       </ScrollView>
       {buttonConfirm()}
+      <BottomSheetError
+        open={openModalError}
+        error={updateUserMedeaData.error}
+        closeAction={() => setOpenModalError(false)}
+      />
     </SnbContainer>
   ) : (
     <LoadingPage />

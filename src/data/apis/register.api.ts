@@ -51,6 +51,18 @@ const getUserMedea = (data: models.IUserMedeaProcess) => {
   return apiGeneral<models.IUserMedea>('auth', path, 'auth', 'v1', 'GET');
 };
 
+const UpdateUserMedea = (data: models.IUpdateUserMedeaProcess) => {
+  const path = 'user-medea/verify';
+  return apiGeneral<models.IUpdateUserMedeaSuccess>(
+    'auth',
+    path,
+    'account',
+    'v1',
+    'PATCH',
+    data,
+  );
+};
+
 export const registerApi = {
   checkPhoneNoAvailability,
   registerMerchant,
@@ -61,4 +73,5 @@ export const registerApi = {
   checkAutoLogin,
   checkPhoneRegistrationV3,
   getUserMedea,
+  UpdateUserMedea,
 };

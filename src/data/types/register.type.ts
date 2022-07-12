@@ -49,3 +49,9 @@ export const GET_USER_MEDEA_PROCESS = 'GetUserMedeaProcess';
 export const GET_USER_MEDEA_SUCCESS = 'GetUserMedeaSuccess';
 export const GET_USER_MEDEA_FAILED = 'GetUserMedeaFailed';
 export const GET_USER_MEDEA_RESET = 'GetUserMedeaReset';
+
+//UPDATE VERIFICATION USER MEDEA
+export const UPDATE_USER_MEDEA_PROCESS = 'UpdateUserMedeaProcess';
+export const UPDATE_USER_MEDEA_SUCCESS = 'UpdateUserMedeaSuccess';
+export const UPDATE_USER_MEDEA_FAILED = 'UpdateUserMedeaFailed';
+export const UPDATE_USER_MEDEA_RESET = 'UpdateUserMedeaReset';
