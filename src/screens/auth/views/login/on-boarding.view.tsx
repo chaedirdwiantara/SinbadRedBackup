@@ -107,6 +107,10 @@ const OnBoardingView: React.FC<Props> = () => {
     );
   };
 
+  const content = () => {
+    throw new Error('My first Sentry error!');
+  };
+
   const termsNotice = () => {
     return (
       <View style={styles.termsNoticeContainer}>
@@ -114,16 +118,6 @@ const OnBoardingView: React.FC<Props> = () => {
           Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
           Kebijakan Privasi kami
         </SnbText2.Paragraph.Small>
-      </View>
-    );
-  };
-
-  const content = () => {
-    return (
-      <View style={styles.container}>
-        <View />
-        {slideOnBoard()}
-        {termsNotice()}
       </View>
     );
   };
