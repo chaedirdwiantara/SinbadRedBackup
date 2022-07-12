@@ -44,7 +44,7 @@ const transactionFilter = [
     label: 'Dibatalkan',
   },
   {
-    id: 'failed_delivery',
+    id: 'delivery_failed',
     label: 'Pengiriman Gagal',
   },
 ];
