@@ -11,6 +11,7 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
+import { CheckoutTotalOrderView } from './checkout-total-order-view';
 import {
   goToPaymentMethod,
   totalPaymentWithoutCurrency,
@@ -164,6 +165,15 @@ const OmsCheckoutView: FC = () => {
           data={data}
           handleSetParcelDetailData={handleSetParcelDetailData}
           handleOpenModalParcelDetail={handleOpenModalParcelDetail}
+        />
+        {/* total order view */}
+        <CheckoutTotalOrderView
+          totalProductsQty={2}
+          totalProductsValue={200000}
+          discountVoucher={10000}
+          totalDeliveryFee={80000}
+          serviceFee={0}
+          totalPayment={270000}
         />
         {/* term and condition view */}
         <CheckoutTNCView clickAction={handleOpenTNCModal} />

@@ -33,6 +33,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={{
           alignItems: 'center',
           justifyContent: 'center',
+          marginRight: 16,
         }}>
         <SnbGrayscaleImage grayscaleAmount={1} brightnessAmount={1}>
           <Image
@@ -96,7 +97,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           </View>
           {renderProductImage(unavailableProducts[0].productImageUrl)}
           <View style={{ justifyContent: 'center', flex: 1 }}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
               <SnbText2.Paragraph.Default color={colorV2.textColor.disable}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
@@ -125,8 +126,8 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                   />
                 </View>
                 {renderProductImage(item.productImageUrl)}
-                <View style={{ flex: 1 }}>
-                  <View style={{ flex: 1 }}>
+                <View style={{ justifyContent: 'center', flex: 1 }}>
+                  <View style={{ flex: 1, justifyContent: 'center' }}>
                     <SnbText2.Paragraph.Default
                       color={colorV2.textColor.disable}>
                       {item.productName}
