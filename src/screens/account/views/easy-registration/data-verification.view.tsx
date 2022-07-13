@@ -10,7 +10,6 @@ import {
 } from 'react-native-sinbad-ui';
 import { View, Image, ScrollView } from 'react-native';
 import { Images } from 'src/assets';
-import { useDataPermanent } from '@core/redux/Data';
 import { useEasyRegistration } from '@screen/account/functions';
 import LoadingPage from '@core/components/LoadingPage';
 import { LIST_LOCATION_VIEW } from '@screen/account/functions/screens_name';
@@ -27,13 +26,12 @@ const DataVerificationView: React.FC = () => {
   const { getUserMedea, userMedeaData } = useGetUserMedea();
   const { updateUserMedea, updateUserMedeaData, updateUserMedeaReset } =
     useUpdateUserMedea();
-  const { advertisingId } = useDataPermanent();
   const { reset } = useNavigation();
   const [openModalError, setOpenModalError] = useState(false);
 
   //FUNCTION
   React.useEffect(() => {
-    getUserMedea({ identifierDeviceId: advertisingId });
+    getUserMedea();
   }, []);
 
   React.useEffect(() => {
@@ -205,6 +203,11 @@ const DataVerificationView: React.FC = () => {
         open={openModalError}
         error={updateUserMedeaData.error}
         closeAction={() => setOpenModalError(false)}
+        retryAction={() => {
+          updateUserMedeaReset();
+          handleSubmit();
+        }}
+        isCloseable
       />
     </SnbContainer>
   ) : (

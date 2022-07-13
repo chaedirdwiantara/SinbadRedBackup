@@ -128,12 +128,10 @@ function* checkPhoneRegistrationV3(
 }
 
 /** get user medea */
-function* getUserMedea(
-  action: models.IRegisterAction<models.IUserMedeaProcess>,
-) {
+function* getUserMedea() {
   try {
     const response: models.IUserMedea = yield call(() =>
-      registerApi.getUserMedea(action.payload),
+      registerApi.getUserMedea(),
     );
     yield put(ActionCreators.getUserMedeaSuccess(response));
   } catch (error) {

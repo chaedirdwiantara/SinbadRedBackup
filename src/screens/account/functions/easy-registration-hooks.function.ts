@@ -100,8 +100,8 @@ export const useEasyRegistration = () => {
   const useGetUserMedea = () => {
     const { userMedeaData } = useSelector((state: any) => state.auth);
     return {
-      getUserMedea: (data: models.IUserMedeaProcess) => {
-        dispatch(Actions.getUserMedeaProcess(data));
+      getUserMedea: () => {
+        dispatch(Actions.getUserMedeaProcess());
       },
       getUserMedeaReset: () => {
         dispatch(Actions.getUserMedeaReset());
