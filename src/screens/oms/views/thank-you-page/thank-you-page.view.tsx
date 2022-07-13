@@ -449,11 +449,18 @@ const OmsThankYouPageView: FC = () => {
         <LoadingPage />
       ) : (
         <>
+        {params.section == 'orderHistory' ?
           <SnbTopNav2.Type3 
           color="white" 
           title={'Menunggu Pembayaran'} 
           backAction={NavigationAction.back}
           />
+          :
+          <SnbTopNav2.Type1 
+          color="white" 
+          title={'Menunggu Pembayaran'}
+          />
+        }
 
           {renderContent()}
           {renderFooter()}
