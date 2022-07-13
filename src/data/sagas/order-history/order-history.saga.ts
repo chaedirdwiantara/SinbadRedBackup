@@ -153,8 +153,6 @@ function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
 }
 /** Post Done Order */
 function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
-  console.log(action.payload, 'SAGA PAYLOAD');
-
   try {
     const { keyword, orderStatus, status, id, orderId } = action.payload;
 
