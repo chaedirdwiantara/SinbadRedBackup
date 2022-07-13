@@ -30,7 +30,11 @@ const Card: FC<CardProps> = (props) => {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const { doneOrder } = useDetailHistoryOrder();
   const onPressAction = useCallback(() => {
-    const payload: { id: string; type: String; orderId: String } = {
+    const payload: {
+      id: string;
+      type: 'list' | 'detail' | 'detail_consolidate';
+      orderId: string;
+    } = {
       type: 'detail_consolidate',
       id: String(data?.id),
       orderId: String(dataId),
