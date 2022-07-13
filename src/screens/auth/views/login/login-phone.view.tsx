@@ -22,7 +22,6 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
-import Clipboard from '@react-native-clipboard/clipboard';
 
 const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
@@ -124,14 +123,6 @@ const Content: React.FC = () => {
           />
         </View>
       </View>
-      <SnbButton2.Link
-        title={advertisingId}
-        onPress={() => {
-          Clipboard.setString(advertisingId)
-          SnbToast.show('Copied', 2500)
-        }}
-        size="medium"
-      />
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
