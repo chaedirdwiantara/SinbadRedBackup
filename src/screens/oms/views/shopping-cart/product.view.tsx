@@ -160,7 +160,12 @@ export const ProductView: FC<ProductViewProps> = ({
   /** => RENDER PRODUCT IMAGE */
   const renderProductImage = () => {
     return (
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: 16,
+        }}>
         <Image
           source={{
             uri: product.productImageUrl,
