@@ -209,12 +209,9 @@ export const checkPhoneRegistrationV3Reset = () => {
 };
 
 // GET USER MEDEA
-export const getUserMedeaProcess = (
-  data: models.IUserMedeaProcess,
-): models.IRegisterAction<models.IUserMedeaProcess> => {
+export const getUserMedeaProcess = () => {
   return {
     type: types.GET_USER_MEDEA_PROCESS,
-    payload: data,
   };
 };
 
