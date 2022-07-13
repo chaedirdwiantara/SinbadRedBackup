@@ -54,7 +54,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              Biaya Pengiriman
+              Ongkos Kirim
             </SnbText2.Paragraph.Default>
           </View>
           <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
