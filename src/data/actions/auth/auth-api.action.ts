@@ -2,8 +2,8 @@ import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
 import { setUserFCM } from '@core/functions/firebase/fcm-firestore.function';
-import { globalReportFromAction } from '@report/global-report';
-import * as EventName from '@report/moengage/event';
+import { globalReportFromAction } from '@core/report/global-report';
+import * as EventName from '@core/report/moengage/event';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
