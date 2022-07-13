@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'newrelic'
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
@@ -26,8 +27,8 @@ android {
         applicationId 'sinbad.app.development'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 11
-        versionName '0.1.5'
+        versionCode 13
+        versionName '0.2.0'
         missingDimensionStrategy 'react-native-camera', 'general', 'mlkit'
         multiDexEnabled true
     }
@@ -83,6 +84,8 @@ dependencies {
     // For animated GIF support
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    // FOR NEWRELIC
+    implementation 'com.newrelic.agent.android:android-agent:6.1.0'
     // MULTIDEX
     implementation 'androidx.multidex:multidex:2.0.1'
     // REACT NATIVE LIBRARY

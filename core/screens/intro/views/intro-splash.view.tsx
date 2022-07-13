@@ -2,8 +2,9 @@
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
-// import { usePageAfterIntro } from '../functions';
 import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
+import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
+import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
@@ -12,11 +13,12 @@ const IntroSplashView: React.FC = () => {
   const { meV2 } = useDataAuth();
   const { getLocationPermissions } = useOTP();
   /** === HOOK === */
-  // usePageAfterIntro();
   const authCoreAction = useAuthCoreAction();
   // this for google ads ID
   const useAdsIDAction = useAdsID();
   /** === EFFECT === */
+  useGetTokenNotLogin();
+  setFlagByDeviceId();
   /** => get auth me */
   React.useEffect(() => {
     useAdsIDAction.saveAdsID();
@@ -61,4 +63,6 @@ export default IntroSplashView;
  * updatedFunction/Component:
  * -> NaN (no desc)
  * -> NaN (no desc)
+ *
+ * Please, before update this code, confirm to sakti first
  */
