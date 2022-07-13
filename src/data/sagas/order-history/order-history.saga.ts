@@ -154,7 +154,7 @@ function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
 /** Post Done Order */
 function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   try {
-    const { keyword, orderStatus, status, id } = action.payload;
+    const { keyword, orderStatus, status, id, orderId } = action.payload;
 
     const response: models.UpdateSuccessV3Props<any> = yield call(() => {
       return OrderHistoryApi.postDoneOrderHistory(
@@ -175,7 +175,6 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
       );
     }
     if (action.payload.type === 'detail') {
-      //to call order detail
       yield action.contextDispatch(
         ActionCreators.orderHistoryDetailReset(action.contextDispatch),
       );
@@ -184,7 +183,8 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
           id,
         }),
       );
-      //to call order consolidate detail
+    }
+    if (action.payload.type === 'detail_consolidate') {
       yield action.contextDispatch(
         ActionCreators.orderConsolidateHistoryDetailReset(
           action.contextDispatch,
@@ -194,7 +194,7 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
         ActionCreators.orderConsolidateHistoryDetailProcess(
           action.contextDispatch,
           {
-            id,
+            orderId,
           },
         ),
       );

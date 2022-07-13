@@ -9,7 +9,7 @@ export type DetailConsolidateHistoryProps =
 export const detailConsolidateHistoryInitialState: DetailConsolidateHistoryProps =
   {
     data: null,
-    loading: false,
+    loading: true,
     refresh: false,
     error: null,
   };

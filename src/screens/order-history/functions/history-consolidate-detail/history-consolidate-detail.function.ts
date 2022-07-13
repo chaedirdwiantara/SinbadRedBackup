@@ -5,14 +5,22 @@ import { useGetNavParams } from '@core/functions/navigation/navigation-hook.func
 
 type UpdateOrder = {
   id: string;
-  type: 'list' | 'detail';
+  type: 'list' | 'detail' | 'detail_consolidate';
   keyword?: string;
   status?: string;
   orderStatus?: string;
+  orderId?: string;
 };
 
 export const useConsolidateDetailHistoryOrder = () => {
+  const {
+    stateOrderHistory: {
+      consolidateDetail: { data },
+    },
+  } = useOrderHistoryContext();
+
   const { params } = useGetNavParams();
+  console.log(params?.id, 'PARAMS ID');
   const { dispatchOrderHistory } = useOrderHistoryContext();
   const { fetch, cancel, done, reset } = useHistoryConsolidateDetailActions();
 
@@ -20,12 +28,18 @@ export const useConsolidateDetailHistoryOrder = () => {
     fetch(dispatchOrderHistory, { id: params?.id });
   }, [params?.id]);
 
+  // const getNew = useCallback(() => {
+  //   console.log(data?.orderId, 'GET NEW DATA');
+  //   fetch(dispatchOrderHistory, { id: data?.orderId });
+  // }, [data?.orderId]);
+
   const cancelOrder = useCallback((data: UpdateOrder) => {
     cancel(dispatchOrderHistory, data);
   }, []);
 
   const doneOrder = useCallback((data: UpdateOrder) => {
     done(dispatchOrderHistory, data);
+    console.log(params?.id, 'DONE ORDER');
   }, []);
 
   const clear = useCallback(() => {

@@ -22,16 +22,18 @@ import { labelStatus } from '@screen/order-history/types';
 
 type CardProps = {
   data: OrderParcels;
+  dataId: String;
 };
 
 const Card: FC<CardProps> = (props) => {
-  const { data } = props;
+  const { data, dataId } = props;
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const { doneOrder } = useDetailHistoryOrder();
   const onPressAction = useCallback(() => {
-    const payload: { id: string; type: 'detail' } = {
-      type: 'detail',
+    const payload: { id: string; type: String; orderId: String } = {
+      type: 'detail_consolidate',
       id: String(data?.id),
+      orderId: String(dataId),
     };
     if (data?.isDisplayDelivered) {
       doneOrder(payload);
@@ -191,12 +193,14 @@ const ConsolidateListOrderDetail = () => {
         {showMore === false ? (
           data?.orderParcels
             .slice(0, 2)
-            .map((i) => <Card key={i.id} data={i} />)
+            .map((i) => <Card key={i.id} data={i} dataId={data.orderId} />)
         ) : (
           <View />
         )}
         {showMore ? (
-          data?.orderParcels.map((i) => <Card key={i.id} data={i} />)
+          data?.orderParcels.map((i) => (
+            <Card key={i.id} data={i} dataId={data.orderId} />
+          ))
         ) : (
           <View />
         )}

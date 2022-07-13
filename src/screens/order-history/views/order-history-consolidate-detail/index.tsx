@@ -24,7 +24,7 @@ const OrderHistoryConsolidateDetail = (props: any) => {
 
   const { get, clear } = useConsolidateDetailHistoryOrder();
 
-  // get consolidate detail data history
+  // get detail data history
   useEffect(() => {
     get();
 
