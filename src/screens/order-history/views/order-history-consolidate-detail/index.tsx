@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 //function
@@ -23,7 +23,17 @@ const OrderHistoryConsolidateDetail = (props: any) => {
   } = useOrderHistoryContext();
 
   const { get, clear } = useConsolidateDetailHistoryOrder();
-  // get consolidate detail data history
+
+  // get detail data history
+  useEffect(() => {
+    get();
+
+    return () => {
+      clear();
+    };
+  }, []);
+
+  // get data when back or open this page
   useFocusEffect(
     useCallback(() => {
       get();
@@ -34,9 +44,9 @@ const OrderHistoryConsolidateDetail = (props: any) => {
     }, []),
   );
 
-  // When Button Diterima OnPress
+  // handle when Button Diterima OnPress
   useCallback(() => {
-    loading == true ? get() : null;
+    loading ?? get();
 
     return () => {
       clear();

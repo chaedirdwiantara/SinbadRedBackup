@@ -29,9 +29,10 @@ export interface orderConsolidateDetailHistory {
   totalQty: number;
   orderParcels: Array<OrderParcels>;
 }
-
-export interface OrderConsolidateHistoryDetailProcessProps
-  extends models.DetailProcessProps {}
+export interface OrderConsolidateHistoryDetailProcessProps {
+  id?: string;
+  orderId?: string;
+}
 
 export interface OrderConsolidateHistoryDetailProcessAction {
   type: string;

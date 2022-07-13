@@ -5,13 +5,20 @@ import { useGetNavParams } from '@core/functions/navigation/navigation-hook.func
 
 type UpdateOrder = {
   id: string;
-  type: 'list' | 'detail';
+  type: 'list' | 'detail' | 'detail_consolidate';
   keyword?: string;
   status?: string;
   orderStatus?: string;
+  orderId?: string;
 };
 
 export const useConsolidateDetailHistoryOrder = () => {
+  const {
+    stateOrderHistory: {
+      consolidateDetail: { data },
+    },
+  } = useOrderHistoryContext();
+
   const { params } = useGetNavParams();
   const { dispatchOrderHistory } = useOrderHistoryContext();
   const { fetch, cancel, done, reset } = useHistoryConsolidateDetailActions();

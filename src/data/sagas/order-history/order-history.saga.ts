@@ -35,22 +35,27 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
 /** Get Consolidate History List */
 function* ConsolidateOrderHistoryList(action: models.ListProcessV3Action) {
   try {
-    const response: models.ListSuccessV3Props<Array<models.ConsolidateOrderListHistory>> =
-      yield call(() => {
-        return OrderHistoryConsolidateApi.getConsolidateOrderHistoryList(
-          action.payload as models.ConsolidateOrderListHistoryProcessProps,
-        );
-      });
+    const response: models.ListSuccessV3Props<
+      Array<models.ConsolidateOrderListHistory>
+    > = yield call(() => {
+      return OrderHistoryConsolidateApi.getConsolidateOrderHistoryList(
+        action.payload as models.ConsolidateOrderListHistoryProcessProps,
+      );
+    });
     yield action.contextDispatch(
       ActionCreators.consolidateOrderHistoryListSuccess(response),
     );
     yield put(ActionCreators.consolidateOrderHistoryListSuccess(response));
   } catch (error) {
     yield action.contextDispatch(
-      ActionCreators.consolidateOrderHistoryListFailed(error as models.ErrorProps),
+      ActionCreators.consolidateOrderHistoryListFailed(
+        error as models.ErrorProps,
+      ),
     );
     yield put(
-      ActionCreators.consolidateOrderHistoryListFailed(error as models.ErrorProps),
+      ActionCreators.consolidateOrderHistoryListFailed(
+        error as models.ErrorProps,
+      ),
     );
   }
 }
@@ -149,7 +154,7 @@ function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
 /** Post Done Order */
 function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   try {
-    const { keyword, orderStatus, status, id } = action.payload;
+    const { keyword, orderStatus, status, id, orderId } = action.payload;
 
     const response: models.UpdateSuccessV3Props<any> = yield call(() => {
       return OrderHistoryApi.postDoneOrderHistory(
@@ -177,6 +182,21 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
         ActionCreators.orderHistoryDetailProcess(action.contextDispatch, {
           id,
         }),
+      );
+    }
+    if (action.payload.type === 'detail_consolidate') {
+      yield action.contextDispatch(
+        ActionCreators.orderConsolidateHistoryDetailReset(
+          action.contextDispatch,
+        ),
+      );
+      yield put(
+        ActionCreators.orderConsolidateHistoryDetailProcess(
+          action.contextDispatch,
+          {
+            id: action.payload.orderId,
+          },
+        ),
       );
     }
 
@@ -249,7 +269,7 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   }
 }
 /** Get Menu Status List */
-function* MenuStatusList(action: models.ListProcessV3Action){
+function* MenuStatusList(action: models.ListProcessV3Action) {
   try {
     const response: models.ListSuccessV3Props<Array<models.MenuStatusList>> =
       yield call(() => {
@@ -263,16 +283,17 @@ function* MenuStatusList(action: models.ListProcessV3Action){
     yield action.contextDispatch(
       ActionCreators.menuStatusListFailed(error as models.ErrorProps),
     );
-    yield put(
-      ActionCreators.menuStatusListFailed(error as models.ErrorProps),
-    );
+    yield put(ActionCreators.menuStatusListFailed(error as models.ErrorProps));
   }
 }
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
-  yield takeLatest(types.CONSOLIDATE_ORDER_HISTORY_LIST_PROCESS, ConsolidateOrderHistoryList);
+  yield takeLatest(
+    types.CONSOLIDATE_ORDER_HISTORY_LIST_PROCESS,
+    ConsolidateOrderHistoryList,
+  );
   yield takeLatest(
     types.ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS,
     OrderConsolidateHistoryDetail,

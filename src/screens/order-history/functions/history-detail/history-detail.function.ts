@@ -5,10 +5,11 @@ import { useGetNavParams } from '@core/functions/navigation/navigation-hook.func
 
 type UpdateOrder = {
   id: string;
-  type: 'list' | 'detail';
+  type: 'list' | 'detail' | 'detail_consolidate';
   keyword?: string;
   status?: string;
   orderStatus?: string;
+  orderId?: string;
 };
 
 export const useDetailHistoryOrder = () => {
