@@ -196,7 +196,7 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
         ActionCreators.orderConsolidateHistoryDetailProcess(
           action.contextDispatch,
           {
-            orderId,
+            id: action.payload.orderId,
           },
         ),
       );
