@@ -292,7 +292,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
       title={
         <SnbBottomSheetPart.Title
           swipeIndicator
-          title="Detail Pesanan"
+          title="Detail Pembayaran"
           titleType="center"
         />
       }
@@ -303,7 +303,7 @@ export const ModalThankYouPageOrderDetail = forwardRef<
   //   <SnbBottomSheet
   //     open={isOpen}
   //     content={content()}
-  //     title={'Detail Pesanan'}
+  //     title={'Detail Pembayaran'}
   //     closeAction={close}
   //     actionIcon={'close'}
   //   />
