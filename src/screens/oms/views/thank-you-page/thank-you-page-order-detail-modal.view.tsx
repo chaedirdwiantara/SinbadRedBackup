@@ -299,15 +299,4 @@ export const ModalThankYouPageOrderDetail = forwardRef<
       close={onCloseModal}
     />
   );
-  // return data !== null ? (
-  //   <SnbBottomSheet
-  //     open={isOpen}
-  //     content={content()}
-  //     title={'Detail Pembayaran'}
-  //     closeAction={close}
-  //     actionIcon={'close'}
-  //   />
-  // ): (
-  //   <View/>
-  // )
 });
