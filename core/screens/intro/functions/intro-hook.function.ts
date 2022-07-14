@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { NavigationAction } from '@navigation';
 import * as Actions from '../../../data/actions';
 import { useDataAuth } from '@core/redux/Data';
+import { Update } from '@core/functions/global/updateApp/UpdateModule';
 /** === FUNCTION === */
 /** => go to page intro or home */
 const usePageAfterIntro = () => {
@@ -28,5 +29,21 @@ const useSetIntroSinbad = () => {
     },
   };
 };
+/** => set update availbale */
+const useSetUpdateAvailable = () => {
+  const dispatch = useDispatch();
+  return {
+    setUpdateAvailable: () => {
+      Update().checkAppUpdate((data: boolean) => {
+        if (data) {
+          dispatch(Actions.updateApp(data));
+        }
+      });
+    },
+    setUpdateFalse: () => {
+      dispatch(Actions.updateApp(false));
+    },
+  };
+};
 /** === EXPORT === */
-export { usePageAfterIntro, useSetIntroSinbad };
+export { usePageAfterIntro, useSetIntroSinbad, useSetUpdateAvailable };

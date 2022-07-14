@@ -1,0 +1,235 @@
+{
+  "project_info": {
+    "project_number": "968992127937",
+    "firebase_url": "https://sinbad-development-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sinbad-development",
+    "storage_bucket": "sinbad-development.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:756a27de25fb0b4d614d40",
+        "android_client_info": {
+          "package_name": "com.app.sinbaddev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:f75a394b1d56573e614d40",
+        "android_client_info": {
+          "package_name": "com.sinbad.agentdevelopment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:6ad6284d6a04cf65614d40",
+        "android_client_info": {
+          "package_name": "com.sinbad.agentminidevelopment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:df68eee6c9c69ea8614d40",
+        "android_client_info": {
+          "package_name": "sinbad.agent.development"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:e12451a9b42d7cbc614d40",
+        "android_client_info": {
+          "package_name": "sinbad.app.development"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-7p9p6fguvpkoujbhucqklrjpqg9qrq08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sinbad.app.development",
+            "certificate_hash": "e0e661e5877235b134f3620b84938ba019eceb81"
+          }
+        },
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968992127937:android:e38cb8569caa00d1614d40",
+        "android_client_info": {
+          "package_name": "sinbad.app.development.mini"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuWvkwavw32lMuHnIGQOZLkxR5Eo-Hz5g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968992127937-nsuqmu9chm1u20f3ankpdfmvosejlm66.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "968992127937-10lg5v31vod3sdpsgpnd76ulkd8c34ai.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.sinbaddev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

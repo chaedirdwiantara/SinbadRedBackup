@@ -56,3 +56,12 @@ export const resetToIntroSinbad = () => {
     }),
   );
 };
+/** => reset to force update page */
+export const resetToForceUpdate = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'ForceUpdate' }],
+    }),
+  );
+};

@@ -1,8 +1,7 @@
-/** === THIS FOR INTERNAL USED === */
-/** => change flag rtdb */
-export const CHANGE_FLAG_RTDB = 'ChangeFlagRTDB';
-/** => flag update */
-export const UPDATE_APP = 'UpdateApp';
+/** === IMPORT ALL MODULE'S SCREEN VIEW HERE === */
+import ForceUpdateView from './force-update.view';
+/** === EXPORT ALL === */
+export { ForceUpdateView };
 /**
  * ================================================================
  * NOTES

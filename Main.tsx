@@ -9,6 +9,7 @@ import SentryCore from './core/report/sentry/SentryCore';
 import Toast from './core/components/Toast';
 import { BottomSheetModalProvider } from '@sinbad/react-native-sinbad-ui/src/utils/thirdParty';
 import MoengageCore from '@core/report/moengage/MoengageCore';
+import ForceUpdate from '@core/components/ForceUpdate';
 
 const Main = () => {
   return (
@@ -19,6 +20,7 @@ const Main = () => {
             <StatusBarGlobal />
             {/* <PushNotification /> */}
             <MainNavigator />
+            <ForceUpdate />
             <Toast />
             <MoengageCore />
           </PersistGate>

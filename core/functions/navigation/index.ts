@@ -7,6 +7,7 @@ import {
   backToPage,
   resetToHome,
   resetToIntroSinbad,
+  resetToForceUpdate,
 } from '../../navigations/RootNavigation';
 import {
   useGetNavParams,
@@ -22,6 +23,7 @@ export const NavigationAction = {
   backToPage,
   resetToHome,
   resetToIntroSinbad,
+  resetToForceUpdate,
   useGetNavParams,
   useCustomBackHardware,
   useFocusEffect,

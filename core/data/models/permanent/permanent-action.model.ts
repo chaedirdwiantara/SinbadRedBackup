@@ -18,3 +18,8 @@ export interface AppVersionActions {
   type: string;
   payload: any;
 }
+/** === FOR FORCE UPDATE VERSION === */
+export interface ForceUpdateVersionActions {
+  type: string;
+  payload: number;
+}

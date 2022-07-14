@@ -1,7 +1,5 @@
 import { NativeModules } from 'react-native';
 
-type UpdateAvailablelity = boolean;
-
 interface UpdateProps {
   checkAppUpdate(data: any): Promise<boolean>;
 }
