@@ -275,9 +275,11 @@ pipeline {
 
                     sh "if [ -d ${WORKSPACE}/source_maps ]; then rm -Rf ${WORKSPACE}/source_maps; fi"
                     sh "mkdir ${WORKSPACE}/source_maps"
-                    sh "node_modules/react-native/scripts/compose-source-maps.js android/app/build/intermediates/sourcemaps/react/release/index.android.bundle.packager.map android/app/build/intermediates/sourcemaps/react/release/index.android.bundle.compiler.map -o source_maps/index.android.bundle.map"
+                    sh "react-native bundle --dev false --platform android --entry-file index.js --bundle-output source_maps/index.android.bundle  --sourcemap-output source_maps/index.android.bundle.packager.map"
+                    sh "node_modules/hermes-engine/linux64-bin/hermesc -emit-binary -out source_maps/index.android.bundle.compiler.hbc source_maps/index.android.bundle -output-source-map"
+                    sh "node_modules/react-native/scripts/compose-source-maps.js source_maps/index.android.bundle.packager.map source_maps/index.android.bundle.compiler.hbc.map -o source_maps/index.android.bundle.map"
                     withCredentials([string(credentialsId: 'sentry-sinbad', variable: 'SENTRYTOKEN')]) {
-                        sh "node_modules/@sentry/cli/sentry-cli --auth-token ${SENTRYTOKEN} releases --org sinbad-id --project sinbad-red-ng-${SINBAD_ENV} files ${env.APP_ID}@${env.APP_VERSION_NAME}+${env.APP_VERSION_CODE} upload-sourcemaps --dist ${env.APP_VERSION_CODE} --strip-prefix . --rewrite android/app/build/generated/assets/react/release/index.android.bundle source_maps/index.android.bundle.map"
+                        sh "node_modules/@sentry/cli/sentry-cli --auth-token ${SENTRYTOKEN} releases --org sinbad-id --project sinbad-red-ng-${SINBAD_ENV} files ${env.APP_ID}@${env.APP_VERSION_NAME}+${env.APP_VERSION_CODE} upload-sourcemaps --dist ${env.APP_VERSION_CODE} --strip-prefix . --rewrite source_maps/index.android.bundle source_maps/index.android.bundle.map"
                     }
                 }
             }
