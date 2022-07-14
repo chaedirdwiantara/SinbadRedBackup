@@ -31,15 +31,13 @@ const Card: FC<CardProps> = (props) => {
               <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
                 {data.name}
               </SnbText2.Paragraph.Default>
-              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                {`(${data.qty}) ${data.uom}`}
-              </SnbText2.Paragraph.Small>
               <SnbText2.Body.Default>
+                {`(${data.qty}) ${data.uom}`} x{' '}
                 {toCurrency(data.productPriceAfterTax, { withFraction: false })}
               </SnbText2.Body.Default>
             </View>
           </View>
-          <View style={{ marginVertical: 16 }}>
+          <View style={{ marginVertical: 8 }}>
             <SnbDivider2 type="solid" />
           </View>
         </View>
@@ -60,18 +58,12 @@ const Card: FC<CardProps> = (props) => {
 };
 
 const ListProductOrder = () => {
-  const [showMore, setShowMore] = useState(false);
-
   const {
     stateOrderHistory: {
       detail: { loading, data },
     },
   } = useOrderHistoryContext();
 
-  const [fristProduct, ...listProduct] = useMemo(
-    () => data?.products || [],
-    [data?.products],
-  );
   if (loading) {
     return (
       <SkeletonAnimator>
@@ -84,23 +76,9 @@ const ListProductOrder = () => {
     <>
       <View style={styles.main}>
         <Header title="Daftar Produk" />
-        {fristProduct ? <Card data={fristProduct} /> : <View />}
-        {showMore ? (
-          listProduct.map((i) => <Card key={i.id} data={i} />)
-        ) : (
-          <View />
-        )}
-        {data?.totalOrderProducts ? (
-          <TouchableOpacity onPress={() => setShowMore((prev) => !prev)}>
-            <SnbText2.Body.Tiny color={colorV2.textColor.link} align="center">
-              {showMore ? 'Sembunyikan' : 'Lihat'}{' '}
-              {showMore ? null : data.totalOrderProducts}{' '}
-              {showMore ? 'produk' : 'produk lainnya'}
-            </SnbText2.Body.Tiny>
-          </TouchableOpacity>
-        ) : (
-          <View />
-        )}
+        {data?.products.map((i) => (
+          <Card key={i.id} data={i} />
+        ))}
       </View>
       <Divider />
     </>
@@ -111,8 +89,8 @@ const styles = StyleSheet.create({
   main: { margin: 16 },
   card: {
     marginTop: 8,
-    marginBottom: 20,
-    elevation: 6,
+    marginBottom: 8,
+    elevation: 3,
     backgroundColor: colorV2.bgColor.light,
     borderRadius: 8,
     overflow: 'hidden',
@@ -123,11 +101,11 @@ const styles = StyleSheet.create({
   },
   product: {
     flexDirection: 'row',
-    marginVertical: 10,
+    marginVertical: 8,
   },
   descProduct: {
     marginLeft: 16,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     width: '70%',
   },
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },

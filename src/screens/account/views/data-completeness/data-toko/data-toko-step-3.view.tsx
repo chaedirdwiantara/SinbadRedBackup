@@ -368,9 +368,9 @@ const Content: React.FC<Props> = (props) => {
             address.value !== existingAddress ||
             noteAddress.value !== existingNoteAddress ||
             vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
-            (typeof vehicleAccessibilityAmount !== 'undefined' &&
-              vehicleAccessibilityAmount?.id) !==
-              existingVehicleAccessibilityAmount ||
+            typeof vehicleAccessibilityAmount?.id !== 'undefined' &&
+            (vehicleAccessibilityAmount?.id !==
+              existingVehicleAccessibilityAmount) ||
             latLng.latitude !== latitude ||
             latLng.longitude !== longitude
           ) {

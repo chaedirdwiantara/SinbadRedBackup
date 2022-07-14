@@ -33,6 +33,7 @@ const useAuthAction = () => {
       dispatch(meV2Reset());
       dispatch(Actions.getTotalCartReset(dispatchCart));
       dispatch(Actions.notificationTotalReset());
+      dispatch(Actions.resetCoachmark())
     },
     resetRequestOTP: () => {
       dispatch(Actions.resetRequestOTP());

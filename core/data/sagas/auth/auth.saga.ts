@@ -76,6 +76,20 @@ function* meV2() {
   }
 }
 
+/** => check phone */
+function* checkPhoneLogin(
+  action: models.IAction<models.ICheckPhoneLogin>
+) {  
+  try {
+    const response: models.ICheckPhoneLoginSuccess = yield call(() => {
+      return AuthApi.checkPhoneLogin(action.payload);
+    });
+    yield put(ActionCreators.checkPhoneLoginSuccess(response));
+  } catch (error: any) {
+    yield put(ActionCreators.checkPhoneLoginFailed(error));
+  }
+}
+
 /** === LISTEN FUNCTION === */
 function* AuthCoreSaga() {
   yield takeLatest(types.LOGIN_USERNAME_PROCESS, loginUserName);
@@ -84,6 +98,7 @@ function* AuthCoreSaga() {
   yield takeLatest(types.ME_PROCESS, me);
   yield takeLatest(types.LOGOUT_PROCESS, logout);
   yield takeLatest(types.ME_V2_PROCESS, meV2);
+  yield takeLatest(types.CHECK_PHONE_LOGIN_PROCESS, checkPhoneLogin)
 }
 
 export default AuthCoreSaga;

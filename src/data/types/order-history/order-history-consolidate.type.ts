@@ -1,0 +1,11 @@
+/** => GET LIST MENU STATUS */
+export const MENU_STATUS_LIST_PROCESS = 'MenuStatusListProcess';
+export const MENU_STATUS_LIST_SUCCESS = 'MenuStatusListSuccess';
+export const MENU_STATUS_LIST_FAILED = 'MenuStatusListFailed';
+/** => GET CONSOLIDATE ORDER HISTORY LIST */
+export const CONSOLIDATE_ORDER_HISTORY_LIST_PROCESS = 'ConsolidateOrderHistoryListProcess';
+export const CONSOLIDATE_ORDER_HISTORY_LIST_SUCCESS = 'ConsolidateOrderHistoryListSuccess';
+export const CONSOLIDATE_ORDER_HISTORY_LIST_FAILED = 'ConsolidateOrderHistoryListFailed';
+export const CONSOLIDATE_ORDER_HISTORY_LIST_REFRESH = 'ConsolidateOrderHistoryListRefresh';
+export const CONSOLIDATE_ORDER_HISTORY_LIST_RESET = 'ConsolidateOrderHistoryListReset';
+export const CONSOLIDATE_ORDER_HISTORY_LIST_LOADMORE = 'ConsolidateOrderHistoryListLoadMore';

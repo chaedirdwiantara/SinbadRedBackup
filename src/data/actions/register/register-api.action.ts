@@ -175,3 +175,96 @@ export const checkAutoLoginFailed = (
 export const checkAutoLoginReset = () => {
   return { type: types.CHECK_AUTO_LOGIN_RESET };
 };
+
+// CHECK PHONE NO AVAILABILITY V3
+export const checkPhoneRegistrationV3Process = (
+  data: models.ICheckPhoneV3Process,
+): models.IRegisterAction<models.ICheckPhoneV3Process> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_PROCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Success = (
+  data: models.ICheckPhoneV3Success,
+): models.IRegisterAction<models.ICheckPhoneV3Success> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_SUCCESS,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Failed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.ICheckPhoneNoAvailabilityFailed | unknown> => {
+  return {
+    type: types.CHECK_PHONE_REGISTRATION_V3_FAILED,
+    payload: data,
+  };
+};
+
+export const checkPhoneRegistrationV3Reset = () => {
+  return { type: types.CHECK_PHONE_REGISTRATION_V3_RESET };
+};
+
+// GET USER MEDEA
+export const getUserMedeaProcess = () => {
+  return {
+    type: types.GET_USER_MEDEA_PROCESS,
+  };
+};
+
+export const getUserMedeaSuccess = (
+  data: models.IUserMedea,
+): models.IRegisterAction<models.IUserMedea> => {
+  return {
+    type: types.GET_USER_MEDEA_SUCCESS,
+    payload: data,
+  };
+};
+
+export const getUserMedeaFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.IUserMedeaFailed | unknown> => {
+  return {
+    type: types.GET_USER_MEDEA_FAILED,
+    payload: data,
+  };
+};
+
+export const getUserMedeaReset = () => {
+  return { type: types.GET_USER_MEDEA_RESET };
+};
+
+// UPDATE USER MEDEA
+export const updateUserMedeaProcess = (
+  data: models.IUpdateUserMedeaProcess,
+): models.IRegisterAction<models.IUpdateUserMedeaProcess> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_PROCESS,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaSuccess = (
+  data: models.IUpdateUserMedeaSuccess,
+): models.IRegisterAction<models.IUpdateUserMedeaSuccess> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_SUCCESS,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaFailed = (
+  data: models.ErrorProps | unknown,
+): models.IRegisterAction<models.IUserMedeaFailed | unknown> => {
+  return {
+    type: types.UPDATE_USER_MEDEA_FAILED,
+    payload: data,
+  };
+};
+
+export const updateUserMedeaReset = () => {
+  return { type: types.UPDATE_USER_MEDEA_RESET };
+};
