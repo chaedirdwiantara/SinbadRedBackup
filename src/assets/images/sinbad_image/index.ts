@@ -10,4 +10,5 @@ export const ImagesSinbad = {
   snbIntro3: require('./intro_3.png'),
   snbOtp: require('./otp.png'),
   snbSmile: require('./smile_sinbad.png'),
+  forceRegister: require('./force_register.png'),
 };

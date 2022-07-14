@@ -41,6 +41,12 @@ const useAuthCoreAction = () => {
       dispatch(Actions.meV2Reset());
       dispatch(Actions.meV2Process());
     },
+    checkPhoneLogin: (data: models.ICheckPhoneLogin) => {
+      dispatch(Actions.checkPhoneLogin(data))
+    },
+    resetCheckLoginPhone: () => {
+      dispatch(Actions.checkPhoneLoginReset())
+    }
   };
 };
 /** === EXPORT === */

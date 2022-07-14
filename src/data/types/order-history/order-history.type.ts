@@ -5,6 +5,17 @@ export const ORDER_HISTORY_LIST_FAILED = 'OrderHistoryListFailed';
 export const ORDER_HISTORY_LIST_REFRESH = 'OrderHistoryListRefresh';
 export const ORDER_HISTORY_LIST_RESET = 'OrderHistoryListReset';
 export const ORDER_HISTORY_LIST_LOADMORE = 'OrderHistoryListLoadMore';
+/** => GET CONSOLIDATE HISTORY DETAIL */
+export const ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS =
+  'OrderConsolidateHistoryDetailProcess';
+export const ORDER_CONSOLIDATE_HISTORY_DETAIL_SUCCESS =
+  'OrderConsolidateHistoryDetailSuccess';
+export const ORDER_CONSOLIDATE_HISTORY_DETAIL_REFRESH =
+  'OrderConsolidateHistoryDetailRefresh';
+export const ORDER_CONSOLIDATE_HISTORY_DETAIL_FAILED =
+  'OrderConsolidateHistoryDetailFailed';
+export const ORDER_CONSOLIDATE_HISTORY_DETAIL_RESET =
+  'OrderConsolidateHistoryDetailReset';
 /** => GET HISTORY DETAIL */
 export const ORDER_HISTORY_DETAIL_PROCESS = 'OrderHistoryDetailProcess';
 export const ORDER_HISTORY_DETAIL_SUCCESS = 'OrderHistoryDetailSuccess';

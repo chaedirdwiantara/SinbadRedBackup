@@ -2,8 +2,8 @@ import * as types from '@types';
 import * as models from '@models';
 /** EXTERNAL FUNCTION */
 import { setUserFCM } from '../../../functions/firebase/fcm-firestore.function';
-import { globalReportFromAction } from '@report/global-report';
-import * as EventName from '@report/moengage/event';
+import { globalReportFromAction } from '@core/report/global-report';
+import * as EventName from '@core/report/moengage/event';
 /** === LOGIN WITH USERNAME === */
 /** => process */
 export const loginUserNameProcess = (
@@ -141,4 +141,31 @@ export const meV2Failed = (data: models.ErrorProps): models.MeFailedAction => {
 /** => reset */
 export const meV2Reset = () => {
   return { type: types.ME_V2_RESET };
+};
+/** === CHECK PHONE === */
+/** PROCESS */
+export const checkPhoneLogin = (
+  data: models.ICheckPhoneLogin
+): models.IAction<any> => {
+  return { type: types.CHECK_PHONE_LOGIN_PROCESS, payload: data }
+}
+/** PROCESS */
+export const checkPhoneLoginSuccess = (
+  data: models.ICheckPhoneLoginSuccess
+): models.IAction<models.ICheckPhoneLoginSuccess> => {
+  return { type: types.CHECK_PHONE_LOGIN_SUCCESS, payload: data }
+}
+/** FAILED */
+export const checkPhoneLoginFailed = (
+  data: models.ErrorProps
+): models.IAction<any> => {
+  return { type: types.CHECK_PHONE_LOGIN_FAILED, payload: data }
+}
+/** RESET */
+export const checkPhoneLoginReset = () => {
+  return { type: types.CHECK_PHONE_LOGIN_RESET }
+}
+/** === SAVE ADS ID === */
+export const saveAdsID = (data: string): models.SaveAdsIDAction => {
+  return { type: types.SAVE_ADS_ID, payload: data };
 };

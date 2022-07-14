@@ -101,9 +101,17 @@ const DataDiriStep2View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else if (isNPWPValid) {
-      updateCompleteData({
-        user: { taxNo: npwp },
-      });
+      if (
+        npwp === completeDataState?.data?.userData?.taxNo ||
+        npwp === '' ||
+        npwp === null
+      ) {
+        backToDataCompleteness();
+      } else {
+        updateCompleteData({
+          user: { taxNo: npwp },
+        });
+      }
       setBackHandle(true);
     } else {
       backToDataCompleteness();
@@ -231,7 +239,10 @@ const DataDiriStep2View: React.FC = () => {
           <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              loading={stateGlobal.uploadImage.loading}
+              loading={
+                stateGlobal.uploadImage.loading ||
+                updateCompleteDataState.loading
+              }
               title={'Lanjutkan'}
               disabled={
                 stateGlobal.uploadImage.loading ||
@@ -243,9 +254,17 @@ const DataDiriStep2View: React.FC = () => {
                 if (capturedImage.data) {
                   upload(dispatchGlobal, capturedImage.data.url);
                 } else if (isNPWPValid) {
-                  updateCompleteData({
-                    user: { taxNo: npwp },
-                  });
+                  if (
+                    npwp === completeDataState?.data?.userData?.taxNo ||
+                    npwp === '' ||
+                    npwp === null
+                  ) {
+                    NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
+                  } else {
+                    updateCompleteData({
+                      user: { taxNo: npwp },
+                    });
+                  }
                 }
               }}
               size="medium"
