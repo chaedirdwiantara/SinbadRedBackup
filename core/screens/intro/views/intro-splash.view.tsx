@@ -2,7 +2,7 @@
 import React from 'react';
 import SplashScreen from 'react-native-splash-screen';
 /** === IMPORT EXTERNAL FUNCTION === */
-import { useAuthCoreAction } from '@core/functions/auth';
+import { useAuthCoreAction, useAdsID } from '@core/functions/auth';
 import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
 import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataAuth } from '@core/redux/Data';
@@ -14,11 +14,14 @@ const IntroSplashView: React.FC = () => {
   const { getLocationPermissions } = useOTP();
   /** === HOOK === */
   const authCoreAction = useAuthCoreAction();
+  // this for google ads ID
+  const useAdsIDAction = useAdsID();
   /** === EFFECT === */
   useGetTokenNotLogin();
   setFlagByDeviceId();
   /** => get auth me */
   React.useEffect(() => {
+    useAdsIDAction.saveAdsID();
     authCoreAction.me();
     authCoreAction.meV2();
   }, []);

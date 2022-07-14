@@ -86,3 +86,8 @@ export interface LogoutFailedAction {
   type: string;
   payload: ErrorProps;
 }
+/** === SAVE ADS ID === */
+export interface SaveAdsIDAction {
+  type: string;
+  payload: string;
+}
