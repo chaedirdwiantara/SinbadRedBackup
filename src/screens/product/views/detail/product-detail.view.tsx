@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, ScrollView, RefreshControl, StatusBar } from 'react-native';
 import {
   SnbContainer,
@@ -12,7 +12,7 @@ import {
 } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENTS === */
 import { EmptyState } from '@core/components/EmptyState';
-import Html from '@core/components/Html';
+import Html from '@core/components/HtmlV2';
 import BulkPricingList from '@core/components/product/BulkPricingList';
 import { ProductDetailHeader } from './ProductDetailHeader';
 import { ProductDetailCarousel } from './ProductDetailCarousel';
@@ -61,6 +61,9 @@ import { useDataAuth } from '@core/redux/Data';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import * as models from '@models';
 import openWhatsApp from '@core/functions/global/linking/open-whatsapp';
+
+/** == CONSTANT */
+const testID = 'product-detail';
 
 /** === COMPONENT === */
 const ProductDetailView: FC = () => {
@@ -221,6 +224,17 @@ const ProductDetailView: FC = () => {
     isBundle: dataProduct?.isBundle ?? false,
     stock: dataStock?.stock ?? 0,
   };
+  // information dimension of product
+  const dimensionProduct = useMemo(() => {
+    const [unit, length, width, height] = [
+      dataProduct?.packagedDimensionLabel ?? 'cm',
+      dataProduct?.packagedDimensionLength ?? 0,
+      dataProduct?.packagedDimensionWidth ?? 0,
+      dataProduct?.packagedDimensionHeight ?? 0,
+    ];
+    // length x width x height
+    return `${length}${unit} X ${width}${unit} X ${height}${unit}`;
+  }, [dataProduct]);
   /** === FUNCTION === */
   const getActionButtonTitle = () => {
     if (defaultProperties.stock >= (dataProduct?.minQty ?? 1)) {
@@ -440,7 +454,10 @@ const ProductDetailView: FC = () => {
           />
           {dataProduct?.hasBulkPrice ? (
             <View style={{ paddingBottom: spacingV2.spacing.lg }}>
-              <BulkPricingList bulkPrices={dataProduct.bulkPrices} />
+              <BulkPricingList
+                bulkPrices={dataProduct.bulkPrices}
+                testID={testID}
+              />
             </View>
           ) : (
             <View />
@@ -456,20 +473,20 @@ const ProductDetailView: FC = () => {
             />
             <ProductDetailSectionItem
               name="Berat"
-              value={`${dataProduct?.productWeight} gr`}
+              // unit will be dynamic
+              value={`${dataProduct?.productWeight} ${dataProduct?.packagedWeightLabel}`}
+            />
+            <ProductDetailSectionItem
+              name="Dimensi per-Dus"
+              value={dimensionProduct}
               bottomSpaces={0}
             />
           </ProductDetailSection>
           <ProductDetailSection title="Nama Supplier" separator={false}>
             <ProductDetailSectionItem
-              name={dataProduct?.productSeller.name ?? '-'}
+              name={dataProduct?.productSeller?.name ?? '-'}
               value=""
             />
-          </ProductDetailSection>
-          <ProductDetailSection title="Detail Produk">
-            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-              {dataProduct?.detail ?? '-'}
-            </SnbText2.Paragraph.Small>
           </ProductDetailSection>
           {/* deskripsi harus render html dengan wrap <p></p> */}
           <ProductDetailSection title="Deskripsi Produk">
@@ -481,6 +498,7 @@ const ProductDetailView: FC = () => {
       <React.Fragment>
         {isAvailable ? (
           <FooterButton.Dual
+            testID={testID}
             title1={getActionButtonTitle()}
             title2=""
             shadow={false}
@@ -506,7 +524,9 @@ const ProductDetailView: FC = () => {
       />
       {/* Add to Cart Modal */}
       <AddToCartModal
+        testID={testID}
         orderQty={orderQty}
+        onBlur={handleCloseModal}
         onChangeQty={onHandleChangeQty}
         open={orderModalVisible}
         closeAction={handleCloseModal}

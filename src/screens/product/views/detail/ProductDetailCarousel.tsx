@@ -27,6 +27,7 @@ export const ProductDetailCarousel: FC<ProductDetailCarouselProps> = ({
       defaultSource={require('../../../../assets/images/sinbadopacity.png')}
       source={{ uri: item }}
       style={{ width: width, height: width }}
+      resizeMode="contain"
     />
   );
   /** => Main */
