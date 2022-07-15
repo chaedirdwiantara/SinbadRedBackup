@@ -85,6 +85,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
       const navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
       const params = { mobilePhone: phone, otpHash, type: otpMethod }
       navigate(navigateTo, params);
+      resetRequestOTP()
     }
     if (requestOTPState.error?.message) {
       ref.current?.close()
