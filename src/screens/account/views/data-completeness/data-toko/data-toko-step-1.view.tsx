@@ -2,6 +2,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
+  SnbBottomSheet2Ref,
   SnbButton2,
   SnbContainer,
   SnbText2,
@@ -30,15 +31,15 @@ const DataTokoStep1View: React.FC = () => {
   const [telp, setTelp] = useState(
     completeDataState?.data?.buyerData?.buyerPhoneNo,
   );
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const [backHandle, setBackHandle] = useState(false);
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -63,14 +64,14 @@ const DataTokoStep1View: React.FC = () => {
     <SnbContainer color="white">
       <ScrollView style={{ flex: 1 }}>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Informasi Toko"
         />
         <Stepper
           complete={completeDataState?.data?.buyerProgress?.completed}
           total={completeDataState?.data?.buyerProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
         />
         <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
@@ -123,8 +124,7 @@ const DataTokoStep1View: React.FC = () => {
         />
       </View>
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => {
           setBackHandle(true);
           const { buyerName, buyerPhoneNo } =
@@ -137,9 +137,8 @@ const DataTokoStep1View: React.FC = () => {
         }}
       />
       <ListOfSteps
-        open={openModalStep}
+        ref={refModalListOfStep}
         type="buyer"
-        closeModal={() => setOpenModalStep(false)}
       />
     </SnbContainer>
   );

@@ -10,6 +10,7 @@ import {
   SnbButton2,
   spacingV2 as layout,
   Content,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -40,7 +41,7 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null)
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
@@ -515,7 +516,7 @@ const UserView: FC = ({ start }: any) => {
                 size={24}
               />
             }
-            onActionPress={() => setShowConfirmation(true)}
+            onActionPress={refModalLogout.current?.open}
           />
         </View>
       </View>
@@ -538,7 +539,7 @@ const UserView: FC = ({ start }: any) => {
             color="white"
             title="Profil"
             iconName={'exit_to_app'}
-            iconAction={() => setShowConfirmation(true)}
+            iconAction={refModalLogout.current?.open}
           />
           <View
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -599,7 +600,7 @@ const UserView: FC = ({ start }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
+      <ModalLogout ref={refModalLogout} />
     </View>
   );
 };
