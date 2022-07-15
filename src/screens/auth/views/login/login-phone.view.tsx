@@ -58,18 +58,6 @@ const Content: React.FC = () => {
     }
   }, [checkPhoneLoginState]);
 
-  useEffect(() => {
-    const backAction = () => {
-      reset({ index: 0, routes: [{ name: 'Home' }] });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
-  }, []);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Image
