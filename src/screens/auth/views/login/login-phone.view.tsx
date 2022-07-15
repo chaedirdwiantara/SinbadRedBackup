@@ -128,6 +128,7 @@ const Content: React.FC = () => {
         <ForceRegistrationModal
           ref={refModalForceRegist}
           confirm={() => {
+            phone.clearText()
             navigate(SELF_REGISTRATION_VIEW);
             refModalForceRegist.current?.close();
           }}
