@@ -39,8 +39,24 @@ const useCheckForceUpdateVersion = async () => {
       });
   }, []);
 };
+/** => check maintenance */
+const useCheckMaintenance = async () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    database()
+      .ref('maintenance/sinbadEcom')
+      .on('value', (data) => {
+        dispatch(CoreAction.maintenance(data.val()));
+      });
+  }, []);
+};
 /** === EXPORT === */
-export { setFlagByDeviceId, useCheckFlagByTask, useCheckForceUpdateVersion };
+export {
+  setFlagByDeviceId,
+  useCheckFlagByTask,
+  useCheckForceUpdateVersion,
+  useCheckMaintenance,
+};
 /**
  * ================================================================
  * NOTES
