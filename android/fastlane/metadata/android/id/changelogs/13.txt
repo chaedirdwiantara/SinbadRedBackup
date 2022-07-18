@@ -1,1 +1,3 @@
 Sinbad versi 0.2.0
+- Aplikasi Sinbad hadir dengan penyegaran terbaru pada tampilan ordermu, kini kamu dapat melihat riwayat order dengan lebih mudah.
+- Untuk kamu yang sudah pernah bergabung dengan sinbad, kini kamu bisa daftar dengan menggunakan data dari aplikasi sinbad lama kamu.
