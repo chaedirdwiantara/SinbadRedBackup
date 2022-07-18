@@ -23,3 +23,8 @@ export interface ForceUpdateVersionActions {
   type: string;
   payload: number;
 }
+/** === FOR MAINTENANCE APP === */
+export interface MaintenanceActions {
+  type: string;
+  payload: boolean;
+}

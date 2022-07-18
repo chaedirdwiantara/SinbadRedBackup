@@ -65,3 +65,12 @@ export const resetToForceUpdate = () => {
     }),
   );
 };
+/** => reset to maintenance page */
+export const resetToMaintenance = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Maintenance' }],
+    }),
+  );
+};

@@ -5,12 +5,22 @@ import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
 import { IntroSplashView, IntroSinbadView } from '../screens/intro/views';
-import { ForceUpdateView } from '../screens/extra/views';
+import { ForceUpdateView, MaintenanceView } from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
 
 const StackNavigator: React.FC = () => {
+  /** => this for maintenance app */
+  const MaintenanceNav = () => {
+    return (
+      <Screen
+        name="Maintenance"
+        component={MaintenanceView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
   /** => this for force update */
   const ForceUpdateNav = () => {
     return (
@@ -75,6 +85,7 @@ const StackNavigator: React.FC = () => {
 
   return (
     <Navigator initialRouteName={'Splash'}>
+      {MaintenanceNav()}
       {ForceUpdateNav()}
       {IntroSplashNav()}
       {IntroSinbadNav()}

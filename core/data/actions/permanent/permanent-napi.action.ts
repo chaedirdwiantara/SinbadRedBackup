@@ -24,3 +24,7 @@ export const forceUpdateVersion = (
 ): models.ForceUpdateVersionActions => {
   return { type: types.FORCE_UPDATE_VERSION, payload };
 };
+/** => FOR MAINTENANCE */
+export const maintenance = (payload: boolean): models.MaintenanceActions => {
+  return { type: types.MAINTENANCE, payload };
+};

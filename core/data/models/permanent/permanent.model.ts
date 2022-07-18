@@ -4,4 +4,5 @@ export interface Permanent {
   searchedKeywords: Array<string>;
   appVersion: any;
   forceUpdateVersion: number;
+  maintenance: boolean;
 }

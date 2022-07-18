@@ -9,6 +9,7 @@ const initialState: models.Permanent = {
   searchedKeywords: [],
   appVersion: null,
   forceUpdateVersion: 0,
+  maintenance: false,
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
@@ -57,6 +58,16 @@ export const permanentCore = simplifyReducer(initialState, {
     return {
       ...state,
       forceUpdateVersion: payload,
+    };
+  },
+  /** => MAINTENANCE */
+  [types.MAINTENANCE](
+    state = initialState,
+    { payload }: models.MaintenanceActions,
+  ) {
+    return {
+      ...state,
+      maintenance: payload,
     };
   },
 });
