@@ -97,6 +97,32 @@ export const useEasyRegistration = () => {
     dispatch(Actions.resetCompleteDataConfirmation());
   };
 
+  const useGetUserMedea = () => {
+    const { userMedeaData } = useSelector((state: any) => state.auth);
+    return {
+      getUserMedea: () => {
+        dispatch(Actions.getUserMedeaProcess());
+      },
+      getUserMedeaReset: () => {
+        dispatch(Actions.getUserMedeaReset());
+      },
+      userMedeaData,
+    };
+  };
+
+  const useUpdateUserMedea = () => {
+    const { updateUserMedeaData } = useSelector((state: any) => state.register);
+    return {
+      updateUserMedea: (data: models.IUpdateUserMedeaProcess) => {
+        dispatch(Actions.updateUserMedeaProcess(data));
+      },
+      updateUserMedeaReset: () => {
+        dispatch(Actions.updateUserMedeaReset());
+      },
+      updateUserMedeaData,
+    };
+  };
+
   return {
     searchLocation,
     createBasicAccount,
@@ -118,5 +144,7 @@ export const useEasyRegistration = () => {
     completeDataState: account.completeData,
     updateCompleteDataState: account.updateCompleteData,
     completeDataConfirmationState: account.completeDataConfirmation,
+    useGetUserMedea,
+    useUpdateUserMedea,
   };
 };

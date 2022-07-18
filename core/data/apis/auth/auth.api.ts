@@ -8,9 +8,15 @@ const loginUserName = (data: models.LoginUserName) => {
   const path = 'login';
   return apiAuth<models.LoginSuccess>(path, 'v1', 'POST', data);
 };
+/** => check phone */
+const checkPhoneLogin = (data: models.ICheckPhoneLogin) => {
+  const path = 'login/check-phone';
+  return apiAuth<models.ICheckPhoneLoginSuccess>(path, 'v2', 'POST', data);
+};
+
 /** => request OTP */
 const requestOTP = (data: models.OtpRequest) => {
-  const path = 'otp/request-otp';
+  const path = 'send-otp';
   return apiAuth<models.OtpGetSuccess>(path, 'v1', 'POST', data);
 };
 /** => verification OTP */
@@ -42,4 +48,5 @@ export const AuthApi = {
   me,
   logout,
   meV2,
+  checkPhoneLogin
 };

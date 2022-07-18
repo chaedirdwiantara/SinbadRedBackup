@@ -73,7 +73,13 @@ export interface ICheckPhoneNoAvailabilitySuccess {
 
 export interface IVerifyOTPRegister {
   mobilePhoneNo: string | undefined;
-  otp: number;
+  otp: string;
+}
+
+export interface ISendOTP {
+  mobilePhone: string;
+  type: 'sms' | 'wa';
+  otpHash?: string;
 }
 export interface IVerifyOTPSuccess {
   data: {
@@ -119,7 +125,53 @@ export interface ICheckAutoLoginSuccess {
   };
 }
 
+export interface ICheckPhoneV3Process {
+  mobilePhone: string | undefined;
+  identifierDeviceId: string | undefined;
+}
+
+export interface ICheckPhoneV3Success {
+  data: {
+    phoneNumberAvailable: boolean;
+    isUserMedea: boolean;
+    isUserAgent: boolean;
+  };
+  message: string;
+}
+
+export interface IUserMedeaProcess {
+  identifierDeviceId: string;
+}
+export interface IUserMedea {
+  data: {
+    ownerName: string;
+    buyerName: string;
+    idNo: string;
+    ownerPhoneNumber: string;
+    address: string;
+  };
+  message: string;
+}
+
+export interface IUpdateUserMedeaProcess {
+  ownerName: string;
+  buyerName: string;
+  idNo: string;
+  address: string;
+  ownerPhoneNumber: string;
+}
+
+export interface IUpdateUserMedeaSuccess {
+  data: {
+    id: Number;
+    createdAt: string;
+    updatedAt: string;
+  };
+  message: string;
+}
+
 // FAILED MODEL
+export interface IUserMedeaFailed {}
 export interface ICheckPhoneNoAvailabilityFailed {}
 export interface IRegisterMerchantFailed {}
 export interface ICheckEmailAvailabilityFailed {}
