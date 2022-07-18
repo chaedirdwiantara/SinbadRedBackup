@@ -1,17 +1,21 @@
-import React, { FC, memo, useCallback, useContext, useRef } from 'react';
+import React, {
+  FC,
+  memo,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 import { toCurrency } from '@core/functions/global/currency-format';
 import {
-  SnbText,
   SnbText2,
-  SnbBadge,
   color,
   colorV2,
   SnbProductListSkeleton,
   SnbEmptyData,
   SnbImageCompressor,
-  SnbButton,
   SnbButton2,
   SnbDivider2,
+  SnbBadge2,
 } from '@sinbad/react-native-sinbad-ui';
 import {
   View,
@@ -24,144 +28,222 @@ import {
   RefreshControl,
 } from 'react-native';
 import moment from 'moment';
-import BottomSheetConfirmation, {
-  BottomSheetTransactionRef,
-} from '@core/components/BottomSheetConfirmation';
 import ConfirmationTime from '../confirmation-time';
 // function
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 import {
-  useHistoryListFunction,
+  useConsolidateHistoryListFunction,
   goToWaitingPaymentHistoryDetail,
   useHistoryListPaymentFunction,
 } from '../../functions/history-list';
 import { CountDownTimer } from '@screen/oms/components/thank-you-page-count-down-timer.component';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
-import { NavigationAction } from '@core/functions/navigation';
+import { NavigationAction } from '@navigation';
 // type
 import * as models from '@models';
 import { labelStatus } from '../../types';
 import { usePaymentHistoryContext } from 'src/data/contexts/oms/payment-history/usePaymentHistoryContext';
+import ConfirmationDoneSheet from './confirmation-done-sheet';
 
 type CardProps = {
   data: models.OrderListHistory;
   onCancelOrder?: () => void;
-  onConFirmOrder?: () => void;
+};
+
+type CardPropsConsolidate = {
+  data: models.ConsolidateOrderListHistory;
+  onRefreshAction: () => void;
 };
 
 type CardWaitingForPaymentProps = {
   data: models.WaitingPaymentListHistory;
-  onDetailOrder?: () => void;
+  onDetailOrder: () => void;
 };
 
 const { width: W } = Dimensions.get('screen');
 
-const Card: FC<CardProps> = (props) => {
-  const { data, onCancelOrder, onConFirmOrder } = props;
+const CardConsolidation: FC<CardPropsConsolidate> = (props) => {
+  const { data, onRefreshAction } = props;
+
   return (
     <Pressable
       style={styles.card}
       android_ripple={{ color: color.black40 }}
       onPress={() =>
-        NavigationAction.navigate('OrderHistoryDetailView', {
-          id: data.id,
+        NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+          id: data.orderId,
         })
       }>
       <View style={{ margin: 16 }}>
-        {/* title */}
-        <View style={styles.title}>
-          {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
-          <SnbText2.Body.Small>{data.sellerName}</SnbText2.Body.Small>
-          <SnbBadge.Label
-            value={data.statusLabel}
-            type={labelStatus[data.statusValue] || 'error'}
-          />
-        </View>
-        {/* Timer */}
-        {data.statusValue === 'delivered' ? (
-          <ConfirmationTime doneAt={data?.doneAt || ''} />
-        ) : (
-          <View />
-        )}
-        {/* product */}
-        <View>
-          <View style={styles.product}>
-            <SnbImageCompressor style={styles.image} uri={data.product.image} />
-            <View style={styles.descProduct}>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-                {data.product.name}
-              </SnbText2.Paragraph.Default>
-              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-                {`(${data.product.qty}) ${data.product.uom}`}
-              </SnbText2.Paragraph.Small>
-              <SnbText2.Body.Default>
-                {toCurrency(data.product.totalProductPriceAfterTax, {
-                  withFraction: false,
-                })}
-              </SnbText2.Body.Default>
-            </View>
-          </View>
-
-          {data.totalOrderProducts > 0 && (
-            <SnbText2.Paragraph.Small
+        {/* top section */}
+        <View style={styles.titleConsolidate}>
+          {/* order identity section*/}
+          <View>
+            <SnbText2.Body.Small testID={'03'}>
+              {data.orderId}
+            </SnbText2.Body.Small>
+            <SnbText2.Paragraph.Tiny
               color={colorV2.textColor.secondary}
-              align="center">
-              + {data.totalOrderProducts} produk lainnya
-            </SnbText2.Paragraph.Small>
-          )}
-          <View style={{ marginVertical: 16 }}>
-            <SnbDivider2 type="solid" />
-          </View>
-        </View>
-        {/* inform */}
-        <View>
-          <View style={styles.information}>
-            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
-              Tanggal Pemesanan
-            </SnbText2.Body.Small>
-            <SnbText2.Body.Small color={colorV2.textColor.secondary}>
+              testID={'03'}>
               {moment(data.orderedAt).format('DD MMM YYYY')}
-            </SnbText2.Body.Small>
+            </SnbText2.Paragraph.Tiny>
           </View>
-          <View style={styles.information}>
-            <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
-            <SnbText2.Body.Small>
-              {toCurrency(data.totalSellerPriceAfterTax, {
-                withFraction: false,
-              })}
-            </SnbText2.Body.Small>
-          </View>
+          {/* fulfillment status section */}
+          <SnbBadge2 testID={'03'} type={'neutral'} title={data.fulfilment} />
         </View>
-        {/* action */}
-        <View style={styles.buttonContainer}>
-          {/* if process */}
-          {data.isCancellable ? (
-            <SnbButton2.Secondary
-              title="Batalkan"
-              size="small"
-              onPress={onCancelOrder}
-              outline={true}
-              full={true}
-            />
-          ) : (
-            <View />
-          )}
-          {/* if delivered */}
-          {data.isOrderAbleToDone ? (
-            <SnbButton2.Primary
-              title="Pesanan Diterima"
-              size="small"
-              onPress={onConFirmOrder}
-              full={true}
-            />
-          ) : (
-            <View />
-          )}
+      </View>
+      <SnbDivider2></SnbDivider2>
+      {/* mid section */}
+      <View style={{ marginHorizontal: 16, marginTop: 16 }}>
+        {ParcelConsolidation(data.orderParcels, onRefreshAction)}
+      </View>
+      {/* bottom section */}
+      <View style={{ marginBottom: 8, marginHorizontal: 16 }}>
+        <View style={styles.information}>
+          <SnbText2.Body.Small>Total Pesanan</SnbText2.Body.Small>
+          <SnbText2.Body.Small>
+            {toCurrency(data.totalOrderParcelsAfterTax, {
+              withFraction: false,
+            })}
+          </SnbText2.Body.Small>
         </View>
+      </View>
+      <View style={{ marginBottom: 16, marginHorizontal: 16 }}>
+        <TouchableOpacity
+          onPress={() =>
+            NavigationAction.navigate('OrderHistoryConsolidateDetailView', {
+              id: data.orderId,
+            })
+          }>
+          {data.totalSupplier > 1 && (
+            <View style={styles.toDetailFooter}>
+              <SnbText2.Body.Small color={colorV2.textColor.link}>
+                {`Lihat ${data.totalSupplier} Supplier Lainnya`}
+              </SnbText2.Body.Small>
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
     </Pressable>
   );
+};
+const ParcelConsolidation = (dataParcels: any[], refresh: ()=> void) => {
+  const [state] = useContext(Context);
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [confirmationOrderId, setConfirmationOrderId] = useState('');
+  const { doneOrder } = useDetailHistoryOrder();
+  const onDoneOrder = useCallback(
+    (idOrder: string) => {
+      const { keyword, orderGroupStatus, subOrderGroupStatus, status } = state;
+      const payload = {
+        keyword,
+        orderGroupStatus,
+        subOrderGroupStatus,
+        status,
+        id: idOrder,
+      };
+      doneOrder({ ...payload, type: 'list' });
+    },
+    [
+      state.keyword,
+      state.orderGroupStatus,
+      state.subOrderGroupStatus,
+      state.status,
+    ],
+  );
+  //render modal confirmation done order
+  const renderModalConfirmationDoneOrder = () => {
+    if (confirmationOrderId != '')
+      return (
+        <ConfirmationDoneSheet
+          open={confirmationOpen}
+          title="Pesanan diterima?"
+          desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+          onConfirm={() => {
+            onDoneOrder(confirmationOrderId);
+          }}
+          contentHeight={175}
+          onClose={() => setConfirmationOpen(false)}
+        />
+      );
+  };
+  return dataParcels?.map((dataParcel) => (
+    <>
+      {/* title */}
+      <View style={styles.title}>
+        {/* <SnbText.B2>{data.sellerName}</SnbText.B2> */}
+        <SnbText2.Body.Small>{dataParcel.sellerName}</SnbText2.Body.Small>
+        <SnbBadge2
+          testID={'03'}
+          title={dataParcel.statusLabel}
+          type={labelStatus[dataParcel.statusValue] || 'error'}
+        />
+      </View>
+      {/* Timer */}
+      {dataParcel.statusValue === 'delivered' ? (
+        <ConfirmationTime doneAt={dataParcel?.doneAt || ''} />
+      ) : (
+        <View />
+      )}
+      {/* product */}
+      <View>
+        <View style={styles.product}>
+          <SnbImageCompressor
+            style={styles.image}
+            uri={dataParcel.productImage}
+          />
+          <View style={styles.descProduct}>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+              {dataParcel.productName}
+            </SnbText2.Paragraph.Default>
+            <SnbText2.Body.Default>
+              {`(${dataParcel.productQty}) ${dataParcel.productUom} x `}
+              {toCurrency(dataParcel.productTotalPriceAfterTax, {
+                withFraction: false,
+              })}
+            </SnbText2.Body.Default>
+          </View>
+        </View>
+
+        {dataParcel.moreProducts > 0 && (
+          <SnbText2.Paragraph.Small
+            color={colorV2.textColor.secondary}
+            align="center">
+            + {dataParcel.moreProducts} produk lainnya
+          </SnbText2.Paragraph.Small>
+        )}
+        {/* confirmation button */}
+        <>
+          <View style={{ marginVertical: 16 }}>
+            <SnbDivider2 type="solid" />
+          </View>
+          <View>
+            {/* if delivered */}
+            {dataParcel.statusValue == 'delivered' ? (
+              <View style={{ marginBottom: 8 }}>
+                <SnbButton2.Secondary
+                  key={dataParcel.id}
+                  outline={true}
+                  title="Pesanan Diterima"
+                  size="small"
+                  onPress={() => {
+                    setConfirmationOrderId(dataParcel.id);
+                    setConfirmationOpen(true);
+                  }}
+                  full={true}
+                />
+              </View>
+            ) : (
+              <View />
+            )}
+          </View>
+        </>
+        {/* confirmation  done*/}
+        {renderModalConfirmationDoneOrder()}
+      </View>
+    </>
+  ));
 };
 
 const CardWaitingForPayment: FC<CardWaitingForPaymentProps> = (props) => {
@@ -250,7 +332,7 @@ const EmptyImage = () => (
   <Image
     source={require('../../../../assets/images/empty_sinbad.png')}
     resizeMode="contain"
-    style={{ height: W * 0.6, aspectRatio: 1 }}
+    style={{ height: W * 0.6, aspectRatio: 1, marginTop: 100 }}
   />
 );
 
@@ -266,14 +348,12 @@ const wordingWaitingForPaymentEmpty = () => {
 
 const ListCard = () => {
   const [state] = useContext(Context);
-  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
   const { onLoadMorePayment, onRefreshPayment } =
     useHistoryListPaymentFunction();
-  const { onLoadMore, onRefresh } = useHistoryListFunction();
-  const { cancelOrder, doneOrder } = useDetailHistoryOrder();
+  const { onLoadMore, onRefresh } = useConsolidateHistoryListFunction();
   const {
     stateOrderHistory: {
-      list: {
+      consolidateList: {
         loading: historyListLoading,
         data: historyListData,
         error: historyListError,
@@ -291,23 +371,6 @@ const ListCard = () => {
       },
     },
   } = usePaymentHistoryContext();
-  // function
-  const onCancelOrder = useCallback(
-    (idOrder: string) => {
-      const { keyword, orderStatus, status } = state;
-      const payload = { keyword, orderStatus, status, id: idOrder };
-      cancelOrder({ ...payload, type: 'list' });
-    },
-    [state.keyword, state.orderStatus, state.status],
-  );
-  const onDoneOrder = useCallback(
-    (idOrder: string) => {
-      const { keyword, orderStatus, status } = state;
-      const payload = { keyword, orderStatus, status, id: idOrder };
-      doneOrder({ ...payload, type: 'list' });
-    },
-    [state.keyword, state.orderStatus, state.status],
-  );
   // loading view
   if ([historyListLoading].some((i) => i)) {
     return <SnbProductListSkeleton />;
@@ -324,7 +387,7 @@ const ListCard = () => {
   }
 
   // render list waiting paymment
-  if (state.status === 'waiting_for_payment') {
+  if (state.orderGroupStatus === 'waiting_for_payment') {
     return (
       <>
         {[historyListPaymentLoading].some((i) => i) ? (
@@ -338,6 +401,7 @@ const ListCard = () => {
         ) : (
           <FlatList
             contentContainerStyle={{ paddingBottom: 50 }}
+            style={styles.main}
             data={historyListPaymentData}
             keyExtractor={(i) => String(i.id)}
             renderItem={({ item }) => (
@@ -381,18 +445,17 @@ const ListCard = () => {
     <>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
+        style={styles.main}
         data={historyListData}
-        keyExtractor={(i) => i.id}
-        renderItem={({ item }) => (
-          <Card
-            data={item}
-            onCancelOrder={() => confirmModalRef.current?.show(item.id)}
-            onConFirmOrder={() => onDoneOrder(item.id)}
-          />
-        )}
+        keyExtractor={(i) => i.orderId}
+        renderItem={({ item }) => 
+        <CardConsolidation 
+          data={item} 
+          onRefreshAction={() => onRefresh()} 
+        />}
         onEndReached={onLoadMore}
         ListEmptyComponent={() =>
-          !historyListLoading ? (
+          historyListData.length == 0 ? (
             <SnbEmptyData
               image={<EmptyImage />}
               subtitle=""
@@ -411,18 +474,14 @@ const ListCard = () => {
           />
         }
       />
-      {/* confirmation  batalkan*/}
-      <BottomSheetConfirmation
-        ref={confirmModalRef}
-        title="Konfirmasi"
-        desc="Yakin Ingin Membatalkan Pesanan?"
-        onSubmit={(idOrder) => onCancelOrder(idOrder)}
-      />
     </>
   );
 };
 
 const styles = StyleSheet.create({
+  main: {
+    backgroundColor: colorV2.bgColor.neutral,
+  },
   card: {
     marginHorizontal: 16,
     marginVertical: 8,
@@ -435,6 +494,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  titleConsolidate: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomColor: colorV2.strokeColor.default,
+  },
   product: {
     flexDirection: 'row',
     marginVertical: 10,
@@ -444,11 +508,15 @@ const styles = StyleSheet.create({
     width: '70%',
     justifyContent: 'center',
   },
+  toDetailFooter: {
+    alignItems: 'center',
+    marginVertical: 6,
+  },
   image: { height: 80, width: 80, borderRadius: 4, resizeMode: 'cover' },
   information: { flexDirection: 'row', justifyContent: 'space-between' },
   buttonContainer: { marginTop: 8 },
   waitingForPaymentEmpty: { marginTop: 60, marginHorizontal: 60 },
-  contentContainerStyle: { paddingBottom: 50, paddingTop: 30 },
+  contentContainerStyle: { paddingBottom: 16, paddingTop: 8 },
 });
 
 export default memo(ListCard);
