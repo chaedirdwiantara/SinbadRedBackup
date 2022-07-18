@@ -21,7 +21,8 @@ import {
   SnbToast,
   SnbTopNav,
   styles,
-  FooterButton
+  FooterButton,
+  SnbTopNav2
 } from '@sinbad/react-native-sinbad-ui';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
@@ -448,7 +449,18 @@ const OmsThankYouPageView: FC = () => {
         <LoadingPage />
       ) : (
         <>
-          <SnbTopNav.Type1 type="white" title={'Menunggu Pembayaran'} />
+        {params.section == 'orderHistory' ?
+          <SnbTopNav2.Type3 
+          color="white" 
+          title={'Menunggu Pembayaran'} 
+          backAction={NavigationAction.back}
+          />
+          :
+          <SnbTopNav2.Type1 
+          color="white" 
+          title={'Menunggu Pembayaran'}
+          />
+        }
 
           {renderContent()}
           {renderFooter()}

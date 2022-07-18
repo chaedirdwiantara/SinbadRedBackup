@@ -9,6 +9,7 @@ import {
   SnbRadio,
   SnbText2,
   colorV2,
+  SnbCheckbox2,
 } from 'react-native-sinbad-ui';
 
 interface ModalTransactionProps {
@@ -27,16 +28,24 @@ const transactionFilter = [
     label: 'Diproses',
   },
   {
-    id: 'packed',
-    label: 'Dikemas',
-  },
-  {
     id: 'shipped',
     label: 'Dikirim',
   },
   {
+    id: 'packed',
+    label: 'Dikemas',
+  },
+  {
     id: 'delivered',
     label: 'Tiba di tujuan',
+  },
+  {
+    id: 'cancelled',
+    label: 'Dibatalkan',
+  },
+  {
+    id: 'delivery_failed',
+    label: 'Pengiriman Gagal',
   },
 ];
 
@@ -54,7 +63,35 @@ const ModalTransactionFilter = forwardRef<
   const Content = useMemo(() => {
     return (
       <View>
-        <SnbRadioGroup value={select} onChange={setSelect}>
+        {transactionFilter.map((i) => (
+          <View
+            key={i.id}
+            style={{marginTop: 8}}
+          >
+            <TouchableOpacity
+              style={{flexDirection: 'row', alignItems: 'center'}}
+              onPress={() => setSelect(i.id)}
+            >
+              <View style={{ flex: 1, marginVertical: 8 }}>
+                  {select === i.id ? (
+                    <SnbText2.Body.Default>{i.label}</SnbText2.Body.Default>
+                  ) : (
+                    <SnbText2.Paragraph.Default>
+                      {i.label}
+                    </SnbText2.Paragraph.Default>
+                  )}
+                </View>
+                <SnbCheckbox2 
+                  key={i.id}
+                  testID = {'03-'+i.id}
+                  checked={select === i.id }
+                  onChange={() => setSelect(i.id)}
+                />
+            </TouchableOpacity>
+            <View style={styles.div} />
+          </View>
+        ))}
+        {/* <SnbRadioGroup value={select} onChange={setSelect}>
           {transactionFilter.map((i) => (
             <View
               key={i.id}
@@ -82,7 +119,7 @@ const ModalTransactionFilter = forwardRef<
               <View style={styles.div} />
             </View>
           ))}
-        </SnbRadioGroup>
+        </SnbRadioGroup> */}
         <View style={{ marginVertical: 14 }}>
           <SnbButton2.Primary
             size="medium"
@@ -114,7 +151,7 @@ const ModalTransactionFilter = forwardRef<
       }
       name="filter-order-history"
       type="content"
-      contentHeight={350}
+      contentHeight={450}
       snap
       close={props.onClose}
     />

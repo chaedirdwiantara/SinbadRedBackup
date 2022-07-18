@@ -103,7 +103,7 @@ export const setErrorMessage = (code: number, message?: string) => {
       return 'No. HP harus berupa angka';
     }
     case 40010000005: {
-      return 'No. Hp yang Anda masukkan sudah terdaftar';
+      return 'Nomor telah terdaftar';
     }
     case 40010000006: {
       return 'No. Hp tidak boleh kosong';

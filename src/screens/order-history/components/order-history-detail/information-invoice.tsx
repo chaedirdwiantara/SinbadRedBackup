@@ -21,11 +21,8 @@ const InformationInfoice = () => {
   return (
     <>
       <View style={styles.main}>
-        <Header title="Informasi Faktur" />
-        <Description
-          title="Nomor Pesanan"
-          value={data?.orderSellerCode || ''}
-        />
+        <Header title="Informasi Invoice" />
+        <Description title="Order ID" value={data?.orderCode || ''} />
         <Description
           title="Tanggal Pemesanan"
           value={toLocalDateTime(data?.orderedAt || '')}

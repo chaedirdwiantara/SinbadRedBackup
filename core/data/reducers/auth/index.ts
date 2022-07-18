@@ -19,6 +19,7 @@ import {
 } from './auth-verify-otp.reducer';
 import { authMeReducer, AuthMeUsernameProps } from './auth-me.reducer';
 import { authMeV2Reducer, AuthMeV2Props } from './auth-me-v2.reducer';
+import { AuthCheckPhoneLoginProps, authCheckPhoneLoginReducer } from './check-phone-login.reducer';
 
 export const authCore = combineReducers({
   me: authMeReducer,
@@ -27,6 +28,7 @@ export const authCore = combineReducers({
   logout: authLogoutReducer,
   requestOTP: authRequestOTPReducer,
   meV2: authMeV2Reducer,
+  checkPhoneLogin: authCheckPhoneLoginReducer
 });
 
 export type AuthProps = {
@@ -36,6 +38,7 @@ export type AuthProps = {
   logout: AuthLogoutProps;
   requestOTP: AuthRequestOTPProps;
   meV2: AuthMeV2Props;
+  checkPhoneLogin: AuthCheckPhoneLoginProps
 };
 /**
  * ================================================================

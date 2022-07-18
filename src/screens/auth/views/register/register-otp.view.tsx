@@ -3,12 +3,12 @@ import {
   maskPhone,
   useOTP,
   setErrorMessage,
-  useCheckPhoneV2,
   useCheckAutoLogin,
+  useAuthAction,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
-import { ScrollView, View, Image } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
@@ -19,6 +19,8 @@ import {
   Content,
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
+import { useDataAuth } from '@core/redux/Data';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const RegisterOTPView: React.FC = () => {
   const {
@@ -26,17 +28,20 @@ const RegisterOTPView: React.FC = () => {
     verifyOTP,
     mobilePhone,
     getLocationPermissions,
-    hashOtp,
+    otpHash,
+    type,
   } = useOTP();
   const { goBack }: any = useNavigation();
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
-  const { checkPhone } = useCheckPhoneV2();
+  const { requestOTP } = useAuthAction();
   const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
   const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
     React.useState(false);
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
+  const authCoreAction = useAuthCoreAction();
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
@@ -48,10 +53,18 @@ const RegisterOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (checkAutoLoginData?.data?.message === 'Success') {
-      getLocationPermissions();
-      resetCheckAutoLogin();
+      authCoreAction.meV2();
     }
   }, [checkAutoLoginData]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData?.data?.message === 'Success') {
+      if (meV2.data) {
+        getLocationPermissions();
+        resetCheckAutoLogin();
+      }
+    }
+  }, [meV2.data]);
 
   React.useEffect(() => {
     if (
@@ -91,11 +104,11 @@ const RegisterOTPView: React.FC = () => {
           onVerifyOTP={(otp) => {
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
-              otp: Number(otp),
+              otp,
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhoneNo: mobilePhone, otpHash: hashOtp });
+            requestOTP({ mobilePhone, otpHash, type });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
@@ -103,6 +116,7 @@ const RegisterOTPView: React.FC = () => {
           otpSuccess={verifyOTP.data !== null}
           loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
+          otpMethod={type}
         />
       </ScrollView>
       <SnbBottomSheet2

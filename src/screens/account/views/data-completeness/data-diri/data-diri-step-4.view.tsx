@@ -69,7 +69,15 @@ const DataDiriStep4View: React.FC = () => {
         const data = {
           email: email,
         };
-        changeEmailAction.changeEmail(dispatchSupplier, { data });
+        if (
+          email === completeDataState?.data?.userData?.email ||
+          email === '' ||
+          email === null
+        ) {
+          backToDataCompleteness();
+        } else {
+          changeEmailAction.changeEmail(dispatchSupplier, { data });
+        }
       } else {
         setErrorMessage('Pastikan email yang Anda masukkan benar');
       }

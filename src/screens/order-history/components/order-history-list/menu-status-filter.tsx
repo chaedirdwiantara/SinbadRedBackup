@@ -1,40 +1,34 @@
-import React, { memo, useCallback, useContext } from 'react';
+import { useMenuStatusListAction } from '@screen/order-history/functions/history-list/use-history-list.hook';
+import React, { memo, useCallback, useContext, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { SnbChips2 } from 'react-native-sinbad-ui';
+import { SnbChips2, SnbText2 } from 'react-native-sinbad-ui';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { Context } from './context';
 
-const menuList = [
-  {
-    id: 'waiting_for_payment',
-    label: 'Menunggu Pembayaran',
-  },
-  {
-    id: 'ongoing',
-    label: 'Pesanan Berlangsung',
-  },
-  {
-    id: 'done',
-    label: 'Pesanan Selesai',
-  },
-  {
-    id: 'failed',
-    label: 'Pesanan Gagal',
-  },
-];
-
 const MenuStatusFilter = () => {
+  const menuStatusListAction = useMenuStatusListAction();
+  const {
+    stateOrderHistory: {
+      menuStatus: { data },
+    },
+    dispatchOrderHistory,
+  } = useOrderHistoryContext();
+  useEffect(() => {
+    menuStatusListAction.menuStatusList(dispatchOrderHistory);
+  }, []);
   const [state, setState] = useContext(Context);
 
   const onSelectFilter = useCallback(
     (id: string) => {
       setState((prev) => ({
         ...prev,
-        status: id,
-        orderStatus: '',
+        status: '',
+        orderGroupStatus: id,
+        subOrderGroupStatus: '',
         keyword: '',
       }));
     },
-    [state.status],
+    [state.orderGroupStatus],
   );
 
   return (
@@ -44,13 +38,14 @@ const MenuStatusFilter = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingHorizontal: 12 }}
         showsVerticalScrollIndicator={false}>
-        {menuList.map((i) => (
+        {data?.map((i) => (
           <View style={styles.main}>
             <SnbChips2.Choice
-              key={i.id}
+              testID={'01'}
+              key={i.code}
               text={i.label}
-              active={i.id === state.status ? true : false}
-              onPress={() => onSelectFilter(i.id)}
+              active={i.code === state.orderGroupStatus ? true : false}
+              onPress={() => onSelectFilter(i.code)}
             />
           </View>
         ))}

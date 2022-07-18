@@ -10,8 +10,6 @@ import { RecommendationHomeView } from '../../recommendation/views';
 import { CategoryHomeView } from '../../category/views';
 /** === IMPORT FUNCTION HERE === */
 import { useHeaderChange, useRefresh } from '../functions';
-import { useGetTokenNotLogin } from '@core/functions/firebase/get-fcm.function';
-import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useDataAuth } from '@core/redux/Data';
 // import { useCheckoutMaster } from '@screen/oms/functions';
@@ -40,8 +38,6 @@ const HomeView: React.FC = ({ navigation, start }: any) => {
   const totalCartActions = useGetTotalCartAction();
   const notificationTotalActions = useNotificationTotalActions();
   const { me, meV2 } = useDataAuth();
-  useGetTokenNotLogin();
-  setFlagByDeviceId();
   /** === FUNCTION FOR HOOK === */
   const changeHeader = (height: number) => {
     height > 100 ? actionHeaderChange(true) : actionHeaderChange(false);

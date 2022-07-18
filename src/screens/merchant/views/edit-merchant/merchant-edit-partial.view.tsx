@@ -307,9 +307,9 @@ const MerchantEditPartialView: FC<Props> = (props) => {
         return (
           (dataLargeArea === storeData?.buyerAccount.largeArea &&
             dataVehicleAccessibilityAmount ===
-              buyerAddressData?.vehicleAccessibilityAmount &&
+            buyerAddressData?.vehicleAccessibilityAmount &&
             vehicleAccessibility.value.id ===
-              buyerAddressData?.vehicleAccessibility?.id) ||
+            buyerAddressData?.vehicleAccessibility?.id) ||
           vehicleAccessibility.value.id === null
         );
       case 'merchantAddress':
@@ -495,11 +495,11 @@ const MerchantEditPartialView: FC<Props> = (props) => {
           keyboardType={'numeric'}
           value={merchantSize.value}
           onChangeText={(text) => {
-            text = text.replace(/[^0-9]/g, '');
+            text = text.replace(text[0] === '0' ? /[^1-9]/g : /[^0-9]/g, '');
             merchantSize.setValue(text);
           }}
           onClearText={() => merchantSize.setValue('')}
-          maxLength={50}
+          maxLength={4}
         />
       </View>
     );

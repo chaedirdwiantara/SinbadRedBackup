@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import {
   MenuStatusFilter,
+  MenuSubStatusFilter,
   SearchInputFilter,
   ListCard,
   HistoryListContext,
@@ -16,7 +17,6 @@ import { NavigationAction } from '@navigation';
 const goBack = () => {
   NavigationAction.back();
 };
-
 const CopilotView = walkthroughable(View);
 
 // context state history list
@@ -33,14 +33,15 @@ const OrderHistoryList = ({ start }: any) => {
       start();
     }
   }, [coachmarkState.data]);
-  // frist get & get by filter history list
+  
+
+  // first get & get by filter history list
   useInitialGetList();
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type3
+      <SnbTopNav2.Type1
         title="Pesanan"
         color="white"
-        backAction={() => goBack()}
       />
       <View>
         <CopilotStep
@@ -53,6 +54,7 @@ const OrderHistoryList = ({ start }: any) => {
         </CopilotStep>
       </View>
       <SearchInputFilter />
+      <MenuSubStatusFilter />
       <ListCard />
     </SnbContainer>
   );
