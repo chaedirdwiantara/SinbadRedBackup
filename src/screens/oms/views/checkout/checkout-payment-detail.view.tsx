@@ -41,7 +41,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
           </View>
           <View style={CheckoutStyle.detailItemContainer}>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              Total Pengiriman
+              Ongkos Kirim
             </SnbText2.Paragraph.Default>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               {toCurrency(deliveryFee, { withFraction: false })}
