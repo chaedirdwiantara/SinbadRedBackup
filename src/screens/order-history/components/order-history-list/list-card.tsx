@@ -162,8 +162,6 @@ const ParcelConsolidation = (dataParcels: any[], refresh: ()=> void) => {
           desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
           onConfirm={() => {
             onDoneOrder(confirmationOrderId);
-            setConfirmationOpen(false);
-            refresh();
           }}
           contentHeight={175}
           onClose={() => setConfirmationOpen(false)}

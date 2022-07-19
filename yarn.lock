@@ -1607,13 +1607,14 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.72":
-  version "1.0.72"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.72.tgz#d714a7ed656bc83d67d0b9cb7ac2317c8530dfc8"
-  integrity sha512-HCm2BfBNZXSJmi+FiR8AhdhyRCNiBuvKGzAdIIuAT2XtUe9U3IpvnslRqeckTcS/V97SMwEDQGwYAX1rKU0ixw==
+"@sinbad/react-native-sinbad-ui@1.0.73":
+  version "1.0.73"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.73.tgz#8a9821c89182c01ed841e0207bd8ccfffa9c39a7"
+  integrity sha512-s7gN+h5cjAcLyQFXxNdJyY5Qbxas+TsG1GLMkLAKify63IHOo0BUtZouKF3dUGpLCNqaocEqbQaaWgueDZbrkA==
   dependencies:
     "@gorhom/bottom-sheet" "4.1.5"
     "@sinbad/design-token" "0.0.1"
+    lodash "^4.17.21"
     moment "2.29.1"
     react-native-calendars "1.1263.0"
     react-native-modal "11.10.0"

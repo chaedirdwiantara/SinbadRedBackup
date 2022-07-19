@@ -15,7 +15,7 @@ export const listHistoryPaymentInitialState: ListHistoryPaymentProps = {
   error: null,
   totalPage: 0,
   page: 0,
-  perPage: 10,
+  perPage: 5,
 };
 /** === REDUCER == */
 export const listHistoryPaymentReducer = simplifyReducer(listHistoryPaymentInitialState, {

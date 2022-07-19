@@ -15,7 +15,7 @@ export const consolidateListHistoryInitialState: ConsolidateListHistoryProps = {
   error: null,
   totalPage: 0,
   page: 1,
-  perPage: 10,
+  perPage: 5,
 };
 /** === REDUCER == */
 export const consolidateListHistoryReducer = simplifyReducer(consolidateListHistoryInitialState, {
