@@ -11,7 +11,7 @@ import {
   SnbToast,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation, useFocusEffect } from '@react-navigation/core';
 import { useAuthAction, useOTP } from '@screen/auth/functions';
 import { useDataAuth } from '@core/redux/Data';
 import { LOGIN_OTP_VIEW, REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
@@ -79,18 +79,24 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
     return resetRequestOTP
   }, [])
 
-  React.useEffect(() => {
+  const gotToOTP = React.useCallback(() => {
     if (requestOTPState.data !== null) {
       ref.current?.close()
       const navigateTo = action === 'login' ? LOGIN_OTP_VIEW : REGISTER_OTP_VIEW
       const params = { mobilePhone: phone, otpHash, type: otpMethod }
       navigate(navigateTo, params);
+      resetRequestOTP()
     }
+  }, [requestOTPState])
+
+  React.useEffect(() => {
     if (requestOTPState.error?.message) {
       ref.current?.close()
       SnbToast.show(requestOTPState.error.message, 2500)
     }
   }, [requestOTPState])
+
+  useFocusEffect(gotToOTP)
 
   function handleOnGetOTP() {
     const data = { mobilePhone: phone, otpHash, type: otpMethod }
