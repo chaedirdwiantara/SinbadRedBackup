@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash';
 import PushNotifications, { Importance } from 'react-native-push-notification';
 import { useDataAuth } from '@core/redux/Data';
 import { useNotificationTotalActions } from '@screen/notification/functions';
+import { colorV2 } from '@sinbad/react-native-sinbad-ui';
 /** === INTERFACE === */
 interface RemoteMessage {
   payload: string;
@@ -80,6 +81,8 @@ const PushNotification = () => {
       message: remoteMessage.notification?.body!,
       title: remoteMessage.notification?.title!,
       largeIcon: '',
+      largeIconUrl: remoteMessage.notification?.image ?? '',
+      color: colorV2.primary.red50,
       smallIcon: 'ic_stat_notif',
       userInfo: remoteMessage,
     });

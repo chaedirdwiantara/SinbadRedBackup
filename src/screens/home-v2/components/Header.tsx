@@ -15,12 +15,18 @@ interface HeaderProps {}
 const Header: FC<HeaderProps> = () => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const totalCartActions = useGetTotalCartAction();
+  const { totalNotification } = useNotificationTotalActions();
+  const { me } = useDataAuth();
+  // state
   const totalCartState: number = useMemo(
     () => stateCart?.total?.data?.totalProducts || 0,
     [stateCart?.total?.data?.totalProducts],
   );
-  const { totalNotification } = useNotificationTotalActions();
-  const { me } = useDataAuth();
+
+  const totalCountNotification: number = useMemo(
+    () => totalNotification?.data?.total ?? 0,
+    [totalNotification?.data?.total],
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -57,7 +63,7 @@ const Header: FC<HeaderProps> = () => {
       icon1Action={onClickCart}
       icon1Value={totalCartState}
       icon2Action={onCLickNotification}
-      icon2Value={totalNotification.data}
+      icon2Value={totalCountNotification}
       onSearch={() => NavigationAction.navigate('SearchView')}
     />
   );

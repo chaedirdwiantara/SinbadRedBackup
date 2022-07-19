@@ -8,7 +8,7 @@ export type NotificationTotalInitialProps =
 /** === INITIAL STATE === */
 export const notificationTotalInitialState: NotificationTotalInitialProps = {
   data: {
-    data: 0,
+    data: { total: 0 },
   },
   error: null,
   loading: false,
