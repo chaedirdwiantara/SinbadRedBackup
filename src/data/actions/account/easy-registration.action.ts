@@ -1,7 +1,7 @@
 import * as models from '@models';
 import * as types from '@types';
-import { globalReportFromAction } from '../../../report/global-report';
-import * as EventName from '../../../report/moengage/event';
+import { globalReportFromAction } from '@core/report/global-report';
+import * as EventName from '@core/report/moengage/event';
 
 export const createBasicAccount = (
   data: models.ICreateBasicAccount,

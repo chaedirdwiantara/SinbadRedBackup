@@ -1,24 +1,33 @@
 import * as Actions from '@actions';
 import * as models from '@models';
 import { useRoute, useNavigation } from '@react-navigation/core';
-import { LIST_LOCATION_VIEW } from '@screen/account/functions/screens_name';
+import {
+  LIST_LOCATION_VIEW,
+  DATA_VERIFICATION_VIEW,
+} from '@screen/account/functions/screens_name';
 import React from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
 import RNOtpVerify from 'react-native-otp-verify';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useDataAuth } from '@core/redux/Data';
 
-const useOTP = () => {
+const useOTP = (action = '') => {
   const dispatch = useDispatch();
   const { reset } = useNavigation();
   const { params }: any = useRoute();
   const { verifyOTP } = useSelector((state: any) => state.auth);
   const [mobilePhone, setMobilePhone] = React.useState('');
   const [otp, setOtp] = React.useState('');
-  const [hashOtp, setHashOtp] = React.useState('');
+  const [otpHash, setOtpHash] = React.useState('');
+  const [type, setType] = React.useState('');
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
-    startListeningForOtp();
+    RNOtpVerify.getHash().then((value) => setOtpHash(value[0]));
+    if (action === 'listeningToHash') {
+      startListeningForOtp();
+    }
     return RNOtpVerify.removeListener;
   }, []);
 
@@ -63,17 +72,26 @@ const useOTP = () => {
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
       ).then(handleRequestPermissionResult);
     } else {
-      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      if (meV2.data?.data?.isRegisteredOnNG === false) {
+        reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+      } else if (meV2.data?.data?.isRegisteredOnNG === true) {
+        reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+      }
     }
   };
 
   const handleRequestPermissionResult = () => {
-    reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    if (meV2.data?.data?.isRegisteredOnNG === false) {
+      reset({ index: 0, routes: [{ name: DATA_VERIFICATION_VIEW }] });
+    } else if (meV2.data?.data?.isRegisteredOnNG === true) {
+      reset({ index: 0, routes: [{ name: LIST_LOCATION_VIEW }] });
+    }
   };
 
   React.useEffect(() => {
-    setMobilePhone(params?.phoneNo);
-    setHashOtp(params?.hashOtp);
+    setMobilePhone(params?.mobilePhone);
+    setOtpHash(params?.otpHash);
+    setType(params?.type);
     return resetVerifyOTP;
   }, []);
 
@@ -85,7 +103,8 @@ const useOTP = () => {
     otp,
     setOtp,
     getLocationPermissions,
-    hashOtp,
+    otpHash,
+    type,
   };
 };
 

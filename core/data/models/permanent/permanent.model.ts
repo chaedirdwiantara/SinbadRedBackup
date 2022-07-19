@@ -5,4 +5,5 @@ export interface Permanent {
   appVersion: any;
   forceUpdateVersion: number;
   maintenance: boolean;
+  advertisingId: string;
 }

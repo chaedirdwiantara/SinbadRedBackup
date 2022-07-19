@@ -1,8 +1,8 @@
 import * as types from '@types';
 import * as models from '@models';
 import ReactMoE from 'react-native-moengage';
-import { globalReportFromAction } from '@report/global-report';
-import * as EventName from '@report/moengage/event';
+import { globalReportFromAction } from '@core/report/global-report';
+import * as EventName from '@core/report/moengage/event';
 /** === LIST === */
 /** => list supplier process */
 export const supplierListProcess = (
