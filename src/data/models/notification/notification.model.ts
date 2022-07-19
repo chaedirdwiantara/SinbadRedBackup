@@ -22,5 +22,5 @@ export interface NotificationListSuccessProps {
 }
 
 export interface NotificationTotalSuccess {
-  data: number;
+  data: { total: number };
 }
