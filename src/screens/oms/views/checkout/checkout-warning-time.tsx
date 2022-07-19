@@ -2,12 +2,7 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import {
-  SnbText2,
-  SnbDivider2,
-  colorV2,
-  SnbIcon,
-} from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, SnbIcon } from 'react-native-sinbad-ui';
 /** === COMPONENT === */
 export const CheckoutWarningTime: FC = () => {
   return (

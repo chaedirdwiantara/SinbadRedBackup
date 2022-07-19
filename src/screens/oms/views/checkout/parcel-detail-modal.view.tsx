@@ -20,8 +20,8 @@ const { height } = Dimensions.get('window');
 interface ModalParcelDetail {
   parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
-  data: models.CheckoutCartProduct[];
-  sellerName: string;
+  data?: models.CheckoutCartProduct[];
+  sellerName?: string;
 }
 /** === COMPONENT === */
 export const ModalParcelDetail: FC<ModalParcelDetail> = ({
@@ -30,15 +30,15 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   data,
   sellerName,
 }) => {
+  if (!data || !sellerName) {
+    return null;
+  }
+
   /** === HOOK === */
   const deliveryFee = 0;
   const totalProductsPrice = totalBarangPrice(data);
 
   const productDetail = () => {
-    if (data === null) {
-      return null;
-    }
-
     return (
       <View style={{ paddingBottom: 16 }}>
         <SnbText2.Body.Default color={colorV2.textColor.secondary}>
@@ -54,7 +54,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
         <View style={CheckoutStyle.modalDetailTotalContainer}>
           <View style={{ width: '50%' }}>
             <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
-              Biaya Pengiriman
+              Ongkos Kirim
             </SnbText2.Paragraph.Default>
           </View>
           <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
@@ -130,7 +130,7 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
     );
   };
 
-  return data !== null ? (
+  return (
     <SnbBottomSheet2
       ref={parentRef}
       name={'checkoutParcelDetailModal'}
@@ -141,8 +141,6 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
       content={content()}
       navigation={navigation()}
     />
-  ) : (
-    <View />
   );
 };
 
