@@ -34,9 +34,11 @@ const IntroSplashView: React.FC = () => {
   setFlagByDeviceId();
   /** => get auth me */
   React.useEffect(() => {
-    useAdsIDAction.saveAdsID();
-    authCoreAction.me();
-    authCoreAction.meV2();
+    if (!maintenance) {
+      useAdsIDAction.saveAdsID();
+      authCoreAction.me();
+      authCoreAction.meV2();
+    }
   }, []);
 
   React.useEffect(() => {
