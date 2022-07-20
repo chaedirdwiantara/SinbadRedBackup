@@ -5,7 +5,7 @@ import {
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
 import { loginPhoneStyles } from '@screen/auth/styles';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
   SnbBottomSheet2Ref,
@@ -21,6 +21,8 @@ import { ModalOTPMethod, ModalSalesman } from '../shared';
 import { useAuthCoreAction } from '@core/functions/auth';
 import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
+import { goToBannerDetail, goToBanner, useBannerAction } from '../../../banner/functions';
+import { contexts } from '@contexts';
 
 const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
@@ -31,6 +33,8 @@ const Content: React.FC = () => {
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent();
   const refModalForceRegist = React.useRef<SnbBottomSheet2Ref>(null);
+  const { stateBanner, dispatchBanner } = useContext(contexts.BannerContext);
+  const bannerAction = useBannerAction();
 
   React.useEffect(() => {
     return () => {
@@ -70,6 +74,8 @@ const Content: React.FC = () => {
     return () => backHandler.remove();
   }, []);
 
+  console.log('response:', checkPhoneLoginState);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Image
@@ -106,6 +112,13 @@ const Content: React.FC = () => {
           size="medium"
           full
         />
+        <SnbButton2.Primary
+          title="Banner"
+          onPress={() => bannerAction.slider(dispatchBanner)}
+          loading={checkPhoneLoginState.loading}
+          size="medium"
+          full
+        />
       </View>
       <View style={loginPhoneStyles.registerLink}>
         <SnbText2.Paragraph.Default>
@@ -134,6 +147,13 @@ const Content: React.FC = () => {
           }}
         />
       </View>
+      <SnbText2.Paragraph.Default>{`banner: ${stateBanner.bannerSlider.list.data}`}</SnbText2.Paragraph.Default>
+      <SnbText2.Paragraph.Default>
+        {`req mobilePhone: ${phone.value}`}
+      </SnbText2.Paragraph.Default>
+      <SnbText2.Paragraph.Default>{`req adsId: ${advertisingId}`}</SnbText2.Paragraph.Default>
+      <SnbText2.Paragraph.Default>{`err code: ${checkPhoneLoginState?.error?.code}`}</SnbText2.Paragraph.Default>
+      <SnbText2.Paragraph.Default>{`err message: ${checkPhoneLoginState?.error?.message}`}</SnbText2.Paragraph.Default>
     </ScrollView>
   );
 };
