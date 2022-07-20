@@ -51,7 +51,7 @@ const cancelVoucher = () => {
 
 // const cancelVoucher = () => {
 //   const path = 'sinbad-vouchers/cancel-reserve-voucher';
-//   return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
+//   return apiMapping('auth', path, 'voucher', 'v1', 'DELETE');
 // };
 
 /** === EXPORT FUNCTIONS === */
