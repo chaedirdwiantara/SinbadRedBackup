@@ -14,7 +14,7 @@ const useAdsID = () => {
       if (advertisingId === '') {
         RNAdvertisingId.getAdvertisingId()
           .then((response) => {
-            dispatch(Actions.saveAdsID(null));
+            dispatch(Actions.saveAdsID(response.advertisingId));
           })
           .catch((error) => console.error(error));
       }
