@@ -18,6 +18,7 @@ const Maintenance = () => {
       SplashScreen.hide();
       NavigationAction.resetToMaintenance();
     } else {
+      SplashScreen.hide();
       NavigationAction.restartApp();
     }
   }, [data.maintenance]);
