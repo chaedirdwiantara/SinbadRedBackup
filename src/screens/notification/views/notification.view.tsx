@@ -1,391 +1,74 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React, { useState } from 'react';
-import { View, FlatList, TouchableWithoutFeedback, Image } from 'react-native';
-import {
-  SnbContainer,
-  SnbText,
-  SnbTopNav,
-  SnbBottomSheet,
-  SnbButton,
-} from 'react-native-sinbad-ui';
-import moment from 'moment';
-import {
-  goBack,
-  useNotificationAction,
-  useStandardModalState,
-} from '../functions';
-import { useNotificationContext } from 'src/data/contexts/notification/useNotificationContext';
-import { contexts } from '@contexts';
-import * as models from '@models';
-import NotificationEmptyView from './notification-empty.view';
-import LoadingPage from '@core/components/LoadingPage';
-import NotificationStyle from '../styles/notification.style';
-import { NavigationAction } from '@navigation';
-import BottomSheetError from '@core/components/BottomSheetError';
-import { LoadingLoadMore } from '@core/components/Loading';
+import React, { memo } from 'react';
+import { FlatList } from 'react-native';
+import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
+import { goBack, timeFromNow } from '../functions';
+import { NotificationCard } from '../components';
 
-const dataIcon = {
-  order: {
-    image: require('../../../assets/icons/notifications/order.png'),
-    title: 'Order',
-  },
-  partial_order: {
-    image: require('../../../assets/icons/notifications/order.png'),
-    title: 'Order',
-  },
-  promo: {
-    image: require('../../../assets/icons/notifications/promo.png'),
-    title: 'Promo',
-  },
-  voucher: {
-    image: require('../../../assets/icons/notifications/voucher.png'),
-    title: 'Voucher',
-  },
-  payment: {
-    image: require('../../../assets/icons/notifications/pembayaran.png'),
-    title: 'Pembayaran',
-  },
-  verification: {
-    image: require('../../../assets/icons/notifications/verifikasi.png'),
-    title: 'Status Verifikasi',
-  },
-  special_offer: {
-    image: require('../../../assets/icons/notifications/penawaranspesial.png'),
-    title: 'Penawaran Spesial',
-  },
-  registration: {
-    image: require('../../../assets/icons/notifications/verifikasi.png'),
-    title: 'Supplier Store Registration',
-  },
-  'Sinbad Quest': {
-    image: require('../../../assets/icons/notifications/quest.png'),
-    title: 'Sinbad Quest',
-  },
-  'Catatan Utang': {
-    image: require('../../../assets/icons/notifications/catatan_utang.png'),
-    title: 'Catatan Utang',
-  },
-  'Rekening Bank': {
-    image: require('../../../assets/icons/notifications/verifikasi.png'),
-    title: 'Rekening Bank',
-  },
-  'Pengembalian Dana': {
-    image: require('../../../assets/icons/notifications/pembayaran.png'),
-    title: 'Pengembalian Dana',
-  },
-  'Pengembalian Dana Berhasil': {
-    image: require('../../../assets/icons/notifications/pembayaran.png'),
-    title: 'Pengembalian Dana Berhasil',
-  },
-};
-
-const SINBAD_REJECT_MESSAGE =
-  'Sinbad gagal melakukan verifikasi toko Anda. Yuk, periksa kembali halaman profile dan lengkapi data Anda.';
-
-/** === COMPONENT === */
-const NotificationView: React.FC = () => {
-  /** === HOOK === */
-  const notificationListError = useStandardModalState();
-  const [modalTitle, setModalTitle] = useState('');
-  const [modalMessage, setModalMessage] = useState('');
-  const [approvalStatus, setApprovalStatus] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const { stateNotification, dispatchNotification } = React.useContext(
-    contexts.NotificationContext,
-  );
-  const {
-    stateNotification: {
-      list: { data: listNotificationData, total: listNotificationTotal },
+const mockData = [
+  {
+    id: '1',
+    typeName: 'Info Produk',
+    iconName: 'sinbad_point',
+    iconColor: 'red',
+    product: {
+      url: 'https://sinbad-website-sg.s3.ap-southeast-1.amazonaws.com/prod/shared/123892-0bd6_20220628132024.png',
+      name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore',
     },
-  } = useNotificationContext();
-  const notificationAction = useNotificationAction();
-  const notificationListState = stateNotification.list;
-  /** => effect */
-  React.useEffect(() => {
-    notificationAction.list(dispatchNotification);
-  }, []);
-  React.useEffect(() => {
-    if (notificationListState.error !== null) {
-      notificationListError.setOpen(true);
-    }
-  }, [notificationListState]);
+    title: 'Lorem Ipsum',
+    date: Date.now(),
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    isRead: false,
+  },
+  {
+    id: '2',
+    typeName: 'Info Produk',
+    iconName: 'sinbad_point',
+    iconColor: 'red',
+    title: 'Lorem Ipsum',
+    date: Date.now() - 1000 * 60 * 1200,
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut .',
+    isRead: true,
+  },
+  {
+    id: '3',
+    typeName: 'Info Produk',
+    iconName: 'sinbad_point',
+    iconColor: 'red',
+    title: 'Lorem Ipsum',
+    date: Date.now() - 1000 * 60 * 1500,
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut .',
+    isRead: false,
+  },
+];
 
-  const handleRetryGetNotification = () => {
-    notificationAction.refresh(dispatchNotification);
-    notificationListError.setOpen(false);
-  };
-
-  const onHandleLoadMore = () => {
-    if (listNotificationData) {
-      if (listNotificationData.length < listNotificationTotal) {
-        notificationAction.loadMore(
-          dispatchNotification,
-          stateNotification.list,
-        );
-      }
-    }
-  };
-
-  const onHandleRefresh = () => {
-    notificationAction.refresh(dispatchNotification);
-  };
-  /** => set approval status title */
-  const setApprovalStatusTitle = (status: string) => {
-    switch (status) {
-      case 'verified':
-        return 'Toko Berhasil Diverifikasi';
-      case 'pending':
-      case 'updating':
-      case 'guest': {
-        return 'Toko Dalam Proses Verifikasi';
-      }
-      default:
-        return 'Toko Gagal Diverifikasi';
-    }
-  };
-  /** === VIEW === */
-  /** => header */
-  const header = () => {
-    return (
-      <SnbTopNav.Type3
-        type="red"
-        title={'Pemberitahuan'}
-        backAction={() => goBack()}
-      />
-    );
-  };
-  /** => render empty */
-  const renderEmpty = () => {
-    return (
-      <NotificationEmptyView
-        title={'Pemberitahuan Kosong'}
-        description={'Tunggu info terbaru Sinbad Yah !'}
-      />
-    );
-  };
-  /** => render item */
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: models.NotificationListSuccessProps;
-    index: number;
-  }) => {
-    let title = item.title;
-    let image = dataIcon.special_offer.image;
-    if (item.type) {
-      image = dataIcon[item.type]?.image;
-    }
-    let message = item.body;
-    switch (item?.type) {
-      case 'registration': {
-        title = 'Hai user_sinbad!';
-        break;
-      }
-      case 'verification': {
-        title = setApprovalStatusTitle(item?.data?.approvalStatus);
-        message = item.data ? item.body : SINBAD_REJECT_MESSAGE;
-        break;
-      }
-      default:
-        break;
-    }
-
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          switch (item?.screen) {
-            case 'registration':
-            case 'verification':
-              setModalTitle(title);
-              setModalMessage(message);
-              setApprovalStatus(item?.data?.approvalStatus);
-              setShowModal(true);
-              break;
-            case 'HistoryDetailView':
-              NavigationAction.navigate(item?.screen, item.data);
-          }
-        }}>
-        <View style={NotificationStyle.boxNotification} key={index}>
-          <View>
-            <Image source={image} style={NotificationStyle.image44Contain} />
-          </View>
-          <View style={{ flex: 1, justifyContent: 'center', paddingLeft: 16 }}>
-            <View style={NotificationStyle.boxNotificationItemHeader}>
-              <View style={{ flex: 3 }}>
-                <SnbText.H4>{title}</SnbText.H4>
-              </View>
-              <View style={{ flex: 1.5 }}>
-                <SnbText.C1>
-                  {item?.createdAt
-                    ? moment(new Date(item.createdAt)).format(
-                        'DD-MM-YYYY HH:mm',
-                      )
-                    : '-'}
-                </SnbText.C1>
-              </View>
-            </View>
-            <View style={{ flex: 1 }}>
-              <SnbText.B3>{message}</SnbText.B3>
-            </View>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-  /** => render modal */
-  const renderModal = () => {
-    return (
-      <SnbBottomSheet
-        open={showModal}
-        closeAction={() => setShowModal(false)}
-        content={renderModalContent()}
-        title={' '}
-        actionIcon={'close'}
-      />
-    );
-  };
-  const renderErrorModal = () => {
-    return (
-      <BottomSheetError
-        open={notificationListError.isOpen}
-        error={notificationListState.error}
-        retryAction={handleRetryGetNotification}
-      />
-    );
-  };
-  const renderLoadMore = () => {
-    if (notificationListState.loadMore) {
-      return (
-        <View style={{ marginBottom: 16 }}>
-          <LoadingLoadMore />
-        </View>
-      );
-    }
-  };
-  /** => render message with supplier name */
-  const renderMessageWithSupplierName = () => {
-    return (
-      <View>
-        <SnbText.B3>Akun anda telah ditambahkan oleh supplier</SnbText.B3>
-        <View style={{ marginVertical: 2 }} />
-        <SnbText.B3>
-          <SnbText.H4>
-            {notificationListState.data?.supplierName || 'Unknown Supplier'}.
-          </SnbText.H4>{' '}
-          Yuk nikmati pilihan produk terbarumu
-        </SnbText.B3>
-      </View>
-    );
-  };
-  /** => render message */
-  const renderMessage = () => (
-    <SnbText.B3 align="center">{modalMessage}</SnbText.B3>
-  );
-  /** => render modal */
-  const renderModalContent = () => {
-    let image = require('../../../assets/images/sinbad_image/smile_sinbad.png');
-    let title = 'Lihat Informasi Supplier';
-    if (approvalStatus === 'rejected') {
-      image = require('../../../assets/images/sinbad_image/cry_sinbad.png');
-    }
-    if (approvalStatus === undefined) {
-      image = require('../../../assets/images/sinbad_image/failed_error.png');
-      title = 'Lihat Profil';
-    }
-
-    return (
-      <View style={{ alignItems: 'center' }}>
-        <View style={{ alignItems: 'center' }}>
-          <Image
-            source={image}
-            style={{ width: 240, height: 160 }}
-            resizeMode="contain"
-          />
-          <SnbText.H4>{modalTitle}</SnbText.H4>
-          <View style={{ paddingHorizontal: 16 }}>
-            {notificationListState.data?.supplierName && approvalStatus === ''
-              ? renderMessageWithSupplierName()
-              : renderMessage()}
-          </View>
-        </View>
-        <View style={{ marginVertical: 16 }} />
-        <View style={{ width: '100%' }}>
-          <SnbButton.Single
-            type="primary"
-            title={title}
-            disabled={false}
-            onPress={() => {
-              setShowModal(false);
-              if (approvalStatus) {
-                console.log('go to MerchantSupplierInformationView');
-              } else {
-                console.log('go to ProfileView');
-              }
-            }}
-          />
-        </View>
-      </View>
-    );
-  };
-  /** => render separator */
-  const renderSeparator = () => {
-    return <View style={[NotificationStyle.lines, { marginLeft: 16 }]} />;
-  };
-  /** => render content */
-  const renderNotificationList = () => {
-    return (
-      <View>
-        <FlatList
-          contentContainerStyle={NotificationStyle.boxFlatlist}
-          data={notificationListState.data}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          refreshing={notificationListState.refresh}
-          onRefresh={onHandleRefresh}
-          onEndReachedThreshold={0.1}
-          onEndReached={onHandleLoadMore}
-          ItemSeparatorComponent={renderSeparator}
-          showsVerticalScrollIndicator
-        />
-      </View>
-    );
-  };
-  /** => render content */
-  const content = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        {!notificationListState.loading &&
-        notificationListState.data.length > 0 ? (
-          <View>{renderNotificationList()}</View>
-        ) : (
-          renderEmpty()
-        )}
-      </View>
-    );
-  };
-  /** => main */
+function NotificationView() {
   return (
     <SnbContainer color="white">
-      {header()}
-      {!notificationListState.loading ? content() : <LoadingPage />}
-      {renderModal()}
-      {renderErrorModal()}
-      {renderLoadMore()}
+      <SnbTopNav2.Type3 color="white" backAction={goBack} title="Notifikasi" />
+      <FlatList
+        data={mockData}
+        keyExtractor={(i) => i.id}
+        renderItem={({ item }) => (
+          <NotificationCard
+            testID={`notif-list-${item.id}`}
+            typeName={item.typeName}
+            iconName={item.iconName}
+            iconColor={item.iconColor}
+            product={item.product}
+            title={item.title}
+            date={timeFromNow(item.date)}
+            content={item.content}
+            read={!item.isRead}
+            onPress={() => {}}
+          />
+        )}
+      />
     </SnbContainer>
   );
-};
+}
 
-export default NotificationView;
-/**
- * ================================================================
- * NOTES
- * ================================================================
- * createdBy: bagaspp (team)
- * createDate: 22102021
- * updatedBy: -
- * updatedDate: -
- * updatedFunction/Component:
- * -> NaN (no desc)
- * -> NaN (no desc)
- */
+export default memo(NotificationView);
