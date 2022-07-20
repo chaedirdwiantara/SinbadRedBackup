@@ -10,6 +10,7 @@ import {
   resetToForceUpdate,
   resetToMaintenance,
   resetToBannedAccount,
+  restartApp
 } from '../../navigations/RootNavigation';
 import {
   useGetNavParams,
@@ -31,6 +32,7 @@ export const NavigationAction = {
   useCustomBackHardware,
   useFocusEffect,
   resetToBannedAccount,
+  restartApp
 };
 /**
  * ================================================================

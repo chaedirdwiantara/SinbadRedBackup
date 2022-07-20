@@ -83,3 +83,11 @@ export const resetToBannedAccount = () => {
     }),
   );
 };
+export const restartApp = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Splash' }],
+    }),
+  );
+};
