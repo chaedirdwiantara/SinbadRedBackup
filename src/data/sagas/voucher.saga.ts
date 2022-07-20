@@ -52,11 +52,27 @@ function* countAllVoucher(action: models.DetailProcessAction) {
     yield put(ActionCreators.countAllVoucherFailed(error));
   }
 }
+/** => cancel reserve voucher */
+function* cancelVoucher(action: Omit<models.DeleteProcessAction, 'id'>) {
+  try {
+    const response: models.DeleteSuccessV3Props = yield call(() => {
+      return VoucherApi.cancelVoucher();
+    });
+    yield action.contextDispatch(ActionCreators.cancelVoucherSuccess(response));
+    yield put(ActionCreators.cancelVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.cancelVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.cancelVoucherFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* VoucherSaga() {
   yield takeLatest(types.VOUCHER_DETAIL_PROCESS, voucherDetail);
   yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
   yield takeLatest(types.COUNT_ALL_VOUCHER_PROCESS, countAllVoucher);
+  yield takeLatest(types.CANCEL_VOUCHER_PROCESS, cancelVoucher);
 }
 
 export default VoucherSaga;
