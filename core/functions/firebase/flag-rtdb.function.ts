@@ -15,7 +15,7 @@ const setFlagByDeviceId = async () => {
     }
   });
 };
-/** check data flag */
+/** => check data flag */
 const useCheckFlagByTask = async (task: string) => {
   const dispatch = useDispatch();
   React.useEffect(() => {
@@ -28,8 +28,35 @@ const useCheckFlagByTask = async (task: string) => {
       database().ref(`sinbadApp/${uniqueId}/flag/${task}`).off('value', flag);
   }, []);
 };
+/** => check force update */
+const useCheckForceUpdateVersion = async () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    database()
+      .ref('forceUpdate/sinbadEcom')
+      .on('value', (data) => {
+        dispatch(CoreAction.forceUpdateVersion(parseInt(data.val(), 10)));
+      });
+  }, []);
+};
+/** => check maintenance */
+const useCheckMaintenance = async () => {
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    database()
+      .ref('maintenance/sinbadEcom')
+      .on('value', (data) => {
+        dispatch(CoreAction.maintenance(data.val()));
+      });
+  }, []);
+};
 /** === EXPORT === */
-export { setFlagByDeviceId, useCheckFlagByTask };
+export {
+  setFlagByDeviceId,
+  useCheckFlagByTask,
+  useCheckForceUpdateVersion,
+  useCheckMaintenance,
+};
 /**
  * ================================================================
  * NOTES

@@ -292,22 +292,11 @@ export const ModalThankYouPageOrderDetail = forwardRef<
       title={
         <SnbBottomSheetPart.Title
           swipeIndicator
-          title="Detail Pesanan"
+          title="Detail Pembayaran"
           titleType="center"
         />
       }
       close={onCloseModal}
     />
   );
-  // return data !== null ? (
-  //   <SnbBottomSheet
-  //     open={isOpen}
-  //     content={content()}
-  //     title={'Detail Pesanan'}
-  //     closeAction={close}
-  //     actionIcon={'close'}
-  //   />
-  // ): (
-  //   <View/>
-  // )
 });
