@@ -74,3 +74,12 @@ export const resetToMaintenance = () => {
     }),
   );
 };
+/** => reset to maintenance page */
+export const restartApp = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Splash' }],
+    }),
+  );
+};
