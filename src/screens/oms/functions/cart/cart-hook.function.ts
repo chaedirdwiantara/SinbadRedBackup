@@ -428,7 +428,7 @@ const useCartLocalData = () => {
         const stock = thisProduct.stock ?? 0;
 
         // determine the increment / decrement value
-        let updateValue = thisProduct.multipleQty ?? 1;
+        let updateValue = 1;
 
         // manage logic increase or decrease
         if (type === 'increase') {
@@ -784,18 +784,6 @@ const useCartLocalData = () => {
               }
 
               let updatedQty: number = qty;
-
-              if (thisProduct.multipleQty > 1) {
-                const isStockValid =
-                  (qty - thisProduct.minQty) % thisProduct.multipleQty === 0;
-                if (isStockValid) {
-                  updatedQty = qty;
-                } else {
-                  const modValue =
-                    (qty - thisProduct.minQty) % thisProduct.multipleQty;
-                  updatedQty = qty - modValue;
-                }
-              }
 
               const productData: models.CartMasterSellersProducts = {
                 ...thisProduct,

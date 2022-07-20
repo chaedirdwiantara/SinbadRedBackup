@@ -266,7 +266,6 @@ const ProductList: FC<ProductListProps> = ({
       productImageUrl: productDetailState?.images[0]?.url ?? '',
       minQty: productDetailState.minQty,
       qty: orderQty,
-      multipleQty: productDetailState.multipleQty,
       qtyPerBox: productDetailState.packagedQty,
       uomLabel: productDetailState.unit,
       warehouseId: Number(productDetailState.warehouseOriginId),

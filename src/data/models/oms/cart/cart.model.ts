@@ -29,7 +29,6 @@ export interface CartProduct {
   productImageUrl: string;
   qty: number;
   minQty: number;
-  multipleQty: number;
   qtyPerBox: number;
   uomLabel: string;
   taxPercentage: number;
@@ -60,7 +59,6 @@ export interface UpdateCartQty {
 export interface updateCartQtyBlur {
   qty: number;
   minQty: number;
-  multipleQty: number;
 }
 
 export interface ProductKeyObject {

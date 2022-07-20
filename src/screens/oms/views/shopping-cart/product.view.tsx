@@ -83,38 +83,16 @@ export const ProductView: FC<ProductViewProps> = ({
     return { displayPrice, lastPrice, priceDifference };
   };
   /** => HANDLE ON BLUR */
-  const handleOnBlur = ({
-    qty,
-    minQty,
-    multipleQty,
-  }: models.updateCartQtyBlur) => {
+  const handleOnBlur = ({ qty, minQty }: models.updateCartQtyBlur) => {
     // if the user update qty using keyboard
     let updatedQty = 1;
     if (qty && Number.isInteger(qty)) {
-      if (multipleQty > 1) {
-        const isMod = (qty - minQty) % multipleQty === 0;
-        const minValue = minQty;
-        const maxValue = stock - ((stock - minQty) % multipleQty);
-        if (qty <= maxValue && qty >= minValue) {
-          if (isMod) {
-            updatedQty = qty;
-          } else {
-            const modValue = (qty - minQty) % multipleQty;
-            updatedQty = qty - modValue;
-          }
-        } else if (qty < minValue) {
-          updatedQty = minValue;
-        } else if (qty > maxValue) {
-          updatedQty = maxValue;
-        }
-      } else {
-        if (qty <= stock && qty >= minQty) {
-          updatedQty = qty;
-        } else if (qty < minQty) {
-          updatedQty = minQty;
-        } else if (qty > stock) {
-          updatedQty = stock;
-        }
+      if (qty <= stock && qty >= minQty) {
+        updatedQty = qty;
+      } else if (qty < minQty) {
+        updatedQty = minQty;
+      } else if (qty > stock) {
+        updatedQty = stock;
       }
     }
 
@@ -249,13 +227,8 @@ export const ProductView: FC<ProductViewProps> = ({
   let isIncreaseDisabled = false;
   const stock = product.stock ?? 0;
 
-  if (product.multipleQty > 1) {
-    isDecreaseDisabled = !(product.qty - product.multipleQty >= product.minQty);
-    isIncreaseDisabled = !(product.qty + product.multipleQty <= stock);
-  } else {
-    isDecreaseDisabled = !(product.qty > product.minQty);
-    isIncreaseDisabled = !(product.qty < stock);
-  }
+  isDecreaseDisabled = !(product.qty > product.minQty);
+  isIncreaseDisabled = !(product.qty < stock);
 
   return (
     <View style={ShoppingCartStyles.horizontalCardContent}>
@@ -301,7 +274,6 @@ export const ProductView: FC<ProductViewProps> = ({
               handleOnBlur({
                 qty: product.qty,
                 minQty: product.minQty,
-                multipleQty: product.multipleQty,
               });
             }}
             onFocus={() => {

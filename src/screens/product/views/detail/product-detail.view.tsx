@@ -188,7 +188,6 @@ const ProductDetailView: FC = () => {
       productImageUrl: dataProduct?.images[0]?.url ?? '',
       minQty: dataProduct.minQty,
       qty: orderQty,
-      multipleQty: dataProduct.multipleQty,
       qtyPerBox: dataProduct.packagedQty,
       uomLabel: dataProduct.unit,
       warehouseId: Number(dataProduct.warehouseOriginId),
