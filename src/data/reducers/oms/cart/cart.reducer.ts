@@ -65,6 +65,11 @@ import {
   cartBuyerAddressReducer,
   CartBuyerAddressInitialProps,
 } from './cart-buyer-address.reducer';
+import {
+  checkBuyerInitialState,
+  checkBuyerReducer,
+  CheckBuyerInitialProps,
+} from './check-buyer.reducer';
 
 export interface CartInitialProps {
   get: GetCartInitialProps;
@@ -80,6 +85,7 @@ export interface CartInitialProps {
   postCheckStock: PostCheckStockInitialProps;
   cancelStock: CancelStockInitialProps;
   buyerAddress: CartBuyerAddressInitialProps;
+  checkBuyer: CheckBuyerInitialProps;
 }
 /** === INITIAL STATE === */
 export const cartInitialState = {
@@ -96,6 +102,7 @@ export const cartInitialState = {
   postCheckStock: postCheckStockInitialState,
   cancelStock: cancelStockInitialState,
   buyerAddress: cartBuyerAddressInitialState,
+  checkBuyer: checkBuyerInitialState,
 };
 /** === REDUCER === */
 export const cartReducer = (
@@ -113,6 +120,7 @@ export const cartReducer = (
     postCheckStock,
     cancelStock,
     buyerAddress,
+    checkBuyer,
   }: CartInitialProps,
   action: any,
 ) => ({
@@ -129,4 +137,5 @@ export const cartReducer = (
   postCheckStock: postCheckStockReducer(postCheckStock, action),
   cancelStock: cancelStockReducer(cancelStock, action),
   buyerAddress: cartBuyerAddressReducer(buyerAddress, action),
+  checkBuyer: checkBuyerReducer(checkBuyer, action),
 });

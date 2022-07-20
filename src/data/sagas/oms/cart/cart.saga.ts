@@ -249,6 +249,23 @@ function* cartBuyerAddress(action: models.DetailProcessAction) {
     );
   }
 }
+/** => CHECK BUYER */
+function* checkBuyer(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.CheckBuyer> = yield call(
+      () => {
+        return CartApi.checkBuyer();
+      },
+    );
+    yield action.contextDispatch(ActionCreators.checkBuyerSuccess(response));
+    yield put(ActionCreators.checkBuyerSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.checkBuyerFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.checkBuyerFailed(error as models.ErrorProps));
+  }
+}
 /** === LISTENER === */
 function* CartSaga() {
   yield takeLatest(types.GET_CART_PROCESS, getCart);
@@ -264,6 +281,7 @@ function* CartSaga() {
   yield takeLatest(types.POST_CHECK_STOCK_PROCESS, postCheckStock);
   yield takeLatest(types.CANCEL_STOCK_PROCESS, cancelStock);
   yield takeLatest(types.CART_BUYER_ADDRESS_PROCESS, cartBuyerAddress);
+  yield takeLatest(types.CHECK_BUYER_PROCESS, checkBuyer);
 }
 
 export default CartSaga;
