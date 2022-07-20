@@ -15,3 +15,8 @@ export const COUNT_ALL_VOUCHER_FAILED = 'CountAllVoucherFailed';
 export const COUNT_ALL_VOUCHER_RESET = 'CountAllVoucherReset';
 // THIS FOR SAVING SELECTED VOUCHERS DATA
 export const SAVE_SELECTED_VOUCHERS = 'SaveSelectedVouchers';
+// CANCEL RESERVE VOUCHER
+export const CANCEL_VOUCHER_PROCESS = 'CancelVoucherProcess';
+export const CANCEL_VOUCHER_SUCCESS = 'CancelVoucherSuccess';
+export const CANCEL_VOUCHER_FAILED = 'CancelVoucherFailed';
+export const CANCEL_VOUCHER_RESET = 'CancelVoucherReset';

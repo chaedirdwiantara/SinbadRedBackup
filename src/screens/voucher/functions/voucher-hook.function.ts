@@ -7,6 +7,19 @@ import * as models from '@models';
 import { contexts } from '@contexts';
 import { useDataVoucher } from '@core/redux/Data';
 /** === FUNCTION === */
+/** => cancel reserve voucher */
+const useCancelVoucherAction = () => {
+  const dispatch = useDispatch();
+  return {
+    fetch: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cancelVoucherProcess(contextDispatch));
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.cancelVoucherReset(contextDispatch));
+    },
+  };
+};
+
 /** => count all voucher action */
 const useCountAllVoucherAction = () => {
   const dispatch = useDispatch();
@@ -209,6 +222,7 @@ const useStandardModalState = () => {
 };
 /** === EXPORT === */
 export {
+  useCancelVoucherAction,
   useVoucherDetailAction,
   useVoucherCartListAction,
   useSearchKeyword,
