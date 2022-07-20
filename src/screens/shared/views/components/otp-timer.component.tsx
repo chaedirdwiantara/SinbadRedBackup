@@ -11,7 +11,7 @@ interface Props {
 const OTPTimer: React.FC<Props> = (props) => {
   const [resend, setResend] = React.useState(false);
   const [timer, setTimer] = React.useState(0);
-  const { requestOTPState, resetRequestOTP } = useAuthAction();
+  const { requestOTPState } = useAuthAction();
   const { checkPhoneV2 } = useCheckPhoneV2();
 
   React.useEffect(() => {
@@ -19,7 +19,6 @@ const OTPTimer: React.FC<Props> = (props) => {
       (requestOTPState.data !== null || checkPhoneV2.data !== null) &&
       resend
     ) {
-      resetRequestOTP()
       SnbToast.show('Kode berhasil dikirim', 2500, {
         position: 'top',
         positionValue: 96,
