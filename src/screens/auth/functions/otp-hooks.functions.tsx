@@ -22,13 +22,17 @@ const useOTP = (action = '') => {
   const [otpHash, setOtpHash] = React.useState('');
   const [type, setType] = React.useState('');
   const { meV2 } = useDataAuth();
+  const [isMounted, setIsMounted] = React.useState(true)
 
   React.useEffect(() => {
-    RNOtpVerify.getHash().then((value) => setOtpHash(value[0]));
+    RNOtpVerify.getHash().then((value) => isMounted && setOtpHash(value[0]));
     if (action === 'listeningToHash') {
       startListeningForOtp();
     }
-    return RNOtpVerify.removeListener;
+    return () => {
+      RNOtpVerify.removeListener();
+      setIsMounted(false)
+    }
   }, []);
 
   const startListeningForOtp = () => {
