@@ -38,7 +38,7 @@ const countAllVoucher = () => {
 };
 /** => cancel reserve voucher */
 const cancelVoucher = () => {
-  const path = 'voucher/cancel-reserve-voucher';
+  const path = 'sinbad-vouchers/cancel-reserve-voucher';
   const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
   return apiMappingMock<models.DeleteItemV3Props>(
     mockHost,
@@ -50,7 +50,7 @@ const cancelVoucher = () => {
 };
 
 // const cancelVoucher = () => {
-//   const path = 'voucher/cancel-reserve-voucher';
+//   const path = 'sinbad-vouchers/cancel-reserve-voucher';
 //   return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
 // };
 
