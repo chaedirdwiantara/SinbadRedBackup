@@ -59,7 +59,7 @@ export const useMenuStatusListAction = () => {
 }
 export const useConsolidateHistoryListActions = () => {
   const dispatch = useDispatch();
-  const perPage = 10;
+  const perPage = 5;
   const page = 1;
   return {
     fetch: (

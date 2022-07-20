@@ -7,8 +7,9 @@ const systemVersion = DeviceInfo.getSystemVersion();
 const appVersion = DeviceInfo.getVersion();
 const uniqueId = DeviceInfo.getUniqueId();
 const isTab = DeviceInfo.isTablet();
+const buildNumber = DeviceInfo.getBuildNumber();
 /** === EXPORT === */
-export { deviceId, systemVersion, appVersion, uniqueId, isTab };
+export { deviceId, systemVersion, appVersion, uniqueId, isTab, buildNumber };
 /**
  * ================================================================
  * NOTES

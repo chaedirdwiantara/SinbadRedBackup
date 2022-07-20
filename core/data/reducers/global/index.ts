@@ -5,9 +5,11 @@
  */
 import { combineReducers } from 'redux';
 import { flagRTDB } from './flag-rtdb/flag-rtdb.reducer';
+import { updateApp } from './update-app/update-app.reducer';
 
 export const globalCore = combineReducers({
   flagRTDB,
+  updateApp,
 });
 /**
  * ================================================================
