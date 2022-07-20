@@ -10,6 +10,7 @@ import {
   SnbButton2,
   spacingV2 as layout,
   Content,
+  SpecialButton,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -46,6 +47,64 @@ const UserView: FC = ({ start }: any) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
   const [clickFromCart, setClickFromCart] = useState(false);
+
+  const dataHeader = [
+    {
+      id: 1,
+      title: 'Upgrade VIP Diproses',
+      subTitle: 'Tim kami sedang memproses upgrade akun Anda.',
+      icon: 'shield',
+      type: 'upgradeVipProcess',
+      status: false,
+    },
+    {
+      id: 2,
+      title: 'Upgrade Akun Berhasil',
+      subTitle: 'Akun Anda telah berhasil menjadi akun VIP.',
+      icon: 'shield_blue',
+      type: 'upgradeVipSuccess',
+      status: false,
+    },
+    {
+      id: 3,
+      title: 'Upgrade Akun Gagal',
+      subTitle: 'Silakan cek kembali kelengkapan profil anda.',
+      icon: 'error',
+      type: 'upgradeVipFailed',
+      status: false,
+    },
+    {
+      id: 4,
+      title: 'Foto KTP',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'ktp',
+      type: 'ktp',
+      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+    },
+    {
+      id: 5,
+      title: 'Tambah Nama Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'store',
+      type: 'merchantAccountName',
+      status:
+        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+          ?.name !== null
+          ? true
+          : false,
+    },
+    {
+      id: 6,
+      title: 'Alamat Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'location',
+      type: 'storeAddress',
+      status:
+        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+          ? true
+          : false,
+    },
+  ];
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -133,42 +192,6 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
@@ -202,31 +225,26 @@ const UserView: FC = ({ start }: any) => {
   const renderItem = (item: any, index: any) => {
     return (
       <View key={index}>
-        <View>
-          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
-            <View style={UserStyles.cardBody}>
-              <View>
-                <Svg name={item.icon} size={40} />
-              </View>
-              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
-                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
-                <SnbText2.Paragraph.Small>
-                  {item.message}
-                </SnbText2.Paragraph.Small>
-              </View>
-              <SnbButton2.Primary
-                size="tiny"
-                onPress={() => {
-                  goTo({
-                    type: item.type,
-                    title: item.title,
-                  });
-                }}
-                title="Lengkapi"
-              />
-            </View>
-          </View>
-        </View>
+        <SpecialButton.Card
+          title={item.title}
+          subTitle={item.subTitle}
+          height={88}
+          action={item.type === 'upgradeVipFailed' ? false : true}
+          actionType="button"
+          actionTitle={
+            item.type === 'upgradeVipProcess' ||
+            item.type === 'upgradeVipSuccess'
+              ? 'Mengerti'
+              : 'Lengkapi'
+          }
+          iconComponent={<Svg name={item.icon} size={40} />}
+          onPress={() => {
+            goTo({
+              type: item.type,
+              title: item.title,
+            });
+          }}
+        />
       </View>
     );
   };
@@ -238,42 +256,6 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
