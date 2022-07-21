@@ -391,6 +391,42 @@ const UserView: FC = ({ start }: any) => {
                     background
                   />
                 )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto NPWP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
+                  />
+                )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto Selfie + KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
+                  />
+                )}
                 {renderSeparator()}
               </View>
             </View>
