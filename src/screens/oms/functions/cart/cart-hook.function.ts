@@ -59,7 +59,7 @@ const useUpdateCartAction = () => {
       cartData: models.CartMaster,
     ) => {
       const newCartData = cloneDeep(cartData);
-      if (stateCart.buyerAddress.data !== null) {
+      if (stateCart.checkBuyer.data !== null) {
         const carts: models.CartMasterSellers[] = [...newCartData.sellers];
         cartData.unavailable.map((product) => {
           const sellerFound = cartData.sellers.find(
@@ -421,15 +421,15 @@ const useCancelStockAction = () => {
     },
   };
 };
-/** => cart buyer address action */
-const useCartBuyerAddressAction = () => {
+/** => check buyer action */
+const useCheckBuyerAction = () => {
   const dispatch = useDispatch();
   return {
     fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartBuyerAddressProcess(contextDispatch));
+      dispatch(Actions.checkBuyerProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartBuyerAddressReset(contextDispatch));
+      dispatch(Actions.checkBuyerReset(contextDispatch));
     },
   };
 };
@@ -940,7 +940,7 @@ export {
   useCheckStockAction,
   usePostCheckStockAction,
   useCancelStockAction,
-  useCartBuyerAddressAction,
+  useCheckBuyerAction,
   useCartLocalData,
   useOmsGeneralFailedState,
   useKeyboardFocus,

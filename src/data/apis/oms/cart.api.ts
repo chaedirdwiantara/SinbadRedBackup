@@ -166,17 +166,6 @@ const cancelStock = () => {
   return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
 };
 
-const cartBuyerAddress = () => {
-  const path = 'profile/buyer-location';
-  return apiMapping<models.CartBuyerAddress>(
-    'auth',
-    path,
-    'account',
-    'v2',
-    'DETAIL',
-  );
-};
-
 const checkBuyer = () => {
   const path = 'check-buyer';
   return apiMapping<models.CheckBuyer>('auth', path, 'account', 'v1', 'DETAIL');
@@ -192,6 +181,5 @@ export const CartApi = {
   checkSeller,
   checkStock,
   cancelStock,
-  cartBuyerAddress,
   checkBuyer,
 };

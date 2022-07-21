@@ -6,7 +6,7 @@ export interface CheckBuyer {
   buyerName: string;
   buyerCode: string;
   buyerTaxNo: string;
-  userFullname: string;
+  userFullName: string;
   userPhoneNumber: string;
   ownerId: number;
   ownerFullName: string;

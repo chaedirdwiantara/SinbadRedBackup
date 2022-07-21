@@ -59,7 +59,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
     setCheckoutBtnLoading(true);
-  }, [cartData, stateCart.buyerAddress.data]);
+  }, [cartData, stateCart.checkBuyer.data]);
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
   const checkProductSellerStock = () => {
