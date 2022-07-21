@@ -352,6 +352,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => listen something to be executed after page loaded */
   useEffect(() => {
     if (!pageLoading) {
+      /** initial fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
       if (stateCart.checkBuyer.data) {
         if (
@@ -364,6 +365,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       }
     }
   }, [pageLoading]);
+
+  /** => listen when something change in products */
+  useEffect(() => {
+    if (localCartMaster) {
+      /** fetch check sinbad voucher */
+      // WIP: add debouce here!
+      checkSinbadVoucherAction.fetch(dispatchVoucher, false, selectedVoucher);
+    }
+  }, [localCartMaster?.sellers]);
 
   /** === VIEW === */
   /** => CONTENT */
