@@ -93,3 +93,30 @@ export const saveSelectedVouchers = (
 ) => {
   return { type: types.SAVE_SELECTED_VOUCHERS, payload: data };
 };
+/** => cancel reserve voucher process */
+export const cancelVoucherProcess = (
+  contextDispatch: (action: any) => any,
+): Omit<models.DeleteProcessAction, 'payload'> => {
+  contextDispatch({ type: types.CANCEL_VOUCHER_PROCESS });
+  return {
+    type: types.CANCEL_VOUCHER_PROCESS,
+    contextDispatch,
+  };
+};
+/** => cancel reserve voucher success */
+export const cancelVoucherSuccess = (
+  data: models.DeleteSuccessV3Props,
+): models.DeleteSuccessV3Action => {
+  return { type: types.CANCEL_VOUCHER_SUCCESS, payload: data };
+};
+/** => cancel reserve voucher failed */
+export const cancelVoucherFailed = (
+  data: models.ErrorProps,
+): models.DeleteFailedAction => {
+  return { type: types.CANCEL_VOUCHER_FAILED, payload: data };
+};
+/** => cancel reserve voucher reset */
+export const cancelVoucherReset = (contextDispatch: (action: any) => any) => {
+  contextDispatch({ type: types.CANCEL_VOUCHER_RESET });
+  return { type: types.CANCEL_VOUCHER_RESET };
+};

@@ -42,6 +42,7 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
+import { useCancelVoucherAction } from '@screen/voucher/functions';
 /** === DUMMIES === */
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
@@ -87,6 +88,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
+  const cancelVoucherAction = useCancelVoucherAction();
 
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
@@ -120,6 +122,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     cartBuyerAddressAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
+    cancelVoucherAction.reset(dispatchVoucher);
   };
 
   /** => handle cart cycle */
@@ -128,6 +131,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setPageLoading(true);
     cancelCartAction.fetch(dispatchCart);
     cartBuyerAddressAction.fetch(dispatchCart);
+    cancelVoucherAction.fetch(dispatchVoucher);
   };
 
   /** => handle update cart */
