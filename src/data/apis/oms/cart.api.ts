@@ -126,7 +126,7 @@ const checkProduct = ({
     'auth',
     path,
     'product',
-    'v1',
+    'v2',
     'CREATE',
     data,
   );

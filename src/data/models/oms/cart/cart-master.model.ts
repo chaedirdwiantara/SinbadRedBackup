@@ -39,4 +39,5 @@ export interface CartMasterSellersProducts extends CartProduct {
   brandId?: string;
   brandName?: string;
   isQtyChanged?: boolean;
+  categoryName?: string;
 }

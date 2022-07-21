@@ -64,8 +64,10 @@ const matchCartWithCheckData = ({
         delete thisCartCheckProduct.externalProductCode;
         delete thisCartCheckProduct.isQtyChanged;
         delete thisCartCheckProduct.leadTime;
+        delete thisCartCheckProduct.categoryName;
         delete thisCheckProduct.status;
         delete thisCheckProduct.externalProductCode;
+        delete thisCheckProduct.categoryName;
 
         if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
           result = false;
