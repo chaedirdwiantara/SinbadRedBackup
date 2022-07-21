@@ -142,7 +142,7 @@ const checkSeller = ({
     'auth',
     path,
     'account',
-    'v1',
+    'v2',
     'DETAIL',
   );
 };

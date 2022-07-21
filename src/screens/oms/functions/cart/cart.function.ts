@@ -94,9 +94,13 @@ const matchCartWithCheckData = ({
 
       // remove unused property for comparation
       delete thisCartSeller.products;
+      delete thisCartSeller.sellerTaxNo;
+      delete thisCartSeller.fullSellerAddress;
       delete thisCartSeller.sellerAdminId;
       delete thisCartSeller.sellerAdminName;
       delete thisCartSeller.sellerAdminEmail;
+      delete thisCheckSeller.sellerTaxNo;
+      delete thisCheckSeller.fullSellerAddress;
       delete thisCheckSeller.sellerAdminId;
       delete thisCheckSeller.sellerAdminName;
       delete thisCheckSeller.sellerAdminEmail;
