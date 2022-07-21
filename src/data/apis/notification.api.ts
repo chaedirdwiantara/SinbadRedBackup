@@ -16,7 +16,7 @@ const notificationList = (data: models.ListProcessProps) => {
 
 /** => notification list */
 const notificationTotal = () => {
-  const path = 'notifications/total';
+  const path = 'notifications/unread';
   return apiMapping<models.NotificationTotalSuccess>(
     'auth',
     path,

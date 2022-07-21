@@ -15,7 +15,8 @@ interface HeaderProps {}
 const Header: FC<HeaderProps> = () => {
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
   const totalCartActions = useGetTotalCartAction();
-  const { totalNotification } = useNotificationTotalActions();
+  const { totalNotification, fetch: fetchTotalNotification } =
+    useNotificationTotalActions();
   const { me } = useDataAuth();
   // state
   const totalCartState: number = useMemo(
@@ -32,6 +33,7 @@ const Header: FC<HeaderProps> = () => {
     React.useCallback(() => {
       if (me.data !== null) {
         totalCartActions.fetch(dispatchCart);
+        fetchTotalNotification();
       }
     }, [me.data]),
   );
