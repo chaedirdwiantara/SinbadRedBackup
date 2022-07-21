@@ -90,6 +90,8 @@ const useUpdateCartAction = () => {
         // rewrite lastUsedPrice
         carts.map((sellerItem) => {
           // deleting unused attributes for carts
+          delete sellerItem.sellerTaxNo;
+          delete sellerItem.fullSellerAddress;
           delete sellerItem.sellerAdminId;
           delete sellerItem.sellerAdminName;
           delete sellerItem.sellerAdminEmail;
@@ -749,7 +751,9 @@ const useCartLocalData = () => {
           let sellerId: number = resultAfterCheckProduct.sellers[i].sellerId;
           let sellerName: string =
             resultAfterCheckProduct.sellers[i].sellerName;
-          let sellerAdminId,
+          let sellerTaxNo,
+            fullSellerAddress,
+            sellerAdminId,
             sellerAdminName,
             sellerAdminEmail,
             status = '';
@@ -757,6 +761,8 @@ const useCartLocalData = () => {
             if (resultAfterCheckProduct.sellers[i].sellerId === item.sellerId) {
               sellerId = item.sellerId;
               sellerName = item.sellerName;
+              sellerTaxNo = item.sellerTaxNo;
+              fullSellerAddress = item.fullSellerAddress;
               sellerAdminId = item.sellerAdminId;
               sellerAdminName = item.sellerAdminName;
               sellerAdminEmail = item.sellerAdminEmail;
@@ -780,6 +786,8 @@ const useCartLocalData = () => {
           sellers.push({
             sellerId,
             sellerName,
+            sellerTaxNo,
+            fullSellerAddress,
             sellerAdminId,
             sellerAdminName,
             sellerAdminEmail,
