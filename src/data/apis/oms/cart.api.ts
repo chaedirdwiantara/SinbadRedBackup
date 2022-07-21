@@ -177,6 +177,11 @@ const cartBuyerAddress = () => {
   );
 };
 
+const checkBuyer = () => {
+  const path = 'check-buyer';
+  return apiMapping<models.CheckBuyer>('auth', path, 'account', 'v1', 'DETAIL');
+};
+
 export const CartApi = {
   getCart,
   getTotalCart,
@@ -188,4 +193,5 @@ export const CartApi = {
   checkStock,
   cancelStock,
   cartBuyerAddress,
+  checkBuyer,
 };
