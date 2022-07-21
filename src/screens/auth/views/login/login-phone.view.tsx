@@ -95,7 +95,11 @@ const Content: React.FC = () => {
           onPress={() => {
             Keyboard.dismiss()
             resetCheckLoginPhone();
-            checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
+            checkPhoneLogin({
+              mobilePhone: phone.value,
+              identifierDeviceId:
+                advertisingId === undefined ? null : advertisingId,
+            });
           }}
           loading={checkPhoneLoginState.loading}
           disabled={
