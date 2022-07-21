@@ -34,6 +34,7 @@ import {
   useUpdateCartAction,
   useKeyboardFocus,
   goToProfile,
+  useCheckSinbadVoucherAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -73,6 +74,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -82,6 +86,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cartBuyerAddressAction = useCartBuyerAddressAction();
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
 
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
@@ -343,6 +348,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => listen something to be executed after page loaded */
   useEffect(() => {
     if (!pageLoading) {
+      checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
       if (stateCart.buyerAddress.data) {
         if (
           !stateCart.buyerAddress.data.buyerName ||
