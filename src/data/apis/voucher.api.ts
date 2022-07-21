@@ -35,9 +35,21 @@ const countAllVoucher = () => {
     'DETAIL',
   );
 };
+/** => check sinbad voucher */
+const checkSinbadVoucher = () => {
+  const path = 'sinbad-vouchers/check-sinbad-voucher';
+  return apiMapping<models.CheckSinbadVoucherResponse>(
+    'auth',
+    path,
+    'voucher',
+    'v1',
+    'CREATE',
+  );
+};
 /** === EXPORT FUNCTIONS === */
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
   countAllVoucher,
+  checkSinbadVoucher,
 };

@@ -52,11 +52,28 @@ function* countAllVoucher(action: models.DetailProcessAction) {
     yield put(ActionCreators.countAllVoucherFailed(error));
   }
 }
+/** => check sinbad voucher */
+function* checkSinbadVoucher(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.CountAllVoucherProps> =
+      yield call(() => {
+        return VoucherApi.countAllVoucher();
+      });
+    yield action.contextDispatch(
+      ActionCreators.countAllVoucherSuccess(response),
+    );
+    yield put(ActionCreators.countAllVoucherSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(ActionCreators.voucherCartListFailed(error));
+    yield put(ActionCreators.countAllVoucherFailed(error));
+  }
+}
 /** === LISTEN FUNCTION === */
 function* VoucherSaga() {
   yield takeLatest(types.VOUCHER_DETAIL_PROCESS, voucherDetail);
   yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
   yield takeLatest(types.COUNT_ALL_VOUCHER_PROCESS, countAllVoucher);
+  yield takeLatest(types.CHECK_SINBAD_VOUCHER_PROCESS, checkSinbadVoucher);
 }
 
 export default VoucherSaga;
