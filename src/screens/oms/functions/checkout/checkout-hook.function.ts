@@ -20,34 +20,8 @@ const useCheckoutAction = () => {
         stateCart.postCheckProduct.data !== null &&
         stateCart.postCheckSeller.data !== null &&
         stateCart.postCheckStock.data !== null &&
-        stateCart.buyerAddress.data !== null
+        stateCart.checkBuyer.data !== null
       ) {
-        const buyerAddress = (({
-          /** typescript disabled for some line @here
-           * because this just to separate the object. */
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          buyerId,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          buyerName,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          buyerCode,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          userFullName,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          userPhoneNumber,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ownerFullName,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ownerPhoneNumber,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          ownerId,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          imageId,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          isImageIdOcrValidation,
-          ...rest
-        }) => rest)(stateCart.buyerAddress.data);
-
         const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
           (seller) => {
             const products: models.CheckoutProductData[] = seller.products
@@ -109,9 +83,12 @@ const useCheckoutAction = () => {
             return {
               sellerId: seller.sellerId,
               sellerName: seller.sellerName,
+              sellerTaxNo: seller.sellerTaxNo,
+              fullSellerAddress: seller.fullSellerAddress,
               sellerAdminId: seller.sellerAdminId,
               sellerAdminName: seller.sellerAdminName,
               sellerAdminEmail: seller.sellerAdminEmail,
+              sinbadVoucherDiscountParcel: 0,
               products,
             };
           },
@@ -124,14 +101,29 @@ const useCheckoutAction = () => {
         dispatch(
           Actions.checkoutProcess(contextDispatch, {
             data: {
-              buyerAddress,
-              buyerName: stateCart.buyerAddress.data.buyerName,
-              buyerCode: stateCart.buyerAddress.data.buyerCode,
-              userFullName: stateCart.buyerAddress.data.userFullName,
-              userPhoneNumber: stateCart.buyerAddress.data.userPhoneNumber,
-              ownerFullName: stateCart.buyerAddress.data.ownerFullName,
-              ownerPhoneNumber: stateCart.buyerAddress.data.ownerPhoneNumber,
-              ownerId: stateCart.buyerAddress.data.ownerId,
+              buyerAddress: {
+                longitude: stateCart.checkBuyer.data.longitude,
+                latitude: stateCart.checkBuyer.data.latitude,
+                province: stateCart.checkBuyer.data.province,
+                city: stateCart.checkBuyer.data.city,
+                district: stateCart.checkBuyer.data.district,
+                urban: stateCart.checkBuyer.data.urban,
+                zipCode: stateCart.checkBuyer.data.zipCode,
+                address: stateCart.checkBuyer.data.address,
+                noteAddress: stateCart.checkBuyer.data.noteAddress,
+                locationId: stateCart.checkBuyer.data.locationId,
+              },
+              buyerName: stateCart.checkBuyer.data.buyerName,
+              buyerCode: stateCart.checkBuyer.data.buyerCode,
+              buyerTaxNo: stateCart.checkBuyer.data.buyerTaxNo,
+              userFullName: stateCart.checkBuyer.data.userFullName,
+              userPhoneNumber: stateCart.checkBuyer.data.userPhoneNumber,
+              ownerFullName: stateCart.checkBuyer.data.ownerFullName,
+              ownerPhoneNumber: stateCart.checkBuyer.data.ownerPhoneNumber,
+              ownerId: stateCart.checkBuyer.data.ownerId,
+              ownerIdNo: stateCart.checkBuyer.data.ownerIdNo,
+              sinbadVoucherId: null,
+              sinbadVoucherDiscountOrder: 0,
               carts,
             },
           }),
