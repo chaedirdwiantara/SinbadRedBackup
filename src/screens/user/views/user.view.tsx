@@ -168,6 +168,10 @@ const UserView: FC = ({ start }: any) => {
       case 'storeAddress':
         handleAddressNavigation();
         break;
+      case 'npwp':
+      case 'selfie':
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        break;
       default:
         break;
     }
@@ -387,6 +391,42 @@ const UserView: FC = ({ start }: any) => {
                     actionText="Lengkapi"
                     onActionPress={() =>
                       goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
+                  />
+                )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto NPWP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'npwp', title: 'Foto NPWP' })
+                    }
+                    background
+                  />
+                )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto Selfie + KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'selfie', title: 'Foto Selfie + KTP' })
                     }
                     background
                   />
