@@ -67,8 +67,6 @@ const matchCartWithCheckData = ({
         delete thisCheckProduct.status;
         delete thisCheckProduct.externalProductCode;
 
-        console.log('ini produk', thisCartCheckProduct, thisCheckProduct);
-
         if (!isEqual(thisCartCheckProduct, thisCheckProduct)) {
           result = false;
           break;
