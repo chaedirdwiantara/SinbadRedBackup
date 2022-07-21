@@ -170,6 +170,47 @@ const useRemoveCartProductAction = () => {
     },
   };
 };
+/** => check sinbad voucher action */
+const useCheckSinbadVoucherAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      reserved: boolean,
+      sinbadVoucherId: number | null,
+    ) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const carts: models.CheckSinbadVoucherPayloadCarts[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          const products: models.CheckSinbadVoucherPayloadProducts[] = [];
+          sellerItem.products.map((productItem) => {
+            products.push({
+              productId: productItem.productId,
+              qty: productItem.qty,
+              priceAfterTax: productItem.priceAfterTax,
+            });
+          });
+          carts.push({ sellerId: sellerItem.sellerId, products });
+        });
+        dispatch(
+          Actions.checkSinbadVoucherProcess(contextDispatch, {
+            data: {
+              cartId: stateCart.get.data.id,
+              sinbadVoucherId,
+              reserved,
+              carts,
+            },
+          }),
+        );
+      }
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkSinbadVoucherReset(contextDispatch));
+    },
+  };
+};
 /** => check product action */
 const useCheckProductAction = () => {
   const { stateCart } = useContext(contexts.CartContext);
@@ -894,6 +935,7 @@ export {
   useCartLocalData,
   useOmsGeneralFailedState,
   useKeyboardFocus,
+  useCheckSinbadVoucherAction,
 };
 /**
  * ================================================================

@@ -52,6 +52,28 @@ function* countAllVoucher(action: models.DetailProcessAction) {
     yield put(ActionCreators.countAllVoucherFailed(error));
   }
 }
+/** => check sinbad voucher */
+function* checkSinbadVoucher(
+  action: models.CreateProcessAction<models.CheckSinbadVoucherPayload>,
+) {
+  try {
+    const response: models.CreateSuccessV3Props<models.CheckSinbadVoucherResponse> =
+      yield call(() => {
+        return VoucherApi.checkSinbadVoucher();
+      });
+    yield action.contextDispatch(
+      ActionCreators.checkSinbadVoucherSuccess(response),
+    );
+    yield put(ActionCreators.checkSinbadVoucherSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.checkSinbadVoucherFailed(error as models.ErrorProps),
+    );
+    yield put(
+      ActionCreators.checkSinbadVoucherFailed(error as models.ErrorProps),
+    );
+  }
+}
 /** => cancel reserve voucher */
 function* cancelVoucher(action: Omit<models.DeleteProcessAction, 'id'>) {
   try {
@@ -72,6 +94,7 @@ function* VoucherSaga() {
   yield takeLatest(types.VOUCHER_DETAIL_PROCESS, voucherDetail);
   yield takeLatest(types.VOUCHER_CART_LIST_PROCESS, voucherCartList);
   yield takeLatest(types.COUNT_ALL_VOUCHER_PROCESS, countAllVoucher);
+  yield takeLatest(types.CHECK_SINBAD_VOUCHER_PROCESS, checkSinbadVoucher);
   yield takeLatest(types.CANCEL_VOUCHER_PROCESS, cancelVoucher);
 }
 

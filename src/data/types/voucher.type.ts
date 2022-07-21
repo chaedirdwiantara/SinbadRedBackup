@@ -15,6 +15,11 @@ export const COUNT_ALL_VOUCHER_FAILED = 'CountAllVoucherFailed';
 export const COUNT_ALL_VOUCHER_RESET = 'CountAllVoucherReset';
 // THIS FOR SAVING SELECTED VOUCHERS DATA
 export const SAVE_SELECTED_VOUCHERS = 'SaveSelectedVouchers';
+// CHECK SINBAD VOUCHER
+export const CHECK_SINBAD_VOUCHER_PROCESS = 'CheckSinbadVoucherProcess';
+export const CHECK_SINBAD_VOUCHER_SUCCESS = 'CheckSinbadVoucherSuccess';
+export const CHECK_SINBAD_VOUCHER_FAILED = 'CheckSinbadVoucherFailed';
+export const CHECK_SINBAD_VOUCHER_RESET = 'CheckSinbadVoucherReset';
 // CANCEL RESERVE VOUCHER
 export const CANCEL_VOUCHER_PROCESS = 'CancelVoucherProcess';
 export const CANCEL_VOUCHER_SUCCESS = 'CancelVoucherSuccess';
