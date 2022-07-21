@@ -5,8 +5,8 @@
 export interface CheckoutCart<T> {
   sellerId: number;
   sellerName: string;
-  fullSellerAddress: string;
-  sellerTaxNo: string;
+  fullSellerAddress?: string;
+  sellerTaxNo?: string;
   sellerAdminId?: number;
   sellerAdminName?: string;
   sellerAdminEmail?: string;
