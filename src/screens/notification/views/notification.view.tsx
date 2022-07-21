@@ -3,7 +3,7 @@ import React, { memo } from 'react';
 import { FlatList } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 import { goBack, timeFromNow } from '../functions';
-import { NotificationCard } from '../components';
+import { NotificationCard, NotificationEmpty } from '../components';
 
 const mockData = [
   {
@@ -50,7 +50,7 @@ function NotificationView() {
     <SnbContainer color="white">
       <SnbTopNav2.Type3 color="white" backAction={goBack} title="Notifikasi" />
       <FlatList
-        data={mockData}
+        data={[]}
         keyExtractor={(i) => i.id}
         renderItem={({ item }) => (
           <NotificationCard
@@ -66,6 +66,8 @@ function NotificationView() {
             onPress={() => {}}
           />
         )}
+        contentContainerStyle={{ flex: 1 }}
+        ListEmptyComponent={() => <NotificationEmpty />}
       />
     </SnbContainer>
   );
