@@ -5,7 +5,7 @@ import { useDataPermanent } from '@core/redux/Data';
 import { useSaveAppVersion } from '../../functions/hook/permanent-hook.function';
 import RNInstallReferrer from 'react-native-install-referrer';
 import { SnbRecord } from './index';
-import * as eventName from '../../../src/report/moengage/event';
+import * as eventName from 'core/report/moengage/event';
 
 const MoengageCore = () => {
   const { saveAppVersion } = useSaveAppVersion();

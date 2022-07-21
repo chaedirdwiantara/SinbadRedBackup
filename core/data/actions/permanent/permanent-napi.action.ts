@@ -18,3 +18,17 @@ export const setSearchKeywords = (
 export const appVersion = (payload: any): models.AppVersionActions => {
   return { type: types.SAVE_APP_VERSION, payload };
 };
+/** => FOR FORCE UPDATE VERSION */
+export const forceUpdateVersion = (
+  payload: number,
+): models.ForceUpdateVersionActions => {
+  return { type: types.FORCE_UPDATE_VERSION, payload };
+};
+/** => FOR MAINTENANCE */
+export const maintenance = (payload: boolean): models.MaintenanceActions => {
+  return { type: types.MAINTENANCE, payload };
+};
+/** => FOR BANNED ACCOUNT */
+export const bannedAccount = (payload: boolean): models.BannedAccountActions => {
+  return { type: types.BANNED_ACCOUNT, payload }
+}

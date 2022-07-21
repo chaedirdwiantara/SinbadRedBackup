@@ -6,3 +6,9 @@ export const IS_INTRO_SINBAD = 'AlreadyIntroSinbad';
 export const SEARCH_KEYWORDS_PRODUCT = 'SearchKeywordsProduct';
 /** FOR UPDATED APP */
 export const SAVE_APP_VERSION = 'saveAppVersion';
+/** FOR FORCE UPDATE */
+export const FORCE_UPDATE_VERSION = 'forceUpdateVersion';
+/** FOR MAINTENANCE */
+export const MAINTENANCE = 'maintenance';
+/** FOR BANNED ACCOUNT */
+export const BANNED_ACCOUNT = 'bannedAccount'
