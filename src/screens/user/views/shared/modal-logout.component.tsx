@@ -5,7 +5,6 @@ import {
   spacingV2 as layout,
   SnbBottomSheet2,
   SnbBottomSheetPart,
-  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { View } from 'react-native';
 import { useAuthAction } from '@screen/auth/functions';
@@ -13,24 +12,18 @@ import { useNavigation } from '@react-navigation/native';
 import { contexts } from '@contexts';
 
 interface Props {
-  open: boolean;
-  setOpen: (value: boolean) => void;
+  ref: any
 }
 
-const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
+const ModalLogout: React.FC<Props> = React.forwardRef((_, ref: any) => {
   const { logout } = useAuthAction();
   const { reset } = useNavigation();
   const { stateUser } = React.useContext(contexts.UserContext);
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
-  React.useEffect(() => {
-    open ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
-  }, [open]);
 
   return (
     <SnbBottomSheet2
-      ref={bottomSheetRef}
-      close={() => setOpen(false)}
+      ref={ref}
       contentHeight={contentHeight + 100}
       title={
         <SnbBottomSheetPart.Title
@@ -42,7 +35,7 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={bottomSheetRef.current?.close}
+          onRight1Action={ref.current?.close}
         />
       }
       name="modal-logout"
@@ -66,7 +59,7 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               onPress={() => {
-                bottomSheetRef.current?.close();
+                ref.current?.close();
                 logout({
                   mobilePhone:
                     stateUser.detail.data?.ownerData?.profile?.mobilePhone,
@@ -83,7 +76,7 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
           <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              onPress={() => bottomSheetRef.current?.close()}
+              onPress={() => ref.current?.close()}
               title="Batalkan"
               disabled={false}
               size="medium"
@@ -94,6 +87,6 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
       }
     />
   );
-};
+});
 
 export default ModalLogout;
