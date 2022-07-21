@@ -168,6 +168,10 @@ const UserView: FC = ({ start }: any) => {
       case 'storeAddress':
         handleAddressNavigation();
         break;
+      case 'npwp':
+      case 'selfie':
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
+        break;
       default:
         break;
     }
@@ -404,7 +408,7 @@ const UserView: FC = ({ start }: any) => {
                     actionType="string"
                     actionText="Lengkapi"
                     onActionPress={() =>
-                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                      goTo({ type: 'npwp', title: 'Foto NPWP' })
                     }
                     background
                   />
@@ -422,7 +426,7 @@ const UserView: FC = ({ start }: any) => {
                     actionType="string"
                     actionText="Lengkapi"
                     onActionPress={() =>
-                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                      goTo({ type: 'selfie', title: 'Foto Selfie + KTP' })
                     }
                     background
                   />
