@@ -56,6 +56,7 @@ const ModalSalesman: React.FC<{ ref: any }> = React.forwardRef((_, ref: any) => 
               size="medium"
               full
               outline
+              testID={'04'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -66,6 +67,7 @@ const ModalSalesman: React.FC<{ ref: any }> = React.forwardRef((_, ref: any) => 
               disabled={false}
               size="medium"
               full
+              testID={'04'}
             />
           </View>
         </View>

@@ -62,7 +62,7 @@ const OTPContent: React.FC<Props> = (props) => {
           </SnbText2.Headline.Default>
           <View style={{ marginVertical: layout.spacing.xxsm }} />
           <View style={{ paddingHorizontal: layout.spacing['3xl'] }}>
-            <SnbText2.Paragraph.Default align="center">
+            <SnbText2.Paragraph.Default align="center" testID={'04'}>
               Kode verifikasi telah dikirimkan melalui {otpMethod === 'sms' ? 'sms' : 'Whatsapp'} ke{' '}
               <SnbText2.Body.Default>{phoneNo}</SnbText2.Body.Default>
             </SnbText2.Paragraph.Default>
@@ -79,6 +79,7 @@ const OTPContent: React.FC<Props> = (props) => {
               setOtpType('default');
               setError(false);
             }}
+            testID={'04'}
           />
         </View>
       </View>
@@ -90,6 +91,7 @@ const OTPContent: React.FC<Props> = (props) => {
           disabled={otp.length < 5 || loading}
           size="medium"
           full
+          testID={'04'}
         />
         <OTPTimer action={resend} />
       </View>

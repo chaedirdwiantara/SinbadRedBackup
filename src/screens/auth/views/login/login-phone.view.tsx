@@ -86,11 +86,13 @@ const Content: React.FC = () => {
           {...phone}
           labelText="Nomer Handphone"
           keyboardType="phone-pad"
+          testID={'01'}
         />
       </View>
       <View style={{ marginTop: layout.spacing.lg }} />
       <View style={{ paddingHorizontal: layout.spacing.lg }}>
         <SnbButton2.Primary
+          testID={'01'}
           title="Selanjutnya"
           onPress={() => {
             Keyboard.dismiss()
@@ -123,6 +125,7 @@ const Content: React.FC = () => {
               phone.clearText();
               navigate(SELF_REGISTRATION_VIEW);
             }}
+            testID={'01'}
           />
         </View>
       </View>
@@ -151,6 +154,7 @@ const LoginPhoneView = () => {
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         color="white"
         title="Masuk"
+        testID={'01'}
       />
       <Content />
     </SnbContainer>

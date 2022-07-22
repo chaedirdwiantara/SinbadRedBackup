@@ -7,6 +7,7 @@ import {
   colorV2,
   spacingV2 as layout,
   borderV2,
+  Content
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {
@@ -74,6 +75,7 @@ const OnBoardingView: React.FC<Props> = () => {
             size="large"
             full
             outline
+            testID={'01'}
           />
         </View>
         <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -84,6 +86,7 @@ const OnBoardingView: React.FC<Props> = () => {
             disabled={false}
             size="large"
             full
+            testID={'01'}
           />
         </View>
       </View>
@@ -101,6 +104,7 @@ const OnBoardingView: React.FC<Props> = () => {
             title="Lewati"
             size="medium"
             onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+            testID={'01'}
           />
         </View>
       </View>
