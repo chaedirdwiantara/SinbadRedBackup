@@ -462,7 +462,7 @@ const ProductDetailView: FC = () => {
           </ProductDetailSection>
           <ProductDetailSection title="Nama Supplier" separator={false}>
             <ProductDetailSectionItem
-              name={dataProduct?.productSeller.name ?? '-'}
+              name={dataProduct?.productSeller?.name ?? '-'}
               value=""
             />
           </ProductDetailSection>
