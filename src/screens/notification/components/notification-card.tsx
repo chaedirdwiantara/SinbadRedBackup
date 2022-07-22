@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -71,11 +71,15 @@ const NotificationCardContent: FC<NotificationCardContentProps> = ({
       onPress={onPress}>
       <View
         style={{
-          backgroundColor: iconColor,
+          backgroundColor: iconColor || color.iconColor.red,
           padding: layout.spacing.xsm,
           borderRadius: 50,
         }}>
-        <SnbIcon name={iconName} color={color.iconColor.white} size={12} />
+        <SnbIcon
+          name={iconName || 'notification'}
+          color={color.iconColor.white}
+          size={12}
+        />
       </View>
 
       <View style={{ flex: 1, marginLeft: layout.spacing.md }}>
@@ -124,7 +128,7 @@ const NotificationCardContent: FC<NotificationCardContentProps> = ({
           )}
         </View>
         {/* product */}
-        {product ? (
+        {product?.url ? (
           <View
             style={{
               flexDirection: 'row',
