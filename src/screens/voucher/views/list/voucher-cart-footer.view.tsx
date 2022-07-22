@@ -30,7 +30,7 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
 
   return (
     <View style={{ justifyContent: 'flex-end' }}>
-      <View>
+      <View style={{ backgroundColor: colorV2.bgColor.light }}>
         <View style={VoucherCartListStyles.footerMiniInfobar}>
           <View style={VoucherCartListStyles.iconLeft}>
             <Svg name="reward_voucher_yellow" size={24} />
