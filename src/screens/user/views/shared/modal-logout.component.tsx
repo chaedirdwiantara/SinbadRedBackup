@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   SnbText2,
   SnbButton2,
@@ -6,11 +6,16 @@ import {
   SnbBottomSheet2,
   SnbBottomSheetPart,
   SnbBottomSheet2Ref,
+  SnbToast,
 } from 'react-native-sinbad-ui';
 import { View } from 'react-native';
-import { useAuthAction } from '@screen/auth/functions';
 import { useNavigation } from '@react-navigation/native';
 import { contexts } from '@contexts';
+import { useDataAuth } from '@core/redux/Data';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useCoachmark } from '@screen/account/functions';
+import { useNotificationTotalActions } from '@screen/notification/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 
 interface Props {
   open: boolean;
@@ -18,14 +23,38 @@ interface Props {
 }
 
 const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
-  const { logout } = useAuthAction();
+  const { logout, resetLogout, meReset, meV2Reset } = useAuthCoreAction();
   const { reset } = useNavigation();
   const { stateUser } = React.useContext(contexts.UserContext);
   const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const [contentHeight, setContentHeight] = React.useState(0);
+  const { logout: logoutState } = useDataAuth()
+  const { resetCoachmark } = useCoachmark()
+  const notificationActions = useNotificationTotalActions()
+  const totalCartAction = useGetTotalCartAction();
+  const { dispatchCart } = useContext(contexts.CartContext);
+
   React.useEffect(() => {
     open ? bottomSheetRef.current?.open() : bottomSheetRef.current?.close();
   }, [open]);
+
+  React.useEffect(() => {
+    if (logoutState.data) {
+      meReset()
+      meV2Reset()
+      totalCartAction.reset(dispatchCart)
+      notificationActions.reset()
+      resetCoachmark()
+      bottomSheetRef.current?.close();
+      reset({ index: 0, routes: [{ name: 'OnBoardingView' }] });
+      resetLogout()
+    }
+    if (logoutState.error) {
+      bottomSheetRef.current?.close()
+      SnbToast.show(logoutState.error.message, 2500)
+    }
+    return resetLogout
+  }, [logoutState])
 
   return (
     <SnbBottomSheet2
@@ -66,18 +95,18 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
               onPress={() => {
-                bottomSheetRef.current?.close();
+                resetLogout()
                 logout({
                   mobilePhone:
                     stateUser.detail.data?.ownerData?.profile?.mobilePhone,
                 });
-                reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
               }}
               title="Keluar Sinbad"
-              disabled={false}
+              disabled={logoutState.loading}
               size="medium"
               full
               outline
+              loading={logoutState.loading}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />

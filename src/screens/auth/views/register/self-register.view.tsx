@@ -147,7 +147,12 @@ const SelfRegisterView: React.FC = () => {
       {header()}
       {content()}
       {buttonRegister()}
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="register" />
+      <ModalOTPMethod
+        ref={refModalOTP}
+        phone={phone.value}
+        action="register"
+        onResetField={phone.clearText}
+      />
       <ModalSalesman ref={refModalSalesman} />
     </SnbContainer>
   );
