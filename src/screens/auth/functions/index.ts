@@ -8,7 +8,7 @@ import {
 import {
   useCheckPhoneV2,
   useCheckAutoLogin,
-  useCheckPhoneRegistrationV3
+  useCheckPhoneRegistrationV3,
 } from './register-hooks.functions';
 import {
   useInputPhone,
