@@ -1,11 +1,12 @@
 /** === IMPORT PACKAGE HERE === */
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { useDebounce } from '@core/functions/hook/debounce';
 import { contexts } from '@contexts';
-import { useDataVoucher } from '@core/redux/Data';
+import { RadioValue } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/Radio/RadioGroup';
 /** === FUNCTION === */
 /** => cancel reserve voucher */
 const useCancelVoucherAction = () => {
@@ -20,20 +21,6 @@ const useCancelVoucherAction = () => {
   };
 };
 
-/** => count all voucher action */
-const useCountAllVoucherAction = () => {
-  const dispatch = useDispatch();
-  return {
-    count: (contextDispatch: (action: any) => any) => {
-      dispatch(
-        Actions.countAllVoucherProcess(contextDispatch, { id: 'unused' }),
-      );
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.countAllVoucherReset());
-    },
-  };
-};
 /** => voucher cart detail action */
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
@@ -54,9 +41,11 @@ const useVoucherDetailAction = () => {
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any) => {
+    list: (contextDispatch: (action: any) => any, keyword: string) => {
       dispatch(
-        Actions.voucherCartListProcess(contextDispatch, { id: 'unused' }),
+        Actions.voucherCartListProcess(contextDispatch, {
+          uniqueCode: keyword,
+        }),
       );
     },
     reset: (contextDispatch: (action: any) => any) => {
@@ -67,157 +56,48 @@ const useVoucherCartListAction = () => {
 /** => set search keyword */
 const useSearchKeyword = () => {
   const [keyword, setKeyword] = React.useState('');
+  const debouncedValue = useDebounce<string>(keyword!);
+
   return {
     changeKeyword: (newValue: string) => {
       setKeyword(newValue);
     },
     keyword,
+    debouncedValue,
   };
 };
 /** => set selected seller voucher */
-const useSelectedSellerVoucher = () => {
-  const [selectedSellerVoucher, setSelectedSellerVoucher] = React.useState<
-    models.SellerVoucherListProps[]
-  >([]);
-  return {
-    setSelectedSellerVoucher: (voucher: models.SellerVoucherListProps[]) => {
-      setSelectedSellerVoucher(voucher);
-    },
-    resetSelectedSellerVoucher: () => {
-      setSelectedSellerVoucher([]);
-    },
-    selectedSellerVoucher,
-  };
-};
-/** => set selected sinbad voucher */
-const useSelectedSinbadVoucher = () => {
-  const [selectedSinbadVoucher, setSelectedSinbadVoucher] =
-    React.useState<models.SinbadVoucherProps | null>(null);
-  return {
-    setSelectedSinbadVoucher: (voucher: models.SinbadVoucherProps | null) => {
-      setSelectedSinbadVoucher(voucher);
-    },
-    resetSelectedSinbadVoucher: () => {
-      setSelectedSinbadVoucher(null);
-    },
-    selectedSinbadVoucher,
-  };
-};
-/** => set voucher list local data (this is for list more view) */
-const useVoucherListMore = () => {
-  const [voucherListData, setVoucherListData] = React.useState<any>([]);
-  return {
-    setVoucherListData: (
-      voucher: models.SinbadVoucherProps[] | models.SellerVoucherListProps[],
-    ) => {
-      setVoucherListData(voucher);
-    },
-    searchVoucherListData: (
-      initialData:
-        | models.SellerVoucherListProps[]
-        | models.SinbadVoucherProps[],
-      keyword: string,
-    ) => {
-      const filteredVoucher = initialData.filter((item) => {
-        return item.voucherName.toLowerCase().includes(keyword.toLowerCase());
-      });
-      setVoucherListData(filteredVoucher);
-    },
-    voucherListData,
-  };
-};
-/** => set voucher list local data (this is for list view) */
-const useVoucherList = () => {
-  const [sellerVoucher, setSellerVoucher] = React.useState<
-    models.SellerVoucherProps[]
-  >([]);
-  const [sinbadVoucher, setSinbadVoucher] = React.useState<
-    models.SinbadVoucherProps[]
-  >([]);
+const useSelectedVoucher = () => {
+  const [selectedVoucherId, setSelectedVoucherId] = React.useState<number>(0);
   const { stateVoucher } = React.useContext(contexts.VoucherContext);
+
   return {
-    updateVoucherList: (
-      sellerVoucherList: models.SellerVoucherProps[],
-      sinbadVoucherList: models.SinbadVoucherProps[],
-    ) => {
-      setSellerVoucher(sellerVoucherList);
-      setSinbadVoucher(sinbadVoucherList);
+    setSelectedVoucher: (voucherId: number) => {
+      setSelectedVoucherId(voucherId);
     },
-    searchVoucher: (keyword: string) => {
-      if (stateVoucher.voucherCart.detail.data !== null) {
-        const filteredSellerVoucher: Array<models.SellerVoucherProps> = [];
-        stateVoucher.voucherCart.detail.data.sellerVouchers.map((item) => {
-          const filteredSubSellerVoucher = item.voucherList.filter(
-            (element) => {
-              return (
-                element.voucherName
-                  .toLowerCase()
-                  .includes(keyword.toLowerCase()) ||
-                element.uniqueCode
-                  .toLowerCase()
-                  .includes(keyword.toLowerCase()) ||
-                element.externalId.toLowerCase().includes(keyword.toLowerCase())
-              );
-            },
-          );
-          if (filteredSubSellerVoucher.length > 0) {
-            filteredSellerVoucher.push({
-              invoiceGroupId: item.invoiceGroupId,
-              invoiceGroupName: item.invoiceGroupName,
-              voucherList: filteredSubSellerVoucher,
-            });
-          }
-        });
-        const filteredSinbadVoucher =
-          stateVoucher.voucherCart.detail.data.sinbadVouchers.filter((item) => {
-            return item.voucherName
-              .toLowerCase()
-              .includes(keyword.toLowerCase());
-          });
-        setSellerVoucher(filteredSellerVoucher);
-        setSinbadVoucher(filteredSinbadVoucher);
-      }
+    resetSelectedVoucher: () => {
+      setSelectedVoucherId(0);
     },
-    resetVoucherData: () => {
-      if (stateVoucher.voucherCart.detail.data !== null) {
-        setSellerVoucher(stateVoucher.voucherCart.detail.data.sellerVouchers);
-        setSinbadVoucher(stateVoucher.voucherCart.detail.data.sinbadVouchers);
-      }
-    },
-    sellerVoucher,
-    sinbadVoucher,
+    selectedVoucher: stateVoucher.voucherCart.detail.data?.eligible.find(
+      (voucher) => voucher.id === selectedVoucherId,
+    ),
+    selectedVoucherId,
   };
 };
-/** => */
-const useVoucherLocalData = () => {
-  const dispatch = useDispatch();
-  const voucherData = useDataVoucher();
+
+const useVoucherList = () => {
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+  const { selectedVoucher, setSelectedVoucher, selectedVoucherId } =
+    useSelectedVoucher();
   return {
-    set: ({
-      sinbadVoucher,
-      sellerVouchers,
-    }: models.selectedVoucherDataProps) => {
-      dispatch(
-        Actions.saveSelectedVouchers({
-          sinbadVoucher,
-          sellerVouchers,
-        }),
-      );
+    eligibleVouchers: stateVoucher.voucherCart.detail.data?.eligible,
+    notEligibleVouchers: stateVoucher.voucherCart.detail.data?.notEligible,
+    loading: stateVoucher.voucherCart.detail.loading,
+    changeSelectedVoucher: (voucher: RadioValue) => {
+      setSelectedVoucher(voucher as number);
     },
-    reset: () => {
-      dispatch(Actions.saveSelectedVouchers(null));
-    },
-    selectedVoucher: voucherData.dataVouchers,
-  };
-};
-/** => standard modal state */
-const useStandardModalState = () => {
-  const [isOpen, setOpen] = React.useState(false);
-  return {
-    setOpen: (value: boolean) => {
-      setOpen(value);
-    },
-    isOpen,
+    selectedVoucher,
+    selectedVoucherId,
   };
 };
 /** === EXPORT === */
@@ -226,13 +106,8 @@ export {
   useVoucherDetailAction,
   useVoucherCartListAction,
   useSearchKeyword,
-  useSelectedSinbadVoucher,
-  useSelectedSellerVoucher,
-  useVoucherListMore,
+  useSelectedVoucher,
   useVoucherList,
-  useCountAllVoucherAction,
-  useVoucherLocalData,
-  useStandardModalState,
 };
 /**
  * ================================================================
