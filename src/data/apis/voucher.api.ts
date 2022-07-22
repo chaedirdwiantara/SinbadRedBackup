@@ -36,17 +36,6 @@ const voucherCartList = (uniqueCode: string) => {
 //     'LIST',
 //   );
 // };
-/** => count all voucher */
-const countAllVoucher = () => {
-  const path = 'voucher-cart-list/count';
-  return apiMapping<models.CountAllVoucherProps>(
-    'auth',
-    path,
-    'discount',
-    'v1',
-    'DETAIL',
-  );
-};
 /** => cancel reserve voucher */
 const cancelVoucher = () => {
   const path = 'sinbad-vouchers/cancel-reserve-voucher';
