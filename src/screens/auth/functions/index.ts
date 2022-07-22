@@ -5,7 +5,11 @@ import {
   extractAddress,
   setErrorMessage,
 } from './auth-utils.functions';
-import { useCheckPhoneV2, useCheckAutoLogin, useCheckPhoneRegistrationV3 } from './register-hooks.functions';
+import {
+  useCheckPhoneV2,
+  useCheckAutoLogin,
+  useCheckPhoneRegistrationV3
+} from './register-hooks.functions';
 import {
   useInputPhone,
   useInput,
