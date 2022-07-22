@@ -15,16 +15,27 @@ const voucherDetail = (data: models.VoucherDetailProcessProps) => {
   );
 };
 /** => voucher cart list */
-const voucherCartList = () => {
-  const path = 'voucher-cart-list';
-  return apiMapping<models.VoucherCartListProps>(
-    'auth',
+const voucherCartList = (uniqueCode: string) => {
+  const path = `sinbad-vouchers?uniqueCode=${uniqueCode}`;
+  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
+  return apiMappingMock<models.VoucherCartListProps>(
+    mockHost,
     path,
-    'discount',
+    'voucher',
     'v1',
-    'DETAIL',
+    'LIST',
   );
 };
+// const voucherCartList = () => {
+//   const path = 'sinbad-vouchers';
+//   return apiMapping<models.VoucherCartListProps>(
+//     'auth',
+//     path,
+//     'voucher',
+//     'v1',
+//     'LIST',
+//   );
+// };
 /** => count all voucher */
 const countAllVoucher = () => {
   const path = 'voucher-cart-list/count';

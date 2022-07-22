@@ -1,4 +1,5 @@
-import * as models from '@models';
+import { DetailProcessAction } from '..';
+
 /** === VOUCHER DETAIL === */
 export interface VoucherDetailProps {
   id: number;
@@ -12,46 +13,34 @@ export interface VoucherDetailProps {
   uniqueCode: string;
 }
 export interface VoucherDataProps {
-  dataVouchers: selectedVoucherDataProps | null;
+  dataVoucher: EligibleVoucherProps | null;
 }
-/** === SELECTED VOUCHER DATA === */
-export interface selectedVoucherDataProps {
-  sinbadVoucher: models.SinbadVoucherProps | null;
-  sellerVouchers: models.SellerVoucherListProps[];
-}
+
 /** === VOUCHER CART LIST === */
 export interface VoucherCartListProps {
-  sinbadVouchers: SinbadVoucherProps[];
-  sellerVouchers: SellerVoucherProps[];
+  eligible: EligibleVoucherProps[];
+  notEligible: NotEligibleVoucherProps[];
 }
-export interface SinbadVoucherProps {
-  voucherId: number;
-  voucherName: string;
-  shortDescription: string;
-  benefitRebate: number;
-  expiredAt: string;
-  remainingDay: number;
-}
-export interface SellerVoucherProps {
-  invoiceGroupId: number;
-  invoiceGroupName: string;
-  voucherList: SellerVoucherListProps[];
-}
-export interface SellerVoucherListProps {
+export interface EligibleVoucherProps {
   id: number;
-  voucherId: number;
-  voucherName: string;
-  uniqueCode: string;
-  externalId: string;
-  shortDescription: string;
+  name: string;
+  endDate: string;
+  sinbadVoucherValue: number;
   remainingDay: number;
-  expiredAt: string;
-  invoiceGroupId: number;
-  invoiceGroupName: string;
-  benefitRebate: number;
-  benefitDiscout: number;
-  benefitType: 'amount' | 'percent';
 }
-export interface CountAllVoucherProps {
-  total: number;
+export interface NotEligibleVoucherProps {
+  id: number;
+  name: string;
+  endDate: string;
+  minOrderTransaction: number;
+  remainingDay: number;
+}
+
+export interface VoucherListProcessProps {
+  uniqueCode: string;
+}
+
+export interface VoucherListProcessAction
+  extends Omit<DetailProcessAction, 'payload'> {
+  payload: VoucherListProcessProps;
 }
