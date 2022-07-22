@@ -55,34 +55,30 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   );
 
   const onPlusPres = useCallback(() => {
-    const multipleQty = product?.multipleQty || 1;
-    // onChangeQty(orderQty + multipleQty);
-    setCounter(counter + multipleQty);
-    onChangeQtyDebounce(counter + multipleQty);
+    // onChangeQty(orderQty + 1);
+    setCounter(counter + 1);
+    onChangeQtyDebounce(counter + 1);
     // onChangeQtyDebounce(counter);
-  }, [counter, product?.multipleQty]);
+  }, [counter]);
 
   const onMinusPres = useCallback(() => {
-    const multipleQty = product?.multipleQty || 1;
-    // onChangeQty(orderQty - multipleQty);
-    setCounter(counter - multipleQty);
-    onChangeQtyDebounce(counter - multipleQty);
+    // onChangeQty(orderQty - 1);
+    setCounter(counter - 1);
+    onChangeQtyDebounce(counter - 1);
     // onChangeQtyDebounce(counter);
-  }, [counter, product?.multipleQty]);
+  }, [counter]);
 
   const handleBlur = useCallback(() => {
     const minQty = product?.minQty || 1;
     const stock = dataStock?.stock || 0;
-    const multipleQty = product?.multipleQty || 1;
     const valueAfterMinimum = counter - minQty;
-    let qty =
-      Math.floor(valueAfterMinimum / multipleQty) * multipleQty + minQty;
+    let qty = Math.floor(valueAfterMinimum / 1) * 1 + minQty;
     if (counter < minQty) {
       setCounter(minQty);
       onChangeQty(minQty);
     } else if (counter > stock) {
       const maxQtyAfterMinimum = stock - minQty;
-      qty = Math.floor(maxQtyAfterMinimum / multipleQty) * multipleQty + minQty;
+      qty = Math.floor(maxQtyAfterMinimum / 1) * 1 + minQty;
       setCounter(qty);
       onChangeQty(qty);
     } else {
@@ -90,7 +86,7 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
       onChangeQty(qty);
     }
     setIsFocus(false);
-  }, [counter, product?.minQty, dataStock?.stock, product?.multipleQty]);
+  }, [counter, product?.minQty, dataStock?.stock]);
 
   const handleChange = useCallback(
     (qty: number) => {
@@ -108,21 +104,23 @@ const AddToCartCounter: FC<AddToCartQuantityModifierProps> = ({
   const minusDisabled = useMemo(
     () =>
       counter <= (product?.minQty || 0) ||
-      counter - (product?.multipleQty || 1) < (product?.minQty || 1) ||
+      counter - 1 < (product?.minQty || 1) ||
       isFocus,
-    [counter, product?.minQty, product?.multipleQty, isFocus],
+    [counter, product?.minQty, isFocus],
   );
 
   const plusDisabled = useMemo(
     () =>
       counter >= (dataStock?.stock || 0) ||
-      counter + (product?.multipleQty || 1) > (dataStock?.stock || 0) ||
+      counter + 1 > (dataStock?.stock || 0) ||
       isFocus,
-    [counter, dataStock?.stock, product?.multipleQty, isFocus],
+    [counter, dataStock?.stock, isFocus],
   );
 
   const leftStockLabel = useMemo(() => {
-    if (isStockEmpty) return 'Stock Habis';
+    if (isStockEmpty) {
+      return 'Stock Habis';
+    }
     // menampilkan jumlah stock tersisa
     return `Tersisa ${dataStock?.stock}`;
   }, [dataStock?.stock, isStockEmpty]);
