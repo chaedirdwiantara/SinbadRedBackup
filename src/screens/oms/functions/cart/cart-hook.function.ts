@@ -59,7 +59,7 @@ const useUpdateCartAction = () => {
       cartData: models.CartMaster,
     ) => {
       const newCartData = cloneDeep(cartData);
-      if (stateCart.buyerAddress.data !== null) {
+      if (stateCart.checkBuyer.data !== null) {
         const carts: models.CartMasterSellers[] = [...newCartData.sellers];
         cartData.unavailable.map((product) => {
           const sellerFound = cartData.sellers.find(
@@ -90,6 +90,8 @@ const useUpdateCartAction = () => {
         // rewrite lastUsedPrice
         carts.map((sellerItem) => {
           // deleting unused attributes for carts
+          delete sellerItem.sellerTaxNo;
+          delete sellerItem.fullSellerAddress;
           delete sellerItem.sellerAdminId;
           delete sellerItem.sellerAdminName;
           delete sellerItem.sellerAdminEmail;
@@ -107,6 +109,7 @@ const useUpdateCartAction = () => {
             delete productItem.brandName;
             delete productItem.leadTime;
             delete productItem.isQtyChanged;
+            delete productItem.categoryName;
 
             if (productItem.priceRules.length > 0) {
               const priceRulesFirstItem = productItem.priceRules[0];
@@ -167,6 +170,47 @@ const useRemoveCartProductAction = () => {
     },
     reset: (contextDispatch: (action: any) => any) => {
       dispatch(Actions.removeCartProductReset(contextDispatch));
+    },
+  };
+};
+/** => check sinbad voucher action */
+const useCheckSinbadVoucherAction = () => {
+  const { stateCart } = useContext(contexts.CartContext);
+  const dispatch = useDispatch();
+  return {
+    fetch: (
+      contextDispatch: (action: any) => any,
+      reserved: boolean,
+      sinbadVoucherId: number | null,
+    ) => {
+      if (stateCart.get.data !== null) {
+        // format payload from redux master
+        const carts: models.CheckSinbadVoucherPayloadCarts[] = [];
+        stateCart.get.data.sellers.map((sellerItem) => {
+          const products: models.CheckSinbadVoucherPayloadProducts[] = [];
+          sellerItem.products.map((productItem) => {
+            products.push({
+              productId: productItem.productId,
+              qty: productItem.qty,
+              priceAfterTax: productItem.priceAfterTax,
+            });
+          });
+          carts.push({ sellerId: sellerItem.sellerId, products });
+        });
+        dispatch(
+          Actions.checkSinbadVoucherProcess(contextDispatch, {
+            data: {
+              cartId: stateCart.get.data.id,
+              sinbadVoucherId,
+              reserved,
+              carts,
+            },
+          }),
+        );
+      }
+    },
+    reset: (contextDispatch: (action: any) => any) => {
+      dispatch(Actions.checkSinbadVoucherReset(contextDispatch));
     },
   };
 };
@@ -377,15 +421,15 @@ const useCancelStockAction = () => {
     },
   };
 };
-/** => cart buyer address action */
-const useCartBuyerAddressAction = () => {
+/** => check buyer action */
+const useCheckBuyerAction = () => {
   const dispatch = useDispatch();
   return {
     fetch: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartBuyerAddressProcess(contextDispatch));
+      dispatch(Actions.checkBuyerProcess(contextDispatch));
     },
     reset: (contextDispatch: (action: any) => any) => {
-      dispatch(Actions.cartBuyerAddressReset(contextDispatch));
+      dispatch(Actions.checkBuyerReset(contextDispatch));
     },
   };
 };
@@ -708,7 +752,9 @@ const useCartLocalData = () => {
           let sellerId: number = resultAfterCheckProduct.sellers[i].sellerId;
           let sellerName: string =
             resultAfterCheckProduct.sellers[i].sellerName;
-          let sellerAdminId,
+          let sellerTaxNo,
+            fullSellerAddress,
+            sellerAdminId,
             sellerAdminName,
             sellerAdminEmail,
             status = '';
@@ -716,6 +762,8 @@ const useCartLocalData = () => {
             if (resultAfterCheckProduct.sellers[i].sellerId === item.sellerId) {
               sellerId = item.sellerId;
               sellerName = item.sellerName;
+              sellerTaxNo = item.sellerTaxNo;
+              fullSellerAddress = item.fullSellerAddress;
               sellerAdminId = item.sellerAdminId;
               sellerAdminName = item.sellerAdminName;
               sellerAdminEmail = item.sellerAdminEmail;
@@ -739,6 +787,8 @@ const useCartLocalData = () => {
           sellers.push({
             sellerId,
             sellerName,
+            sellerTaxNo,
+            fullSellerAddress,
             sellerAdminId,
             sellerAdminName,
             sellerAdminEmail,
@@ -890,10 +940,11 @@ export {
   useCheckStockAction,
   usePostCheckStockAction,
   useCancelStockAction,
-  useCartBuyerAddressAction,
+  useCheckBuyerAction,
   useCartLocalData,
   useOmsGeneralFailedState,
   useKeyboardFocus,
+  useCheckSinbadVoucherAction,
 };
 /**
  * ================================================================

@@ -66,7 +66,7 @@ const commitCartApi = (
     'auth',
     path,
     'buyer-cart',
-    'v1',
+    'v2',
     'CREATE',
     data.data,
   );

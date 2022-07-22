@@ -103,7 +103,8 @@ const SelfRegisterView: React.FC = () => {
               Keyboard.dismiss();
               checkPhoneRegistration({
                 mobilePhone: phone.value,
-                identifierDeviceId: advertisingId,
+                identifierDeviceId:
+                  advertisingId === undefined ? null : advertisingId,
               });
             }}
             disabled={

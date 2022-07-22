@@ -26,16 +26,17 @@ const voucherCartList = (uniqueCode: string) => {
     'LIST',
   );
 };
-// const voucherCartList = () => {
-//   const path = 'sinbad-vouchers';
-//   return apiMapping<models.VoucherCartListProps>(
-//     'auth',
-//     path,
-//     'voucher',
-//     'v1',
-//     'LIST',
-//   );
-// };
+/** => check sinbad voucher */
+const checkSinbadVoucher = () => {
+  const path = 'sinbad-vouchers/check-sinbad-voucher';
+  return apiMapping<models.CheckSinbadVoucherResponse>(
+    'auth',
+    path,
+    'voucher',
+    'v1',
+    'CREATE',
+  );
+};
 /** => cancel reserve voucher */
 const cancelVoucher = () => {
   const path = 'sinbad-vouchers/cancel-reserve-voucher';
@@ -58,6 +59,6 @@ const cancelVoucher = () => {
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
-  countAllVoucher,
+  checkSinbadVoucher,
   cancelVoucher,
 };

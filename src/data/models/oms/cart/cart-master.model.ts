@@ -15,6 +15,8 @@ export interface CartMaster {
 export interface CartMasterSellers {
   sellerId: number;
   sellerName: string;
+  sellerTaxNo?: string;
+  fullSellerAddress?: string;
   sellerAdminId?: number;
   sellerAdminName?: string;
   sellerAdminEmail?: string;
@@ -37,4 +39,5 @@ export interface CartMasterSellersProducts extends CartProduct {
   brandId?: string;
   brandName?: string;
   isQtyChanged?: boolean;
+  categoryName?: string;
 }

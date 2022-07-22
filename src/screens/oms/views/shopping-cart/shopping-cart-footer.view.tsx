@@ -15,20 +15,23 @@ import { contexts } from '@contexts';
 import * as models from '@models';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
+import { toCurrency } from '@core/functions/global/currency-format';
 
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
   countTotalProduct: number;
-  countTotalPrice: number;
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
   handleErrorGlobalModalData: any;
 }
+interface SelectedVoucherProps {
+  sinbadVoucherId: number;
+  voucherAmount: number;
+}
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
-  countTotalPrice,
   countTotalProduct,
   isCheckoutDisabled,
   handleOpenErrorBusinessModal,
@@ -39,7 +42,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
-  const [isErrorShown, setErrorShown] = useState(false);
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+  const [footerData, setFooterData] =
+    useState<models.CheckSinbadVoucherResponse | null>(null);
+  const [selectedVoucher, setSelectedVoucher] =
+    useState<SelectedVoucherProps | null>(null);
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
   const [isCheckoutBtnLoading, setCheckoutBtnLoading] = useState(false);
@@ -59,7 +66,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     updateCartAction.fetch(dispatchCart, cartData);
     setCheckoutPressed(true);
     setCheckoutBtnLoading(true);
-  }, [cartData, stateCart.buyerAddress.data]);
+  }, [cartData, stateCart.checkBuyer.data]);
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
   const checkProductSellerStock = () => {
@@ -111,7 +118,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
-        setErrorShown(true);
         handleOpenErrorBusinessModal();
       }
     }
@@ -219,15 +225,34 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [isUpdateError]);
 
+  /** => listen check voucher fetch */
+  useEffect(() => {
+    if (stateVoucher.checkSinbadVoucher.data !== null) {
+      setFooterData(stateVoucher.checkSinbadVoucher.data);
+    }
+  }, [stateVoucher.checkSinbadVoucher]);
+
   /** === VIEWS === */
   /** ==> content */
   const renderFooterContent = () => (
     <FooterButton.Order
       titleButton="Checkout Sekarang"
-      loading={false}
+      loading={!footerData}
       loadingButton={isCheckoutBtnLoading}
       disabled={isCheckoutDisabled || isCheckoutBtnLoading}
-      value={countTotalPrice}
+      value={footerData?.totalOrderAfterSinbadVoucher || 0}
+      vouchers={
+        footerData
+          ? {
+              isNoProductSelected: countTotalProduct === 0,
+              isVoucherAvailable: footerData.isVoucherExist,
+              isVoucherSelected: !!selectedVoucher?.sinbadVoucherId,
+              selectedAmount: toCurrency(selectedVoucher?.voucherAmount, {
+                withFraction: false,
+              }),
+            }
+          : undefined
+      }
       description={
         countTotalProduct > 0
           ? `(${countTotalProduct}) barang dipilih`

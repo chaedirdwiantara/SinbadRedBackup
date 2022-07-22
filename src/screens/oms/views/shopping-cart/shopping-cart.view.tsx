@@ -29,11 +29,12 @@ import {
   useCartLocalData,
   useOmsGeneralFailedState,
   useGetTotalCartAction,
-  useCartBuyerAddressAction,
+  useCheckBuyerAction,
   useCancelStockAction,
   useUpdateCartAction,
   useKeyboardFocus,
   goToProfile,
+  useCheckSinbadVoucherAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -74,16 +75,19 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
   const checkStockAction = useCheckStockAction();
   const removeCartProductAction = useRemoveCartProductAction();
   const totalCartActions = useGetTotalCartAction();
-  const cartBuyerAddressAction = useCartBuyerAddressAction();
+  const checkBuyerAction = useCheckBuyerAction();
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
   const cancelVoucherAction = useCancelVoucherAction();
 
   /** => MODAL REF */
@@ -115,7 +119,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     checkStockAction.reset(dispatchCart);
     getCartAction.reset(dispatchCart);
     removeCartProductAction.reset(dispatchCart);
-    cartBuyerAddressAction.reset(dispatchCart);
+    checkBuyerAction.reset(dispatchCart);
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
     cancelVoucherAction.reset(dispatchVoucher);
@@ -126,7 +130,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     handleResetContexts();
     setPageLoading(true);
     cancelCartAction.fetch(dispatchCart);
-    cartBuyerAddressAction.fetch(dispatchCart);
+    checkBuyerAction.fetch(dispatchCart);
     cancelVoucherAction.fetch(dispatchVoucher);
   };
 
@@ -202,16 +206,16 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => if cancel stock or buyer address failed */
   useEffect(() => {
-    if (!stateCart.cancelStock.loading && !stateCart.buyerAddress.loading) {
+    if (!stateCart.cancelStock.loading && !stateCart.checkBuyer.loading) {
       // check which endpoint fetch was fail
       const isErrorCancelStock = stateCart.cancelStock.error !== null;
-      const isErrorBuyerAddress = stateCart.buyerAddress.error !== null;
+      const isErrorBuyerAddress = stateCart.checkBuyer.error !== null;
       // determine the error data
       let errorData = null;
       if (isErrorCancelStock) {
         errorData = stateCart.cancelStock.error;
       } else {
-        errorData = stateCart.buyerAddress.error;
+        errorData = stateCart.checkBuyer.error;
       }
       if (isErrorCancelStock || isErrorBuyerAddress) {
         errorModal.setCloseAction(() => handleGoBack);
@@ -219,17 +223,17 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         errorModal.setOpen(true);
       }
     }
-  }, [stateCart.cancelStock, stateCart.buyerAddress]);
+  }, [stateCart.cancelStock, stateCart.checkBuyer]);
 
   /** => after success fetch cancelStock & buyerAddress, fetch getCart */
   useEffect(() => {
     if (
       stateCart.cancelStock.data !== null &&
-      stateCart.buyerAddress.data !== null
+      stateCart.checkBuyer.data !== null
     ) {
       getCartAction.fetch(dispatchCart);
     }
-  }, [stateCart.cancelStock.data, stateCart.buyerAddress.data]);
+  }, [stateCart.cancelStock.data, stateCart.checkBuyer.data]);
 
   /** => if get cart failed */
   useEffect(() => {
@@ -248,7 +252,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (
       stateCart.get.data !== null &&
       stateCart.get.data.sellers.length > 0 &&
-      stateCart.buyerAddress.data !== null
+      stateCart.checkBuyer.data !== null
     ) {
       setLocalCartMaster({
         id: stateCart.get.data.id,
@@ -267,7 +271,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     ) {
       setPageLoading(false);
     }
-  }, [stateCart.get.data, stateCart.buyerAddress.data]);
+  }, [stateCart.get.data, stateCart.checkBuyer.data]);
 
   /** => if one of the check endpoint fail, show error retry */
   useEffect(() => {
@@ -348,17 +352,28 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => listen something to be executed after page loaded */
   useEffect(() => {
     if (!pageLoading) {
-      if (stateCart.buyerAddress.data) {
+      /** initial fetch check sinbad voucher */
+      checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
+      if (stateCart.checkBuyer.data) {
         if (
-          !stateCart.buyerAddress.data.buyerName ||
-          !stateCart.buyerAddress.data.address ||
-          !stateCart.buyerAddress.data.isImageIdOcrValidation
+          !stateCart.checkBuyer.data.buyerName ||
+          !stateCart.checkBuyer.data.address ||
+          !stateCart.checkBuyer.data.isImageIdOcrValidation
         ) {
           refCartValidationModal.current?.open();
         }
       }
     }
   }, [pageLoading]);
+
+  /** => listen when something change in products */
+  useEffect(() => {
+    if (localCartMaster) {
+      /** fetch check sinbad voucher */
+      // WIP: add debouce here!
+      checkSinbadVoucherAction.fetch(dispatchVoucher, false, selectedVoucher);
+    }
+  }, [localCartMaster?.sellers]);
 
   /** === VIEW === */
   /** => CONTENT */
