@@ -4,17 +4,6 @@ import apiMappingMock from '@core/services/apiMappingMockV3';
 import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
 
-// const getCart = () => {
-//   const path = 'carts';
-//   const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-//   return apiMappingMock<models.GetCartData>(
-//     mockHost,
-//     path,
-//     'cart',
-//     'v2',
-//     'DETAIL',
-//   );
-// };
 const getCart = () => {
   const path = 'carts';
   return apiMapping<models.GetCartData>(
@@ -37,21 +26,6 @@ const getTotalCart = () => {
   );
 };
 
-// const addToCart = (
-//   data: models.CreateProcessProps<models.AddToCartPayload>,
-// ) => {
-//   const path = 'carts';
-//   const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-//   return apiMappingMock<models.AddToCartResponse>(
-//     mockHost,
-//     path,
-//     'cart',
-//     'v2',
-//     'CREATE',
-//     data.data,
-//   );
-// };
-
 const addToCart = (
   data: models.CreateProcessProps<models.AddToCartPayload>,
 ) => {
@@ -65,24 +39,6 @@ const addToCart = (
     data.data,
   );
 };
-
-// const updateCart = (
-//   data: models.UpdateProcessProps<models.UpdateCartPayload>,
-// ) => {
-//   const path = `carts/${data.data.id}`;
-//   const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-//   return apiMappingMock<models.UpdateCartResponse>(
-//     mockHost,
-//     path,
-//     'cart',
-//     'v2',
-//     'UPDATE',
-//     {
-//       buyerName: data.data.buyerName,
-//       carts: data.data.carts,
-//     },
-//   );
-// };
 
 const updateCart = (
   data: models.UpdateProcessProps<models.UpdateCartPayload>,
