@@ -39,6 +39,10 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
   }, [open]);
 
   React.useEffect(() => {
+    return resetLogout
+  }, [])
+
+  React.useEffect(() => {
     if (logoutState.data) {
       meReset()
       meV2Reset()
@@ -53,7 +57,6 @@ const ModalLogout: React.FC<Props> = ({ open, setOpen }) => {
       bottomSheetRef.current?.close()
       SnbToast.show(logoutState.error.message, 2500)
     }
-    return resetLogout
   }, [logoutState])
 
   return (
