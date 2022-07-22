@@ -53,4 +53,4 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
       />
     </View>
   );
-}
+};
