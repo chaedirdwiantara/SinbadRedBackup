@@ -16,11 +16,11 @@ const SharedNav = {
   ListAndSearchView: {
     component: ListAndSearchView,
   },
-  OCRResultView: {
-    component: OCRResultView,
-  },
   MapsViewType2: {
     component: MapsViewType2,
+  },
+  OCRResultView: {
+    component: OCRResultView,
   },
 };
 
