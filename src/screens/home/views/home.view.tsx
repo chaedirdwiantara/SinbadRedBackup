@@ -12,7 +12,6 @@ import { CategoryHomeView } from '../../category/views';
 import { useHeaderChange, useRefresh } from '../functions';
 import { useGetTotalCartAction } from '@screen/oms/functions';
 import { useDataAuth } from '@core/redux/Data';
-// import { useCheckoutMaster } from '@screen/oms/functions';
 import { useNotificationTotalActions } from '@screen/notification/functions';
 import BottomSheetError from '@core/components/BottomSheetError';
 import PushNotification from '@core/components/PushNotification';

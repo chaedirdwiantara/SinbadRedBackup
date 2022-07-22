@@ -229,26 +229,6 @@ function* cancelStock(action: Omit<models.DeleteProcessAction, 'id'>) {
     yield put(ActionCreators.cancelStockFailed(error as models.ErrorProps));
   }
 }
-/** => CART BUYER ADDRESS */
-function* cartBuyerAddress(action: models.DetailProcessAction) {
-  try {
-    const response: models.DetailSuccessProps<models.CartBuyerAddress> =
-      yield call(() => {
-        return CartApi.cartBuyerAddress();
-      });
-    yield action.contextDispatch(
-      ActionCreators.cartBuyerAddressSuccess(response),
-    );
-    yield put(ActionCreators.cartBuyerAddressSuccess(response));
-  } catch (error) {
-    yield action.contextDispatch(
-      ActionCreators.cartBuyerAddressFailed(error as models.ErrorProps),
-    );
-    yield put(
-      ActionCreators.cartBuyerAddressFailed(error as models.ErrorProps),
-    );
-  }
-}
 /** => CHECK BUYER */
 function* checkBuyer(action: models.DetailProcessAction) {
   try {
@@ -280,7 +260,6 @@ function* CartSaga() {
   yield takeLatest(types.CHECK_STOCK_PROCESS, checkStock);
   yield takeLatest(types.POST_CHECK_STOCK_PROCESS, postCheckStock);
   yield takeLatest(types.CANCEL_STOCK_PROCESS, cancelStock);
-  yield takeLatest(types.CART_BUYER_ADDRESS_PROCESS, cartBuyerAddress);
   yield takeLatest(types.CHECK_BUYER_PROCESS, checkBuyer);
 }
 

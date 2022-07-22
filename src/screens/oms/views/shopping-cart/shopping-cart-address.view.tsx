@@ -25,20 +25,20 @@ export const ShoppingCartAddress: FC = () => {
         <SnbText2.Body.Small
           color={
             colorV2.textColor.default
-          }>{`${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
+          }>{`${stateCart.checkBuyer.data?.buyerName}`}</SnbText2.Body.Small>
       </View>
       <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
-        {stateCart.buyerAddress.data?.address}
-        {stateCart.buyerAddress.data?.urban ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.urban}
-        {stateCart.buyerAddress.data?.district ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.district}
-        {stateCart.buyerAddress.data?.city ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.city}
-        {stateCart.buyerAddress.data?.province ? ',' : null}{' '}
-        {stateCart.buyerAddress.data?.province}
-        {stateCart.buyerAddress.data?.zipCode ? ' ' : null}
-        {stateCart.buyerAddress.data?.zipCode}
+        {stateCart.checkBuyer.data?.address}
+        {stateCart.checkBuyer.data?.urban ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.urban}
+        {stateCart.checkBuyer.data?.district ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.district}
+        {stateCart.checkBuyer.data?.city ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.city}
+        {stateCart.checkBuyer.data?.province ? ',' : null}{' '}
+        {stateCart.checkBuyer.data?.province}
+        {stateCart.checkBuyer.data?.zipCode ? ' ' : null}
+        {stateCart.checkBuyer.data?.zipCode}
       </SnbText2.Paragraph.Tiny>
     </View>
   );
