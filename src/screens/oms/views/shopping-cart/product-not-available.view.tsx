@@ -2,11 +2,11 @@
 import React, { FC } from 'react';
 import { View, Image, TouchableOpacity } from 'react-native';
 import {
-  SnbText,
   SnbText2,
   SnbCheckbox2,
   SnbIcon,
-  color,
+  colorV2,
+  SnbGrayscaleImage,
 } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import { ShoppingCartStyles } from '@screen/oms/styles';
@@ -33,15 +33,16 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={{
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: 0.5,
         }}>
-        <Image
-          source={{
-            uri: imageUrl,
-          }}
-          defaultSource={Images.opacityPlaceholder}
-          style={ShoppingCartStyles.productImg}
-        />
+        <SnbGrayscaleImage grayscaleAmount={1} brightnessAmount={1}>
+          <Image
+            source={{
+              uri: imageUrl,
+            }}
+            defaultSource={Images.opacityPlaceholder}
+            style={ShoppingCartStyles.productImg}
+          />
+        </SnbGrayscaleImage>
       </View>
     );
   };
@@ -59,7 +60,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
             };
             goToProduct(category);
           }}>
-          <SnbText.B4 color={color.blue50}>Cari Produk Sejenis</SnbText.B4>
+          <SnbText2.Body.Tiny color={colorV2.textColor.link}>
+            Cari Produk Sejenis
+          </SnbText2.Body.Tiny>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
@@ -73,7 +76,11 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
               removedProducts,
             });
           }}>
-          <SnbIcon name="delete" color={color.black60} size={24} />
+          <SnbIcon
+            name="delete"
+            color={colorV2.btnSecColor.default}
+            size={24}
+          />
         </TouchableOpacity>
       </View>
     );
@@ -90,15 +97,12 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           {renderProductImage(unavailableProducts[0].productImageUrl)}
           <View style={{ justifyContent: 'center', flex: 1 }}>
             <View style={{ flex: 1 }}>
-              <SnbText2.Paragraph.Default
-                color={color.black80}
-                numberOfLines={1}
-                ellipsizeMode={'tail'}>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.disable}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
-              <SnbText.B4 color={color.black80}>
+              <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
                 {unavailableProducts[0].unavailableMessage}
-              </SnbText.B4>
+              </SnbText2.Paragraph.Tiny>
             </View>
           </View>
         </View>
@@ -124,14 +128,12 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
                 <View style={{ flex: 1 }}>
                   <View style={{ flex: 1 }}>
                     <SnbText2.Paragraph.Default
-                      color={color.black80}
-                      numberOfLines={1}
-                      ellipsizeMode={'tail'}>
+                      color={colorV2.textColor.disable}>
                       {item.productName}
                     </SnbText2.Paragraph.Default>
-                    <SnbText.B4 color={color.black80}>
+                    <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
                       {item.unavailableMessage}
-                    </SnbText.B4>
+                    </SnbText2.Paragraph.Tiny>
                   </View>
                 </View>
               </View>

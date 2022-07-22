@@ -15,8 +15,13 @@ import { NavigationAction } from '@navigation';
 const LoginOTPView: React.FC = () => {
   const { goBack } = useNavigation();
   const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
-  const { resetVerifyOTP, mobilePhone, getLocationPermissions } = useOTP();
+  const { resetVerifyOTP, mobilePhone, getLocationPermissions, otpHash, type } = useOTP();
   const { meV2 } = useDataAuth();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    verifyOTP.data !== null && setLoading(true);
+  }, [verifyOTP]);
 
   React.useEffect(() => {
     if (meV2.data) {
@@ -26,6 +31,7 @@ const LoginOTPView: React.FC = () => {
         getLocationPermissions();
       }
     }
+    meV2.error && setLoading(false);
   }, [meV2]);
 
   return (
@@ -43,14 +49,15 @@ const LoginOTPView: React.FC = () => {
             verificationOTP({ mobilePhone, otp });
           }}
           resend={() => {
-            requestOTP({ mobilePhone });
+            requestOTP({ mobilePhone, otpHash, type });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
           }
           otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading}
+          loading={verifyOTP.loading || loading}
           phoneNo={maskPhone(mobilePhone)}
+          otpMethod={type}
         />
       </ScrollView>
     </SnbContainer>

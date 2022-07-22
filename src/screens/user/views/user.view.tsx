@@ -9,6 +9,9 @@ import {
   SnbIcon,
   SnbButton2,
   spacingV2 as layout,
+  Content,
+  SnbBottomSheet2Ref,
+  SpecialButton,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -26,7 +29,6 @@ import { useCoachmark } from '@screen/account/functions';
 import LinearGradient from 'react-native-linear-gradient';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import Svg from '@svg';
-import ListButton from '../views/shared/list-button.component';
 import ModalLogout from './shared/modal-logout.component';
 
 const CopilotView = walkthroughable(View);
@@ -40,11 +42,70 @@ const UserView: FC = ({ start }: any) => {
   /** === HOOK === */
   const storeDetailAction = UserHookFunc.useStoreDetailAction();
   const { stateUser, dispatchUser } = React.useContext(contexts.UserContext);
-  const [showConfirmation, setShowConfirmation] = React.useState(false);
+  const refModalLogout = React.useRef<SnbBottomSheet2Ref>(null)
   const { coachmarkState } = useCoachmark();
   const { width } = Dimensions.get('window');
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [loadingCarousel, setLoadingCarousel] = useState(true);
+  const [clickFromCart, setClickFromCart] = useState(false);
+
+  const dataHeader = [
+    {
+      id: 1,
+      title: 'Upgrade VIP Diproses',
+      subTitle: 'Tim kami sedang memproses upgrade akun Anda.',
+      icon: 'shield',
+      type: 'upgradeVipProcess',
+      status: false,
+    },
+    {
+      id: 2,
+      title: 'Upgrade Akun Berhasil',
+      subTitle: 'Akun Anda telah berhasil menjadi akun VIP.',
+      icon: 'shield_blue',
+      type: 'upgradeVipSuccess',
+      status: false,
+    },
+    {
+      id: 3,
+      title: 'Upgrade Akun Gagal',
+      subTitle: 'Silakan cek kembali kelengkapan profil anda.',
+      icon: 'error',
+      type: 'upgradeVipFailed',
+      status: false,
+    },
+    {
+      id: 4,
+      title: 'Foto KTP',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'ktp',
+      type: 'ktp',
+      status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
+    },
+    {
+      id: 5,
+      title: 'Tambah Nama Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'store',
+      type: 'merchantAccountName',
+      status:
+        stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
+          ?.name !== null
+          ? true
+          : false,
+    },
+    {
+      id: 6,
+      title: 'Alamat Toko',
+      subTitle: 'Belanja lebih mudah dengan melengkapi profil Anda.',
+      icon: 'location',
+      type: 'storeAddress',
+      status:
+        stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
+          ? true
+          : false,
+    },
+  ];
 
   // usage for show modal
   const [modalUserProfileCompletion, setModalUserProfileCompletion] =
@@ -62,7 +123,8 @@ const UserView: FC = ({ start }: any) => {
         isProfileCompletionCart === true &&
         ownerData?.info.isImageIdOcrValidate === true &&
         buyerData?.buyerInformation.buyerAccount.name !== null &&
-        buyerData?.buyerAddress.address !== null
+        buyerData?.buyerAddress.address !== null &&
+        !clickFromCart
       ) {
         setModalUserProfileCompletion(true);
       }
@@ -98,10 +160,18 @@ const UserView: FC = ({ start }: any) => {
         break;
       }
       case 'merchantAccountName':
-        NavigationAction.navigate('MerchantEditView', { title, type });
+        NavigationAction.navigate('MerchantEditView', {
+          title,
+          type,
+          originFrom: 'profile',
+        });
         break;
       case 'storeAddress':
         handleAddressNavigation();
+        break;
+      case 'npwp':
+      case 'selfie':
+        NavigationAction.navigate('MerchantEditPhotoView', { title, type });
         break;
       default:
         break;
@@ -127,42 +197,6 @@ const UserView: FC = ({ start }: any) => {
 
   /** === RENDER SLIDER PAGINATION DOT === */
   const pagination = () => {
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View>
@@ -179,35 +213,43 @@ const UserView: FC = ({ start }: any) => {
     );
   };
 
+  const renderSeparator = () => {
+    return (
+      <View
+        style={{
+          flex: 1,
+          borderTopWidth: 1,
+          borderColor: colorV2.strokeColor.default,
+          marginTop: layout.spacing.sm,
+        }}
+      />
+    );
+  };
+
   /** === RENDER HEADER ITEM SLIDE === */
   const renderItem = (item: any, index: any) => {
     return (
       <View key={index}>
-        <View>
-          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
-            <View style={UserStyles.cardBody}>
-              <View>
-                <Svg name={item.icon} size={40} />
-              </View>
-              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
-                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
-                <SnbText2.Paragraph.Small>
-                  {item.message}
-                </SnbText2.Paragraph.Small>
-              </View>
-              <SnbButton2.Primary
-                size="tiny"
-                onPress={() => {
-                  goTo({
-                    type: item.type,
-                    title: item.title,
-                  });
-                }}
-                title="Lengkapi"
-              />
-            </View>
-          </View>
-        </View>
+        <SpecialButton.Card
+          title={item.title}
+          subTitle={item.subTitle}
+          height={88}
+          action={item.type === 'upgradeVipFailed' ? false : true}
+          actionType="button"
+          actionTitle={
+            item.type === 'upgradeVipProcess' ||
+              item.type === 'upgradeVipSuccess'
+              ? 'Mengerti'
+              : 'Lengkapi'
+          }
+          iconComponent={<Svg name={item.icon} size={40} />}
+          onPress={() => {
+            goTo({
+              type: item.type,
+              title: item.title,
+            });
+          }}
+        />
       </View>
     );
   };
@@ -219,42 +261,6 @@ const UserView: FC = ({ start }: any) => {
     const source = data?.imageUrl
       ? { uri: data?.imageUrl }
       : require('../../../assets/images/sinbad_image/avatar.png');
-    const dataHeader = [
-      {
-        id: 1,
-        title: 'Foto KTP',
-        subTitle: 'Upload Foto KTP',
-        icon: 'ktp',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'ktp',
-        status: stateUser.detail.data?.ownerData?.info?.isImageIdOcrValidate,
-      },
-      {
-        id: 2,
-        title: 'Tambah Nama Toko',
-        subTitle: 'Isi Nama Toko',
-        icon: 'store',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'merchantAccountName',
-        status:
-          stateUser.detail.data?.buyerData?.buyerInformation?.buyerAccount
-            ?.name !== null
-            ? true
-            : false,
-      },
-      {
-        id: 3,
-        title: 'Alamat Toko',
-        subTitle: 'Isi Alamat Toko',
-        icon: 'location',
-        message: 'Belanja lebih mudah dengan melengkapi profil Anda.',
-        type: 'storeAddress',
-        status:
-          stateUser.detail.data?.buyerData?.buyerAddress?.address !== null
-            ? true
-            : false,
-      },
-    ];
     const dataCarousel = dataHeader.filter((item) => item.status === false);
     return (
       <View style={UserStyles.headerInformationContainer}>
@@ -328,8 +334,8 @@ const UserView: FC = ({ start }: any) => {
         </LinearGradient>
         <View>
           {!ownerData?.info.isImageIdOcrValidate ||
-          buyerData?.buyerInformation.buyerAccount.name === null ||
-          buyerData?.buyerAddress.address === null
+            buyerData?.buyerInformation.buyerAccount.name === null ||
+            buyerData?.buyerAddress.address === null
             ? pagination()
             : null}
         </View>
@@ -352,31 +358,82 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
                 <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="person"
-                    color={colorV2.iconColor.default}
-                    size={24}
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Data Diri"
+                  iconComponent={
+                    <SnbIcon
+                      name="person"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailProfileView')
+                  }
+                />
+                {!ownerData?.info.isImageIdOcrValidate && (
+                  <Content.MenuList
+                    title="Upload Foto KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'ktp', title: 'Foto KTP' })
+                    }
+                    background
                   />
-                }
-                title={'Data Diri'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantDetailProfileView')
-                }
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
+                )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto NPWP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'npwp', title: 'Foto NPWP' })
+                    }
+                    background
                   />
-                }
-                badges1={ownerData?.info.isImageIdOcrValidate ? false : true}
-                leftBadgeItem1={<Svg name={'ktp_blue'} size={20} />}
-                badgesTitle1={'Upload Foto KTP'}
-                separator
-                pressBadge1={() => goTo({ type: 'ktp', title: 'Foto KTP' })}
-              />
+                )}
+                {true && (
+                  <Content.MenuList
+                    title="Upload Foto Selfie + KTP"
+                    iconComponent={
+                      <SnbIcon
+                        name="ktp"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({ type: 'selfie', title: 'Foto Selfie + KTP' })
+                    }
+                    background
+                  />
+                )}
+                {renderSeparator()}
+              </View>
             </View>
           </CopilotView>
         </CopilotStep>
@@ -391,93 +448,97 @@ const UserView: FC = ({ start }: any) => {
                 <SnbText2.Body.Small>Data Toko</SnbText2.Body.Small>
                 <SnbText2.Paragraph.Small>{`${data?.buyerProgress.done}/${data?.buyerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="store"
-                    color={colorV2.iconColor.default}
-                    size={24}
+              <View
+                style={{
+                  marginHorizontal: layout.spacing.lg,
+                  marginTop: layout.spacing.md,
+                }}>
+                <Content.MenuList
+                  title="Informasi Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={() =>
+                    NavigationAction.navigate('MerchantDetailAccountView')
+                  }
+                />
+                <Content.MenuList
+                  title="Alamat Toko"
+                  iconComponent={
+                    <SnbIcon
+                      name="location_store"
+                      color={colorV2.iconColor.default}
+                      size={24}
+                    />
+                  }
+                  actionType="icon"
+                  actionIcon="chevron_right"
+                  onActionPress={handleAddressNavigation}
+                />
+                {!buyerData?.buyerInformation?.buyerAccount?.name && (
+                  <Content.MenuList
+                    title="Isi Nama Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="create"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={() =>
+                      goTo({
+                        type: 'merchantAccountName',
+                        title: 'Tambah Nama Toko',
+                      })
+                    }
+                    background
                   />
-                }
-                title={'Informasi Toko'}
-                onPress={() =>
-                  NavigationAction.navigate('MerchantDetailAccountView')
-                }
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
+                )}
+                {!buyerData?.buyerAddress?.address && (
+                  <Content.MenuList
+                    title="Isi Alamat Toko"
+                    iconComponent={
+                      <SnbIcon
+                        name="location_store"
+                        color={colorV2.iconColor.blue}
+                        size={24}
+                      />
+                    }
+                    actionType="string"
+                    actionText="Lengkapi"
+                    onActionPress={handleAddressNavigation}
+                    background
                   />
-                }
-                separator
-              />
-              <ListButton
-                leftItem={
-                  <SnbIcon
-                    name="location_store"
-                    color={colorV2.iconColor.default}
-                    size={24}
-                  />
-                }
-                title={'Alamat Toko'}
-                onPress={handleAddressNavigation}
-                rightItem={
-                  <SnbIcon
-                    name="chevron_right"
-                    color={colorV2.iconColor.default}
-                    size={24}
-                  />
-                }
-                badges1={
-                  buyerData?.buyerInformation?.buyerAccount?.name !== null
-                    ? false
-                    : true
-                }
-                leftBadgeItem1={
-                  <SnbIcon
-                    name={'create'}
-                    size={20}
-                    color={colorV2.iconColor.blue}
-                  />
-                }
-                badgesTitle1={'Isi Nama Toko'}
-                badges2={
-                  buyerData?.buyerAddress?.address !== null ? false : true
-                }
-                leftBadgeItem2={
-                  <SnbIcon
-                    name={'location_store'}
-                    size={20}
-                    color={colorV2.iconColor.blue}
-                  />
-                }
-                badgesTitle2={'Isi Alamat Toko'}
-                pressBadge1={() =>
-                  goTo({
-                    type: 'merchantAccountName',
-                    title: 'Tambah Nama Toko',
-                  })
-                }
-                pressBadge2={handleAddressNavigation}
-                separator
-              />
+                )}
+                {renderSeparator()}
+              </View>
             </View>
           </CopilotView>
         </CopilotStep>
 
-        <View>
-          <ListButton
-            leftItem={
+        <View
+          style={{
+            marginHorizontal: layout.spacing.lg,
+            marginTop: layout.spacing.md,
+          }}>
+          <Content.MenuList
+            title="Log Out"
+            iconComponent={
               <SnbIcon
                 name="exit_to_app"
                 color={colorV2.iconColor.default}
                 size={24}
               />
             }
-            title={'Log Out'}
-            onPress={() => setShowConfirmation(true)}
-            separator={false}
+            onActionPress={refModalLogout.current?.open}
           />
         </View>
       </View>
@@ -500,7 +561,7 @@ const UserView: FC = ({ start }: any) => {
             color="white"
             title="Profil"
             iconName={'exit_to_app'}
-            iconAction={() => setShowConfirmation(true)}
+            iconAction={() => refModalLogout.current?.open()}
           />
           <View
             style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -546,6 +607,8 @@ const UserView: FC = ({ start }: any) => {
           <ModalUserProfileCompletion
             isOpen={modalUserProfileCompletion}
             handleNavigateToCart={() => {
+              setClickFromCart(true);
+              setModalUserProfileCompletion(false);
               NavigationAction.navigate('OmsShoppingCartView');
             }}
           />
@@ -559,7 +622,7 @@ const UserView: FC = ({ start }: any) => {
   return (
     <View style={{ flex: 1 }}>
       <SnbContainer color={'grey'}>{content()}</SnbContainer>
-      <ModalLogout open={showConfirmation} setOpen={setShowConfirmation} />
+      <ModalLogout ref={refModalLogout} />
     </View>
   );
 };

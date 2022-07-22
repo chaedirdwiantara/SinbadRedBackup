@@ -8,6 +8,10 @@ const initialState: models.Permanent = {
   isIntroSinbad: false,
   searchedKeywords: [],
   appVersion: null,
+  forceUpdateVersion: 0,
+  maintenance: false,
+  advertisingId: '',
+  isBanned: false,
 };
 /** === FUNCTION HERE === */
 export const permanentCore = simplifyReducer(initialState, {
@@ -46,6 +50,46 @@ export const permanentCore = simplifyReducer(initialState, {
     return {
       ...state,
       appVersion: payload,
+    };
+  },
+  /** => FORCE UPDATE */
+  [types.FORCE_UPDATE_VERSION](
+    state = initialState,
+    { payload }: models.ForceUpdateVersionActions,
+  ) {
+    return {
+      ...state,
+      forceUpdateVersion: payload,
+    };
+  },
+  /** => MAINTENANCE */
+  [types.MAINTENANCE](
+    state = initialState,
+    { payload }: models.MaintenanceActions,
+  ) {
+    return {
+      ...state,
+      maintenance: payload,
+    };
+  },
+  /** => SAVE ADS ID */
+  [types.SAVE_ADS_ID](
+    state = initialState,
+    { payload }: models.SaveAdsIDAction,
+  ) {
+    return {
+      ...state,
+      advertisingId: payload,
+    };
+  },
+  /** => BANNED ACCOUNT */
+  [types.BANNED_ACCOUNT](
+    state = initialState,
+    { payload }: models.BannedAccountActions,
+  ) {
+    return {
+      ...state,
+      isBanned: payload,
     };
   },
 });

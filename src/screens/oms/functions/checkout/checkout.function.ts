@@ -73,7 +73,7 @@ const totalPayment = (sellers: models.CheckoutCartResponse[]) => {
         sellers[i].products[a].qty * sellers[i].products[a].priceAfterTax;
     }
   }
-  return toCurrency(total, { withFraction: false });
+  return total;
 };
 
 const totalPaymentWithoutCurrency = (

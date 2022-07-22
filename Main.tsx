@@ -4,11 +4,14 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Store, Persistor } from './core/redux/Store';
 import StatusBarGlobal from './core/components/StatusBarGlobal';
 import MainNavigator from './core/navigations/MainNavigator';
-// import PushNotification from './core/components/PushNotification';
+import PushNotification from './core/components/PushNotification';
 import SentryCore from './core/report/sentry/SentryCore';
 import Toast from './core/components/Toast';
 import { BottomSheetModalProvider } from '@sinbad/react-native-sinbad-ui/src/utils/thirdParty';
 import MoengageCore from '@core/report/moengage/MoengageCore';
+import ForceUpdate from '@core/components/ForceUpdate';
+import Maintenance from '@core/components/Maintenance';
+import BannedAccount from '@core/components/BannedAccount';
 
 const Main = () => {
   return (
@@ -17,8 +20,11 @@ const Main = () => {
         <Provider store={Store}>
           <PersistGate loading={null} persistor={Persistor}>
             <StatusBarGlobal />
-            {/* <PushNotification /> */}
+            <PushNotification />
             <MainNavigator />
+            <ForceUpdate />
+            <Maintenance />
+            <BannedAccount />
             <Toast />
             <MoengageCore />
           </PersistGate>

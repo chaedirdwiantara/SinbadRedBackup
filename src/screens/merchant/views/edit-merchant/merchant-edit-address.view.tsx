@@ -18,12 +18,14 @@ import {
   SnbTextField2,
   SnbToast,
   SnbProgress,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
 import {
   DEFAULT_LATITUDE,
   DEFAULT_LONGITUDE,
   REGION_OPTIONS,
+  toastOptions,
 } from '@screen/auth/functions/auth-utils.functions';
 import { MAPS_VIEW_TYPE_2 } from '@screen/account/functions/screens_name';
 import { ModalSelection } from '@screen/account/views/shared';
@@ -55,8 +57,7 @@ const Content: React.FC = () => {
     React.useState<any>(null);
   let mapRef = React.useRef<MapView>(null);
   const [type, setType] = React.useState<models.ITypeList>('');
-  const [openModalSelection, setOpenModalSelection] =
-    React.useState<boolean>(false);
+  const refModalSelection = React.useRef<SnbBottomSheet2Ref>()
   const [latLng, setLatLng] = React.useState<LatLng | any>(null);
   const [streetName, setStreetName] = React.useState();
   const [staticAddress, setStaticAddress] = React.useState(
@@ -72,11 +73,6 @@ const Content: React.FC = () => {
     }
     street && setStreetName(street);
     coordinate && setLatLng(coordinate);
-    isLatLngAvailable &&
-      setLatLng({
-        longitude: buyerAddress?.longitude,
-        latitude: buyerAddress?.latitude,
-      });
     location && setLocationId(location);
   }, []);
 
@@ -84,7 +80,7 @@ const Content: React.FC = () => {
     if (!buyerAddress) {
       detail(dispatchUser);
     } else {
-      address.setValue(buyerAddress.address);
+      buyerAddress.address && address.setValue(buyerAddress.address);
       noteAddress.setValue(buyerAddress.noteAddress || '');
       setVehicleAccessibilityAmount(
         buyerAddress.vehicleAccessibilityAmount
@@ -95,7 +91,7 @@ const Content: React.FC = () => {
           : null,
       );
       setVehicleAccessibility(buyerAddress.vehicleAccessibility);
-      setLatLng({
+      isLatLngAvailable && setLatLng({
         longitude: buyerAddress?.longitude,
         latitude: buyerAddress?.latitude,
       });
@@ -113,7 +109,7 @@ const Content: React.FC = () => {
       goBack();
       reset(dispatchSupplier);
       detail(dispatchUser);
-      SnbToast.show('Alamat berhasil diperbarui', 2000);
+      SnbToast.show('Alamat berhasil ditambahkan', 2000, toastOptions);
     }
   }, [stateMerchant.profileEdit]);
 
@@ -210,7 +206,7 @@ const Content: React.FC = () => {
                   }>
                   <Image
                     source={require('@image/pin_point.png')}
-                    style={{ height: 44, width: 44, resizeMode: 'contain' }}
+                    style={{ height: 56, width: 56, resizeMode: 'contain' }}
                   />
                 </Marker>
               </MapView>,
@@ -270,7 +266,7 @@ const Content: React.FC = () => {
                     type: 'listVehicleAccess',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -296,7 +292,7 @@ const Content: React.FC = () => {
                     type: 'listVehicleAccessAmount',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -360,7 +356,7 @@ const Content: React.FC = () => {
       </View>
       <ModalSelection
         type={type}
-        open={openModalSelection}
+        ref={refModalSelection}
         onCloseModalSelection={(result: any) => {
           if (result) {
             switch (result.type as models.ITypeList) {
@@ -377,7 +373,7 @@ const Content: React.FC = () => {
             }
             onSelectedItem(result.item);
           }
-          setOpenModalSelection(false);
+          refModalSelection.current?.close();
           resetGetSelection();
           resetSelectedItem();
         }}

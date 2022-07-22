@@ -1,19 +1,24 @@
 import * as models from '@models';
 import * as types from '@types';
-import { globalReportFromAction } from '../../../report/GlobalReport';
-import * as EventName from '../../../report/moengage/event';
+import { globalReportFromAction } from '@core/report/global-report';
+import * as EventName from '@core/report/moengage/event';
 
 export const createBasicAccount = (
   data: models.ICreateBasicAccount,
+  params: any,
 ): models.IAction<models.ICreateBasicAccount> => ({
   type: types.CREATE_BASIC_ACCOUNT_PROCESS,
   payload: data,
+  params: params,
 });
 
-export const createBasicAccountSuccess = (data: any) => ({
-  type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
-  payload: data,
-});
+export const createBasicAccountSuccess = (data: any, params: any) => {
+  globalReportFromAction(EventName.REGISTRATION_SUCCESS, params);
+  return {
+    type: types.CREATE_BASIC_ACCOUNT_SUCCESS,
+    payload: data,
+  };
+};
 
 export const createBasicAccountFailed = (data: any) => ({
   type: types.CREATE_BASIC_ACCOUNT_FAILED,
@@ -89,28 +94,27 @@ export const updateCompleteDataSuccess = (
 ) => {
   const dataUser = payload?.user;
   const dataBuyer = payload?.buyer;
-
   if (payload?.user) {
     if (dataUser?.idNo && dataUser?.name) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_1, dataUser);
+      globalReportFromAction(EventName.OWNER_DATA_STEP_1, { dataUser });
     } else if (dataUser?.taxImageUrl && dataUser.taxNo) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_2, dataUser);
+      globalReportFromAction(EventName.OWNER_DATA_STEP_2, { dataUser });
     } else if (dataUser?.selfieImageUrl) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_3, dataUser);
+      globalReportFromAction(EventName.OWNER_DATA_STEP_3, { dataUser });
     } else if (dataUser?.email) {
-      globalReportFromAction(EventName.OWNER_DATA_STEP_4, dataUser);
+      globalReportFromAction(EventName.OWNER_DATA_STEP_4, { dataUser });
     }
   } else if (payload?.buyer) {
     if (dataBuyer?.name && dataBuyer?.phoneNo) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_1, dataBuyer);
+      globalReportFromAction(EventName.STORE_DATA_STEP_1, { dataBuyer });
     } else if (dataBuyer?.imageUrl) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_2, dataBuyer);
+      globalReportFromAction(EventName.STORE_DATA_STEP_2, { dataBuyer });
     } else if (
       dataBuyer?.noteAddress &&
       dataBuyer?.vehicleAccessibilityId &&
       dataBuyer?.vehicleAccessibilityAmount
     ) {
-      globalReportFromAction(EventName.STORE_DATA_STEP_3, dataBuyer);
+      globalReportFromAction(EventName.STORE_DATA_STEP_3, { dataBuyer });
     }
   }
   return {
@@ -119,10 +123,12 @@ export const updateCompleteDataSuccess = (
   };
 };
 
-export const updateCompleteDataFailed = (data: any) => ({
-  type: types.UPDATE_COMPLETE_DATA_FAILED,
-  payload: data,
-});
+export const updateCompleteDataFailed = (data: any) => {
+  return {
+    type: types.UPDATE_COMPLETE_DATA_FAILED,
+    payload: data,
+  };
+};
 
 export const resetUpdateCompleteData = () => ({
   type: types.UPDATE_COMPLETE_DATA_RESET,

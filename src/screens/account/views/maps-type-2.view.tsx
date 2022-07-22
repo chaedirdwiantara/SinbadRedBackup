@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   borderV2,
   colorV2,
-  SnbBottomSheet,
+  Content,
+  SnbBottomSheet2,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
   SnbButton2,
   SnbContainer,
+  SnbIcon,
   SnbSkeletonAnimator,
   SnbText2,
   spacingV2 as layout,
@@ -15,6 +19,7 @@ import {
   LogBox,
   PermissionsAndroid,
   StyleSheet,
+  TouchableHighlight,
   View,
 } from 'react-native';
 import {
@@ -36,6 +41,35 @@ import {
   getStreetName,
   REGION_OPTIONS,
 } from '@screen/auth/functions/auth-utils.functions';
+import { debounce } from 'lodash';
+
+interface IconButtonProps {
+  icon: string;
+  onPress: () => void;
+}
+
+const IconButton: React.FC<IconButtonProps> = ({ icon, onPress }) => {
+  return (
+    <TouchableHighlight
+      style={{
+        backgroundColor: colorV2.bgColor.light,
+        paddingVertical: 12.8,
+        paddingHorizontal: 12.8,
+        borderRadius: borderV2.radius.full,
+        alignItems: 'center'
+      }}
+      underlayColor={colorV2.bgColor.neutral}
+      onPress={onPress}>
+      <View style={{ alignItems: 'center' }}>
+        <SnbIcon
+          name={icon}
+          size={18.3}
+          color={colorV2.iconColor.dark}
+        />
+      </View>
+    </TouchableHighlight>
+  )
+}
 
 const MapsViewType2: React.FC = () => {
   const [latLng, setLatLng] = React.useState<LatLng>({
@@ -44,19 +78,25 @@ const MapsViewType2: React.FC = () => {
   });
   const refMaps = React.useRef<MapView>(null);
   const { navigate, goBack, dispatch } = useNavigation();
-  const [showModalAreaNotFound, setShowModalAreaNotFound] =
-    React.useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
   const [addressResult, setAddressResult] = React.useState<any[]>([]);
   const [isMounted, setIsMounted] = React.useState(true);
   const { getLocation, locations, resetLocation } = useLocations();
   const [loadingGetAddress, setLoadingGetAddress] = React.useState(false);
   const { params } = useRoute();
-  const { onMapsResult, action, existingLatLang, originFrom }: any =
+  const { onMapsResult, action, currentLatLng, originFrom }: any =
     params || {};
 
   React.useEffect(() => {
-    if (existingLatLang) {
-      setLatLng(existingLatLang);
+    if (currentLatLng) {
+      setLatLng(currentLatLng);
+      setTimeout(() => {
+        refMaps.current?.animateToRegion({
+          ...currentLatLng,
+          ...REGION_OPTIONS,
+        });
+      }, 10)
     } else {
       getLocationPermissions();
     }
@@ -66,20 +106,12 @@ const MapsViewType2: React.FC = () => {
     };
   }, []);
 
-  React.useEffect(() => {
-    if (
-      latLng.latitude !== DEFAULT_LATITUDE &&
-      latLng.longitude !== DEFAULT_LONGITUDE
-    ) {
-      setTimeout(() => {
-        refMaps.current?.animateToRegion({
-          ...latLng,
-          ...REGION_OPTIONS,
-        });
-      }, 10);
-      getAddress(latLng);
-    }
-  }, [latLng]);
+  const handleOnChangeRegionComplete = useCallback(
+    debounce(({ latitude, longitude }) => {
+      setLatLng({ latitude, longitude })
+      getAddress({ latitude, longitude })
+    }, 750)
+    , [latLng])
 
   React.useEffect(() => {
     if (locations.data) {
@@ -111,12 +143,12 @@ const MapsViewType2: React.FC = () => {
           }, 0);
         }
       } else {
-        setShowModalAreaNotFound(true);
+        bottomSheetRef.current?.open();
       }
     }
 
     if (locations.error) {
-      setShowModalAreaNotFound(true);
+      bottomSheetRef.current?.open();
     }
   }, [locations]);
 
@@ -138,12 +170,20 @@ const MapsViewType2: React.FC = () => {
     Geolocation.getCurrentPosition(
       ({ coords: { latitude, longitude } }) => {
         setLatLng({ latitude, longitude });
+        getAddress({ latitude, longitude })
+        setTimeout(() => {
+          refMaps.current?.animateToRegion({
+            latitude,
+            longitude,
+            ...REGION_OPTIONS,
+          });
+        }, 10)
       },
       (error: any) => {
         if (error?.code === 3) {
           getUserLocation();
         } else {
-          setShowModalAreaNotFound(true);
+          bottomSheetRef.current?.open();
         }
       },
       {
@@ -167,7 +207,7 @@ const MapsViewType2: React.FC = () => {
         if (requestLocationPermissionResult === 'granted') {
           getUserLocation();
         } else {
-          setShowModalAreaNotFound(true);
+          bottomSheetRef.current?.open();
         }
       } else {
         getUserLocation();
@@ -175,9 +215,7 @@ const MapsViewType2: React.FC = () => {
     } catch (error) {}
   }
 
-  LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+  LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'])
 
   return (
     <SnbContainer color="white">
@@ -185,50 +223,25 @@ const MapsViewType2: React.FC = () => {
         <MapView
           initialRegion={{
             ...latLng,
-            latitudeDelta: 16,
-            longitudeDelta: 16,
+            ...REGION_OPTIONS
           }}
           showsMyLocationButton={false}
           ref={refMaps}
-          style={{ flex: 1 }}>
-          {renderIF(
-            latLng.latitude !== DEFAULT_LATITUDE &&
-              latLng.longitude !== DEFAULT_LONGITUDE,
-            <Marker
-              coordinate={latLng}
-              draggable
-              onDragEnd={({ nativeEvent: { coordinate } }: any) => {
-                setLatLng(coordinate);
-                refMaps.current?.animateToRegion({
-                  ...coordinate,
-                  ...REGION_OPTIONS,
-                });
-              }}>
-              <Image
-                source={require('@image/pin_point.png')}
-                style={{ height: 44, width: 44, resizeMode: 'contain' }}
-              />
-            </Marker>,
-          )}
-        </MapView>
+          onRegionChangeComplete={handleOnChangeRegionComplete}
+          style={{ flex: 1 }} />
+        <View style={styles.markerFixed}>
+          <Image style={styles.marker} source={require('@image/pin_point.png')} />
+        </View>
         <View style={{ ...styles.floatingButton }}>
-          <SnbButton2.Icon
+          <IconButton
+            icon='arrow_back'
             onPress={goBack}
-            disabled={false}
-            size="medium"
-            iconName="arrow_back"
           />
         </View>
-        <View
-          style={{
-            ...styles.floatingButton,
-            right: 0,
-          }}>
-          <SnbButton2.Icon
-            size="medium"
+        <View style={{ ...styles.floatingButton, right: 0 }}>
+          <IconButton
+            icon='location'
             onPress={getLocationPermissions}
-            disabled={false}
-            iconName="location"
           />
         </View>
       </View>
@@ -307,7 +320,7 @@ const MapsViewType2: React.FC = () => {
             loading={locations.loading}
             onPress={() => {
               if (addressResult.length === 0) {
-                setShowModalAreaNotFound(true);
+                bottomSheetRef.current?.open();
               } else {
                 const address = extractAddress(
                   addressResult[0]?.address_components,
@@ -322,52 +335,42 @@ const MapsViewType2: React.FC = () => {
           />
         </View>
       </View>
-      <SnbBottomSheet
-        closeAction={() => {
-          setShowModalAreaNotFound(false);
-        }}
-        isSwipeable
-        open={showModalAreaNotFound}
+      <SnbBottomSheet2
+        ref={bottomSheetRef}
+        name="modal-area-not-found"
+        title={<SnbBottomSheetPart.Title title="" swipeIndicator />}
+        type="content"
+        contentHeight={contentHeight + 100}
         content={
-          <View style={{ alignItems: 'center' }}>
-            <Image
-              source={require('@image/sinbad_image/address_not_found.png')}
-              style={{
+          <View
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+            <Content.Illustration
+              image={require('@image/sinbad_image/address_not_found.png')}
+              imageStyle={{
                 height: 180,
                 width: 180,
                 resizeMode: 'contain',
                 marginVertical: layout.spacing.lg,
               }}
+              title="Area Tidak Ditemukan"
+              description="Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
+              manual."
             />
-            <View
-              style={{
-                paddingHorizontal: layout.spacing['3xl'],
-                paddingVertical: layout.spacing.sm,
-              }}>
-              <SnbText2.Headline.Default align="center">
-                Area Tidak Ditemukan
-              </SnbText2.Headline.Default>
-              <View style={{ marginVertical: layout.spacing.sm }} />
-              <SnbText2.Paragraph.Default
-                align="center"
-                color={colorV2.textColor.secondary}>
-                Coba cek ulang posisi titik lokasi Anda atau masukkan lokasi
-                manual.
-              </SnbText2.Paragraph.Default>
-            </View>
-            <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-              <View style={{ flex: 1 }}>
-                <SnbButton2.Primary
-                  onPress={() => {
-                    setShowModalAreaNotFound(false);
-                    navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
-                  }}
-                  title="Masukkan Lokasi Manual"
-                  disabled={false}
-                  full
-                  size="medium"
-                />
-              </View>
+          </View>
+        }
+        button={
+          <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
+            <View style={{ flex: 1 }}>
+              <SnbButton2.Primary
+                onPress={() => {
+                  bottomSheetRef.current?.close();
+                  navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW);
+                }}
+                title="Masukkan Lokasi Manual"
+                disabled={false}
+                full
+                size="medium"
+              />
             </View>
           </View>
         }
@@ -397,6 +400,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: layout.spacing.lg,
     paddingTop: layout.spacing.xl,
     paddingBottom: 0,
+  },
+  markerFixed: {
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%'
+  },
+  marker: {
+    height: 64,
+    width: 64,
+    resizeMode: 'contain'
   },
 });
 export default MapsViewType2;

@@ -5,8 +5,11 @@ import {
   SnbText2,
   SnbContainer,
   SnbTopNav2,
-  SnbBottomSheet,
+  SnbBottomSheet2,
   spacingV2 as layout,
+  Content,
+  SnbBottomSheet2Ref,
+  SnbBottomSheetPart,
 } from 'react-native-sinbad-ui';
 import OtpStyle from '../../styles/otp.style';
 import { MerchantHookFunc } from '../../function';
@@ -17,7 +20,6 @@ import { NavigationAction } from '@navigation';
 import { useQuestTaskAction } from '../../../quest/function';
 import { useQuestContext } from 'src/data/contexts/quest/useQuestContext';
 import { OTPInput, OTPTimer } from '@screen/shared/views/components';
-import Svg from '@svg';
 
 interface Props {
   loading: boolean;
@@ -58,7 +60,6 @@ const OTPContent: React.FC<Props> = (props) => {
     contexts.MerchantContext,
   );
   const { dispatchUser } = React.useContext(contexts.UserContext);
-  const [openModalSuccess, setOpenModalSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [successOTP, setSuccessOTP] = useState(false);
   const [otpType, setOtpType] = useState<'error' | 'default' | 'success'>(
@@ -67,11 +68,14 @@ const OTPContent: React.FC<Props> = (props) => {
   // related Quest hook
   const { dispatchQuest } = useQuestContext();
   const { update } = useQuestTaskAction();
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
   //FUNCTION
   const verifyOtp = () => {
     if (type === 'email') {
       // eslint-disable-next-line no-shadow
       const data = {
+        screen: 'profile',
         email: props.route.params.data,
         code: otp,
       };
@@ -102,7 +106,7 @@ const OTPContent: React.FC<Props> = (props) => {
       stateMerchant.verificationMobilePhone.data ||
       stateMerchant.verificationBankAccount.data
     ) {
-      setOpenModalSuccess(true);
+      bottomSheetRef.current?.open();
       setSuccessOTP(true);
       setOtpType('success');
       // if source Quest, update quest task status
@@ -138,7 +142,8 @@ const OTPContent: React.FC<Props> = (props) => {
       changeBankAccountAction.resetChangeBankAccount(dispatchSupplier);
       changeBankAccountAction.resetVerificationBankAccount(dispatchSupplier);
     }
-    setOpenModalSuccess(false);
+    bottomSheetRef.current?.close();
+
     // if source Quest, navigate to quest detail view
     if (source === 'Quest') {
       NavigationAction.navigate('QuestDetailView', {
@@ -214,7 +219,10 @@ const OTPContent: React.FC<Props> = (props) => {
           <ScrollView>
             <View style={OtpStyle.titleContainer}>
               <View style={{ alignSelf: 'center' }}>
-                <Svg name="sinbad_otp" size={200} />
+                <Image
+                  source={require('@image/sinbad_image/sinbad_otp.png')}
+                  style={{ height: 200, resizeMode: 'contain' }}
+                />
               </View>
               <View
                 style={{ padding: layout.spacing.sm, alignItems: 'center' }}>
@@ -277,30 +285,33 @@ const OTPContent: React.FC<Props> = (props) => {
     <SnbContainer color={'white'}>
       {header()}
       {content()}
-      <SnbBottomSheet
-        open={openModalSuccess}
+      <SnbBottomSheet2
+        contentHeight={contentHeight + 100}
+        name={`modal-success-verification-${type}`}
+        ref={bottomSheetRef}
+        title={<SnbBottomSheetPart.Title title="" />}
+        type="content"
+        snap={false}
         content={
-          <View>
-            <View style={{ alignContent: 'center', alignItems: 'center' }}>
-              <Image
-                source={require('@image/sinbad_image/smile_sinbad.png')}
-                style={OtpStyle.image}
-              />
-              <View style={{ marginVertical: layout.spacing.lg }}>
-                <SnbText2.Paragraph.Tiny>
-                  {setLabel(type)} Berhasil Terverifikasi
-                </SnbText2.Paragraph.Tiny>
-              </View>
-            </View>
-            <View style={{ padding: layout.spacing.lg }}>
-              <SnbButton2.Primary
-                disabled={false}
-                onPress={() => confirm()}
-                title={'Oke, Saya Mengerti'}
-                full
-                size="medium"
-              />
-            </View>
+          <View
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+            <Content.Illustration
+              imageStyle={OtpStyle.image}
+              image={require('@image/sinbad_image/smile_sinbad.png')}
+              description={`${setLabel(type)} Berhasil Terverifikasi`}
+              title=""
+            />
+          </View>
+        }
+        button={
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              disabled={false}
+              onPress={() => confirm()}
+              title={'Oke, Saya Mengerti'}
+              full
+              size="medium"
+            />
           </View>
         }
       />

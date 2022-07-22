@@ -30,6 +30,7 @@ interface Props {
   listType?: 'number' | 'icon';
   type: 'horizontal' | 'vertical';
   isTiltImage?: boolean;
+  brightnessAmount?: number;
 }
 
 const UploadPhotoRules: React.FC<Props> = (props) => {
@@ -44,6 +45,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
     buttonLabel,
     type,
     isTiltImage,
+    brightnessAmount,
   } = props;
   const source = typeof imgSrc === 'string' ? { uri: imgSrc } : imgSrc;
 
@@ -71,7 +73,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           </View>
         </View>
         <View style={{ marginVertical: layout.spacing.sm }} />
-        <Brightness amount={1.2}>
+        <Brightness amount={brightnessAmount || 1.2}>
           <View
             style={{
               padding: isTiltImage ? layout.spacing.xl : 0,

@@ -6,10 +6,15 @@ import {
   TouchableOpacity,
   LayoutChangeEvent,
 } from 'react-native';
-import { color, SnbText, SnbBadge } from '@sinbad/react-native-sinbad-ui';
+import {
+  SnbText2,
+  SnbBadge2,
+  colorV2,
+  spacingV2,
+} from '@sinbad/react-native-sinbad-ui';
 import Svg from '@svg';
 import { toCurrency } from '@core/functions/global/currency-format';
-
+// TYPES
 type BulkPriceData = {
   label: string;
   priceAfterTax: number;
@@ -25,30 +30,40 @@ type ListPriceProps = {
 
 type BulkPriceListProps = {
   bulkPrices: Array<BulkPriceData>;
+  onExpand?: (isExpand: boolean) => void;
 };
-
+// VAR
+const { textColor, strokeColor } = colorV2;
+const { spacing } = spacingV2;
+// COMPONENT
 const ListPrice: FC<ListPriceProps> = (props) => (
   <View style={styles.listBulkPrice}>
-    <SnbText.B3 color={color.black60}>{props.label}</SnbText.B3>
-    <SnbText.B3>{toCurrency(props.price, { withFraction: false })}</SnbText.B3>
+    <SnbText2.Paragraph.Small color={textColor.secondary}>
+      {props.label}
+    </SnbText2.Paragraph.Small>
+    <SnbText2.Paragraph.Small>
+      {toCurrency(props.price, { withFraction: false })}
+    </SnbText2.Paragraph.Small>
   </View>
 );
 
 const EndListPrice: FC<ListPriceProps> = (props) => (
   <View style={styles.listBulkPrice}>
-    <SnbText.B3 color={color.red70}>{props.label}</SnbText.B3>
+    <SnbText2.Body.Small color={textColor.selected}>
+      {props.label}
+    </SnbText2.Body.Small>
     <View style={styles.cheapPrice}>
       <View style={{ marginRight: 8 }}>
-        <SnbBadge.Label type="error" value="Paling Murah!" />
+        <SnbBadge2 type="error" title="Paling Murah!" />
       </View>
-      <SnbText.B3 color={color.red70}>
+      <SnbText2.Body.Small color={textColor.selected}>
         {toCurrency(props.price, { withFraction: false })}
-      </SnbText.B3>
+      </SnbText2.Body.Small>
     </View>
   </View>
 );
 
-const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
+const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices, onExpand }) => {
   const [show, setShow] = useState(true);
   const [fristInitialHeight, setFristInitialHeight] = useState(false);
   const animatedController = useRef(new Animated.Value(1)).current;
@@ -84,6 +99,7 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
       }).start();
     }
     setShow(!show);
+    onExpand && onExpand(!show);
   }, [show]);
 
   const onLayoutViewListPrice = useCallback(
@@ -105,7 +121,7 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
         onPress={toggleShow}
         activeOpacity={1}
         testID="collapse_bulk_pricing_list">
-        <SnbText.B2>Harga Grosir</SnbText.B2>
+        <SnbText2.Body.Default>Harga Grosir</SnbText2.Body.Default>
         <Animated.View style={{ transform: [{ rotateZ: arrowAngleAnimate }] }}>
           <Svg name="expand_less" size={15} />
         </Animated.View>
@@ -117,8 +133,8 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
         <View style={styles.card} onLayout={onLayoutViewListPrice}>
           {/* title card */}
           <View style={styles.titleBulkPrice}>
-            <SnbText.B3>Order</SnbText.B3>
-            <SnbText.B3>Harga Grosir</SnbText.B3>
+            <SnbText2.Body.Small>Order</SnbText2.Body.Small>
+            <SnbText2.Body.Small>Harga Grosir</SnbText2.Body.Small>
           </View>
           {/* list */}
           {bulkPrices.map((item, index) =>
@@ -144,20 +160,20 @@ const BulkPricingList: FC<BulkPriceListProps> = ({ bulkPrices }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 16,
+    marginHorizontal: spacing.lg,
   },
   containerTitle: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginRight: 5,
-    marginBottom: 12,
+    marginBottom: spacing.md,
   },
   card: {
     borderWidth: 1,
     borderRadius: 6,
-    borderColor: color.black40,
-    padding: 12,
+    borderColor: strokeColor.default,
+    padding: spacing.md,
   },
   titleBulkPrice: {
     flexDirection: 'row',
@@ -165,12 +181,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingBottom: 4,
     marginBottom: 2,
-    borderColor: color.black40,
+    borderColor: strokeColor.default,
   },
   listBulkPrice: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: 2,
+    marginTop: 4,
     alignItems: 'center',
   },
   cheapPrice: { flexDirection: 'row', alignItems: 'center' },

@@ -1,21 +1,21 @@
 import React from 'react';
 import {
   colorV2,
-  SnbBottomSheet,
+  SnbBottomSheet2,
+  SnbBottomSheetPart,
   SnbButton2,
   SnbIcon,
   SnbProgress,
   SnbText2,
   spacingV2 as layout,
 } from '@sinbad/react-native-sinbad-ui';
-import { FlatList, TouchableOpacity, View } from 'react-native';
+import { FlatList, LogBox, TouchableOpacity, View } from 'react-native';
 import * as models from '@models';
 import { useTextFieldSelect } from '@screen/auth/functions';
 import { IRadioButton } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/RadioButtonTypes';
 import ErrorContent from './error-content.component';
-
 interface Props {
-  open: boolean;
+  ref: any;
   type: models.ITypeList;
   onCloseModalSelection: (result?: any) => void;
   params?: string;
@@ -108,16 +108,16 @@ function handleRadioButtonStatus(
   return { label, status };
 }
 
-const ModalSelection: React.FC<Props> = ({
+const ModalSelection: React.FC<Props> = React.forwardRef(({
   type,
-  open,
   onCloseModalSelection,
   params,
-}) => {
+}, ref: any) => {
   const { listSelection, selectedItem, loadMoreSelection, getSelection } =
     useTextFieldSelect();
   const [tempSelectedItem, setTempSelectedItem] = React.useState<any>(null);
 
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.'])
   React.useEffect(() => {
     setTempSelectedItem(selectedItem);
   }, [selectedItem]);
@@ -137,20 +137,52 @@ const ModalSelection: React.FC<Props> = ({
   }
 
   return (
-    <SnbBottomSheet
-      isSwipeable
-      open={open}
-      title={setTitle(type)}
-      closeAction={() => onCloseModalSelection()}
-      actionIcon="close"
-      size="halfscreen"
+    <SnbBottomSheet2
+      ref={ref}
+      type="m-l"
+      snap={false}
+      name={`modal-selection-${type}`}
+      title={
+        <SnbBottomSheetPart.Title title={setTitle(type)} titleType="center" />
+      }
+      navigation={
+        <SnbBottomSheetPart.Navigation
+          iconRight1Name="x"
+          onRight1Action={() => {
+            onCloseModalSelection();
+            setTempSelectedItem(null);
+          }}
+        />
+      }
+      close={() => {
+        onCloseModalSelection();
+        setTempSelectedItem(null);
+      }}
+      button={
+        <View style={{ padding: layout.spacing.lg }}>
+          <SnbButton2.Primary
+            title={setTitle(type)}
+            onPress={() => {
+              onCloseModalSelection(tempSelectedItem);
+              setTempSelectedItem(null);
+            }}
+            disabled={tempSelectedItem === null || listSelection.data === null}
+            full
+            size="medium"
+          />
+        </View>
+      }
       content={
         <View style={{ flex: 1 }}>
           <View style={{ flex: 1 }}>
             <FlatList
               ListEmptyComponent={() => {
                 if (listSelection.loading) {
-                  return <SnbProgress />;
+                  return (
+                    <View style={{ padding: layout.spacing.lg }}>
+                      <SnbProgress />
+                    </View>
+                  );
                 }
                 if (listSelection.error) {
                   return (
@@ -166,7 +198,6 @@ const ModalSelection: React.FC<Props> = ({
               }}
               data={listSelection.data?.data}
               keyExtractor={(_, idx) => idx.toString()}
-              contentContainerStyle={{ paddingHorizontal: layout.spacing.lg }}
               onEndReached={handleLoadMore}
               onEndReachedThreshold={1}
               ItemSeparatorComponent={() => (
@@ -217,21 +248,10 @@ const ModalSelection: React.FC<Props> = ({
             />
           </View>
           {listSelection.isLoadMoreLoading && <SnbProgress />}
-          <View style={{ padding: layout.spacing.lg }}>
-            <SnbButton2.Primary
-              title={setTitle(type)}
-              onPress={() => onCloseModalSelection(tempSelectedItem)}
-              disabled={
-                tempSelectedItem === null || listSelection.data === null
-              }
-              full
-              size="medium"
-            />
-          </View>
         </View>
       }
     />
   );
-};
+});
 
 export default ModalSelection;

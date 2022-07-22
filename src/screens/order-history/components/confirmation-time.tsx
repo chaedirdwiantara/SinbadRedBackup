@@ -25,7 +25,7 @@ const counter = (time1: CounterProp, time2: CounterProp) => {
   const duration = moment.duration(diff, 'milliseconds');
   const seconds = duration.asSeconds();
   const ss = joinZero(duration.seconds());
-  const hh = joinZero(duration.hours());
+  const hh = duration.days() > 0 ? 24  * duration.days() + duration.hours() : joinZero(duration.hours());
   const mm = joinZero(duration.minutes());
 
   if (Number(seconds) <= 0) return '00:00:00';
@@ -71,7 +71,7 @@ const ConfirmationTime: FC<Props> = (props) => {
   return (
     <View style={styles.timer}>
       <SnbText.C1 color={color.yellow80}>
-        Batas waktu konfirmasi:{' '}
+        Pesanan Selesai Otomatis dalam:{' '}
         <SnbText.B4 color={color.yellow80}>{time}</SnbText.B4>
       </SnbText.C1>
     </View>

@@ -2,7 +2,7 @@
 import { CheckoutStyle } from '@screen/oms/styles';
 import React, { FC, useState } from 'react';
 import { View, TouchableOpacity, FlatList } from 'react-native';
-import { SnbText, color } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, SnbBottomSheet2Ref } from 'react-native-sinbad-ui';
 /** === IMPORT EXTERNAL COMPONENT === */
 import { CheckoutSKUListView } from './checkout-sku-list.view';
 import { CheckoutShipmentDetailView } from './checkout-shipment-detail.view';
@@ -21,7 +21,6 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
 }) => {
   /** === HOOK === */
 
-  const [openModal, setOpenModal] = useState(false);
   const [dataModal, setDataModal]: any = useState([]);
   //get max lead time from product list
   const getMaxLeadTime = (products: models.CheckoutCartProduct[]) => {
@@ -32,6 +31,9 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
       }),
     );
   };
+
+  /** => MODAL REF */
+  const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   return (
     <>
@@ -46,12 +48,17 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
               <View style={CheckoutStyle.headerSection}>
-                <SnbText.H4>{item.sellerName}</SnbText.H4>
+                <SnbText2.Headline.Small color={colorV2.textColor.default}>
+                  {item.sellerName}
+                </SnbText2.Headline.Small>
                 <TouchableOpacity
                   onPress={() => {
-                    setOpenModal(true), setDataModal(item.products);
+                    refParcelDetailModal.current?.open();
+                    setDataModal(item.products);
                   }}>
-                  <SnbText.B2 color={color.blue50}>Lihat Detail</SnbText.B2>
+                  <SnbText2.Body.Small color={colorV2.textColor.link}>
+                    Lihat Detail
+                  </SnbText2.Body.Small>
                 </TouchableOpacity>
               </View>
               <CheckoutSKUListView products={item.products} />
@@ -61,11 +68,12 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
               <CheckoutPaymentDetailView products={item.products} />
             </View>
             <ModalParcelDetail
-              isOpen={openModal}
+              parentRef={refParcelDetailModal}
               close={() => {
-                setOpenModal(false);
+                refParcelDetailModal.current?.close();
               }}
               data={dataModal}
+              sellerName={item.sellerName}
             />
           </>
         )}

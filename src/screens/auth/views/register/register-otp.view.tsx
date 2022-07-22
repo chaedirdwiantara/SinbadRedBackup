@@ -3,20 +3,24 @@ import {
   maskPhone,
   useOTP,
   setErrorMessage,
-  useCheckPhoneV2,
   useCheckAutoLogin,
+  useAuthAction,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
-import { ScrollView, View, Image } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   SnbContainer,
   SnbTopNav2,
-  SnbBottomSheet,
-  SnbText2,
+  SnbBottomSheet2,
   SnbButton2,
   spacingV2 as layout,
+  SnbBottomSheetPart,
+  Content,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
+import { useDataAuth } from '@core/redux/Data';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const RegisterOTPView: React.FC = () => {
   const {
@@ -24,16 +28,20 @@ const RegisterOTPView: React.FC = () => {
     verifyOTP,
     mobilePhone,
     getLocationPermissions,
-    hashOtp,
+    otpHash,
+    type,
   } = useOTP();
   const { goBack }: any = useNavigation();
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
-  const { checkPhone } = useCheckPhoneV2();
+  const { requestOTP } = useAuthAction();
   const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
   const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
     React.useState(false);
-  const [modalError, setModalError] = React.useState(false);
+  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
+  const authCoreAction = useAuthCoreAction();
+  const { meV2 } = useDataAuth();
 
   React.useEffect(() => {
     if (verifyOTP.data !== null) {
@@ -45,10 +53,18 @@ const RegisterOTPView: React.FC = () => {
 
   React.useEffect(() => {
     if (checkAutoLoginData?.data?.message === 'Success') {
-      getLocationPermissions();
-      resetCheckAutoLogin();
+      authCoreAction.meV2();
     }
   }, [checkAutoLoginData]);
+
+  React.useEffect(() => {
+    if (checkAutoLoginData?.data?.message === 'Success') {
+      if (meV2.data) {
+        getLocationPermissions();
+        resetCheckAutoLogin();
+      }
+    }
+  }, [meV2.data]);
 
   React.useEffect(() => {
     if (
@@ -63,54 +79,17 @@ const RegisterOTPView: React.FC = () => {
     }
     if (reCheckAutoLogin === 3) {
       setLoadingCheckAutoLogin(false);
-      setModalError(true);
+      bottomSheetRef.current?.open();
       resetCheckAutoLogin();
     }
   }, [reCheckAutoLogin, checkAutoLoginData]);
 
   React.useEffect(() => {
     if (checkAutoLoginData.error !== null) {
-      setModalError(true);
+      bottomSheetRef.current?.open();
       setLoadingCheckAutoLogin(false);
     }
   }, [checkAutoLoginData.error]);
-
-  const renderModalError = () => {
-    return (
-      <View>
-        <Image
-          source={require('@image/sinbad_cry.png')}
-          style={{
-            height: 160,
-            width: 160,
-            alignSelf: 'center',
-            marginVertical: layout.spacing.lg,
-          }}
-        />
-        <View style={{ margin: layout.spacing.lg }}>
-          <SnbText2.Headline.Default align="center">
-            Data Anda masih sedang tahap proses
-          </SnbText2.Headline.Default>
-          <View style={{ marginVertical: layout.spacing.sm }} />
-          <SnbText2.Body.Default align="center">
-            silahkan tunggu atau hubungi customer service Sinbad
-          </SnbText2.Body.Default>
-        </View>
-        <View style={{ padding: layout.spacing.lg }}>
-          <SnbButton2.Primary
-            title="Tutup"
-            disabled={false}
-            onPress={() => {
-              setModalError(false);
-              setReCheckAutoLogin(0);
-            }}
-            size="medium"
-            full
-          />
-        </View>
-      </View>
-    );
-  };
 
   return (
     <SnbContainer color="white">
@@ -125,11 +104,11 @@ const RegisterOTPView: React.FC = () => {
           onVerifyOTP={(otp) => {
             verifyOTPRegister({
               mobilePhoneNo: mobilePhone,
-              otp: Number(otp),
+              otp,
             });
           }}
           resend={() => {
-            checkPhone({ mobilePhoneNo: mobilePhone, otpHash: hashOtp });
+            requestOTP({ mobilePhone, otpHash, type });
           }}
           errorMessage={
             verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
@@ -137,13 +116,43 @@ const RegisterOTPView: React.FC = () => {
           otpSuccess={verifyOTP.data !== null}
           loading={verifyOTP.loading || loadingCheckAutoLogin}
           phoneNo={maskPhone(mobilePhone)}
+          otpMethod={type}
         />
       </ScrollView>
-      <SnbBottomSheet
-        open={modalError}
-        title={''}
-        content={renderModalError()}
-        size={'normal'}
+      <SnbBottomSheet2
+        ref={bottomSheetRef}
+        title={<SnbBottomSheetPart.Title title="" />}
+        content={
+          <View
+            onLayout={(ev) => setContentHeight(ev.nativeEvent.layout.height)}>
+            <Content.Illustration
+              image={require('@image/sinbad_cry.png')}
+              imageStyle={{
+                height: 160,
+                width: 160,
+              }}
+              title="Data Anda masih sedang tahap proses"
+              description="Silakan tunggu atau hubungi customer service Sinbad"
+            />
+          </View>
+        }
+        name="modal-check-self-registration"
+        type="content"
+        contentHeight={contentHeight + 100}
+        button={
+          <View style={{ padding: layout.spacing.lg }}>
+            <SnbButton2.Primary
+              title="Tutup"
+              disabled={false}
+              onPress={() => {
+                bottomSheetRef.current?.close();
+                setReCheckAutoLogin(0);
+              }}
+              size="medium"
+              full
+            />
+          </View>
+        }
       />
     </SnbContainer>
   );

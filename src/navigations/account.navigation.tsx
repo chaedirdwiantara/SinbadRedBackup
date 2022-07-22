@@ -13,6 +13,7 @@ import {
   ListLocationView,
   ProductCategoryView,
   EmailOtp,
+  DataVerificationView,
 } from '@screen/account/views';
 
 const AccountNav = {
@@ -57,6 +58,9 @@ const AccountNav = {
   },
   EmailOtp: {
     component: EmailOtp,
+  },
+  DataVerificationView: {
+    component: DataVerificationView,
   },
 };
 

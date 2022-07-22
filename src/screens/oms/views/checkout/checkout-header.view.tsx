@@ -1,11 +1,15 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
-import { SnbTopNav } from 'react-native-sinbad-ui';
+import { SnbTopNav2 } from 'react-native-sinbad-ui';
 /** === INTERFACES === */
 interface CheckoutHeaderProps {
   backAction: () => void;
 }
 /** === COMPONENT ===  */
 export const CheckoutHeader: FC<CheckoutHeaderProps> = ({ backAction }) => (
-  <SnbTopNav.Type3 type="white" title={'Checkout'} backAction={backAction} />
+  <SnbTopNav2.Type3
+    title={'Checkout'}
+    color={'white'}
+    backAction={backAction}
+  />
 );

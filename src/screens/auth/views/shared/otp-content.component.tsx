@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import {
   SnbButton2,
   SnbText2,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { loginOTPStyle } from '../../styles';
-import Svg from '@svg';
 import { useOTP } from '@screen/auth/functions';
 import { OTPInput, OTPTimer } from '@screen/shared/views/components';
 interface Props {
@@ -17,12 +16,13 @@ interface Props {
   resend: () => void;
   errorMessage: string;
   testID: string;
+  otpMethod: 'sms' | 'wa' | string
 }
 
 const OTPContent: React.FC<Props> = (props) => {
-  const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess } =
+  const { onVerifyOTP, loading, phoneNo, resend, errorMessage, otpSuccess, otpMethod } =
     props;
-  const { otp, setOtp } = useOTP();
+  const { otp, setOtp } = useOTP('listeningToHash');
   const [error, setError] = React.useState(false);
   const [otpType, setOtpType] = React.useState<'error' | 'default' | 'success'>(
     'default',
@@ -51,7 +51,10 @@ const OTPContent: React.FC<Props> = (props) => {
     <View style={{ justifyContent: 'space-between', flex: 1 }}>
       <View style={{ marginVertical: layout.spacing.xl }}>
         <View style={{ alignSelf: 'center' }}>
-          <Svg name="sinbad_otp" size={200} />
+          <Image
+            source={require('@image/sinbad_image/sinbad_otp.png')}
+            style={{ height: 200, resizeMode: 'contain' }}
+          />
         </View>
         <View style={loginOTPStyle.titleContainer}>
           <SnbText2.Headline.Default>
@@ -60,7 +63,7 @@ const OTPContent: React.FC<Props> = (props) => {
           <View style={{ marginVertical: layout.spacing.xxsm }} />
           <View style={{ paddingHorizontal: layout.spacing['3xl'] }}>
             <SnbText2.Paragraph.Default align="center">
-              Kode verifikasi telah dikirimkan melalui sms ke{' '}
+              Kode verifikasi telah dikirimkan melalui {otpMethod === 'sms' ? 'sms' : 'Whatsapp'} ke{' '}
               <SnbText2.Body.Default>{phoneNo}</SnbText2.Body.Default>
             </SnbText2.Paragraph.Default>
           </View>

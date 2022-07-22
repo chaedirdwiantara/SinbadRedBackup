@@ -1,4 +1,4 @@
-import { useAuthAction } from '@screen/auth/functions';
+import { useAuthAction, useCheckPhoneV2 } from '@screen/auth/functions';
 import { SnbButton2, SnbText2, SnbToast } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -11,17 +11,21 @@ interface Props {
 const OTPTimer: React.FC<Props> = (props) => {
   const [resend, setResend] = React.useState(false);
   const [timer, setTimer] = React.useState(0);
-
-  const { requestOTPState } = useAuthAction();
+  const { requestOTPState, resetRequestOTP } = useAuthAction();
+  const { checkPhoneV2 } = useCheckPhoneV2();
 
   React.useEffect(() => {
-    if (requestOTPState.data !== null && resend) {
+    if (
+      (requestOTPState.data !== null || checkPhoneV2.data !== null) &&
+      resend
+    ) {
+      resetRequestOTP()
       SnbToast.show('Kode berhasil dikirim', 2500, {
         position: 'top',
         positionValue: 96,
       });
     }
-  }, [requestOTPState, resend]);
+  }, [requestOTPState, checkPhoneV2, resend]);
 
   React.useEffect(() => {
     if (props.timer) {

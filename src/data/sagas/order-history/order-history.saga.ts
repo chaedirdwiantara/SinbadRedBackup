@@ -3,6 +3,7 @@ import { put, call, takeLatest } from 'redux-saga/effects';
 import { SnbToast } from '@sinbad/react-native-sinbad-ui';
 /** === IMPORT INTERNAL === */
 import * as OrderHistoryApi from 'src/data/apis/order-history/order-history.api';
+import * as OrderHistoryConsolidateApi from 'src/data/apis/order-history/order-history-consolidate.api';
 import * as ActionCreators from '@actions';
 import * as models from '@models';
 import * as types from '@types';
@@ -29,6 +30,65 @@ function* OrderHistoryList(action: models.ListProcessV3Action) {
     yield put(
       ActionCreators.orderHistoryListFailed(error as models.ErrorProps),
     );
+  }
+}
+/** Get Consolidate History List */
+function* ConsolidateOrderHistoryList(action: models.ListProcessV3Action) {
+  try {
+    const response: models.ListSuccessV3Props<
+      Array<models.ConsolidateOrderListHistory>
+    > = yield call(() => {
+      return OrderHistoryConsolidateApi.getConsolidateOrderHistoryList(
+        action.payload as models.ConsolidateOrderListHistoryProcessProps,
+      );
+    });
+    yield action.contextDispatch(
+      ActionCreators.consolidateOrderHistoryListSuccess(response),
+    );
+    yield put(ActionCreators.consolidateOrderHistoryListSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.consolidateOrderHistoryListFailed(
+        error as models.ErrorProps,
+      ),
+    );
+    yield put(
+      ActionCreators.consolidateOrderHistoryListFailed(
+        error as models.ErrorProps,
+      ),
+    );
+  }
+}
+/** Get Consolidate History Detail */
+function* OrderConsolidateHistoryDetail(action: models.DetailProcessAction) {
+  try {
+    const response: models.DetailSuccessProps<models.orderConsolidateDetailHistory> =
+      yield call(() => {
+        return OrderHistoryApi.getOrderConsolidateHistoryDetail(
+          action.payload as models.OrderConsolidateHistoryDetailProcessProps,
+        );
+      });
+
+    yield action.contextDispatch(
+      ActionCreators.orderConsolidateHistoryDetailSuccess(response),
+    );
+
+    yield put(ActionCreators.orderConsolidateHistoryDetailSuccess(response));
+  } catch (error: any) {
+    yield action.contextDispatch(
+      ActionCreators.orderConsolidateHistoryDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    yield put(
+      ActionCreators.orderConsolidateHistoryDetailFailed(
+        error as models.ErrorProps,
+      ),
+    );
+
+    SnbToast.show(error.message, 3000, { positionValue: 50 });
+    NavigationAction.back();
   }
 }
 /** Get History Detail */
@@ -94,7 +154,7 @@ function* OrderHistoryTrackingDetail(action: models.DetailProcessAction) {
 /** Post Done Order */
 function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
   try {
-    const { keyword, orderStatus, status, id } = action.payload;
+    const { keyword, orderGroupStatus, subOrderGroupStatus , status, id, orderId } = action.payload;
 
     const response: models.UpdateSuccessV3Props<any> = yield call(() => {
       return OrderHistoryApi.postDoneOrderHistory(
@@ -103,13 +163,15 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
     });
 
     if (action.payload.type === 'list') {
-      yield action.contextDispatch(ActionCreators.orderHistoryListReset());
+      yield action.contextDispatch(ActionCreators.consolidateOrderHistoryListReset());
       yield put(
-        ActionCreators.orderHistoryListProcess(action.contextDispatch, {
+        ActionCreators.consolidateOrderHistoryListProcess(action.contextDispatch, {
           keyword,
-          orderStatus,
+          orderGroupStatus,
+          subOrderGroupStatus,
           status,
           loading: true,
+          perPage: 5,
           page: 1,
         }),
       );
@@ -122,6 +184,21 @@ function* DoneOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
         ActionCreators.orderHistoryDetailProcess(action.contextDispatch, {
           id,
         }),
+      );
+    }
+    if (action.payload.type === 'detail_consolidate') {
+      yield action.contextDispatch(
+        ActionCreators.orderConsolidateHistoryDetailReset(
+          action.contextDispatch,
+        ),
+      );
+      yield put(
+        ActionCreators.orderConsolidateHistoryDetailProcess(
+          action.contextDispatch,
+          {
+            id: action.payload.orderId,
+          },
+        ),
       );
     }
 
@@ -193,10 +270,36 @@ function* CancelOrderHistory(action: models.UpdateOrderHistoryProcessAction) {
     SnbToast.show(error.message, 3000, { positionValue: 50 });
   }
 }
+/** Get Menu Status List */
+function* MenuStatusList(action: models.ListProcessV3Action) {
+  try {
+    const response: models.ListSuccessV3Props<Array<models.MenuStatusList>> =
+      yield call(() => {
+        return OrderHistoryConsolidateApi.getMenuStatusList();
+      });
+    yield action.contextDispatch(
+      ActionCreators.menuStatusListSuccess(response),
+    );
+    yield put(ActionCreators.menuStatusListSuccess(response));
+  } catch (error) {
+    yield action.contextDispatch(
+      ActionCreators.menuStatusListFailed(error as models.ErrorProps),
+    );
+    yield put(ActionCreators.menuStatusListFailed(error as models.ErrorProps));
+  }
+}
 
 /** === LISTENER === */
 function* OrderHistorySaga() {
   yield takeLatest(types.ORDER_HISTORY_LIST_PROCESS, OrderHistoryList);
+  yield takeLatest(
+    types.CONSOLIDATE_ORDER_HISTORY_LIST_PROCESS,
+    ConsolidateOrderHistoryList,
+  );
+  yield takeLatest(
+    types.ORDER_CONSOLIDATE_HISTORY_DETAIL_PROCESS,
+    OrderConsolidateHistoryDetail,
+  );
   yield takeLatest(types.ORDER_HISTORY_DETAIL_PROCESS, OrderHistoryDetail);
   yield takeLatest(
     types.ORDER_HISTORY_TRACKING_DETAIL_PROCESS,
@@ -204,6 +307,7 @@ function* OrderHistorySaga() {
   );
   yield takeLatest(types.DONE_ORDER_HISTORY_PROCESS, DoneOrderHistory);
   yield takeLatest(types.CANCEL_ORDER_HISTORY_PROCESS, CancelOrderHistory);
+  yield takeLatest(types.MENU_STATUS_LIST_PROCESS, MenuStatusList);
 }
 
 export default OrderHistorySaga;

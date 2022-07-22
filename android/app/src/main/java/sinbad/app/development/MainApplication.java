@@ -1,20 +1,12 @@
 package sinbad.app.development;
 
-import android.app.Application;
 import android.content.Context;
-import android.os.Build;
 
 import androidx.multidex.MultiDexApplication;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.reactlibrary.RNInstallReferrerPackage;
 import com.moengage.react.MoEInitializer;
-import com.moengage.react.MoEReactPackage;
 import com.moengage.core.MoEngage;
-import com.facebook.react.ReactInstanceManager;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.swmansion.rnscreens.RNScreensPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -24,6 +16,10 @@ import java.util.List;
 // FOR REANIMATE
 import com.facebook.react.bridge.JSIModulePackage;
 import com.swmansion.reanimated.ReanimatedJSIModulePackage;
+// FOR NEWRELIC
+import com.newrelic.agent.android.NewRelic;
+import newrelic.NewRelicPackage;
+import update.UpdatePackage;
 
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
@@ -39,6 +35,8 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
         protected List<ReactPackage> getPackages() {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
+           packages.add(new NewRelicPackage());
+           packages.add(new UpdatePackage());
           return packages;
         }
 
@@ -62,13 +60,17 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
-    // this for flipper
+    // FOR NEWRELIC
+    if(!BuildConfig.NEWRELIC_TOKEN.isEmpty() && BuildConfig.NEWRELIC_TOKEN != null){
+        NewRelic.withApplicationToken(BuildConfig.NEWRELIC_TOKEN).start(this);
+    }
+    // FOR MOENGAGE
+    if(!BuildConfig.MOENGAGE_KEY.isEmpty() && BuildConfig.MOENGAGE_KEY != null){
+        MoEngage.Builder moEngage = new MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY);
+        MoEInitializer.INSTANCE.initialize(getApplicationContext(), moEngage);
+    }
+    // FOR FLIPPER
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-    // Moengage Init
-      if(!BuildConfig.MOENGAGE_KEY.isEmpty() && BuildConfig.MOENGAGE_KEY != null){
-          MoEngage.Builder moEngage = new MoEngage.Builder(this, BuildConfig.MOENGAGE_KEY);
-          MoEInitializer.INSTANCE.initialize(getApplicationContext(), moEngage);
-      }
   }
 
   /**

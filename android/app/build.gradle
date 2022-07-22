@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'newrelic'
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
@@ -26,8 +27,8 @@ android {
         applicationId 'sinbad.app.development'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4
-        versionName '1.0'
+        versionCode 14
+        versionName '0.1.8'
         missingDimensionStrategy 'react-native-camera', 'general', 'mlkit'
         multiDexEnabled true
     }
@@ -77,12 +78,16 @@ dependencies {
     // implementation 'com.google.android.gms:play-services-base:17.6.0'
     // implementation 'com.google.android.gms:play-services-location:18.0.0'
     // implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    // FOR UPDATE
+    implementation 'com.google.android.play:core:1.10.3'
     // INTERNAL REACT NATIVE
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.facebook.react:react-native:0.64.0'
     // For animated GIF support
     implementation 'com.facebook.fresco:animated-gif:2.0.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    // FOR NEWRELIC
+    implementation 'com.newrelic.agent.android:android-agent:6.1.0'
     // MULTIDEX
     implementation 'androidx.multidex:multidex:2.0.1'
     // REACT NATIVE LIBRARY
@@ -91,6 +96,9 @@ dependencies {
     implementation project(':@react-native-firebase_firestore')
     implementation project(':@react-native-firebase_database')
     implementation project(':react-native-push-notification')
+    implementation project(':react-native-linear-gradient')
+    implementation project(':react-native-splash-screen')
+    implementation project(':react-native-advertising-id')
     // DEBUG FLIPPER
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

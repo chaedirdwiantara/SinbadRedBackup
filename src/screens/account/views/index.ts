@@ -14,6 +14,7 @@ import InputManualLocationModalView from './data-completeness/input-manual-locat
 import MapsViewType2 from './maps-type-2.view';
 import EmailOtp from './shared/email-otp.view';
 import TextFieldSelect from './textfield-select-2.component';
+import DataVerificationView from './easy-registration/data-verification.view';
 export {
   ListLocationView,
   BuyerCategoryView,
@@ -31,4 +32,5 @@ export {
   MapsViewType2,
   EmailOtp,
   TextFieldSelect,
+  DataVerificationView,
 };

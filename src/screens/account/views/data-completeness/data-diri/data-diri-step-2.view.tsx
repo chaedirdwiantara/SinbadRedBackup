@@ -6,6 +6,7 @@ import {
   SnbToast,
   SnbTextField2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler, ScrollView } from 'react-native';
 import {
@@ -23,8 +24,8 @@ import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
 
 const DataDiriStep2View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
   const { stateGlobal, dispatchGlobal } = React.useContext(
@@ -72,7 +73,7 @@ const DataDiriStep2View: React.FC = () => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -101,9 +102,17 @@ const DataDiriStep2View: React.FC = () => {
       upload(dispatchGlobal, capturedImage.data.url);
       setBackHandle(true);
     } else if (isNPWPValid) {
-      updateCompleteData({
-        user: { taxNo: npwp },
-      });
+      if (
+        npwp === completeDataState?.data?.userData?.taxNo ||
+        npwp === '' ||
+        npwp === null
+      ) {
+        backToDataCompleteness();
+      } else {
+        updateCompleteData({
+          user: { taxNo: npwp },
+        });
+      }
       setBackHandle(true);
     } else {
       backToDataCompleteness();
@@ -231,7 +240,10 @@ const DataDiriStep2View: React.FC = () => {
           <View style={{ marginHorizontal: layout.spacing.sm }} />
           <View style={{ flex: 1 }}>
             <SnbButton2.Primary
-              loading={stateGlobal.uploadImage.loading}
+              loading={
+                stateGlobal.uploadImage.loading ||
+                updateCompleteDataState.loading
+              }
               title={'Lanjutkan'}
               disabled={
                 stateGlobal.uploadImage.loading ||
@@ -243,9 +255,17 @@ const DataDiriStep2View: React.FC = () => {
                 if (capturedImage.data) {
                   upload(dispatchGlobal, capturedImage.data.url);
                 } else if (isNPWPValid) {
-                  updateCompleteData({
-                    user: { taxNo: npwp },
-                  });
+                  if (
+                    npwp === completeDataState?.data?.userData?.taxNo ||
+                    npwp === '' ||
+                    npwp === null
+                  ) {
+                    NavigationAction.navigate(DATA_DIRI_STEP_3_VIEW);
+                  } else {
+                    updateCompleteData({
+                      user: { taxNo: npwp },
+                    });
+                  }
                 }
               }}
               size="medium"
@@ -265,26 +285,24 @@ const DataDiriStep2View: React.FC = () => {
     <SnbContainer color="white">
       <View>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Foto NPWP"
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => backSave()}
       />
       <ListOfSteps
-        open={openModalStep}
         type="user"
-        closeModal={() => setOpenModalStep(false)}
+        ref={refModalListOfStep}
       />
     </SnbContainer>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,8 +10,8 @@ import {
 import {
   SnbText,
   SnbBottomSheet2,
+  SnbBottomSheet2Ref,
   SnbBottomSheetPart,
-  SnbText2,
   FooterButton,
   Content,
 } from 'react-native-sinbad-ui';
@@ -94,6 +94,8 @@ interface ErrorProps {
 }
 /** === COMPONENT === */
 const BottomSheetError: React.FC<ErrorProps> = (props) => {
+  /** => ref */
+  const modalRef = useRef<SnbBottomSheet2Ref>(null);
   /** => error code to service name */
   const errorCode = (code: number) => {
     const digit = code.toString();
@@ -295,7 +297,7 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
         loading={false}
         loadingButton={false}
         disabled={false}
-        buttonPress={() => (props.closeAction ? props.closeAction() : null)}
+        buttonPress={onClose}
       />
     );
   };
@@ -335,25 +337,38 @@ const BottomSheetError: React.FC<ErrorProps> = (props) => {
     return (
       <SnbBottomSheetPart.Navigation
         iconRight1Name="x"
-        onRight1Action={props.closeAction}
+        onRight1Action={() => {
+          props?.closeAction && props?.closeAction();
+          modalRef.current?.close();
+        }}
       />
     );
   };
+  // state Effect
+  useEffect(() => {
+    if (props.open && props.error?.code !== 401 && props.error !== null) {
+      modalRef.current?.open();
+    }
+  }, [modalRef.current, props.open, props.error]);
+
+  const onClose = useCallback(() => {
+    props?.closeAction && props.closeAction();
+    modalRef.current?.close();
+  }, [modalRef.current]);
   /** => main */
   return (
     <SnbBottomSheet2
+      ref={modalRef}
       name={'globalError'}
       type="content"
       contentHeight={400}
       snap={false}
-      open={props.open && props.error?.code !== 401 && props.error !== null}
-      close={() =>
-        props.closeAction && props.isCloseable ? props.closeAction() : null
-      }
+      close={() => {}}
       navigation={props.isCloseable ? navigation() : null}
       title={title()}
       content={content()}
       button={button()}
+      isBackDisable
     />
   );
 };

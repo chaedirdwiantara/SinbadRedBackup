@@ -1,5 +1,5 @@
 /** === IMPORT PACKAGES === */
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT INTERNAL === */
 import * as Actions from '@actions';
@@ -17,19 +17,19 @@ const callProcessAction = (
   return Actions.productListProcess(
     contextDispatch,
     {
+      ...queryOptions,
       loading,
       page,
       perPage,
-      ...queryOptions,
     },
     subModule,
   );
 };
 
+const perPage = 10;
+const page = 1;
 const useProductListActions = (subModule?: models.ProductSubModule) => {
   const dispatch = useDispatch();
-  const perPage = 10;
-  const page = 1;
   return {
     fetch: (
       contextDispatch: (action: any) => any,
@@ -219,9 +219,9 @@ const useReserveStockAction = () => {
 const useOrderQuantity = ({ minQty }: { minQty: number }) => {
   const [orderQty, setOrderQty] = useState(minQty);
 
-  const onChangeQty = (value: number) => {
+  const onChangeQty = useCallback((value: number) => {
     setOrderQty(value);
-  };
+  }, []);
 
   const increaseOrderQty = () => {
     setOrderQty((prevQty) => prevQty + 1);

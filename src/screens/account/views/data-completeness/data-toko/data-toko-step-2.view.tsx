@@ -7,6 +7,7 @@ import {
   SnbButton2,
   SnbToast,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { contexts } from '@contexts';
 import { useUploadImageAction } from '@core/functions/hook/upload-image';
@@ -24,11 +25,10 @@ import {
 } from '@screen/account/functions/screens_name';
 
 interface Props {
-  openModalBack: boolean;
-  onCloseModalBack: (value: boolean) => void;
+  ref: any
 }
 
-const Content: React.FC<Props> = (props) => {
+const Content: React.FC<Props> = React.forwardRef((_, ref) => {
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { stateGlobal, dispatchGlobal } = React.useContext(
     contexts.GlobalContext,
@@ -44,7 +44,6 @@ const Content: React.FC<Props> = (props) => {
     backToDataCompleteness,
   } = useEasyRegistration();
   const { imageUrl } = completeDataState.data?.buyerData || {};
-  const [openModalBack, setOpenModalBack] = React.useState(false);
   const [backHandle, setBackHandle] = React.useState(false);
 
   React.useEffect(() => {
@@ -54,19 +53,6 @@ const Content: React.FC<Props> = (props) => {
       resetCamera();
     };
   }, []);
-
-  const handleBackButton = React.useCallback(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        setOpenModalBack(true);
-        return true;
-      },
-    );
-    return backHandler.remove;
-  }, []);
-
-  useFocusEffect(handleBackButton);
 
   React.useEffect(() => {
     if (
@@ -118,6 +104,7 @@ const Content: React.FC<Props> = (props) => {
             type="vertical"
             resizeMode="stretch"
             blurRadius={2}
+            listType="number"
           />
         </View>
       </View>
@@ -188,11 +175,7 @@ const Content: React.FC<Props> = (props) => {
         renderUploadPhotoRules(),
       )}
       <ModalBack
-        open={openModalBack || props.openModalBack}
-        closeModal={() => {
-          setOpenModalBack(false);
-          props.onCloseModalBack(false);
-        }}
+        ref={ref}
         confirm={() => {
           if (capturedImage?.data?.url) {
             upload(dispatchGlobal, capturedImage.data.url);
@@ -204,33 +187,42 @@ const Content: React.FC<Props> = (props) => {
       />
     </View>
   );
-};
+});
 
 const DataTokoStep2View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { completeDataState } = useEasyRegistration();
+
+  const handleBackButton = React.useCallback(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        refModalBack.current?.open()
+        return true;
+      },
+    );
+    return backHandler.remove;
+  }, []);
+
+  useFocusEffect(handleBackButton);
 
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        backAction={() => setOpenModalBack(true)}
+        backAction={() => refModalBack.current?.open()}
         color="white"
         title="Foto Toko"
       />
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
-        onPress={() => setOpenModalStep(true)}
+        onPress={() => refModalListOfStep.current?.open()}
       />
-      <Content
-        openModalBack={openModalBack}
-        onCloseModalBack={setOpenModalBack}
-      />
+      <Content ref={refModalBack} />
       <ListOfSteps
-        open={openModalStep}
+        ref={refModalListOfStep}
         type="buyer"
-        closeModal={() => setOpenModalStep(false)}
       />
     </SnbContainer>
   );

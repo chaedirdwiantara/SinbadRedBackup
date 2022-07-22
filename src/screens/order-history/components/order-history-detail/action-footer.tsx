@@ -1,11 +1,13 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { color, SnbText } from '@sinbad/react-native-sinbad-ui';
+import { colorV2, SnbText2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import BottomSheetConfirmation, {
   BottomSheetTransactionRef,
 } from '@core/components/BottomSheetConfirmation';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 import { useDetailHistoryOrder } from '../../functions/history-detail';
+import Svg from '@svg';
+import { ConfirmationDoneSheet } from '../order-history-list';
 
 const ActionFooter = () => {
   const {
@@ -13,31 +15,39 @@ const ActionFooter = () => {
       detail: { data, loading },
     },
   } = useOrderHistoryContext();
-  const { cancelOrder, doneOrder } = useDetailHistoryOrder();
-  const confirmModalRef = useRef<BottomSheetTransactionRef>(null);
+  const { doneOrder } = useDetailHistoryOrder();
+  const [confirmationOpen, setConfirmationOpen] = useState(false);
 
-  const onCancelOrder = useCallback(() => {
-    cancelOrder({ type: 'detail', id: String(data?.id) });
-  }, [data?.id]);
-
+  // const onCancelOrder = useCallback(() => {
+  //   cancelOrder({ type: 'detail', id: String(data?.id) });
+  // }, [data?.id]);
   const onPressAction = useCallback(() => {
     const payload: { id: string; type: 'detail' } = {
       type: 'detail',
       id: String(data?.id),
     };
-    if (data?.isCancellable && data?.isOrderAbleToDone) {
-      // cant action same true
-      return void 0;
-    }
-    if (data?.isCancellable) {
-      // action cancel order
-      confirmModalRef.current?.show(data.id);
-    }
     if (data?.isOrderAbleToDone) {
       // action done order
       doneOrder(payload);
     }
   }, [data?.isCancellable, data?.isOrderAbleToDone, data?.id]);
+
+  //render modal confirmation done order
+  const renderModalConfirmationDoneOrder = () => {
+    return (
+      <ConfirmationDoneSheet
+        open={confirmationOpen}
+        title="Pesanan diterima?"
+        desc="Pastikan Anda telah menerima barang yang sesuai dengan pesanan Anda"
+        onConfirm={() => {
+          onPressAction();
+          setConfirmationOpen(false);
+        }}
+        contentHeight={175}
+        onClose={() => setConfirmationOpen(false)}
+      />
+    );
+  };
 
   const onOpenWhatsapp = useCallback(() => {
     const text = `
@@ -55,26 +65,31 @@ const ActionFooter = () => {
   return (
     <>
       <View style={styles.main}>
-        <TouchableOpacity onPress={onOpenWhatsapp}>
-          <SnbText.B2 color={color.blue60}>Butuh Bantuan?</SnbText.B2>
+        <TouchableOpacity
+          onPress={onOpenWhatsapp}
+          style={styles.footerIconText}>
+          <View style={styles.icon}>
+            <Svg size={24} name="whatsapp" />
+          </View>
+          <SnbText2.Body.Default color={colorV2.textColor.link}>
+            Butuh Bantuan?
+          </SnbText2.Body.Default>
         </TouchableOpacity>
-        {data?.isCancellable || data?.isOrderAbleToDone ? (
-          <TouchableOpacity style={styles.button} onPress={onPressAction}>
-            <SnbText.B3 color={color.white}>
-              {data?.isCancellable ? 'Batalkan' : 'Pesanan Diterima'}
-            </SnbText.B3>
-          </TouchableOpacity>
+        {data?.isOrderAbleToDone ? (
+          <View style={styles.buttonContainer}>
+            <SnbButton2.Primary
+              title={'Diterima'}
+              size="medium"
+              onPress={() => setConfirmationOpen(true)}
+              full={true}
+            />
+          </View>
         ) : (
           <View />
         )}
       </View>
-      {/* confirmation  batalkan*/}
-      <BottomSheetConfirmation
-        ref={confirmModalRef}
-        title="Konfirmasi"
-        desc="Yakin ingin membatalkan pesanan?"
-        onSubmit={onCancelOrder}
-      />
+      {/* confirmation  done*/}
+      {renderModalConfirmationDoneOrder()}
     </>
   );
 };
@@ -82,19 +97,16 @@ const ActionFooter = () => {
 const styles = StyleSheet.create({
   main: {
     height: 76,
-    backgroundColor: color.white,
+    backgroundColor: colorV2.bgColor.light,
     elevation: 10,
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: color.red50,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 4,
-  },
+  icon: { marginRight: 8, marginTop: -2 },
+  footerIconText: { flexDirection: 'row', marginLeft: 24 },
+  buttonContainer: { width: 156, height: 44, marginTop: 16, marginBottom: 16 },
 });
 
 export default ActionFooter;

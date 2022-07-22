@@ -1,12 +1,11 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import { RefreshControl, ScrollView } from 'react-native';
-import { SnbContainer, SnbTopNav } from '@sinbad/react-native-sinbad-ui';
+import { SnbContainer, SnbTopNav2 } from '@sinbad/react-native-sinbad-ui';
 import {
   StatusOrder,
   InformationInvoice,
   InformationDelivery,
   ListProductOrder,
-  InformationPayment,
   ActionFooter,
 } from '@screen/order-history/components/order-history-detail';
 //function
@@ -30,11 +29,21 @@ const OrderHistoryDetail = () => {
       clear();
     };
   }, []);
+
+  // handle when Button Diterima OnPress
+  useCallback(() => {
+    loading == true ? get() : null;
+
+    return () => {
+      clear();
+    };
+  }, [loading]);
+
   return (
     <SnbContainer color="white">
-      <SnbTopNav.Type3
-        type="red"
+      <SnbTopNav2.Type3
         title="Detail Pesanan"
+        color="white"
         backAction={NavigationAction.back}
       />
       <ScrollView
@@ -45,7 +54,6 @@ const OrderHistoryDetail = () => {
         <InformationInvoice />
         <InformationDelivery />
         <ListProductOrder />
-        <InformationPayment />
       </ScrollView>
       <ActionFooter />
     </SnbContainer>

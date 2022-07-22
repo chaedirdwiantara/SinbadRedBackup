@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useRef, useState, useContext } from 'react';
-import { SnbIcon, SnbTextField } from 'react-native-sinbad-ui';
+import {
+  SnbIcon,
+  SnbTextField2,
+  SnbBottomSheet2Ref,
+} from 'react-native-sinbad-ui';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import ModalTransactionFilter, {
-  ModalTransactionRef,
-} from './modal-transaction-filter';
+import ModalTransactionFilter from './modal-transaction-filter';
 import { Context } from './context';
 import { useMemo } from 'react';
 import { useEffect } from 'react';
@@ -11,7 +13,7 @@ import { useEffect } from 'react';
 const SearchInputFilter = () => {
   const [search, setSearch] = useState('');
   const [state, setState] = useContext(Context);
-  const filterModalRef = useRef<ModalTransactionRef>(null);
+  const filterModalRef = useRef<SnbBottomSheet2Ref>(null);
 
   const onClear = useCallback(() => {
     setSearch('');
@@ -22,32 +24,37 @@ const SearchInputFilter = () => {
     setState((prev) => ({ ...prev, keyword: search }));
   }, [search]);
 
-  const onSubmitOrderStatus = useCallback((orderStatus) => {
-    setState((prev) => ({ ...prev, orderStatus }));
-  }, []);
+  const onSubmitOrderStatus = useCallback(
+    (status: string) => {
+      setState((prev) => ({ ...prev, status }));
+      filterModalRef.current?.close();
+    },
+    [filterModalRef.current],
+  );
 
   const isShowFilterOrderStatus = useMemo(
-    () => state.status === 'ongoing',
-    [state.status],
+    () => state.orderGroupStatus === 'ongoing',
+    [state.orderGroupStatus],
   );
 
   // clear if change status menu
   useEffect(() => {
     setSearch('');
-  }, [state.status]);
+  }, [state.orderGroupStatus]);
 
   // hide search
-  if (state.status === 'waiting_for_payment') return <View />;
+  if (state.orderGroupStatus === 'waiting_for_payment') return <View />;
 
   return (
     <View style={styles.main}>
       <View style={styles.input}>
-        <SnbTextField.Text
+        <SnbTextField2.Text
+          testID={'03'}
           placeholder="Cari Transaksi"
           type="default"
           onChangeText={setSearch}
-          clearText={onClear}
-          enter={onEnter}
+          onClearText={onClear}
+          onEnter={onEnter}
           value={search}
           prefixIconName="search"
           autoCapitalize="none"
@@ -59,12 +66,13 @@ const SearchInputFilter = () => {
         <>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => filterModalRef.current?.trigger()}>
+            onPress={() => filterModalRef.current?.open()}>
             <SnbIcon name="filter_list" size={24} />
           </TouchableOpacity>
           <ModalTransactionFilter
             ref={filterModalRef}
             onSubmit={onSubmitOrderStatus}
+            onClose={() => filterModalRef.current?.close()}
           />
         </>
       )}
@@ -75,6 +83,7 @@ const SearchInputFilter = () => {
 const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 16,
+    paddingBottom: 12,
     flexDirection: 'row',
   },
   input: {

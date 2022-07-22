@@ -55,12 +55,20 @@ export const ThankYouPageStyle = StyleSheet.create({
     paddingBottom: 24
   },
   footerCancelOrder: {
-    alignItems: 'center',
+    // alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 16,
   },
   footerCancelOrderButton: {
     height: 70
-  }
+  },
+  cardTimeBlock: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 18,
+    height: 18,
+    backgroundColor: color.red50,
+    borderRadius: 2,
+  },
 })
 

@@ -56,3 +56,38 @@ export const resetToIntroSinbad = () => {
     }),
   );
 };
+/** => reset to force update page */
+export const resetToForceUpdate = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'ForceUpdate' }],
+    }),
+  );
+};
+/** => reset to maintenance page */
+export const resetToMaintenance = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Maintenance' }],
+    }),
+  );
+};
+/** => reset to maintenance page */
+export const resetToBannedAccount = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'BannedAccount' }],
+    }),
+  );
+};
+export const restartApp = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'Splash' }],
+    }),
+  );
+};

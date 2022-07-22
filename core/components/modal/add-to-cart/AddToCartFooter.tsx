@@ -1,71 +1,81 @@
 /** === IMPORT PACKAGES ===  */
-import React, { FC, useMemo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { SnbText, SnbButton, styles } from 'react-native-sinbad-ui';
+import {
+  SnbDivider2,
+  SnbText2,
+  SnbButton2,
+  spacingV2,
+  SnbContainer,
+  styles,
+} from 'react-native-sinbad-ui';
 /** === IMPORT FUNCTIONS ===  */
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useStockContext } from 'src/data/contexts/product/stock/useStockContext';
 /** === IMPORT STYLE ===  */
 import { AddToCartModalStyle } from '@core/styles';
+import * as models from '@models';
 /** === TYPE ===  */
 interface AddToCartFooterProps {
   onAddToCartPress: () => void;
+  isStockEmpty: boolean;
   orderQty: number;
   disabled: boolean;
   isFromProductDetail?: boolean;
   bulkPriceAterTax: number;
+  errorStock: models.ErrorProps | null;
+  loading: boolean;
 }
+// VAR
+const { spacing } = spacingV2;
 /** === COMPONENT ===  */
-export const AddToCartFooter: FC<AddToCartFooterProps> = ({
+const AddToCartFooterMemo: FC<AddToCartFooterProps> = ({
+  isStockEmpty,
   onAddToCartPress,
   orderQty,
   disabled,
-  isFromProductDetail,
   bulkPriceAterTax,
+  errorStock,
+  loading,
 }) => {
-  /** === HOOKS ===  */
-  const {
-    stateStock: {
-      validation: { error: errorStock },
-      detail: { error: errorStockDetail },
-    },
-  } = useStockContext();
-
+  // kalkulasi harga total
   const totalPrice = useMemo(
     () => bulkPriceAterTax * orderQty,
     [bulkPriceAterTax, orderQty],
   );
-
+  // label button
+  const titleButton = useMemo(
+    () => (errorStock || isStockEmpty ? 'Stock Habis' : 'Tambah ke Keranjang'),
+    [isStockEmpty, errorStock],
+  );
+  // render
   return (
-    <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
-      <View style={{ marginRight: 16 }}>
-        <View style={{ flexDirection: 'row', marginBottom: 4 }}>
-          <SnbText.B4>
-            {toCurrency(totalPrice, {
-              withFraction: false,
-            })}
-          </SnbText.B4>
+    <SnbContainer color="white">
+      <SnbDivider2 />
+      <View style={[AddToCartModalStyle.footer, styles.shadowStyle]}>
+        <View style={{ marginRight: spacing.lg }}>
+          <View style={{ flexDirection: 'row' }}>
+            {!loading ? (
+              <SnbText2.Body.Default>
+                {toCurrency(totalPrice, {
+                  withFraction: false,
+                })}
+              </SnbText2.Body.Default>
+            ) : (
+              <View />
+            )}
+          </View>
         </View>
+        <SnbButton2.Primary
+          disabled={disabled || loading}
+          size="medium"
+          loading={loading}
+          testID="action-add-to-cart"
+          title={titleButton}
+          onPress={onAddToCartPress}
+        />
       </View>
-      {isFromProductDetail ? (
-        <SnbButton.Dynamic
-          disabled={disabled}
-          size="small"
-          type="primary"
-          title={errorStockDetail ? 'Stock Habis' : 'Tambah ke Keranjang'}
-          radius={6}
-          onPress={onAddToCartPress}
-        />
-      ) : (
-        <SnbButton.Dynamic
-          disabled={disabled}
-          size="small"
-          type="primary"
-          title={errorStock ? 'Stock Habis' : 'Tambah ke Keranjang'}
-          radius={6}
-          onPress={onAddToCartPress}
-        />
-      )}
-    </View>
+    </SnbContainer>
   );
 };
+
+export const AddToCartFooter = memo(AddToCartFooterMemo);
