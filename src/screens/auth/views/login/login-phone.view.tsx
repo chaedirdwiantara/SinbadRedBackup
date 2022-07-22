@@ -84,7 +84,7 @@ const Content: React.FC = () => {
       <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text
           {...phone}
-          labelText="Nomer Handphone"
+          labelText="Nomor Handphone"
           keyboardType="phone-pad"
         />
       </View>
