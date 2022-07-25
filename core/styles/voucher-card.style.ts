@@ -1,4 +1,4 @@
-import { colorV2, styles } from '@sinbad/react-native-sinbad-ui';
+import { styles } from '@sinbad/react-native-sinbad-ui';
 import { StyleSheet } from 'react-native';
 
 export const VoucherCardStyle = StyleSheet.create({
@@ -10,6 +10,7 @@ export const VoucherCardStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 5,
   },
   icon: {
     flexDirection: 'column',
