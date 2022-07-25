@@ -61,9 +61,9 @@ const OnBoardingView: React.FC<Props> = () => {
         <OnBoardSlider data={data} />
         <FooterButton.Dual
           testID={'OnBoarding'}
-          title1="Daftar"
+          title1="Masuk"
           button1Press={() => navigate(LOGIN_PHONE_VIEW)}
-          title2="Masuk"
+          title2="Daftar"
           button2Press={() => navigate(SELF_REGISTRATION_VIEW)}
           textLink="Lewati"
           description="Biarkan saya masuk"
