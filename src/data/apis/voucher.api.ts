@@ -5,35 +5,36 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
-  const path = `voucher-cart-list/detail/${data.id}?type=${data.type}`;
-  return apiMapping<models.VoucherDetailProps>(
-    'auth',
+  const path = `sinbad-vouchers/${data.id}`;
+  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
+  return apiMappingMock<models.VoucherCartDetailProps>(
+    mockHost,
     path,
-    'discount',
+    'voucher',
     'v1',
     'DETAIL',
   );
 };
+// const voucherDetail = (data: models.VoucherDetailProcessProps) => {
+//   const path = `sinbad-voucher/${data.id}`;
+//   return apiMapping<models.VoucherCartDetailProps>(
+//     'auth',
+//     path,
+//     'voucher',
+//     'v1',
+//     'DETAIL',
+//   );
+// };
 /** => voucher cart list */
-const voucherCartList = () => {
-  const path = 'voucher-cart-list';
-  return apiMapping<models.VoucherCartListProps>(
-    'auth',
+const voucherCartList = (uniqueCode: string) => {
+  const path = `sinbad-vouchers?uniqueCode=${uniqueCode}`;
+  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
+  return apiMappingMock<models.VoucherCartListProps>(
+    mockHost,
     path,
-    'discount',
+    'voucher',
     'v1',
-    'DETAIL',
-  );
-};
-/** => count all voucher */
-const countAllVoucher = () => {
-  const path = 'voucher-cart-list/count';
-  return apiMapping<models.CountAllVoucherProps>(
-    'auth',
-    path,
-    'discount',
-    'v1',
-    'DETAIL',
+    'LIST',
   );
 };
 /** => check sinbad voucher */
@@ -69,7 +70,6 @@ const cancelVoucher = () => {
 export const VoucherApi = {
   voucherCartList,
   voucherDetail,
-  countAllVoucher,
   checkSinbadVoucher,
   cancelVoucher,
 };

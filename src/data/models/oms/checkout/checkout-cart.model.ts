@@ -25,11 +25,15 @@ export interface CheckoutPayload {
   buyerAddress: CheckoutBuyerAddressPayload;
   buyerName: string;
   buyerCode: string;
+  buyerTaxNo: string;
   userFullName: string;
   userPhoneNumber: string;
   ownerFullName: string;
   ownerPhoneNumber: string;
   ownerId: number;
+  ownerIdNo: string;
+  sinbadVoucherId: number | null;
+  sinbadVoucherDiscountOrder: number;
   carts: CheckoutCartPayload[];
 }
 

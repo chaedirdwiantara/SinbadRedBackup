@@ -2,10 +2,10 @@
 import * as types from '@types';
 import * as models from '@models';
 import simplifyReducer from '@core/redux/simplifyReducer';
-import { AddToCartResponse } from '@models';
+import { CheckSinbadVoucherResponse } from '@models';
 /** === TYPE HERE === */
 export type CheckSinbadVoucherInitialProps =
-  models.CreateItemV3Props<AddToCartResponse>;
+  models.CreateItemV3Props<CheckSinbadVoucherResponse>;
 /** === INITIAL STATE HERE === */
 export const checkSinbadVoucherInitialState: CheckSinbadVoucherInitialProps = {
   data: null,

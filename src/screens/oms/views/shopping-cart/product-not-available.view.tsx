@@ -62,7 +62,7 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
           onPress={() => {
             const category = {
               id: product.categoryId,
-              name: '',
+              name: product.categoryName || '',
               icon: '',
               hasChild: false,
             };

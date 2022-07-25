@@ -6,26 +6,14 @@ import * as models from '@models';
 
 const getCart = () => {
   const path = 'carts';
-  const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-  return apiMappingMock<models.GetCartData>(
-    mockHost,
+  return apiMapping<models.GetCartData>(
+    'auth',
     path,
-    'cart',
+    'buyer-cart',
     'v2',
     'DETAIL',
   );
 };
-
-// const getCart = () => {
-//   const path = 'carts';
-//   return apiMapping<models.GetCartData>(
-//     'auth',
-//     path,
-//     'buyer-cart',
-//     'v1',
-//     'DETAIL',
-//   );
-// };
 
 const getTotalCart = () => {
   const path = 'carts/total-products';
@@ -42,40 +30,24 @@ const addToCart = (
   data: models.CreateProcessProps<models.AddToCartPayload>,
 ) => {
   const path = 'carts';
-  const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-  return apiMappingMock<models.AddToCartResponse>(
-    mockHost,
+  return apiMapping<models.AddToCartResponse>(
+    'auth',
     path,
-    'cart',
+    'buyer-cart',
     'v2',
     'CREATE',
     data.data,
   );
 };
 
-// const addToCart = (
-//   data: models.CreateProcessProps<models.AddToCartPayload>,
-// ) => {
-//   const path = 'carts';
-//   return apiMapping<models.AddToCartResponse>(
-//     'auth',
-//     path,
-//     'buyer-cart',
-//     'v1',
-//     'CREATE',
-//     data.data,
-//   );
-// };
-
 const updateCart = (
   data: models.UpdateProcessProps<models.UpdateCartPayload>,
 ) => {
   const path = `carts/${data.data.id}`;
-  const mockHost = 'https://ef97a830-e9ff-4fa7-87c9-feb0eb94ebf7.mock.pstmn.io';
-  return apiMappingMock<models.UpdateCartResponse>(
-    mockHost,
+  return apiMapping<models.UpdateCartResponse>(
+    'auth',
     path,
-    'cart',
+    'buyer-cart',
     'v2',
     'UPDATE',
     {
@@ -84,23 +56,6 @@ const updateCart = (
     },
   );
 };
-
-// const updateCart = (
-//   data: models.UpdateProcessProps<models.UpdateCartPayload>,
-// ) => {
-//   const path = `carts/${data.data.id}`;
-//   return apiMapping<models.UpdateCartResponse>(
-//     'auth',
-//     path,
-//     'buyer-cart',
-//     'v1',
-//     'UPDATE',
-//     {
-//       buyerName: data.data.buyerName,
-//       carts: data.data.carts,
-//     },
-//   );
-// };
 
 const removeCartProduct = ({
   data,
@@ -166,17 +121,6 @@ const cancelStock = () => {
   return apiMapping('auth', path, 'warehouse', 'v1', 'DELETE');
 };
 
-const cartBuyerAddress = () => {
-  const path = 'profile/buyer-location';
-  return apiMapping<models.CartBuyerAddress>(
-    'auth',
-    path,
-    'account',
-    'v2',
-    'DETAIL',
-  );
-};
-
 const checkBuyer = () => {
   const path = 'check-buyer';
   return apiMapping<models.CheckBuyer>('auth', path, 'account', 'v1', 'DETAIL');
@@ -192,6 +136,5 @@ export const CartApi = {
   checkSeller,
   checkStock,
   cancelStock,
-  cartBuyerAddress,
   checkBuyer,
 };
