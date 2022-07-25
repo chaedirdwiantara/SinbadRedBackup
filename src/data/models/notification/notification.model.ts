@@ -1,23 +1,22 @@
 /** === NOTIFICATION LIST === */
 export interface NotificationData {
-  reasons: string;
-  supplierName: string;
-  approvalStatus: string;
-  billingId: number;
-  id: number;
-  section: string;
-  orderParcelId: number;
+  iconName: string;
+  iconColor: string;
+  orderId?: string;
+  screen?: string;
+  productId?: string;
+  warehouseId?: string;
+  productImage?: string;
+  productName?: string;
 }
 export interface NotificationListSuccessProps {
-  id: number;
-  userId: number;
-  type: string;
-  data: NotificationData;
+  id: string;
+  typeName: string;
+  title: string;
   body: string;
-  imageUrl: string;
   isRead: boolean;
   screen: string;
-  title: string;
+  data: NotificationData;
   createdAt: string;
 }
 

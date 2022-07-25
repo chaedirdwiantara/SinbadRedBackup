@@ -4,8 +4,8 @@ import * as models from '@models';
 /** => notification list process */
 export const notificationListProcess = (
   contextDispatch: (action: any) => any,
-  data: models.ListProcessProps,
-): models.ListProcessAction => {
+  data: models.ListProcessV3Props<{ perPage: number }>,
+): models.ListProcessV3Action => {
   contextDispatch({ type: types, payload: data });
   return {
     type: types.NOTIFICATION_LIST_PROCESS,
@@ -36,4 +36,26 @@ export const notificationListReset = () => {
 /** => notification list more */
 export const notificationListLoadMore = () => {
   return { type: types.NOTIFICATION_LIST_LOADMORE };
+};
+/** => notification mark read process */
+export const notificationMarkReadProcess = (
+  contextDispatch: (action: any) => any,
+  data: models.CreateProcessProps<models.NotificationListSuccessProps>,
+) => {
+  contextDispatch({ type: types, payload: data });
+  return {
+    type: types.NOTIFICATION_MARK_READ_PROCESS,
+    payload: data,
+    contextDispatch,
+  };
+};
+/** => notification mark read success */
+export const notificationMarkReadSuccess = () => {
+  return { type: types.NOTIFICATION_MARK_READ_SUCCESS };
+};
+/** => notification mark read failed */
+export const notificationMarkReadFailed = (
+  data: models.ErrorProps,
+): models.DetailFailedAction => {
+  return { type: types.NOTIFICATION_MARK_READ_FAILED, payload: data };
 };

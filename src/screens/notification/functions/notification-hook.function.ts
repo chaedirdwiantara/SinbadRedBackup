@@ -4,47 +4,77 @@ import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
 import * as models from '@models';
+import { contexts } from '@contexts';
 import { useDataTotalNotification } from '@core/redux/Data';
-import React from 'react';
+import React, { useCallback } from 'react';
+import { navigate } from '@core/navigations/RootNavigation';
 /** === FUNCTION === */
 /** === call fetch === */
 const callList = (
   contextDispatch: (action: any) => any,
   loading: boolean,
-  skip: number,
-  limit: number,
+  page: number,
+  perPage: number,
 ) => {
   return Actions.notificationListProcess(contextDispatch, {
     loading,
-    skip,
-    limit,
+    page,
+    perPage,
   });
 };
+
+const perPage = 10;
+const page = 1;
 /** => notification action */
 export const useNotificationAction = () => {
+  const { stateNotification, dispatchNotification } = React.useContext(
+    contexts.NotificationContext,
+  );
   const dispatch = useDispatch();
-  const limit = 10;
+
+  const onFetch = useCallback(() => {
+    dispatchNotification(Actions.notificationListReset());
+    dispatch(callList(dispatchNotification, true, page, perPage));
+  }, [dispatchNotification]);
+
+  const onLoadMore = useCallback(() => {
+    const state = stateNotification.list;
+    if (state.page < state.totalPage) {
+      dispatchNotification(Actions.notificationListLoadMore());
+      dispatch(
+        callList(dispatchNotification, false, state.page + 1, state.perPage),
+      );
+    }
+  }, [stateNotification.list, dispatchNotification]);
+
+  const onRefresh = useCallback(() => {
+    dispatchNotification(Actions.notificationListRefresh());
+    dispatch(callList(dispatchNotification, true, page, perPage));
+  }, [dispatchNotification, dispatch]);
+
+  const onReset = useCallback(() => {
+    dispatchNotification(Actions.notificationListReset());
+  }, [dispatchNotification]);
+
+  const onMarkRead = useCallback(
+    (data: models.NotificationListSuccessProps) => {
+      navigate('UserView');
+      // cant dispatch if has read
+      if (data.isRead) return void 0;
+      dispatch(
+        Actions.notificationMarkReadProcess(dispatchNotification, { data }),
+      );
+    },
+    [],
+  );
+
   return {
-    list: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.notificationListReset());
-      dispatch(callList(contextDispatch, true, 0, limit));
-    },
-    refresh: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.notificationListRefresh());
-      dispatch(callList(contextDispatch, true, 0, limit));
-    },
-    loadMore: (
-      contextDispatch: (action: any) => any,
-      list: models.ListItemProps<models.NotificationListSuccessProps[]>,
-    ) => {
-      if (list.data.length < list.total) {
-        contextDispatch(Actions.notificationListLoadMore());
-        dispatch(callList(contextDispatch, false, list.skip + limit, limit));
-      }
-    },
-    reset: (contextDispatch: (action: any) => any) => {
-      contextDispatch(Actions.notificationListReset());
-    },
+    onFetch,
+    onRefresh,
+    onLoadMore,
+    onReset,
+    onMarkRead,
+    stateNotification,
   };
 };
 
@@ -60,15 +90,5 @@ export const useNotificationTotalActions = () => {
     reset: () => {
       dispatch(Actions.notificationTotalReset());
     },
-  };
-};
-
-export const useStandardModalState = () => {
-  const [isOpen, setOpen] = React.useState(false);
-  return {
-    setOpen: (value: boolean) => {
-      setOpen(value);
-    },
-    isOpen,
   };
 };

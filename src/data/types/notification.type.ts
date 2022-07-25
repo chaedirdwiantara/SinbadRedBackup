@@ -12,3 +12,7 @@ export const NOTIFICATION_TOTAL_FAILED = 'NotificationTotalFailed';
 export const NOTIFICATION_TOTAL_REFRESH = 'NotificationTotalRefresh';
 export const NOTIFICATION_TOTAL_RESET = 'NotificationTotalReset';
 export const NOTIFICATION_TOTAL_LOADMORE = 'NotificationTotalLoadMore';
+// NOTIFICATION MARK READ
+export const NOTIFICATION_MARK_READ_PROCESS = 'NotificationMarkReadProcess';
+export const NOTIFICATION_MARK_READ_SUCCESS = 'NotificationMarkReadSuccess';
+export const NOTIFICATION_MARK_READ_FAILED = 'NotificationMarkReadFailed';
