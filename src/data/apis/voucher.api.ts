@@ -2,7 +2,6 @@
 import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
-import { VoucherListProcessProps } from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
@@ -27,7 +26,10 @@ const voucherDetail = (data: models.VoucherDetailProcessProps) => {
 //   );
 // };
 /** => voucher cart list */
-const voucherCartList = ({ totalOrder, ...other }: VoucherListProcessProps) => {
+const voucherCartList = ({
+  totalOrder,
+  ...other
+}: models.VoucherListProcessProps) => {
   const path = other?.uniqueCode
     ? `sinbad-vouchers?totalOrder=${totalOrder}&uniqueCode=${other?.uniqueCode}`
     : `sinbad-vouchers?totalOrder=${totalOrder}`;
