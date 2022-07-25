@@ -10,6 +10,24 @@ export const VoucherCartListStyles = StyleSheet.create({
   cardContainer: {
     marginBottom: 32,
   },
+  emptyContainer: {
+    backgroundColor: colorV2.bgColor.light,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 8,
+    paddingHorizontal: 49,
+    height: '100%',
+  },
+  emptyImage: {
+    width: 240,
+    height: 240,
+    marginBottom: spacingV2.spacing.xl,
+  },
+  emptyTitle: {
+    marginBottom: spacingV2.spacing.sm,
+  },
   footerMiniInfobar: {
     paddingHorizontal: spacingV2.spacing.md,
     paddingVertical: spacingV2.spacing.lg,

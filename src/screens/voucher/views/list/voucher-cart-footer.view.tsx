@@ -30,18 +30,20 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
 
   return (
     <View style={{ justifyContent: 'flex-end' }}>
-      <View style={{ backgroundColor: colorV2.bgColor.light }}>
-        <View style={VoucherCartListStyles.footerMiniInfobar}>
-          <View style={VoucherCartListStyles.iconLeft}>
-            <Svg name="reward_voucher_yellow" size={24} />
-          </View>
-          <View style={VoucherCartListStyles.infobarDescription}>
-            <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
-              {`Potensi Diskon: ${potentialDiscount}`}
-            </SnbText2.Paragraph.Small>
+      {!!selectedVoucher && (
+        <View style={{ backgroundColor: colorV2.bgColor.light }}>
+          <View style={VoucherCartListStyles.footerMiniInfobar}>
+            <View style={VoucherCartListStyles.iconLeft}>
+              <Svg name="reward_voucher_yellow" size={24} />
+            </View>
+            <View style={VoucherCartListStyles.infobarDescription}>
+              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+                {`Potensi Diskon: ${potentialDiscount}`}
+              </SnbText2.Paragraph.Small>
+            </View>
           </View>
         </View>
-      </View>
+      )}
       <FooterButton.Order
         titleButton="Pakai Voucher"
         loading={loading}

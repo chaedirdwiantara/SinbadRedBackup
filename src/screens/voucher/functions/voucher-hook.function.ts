@@ -25,12 +25,8 @@ const useCancelVoucherAction = () => {
 const useVoucherDetailAction = () => {
   const dispatch = useDispatch();
   return {
-    detail: (
-      contextDispatch: (action: any) => any,
-      id: string,
-      type: string,
-    ) => {
-      dispatch(Actions.voucherDetailProcess(contextDispatch, { id, type }));
+    detail: (contextDispatch: (action: any) => any, id: string) => {
+      dispatch(Actions.voucherDetailProcess(contextDispatch, { id }));
     },
     reset: (contextDispatch: (action: any) => any) => {
       contextDispatch(Actions.voucherDetailReset());
@@ -78,7 +74,7 @@ const useSelectedVoucher = () => {
     resetSelectedVoucher: () => {
       setSelectedVoucherId(0);
     },
-    selectedVoucher: stateVoucher.voucherCart.detail.data?.eligible.find(
+    selectedVoucher: stateVoucher.voucherCart.list.data?.eligible.find(
       (voucher) => voucher.id === selectedVoucherId,
     ),
     selectedVoucherId,
@@ -90,14 +86,28 @@ const useVoucherList = () => {
   const { selectedVoucher, setSelectedVoucher, selectedVoucherId } =
     useSelectedVoucher();
   return {
-    eligibleVouchers: stateVoucher.voucherCart.detail.data?.eligible,
-    notEligibleVouchers: stateVoucher.voucherCart.detail.data?.notEligible,
-    loading: stateVoucher.voucherCart.detail.loading,
+    eligibleVouchers: stateVoucher.voucherCart.list.data?.eligible,
+    notEligibleVouchers: stateVoucher.voucherCart.list.data?.notEligible,
+    loading: stateVoucher.voucherCart.list.loading,
     changeSelectedVoucher: (voucher: RadioValue) => {
       setSelectedVoucher(voucher as number);
     },
+    empty:
+      stateVoucher.voucherCart.list.data?.eligible.length === 0 &&
+      stateVoucher.voucherCart.list.data?.notEligible.length === 0,
+    disabled: stateVoucher.voucherCart.list.data?.eligible.length === 0,
     selectedVoucher,
     selectedVoucherId,
+  };
+};
+
+const useVoucherDetail = () => {
+  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+
+  return {
+    data: stateVoucher.voucherCart.detail.data,
+    loading: stateVoucher.voucherCart.detail.loading,
+    error: stateVoucher.voucherCart.detail.error,
   };
 };
 /** === EXPORT === */
@@ -108,6 +118,7 @@ export {
   useSearchKeyword,
   useSelectedVoucher,
   useVoucherList,
+  useVoucherDetail,
 };
 /**
  * ================================================================

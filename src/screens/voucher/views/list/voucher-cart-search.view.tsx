@@ -18,6 +18,9 @@ export const VoucherCartSearch = () => {
   /** => effects */
   useEffect(() => {
     getVouchersAction.list(dispatchVoucher, debouncedValue);
+    return () => {
+      getVouchersAction.reset(dispatchVoucher);
+    };
   }, [debouncedValue]);
 
   /** === VIEW === */

@@ -1,11 +1,11 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { SnbContainer, SnbRadioGroup } from '@sinbad/react-native-sinbad-ui';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { VoucherCard } from '@core/components/VoucherCard';
 import * as models from '@models';
 import { VoucherCartListStyles } from '../../styles';
 import { toCurrency } from '@core/functions/global/currency-format';
-import { useSelectedVoucher } from '@screen/voucher/functions';
+import { NavigationAction } from '@core/functions/navigation';
 
 interface VoucherCartListProps {
   eligibleVouchers: models.EligibleVoucherProps[];
@@ -30,13 +30,13 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 
   return (
     <SnbContainer color="grey">
-      <View style={VoucherCartListStyles.container}>
+      <ScrollView style={VoucherCartListStyles.container}>
         <SnbRadioGroup 
           value={props?.selectedVoucher?.id}
-          onChange={(value) => onSelectedChange(value)}>
+          onChange={(value) => onSelectedChange(value as number)}>
           {eligibleVouchers &&
             eligibleVouchers.map((voucher) => {
-            const subtitle = getSubtitle(voucher.remainingDay);
+              const subtitle = getSubtitle(voucher.remainingDay);
 
               return (
                 <View
@@ -47,7 +47,12 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     title={voucher.name}
                     subtitle={subtitle}
                     value={voucher.id}
-                    onPress={() => {}}
+                    onPress={() =>
+                      NavigationAction.navigate('VoucherDetailView', {
+                        id: voucher.id,
+                        type: 'eligible',
+                      })
+                    }
                     type="eligible"
                   />
                 </View>
@@ -71,7 +76,12 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     title={voucher.name}
                     subtitle={subtitle}
                     value={voucher.id}
-                    onPress={() => {}}
+                    onPress={() =>
+                      NavigationAction.navigate('VoucherDetailView', {
+                        id: voucher.id,
+                        type: 'not-eligible',
+                      })
+                    }
                     type="not-eligible"
                     helperText={helperText}
                   />
@@ -79,7 +89,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
               );
             })}
         </SnbRadioGroup>
-      </View>
+      </ScrollView>
     </SnbContainer>
   );
 };
