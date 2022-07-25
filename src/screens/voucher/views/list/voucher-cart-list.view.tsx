@@ -22,6 +22,9 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 }) => {
   const getSubtitle = (remainingDay: number) => {
     if (remainingDay > 0) {
+      if (remainingDay > 30) {
+        return 'Berakhir >30 hari lagi';
+      }
       return `Berakhir dalam ${remainingDay} hari lagi!`;
     }
 
@@ -34,30 +37,49 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
         <SnbRadioGroup 
           value={props?.selectedVoucher?.id}
           onChange={(value) => onSelectedChange(value as number)}>
+          {props?.selectedVoucher && (
+            <View style={VoucherCartListStyles.cardContainer}>
+              <VoucherCard
+                name="Sinbad"
+                title={props?.selectedVoucher.name}
+                subtitle={getSubtitle(props?.selectedVoucher?.remainingDay)}
+                value={props?.selectedVoucher.id}
+                onPress={() =>
+                  NavigationAction.navigate('VoucherDetailView', {
+                    id: props?.selectedVoucher?.id,
+                    type: 'eligible',
+                  })
+                }
+                type="eligible"
+              />
+            </View>
+          )}
           {eligibleVouchers &&
-            eligibleVouchers.map((voucher) => {
-              const subtitle = getSubtitle(voucher.remainingDay);
+            eligibleVouchers
+              .filter((voucher) => voucher.id !== props.selectedVoucher?.id)
+              .map((voucher) => {
+                const subtitle = getSubtitle(voucher.remainingDay);
 
-              return (
-                <View
-                  key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
-                  style={VoucherCartListStyles.cardContainer}>
-                  <VoucherCard
-                    name="Sinbad"
-                    title={voucher.name}
-                    subtitle={subtitle}
-                    value={voucher.id}
-                    onPress={() =>
-                      NavigationAction.navigate('VoucherDetailView', {
-                        id: voucher.id,
-                        type: 'eligible',
-                      })
-                    }
-                    type="eligible"
-                  />
-                </View>
-              );
-            })}
+                return (
+                  <View
+                    key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
+                    style={VoucherCartListStyles.cardContainer}>
+                    <VoucherCard
+                      name="Sinbad"
+                      title={voucher.name}
+                      subtitle={subtitle}
+                      value={voucher.id}
+                      onPress={() =>
+                        NavigationAction.navigate('VoucherDetailView', {
+                          id: voucher.id,
+                          type: 'eligible',
+                        })
+                      }
+                      type="eligible"
+                    />
+                  </View>
+                );
+              })}
 
           {notEligibleVouchers &&
             notEligibleVouchers.map((voucher) => {
