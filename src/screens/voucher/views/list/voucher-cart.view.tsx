@@ -11,6 +11,7 @@ import { VoucherCartList } from './voucher-cart-list.view';
 import { VoucherCartHeader } from './voucher-cart-header.view';
 import { VoucherCartSearch } from './voucher-cart-search.view';
 import { VoucherCartFooter } from './voucher-cart-footer.view';
+import { VoucherCartEmpty } from './voucher-cart-empty.view';
 // import { useCartMasterActions } from '@screen/oms/functions';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
@@ -20,6 +21,8 @@ const VoucherCartListView: FC = () => {
     eligibleVouchers,
     notEligibleVouchers,
     loading,
+    empty,
+    disabled,
     changeSelectedVoucher,
     selectedVoucher,
   } = useVoucherList();
@@ -27,28 +30,39 @@ const VoucherCartListView: FC = () => {
   /** => effect */
 
   /** === VIEW === */
+  const renderListAndFooter = () => {
+    return (
+      <>
+        {!loading ? (
+          <VoucherCartList
+            onSelectedChange={changeSelectedVoucher}
+            eligibleVouchers={eligibleVouchers ?? []}
+            notEligibleVouchers={notEligibleVouchers ?? []}
+            selectedVoucher={selectedVoucher}
+          />
+        ) : (
+          <LoadingPage />
+        )}
+        <VoucherCartFooter
+          selectedVoucher={selectedVoucher}
+          total={10000}
+          loading={loading}
+          disabled={disabled}
+        />
+      </>
+    );
+  };
+
+  const renderEmpty = () => {
+    return <VoucherCartEmpty />;
+  };
 
   /** => main */
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
       <VoucherCartSearch />
-      {!stateVoucher.voucherCart.detail.loading ? (
-        <VoucherCartList
-          onSelectedChange={changeSelectedVoucher}
-          eligibleVouchers={eligibleVouchers ?? []}
-          notEligibleVouchers={notEligibleVouchers ?? []}
-          selectedVoucher={selectedVoucher}
-        />
-      ) : (
-        <LoadingPage />
-      )}
-      <VoucherCartFooter
-        selectedVoucher={selectedVoucher}
-        total={10000}
-        loading={loading}
-        disabled={!eligibleVouchers}
-      />
+      {!empty ? renderListAndFooter() : renderEmpty()}
     </SnbContainer>
   );
 };
