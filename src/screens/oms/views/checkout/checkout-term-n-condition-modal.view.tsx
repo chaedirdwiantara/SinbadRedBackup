@@ -9,6 +9,7 @@ import {
   SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import * as models from '@models';
+import { testProps } from '@core/functions/global/test-props';
 const { height } = Dimensions.get('window');
 
 /** === INTERFACE === */
@@ -16,6 +17,7 @@ interface ModalCheckoutTNCProps {
   parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
   data: models.CheckoutTnc | null;
+  testID: string;
 }
 
 /** === COMPONENT === */
@@ -23,6 +25,7 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
   parentRef,
   close,
   data,
+  testID,
 }) => {
   const content = () => {
     return (
@@ -37,7 +40,11 @@ export const ModalCheckoutTNC: FC<ModalCheckoutTNCProps> = ({
           }}
           showsVerticalScrollIndicator={false}>
           {data !== null && data !== undefined && (
-            <Html value={data.content} fontSize={12} />
+            <Html
+              {...testProps(`html.modalTermsAndConditions.${testID}`)}
+              value={data.content}
+              fontSize={12}
+            />
           )}
         </ScrollView>
       </View>

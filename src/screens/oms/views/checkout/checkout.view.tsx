@@ -11,6 +11,7 @@ import ModalBottomErrorExpiredTime from './expired-time.modal.view';
 import { CheckoutTNCView } from './checkout-terms-n-condition.view';
 import { ModalCheckoutTNC } from './checkout-term-n-condition-modal.view';
 import { ModalParcelDetail } from './parcel-detail-modal.view';
+import ModalValidationLimit from './validation-limit-modal';
 import { CheckoutTotalOrderView } from './checkout-total-order-view';
 import {
   goToPaymentMethod,
@@ -36,6 +37,8 @@ import {
 } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
 import * as models from '@models';
+/** === GLOBAL === */
+const screenName = 'checkoutPage';
 /** === INTERFACE === */
 interface ParcelDetailData {
   data: models.CheckoutCartProduct[];
@@ -67,6 +70,7 @@ const OmsCheckoutView: FC = () => {
   const refTermConditionModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refBackToCartModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refParcelDetailModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refValidationLimitModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** => Back handler */
   useCustomBackHardware(() => refBackToCartModal.current?.open());
@@ -118,6 +122,7 @@ const OmsCheckoutView: FC = () => {
     checkoutAction.reset(dispatchCheckout);
     refExpiredTimeModal.current?.close();
     refBackToCartModal.current?.close();
+    refValidationLimitModal.current?.close();
     clearTimeout(timeRef.current);
     goToShoppingCart();
   };
@@ -146,6 +151,7 @@ const OmsCheckoutView: FC = () => {
     <SnbContainer color="grey">
       {/* header view */}
       <CheckoutHeader
+        testID={screenName}
         backAction={() => {
           refBackToCartModal.current?.open();
         }}
@@ -157,17 +163,20 @@ const OmsCheckoutView: FC = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* address view */}
         <CheckoutAddressView
+          testID={screenName}
           buyerAddress={data.buyerAddress}
           buyerName={data.buyerName}
         />
         {/* main body view */}
         <CheckoutInvoiceGroupView
+          testID={screenName}
           data={data}
           handleSetParcelDetailData={handleSetParcelDetailData}
           handleOpenModalParcelDetail={handleOpenModalParcelDetail}
         />
         {/* total order view */}
         <CheckoutTotalOrderView
+          testID={screenName}
           totalProductsQty={2}
           totalProductsValue={200000}
           discountVoucher={10000}
@@ -176,20 +185,36 @@ const OmsCheckoutView: FC = () => {
           totalPayment={270000}
         />
         {/* term and condition view */}
-        <CheckoutTNCView clickAction={handleOpenTNCModal} />
+        <CheckoutTNCView testID={screenName} clickAction={handleOpenTNCModal} />
       </ScrollView>
 
       {/* bottom view */}
-      <CheckoutBottomView data={data} goToPaymentMethod={toPaymentMethod} />
+      <CheckoutBottomView
+        testID={screenName}
+        data={data}
+        goToPaymentMethod={toPaymentMethod}
+        handleOpenValidationLimitModal={() => {
+          refValidationLimitModal.current?.open();
+        }}
+      />
+
+      {/* modal validation limit */}
+      <ModalValidationLimit
+        testID={screenName}
+        parentRef={refValidationLimitModal}
+        close={handleBackToCart}
+      />
 
       {/* modal expired time */}
       <ModalBottomErrorExpiredTime
+        testID={screenName}
         parentRef={refExpiredTimeModal}
         close={handleBackToCart}
       />
 
       {/* modal Term and Condition */}
       <ModalCheckoutTNC
+        testID={screenName}
         parentRef={refTermConditionModal}
         close={() => refTermConditionModal.current?.close()}
         data={TncContentData}
@@ -197,6 +222,7 @@ const OmsCheckoutView: FC = () => {
 
       {/* modal back to cart */}
       <BackToCartModal
+        testID={screenName}
         parentRef={refBackToCartModal}
         handleNoAction={() => {
           refBackToCartModal.current?.close();
@@ -206,6 +232,7 @@ const OmsCheckoutView: FC = () => {
 
       {/* modal parcel detail */}
       <ModalParcelDetail
+        testID={screenName}
         parentRef={refParcelDetailModal}
         close={() => {
           refParcelDetailModal.current?.close();

@@ -10,6 +10,7 @@ import { CheckoutPaymentDetailView } from './checkout-payment-detail.view';
 import { CheckoutWarningTime } from './checkout-warning-time';
 /** === TYPE === */
 import * as models from '@models';
+import { testProps } from '@core/functions/global/test-props';
 /** === INTERFACE === */
 interface CheckoutInvoiceGroupViewProps {
   data: models.CheckoutResponse;
@@ -18,12 +19,14 @@ interface CheckoutInvoiceGroupViewProps {
     sellerName: string,
   ) => void;
   handleOpenModalParcelDetail: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   data,
   handleSetParcelDetailData,
   handleOpenModalParcelDetail,
+  testID,
 }) => {
   /** === HOOK === */
   //get max lead time from product list
@@ -39,7 +42,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
   return (
     <>
       <View style={CheckoutStyle.invoiceGroupListContainer}>
-        <CheckoutWarningTime />
+        <CheckoutWarningTime testID={testID} />
       </View>
 
       <FlatList
@@ -49,24 +52,38 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
           <>
             <View style={CheckoutStyle.invoiceGroupListField}>
               <View style={CheckoutStyle.headerSection}>
-                <SnbText2.Headline.Small color={colorV2.textColor.default}>
+                <SnbText2.Headline.Small
+                  testID={`sellerName.seller${item.sellerId}.productContainer.${testID}`}
+                  color={colorV2.textColor.default}>
                   {item.sellerName}
                 </SnbText2.Headline.Small>
                 <TouchableOpacity
+                  {...testProps(
+                    `btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`,
+                  )}
                   onPress={() => {
                     handleOpenModalParcelDetail();
                     handleSetParcelDetailData(item.products, item.sellerName);
                   }}>
-                  <SnbText2.Body.Small color={colorV2.textColor.link}>
+                  <SnbText2.Body.Small
+                    testID={`title.btn-openParcelDetail.seller${item.sellerId}.productContainer.${testID}`}
+                    color={colorV2.textColor.link}>
                     Lihat Detail
                   </SnbText2.Body.Small>
                 </TouchableOpacity>
               </View>
-              <CheckoutSKUListView products={item.products} />
+              <CheckoutSKUListView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
+                products={item.products}
+              />
               <CheckoutShipmentDetailView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
                 leadTime={getMaxLeadTime(item.products)}
               />
-              <CheckoutPaymentDetailView products={item.products} />
+              <CheckoutPaymentDetailView
+                testID={`seller${item.sellerId}.productContainer.${testID}`}
+                products={item.products}
+              />
             </View>
           </>
         )}

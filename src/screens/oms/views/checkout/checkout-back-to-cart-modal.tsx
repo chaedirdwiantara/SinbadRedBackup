@@ -16,18 +16,21 @@ interface BackToCartModalProps {
   parentRef: Ref<SnbBottomSheet2Ref>;
   handleOkAction: () => void;
   handleNoAction: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const BackToCartModal: FC<BackToCartModalProps> = ({
   parentRef,
   handleOkAction,
   handleNoAction,
+  testID,
 }) => {
   /** => content item image */
   const contentItemImage = () => {
     return (
       <View style={CheckoutStyle.contentImageContainer}>
         <Image
+          testID={`img.modalBackToCart.${testID}`}
           source={Images.emptySinbad}
           style={CheckoutStyle.image}
           resizeMode={'contain'}
@@ -40,6 +43,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
     return (
       <View style={CheckoutStyle.contentTitleContainer}>
         <SnbText2.Headline.Default
+          testID={`title.modalBackToCart.${testID}`}
           color={colorV2.textColor.default}
           align={'center'}>
           Keluar dari Halaman Checkout
@@ -52,6 +56,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
     return (
       <View style={CheckoutStyle.contentMessageContainer}>
         <SnbText2.Paragraph.Default
+          testID={`subTitle.modalBackToCart.${testID}`}
           color={colorV2.textColor.secondary}
           align={'center'}>
           Dengan keluar dari halaman ini, pesanan Anda tidak akan diproses.
@@ -73,6 +78,7 @@ export const BackToCartModal: FC<BackToCartModalProps> = ({
   const button = () => {
     return (
       <FooterButton.Dual
+        testID={`modalBackToCart.${testID}`}
         title1={'Lanjut Bayar'}
         title2={'Keluar'}
         button1Press={handleNoAction}

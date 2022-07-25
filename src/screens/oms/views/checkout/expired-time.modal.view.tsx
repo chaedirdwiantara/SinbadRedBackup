@@ -13,17 +13,20 @@ import { CheckoutStyle } from '../../styles';
 interface CheckoutBottomErrorModalProps {
   parentRef: Ref<SnbBottomSheet2Ref>;
   close: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
   parentRef,
   close,
+  testID,
 }) => {
   /** => content item image */
   const contentItemImage = () => {
     return (
       <View style={CheckoutStyle.contentImageContainer}>
         <Image
+          testID={`img.modalExpiredTime.${testID}`}
           source={Images.cartNotFound}
           style={CheckoutStyle.image}
           resizeMode={'contain'}
@@ -36,6 +39,7 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
     return (
       <View style={CheckoutStyle.contentTitleContainer}>
         <SnbText2.Headline.Default
+          testID={`title.modalExpiredTime.${testID}`}
           color={colorV2.textColor.default}
           align={'center'}>
           Batas Waktu Pemesanan Habis
@@ -48,6 +52,7 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
     return (
       <View style={CheckoutStyle.contentMessageContainer}>
         <SnbText2.Paragraph.Default
+          testID={`subTitle.modalExpiredTime.${testID}`}
           color={colorV2.textColor.secondary}
           align={'center'}>
           Silahkan ulangi proses pemesanan dan selesaikan kurang dari 5 menit
@@ -68,7 +73,11 @@ export const ModalBottomErrorExpiredTime: FC<CheckoutBottomErrorModalProps> = ({
   /** => button */
   const button = () => {
     return (
-      <FooterButton.Single title={'Kembali Ke Keranjang'} buttonPress={close} />
+      <FooterButton.Single
+        testID={`modalExpiredTime.${testID}`}
+        title={'Kembali Ke Keranjang'}
+        buttonPress={close}
+      />
     );
   };
   /** => content */
