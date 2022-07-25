@@ -14,6 +14,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 import { Images } from 'src/assets';
 import * as models from '@models';
 import Svg from '@svg';
+import { testProps } from '@core/functions/global/test-props';
 
 interface ProductViewProps {
   product: models.CartMasterSellersProducts;
@@ -30,6 +31,7 @@ interface ProductViewProps {
     warehouseId,
   }: models.ProductKeyObject) => void;
   keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
+  testID: string;
 }
 
 export const ProductView: FC<ProductViewProps> = ({
@@ -38,6 +40,7 @@ export const ProductView: FC<ProductViewProps> = ({
   handleUpdateQty,
   handleUpdateSelected,
   keyboardFocus,
+  testID,
 }) => {
   /** => HANDLE DISPLAY PRICE */
   const handleDisplayPrice = () => {
@@ -112,7 +115,9 @@ export const ProductView: FC<ProductViewProps> = ({
   const renderUOMInformation = () => {
     return (
       <View style={{ flexDirection: 'row' }}>
-        <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+        <SnbText2.Paragraph.Tiny
+          testID={`uomLabel.product${product.productId}.${testID}`}
+          color={colorV2.textColor.secondary}>
           {product.uomLabel}
         </SnbText2.Paragraph.Tiny>
         {renderRemainingStock()}
@@ -128,6 +133,7 @@ export const ProductView: FC<ProductViewProps> = ({
             {'  |  '}
           </SnbText2.Paragraph.Tiny>
           <SnbText2.Paragraph.Tiny
+            testID={`remainingStock.product${product.productId}.${testID}`}
             color={
               colorV2.strokeColor.primary
             }>{`Sisa ${product.stock} ${product.uomLabel}`}</SnbText2.Paragraph.Tiny>
@@ -145,6 +151,7 @@ export const ProductView: FC<ProductViewProps> = ({
           marginRight: 16,
         }}>
         <Image
+          {...testProps(`img.product${product.productId}.${testID}`)}
           source={{
             uri: product.productImageUrl,
           }}
@@ -158,6 +165,9 @@ export const ProductView: FC<ProductViewProps> = ({
   const renderRemoveProductIcon = () => {
     return (
       <TouchableOpacity
+        {...testProps(
+          `btn-removeProduct.product${product.productId}.${testID}`,
+        )}
         onPress={() => {
           const removedProducts: models.RemovedProducts[] = [];
           removedProducts.push({
@@ -170,7 +180,14 @@ export const ProductView: FC<ProductViewProps> = ({
           });
         }}
         style={{ marginRight: 20 }}>
-        <SnbIcon name="delete" color={colorV2.btnSecColor.default} size={24} />
+        <SnbIcon
+          {...testProps(
+            `icon.btn-removeProduct.product${product.productId}.${testID}`,
+          )}
+          name="delete"
+          color={colorV2.btnSecColor.default}
+          size={24}
+        />
       </TouchableOpacity>
     );
   };
@@ -187,6 +204,7 @@ export const ProductView: FC<ProductViewProps> = ({
         {priceDifference !== 'same' && !product.isQtyChanged ? (
           <View style={{ marginRight: 5 }}>
             <SnbText2.Paragraph.Small
+              testID={`priceDifference.price.product${product.productId}.${testID}`}
               color={colorV2.textColor.disable}
               textDecorationLine="line-through">
               {toCurrency(lastPrice, {
@@ -198,7 +216,9 @@ export const ProductView: FC<ProductViewProps> = ({
           <View />
         )}
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <SnbText2.Body.Small color={colorV2.textColor.default}>
+          <SnbText2.Body.Small
+            testID={`displayPrice.price.product${product.productId}.${testID}`}
+            color={colorV2.textColor.default}>
             {toCurrency(displayPrice, {
               withFraction: false,
             })}
@@ -206,6 +226,9 @@ export const ProductView: FC<ProductViewProps> = ({
           {priceDifference !== 'same' && !product.isQtyChanged ? (
             <View style={{ marginLeft: 4 }}>
               <Svg
+                {...testProps(
+                  `icon.price.product${product.productId}.${testID}`,
+                )}
                 name={
                   priceDifference === 'higher'
                     ? 'price_changes_up'
@@ -235,6 +258,7 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={{ flexDirection: 'row' }}>
         <View style={ShoppingCartStyles.checkboxContainer}>
           <SnbCheckbox2
+            testID={`checkbox.product${product.productId}.${testID}`}
             checked={product.selected}
             onChange={() => {
               if (product.sellerId) {
@@ -250,7 +274,9 @@ export const ProductView: FC<ProductViewProps> = ({
         {renderProductImage()}
         <View style={{ justifyContent: 'center', flex: 1 }}>
           <View>
-            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+            <SnbText2.Paragraph.Default
+              testID={`productName.product${product.productId}.${testID}`}
+              color={colorV2.textColor.secondary}>
               {product.productName}
             </SnbText2.Paragraph.Default>
           </View>
@@ -261,6 +287,7 @@ export const ProductView: FC<ProductViewProps> = ({
       <View style={ShoppingCartStyles.actionContainer}>
         <View>
           <SnbText2.Caption.Default
+            testID={`qtyPerBox.product${product.productId}.${testID}`}
             color={
               colorV2.textColor.secondary
             }>{`${product.qtyPerBox} Pcs dalam 1 ${product.uomLabel}`}</SnbText2.Caption.Default>
@@ -268,6 +295,7 @@ export const ProductView: FC<ProductViewProps> = ({
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {renderRemoveProductIcon()}
           <SnbNumberCounter2
+            testID={`numberCounter.product${product.productId}.${testID}`}
             value={product.qty}
             maxLength={6}
             onBlur={() => {

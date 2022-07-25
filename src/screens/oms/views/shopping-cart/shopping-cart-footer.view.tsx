@@ -24,6 +24,7 @@ interface FooterProps {
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
   handleErrorGlobalModalData: any;
+  testID: string;
 }
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
@@ -33,6 +34,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   isCheckoutDisabled,
   handleOpenErrorBusinessModal,
   handleErrorGlobalModalData,
+  testID,
 }) => {
   /** === STATES === */
   const { stateCart, dispatchCart } = useContext(contexts.CartContext);
@@ -223,6 +225,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** ==> content */
   const renderFooterContent = () => (
     <FooterButton.Order
+      testID={`footer.${testID}`}
       titleButton="Checkout Sekarang"
       loading={false}
       loadingButton={isCheckoutBtnLoading}

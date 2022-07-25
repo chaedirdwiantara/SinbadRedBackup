@@ -4,8 +4,14 @@ import { View } from 'react-native';
 import { SnbText2, SnbDivider2, colorV2 } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
 import { contexts } from '@contexts';
+/** === INTERFACE ===  */
+interface ShoppingCartAddressProps {
+  testID: string;
+}
 /** === COMPONENT ===  */
-export const ShoppingCartAddress: FC = () => {
+export const ShoppingCartAddress: FC<ShoppingCartAddressProps> = ({
+  testID,
+}) => {
   /** => ACTION */
   const { stateCart } = React.useContext(contexts.CartContext);
   return (
@@ -15,7 +21,9 @@ export const ShoppingCartAddress: FC = () => {
         marginTop: 4,
         padding: 12,
       }}>
-      <SnbText2.Headline.Small color={colorV2.textColor.default}>
+      <SnbText2.Headline.Small
+        testID={`label.address.${testID}`}
+        color={colorV2.textColor.default}>
         Alamat Pengiriman
       </SnbText2.Headline.Small>
       <View style={{ marginVertical: 4 }}>
@@ -23,11 +31,14 @@ export const ShoppingCartAddress: FC = () => {
       </View>
       <View style={{ marginBottom: 4 }}>
         <SnbText2.Body.Small
+          testID={`buyerName.address.${testID}`}
           color={
             colorV2.textColor.default
           }>{`${stateCart.buyerAddress.data?.buyerName}`}</SnbText2.Body.Small>
       </View>
-      <SnbText2.Paragraph.Tiny color={colorV2.textColor.secondary}>
+      <SnbText2.Paragraph.Tiny
+        testID={`fullAddress.address.${testID}`}
+        color={colorV2.textColor.secondary}>
         {stateCart.buyerAddress.data?.address}
         {stateCart.buyerAddress.data?.urban ? ',' : null}{' '}
         {stateCart.buyerAddress.data?.urban}
