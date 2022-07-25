@@ -36,6 +36,10 @@ import check_circle from './check_circle.svg';
 import x_circle from './x_circle.svg';
 // product no in urban
 import kategori_toko from './kategori_toko.svg';
+// voucher
+import reward_voucher from './reward_voucher.svg';
+import reward_voucher_not_eligible from './reward_voucher_not_eligible.svg';
+import reward_voucher_yellow from './reward_voucher_yellow.svg';
 
 export const SvgRegistery = {
   penguin,
@@ -73,4 +77,7 @@ export const SvgRegistery = {
   check_circle,
   x_circle,
   kategori_toko,
+  reward_voucher,
+  reward_voucher_not_eligible,
+  reward_voucher_yellow,
 };
