@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { color, SnbText2 } from 'react-native-sinbad-ui';
+import { color, SnbText2, Content, spacingV2 } from 'react-native-sinbad-ui';
 
 const { width } = Dimensions.get('window');
 
@@ -29,21 +29,12 @@ const OnBoardingView: React.FC<Props> = (props) => {
   const renderItem = (item: any, index: any) => {
     return (
       <View key={index} style={styles.description}>
-        <Image
-          resizeMode="contain"
-          source={item.image}
-          style={{ height: 240 }}
+        <Content.Illustration
+          image={item.image}
+          title={item.title}
+          description={item.message}
+          imageStyle={{ height: 240, marginTop: spacingV2.spacing.lg }}
         />
-        <View style={{ marginVertical: 12 }} />
-        <SnbText2.Headline.Default align="center">
-          {item.title}
-        </SnbText2.Headline.Default>
-        <View style={{ marginVertical: 2 }} />
-        <View style={{ paddingHorizontal: 32 }}>
-          <SnbText2.Paragraph.Default align="center" color={color.black60}>
-            {item.message}
-          </SnbText2.Paragraph.Default>
-        </View>
       </View>
     );
   };
@@ -96,6 +87,7 @@ const styles = StyleSheet.create({
   description: {
     alignItems: 'center',
     justifyContent: 'flex-end',
+    marginHorizontal: spacingV2.spacing.lg,
   },
 });
 

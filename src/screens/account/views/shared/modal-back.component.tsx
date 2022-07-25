@@ -80,6 +80,7 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
                 loading={updateCompleteDataState.loading}
                 size="medium"
                 full
+                testID={'06.3'}
               />
             </View>
           </View>

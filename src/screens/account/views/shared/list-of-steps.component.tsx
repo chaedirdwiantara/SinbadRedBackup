@@ -26,6 +26,7 @@ interface ListOfStepsProps {
   type: 'user' | 'buyer';
   closeModal: () => void;
   open: boolean;
+  testID?: string;
 }
 
 const ListOfSteps: FC<ListOfStepsProps> = (props) => {

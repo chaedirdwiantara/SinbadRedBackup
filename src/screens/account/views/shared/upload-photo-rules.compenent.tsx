@@ -31,6 +31,7 @@ interface Props {
   type: 'horizontal' | 'vertical';
   isTiltImage?: boolean;
   brightnessAmount?: number;
+  testID?: string;
 }
 
 const UploadPhotoRules: React.FC<Props> = (props) => {
@@ -181,6 +182,7 @@ const UploadPhotoRules: React.FC<Props> = (props) => {
           onPress={action}
           size="medium"
           full
+          testID={props.testID}
         />
       </View>
     </View>

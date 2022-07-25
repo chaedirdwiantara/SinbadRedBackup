@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   SnbContainer,
   SnbTopNav2,
@@ -93,6 +93,7 @@ const Content: React.FC<Props> = (props) => {
           listType="number"
           blurRadius={2.2}
           isTiltImage
+          testID={'07.1'}
         />
       </View>
     );
@@ -118,6 +119,7 @@ const Content: React.FC<Props> = (props) => {
               size="medium"
               full
               outline
+              testID={'07.1'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -133,6 +135,7 @@ const Content: React.FC<Props> = (props) => {
               loading={updateCompleteDataState.loading}
               size="medium"
               full
+              testID={'07.1'}
             />
           </View>
         </View>
@@ -200,11 +203,13 @@ const DataDiriStep1View: React.FC = () => {
         backAction={() => setOpenModalBack(true)}
         title="Foto KTP"
         color="white"
+        testID={'07'}
       />
       <Stepper
         complete={completeDataState?.data?.userProgress?.completed}
         total={completeDataState?.data?.userProgress?.total}
         onPress={() => setOpenModalStep(true)}
+        testID={'07'}
       />
       <Content
         openModalBack={openModalBack}
@@ -214,6 +219,7 @@ const DataDiriStep1View: React.FC = () => {
         open={openModalStep}
         type="user"
         closeModal={() => setOpenModalStep(false)}
+        testID={'07.4'}
       />
     </SnbContainer>
   );

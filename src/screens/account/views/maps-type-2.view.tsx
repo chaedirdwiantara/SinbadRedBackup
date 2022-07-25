@@ -84,7 +84,7 @@ const MapsViewType2: React.FC = () => {
   const { getLocation, locations, resetLocation } = useLocations();
   const [loadingGetAddress, setLoadingGetAddress] = React.useState(false);
   const { params } = useRoute();
-  const { onMapsResult, action, currentLatLng, originFrom }: any =
+  const { onMapsResult, action, currentLatLng, originFrom, testID }: any =
     params || {};
 
   React.useEffect(() => {
@@ -221,12 +221,14 @@ const MapsViewType2: React.FC = () => {
         <MapView
           initialRegion={{
             ...latLng,
-            ...REGION_OPTIONS
+            ...REGION_OPTIONS,
           }}
           showsMyLocationButton={false}
           ref={refMaps}
           onRegionChangeComplete={handleOnChangeRegionComplete}
-          style={{ flex: 1 }} />
+          style={{ flex: 1 }}
+          testID={testID ? testID : ''}
+        />
         <View style={styles.markerFixed}>
           <Image style={styles.marker} source={require('@image/pin_point.png')} />
         </View>
@@ -284,6 +286,7 @@ const MapsViewType2: React.FC = () => {
                 onPress={() => navigate(INPUT_MANUAL_LOCATION_MODAL_VIEW)}
                 disabled={false}
                 size="small"
+                testID={testID ? testID : ''}
               />
             </View>
           </View>
@@ -302,10 +305,13 @@ const MapsViewType2: React.FC = () => {
               addressResult.length > 0,
               <SnbText2.Paragraph.Small
                 align="justify"
-                color={colorV2.textColor.secondary}>
+                color={colorV2.textColor.secondary}
+                testID={testID ? testID : ''}>
                 {addressResult[0]?.formatted_address}
               </SnbText2.Paragraph.Small>,
-              <SnbText2.Paragraph.Small color={colorV2.textColor.secondary}>
+              <SnbText2.Paragraph.Small
+                color={colorV2.textColor.secondary}
+                testID={testID ? testID : ''}>
                 Alamat tidak ditemukan
               </SnbText2.Paragraph.Small>,
             ),
@@ -330,6 +336,7 @@ const MapsViewType2: React.FC = () => {
             }}
             full
             size="medium"
+            testID={testID ? testID : ''}
           />
         </View>
       </View>
@@ -368,6 +375,7 @@ const MapsViewType2: React.FC = () => {
                 disabled={false}
                 full
                 size="medium"
+                testID={testID ? testID : ''}
               />
             </View>
           </View>

@@ -13,6 +13,7 @@ interface StepperProps {
   marker?: Array<string>;
   total: number;
   onPress: () => void;
+  testID?: string;
 }
 
 const Stepper: FC<StepperProps> = (props) => {
@@ -37,7 +38,12 @@ const Stepper: FC<StepperProps> = (props) => {
         <SnbText2.Paragraph.Tiny>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Paragraph.Tiny>
       </View>
       <View style={{ marginHorizontal: layout.spacing.sm }} />
-      <SnbButton2.Link title="Lihat" size="tiny" onPress={props.onPress} />
+      <SnbButton2.Link
+        title="Lihat"
+        size="tiny"
+        onPress={props.onPress}
+        testID={props.testID}
+      />
     </View>
   );
 };

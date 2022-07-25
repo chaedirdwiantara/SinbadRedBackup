@@ -105,6 +105,7 @@ const Content: React.FC<Props> = (props) => {
             resizeMode="stretch"
             blurRadius={2}
             listType="number"
+            testID={'12.1'}
           />
         </View>
       </View>
@@ -157,6 +158,7 @@ const Content: React.FC<Props> = (props) => {
               loading={stateGlobal.uploadImage.loading}
               size="medium"
               full
+              testID={'12.3'}
             />
           </View>
         </View>
@@ -216,11 +218,13 @@ const DataTokoStep2View: React.FC = () => {
         backAction={() => setOpenModalBack(true)}
         color="white"
         title="Foto Toko"
+        testID={'12'}
       />
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
         onPress={() => setOpenModalStep(true)}
+        testID={'12'}
       />
       <Content
         openModalBack={openModalBack}
@@ -230,6 +234,7 @@ const DataTokoStep2View: React.FC = () => {
         open={openModalStep}
         type="buyer"
         closeModal={() => setOpenModalStep(false)}
+        testID={'12.5'}
       />
     </SnbContainer>
   );
