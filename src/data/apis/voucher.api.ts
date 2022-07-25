@@ -5,15 +5,26 @@ import * as models from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
-  const path = `voucher-cart-list/detail/${data.id}?type=${data.type}`;
-  return apiMapping<models.VoucherDetailProps>(
-    'auth',
+  const path = `sinbad-vouchers/${data.id}`;
+  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
+  return apiMappingMock<models.VoucherCartDetailProps>(
+    mockHost,
     path,
-    'discount',
+    'voucher',
     'v1',
     'DETAIL',
   );
 };
+// const voucherDetail = (data: models.VoucherDetailProcessProps) => {
+//   const path = `sinbad-voucher/${data.id}`;
+//   return apiMapping<models.VoucherCartDetailProps>(
+//     'auth',
+//     path,
+//     'voucher',
+//     'v1',
+//     'DETAIL',
+//   );
+// };
 /** => voucher cart list */
 const voucherCartList = (uniqueCode: string) => {
   const path = `sinbad-vouchers?uniqueCode=${uniqueCode}`;

@@ -1,16 +1,11 @@
-import { DetailProcessAction } from '..';
-
 /** === VOUCHER DETAIL === */
-export interface VoucherDetailProps {
+export interface VoucherCartDetailProps {
   id: number;
+  name: string;
   imageUrl: string;
-  expiredAt: string;
-  voucherDescription: string;
-  termsAndCondition: string[];
-  instructions: string[];
-  voucherName: string;
-  voucherHeader: string;
-  uniqueCode: string;
+  descriptions: string;
+  termAndConditions: string[];
+  howToUse: string[];
 }
 export interface VoucherDataProps {
   dataVoucher: EligibleVoucherProps | null;
@@ -34,13 +29,4 @@ export interface NotEligibleVoucherProps {
   endDate: string;
   minOrderTransaction: number;
   remainingDay: number;
-}
-
-export interface VoucherListProcessProps {
-  uniqueCode: string;
-}
-
-export interface VoucherListProcessAction
-  extends Omit<DetailProcessAction, 'payload'> {
-  payload: VoucherListProcessProps;
 }

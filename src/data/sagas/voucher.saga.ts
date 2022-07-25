@@ -9,7 +9,7 @@ import * as models from '@models';
 /** => voucher detail */
 function* voucherDetail(action: models.VoucherDetailProcessAction) {
   try {
-    const response: models.DetailSuccessProps<models.VoucherDetailProps> =
+    const response: models.DetailSuccessProps<models.VoucherCartDetailProps> =
       yield call(() => {
         return VoucherApi.voucherDetail(action.payload);
       });

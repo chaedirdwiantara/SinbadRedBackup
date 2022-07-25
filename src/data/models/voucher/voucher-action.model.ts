@@ -1,9 +1,18 @@
+import { DetailProcessAction } from '..';
+
 export interface VoucherDetailProcessProps {
   id: string;
-  type: string;
 }
 export interface VoucherDetailProcessAction {
   type: string;
   payload: VoucherDetailProcessProps;
   contextDispatch: (action: any) => any;
+}
+export interface VoucherListProcessProps {
+  uniqueCode: string;
+}
+
+export interface VoucherListProcessAction
+  extends Omit<DetailProcessAction, 'payload'> {
+  payload: VoucherListProcessProps;
 }
