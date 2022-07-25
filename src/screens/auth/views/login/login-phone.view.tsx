@@ -81,7 +81,7 @@ const Content: React.FC = () => {
           resetCheckLoginPhone();
           checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
         }}
-        loading={checkPhoneLoginState.loading}
+        loadingButton={checkPhoneLoginState.loading}
         disabled={
           phone.value === '' ||
           phone.valMsgError !== '' ||

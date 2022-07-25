@@ -104,7 +104,7 @@ const SelfRegisterView: React.FC = () => {
             identifierDeviceId: advertisingId,
           })
         }}
-        loading={checkPhoneRegistrationState.loading}
+        loadingButton={checkPhoneRegistrationState.loading}
         disabled={
           phone.value === '' ||
           phone.valMsgError !== '' ||
