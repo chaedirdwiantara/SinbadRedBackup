@@ -1,17 +1,14 @@
 import {
   setErrorMessage,
-  useAuthAction,
   useInputPhone,
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
 import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
+  FooterButton,
   SnbBottomSheet2Ref,
-  SnbButton2,
   SnbContainer,
-  SnbText2,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
@@ -88,40 +85,26 @@ const Content: React.FC = () => {
           keyboardType="phone-pad"
         />
       </View>
-      <View style={{ marginTop: layout.spacing.lg }} />
-      <View style={{ paddingHorizontal: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Selanjutnya"
-          onPress={() => {
-            Keyboard.dismiss()
-            resetCheckLoginPhone();
-            checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
-          }}
-          loading={checkPhoneLoginState.loading}
-          disabled={
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            checkPhoneLoginState.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
-      <View style={loginPhoneStyles.registerLink}>
-        <SnbText2.Paragraph.Default>
-          Belum punya akun Sinbad?
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.sm }}>
-          <SnbButton2.Link
-            title="Daftar"
-            size="medium"
-            onPress={() => {
-              phone.clearText();
-              navigate(SELF_REGISTRATION_VIEW);
-            }}
-          />
-        </View>
-      </View>
+      <FooterButton.Single
+        title='Selanjutnya'
+        buttonPress={() => {
+          Keyboard.dismiss()
+          resetCheckLoginPhone();
+          checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
+        }}
+        loading={checkPhoneLoginState.loading}
+        disabled={
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          checkPhoneLoginState.loading
+        }
+        textLink="Daftar"
+        textLinkPress={() => {
+          phone.clearText();
+          navigate(SELF_REGISTRATION_VIEW);
+        }}
+        description="Belum punya akun Sinbad?"
+      />
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
