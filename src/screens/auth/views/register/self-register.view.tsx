@@ -95,6 +95,7 @@ const SelfRegisterView: React.FC = () => {
   const buttonRegister = () => {
     return (
       <FooterButton.Single
+        testID='Register'
         title='Lanjut'
         buttonPress={() => {
           Keyboard.dismiss();

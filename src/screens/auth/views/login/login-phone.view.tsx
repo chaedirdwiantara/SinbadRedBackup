@@ -74,6 +74,7 @@ const Content: React.FC = () => {
         />
       </View>
       <FooterButton.Single
+        testID='Login'
         title='Selanjutnya'
         buttonPress={() => {
           Keyboard.dismiss()
