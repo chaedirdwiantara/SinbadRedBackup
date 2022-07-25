@@ -2,6 +2,7 @@
 import apiMapping from '@core/services/apiMappingV3';
 import apiMappingMock from '@core/services/apiMappingMockV3';
 import * as models from '@models';
+import { VoucherListProcessProps } from '@models';
 /** === FUNCTION === */
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
@@ -26,8 +27,8 @@ const voucherDetail = (data: models.VoucherDetailProcessProps) => {
 //   );
 // };
 /** => voucher cart list */
-const voucherCartList = (uniqueCode: string) => {
-  const path = `sinbad-vouchers?uniqueCode=${uniqueCode}`;
+const voucherCartList = ({ totalOrder, ...other }: VoucherListProcessProps) => {
+  const path = `sinbad-vouchers?totalOrder=${totalOrder}&uniqueCode=${other?.uniqueCode}`;
   const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
   return apiMappingMock<models.VoucherCartListProps>(
     mockHost,

@@ -1,12 +1,12 @@
 /** === IMPORT PACKAGE HERE === */
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 import * as Actions from '@actions';
-import * as models from '@models';
 import { useDebounce } from '@core/functions/hook/debounce';
 import { contexts } from '@contexts';
 import { RadioValue } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/Radio/RadioGroup';
+import { VoucherListProcessProps } from '@models';
 /** === FUNCTION === */
 /** => cancel reserve voucher */
 const useCancelVoucherAction = () => {
@@ -37,10 +37,14 @@ const useVoucherDetailAction = () => {
 const useVoucherCartListAction = () => {
   const dispatch = useDispatch();
   return {
-    list: (contextDispatch: (action: any) => any, keyword: string) => {
+    list: (
+      contextDispatch: (action: any) => any,
+      { totalOrder, uniqueCode }: VoucherListProcessProps,
+    ) => {
       dispatch(
         Actions.voucherCartListProcess(contextDispatch, {
-          uniqueCode: keyword,
+          totalOrder,
+          ...(uniqueCode && { uniqueCode }),
         }),
       );
     },
@@ -64,15 +68,17 @@ const useSearchKeyword = () => {
 };
 /** => set selected seller voucher */
 const useSelectedVoucher = () => {
-  const [selectedVoucherId, setSelectedVoucherId] = React.useState<number>(0);
+  const [selectedVoucherId, setSelectedVoucherId] = React.useState<
+    string | null
+  >();
   const { stateVoucher } = React.useContext(contexts.VoucherContext);
 
   return {
-    setSelectedVoucher: (voucherId: number) => {
+    setSelectedVoucher: (voucherId: string) => {
       setSelectedVoucherId(voucherId);
     },
     resetSelectedVoucher: () => {
-      setSelectedVoucherId(0);
+      setSelectedVoucherId(null);
     },
     selectedVoucher: stateVoucher.voucherCart.list.data?.eligible.find(
       (voucher) => voucher.id === selectedVoucherId,
@@ -90,7 +96,7 @@ const useVoucherList = () => {
     notEligibleVouchers: stateVoucher.voucherCart.list.data?.notEligible,
     loading: stateVoucher.voucherCart.list.loading,
     changeSelectedVoucher: (voucher: RadioValue) => {
-      setSelectedVoucher(voucher as number);
+      setSelectedVoucher(voucher as string);
     },
     empty:
       stateVoucher.voucherCart.list.data?.eligible.length === 0 &&
