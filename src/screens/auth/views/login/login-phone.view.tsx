@@ -55,18 +55,6 @@ const Content: React.FC = () => {
     }
   }, [checkPhoneLoginState]);
 
-  useEffect(() => {
-    const backAction = () => {
-      reset({ index: 0, routes: [{ name: 'Home' }] });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
-  }, []);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Image
@@ -111,6 +99,7 @@ const Content: React.FC = () => {
         <ForceRegistrationModal
           ref={refModalForceRegist}
           confirm={() => {
+            phone.clearText()
             navigate(SELF_REGISTRATION_VIEW);
             refModalForceRegist.current?.close();
           }}

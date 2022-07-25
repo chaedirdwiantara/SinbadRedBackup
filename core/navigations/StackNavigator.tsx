@@ -5,11 +5,42 @@ import Navigations from '../../src/navigations';
 import TabNavigator from './TabNavigator';
 /** => for intro view */
 import { IntroSplashView, IntroSinbadView } from '../screens/intro/views';
+import { BannedACcountView, ForceUpdateView, MaintenanceView } from '../screens/extra/views';
 
 const { Navigator, Screen } = createNativeStackNavigator();
 enableScreens();
 
 const StackNavigator: React.FC = () => {
+  /** => this for maintenance app */
+  const BannedAccountNav = () => {
+    return (
+      <Screen
+        name="BannedAccount"
+        component={BannedACcountView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
+  /** => this for maintenance app */
+  const MaintenanceNav = () => {
+    return (
+      <Screen
+        name="Maintenance"
+        component={MaintenanceView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
+  /** => this for force update */
+  const ForceUpdateNav = () => {
+    return (
+      <Screen
+        name="ForceUpdate"
+        component={ForceUpdateView}
+        options={{ headerShown: false, screenOrientation: 'portrait' }}
+      />
+    );
+  };
   /** => this for intro splash */
   const IntroSplashNav = () => {
     return (
@@ -64,10 +95,13 @@ const StackNavigator: React.FC = () => {
 
   return (
     <Navigator initialRouteName={'Splash'}>
+      {MaintenanceNav()}
+      {ForceUpdateNav()}
       {IntroSplashNav()}
       {IntroSinbadNav()}
       {tabNav()}
       {projectNav()}
+      {BannedAccountNav()}
     </Navigator>
   );
 };

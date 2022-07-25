@@ -1,9 +1,11 @@
 export interface UpdateOrderHistoryProcessProps {
   id: string;
-  type: 'list' | 'detail';
+  type: 'list' | 'detail' | 'detail_consolidate';
+  orderGroupStatus?: string;
+  subOrderGroupStatus?: string;
   status?: string;
   keyword?: string;
-  orderStatus?: string;
+  orderId?: string;
 }
 
 export interface UpdateOrderHistoryProcessAction {

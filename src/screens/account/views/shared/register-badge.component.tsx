@@ -15,7 +15,7 @@ const RegisterBadge: React.FC = () => {
   const { navigate } = useNavigation();
   const { me } = useDataAuth();
 
-  if (me.data === null) {
+  if (me.data === null && !me.loading) {
     return (
       <View
         style={{

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import {
   MenuStatusFilter,
+  MenuSubStatusFilter,
   SearchInputFilter,
   ListCard,
   HistoryListContext,
@@ -12,11 +13,11 @@ import { copilotOptions } from '@screen/account/views/shared';
 import { View } from 'react-native';
 import { useCoachmark } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 
 const goBack = () => {
   NavigationAction.back();
 };
-
 const CopilotView = walkthroughable(View);
 
 // context state history list
@@ -25,22 +26,29 @@ const { Provider } = HistoryListContext;
 const OrderHistoryList = ({ start }: any) => {
   const { coachmarkState } = useCoachmark();
 
+  const {
+    stateOrderHistory: {
+      menuStatus: { data },
+    },
+  } = useOrderHistoryContext();
+
   React.useEffect(() => {
     if (
       typeof coachmarkState.data?.orderCoachmark === 'boolean' &&
-      coachmarkState.data?.orderCoachmark == false
+      coachmarkState.data?.orderCoachmark === false &&
+      data.length > 0
     ) {
       start();
     }
-  }, [coachmarkState.data]);
-  // frist get & get by filter history list
+  }, [coachmarkState.data, data]);
+
+  // first get & get by filter history list
   useInitialGetList();
   return (
     <SnbContainer color="white">
-      <SnbTopNav2.Type3
+      <SnbTopNav2.Type1
         title="Pesanan"
         color="white"
-        backAction={() => goBack()}
       />
       <View>
         <CopilotStep
@@ -53,6 +61,7 @@ const OrderHistoryList = ({ start }: any) => {
         </CopilotStep>
       </View>
       <SearchInputFilter />
+      <MenuSubStatusFilter />
       <ListCard />
     </SnbContainer>
   );
