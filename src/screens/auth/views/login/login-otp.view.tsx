@@ -43,7 +43,7 @@ const LoginOTPView: React.FC = () => {
       />
       <ScrollView>
         <OTPContent
-          testID="login"
+          testID="loginOTP"
           onVerifyOTP={(otp) => {
             resetVerifyOTP();
             verificationOTP({ mobilePhone, otp });
