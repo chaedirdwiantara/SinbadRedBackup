@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbCheckbox2, SnbText2, colorV2 } from 'react-native-sinbad-ui';
+import { SnbCheckbox2 } from 'react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ProductAvailableSection } from './product-available-section.view';
@@ -35,6 +35,7 @@ interface ShoppingCartProductsProps {
   }: models.ManageCheckbox) => void;
   keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
   handleScrollToBottom: () => void;
+  testID: string;
 }
 /** === COMPONENT === */
 export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
@@ -48,6 +49,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
   manageCheckboxOnPress,
   keyboardFocus,
   handleScrollToBottom,
+  testID,
 }) => {
   const allSellerCheckboxStatus = manageCheckboxStatus({ sellerId: null });
   /** === HOOKS === */
@@ -67,6 +69,8 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
           }}>
           <View style={{ marginRight: 16 }}>
             <SnbCheckbox2
+              label={'Pilih Semua'}
+              testID={`checkbox.checkAll.productContainer.${testID}`}
               checked={allSellerCheckboxStatus === 'selected'}
               indeterminate={allSellerCheckboxStatus === 'indeterminate'}
               onChange={() => {
@@ -77,14 +81,12 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
               }}
             />
           </View>
-          <SnbText2.Body.Small color={colorV2.textColor.default}>
-            Pilih Semua
-          </SnbText2.Body.Small>
         </View>
       ) : (
         <View />
       )}
       <ProductAvailableSection
+        testID={`available.productContainer.${testID}`}
         availableProducts={availableProducts}
         handleRemoveProductModal={handleRemoveProductModal}
         handleUpdateQty={handleUpdateQty}
@@ -94,6 +96,7 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
         keyboardFocus={keyboardFocus}
       />
       <ProductNotAvailableSection
+        testID={`unavailable.productContainer.${testID}`}
         unavailableProducts={unavailableProducts}
         handleRemoveProductModal={handleRemoveProductModal}
         handleScrollToBottom={handleScrollToBottom}

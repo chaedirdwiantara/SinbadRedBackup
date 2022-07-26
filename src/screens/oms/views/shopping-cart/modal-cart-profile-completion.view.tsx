@@ -11,31 +11,37 @@ import {
 } from 'react-native-sinbad-ui';
 import { CartProfileCompletionStyles } from '@screen/oms/styles';
 import { Images } from 'src/assets';
+import { testProps } from '@core/functions/global/test-props';
 /** === INTERFACE ===  */
 interface ModalCartProfileCompletionProps {
   handleNavigateToProfile: () => void;
   parentRef: Ref<SnbBottomSheet2Ref>;
+  testID: string;
 }
 /** === COMPONENT ===  */
 export const ModalCartProfileCompletion: FC<
   ModalCartProfileCompletionProps
-> = ({ handleNavigateToProfile, parentRef }) => {
+> = ({ handleNavigateToProfile, parentRef, testID }) => {
   const renderContent = () => {
     return (
       <View style={CartProfileCompletionStyles.modalContentContainer}>
         <View style={CartProfileCompletionStyles.modalImageContainer}>
           <Image
+            {...testProps(`img.content.modalCartProfileCompletion${testID}`)}
             source={Images.registrationIncomplete}
             style={CartProfileCompletionStyles.modalImage}
           />
         </View>
         <View style={{ marginBottom: 4 }}>
-          <SnbText2.Headline.Default color={colorV2.textColor.default}>
+          <SnbText2.Headline.Default
+            testID={`title.content.modalCartProfileCompletion.${testID}`}
+            color={colorV2.textColor.default}>
             Akun Belum Lengkap
           </SnbText2.Headline.Default>
         </View>
         <View style={{ marginBottom: 16 }}>
           <SnbText2.Paragraph.Default
+            testID={`subTitle.content.modalCartProfileCompletion.${testID}`}
             align="center"
             color={colorV2.textColor.secondary}>
             Lengkapi akun anda dengan menambahkan foto KTP dan detail lokasi
@@ -44,6 +50,7 @@ export const ModalCartProfileCompletion: FC<
         </View>
         <View style={{ width: '100%' }}>
           <SnbButton2.Primary
+            testID={`modalCartProfileCompletion.${testID}`}
             full
             title="Lengkapi Akun Saya"
             size="medium"

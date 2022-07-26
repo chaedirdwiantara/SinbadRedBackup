@@ -31,6 +31,7 @@ interface ProductAvailableSectionProps {
     currentStatus,
   }: models.ManageCheckbox) => void;
   keyboardFocus: { isFocus: boolean; setFocus: (val: boolean) => void };
+  testID: string;
 }
 /** === COMPONENT === */
 export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
@@ -41,6 +42,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
   manageCheckboxStatus,
   manageCheckboxOnPress,
   keyboardFocus,
+  testID,
 }) => {
   /** === HOOKS === */
   /** === VIEW === */
@@ -60,6 +62,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
               <View style={ShoppingCartStyles.sellerContainer}>
                 <View style={{ marginRight: 16 }}>
                   <SnbCheckbox2
+                    testID={`checkbox.seller${item.sellerId}.${testID}`}
                     checked={thisSellerCheckboxStatus === 'selected'}
                     indeterminate={thisSellerCheckboxStatus === 'indeterminate'}
                     onChange={() => {
@@ -70,7 +73,8 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                     }}
                   />
                 </View>
-                <SnbText2.Headline.Small>
+                <SnbText2.Headline.Small
+                  testID={`sellerName.seller${item.sellerId}.${testID}`}>
                   {item.sellerName}
                 </SnbText2.Headline.Small>
               </View>
@@ -79,6 +83,7 @@ export const ProductAvailableSection: FC<ProductAvailableSectionProps> = ({
                   key={`${product.productId}.${product.sellerId}.${product.warehouseId}`}
                   style={{ ...ShoppingCartStyles.cardContainer, marginTop: 0 }}>
                   <ProductView
+                    testID={testID}
                     product={product}
                     handleRemoveProductModal={handleRemoveProductModal}
                     handleUpdateQty={handleUpdateQty}

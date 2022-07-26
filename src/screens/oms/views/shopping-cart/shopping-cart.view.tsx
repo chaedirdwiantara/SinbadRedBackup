@@ -43,7 +43,8 @@ import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
 import { useCancelVoucherAction } from '@screen/voucher/functions';
-/** === DUMMIES === */
+/** === GLOBAL === */
+const screenName = 'keranjangPage';
 /** === COMPONENT === */
 const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => STATE */
@@ -75,9 +76,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { stateVoucher, dispatchVoucher } = React.useContext(
-    contexts.VoucherContext,
-  );
+  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -387,8 +386,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         <React.Fragment>
           <ScrollView ref={scrollRef}>
             <View style={{ flex: 1 }}>
-              <ShoppingCartAddress />
+              <ShoppingCartAddress testID={screenName} />
               <ShoppingCartProducts
+                testID={screenName}
                 handleRemoveProductModal={handleRemoveProductModal}
                 unavailableProducts={localCartMaster.unavailable}
                 availableProducts={localCartMaster.sellers}
@@ -403,6 +403,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             </View>
           </ScrollView>
           <ShoppingCartFooter
+            testID={screenName}
             cartData={localCartMaster}
             countTotalProduct={countTotalProduct}
             countTotalPrice={countTotalPrice}
@@ -425,10 +426,11 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   /** => MAIN */
   return (
     <SnbContainer color="grey">
-      <ShoppingCartHeader goBack={handleGoBack} />
+      <ShoppingCartHeader goBack={handleGoBack} testID={screenName} />
       {!pageLoading ? renderContent() : <LoadingPage />}
       {/* Business Error Modal When Checkout */}
       <ShoppingCartValidation
+        testID={screenName}
         closeAction={() => {
           handleCartCyle();
           refCartBusinessErrorModal.current?.close();
@@ -437,12 +439,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
       />
       {/* Dialog Remove Product */}
       <ModalRemoveProduct
+        testID={screenName}
         parentRef={refRemoveProductModal}
         okAction={() => handleOkActionRemoveProduct()}
         cancelAction={() => refRemoveProductModal.current?.close()}
       />
       {/* Profile Completion Modal */}
       <ModalCartProfileCompletion
+        testID={screenName}
         parentRef={refCartValidationModal}
         handleNavigateToProfile={() => {
           refCartValidationModal.current?.close();
@@ -462,7 +466,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           errorModal.setOpen(false);
         }}
       />
-      <SnbToast2 />
+      <SnbToast2 testID={screenName} />
     </SnbContainer>
   );
 };

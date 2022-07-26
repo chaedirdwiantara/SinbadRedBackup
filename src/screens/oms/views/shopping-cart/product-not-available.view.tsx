@@ -14,20 +14,23 @@ import { goToProduct } from '@screen/category/functions';
 import * as models from '@models';
 import { UnavailableAccordionView } from './product-not-available-accordion.view';
 import { Images } from 'src/assets';
+import { testProps } from '@core/functions/global/test-props';
 
 interface ProductUnavailableViewProps {
   unavailableProducts: models.CartMasterUnavailable[];
   handleRemoveProductModal: (params: models.HandleRemoveProduct) => void;
   handleScrollToBottom: () => void;
+  testID: string;
 }
 
 export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
   unavailableProducts,
   handleRemoveProductModal,
   handleScrollToBottom,
+  testID,
 }) => {
   /** => PRODUCT IMAGE */
-  const renderProductImage = (imageUrl: string) => {
+  const renderProductImage = (product: models.CartMasterUnavailable) => {
     return (
       <View
         style={{
@@ -37,8 +40,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         }}>
         <SnbGrayscaleImage grayscaleAmount={1} brightnessAmount={1}>
           <Image
+            testID={`img.product${product.productId}.${testID}`}
             source={{
-              uri: imageUrl,
+              uri: product.productImageUrl,
             }}
             defaultSource={Images.opacityPlaceholder}
             style={ShoppingCartStyles.productImg}
@@ -52,6 +56,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
     return (
       <View style={ShoppingCartStyles.unavailableActionContainer}>
         <TouchableOpacity
+          {...testProps(
+            `btn-searchSameKindProduct.product${product.productId}.${testID}`,
+          )}
           onPress={() => {
             const category = {
               id: product.categoryId,
@@ -61,11 +68,16 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
             };
             goToProduct(category);
           }}>
-          <SnbText2.Body.Tiny color={colorV2.textColor.link}>
+          <SnbText2.Body.Tiny
+            testID={`label.btn-searchSameKindProduct.product${product.productId}.${testID}`}
+            color={colorV2.textColor.link}>
             Cari Produk Sejenis
           </SnbText2.Body.Tiny>
         </TouchableOpacity>
         <TouchableOpacity
+          {...testProps(
+            `btn-removeProduct.product${product.productId}.${testID}`,
+          )}
           onPress={() => {
             const removedProducts: models.RemovedProducts[] = [];
             removedProducts.push({
@@ -78,6 +90,9 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
             });
           }}>
           <SnbIcon
+            {...testProps(
+              `icon.btn-removeProduct.product${product.productId}.${testID}`,
+            )}
             name="delete"
             color={colorV2.btnSecColor.default}
             size={24}
@@ -93,15 +108,24 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
         style={ShoppingCartStyles.horizontalCardContent}>
         <View style={{ flexDirection: 'row' }}>
           <View style={ShoppingCartStyles.checkboxContainer}>
-            <SnbCheckbox2 disabled={true} checked={false} onChange={() => {}} />
+            <SnbCheckbox2
+              testID={`checkbox.product${unavailableProducts[0].productId}.${testID}`}
+              disabled={true}
+              checked={false}
+              onChange={() => {}}
+            />
           </View>
-          {renderProductImage(unavailableProducts[0].productImageUrl)}
+          {renderProductImage(unavailableProducts[0])}
           <View style={{ justifyContent: 'center', flex: 1 }}>
             <View style={{ flex: 1, justifyContent: 'center' }}>
-              <SnbText2.Paragraph.Default color={colorV2.textColor.disable}>
+              <SnbText2.Paragraph.Default
+                testID={`productName.product${unavailableProducts[0].productId}.${testID}`}
+                color={colorV2.textColor.disable}>
                 {unavailableProducts[0].productName}
               </SnbText2.Paragraph.Default>
-              <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
+              <SnbText2.Paragraph.Tiny
+                testID={`unavailableMessage.product${unavailableProducts[0].productId}.${testID}`}
+                color={colorV2.textColor.default}>
                 {unavailableProducts[0].unavailableMessage}
               </SnbText2.Paragraph.Tiny>
             </View>
@@ -120,19 +144,23 @@ export const ProductUnavailableView: FC<ProductUnavailableViewProps> = ({
               <View style={{ flexDirection: 'row' }}>
                 <View style={ShoppingCartStyles.checkboxContainer}>
                   <SnbCheckbox2
+                    testID={`checkbox.product${item.productId}.${testID}`}
                     disabled={true}
                     checked={false}
                     onChange={() => {}}
                   />
                 </View>
-                {renderProductImage(item.productImageUrl)}
+                {renderProductImage(item)}
                 <View style={{ justifyContent: 'center', flex: 1 }}>
                   <View style={{ flex: 1, justifyContent: 'center' }}>
                     <SnbText2.Paragraph.Default
+                      testID={`productName.product${item.productId}.${testID}`}
                       color={colorV2.textColor.disable}>
                       {item.productName}
                     </SnbText2.Paragraph.Default>
-                    <SnbText2.Paragraph.Tiny color={colorV2.textColor.default}>
+                    <SnbText2.Paragraph.Tiny
+                      testID={`unavailableMessage.product${item.productId}.${testID}`}
+                      color={colorV2.textColor.default}>
                       {item.unavailableMessage}
                     </SnbText2.Paragraph.Tiny>
                   </View>

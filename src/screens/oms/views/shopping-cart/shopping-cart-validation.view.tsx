@@ -10,11 +10,13 @@ import {
 } from 'react-native-sinbad-ui';
 import { ShoppingCartValidationStyles } from '@screen/oms/styles';
 import { Images } from 'src/assets';
+import { testProps } from '@core/functions/global/test-props';
 /** === INTERFACE === */
 /** => error props */
 interface ShoppingCartValidationProps {
   closeAction?: () => void;
   parentRef: Ref<SnbBottomSheet2Ref>;
+  testID: string;
 }
 /** === COMPONENT === */
 const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
@@ -27,6 +29,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentImageContainer}>
         <Image
+          {...testProps(`img.content.modalRemoveProduct.${props.testID}`)}
           source={Images.reminder}
           style={ShoppingCartValidationStyles.image}
         />
@@ -38,6 +41,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentTitleContainer}>
         <SnbText2.Headline.Default
+          testID={`title.content.modalCartValidation.${props.testID}`}
           color={colorV2.textColor.default}
           align={'center'}>
           Perubahan Produk di Keranjang
@@ -50,6 +54,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
     return (
       <View style={ShoppingCartValidationStyles.contentMessageContainer}>
         <SnbText2.Paragraph.Default
+          testID={`subTitle.content.modalCartValidation.${props.testID}`}
           color={colorV2.textColor.secondary}
           align={'center'}>
           Cek ulang keranjang Anda untuk mengetahui produk yang mengalami
@@ -72,6 +77,7 @@ const ShoppingCartValidation: React.FC<ShoppingCartValidationProps> = ({
   const button = () => {
     return (
       <FooterButton.Single
+        testID={`modalCartValidation.${props.testID}`}
         title={'Kembali Ke Keranjang'}
         buttonPress={() => {
           props?.closeAction && props?.closeAction();
