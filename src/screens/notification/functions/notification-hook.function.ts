@@ -7,7 +7,7 @@ import * as models from '@models';
 import { contexts } from '@contexts';
 import { useDataTotalNotification } from '@core/redux/Data';
 import React, { useCallback } from 'react';
-import { navigate } from '@core/navigations/RootNavigation';
+import { navigate, goToMenu } from '@core/navigations/RootNavigation';
 /** === FUNCTION === */
 /** === call fetch === */
 const callList = (
@@ -56,9 +56,28 @@ export const useNotificationAction = () => {
     dispatchNotification(Actions.notificationListReset());
   }, [dispatchNotification]);
 
+  const navigateToPages = useCallback(
+    (data: models.NotificationListSuccessProps) => {
+      if (data.screen) {
+        switch (data.screen) {
+          case 'HistoryListView':
+            goToMenu(data.screen, data.data);
+            break;
+          case 'UserView':
+            goToMenu(data.screen, data.data);
+            break;
+          default:
+            navigate(data?.screen, data.data);
+            break;
+        }
+      }
+    },
+    [],
+  );
+
   const onMarkRead = useCallback(
     (data: models.NotificationListSuccessProps) => {
-      navigate('UserView');
+      navigateToPages(data);
       // cant dispatch if has read
       if (data.isRead) return void 0;
       dispatch(

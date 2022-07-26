@@ -2,9 +2,9 @@
 export interface NotificationData {
   iconName: string;
   iconColor: string;
-  orderId?: string;
+  // id can be order id or product id
+  id?: string;
   screen?: string;
-  productId?: string;
   warehouseId?: string;
   productImage?: string;
   productName?: string;
