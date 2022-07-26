@@ -42,8 +42,8 @@ const getList = (
   );
 };
 
-const getDetail = (payload: models.DetailProcessProps) => {
-  const [productId, warehouseId] = payload.id.split('_');
+const getDetail = (payload: models.DetailProductProcess) => {
+  const { id: productId, warehouseId } = payload;
   const qs = serializeQs({
     warehouseId,
   });

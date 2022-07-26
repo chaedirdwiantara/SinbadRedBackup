@@ -81,7 +81,7 @@ const PushNotification = () => {
       message: remoteMessage.notification?.body!,
       title: remoteMessage.notification?.title!,
       largeIcon: '',
-      largeIconUrl: remoteMessage.notification?.image ?? '',
+      largeIconUrl: remoteMessage.notification?.android?.imageUrl ?? '',
       color: colorV2.primary.red50,
       smallIcon: 'ic_stat_notif',
       userInfo: remoteMessage,
@@ -94,6 +94,8 @@ const PushNotification = () => {
         switch (data?.screen) {
           case 'HomeView':
           case 'HistoryListView':
+            NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
+            break;
           case 'HelpView':
           case 'UserView':
             NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
