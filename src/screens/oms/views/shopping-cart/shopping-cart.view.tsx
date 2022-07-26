@@ -62,6 +62,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckSeller,
     mergeCheckStock,
     setInitialLocalData,
+    debouncedValue,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const keyboardFocus = useKeyboardFocus();
@@ -370,9 +371,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     if (localCartMaster) {
       /** fetch check sinbad voucher */
       // WIP: add debouce here!
-      checkSinbadVoucherAction.fetch(dispatchVoucher, false, selectedVoucher);
+      checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
     }
-  }, [localCartMaster?.sellers]);
+  }, [debouncedValue]);
 
   /** === VIEW === */
   /** => CONTENT */

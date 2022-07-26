@@ -15,6 +15,7 @@ import ModalValidationLimit from './validation-limit-modal';
 import { CheckoutTotalOrderView } from './checkout-total-order-view';
 import {
   goToPaymentMethod,
+  totalPayment,
   totalPaymentWithoutCurrency,
   totalQty,
   useGetTncContent,
@@ -62,6 +63,7 @@ const OmsCheckoutView: FC = () => {
   const { stateCheckout } = useContext(contexts.CheckoutContext);
   const data = stateCheckout.checkout.data;
 
+  const totalPaymentFull = totalPayment(data?.sellers || []);
   const totalPaymentNumber = totalPaymentWithoutCurrency(data?.sellers || []);
   const totalQtyCheckout = totalQty(data?.sellers || []);
 
@@ -178,11 +180,11 @@ const OmsCheckoutView: FC = () => {
         <CheckoutTotalOrderView
           testID={screenName}
           totalProductsQty={2}
-          totalProductsValue={200000}
+          totalProductsValue={totalPaymentFull}
           discountVoucher={10000}
-          totalDeliveryFee={80000}
+          totalDeliveryFee={0}
           serviceFee={0}
-          totalPayment={270000}
+          totalPayment={totalPaymentFull - data.sinbadVoucherDiscountOrder}
         />
         {/* term and condition view */}
         <CheckoutTNCView testID={screenName} clickAction={handleOpenTNCModal} />
