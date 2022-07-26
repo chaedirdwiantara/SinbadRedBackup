@@ -56,6 +56,7 @@ export const ModalUserProfileCompletion: FC<
               title="Lanjutkan Transaksi"
               size="medium"
               onPress={handleNavigateToCart}
+              testID={'13.5'}
             />
           </View>
         </View>
