@@ -2,13 +2,6 @@ import apiAuth from '@core/services/apiAuth';
 import * as models from '@models';
 import apiGeneral from '@core/services/apiGeneral';
 
-const checkPhoneNoAvailability = (
-  data: models.ICheckPhoneNoAvailabilityProcess,
-) => {
-  const path = `check-owner-phone?mobilePhone=${data.mobilePhoneNo}`;
-  return apiAuth(path, 'v1', 'GET');
-};
-
 const checkEmailAvailability = (
   data: models.ICheckEmailAvailabilityProcess,
 ) => {
@@ -16,19 +9,9 @@ const checkEmailAvailability = (
   return apiAuth(path, 'v1', 'GET');
 };
 
-const registerMerchant = (data: models.IMerchantData) => {
-  const path = 'registration';
-  return apiAuth(path, 'v1', 'POST', data);
-};
-
 const verifyOTPRegister = (data: models.IVerifyOTPRegister) => {
   const path = 'validate-otp';
   return apiAuth(path, 'v3', 'POST', data);
-};
-
-const registermerchantDetail = (data: models.IRegisterMerchantSuccess) => {
-  const path = `registration/check-self-registration/${data.data.requestId}`;
-  return apiAuth(path, 'v1', 'GET');
 };
 
 const checkPhoneV2 = (data: models.ICheckPhoneV2Process) => {
@@ -64,11 +47,8 @@ const UpdateUserMedea = (data: models.IUpdateUserMedeaProcess) => {
 };
 
 export const registerApi = {
-  checkPhoneNoAvailability,
-  registerMerchant,
   checkEmailAvailability,
   verifyOTPRegister,
-  registermerchantDetail,
   checkPhoneV2,
   checkAutoLogin,
   checkPhoneRegistrationV3,

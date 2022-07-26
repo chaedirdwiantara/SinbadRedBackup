@@ -24,13 +24,11 @@ import { NavigationAction } from '@navigation';
 
 interface ListOfStepsProps {
   type: 'user' | 'buyer';
-  closeModal: () => void;
-  open: boolean;
+  ref: any;
 }
 
-const ListOfSteps: FC<ListOfStepsProps> = (props) => {
+const ListOfSteps: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
   const { completeDataState } = useEasyRegistration();
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
   const dataUser = [
     {
       title: 'Foto KTP',
@@ -64,12 +62,6 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
     },
   ];
 
-  React.useEffect(() => {
-    props.open
-      ? bottomSheetRef.current?.open()
-      : bottomSheetRef.current?.close();
-  }, [props.open]);
-
   const checkContentDisable = (item: any, index: number) => {
     if (
       index === 0 ||
@@ -84,7 +76,7 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
   };
 
   const goTo = (index: number) => {
-    props.closeModal();
+    ref.current?.close()
     if (props.type === 'user') {
       switch (index) {
         case 0:
@@ -182,16 +174,15 @@ const ListOfSteps: FC<ListOfStepsProps> = (props) => {
       navigation={
         <SnbBottomSheetPart.Navigation
           iconRight1Name="x"
-          onRight1Action={() => bottomSheetRef.current?.close()}
+          onRight1Action={() => ref.current?.close()}
         />
       }
-      ref={bottomSheetRef}
+      ref={ref}
       content={renderContent()}
-      close={props.closeModal}
       name="modal-list-of-step"
       type="m-l"
     />
   );
-};
+});
 
 export default ListOfSteps;
