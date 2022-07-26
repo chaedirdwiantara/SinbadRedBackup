@@ -65,7 +65,10 @@ const ListLayout: FC<ProductLayoutProps> = ({
           qtySoldLabel={item.qtySoldValue ? `Terjual ${item.qtySoldLabel}` : ''}
           isExclusive={item.isExclusive}
           onCardPress={() => {
-            goToProductDetail(`${item.id}_${item.warehouseOriginId}`);
+            goToProductDetail({
+              id: item.id,
+              warehouseId: item.warehouseOriginId,
+            });
           }}
           withOrderButton={true}
           onOrderPress={() => onOrderPress(item)}

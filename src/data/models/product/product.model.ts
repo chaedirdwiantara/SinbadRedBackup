@@ -142,3 +142,8 @@ export type ProductSubModule = 'recommendations' | undefined;
 export interface ProductListProcessAction extends models.ListProcessV3Action {
   subModule?: ProductSubModule;
 }
+
+export interface DetailProductProcess {
+  id: string;
+  warehouseId: string;
+}
