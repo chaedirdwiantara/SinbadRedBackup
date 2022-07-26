@@ -8,8 +8,10 @@ import { setFlagByDeviceId } from '@core/functions/firebase/flag-rtdb.function';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
 import { useOTP } from '@screen/auth/functions';
+import { useIsFocused } from '@react-navigation/native';
 /** === COMPONENT === */
 const IntroSplashView: React.FC = () => {
+  const isFocused = useIsFocused();
   const { meV2 } = useDataAuth();
   const { getLocationPermissions } = useOTP();
   /** === HOOK === */
@@ -30,7 +32,9 @@ const IntroSplashView: React.FC = () => {
     if (meV2.data && !meV2.loading) {
       if (meV2.data?.data?.isBuyerCategoryCompleted) {
         setTimeout(() => {
-          NavigationAction.resetToHome();
+          if (isFocused) {
+            NavigationAction.resetToHome();
+          }
           SplashScreen.hide();
         }, 100);
       } else {
@@ -41,7 +45,9 @@ const IntroSplashView: React.FC = () => {
       }
     } else if ((!meV2.data || meV2.error) && !meV2.loading) {
       setTimeout(() => {
-        NavigationAction.resetToIntroSinbad();
+        if (isFocused) {
+          NavigationAction.resetToIntroSinbad();
+        }
         SplashScreen.hide();
       }, 100);
     }
