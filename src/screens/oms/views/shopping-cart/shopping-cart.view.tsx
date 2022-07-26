@@ -366,15 +366,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [pageLoading]);
 
-  /** => listen when something change in products */
-  useEffect(() => {
-    if (localCartMaster) {
-      /** fetch check sinbad voucher */
-      // WIP: add debouce here!
-      checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
-    }
-  }, [debouncedValue]);
-
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
@@ -406,8 +397,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           <ShoppingCartFooter
             testID={screenName}
             cartData={localCartMaster}
+            localCartMasterDebouce={debouncedValue!}
             countTotalProduct={countTotalProduct}
-            countTotalPrice={countTotalPrice}
             isCheckoutDisabled={
               !isAnyActiveProduct() ||
               countTotalPrice < 100000 ||

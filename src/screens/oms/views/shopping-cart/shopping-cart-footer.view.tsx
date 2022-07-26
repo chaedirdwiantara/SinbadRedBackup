@@ -2,6 +2,7 @@
 import {
   matchCartWithCheckData,
   useCheckoutAction,
+  useCheckSinbadVoucherAction,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
@@ -20,6 +21,7 @@ import { toCurrency } from '@core/functions/global/currency-format';
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
+  localCartMasterDebouce: models.CartMaster;
   countTotalProduct: number;
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
@@ -33,6 +35,7 @@ interface SelectedVoucherProps {
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
+  localCartMasterDebouce,
   countTotalProduct,
   isCheckoutDisabled,
   handleOpenErrorBusinessModal,
@@ -44,7 +47,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
-  const { stateVoucher } = React.useContext(contexts.VoucherContext);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const [footerData, setFooterData] =
     useState<models.CheckSinbadVoucherResponse | null>(null);
   const [selectedVoucher, setSelectedVoucher] =
@@ -61,6 +66,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -233,6 +239,18 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       setFooterData(stateVoucher.checkSinbadVoucher.data);
     }
   }, [stateVoucher.checkSinbadVoucher]);
+
+  /** => listen when something change in products */
+  useEffect(() => {
+    if (cartData) {
+      /** fetch check sinbad voucher */
+      checkSinbadVoucherAction.fetch(
+        dispatchVoucher,
+        false,
+        selectedVoucher?.sinbadVoucherId || null,
+      );
+    }
+  }, [localCartMasterDebouce]);
 
   /** === VIEWS === */
   /** ==> content */
