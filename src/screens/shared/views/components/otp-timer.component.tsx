@@ -1,4 +1,6 @@
-import { useAuthAction, useCheckPhoneV2 } from '@screen/auth/functions';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth } from '@core/redux/Data';
+import { useCheckPhoneV2 } from '@screen/auth/functions';
 import { SnbButton2, SnbText2, SnbToast } from '@sinbad/react-native-sinbad-ui';
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -11,8 +13,9 @@ interface Props {
 const OTPTimer: React.FC<Props> = (props) => {
   const [resend, setResend] = React.useState(false);
   const [timer, setTimer] = React.useState(0);
-  const { requestOTPState, resetRequestOTP } = useAuthAction();
+  const { resetRequestOTP } = useAuthCoreAction();
   const { checkPhoneV2 } = useCheckPhoneV2();
+  const { requestOTP: requestOTPState } = useDataAuth()
 
   React.useEffect(() => {
     if (

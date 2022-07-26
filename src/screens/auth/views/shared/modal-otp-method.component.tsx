@@ -12,14 +12,16 @@ import {
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
 import { useNavigation, useFocusEffect } from '@react-navigation/core';
-import { useAuthAction, useOTP } from '@screen/auth/functions';
+import { useOTP } from '@screen/auth/functions';
 import { useDataAuth } from '@core/redux/Data';
 import { LOGIN_OTP_VIEW, REGISTER_OTP_VIEW } from '@screen/auth/functions/screens_name';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 interface Props {
   ref: any,
   phone: string,
-  action: 'register' | 'login'
+  action: 'register' | 'login',
+  onResetField: () => void
 }
 
 interface RadioButtonProps {
@@ -67,10 +69,10 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, onPress, selected, ico
   )
 }
 
-const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref: any) => {
+const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onResetField }, ref: any) => {
   const [contentHeight, setContentHeight] = React.useState(0);
   const [otpMethod, setOtpMethod] = React.useState('')
-  const { requestOTP, resetRequestOTP } = useAuthAction()
+  const { requestOTP, resetRequestOTP } = useAuthCoreAction()
   const { otpHash } = useOTP()
   const { requestOTP: requestOTPState } = useDataAuth()
   const { navigate } = useNavigation()
@@ -86,6 +88,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action }, ref
       const params = { mobilePhone: phone, otpHash, type: otpMethod }
       navigate(navigateTo, params);
       resetRequestOTP()
+      onResetField()
     }
   }, [requestOTPState])
 

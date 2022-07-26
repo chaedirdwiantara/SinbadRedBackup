@@ -35,15 +35,13 @@ const SelfRegisterView: React.FC = () => {
   React.useEffect(() => {
     if (checkPhoneRegistrationState?.data !== null) {
       if (checkPhoneRegistrationState?.data?.phoneNumberAvailable) {
-        if (checkPhoneRegistrationState?.data?.isUserAgent) {
-          phone.clearText();
-          checkPhoneRegistrationReset();
-          // SHOW MODAL SALESMAN DISINI
-          refModalSalesman.current?.open();
-        } else {
-          //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
-          refModalOTP.current?.open();
-        }
+        //SHOW MODAL SEND OTP DAN NAVIGATE KE OTP PAGE
+        refModalOTP.current?.open()
+      } else if (checkPhoneRegistrationState?.data?.isUserAgent) {
+        phone.clearText();
+        checkPhoneRegistrationReset();
+        // SHOW MODAL SALESMAN DISINI
+        refModalSalesman.current?.open();
       } else {
         phone.setMessageError('Nomor telah terdaftar');
         phone.setType('error');
@@ -103,7 +101,8 @@ const SelfRegisterView: React.FC = () => {
               Keyboard.dismiss();
               checkPhoneRegistration({
                 mobilePhone: phone.value,
-                identifierDeviceId: advertisingId,
+                identifierDeviceId:
+                  advertisingId === undefined ? null : advertisingId,
               });
             }}
             disabled={
@@ -146,7 +145,12 @@ const SelfRegisterView: React.FC = () => {
       {header()}
       {content()}
       {buttonRegister()}
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="register" />
+      <ModalOTPMethod
+        ref={refModalOTP}
+        phone={phone.value}
+        action="register"
+        onResetField={phone.clearText}
+      />
       <ModalSalesman ref={refModalSalesman} />
     </SnbContainer>
   );

@@ -65,7 +65,7 @@ export interface ICheckAutoLoginSuccess {
 
 export interface ICheckPhoneV3Process {
   mobilePhone: string | undefined;
-  identifierDeviceId: string | undefined;
+  identifierDeviceId: string | null;
 }
 
 export interface ICheckPhoneV3Success {
