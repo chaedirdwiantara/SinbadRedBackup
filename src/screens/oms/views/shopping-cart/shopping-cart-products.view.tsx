@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbCheckbox2 } from 'react-native-sinbad-ui';
+import { colorV2, SnbCheckbox2, SnbText2 } from 'react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import { ProductAvailableSection } from './product-available-section.view';
@@ -69,7 +69,6 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
           }}>
           <View style={{ marginRight: 16 }}>
             <SnbCheckbox2
-              label={'Pilih Semua'}
               testID={`checkbox.checkAll.productContainer.${testID}`}
               checked={allSellerCheckboxStatus === 'selected'}
               indeterminate={allSellerCheckboxStatus === 'indeterminate'}
@@ -81,6 +80,11 @@ export const ShoppingCartProducts: FC<ShoppingCartProductsProps> = ({
               }}
             />
           </View>
+          <SnbText2.Body.Small
+            testID={`checkbox.checkAll.productContainer.${testID}`}
+            color={colorV2.textColor.default}>
+            Pilih Semua
+          </SnbText2.Body.Small>
         </View>
       ) : (
         <View />
