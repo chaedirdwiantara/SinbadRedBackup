@@ -25,7 +25,12 @@ function* voucherCartList(action: models.VoucherListProcessAction) {
   try {
     const response: models.DetailSuccessProps<models.VoucherCartListProps> =
       yield call(() => {
-        return VoucherApi.voucherCartList(action.payload.uniqueCode);
+        return VoucherApi.voucherCartList({
+          totalOrder: action.payload.totalOrder,
+          ...(action.payload.uniqueCode && {
+            uniqueCode: action.payload.uniqueCode,
+          }),
+        });
       });
     yield action.contextDispatch(
       ActionCreators.voucherCartListSuccess(response),

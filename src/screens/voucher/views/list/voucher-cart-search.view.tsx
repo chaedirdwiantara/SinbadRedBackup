@@ -17,7 +17,10 @@ export const VoucherCartSearch = () => {
   const { changeKeyword, keyword, debouncedValue } = useSearchKeyword();
   /** => effects */
   useEffect(() => {
-    getVouchersAction.list(dispatchVoucher, debouncedValue);
+    getVouchersAction.list(dispatchVoucher, {
+      totalOrder: 10000,
+      ...(debouncedValue && { uniqueCode: debouncedValue }),
+    });
     return () => {
       getVouchersAction.reset(dispatchVoucher);
     };

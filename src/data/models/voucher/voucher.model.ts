@@ -1,6 +1,7 @@
 /** === VOUCHER DETAIL === */
 export interface VoucherCartDetailProps {
-  id: number;
+  id: string;
+  sinbadVoucherId: number;
   name: string;
   imageUrl: string;
   descriptions: string;
@@ -17,16 +18,19 @@ export interface VoucherCartListProps {
   notEligible: NotEligibleVoucherProps[];
 }
 export interface EligibleVoucherProps {
-  id: number;
+  id: string;
+  sinbadVoucherId: number;
   name: string;
   endDate: string;
   sinbadVoucherValue: number;
   remainingDay: number;
 }
 export interface NotEligibleVoucherProps {
-  id: number;
+  id: string;
+  sinbadVoucherId: number;
   name: string;
   endDate: string;
   minOrderTransaction: number;
   remainingDay: number;
+  sinbadVoucherValue: number;
 }

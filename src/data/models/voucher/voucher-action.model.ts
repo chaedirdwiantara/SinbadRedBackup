@@ -9,7 +9,8 @@ export interface VoucherDetailProcessAction {
   contextDispatch: (action: any) => any;
 }
 export interface VoucherListProcessProps {
-  uniqueCode: string;
+  uniqueCode?: string;
+  totalOrder: number;
 }
 
 export interface VoucherListProcessAction
