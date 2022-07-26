@@ -58,19 +58,6 @@ export const voucherCartListFailed = (
 export const voucherCartListReset = () => {
   return { type: types.VOUCHER_CART_LIST_RESET };
 };
-/** === COUNT ALL VOUCHER === */
-/** => count all voucher process */
-export const countAllVoucherProcess = (
-  contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
-  contextDispatch({ type: types.COUNT_ALL_VOUCHER_PROCESS, payload: data });
-  return {
-    type: types.COUNT_ALL_VOUCHER_PROCESS,
-    payload: data,
-    contextDispatch,
-  };
-};
 /** => cancel reserve voucher process */
 export const cancelVoucherProcess = (
   contextDispatch: (action: any) => any,
