@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/core';
 import {
   maskPhone,
   setErrorMessage,
-  useAuthAction,
   useOTP,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
@@ -11,17 +10,23 @@ import { ScrollView } from 'react-native';
 import { SnbContainer, SnbTopNav2 } from 'react-native-sinbad-ui';
 import { useDataAuth } from '@core/redux/Data';
 import { NavigationAction } from '@navigation';
+import { useAuthCoreAction } from '@core/functions/auth';
 
 const LoginOTPView: React.FC = () => {
   const { goBack } = useNavigation();
-  const { requestOTP, verifyOTP, verificationOTP } = useAuthAction();
-  const { resetVerifyOTP, mobilePhone, getLocationPermissions, otpHash, type } = useOTP();
+  const { requestOTP, verificationOTP, resetVerificationOTP } = useAuthCoreAction();
+  const { mobilePhone, getLocationPermissions, otpHash, type } = useOTP();
   const { meV2 } = useDataAuth();
   const [loading, setLoading] = React.useState(false);
+  const { loginPhoneNumber } = useDataAuth()
 
   React.useEffect(() => {
-    verifyOTP.data !== null && setLoading(true);
-  }, [verifyOTP]);
+    return resetVerificationOTP
+  }, [])
+
+  React.useEffect(() => {
+    loginPhoneNumber.data !== null && setLoading(true);
+  }, [loginPhoneNumber]);
 
   React.useEffect(() => {
     if (meV2.data) {
@@ -45,17 +50,17 @@ const LoginOTPView: React.FC = () => {
         <OTPContent
           testID="loginOTP"
           onVerifyOTP={(otp) => {
-            resetVerifyOTP();
+            resetVerificationOTP()
             verificationOTP({ mobilePhone, otp });
           }}
           resend={() => {
             requestOTP({ mobilePhone, otpHash, type });
           }}
           errorMessage={
-            verifyOTP.error?.code ? setErrorMessage(verifyOTP.error?.code) : ''
+            loginPhoneNumber.error?.code ? setErrorMessage(loginPhoneNumber.error?.code) : ''
           }
-          otpSuccess={verifyOTP.data !== null}
-          loading={verifyOTP.loading || loading}
+          otpSuccess={loginPhoneNumber.data !== null}
+          loading={loginPhoneNumber.loading || loading}
           phoneNo={maskPhone(mobilePhone)}
           otpMethod={type}
         />

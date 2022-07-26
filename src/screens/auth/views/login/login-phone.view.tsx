@@ -3,8 +3,8 @@ import {
   useInputPhone,
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
+import React from 'react';
+import { View, ScrollView, Image, Keyboard } from 'react-native';
 import {
   FooterButton,
   SnbBottomSheet2Ref,
@@ -23,7 +23,7 @@ const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
   const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
   const phone = useInputPhone();
-  const { reset, navigate } = useNavigation();
+  const { navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent();
@@ -33,6 +33,7 @@ const Content: React.FC = () => {
     return () => {
       resetCheckLoginPhone()
       resetRequestOTP()
+      phone.clearText()
     };
   }, []);
 
@@ -69,7 +70,7 @@ const Content: React.FC = () => {
       <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text
           {...phone}
-          labelText="Nomer Handphone"
+          labelText="Nomor Handphone"
           keyboardType="phone-pad"
         />
       </View>
@@ -94,7 +95,12 @@ const Content: React.FC = () => {
         }}
         description="Belum punya akun Sinbad?"
       />
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
+      <ModalOTPMethod 
+        ref={refModalOTP} 
+        phone={phone.value} 
+        action="login" 
+        onResetField={phone.clearText}
+      />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal

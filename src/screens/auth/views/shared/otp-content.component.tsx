@@ -34,6 +34,10 @@ const OTPContent: React.FC<Props> = (props) => {
   const { checkPhoneV2 } = useCheckPhoneV2();
 
   useEffect(() => {
+    setOtpType('default')
+    return () => setOtpType('default')
+  }, [])
+  useEffect(() => {
     if (otp.length < 5) {
       setError(false);
     }
