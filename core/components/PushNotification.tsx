@@ -94,6 +94,8 @@ const PushNotification = () => {
         switch (data?.screen) {
           case 'HomeView':
           case 'HistoryListView':
+            NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
+            break;
           case 'HelpView':
           case 'UserView':
             NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
