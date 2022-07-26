@@ -60,7 +60,7 @@ export const useNotificationAction = () => {
     (data: models.NotificationListSuccessProps) => {
       if (data.screen) {
         switch (data.screen) {
-          case 'OrderHistoryListView':
+          case 'HistoryListView':
             goToMenu(data.screen, data.data);
             break;
           case 'UserView':
