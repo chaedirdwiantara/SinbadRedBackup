@@ -75,6 +75,14 @@ export const resetToMaintenance = () => {
   );
 };
 /** => reset to maintenance page */
+export const resetToBannedAccount = () => {
+  navigationRef.current?.dispatch(
+    CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'BannedAccount' }],
+    }),
+  );
+};
 export const restartApp = () => {
   navigationRef.current?.dispatch(
     CommonActions.reset({

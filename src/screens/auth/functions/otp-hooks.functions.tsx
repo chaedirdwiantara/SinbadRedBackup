@@ -24,15 +24,15 @@ const useOTP = (action = '') => {
   const { meV2 } = useDataAuth();
   const [isMounted, setIsMounted] = React.useState(true)
   const { requestOTP } = useDataAuth()
-
+  
   React.useEffect(() => {
     RNOtpVerify.getHash().then((value) => isMounted && setOtpHash(value[0]));
     if (action === 'listeningToHash') {
       startListeningForOtp();
     }
     return () => {
-      setIsMounted(false)
       RNOtpVerify.removeListener();
+      setIsMounted(false)
     }
   }, []);
 
