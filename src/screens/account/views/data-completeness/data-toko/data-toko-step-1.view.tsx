@@ -67,11 +67,13 @@ const DataTokoStep1View: React.FC = () => {
           backAction={() => refModalBack.current?.open()}
           color="white"
           title="Informasi Toko"
+          testID={'11'}
         />
         <Stepper
           complete={completeDataState?.data?.buyerProgress?.completed}
           total={completeDataState?.data?.buyerProgress?.total}
           onPress={() => refModalListOfStep.current?.open()}
+          testID={'11'}
         />
         <View style={{ margin: layout.spacing.lg }}>
           <SnbText2.Body.Default>Sinbad ID</SnbText2.Body.Default>
@@ -87,6 +89,7 @@ const DataTokoStep1View: React.FC = () => {
             placeholder={'Contoh: Samsul'}
             labelText={'Nama Toko'}
             mandatory
+            testID={'11'}
           />
         </View>
         <View style={{ margin: layout.spacing.lg }}>
@@ -102,6 +105,7 @@ const DataTokoStep1View: React.FC = () => {
             placeholder={'Contoh: 0812345678'}
             labelText={'Nomor Telepon Toko'}
             mandatory
+            testID={'11'}
           />
         </View>
       </ScrollView>
@@ -121,6 +125,7 @@ const DataTokoStep1View: React.FC = () => {
           loading={updateCompleteDataState.loading}
           size="medium"
           full
+          testID={'11'}
         />
       </View>
       <ModalBack
@@ -139,6 +144,7 @@ const DataTokoStep1View: React.FC = () => {
       <ListOfSteps
         ref={refModalListOfStep}
         type="buyer"
+        testID={'11.4'}
       />
     </SnbContainer>
   );

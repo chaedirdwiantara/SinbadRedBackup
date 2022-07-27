@@ -72,10 +72,11 @@ const Content: React.FC = () => {
           {...phone}
           labelText="Nomor Handphone"
           keyboardType="phone-pad"
+          testID={'01'}
         />
       </View>
       <FooterButton.Single
-        testID='Login'
+        testID={'01'}
         title='Selanjutnya'
         buttonPress={() => {
           Keyboard.dismiss()
@@ -125,6 +126,7 @@ const LoginPhoneView = () => {
         backAction={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         color="white"
         title="Masuk"
+        testID={'01'}
       />
       <Content />
     </SnbContainer>

@@ -85,6 +85,7 @@ const DataVerificationView: React.FC = () => {
             labelText={'Nomor Handphone'}
             keyboardType={'default'}
             mandatory
+            testID={'10'}
           />
         </View>
         <View style={{ marginBottom: layout.spacing.lg }}>
@@ -99,6 +100,7 @@ const DataVerificationView: React.FC = () => {
             labelText={'Nama Toko'}
             keyboardType={'default'}
             mandatory
+            testID={'10'}
           />
         </View>
         <View style={{ marginBottom: layout.spacing.lg }}>
@@ -113,6 +115,7 @@ const DataVerificationView: React.FC = () => {
             labelText={'Nama Pemilik'}
             keyboardType={'default'}
             mandatory
+            testID={'10'}
           />
         </View>
         <View style={{ marginBottom: layout.spacing.lg }}>
@@ -129,6 +132,7 @@ const DataVerificationView: React.FC = () => {
             keyboardType={'number-pad'}
             mandatory
             valMsgError={'Nomor KTP harus 16 digit'}
+            testID={'10'}
           />
         </View>
         <View>
@@ -143,6 +147,7 @@ const DataVerificationView: React.FC = () => {
             labelText={'Alamat'}
             keyboardType={'default'}
             mandatory
+            testID={'10'}
           />
         </View>
       </View>
@@ -166,6 +171,7 @@ const DataVerificationView: React.FC = () => {
             size="medium"
             full
             loading={updateUserMedeaData.loading}
+            testID={'10'}
           />
         </View>
       </View>

@@ -71,6 +71,7 @@ const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
                 loading={updateCompleteDataState.loading}
                 size="medium"
                 full
+                testID={'06.3'}
               />
             </View>
           </View>

@@ -144,6 +144,7 @@ const DataDiriStep3View: React.FC = () => {
         type="vertical"
         resizeMode="stretch"
         listType="number"
+        testID={'09.1'}
       />
     );
   };
@@ -178,6 +179,7 @@ const DataDiriStep3View: React.FC = () => {
               size="medium"
               full
               outline
+              testID={'09.3'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -189,6 +191,7 @@ const DataDiriStep3View: React.FC = () => {
               onPress={() => confirm()}
               size="medium"
               full
+              testID={'09.3'}
             />
           </View>
         </View>
@@ -207,11 +210,13 @@ const DataDiriStep3View: React.FC = () => {
           backAction={() => refModalBack.current?.open()}
           color="white"
           title="Foto Diri Dengan KTP"
+          testID={'09'}
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => refModalListOfStep.current?.open()}
+          testID={'09'}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
@@ -222,6 +227,7 @@ const DataDiriStep3View: React.FC = () => {
       <ListOfSteps
         type="user"
         ref={refModalListOfStep}
+        testID={'09.4'}
       />
     </SnbContainer>
   );

@@ -178,11 +178,13 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
                       onMapsResult,
                       action: 'update',
                       currentLatLng: latLng,
+                      testID: '13.1',
                     })
                   }
                   title="Ubah Titik Lokasi"
                   disabled={false}
                   size="tiny"
+                  testID={'13.1'}
                 />,
               )}
             </View>
@@ -213,7 +215,8 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
                       latitude: DEFAULT_LATITUDE,
                       longitude: DEFAULT_LONGITUDE,
                     }
-                  }>
+                  }
+                  testID={'13.2'}>
                   <Image
                     source={require('@image/pin_point.png')}
                     style={{ height: 56, width: 56, resizeMode: 'contain' }}
@@ -226,6 +229,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
                     onMapsResult,
                     action: 'update',
                     currentLatLng: latLng,
+                    testID: '13.1',
                   })
                 }
                 style={styles.pinPoint}>
@@ -238,7 +242,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
           <View style={{ padding: layout.spacing.lg }}>
             <SnbText2.Body.Small>{streetName}</SnbText2.Body.Small>
             <View style={{ marginVertical: layout.spacing.xxsm }} />
-            <SnbText2.Paragraph.Small align="justify">
+            <SnbText2.Paragraph.Small align="justify" >
               {staticAddress}
             </SnbText2.Paragraph.Small>
           </View>
@@ -258,6 +262,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               labelText="Catatan Alamat"
               placeholder="Masukkan catatan alamat"
               maxLength={200}
+              testID={'13.2'}
             />
           </View>
           <View style={{ padding: layout.spacing.lg }}>
@@ -280,6 +285,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               }}
               rightType="icon"
               rightIcon="chevron_right"
+              testID={'13.2'}
             />
           </View>
           <View style={{ padding: layout.spacing.lg }}>
@@ -306,6 +312,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               }}
               rightType="icon"
               rightIcon="chevron_right"
+              testID={'13.2'}
             />
           </View>
         </ScrollView>
@@ -331,6 +338,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
           }
           full
           size="medium"
+          testID={'13.2'}
         />
       </View>
       <ModalSelection
@@ -416,16 +424,19 @@ const DataTokoStep3View: React.FC = () => {
         backAction={() => refModalBack.current?.open()}
         color="white"
         title="Alamat Toko"
+        testID={'13'}
       />
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
         onPress={() => refModalListOfStep.current?.open()}
+        testID={'13'}
       />
       <Content ref={refModalBack} />
       <ListOfSteps
         ref={refModalListOfStep}
         type="buyer"
+        testID={'13.4'}
       />
     </SnbContainer>
   );

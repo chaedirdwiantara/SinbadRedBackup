@@ -5,6 +5,9 @@ import {
   SnbText2,
   SnbButton2,
   spacingV2 as layout,
+  Text,
+  SnbIcon,
+  colorV2,
 } from 'react-native-sinbad-ui';
 import { ScrollView, View, BackHandler } from 'react-native';
 import { NavigationAction } from '@navigation';
@@ -48,6 +51,7 @@ const MerchantDetailAccountView: FC = () => {
     NavigationAction.navigate(isPhoto, {
       title: data.title,
       type: data.type,
+      testID: data.testID,
     });
   };
   /** === VIEW === */
@@ -62,6 +66,7 @@ const MerchantDetailAccountView: FC = () => {
           editMerchantAction.reset(dispatchSupplier);
           editProfileAction.reset(dispatchSupplier);
         }}
+        testID={'06.1'}
       />
     );
   };
@@ -69,33 +74,41 @@ const MerchantDetailAccountView: FC = () => {
   const renderContentSection = (data: any) => {
     return (
       <View style={MerchantStyles.boxContent}>
-        <View>
-          <View style={{ marginBottom: layout.spacing.xsm }}>
-            <SnbText2.Body.Default color={color.black100}>
-              {data.key}
-            </SnbText2.Body.Default>
-          </View>
-          <SnbText2.Paragraph.Default
-            color={data.fontColor ? data.fontColor : color.black60}>
-            {data.value} {data.key === 'Ukuran Toko' && 'm\u00B2'}
-          </SnbText2.Paragraph.Default>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {data.action === 'tambah' && (
-            <SnbButton2.Link
-              onPress={() => goTo(data)}
-              title="Tambah"
-              size="small"
-            />
-          )}
-          {data.action === 'ubah' && (
-            <SnbButton2.Link
-              onPress={() => goTo(data)}
-              title="Ubah"
-              size="small"
-            />
-          )}
-        </View>
+        <Text.Output
+          title={data.key}
+          actionComponentAlign="center"
+          testID={'06.1'}
+          text={
+            <SnbText2.Paragraph.Default
+              color={
+                data.success
+                  ? colorV2.textColor.success
+                  : colorV2.textColor.secondary
+              }>
+              {data.value}
+            </SnbText2.Paragraph.Default>
+          }
+          actionComponent={
+            data.action ? (
+              <SnbButton2.Link
+                onPress={() => goTo(data)}
+                title={`${data.action[0].toUpperCase() + data.action.slice(1)}`}
+                size="small"
+              />
+            ) : null
+          }
+          titleIcon={
+            data.label !== undefined ? (
+              <SnbIcon
+                name={'shield'}
+                size={16}
+                color={
+                  data.label ? colorV2.iconColor.green : colorV2.iconColor.dark
+                }
+              />
+            ) : null
+          }
+        />
       </View>
     );
   };
@@ -131,6 +144,7 @@ const MerchantDetailAccountView: FC = () => {
                 : 'ubah',
             type: 'merchantAccountName',
             title: buyerData?.name ? 'Ubah Nama Toko' : 'Tambah Nama Toko',
+            testID: '05.1',
           })}
           {renderContentSection({
             key: 'Nomor Handphone Toko',

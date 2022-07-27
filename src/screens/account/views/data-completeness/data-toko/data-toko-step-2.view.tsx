@@ -105,6 +105,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
             resizeMode="stretch"
             blurRadius={2}
             listType="number"
+            testID={'12.1'}
           />
         </View>
       </View>
@@ -157,6 +158,7 @@ const Content: React.FC<Props> = React.forwardRef((_, ref) => {
               loading={stateGlobal.uploadImage.loading}
               size="medium"
               full
+              testID={'12.3'}
             />
           </View>
         </View>
@@ -213,16 +215,19 @@ const DataTokoStep2View: React.FC = () => {
         backAction={() => refModalBack.current?.open()}
         color="white"
         title="Foto Toko"
+        testID={'12'}
       />
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
         onPress={() => refModalListOfStep.current?.open()}
+        testID={'12'}
       />
       <Content ref={refModalBack} />
       <ListOfSteps
         ref={refModalListOfStep}
         type="buyer"
+        testID={'12.5'}
       />
     </SnbContainer>
   );

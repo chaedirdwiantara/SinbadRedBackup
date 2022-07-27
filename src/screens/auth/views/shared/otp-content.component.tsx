@@ -118,6 +118,7 @@ const OTPContent: React.FC<Props> = (props) => {
               setOtpType('default');
               setError(false);
             }}
+            testID={'04'}
           />
         </View>
       </View>

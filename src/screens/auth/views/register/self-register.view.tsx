@@ -68,6 +68,7 @@ const SelfRegisterView: React.FC = () => {
         backAction={() => navigate('OnBoardingView')}
         color="white"
         title="Daftar"
+        testID={'02'}
       />
     );
   };
@@ -83,7 +84,11 @@ const SelfRegisterView: React.FC = () => {
             />
           </View>
           <View style={{ padding: layout.spacing.lg }}>
-            <SnbTextField2.Text {...phone} keyboardType="phone-pad" />
+            <SnbTextField2.Text
+              testID={'02'}
+              {...phone}
+              keyboardType="phone-pad"
+            />
           </View>
         </View>
       </ScrollView>
@@ -93,7 +98,7 @@ const SelfRegisterView: React.FC = () => {
   const buttonRegister = () => {
     return (
       <FooterButton.Single
-        testID='registerOTP'
+        testID={'02'}
         title='Lanjut'
         buttonPress={() => {
           Keyboard.dismiss();
