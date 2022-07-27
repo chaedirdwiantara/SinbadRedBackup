@@ -14,6 +14,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
+import { ModalErrorCheckVoucher } from './modal-error-check-voucher';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
@@ -94,6 +95,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refVoucherBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -461,6 +463,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           refCartValidationModal.current?.close();
           goToProfile();
         }}
+      />
+      {/* Error Check Voucher */}
+      <ModalErrorCheckVoucher
+        handleClose={() => {
+          refVoucherBusinessErrorModal.current?.close();
+        }}
+        parentRef={refVoucherBusinessErrorModal}
+        testID={screenName}
       />
       {/* Error Modal Check Product, Seller & Stock */}
       <BottomSheetError
