@@ -15,8 +15,8 @@ export const voucherDetailProcess = (
 };
 /** => voucher detail success */
 export const voucherDetailSuccess = (
-  data: models.DetailSuccessProps<models.VoucherDetailProps>,
-): models.DetailSuccessAction<models.VoucherDetailProps> => {
+  data: models.DetailSuccessProps<models.VoucherCartDetailProps>,
+): models.DetailSuccessAction<models.VoucherCartDetailProps> => {
   return { type: types.VOUCHER_DETAIL_SUCCESS, payload: data };
 };
 /** => voucher detail failed */
@@ -57,19 +57,6 @@ export const voucherCartListFailed = (
 /** => voucher cart list reset */
 export const voucherCartListReset = () => {
   return { type: types.VOUCHER_CART_LIST_RESET };
-};
-/** === COUNT ALL VOUCHER === */
-/** => count all voucher process */
-export const countAllVoucherProcess = (
-  contextDispatch: (action: any) => any,
-  data: models.DetailProcessProps,
-): models.DetailProcessAction => {
-  contextDispatch({ type: types.COUNT_ALL_VOUCHER_PROCESS, payload: data });
-  return {
-    type: types.COUNT_ALL_VOUCHER_PROCESS,
-    payload: data,
-    contextDispatch,
-  };
 };
 /** => cancel reserve voucher process */
 export const cancelVoucherProcess = (

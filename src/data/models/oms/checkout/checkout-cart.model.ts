@@ -43,16 +43,21 @@ export interface CheckoutCartResponse
 export interface CheckoutResponse {
   id: string;
   buyerId: number;
-  userId: number;
   cartId: string;
   buyerName: string;
   buyerCode: string;
+  buyerTaxNo: string;
   userFullName: string;
   userPhoneNumber: string;
-  ownerId: number;
+  userId: number;
   ownerFullName: string;
   ownerPhoneNumber: string;
+  ownerId: number;
+  ownerIdNo: string;
+  sinbadVoucherId: number;
+  sinbadVoucherDiscountOrder: number;
   buyerAddress: CheckoutBuyerAddressPayload;
+  totalOrderQtyProduct: number;
   sellers: CheckoutCartResponse[];
   createdAt: string;
   updatedAt: string;

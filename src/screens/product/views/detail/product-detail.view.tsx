@@ -191,7 +191,7 @@ const ProductDetailView: FC = () => {
       qtyPerBox: dataProduct.packagedQty,
       uomLabel: dataProduct.unit,
       warehouseId: Number(dataProduct.warehouseOriginId),
-      sellerId: Number(dataProduct.sellerId),
+      sellerId: Number(dataProduct.productSeller.id),
       sellerName: dataProduct.productSeller.name,
       taxPercentage: dataProduct.productTax.amount,
       lastUsedPrice,

@@ -269,7 +269,7 @@ const ProductList: FC<ProductListProps> = ({
       qtyPerBox: productDetailState.packagedQty,
       uomLabel: productDetailState.unit,
       warehouseId: Number(productDetailState.warehouseOriginId),
-      sellerId: Number(productDetailState.sellerId),
+      sellerId: Number(productDetailState.productSeller.id),
       sellerName: productDetailState.productSeller.name,
       taxPercentage: productDetailState.productTax.amount,
       lastUsedPrice,

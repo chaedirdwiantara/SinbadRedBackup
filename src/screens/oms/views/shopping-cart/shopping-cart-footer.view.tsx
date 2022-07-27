@@ -2,11 +2,14 @@
 import {
   matchCartWithCheckData,
   useCheckoutAction,
+  useCheckSinbadVoucherAction,
+  useFooterData,
   usePostCheckProductAction,
   usePostCheckSellerAction,
   usePostCheckStockAction,
   useUpdateCartAction,
-} from '@screen/oms/functions';
+} from '../../functions';
+import { useVoucherLocalData } from '@screen/voucher/functions';
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { FooterButton } from 'react-native-sinbad-ui';
@@ -20,23 +23,36 @@ import { toCurrency } from '@core/functions/global/currency-format';
 /** === INTERFACE === */
 interface FooterProps {
   cartData: models.CartMaster;
+  localCartMasterDebouce: models.CartMaster;
   countTotalProduct: number;
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
-  handleErrorGlobalModalData: any;
+  handleErrorGlobalModalData: ErrorGlobalModalDataProps;
+  handleParentToast: (message: string) => void;
   testID: string;
 }
-interface SelectedVoucherProps {
-  sinbadVoucherId: number;
-  voucherAmount: number;
+interface ErrorGlobalModalDataProps {
+  setOpen: (val: boolean) => void;
+  setRetryAction: (val: () => void) => void;
+  setCloseAction: (val: () => void) => void;
+  setErrorData: (val: models.ErrorProps | null) => void;
+  setRetryCount: (val: number) => void;
+  isOpen: boolean;
+  retryAction: Function;
+  closeAction: Function;
+  errorData: models.ErrorProps | null;
+  retryCount: number;
 }
+type IVoucherStatus = 'green' | 'yellow' | 'gray' | 'hidden';
 /** === COMPONENT ===  */
 export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
+  localCartMasterDebouce,
   countTotalProduct,
   isCheckoutDisabled,
   handleOpenErrorBusinessModal,
   handleErrorGlobalModalData,
+  handleParentToast,
   testID,
 }) => {
   /** === STATES === */
@@ -44,16 +60,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const { stateCheckout, dispatchCheckout } = useContext(
     contexts.CheckoutContext,
   );
-  const { stateVoucher } = React.useContext(contexts.VoucherContext);
-  const [footerData, setFooterData] =
-    useState<models.CheckSinbadVoucherResponse | null>(null);
-  const [selectedVoucher, setSelectedVoucher] =
-    useState<SelectedVoucherProps | null>(null);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const [isMatchValid, setMatchValid] = useState(false);
   const [isCheckoutPressed, setCheckoutPressed] = useState(false);
   const [isCheckoutBtnLoading, setCheckoutBtnLoading] = useState(false);
   const [isUpdateError, setUpdateError] = useState(false);
   const isFocused = useIsFocused();
+  const { selectedVoucher, resetSelectedVoucher } = useVoucherLocalData();
+  const { footerData, setFooterData } = useFooterData();
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -61,6 +77,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const postCheckStockAction = usePostCheckStockAction();
   const updateCartAction = useUpdateCartAction();
   const checkoutAction = useCheckoutAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
 
   /** === FUNCTIONS === */
   /** Update cart after checkout button was clicked */
@@ -232,39 +249,86 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (stateVoucher.checkSinbadVoucher.data !== null) {
       setFooterData(stateVoucher.checkSinbadVoucher.data);
     }
-  }, [stateVoucher.checkSinbadVoucher]);
+  }, [stateVoucher.checkSinbadVoucher.data]);
+
+  /** => listen when something change in products */
+  useEffect(() => {
+    if (localCartMasterDebouce) {
+      /** fetch check sinbad voucher */
+      checkSinbadVoucherAction.fetch(
+        dispatchVoucher,
+        false,
+        selectedVoucher?.voucherId || null,
+      );
+    }
+  }, [localCartMasterDebouce]);
+
+  const manageVoucherCheckbox = () => {
+    const isVoucherSelected = selectedVoucher?.voucherId !== null;
+    const isProductSelected = countTotalProduct > 0;
+    const isSinbadVoucherExist =
+      stateVoucher.checkSinbadVoucher.data?.isVoucherExist || false;
+    let voucherStatus: IVoucherStatus, voucherBadgeTitle, voucherBadgeSubtitle;
+
+    if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
+      voucherStatus = 'green';
+      voucherBadgeTitle = `Kamu Hemat ${toCurrency(
+        stateVoucher.checkSinbadVoucher.data?.sinbadVoucherDiscountOrder,
+        { withFraction: false },
+      )}`;
+      voucherBadgeSubtitle = '1 Voucher digunakan';
+    } else if (
+      isSinbadVoucherExist &&
+      isProductSelected &&
+      !isVoucherSelected
+    ) {
+      voucherStatus = 'yellow';
+      voucherBadgeTitle = 'Gunakan voucher untuk dapat diskon';
+    } else if (isSinbadVoucherExist && !isProductSelected) {
+      voucherStatus = 'gray';
+      voucherBadgeTitle = 'Pilih produk sebelum pakai voucher';
+    } else {
+      voucherStatus = 'hidden';
+    }
+
+    return { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle };
+  };
 
   /** === VIEWS === */
   /** ==> content */
-  const renderFooterContent = () => (
-    <FooterButton.Order
-      testID={`footer.${testID}`}
-      titleButton="Checkout Sekarang"
-      loading={!footerData}
-      loadingButton={isCheckoutBtnLoading}
-      disabled={isCheckoutDisabled || isCheckoutBtnLoading}
-      value={footerData?.totalOrderAfterSinbadVoucher || 0}
-      vouchers={
-        footerData
-          ? {
-              isNoProductSelected: countTotalProduct === 0,
-              isVoucherAvailable: footerData.isVoucherExist,
-              isVoucherSelected: !!selectedVoucher?.sinbadVoucherId,
-              selectedAmount: toCurrency(selectedVoucher?.voucherAmount, {
-                withFraction: false,
-              }),
-            }
-          : undefined
-      }
-      description={
-        countTotalProduct > 0
-          ? `(${countTotalProduct}) barang dipilih`
-          : undefined
-      }
-      buttonPress={handleOnPressCheckout}
-      type={'cart'}
-    />
-  );
+  const renderFooterContent = () => {
+    const { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle } =
+      manageVoucherCheckbox();
+    return (
+      <FooterButton.Cart
+        testID={`footer.${testID}`}
+        titleButton="Checkout Sekarang"
+        loading={!footerData}
+        loadingButton={isCheckoutBtnLoading}
+        disabled={isCheckoutDisabled || isCheckoutBtnLoading}
+        value={footerData?.totalOrderAfterSinbadVoucher || 0}
+        description={
+          countTotalProduct > 0
+            ? `(${countTotalProduct}) barang dipilih`
+            : undefined
+        }
+        buttonPress={handleOnPressCheckout}
+        voucherStatus={voucherStatus}
+        voucherTitle={voucherBadgeTitle}
+        voucherDescription={voucherBadgeSubtitle}
+        onPressVoucher={() => {
+          // navigate to voucher list
+        }}
+        onCloseVoucher={
+          voucherStatus === 'green'
+            ? () => {
+                resetSelectedVoucher();
+              }
+            : undefined
+        }
+      />
+    );
+  };
 
   /** ==> Main */
   return (

@@ -10,6 +10,7 @@ import { useContext } from 'react';
 /** => checkout action */
 const useCheckoutAction = () => {
   const { stateCart } = useContext(contexts.CartContext);
+  const { stateVoucher } = useContext(contexts.VoucherContext);
   const dispatch = useDispatch();
   return {
     fetch: (
@@ -20,7 +21,8 @@ const useCheckoutAction = () => {
         stateCart.postCheckProduct.data !== null &&
         stateCart.postCheckSeller.data !== null &&
         stateCart.postCheckStock.data !== null &&
-        stateCart.checkBuyer.data !== null
+        stateCart.checkBuyer.data !== null &&
+        stateVoucher.checkSinbadVoucher.data !== null
       ) {
         const cartsTemp: models.CheckoutCartPayload[] = cartMaster.sellers.map(
           (seller) => {
@@ -80,6 +82,14 @@ const useCheckoutAction = () => {
                       : product.taxPrice,
                 };
               });
+
+            const foundCheckVoucher =
+              stateVoucher.checkSinbadVoucher.data?.carts.find(
+                (checkVoucher) => {
+                  return checkVoucher.sellerId === seller.sellerId;
+                },
+              );
+
             return {
               sellerId: seller.sellerId,
               sellerName: seller.sellerName,
@@ -88,7 +98,8 @@ const useCheckoutAction = () => {
               sellerAdminId: seller.sellerAdminId,
               sellerAdminName: seller.sellerAdminName,
               sellerAdminEmail: seller.sellerAdminEmail,
-              sinbadVoucherDiscountParcel: 0,
+              sinbadVoucherDiscountParcel:
+                foundCheckVoucher?.sinbadVoucherDiscountParcel || 0,
               products,
             };
           },
@@ -116,14 +127,15 @@ const useCheckoutAction = () => {
               buyerName: stateCart.checkBuyer.data.buyerName,
               buyerCode: stateCart.checkBuyer.data.buyerCode,
               buyerTaxNo: stateCart.checkBuyer.data.buyerTaxNo,
-              userFullName: stateCart.checkBuyer.data.userFullName,
+              userFullName: stateCart.checkBuyer.data.userFullname,
               userPhoneNumber: stateCart.checkBuyer.data.userPhoneNumber,
-              ownerFullName: stateCart.checkBuyer.data.ownerFullName,
+              ownerFullName: stateCart.checkBuyer.data.ownerFullname,
               ownerPhoneNumber: stateCart.checkBuyer.data.ownerPhoneNumber,
               ownerId: stateCart.checkBuyer.data.ownerId,
               ownerIdNo: stateCart.checkBuyer.data.ownerIdNo,
               sinbadVoucherId: null,
-              sinbadVoucherDiscountOrder: 0,
+              sinbadVoucherDiscountOrder:
+                stateVoucher.checkSinbadVoucher.data.sinbadVoucherDiscountOrder,
               carts,
             },
           }),

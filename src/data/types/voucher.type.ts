@@ -8,13 +8,9 @@ export const VOUCHER_DETAIL_PROCESS = 'VoucherDetailProcess';
 export const VOUCHER_DETAIL_SUCCESS = 'VoucherDetailSuccess';
 export const VOUCHER_DETAIL_FAILED = 'VoucherDetailFailed';
 export const VOUCHER_DETAIL_RESET = 'VoucherDetailReset';
-// COUNT ALL VOUCHER
-export const COUNT_ALL_VOUCHER_PROCESS = 'CountAllVoucherProcess';
-export const COUNT_ALL_VOUCHER_SUCCESS = 'CountAllVoucherSuccess';
-export const COUNT_ALL_VOUCHER_FAILED = 'CountAllVoucherFailed';
-export const COUNT_ALL_VOUCHER_RESET = 'CountAllVoucherReset';
-// THIS FOR SAVING SELECTED VOUCHERS DATA
-export const SAVE_SELECTED_VOUCHERS = 'SaveSelectedVouchers';
+// THIS FOR SELECTED VOUCHERS DATA
+export const SAVE_SELECTED_VOUCHER = 'SaveSelectedVoucher';
+export const RESET_SELECTED_VOUCHER = 'ResetSelectedVoucher';
 // CHECK SINBAD VOUCHER
 export const CHECK_SINBAD_VOUCHER_PROCESS = 'CheckSinbadVoucherProcess';
 export const CHECK_SINBAD_VOUCHER_SUCCESS = 'CheckSinbadVoucherSuccess';

@@ -34,3 +34,8 @@ export interface NotEligibleVoucherProps {
   remainingDay: number;
   sinbadVoucherValue: number;
 }
+
+export interface SaveSelectedVoucher {
+  voucherId: number;
+  voucherValue: number;
+}

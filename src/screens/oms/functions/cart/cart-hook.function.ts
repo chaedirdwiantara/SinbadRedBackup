@@ -8,6 +8,7 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 import { manageRemoveProduct } from './cart.function';
+import { useDebounce } from '@core/functions/hook/debounce';
 /** === FUNCTION === */
 /** => get cart action */
 const useGetCartAction = () => {
@@ -437,6 +438,7 @@ const useCheckBuyerAction = () => {
 const useCartLocalData = () => {
   const [localCartMaster, setLocalCartMaster] = useState<models.CartMaster>();
   const [initialCartData, setInitialCartData] = useState<models.CartMaster>();
+  const debouncedValue = useDebounce(localCartMaster);
   return {
     updateQty: ({
       productId,
@@ -883,6 +885,7 @@ const useCartLocalData = () => {
     },
     localCartMaster,
     initialCartData,
+    debouncedValue,
   };
 };
 /** => oms general failed state */
@@ -926,6 +929,19 @@ const useKeyboardFocus = () => {
     isFocus,
   };
 };
+/** => footer data */
+const useFooterData = () => {
+  const [data, setData] = useState<models.CheckSinbadVoucherResponse | null>(
+    null,
+  );
+
+  return {
+    setFooterData: (newValue: models.CheckSinbadVoucherResponse | null) => {
+      setData(newValue);
+    },
+    footerData: data,
+  };
+};
 /** === EXPORT === */
 export {
   useGetCartAction,
@@ -945,6 +961,7 @@ export {
   useOmsGeneralFailedState,
   useKeyboardFocus,
   useCheckSinbadVoucherAction,
+  useFooterData,
 };
 /**
  * ================================================================

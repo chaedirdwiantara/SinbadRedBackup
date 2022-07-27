@@ -43,7 +43,9 @@ const voucherCartList = ({
   );
 };
 /** => check sinbad voucher */
-const checkSinbadVoucher = () => {
+const checkSinbadVoucher = ({
+  data,
+}: models.CreateProcessProps<models.CheckSinbadVoucherPayload>) => {
   const path = 'sinbad-vouchers/check-sinbad-voucher';
   return apiMapping<models.CheckSinbadVoucherResponse>(
     'auth',
@@ -51,6 +53,7 @@ const checkSinbadVoucher = () => {
     'voucher',
     'v1',
     'CREATE',
+    data,
   );
 };
 /** => cancel reserve voucher */

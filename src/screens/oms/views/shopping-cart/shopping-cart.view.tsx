@@ -34,7 +34,6 @@ import {
   useUpdateCartAction,
   useKeyboardFocus,
   goToProfile,
-  useCheckSinbadVoucherAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -62,6 +61,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     mergeCheckSeller,
     mergeCheckStock,
     setInitialLocalData,
+    debouncedValue,
   } = useCartLocalData();
   const [pageLoading, setPageLoading] = useState(false);
   const keyboardFocus = useKeyboardFocus();
@@ -76,7 +76,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
+  const { stateVoucher, dispatchVoucher } = React.useContext(
+    contexts.VoucherContext,
+  );
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -86,7 +88,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const checkBuyerAction = useCheckBuyerAction();
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
-  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
   const cancelVoucherAction = useCancelVoucherAction();
 
   /** => MODAL REF */
@@ -175,6 +176,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   NavigationAction.useCustomBackHardware(() => {
     handleGoBack();
   });
+
+  /** => toast error check voucher */
+  const handleToastErrorCheckVoucher = (message: string) => {
+    SnbToast2.show(message, 2000, {
+      position: 'bottom',
+      positionValue: 110,
+    });
+  };
 
   /** === HOOKS === */
   /** => will unmount */
@@ -352,7 +361,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   useEffect(() => {
     if (!pageLoading) {
       /** initial fetch check sinbad voucher */
-      checkSinbadVoucherAction.fetch(dispatchVoucher, false, null);
       if (stateCart.checkBuyer.data) {
         if (
           !stateCart.checkBuyer.data.buyerName ||
@@ -365,14 +373,14 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [pageLoading]);
 
-  /** => listen when something change in products */
+  /** => listen check voucher fetch error */
   useEffect(() => {
-    if (localCartMaster) {
-      /** fetch check sinbad voucher */
-      // WIP: add debouce here!
-      checkSinbadVoucherAction.fetch(dispatchVoucher, false, selectedVoucher);
+    if (stateVoucher.checkSinbadVoucher.error !== null) {
+      errorModal.setCloseAction(() => handleGoBack);
+      errorModal.setErrorData(stateVoucher.checkSinbadVoucher.error);
+      errorModal.setOpen(true);
     }
-  }, [localCartMaster?.sellers]);
+  }, [stateVoucher.checkSinbadVoucher.error]);
 
   /** === VIEW === */
   /** => CONTENT */
@@ -405,8 +413,8 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           <ShoppingCartFooter
             testID={screenName}
             cartData={localCartMaster}
+            localCartMasterDebouce={debouncedValue!}
             countTotalProduct={countTotalProduct}
-            countTotalPrice={countTotalPrice}
             isCheckoutDisabled={
               !isAnyActiveProduct() ||
               countTotalPrice < 100000 ||
@@ -416,6 +424,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
               refCartBusinessErrorModal.current?.open();
             }}
             handleErrorGlobalModalData={errorModal}
+            handleParentToast={handleToastErrorCheckVoucher}
           />
         </React.Fragment>
       );

@@ -122,7 +122,7 @@ const cancelStock = () => {
 };
 
 const checkBuyer = () => {
-  const path = 'check-buyer';
+  const path = 'check-buyers';
   return apiMapping<models.CheckBuyer>('auth', path, 'account', 'v1', 'DETAIL');
 };
 
