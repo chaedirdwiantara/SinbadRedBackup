@@ -7,8 +7,10 @@ import {
   SnbToast,
   spacingV2 as layout,
 } from 'react-native-sinbad-ui';
-import { useAuthAction, useCheckPhoneV2, useOTP } from '@screen/auth/functions';
+import { useCheckPhoneV2, useOTP } from '@screen/auth/functions';
 import { OTPInput } from '@screen/shared/views/components';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useDataAuth } from '@core/redux/Data';
 interface Props {
   onVerifyOTP: (otp: string) => void;
   loading: boolean;
@@ -30,13 +32,15 @@ const OTPContent: React.FC<Props> = (props) => {
   );
   const [resend, setResend] = React.useState(false);
   const [timer, setTimer] = React.useState(90);
-  const { requestOTPState, resetRequestOTP } = useAuthAction();
+  const { resetRequestOTP } = useAuthCoreAction();
   const { checkPhoneV2 } = useCheckPhoneV2();
+  const { requestOTP: requestOTPState } = useDataAuth()
 
   useEffect(() => {
     setOtpType('default')
     return () => setOtpType('default')
   }, [])
+  
   useEffect(() => {
     if (otp.length < 5) {
       setError(false);
