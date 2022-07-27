@@ -13,6 +13,7 @@ import { copilotOptions } from '@screen/account/views/shared';
 import { View } from 'react-native';
 import { useCoachmark } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
+import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
 
 const goBack = () => {
   NavigationAction.back();
@@ -25,15 +26,21 @@ const { Provider } = HistoryListContext;
 const OrderHistoryList = ({ start }: any) => {
   const { coachmarkState } = useCoachmark();
 
+  const {
+    stateOrderHistory: {
+      menuStatus: { data },
+    },
+  } = useOrderHistoryContext();
+
   React.useEffect(() => {
     if (
       typeof coachmarkState.data?.orderCoachmark === 'boolean' &&
-      coachmarkState.data?.orderCoachmark == false
+      coachmarkState.data?.orderCoachmark === false &&
+      data.length > 0
     ) {
       start();
     }
-  }, [coachmarkState.data]);
-  
+  }, [coachmarkState.data, data]);
 
   // first get & get by filter history list
   useInitialGetList();

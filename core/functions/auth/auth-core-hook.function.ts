@@ -31,8 +31,8 @@ const useAuthCoreAction = () => {
     resetVerificationOTP: () => {
       dispatch(Actions.verificationOTPReset());
     },
-    logout: () => {
-      dispatch(Actions.logoutProcess());
+    logout: (data?: any) => {
+      dispatch(Actions.logoutProcess(data));
     },
     resetLogout: () => {
       dispatch(Actions.logoutReset());
@@ -46,6 +46,12 @@ const useAuthCoreAction = () => {
     },
     resetCheckLoginPhone: () => {
       dispatch(Actions.checkPhoneLoginReset())
+    },
+    meV2Reset: () => {
+      dispatch(Actions.meV2Reset())
+    },
+    meReset: () => {
+      dispatch(Actions.meReset())
     }
   };
 };

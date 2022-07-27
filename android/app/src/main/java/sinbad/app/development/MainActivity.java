@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this, R.style.SplashTheme, true);
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
   }
 
   @Override

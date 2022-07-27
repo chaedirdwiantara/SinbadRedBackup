@@ -20,7 +20,7 @@ const ModalSalesman: React.FC<{ ref: any }> = React.forwardRef((_, ref: any) => 
           image={ImagesSinbad.forceRegister}
           imageStyle={{ height: 180, width: 180, resizeMode: 'contain' }}
           title="Selamat Datang Salesman"
-          description="Silakan gunakan Applikasi Sinbad Agent. Jika ada kendala, dapat hubungi team CS kami."
+          description="Silakan gunakan Aplikasi Sinbad Agent. Jika ada kendala, dapat hubungi tim CS kami."
         />
       </View>
     )

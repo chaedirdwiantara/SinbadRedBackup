@@ -103,7 +103,8 @@ export const meReset = () => {
 };
 /** === LOGOUT === */
 /** => process */
-export const logoutProcess = (): models.LogoutProcessAction => {
+export const logoutProcess = (data: any): models.LogoutProcessAction => {
+  globalReportFromAction(EventName.LOGOUT, data);
   return { type: types.LOGOUT_PROCESS };
 };
 /** => success */
