@@ -4,7 +4,6 @@ import {
   useOTP,
   setErrorMessage,
   useCheckAutoLogin,
-  useAuthAction,
 } from '@screen/auth/functions';
 import { OTPContent } from '@screen/auth/views/shared';
 import React from 'react';
@@ -34,7 +33,7 @@ const RegisterOTPView: React.FC = () => {
   const { goBack }: any = useNavigation();
   const { checkAutoLogin, resetCheckAutoLogin, checkAutoLoginData } =
     useCheckAutoLogin();
-  const { requestOTP } = useAuthAction();
+  const { requestOTP } = useAuthCoreAction();
   const [reCheckAutoLogin, setReCheckAutoLogin] = React.useState(0);
   const [loadingCheckAutoLogin, setLoadingCheckAutoLogin] =
     React.useState(false);
