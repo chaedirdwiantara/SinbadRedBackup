@@ -23,10 +23,11 @@ import {
   RegisterBadge,
   UpgradeVIPAccountBadge,
 } from '@screen/account/views/shared';
-import { useDataAuth } from '@core/redux/Data';
+import { useDataAuth, useDataUpdateApp } from '@core/redux/Data';
 import { renderIF } from '@screen/auth/functions';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NavigationAction } from '@navigation';
+import BottomSheetUpdate from '@core/components/BottomSheetUpdate';
 
 const { width } = Dimensions.get('window');
 const CopilotView = walkthroughable(View);
@@ -34,6 +35,7 @@ const CopilotView = walkthroughable(View);
 const HomeView: FC = ({ start }: any) => {
   const [keyword, setKeyword] = useState('');
   const { meV2 } = useDataAuth();
+  const { isUpdateApp } = useDataUpdateApp();
   const tabBarHeight = useBottomTabBarHeight();
   const [vipBadgeLayout, setVipBadgeLayout] = useState<LayoutRectangle>();
 
@@ -41,8 +43,14 @@ const HomeView: FC = ({ start }: any) => {
     typeof meV2.data?.data?.isDataCompleted === 'boolean' &&
     meV2.data?.data?.isDataCompleted === false;
 
+  /** => bottom sheet update */
+  const bottomSheetUpdate = () => {
+    return <BottomSheetUpdate open={isUpdateApp} />;
+  };
+
   return (
     <View style={{ flex: 1 }}>
+      {bottomSheetUpdate()}
       <CopilotStep
         text="Cari dan temukan produk terbaik untuk stok toko Anda."
         order={1}

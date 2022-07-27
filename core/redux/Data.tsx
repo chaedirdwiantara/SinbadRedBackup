@@ -15,6 +15,10 @@ const useDataPermanent = (): models.Permanent => {
 const useDataFlagRTDB = (): models.FlagRTDB => {
   return useSelector((state: RootState) => state.globalCore.flagRTDB);
 };
+/** => global data */
+const useDataUpdateApp = (): models.updateApp => {
+  return useSelector((state: RootState) => state.globalCore.updateApp);
+};
 /** => for auth data */
 const useDataAuth = (): AuthProps => {
   return useSelector((state: RootState) => state.authCore);
@@ -36,6 +40,7 @@ export {
   useDataFlagRTDB,
   useDataAuth,
   useDataTotalNotification,
+  useDataUpdateApp,
 };
 /**
  * ================================================================

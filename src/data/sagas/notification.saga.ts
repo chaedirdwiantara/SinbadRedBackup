@@ -47,7 +47,9 @@ function* notificationTotal() {
 
 /** notification mark read & refresh data */
 function* notificationMarkRead(
-  action: models.CreateProcessAction<models.NotificationListSuccessProps>,
+  action: models.CreateProcessAction<
+    Pick<models.NotificationListSuccessProps, 'id'>
+  >,
 ) {
   try {
     const { id } = action.payload.data;

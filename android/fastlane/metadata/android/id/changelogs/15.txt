@@ -1,0 +1,2 @@
+Sinbad versi 0.1.9
+Bugs Fixing adsID undefined in login register page

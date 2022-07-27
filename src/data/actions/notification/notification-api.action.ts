@@ -40,7 +40,9 @@ export const notificationListLoadMore = () => {
 /** => notification mark read process */
 export const notificationMarkReadProcess = (
   contextDispatch: (action: any) => any,
-  data: models.CreateProcessProps<models.NotificationListSuccessProps>,
+  data: models.CreateProcessProps<
+    Pick<models.NotificationListSuccessProps, 'id'>
+  >,
 ) => {
   contextDispatch({ type: types, payload: data });
   return {
