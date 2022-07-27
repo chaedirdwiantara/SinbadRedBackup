@@ -10,6 +10,7 @@ import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
 import Svg from '@svg';
 import { VoucherCartListStyles } from '@screen/voucher/styles';
+import { useVoucherLocalData } from '@screen/voucher/functions';
 
 interface VoucherCartFooterProps {
   selectedVoucher: models.EligibleVoucherProps | undefined;
@@ -28,6 +29,8 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
     withFraction: false,
   });
 
+  const { setSelectedVoucher } = useVoucherLocalData();
+
   return (
     <View style={{ justifyContent: 'flex-end' }}>
       {!!selectedVoucher && (
@@ -44,14 +47,18 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
           </View>
         </View>
       )}
-      <FooterButton.Order
+      <FooterButton.Checkout
         titleButton="Pakai Voucher"
         loading={loading}
         loadingButton={loading}
         disabled={disabled}
         value={total ?? 0}
-        buttonPress={() => {}}
-        type={'checkout'}
+        buttonPress={() =>
+          setSelectedVoucher({
+            voucherId: selectedVoucher?.sinbadVoucherId!,
+            voucherValue: selectedVoucher?.sinbadVoucherValue!,
+          })
+        }
       />
     </View>
   );

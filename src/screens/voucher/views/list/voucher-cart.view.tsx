@@ -1,12 +1,12 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT HERE === */
 
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { goBack, useVoucherList } from '../../functions';
+import { goBack, useVoucherList, useVoucherLocalData } from '../../functions';
 import { VoucherCartList } from './voucher-cart-list.view';
 import { VoucherCartHeader } from './voucher-cart-header.view';
 import { VoucherCartSearch } from './voucher-cart-search.view';
@@ -27,8 +27,13 @@ const VoucherCartListView: FC = () => {
     changeSelectedVoucher,
     selectedVoucher,
   } = useVoucherList();
-
+  const { selectedVoucher: localSelectedVoucher } = useVoucherLocalData();
   /** => effect */
+  useEffect(() => {
+    if (localSelectedVoucher) {
+      changeSelectedVoucher(localSelectedVoucher.voucherId);
+    }
+  }, [localSelectedVoucher]);
 
   /** === VIEW === */
   const renderListAndFooter = () => {
