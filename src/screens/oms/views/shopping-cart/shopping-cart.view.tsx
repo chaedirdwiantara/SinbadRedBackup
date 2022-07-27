@@ -183,10 +183,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   });
 
   /** => toast error check voucher */
-  const handleToastErrorCheckVoucher = (message: string) => {
+  const handleToastErrorCheckVoucher = (message: string, height: number) => {
     SnbToast2.show(message, 2000, {
       position: 'bottom',
-      positionValue: 170,
+      positionValue: height + 25,
     });
   };
 
