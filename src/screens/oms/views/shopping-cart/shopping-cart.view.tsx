@@ -66,7 +66,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     setInitialLocalData,
     debouncedValue,
   } = useCartLocalData();
-  const [pageLoading, setPageLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const keyboardFocus = useKeyboardFocus();
   const [selectRemoveProduct, setSelectRemoveProduct] =
     useState<models.HandleRemoveProduct | null>(null);
