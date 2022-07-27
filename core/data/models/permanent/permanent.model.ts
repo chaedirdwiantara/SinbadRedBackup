@@ -6,4 +6,5 @@ export interface Permanent {
   forceUpdateVersion: number;
   maintenance: boolean;
   advertisingId: string;
+  isBanned: boolean;
 }

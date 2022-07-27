@@ -22,6 +22,7 @@ import {
   SnbText2,
   colorV2,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { ListOfSteps, ModalBack, ModalSelection, Stepper } from '../../shared';
 import * as models from '@models';
@@ -51,11 +52,10 @@ function removeEmptyValue(data: any) {
 }
 
 interface Props {
-  openModalBack: boolean;
-  onCloseModalBack: (value: boolean) => void;
+  ref: any
 }
 
-const Content: React.FC<Props> = (props) => {
+const Content: React.FC<Props> = React.forwardRef((_, ref) => {
   const { completeDataState } = useEasyRegistration();
   const { buyerData } = completeDataState.data || {};
   const { coordinate, formattedAddress, location, street }: any =
@@ -72,15 +72,14 @@ const Content: React.FC<Props> = (props) => {
     React.useState<any>(
       buyerData?.vehicleAccessibilityAmount
         ? {
-            id: buyerData.vehicleAccessibilityAmount,
-            value: buyerData.vehicleAccessibilityAmount,
-          }
+          id: buyerData.vehicleAccessibilityAmount,
+          value: buyerData.vehicleAccessibilityAmount,
+        }
         : null,
     );
   let mapRef = React.useRef<MapView>(null);
   const [type, setType] = React.useState<models.ITypeList>('');
-  const [openModalSelection, setOpenModalSelection] =
-    React.useState<boolean>(false);
+  const refModalSelection = React.useRef<SnbBottomSheet2Ref>()
   const [latLng, setLatLng] = React.useState<LatLng | any>(null);
   const {
     latitude,
@@ -142,7 +141,7 @@ const Content: React.FC<Props> = (props) => {
       noteAddress.value !== existingNoteAddress ||
       vehicleAccessibility?.id !== existingVehicleAccessibility?.id ||
       vehicleAccessibilityAmount?.value !==
-        existingVehicleAccessibilityAmount ||
+      existingVehicleAccessibilityAmount ||
       latLng?.latitude !== latitude ||
       latLng?.longitude !== longitude;
 
@@ -197,14 +196,14 @@ const Content: React.FC<Props> = (props) => {
                 initialRegion={
                   latLng
                     ? {
-                        ...latLng,
-                        ...REGION_OPTIONS,
-                      }
+                      ...latLng,
+                      ...REGION_OPTIONS,
+                    }
                     : {
-                        latitude: DEFAULT_LATITUDE,
-                        longitude: DEFAULT_LONGITUDE,
-                        ...REGION_OPTIONS,
-                      }
+                      latitude: DEFAULT_LATITUDE,
+                      longitude: DEFAULT_LONGITUDE,
+                      ...REGION_OPTIONS,
+                    }
                 }
                 zoomEnabled={false}
                 pitchEnabled={false}
@@ -282,7 +281,7 @@ const Content: React.FC<Props> = (props) => {
                     type: 'listVehicleAccess',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -309,7 +308,7 @@ const Content: React.FC<Props> = (props) => {
                     type: 'listVehicleAccessAmount',
                   });
                 }
-                setOpenModalSelection(true);
+                refModalSelection.current?.open()
               }}
               rightType="icon"
               rightIcon="chevron_right"
@@ -344,7 +343,7 @@ const Content: React.FC<Props> = (props) => {
       </View>
       <ModalSelection
         type={type}
-        open={openModalSelection}
+        ref={refModalSelection}
         onCloseModalSelection={(result: any) => {
           if (result) {
             switch (result.type as models.ITypeList) {
@@ -361,16 +360,13 @@ const Content: React.FC<Props> = (props) => {
             }
             onSelectedItem(result.item);
           }
-          setOpenModalSelection(false);
+          refModalSelection.current?.close()
           resetGetSelection();
           resetSelectedItem();
         }}
       />
       <ModalBack
-        open={props.openModalBack}
-        closeModal={() => {
-          props.onCloseModalBack(false);
-        }}
+        ref={ref}
         confirm={() => {
           if (
             address.value !== existingAddress ||
@@ -402,18 +398,18 @@ const Content: React.FC<Props> = (props) => {
       />
     </View>
   );
-};
+});
 
 const DataTokoStep3View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = React.useState(false);
-  const [openModalBack, setOpenModalBack] = React.useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { completeDataState } = useEasyRegistration();
 
   const handleBackButton = React.useCallback(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -425,7 +421,7 @@ const DataTokoStep3View: React.FC = () => {
   return (
     <SnbContainer color="white">
       <SnbTopNav2.Type3
-        backAction={() => setOpenModalBack(true)}
+        backAction={() => refModalBack.current?.open()}
         color="white"
         title="Alamat Toko"
         testID={'13'}
@@ -433,17 +429,13 @@ const DataTokoStep3View: React.FC = () => {
       <Stepper
         complete={completeDataState?.data?.buyerProgress?.completed}
         total={completeDataState?.data?.buyerProgress?.total}
-        onPress={() => setOpenModalStep(true)}
+        onPress={() => refModalListOfStep.current?.open()}
         testID={'13'}
       />
-      <Content
-        openModalBack={openModalBack}
-        onCloseModalBack={setOpenModalBack}
-      />
+      <Content ref={refModalBack} />
       <ListOfSteps
-        open={openModalStep}
+        ref={refModalListOfStep}
         type="buyer"
-        closeModal={() => setOpenModalStep(false)}
         testID={'13.4'}
       />
     </SnbContainer>

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
-  SnbButton2,
   SnbContainer,
-  SnbText2,
   colorV2,
   spacingV2 as layout,
   borderV2,
   FooterButton,
+  SnbInfoBox2,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {
@@ -55,65 +54,27 @@ const OnBoardingView: React.FC<Props> = () => {
 
   setFlagByDeviceId();
 
-  const slideOnBoard = () => {
-    return (
-      <View>
-        <OnBoardSlider data={data} />
-        {button()}
-        {skipLogin()}
-      </View>
-    );
-  };
-
-  const button = () => {
-    return (
-      <View style={{ padding: layout.spacing.lg }}>
-        <FooterButton.Dual
-          title1="Daftar"
-          title2="Masuk"
-          button1Press={() => navigate(SELF_REGISTRATION_VIEW)}
-          button2Press={() => navigate(LOGIN_PHONE_VIEW)}
-          testID={'01'}
-        />
-      </View>
-    );
-  };
-
-  const skipLogin = () => {
-    return (
-      <View style={styles.textSkipLogin}>
-        <SnbText2.Paragraph.Default>
-          Biarkan saya masuk{' '}
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.lg }}>
-          <SnbButton2.Link
-            title="Lewati"
-            size="medium"
-            onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-            testID={'01'}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  const termsNotice = () => {
-    return (
-      <View style={styles.termsNoticeContainer}>
-        <SnbText2.Paragraph.Small color={colorV2.textColor.link} align="center">
-          Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
-          Kebijakan Privasi kami
-        </SnbText2.Paragraph.Small>
-      </View>
-    );
-  };
-
   const content = () => {
     return (
       <View style={styles.container}>
         <View />
-        {slideOnBoard()}
-        {termsNotice()}
+        <OnBoardSlider data={data} />
+        <FooterButton.Dual
+          testID={'01'}
+          title2="Masuk"
+          button2Press={() => navigate(LOGIN_PHONE_VIEW)}
+          title1="Daftar"
+          button1Press={() => navigate(SELF_REGISTRATION_VIEW)}
+          textLink="Lewati"
+          description="Biarkan saya masuk"
+          textLinkPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+        />
+        <SnbInfoBox2
+          title="Dengan daftar atau masuk, Anda menyetujui Syarat & Ketentuan serta
+          Kebijakan Privasi kami"
+          color="blue"
+          align='center'
+        />
       </View>
     );
   };

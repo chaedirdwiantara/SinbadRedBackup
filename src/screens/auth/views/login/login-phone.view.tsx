@@ -1,17 +1,14 @@
 import {
   setErrorMessage,
-  useAuthAction,
   useInputPhone,
 } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import { loginPhoneStyles } from '@screen/auth/styles';
-import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
+import React from 'react';
+import { View, ScrollView, Image, Keyboard } from 'react-native';
 import {
+  FooterButton,
   SnbBottomSheet2Ref,
-  SnbButton2,
   SnbContainer,
-  SnbText2,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
@@ -26,7 +23,7 @@ const Content: React.FC = () => {
   const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
   const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
   const phone = useInputPhone();
-  const { reset, navigate } = useNavigation();
+  const { navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent();
@@ -36,6 +33,7 @@ const Content: React.FC = () => {
     return () => {
       resetCheckLoginPhone()
       resetRequestOTP()
+      phone.clearText()
     };
   }, []);
 
@@ -58,18 +56,6 @@ const Content: React.FC = () => {
     }
   }, [checkPhoneLoginState]);
 
-  useEffect(() => {
-    const backAction = () => {
-      reset({ index: 0, routes: [{ name: 'Home' }] });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
-  }, []);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Image
@@ -84,52 +70,38 @@ const Content: React.FC = () => {
       <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text
           {...phone}
-          labelText="Nomer Handphone"
+          labelText="Nomor Handphone"
           keyboardType="phone-pad"
           testID={'01'}
         />
       </View>
-      <View style={{ marginTop: layout.spacing.lg }} />
-      <View style={{ paddingHorizontal: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          testID={'01'}
-          title="Selanjutnya"
-          onPress={() => {
-            Keyboard.dismiss()
-            resetCheckLoginPhone();
-            checkPhoneLogin({
-              mobilePhone: phone.value,
-              identifierDeviceId:
-                advertisingId === undefined ? null : advertisingId,
-            });
-          }}
-          loading={checkPhoneLoginState.loading}
-          disabled={
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            checkPhoneLoginState.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
-      <View style={loginPhoneStyles.registerLink}>
-        <SnbText2.Paragraph.Default>
-          Belum punya akun Sinbad?
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.sm }}>
-          <SnbButton2.Link
-            title="Daftar"
-            size="medium"
-            onPress={() => {
-              phone.clearText();
-              navigate(SELF_REGISTRATION_VIEW);
-            }}
-            testID={'01'}
-          />
-        </View>
-      </View>
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
+      <FooterButton.Single
+        testID={'01'}
+        title='Selanjutnya'
+        buttonPress={() => {
+          Keyboard.dismiss()
+          resetCheckLoginPhone();
+          checkPhoneLogin({ mobilePhone: phone.value, identifierDeviceId: advertisingId });
+        }}
+        loadingButton={checkPhoneLoginState.loading}
+        disabled={
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          checkPhoneLoginState.loading
+        }
+        textLink="Daftar"
+        textLinkPress={() => {
+          phone.clearText();
+          navigate(SELF_REGISTRATION_VIEW);
+        }}
+        description="Belum punya akun Sinbad?"
+      />
+      <ModalOTPMethod 
+        ref={refModalOTP} 
+        phone={phone.value} 
+        action="login" 
+        onResetField={phone.clearText}
+      />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal

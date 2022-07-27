@@ -2,8 +2,6 @@ import {
   MerchantDetailProfileView,
   MerchantDetailAccountView,
   MerchantDetailInformationView,
-  MerchantSupplierInformationView,
-  MerchantDetailAddressView,
 } from '@screen/merchant/views/detail-merchant';
 import {
   MerchantEditView,
@@ -27,12 +25,6 @@ const MerchantNav = {
   },
   MerchantEditView: {
     component: MerchantEditView,
-  },
-  MerchantSupplierInformationView: {
-    component: MerchantSupplierInformationView,
-  },
-  MerchantDetailAddressView: {
-    component: MerchantDetailAddressView,
   },
   MerchantEditAddressView: {
     component: MerchantEditAddressView,
