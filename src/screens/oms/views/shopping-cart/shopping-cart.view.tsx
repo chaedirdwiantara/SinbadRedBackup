@@ -186,7 +186,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const handleToastErrorCheckVoucher = (message: string) => {
     SnbToast2.show(message, 2000, {
       position: 'bottom',
-      positionValue: 110,
+      positionValue: 170,
     });
   };
 

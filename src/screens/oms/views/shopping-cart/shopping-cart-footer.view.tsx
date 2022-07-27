@@ -274,9 +274,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       } else if (stateVoucher.checkSinbadVoucher.data.totalOrder < 100000) {
         resetSelectedVoucher();
         handleParentToast('Min. belanja 100rb untuk checkout');
-      } else {
-        setFooterData(stateVoucher.checkSinbadVoucher.data);
       }
+      setFooterData(stateVoucher.checkSinbadVoucher.data);
     }
   }, [stateVoucher.checkSinbadVoucher.data]);
 
