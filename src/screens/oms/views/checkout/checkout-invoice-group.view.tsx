@@ -83,6 +83,7 @@ export const CheckoutInvoiceGroupView: FC<CheckoutInvoiceGroupViewProps> = ({
               <CheckoutPaymentDetailView
                 testID={`seller${item.sellerId}.productContainer.${testID}`}
                 products={item.products}
+                totalQty={item.totalSellerQtyProduct!}
               />
             </View>
           </>

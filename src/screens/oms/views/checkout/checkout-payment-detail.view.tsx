@@ -6,7 +6,6 @@ import { SnbText2, colorV2, SnbIcon } from 'react-native-sinbad-ui';
 import {
   usePaymentDetailAccorrdion,
   totalBarangPrice,
-  subTotalQty,
 } from '../../functions/checkout';
 /** === TYPE === */
 import * as models from '@models';
@@ -15,12 +14,14 @@ import { testProps } from '@core/functions/global/test-props';
 
 export interface CheckoutPaymentDetailViewProps {
   products: models.CheckoutCartProduct[];
+  totalQty: number;
   testID: string;
 }
 
 /** === COMPONENT === */
 export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
   products,
+  totalQty,
   testID,
 }) => {
   /** === HOOK === */
@@ -28,7 +29,6 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
   const isActive = paymentAccordion.active === 1;
   const deliveryFee = 0;
   const totalProductsPrice = totalBarangPrice(products);
-  const subQty = subTotalQty(products);
 
   return (
     <View>
@@ -38,7 +38,7 @@ export const CheckoutPaymentDetailView: FC<CheckoutPaymentDetailViewProps> = ({
             <SnbText2.Paragraph.Default
               testID={`totalProductsQty.detail.${testID}`}
               color={colorV2.textColor.secondary}>
-              {`Total Barang (${subQty})`}
+              {`Total Barang (${totalQty})`}
             </SnbText2.Paragraph.Default>
             <SnbText2.Paragraph.Default
               testID={`totalProductsPrice.detail.${testID}`}

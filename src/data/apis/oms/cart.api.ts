@@ -1,6 +1,5 @@
 /** === IMPORT INTERNAL === */
 import { serializeUniformKeyQs } from '@core/functions/global/query-string';
-import apiMappingMock from '@core/services/apiMappingMockV3';
 import apiMapping from '@core/services/apiMappingV3';
 import * as models from '@models';
 

@@ -11,6 +11,7 @@ export interface CheckoutCart<T> {
   sellerAdminName?: string;
   sellerAdminEmail?: string;
   sinbadVoucherDiscountParcel: number;
+  totalSellerQtyProduct?: number;
   products: T[];
 }
 

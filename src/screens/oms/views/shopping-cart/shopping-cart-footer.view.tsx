@@ -287,7 +287,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         stateVoucher.checkSinbadVoucher.data.totalOrder < 100000 &&
         countTotalProduct > 0
       ) {
-        resetSelectedVoucher();
         handleParentToast(
           'Min. belanja 100rb untuk checkout',
           refFooterHeight.current,
@@ -354,7 +353,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
       voucherStatus = 'green';
       voucherBadgeTitle = `Kamu Hemat ${toCurrency(
-        stateVoucher.checkSinbadVoucher.data?.sinbadVoucherDiscountOrder,
+        footerData?.sinbadVoucherDiscountOrder,
         { withFraction: false },
       )}`;
       voucherBadgeSubtitle = '1 Voucher digunakan';

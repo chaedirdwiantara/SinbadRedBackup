@@ -44,6 +44,7 @@ import * as models from '@models';
 import { ShoppingCartEmpty } from './shopping-cart-empty.view';
 import { NavigationAction } from '@core/functions/navigation';
 import { useCancelVoucherAction } from '@screen/voucher/functions';
+import { useVoucherLocalData } from '@screen/voucher/functions';
 /** === GLOBAL === */
 const screenName = 'keranjangPage';
 /** === COMPONENT === */
@@ -92,6 +93,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const updateCartAction = useUpdateCartAction();
   const cancelVoucherAction = useCancelVoucherAction();
   const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
+  const { resetSelectedVoucher } = useVoucherLocalData();
 
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
@@ -195,6 +197,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   useEffect(() => {
     return () => {
       handleResetContexts();
+      resetSelectedVoucher();
     };
   }, []);
 
