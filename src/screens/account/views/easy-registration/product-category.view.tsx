@@ -12,7 +12,7 @@ import {
 } from '@sinbad/react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 import React from 'react';
-import { FlatList, Image, View } from 'react-native';
+import { FlatList, Image, TouchableOpacity, View } from 'react-native';
 import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
@@ -89,7 +89,18 @@ const ProductCategory: React.FC = () => {
 
   function renderItems({ item }: any) {
     return (
-      <View style={{ marginVertical: layout.spacing.lg }}>
+      <TouchableOpacity
+        style={{ marginVertical: layout.spacing.lg }}
+        onPress={() => {
+          const newData = data.map((el) => {
+            if (el.id === item.id) {
+              el.isSelected = !el.isSelected;
+            }
+            return el;
+          });
+          setData(newData);
+        }}
+      >
         <Option.Basic
           label={item.name}
           checked={item?.isSelected}
@@ -109,7 +120,7 @@ const ProductCategory: React.FC = () => {
             />
           }
         />
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -129,9 +140,19 @@ const ProductCategory: React.FC = () => {
           ListHeaderComponent={() => {
             if (productCategories?.data.length > 0) {
               return (
-                <View
+                <TouchableOpacity
+                  activeOpacity={0.9}
+                  onPress={() => {
+                    setCheckBoxStatus(
+                      checkBoxStatus === 'indeterminate'
+                        ? 'unselect'
+                        : 'indeterminate',
+                    );
+                  }}
                   style={{
-                    marginTop: layout.spacing.lg,
+                    paddingVertical: layout.spacing.lg,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colorV2.neutral.cloud30
                   }}>
                   <Option.Basic
                     label={'Semua Produk'}
@@ -152,9 +173,8 @@ const ProductCategory: React.FC = () => {
                         }}
                       />
                     }
-                    withDivider
                   />
-                </View>
+                </TouchableOpacity>
               );
             }
             return null;
@@ -188,8 +208,8 @@ const ProductCategory: React.FC = () => {
           ItemSeparatorComponent={() => (
             <View
               style={{
-                height: 0.75,
-                backgroundColor: colorV2.bgColor.neutralAlt,
+                borderBottomWidth: 1,
+                borderBottomColor: colorV2.neutral.cloud30,
               }}
             />
           )}
