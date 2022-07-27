@@ -282,11 +282,13 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** => listen when something change in products */
   useEffect(() => {
     if (localCartMasterDebouce) {
+      const carts = reformatCarts();
       /** fetch check sinbad voucher */
       checkSinbadVoucherAction.fetch(
         dispatchVoucher,
         false,
         selectedVoucher?.voucherId || null,
+        carts,
       );
     }
   }, [localCartMasterDebouce]);
@@ -298,6 +300,26 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       handleParentToast('Pilih produk sebelum pakai voucher');
     }
   }, [countTotalProduct]);
+
+  const reformatCarts = () => {
+    // format payload from redux master
+    const carts: models.CheckSinbadVoucherPayloadCarts[] = [];
+    localCartMasterDebouce.sellers.map((sellerItem) => {
+      const products: models.CheckSinbadVoucherPayloadProducts[] = [];
+      sellerItem.products.map((productItem) => {
+        products.push({
+          productId: productItem.productId,
+          qty: productItem.qty,
+          priceAfterTax: productItem.priceAfterTax,
+        });
+      });
+      carts.push({ sellerId: sellerItem.sellerId, products });
+    });
+
+    console.log('ini carts', carts);
+
+    return carts;
+  };
 
   const manageVoucherCheckbox = () => {
     const isVoucherSelected =
