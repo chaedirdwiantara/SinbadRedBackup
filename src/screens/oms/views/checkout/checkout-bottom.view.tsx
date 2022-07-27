@@ -32,14 +32,13 @@ export const CheckoutBottomView: FC<CheckoutBottomViewProps> = ({
 
   return (
     <React.Fragment>
-      <FooterButton.Order
+      <FooterButton.Checkout
         testID={testID}
         titleButton="Pilih Pembayaran"
         value={totalPaymentFull}
         buttonPress={
           totalPaymentNumber > 999999999 ? pressButton : goToPaymentMethod
         }
-        type={'checkout'}
       />
     </React.Fragment>
   );
