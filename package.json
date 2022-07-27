@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "clear": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache",
-    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:bundleRelease"
+    "build": "cd ./android && ./gradlew clean && ./gradlew cleanBuildCache && ./gradlew app:bundleRelease",
+    "uninstall": "adb uninstall sinbad.app.development"
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "2.2.2",
@@ -27,7 +28,7 @@
     "@react-navigation/stack": "5.14.4",
     "@sentry/react-native": "3.2.10",
     "@sinbad/image-editor": "2.3.1",
-    "@sinbad/react-native-sinbad-ui": "1.0.78",
+    "@sinbad/react-native-sinbad-ui": "1.0.80",
     "fbjs": "0.8.18",
     "moment": "2.29.1",
     "react": "16.13.1",
