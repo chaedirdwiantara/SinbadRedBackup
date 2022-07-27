@@ -929,6 +929,19 @@ const useKeyboardFocus = () => {
     isFocus,
   };
 };
+/** => footer data */
+const useFooterData = () => {
+  const [data, setData] = useState<models.CheckSinbadVoucherResponse | null>(
+    null,
+  );
+
+  return {
+    setFooterData: (newValue: models.CheckSinbadVoucherResponse | null) => {
+      setData(newValue);
+    },
+    footerData: data,
+  };
+};
 /** === EXPORT === */
 export {
   useGetCartAction,
@@ -948,6 +961,7 @@ export {
   useOmsGeneralFailedState,
   useKeyboardFocus,
   useCheckSinbadVoucherAction,
+  useFooterData,
 };
 /**
  * ================================================================

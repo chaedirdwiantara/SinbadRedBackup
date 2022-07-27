@@ -26,7 +26,7 @@ const useDataAuth = (): AuthProps => {
 const useDataGlobal = () => {
   return useSelector((state: RootState) => state.permanent.global);
 };
-const useDataVoucher = (): models.VoucherDataProps => {
+const useDataVoucher = (): models.VoucherLocalData => {
   return useSelector((state: RootState) => state.voucher);
 };
 const useDataTotalNotification = () => {

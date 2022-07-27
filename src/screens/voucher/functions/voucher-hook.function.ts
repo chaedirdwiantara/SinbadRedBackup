@@ -7,6 +7,8 @@ import { useDebounce } from '@core/functions/hook/debounce';
 import { contexts } from '@contexts';
 import { RadioValue } from '@sinbad/react-native-sinbad-ui/lib/typescript/components/v2/Radio/RadioGroup';
 import { VoucherListProcessProps } from '@models';
+import { useDataVoucher } from '@core/redux/Data';
+import * as models from '@models';
 /** === FUNCTION === */
 /** => cancel reserve voucher */
 const useCancelVoucherAction = () => {
@@ -116,6 +118,19 @@ const useVoucherDetail = () => {
     error: stateVoucher.voucherCart.detail.error,
   };
 };
+const useVoucherLocalData = () => {
+  const dispatch = useDispatch();
+  const voucherData = useDataVoucher();
+  return {
+    setSelectedVoucher: (voucher: models.SaveSelectedVoucher) => {
+      dispatch(Actions.saveSelectedVoucher(voucher));
+    },
+    resetSelectedVoucher: () => {
+      dispatch(Actions.resetSelectedVoucher());
+    },
+    selectedVoucher: voucherData.selectedSinbadVoucher,
+  };
+};
 /** === EXPORT === */
 export {
   useCancelVoucherAction,
@@ -125,6 +140,7 @@ export {
   useSelectedVoucher,
   useVoucherList,
   useVoucherDetail,
+  useVoucherLocalData,
 };
 /**
  * ================================================================

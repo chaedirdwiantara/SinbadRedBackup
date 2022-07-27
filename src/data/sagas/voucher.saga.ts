@@ -48,7 +48,7 @@ function* checkSinbadVoucher(
   try {
     const response: models.CreateSuccessV3Props<models.CheckSinbadVoucherResponse> =
       yield call(() => {
-        return VoucherApi.checkSinbadVoucher();
+        return VoucherApi.checkSinbadVoucher(action.payload);
       });
     yield action.contextDispatch(
       ActionCreators.checkSinbadVoucherSuccess(response),
