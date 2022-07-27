@@ -10,7 +10,14 @@ import {
   useUpdateCartAction,
 } from '../../functions';
 import { useVoucherLocalData } from '@screen/voucher/functions';
-import React, { FC, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { View } from 'react-native';
 import { FooterButton } from 'react-native-sinbad-ui';
 /** === IMPORT OTHER HERE === */
@@ -29,7 +36,7 @@ interface FooterProps {
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
   handleErrorGlobalModalData: ErrorGlobalModalDataProps;
-  handleParentToast: (message: string) => void;
+  handleParentToast: (message: string, height: number) => void;
   handleOpenErrorCheckVoucher: () => void;
   testID: string;
 }
@@ -73,6 +80,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const isFocused = useIsFocused();
   const { selectedVoucher, resetSelectedVoucher } = useVoucherLocalData();
   const { footerData, setFooterData } = useFooterData();
+  const refFooterHeight = useRef(0);
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -98,10 +106,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckProductAction.fetch(dispatchCart, cartData);
       postCheckSellerAction.fetch(dispatchCart, cartData);
       postCheckStockAction.fetch(dispatchCart, cartData);
+      const carts = reformatCarts();
       checkSinbadVoucherAction.fetch(
         dispatchVoucher,
         true,
         selectedVoucher?.voucherId || null,
+        carts,
       );
       setCheckoutPressed(false);
       setCheckoutBtnLoading(true);
@@ -271,10 +281,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         resetSelectedVoucher();
         handleParentToast(
           'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
+          refFooterHeight.current,
         );
-      } else if (stateVoucher.checkSinbadVoucher.data.totalOrder < 100000) {
-        resetSelectedVoucher();
-        handleParentToast('Min. belanja 100rb untuk checkout');
+      } else if (
+        stateVoucher.checkSinbadVoucher.data.totalOrder < 100000 &&
+        countTotalProduct > 0
+      ) {
+        handleParentToast(
+          'Min. belanja 100rb untuk checkout',
+          refFooterHeight.current,
+        );
       }
       setFooterData(stateVoucher.checkSinbadVoucher.data);
     }
@@ -296,9 +312,16 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** => listen relate count total selected product */
   useEffect(() => {
-    if (selectedVoucher && countTotalProduct === 0) {
+    if (
+      stateVoucher.checkSinbadVoucher.data &&
+      stateVoucher.checkSinbadVoucher.data.isVoucherExist &&
+      countTotalProduct === 0
+    ) {
       resetSelectedVoucher();
-      handleParentToast('Pilih produk sebelum pakai voucher');
+      handleParentToast(
+        'Pilih produk sebelum pakai voucher',
+        refFooterHeight.current,
+      );
     }
   }, [countTotalProduct]);
 
@@ -317,8 +340,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       carts.push({ sellerId: sellerItem.sellerId, products });
     });
 
-    console.log('ini carts', carts);
-
     return carts;
   };
 
@@ -326,14 +347,13 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     const isVoucherSelected =
       selectedVoucher && selectedVoucher.voucherId !== null;
     const isProductSelected = countTotalProduct > 0;
-    const isSinbadVoucherExist =
-      stateVoucher.checkSinbadVoucher.data?.isVoucherExist || false;
+    const isSinbadVoucherExist = footerData?.isVoucherExist || false;
     let voucherStatus: IVoucherStatus, voucherBadgeTitle, voucherBadgeSubtitle;
 
     if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
       voucherStatus = 'green';
       voucherBadgeTitle = `Kamu Hemat ${toCurrency(
-        stateVoucher.checkSinbadVoucher.data?.sinbadVoucherDiscountOrder,
+        footerData?.sinbadVoucherDiscountOrder,
         { withFraction: false },
       )}`;
       voucherBadgeSubtitle = '1 Voucher digunakan';
@@ -389,7 +409,10 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
           voucherStatus === 'green'
             ? () => {
                 resetSelectedVoucher();
-                handleParentToast('Voucher Berhasil Dihapus');
+                handleParentToast(
+                  'Voucher Berhasil Dihapus',
+                  refFooterHeight.current,
+                );
               }
             : undefined
         }
@@ -399,6 +422,13 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   /** ==> Main */
   return (
-    <View style={{ justifyContent: 'flex-end' }}>{renderFooterContent()}</View>
+    <View
+      style={{ justifyContent: 'flex-end' }}
+      onLayout={(event) => {
+        const { height } = event.nativeEvent.layout;
+        refFooterHeight.current = height;
+      }}>
+      {renderFooterContent()}
+    </View>
   );
 };

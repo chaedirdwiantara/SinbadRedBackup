@@ -37,6 +37,7 @@ import {
   useThankYouPageCancelOrderAction,
 } from '@screen/oms/functions/thank-you-page/thank-you-page-hook.function';
 import { useThankYouPageContext } from 'src/data/contexts/oms/thank-you-page/useThankYouPageContext';
+import { useVoucherLocalData } from '@screen/voucher/functions';
 import * as models from '@models';
 /** === GLOBAL === */
 const screenName = 'checkoutPage';
@@ -76,6 +77,8 @@ const OmsCheckoutView: FC = () => {
 
   /** => Back handler */
   useCustomBackHardware(() => refBackToCartModal.current?.open());
+
+  const { resetSelectedVoucher } = useVoucherLocalData();
 
   /** => Get TNC Contents  */
   const getTncContent = useGetTncContent();
@@ -120,6 +123,7 @@ const OmsCheckoutView: FC = () => {
 
   /** handle back to cart */
   const handleBackToCart = () => {
+    resetSelectedVoucher();
     updateCartAction.reset(dispatchCart);
     checkoutAction.reset(dispatchCheckout);
     refExpiredTimeModal.current?.close();
@@ -179,12 +183,12 @@ const OmsCheckoutView: FC = () => {
         {/* total order view */}
         <CheckoutTotalOrderView
           testID={screenName}
-          totalProductsQty={2}
+          totalProductsQty={data.totalOrderQtyProduct}
           totalProductsValue={totalPaymentFull}
-          discountVoucher={10000}
+          discountVoucher={data.sinbadVoucherDiscountOrder}
           totalDeliveryFee={0}
           serviceFee={0}
-          totalPayment={totalPaymentFull - data.sinbadVoucherDiscountOrder}
+          totalPayment={totalPaymentNumber - data.sinbadVoucherDiscountOrder}
         />
         {/* term and condition view */}
         <CheckoutTNCView testID={screenName} clickAction={handleOpenTNCModal} />
