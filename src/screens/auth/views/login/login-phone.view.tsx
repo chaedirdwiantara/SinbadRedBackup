@@ -1,20 +1,14 @@
-import {
-  setErrorMessage,
-  useAuthAction,
-  useInputPhone,
-} from '@screen/auth/functions';
+import { setErrorMessage, useInputPhone } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import { loginPhoneStyles } from '@screen/auth/styles';
 import React, { useEffect } from 'react';
 import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
 import {
   SnbBottomSheet2Ref,
-  SnbButton2,
   SnbContainer,
-  SnbText2,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
@@ -23,8 +17,9 @@ import { useDataAuth, useDataPermanent } from '@core/redux/Data';
 import { ForceRegistrationModal } from '../shared/index';
 
 const Content: React.FC = () => {
-  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } = useAuthCoreAction();
-  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth()
+  const { checkPhoneLogin, resetCheckLoginPhone, resetRequestOTP } =
+    useAuthCoreAction();
+  const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth();
   const phone = useInputPhone();
   const { reset, navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
@@ -34,8 +29,8 @@ const Content: React.FC = () => {
 
   React.useEffect(() => {
     return () => {
-      resetCheckLoginPhone()
-      resetRequestOTP()
+      resetCheckLoginPhone();
+      resetRequestOTP();
     };
   }, []);
 
@@ -89,8 +84,32 @@ const Content: React.FC = () => {
           testID={'01'}
         />
       </View>
-      <View style={{ marginTop: layout.spacing.lg }} />
-      <View style={{ paddingHorizontal: layout.spacing.lg }}>
+      <FooterButton.Single
+        testID={'01'}
+        title="Selanjutnya"
+        buttonPress={() => {
+          Keyboard.dismiss();
+          resetCheckLoginPhone();
+          checkPhoneLogin({
+            mobilePhone: phone.value,
+            identifierDeviceId:
+              advertisingId === undefined ? null : advertisingId,
+          });
+        }}
+        textLink={'Daftar'}
+        description={'Belum punya akun Sinbad?'}
+        textLinkPress={() => {
+          phone.clearText();
+          navigate(SELF_REGISTRATION_VIEW);
+        }}
+        disabled={
+          phone.value === '' ||
+          phone.valMsgError !== '' ||
+          checkPhoneLoginState.loading
+        }
+        loadingButton={checkPhoneLoginState.loading}
+      />
+      {/* <View style={{ paddingHorizontal: layout.spacing.lg }}>
         <SnbButton2.Primary
           testID={'01'}
           title="Selanjutnya"
@@ -128,14 +147,14 @@ const Content: React.FC = () => {
             testID={'01'}
           />
         </View>
-      </View>
+      </View> */}
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal
           ref={refModalForceRegist}
           confirm={() => {
-            phone.clearText()
+            phone.clearText();
             navigate(SELF_REGISTRATION_VIEW);
             refModalForceRegist.current?.close();
           }}

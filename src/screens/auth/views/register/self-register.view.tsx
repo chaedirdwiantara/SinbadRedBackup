@@ -2,12 +2,11 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, Image, Keyboard } from 'react-native';
 import {
   SnbContainer,
-  SnbText2,
   SnbTopNav2,
   SnbTextField2,
-  SnbButton2,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { LOGIN_PHONE_VIEW } from '@screen/auth/functions/screens_name';
@@ -101,50 +100,30 @@ const SelfRegisterView: React.FC = () => {
   const buttonRegister = () => {
     return (
       <View>
-        <View style={styles.button}>
-          <SnbButton2.Primary
-            title={'Lanjut'}
-            onPress={() => {
-              Keyboard.dismiss();
-              checkPhoneRegistration({
-                mobilePhone: phone.value,
-                identifierDeviceId:
-                  advertisingId === undefined ? null : advertisingId,
-              });
-            }}
-            disabled={
-              phone.value === '' ||
-              phone.valMsgError !== '' ||
-              checkPhoneRegistrationState.loading
-            }
-            loading={checkPhoneRegistrationState.loading}
-            size="medium"
-            full
-            testID={'02'}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: layout.spacing.md,
-          }}>
-          <SnbText2.Paragraph.Default>
-            Sudah punya akun Sinbad?{' '}
-          </SnbText2.Paragraph.Default>
-          <View style={{ marginLeft: -layout.spacing.md }}>
-            <SnbButton2.Link
-              title="Masuk"
-              size="medium"
-              onPress={() => {
-                phone.clearText();
-                navigate(LOGIN_PHONE_VIEW);
-              }}
-              testID={'02'}
-            />
-          </View>
-        </View>
+        <FooterButton.Single
+          testID={'02'}
+          title={'Lanjut'}
+          buttonPress={() => {
+            Keyboard.dismiss();
+            checkPhoneRegistration({
+              mobilePhone: phone.value,
+              identifierDeviceId:
+                advertisingId === undefined ? null : advertisingId,
+            });
+          }}
+          textLink={'Masuk'}
+          description={'Sudah punya akun Sinbad?'}
+          textLinkPress={() => {
+            phone.clearText();
+            navigate(LOGIN_PHONE_VIEW);
+          }}
+          disabled={
+            phone.value === '' ||
+            phone.valMsgError !== '' ||
+            checkPhoneRegistrationState.loading
+          }
+          loadingButton={checkPhoneRegistrationState.loading}
+        />
       </View>
     );
   };

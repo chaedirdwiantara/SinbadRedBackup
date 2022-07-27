@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
-  SnbButton2,
   SnbContainer,
   SnbText2,
   colorV2,
@@ -60,7 +59,6 @@ const OnBoardingView: React.FC<Props> = () => {
       <View>
         <OnBoardSlider data={data} />
         {button()}
-        {skipLogin()}
       </View>
     );
   };
@@ -74,25 +72,10 @@ const OnBoardingView: React.FC<Props> = () => {
           button1Press={() => navigate(SELF_REGISTRATION_VIEW)}
           button2Press={() => navigate(LOGIN_PHONE_VIEW)}
           testID={'01'}
+          textLink={'Lewati'}
+          description={'Biarkan saya masuk'}
+          textLinkPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
         />
-      </View>
-    );
-  };
-
-  const skipLogin = () => {
-    return (
-      <View style={styles.textSkipLogin}>
-        <SnbText2.Paragraph.Default>
-          Biarkan saya masuk{' '}
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.lg }}>
-          <SnbButton2.Link
-            title="Lewati"
-            size="medium"
-            onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
-            testID={'01'}
-          />
-        </View>
       </View>
     );
   };
