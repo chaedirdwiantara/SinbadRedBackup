@@ -23,19 +23,19 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
   const getSubtitle = (remainingDay: number) => {
     if (remainingDay > 0) {
       if (remainingDay > 30) {
-        return 'Berakhir >30 hari lagi';
+        return 'Berakhir >30 hari lagi!';
       }
       return `Berakhir dalam ${remainingDay} hari lagi!`;
     }
 
-    return 'Berakhir hari ini';
+    return 'Berakhir hari ini!';
   };
 
   return (
     <SnbContainer color="grey">
       <ScrollView style={VoucherCartListStyles.container}>
         <SnbRadioGroup 
-          value={props?.selectedVoucher?.id}
+          value={props?.selectedVoucher?.sinbadVoucherId}
           onChange={(value) => onSelectedChange(value as number)}>
           {props?.selectedVoucher && (
             <View style={VoucherCartListStyles.cardContainer}>
@@ -43,10 +43,10 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                 name="Sinbad"
                 title={props?.selectedVoucher.name}
                 subtitle={getSubtitle(props?.selectedVoucher?.remainingDay)}
-                value={props?.selectedVoucher.id}
+                value={props?.selectedVoucher.sinbadVoucherId}
                 onPress={() =>
                   NavigationAction.navigate('VoucherDetailView', {
-                    id: props?.selectedVoucher?.id,
+                    id: props?.selectedVoucher?.sinbadVoucherId,
                     type: 'eligible',
                   })
                 }
@@ -62,16 +62,16 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 
                 return (
                   <View
-                    key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
+                    key={`${voucher.sinbadVoucherId}-${voucher.id}`}
                     style={VoucherCartListStyles.cardContainer}>
                     <VoucherCard
                       name="Sinbad"
                       title={voucher.name}
                       subtitle={subtitle}
-                      value={voucher.id}
+                      value={voucher.sinbadVoucherId}
                       onPress={() =>
                         NavigationAction.navigate('VoucherDetailView', {
-                          id: voucher.id,
+                          id: voucher.sinbadVoucherId,
                           type: 'eligible',
                         })
                       }
@@ -91,16 +91,16 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 
               return (
                 <View
-                  key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
+                  key={`${voucher.sinbadVoucherId}-${voucher.id}`}
                   style={VoucherCartListStyles.cardContainer}>
                   <VoucherCard
                     name="Sinbad"
                     title={voucher.name}
                     subtitle={subtitle}
-                    value={voucher.id}
+                    value={voucher.sinbadVoucherId}
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
-                        id: voucher.id,
+                        id: voucher.sinbadVoucherId,
                         type: 'not-eligible',
                       })
                     }

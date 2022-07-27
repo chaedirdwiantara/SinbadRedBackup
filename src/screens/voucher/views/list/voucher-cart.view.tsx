@@ -1,33 +1,46 @@
 /** === IMPORT PACKAGE HERE ===  */
 import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SnbContainer } from 'react-native-sinbad-ui';
 /** === IMPORT COMPONENT HERE === */
 
 /** === IMPORT INTERNAL FUNCTION HERE === */
-import { goBack, useVoucherList } from '../../functions';
+import { goBack, useVoucherList, useVoucherLocalData } from '../../functions';
 import { VoucherCartList } from './voucher-cart-list.view';
 import { VoucherCartHeader } from './voucher-cart-header.view';
 import { VoucherCartSearch } from './voucher-cart-search.view';
 import { VoucherCartFooter } from './voucher-cart-footer.view';
 import { VoucherCartEmpty } from './voucher-cart-empty.view';
-// import { useCartMasterActions } from '@screen/oms/functions';
+import BottomSheetError from '@core/components/BottomSheetError';
+import { NavigationAction } from '@core/functions/navigation';
+/** === INTERFACE === */
+interface NavigationParams {
+  totalOrder: number;
+}
+
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
-  const { stateVoucher } = React.useContext(contexts.VoucherContext);
   const {
     eligibleVouchers,
     notEligibleVouchers,
     loading,
     empty,
     disabled,
+    error,
     changeSelectedVoucher,
     selectedVoucher,
   } = useVoucherList();
-
+  const { selectedVoucher: localSelectedVoucher } = useVoucherLocalData();
+  const { totalOrder } =
+    NavigationAction.useGetNavParams<NavigationParams>().params;
   /** => effect */
+  useEffect(() => {
+    if (localSelectedVoucher) {
+      changeSelectedVoucher(localSelectedVoucher.voucherId);
+    }
+  }, [localSelectedVoucher]);
 
   /** === VIEW === */
   const renderListAndFooter = () => {
@@ -45,7 +58,7 @@ const VoucherCartListView: FC = () => {
         )}
         <VoucherCartFooter
           selectedVoucher={selectedVoucher}
-          total={10000}
+          total={totalOrder}
           loading={loading}
           disabled={disabled}
         />
@@ -57,12 +70,25 @@ const VoucherCartListView: FC = () => {
     return <VoucherCartEmpty />;
   };
 
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={!!error}
+        error={error}
+        closeAction={() => {
+          goBack();
+        }}
+      />
+    );
+  };
+
   /** => main */
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
-      <VoucherCartSearch />
+      <VoucherCartSearch totalOrder={totalOrder} />
       {!empty ? renderListAndFooter() : renderEmpty()}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

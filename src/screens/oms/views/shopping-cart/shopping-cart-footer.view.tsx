@@ -26,6 +26,7 @@ import * as models from '@models';
 import { goToCheckout } from '@core/functions/product';
 import { useIsFocused } from '@react-navigation/native';
 import { toCurrency } from '@core/functions/global/currency-format';
+import { NavigationAction } from '@core/functions/navigation';
 
 /** === INTERFACE === */
 interface FooterProps {
@@ -400,6 +401,9 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         onPressVoucher={() => {
           if (voucherStatus !== 'gray') {
             // navigate to voucher list
+            NavigationAction.navigate('VoucherCartListView', {
+              totalOrder: totalDisplayPrice,
+            });
           }
         }}
         onCloseVoucher={
