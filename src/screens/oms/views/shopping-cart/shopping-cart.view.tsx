@@ -14,6 +14,7 @@ import { ShoppingCartFooter } from './shopping-cart-footer.view';
 import { ShoppingCartProducts } from './shopping-cart-products.view';
 import { ModalRemoveProduct } from './modal-remove-product.view';
 import { ModalCartProfileCompletion } from './modal-cart-profile-completion.view';
+import { ModalErrorCheckVoucher } from './modal-error-check-voucher';
 import ShoppingCartValidation from './shopping-cart-validation.view';
 /** === IMPORT EXTERNAL COMPONENT HERE === */
 import BottomSheetError from '@core/components/BottomSheetError';
@@ -34,6 +35,7 @@ import {
   useUpdateCartAction,
   useKeyboardFocus,
   goToProfile,
+  useCheckSinbadVoucherAction,
 } from '../../functions';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
 /** === IMPORT OTHER HERE === */
@@ -89,11 +91,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
   const cancelCartAction = useCancelStockAction();
   const updateCartAction = useUpdateCartAction();
   const cancelVoucherAction = useCancelVoucherAction();
+  const checkSinbadVoucherAction = useCheckSinbadVoucherAction();
 
   /** => MODAL REF */
   const refRemoveProductModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartValidationModal = React.useRef<SnbBottomSheet2Ref>(null);
   const refCartBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
+  const refVoucherBusinessErrorModal = React.useRef<SnbBottomSheet2Ref>(null);
 
   /** === FUNCTIONS === */
   /** => handle remove product modal */
@@ -123,6 +127,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     updateCartAction.reset(dispatchCart);
     cancelCartAction.reset(dispatchCart);
     cancelVoucherAction.reset(dispatchVoucher);
+    checkSinbadVoucherAction.reset(dispatchVoucher);
   };
 
   /** => handle cart cycle */
@@ -425,6 +430,9 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             }}
             handleErrorGlobalModalData={errorModal}
             handleParentToast={handleToastErrorCheckVoucher}
+            handleOpenErrorCheckVoucher={() => {
+              refVoucherBusinessErrorModal.current?.open();
+            }}
           />
         </React.Fragment>
       );
@@ -461,6 +469,15 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
           refCartValidationModal.current?.close();
           goToProfile();
         }}
+      />
+      {/* Error Check Voucher */}
+      <ModalErrorCheckVoucher
+        handleClose={() => {
+          handleCartCyle();
+          refVoucherBusinessErrorModal.current?.close();
+        }}
+        parentRef={refVoucherBusinessErrorModal}
+        testID={screenName}
       />
       {/* Error Modal Check Product, Seller & Stock */}
       <BottomSheetError

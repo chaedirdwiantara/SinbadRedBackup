@@ -29,6 +29,7 @@ interface FooterProps {
   handleOpenErrorBusinessModal: () => void;
   handleErrorGlobalModalData: ErrorGlobalModalDataProps;
   handleParentToast: (message: string) => void;
+  handleOpenErrorCheckVoucher: () => void;
   testID: string;
 }
 interface ErrorGlobalModalDataProps {
@@ -53,6 +54,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   handleOpenErrorBusinessModal,
   handleErrorGlobalModalData,
   handleParentToast,
+  handleOpenErrorCheckVoucher,
   testID,
 }) => {
   /** === STATES === */
@@ -91,9 +93,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const checkProductSellerStock = () => {
     if (stateCart.update.data !== null && isCheckoutPressed) {
       /** Input product(s) that's been selected and available as payload */
+      checkSinbadVoucherAction.reset(dispatchVoucher);
       postCheckProductAction.fetch(dispatchCart, cartData);
       postCheckSellerAction.fetch(dispatchCart, cartData);
       postCheckStockAction.fetch(dispatchCart, cartData);
+      checkSinbadVoucherAction.fetch(
+        dispatchVoucher,
+        true,
+        selectedVoucher?.voucherId || null,
+      );
       setCheckoutPressed(false);
       setCheckoutBtnLoading(true);
     }
@@ -110,6 +118,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       postCheckSellerAction.reset(dispatchCart);
       postCheckStockAction.reset(dispatchCart);
       checkoutAction.reset(dispatchCheckout);
+      checkSinbadVoucherAction.reset(dispatchVoucher);
     };
   }, []);
 
@@ -138,12 +147,18 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       /** Show business error if and only if the data from those responses doesn't match with Cart Master  */
       if (!validationResult) {
         handleOpenErrorBusinessModal();
+      } else if (
+        stateVoucher.checkSinbadVoucher.error !== null &&
+        stateVoucher.checkSinbadVoucher.error.code === 50170000017
+      ) {
+        handleOpenErrorCheckVoucher();
       }
     }
   }, [
     stateCart.postCheckProduct.data,
     stateCart.postCheckSeller.data,
     stateCart.postCheckStock.data,
+    stateVoucher.checkSinbadVoucher,
   ]);
 
   /** => if one of the check endpoint fail, show CTA */
@@ -247,7 +262,21 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   /** => listen check voucher fetch */
   useEffect(() => {
     if (stateVoucher.checkSinbadVoucher.data !== null) {
-      setFooterData(stateVoucher.checkSinbadVoucher.data);
+      if (
+        stateVoucher.checkSinbadVoucher.data.sinbadVoucherId !==
+          selectedVoucher?.voucherId &&
+        selectedVoucher !== null
+      ) {
+        resetSelectedVoucher();
+        handleParentToast(
+          'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
+        );
+      } else if (stateVoucher.checkSinbadVoucher.data.totalOrder < 100000) {
+        resetSelectedVoucher();
+        handleParentToast('Min. belanja 100rb untuk checkout');
+      } else {
+        setFooterData(stateVoucher.checkSinbadVoucher.data);
+      }
     }
   }, [stateVoucher.checkSinbadVoucher.data]);
 
@@ -263,8 +292,17 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [localCartMasterDebouce]);
 
+  /** => listen relate count total selected product */
+  useEffect(() => {
+    if (selectedVoucher && countTotalProduct === 0) {
+      resetSelectedVoucher();
+      handleParentToast('Pilih produk sebelum pakai voucher');
+    }
+  }, [countTotalProduct]);
+
   const manageVoucherCheckbox = () => {
-    const isVoucherSelected = selectedVoucher?.voucherId !== null;
+    const isVoucherSelected =
+      selectedVoucher && selectedVoucher.voucherId !== null;
     const isProductSelected = countTotalProduct > 0;
     const isSinbadVoucherExist =
       stateVoucher.checkSinbadVoucher.data?.isVoucherExist || false;
@@ -299,6 +337,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const renderFooterContent = () => {
     const { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle } =
       manageVoucherCheckbox();
+    const totalDisplayPrice = footerData?.totalOrderAfterSinbadVoucher || 0;
     return (
       <FooterButton.Cart
         testID={`footer.${testID}`}
@@ -306,7 +345,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         loading={!footerData}
         loadingButton={isCheckoutBtnLoading}
         disabled={isCheckoutDisabled || isCheckoutBtnLoading}
-        value={footerData?.totalOrderAfterSinbadVoucher || 0}
+        value={totalDisplayPrice || 0}
         description={
           countTotalProduct > 0
             ? `(${countTotalProduct}) barang dipilih`
@@ -317,12 +356,15 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         voucherTitle={voucherBadgeTitle}
         voucherDescription={voucherBadgeSubtitle}
         onPressVoucher={() => {
-          // navigate to voucher list
+          if (voucherStatus !== 'gray') {
+            // navigate to voucher list
+          }
         }}
         onCloseVoucher={
           voucherStatus === 'green'
             ? () => {
                 resetSelectedVoucher();
+                handleParentToast('Voucher Berhasil Dihapus');
               }
             : undefined
         }
