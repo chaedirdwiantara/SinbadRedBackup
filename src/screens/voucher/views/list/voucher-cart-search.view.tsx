@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { colorV2, SnbTextField2 } from '@sinbad/react-native-sinbad-ui';
 import { View } from 'react-native';
 import {
@@ -7,7 +7,13 @@ import {
 } from '@screen/voucher/functions';
 import { contexts } from '@contexts';
 
-export const VoucherCartSearch = () => {
+interface VoucherCartSearchProps {
+  totalOrder: number;
+}
+
+export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
+  totalOrder,
+}) => {
   /** === HOOK === */
   /** => contexts */
   const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
@@ -19,7 +25,7 @@ export const VoucherCartSearch = () => {
   useEffect(() => {
     if (debouncedValue.length >= 3 || debouncedValue.length === 0) {
       getVouchersAction.list(dispatchVoucher, {
-        totalOrder: 2000000,
+        totalOrder,
         ...(debouncedValue && { uniqueCode: debouncedValue.toUpperCase() }),
       });
     }
