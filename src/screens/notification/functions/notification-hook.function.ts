@@ -75,6 +75,14 @@ export const useNotificationAction = () => {
     [],
   );
 
+  const onDispatchReadFromDrawer = useCallback((id: string) => {
+    dispatch(
+      Actions.notificationMarkReadProcess(dispatchNotification, {
+        data: { id },
+      }),
+    );
+  }, []);
+
   const onMarkRead = useCallback(
     (data: models.NotificationListSuccessProps) => {
       navigateToPages(data);
@@ -93,6 +101,7 @@ export const useNotificationAction = () => {
     onLoadMore,
     onReset,
     onMarkRead,
+    onDispatchReadFromDrawer,
     stateNotification,
   };
 };

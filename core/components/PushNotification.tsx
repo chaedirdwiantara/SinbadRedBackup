@@ -5,7 +5,10 @@ import { NavigationAction } from '@navigation';
 import { isEmpty } from 'lodash';
 import PushNotifications, { Importance } from 'react-native-push-notification';
 import { useDataAuth } from '@core/redux/Data';
-import { useNotificationTotalActions } from '@screen/notification/functions';
+import {
+  useNotificationAction,
+  useNotificationTotalActions,
+} from '@screen/notification/functions';
 import { colorV2 } from '@sinbad/react-native-sinbad-ui';
 /** === INTERFACE === */
 interface RemoteMessage {
@@ -17,6 +20,7 @@ const PushNotification = () => {
   /** === HOOK === */
   const { me } = useDataAuth();
   const notificationTotalActions = useNotificationTotalActions();
+  const { onDispatchReadFromDrawer } = useNotificationAction();
   /** === ACTION FOR FOREGROUND === */
   PushNotifications.configure({
     onNotification: function (notification) {
@@ -91,17 +95,19 @@ const PushNotification = () => {
   const deepLink = (data: any) => {
     if (!isEmpty(data)) {
       if (data?.screen !== undefined) {
+        const payload = JSON.parse(data.payload);
+        onDispatchReadFromDrawer(payload?.notificationId ?? '');
         switch (data?.screen) {
           case 'HomeView':
           case 'HistoryListView':
-            NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
+            NavigationAction.goToMenu(data?.screen, payload);
             break;
           case 'HelpView':
           case 'UserView':
-            NavigationAction.goToMenu(data?.screen, JSON.parse(data.payload));
+            NavigationAction.goToMenu(data?.screen, payload);
             break;
           default:
-            NavigationAction.navigate(data?.screen, JSON.parse(data.payload));
+            NavigationAction.navigate(data?.screen, payload);
             break;
         }
       } else {
