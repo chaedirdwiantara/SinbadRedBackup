@@ -23,7 +23,7 @@ interface Props {
 
 const OTPContent: React.FC<Props> = (props) => {
   /** === HOOK === */
-  const { loading, data, type } = props.route.params;
+  const { loading, data, type, testID } = props.route.params;
   const [otp, setOtp] = useState('');
   const changeEmailAction = MerchantHookFunc.useChangeEmail();
   const { stateMerchant, dispatchSupplier } = React.useContext(
@@ -111,6 +111,7 @@ const OTPContent: React.FC<Props> = (props) => {
         color="white"
         title={'Kode Verifikasi'}
         backAction={() => backFunc()}
+        testID={testID ? testID : ''}
       />
     );
   };
@@ -153,6 +154,7 @@ const OTPContent: React.FC<Props> = (props) => {
                 otpSuccess={successOTP}
                 type={otpType}
                 showMessage={errorMessage !== '' || successOTP}
+                testID={testID ? testID : ''}
               />
             </View>
             <View style={{ padding: layout.spacing.lg }}>
@@ -167,6 +169,7 @@ const OTPContent: React.FC<Props> = (props) => {
                 }
                 full
                 size="medium"
+                testID={testID ? testID : ''}
               />
             </View>
           </ScrollView>
@@ -203,6 +206,7 @@ const OTPContent: React.FC<Props> = (props) => {
                 title={'Oke, Saya Mengerti'}
                 full
                 size="medium"
+                testID={testID ? testID : ''}
               />
             </View>
           </View>

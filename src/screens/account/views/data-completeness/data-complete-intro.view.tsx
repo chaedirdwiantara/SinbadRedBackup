@@ -76,6 +76,7 @@ const Content: React.FC = () => {
           disabled={false}
           size="medium"
           full
+          testID={'06.1'}
         />
       </View>
     </View>

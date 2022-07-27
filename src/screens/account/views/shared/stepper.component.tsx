@@ -5,6 +5,7 @@ import {
   SnbButton2,
   spacingV2 as layout,
   borderV2,
+  SnbProgress2,
 } from '@sinbad/react-native-sinbad-ui';
 import { View, StyleSheet } from 'react-native';
 
@@ -13,6 +14,7 @@ interface StepperProps {
   marker?: Array<string>;
   total: number;
   onPress: () => void;
+  testID?: string;
 }
 
 const Stepper: FC<StepperProps> = (props) => {
@@ -24,20 +26,24 @@ const Stepper: FC<StepperProps> = (props) => {
         alignItems: 'center',
       }}>
       <View style={{ flex: 1 }}>
-        <View
-          style={{ flexDirection: 'row', marginBottom: layout.spacing.xxsm }}>
-          <View style={[styles.progressBackground, { width: '100%' }]} />
-          <View
-            style={[
-              styles.progress,
-              { width: `${(props.complete / props.total) * 100}%` },
-            ]}
-          />
+        <SnbProgress2.Bar
+          percentage={(props.complete / props.total) * 100}
+          testID={props.testID}
+        />
+        <View style={{ marginTop: layout.spacing.xxsm }}>
+          <SnbText2.Paragraph.Tiny
+            testID={
+              props.testID
+            }>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Paragraph.Tiny>
         </View>
-        <SnbText2.Paragraph.Tiny>{`${props.complete} dari ${props.total} tahap selesai`}</SnbText2.Paragraph.Tiny>
       </View>
       <View style={{ marginHorizontal: layout.spacing.sm }} />
-      <SnbButton2.Link title="Lihat" size="tiny" onPress={props.onPress} />
+      <SnbButton2.Link
+        title="Lihat"
+        size="tiny"
+        onPress={props.onPress}
+        testID={props.testID}
+      />
     </View>
   );
 };

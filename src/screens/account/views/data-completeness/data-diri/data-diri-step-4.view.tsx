@@ -103,6 +103,7 @@ const DataDiriStep4View: React.FC = () => {
       NavigationAction.navigate('EmailOtp', {
         type: 'email',
         data: email,
+        testID: '10.4',
       });
     }
   }, [stateMerchant]);
@@ -135,11 +136,13 @@ const DataDiriStep4View: React.FC = () => {
           backAction={() => setOpenModalBack(true)}
           color="white"
           title="Alamat Email"
+          testID={'10'}
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
+          testID={'10'}
         />
         <View
           style={{ alignItems: 'center', marginVertical: layout.spacing.lg }}>
@@ -158,6 +161,7 @@ const DataDiriStep4View: React.FC = () => {
             labelText={'Email'}
             mandatory
             valMsgError={errorMessage}
+            testID={'10'}
           />
         </View>
       </ScrollView>
@@ -179,6 +183,7 @@ const DataDiriStep4View: React.FC = () => {
           }
           size="medium"
           full
+          testID={'10'}
         />
       </View>
       <ModalBack
@@ -197,6 +202,7 @@ const DataDiriStep4View: React.FC = () => {
         open={openModalStep}
         type="user"
         closeModal={() => setOpenModalStep(false)}
+        testID={'10.3'}
       />
     </SnbContainer>
   );

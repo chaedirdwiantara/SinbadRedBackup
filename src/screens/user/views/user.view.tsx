@@ -10,6 +10,7 @@ import {
   SnbButton2,
   spacingV2 as layout,
   Content,
+  SpecialButton,
 } from 'react-native-sinbad-ui';
 import { NavigationAction } from '@navigation';
 /** === IMPORT STYLE HERE === */
@@ -117,9 +118,9 @@ const UserView: FC = ({ start }: any) => {
   /** => header */
   const header = () => {
     if (stateUser.detail.data) {
-      return <SnbTopNav2.Type1 color="white" title="Profil" />;
+      return <SnbTopNav2.Type1 color="white" title="Profil" testID={'01.1'} />;
     }
-    return <SnbTopNav2.Type1 color="red" title="Profil" />;
+    return <SnbTopNav2.Type1 color="red" title="Profil" testID={'01.1'} />;
   };
 
   const handleAddressNavigation = () => {
@@ -202,31 +203,27 @@ const UserView: FC = ({ start }: any) => {
   const renderItem = (item: any, index: any) => {
     return (
       <View key={index}>
-        <View>
-          <View style={[UserStyles.shadowStyle, UserStyles.carouselContainer]}>
-            <View style={UserStyles.cardBody}>
-              <View>
-                <Svg name={item.icon} size={40} />
-              </View>
-              <View style={{ flex: 1, marginHorizontal: layout.spacing.lg }}>
-                <SnbText2.Body.Default>{item.subTitle}</SnbText2.Body.Default>
-                <SnbText2.Paragraph.Small>
-                  {item.message}
-                </SnbText2.Paragraph.Small>
-              </View>
-              <SnbButton2.Primary
-                size="tiny"
-                onPress={() => {
-                  goTo({
-                    type: item.type,
-                    title: item.title,
-                  });
-                }}
-                title="Lengkapi"
-              />
-            </View>
-          </View>
-        </View>
+        <SpecialButton.Card
+          title={item.title}
+          subTitle={item.subTitle}
+          height={88}
+          action={item.type === 'upgradeVipFailed' ? false : true}
+          actionType="button"
+          actionTitle={
+            item.type === 'upgradeVipProcess' ||
+            item.type === 'upgradeVipSuccess'
+              ? 'Mengerti'
+              : 'Lengkapi'
+          }
+          iconComponent={<Svg name={item.icon} size={40} />}
+          onPress={() => {
+            goTo({
+              type: item.type,
+              title: item.title,
+            });
+          }}
+          testID={'01.1'}
+        />
       </View>
     );
   };
@@ -298,7 +295,7 @@ const UserView: FC = ({ start }: any) => {
             </View>
             <View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <SnbText2.Body.Small numberOfLines={1}>
+                <SnbText2.Body.Small numberOfLines={1} testID={'01.1'}>
                   {data?.name ||
                     buyerData?.buyerInformation?.buyerAccount?.code}
                 </SnbText2.Body.Small>
@@ -314,7 +311,7 @@ const UserView: FC = ({ start }: any) => {
                   />
                 </View>
               </View>
-              <SnbText2.Paragraph.Tiny>
+              <SnbText2.Paragraph.Tiny testID={'01.1'}>
                 {ownerData?.accountType === 'basic' ? 'Akun Basic' : 'Akun VIP'}
               </SnbText2.Paragraph.Tiny>
             </View>
@@ -369,7 +366,10 @@ const UserView: FC = ({ start }: any) => {
             <View style={{ marginVertical: layout.spacing.lg }}>
               <View style={UserStyles.bodyTitleContainer}>
                 <SnbText2.Body.Small>Data Pemilik</SnbText2.Body.Small>
-                <SnbText2.Paragraph.Small>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
+                <SnbText2.Paragraph.Small
+                  testID={
+                    '01.1'
+                  }>{`${data?.ownerProgress.done}/${data?.ownerProgress.total} Selesai`}</SnbText2.Paragraph.Small>
               </View>
               <View
                 style={{

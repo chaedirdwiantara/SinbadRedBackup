@@ -167,6 +167,7 @@ const DataDiriStep2View: React.FC = () => {
         listType="number"
         blurRadius={3}
         isTiltImage
+        testID={'08.1'}
       />
     );
   };
@@ -222,6 +223,7 @@ const DataDiriStep2View: React.FC = () => {
               keyboardType={'number-pad'}
               mandatory
               valMsgError={messageErrorNPWP}
+              testID={'08.1'}
             />
           </View>
         </ScrollView>
@@ -234,6 +236,7 @@ const DataDiriStep2View: React.FC = () => {
               size="medium"
               full
               outline
+              testID={'08.3'}
             />
           </View>
           <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -269,6 +272,7 @@ const DataDiriStep2View: React.FC = () => {
               }}
               size="medium"
               full
+              testID={'08.3'}
             />
           </View>
         </View>
@@ -287,11 +291,13 @@ const DataDiriStep2View: React.FC = () => {
           backAction={() => setOpenModalBack(true)}
           color="white"
           title="Foto NPWP"
+          testID={'08'}
         />
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
           onPress={() => setOpenModalStep(true)}
+          testID={'08'}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
@@ -304,6 +310,7 @@ const DataDiriStep2View: React.FC = () => {
         open={openModalStep}
         type="user"
         closeModal={() => setOpenModalStep(false)}
+        testID={'08.4'}
       />
     </SnbContainer>
   );

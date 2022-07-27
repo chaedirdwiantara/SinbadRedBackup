@@ -190,6 +190,7 @@ const Content: React.FC = () => {
             loading={completeDataConfirmationState.loading}
             full
             size="medium"
+            testID={'06.2'}
           />
         </View>
       </View>

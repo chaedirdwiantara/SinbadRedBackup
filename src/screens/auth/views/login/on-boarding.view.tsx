@@ -7,6 +7,7 @@ import {
   colorV2,
   spacingV2 as layout,
   borderV2,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import OnBoardSlider from '@core/components/OnBoardSlider';
 import {
@@ -66,26 +67,14 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View style={{ flexDirection: 'row', padding: layout.spacing.lg }}>
-        <View style={{ flex: 1 }}>
-          <SnbButton2.Primary
-            title={'Masuk'}
-            onPress={() => navigate(LOGIN_PHONE_VIEW)}
-            size="large"
-            full
-            outline
-          />
-        </View>
-        <View style={{ marginHorizontal: layout.spacing.sm }} />
-        <View style={{ flex: 1 }}>
-          <SnbButton2.Primary
-            title={'Daftar'}
-            onPress={() => navigate(SELF_REGISTRATION_VIEW)}
-            disabled={false}
-            size="large"
-            full
-          />
-        </View>
+      <View style={{ padding: layout.spacing.lg }}>
+        <FooterButton.Dual
+          title1="Daftar"
+          title2="Masuk"
+          button1Press={() => navigate(SELF_REGISTRATION_VIEW)}
+          button2Press={() => navigate(LOGIN_PHONE_VIEW)}
+          testID={'01'}
+        />
       </View>
     );
   };
@@ -101,6 +90,7 @@ const OnBoardingView: React.FC<Props> = () => {
             title="Lewati"
             size="medium"
             onPress={() => reset({ index: 0, routes: [{ name: 'Home' }] })}
+            testID={'01'}
           />
         </View>
       </View>

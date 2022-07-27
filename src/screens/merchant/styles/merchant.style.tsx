@@ -47,7 +47,6 @@ const UserStyles = StyleSheet.create({
     paddingHorizontal: layout.spacing.lg,
     paddingTop: layout.spacing.xl,
     justifyContent: 'space-between',
-    flexDirection: 'row',
   },
   badgeBox: {
     flexDirection: 'row',

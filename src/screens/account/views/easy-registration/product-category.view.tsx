@@ -7,13 +7,12 @@ import {
   SnbText2,
   SnbTopNav2,
   spacingV2 as layout,
-  borderV2,
   colorV2,
-  SnbIcon,
+  Option,
 } from '@sinbad/react-native-sinbad-ui';
 import { ICheckbox } from '@sinbad/react-native-sinbad-ui/lib/typescript/models/CheckboxTypes';
 import React from 'react';
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, View } from 'react-native';
 import { ErrorContent } from '../shared';
 
 const Content: React.FC = () => {
@@ -90,49 +89,27 @@ const ProductCategory: React.FC = () => {
 
   function renderItems({ item }: any) {
     return (
-      <TouchableOpacity
-        activeOpacity={1}
-        onPress={() => {
-          const newData = data.map((el) => {
-            if (el.id === item.id) {
-              el.isSelected = !el.isSelected;
-            }
-            return el;
-          });
-          setData(newData);
-        }}
-        style={{
-          flexDirection: 'row',
-          paddingVertical: layout.spacing.md,
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            borderRadius: borderV2.radius.lg,
-            borderWidth: 1,
-            borderColor: colorV2.strokeColor.disable,
-            padding: layout.spacing.sm,
-          }}>
-          <Image
-            source={{ uri: item?.icon || ' ' }}
-            style={{ width: 24, height: 24 }}
-          />
-        </View>
-        <View style={{ flex: 1, marginHorizontal: layout.spacing.md }}>
-          <SnbText2.Paragraph.Small>{item?.name}</SnbText2.Paragraph.Small>
-        </View>
-        <SnbIcon
-          name={
-            item?.isSelected
-              ? 'check_box_selected'
-              : 'check_box_unselect_outline'
-          }
-          size={24}
-          color={
-            item?.isSelected ? colorV2.iconColor.red : colorV2.iconColor.default
+      <View style={{ marginVertical: layout.spacing.lg }}>
+        <Option.Basic
+          label={item.name}
+          checked={item?.isSelected}
+          onCheckedChange={() => {
+            const newData = data.map((el) => {
+              if (el.id === item.id) {
+                el.isSelected = !el.isSelected;
+              }
+              return el;
+            });
+            setData(newData);
+          }}
+          iconComponent={
+            <Image
+              source={{ uri: item?.icon || ' ' }}
+              style={{ width: 24, height: 24 }}
+            />
           }
         />
-      </TouchableOpacity>
+      </View>
     );
   }
 
@@ -142,8 +119,6 @@ const ProductCategory: React.FC = () => {
         style={{
           marginHorizontal: layout.spacing.lg,
           paddingVertical: layout.spacing.md,
-          borderBottomWidth: 1,
-          borderBottomColor: colorV2.bgColor.neutralAlt,
         }}>
         <SnbText2.Headline.Small>
           Produk apa yang Anda jual?
@@ -156,29 +131,19 @@ const ProductCategory: React.FC = () => {
               return (
                 <View
                   style={{
-                    borderBottomWidth: 0.75,
-                    borderColor: colorV2.strokeColor.default,
+                    marginTop: layout.spacing.lg,
                   }}>
-                  <TouchableOpacity
-                    onPress={() => {
+                  <Option.Basic
+                    label={'Semua Produk'}
+                    checked={checkBoxStatus === 'indeterminate'}
+                    onCheckedChange={() => {
                       setCheckBoxStatus(
                         checkBoxStatus === 'indeterminate'
                           ? 'unselect'
                           : 'indeterminate',
                       );
                     }}
-                    style={{
-                      flexDirection: 'row',
-                      paddingVertical: layout.spacing.md,
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        borderRadius: borderV2.radius.lg,
-                        borderWidth: 1,
-                        borderColor: colorV2.strokeColor.default,
-                        padding: layout.spacing.sm,
-                      }}>
+                    iconComponent={
                       <Image
                         source={require('@image/all_product.png')}
                         style={{
@@ -186,27 +151,9 @@ const ProductCategory: React.FC = () => {
                           height: 24,
                         }}
                       />
-                    </View>
-                    <View
-                      style={{ flex: 1, marginHorizontal: layout.spacing.md }}>
-                      <SnbText2.Body.Default>
-                        Semua Produk
-                      </SnbText2.Body.Default>
-                    </View>
-                    <SnbIcon
-                      name={
-                        checkBoxStatus === 'indeterminate'
-                          ? 'check_box_indeterminate'
-                          : 'check_box_unselect_outline'
-                      }
-                      size={24}
-                      color={
-                        checkBoxStatus === 'indeterminate'
-                          ? colorV2.iconColor.red
-                          : colorV2.iconColor.default
-                      }
-                    />
-                  </TouchableOpacity>
+                    }
+                    withDivider
+                  />
                 </View>
               );
             }
@@ -256,6 +203,7 @@ const ProductCategory: React.FC = () => {
             disabled={disableButton}
             size={'medium'}
             full
+            testID={'05.2'}
           />
         </View>
       </View>

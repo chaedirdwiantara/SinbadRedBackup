@@ -10,7 +10,11 @@ import { MerchantHookFunc } from '@screen/merchant/function';
 import { contexts } from '@contexts';
 import { useCamera } from '@screen/auth/functions';
 
-const OCRResultView: React.FC = () => {
+interface Props {
+  testID?: string;
+}
+
+const OCRResultView: React.FC<Props> = (props) => {
   const { editProfile } = MerchantHookFunc.useEditProfile();
   const { dispatchSupplier, stateMerchant } = React.useContext(
     contexts.MerchantContext,
@@ -37,6 +41,7 @@ const OCRResultView: React.FC = () => {
             size="medium"
             full
             outline
+            testID={props.testID}
           />
         </View>
         <View style={{ marginHorizontal: layout.spacing.sm }} />
@@ -58,6 +63,7 @@ const OCRResultView: React.FC = () => {
             size="medium"
             full
             loading={stateMerchant.profileEdit.loading}
+            testID={props.testID}
           />
         </View>
       </View>
