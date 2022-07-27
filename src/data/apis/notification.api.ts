@@ -1,12 +1,21 @@
 /** === IMPORT EXTERNAL FUNCTION === */
 import apiMapping from '@core/services/apiMapping';
 import * as models from '@models';
+import moment from 'moment';
 /** === FUNCTION === */
 /** => notification list */
 const notificationList = (
   data: models.ListProcessV3Props<{ perPage: number }>,
 ) => {
-  const path = `notifications?page=${data.page}&perPage=${data.perPage}`;
+  // only get 30 day
+  //(YYYY-MM-DD)
+  const formatDate = 'YYYY-MM-DD';
+  const day30Before = new Date(Date.now() - 1000 * 60 * 60 * 24 * 30);
+  const startDate = moment().format(formatDate);
+  const endDate = moment(day30Before).format(formatDate);
+
+  const path = `notifications?page=${data.page}&perPage=${data.perPage}&startDate=${startDate}&endDate=${endDate}`;
+
   return apiMapping<models.NotificationListSuccessProps[]>(
     'auth',
     path,
