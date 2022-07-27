@@ -10,7 +10,7 @@ import * as models from '@models';
 import { toCurrency } from '@core/functions/global/currency-format';
 import Svg from '@svg';
 import { VoucherCartListStyles } from '@screen/voucher/styles';
-import { useVoucherLocalData } from '@screen/voucher/functions';
+import { goBack, useVoucherLocalData } from '@screen/voucher/functions';
 
 interface VoucherCartFooterProps {
   selectedVoucher: models.EligibleVoucherProps | undefined;
@@ -53,12 +53,13 @@ export const VoucherCartFooter: FC<VoucherCartFooterProps> = ({
         loadingButton={loading}
         disabled={disabled}
         value={total ?? 0}
-        buttonPress={() =>
+        buttonPress={() => {
           setSelectedVoucher({
             voucherId: selectedVoucher?.sinbadVoucherId!,
             voucherValue: selectedVoucher?.sinbadVoucherValue!,
-          })
-        }
+          });
+          goBack();
+        }}
       />
     </View>
   );
