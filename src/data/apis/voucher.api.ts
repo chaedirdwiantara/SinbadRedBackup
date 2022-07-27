@@ -6,25 +6,14 @@ import * as models from '@models';
 /** => voucher detail */
 const voucherDetail = (data: models.VoucherDetailProcessProps) => {
   const path = `sinbad-vouchers/${data.id}`;
-  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
-  return apiMappingMock<models.VoucherCartDetailProps>(
-    mockHost,
+  return apiMapping<models.VoucherCartDetailProps>(
+    'auth',
     path,
     'voucher',
     'v1',
     'DETAIL',
   );
 };
-// const voucherDetail = (data: models.VoucherDetailProcessProps) => {
-//   const path = `sinbad-voucher/${data.id}`;
-//   return apiMapping<models.VoucherCartDetailProps>(
-//     'auth',
-//     path,
-//     'voucher',
-//     'v1',
-//     'DETAIL',
-//   );
-// };
 /** => voucher cart list */
 const voucherCartList = ({
   totalOrder,
@@ -33,9 +22,8 @@ const voucherCartList = ({
   const path = other?.uniqueCode
     ? `sinbad-vouchers?totalOrder=${totalOrder}&uniqueCode=${other?.uniqueCode}`
     : `sinbad-vouchers?totalOrder=${totalOrder}`;
-  const mockHost = 'https://fefad299-d7fa-4988-9f70-188fda3275e9.mock.pstmn.io';
-  return apiMappingMock<models.VoucherCartListProps>(
-    mockHost,
+  return apiMapping<models.VoucherCartListProps>(
+    'auth',
     path,
     'voucher',
     'v1',

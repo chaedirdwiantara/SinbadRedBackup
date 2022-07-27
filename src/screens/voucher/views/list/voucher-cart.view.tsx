@@ -12,17 +12,18 @@ import { VoucherCartHeader } from './voucher-cart-header.view';
 import { VoucherCartSearch } from './voucher-cart-search.view';
 import { VoucherCartFooter } from './voucher-cart-footer.view';
 import { VoucherCartEmpty } from './voucher-cart-empty.view';
+import BottomSheetError from '@core/components/BottomSheetError';
 // import { useCartMasterActions } from '@screen/oms/functions';
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
   /** === HOOK === */
-  const { stateVoucher } = React.useContext(contexts.VoucherContext);
   const {
     eligibleVouchers,
     notEligibleVouchers,
     loading,
     empty,
     disabled,
+    error,
     changeSelectedVoucher,
     selectedVoucher,
   } = useVoucherList();
@@ -57,12 +58,25 @@ const VoucherCartListView: FC = () => {
     return <VoucherCartEmpty />;
   };
 
+  const renderErrorModal = () => {
+    return (
+      <BottomSheetError
+        open={!!error}
+        error={error}
+        closeAction={() => {
+          goBack();
+        }}
+      />
+    );
+  };
+
   /** => main */
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
       <VoucherCartSearch />
       {!empty ? renderListAndFooter() : renderEmpty()}
+      {renderErrorModal()}
     </SnbContainer>
   );
 };

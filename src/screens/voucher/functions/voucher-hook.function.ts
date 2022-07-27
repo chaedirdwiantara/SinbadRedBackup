@@ -62,7 +62,7 @@ const useSearchKeyword = () => {
 
   return {
     changeKeyword: (newValue: string) => {
-      setKeyword(newValue);
+      setKeyword(newValue.toUpperCase());
     },
     keyword,
     debouncedValue,
@@ -103,7 +103,10 @@ const useVoucherList = () => {
     empty:
       stateVoucher.voucherCart.list.data?.eligible.length === 0 &&
       stateVoucher.voucherCart.list.data?.notEligible.length === 0,
-    disabled: stateVoucher.voucherCart.list.data?.eligible.length === 0,
+    disabled:
+      stateVoucher.voucherCart.list.data?.eligible.length === 0 ||
+      !selectedVoucher,
+    error: stateVoucher.voucherCart.list.error,
     selectedVoucher,
     selectedVoucherId,
   };

@@ -17,13 +17,12 @@ export const VoucherCartSearch = () => {
   const { changeKeyword, keyword, debouncedValue } = useSearchKeyword();
   /** => effects */
   useEffect(() => {
-    getVouchersAction.list(dispatchVoucher, {
-      totalOrder: 10000,
-      ...(debouncedValue && { uniqueCode: debouncedValue }),
-    });
-    return () => {
-      getVouchersAction.reset(dispatchVoucher);
-    };
+    if (debouncedValue.length >= 3 || debouncedValue.length === 0) {
+      getVouchersAction.list(dispatchVoucher, {
+        totalOrder: 2000000,
+        ...(debouncedValue && { uniqueCode: debouncedValue.toUpperCase() }),
+      });
+    }
   }, [debouncedValue]);
 
   /** === VIEW === */

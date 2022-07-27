@@ -46,7 +46,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                 value={props?.selectedVoucher.id}
                 onPress={() =>
                   NavigationAction.navigate('VoucherDetailView', {
-                    id: props?.selectedVoucher?.id,
+                    id: props?.selectedVoucher?.sinbadVoucherId,
                     type: 'eligible',
                   })
                 }
@@ -62,7 +62,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 
                 return (
                   <View
-                    key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
+                    key={`${voucher.sinbadVoucherId}-${voucher.id}`}
                     style={VoucherCartListStyles.cardContainer}>
                     <VoucherCard
                       name="Sinbad"
@@ -71,7 +71,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                       value={voucher.id}
                       onPress={() =>
                         NavigationAction.navigate('VoucherDetailView', {
-                          id: voucher.id,
+                          id: voucher.sinbadVoucherId,
                           type: 'eligible',
                         })
                       }
@@ -91,7 +91,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
 
               return (
                 <View
-                  key={`${voucher.name.split(' ').join('')}-${voucher.id}`}
+                  key={`${voucher.sinbadVoucherId}-${voucher.id}`}
                   style={VoucherCartListStyles.cardContainer}>
                   <VoucherCard
                     name="Sinbad"
@@ -100,7 +100,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     value={voucher.id}
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
-                        id: voucher.id,
+                        id: voucher.sinbadVoucherId,
                         type: 'not-eligible',
                       })
                     }
