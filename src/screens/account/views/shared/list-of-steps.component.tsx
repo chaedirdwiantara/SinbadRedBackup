@@ -25,6 +25,7 @@ import { NavigationAction } from '@navigation';
 interface ListOfStepsProps {
   type: 'user' | 'buyer';
   ref: any;
+  testID?: string;
 }
 
 const ListOfSteps: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {

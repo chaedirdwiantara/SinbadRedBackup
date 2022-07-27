@@ -8,6 +8,8 @@ import {
   SnbToast,
   SnbButton2,
   spacingV2 as layout,
+  Text,
+  SnbInfoBox2,
 } from 'react-native-sinbad-ui';
 import {
   Image,
@@ -101,6 +103,7 @@ const MerchantDetailProfileView: FC = () => {
         color="white"
         title="Data Diri"
         backAction={() => NavigationAction.back()}
+        testID={'12.1'}
       />
     );
   };
@@ -139,35 +142,13 @@ const MerchantDetailProfileView: FC = () => {
   const renderHeaderImage = () => {
     return (
       <View style={MerchantStyles.headerContainer}>
-        <View style={MerchantStyles.badgeBox}>
-          <View style={{ marginRight: layout.spacing.sm }}>
-            <SnbIcon name={'info'} size={16} color={colorV2.iconColor.blue} />
-          </View>
-          <View style={{ flex: 1 }}>
-            <SnbText2.Paragraph.Small color={colorV2.textColor.link}>
-              Transaksi lebih mudah dan cepat dengan melengkapi data diri.
-            </SnbText2.Paragraph.Small>
-          </View>
-        </View>
+        <SnbInfoBox2
+          title={'Transaksi lebih mudah dan cepat dengan melengkapi data diri.'}
+          leftIcon={'info'}
+          color={'blue'}
+          testID={'12.1'}
+        />
         <View style={MerchantStyles.boxHeader}>{renderOwnerImage()}</View>
-      </View>
-    );
-  };
-  /** === label === */
-  const renderLabel = (data: any) => {
-    return (
-      <View
-        style={{
-          alignSelf: 'center',
-          marginHorizontal: layout.spacing.sm,
-        }}>
-        <View style={{ alignSelf: 'center' }}>
-          <SnbIcon
-            name={'shield'}
-            size={16}
-            color={data ? colorV2.iconColor.green : colorV2.iconColor.dark}
-          />
-        </View>
       </View>
     );
   };
@@ -175,35 +156,41 @@ const MerchantDetailProfileView: FC = () => {
   const renderContentSection = (data: any) => {
     return (
       <View style={MerchantStyles.boxContent}>
-        <View style={{ flex: 1 }}>
-          <View
-            style={{ marginBottom: layout.spacing.sm, flexDirection: 'row' }}>
-            <SnbText2.Body.Default>{data.key}</SnbText2.Body.Default>
-            {data.label !== undefined ? renderLabel(data.label) : null}
-          </View>
-          <SnbText2.Paragraph.Default
-            color={
-              data.success ? colorV2.iconColor.green : colorV2.iconColor.dark
-            }>
-            {data.value}
-          </SnbText2.Paragraph.Default>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {data.action === 'tambah' && (
-            <SnbButton2.Link
-              onPress={() => goTo(data)}
-              title="Tambah"
-              size="small"
-            />
-          )}
-          {data.action === 'ubah' && (
-            <SnbButton2.Link
-              onPress={() => goTo(data)}
-              title="Ubah"
-              size="small"
-            />
-          )}
-        </View>
+        <Text.Output
+          title={data.key}
+          actionComponentAlign="center"
+          testID={'12.1'}
+          text={
+            <SnbText2.Paragraph.Default
+              color={
+                data.success
+                  ? colorV2.textColor.success
+                  : colorV2.textColor.secondary
+              }>
+              {data.value}
+            </SnbText2.Paragraph.Default>
+          }
+          actionComponent={
+            data.action ? (
+              <SnbButton2.Link
+                onPress={() => goTo(data)}
+                title={`${data.action[0].toUpperCase() + data.action.slice(1)}`}
+                size="small"
+              />
+            ) : null
+          }
+          titleIcon={
+            data.label !== undefined ? (
+              <SnbIcon
+                name={'shield'}
+                size={16}
+                color={
+                  data.label ? colorV2.iconColor.green : colorV2.iconColor.dark
+                }
+              />
+            ) : null
+          }
+        />
       </View>
     );
   };
@@ -218,7 +205,6 @@ const MerchantDetailProfileView: FC = () => {
         {renderContentSection({
           key: 'No Handphone',
           value: ownerData?.profile.mobilePhone,
-          action: ownerData?.profile.mobilePhone ? 'ubah' : 'tambah',
           type: 'merchantOwnerPhoneNo',
           title: ownerData?.profile.mobilePhone
             ? 'Ubah No Handphone'

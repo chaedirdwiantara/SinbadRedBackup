@@ -30,6 +30,7 @@ interface Props {
   source: string;
   sourceData: any;
   originFrom: string | undefined;
+  testID?: string;
 }
 
 const MerchantEditPartialView: FC<Props> = (props) => {

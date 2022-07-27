@@ -79,6 +79,7 @@ const Content: React.FC = () => {
             title="Ubah Foto"
             full
             onPress={() => openCameraWithOCR('ktp')}
+            testID={'13.1'}
           />
         </View>
       </View>
@@ -104,6 +105,7 @@ const Content: React.FC = () => {
             blurRadius={2.2}
             isTiltImage
             listType="number"
+            testID={'13.1'}
           />,
           renderImagePreview(),
         ),
@@ -117,7 +119,12 @@ const UpdatePhotoKTPView = () => {
 
   return (
     <SnbContainer color={'white'}>
-      <SnbTopNav2.Type3 color="white" title={'Foto KTP'} backAction={goBack} />
+      <SnbTopNav2.Type3
+        color="white"
+        title={'Foto KTP'}
+        backAction={goBack}
+        testID={'13.1'}
+      />
       <Content />
     </SnbContainer>
   );

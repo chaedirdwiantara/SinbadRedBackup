@@ -162,6 +162,7 @@ const ModalOTPMethod: React.FC<Props> = React.forwardRef(({ phone, action, onRes
             full
             loading={requestOTPState.loading}
             disabled={otpMethod === '' || requestOTPState.loading}
+            testID={'03'}
           />
         </View>
       }
