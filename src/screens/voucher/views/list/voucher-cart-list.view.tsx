@@ -6,7 +6,7 @@ import * as models from '@models';
 import { VoucherCartListStyles } from '../../styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { NavigationAction } from '@core/functions/navigation';
-import { useVoucherLocalData } from '@screen/voucher/functions';
+import { reorderVoucherList, useVoucherLocalData } from '@screen/voucher/functions';
 
 interface VoucherCartListProps {
   eligibleVouchers: models.EligibleVoucherProps[];
@@ -33,15 +33,10 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
     return 'Berakhir hari ini!';
   };
 
-  const selectedVoucherData = eligibleVouchers.find(
-    (voucher) => voucher?.sinbadVoucherId === selectedVoucher?.voucherId,
+  const eligibleVoucherFiltered = reorderVoucherList(
+    eligibleVouchers,
+    selectedVoucher!,
   );
-
-  const eligibleVoucherFiltered = eligibleVouchers.filter(
-    (voucher) => voucher?.sinbadVoucherId !== selectedVoucher?.voucherId!,
-  );
-
-  eligibleVoucherFiltered.unshift(selectedVoucherData!);
 
   return (
     <SnbContainer color="grey">
