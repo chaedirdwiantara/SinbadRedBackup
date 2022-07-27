@@ -62,7 +62,7 @@ const useSearchKeyword = () => {
 
   return {
     changeKeyword: (newValue: string) => {
-      setKeyword(newValue);
+      setKeyword(newValue.toUpperCase());
     },
     keyword,
     debouncedValue,
@@ -70,20 +70,18 @@ const useSearchKeyword = () => {
 };
 /** => set selected seller voucher */
 const useSelectedVoucher = () => {
-  const [selectedVoucherId, setSelectedVoucherId] = React.useState<
-    string | null
-  >();
+  const [selectedVoucherId, setSelectedVoucherId] = React.useState<number>(0);
   const { stateVoucher } = React.useContext(contexts.VoucherContext);
 
   return {
-    setSelectedVoucher: (voucherId: string) => {
+    setSelectedVoucher: (voucherId: number) => {
       setSelectedVoucherId(voucherId);
     },
     resetSelectedVoucher: () => {
-      setSelectedVoucherId(null);
+      setSelectedVoucherId(0);
     },
     selectedVoucher: stateVoucher.voucherCart.list.data?.eligible.find(
-      (voucher) => voucher.id === selectedVoucherId,
+      (voucher) => voucher.sinbadVoucherId === selectedVoucherId,
     ),
     selectedVoucherId,
   };
@@ -98,12 +96,15 @@ const useVoucherList = () => {
     notEligibleVouchers: stateVoucher.voucherCart.list.data?.notEligible,
     loading: stateVoucher.voucherCart.list.loading,
     changeSelectedVoucher: (voucher: RadioValue) => {
-      setSelectedVoucher(voucher as string);
+      setSelectedVoucher(voucher as number);
     },
     empty:
       stateVoucher.voucherCart.list.data?.eligible.length === 0 &&
       stateVoucher.voucherCart.list.data?.notEligible.length === 0,
-    disabled: stateVoucher.voucherCart.list.data?.eligible.length === 0,
+    disabled:
+      stateVoucher.voucherCart.list.data?.eligible.length === 0 ||
+      !selectedVoucher,
+    error: stateVoucher.voucherCart.list.error,
     selectedVoucher,
     selectedVoucherId,
   };

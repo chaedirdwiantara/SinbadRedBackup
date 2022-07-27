@@ -25,7 +25,6 @@ interface NavigationParams {
 /** === COMPONENT === */
 const VoucherDetailView: FC = () => {
   /** === HOOK === */
-  const ScrollViewRef = React.useRef<ScrollView>();
   const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   const voucherDetailAction = useVoucherDetailAction();
   const { data, loading, error } = useVoucherDetail();
