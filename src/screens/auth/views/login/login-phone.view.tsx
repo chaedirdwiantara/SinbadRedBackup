@@ -109,45 +109,6 @@ const Content: React.FC = () => {
         }
         loadingButton={checkPhoneLoginState.loading}
       />
-      {/* <View style={{ paddingHorizontal: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          testID={'01'}
-          title="Selanjutnya"
-          onPress={() => {
-            Keyboard.dismiss()
-            resetCheckLoginPhone();
-            checkPhoneLogin({
-              mobilePhone: phone.value,
-              identifierDeviceId:
-                advertisingId === undefined ? null : advertisingId,
-            });
-          }}
-          loading={checkPhoneLoginState.loading}
-          disabled={
-            phone.value === '' ||
-            phone.valMsgError !== '' ||
-            checkPhoneLoginState.loading
-          }
-          size="medium"
-          full
-        />
-      </View>
-      <View style={loginPhoneStyles.registerLink}>
-        <SnbText2.Paragraph.Default>
-          Belum punya akun Sinbad?
-        </SnbText2.Paragraph.Default>
-        <View style={{ marginLeft: -layout.spacing.sm }}>
-          <SnbButton2.Link
-            title="Daftar"
-            size="medium"
-            onPress={() => {
-              phone.clearText();
-              navigate(SELF_REGISTRATION_VIEW);
-            }}
-            testID={'01'}
-          />
-        </View>
-      </View> */}
       <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
