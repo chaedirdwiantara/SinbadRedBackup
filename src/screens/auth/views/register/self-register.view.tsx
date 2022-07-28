@@ -97,29 +97,32 @@ const SelfRegisterView: React.FC = () => {
 
   const buttonRegister = () => {
     return (
-      <FooterButton.Single
-        testID={'02'}
-        title='Lanjut'
-        buttonPress={() => {
-          Keyboard.dismiss();
-          checkPhoneRegistration({
-            mobilePhone: phone.value,
-            identifierDeviceId: advertisingId,
-          })
-        }}
-        loadingButton={checkPhoneRegistrationState.loading}
-        disabled={
-          phone.value === '' ||
-          phone.valMsgError !== '' ||
-          checkPhoneRegistrationState.loading
-        }
-        textLink="Masuk"
-        textLinkPress={() => {
-          phone.clearText();
-          navigate(LOGIN_PHONE_VIEW);
-        }}
-        description="Sudah punya akun Sinbad?"
-      />
+      <View>
+        <FooterButton.Single
+          testID={'02'}
+          title={'Lanjut'}
+          buttonPress={() => {
+            Keyboard.dismiss();
+            checkPhoneRegistration({
+              mobilePhone: phone.value,
+              identifierDeviceId:
+                advertisingId === undefined ? null : advertisingId,
+            });
+          }}
+          textLink={'Masuk'}
+          description={'Sudah punya akun Sinbad?'}
+          textLinkPress={() => {
+            phone.clearText();
+            navigate(LOGIN_PHONE_VIEW);
+          }}
+          disabled={
+            phone.value === '' ||
+            phone.valMsgError !== '' ||
+            checkPhoneRegistrationState.loading
+          }
+          loadingButton={checkPhoneRegistrationState.loading}
+        />
+      </View>
     );
   };
 
