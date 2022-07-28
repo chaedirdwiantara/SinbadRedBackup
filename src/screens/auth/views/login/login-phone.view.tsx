@@ -31,6 +31,7 @@ const Content: React.FC = () => {
     return () => {
       resetCheckLoginPhone();
       resetRequestOTP();
+      phone.clearText();
     };
   }, []);
 
