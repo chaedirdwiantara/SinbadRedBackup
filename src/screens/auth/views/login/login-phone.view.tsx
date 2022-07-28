@@ -1,14 +1,14 @@
 import { setErrorMessage, useInputPhone } from '@screen/auth/functions';
 import { SELF_REGISTRATION_VIEW } from '@screen/auth/functions/screens_name';
-import React, { useEffect } from 'react';
-import { View, ScrollView, BackHandler, Image, Keyboard } from 'react-native';
+import React from 'react';
+import { View, ScrollView, Image, Keyboard } from 'react-native';
 import {
+  FooterButton,
   SnbBottomSheet2Ref,
   SnbContainer,
   SnbTextField2,
   SnbTopNav2,
   spacingV2 as layout,
-  FooterButton,
 } from 'react-native-sinbad-ui';
 import { useNavigation } from '@react-navigation/core';
 import { ModalOTPMethod, ModalSalesman } from '../shared';
@@ -21,7 +21,7 @@ const Content: React.FC = () => {
     useAuthCoreAction();
   const { checkPhoneLogin: checkPhoneLoginState } = useDataAuth();
   const phone = useInputPhone();
-  const { reset, navigate } = useNavigation();
+  const { navigate } = useNavigation();
   const refModalOTP = React.useRef<SnbBottomSheet2Ref>(null);
   const refModalSalesman = React.useRef<SnbBottomSheet2Ref>(null);
   const { advertisingId } = useDataPermanent();
@@ -53,18 +53,6 @@ const Content: React.FC = () => {
     }
   }, [checkPhoneLoginState]);
 
-  useEffect(() => {
-    const backAction = () => {
-      reset({ index: 0, routes: [{ name: 'Home' }] });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-    return () => backHandler.remove();
-  }, []);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Image
@@ -79,7 +67,7 @@ const Content: React.FC = () => {
       <View style={{ padding: layout.spacing.lg }}>
         <SnbTextField2.Text
           {...phone}
-          labelText="Nomer Handphone"
+          labelText="Nomor Handphone"
           keyboardType="phone-pad"
           testID={'01'}
         />

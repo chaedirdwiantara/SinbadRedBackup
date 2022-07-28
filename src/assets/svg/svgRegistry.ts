@@ -8,6 +8,9 @@ import call from './call.svg';
 import whatsapp from './whatsapp.svg';
 import mail from './mail.svg';
 import expand_less from './expand_less.svg';
+import shield from './shield.svg';
+import shield_blue from './shield_blue.svg';
+import error from './error.svg';
 // history tracking icon
 import packed from './packed.svg';
 import shiped from './shiped.svg';
@@ -73,4 +76,7 @@ export const SvgRegistery = {
   check_circle,
   x_circle,
   kategori_toko,
+  shield,
+  shield_blue,
+  error,
 };

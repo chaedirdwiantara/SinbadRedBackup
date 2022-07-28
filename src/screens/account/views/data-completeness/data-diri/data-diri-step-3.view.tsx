@@ -5,6 +5,7 @@ import {
   SnbButton2,
   SnbToast,
   spacingV2 as layout,
+  SnbBottomSheet2Ref,
 } from 'react-native-sinbad-ui';
 import { View, Image, BackHandler } from 'react-native';
 import {
@@ -22,8 +23,8 @@ import { useEasyRegistration } from '@screen/account/functions';
 import { NavigationAction } from '@navigation';
 
 const DataDiriStep3View: React.FC = () => {
-  const [openModalStep, setOpenModalStep] = useState(false);
-  const [openModalBack, setOpenModalBack] = useState(false);
+  const refModalListOfStep = React.useRef<SnbBottomSheet2Ref>()
+  const refModalBack = React.useRef<SnbBottomSheet2Ref>()
   const { openCamera, capturedImage, resetCamera } = useCamera();
   const { upload, save } = useUploadImageAction();
   const { stateGlobal, dispatchGlobal } = React.useContext(
@@ -53,7 +54,7 @@ const DataDiriStep3View: React.FC = () => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       () => {
-        setOpenModalBack(true);
+        refModalBack.current?.open()
         return true;
       },
     );
@@ -206,7 +207,7 @@ const DataDiriStep3View: React.FC = () => {
     <SnbContainer color="white">
       <View>
         <SnbTopNav2.Type3
-          backAction={() => setOpenModalBack(true)}
+          backAction={() => refModalBack.current?.open()}
           color="white"
           title="Foto Diri Dengan KTP"
           testID={'09'}
@@ -214,20 +215,18 @@ const DataDiriStep3View: React.FC = () => {
         <Stepper
           complete={completeDataState?.data?.userProgress?.completed}
           total={completeDataState?.data?.userProgress?.total}
-          onPress={() => setOpenModalStep(true)}
+          onPress={() => refModalListOfStep.current?.open()}
           testID={'09'}
         />
       </View>
       {isImageAvailable ? renderImagePreview() : renderUploadPhotoRules()}
       <ModalBack
-        open={openModalBack}
-        closeModal={() => setOpenModalBack(false)}
+        ref={refModalBack}
         confirm={() => backSave()}
       />
       <ListOfSteps
-        open={openModalStep}
         type="user"
-        closeModal={() => setOpenModalStep(false)}
+        ref={refModalListOfStep}
         testID={'09.4'}
       />
     </SnbContainer>

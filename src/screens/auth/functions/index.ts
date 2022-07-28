@@ -6,14 +6,11 @@ import {
   setErrorMessage,
 } from './auth-utils.functions';
 import {
-  useCheckPhoneNoAvailability,
-  useRegister,
   useCheckPhoneV2,
   useCheckAutoLogin,
   useCheckPhoneRegistrationV3,
 } from './register-hooks.functions';
 import {
-  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
@@ -21,23 +18,18 @@ import {
   useTextFieldSelect,
 } from './global-hooks.functions';
 import useOTP from './otp-hooks.functions';
-import { useAuthAction } from './auth-hook.function';
 
 export {
   renderIF,
   formatter,
   useCamera,
   useTextFieldSelect,
-  useCheckPhoneNoAvailability,
-  useMerchant,
   useInputPhone,
   useInput,
   useInputFormat,
   maskPhone,
   useOTP,
-  useAuthAction,
   extractAddress,
-  useRegister,
   setErrorMessage,
   useCheckPhoneV2,
   useCheckAutoLogin,

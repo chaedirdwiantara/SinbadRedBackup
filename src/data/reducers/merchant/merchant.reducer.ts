@@ -1,9 +1,4 @@
 /** === IMPORT HERE === */
-// import * as models from '@models';
-import {
-  supplierListReducer,
-  supplierListInitialState,
-} from './merchant-list.reducer';
 import {
   merchantEditReducer,
   merchantEditInitialState,
@@ -42,7 +37,6 @@ import {
 // export type ProfileEditInitialProps = models.UpdateProps;
 /** === INITIAL HERE === */
 export const supplierInitialState = {
-  list: supplierListInitialState,
   merchantEdit: merchantEditInitialState,
   profileEdit: profileEditInitialState,
   changeEmail: changeEmailInitialState,
@@ -55,7 +49,6 @@ export const supplierInitialState = {
 /** === EXPORT ALL HERE === */
 export const merchantReducer = (
   {
-    list,
     merchantEdit,
     profileEdit,
     changeEmail,
@@ -67,7 +60,6 @@ export const merchantReducer = (
   }: any,
   action: any,
 ) => ({
-  list: supplierListReducer(list, action),
   merchantEdit: merchantEditReducer(merchantEdit, action),
   profileEdit: profileEditReducer(profileEdit, action),
   changeEmail: changeEmailReducer(changeEmail, action),

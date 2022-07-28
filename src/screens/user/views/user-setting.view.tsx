@@ -9,13 +9,11 @@ import {
 import { ScrollView } from 'react-native';
 import { NavigationAction } from '@navigation';
 /** === IMPORT FUNCTION HERE === */
-import { useAuthAction } from '@screen/auth/functions/auth-hook.function';
 import { useNavigation } from '@react-navigation/core';
 import { contexts } from '@contexts';
 
 const UserSettingView: FC = () => {
   /** === HOOK === */
-  const { logout } = useAuthAction();
   const { reset } = useNavigation();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { stateUser } = React.useContext(contexts.UserContext);
@@ -56,7 +54,6 @@ const UserSettingView: FC = () => {
         cancelText="Ya"
         cancel={() => {
           setShowConfirmation(false);
-          logout();
           reset({ index: 0, routes: [{ name: 'LoginPhoneView' }] });
         }}
         ok={() => {

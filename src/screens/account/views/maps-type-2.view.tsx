@@ -16,6 +16,7 @@ import {
 import MapView, { LatLng, Marker } from 'react-native-maps';
 import {
   Image,
+  LogBox,
   PermissionsAndroid,
   StyleSheet,
   TouchableHighlight,
@@ -214,6 +215,7 @@ const MapsViewType2: React.FC = () => {
     } catch (error) {}
   }
 
+  LogBox.ignoreLogs(['Non-serializable values were found in the navigation state.'])
 
   return (
     <SnbContainer color="white">

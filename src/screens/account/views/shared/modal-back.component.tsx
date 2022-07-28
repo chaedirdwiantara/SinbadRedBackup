@@ -11,21 +11,13 @@ import { View } from 'react-native';
 import { useEasyRegistration } from '@screen/account/functions';
 
 interface ListOfStepsProps {
-  closeModal: () => void;
-  open: boolean;
+  ref: any;
   confirm: () => void;
 }
 
-const ModalBack: FC<ListOfStepsProps> = (props) => {
+const ModalBack: FC<ListOfStepsProps> = React.forwardRef((props, ref: any) => {
   const { updateCompleteDataState } = useEasyRegistration();
   const [contentHeight, setContentHeight] = React.useState(0);
-  const bottomSheetRef = React.useRef<SnbBottomSheet2Ref>(null);
-
-  React.useEffect(() => {
-    props.open
-      ? bottomSheetRef.current?.open()
-      : bottomSheetRef.current?.close();
-  }, [props.open]);
 
   const renderContent = () => {
     return (
@@ -43,13 +35,12 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
   return (
     <View>
       <SnbBottomSheet2
-        ref={bottomSheetRef}
+        ref={ref}
         content={renderContent()}
         title={<SnbBottomSheetPart.Title title="" />}
         name="modal-back-profile-completion"
         type="content"
         snap={false}
-        close={props.closeModal}
         contentHeight={contentHeight + 100}
         button={
           <View
@@ -60,7 +51,7 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
             <View style={{ flex: 1 }}>
               <SnbButton2.Primary
                 onPress={() => {
-                  props.closeModal();
+                  ref.current?.close()
                 }}
                 title="Batal"
                 disabled={false}
@@ -88,6 +79,6 @@ const ModalBack: FC<ListOfStepsProps> = (props) => {
       />
     </View>
   );
-};
+});
 
 export default ModalBack;

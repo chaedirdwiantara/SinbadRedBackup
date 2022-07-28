@@ -3,6 +3,7 @@ import { useTextFieldSelect } from '@screen/auth/functions';
 import React from 'react';
 import { View } from 'react-native';
 import {
+  SnbBottomSheet2Ref,
   SnbButton2,
   SnbContainer,
   SnbTopNav2,
@@ -22,8 +23,7 @@ const Content = () => {
   const [urban, setUrban] = React.useState<any>(null);
   const { goBack } = useNavigation();
   const [type, setType] = React.useState<models.ITypeList>('');
-  const [openModalSelection, setOpenModalSelection] =
-    React.useState<boolean>(false);
+  const refModalSelection = React.useRef<SnbBottomSheet2Ref>()
   const [params, setParams] = React.useState('');
   const { getLocation, locations, resetLocation } = useLocations();
 
@@ -55,7 +55,7 @@ const Content = () => {
             onPress={() => {
               setType('listProvince');
               getSelection({ type: 'listProvince' });
-              setOpenModalSelection(true);
+              refModalSelection.current?.open();
             }}
             rightType="icon"
             rightIcon="chevron_right"
@@ -77,7 +77,7 @@ const Content = () => {
                   type: 'listCity',
                   params: cityParams,
                 });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -103,7 +103,7 @@ const Content = () => {
                   type: 'listDistrict',
                   params: districtParams,
                 });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -130,7 +130,7 @@ const Content = () => {
                   params: urbanParams,
                 });
                 urban && onSelectedItem({ type: 'listUrban', item: urban });
-                setOpenModalSelection(true);
+                refModalSelection.current?.open();
               }
             }}
             rightType="icon"
@@ -167,7 +167,7 @@ const Content = () => {
       </View>
       <ModalSelection
         type={type}
-        open={openModalSelection}
+        ref={refModalSelection}
         params={params}
         onCloseModalSelection={(result) => {
           if (result) {
@@ -201,7 +201,7 @@ const Content = () => {
           }
           resetGetSelection();
           resetSelectedItem();
-          setOpenModalSelection(false);
+          refModalSelection.current?.close()
         }}
       />
     </View>
