@@ -22,26 +22,35 @@ const PaymentInformation = () => {
   }
   return (
     <>
-    <View style={styles.main}>
-      <Header title="Informasi Pembayaran" />
-      <Description
-        title="Metode Pembayaran"
-        value={data?.paymentMethod || ''}
-      />
-      <Description
-        title={`Total Harga (${data?.totalQty || 0} Barang)`}
-        value={toCurrency(data?.totalOrderParcelsAfterTax || 0, {
-          withFraction: false,
-        })}
-      />
-      <Description
-        title="Total Belanja"
-        value={toCurrency(data?.totalOrderPriceAfterTax || 0, {
-          withFraction: false,
-        })}
-      />
-    </View>
-    <Divider />
+      <View style={styles.main}>
+        <Header title="Informasi Pembayaran" testID="textTitle.2.2" />
+        <Description
+          title="Metode Pembayaran"
+          value={data?.paymentMethod || ''}
+        />
+        <Description
+          title={`Total Harga (${data?.totalQty || 0} Barang)`}
+          value={toCurrency(data?.totalOrderParcelsAfterTax || 0, {
+            withFraction: false,
+          })}
+        />
+        {data?.sinbadVoucherDiscountOrder != null ? (
+          <Description
+            title={`Potongan Voucher`}
+            voucher={true}
+            value={`-${toCurrency(data?.sinbadVoucherDiscountOrder || 0, {
+              withFraction: false,
+            })}`}
+          />
+        ) : null}
+        <Description
+          title="Total Belanja"
+          value={toCurrency(data?.totalOrderPrice || 0, {
+            withFraction: false,
+          })}
+        />
+      </View>
+      <Divider />
     </>
   );
 };
