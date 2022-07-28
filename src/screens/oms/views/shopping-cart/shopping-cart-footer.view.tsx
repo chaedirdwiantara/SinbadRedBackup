@@ -98,6 +98,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     setCheckoutBtnLoading(true);
   }, [cartData, stateCart.checkBuyer.data]);
 
+  const handleResetSelectedVoucher = () => {
+    resetSelectedVoucher();
+    const carts = reformatCarts();
+    checkSinbadVoucherAction.fetch(dispatchVoucher, true, null, carts);
+  };
+
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
   const checkProductSellerStock = () => {
     if (stateCart.update.data !== null && isCheckoutPressed) {
@@ -278,7 +284,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
           selectedVoucher?.voucherId &&
         selectedVoucher !== null
       ) {
-        resetSelectedVoucher();
+        handleResetSelectedVoucher();
         handleParentToast(
           'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
           refFooterHeight.current,
@@ -317,7 +323,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       stateVoucher.checkSinbadVoucher.data.isVoucherExist &&
       countTotalProduct === 0
     ) {
-      resetSelectedVoucher();
+      handleResetSelectedVoucher();
       handleParentToast(
         'Pilih produk sebelum pakai voucher',
         refFooterHeight.current,
@@ -408,7 +414,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         onCloseVoucher={
           voucherStatus === 'green'
             ? () => {
-                resetSelectedVoucher();
+                handleResetSelectedVoucher();
                 handleParentToast(
                   'Voucher Berhasil Dihapus',
                   refFooterHeight.current,
