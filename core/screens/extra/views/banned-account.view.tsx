@@ -1,23 +1,50 @@
 /** === IMPORT PACKAGE HERE ===  */
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Content,
   SnbButton2,
   SnbContainer,
+  SnbToast2,
   SnbTopNav2,
   spacingV2 as layout
 } from '@sinbad/react-native-sinbad-ui';
 import { ImagesSinbad } from '@image/sinbad_image/index';
 import { Linking, View } from 'react-native';
 import { useDataAuth } from '@core/redux/Data';
-import { useAuthAction } from '@screen/auth/functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
+import { useAuthCoreAction } from '@core/functions/auth';
+import { useCoachmark } from '@screen/account/functions';
+import { useNotificationTotalActions } from '@screen/notification/functions';
+import { useGetTotalCartAction } from '@screen/oms/functions';
 
 const BannedACcountView: React.FC = () => {
-  const { me } = useDataAuth()
-  const { logout } = useAuthAction();
+  const { logout, resetLogout, meReset, meV2Reset } = useAuthCoreAction();
   const { stateUser } = React.useContext(contexts.UserContext);
+  const { logout: logoutState, me } = useDataAuth()
+  const { resetCoachmark } = useCoachmark()
+  const notificationActions = useNotificationTotalActions()
+  const totalCartAction = useGetTotalCartAction();
+  const { dispatchCart } = useContext(contexts.CartContext);
+
+  React.useEffect(() => {
+    return resetLogout
+  }, [])
+
+  React.useEffect(() => {
+    if (logoutState.data) {
+      meReset()
+      meV2Reset()
+      totalCartAction.reset(dispatchCart)
+      notificationActions.reset()
+      resetCoachmark()
+      NavigationAction.resetToIntroSinbad()
+      resetLogout()
+    }
+    if (logoutState.error) {
+      SnbToast2.show(logoutState.error.message, 2500)
+    }
+  }, [logoutState])
 
   return (
     <SnbContainer color="white">
@@ -59,7 +86,6 @@ const BannedACcountView: React.FC = () => {
                       stateUser.detail.data?.ownerData?.profile?.mobilePhone,
                   });
                 }
-                NavigationAction.resetToIntroSinbad()
               }}
             />
           </View>

@@ -13,22 +13,7 @@ export const verifyOTP = simplifyReducer(INITIAL_STATE, {
     return { ...INITIAL_STATE, loading: true };
   },
 
-  [types.VERIFICATION_OTP_PROCESS]() {
-    return { ...INITIAL_STATE, loading: true };
-  },
-
   [types.VERIFY_OTP_REGISTER_SUCCESS](
-    state = INITIAL_STATE,
-    action: models.IRegisterAction<models.IVerifyOTPSuccess>,
-  ) {
-    return {
-      ...state,
-      loading: false,
-      data: action.payload,
-    };
-  },
-
-  [types.VERIFICATION_OTP_SUCCESS](
     state = INITIAL_STATE,
     action: models.IRegisterAction<models.IVerifyOTPSuccess>,
   ) {
@@ -49,18 +34,7 @@ export const verifyOTP = simplifyReducer(INITIAL_STATE, {
       error: action.payload,
     };
   },
-
-  [types.VERIFICATION_OTP_FAILED](
-    state = INITIAL_STATE,
-    action: models.IRegisterAction<any>,
-  ) {
-    return {
-      ...state,
-      loading: false,
-      error: action.payload,
-    };
-  },
-
+  
   [types.VERIFY_OTP_RESET]() {
     return INITIAL_STATE;
   },
