@@ -19,7 +19,7 @@ import {
   BackHandler,
 } from 'react-native';
 import { NavigationAction } from '@navigation';
-import testProps from '@core/functions/global/test-props';
+import { testProps } from '@core/functions/global/test-props';
 /** === IMPORT STYLE HERE === */
 import MerchantStyles from '../../styles/merchant.style';
 /** === IMPORT EXTERNAL FUNCTION HERE === */
@@ -128,7 +128,7 @@ const MerchantDetailProfileView: FC = () => {
         <TouchableOpacity
           style={MerchantStyles.boxEditIconContainer}
           onPress={() => goTo({ type: 'merchantOwnerImage' })}
-          testID={'profileUpload.12'}>
+          {...testProps('uploadProfile.12')}>
           <View style={MerchantStyles.boxEditIcon}>
             <SnbIcon
               name={'create'}

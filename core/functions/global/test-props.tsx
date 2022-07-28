@@ -1,6 +1,8 @@
-export const testProps = (id?: string) => {
+const testProps = (id?: string) => {
   return {
     testID: id,
     accessibilityLabel: id,
   };
 };
+
+export { testProps };
