@@ -66,7 +66,7 @@ const OnBoardingView: React.FC<Props> = () => {
 
   const button = () => {
     return (
-      <View style={{ padding: layout.spacing.lg }}>
+      <View>
         <FooterButton.Dual
           testID={'01'}
           title2="Masuk"
