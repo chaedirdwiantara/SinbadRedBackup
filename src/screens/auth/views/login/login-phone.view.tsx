@@ -98,7 +98,12 @@ const Content: React.FC = () => {
         }
         loadingButton={checkPhoneLoginState.loading}
       />
-      <ModalOTPMethod ref={refModalOTP} phone={phone.value} action="login" />
+      <ModalOTPMethod 
+        ref={refModalOTP} 
+        phone={phone.value} 
+        action="login"
+        onResetField={phone.clearText}
+       />
       <ModalSalesman ref={refModalSalesman} />
       <View style={{ flex: 1 }}>
         <ForceRegistrationModal
