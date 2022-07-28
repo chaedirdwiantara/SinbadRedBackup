@@ -116,10 +116,10 @@ const NotificationCardContent: FC<NotificationCardContentProps> = ({
             flexDirection: 'row-reverse',
             paddingTop: layout.spacing.xsm,
           }}>
-          {isLoadMore && !loadMore ? (
+          {isLoadMore ? (
             <SnbButton2.Link
               onPress={() => setLoadMore((prev) => !prev)}
-              title="Lihat Lebih Banyak"
+              title={`Lihat Lebih ${loadMore ? 'Sedikit' : 'Banyak'}`}
               size="tiny"
               testID={`${testID}.expand`}
             />

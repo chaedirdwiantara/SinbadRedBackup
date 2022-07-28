@@ -30,44 +30,40 @@ function NotificationView() {
   }, []);
 
   const render = useMemo(() => {
-    // loading
+    // loading get data
     if (loading) return <SnbProductListSkeleton />;
-    // data empty
-    if (!loading && data.length === 0) return <NotificationEmpty />;
-    // have data
-    if (!loading && data.length)
-      return (
-        <FlatList
-          data={data}
-          refreshing={refresh}
-          refreshControl={
-            <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
-          }
-          keyExtractor={(i) => i.id}
-          renderItem={({ item }) => (
-            <NotificationCard
-              testID={`${testID}-${item.id}`}
-              typeName={item.typeName ?? ''}
-              iconName={item.data?.iconName ?? ''}
-              iconColor={item.data?.iconColor ?? ''}
-              product={{
-                name: item.data?.productName ?? '',
-                url: item.data?.productImage ?? '',
-              }}
-              title={item?.title ?? ''}
-              date={timeFromNow(new Date(item.createdAt).getTime())}
-              content={item?.body ?? ''}
-              read={item.isRead}
-              onPress={() => onMarkRead(item)}
-            />
-          )}
-          contentContainerStyle={{ paddingBottom: 60 }}
-          onEndReachedThreshold={0.1}
-          onEndReached={onLoadMore}
-        />
-      );
-
-    return <></>;
+    // compete get
+    return (
+      <FlatList
+        data={data}
+        refreshing={refresh}
+        refreshControl={
+          <RefreshControl refreshing={refresh} onRefresh={onRefresh} />
+        }
+        keyExtractor={(i) => i.id}
+        renderItem={({ item }) => (
+          <NotificationCard
+            testID={`${testID}-${item.id}`}
+            typeName={item.typeName ?? ''}
+            iconName={item.data?.iconName ?? ''}
+            iconColor={item.data?.iconColor ?? ''}
+            product={{
+              name: item.data?.productName ?? '',
+              url: item.data?.productImage ?? '',
+            }}
+            title={item?.title ?? ''}
+            date={timeFromNow(new Date(item.createdAt).getTime())}
+            content={item?.body ?? ''}
+            read={item.isRead}
+            onPress={() => onMarkRead(item)}
+          />
+        )}
+        contentContainerStyle={{ paddingBottom: 60, flexGrow: 1 }}
+        ListEmptyComponent={() => <NotificationEmpty />}
+        onEndReachedThreshold={0.1}
+        onEndReached={onLoadMore}
+      />
+    );
   }, [loading, data, refresh, onRefresh, onLoadMore]);
   // render ui
   return (
