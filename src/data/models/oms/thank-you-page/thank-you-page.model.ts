@@ -8,6 +8,7 @@ export interface ThankYouOrderDetailProps {
   paymentServiceFeeDeduct: number;
   paymentIsServiceFeeFree: boolean;
   totalOrderPriceAfterTax: number;
+  sinbadVoucherDiscountOrder: number;
   sellers: OrderSeller[];
   buyerAddress: string;
   buyerAddressProvince: string;

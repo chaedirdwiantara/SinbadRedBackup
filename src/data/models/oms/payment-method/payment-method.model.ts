@@ -64,6 +64,10 @@ export interface PaymentMethodCreateOrderData {
   paymentMethodIsServiceFeeFree: boolean;
   paymentMethodIconUrl: string;
   reservedAt: string;
+  sinbadVoucherDiscountOrder: number;
+  sinbadVoucherId: number;
+  ownerIdNo: string;
+  buyerTaxNo: string;
 }
 
 export interface PaymentMethodSellers {
@@ -72,6 +76,9 @@ export interface PaymentMethodSellers {
   sellerAdminEmail: string;
   sellerAdminId: string;
   sellerAdminFullname: string;
+  fullSellerAddress?: string;
+  sellerTaxNo?: string;
+  sinbadVoucherDiscountParcel?: number;
   products: PaymentMethodProducts[];
 }
 export interface PaymentMethodBuyerAdress {
