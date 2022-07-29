@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText2 } from 'react-native-sinbad-ui';
+import { SnbText2, colorV2, spacingV2 } from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
 import { VoucherDetailAccordion } from '@screen/voucher/components/VoucherDetailAccordion';
 /** === INTERFACE === */
@@ -25,14 +25,21 @@ export const VoucherDetailTnC: FC<VoucherDetailTnCProps> = ({
         onPress={() => setOpen((prev) => !prev)}>
         <View style={{ paddingBottom: 28 }}>
           <View style={{ marginBottom: 14 }}>
-            <SnbText2.Paragraph.Default color={'#677a8e'}>
+            <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
               Syarat dan Ketentuan dalam menggunakan voucher ini:
             </SnbText2.Paragraph.Default>
           </View>
           {termsAndCondition.map((tnc) => (
-            <SnbText2.Paragraph.Default key={`${tnc}`} color={'#677a8e'}>
-              {`\u2022 ${tnc}`}
-            </SnbText2.Paragraph.Default>
+            <View key={`${tnc}`} style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ marginRight: spacingV2.spacing.sm }}>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  {'\u2022'}
+                </SnbText2.Paragraph.Default>
+              </View>
+              <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                {`${tnc}`}
+              </SnbText2.Paragraph.Default>
+            </View>
           ))}
         </View>
       </VoucherDetailAccordion>

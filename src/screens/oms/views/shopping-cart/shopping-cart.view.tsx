@@ -79,9 +79,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => ACTION */
   const { stateCart, dispatchCart } = React.useContext(contexts.CartContext);
-  const { stateVoucher, dispatchVoucher } = React.useContext(
-    contexts.VoucherContext,
-  );
+  const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   const getCartAction = useGetCartAction();
   const checkProductAction = useCheckProductAction();
   const checkSellerAction = useCheckSellerAction();
@@ -186,9 +184,13 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
 
   /** => toast error check voucher */
   const handleToastErrorCheckVoucher = (message: string, height: number) => {
-    SnbToast2.show(message, 2000, {
+    SnbToast2.show(message, 1000, {
       position: 'bottom',
       positionValue: height + 25,
+      action: () => {
+        SnbToast2.hide();
+      },
+      actionLabel: 'oke',
     });
   };
 
@@ -234,6 +236,7 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
         errorData = stateCart.checkBuyer.error;
       }
       if (isErrorCancelStock || isErrorBuyerAddress) {
+        setPageLoading(false);
         errorModal.setCloseAction(() => handleGoBack);
         errorModal.setErrorData(errorData);
         errorModal.setOpen(true);
@@ -381,15 +384,6 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
     }
   }, [pageLoading]);
 
-  /** => listen check voucher fetch error */
-  useEffect(() => {
-    if (stateVoucher.checkSinbadVoucher.error !== null) {
-      errorModal.setCloseAction(() => handleGoBack);
-      errorModal.setErrorData(stateVoucher.checkSinbadVoucher.error);
-      errorModal.setOpen(true);
-    }
-  }, [stateVoucher.checkSinbadVoucher.error]);
-
   /** === VIEW === */
   /** => CONTENT */
   const renderContent = () => {
@@ -422,11 +416,10 @@ const OmsShoppingCartView: FC = ({ navigation }: any) => {
             testID={screenName}
             cartData={localCartMaster}
             localCartMasterDebouce={debouncedValue!}
+            countTotalPrice={countTotalPrice}
             countTotalProduct={countTotalProduct}
             isCheckoutDisabled={
-              !isAnyActiveProduct() ||
-              countTotalPrice < 100000 ||
-              keyboardFocus.isFocus
+              countTotalProduct === 0 || keyboardFocus.isFocus
             }
             handleOpenErrorBusinessModal={() => {
               refCartBusinessErrorModal.current?.open();
