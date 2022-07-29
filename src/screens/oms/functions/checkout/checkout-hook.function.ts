@@ -6,11 +6,13 @@ import * as Actions from '@actions';
 import * as models from '@models';
 import { contexts } from '@contexts';
 import { useContext } from 'react';
+import { useVoucherLocalData } from '@screen/voucher/functions';
 /** === FUNCTION === */
 /** => checkout action */
 const useCheckoutAction = () => {
   const { stateCart } = useContext(contexts.CartContext);
   const { stateVoucher } = useContext(contexts.VoucherContext);
+  const { selectedVoucher } = useVoucherLocalData();
   const dispatch = useDispatch();
   return {
     fetch: (
@@ -133,7 +135,7 @@ const useCheckoutAction = () => {
               ownerPhoneNumber: stateCart.checkBuyer.data.ownerPhoneNumber,
               ownerId: stateCart.checkBuyer.data.ownerId,
               ownerIdNo: stateCart.checkBuyer.data.ownerIdNo,
-              sinbadVoucherId: null,
+              sinbadVoucherId: selectedVoucher?.voucherId || null,
               sinbadVoucherDiscountOrder:
                 stateVoucher.checkSinbadVoucher.data.sinbadVoucherDiscountOrder,
               carts,

@@ -83,6 +83,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const { selectedVoucher, resetSelectedVoucher } = useVoucherLocalData();
   const { footerData, setFooterData } = useFooterData();
   const refFooterHeight = useRef(0);
+  const [isDeleteVoucher, setDeleteVoucher] = useState(false);
 
   /** === ACTIONS === */
   const postCheckProductAction = usePostCheckProductAction();
@@ -102,8 +103,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   const handleResetSelectedVoucher = () => {
     resetSelectedVoucher();
-    const carts = reformatCarts();
-    checkSinbadVoucherAction.fetch(dispatchVoucher, true, null, carts);
   };
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
@@ -345,7 +344,11 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
             refFooterHeight.current,
           );
         }, 300);
-      } else if (footerData.totalOrder < 100000 && countTotalProduct > 0) {
+      } else if (
+        footerData.totalOrder < 100000 &&
+        countTotalProduct > 0 &&
+        !isDeleteVoucher
+      ) {
         setTimeout(() => {
           handleParentToast(
             'Min. belanja 100rb untuk checkout',
@@ -449,12 +452,21 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         onCloseVoucher={
           voucherStatus === 'green'
             ? () => {
+                setDeleteVoucher(true);
                 handleResetSelectedVoucher();
+                const carts = reformatCarts();
+                checkSinbadVoucherAction.fetch(
+                  dispatchVoucher,
+                  true,
+                  null,
+                  carts,
+                );
                 setTimeout(() => {
                   handleParentToast(
                     'Voucher Berhasil Dihapus',
                     refFooterHeight.current,
                   );
+                  setDeleteVoucher(false);
                 }, 300);
               }
             : undefined
