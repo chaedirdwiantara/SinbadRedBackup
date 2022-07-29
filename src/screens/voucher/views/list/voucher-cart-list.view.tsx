@@ -6,7 +6,10 @@ import * as models from '@models';
 import { VoucherCartListStyles } from '../../styles';
 import { toCurrency } from '@core/functions/global/currency-format';
 import { NavigationAction } from '@core/functions/navigation';
-import { reorderVoucherList, useVoucherLocalData } from '@screen/voucher/functions';
+import {
+  reorderVoucherList,
+  useVoucherLocalData,
+} from '@screen/voucher/functions';
 
 interface VoucherCartListProps {
   eligibleVouchers: models.EligibleVoucherProps[];
@@ -60,6 +63,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
                         id: voucher?.sinbadVoucherId,
+                        value: voucher?.sinbadVoucherValue,
                         type: 'eligible',
                       })
                     }
@@ -89,6 +93,7 @@ export const VoucherCartList: FC<VoucherCartListProps> = ({
                     onPress={() =>
                       NavigationAction.navigate('VoucherDetailView', {
                         id: voucher?.sinbadVoucherId,
+                        value: voucher?.sinbadVoucherValue,
                         type: 'not-eligible',
                       })
                     }
