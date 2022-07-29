@@ -26,7 +26,7 @@ export const VoucherCartSearch: FC<VoucherCartSearchProps> = ({
     if (debouncedValue.length >= 3 || debouncedValue.length === 0) {
       getVouchersAction.list(dispatchVoucher, {
         totalOrder,
-        ...(debouncedValue && { uniqueCode: debouncedValue.toUpperCase() }),
+        ...(debouncedValue && { uniqueCode: debouncedValue }),
       });
     }
   }, [debouncedValue]);

@@ -62,7 +62,7 @@ const useSearchKeyword = () => {
 
   return {
     changeKeyword: (newValue: string) => {
-      setKeyword(newValue.toUpperCase());
+      setKeyword(newValue);
     },
     keyword,
     debouncedValue,

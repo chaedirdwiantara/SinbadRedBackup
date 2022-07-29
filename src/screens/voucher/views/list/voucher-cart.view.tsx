@@ -1,5 +1,4 @@
 /** === IMPORT PACKAGE HERE ===  */
-import { contexts } from '@contexts';
 import LoadingPage from '@core/components/LoadingPage';
 import React, { FC, useEffect } from 'react';
 import { SnbContainer } from 'react-native-sinbad-ui';
