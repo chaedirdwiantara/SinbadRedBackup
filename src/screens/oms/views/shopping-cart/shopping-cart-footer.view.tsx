@@ -102,8 +102,6 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
 
   const handleResetSelectedVoucher = () => {
     resetSelectedVoucher();
-    const carts = reformatCarts();
-    checkSinbadVoucherAction.fetch(dispatchVoucher, true, null, carts);
   };
 
   /** ==> Check product, seller, and stock after checkout button was clicked and update API requested */
