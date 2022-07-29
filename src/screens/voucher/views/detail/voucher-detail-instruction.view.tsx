@@ -1,7 +1,7 @@
 /** === IMPORT PACKAGE HERE ===  */
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbText2 } from 'react-native-sinbad-ui';
+import { colorV2, SnbText2, spacingV2 } from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
 import { VoucherDetailAccordion } from '@screen/voucher/components/VoucherDetailAccordion';
 /** === INTERFACE === */
@@ -25,11 +25,20 @@ export const VoucherDetailInstruction: FC<VoucherDetailInstructionProps> = ({
         onPress={() => setOpen((prev) => !prev)}>
         <View style={{ paddingBottom: 28 }}>
           {instructions.map((instruction) => (
-            <SnbText2.Paragraph.Default
+            <View
               key={`${instruction}`}
-              color={'#677a8e'}>
-              {`\u2022 ${instruction}`}
-            </SnbText2.Paragraph.Default>
+              style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ marginRight: spacingV2.spacing.sm }}>
+                <SnbText2.Paragraph.Default color={colorV2.textColor.secondary}>
+                  {'\u2022'}
+                </SnbText2.Paragraph.Default>
+              </View>
+              <SnbText2.Paragraph.Default
+                key={`${instruction}`}
+                color={colorV2.textColor.secondary}>
+                {`${instruction}`}
+              </SnbText2.Paragraph.Default>
+            </View>
           ))}
         </View>
       </VoucherDetailAccordion>
