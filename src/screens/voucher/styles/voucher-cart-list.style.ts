@@ -11,14 +11,13 @@ export const VoucherCartListStyles = StyleSheet.create({
     marginBottom: 32,
   },
   emptyContainer: {
+    flex: 1,
     backgroundColor: colorV2.bgColor.light,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
     marginTop: 8,
     paddingHorizontal: 49,
-    height: '100%',
   },
   emptyImage: {
     width: 240,

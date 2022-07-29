@@ -14,12 +14,15 @@ import {
   useVoucherDetailAction,
   goBack,
   useVoucherDetail,
+  useVoucherLocalData,
 } from '../../functions';
 import { contexts } from '@contexts';
 import { NavigationAction } from '@core/functions/navigation';
 import { VoucherDetailFooter } from './voucher-detail-footer.view';
 /** === INTERFACE === */
 interface NavigationParams {
+  id: number;
+  value: number;
   type: 'eligible' | 'not-eligible';
 }
 /** === COMPONENT === */
@@ -27,8 +30,9 @@ const VoucherDetailView: FC = () => {
   /** === HOOK === */
   const { dispatchVoucher } = React.useContext(contexts.VoucherContext);
   const voucherDetailAction = useVoucherDetailAction();
+  const { setSelectedVoucher } = useVoucherLocalData();
   const { data, loading, error } = useVoucherDetail();
-  const { id, type } =
+  const { id, value, type } =
     NavigationAction.useGetNavParams<NavigationParams>().params;
 
   NavigationAction.useCustomBackHardware(() => {
@@ -42,6 +46,14 @@ const VoucherDetailView: FC = () => {
       voucherDetailAction.reset(dispatchVoucher);
     };
   }, []);
+
+  const onPressHandler = () => {
+    setSelectedVoucher({
+      voucherId: id,
+      voucherValue: value,
+    });
+    NavigationAction.navigate('OmsShoppingCartView');
+  };
 
   /** === VIEW === */
   /** => header */
@@ -125,7 +137,7 @@ const VoucherDetailView: FC = () => {
       <VoucherDetailFooter
         loading={loading}
         disabled={type === 'not-eligible'}
-        onPress={() => {}}
+        onPress={onPressHandler}
       />
     </SnbContainer>
   );
