@@ -27,6 +27,7 @@ import CheckoutTncSaga from './oms/checkout/checkout-tnc.saga';
 import paymentMethodListSaga from './oms/payment-method/payment-method.saga';
 import PaymentHistorySaga from './oms/payment-history/payment-history.saga';
 import OcrImageSaga from './account/ocr-image.saga';
+import WaitingForPaymentInvoiceSaga from './oms/invoice/waiting-for-payment-invoice.saga';
 
 function* rootSaga() {
   yield all([fork(AuthCoreSaga)]);
@@ -57,6 +58,7 @@ function* rootSaga() {
   yield all([fork(paymentMethodListSaga)]);
   yield all([fork(PaymentHistorySaga)]);
   yield all([fork(OcrImageSaga)]);
+  yield all([fork(WaitingForPaymentInvoiceSaga)]);
 }
 
 export default rootSaga;
