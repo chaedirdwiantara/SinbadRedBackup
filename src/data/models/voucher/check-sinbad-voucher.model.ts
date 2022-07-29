@@ -3,7 +3,7 @@
  */
 export interface CheckSinbadVoucherResponse {
   isVoucherExist: boolean;
-  sinbadVoucherId: number;
+  sinbadVoucherId: number | null;
   totalOrder: number;
   sinbadVoucherDiscountOrder: number;
   totalOrderAfterSinbadVoucher: number;

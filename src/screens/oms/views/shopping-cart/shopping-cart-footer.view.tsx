@@ -33,6 +33,7 @@ interface FooterProps {
   cartData: models.CartMaster;
   localCartMasterDebouce: models.CartMaster;
   countTotalProduct: number;
+  countTotalPrice: number;
   isCheckoutDisabled: boolean;
   handleOpenErrorBusinessModal: () => void;
   handleErrorGlobalModalData: ErrorGlobalModalDataProps;
@@ -58,6 +59,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   cartData,
   localCartMasterDebouce,
   countTotalProduct,
+  countTotalPrice,
   isCheckoutDisabled,
   handleOpenErrorBusinessModal,
   handleErrorGlobalModalData,
@@ -276,31 +278,27 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     }
   }, [isUpdateError]);
 
-  /** => listen check voucher fetch */
+  /** => listen check voucher fetch success */
   useEffect(() => {
     if (stateVoucher.checkSinbadVoucher.data !== null) {
-      if (
-        stateVoucher.checkSinbadVoucher.data.sinbadVoucherId !==
-          selectedVoucher?.voucherId &&
-        selectedVoucher !== null
-      ) {
-        handleResetSelectedVoucher();
-        handleParentToast(
-          'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
-          refFooterHeight.current,
-        );
-      } else if (
-        stateVoucher.checkSinbadVoucher.data.totalOrder < 100000 &&
-        countTotalProduct > 0
-      ) {
-        handleParentToast(
-          'Min. belanja 100rb untuk checkout',
-          refFooterHeight.current,
-        );
-      }
       setFooterData(stateVoucher.checkSinbadVoucher.data);
     }
   }, [stateVoucher.checkSinbadVoucher.data]);
+
+  /** => listen check voucher fetch error */
+  useEffect(() => {
+    if (stateVoucher.checkSinbadVoucher.error !== null) {
+      resetSelectedVoucher();
+      setFooterData({
+        isVoucherExist: false,
+        sinbadVoucherId: null,
+        totalOrder: countTotalPrice,
+        sinbadVoucherDiscountOrder: 0,
+        totalOrderAfterSinbadVoucher: countTotalPrice,
+        carts: [],
+      });
+    }
+  }, [stateVoucher.checkSinbadVoucher.error]);
 
   /** => listen when something change in products */
   useEffect(() => {
@@ -324,12 +322,39 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
       countTotalProduct === 0
     ) {
       handleResetSelectedVoucher();
-      handleParentToast(
-        'Pilih produk sebelum pakai voucher',
-        refFooterHeight.current,
-      );
+      setTimeout(() => {
+        handleParentToast(
+          'Pilih produk sebelum pakai voucher',
+          refFooterHeight.current,
+        );
+      }, 300);
     }
   }, [countTotalProduct]);
+
+  /** listen relate  */
+  useEffect(() => {
+    if (footerData) {
+      if (
+        footerData.sinbadVoucherId !== selectedVoucher?.voucherId &&
+        selectedVoucher !== null
+      ) {
+        handleResetSelectedVoucher();
+        setTimeout(() => {
+          handleParentToast(
+            'Maaf, total belanja kamu dibawah syarat pemakaian voucher',
+            refFooterHeight.current,
+          );
+        }, 300);
+      } else if (footerData.totalOrder < 100000 && countTotalProduct > 0) {
+        setTimeout(() => {
+          handleParentToast(
+            'Min. belanja 100rb untuk checkout',
+            refFooterHeight.current,
+          );
+        }, 300);
+      }
+    }
+  }, [footerData]);
 
   const reformatCarts = () => {
     // format payload from redux master
@@ -392,7 +417,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         titleButton="Checkout Sekarang"
         loading={!footerData}
         loadingButton={isCheckoutBtnLoading}
-        disabled={isCheckoutDisabled || isCheckoutBtnLoading}
+        disabled={
+          totalDisplayPrice < 100000 ||
+          isCheckoutBtnLoading ||
+          isCheckoutDisabled ||
+          stateVoucher.checkSinbadVoucher.loading
+        }
         value={totalDisplayPrice || 0}
         description={
           countTotalProduct > 0
@@ -409,16 +439,23 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
             NavigationAction.navigate('VoucherCartListView', {
               totalOrder: totalDisplayPrice,
             });
+          } else if (voucherStatus === 'gray') {
+            handleParentToast(
+              'Pilih produk sebelum pakai voucher',
+              refFooterHeight.current,
+            );
           }
         }}
         onCloseVoucher={
           voucherStatus === 'green'
             ? () => {
                 handleResetSelectedVoucher();
-                handleParentToast(
-                  'Voucher Berhasil Dihapus',
-                  refFooterHeight.current,
-                );
+                setTimeout(() => {
+                  handleParentToast(
+                    'Voucher Berhasil Dihapus',
+                    refFooterHeight.current,
+                  );
+                }, 300);
               }
             : undefined
         }
