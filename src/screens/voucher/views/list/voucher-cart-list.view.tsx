@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { SnbContainer, SnbRadioGroup } from '@sinbad/react-native-sinbad-ui';
 import { View, ScrollView } from 'react-native';
 import { VoucherCard } from '@core/components/VoucherCard';

@@ -20,8 +20,9 @@ export const VoucherCartListStyles = StyleSheet.create({
     paddingHorizontal: 49,
   },
   emptyImage: {
-    width: 240,
-    height: 240,
+    width: '100%',
+    height: undefined,
+    aspectRatio: 2 / 1,
     marginBottom: spacingV2.spacing.xl,
   },
   emptyTitle: {
