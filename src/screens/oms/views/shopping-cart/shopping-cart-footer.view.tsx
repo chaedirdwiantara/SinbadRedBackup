@@ -439,9 +439,7 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
         onPressVoucher={() => {
           if (voucherStatus !== 'gray') {
             // navigate to voucher list
-            NavigationAction.navigate('VoucherCartListView', {
-              totalOrder: totalDisplayPrice,
-            });
+            NavigationAction.navigate('VoucherCartListView');
           } else if (voucherStatus === 'gray') {
             setTimeout(() => {
               handleParentToast(
