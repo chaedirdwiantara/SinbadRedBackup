@@ -365,11 +365,13 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     localCartMasterDebouce.sellers.map((sellerItem) => {
       const products: models.CheckSinbadVoucherPayloadProducts[] = [];
       sellerItem.products.map((productItem) => {
-        products.push({
-          productId: productItem.productId,
-          qty: productItem.qty,
-          priceAfterTax: productItem.priceAfterTax,
-        });
+        if (productItem.selected) {
+          products.push({
+            productId: productItem.productId,
+            qty: productItem.qty,
+            priceAfterTax: productItem.priceAfterTax,
+          });
+        }
       });
       carts.push({ sellerId: sellerItem.sellerId, products });
     });
@@ -381,13 +383,14 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
     const isVoucherSelected =
       selectedVoucher && selectedVoucher.voucherId !== null;
     const isProductSelected = countTotalProduct > 0;
-    const isSinbadVoucherExist = footerData?.isVoucherExist || false;
+    const isSinbadVoucherExist =
+      (footerData && footerData.isVoucherExist) || false;
     let voucherStatus: IVoucherStatus, voucherBadgeTitle, voucherBadgeSubtitle;
 
     if (isSinbadVoucherExist && isProductSelected && isVoucherSelected) {
       voucherStatus = 'green';
       voucherBadgeTitle = `Kamu Hemat ${toCurrency(
-        footerData?.sinbadVoucherDiscountOrder,
+        (footerData && footerData.sinbadVoucherDiscountOrder) || 0,
         { withFraction: false },
       )}`;
       voucherBadgeSubtitle = '1 Voucher digunakan';
@@ -413,7 +416,8 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
   const renderFooterContent = () => {
     const { voucherStatus, voucherBadgeTitle, voucherBadgeSubtitle } =
       manageVoucherCheckbox();
-    const totalDisplayPrice = footerData?.totalOrderAfterSinbadVoucher || 0;
+    const totalDisplayPrice =
+      (footerData && footerData.totalOrderAfterSinbadVoucher) || 0;
     return (
       <FooterButton.Cart
         testID={`footer.${testID}`}
