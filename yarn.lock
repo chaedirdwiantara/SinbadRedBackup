@@ -1607,10 +1607,10 @@
   resolved "http://lib.sinbad.web.id/@sinbad%2fimage-editor/-/image-editor-2.3.1.tgz#0b517c411026ed3a015792e6be68646d3ee511c4"
   integrity sha512-KjBqHNalgPXr8DRPqNjWhvVBVWbwzb6SvzHDXu+Rxbyx7rY/XQa+G2s0/VDMLr5SQiJ+CTzZj35P1SCwNLaTUw==
 
-"@sinbad/react-native-sinbad-ui@1.0.82":
-  version "1.0.82"
-  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.82.tgz#27873443de66a1e68ccde0ae7e36090a07867fe2"
-  integrity sha512-zI/Q/dAJ8wXaEd16EClykL4B7QFHeo+xxgLzoHLgXLHx/NffRlXZRZgKthgiMlGUIdM+kQGLBw4vKVx+5n3MDQ==
+"@sinbad/react-native-sinbad-ui@1.0.83":
+  version "1.0.83"
+  resolved "http://lib.sinbad.web.id/@sinbad%2freact-native-sinbad-ui/-/react-native-sinbad-ui-1.0.83.tgz#cb9fc14eebfb6993f0dbc2e0ddf0e85a94fd36b8"
+  integrity sha512-RVLc8nnIIf0Yf4LGmysJKuNAIaUFCaSOcm0sHwRHgJX7+0SrwALD3NOKJfr/TppaUE6jG/lJLlI3ayZ+ouSPrg==
   dependencies:
     "@gorhom/bottom-sheet" "4.1.5"
     "@sinbad/design-token" "0.0.1"
