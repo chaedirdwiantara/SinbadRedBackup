@@ -3,14 +3,15 @@ import { StyleSheet } from 'react-native';
 
 export const VoucherCardStyle = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: 'row',
+    marginRight: 1,
     ...styles.shadowForBox5,
   },
   leftContentContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingLeft: 5,
   },
   icon: {
     flexDirection: 'column',
@@ -18,17 +19,16 @@ export const VoucherCardStyle = StyleSheet.create({
     alignItems: 'center',
     width: 90,
     position: 'relative',
-    paddingRight: 5,
   },
   rightContentContainer: {
     flexDirection: 'column',
     paddingVertical: 8,
+    justifyContent: 'space-between',
   },
   rightTopContent: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     paddingHorizontal: 16,
-    paddingVertical: 8,
   },
   title: {
     flexDirection: 'column',
@@ -47,11 +47,12 @@ export const VoucherCardStyle = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   helperContainer: {
-    height: 36,
     paddingHorizontal: 26,
     paddingVertical: 6,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    marginRight: 1,
+    marginTop: 1,
     ...styles.shadowForBox5,
   },
   helperText: {
