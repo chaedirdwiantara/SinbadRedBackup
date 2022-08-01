@@ -2,8 +2,8 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { BackHandler, ScrollView, View } from 'react-native';
 import {
+  FooterButton,
   SnbBottomSheet2Ref,
-  SnbButton2,
   SnbContainer,
   SnbText2,
   SnbTextField2,
@@ -109,25 +109,21 @@ const DataTokoStep1View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Lanjut"
-          disabled={!name || !telp || updateCompleteDataState.loading}
-          onPress={() => {
-            const { buyerName, buyerPhoneNo } =
-              completeDataState?.data?.buyerData || {};
-            if (name !== buyerName || telp !== buyerPhoneNo) {
-              updateCompleteData({ buyer: { name, phoneNo: telp } });
-            } else {
-              navigate(DATA_TOKO_STEP_2_VIEW);
-            }
-          }}
-          loading={updateCompleteDataState.loading}
-          size="medium"
-          full
-          testID={'11'}
-        />
-      </View>
+      <FooterButton.Single
+        title="Lanjut"
+        disabled={!name || !telp || updateCompleteDataState.loading}
+        buttonPress={() => {
+          const { buyerName, buyerPhoneNo } =
+            completeDataState?.data?.buyerData || {};
+          if (name !== buyerName || telp !== buyerPhoneNo) {
+            updateCompleteData({ buyer: { name, phoneNo: telp } });
+          } else {
+            navigate(DATA_TOKO_STEP_2_VIEW);
+          }
+        }}
+        loadingButton={updateCompleteDataState.loading}
+        testID={'11'}
+      />
       <ModalBack
         ref={refModalBack}
         confirm={() => {

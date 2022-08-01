@@ -3,9 +3,9 @@ import {
   SnbContainer,
   SnbTopNav2,
   SnbTextField2,
-  SnbButton2,
   spacingV2 as layout,
   SnbBottomSheet2Ref,
+  FooterButton,
 } from 'react-native-sinbad-ui';
 import { Stepper, ListOfSteps, ModalBack } from '../../shared/index';
 import { View, ScrollView, BackHandler, Image } from 'react-native';
@@ -166,27 +166,23 @@ const DataDiriStep4View: React.FC = () => {
           />
         </View>
       </ScrollView>
-      <View style={{ padding: layout.spacing.lg }}>
-        <SnbButton2.Primary
-          title="Simpan"
-          disabled={
-            (emailIsNotValid && email) ||
-              updateCompleteDataState.loading ||
-              stateMerchant.changeEmail.loading ||
-              email === '' ||
-              email === null
-              ? true
-              : false
-          }
-          onPress={() => confirm()}
-          loading={
-            updateCompleteDataState.loading || stateMerchant.changeEmail.loading
-          }
-          size="medium"
-          full
-          testID={'10'}
-        />
-      </View>
+      <FooterButton.Single
+        title="Simpan"
+        buttonPress={() => confirm()}
+        disabled={
+          (emailIsNotValid && email) ||
+            updateCompleteDataState.loading ||
+            stateMerchant.changeEmail.loading ||
+            email === '' ||
+            email === null
+            ? true
+            : false
+        }
+        loadingButton={
+          updateCompleteDataState.loading || stateMerchant.changeEmail.loading
+        }
+        testID={'10'}
+      />
       <ModalBack
         ref={refModalBack}
         confirm={() => {
