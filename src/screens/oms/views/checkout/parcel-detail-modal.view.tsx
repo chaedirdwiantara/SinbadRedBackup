@@ -43,13 +43,12 @@ export const ModalParcelDetail: FC<ModalParcelDetail> = ({
   const productDetail = () => {
     return (
       <View style={{ paddingBottom: 16 }}>
-        <SnbText2.Body.Default
-          testID={`sellerName.modalParcelDetail.${testID}`}
-          color={colorV2.textColor.secondary}>
-          {sellerName}
-        </SnbText2.Body.Default>
-        <View style={{ marginVertical: 8 }}>
-          <SnbDivider2 />
+        <View style={{ marginBottom: 8 }}>
+          <SnbText2.Body.Default
+            testID={`sellerName.modalParcelDetail.${testID}`}
+            color={colorV2.textColor.secondary}>
+            {sellerName}
+          </SnbText2.Body.Default>
         </View>
         {productList(data)}
         <View style={{ marginVertical: 8 }}>
