@@ -12,11 +12,6 @@ import { VoucherCartSearch } from './voucher-cart-search.view';
 import { VoucherCartFooter } from './voucher-cart-footer.view';
 import { VoucherCartEmpty } from './voucher-cart-empty.view';
 import BottomSheetError from '@core/components/BottomSheetError';
-import { NavigationAction } from '@core/functions/navigation';
-/** === INTERFACE === */
-interface NavigationParams {
-  totalOrder: number;
-}
 
 /** === COMPONENT === */
 const VoucherCartListView: FC = () => {
@@ -30,10 +25,9 @@ const VoucherCartListView: FC = () => {
     error,
     changeSelectedVoucher,
     selectedVoucher,
+    totalOrder,
   } = useVoucherList();
   const { selectedVoucher: localSelectedVoucher } = useVoucherLocalData();
-  const { totalOrder } =
-    NavigationAction.useGetNavParams<NavigationParams>().params;
   /** => effect */
   useEffect(() => {
     if (localSelectedVoucher) {
@@ -57,7 +51,7 @@ const VoucherCartListView: FC = () => {
         )}
         <VoucherCartFooter
           selectedVoucher={selectedVoucher}
-          total={totalOrder}
+          total={totalOrder ?? 0}
           loading={loading}
           disabled={disabled}
         />
@@ -85,7 +79,7 @@ const VoucherCartListView: FC = () => {
   return (
     <SnbContainer color="grey">
       <VoucherCartHeader goBack={() => goBack()} />
-      <VoucherCartSearch totalOrder={totalOrder} />
+      <VoucherCartSearch totalOrder={totalOrder ?? 0} />
       {!empty ? renderListAndFooter() : renderEmpty()}
       {renderErrorModal()}
     </SnbContainer>

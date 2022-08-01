@@ -94,7 +94,9 @@ const useVoucherList = () => {
   return {
     eligibleVouchers: stateVoucher.voucherCart.list.data?.eligible,
     notEligibleVouchers: stateVoucher.voucherCart.list.data?.notEligible,
-    loading: stateVoucher.voucherCart.list.loading,
+    loading:
+      stateVoucher.voucherCart.list.loading ||
+      stateVoucher.checkSinbadVoucher.loading,
     changeSelectedVoucher: (voucher: RadioValue) => {
       setSelectedVoucher(voucher as number);
     },
@@ -107,6 +109,7 @@ const useVoucherList = () => {
     error: stateVoucher.voucherCart.list.error,
     selectedVoucher,
     selectedVoucherId,
+    totalOrder: stateVoucher.checkSinbadVoucher.data?.totalOrder,
   };
 };
 
