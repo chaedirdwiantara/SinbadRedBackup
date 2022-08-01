@@ -12,7 +12,7 @@ interface VoucherDetailTnCProps {
 export const VoucherDetailTnC: FC<VoucherDetailTnCProps> = ({
   termsAndCondition,
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   return (
     <View
       style={{
