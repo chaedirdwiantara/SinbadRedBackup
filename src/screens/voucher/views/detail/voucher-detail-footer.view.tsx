@@ -19,6 +19,7 @@ export const VoucherDetailFooter: FC<VoucherDetailFooterProps> = ({
       loadingButton={loading}
       disabled={disabled}
       buttonPress={onPress}
+      shadow={true}
     />
   );
 };

@@ -48,7 +48,7 @@ const VoucherCardMemo: FC<VoucherCardProps> = ({
     <View>
       <View style={VoucherCardStyle.container}>
         <View style={VoucherCardStyle.leftContentContainer}>
-          <Image source={bgVoucher} style={{ left: -5 }} />
+          <Image source={bgVoucher} />
           <View
             style={{
               ...VoucherCardStyle.icon,

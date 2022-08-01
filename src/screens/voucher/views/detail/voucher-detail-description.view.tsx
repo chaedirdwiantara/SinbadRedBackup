@@ -1,8 +1,9 @@
 /** === IMPORT PACKAGE HERE ===  */
+import Html from '@core/components/Html';
 import HtmlV2 from '@core/components/HtmlV2';
 import React, { FC } from 'react';
 import { View } from 'react-native';
-import { SnbDashedLine, SnbText2 } from 'react-native-sinbad-ui';
+import { SnbDashedLine, SnbText2, styles } from 'react-native-sinbad-ui';
 import { VoucherDetailStyles } from '../../styles';
 /** === INTERFACE === */
 interface VoucherDetailDescriptionProps {
@@ -19,6 +20,7 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
       style={{
         ...VoucherDetailStyles.sectionContainer,
         ...{ marginBottom: 8 },
+        ...styles.shadowForBox5,
       }}>
       <SnbText2.Headline.Default>{name}</SnbText2.Headline.Default>
       <SnbDashedLine
@@ -26,7 +28,7 @@ export const VoucherDetailDescription: FC<VoucherDetailDescriptionProps> = ({
         dashLength={8}
         style={{ marginVertical: 10 }}
       />
-      <HtmlV2 value={description} fontSize={12} />
+      <Html value={description} fontSize={12} />
       <SnbDashedLine dashGap={5} dashLength={8} />
     </View>
   );
