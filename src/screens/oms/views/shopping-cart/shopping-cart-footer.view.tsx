@@ -443,10 +443,12 @@ export const ShoppingCartFooter: FC<FooterProps> = ({
               totalOrder: totalDisplayPrice,
             });
           } else if (voucherStatus === 'gray') {
-            handleParentToast(
-              'Pilih produk sebelum pakai voucher',
-              refFooterHeight.current,
-            );
+            setTimeout(() => {
+              handleParentToast(
+                'Pilih produk sebelum pakai voucher',
+                refFooterHeight.current,
+              );
+            }, 300);
           }
         }}
         onCloseVoucher={
