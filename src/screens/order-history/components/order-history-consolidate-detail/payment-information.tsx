@@ -36,7 +36,7 @@ const PaymentInformation = () => {
         />
         {data?.sinbadVoucherDiscountOrder != null ? (
           <Description
-            title={`Potongan Voucher`}
+            title={'Potongan Voucher'}
             voucher={true}
             value={`-${toCurrency(data?.sinbadVoucherDiscountOrder || 0, {
               withFraction: false,

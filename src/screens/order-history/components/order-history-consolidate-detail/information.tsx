@@ -2,7 +2,6 @@ import React from 'react';
 import {
   colorV2,
   SnbText2,
-  SnbDivider2,
   SnbBadge2,
   Text,
 } from '@sinbad/react-native-sinbad-ui';

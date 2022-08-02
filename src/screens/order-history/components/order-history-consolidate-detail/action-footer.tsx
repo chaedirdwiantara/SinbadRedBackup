@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import { colorV2, SnbText2 } from '@sinbad/react-native-sinbad-ui';
+import { View, StyleSheet, Linking } from 'react-native';
+import { colorV2, SnbButton2 } from '@sinbad/react-native-sinbad-ui';
 import { useOrderHistoryContext } from 'src/data/contexts/order-history/useOrderHistoryContext';
-import Svg from '@svg';
 
 const ActionFooter = () => {
   const {
@@ -25,14 +24,14 @@ const ActionFooter = () => {
 
   return (
     <View style={styles.main}>
-      <TouchableOpacity onPress={onOpenWhatsapp} style={styles.footerIconText}>
-        <View style={styles.icon}>
-          <Svg size={24} name="whatsapp" />
-        </View>
-        <SnbText2.Body.Default color={colorV2.textColor.link}>
-          Butuh Bantuan?
-        </SnbText2.Body.Default>
-      </TouchableOpacity>
+      <SnbButton2.Link
+        disabled={false}
+        iconName={'whatsapp'}
+        size="medium"
+        title="Butuh Bantuan?"
+        onPress={onOpenWhatsapp}
+        testID="07.2.1 Button TextLink+Icon"
+      />
     </View>
   );
 };
@@ -43,15 +42,6 @@ const styles = StyleSheet.create({
     backgroundColor: colorV2.bgColor.light,
     elevation: 10,
     padding: 16,
-    paddingBottom: 24,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  icon: { marginRight: 8, marginTop: -2 },
-  footerIconText: {
-    flexDirection: 'row',
-    marginLeft: 24,
   },
 });
 
